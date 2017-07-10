@@ -1,0 +1,87 @@
+{
+    "code": 200,
+    "data": {
+        "list": [
+            {
+                "oneCategory": "饮料烟酒",
+                "twoCategory": "水饮料",
+                "threeCategory": "碳酸饮料",
+                "parameterName": "品牌",
+                "parameterType": "单选",
+                "inputType": "文本框",
+                "ifRequired": "是",
+                "ifDisplay": "是",
+                "sort": "1"
+            },
+            {
+                "oneCategory": "饮料烟酒",
+                "twoCategory": "水饮料",
+                "threeCategory": "碳酸饮料",
+                "parameterName": "克重",
+                "parameterType": "单选",
+                "inputType": "文本框",
+                "ifRequired": "是",
+                "ifDisplay": "是",
+                "sort": "1"
+            },
+            {
+                "oneCategory": "饮料烟酒",
+                "twoCategory": "烟",
+                "threeCategory": "云烟",
+                "parameterName": "价格",
+                "parameterType": "单选",
+                "inputType": "文本框",
+                "ifRequired": "是",
+                "ifDisplay": "是",
+                "sort": "1"
+            },
+            {
+                "oneCategory": "饮料烟酒",
+                "twoCategory": "水饮料",
+                "threeCategory": "碳酸饮料",
+                "parameterName": "品牌",
+                "parameterType": "单选",
+                "inputType": "文本框",
+                "ifRequired": "是",
+                "ifDisplay": "是",
+                "sort": "1"
+            },
+            {
+                "oneCategory": "饮料烟酒",
+                "twoCategory": "水饮料",
+                "threeCategory": "碳酸饮料",
+                "parameterName": "品牌",
+                "parameterType": "单选",
+                "inputType": "文本框",
+                "ifRequired": "是",
+                "ifDisplay": "是",
+                "sort": "1"
+            },
+            {
+                "oneCategory": "饮料烟酒",
+                "twoCategory": "水饮料",
+                "threeCategory": "碳酸饮料",
+                "parameterName": "品牌",
+                "parameterType": "单选",
+                "inputType": "文本框",
+                "ifRequired": "是",
+                "ifDisplay": "是",
+                "sort": "1"
+            },
+            {
+                "oneCategory": "饮料烟酒",
+                "twoCategory": "水饮料",
+                "threeCategory": "碳酸饮料",
+                "parameterName": "品牌",
+                "parameterType": "单选",
+                "inputType": "文本框",
+                "ifRequired": "是",
+                "ifDisplay": "是",
+                "sort": "1"
+            }
+        ],
+        "total": 30,
+        "number": 30,
+        "current": 1
+    }
+}

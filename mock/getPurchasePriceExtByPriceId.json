@@ -1,0 +1,21 @@
+{
+  "timestamp": 1496319990118,
+  "code": 200,
+  "message": "根据阶梯价格主键查询采购价格相关信息成功",
+  "data": {
+    "id": 13,
+    "price1": 123.3,
+    "startNumber1": 10,
+    "endNumber1": 10,
+    "pricingId": 18,
+    "price2": 123.46,
+    "startNumber2": 10,
+    "endNumber2": 10,
+    "price3": 123,
+    "startNumber3": 10,
+    "endNumber3": 10,
+    "state": 1,
+    "supplierId": "SP00002"
+  },
+  "success": true
+}

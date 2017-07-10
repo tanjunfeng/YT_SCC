@@ -1,0 +1,52 @@
+{
+    "code": 200,
+    "data": {
+        "list": [
+            {
+                "registeNumber": "110106017206991",
+                "companyName": "北京跃亮共创商贸有限公司",
+                "contacts": "许乾跃",
+                "phone": "13311090436",
+                "email": "2375865783@qq.com",
+                "rebate": "1.20%",
+                "supplierNumber": 100033,
+                "balanceAccount": "商家雅堂金融账户",
+                "balanceDate": "1",
+                "enterTime": "2016-07-05 14:32:23",
+                "marginBalance": "50000.00",
+                "supplierStatus": 0
+            },
+            {
+                "registeNumber": "0612015060287",
+                "companyName": "广州缔造电器有限公司",
+                "contacts": "林石生",
+                "phone": "13841569828",
+                "email": "404921354@qq.com",
+                "rebate": "3.00%",
+                "supplierNumber": 100033,
+                "balanceAccount": "商家雅堂金融账户",
+                "balanceDate": "1",
+                "enterTime": "2016-07-15 14:32:23",
+                "marginBalance": "50000.00",
+                "supplierStatus": 1
+            },
+            {
+                "registeNumber": "13702113940708",
+                "companyName": "青岛莱尔娅家居清洁用品有限公司",
+                "contacts": "王涛",
+                "phone": "13841569828",
+                "email": "404921354@qq.com",
+                "rebate": "3.00%",
+                "supplierNumber": 100033,
+                "balanceAccount": "商家雅堂金融账户",
+                "balanceDate": "1",
+                "enterTime": "2016-07-25 14:32:23",
+                "marginBalance": "50000.00",
+                "supplierStatus": 1
+            }
+        ],
+        "total": 30,
+        "number": 30,
+        "current": 1
+    }
+}

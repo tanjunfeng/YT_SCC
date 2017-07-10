@@ -1,0 +1,16 @@
+.upload-cut-wrap {
+    .pre-image {
+        display: none;
+    }
+    .upload-cut-pre-img {
+        display: inline-block;
+    }
+    &.upload-cut-wrap-pre {
+        .pre-image {
+            display: inline-block;
+        }
+        .upload-cut-pre-img {
+            display: none;
+        }
+    }
+}

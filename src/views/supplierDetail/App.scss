@@ -1,0 +1,45 @@
+.supplier-detail-item {
+    margin-bottom: 15px;
+    border: 1px solid #C3C4C7;
+    color: #515151;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.detail-message {
+    &-header {
+        background-color: #F9f9f9;
+        border-bottom: 1px solid #C3C4C7;
+        padding: 8px 18px;
+        color: #242424;
+        font-size: 14px;
+        &-icon {
+            font-size: 16px;
+            margin-right: 8px;
+        }
+
+        &-edit, &-examine {
+            margin-left: 40px;
+            color: #108ee9;
+            cursor: pointer;
+            .anticon-edit {
+                margin-right: 8px;
+            }
+        }
+    }
+    &-body {
+        padding: 0 18px;
+    }
+    &-list {
+        height: 100%;
+    }
+    &-item {
+        line-height: 40px;
+    }
+}
+
+.add-message-item {
+    .ant-input {
+        width: 300px;
+    }
+}

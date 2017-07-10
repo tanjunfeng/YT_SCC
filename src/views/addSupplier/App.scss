@@ -1,0 +1,56 @@
+.supplier-add-item {
+    margin-bottom: 15px;
+    border: 1px solid #C3C4C7;
+    color: #515151;
+    border-radius: 2px;
+    .ant-input {
+        // width: initial;
+    }
+}
+
+.add-message {
+    &-header {
+        background-color: #F9f9f9;
+        border-bottom: 1px solid #C3C4C7;
+        padding: 8px 18px;
+        color: #242424;
+        font-size: 14px;
+        &-icon {
+            font-size: 16px;
+            margin-right: 8px;
+        }
+    }
+    &-body {
+        padding: 0 18px;
+    }
+    &-list {
+        height: 100%;
+        .ant-form-item {
+            margin-bottom: 0;
+        }
+        .add-message-button {
+            margin: 10px 0 20px 116px;
+        }
+        .ant-form-explain {
+            margin-left: 118px;
+        }
+    }
+    &-item {
+        line-height: 40px;
+        & > span {
+            vertical-align: middle;
+            &:first-child {
+                display: inline-block;
+                min-width: 120px;
+                text-align: right;
+            }
+        }
+        
+    }
+    &-handle {
+        text-align: center;
+    }
+    &-pre {
+        margin-right: 10px;
+    }
+}

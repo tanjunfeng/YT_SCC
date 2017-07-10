@@ -1,0 +1,133 @@
+{
+    "timestamp": 1497346079775,
+    "code": 200,
+    "message": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 20,
+        "size": 20,
+        "orderBy": null,
+        "startRow": 1,
+        "endRow": 20,
+        "total": 25,
+        "pages": 2,
+        "list": [
+            {
+                "id": "xprov7",
+                "spNo": "SP222",
+                "companyName": "成都杨氏双流造纸有限公司1ysys"
+            },
+            {
+                "id": "xprov6",
+                "spNo": "SP222",
+                "companyName": "成都杨氏双流造纸有限公司"
+            },
+            {
+                "id": "xprov4",
+                "spNo": "SP222",
+                "companyName": "成都杨氏双流造纸有限公司"
+            },
+            {
+                "id": "xprov1",
+                "spNo": "SP222",
+                "companyName": "成都杨氏双流造纸有限公司"
+            },
+            {
+                "id": "1234567UUID4",
+                "spNo": "SP222",
+                "companyName": "成都杨氏双流造纸有限公司1"
+            },
+            {
+                "id": "SP000010",
+                "spNo": "SP002",
+                "companyName": "成都双流造纸有限公司"
+            },
+            {
+                "id": "SP00001",
+                "saleRegions": "华东,华北,华中,华南,东北,西南",
+                "spNo": "SP002",
+                "companyName": "成都双流造纸有限公司"
+            },
+            {
+                "id": "1234567UUID2",
+                "spNo": "SP222",
+                "companyName": "成都杨氏双流造纸有限公司1"
+            },
+            {
+                "id": "1234567UUID",
+                "spNo": "SP222",
+                "companyName": "成都杨氏双流造纸有限公司1"
+            },
+            {
+                "id": "SP00018",
+                "spNo": "SP005",
+                "companyName": "湖南统一食品有限公司"
+            },
+            {
+                "id": "SP00003",
+                "saleRegions": "西北",
+                "spNo": "SP002",
+                "companyName": "成都双流造纸有限公司"
+            },
+            {
+                "id": "SP00005",
+                "spNo": "SP005",
+                "companyName": "湖南统一食品有限公司"
+            },
+            {
+                "id": "SP00004",
+                "spNo": "SP002",
+                "companyName": "成都双流造纸有限公司"
+            },
+            {
+                "id": "SP00006",
+                "spNo": "SP002",
+                "companyName": "成都双流造纸有限公司"
+            },
+            {
+                "id": "SP00007",
+                "spNo": "SP002",
+                "companyName": "成都双流造纸有限公司"
+            },
+            {
+                "id": "SP00008",
+                "spNo": "SP002",
+                "companyName": "成都双流造纸有限公司"
+            },
+            {
+                "id": "SP00009",
+                "spNo": "SP005",
+                "companyName": "湖南统一食品有限公司"
+            },
+            {
+                "id": "SP000012",
+                "spNo": "SP002",
+                "companyName": "成都双流造纸有限公司"
+            },
+            {
+                "id": "SP000015",
+                "spNo": "SP002",
+                "companyName": "成都双流造纸有限公司"
+            },
+            {
+                "id": "SP000013",
+                "spNo": "SP002",
+                "companyName": "成都双流造纸有限公司"
+            }
+        ],
+        "firstPage": 1,
+        "prePage": 0,
+        "nextPage": 2,
+        "lastPage": 2,
+        "isFirstPage": true,
+        "isLastPage": false,
+        "hasPreviousPage": false,
+        "hasNextPage": true,
+        "navigatePages": 8,
+        "navigatepageNums": [
+            1,
+            2
+        ]
+    },
+    "success": true
+}

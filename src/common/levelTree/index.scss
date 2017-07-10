@@ -1,0 +1,92 @@
+/**
+ * @file index.scss
+ * @author denglingbo
+ *
+ */
+
+.level-tree {
+    position: relative;
+    margin-top: 15px;
+
+    .ant-tree li.drag-over-gap-top > span {
+        border-top-color: transparent !important;;
+    }
+
+    .ant-tree li.drag-over-gap-bottom > span {
+        border-bottom-color: transparent !important;
+    }
+
+    .absolute-right {
+        position: absolute;
+        right: 15px;
+    }
+
+    .ant-row {
+        padding: 0 10px;
+        background: #f7f7f7;
+        border-bottom: 1px solid #e1e6ec;
+    }
+
+    .tree-title {
+        padding: 10px 0;
+        font-size: 14px;
+
+        i {
+            margin-right: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+    }
+
+    .ant-tree-switcher {}
+
+    /* 阿里哥，这里的动画要抖动，你们计算高度的地方有问题都提交了，QA 必须罚款 */
+    li.ant-tree-treenode-disabled {
+        //min-height: 34px !important;
+    }
+
+    /* 动画也要出现抖动，QA 真的要罚款 */
+    .ant-tree-node-content-wrapper {
+        transition: all 0s ease !important;
+
+        &.ant-tree-node-selected {
+            background: none !important;
+
+            &:hover {
+                background-color: #ecf6fd !important;
+            }
+        }
+    }
+
+    .ant-tree-title {
+
+    }
+
+    .tree-row-dropmenu {
+        border-radius: 0 4px 4px 0;
+
+        &.ant-btn {
+            height: 24px;
+            padding: 0 10px;
+            font-weight: normal;
+
+            &:hover {
+                border-color: #d9d9d9;
+            }
+        }
+    }
+
+    .ant-dropdown-menu-item {
+        &:hover {
+            background: none !important;
+        }
+    }
+
+    .input-middle {
+        padding-top: 11px;
+        padding-bottom: 11px;
+        border-right: none;
+        border-radius: 4px 0 0 4px;
+    }
+}
+

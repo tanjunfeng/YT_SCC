@@ -1,0 +1,126 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Upload, Button, Icon } from 'antd';
+import classnames from 'classnames';
+
+class InlineUpload extends Component {
+    constructor(props) {
+        super(props);
+
+        this.handleChange = ::this.handleChange;
+        this.handleDelete = ::this.handleDelete;
+        this.getValue = ::this.getValue;
+        this.result = [];
+    }
+
+    state = {
+        fileList: [],
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.datas &&
+            nextProps.datas.length > 0
+            && nextProps.datas != this.props.datas
+        ) {
+            this.result = nextProps.datas;
+            this.props.onChange(this.result);
+        }
+    }
+
+    handleChange(info) {
+        const status = info.file.status;
+        if (status === 'done') {
+            const { response } = info.file;
+            this.result.push(response.data.fileOnServerUrl);
+            this.props.onChange(this.result);
+        }
+        let fileList = info.fileList;
+        this.setState({ fileList });
+    }
+
+    handleDelete(e) {
+        const index = e.target.getAttribute('data-index');
+        this.result.splice(index, 1);
+        this.props.onChange(this.result);
+        this.setState({
+            fileList: []
+        })
+    }
+
+    getValue() {
+        return this.result;
+    }
+
+    render() {
+        const { fileList } = this.state;
+        const { limit = 1 } = this.props;
+        const { apiHost } = config;
+        const props = {
+            action: `${apiHost}commonUploadFile/uploadFile`,
+            onChange: this.handleChange,
+            showUploadList: false
+        };
+        return (
+            <div className={classnames('inline-upload', {'inline-upload-limit': this.result.length >= limit})}>
+                {
+                    <Upload {...props} fileList={this.state.fileList} >
+                        <Button>
+                            <Icon type="upload" />
+                            点击上传
+                        </Button>
+                    </Upload>
+                }
+                <div className="inline-upload-file">
+                    {
+                        this.result.map((item, index) => {
+                            return (
+                                <div
+                                    key={item}
+                                    style={{display: 'inline-block', marginRight: '6px'}}
+                                >
+                                    <a
+                                        href={item}
+                                        target="_blank"
+                                        title="点击查看"
+                                        className="inline-upload-file-link">
+                                        <Icon type="picture" className="inline-upload-file-icon" />
+                                    </a>
+                                    <a
+                                        href={item}
+                                        target="_blank"
+                                        title="点击查看"
+                                        className="inline-upload-file-link"
+                                    >
+                                        查看
+                                    </a>
+                                    <span
+                                        title="点击删除"
+                                        className="inline-upload-file-delete"
+                                        data-index={index}
+                                        onClick={this.handleDelete}
+                                    >
+                                        删除
+                                    </span>
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+            </div>
+        );
+    }
+}
+
+InlineUpload.propTypes = {
+    limit: PropTypes.number,
+    handleChange: PropTypes.func,
+    datas: PropTypes.arrayOf(PropTypes.any),
+    onChange: PropTypes.func,
+};
+
+InlineUpload.defaultProps = {
+    handleChange: () => {},
+    onChange: () => {}
+}
+
+export default InlineUpload;

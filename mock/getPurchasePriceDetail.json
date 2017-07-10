@@ -1,0 +1,39 @@
+{
+  "timestamp": 1497060658898,
+  "code": 200,
+  "message": null,
+  "data": {
+    "product": {
+      "id": "100",
+      "name": "黑人超白矿物盐牙膏90G",
+      "invoiceLimit": 0,
+      "firstLevelCategoryName": "家用清洁",
+      "secondLevelCategoryName": null,
+      "thirdLevelCategoryName": null,
+      "saleName": null,
+      "inputTaxRate": null,
+      "deductibleTaxRate": null,
+      "brandName": "三合"
+    },
+    "goodsPriceInfoList": [
+      {
+        "id": 8,
+        "price1": 123.46,
+        "startNumber1": 10,
+        "endNumber1": 10,
+        "pricingId": 13,
+        "price2": 123.46,
+        "startNumber2": 10,
+        "endNumber2": 10,
+        "price3": 123,
+        "startNumber3": 10,
+        "endNumber3": 10,
+        "state": 1,
+        "supplierId": "SP00001",
+        "companyName": "成都双流造纸有限公司",
+        "status": 1
+      }
+    ]
+  },
+  "success": true
+}

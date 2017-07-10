@@ -1,0 +1,58 @@
+.supplier-SellingPrice-item {
+    .detail-message {
+        &-item {
+            width: 300px;
+            margin-right: 20px;
+            float: left;
+            line-height: 24px;
+            margin-top: 20px;
+        }
+        &-price {
+            width: 100%;
+        }
+        &-price-left {
+            width: 50px;
+            float: left;
+        }
+        &-price-right {
+            width: 200px;
+            float: left;
+        }
+    }
+    .detail-close-header-icon {
+        font-size: 20px;
+        color: #666666;
+    }
+}
+
+.price-detail-item {
+    margin-bottom: 15px;
+    border: 1px solid #C3C4C7;
+    color: #515151;
+    border-radius: 2px;
+}
+
+.price-form .ant-row {
+    display: inline-block;
+}
+
+.price-line {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.price-tittle {
+    line-height: 24px;
+}
+
+.price-num {
+    margin-left: 145px;
+}
+
+.price-model {
+    height: 400px;
+    overflow-y: auto;
+}
+.price-content .supplier-detail-item{
+    overflow: visible;
+}

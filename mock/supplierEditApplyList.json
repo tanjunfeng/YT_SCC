@@ -1,0 +1,42 @@
+{
+    "code": 200,
+    "data": {
+        "total": 2,
+        "pageNum": 1,
+        "pageSize": 2,
+        "data": [
+            {
+                "spRegNo": "62265534612856",
+                "companyName": "湖南统一食品有限公司",
+                "name": "小登子",
+                "phone": "185345605563",
+                "email": "185345605562@163.com",
+                "rebateRate": 7.2,
+                "spNo": "SP005",
+                "settlementAccountType": 0,
+                "settlementPeriod": 10,
+                "settledTime": "1497236783054",
+                "settledRequestTime": null,
+                "status": 0,
+                "supplierCooperationId": 2,
+                "supplierInfoId": "SP00018"
+            },
+            {
+                "spRegNo": "62265534612857",
+                "companyName": "湖南统一食品有限公司",
+                "name": "小蚊子",
+                "phone": "185345605562",
+                "email": "185345605562@163.com",
+                "rebateRate": 5.23,
+                "spNo": "SP006",
+                "settlementAccountType": 1,
+                "settlementPeriod": 12,
+                "settledTime": "1497236783054",
+                "settledRequestTime": null,
+                "status": 1,
+                "supplierCooperationId": 1,
+                "supplierInfoId": "SP00005"
+            }
+        ]
+    }
+}

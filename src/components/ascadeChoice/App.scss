@@ -1,0 +1,20 @@
+.ant-form-inline .ant-form-item.ascade-choice {
+    &-first {
+        margin-right: 0px;
+    }
+    &-first, &-second {
+        width: 80px;
+    }
+}
+
+.ascade-choice {
+    &-step {
+        margin: 0 8px;
+    }
+    &-form {
+        display: inline-block;
+            &.ant-form-inline .ant-form-item-with-help {
+                margin-bottom: 0;
+            }
+    }
+}

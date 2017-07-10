@@ -1,0 +1,76 @@
+{
+    "timestamp": 1496494347492,
+    "code": 200,
+    "message": null,
+    "data": {
+        "goodsPriceInfoVos": null,
+        "provinceCityListVos": [
+            {
+                "code": "110000",
+                "parentCode": "100000",
+                "regionName": "北京",
+                "regionType": "2",
+                "childs": [
+                    {
+                        "code": "110100",
+                        "parentCode": "110000",
+                        "regionName": "北京市",
+                        "regionType": "3",
+                        "childs": []
+                    }
+                ]
+            },
+            {
+                "code": "120000",
+                "parentCode": "100000",
+                "regionName": "天津",
+                "regionType": "2",
+                "childs": [
+                    {
+                        "code": "120100",
+                        "parentCode": "120000",
+                        "regionName": "天津市",
+                        "regionType": "3",
+                        "childs": []
+                    }
+                ]
+            },
+            {
+                "code": "130000",
+                "parentCode": "100000",
+                "regionName": "河北省",
+                "regionType": "2",
+                "childs": [
+                    {
+                        "code": "130100",
+                        "parentCode": "130000",
+                        "regionName": "石家庄市",
+                        "regionType": "3",
+                        "childs": []
+                    },
+                    {
+                        "code": "130200",
+                        "parentCode": "130000",
+                        "regionName": "唐山市",
+                        "regionType": "3",
+                        "childs": []
+                    },
+                    {
+                        "code": "130300",
+                        "parentCode": "130000",
+                        "regionName": "秦皇岛市",
+                        "regionType": "3",
+                        "childs": []
+                    },
+                    {
+                        "code": "130400",
+                        "parentCode": "130000",
+                        "regionName": "邯郸市",
+                        "regionType": "3",
+                        "childs": []
+                    }
+                ]
+            }
+        ]
+    }
+}

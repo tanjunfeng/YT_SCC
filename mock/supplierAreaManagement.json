@@ -1,0 +1,103 @@
+{
+    "code": 200,
+    "data": {
+        "list": [
+            {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }, {
+                "supplier": "供应商A",
+                "supplierNumber": 100021,
+                "salesArea": ["华东", "华北", "华中", "华南", "东北", "西南", "西北"]
+            }
+        ],
+        "total": 100,
+        "number": 30,
+        "current": 1
+    }
+}

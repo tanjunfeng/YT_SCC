@@ -1,0 +1,104 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "id": 6,
+            "code": "06",
+            "parentCode": "root",
+            "regionName": "西南",
+            "regionType": null,
+            "regions": [
+                {
+                    "id": 12,
+                    "code": "06005",
+                    "parentCode": "06",
+                    "regionName": "贵州省",
+                    "regionType": null,
+                    "regions": [
+                        {
+                            "id": 13,
+                            "code": "06006",
+                            "parentCode": "06005",
+                            "regionName": "贵阳市",
+                            "regionType": null,
+                            "regions": []
+                        }
+                    ]
+                },
+                {
+                    "id": 8,
+                    "code": "06001",
+                    "parentCode": "06",
+                    "regionName": "四川省",
+                    "regionType": "province",
+                    "regions": [
+                        {
+                            "id": 11,
+                            "code": "06004",
+                            "parentCode": "06001",
+                            "regionName": "南充市",
+                            "regionType": "city",
+                            "regions": []
+                        },
+                        {
+                            "id": 10,
+                            "code": "06003",
+                            "parentCode": "06001",
+                            "regionName": "绵阳市",
+                            "regionType": "city",
+                            "regions": []
+                        },
+                        {
+                            "id": 9,
+                            "code": "06002",
+                            "parentCode": "06001",
+                            "regionName": "成都市",
+                            "regionType": "city",
+                            "regions": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "code": "05",
+            "parentCode": "root",
+            "regionName": "东北",
+            "regionType": null,
+            "regions": []
+        },
+        {
+            "id": 4,
+            "code": "04",
+            "parentCode": "root",
+            "regionName": "华南",
+            "regionType": null,
+            "regions": []
+        },
+        {
+            "id": 3,
+            "code": "03",
+            "parentCode": "root",
+            "regionName": "华中",
+            "regionType": null,
+            "regions": []
+        },
+        {
+            "id": 2,
+            "code": "02",
+            "parentCode": "root",
+            "regionName": "华北",
+            "regionType": null,
+            "regions": []
+        },
+        {
+            "id": 1,
+            "code": "01",
+            "parentCode": "root",
+            "regionName": "华东",
+            "regionType": null,
+            "regions": []
+        }
+    ]
+}

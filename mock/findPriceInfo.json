@@ -1,0 +1,57 @@
+{
+  "timestamp": 1496629586173,
+  "code": 200,
+  "message": null,
+  "data": {
+    "goodsPriceInfoVos": [
+      {
+        "id": 7,
+        "price1": 123.3,
+        "startNumber1": 10,
+        "endNumber1": 10,
+        "pricingId": 12,
+        "price2": 123.46,
+        "startNumber2": 10,
+        "endNumber2": 10,
+        "price3": 123,
+        "startNumber3": 10,
+        "endNumber3": 10,
+        "state": 0,
+        "cityCodes": null,
+        "provinceCodes": null,
+        "cityNames": "重庆,成都"
+      },
+      {
+        "id": 8,
+        "price1": 108,
+        "startNumber1": 10,
+        "endNumber1": 10,
+        "pricingId": 12,
+        "price2": 120,
+        "startNumber2": 10,
+        "endNumber2": 10,
+        "price3": 180,
+        "startNumber3": 10,
+        "endNumber3": 10,
+        "state": 0,
+        "cityCodes": null,
+        "provinceCodes": null,
+        "cityNames": "广州,成都"
+      }
+    ],
+    "provinceCityListVos": null,
+    "productVo": {
+      "id": "100",
+      "name": "黑人超白矿物盐牙膏90G",
+      "invoiceLimit": 0,
+      "firstLevelCategoryName": "家用清洁",
+      "secondLevelCategoryName": null,
+      "thirdLevelCategoryName": null,
+      "saleName": null,
+      "inputTaxRate": null,
+      "deductibleTaxRate": null,
+      "brandName": "三合"
+    }
+  },
+  "success": false
+}

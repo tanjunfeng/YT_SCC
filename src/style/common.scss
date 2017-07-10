@@ -1,0 +1,49 @@
+/**
+ * @file reset.scss
+ * @author denglingbo
+ */
+
+@import './reset.scss';
+#root {
+    height: 100%;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 0;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 0;
+    background-color: rgba(150, 150, 150, 0.5);
+}
+
+.classify-select-label {
+    vertical-align: middle;
+}
+
+.ant-table-placeholder {
+    border-bottom: none;
+}
+
+.supplier-company-qualification .ant-select-dropdown-menu-item {
+    line-height: 30px;
+    padding: 0 8px;
+}
+
+.border-style {
+    border: 1px solid #e1e6ec;
+}
+
+.breadcrumb {
+    margin-top: 15px;
+}
+.ant-form-inline .ant-form-item{
+    line-height: 42px;
+}

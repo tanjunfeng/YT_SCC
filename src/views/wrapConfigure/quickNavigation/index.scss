@@ -1,0 +1,22 @@
+// 切图预览
+.pre-img {
+    border: 1px solid transparent;
+}
+
+.file-upload-wrap {
+    .pre-image {
+        display: inline-block;
+    }
+    .pre-img {
+        display: none;
+    }
+}
+
+.file-upload-wrap-hide {
+    .pre-image {
+        display: none;
+    }
+    .pre-img {
+        display: block;
+    }
+}

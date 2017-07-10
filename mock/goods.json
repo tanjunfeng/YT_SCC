@@ -1,0 +1,1142 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "brands": [
+                {
+                    "brandName": "brand1",
+                    "@class": "com.yatang.catalog.YTCategoryGroupBrand",
+                    "imgUrl": "group1/M00/00/3B/rB7SAlkijZmAUwQ5AADDA-b-lA0695.jpg",
+                    "sort": 1,
+                    "url": "test/index"
+                },
+                {
+                    "brandName": "brand2",
+                    "@class": "com.yatang.catalog.YTCategoryGroupBrand",
+                    "imgUrl": "group1/M00/00/3B/rB7SAlkijaiAB3l6AAD36HFc45g119.jpg",
+                    "sort": 1,
+                    "url": "test2/index"
+                },
+                {
+                    "brandName": "branch3",
+                    "@class": "com.yatang.catalog.YTCategoryGroupBrand",
+                    "imgUrl": "group1/M00/00/3C/rB7SAlkqLwiAMqC9AAAJw_0Z2-4654.jpg",
+                    "sort": 2,
+                    "url": "www.baidu.com"
+                },
+                {
+                    "brandName": "branch5",
+                    "@class": "com.yatang.catalog.YTCategoryGroupBrand",
+                    "imgUrl": "group1/M00/00/3C/rB7SAlkqMjSAZ952AAAJw_0Z2-4658.jpg",
+                    "sort": 3,
+                    "url": "www.baidu.com"
+                }
+            ],
+            "@class": "com.yatang.catalog.YTCategoryGroup",
+            "description": "客厅家具",
+            "displayName": "客厅家具",
+            "keywords": [
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "沙发",
+                    "sort": 0,
+                    "url": "/goods-shafa/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "电视柜",
+                    "sort": 1,
+                    "url": "/goods-dianshigui/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "沙发",
+                    "sort": 1,
+                    "url": "/goods-shafa/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "茶几",
+                    "sort": 2,
+                    "url": "/goods-chaji/"
+                }
+            ],
+            "promoImageUrl": "group1/M00/00/3D/rB7SAlkqMl6AOtYAAAA5olL5XF8106.jpg",
+            "promoUrl": "/goods-xiuxianyideng/prod70120.html",
+            "siteId": null,
+            "sort": 0,
+            "subCategories": [
+                {
+                    "categoryId": "homeStoreGiftShop",
+                    "categoryName": "餐厅家具",
+                    "@class": "com.yatang.endeca.mobile.search.result.Category",
+                    "dimensionId": "2225892774",
+                    "imageLink": null,
+                    "imgUrl": null,
+                    "subCategories": [
+                        {
+                            "categoryId": "homeStoreGlassware",
+                            "categoryName": "餐桌",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3938208413",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/餐厅/分类_餐桌.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreUnique",
+                            "categoryName": "餐边柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "1697795622",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/餐厅/分类_餐边柜.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat100029",
+                            "categoryName": "餐椅",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "597580074",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/餐厅/分类_餐椅.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120032",
+                            "categoryName": "隔厅柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "4173780359",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/餐厅/分类_隔厅柜.png",
+                            "subCategories": []
+                        }
+                    ]
+                },
+                {
+                    "categoryId": "homeStoreSeating",
+                    "categoryName": "卧室家具",
+                    "@class": "com.yatang.endeca.mobile.search.result.Category",
+                    "dimensionId": "4000743600",
+                    "imageLink": null,
+                    "imgUrl": null,
+                    "subCategories": [
+                        {
+                            "categoryId": "homeStoreSeatingDining",
+                            "categoryName": "床",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "559834362",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-床_03.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingOffice",
+                            "categoryName": "床垫",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3628922559",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-床垫_09.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingSofas",
+                            "categoryName": "床头柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "152248990",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-床头柜_06.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingArmchairs",
+                            "categoryName": "斗柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "2648904996",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-斗屉_21.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingFootstools",
+                            "categoryName": "梳妆台/凳",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "2506467728",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-梳妆台18.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingOutdoor",
+                            "categoryName": "衣柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "512216937",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-衣柜_15.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120042",
+                            "categoryName": "衣帽架",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3522158799",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-衣帽架_27.png",
+                            "subCategories": []
+                        }
+                    ]
+                },
+                {
+                    "categoryId": "homeStoreStorage",
+                    "categoryName": "书房家具",
+                    "@class": "com.yatang.endeca.mobile.search.result.Category",
+                    "dimensionId": "3706998517",
+                    "imageLink": "http://sit2.yatang.cn/browse/productDetailSku.jsp?productId=prod380077",
+                    "imgUrl": "https://sit2-static.yatang.cnhttp://sit2_static.yatang.cn/ytdocroot/content/home/category/category_promo.jpg",
+                    "subCategories": [
+                        {
+                            "categoryId": "cat110032",
+                            "categoryName": "电脑椅",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "241476930",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/书房/分类-书房-电脑椅_09.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120040",
+                            "categoryName": "电脑桌",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "755869909",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/书房/书房-电脑桌06.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120041",
+                            "categoryName": "书柜书架",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "1523865733",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/书房/书柜-书架03.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat250018",
+                            "categoryName": "书桌",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "2303666826",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/书房/分类-书房-书桌_15.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat290015",
+                            "categoryName": "我的电脑书桌",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "1212332600",
+                            "imageLink": null,
+                            "imgUrl": null,
+                            "subCategories": []
+                        }
+                    ]
+                },
+                {
+                    "categoryId": "cat100026",
+                    "categoryName": "储物家具",
+                    "@class": "com.yatang.endeca.mobile.search.result.Category",
+                    "dimensionId": "3617330679",
+                    "imageLink": null,
+                    "imgUrl": null,
+                    "subCategories": [
+                        {
+                            "categoryId": "homeStoreSeatingKitchen",
+                            "categoryName": "鞋柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3854035459",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/储物家具/分类-储物家居-鞋柜_03.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120033",
+                            "categoryName": "储物/收纳",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "1925043787",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/储物家具/分类-储物家居-收纳箱_06.png",
+                            "subCategories": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "brands": [
+                {
+                    "brandName": "test1",
+                    "@class": "com.yatang.catalog.YTCategoryGroupBrand",
+                    "imgUrl": "group1/M00/00/3D/rB7SAlkuGnmADiLzAAAykaw3_04427.jpg",
+                    "sort": 1,
+                    "url": "https://www.taobao.com"
+                }
+            ],
+            "@class": "com.yatang.catalog.YTCategoryGroup",
+            "description": "日用百货",
+            "displayName": "日用百货",
+            "keywords": [
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "沙发",
+                    "sort": 2,
+                    "url": "/goods-shafa/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "电视柜",
+                    "sort": 2,
+                    "url": "/goods-dianshgui/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "床",
+                    "sort": 4,
+                    "url": "/goods-chuang/"
+                }
+            ],
+            "promoImageUrl": "group1/M00/00/3D/rB7SAlkqaIyAFUCsAAAykaw3_04524.jpg",
+            "promoUrl": "/goods-xiuxianyideng/prod70120.html",
+            "siteId": null,
+            "sort": 1,
+            "subCategories": [
+                {
+                    "categoryId": "homeStoreTables",
+                    "categoryName": "客厅家具",
+                    "@class": "com.yatang.endeca.mobile.search.result.Category",
+                    "dimensionId": "2228408478",
+                    "imageLink": null,
+                    "imgUrl": null,
+                    "subCategories": [
+                        {
+                            "categoryId": "homeStoreTablesDining",
+                            "categoryName": "沙发",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "172064705",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/客厅/分类-客厅-沙发_06.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreTablesSide",
+                            "categoryName": "电视柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "1384494459",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/客厅/分类-客厅-电视柜_08.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat100030",
+                            "categoryName": "茶几",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "1826079306",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/客厅/分类-客厅-茶几_03.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120038",
+                            "categoryName": "休闲椅凳",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "149566606",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/客厅/分类-客厅-休闲板凳_20.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120039",
+                            "categoryName": "展示柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3693848065",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/客厅/分类-客厅-展示柜_17.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120057",
+                            "categoryName": "酒柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "2407575182",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/客厅/分类-客厅-酒柜14.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat270021",
+                            "categoryName": "沙发床",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "358963615",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/客厅/分类-客厅-沙发床_29.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat280017",
+                            "categoryName": "花几",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "795681291",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/客厅/分类-客厅-花几_26.png",
+                            "subCategories": []
+                        }
+                    ]
+                },
+                {
+                    "categoryId": "homeStoreSeating",
+                    "categoryName": "卧室家具",
+                    "@class": "com.yatang.endeca.mobile.search.result.Category",
+                    "dimensionId": "4000743600",
+                    "imageLink": null,
+                    "imgUrl": null,
+                    "subCategories": [
+                        {
+                            "categoryId": "homeStoreSeatingDining",
+                            "categoryName": "床",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "559834362",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-床_03.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingOffice",
+                            "categoryName": "床垫",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3628922559",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-床垫_09.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingSofas",
+                            "categoryName": "床头柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "152248990",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-床头柜_06.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingArmchairs",
+                            "categoryName": "斗柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "2648904996",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-斗屉_21.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingFootstools",
+                            "categoryName": "梳妆台/凳",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "2506467728",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-梳妆台18.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingOutdoor",
+                            "categoryName": "衣柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "512216937",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-衣柜_15.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120042",
+                            "categoryName": "衣帽架",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3522158799",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-衣帽架_27.png",
+                            "subCategories": []
+                        }
+                    ]
+                },
+                {
+                    "categoryId": "cat100026",
+                    "categoryName": "储物家具",
+                    "@class": "com.yatang.endeca.mobile.search.result.Category",
+                    "dimensionId": "3617330679",
+                    "imageLink": null,
+                    "imgUrl": null,
+                    "subCategories": [
+                        {
+                            "categoryId": "homeStoreSeatingKitchen",
+                            "categoryName": "鞋柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3854035459",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/储物家具/分类-储物家居-鞋柜_03.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120033",
+                            "categoryName": "储物/收纳",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "1925043787",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/储物家具/分类-储物家居-收纳箱_06.png",
+                            "subCategories": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "brands": [
+                {
+                    "brandName": "brand1",
+                    "@class": "com.yatang.catalog.YTCategoryGroupBrand",
+                    "imgUrl": "group1/M00/00/3A/rB7SAlkdBL-AZuCZAAGG1m-BdeI649.png",
+                    "sort": 1,
+                    "url": "www.baidu.com"
+                },
+                {
+                    "brandName": "brand2",
+                    "@class": "com.yatang.catalog.YTCategoryGroupBrand",
+                    "imgUrl": "group1/M00/00/3A/rB7SAlkcCP2AXiG4AABiUhzFtAI619.png",
+                    "sort": 2,
+                    "url": "www.google.com"
+                },
+                {
+                    "brandName": "brand3",
+                    "@class": "com.yatang.catalog.YTCategoryGroupBrand",
+                    "imgUrl": "group1/M00/00/3A/rB7SAlkcCS-Aa4pOAAA7BRe1Ch0802.png",
+                    "sort": 3,
+                    "url": "www.jd.com"
+                },
+                {
+                    "brandName": "test",
+                    "@class": "com.yatang.catalog.YTCategoryGroupBrand",
+                    "imgUrl": "group1/M00/00/3B/rB7SAlkeZO6APrBfAAGG1m-BdeI417.png",
+                    "sort": 5,
+                    "url": "www.test.com"
+                }
+            ],
+            "@class": "com.yatang.catalog.YTCategoryGroup",
+            "description": "卧室家具",
+            "displayName": "卧室家具",
+            "keywords": [
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "床",
+                    "sort": 1,
+                    "url": "/goods-chuangdian/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "衣柜",
+                    "sort": 2,
+                    "url": "/goods-yigui/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "床垫",
+                    "sort": 2,
+                    "url": "/goods-chuangdian/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "床头柜",
+                    "sort": 3,
+                    "url": "/goods-chuangtougui/"
+                }
+            ],
+            "promoImageUrl": "group1/M00/00/3B/rB7SAlkjkSaAVe4TAAB0ufn_vHE358.jpg",
+            "promoUrl": "/goods-xiuxianyideng/prod70120.html",
+            "siteId": null,
+            "sort": 1,
+            "subCategories": [
+                {
+                    "categoryId": "homeStoreSeating",
+                    "categoryName": "卧室家具",
+                    "@class": "com.yatang.endeca.mobile.search.result.Category",
+                    "dimensionId": "4000743600",
+                    "imageLink": null,
+                    "imgUrl": null,
+                    "subCategories": [
+                        {
+                            "categoryId": "homeStoreSeatingDining",
+                            "categoryName": "床",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "559834362",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-床_03.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingOffice",
+                            "categoryName": "床垫",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3628922559",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-床垫_09.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingSofas",
+                            "categoryName": "床头柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "152248990",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-床头柜_06.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingArmchairs",
+                            "categoryName": "斗柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "2648904996",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-斗屉_21.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingFootstools",
+                            "categoryName": "梳妆台/凳",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "2506467728",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-梳妆台18.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingOutdoor",
+                            "categoryName": "衣柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "512216937",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-衣柜_15.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120042",
+                            "categoryName": "衣帽架",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3522158799",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-衣帽架_27.png",
+                            "subCategories": []
+                        }
+                    ]
+                },
+                {
+                    "categoryId": "homeStoreStorage",
+                    "categoryName": "书房家具",
+                    "@class": "com.yatang.endeca.mobile.search.result.Category",
+                    "dimensionId": "3706998517",
+                    "imageLink": "http://sit2.yatang.cn/browse/productDetailSku.jsp?productId=prod380077",
+                    "imgUrl": "https://sit2-static.yatang.cnhttp://sit2_static.yatang.cn/ytdocroot/content/home/category/category_promo.jpg",
+                    "subCategories": [
+                        {
+                            "categoryId": "cat110032",
+                            "categoryName": "电脑椅",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "241476930",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/书房/分类-书房-电脑椅_09.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120040",
+                            "categoryName": "电脑桌",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "755869909",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/书房/书房-电脑桌06.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120041",
+                            "categoryName": "书柜书架",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "1523865733",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/书房/书柜-书架03.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat250018",
+                            "categoryName": "书桌",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "2303666826",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/书房/分类-书房-书桌_15.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat290015",
+                            "categoryName": "我的电脑书桌",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "1212332600",
+                            "imageLink": null,
+                            "imgUrl": null,
+                            "subCategories": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "brands": [],
+            "@class": "com.yatang.catalog.YTCategoryGroup",
+            "description": "餐厅家具",
+            "displayName": "餐厅家具",
+            "keywords": [
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "餐桌",
+                    "sort": 0,
+                    "url": "/goods-canzhuo/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "餐椅",
+                    "sort": 1,
+                    "url": "/goods-canyi/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "餐厅套装",
+                    "sort": 2,
+                    "url": "goods-cantingtaozhuang/"
+                }
+            ],
+            "promoImageUrl": "group1/M00/00/3B/rB7SAlkijBGAOqaIAAB0ufn_vHE220.jpg",
+            "promoUrl": "/goods-xiuxianyideng/prod70120.html",
+            "siteId": null,
+            "sort": 2,
+            "subCategories": [
+                {
+                    "categoryId": "homeStoreGiftShop",
+                    "categoryName": "餐厅家具",
+                    "@class": "com.yatang.endeca.mobile.search.result.Category",
+                    "dimensionId": "2225892774",
+                    "imageLink": null,
+                    "imgUrl": null,
+                    "subCategories": [
+                        {
+                            "categoryId": "homeStoreGlassware",
+                            "categoryName": "餐桌",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3938208413",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/餐厅/分类_餐桌.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreUnique",
+                            "categoryName": "餐边柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "1697795622",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/餐厅/分类_餐边柜.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat100029",
+                            "categoryName": "餐椅",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "597580074",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/餐厅/分类_餐椅.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120032",
+                            "categoryName": "隔厅柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "4173780359",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/餐厅/分类_隔厅柜.png",
+                            "subCategories": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "brands": [
+                {
+                    "brandName": "brandtest",
+                    "@class": "com.yatang.catalog.YTCategoryGroupBrand",
+                    "imgUrl": "group1/M00/00/3B/rB7SAlkdFEaAVeNLAAGG1m-BdeI921.png",
+                    "sort": 1,
+                    "url": "http://www.baidu.com"
+                }
+            ],
+            "@class": "com.yatang.catalog.YTCategoryGroup",
+            "description": "书房家具",
+            "displayName": "书房家具",
+            "keywords": [
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "书桌",
+                    "sort": 0,
+                    "url": "/goods-shuzhuo/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "书柜书架",
+                    "sort": 1,
+                    "url": "/goods-shuguishujia/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "电脑椅",
+                    "sort": 2,
+                    "url": "/goods-diannaoyi/"
+                }
+            ],
+            "promoImageUrl": "group1/M00/00/3B/rB7SAlkjkU-AdtaYAAB0ufn_vHE560.jpg",
+            "promoUrl": "/goods-xiuxianyideng/prod70120.html",
+            "siteId": null,
+            "sort": 3,
+            "subCategories": [
+                {
+                    "categoryId": "homeStoreStorage",
+                    "categoryName": "书房家具",
+                    "@class": "com.yatang.endeca.mobile.search.result.Category",
+                    "dimensionId": "3706998517",
+                    "imageLink": "http://sit2.yatang.cn/browse/productDetailSku.jsp?productId=prod380077",
+                    "imgUrl": "https://sit2-static.yatang.cnhttp://sit2_static.yatang.cn/ytdocroot/content/home/category/category_promo.jpg",
+                    "subCategories": [
+                        {
+                            "categoryId": "cat110032",
+                            "categoryName": "电脑椅",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "241476930",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/书房/分类-书房-电脑椅_09.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120040",
+                            "categoryName": "电脑桌",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "755869909",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/书房/书房-电脑桌06.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120041",
+                            "categoryName": "书柜书架",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "1523865733",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/书房/书柜-书架03.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat250018",
+                            "categoryName": "书桌",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "2303666826",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/书房/分类-书房-书桌_15.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat290015",
+                            "categoryName": "我的电脑书桌",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "1212332600",
+                            "imageLink": null,
+                            "imgUrl": null,
+                            "subCategories": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "brands": [],
+            "@class": "com.yatang.catalog.YTCategoryGroup",
+            "description": "家纺装饰",
+            "displayName": "家纺装饰",
+            "keywords": [
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "居家家纺",
+                    "sort": 1,
+                    "url": "/goods-jujiajiafang/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "布艺软饰",
+                    "sort": 2,
+                    "url": "/goods-buyiruanshi/"
+                }
+            ],
+            "promoImageUrl": "group1/M00/00/3B/rB7SAlkjlWGAS_ZiAAB0ufn_vHE157.jpg",
+            "promoUrl": "/goods-xiuxianyideng/prod70120.html",
+            "siteId": null,
+            "sort": 4,
+            "subCategories": []
+        },
+        {
+            "brands": [],
+            "@class": "com.yatang.catalog.YTCategoryGroup",
+            "description": "健康家居",
+            "displayName": "健康家居",
+            "keywords": [
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "床",
+                    "sort": 1,
+                    "url": "/goods-chuang/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "厨具",
+                    "sort": 1,
+                    "url": "/goods-chuju/"
+                },
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "日用百货",
+                    "sort": 2,
+                    "url": "/goods-riyongbaihuo/"
+                }
+            ],
+            "promoImageUrl": "group1/M00/00/3B/rB7SAlkjlXWAf1OYAAB0ufn_vHE065.jpg",
+            "promoUrl": "/goods-xiuxianyideng/prod70120.html",
+            "siteId": null,
+            "sort": 5,
+            "subCategories": [
+                {
+                    "categoryId": "cat100028",
+                    "categoryName": "健康家居",
+                    "@class": "com.yatang.endeca.mobile.search.result.Category",
+                    "dimensionId": "40147578",
+                    "imageLink": null,
+                    "imgUrl": null,
+                    "subCategories": [
+                        {
+                            "categoryId": "cat280019",
+                            "categoryName": "餐盘",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3743667986",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/健康家居/分类-健康家居-餐盘_06.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat270019",
+                            "categoryName": "茶叶",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "1828651015",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/健康家居/分类-健康家居-茶叶_21.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat270020",
+                            "categoryName": "置物架",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3006460216",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/健康家居/分类-健康家居-置物架_15.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat280018",
+                            "categoryName": "果盘",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "500043582",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/健康家居/分类-健康家居-果盘_18.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat270022",
+                            "categoryName": "文房四宝",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "243718489",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/健康家居/分类-健康家居-文房四宝_03.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat280015",
+                            "categoryName": " 藤椅",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "2006536884",
+                            "imageLink": null,
+                            "imgUrl": null,
+                            "subCategories": []
+                        }
+                    ]
+                },
+                {
+                    "categoryId": "homeStoreSeating",
+                    "categoryName": "卧室家具",
+                    "@class": "com.yatang.endeca.mobile.search.result.Category",
+                    "dimensionId": "4000743600",
+                    "imageLink": null,
+                    "imgUrl": null,
+                    "subCategories": [
+                        {
+                            "categoryId": "homeStoreSeatingDining",
+                            "categoryName": "床",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "559834362",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-床_03.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingOffice",
+                            "categoryName": "床垫",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3628922559",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-床垫_09.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingSofas",
+                            "categoryName": "床头柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "152248990",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-床头柜_06.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingArmchairs",
+                            "categoryName": "斗柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "2648904996",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-斗屉_21.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingFootstools",
+                            "categoryName": "梳妆台/凳",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "2506467728",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-梳妆台18.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "homeStoreSeatingOutdoor",
+                            "categoryName": "衣柜",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "512216937",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-衣柜_15.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat120042",
+                            "categoryName": "衣帽架",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3522158799",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/卧室/分类-卧室-衣帽架_27.png",
+                            "subCategories": []
+                        }
+                    ]
+                },
+                {
+                    "categoryId": "cat100028",
+                    "categoryName": "健康家居",
+                    "@class": "com.yatang.endeca.mobile.search.result.Category",
+                    "dimensionId": "40147578",
+                    "imageLink": null,
+                    "imgUrl": null,
+                    "subCategories": [
+                        {
+                            "categoryId": "cat280019",
+                            "categoryName": "餐盘",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3743667986",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/健康家居/分类-健康家居-餐盘_06.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat270019",
+                            "categoryName": "茶叶",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "1828651015",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/健康家居/分类-健康家居-茶叶_21.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat270020",
+                            "categoryName": "置物架",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "3006460216",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/健康家居/分类-健康家居-置物架_15.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat280018",
+                            "categoryName": "果盘",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "500043582",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/健康家居/分类-健康家居-果盘_18.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat270022",
+                            "categoryName": "文房四宝",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "243718489",
+                            "imageLink": null,
+                            "imgUrl": "https://sit2-static.yatang.cn/ymdocroot/images/分类/健康家居/分类-健康家居-文房四宝_03.png",
+                            "subCategories": []
+                        },
+                        {
+                            "categoryId": "cat280015",
+                            "categoryName": " 藤椅",
+                            "@class": "com.yatang.endeca.mobile.search.result.Category",
+                            "dimensionId": "2006536884",
+                            "imageLink": null,
+                            "imgUrl": null,
+                            "subCategories": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "brands": [],
+            "@class": "com.yatang.catalog.YTCategoryGroup",
+            "description": "卧室家具",
+            "displayName": "卧室家具",
+            "keywords": [
+                {
+                    "@class": "com.yatang.catalog.YTCategoryGroupKeyword",
+                    "keywords": "沙发",
+                    "sort": 1,
+                    "url": "/goods-shafa/"
+                }
+            ],
+            "promoImageUrl": "group1/M00/00/3D/rB7SAlkuG0CAT7OnAAAykaw3_04767.jpg",
+            "promoUrl": null,
+            "siteId": null,
+            "sort": 6,
+            "subCategories": []
+        }
+    ]
+}

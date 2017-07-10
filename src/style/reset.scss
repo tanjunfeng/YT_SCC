@@ -1,0 +1,59 @@
+/**
+ * @file reset.scss
+ * @author denglingbo
+ */
+
+.gys-layout {
+    margin: 15px 0;
+    padding: 15px;
+    background: #ffffff;
+    border: 1px solid #e1e6ec;
+}
+
+.list-layout {
+    background: #ffffff;
+    border: 1px solid #e1e6ec;
+}
+
+.manage-form,
+.application-form,
+.area-form {
+    @extend .gys-layout;
+}
+
+.manage-list,
+.application-list,
+.onsale-list,
+.area-list,
+.supplier-detail-item,
+.detail-message-header,
+.onsale-form {
+    @extend .list-layout;
+}
+
+/* Reset antd styles */
+.ant-menu-submenu-vertical {
+    .ant-menu-item {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+}
+
+.wap-management {
+    &-tip {
+        margin: 20px 0;
+        padding: 20px 10px;
+        border: 1px solid #e1e6ec;
+        background-color: #f7f7f7;
+    }
+}
+
+.supplier-detail-item {
+    border: 1px solid #e1e6ec;
+}
+
+.detail-message-header {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}

@@ -1,0 +1,28 @@
+.category-icon-management {
+    .category-li{
+        cursor: pointer;
+        display: block;
+        color:rgba(0, 0, 0, 0.65);
+        padding: 8px;
+        &:hover{
+            background-color: #ECF6FD;
+        }
+        .anticon-right{
+            float: right !important;
+        }
+    }
+
+    .active-li{
+        background-color: #ECF6FD;
+    }
+
+    .primary-li{
+        background-color:'';
+    }
+
+    .category-lv3-card{
+        .ant-card-body{
+            padding: 0;
+        }
+    }
+}

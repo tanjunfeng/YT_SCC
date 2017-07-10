@@ -1,0 +1,49 @@
+.ant-table-pagination {
+    margin-right: 15px;
+}
+.change-form {
+    padding-left: 30px;
+    .ant-form-item {
+        margin-bottom: 15px;
+    }
+    .manage-form-item1 {
+        .tjf-css-textarea{
+        width: 270px;
+        resize: none;
+        }
+        .tjf-css-ms{
+        vertical-align: top;
+        text-align: right;
+        }
+        .tjf-css-mc{
+        vertical-align: top;
+        text-align: right;
+            b{
+                color: #f90000;
+                vertical-align: middle;
+            }
+        }
+    }
+    .ant-form-explain {
+        padding-left: 73px;
+    }
+
+    &-label {
+        min-width: 66px;
+    }
+
+    &-tip {
+        margin-left: 10px;
+    }
+}
+.ant-spin-container{
+    .ant-table-thead th,td{
+        text-align: center;
+    }
+    .manage-form-item,.manage-form-item1{
+        line-height: 46px;
+    }
+}
+.nameShow{
+    width: 270px;
+}

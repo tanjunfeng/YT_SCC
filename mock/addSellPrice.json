@@ -1,0 +1,19 @@
+{
+    "productId":"1231",
+    "goodsPriceInfo":
+        {
+        "price1": 1000.456,
+        "startNumber1": 10,
+        "endNumber1": 10,
+            "price2": 1000.456,
+        "startNumber2": 10,
+        "endNumber2": 10,
+            "price3": 1000.456,
+        "startNumber3": 10,
+        "endNumber3": 10,
+        "cityCodes":"021,023,010,0826",
+        "cityNames":"广州市,重庆,北京,广安",
+        "provinceCodes":"021,023,010,082"
+
+        }
+}

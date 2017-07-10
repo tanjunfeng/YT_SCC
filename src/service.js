@@ -1,0 +1,407 @@
+/**
+ * @file service.js
+ * @author denglingbo
+ *
+ * 业务模块 service 封装
+ */
+
+import Http from 'freed-spa/lib/util/http';
+import store from 'freed-spa/src/store';
+import { receiveLogout } from './actions/user';
+import LoginLayout from './views/login/LoginLayout'
+
+const http = new Http();
+
+/**
+ * http response 拦截器
+ */
+http.response(
+    res => {
+        if (res.data.code === 401) {
+            store.dispatch(receiveLogout());
+            LoginLayout();
+            return Promise.reject(res);
+        }
+        return Promise.resolve(res);
+    },
+    err => {
+        if (err.response) {
+            const status = err.response.status;
+            if (status === 401) {
+                store.dispatch(receiveLogout());
+                LoginLayout();
+            }
+        }
+        return Promise.reject(err);
+    }
+);
+
+/**
+ * 下载相关api
+ */
+// 下载供应商excel URL
+export const exportSupplierList = 'provider/exportSupplierList';
+
+// 下载供应商入驻列表
+export const exportSupplierEnterList = 'provider/exportSupplierEnterList';
+
+// 下载供应商修改列表
+export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
+
+/**
+ * 登录 Api
+ */
+export const login = () => http.post('/login');
+
+/**
+ * 获取用户权限
+ * @param code
+ */
+export const fetchRights = (code) => http.get('/system/queryLeftMenusOrButton', { menuId: code });
+
+/**
+ * 获取用户信息及顶部memu数据
+ */
+
+export const user = (params) => http.get('/system/user', params);
+
+/**
+ * 获取侧边栏menus
+ */
+export const queryLeftMenus = (params) => http.get('/system/queryLeftMenusOrButton', params);
+
+/**
+ * 退出登录
+ */
+export const logout = (params) => http.get('/system/logout', params);
+
+/**
+ * 获取用户信息
+ */
+export const fetchUser = () => http.get('/user');
+
+/**
+ * Others
+ */
+export const fetchBookList = () => http.get('/book');
+
+export const fetchBookDetail = (params) => http.get('/bookDetail', params);
+
+export const fetchTopic = () => http.get('/topic');
+
+export const createTopic = (params) => http.post('/topic/create', params);
+
+
+// 查询供应商列表
+export const fetchSupplierList = (params) => http.get('/provider/queryApprovedSupplier', params);
+
+// 修改供应商合作信息
+export const modifySupplierCooperationInfo = (params) => http.post('/provider/updateSupplierCooperationInfo', params);
+
+// 修改供应商状态(新)
+export const editSupplierStatus = (params) => http.post('/provider/editSupplierStatus', params);
+
+// 修改供应商状态
+export const updateSupplierStatus = (params) => http.post('/provider/updateSupplierStatus', params);
+
+// 查询供应商修改资料申请列表
+export const fetchSupplierEditApply = (params) => http.get('/provider/supplierEditApplyList', params);
+
+// 供应商申请入驻管理
+export const fetchProviderEnter = (params) => http.get('/provider/queryProviderEnterList', params);
+
+// 供应商综合审核录入
+export const insertSupplierAuditInfo = (params) => http.post('/provider/insertSupplierAuditInfo', params);
+
+// 查询供应区域信息
+export const fetchSaleRegion = (params) => http.get('/provider/supplierSaleRegionList', params);
+
+// 查询供应区域信息
+export const checkSupplierBasicInfo = (params) => http.get('/provider/checkSupplierBasicInfo', params);
+
+// 检查供应商基本信息是否重复
+export const settlementInfo = (params) => http.post('/provider/checkSupplierBasicInfo', params);
+
+// 供应商基本信息录入
+export const insertSupplierSettlementInfo = (params) => http.post('/provider/insertSupplierSettlementInfo', params);
+
+// 查询纳税人是否已存在
+export const taxpayerNumber = (params) => http.get('/provider/checkSupplierOperTaxBytaxpayerNumber', params);
+
+// 检查银行账号是否存在重复
+export const bankAccount = (params) => http.get('/provider/checkSupplierBankInfoByBankAccount', params);
+
+// 检查营业执照号是否重复
+export const registLicenceNo = (params) => http.get('/provider/checkSupplierLicenseInfoByRegistLicenceNo', params);
+
+// 检查组织机构代码是否重复
+export const orgCodeInfoByCode = (params) => http.get('/provider/checkSupplierOrgCodeInfoByCode', params);
+
+// 检查供应商紧急联系人的重复情况
+export const emerCont = (params) => http.get('/provider/checkSupplierEmerCont', params);
+
+// 检查供应商入驻联系人的重复情况
+export const settledCont = (params) => http.get('/provider/checkSupplierSettledCont', params);
+
+// 查看失败原因
+export const findAuditFailedReason = (params) => http.get('/provider/findAuditFailedReason', params);
+
+// 获取供应商详情
+export const queryProviderDetail = (params) => http.get('/provider/queryProviderDetail', params);
+
+// 修改供应商营业执照信息 (未联调)
+export const updateSupplierLicenseInfo = (params) => http.post('/provider/updateSupplierLicenseInfo', params);
+
+// 查看修改供应商营业执照信息 (未联调)
+export const showOldAndNewLicenseInfo = (params) => http.get('/provider/showOldAndNewLicenseInfo', params);
+
+// 审核公司营业执照 (未联调)
+export const approveSupplierLicense = (params) => http.post('/provider/approveSupplierLicense', params);
+
+// 修改公司组织机构代码证信息 (未联调)
+export const updateSupplierOrgCodeInfo = (params) => http.post('/provider/updateSupplierOrgCodeInfo', params);
+
+// 查询组织机构代码证修改前和修改后内容 (未联调)
+export const showOldAndNewOrgCodeInfo = (params) => http.get('/provider/showOldAndNewOrgCodeInfo', params);
+
+// 审核组织机构代码证修改内容 (未联调)
+export const approveSupplierOrgCode = (params) => http.post('/provider/approveSupplierOrgCode', params);
+
+// 修改公司经营及税务信息 (未联调)
+export const updateSupplierOperTaxInfo = (params) => http.post('/provider/updateSupplierOperTaxInfo', params);
+
+// 查询公司经营及税务信息修改前和修改后内容 (未联调)
+export const showOldAndNewOperTaxContent = (params) => http.get('/provider/showOldAndNewOperTaxContent', params);
+
+// 审核供应商公司经营及税务信息修改内容 (未联调)
+export const approveSupplierOperTax = (params) => http.post('/provider/approveSupplierOperTax', params);
+
+// 修改银行信息 (未联调)
+export const updateSupplierBankInfo = (params) => http.post('/provider/updateSupplierBankInfo', params);
+
+// 查询商家银行修改前和修改后的内容 (未联调)
+export const showOldAndNewBankContent = (params) => http.get('/provider/showOldAndNewBankContent', params);
+
+// 审核供应商银行修改信息 (未联调)
+export const approveSupplierBank = (params) => http.post('/provider/approveSupplierBank', params);
+
+// 修改供应商紧急联系人 (未联调)
+export const editSupplierEmerContApproval = (params) => http.post('/provider/editSupplierEmerContApproval', params);
+
+// 查询供应商紧急联系人修改前修改后的信息 (未联调)
+export const showOldAndNewEmerContInfo = (params) => http.get('/provider/showOldAndNewEmerContInfo', params);
+
+// 审核紧急联系人修改后的内容 (未联调)
+export const approveSupplierEmerCont = (params) => http.post('/provider/approveSupplierEmerCont', params);
+
+// 修改招商入驻联系人 (未联调)
+export const editSupplierSettledContApproval = (params) => http.post('/provider/editSupplierSettledContApproval', params);
+
+// 查询招商入驻联系人修改前和修改后内容 (未联调)
+export const showOldAndNewSettledContInfo = (params) => http.get('/provider/showOldAndNewSettledContInfo', params);
+
+// 审核招商入驻联系人修改后内容 (未联调)
+export const approveSupplierSettledCont = (params) => http.post('/provider/approveSupplierSettledCont', params);
+
+// 修改合作信息 (未联调)
+export const editSupplierCooperationApproval = (params) => http.post('provider/updateSupplierCooperationInfo', params);
+
+export const fetchSaleRegionsDtail = (params) => http.get('/provider/supplierSaleRegions', params);
+
+export const fetchApplicationList = (params) => http.get('/suppliersApplicationList', params);
+
+export const fetchParameterList = (params) => http.get('/parameterList', params);
+
+// 查询所有的省和直辖市
+export const queryAllProvince = (params) => http.get('/region/queryAllProvince', params);
+
+// 根据code查询子区域
+export const queryRegionByCode = (params) => http.get('/region/queryRegionByCode', params);
+
+// 商品分类第一级查询
+export const fetchFirstLevelCategorys = () => http.get('/category/queryFirstLevelCategorys');
+
+// 子集商品分类查询
+export const fetchCategorysById = (params) => http.get('-web-manage/queryCategorysById/xcate1', params);
+
+// 查询在售商品列表
+export const fetchShelfProductsByLike = (params) => http.get('/product/queryShelfProductsByLike', params);
+
+export const fetchClassifiedList = () => http.get('/category/queryFirstLevelCategorys');
+
+// 查询销售价格详情
+export const findPriceinfo = (params) => http.get('/price/findPriceInfo', params);
+
+// 查询销售价格详情
+export const toaddsellprice = (params) => http.get('/price/toAddSellPrice', params);
+
+// 跳转到修改销售价格页面
+export const toUpdateSellPrice = (params) => http.get('/price/toUpdateSellPrice', params);
+
+// 修改销售价格
+export const updateSellPrice = (params) => http.post('/price/updateSellPrice', params);
+
+// 删除采购价格
+export const deletePurchasePriceById = (params) => http.get('/price/deletePurchasePriceById', params);
+
+// 查看商品详情
+export const commodityDetail = (params) => http.get('/product/detailsById', params);
+
+// 查询采购价格list
+export const purchasePriceDetail = (params) => http.get('/price/getPurchasePriceDetail', params);
+
+// 新增采购价格
+export const addPurchasement = (params) => http.post('/price/addPurchasementPrice', params);
+
+// 在售商品列表下架功能
+export const updateOffShelfProducts = (params) => http.post('/product/updateOffShelfProducts', params);
+
+// 新增销售价格
+export const addSellPrice = (params) => http.post('/price/addSellPrice', params);
+
+// 修改采购价格
+export const updatePurchasePrice = (params) => http.post('/price/updatePurchasePrice', params);
+
+// 系统配置
+// 分类列表页商品排序管理
+export const fetchCategoryList = (params) => http.get('/categoryGoodsOrder/queryCategoryGoodsOrders', params);
+
+// 修改分类商品排序号
+export const fetchOrderNum = (params) => http.post('/categoryGoodsOrder/updateCategoryGoodsOrderNum', params);
+
+// 新增分类商品排序号
+export const fetchInsertCategoryGoodsOrder = (params) => http.post('/categoryGoodsOrder/insertCategoryGoodsOrder', params);
+
+// 通过商品编号获取商品名称
+export const fetchQuerygoodsname = (params) => http.get('/categoryGoodsOrder/queryGoodsName', params);
+
+// 根据分类排序商品id删除记录
+export const fetchDeleteOrderNum = (params) => http.get('/categoryGoodsOrder/deleteCategoryGoodsOrderNum', params);
+
+// 多媒体管理
+// 静态页面列表查询
+export const fetchFindStaticPageList = (params) => http.get('/staticPage/findStaticPageList', params);
+
+// 查询字典分页列表
+export const dictionaryList = (params) => http.get('/dictionary/dictionaryList', params);
+
+// 新增静态页
+export const insertstaticpage = (params) => http.post('/staticPage/insertStaticPage', params);
+
+// 修改静态页面基本信息
+export const updatestaticpagebase = (params) => http.post('/staticPage/updateStaticPageBase', params);
+
+// 显示字典内容
+export const dictionaryContentList = (params) => http.get('/dictionary/dictionaryContentList', params);
+
+// 页面编辑数据列表
+export const fectheEditorList = (params) => http.get('/staticPage/toUpdateStaticPage', params);
+// 修改静态页面编辑内容并上传到图片服务器
+export const fectheEditorContent = (params) => http.post('/staticPage/updateStaticPageUpload', params);
+
+/**
+ * wrap 端配置相关接口
+ */
+// 查询所有轮播
+export const queryCarouselAdList = (params) => http.get('/homeAd/queryCarouselAdList', params);
+
+// 修改分类信息
+export const updateCarouselAd = (params) => http.post('/homeAd/updateCarouselAd', params);
+
+// 删除某个轮播
+export const deleteCarouselAd = (params) => http.post('/homeAd/deleteCarouselAd', params);
+
+// 新增轮播
+export const insertCarouselAd = (params) => http.post('/homeAd/insertCarouselAd', params);
+
+
+// 判断序号是否重复
+export const queryCarouselAdBySorting = (params) => http.get('/homeAd/queryCarouselAdBySorting', params);
+
+// 查询单个轮播广告
+export const queryCarouselAdListById = (params) => http.get('/homeAd/queryCarouselAdListById', params);
+
+// 查询轮播间隔时间
+export const queryCarouselIntervalList = (params) => http.get('/homeAd/queryCarouselInterval', params);
+
+// 修改轮播间隔时间
+export const updateCarouselInterval = (params) => http.post('/homeAd/updateCarouselInterval', params);
+
+// 查询快捷导航列表
+export const queryQuickNavigationList = (params) => http.get('/homeAd/queryQuickNavigationList', params);
+
+// 查询单个快捷导航
+export const queryQuickNavigation = (params) => http.get('sc/homeAd/queryQuickNavigation', params);
+
+// 修改快捷导航
+export const updateQuickNavigation = (params) => http.post('/homeAd/updateQuickNavigation', params);
+
+// 首页配置区域列表
+export const areaList = (params) => http.get('/homeAd/areaList', params);
+
+// 设置首页广告区域停用或者启用
+export const setAreaEnable = (params) => http.post('/homeAd/setAreaEnable', params);
+
+// 设置首页广告区域上移或者下移
+export const moveArea = (params) => http.post('/homeAd/moveArea', params);
+
+// 添加广告项
+export const saveItemAd = (params) => http.post('/homeAd/saveItemAd', params);
+
+// 上传base64图片
+export const uploadImageBase64Data = (params) => http.post('/commonUploadFile/uploadImageBase64Data', params);
+
+// 查询全部分类信息
+export const queryCategorys = (params) => http.get('/category/queryCategories', params);
+
+// 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
+export const saveInput = (params) => http.post('/rk/saveInput', params);
+
+// 搜索推荐配置(cyx)---2.添加热门推荐的关键字
+export const saveHot = (params) => http.post('/rk/saveHot', params);
+
+// 搜索推荐配置(cyx)---3.修改热门推荐关键字之回显
+export const findById = (params) => http.get('/rk/findById', params);
+
+// 搜索推荐配置(cyx)---4.修改热门推荐关键字
+export const updateHot = (params) => http.post('/rk/updateHot', params);
+
+// 搜索推荐配置(cyx)---5.根据id删除对应的热门推荐关键字
+export const deleteById = (params) => http.get('/rk/deleteById', params);
+
+// 搜索推荐配置(cyx)---6.查出所有的搜索框下方推荐关键字并分页
+export const queryAllHot = (params) => http.get('/rk/queryAllHot', params);
+
+// 搜索推荐配置(cyx)---7.查询搜索框中的关键字查询
+export const selectInputKeyword = (params) => http.get('/rk/selectInputKeyword', params);
+
+// 搜索推荐配置(cyx)---7.查询搜索框中的关键字查询
+export const queryCategoriesLv3IconList = (params) => http.get('/categoryIcon/queryCategoriesLv3IconList', params);
+
+// 分类图标管理(cyx)---上传ICON
+export const addOrUpdateCategoryIcon = (params) => http.post('/categoryIcon/addOrUpdateCategoryIcon', params);
+
+// 404页面广告配置(cyx)---查询table
+export const queryAllAdPlanList = (params) => http.get('/adPlan/queryAllAdPlanList', params);
+
+// 404页面广告配置(cyx)---删除方案
+export const deleteAdPlanById = (params) => http.get('/adPlan/deleteAdPlanById', params);
+
+// 404页面广告配置(cyx)---方案的启停
+export const changeAdPlanState = (params) => http.get('/adPlan/changeAdPlanState', params);
+
+// 404页面广告配置(cyx)---新增方案
+export const addAdPlan = (params) => http.post('/adPlan/addAdPlan', params);
+
+// 404页面广告配置(cyx)---新增方案
+export const updateAdPlan = (params) => http.post('/adPlan/updateAdPlan', params);
+
+// 查询阶梯价格信息
+export const getPurchasePrice = (params) => http.get('/price/getPurchasePriceExtByPriceId', params);
+
+// 查询供应商
+export const queryAllSupplier = (params) => http.get('/price/queryAllSupplier', params);
+
+// 新增数据字典
+export const insertDictionary = (params) => http.post('/dictionary/insertDictionary', params);
+

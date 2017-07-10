@@ -1,0 +1,262 @@
+{
+    "timestamp": 1496742241941,
+    "code": 200,
+    "message": null,
+    "data": [
+        {
+            "id": "xcate222",
+            "categoryName": "玩具",
+            "level": null,
+            "status": null,
+            "parentCategoryId": null,
+            "sortOrder": 1,
+            "displayStatus": 0
+        },
+        {
+            "id": "xcate1",
+            "categoryName": "饮料烟酒",
+            "level": null,
+            "status": null,
+            "parentCategoryId": null,
+            "sortOrder": 2,
+            "displayStatus": 1,
+            "childCategories": [
+                {
+                    "id": "xcate8",
+                    "categoryName": "水饮料",
+                    "level": null,
+                    "status": null,
+                    "parentCategoryId": "xcate1",
+                    "sortOrder": null,
+                    "displayStatus": 1,
+                    "childCategories": [
+                        {
+                            "id": "xcate37",
+                            "categoryName": "碳酸饮料",
+                            "level": null,
+                            "status": null,
+                            "parentCategoryId": "xcate8",
+                            "sortOrder": null,
+                            "displayStatus": 1,
+                            "childCategories": [
+                                {
+                                    "id": "xcate1ssssss",
+                                    "categoryName": "碳酸饮料 - AAAA",
+                                    "level": null,
+                                    "status": null,
+                                    "parentCategoryId": "xcate37",
+                                    "sortOrder": 1,
+                                    "displayStatus": 1
+                                }
+                            ]
+                        },
+                        {
+                            "id": "xcate38",
+                            "categoryName": "饮用水",
+                            "level": null,
+                            "status": null,
+                            "parentCategoryId": "xcate8",
+                            "sortOrder": null,
+                            "displayStatus": 1,
+                            "childCategories": []
+                        },
+                        {
+                            "id": "xcate39",
+                            "categoryName": "茶饮、咖啡",
+                            "level": null,
+                            "status": null,
+                            "parentCategoryId": "xcate8",
+                            "sortOrder": null,
+                            "displayStatus": 1,
+                            "childCategories": []
+                        },
+                        {
+                            "id": "xcate40",
+                            "categoryName": "功能饮料",
+                            "level": null,
+                            "status": null,
+                            "parentCategoryId": "xcate8",
+                            "sortOrder": null,
+                            "displayStatus": 1,
+                            "childCategories": []
+                        },
+                        {
+                            "id": "xcate41",
+                            "categoryName": "果汁",
+                            "level": null,
+                            "status": null,
+                            "parentCategoryId": "xcate8",
+                            "sortOrder": null,
+                            "displayStatus": 1,
+                            "childCategories": []
+                        }
+                    ]
+                },
+                {
+                    "id": "xcate9",
+                    "categoryName": "奶制品",
+                    "level": null,
+                    "status": null,
+                    "parentCategoryId": "xcate1",
+                    "sortOrder": null,
+                    "displayStatus": 1,
+                    "childCategories": [
+                        {
+                            "id": "xcate42",
+                            "categoryName": "成人奶制品",
+                            "level": null,
+                            "status": null,
+                            "parentCategoryId": "xcate9",
+                            "sortOrder": null,
+                            "displayStatus": 1,
+                            "childCategories": []
+                        },
+                        {
+                            "id": "xcate43",
+                            "categoryName": "儿童奶制品",
+                            "level": null,
+                            "status": null,
+                            "parentCategoryId": "xcate9",
+                            "sortOrder": null,
+                            "displayStatus": 1,
+                            "childCategories": []
+                        }
+                    ]
+                },
+                {
+                    "id": "xcate10",
+                    "categoryName": "酒类",
+                    "level": null,
+                    "status": null,
+                    "parentCategoryId": "xcate1",
+                    "sortOrder": null,
+                    "displayStatus": 1,
+                    "childCategories": [
+                        {
+                            "id": "xcate44",
+                            "categoryName": "白酒",
+                            "level": null,
+                            "status": null,
+                            "parentCategoryId": "xcate10",
+                            "sortOrder": null,
+                            "displayStatus": 0,
+                            "childCategories": []
+                        },
+                        {
+                            "id": "xcate45",
+                            "categoryName": "啤酒",
+                            "level": null,
+                            "status": null,
+                            "parentCategoryId": "xcate10",
+                            "sortOrder": null,
+                            "displayStatus": 1,
+                            "childCategories": []
+                        },
+                        {
+                            "id": "xcate46",
+                            "categoryName": "红酒",
+                            "level": null,
+                            "status": null,
+                            "parentCategoryId": "xcate10",
+                            "sortOrder": null,
+                            "displayStatus": 1,
+                            "childCategories": []
+                        },
+                        {
+                            "id": "xcate47",
+                            "categoryName": "果酒",
+                            "level": null,
+                            "status": null,
+                            "parentCategoryId": "xcate10",
+                            "sortOrder": null,
+                            "displayStatus": 1,
+                            "childCategories": []
+                        },
+                        {
+                            "id": "xcate48",
+                            "categoryName": "调制酒",
+                            "level": null,
+                            "status": null,
+                            "parentCategoryId": "xcate10",
+                            "sortOrder": null,
+                            "displayStatus": 1,
+                            "childCategories": []
+                        }
+                    ]
+                },
+                {
+                    "id": "xcate11",
+                    "categoryName": "烟草",
+                    "level": null,
+                    "status": null,
+                    "parentCategoryId": "xcate1",
+                    "sortOrder": null,
+                    "displayStatus": 1,
+                    "childCategories": [
+                        {
+                            "id": "xcate49",
+                            "categoryName": "国产烟",
+                            "level": null,
+                            "status": null,
+                            "parentCategoryId": "xcate11",
+                            "sortOrder": null,
+                            "displayStatus": 1,
+                            "childCategories": []
+                        },
+                        {
+                            "id": "xcate50",
+                            "categoryName": "进口烟",
+                            "level": null,
+                            "status": null,
+                            "parentCategoryId": "xcate11",
+                            "sortOrder": null,
+                            "displayStatus": 1,
+                            "childCategories": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "xcate4",
+            "categoryName": "护肤品",
+            "level": null,
+            "status": null,
+            "parentCategoryId": null,
+            "sortOrder": 3,
+            "displayStatus": 1,
+            "childCategories": [
+                {
+                    "id": "xcate221",
+                    "categoryName": "洗面奶",
+                    "level": null,
+                    "status": null,
+                    "parentCategoryId": "xcate4",
+                    "sortOrder": null,
+                    "displayStatus": 1
+                }
+            ]
+        },
+        {
+            "id": "xcate6",
+            "categoryName": "毛巾",
+            "level": null,
+            "status": null,
+            "parentCategoryId": null,
+            "sortOrder": 3,
+            "displayStatus": 1,
+            "childCategories": [
+                {
+                    "id": "xcate2551",
+                    "categoryName": "干毛巾",
+                    "level": null,
+                    "status": null,
+                    "parentCategoryId": "xcate6",
+                    "sortOrder": null,
+                    "displayStatus": 1
+                }
+            ]
+        }
+    ],
+    "success": true
+}

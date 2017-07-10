@@ -1,0 +1,20 @@
+/**
+ * @file SiderMenu.scss
+ * @author denglingbo
+ */
+
+.ant-menu-item {
+    padding-left: 42px !important;
+}
+
+.ant-menu-submenu-title {
+    padding-left: 20px !important;
+
+    .anticon {
+        transition: font-size .3s;
+    }
+}
+
+.ant-menu-dark.ant-menu-inline, .ant-menu-dark.ant-menu-vertical {
+    margin-bottom: 31px;
+}

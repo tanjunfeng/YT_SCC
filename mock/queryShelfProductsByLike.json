@@ -1,0 +1,35 @@
+{
+  "timestamp": 1496396124670,
+  "code": 200,
+  "message": null,
+  "data": {
+    "data": [
+      {
+        "id": "111658",
+        "name": null,
+        "brand": null,
+        "firstLevelCategoryName": null,
+        "secondLevelCategoryName": null,
+        "thirdLevelCategoryName": null,
+        "createTime": 1472009608000,
+        "shelfTime": null,
+        "imageUrl": null
+      },
+      {
+        "id": "147850",
+        "name": null,
+        "brand": null,
+        "firstLevelCategoryName": null,
+        "secondLevelCategoryName": null,
+        "thirdLevelCategoryName": null,
+        "createTime": 1472005904000,
+        "shelfTime": null,
+        "imageUrl": null
+      }
+    ],
+    "total": 72,
+    "pageNum": 1,
+    "pageSize": 2
+  },
+  "success": true
+}

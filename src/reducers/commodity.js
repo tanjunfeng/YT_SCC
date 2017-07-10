@@ -1,0 +1,135 @@
+/**
+ * @file supplier.js
+ * @author shijh, denglingbo
+ * 
+ * 商品管理 reducer
+ */
+
+import Immutable from 'immutable';
+import ActionType from '../actions/ActionType';
+
+const initState = Immutable.fromJS({
+
+    // 供应商管理列表
+    data: {},
+
+    // 弹出框数据 
+    visibleData: {},
+
+    informationVisible: false,
+
+    // 地区管理列表
+    areaData: {},
+
+    // 供应商申请列表
+    applicationData: {},
+
+    // 控制弹出框显示影藏
+    toAddPriceVisible: false,
+    // 是否是编辑
+    isEdit: false,
+    purchasingPiceVisible: false,
+
+    // 商品分类列表
+    goods: [],
+
+    // 在售商品列表
+    selfProduct: {},
+
+    // 销售价格详情
+    price: {},
+
+    // 查看新增销售价格
+    addPrice: {},
+
+    // 跳转到修改销售价格页面
+    toUpdate: {},
+    // 商品分类
+    classifiedList: [],
+
+    // 查看商品详情
+    commodityDetail: {},
+
+    // 查看采购价格list
+    purchasePrice: {},
+
+    // 查询供应商
+    queryAll: [],
+
+
+});
+
+export default function (state = initState, action) {
+    switch (action.type) {
+        case ActionType.RECEIVE_PARAMETER_LIST:
+            return state.set('data', action.payload);
+
+        case ActionType.RECEIVE_SELF_PRODUCT_LIST:
+            return state.set('selfProduct', action.payload);
+
+        case ActionType.RECEIVE_CLASSIFIED_LIST:
+            return state.set('classifiedList', action.payload);
+
+        case ActionType.RECEIVE_FIND_PRICE_INFO:
+            return state.set('price', action.payload);
+
+        case ActionType.RECEIVE_TO_ADD_SELL_PRICE: {
+            return state.set('addPrice', action.payload);
+        }
+        case ActionType.RECEIVE_TO_UPDATE_SELL_PRICE: {
+            return state.set('toUpdate', action.payload);
+        }
+        // 查询阶梯价格信息
+        case ActionType.RECEIVE_GET_PURCHASE_PRICE_EXT_BY_PRICE_ID: {
+            return state.set('getPurchasePrice', action.payload);
+        }
+        // 新增销售价格弹窗
+        case ActionType.PRODUCT_TO_ADD_SELL_PRICE: {
+            const { isVisible, id, isEdit, pricingId } = action.payload;
+            return state
+                .set('toAddPriceVisible', isVisible)
+                .set('visibleData', id)
+                .set('isEdit', isEdit)
+                .set('pricingId', pricingId)
+                .set('id',id)
+                ;
+        }
+
+        // 新增采购价格弹窗
+        case ActionType.PRODUCT_ADD_PURCHASEMENT_PRICE: {
+            const { isVisible, id, isEdit, supplierId, companyName, pricingId } = action.payload;
+            return state
+                .set('toPurchasePriceVisible', isVisible)
+                .set('visibleData', id)
+                .set('isEdit', isEdit)
+                .set('id', id)
+                .set('supplierId', supplierId)
+                .set('companyName', companyName)
+                .set('pricingId', pricingId)
+                ;
+        }
+
+        case ActionType.RECEIVE_COMMODITY_DETAIL:
+            return state.set('commodityDetail', action.payload);
+
+        case ActionType.RECEIVE_GET_PURCHASE_PRICE_DETAIL:
+            return state.set('purchasePrice', action.payload);
+
+        case ActionType.REQUEST_ADD_SELL_PRICE:
+            return state.set('toAddPriceVisible', action.payload);
+
+        case ActionType.REQUEST_ADD_PURCHASEMENT_PRICE:
+            return state.set('toPurchasePriceVisible', action.payload);
+
+        // 查询供应商
+        case ActionType.RECEIVE_QUERY_ALL_SUPPLIER:
+            return state.set('queryAll', action.payload);
+
+        case ActionType.RECEIVE_UPDATE_OFFSHELF_PRODUCTS: {
+            // 在售商品列表下架功能
+            return state;
+        }
+        default:
+            return state;
+    }
+}

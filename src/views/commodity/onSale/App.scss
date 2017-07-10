@@ -1,0 +1,37 @@
+.onsale {
+    &-list,
+    &-form {
+        background: #ffffff;
+        border: 1px solid #c4c5c9;
+    }
+    &-form {
+        margin: 20px 0;
+        padding: 26px 18px;
+    }
+    &-number {
+        margin-right: 20px;
+    }
+    &-img-wrap {
+        margin-top: 6px;
+    }
+    &-img {
+        width: 40px;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+}
+
+.classify-select {
+    display: inline-block;
+    vertical-align: middle;
+    &-label {
+        margin-right: 8px;
+    }
+    &-btn-warp {
+        display: inline-block;
+    }
+}
+
+.supplier-SellingPrice-item .ant-card-bordered {
+    height: 176px;
+}

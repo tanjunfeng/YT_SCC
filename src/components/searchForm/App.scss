@@ -1,0 +1,39 @@
+.manage {
+    &-list, &-form {
+        background: #ffffff;
+        border: 1px solid #c4c5c9;
+    }
+
+    &-form {
+        margin: 20px 0;
+        padding: 26px 18px;
+        &-label {
+            margin-right: 8px;
+            display: inline-block;
+            min-width: 60px;
+        }
+        &-input {
+            display: inline-block;
+            width: 153px;
+        }
+        &-companyName {
+            width: inherit;
+            width: 270px;
+        }
+        &-supplierNumber {
+            max-width: 90px;
+        }
+        &-item {
+            line-height: 46px;
+        }
+        &-item1 {
+            width: 340px;
+        }
+        &-item2 {
+            width: 290px;
+            .ant-form-item-control-wrapper {
+                width: 100%;
+            }
+        }
+    }
+}

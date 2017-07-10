@@ -1,0 +1,120 @@
+{
+    "timestamp": 1497859430586,
+    "code": 200,
+    "message": null,
+    "data": {
+        "id": "1001",
+        "name": "测试",
+        "saleName": null,
+        "description": null,
+        "internationalCodes": [
+            "9999999999999",
+            "2222222222222"
+        ],
+        "brandName": null,
+        "invoiceLimit": 0,
+        "inputTaxRate": null,
+        "deductibleTaxRate": null,
+        "taxRate": null,
+        "deliveryTime": null,
+        "producePlace": null,
+        "minUnit": "条",
+        "firstLevelCategoryName": "粮油副食",
+        "secondLevelCategoryName": "罐头",
+        "thirdLevelCategoryName": "水果罐头",
+        "packingSpecifications": null,
+        "weight": null,
+        "qualityGuaranteePeriod": null,
+        "guaranteePeriodUnit": null,
+        "onshelfStatus": 0,
+        "carton": null,
+        "attributeValules": [
+            {
+                "value": "属性值一",
+                "id": null,
+                "name": "属性一"
+            },
+            {
+                "value": "属性值二",
+                "id": null,
+                "name": "属性二"
+            }
+        ],
+        "childSkus": [
+            {
+                "id": "1",
+                "status": 0,
+                "attr1Name": "口味",
+                "attr2Name": "重量",
+                "attr3Name": "",
+                "attr1Value": "苹果",
+                "attr2Value": "100g",
+                "attr3Value": "",
+                "images": [
+                    {
+                        "id": "ximg2913",
+                        "url": "group1/M00/00/BB/rB4KPllD0T-Ad4xLAA1rIuRd3Es943.jpg"
+                    },
+                    {
+                        "id": "ximg2914",
+                        "url": "group1/M00/00/BC/rB4KPVlD0UCAXaenAAkVVGMybN8245.jpg"
+                    }
+                ]
+            },
+            {
+                "id": "2",
+                "status": 0,
+                "attr1Name": "口味",
+                "attr2Name": "重量",
+                "attr3Name": "",
+                "attr1Value": "苹果2",
+                "attr2Value": "1002g",
+                "attr3Value": "",
+                "images": [
+                    {
+                        "id": "ximg2913",
+                        "url": "group1/M00/00/BB/rB4KPllD0T-Ad4xLAA1rIuRd3Es943.jpg"
+                    },
+                    {
+                        "id": "ximg2914",
+                        "url": "group1/M00/00/BC/rB4KPVlD0UCAXaenAAkVVGMybN8245.jpg"
+                    }
+                ]
+            }
+        ],
+        "skuInputVos": [
+            {
+                "name": "口味",
+                "value": [
+                    "苹果2",
+                    "苹果"
+                ]
+            },
+            {
+                "name": "重量",
+                "value": [
+                    "1002g",
+                    "100g"
+                ]
+            }
+        ],
+        "images": [
+            {
+                "id": "ximg2913",
+                "url": "group1/M00/00/BB/rB4KPllD0T-Ad4xLAA1rIuRd3Es943.jpg"
+            },
+            {
+                "id": "ximg2914",
+                "url": "group1/M00/00/BC/rB4KPVlD0UCAXaenAAkVVGMybN8245.jpg"
+            },
+            {
+                "id": "ximg2915",
+                "url": "group1/M00/00/BC/rB4KPFlD0UOAXryiAAzodQCbVVc274.jpg"
+            }
+        ],
+        "mainImage": null,
+        "html": null,
+        "keyWords": null
+    },
+    "success": true
+}

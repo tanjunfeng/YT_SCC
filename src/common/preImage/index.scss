@@ -1,0 +1,84 @@
+/**
+ * @file index.scss
+ * @author denglingbo
+ *
+ */
+
+.pre-image {
+    user-select: none;
+    position: relative;
+    display: inline-block;
+    border: 1px solid #eee;
+
+    &-bar-title,
+    &-bar-content {
+        width: 180px;
+    }
+
+    &-bar-title {
+        text-align: right;
+
+        span {
+            width: 14px;
+            margin-left: 5px;
+            display: inline-block;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        i {
+            transition: all .3s;
+            transform-origin: 50% 50%;
+
+            &:hover {
+                font-size: 14px;
+                color: #333;
+            }
+        }
+    }
+
+    canvas {}
+
+    &-wrapper {
+        position: relative;
+
+        /* 模拟一个按钮，去触发 file */
+        .pre-image-file-choose {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            opacity: 1;
+            cursor: pointer;
+
+            i {
+                position: absolute;
+                font-size: 40px;
+                top: 50%;
+                left: 50%;
+                margin: -20px 0 0 -20px;
+
+                &:hover {
+                    color: #000000;
+                }
+            }
+        }
+    }
+
+    /* 容器默认状态 */
+    &-default {
+        /* 这里解决一下交互问题，当没有上传图片，不希望展示出操作容器 */
+        .ant-popover {
+            display: none;
+        }
+    }
+
+    /* 容器添加了图片状态 */
+    &-uploaded {
+        .pre-image-file-choose {
+            display: none;
+        }
+    }
+}

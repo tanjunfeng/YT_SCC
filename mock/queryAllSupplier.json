@@ -1,0 +1,52 @@
+{
+  "timestamp": 1496320177947,
+  "code": 200,
+  "message": "成功查询所有供应商",
+  "data": [
+    {
+      "supplierId": "1234567UUID",
+      "companyName": "成都杨氏双流造纸有限公司1"
+    },
+    {
+      "supplierId": "SP000011",
+      "companyName": "成都双流造纸有限公司"
+    },
+    {
+      "supplierId": "SP000012",
+      "companyName": "成都双流造纸有限公司"
+    },
+    {
+      "supplierId": "SP000013",
+      "companyName": "成都双流造纸有限公司"
+    },
+    {
+      "supplierId": "SP000014",
+      "companyName": "成都双流造纸有限公司"
+    },
+    {
+      "supplierId": "SP000015",
+      "companyName": "成都双流造纸有限公司"
+    },
+    {
+      "supplierId": "SP000016",
+      "companyName": "成都双流造纸有限公司"
+    },
+    {
+      "supplierId": "SP000017",
+      "companyName": "成都双流造纸有限公司"
+    },
+    {
+      "supplierId": "SP00002",
+      "companyName": "成都双流造纸有限公司"
+    },
+    {
+      "supplierId": "SP00004",
+      "companyName": "成都双流造纸有限公司"
+    },
+    {
+      "supplierId": "SP00006",
+      "companyName": "成都双流造纸有限公司"
+    }
+  ],
+  "success": true
+}

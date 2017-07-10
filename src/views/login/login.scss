@@ -1,0 +1,122 @@
+/**
+ * @file Login.jsx
+ * @author Tan jun feng
+ */
+
+$color_red: #e90000;
+$color_white: #fff;
+$ft: 'yahei';
+.ant-layout {
+    background: $color_white;
+}
+
+.yt-content-wrap {
+    background: url(../../images/login/banner-bg.jpg) no-repeat 50% 0;
+    height: 550px;
+}
+
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+    background: $color_red;
+    border-color: $color_red;
+}
+
+.yt-wrap-inner {
+    width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.ant-input-affix-wrapper {
+    width: 300px;
+    height: 40px;
+}
+
+.yt-login {
+
+    &-form {
+        margin-top: 30px;
+        &-footer {
+            margin-top: 30px;
+            a {
+                color: #333;
+            }
+        }
+    }
+
+    &-contn {
+        text-align: center;
+        width: 410px;
+        height: 360px;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        overflow: hidden;
+        background: #fff;
+        position: absolute;
+        right: 0;
+        top: 100px;
+    }
+
+    &-header {
+        background-color: $color_red;
+        line-height: 42px;
+        color: #fff;
+        font-size: 18px;
+    }
+
+    &-form-button {
+        width: 305px;
+        height: 40px;
+        background-color: $color_red;
+        border-color: $color_red;
+    }
+
+    &-head-logo {
+        padding: 20px 15px 20px 0;
+
+        img, span {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+
+        img {
+            margin-right: 10px;
+        }
+
+        span {
+            font-size: 24px;
+        }
+        
+    }
+
+}
+
+.yt-foot {
+    &-szfw-logo {
+        margin-top: 10px;
+        display: ineline-block;
+    }
+
+    &-wrap {
+        text-align: center;
+    }
+
+    &-tittle {
+        font-size: 14px;
+    }
+
+    &-inner {
+        font-size: 14px;
+        padding-top: 10px;
+
+        p {
+            margin-bottom: 5px;
+        }
+
+        a {
+            color: #333;
+        }
+    }
+}

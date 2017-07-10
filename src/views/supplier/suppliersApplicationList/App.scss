@@ -1,0 +1,54 @@
+textarea.application-modal-textarea {
+    max-width: 300px;
+    vertical-align: top;
+    min-width: 100px;
+}
+
+.application-modal {
+    &-tip {
+        color: #ff0000;
+        padding-left: 36px;
+    }
+    &-select {
+        .application-modal-label {
+            display: inline-block;
+            width: 70px;
+            text-align: right;
+        }
+        margin: 14px 0;
+    }
+}
+
+.application-form-item {
+    width: 100%;
+    .ant-form-item-control-wrapper {
+        width: inherit;
+    }
+    .application-modal-label {
+        margin-right: 8px;
+    }
+    .ant-form-explain {
+        margin-left: 82px;
+        margin-top: 4px;
+    }
+}
+
+.check-reason {
+    &-list {
+        padding: 0 0 20px 0;
+    }
+    &-item {
+        margin: 10px 0;
+        overflow: hidden;
+    }
+    &-left, &-right {
+        float: left;
+    }
+    &-left {
+        min-width: 73px;
+        text-align: right;
+    }
+    &-right {
+        width: 400px;
+    }
+}

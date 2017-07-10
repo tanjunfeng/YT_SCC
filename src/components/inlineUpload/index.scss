@@ -1,0 +1,33 @@
+.inline-upload {
+    display: inline-block;
+    &-file {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 40px;
+
+        &-link {
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        &-icon {
+            font-size: 16px;
+            margin-right: 4px;
+            vertical-align: middle;
+        }
+        &-delete {
+            cursor: pointer;
+            vertical-align: middle;
+            &:hover {
+                color: #108ee9
+            }
+        }
+    }
+    &-limit {
+        .ant-upload {
+            display: none;
+        }
+    }
+    .ant-upload {
+        margin-right: 6px;
+    }
+}
