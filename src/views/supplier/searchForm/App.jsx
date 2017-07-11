@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker } from 'antd';
 
-import AscadeChoice from '../../../components/ascadeChoice';
 import Utils from '../../../util/util';
-import { supplierTypeOptions, supplierStatusOptions, supplierLevelOptions, supplierPlaceLevelOptions } from '../../../constant/searchParams';
+import {
+    supplierTypeOptions,
+    supplierStatusOptions,
+    supplierLevelOptions,
+    supplierPlaceLevelOptions
+} from '../../../constant/searchParams';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -121,8 +125,7 @@ class SearchForm extends Component {
                         <FormItem className="manage-form-item1">
                             <div>
                                 <span className="manage-form-label">供应商编码</span>
-                                {getFieldDecorator('supplierNumber', {
-                                })(
+                                {getFieldDecorator('supplierNumber')(
                                     <Input
                                         placeholder="供应商编码"
                                     />
@@ -133,8 +136,7 @@ class SearchForm extends Component {
                         <FormItem className="manage-form-item1">
                             <div>
                                 <span className="manage-form-label">供应商名称</span>
-                                {getFieldDecorator('supplierName', {
-                                })(
+                                {getFieldDecorator('supplierName')(
                                     <Input
                                         placeholder="供应商名称"
                                     />
@@ -145,8 +147,7 @@ class SearchForm extends Component {
                         <FormItem className="manage-form-item1">
                             <div>
                                 <span className="manage-form-label">供应商营业执照号</span>
-                                {getFieldDecorator('supplierLicense', {
-                                })(
+                                {getFieldDecorator('supplierLicense')(
                                     <Input
                                         className="manage-form-supplierLicense"
                                         placeholder="供应商营业执照号"
@@ -161,7 +162,11 @@ class SearchForm extends Component {
                                 {getFieldDecorator('supplierType', {
                                     initialValue: supplierTypeOptions.defaultValue
                                 })(
-                                    <Select style={{ width: '153px' }} size="default" onChange={this.handleSupplierTypeChange}>
+                                    <Select
+                                        style={{ width: '153px' }}
+                                        size="default"
+                                        onChange={this.handleSupplierTypeChange}
+                                    >
                                         {
                                             supplierTypeOptions.data.map((item) =>
                                                 (<Option key={item.key} value={item.key}>
@@ -194,7 +199,7 @@ class SearchForm extends Component {
                         <FormItem className="manage-form-item1">
                             <span className="manage-form-label">供应商等级</span>
                             {getFieldDecorator('supplierLevel', {
-                                initialValue: '-1',
+                                initialValue: supplierTypeItems.defaultValue
                             })(
                                 <Select
                                     style={{ width: '153px' }}
@@ -230,7 +235,11 @@ class SearchForm extends Component {
                     <div className="manage-form-item">
                         <span className="manage-form-item3">
                             <FormItem>
-                                <Button type="primary" onClick={this.handleGetValue} size="default">
+                                <Button
+                                    type="primary"
+                                    onClick={this.handleGetValue}
+                                    size="default"
+                                >
                                     搜索
                                 </Button>
                             </FormItem>
