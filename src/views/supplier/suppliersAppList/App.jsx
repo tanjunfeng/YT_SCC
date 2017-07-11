@@ -20,14 +20,17 @@ import {
 import SearchForm from '../../../components/searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
-import { spplierSelectType, suplierStatusSelect } from '../../../constant/searchParams';
+import {
+    spplierSelectType,
+    suplierStatusSelect
+} from '../../../constant/searchParams';
 import { suppliersAppList } from '../../../constant/formColumns';
 import { exportSupplierEnterList } from '../../../service';
 import ChangeAudit from './changeAudit';
 import CheckReason from './checkReason';
 
 const columns = suppliersAppList;
-// const FormItem = Form.Item;
+const FormItem = Form.Item;
 
 
 @connect(
@@ -46,13 +49,13 @@ const columns = suppliersAppList;
 class SuppliersAppList extends PureComponent {
     constructor(props) {
         super(props);
-        this.renderOperation = ::this.renderOperation;
-        this.handleFormSearch = ::this.handleFormSearch;
-        this.handleFormReset = ::this.handleFormReset;
-        this.handlePaginationChange = ::this.handlePaginationChange;
-        this.handleDownLoad = ::this.handleDownLoad;
-        this.handleInputSupplier = ::this.handleInputSupplier;
-        this.handleGetList = ::this.handleGetList;
+        this.renderOperation = this.renderOperation.bind(this);
+        this.handleFormSearch = this.handleFormSearch.bind(this);
+        this.handleFormReset = this.handleFormReset.bind(this);
+        this.handlePaginationChange = this.handlePaginationChange.bind(this);
+        this.handleDownLoad = this.handleDownLoad.bind(this);
+        this.handleInputSupplier = this.handleInputSupplier.bind(this);
+        this.handleGetList = this.handleGetList.bind(this);
 
         this.searchForm = {};
         this.current = 1;
@@ -126,25 +129,15 @@ class SuppliersAppList extends PureComponent {
                     <Link to={`${pathname}/${id}`}>供应商详情</Link>
                 </Menu.Item>
                 {
-                    <Menu.Item key="audit">
-                        <a target="_blank" rel="noopener noreferrer">查看供应商详情</a>
-                    </Menu.Item>
-                }
-                {
-                    <Menu.Item key="modifySupInfor">
-                        <a target="_blank" rel="noopener noreferrer">修改供应商信息</a>
-                    </Menu.Item>
-                }
-                {
                     status === 0 &&
-                    <Menu.Item key="addAddress">
-                        <a target="_blank" rel="noopener noreferrer">新增供应商地点信息</a>
+                    <Menu.Item key="frozen">
+                        <a target="_blank" rel="noopener noreferrer">入驻审核</a>
                     </Menu.Item>
                 }
                 {
                     status === 1 &&
-                    <Menu.Item key="checkReason">
-                        <a target="_blank" rel="noopener noreferrer">查看审核已拒绝原因</a>
+                    <Menu.Item key="frozen">
+                        <a target="_blank" rel="noopener noreferrer">修改审核</a>
                     </Menu.Item>
                 }
             </Menu>
@@ -212,7 +205,6 @@ SuppliersAppList.propTypes = {
     applicationData: PropTypes.objectOf(PropTypes.any),
     auditVisible: PropTypes.bool,
     checkResonVisible: PropTypes.bool,
-    checkReasonVisible: PropTypes.bool,
 }
 
 export default withRouter(Form.create()(SuppliersAppList));
