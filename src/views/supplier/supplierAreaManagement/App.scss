@@ -5,3 +5,33 @@
         }
     }
 }
+
+.space-choose-space {
+    position: relative;
+    li {
+        float: left;
+    }
+    &.ant-tree > li:first-child {
+        padding-top: 0px;
+    }
+    &.ant-tree > li:last-child {
+        padding-bottom: 0px;
+    }
+    &.ant-tree li {
+        padding: 0;
+    }
+    &.ant-tree li ul {
+        padding: 0;
+    }
+    .ant-tree-switcher-noop {
+        display: none !important;
+    }
+    .ant-tree-child-tree-open {
+        display: block;
+        position: absolute;
+        border: 1px solid #999;
+        background: #eee;
+        max-width: 200px;
+        margin-left: 25px;
+    }
+}
