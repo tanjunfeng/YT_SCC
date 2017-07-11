@@ -102,7 +102,7 @@ startApp({
                     {
                         "code": "goodsClassification",
                         "name": "商品分类列表"
-                    }
+                    },
                 ]
             },
             {
@@ -124,7 +124,11 @@ startApp({
                     {
                         code: "supplierAreaManagement",
                         name: "供应商配送区域管理"
-                    }
+                    },
+                    {
+                        code: "supplierInputList",
+                        name: "供应商录入管理"
+                    },
                 ]
             },
             {
