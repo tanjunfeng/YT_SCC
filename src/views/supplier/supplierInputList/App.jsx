@@ -24,7 +24,6 @@ import ChangeMessage from './changeMessage';
 
 const confirm = Modal.confirm;
 
-
 const columns = supplierManageColumns;
 
 @connect(
@@ -48,6 +47,7 @@ class SupplierInputList extends PureComponent {
         this.renderOperation = ::this.renderOperation;
         this.handleFormSearch = ::this.handleFormSearch;
         this.handleFormReset = ::this.handleFormReset;
+        this.handleInputSupplier = ::this.handleInputSupplier;
         this.handleDownLoad = ::this.handleDownLoad;
         this.handleGetList = ::this.handleGetList;
 
@@ -148,7 +148,10 @@ class SupplierInputList extends PureComponent {
         this.searchForm = {};
         this.handlePaginationChange();
     }
-
+    handleInputSupplier() {
+        const { history } = this.props;
+        history.push('/applicationList/add');
+    }
     handleDownLoad(data) {
         Utils.exportExcel(exportSupplierList, data);
     }
@@ -228,6 +231,7 @@ class SupplierInputList extends PureComponent {
                     suplierSelect={spplierSelectType}
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
+                    onInput={this.handleInputSupplier}
                     onExcel={this.handleDownLoad}
                 />
                 <div className="manage-list">

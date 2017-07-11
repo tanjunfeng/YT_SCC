@@ -66,7 +66,7 @@ class SearchForm extends Component {
             searchData[selectType] = selectValue;
         }
 
-        if(status && status !== '-1') {
+        if (status && status !== '-1') {
             searchData.status = parseInt(status, 10);
         }
 
