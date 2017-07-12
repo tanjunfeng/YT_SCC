@@ -168,10 +168,10 @@ class CateGory extends Component {
                 break;
             case 'delete':
                 confirm({
-                    title: '你确认要删除'
-                    + firstCategoryName +
-                    '>' + secondCategoryName +
-                    '>' + '中的该商品排序吗？',
+                    title:
+                        '你确认要删除' + firstCategoryName
+                        + '>' + secondCategoryName
+                        + '>' + '中的该商品排序吗？',
                     onOk: () => {
                         this.props.modifyDeleteOrderNum({pkId})
                         .then(() => {

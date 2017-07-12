@@ -15,10 +15,10 @@ class SearchForm extends Component {
     constructor(props) {
         super(props);
 
-        this.handleGetValue = ::this.handleGetValue;
-        this.onEnterTimeChange = ::this.onEnterTimeChange;
-        this.handleResetValue = ::this.handleResetValue;
-        this.handleDownload = ::this.handleDownload;
+        this.handleGetValue = this.handleGetValue.bind(this);
+        this.onEnterTimeChange = this.onEnterTimeChange.bind(this);
+        this.handleResetValue = this.handleResetValue.bind(this);
+        this.handleDownload = this.handleDownload.bind(this);
 
         this.searchData = {};
         this.time = {
@@ -32,7 +32,7 @@ class SearchForm extends Component {
 
     onEnterTimeChange(result) {
         this.setState({rengeTime: result});
-        if(result.length === 2) {
+        if (result.length === 2) {
             this.time = {
                 minSettledDate: result[0].valueOf(),
                 maxSettledDate: result[1].valueOf()
@@ -43,7 +43,6 @@ class SearchForm extends Component {
                 maxSettledDate: null
             }
         }
-
     }
 
     getValue() {
@@ -66,7 +65,7 @@ class SearchForm extends Component {
             searchData[selectType] = selectValue;
         }
 
-        if(status && status !== '-1') {
+        if (status && status !== '-1') {
             searchData.status = parseInt(status, 10);
         }
 
@@ -275,6 +274,7 @@ SearchForm.propTypes = {
     onExcel: PropTypes.func,
     onInput: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
+    type: PropTypes.objectOf(PropTypes.any)
 };
 
 export default Form.create()(SearchForm);
