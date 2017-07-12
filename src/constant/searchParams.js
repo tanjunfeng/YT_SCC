@@ -134,3 +134,82 @@ export const settlementAccount = {
         value: '商户公司银行账户'
     }]
 }
+
+// 供应商类型
+export const supplierTypeOptions = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '供应商'
+    }, {
+        key: '1',
+        value: '供应商地点'
+    }]
+}
+
+// 供应商状态
+export const supplierStatusOptions = {
+    defaultValue: '1',
+    data: [{
+        key: '0',
+        value: '工作表'
+    }, {
+        key: '1',
+        value: '已提交'
+    }, {
+        key: '2',
+        value: '已审核'
+    }, {
+        key: '3',
+        value: '已拒绝'
+    }, {
+        key: '4',
+        value: '修改中'
+    }]
+}
+
+// 供应商类型
+export const supplierLevelOptions = {
+    defaultValue: '-1',
+    data: [
+    {
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '战略供应商'
+    }, {
+        key: '1',
+        value: '核心供应商'
+    }, {
+        key: '2',
+        value: '可替代供应商'
+    }]
+}
+
+// 供应商类型
+export const supplierPlaceLevelOptions = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '生产厂家'
+    }, {
+        key: '1',
+        value: '批发商'
+    }, {
+        key: '2',
+        value: '经销商'
+    }, {
+        key: '3',
+        value: '代销商'
+    }, {
+        key: '4',
+        value: '其他'
+    }]
+}

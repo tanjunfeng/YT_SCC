@@ -21,7 +21,7 @@ if (__TEST__) {
     rules = [{
         pattern: /https?:\/\/[-\w\.]*(?::\d+)?\/(.+)/,
         // responder: 'http://172.30.10.157:8080/$1',
-        responder: 'http://sitxcsc.yatang.cn:/api/$1'
+        responder: 'http://sitxcsc.yatang.com.cn:/api/$1'
 
     }];
 
