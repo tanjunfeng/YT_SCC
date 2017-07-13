@@ -1,3 +1,10 @@
+/**
+ * @file App.jsx
+ *
+ * @author shijinhua,caoyanxuan
+ *
+ * 公共searchForm
+ */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, message } from 'antd';
@@ -61,7 +68,7 @@ class SearchForm extends Component {
             inTime: this.state.inTime
         };
         this.searchData = Utils.removeInvalid(searchData);
-        console.log(searchData)
+        // console.log(searchData)
     }
 
     // 供应商类型为"供应商地点"时，供应商编码为必选项
@@ -78,16 +85,16 @@ class SearchForm extends Component {
         const { onSearch } = this.props;
         this.getValue();
         if (this.isPlaceType()) {
-            console.log(this.isPlaceType())
+            // console.log(this.isPlaceType())
         }
         const sState = this.searchData.supplierState;
         // '已审核'状态调主数据，其他状态调SCM数据
         if (sState === '2') {
-            console.log('已审核状态，调主数据')
+            // console.log('已审核状态，调主数据')
         } else {
-            console.log( '调SCM数据')
+            // console.log( '调SCM数据')
         }
-        // onSearch(this.searchData);
+        onSearch(this.searchData);
     }
 
     // 添加/新增
@@ -95,10 +102,10 @@ class SearchForm extends Component {
         const { onInput } = this.props;
         this.getValue();
         if (this.isPlaceType()) {
-            console.log(this.isPlaceType())
+            // console.log(this.isPlaceType())
         }
 
-        // onInput();
+        onInput();
     }
 
     // 重置
@@ -127,22 +134,18 @@ class SearchForm extends Component {
     }
 
     // 供应商状态select
-    handleSupplierStatusChange(value) {
-        console.log(value)
-    }
+    // handleSupplierStatusChange(value) {
+    //     console.log(value)
+    // }
 
     // 供应商等级select
-    handleSupplierLevelChange(value) {
-        console.log(value)
-    }
+    // handleSupplierLevelChange(value) {
+    //     console.log(value)
+    // }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         const { supplierType } = this.state;
-        const {
-            suplierSelect,
-            type,
-        } = this.props;
         const supplierTypeItems =
         supplierType > 0 ? supplierPlaceLevelOptions : supplierLevelOptions;
         return (
