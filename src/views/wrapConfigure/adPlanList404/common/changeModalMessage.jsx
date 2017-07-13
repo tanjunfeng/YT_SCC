@@ -1,3 +1,10 @@
+/**
+ * @file App.jsx
+ *
+ * @author caoyanxuan
+ *
+ * 404页面广告配置--子组件--模态框
+ */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
