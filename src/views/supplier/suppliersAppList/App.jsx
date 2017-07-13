@@ -1,3 +1,10 @@
+/**
+ * @file app.jsx
+ * @author Tan junfeng
+ *
+ * 供应商入驻申请列表
+ */
+
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -30,7 +37,6 @@ import ChangeAudit from './changeAudit';
 import CheckReason from './checkReason';
 
 const columns = suppliersAppList;
-const FormItem = Form.Item;
 
 
 @connect(
@@ -55,7 +61,7 @@ class SuppliersAppList extends PureComponent {
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
         this.handleDownLoad = this.handleDownLoad.bind(this);
         this.handleInputSupplier = this.handleInputSupplier.bind(this);
-        this.handleGetList = this.handleGetList.bind(this);
+        // this.handleGetList = this.handleGetList.bind(this);
 
         this.searchForm = {};
         this.current = 1;
@@ -72,10 +78,10 @@ class SuppliersAppList extends PureComponent {
     handleSelect(record, index, item) {
         const { key } = item;
         switch (key) {
-            case 'audit':
+            case 'changeAudit':
                 this.props.modifyAuditVisible({isVisible: true, record});
                 break;
-            case 'checkReason':
+            case 'CheckReason':
                 this.props.modifyCheckReasonVisible({isVisible: true, record});
                 break;
             default:
@@ -111,13 +117,13 @@ class SuppliersAppList extends PureComponent {
         });
     }
 
-    handleGetList() {
-        this.props.fetchProviderEnterList({
-            pageNum: this.current,
-            pageSize: PAGE_SIZE,
-            ...this.searchForm
-        });
-    }
+    // handleGetList() {
+    //     this.props.fetchProviderEnterList({
+    //         pageNum: this.current,
+    //         pageSize: PAGE_SIZE,
+    //         ...this.searchForm
+    //     });
+    // }
 
     renderOperation(text, record, index) {
         const { status, id } = record;
@@ -130,13 +136,13 @@ class SuppliersAppList extends PureComponent {
                 </Menu.Item>
                 {
                     status === 0 &&
-                    <Menu.Item key="frozen">
+                    <Menu.Item key="changeAudit">
                         <a target="_blank" rel="noopener noreferrer">入驻审核</a>
                     </Menu.Item>
                 }
                 {
                     status === 1 &&
-                    <Menu.Item key="frozen">
+                    <Menu.Item key="CheckReason">
                         <a target="_blank" rel="noopener noreferrer">修改审核</a>
                     </Menu.Item>
                 }
@@ -183,9 +189,7 @@ class SuppliersAppList extends PureComponent {
                 </div>
                 {
                     this.props.auditVisible &&
-                    <ChangeAudit
-                        getList={this.handleGetList}
-                    />
+                    <ChangeAudit />
                 }
                 {
                     this.props.checkResonVisible &&

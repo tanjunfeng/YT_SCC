@@ -1,84 +1,188 @@
 import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { Modal } from 'antd';
-import moment from 'moment';
+import {
+    Form,
+    Input,
+    Select,
+    Modal,
+    message,
+    Table,
+    Icon
+} from 'antd';
 
-import { modifyCheckReasonVisible } from '../../../actions';
-import { findFailedReason } from '../../../actions/addSupplier'
+import {
+    modifyCheckReasonVisible,
+    insertSupplierSettlementInfo
+} from '../../../actions';
 
+const FormItem = Form.Item;
+const Option = Select.Option;
 
 @connect(
     state => ({
         checkResonVisible: state.toJS().supplier.checkResonVisible,
         visibleData: state.toJS().supplier.visibleData,
-        resonData: state.toJS().supplier.resonData
     }),
     dispatch => bindActionCreators({
         modifyCheckReasonVisible,
-        findFailedReason
+        insertSupplierSettlementInfo
     }, dispatch)
 )
 class CheckReason extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.handleAuditCancel = ::this.handleAuditCancel;
+        this.handleCheckOk = ::this.handleCheckOk;
+        this.handleCheckCancel = ::this.handleCheckCancel;
+        this.handleSelectChange = ::this.handleSelectChange;
+        this.handleTextChange = ::this.handleTextChange;
     }
 
-    componentDidMount() {
-        const { visibleData } = this.props;
-        this.props.findFailedReason({
-            id: visibleData.id
-        })
+    state = {
+        selected: -1
     }
 
-    handleAuditCancel() {
+
+    handleCheckCancel() {
         this.props.modifyCheckReasonVisible(false);
     }
 
+    handleCheckOk() {
+        const { selected } = this.state;
+        const { visibleData } = this.props;
+        if (selected === -1) {
+            message.error('请选择审核结果');
+            return;
+        }
+        this.props.form.validateFields((err) => {
+            if (!err) {
+                this.props.insertSupplierSettlementInfo({
+                    id: visibleData.id,
+                    status: parseInt(selected, 10),
+                    ...this.props.form.getFieldsValue()
+                }).then(() => {
+                    this.props.getList()
+                })
+            }
+        })
+    }
+
+    handleSelectChange(key) {
+        this.setState({
+            selected: key
+        })
+    }
+
+    handleTextChange(value) {
+
+    }
+
     render() {
-        const { resonData = {} } = this.props;
-        const { auditTime = null, auditUser = null, failedReason = null } = resonData;
+        const {
+            companyName,
+            name,
+        } = this.props.visibleData;
+        const columns = [{
+            title: '项目',
+            dataIndex: 'name',
+        }, {
+            title: '修改前',
+            dataIndex: 'before',
+            render: (text, row, index) => {
+                if (index > 1) {
+                    return <a href="#"><Icon type="picture" />{text}</a>;
+                }
+                return {
+                    children: text,
+                };
+            },
+        }, {
+            title: '修改后',
+            dataIndex: 'after',
+            render: (text, row, index) => {
+                if (index > 1) {
+                    return <a href="#"><Icon type="picture" />{text}</a>;
+                }
+                return {
+                    children: text,
+                };
+            },
+        }];
+        const data = [{
+            key: '1',
+            name: '公司所在地',
+            before: companyName,
+            after: companyName,
+        }, {
+            key: '2',
+            name: '详细地址',
+            before: name,
+            after: name,
+        }, {
+            key: '3',
+            name: '税务登记证电子版',
+            before: '查看',
+            after: '查看',
+        }];
+        const { getFieldDecorator } = this.props.form;
+
         return (
             <Modal
-                title="审核不通过原因"
+                title="供应商修改资料审核"
                 visible={this.props.checkResonVisible}
-                onCancel={this.handleAuditCancel}
-                footer={null}
+                onOk={this.handleCheckOk}
+                onCancel={this.handleCheckCancel}
+                maskClosable={false}
             >
-                <ul className="check-reason-list">
-                    <li className="check-reason-item">
-                        <span className="check-reason-left">审核时间：</span>
-                        {
-                            auditTime &&
-                            <span className="check-reason-right">
-                                {
-                                    !!auditTime
-                                    ? moment(auditTime).format('YYYY-MM-DD')
-                                    : '无'
-                                }
-                            </span>
-                        }
-                    </li>
-                    <li className="check-reason-item">
-                        <span className="check-reason-left">审核人：</span>
-                        {
-                            auditUser &&
-                            <span className="check-reason-right">{auditUser}</span>
-                        }
-                    </li>
-                    <li className="check-reason-item">
-                        <span className="check-reason-left">不通过原因：</span>
-                        {
-                            failedReason &&
-                            <span className="check-reason-right">
-                                {failedReason}
-                            </span>
-                        }
-                    </li>
-                </ul>
+                <span>修改资料详情</span>
+                <Table
+                    columns={columns}
+                    dataSource={data}
+                    pagination={false}
+                    size="small"
+                />
+                <div>
+                    <div className="application-modal-tip">
+                        注意：审核通过，供应商的所有账号可正常登录商家后台系统。
+                    </div>
+                    {
+                        this.props.modifyCheckReasonVisible &&
+                        <div className="application-modal-select">
+                            <span className="application-modal-label">审核：</span>
+                            <Select
+                                style={{ width: '153px', marginLeft: '15px' }}
+                                size="default"
+                                placeholder="请选择"
+                                onChange={this.handleSelectChange}
+                            >
+                                <Option value="2">通过</Option>
+                                <Option value="1">不通过</Option>
+                            </Select>
+                        </div>
+                    }
+                    {
+                        this.props.modifyCheckReasonVisible && this.state.selected === '1' &&
+                        <Form layout="inline">
+                            <FormItem className="application-form-item">
+                                <span className="application-modal-label">*不通过原因：</span>
+                                {getFieldDecorator('failedReason', {
+                                    rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
+                                })(
+                                    <Input
+                                        onChange={this.handleTextChange}
+                                        type="textarea"
+                                        placeholder="请输入不通过原因"
+                                        className="application-modal-textarea"
+                                        autosize={{ minRows: 2, maxRows: 8 }}
+                                    />
+                                    )}
+                            </FormItem>
+                        </Form>
+                    }
+                </div>
             </Modal>
         );
     }
@@ -87,8 +191,10 @@ class CheckReason extends PureComponent {
 CheckReason.propTypes = {
     modifyCheckReasonVisible: PropTypes.bool,
     checkResonVisible: PropTypes.bool,
-    resonData: PropTypes.objectOf(PropTypes.any),
-    findFailedReason: PropTypes.func,
+    form: PropTypes.objectOf(PropTypes.any),
+    visibleData: PropTypes.objectOf(PropTypes.any),
+    insertSupplierSettlementInfo: PropTypes.objectOf(PropTypes.any),
+    getList: PropTypes.objectOf(PropTypes.any),
 }
 
-export default CheckReason;
+export default withRouter(Form.create()(CheckReason));

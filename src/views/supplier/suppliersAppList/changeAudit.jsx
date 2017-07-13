@@ -106,7 +106,7 @@ class ChangeAudit extends PureComponent {
                         this.props.auditVisible && this.state.selected === '1' &&
                         <Form layout="inline">
                             <FormItem className="application-form-item">
-                                <span className="application-modal-label">*不通过原因：</span>
+                                <span className="application-modal-label"><b className="tjf-css-import">*</b>不通过原因：</span>
                                 {getFieldDecorator('failedReason', {
                                     rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
                                 })(
@@ -123,82 +123,9 @@ class ChangeAudit extends PureComponent {
                     }
                     {
                         this.props.auditVisible && this.state.selected === '2' &&
-                        <Form className="change-form">
-                            <FormItem className="manage-form-item">
-                                <span className="manage-form-label change-form-label">*结算账期</span>
-                                {getFieldDecorator('settlementPeriod', {
-                                    rules: [{
-                                        required: true,
-                                        message: '请输入结算账期'
-                                    }]
-                                })(
-                                    <Input
-                                        className="manage-form-input"
-                                        placeholder="结算账期"
-                                    />
-                                    )}
-                                <span className="change-form-tip">天</span>
-                            </FormItem>
-                            <FormItem className="manage-form-item">
-                                <span className="manage-form-label change-form-label">*结算账户</span>
-                                {getFieldDecorator('settlementAccountType', {
-                                    rules: [{
-                                        required: true,
-                                        message: '请选择结算账户'
-                                    }]
-                                })(
-                                    <Select
-                                        style={{ width: '153px' }}
-                                        size="default"
-                                        placeholder="请选择"
-                                    >
-                                        <Option value="0">商户雅堂金融账户</Option>
-                                        <Option value="1">商户公司银行账户</Option>
-                                    </Select>
-                                    )}
-                            </FormItem>
-                            <FormItem className="manage-form-item">
-                                <span className="manage-form-label change-form-label">*返利</span>
-                                {getFieldDecorator('rebateRate', {
-                                    rules: [{
-                                        required: true,
-                                        message: '请输入返利'
-                                    }, {
-                                        validator: validatorRebate
-                                    }]
-                                })(
-                                    <Input
-                                        className="manage-form-input"
-                                        placeholder="返利"
-                                    />
-                                    )}
-                                <span className="change-form-tip">%</span>
-                            </FormItem>
-                            <FormItem className="manage-form-item">
-                                <span className="manage-form-label change-form-label">*保证金金额</span>
-                                {getFieldDecorator('guaranteeMoney', {
-                                    rules: [{ required: true, message: '请输入保证金金额' }]
-                                })(
-                                    <Input
-                                        className="manage-form-input"
-                                        placeholder="保证金金额"
-                                    />
-                                    )}
-                                <span className="change-form-tip">元（例：5000.00）</span>
-                            </FormItem>
-                            <FormItem className="manage-form-item">
-                                <span className="manage-form-label change-form-label">*商家合约时间</span>
-                                {getFieldDecorator('storeContractDate', {
-                                    rules: [{ required: true, message: '请输入合约时间' }]
-                                })(
-                                    <Input
-                                        className="manage-form-input"
-                                        placeholder="合约时间"
-                                    />
-                                    )}
-                                <span className="change-form-tip">月</span>
-                            </FormItem>
-                        </Form>
+                        <div className="tjf-css-passCheck">
+                            <span>确认通过审核？</span>
+                        </div>
                     }
                 </div>
             </Modal>

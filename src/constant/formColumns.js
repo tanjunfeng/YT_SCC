@@ -293,8 +293,24 @@ export const suppliersAppList = [
     },
     {
         title: '供应商状态',
-        dataIndex: 'settledRequestTime',
-        key: 'settledRequestTime',
+        dataIndex: 'status',
+        key: 'status',
+        render: (text) => {
+            switch (parseInt(text, 10)) {
+                case 0:
+                    return '工作表';
+                case 1:
+                    return '已审核';
+                case 2:
+                    return '已提交';
+                case 3:
+                    return '修改中';
+                case 4:
+                    return '已拒绝';
+                default:
+                    return null;
+            }
+        }
     },
     {
         title: '操作',
@@ -339,6 +355,22 @@ export const supplierInputList = [
         title: '供应商状态',
         dataIndex: 'settledRequestTime',
         key: 'settledRequestTime',
+        render: (text) => {
+            switch (parseInt(text, 10)) {
+                case 0:
+                    return '工作表';
+                case 1:
+                    return '已审核';
+                case 2:
+                    return '已提交';
+                case 3:
+                    return '修改中';
+                case 4:
+                    return '已拒绝';
+                default:
+                    return null;
+            }
+        }
     },
     {
         title: '操作',

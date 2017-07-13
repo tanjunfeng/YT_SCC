@@ -271,7 +271,7 @@ const routes = [
                     </Switch>
                 )
             },
-            // 供应商入驻申请列表
+            // 供应商入驻申请列表(改)
             {
                 path: '/suppliersAppList',
                 parent: 'gysgl',
