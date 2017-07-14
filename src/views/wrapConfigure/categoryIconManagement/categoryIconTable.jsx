@@ -1,3 +1,10 @@
+/**
+ * @file App.jsx
+ *
+ * @author caoyanxuan
+ *
+ * 分类图标管理--子组件--模态框
+ */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';

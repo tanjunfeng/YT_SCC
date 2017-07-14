@@ -228,7 +228,7 @@ class SupplierInputList extends PureComponent {
         return (
             <div className="manage">
                 <SearchForm
-                    suplierSelect={spplierSelectType}
+                    isSuplierAddMenu
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
                     onInput={this.handleInputSupplier}
@@ -263,6 +263,7 @@ class SupplierInputList extends PureComponent {
 SupplierInputList.propTypes = {
     fetchSupplierList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
     supplier: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     modifyInformationVisible: PropTypes.func,

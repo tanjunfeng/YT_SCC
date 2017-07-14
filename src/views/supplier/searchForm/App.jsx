@@ -1,6 +1,13 @@
+/**
+ * @file App.jsx
+ *
+ * @author shijinhua,caoyanxuan
+ *
+ * 公共searchForm
+ */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, Form, Select, DatePicker } from 'antd';
+import { Button, Input, Form, Select, DatePicker, message } from 'antd';
 
 import Utils from '../../../util/util';
 import {
@@ -19,73 +26,102 @@ class SearchForm extends Component {
 
         this.handleGetValue = ::this.handleGetValue;
         this.onEnterTimeChange = ::this.onEnterTimeChange;
+        this.isPlaceTypeForSearch = ::this.isPlaceTypeForSearch;
+        this.isPlaceTypeForAdd = ::this.isPlaceTypeForAdd;
+        this.handleAddValue = ::this.handleAddValue;
         this.handleResetValue = ::this.handleResetValue;
         this.handleDownload = ::this.handleDownload;
         this.handleSupplierTypeChange = ::this.handleSupplierTypeChange;
+        this.handleSupplierStatusChange = ::this.handleSupplierStatusChange;
+        this.handleSupplierLevelChange = ::this.handleSupplierLevelChange;
 
         this.searchData = {};
-        this.time = null;
         this.state = {
             rengeTime: null,
+            inTime: null,
             supplierType: '-1',
         }
     }
-
+    // DatePicker
     onEnterTimeChange(date, dateString) {
-        this.setState({rengeTime: date});
-        console.log(this.time)
-        this.time = dateString;
-        // if(result.length === 2) {
-        //     this.time = {
-        //         minSettledDate: result[0].valueOf(),
-        //         maxSettledDate: result[1].valueOf()
-        //     }
-        // } else {
-        //     this.time = {
-        //         minSettledDate: null,
-        //         maxSettledDate: null
-        //     }
-        // }
+        this.setState({
+            rengeTime: date,
+            inTime: dateString,
+        });
     }
+
     getValue() {
         const {
-            companyName,
-            selectValue,
-            settlementAccountType,
-            selectType,
-            status
+            supplierNumber,
+            supplierName,
+            supplierLicense,
+            supplierType,
+            supplierState,
+            supplierLevel,
         } = this.props.form.getFieldsValue();
-
-        const searchData = {companyName,
-            minSettlementPeriod: this.balanceDateRef && this.balanceDateRef.getFieldsValue().first,
-            maxSettlementPeriod: this.balanceDateRef && this.balanceDateRef.getFieldsValue().second,
-            minRebateRate: this.rebateRef && this.rebateRef.getFieldsValue().first,
-            maxRebateRate: this.rebateRef && this.rebateRef.getFieldsValue().second
+        const searchData = {
+            supplierNumber,
+            supplierName,
+            supplierLicense,
+            supplierType,
+            supplierState,
+            supplierLevel,
+            inTime: this.state.inTime
         };
-
-        if (selectValue) {
-            searchData[selectType] = selectValue;
-        }
-
-        if (status && status !== '-1') {
-            searchData.status = parseInt(status, 10);
-        }
-
-        if (settlementAccountType && settlementAccountType !== '-1') {
-            searchData.settlementAccountType = parseInt(settlementAccountType, 10);
-        }
-
-        Object.assign(searchData, this.time);
         this.searchData = Utils.removeInvalid(searchData);
-        console.log(searchData)
+        // console.log(searchData)
     }
 
+    // 供应商类型为"供应商地点"时，供应商编码为必选项
+    isPlaceTypeForSearch() {
+        const { supplierNumber, supplierType } = this.searchData;
+        if (supplierType === '1' && !supplierNumber) {
+            message.error('请输入供应商编码！');
+            return false;
+        }
+        return true;
+    }
+    isPlaceTypeForAdd() {
+        const { supplierNumber, supplierType } = this.searchData;
+        if (supplierType === '1' && !supplierNumber) {
+            message.error('请输入供应商编码！');
+            return false;
+        }
+        return true;
+    }
+    // 查询/搜索
     handleGetValue() {
         const { onSearch } = this.props;
-        this.getValue()
-        onSearch(this.searchData);
+        const sState = this.searchData.supplierState;
+        this.getValue();
+        if (this.isPlaceTypeForSearch()) {
+            // console.log(this.isPlaceTypeForSearch())
+            // '已审核'状态调主数据，其他状态调SCM数据
+            if (sState === '2') {
+                // console.log('已审核状态，调主数据')
+                onSearch(this.searchData);
+            } else {
+                // console.log( '调SCM数据')
+            }
+        }
     }
 
+    // 添加/新增
+    handleAddValue() {
+        const { onInput } = this.props;
+        this.getValue();
+        if (this.searchData.supplierType !== '-1') {
+            // console.log('已选供应商类型')
+            if (this.isPlaceTypeForAdd()) {
+                // console.log(this.isPlaceTypeForAdd())
+                onInput();
+            }
+        } else {
+            message.error('请选择供应商类型！');
+        }
+    }
+
+    // 重置
     handleResetValue() {
         const { onReset } = this.props;
         this.searchData = {};
@@ -94,12 +130,14 @@ class SearchForm extends Component {
         onReset(this.searchData);
     }
 
+    // 导出Excel
     handleDownload() {
         this.getValue();
         const { onExcel } = this.props;
         onExcel(this.searchData);
     }
 
+    // 供应商类型select
     handleSupplierTypeChange(value) {
         this.setState({
             supplierType: value,
@@ -108,106 +146,74 @@ class SearchForm extends Component {
         })
     }
 
+    // 供应商状态select
+    handleSupplierStatusChange(value) {
+        message.success(value)
+    }
+
+    // 供应商等级select
+    handleSupplierLevelChange(value) {
+        message.success(value)
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const { supplierType } = this.state;
-        const {
-            suplierSelect,
-            type,
-        } = this.props;
         const supplierTypeItems =
         supplierType > 0 ? supplierPlaceLevelOptions : supplierLevelOptions;
         return (
             <div className="manage-form">
                 <Form layout="inline">
-                    <div className="manage-form-item">
-                        {/* 供应商编码 */}
-                        <FormItem className="manage-form-item1">
-                            <div>
-                                <span className="manage-form-label">供应商编码</span>
-                                {getFieldDecorator('supplierNumber')(
-                                    <Input
-                                        placeholder="供应商编码"
-                                    />
-                                )}
-                            </div>
-                        </FormItem>
-                        {/* 供应商名称 */}
-                        <FormItem className="manage-form-item1">
-                            <div>
-                                <span className="manage-form-label">供应商名称</span>
-                                {getFieldDecorator('supplierName')(
-                                    <Input
-                                        placeholder="供应商名称"
-                                    />
-                                )}
-                            </div>
-                        </FormItem>
-                        {/* 供应商营业执照号 */}
-                        <FormItem className="manage-form-item1">
-                            <div>
-                                <span className="manage-form-label">供应商营业执照号</span>
-                                {getFieldDecorator('supplierLicense')(
-                                    <Input
-                                        className="manage-form-supplierLicense"
-                                        placeholder="供应商营业执照号"
-                                    />
-                                )}
-                            </div>
-                        </FormItem>
-                        {/* 供应商类型 */}
-                        <FormItem className="manage-form-item1">
-                            <div>
-                                <span className="manage-form-label">供应商类型</span>
-                                {getFieldDecorator('supplierType', {
-                                    initialValue: supplierTypeOptions.defaultValue
-                                })(
-                                    <Select
-                                        style={{ width: '153px' }}
-                                        size="default"
-                                        onChange={this.handleSupplierTypeChange}
-                                    >
-                                        {
-                                            supplierTypeOptions.data.map((item) =>
-                                                (<Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Option>)
-                                            )
-                                        }
-                                    </Select>
-                                )}
-                            </div>
-                        </FormItem>
-                        {/* 供应商状态 */}
-                        <FormItem className="mmanage-form-item1">
-                            <span className="manage-form-label">供应商状态</span>
-                            {getFieldDecorator('status', {
-                                initialValue: supplierStatusOptions.defaultValue
-                            })(
-                                <Select style={{ width: '153px' }} size="default">
-                                    {
-                                        supplierStatusOptions.data.map((item) =>
-                                            (<Option key={item.key} value={item.key}>
-                                                {item.value}
-                                            </Option>)
-                                        )
-                                    }
-                                </Select>
+                    {/* 供应商编码 */}
+                    <FormItem className="sc-form-item">
+                        <div>
+                            <span className="sc-form-item-label">供应商编码</span>
+                            {getFieldDecorator('supplierNumber')(
+                                <Input
+                                    className="sc-form-item-input"
+                                    placeholder="供应商编码"
+                                />
                             )}
-                        </FormItem>
-                        {/* 供应商等级 */}
-                        <FormItem className="manage-form-item1">
-                            <span className="manage-form-label">供应商等级</span>
-                            {getFieldDecorator('supplierLevel', {
-                                initialValue: supplierTypeItems.defaultValue
+                        </div>
+                    </FormItem>
+                    {/* 供应商名称 */}
+                    <FormItem className="sc-form-item">
+                        <div>
+                            <span className="sc-form-item-label">供应商名称</span>
+                            {getFieldDecorator('supplierName')(
+                                <Input
+                                    className="sc-form-item-input"
+                                    placeholder="供应商名称"
+                                />
+                            )}
+                        </div>
+                    </FormItem>
+                    {/* 供应商营业执照号 */}
+                    <FormItem className="sc-form-item">
+                        <div>
+                            <span className="sc-form-item-label">供应商营业执照号</span>
+                            {getFieldDecorator('supplierLicense')(
+                                <Input
+                                    className="sc-form-item-input-license sc-form-item-input"
+                                    placeholder="供应商营业执照号"
+                                />
+                            )}
+                        </div>
+                    </FormItem>
+                    {/* 供应商类型 */}
+                    <FormItem className="sc-form-item">
+                        <div>
+                            <span className="sc-form-item-label">供应商类型</span>
+                            {getFieldDecorator('supplierType', {
+                                initialValue: supplierTypeOptions.defaultValue
                             })(
                                 <Select
-                                    style={{ width: '153px' }}
+                                    className="sc-form-item-select"
                                     size="default"
-                                    disabled={this.state.supplierType === '-1'} 
+                                    onChange={this.handleSupplierTypeChange}
                                 >
                                     {
-                                        supplierTypeItems.data.map((item) =>
+                                        supplierTypeOptions.data.map((item) =>
                                             (<Option key={item.key} value={item.key}>
                                                 {item.value}
                                             </Option>)
@@ -215,53 +221,97 @@ class SearchForm extends Component {
                                     }
                                 </Select>
                             )}
+                        </div>
+                    </FormItem>
+                    {/* 供应商状态 */}
+                    <FormItem className="sc-form-item">
+                        <span className="sc-form-item-label">供应商状态</span>
+                        {getFieldDecorator('supplierState', {
+                            initialValue: supplierStatusOptions.defaultValue
+                        })(
+                            <Select
+                                className="sc-form-item-select"
+                                size="default"
+                                onChange={this.handleSupplierStatusChange}
+                            >
+                                {
+                                    supplierStatusOptions.data.map((item) =>
+                                        (<Option key={item.key} value={item.key}>
+                                            {item.value}
+                                        </Option>)
+                                    )
+                                }
+                            </Select>
+                        )}
+                    </FormItem>
+                    {/* 供应商等级 */}
+                    <FormItem className="sc-form-item">
+                        <span className="sc-form-item-label">供应商等级</span>
+                        {getFieldDecorator('supplierLevel', {
+                            initialValue: supplierTypeItems.defaultValue
+                        })(
+                            <Select
+                                className="sc-form-item-select"
+                                size="default"
+                                onChange={this.handleSupplierLevelChange}
+                                disabled={this.state.supplierType === '-1'}
+                            >
+                                {
+                                    supplierTypeItems.data.map((item) =>
+                                        (<Option key={item.key} value={item.key}>
+                                            {item.value}
+                                        </Option>)
+                                    )
+                                }
+                            </Select>
+                        )}
+                    </FormItem>
+                    {/* 供应商入驻日期 */}
+                    <FormItem className="sc-form-item">
+                        <div>
+                            <span className="sc-form-item-label">供应商入驻日期</span>
+                            <DatePicker
+                                className="sc-form-item-date-picker"
+                                showToday
+                                onChange={this.onEnterTimeChange}
+                                value={this.state.rengeTime}
+                                format="YYYY/MM/DD"
+                                placeholder="入驻日期"
+                            />
+                        </div>
+                    </FormItem>
+                    <div className="sc-form-button-group">
+                        <FormItem>
+                            <Button
+                                type="primary"
+                                onClick={this.handleGetValue}
+                                size="default"
+                            >
+                                搜索
+                            </Button>
                         </FormItem>
-                        {/* 供应商入驻日期 */}
-                        <FormItem className="manage-form-item1">
-                            <div>
-                                <span className="manage-form-label">供应商入驻日期</span>
-                                <DatePicker
-                                    style={{width: '270px'}}
-                                    className="manage-form-enterTime"
-                                    showToday
-                                    onChange={this.onEnterTimeChange}
-                                    value={this.state.rengeTime}
-                                    format="YYYY-MM-DD"
-                                    placeholder="入驻日期"
-                                />
-                            </div>
-                        </FormItem>
-                    </div>
-                    <div className="manage-form-item">
-                        <span className="manage-form-item3">
+                        {
+                            this.props.isSuplierAddMenu &&
                             <FormItem>
                                 <Button
                                     type="primary"
-                                    onClick={this.handleGetValue}
                                     size="default"
+                                    onClick={this.handleAddValue}
                                 >
-                                    搜索
+                                    创建
                                 </Button>
                             </FormItem>
-                            <FormItem>
-                                <Button size="default" onClick={this.handleResetValue}>
-                                    重置
-                                </Button>
-                            </FormItem>
-                            {
-                                type !== 'supplierInput' &&
-                                <FormItem>
-                                    <Button size="default" onClick={this.props.onInput}>
-                                        创建
-                                    </Button>
-                                </FormItem>
-                            }
-                            <FormItem className="manage-form-item2">
-                                <Button size="default" onClick={this.handleDownload}>
-                                    导出供应商列表
-                                </Button>
-                            </FormItem>
-                        </span>
+                        }
+                        <FormItem>
+                            <Button size="default" onClick={this.handleResetValue}>
+                                重置
+                            </Button>
+                        </FormItem>
+                        <FormItem>
+                            <Button size="default" onClick={this.handleDownload}>
+                                导出供应商列表
+                            </Button>
+                        </FormItem>
                     </div>
                 </Form>
             </div>
@@ -274,6 +324,7 @@ SearchForm.propTypes = {
     onReset: PropTypes.func,
     onExcel: PropTypes.func,
     onInput: PropTypes.func,
+    isSuplierAddMenu: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
 };
 
