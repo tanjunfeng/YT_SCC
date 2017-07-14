@@ -291,11 +291,12 @@ export const insertstaticpage = (params) => http.post('/staticPage/insertStaticP
 // 修改静态页面基本信息
 export const updatestaticpagebase = (params) => http.post('/staticPage/updateStaticPageBase', params);
 
-// 显示字典内容
+// 查询显示字典维护内容列表
 export const dictionaryContentList = (params) => http.get('/dictionary/dictionaryContentList', params);
 
 // 页面编辑数据列表
 export const fectheEditorList = (params) => http.get('/staticPage/toUpdateStaticPage', params);
+
 // 修改静态页面编辑内容并上传到图片服务器
 export const fectheEditorContent = (params) => http.post('/staticPage/updateStaticPageUpload', params);
 
@@ -404,4 +405,11 @@ export const queryAllSupplier = (params) => http.get('/price/queryAllSupplier', 
 
 // 新增数据字典
 export const insertDictionary = (params) => http.post('/dictionary/insertDictionary', params);
+
+// 修改数据字典
+export const updateDictionary = (params) => http.post('/dictionary/updateDictionary', params);
+
+// 删除数据字典
+export const deleteDictionary = (params) => http.get('/dictionary/deleteDictionary', params);
+
 

@@ -375,3 +375,26 @@ export const showChange = [{
     dataIndex: 'new',
     key: 'new'
 }]
+// 数据字典
+export const dictionaryColumns = [{
+    title: '序号',
+    dataIndex: 'id',
+    key: 'id',
+    render: text => <a href="#">{text}</a>,
+}, {
+    title: '字典名称',
+    dataIndex: 'dictionary',
+    key: 'dictionary',
+}, {
+    title: '字典编码',
+    dataIndex: 'code',
+    key: 'code',
+}, {
+    title: '说明',
+    dataIndex: 'remark',
+    key: 'remark',
+}, {
+    title: '操作',
+    dataIndex: 'action',
+    key: 'action'
+}]
