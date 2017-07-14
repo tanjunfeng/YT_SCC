@@ -27,7 +27,6 @@ import Utils from '../../../util/util';
 import { exportSupplierList } from '../../../service';
 import ChangeMessage from './changeMessage';
 
-const confirm = Modal.confirm;
 const columns = supplierInputList;
 
 @connect(
@@ -45,6 +44,7 @@ const columns = supplierInputList;
 class SupplierInputList extends PureComponent {
     constructor(props) {
         super(props);
+
 
         this.handleSelect = this.handleSelect.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
@@ -90,7 +90,10 @@ class SupplierInputList extends PureComponent {
         this.searchForm = {};
         this.handlePaginationChange();
     }
-
+    handleInputSupplier() {
+        const { history } = this.props;
+        history.push('/applicationList/add');
+    }
     handleDownLoad(data) {
         Utils.exportExcel(exportSupplierList, data);
     }
@@ -193,9 +196,10 @@ class SupplierInputList extends PureComponent {
         return (
             <div className="manage">
                 <SearchForm
-                    suplierSelect={spplierSelectType}
+                    isSuplierAddMenu
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
+                    onInput={this.handleInputSupplier}
                     onExcel={this.handleDownLoad}
                 />
                 <Form>
@@ -229,6 +233,7 @@ class SupplierInputList extends PureComponent {
 SupplierInputList.propTypes = {
     fetchSupplierList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
     supplier: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     modifyInformationVisible: PropTypes.func,

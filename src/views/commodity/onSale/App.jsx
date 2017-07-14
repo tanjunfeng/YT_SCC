@@ -299,7 +299,7 @@ class OnSale extends Component {
                                     />
                                 </div>
                             </FormItem>
-                            <FormItem>
+                            <FormItem className="manage-form-item1">
                                 <div>
                                     <span className="manage-form-label">商品分类</span>
                                     <ClassifiedSelect
