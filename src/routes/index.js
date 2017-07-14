@@ -17,6 +17,8 @@ import SupplierManageList from 'bundle-loader?lazy!../views/supplier/supplierMan
 import SupplierAreaManagement from 'bundle-loader?lazy!../views/supplier/supplierAreaManagement';
 // 供应商入驻申请列表
 import SuppliersApplicationList from 'bundle-loader?lazy!../views/supplier/suppliersApplicationList';
+// 供应商入驻申请列表(改)
+import SuppliersAppList from 'bundle-loader?lazy!../views/supplier/suppliersAppList';
 // 供应商修改资料申请
 import SupplierModifyApplication from 'bundle-loader?lazy!../views/supplier/supplierModifyApplication';
 // 供应商详情
@@ -249,7 +251,7 @@ const routes = [
                         <Route
                             path="/applicationList"
                             exact
-                            render={() => (<Bundle load={SuppliersApplicationList}>
+                            render={() => (<Bundle load={SuppliersAppList}>
                                 {(App) => <App />}
                             </Bundle>)}
                         />
@@ -264,6 +266,36 @@ const routes = [
                         />
                         <Route
                             path="/applicationList/:id"
+                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
+            // 供应商入驻申请列表(改)
+            {
+                path: '/suppliersAppList',
+                parent: 'gysgl',
+                key: 'suppliersAppList',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/SuppliersAppList"
+                            exact
+                            render={() => (<Bundle load={SuppliersAppList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/SuppliersAppList/add"
+                            exact
+                            render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/SuppliersAppList/edit/:id"
+                            render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/SuppliersAppList/:id"
                             render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>

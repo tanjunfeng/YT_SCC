@@ -259,6 +259,126 @@ export const supplierApplicationList = [
     }
 ]
 
+// 供应商申请入驻列表(改)
+export const suppliersAppList = [
+    {
+        title: '供应商编码',
+        dataIndex: 'spRegNo',
+        key: 'spRegNo',
+    },
+    {
+        title: '供应商名称',
+        dataIndex: 'companyName',
+        key: 'companyName',
+    },
+    {
+        title: '供应商营业执照号',
+        dataIndex: 'name',
+        key: 'name',
+    },
+    {
+        title: '供应商类型',
+        dataIndex: 'phone',
+        key: 'phone',
+    },
+    {
+        title: '供应商等级',
+        dataIndex: 'email',
+        key: 'email',
+    },
+    {
+        title: '供应商入驻日期',
+        dataIndex: 'spNo',
+        key: 'spNo',
+    },
+    {
+        title: '供应商状态',
+        dataIndex: 'status',
+        key: 'status',
+        render: (text) => {
+            switch (parseInt(text, 10)) {
+                case 0:
+                    return '工作表';
+                case 1:
+                    return '已审核';
+                case 2:
+                    return '已提交';
+                case 3:
+                    return '修改中';
+                case 4:
+                    return '已拒绝';
+                default:
+                    return null;
+            }
+        }
+    },
+    {
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation',
+    }
+]
+
+// 供应商录入管理
+export const supplierInputList = [
+    {
+        title: '供应商编码',
+        dataIndex: 'spRegNo',
+        key: 'spRegNo',
+    },
+    {
+        title: '供应商名称',
+        dataIndex: 'companyName',
+        key: 'companyName',
+    },
+    {
+        title: '供应商营业执照号',
+        dataIndex: 'name',
+        key: 'name',
+    },
+    {
+        title: '供应商类型',
+        dataIndex: 'phone',
+        key: 'phone',
+    },
+    {
+        title: '供应商等级',
+        dataIndex: 'email',
+        key: 'email',
+    },
+    {
+        title: '供应商入驻日期',
+        dataIndex: 'spNo',
+        key: 'spNo',
+    },
+    {
+        title: '供应商状态',
+        dataIndex: 'settledRequestTime',
+        key: 'settledRequestTime',
+        render: (text) => {
+            switch (parseInt(text, 10)) {
+                case 0:
+                    return '工作表';
+                case 1:
+                    return '已审核';
+                case 2:
+                    return '已提交';
+                case 3:
+                    return '修改中';
+                case 4:
+                    return '已拒绝';
+                default:
+                    return null;
+            }
+        }
+    },
+    {
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation',
+    }
+]
+
 // 供应商供应区域列表
 export const supplierAreaList = [{
     title: '供应商',

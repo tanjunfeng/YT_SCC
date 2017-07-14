@@ -118,6 +118,10 @@ startApp({
                         name: "供应商入驻申请列表"
                     },
                     {
+                        code: "suppliersAppList",
+                        name: "供应商入驻申请列表"
+                    },
+                    {
                         code: "modifyApplication",
                         name: "供应商修改资料申请"
                     },
@@ -132,7 +136,7 @@ startApp({
                 ]
             },
             {
-                code: "gylxtpz",
+                code: 'gylxtpz',
                 name: "系统配置",
                 submenu: [
                     {

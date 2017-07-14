@@ -1,6 +1,6 @@
 /**
- * @file list.jsx
- * @author shijh
+ * @file supplierInputList.jsx
+ * @author shijh,tanjf
  *
  * 管理列表页面
  */
@@ -13,18 +13,21 @@ import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Table, Form, Icon, Menu, Dropdown, Modal } from 'antd';
 
-import { fetchSupplierList, modifyInformationVisible, modifySupplierFrozen, modifyCollaboration } from '../../../actions';
+import {
+    fetchSupplierList,
+    modifyInformationVisible,
+    modifySupplierFrozen,
+    modifyCollaboration
+} from '../../../actions';
 import SearchForm from '../searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { spplierSelectType } from '../../../constant/searchParams';
-import { supplierManageColumns } from '../../../constant/formColumns';
+import { supplierInputList } from '../../../constant/formColumns';
 import Utils from '../../../util/util';
 import { exportSupplierList } from '../../../service';
 import ChangeMessage from './changeMessage';
 
-const confirm = Modal.confirm;
-
-const columns = supplierManageColumns;
+const columns = supplierInputList;
 
 @connect(
     state => ({
@@ -42,17 +45,21 @@ class SupplierInputList extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.handleSelect = ::this.handleSelect;
-        this.handlePaginationChange = ::this.handlePaginationChange;
-        this.renderOperation = ::this.renderOperation;
-        this.handleFormSearch = ::this.handleFormSearch;
-        this.handleFormReset = ::this.handleFormReset;
-        this.handleInputSupplier = ::this.handleInputSupplier;
-        this.handleDownLoad = ::this.handleDownLoad;
-        this.handleGetList = ::this.handleGetList;
+
+        this.handleSelect = this.handleSelect.bind(this);
+        this.handlePaginationChange = this.handlePaginationChange.bind(this);
+        this.renderOperation = this.renderOperation.bind(this);
+        this.handleFormSearch = this.handleFormSearch.bind(this);
+        this.handleFormReset = this.handleFormReset.bind(this);
+        this.handleDownLoad = this.handleDownLoad.bind(this);
+        this.handleGetList = this.handleGetList.bind(this);
 
         this.searchForm = {};
         this.current = 1;
+        this.state = {
+            ModalText: '银行信息不全，请重新补全。',
+            visible: false,
+        }
     }
 
     componentDidMount() {
@@ -64,77 +71,12 @@ class SupplierInputList extends PureComponent {
     }
 
     handleSelect(record, index, items) {
-        const { id } = record;
         const { key } = items;
         switch (key) {
-            case 'changeMessage':
+            case 'checkReason':
                 this.props.modifyInformationVisible({isVisible: true, record});
                 break;
-            case 'frozen':
-                confirm({
-                    title: '你确认要冻结该供应商？',
-                    onOk: () => {
-                        this.props.modifySupplierFrozen({
-                            isFrozen: true,
-                            index,
-                            id,
-                            status: 3
-                        }).then(() => {
-                            this.handleGetList();
-                        })
-                    },
-                    onCancel() {},
-                });
-                break;
-            case 'unFrozen':
-                confirm({
-                    title: '你确认要对供应商解除冻结？',
-                    onOk: () => {
-                        this.props.modifySupplierFrozen({
-                            isFrozen: false,
-                            index, id,
-                            status: 2
-                        }).then(() => {
-                            this.handleGetList();
-                        })
-                    },
-                    onCancel() {},
-                });
-                break;
-            case 'closeCollaboration':
-                confirm({
-                    title: '你确认要对供应商终止合作？',
-                    onOk: () => {
-                        this.props.modifyCollaboration({
-                            isCloseCollaboration: true,
-                            index,
-                            id,
-                            status: 4
-                        }).then(() => {
-                            this.handleGetList();
-                        })
-                    },
-                    onCancel() {},
-                });
-                break;
-            case 'reOpenCollaboration':
-                confirm({
-                    title: '你确认要对供应商重启合作？',
-                    onOk: () => {
-                        this.props.modifyCollaboration({
-                            isCloseCollaboration: false,
-                            index,
-                            id,
-                            status: 2
-                        }).then(() => {
-                            this.handleGetList();
-                        })
-                    },
-                    onCancel() {},
-                });
-                break;
             default:
-
                 break;
         }
     }
@@ -182,38 +124,64 @@ class SupplierInputList extends PureComponent {
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/${id}`}>供应商详情</Link>
                 </Menu.Item>
-                <Menu.Item key="changeMessage">
-                    <a target="_blank" rel="noopener noreferrer">修改合作信息</a>
+                {
+                    <Menu.Item key="audit">
+                        <a target="_blank" rel="noopener noreferrer">
+                            查看供应商详情
+                        </a>
+                    </Menu.Item>
+                }
+                {
+                    <Menu.Item key="modifySupInfor">
+                        <a target="_blank" rel="noopener noreferrer">
+                            修改供应商信息
+                        </a>
+                    </Menu.Item>
+                }
+                {
+                    <Menu.Item key="addAddress">
+                        <a target="_blank" rel="noopener noreferrer">
+                            新增供应商地点信息
+                        </a>
+                    </Menu.Item>
+                }
+            </Menu>
+        );
+
+        const menu1 = (
+            <Menu onClick={(item) => this.handleSelect(record, index, item)}>
+                <Menu.Item key="AddDetail">
+                    <Link to={`${pathname}/${id}`}>供应商地点详情</Link>
                 </Menu.Item>
                 {
-                    status !== 3 && status !== 4 &&
-                    <Menu.Item key="frozen">
-                        <a target="_blank" rel="noopener noreferrer">冻结</a>
+                    <Menu.Item key="auditAdd">
+                        <a target="_blank" rel="noopener noreferrer">
+                            查看供应商地点详情
+                        </a>
                     </Menu.Item>
                 }
                 {
-                    status === 3 &&
-                    <Menu.Item key="unFrozen">
-                        <a target="_blank" rel="noopener noreferrer">解除冻结</a>
+                    <Menu.Item key="modifySupAddInfor">
+                        <a target="_blank" rel="noopener noreferrer">
+                            修改供应商地点信息
+                        </a>
                     </Menu.Item>
                 }
                 {
-                    status !== 4 &&
-                    <Menu.Item key="closeCollaboration">
-                        <a target="_blank" rel="noopener noreferrer">终止合作</a>
-                    </Menu.Item>
-                }
-                {
-                    status === 4 &&
-                    <Menu.Item key="reOpenCollaboration">
-                        <a target="_blank" rel="noopener noreferrer">重启合作</a>
+                    <Menu.Item key="checkReason">
+                        <a target="_blank" rel="noopener noreferrer">
+                            查看审核已拒绝原因
+                        </a>
                     </Menu.Item>
                 }
             </Menu>
         );
 
         return (
-            <Dropdown overlay={menu} placement="bottomCenter">
+            <Dropdown
+                overlay={status === 6 ? menu : menu1}
+                placement="bottomCenter"
+            >
                 <a className="ant-dropdown-link">
                     表单操作 <Icon type="down" />
                 </a>
@@ -234,27 +202,29 @@ class SupplierInputList extends PureComponent {
                     onInput={this.handleInputSupplier}
                     onExcel={this.handleDownLoad}
                 />
-                <div className="manage-list">
-                    <Table
-                        dataSource={data}
-                        columns={columns}
-                        rowKey="id"
-                        scroll={{ x: 1300 }}
-                        pagination={{
-                            current: pageNum,
-                            total,
-                            pageSize,
-                            showQuickJumper: true,
-                            onChange: this.handlePaginationChange
-                        }}
-                    />
-                </div>
-                {
-                    this.props.informationVisible &&
-                    <ChangeMessage
-                        getList={this.handleGetList}
-                    />
-                }
+                <Form>
+                    <div className="manage-list">
+                        <Table
+                            dataSource={data}
+                            columns={columns}
+                            rowKey="id"
+                            scroll={{ x: 1300 }}
+                            pagination={{
+                                current: pageNum,
+                                total,
+                                pageSize,
+                                showQuickJumper: true,
+                                onChange: this.handlePaginationChange
+                            }}
+                        />
+                    </div>
+                    {
+                        this.props.informationVisible &&
+                        <ChangeMessage
+                            getList={this.handleGetList}
+                        />
+                    }
+                </Form>
             </div>
         )
     }
@@ -270,7 +240,6 @@ SupplierInputList.propTypes = {
     modifySupplierFrozen: PropTypes.func,
     modifyCollaboration: PropTypes.func,
     informationVisible: PropTypes.bool
-
 }
 
 export default withRouter(Form.create()(SupplierInputList));

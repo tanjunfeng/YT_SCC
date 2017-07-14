@@ -93,6 +93,7 @@ class CateGory extends Component {
         })
     }
 
+    // 搜索
     handleSearch() {
         const {
             id,
@@ -117,6 +118,7 @@ class CateGory extends Component {
         })
     }
 
+    // 表单操作
     handleSelectChange(data, that) {
         const { first, second, third } = data;
         this.classify = {
@@ -127,6 +129,7 @@ class CateGory extends Component {
         this.classifyRef = that;
     }
 
+    // 重置按钮
     handleReset() {
         this.props.form.resetFields();
         this.setState({
@@ -136,6 +139,7 @@ class CateGory extends Component {
         this.classifyRef && this.classifyRef.resetValue()
     }
 
+    // 新增
     handleAdd() {
         this.props.modifyCategoryVisible({
             isVisible: true,
@@ -146,6 +150,7 @@ class CateGory extends Component {
         });
     }
 
+    // 下拉选项
     handleSelect(record, index, items) {
         const { categoryorderlist = {} } = this.props;
         const { total, data = {} } = categoryorderlist;
@@ -168,10 +173,8 @@ class CateGory extends Component {
                 break;
             case 'delete':
                 confirm({
-                    title: '你确认要删除'
-                    + firstCategoryName +
-                    '>' + secondCategoryName +
-                    '>' + '中的该商品排序吗？',
+                    title:
+                    `你确认要删除 ${firstCategoryName} > + ${secondCategoryName} > 中的该商品排序吗？`,
                     onOk: () => {
                         this.props.modifyDeleteOrderNum({pkId})
                         .then(() => {
