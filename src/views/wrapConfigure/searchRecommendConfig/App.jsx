@@ -127,7 +127,6 @@ class SearchRecommendConfig extends Component {
         }
     }
 
-
     // table操作
     renderOperation(text, record) {
         const menu = (
@@ -140,7 +139,6 @@ class SearchRecommendConfig extends Component {
                 </Menu.Item>
             </Menu>
         );
-
         return (
             <Dropdown overlay={menu} placement="bottomCenter">
                 <a className="ant-dropdown-link">

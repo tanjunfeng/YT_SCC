@@ -107,7 +107,6 @@ class CarouselManagement extends Component {
         });
     }
     handleIntervalChange(value) {
-        console.log(value)
         this.props.modifyCarouselInterval({ carouselInterval: value.key
         }, () => {
             // this.props.fetchCarouselAdList();
