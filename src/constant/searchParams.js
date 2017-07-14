@@ -107,7 +107,7 @@ export const supplierStatus = {
 
 // 入驻申请状态
 export const suplierStatusSelect = {
-     defaultValue: '-1',
+    defaultValue: '-1',
     data: [{
         key: '-1',
         value: '全部'
@@ -174,8 +174,7 @@ export const supplierStatusOptions = {
 // 供应商类型
 export const supplierLevelOptions = {
     defaultValue: '-1',
-    data: [
-    {
+    data: [{
         key: '-1',
         value: '全部'
     }, {

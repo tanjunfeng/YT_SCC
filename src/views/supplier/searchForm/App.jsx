@@ -45,9 +45,11 @@ class SearchForm extends Component {
         }
     }
 
-    /*
-    * 作用：DatePicker日期选取
-    * 参数：data：moment对象；dateString：格式化后的日期，如：2017/7/14
+    /**
+    * DatePicker日期选取
+    *
+    * @param {moment} data 日期的moment对象
+    * @param {string} dateString 格式化后的日期
     */
     onEnterTimeChange(date, dateString) {
         this.setState({
@@ -56,7 +58,9 @@ class SearchForm extends Component {
         });
     }
 
-    // 获取form的值，赋给this.searchDate
+    /**
+    * 获取form的值，赋给this.searchDate
+    */
     getValue() {
         const {
             supplierNumber,
@@ -78,7 +82,9 @@ class SearchForm extends Component {
         this.searchData = Utils.removeInvalid(searchData);
     }
 
-    // 供应商类型为"供应商地点"时，供应商编码为必选项
+    /**
+    * 供应商类型为"供应商地点"时，供应商编码为必选项
+    */
     isPlaceTypeForSearch() {
         const { supplierNumber, supplierType } = this.searchData;
         if (supplierType === '1' && !supplierNumber) {
@@ -88,19 +94,28 @@ class SearchForm extends Component {
         return true;
     }
 
-    // 供应商类型为"供应商地点"时，供应商编码为必选项;如果供应商类型为供应商地点，当供应商状态为已提交或已审核才通过
+    /**
+    * 1.供应商类型为"供应商地点"时，供应商编码为必选项;
+    * 2.如果供应商类型为供应商地点，当供应商状态为已提交或已审核才通过
+    */
     isPlaceTypeForAdd() {
         const { supplierNumber, supplierType, supplierState } = this.searchData;
         if (supplierType === '1' && !supplierNumber) {
             message.error('请输入供应商编码！');
             return false;
-        } else if (supplierType === '1' && supplierNumber && !(supplierState === '1' || supplierState === '2')) {
+        } else if (supplierType === '1'
+            && supplierNumber
+            && !(supplierState === '1' || supplierState === '2')
+        ) {
             message.error('供应商尚未提交审核，不能创建供应商地点！');
             return false;
         }
         return true;
     }
-    // 查询/搜索
+
+    /**
+    * 查询/搜索
+    */
     handleGetValue() {
         const { onSearch } = this.props;
         const sState = this.searchData.supplierState;
@@ -110,14 +125,15 @@ class SearchForm extends Component {
             if (sState === '2') {
                 // console.log('已审核状态，调主数据')
                 onSearch(this.searchData);
-            } else {
-                // console.log( '调SCM数据')
-                onSearch(this.searchData);
             }
+            // console.log( '调SCM数据')
+            onSearch(this.searchData);
         }
     }
 
-    // 添加/新增
+    /**
+    * 添加/新增
+    */
     handleAddValue() {
         const { onInput } = this.props;
         this.getValue();
@@ -126,12 +142,13 @@ class SearchForm extends Component {
             if (this.isPlaceTypeForAdd()) {
                 onInput();
             }
-        } else {
-            message.error('请选择供应商类型！');
         }
+        message.error('请选择供应商类型！');
     }
 
-    // 重置
+    /**
+    * 重置
+    */
     handleResetValue() {
         const { onReset } = this.props;
         this.searchData = {};
@@ -140,14 +157,19 @@ class SearchForm extends Component {
         onReset(this.searchData);
     }
 
-    // 导出Excel
+    /**
+    * 导出Excel
+    */
     handleDownload() {
         this.getValue();
         const { onExcel } = this.props;
         onExcel(this.searchData);
     }
 
-    // 供应商类型select
+    /**
+    * 供应商类型select
+    * @param {string} value select当前项的key值
+    */
     handleSupplierTypeChange(value) {
         this.setState({
             supplierType: value,
