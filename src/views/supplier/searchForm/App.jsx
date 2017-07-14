@@ -26,7 +26,8 @@ class SearchForm extends Component {
 
         this.handleGetValue = ::this.handleGetValue;
         this.onEnterTimeChange = ::this.onEnterTimeChange;
-        this.isPlaceType = ::this.isPlaceType;
+        this.isPlaceTypeForSearch = ::this.isPlaceTypeForSearch;
+        this.isPlaceTypeForAdd = ::this.isPlaceTypeForAdd;
         this.handleAddValue = ::this.handleAddValue;
         this.handleResetValue = ::this.handleResetValue;
         this.handleDownload = ::this.handleDownload;
@@ -72,7 +73,15 @@ class SearchForm extends Component {
     }
 
     // 供应商类型为"供应商地点"时，供应商编码为必选项
-    isPlaceType() {
+    isPlaceTypeForSearch() {
+        const { supplierNumber, supplierType } = this.searchData;
+        if (supplierType === '1' && !supplierNumber) {
+            message.error('请输入供应商编码！');
+            return false;
+        }
+        return true;
+    }
+    isPlaceTypeForAdd() {
         const { supplierNumber, supplierType } = this.searchData;
         if (supplierType === '1' && !supplierNumber) {
             message.error('请输入供应商编码！');
@@ -83,29 +92,33 @@ class SearchForm extends Component {
     // 查询/搜索
     handleGetValue() {
         const { onSearch } = this.props;
-        this.getValue();
-        if (this.isPlaceType()) {
-            // console.log(this.isPlaceType())
-        }
         const sState = this.searchData.supplierState;
-        // '已审核'状态调主数据，其他状态调SCM数据
-        if (sState === '2') {
-            // console.log('已审核状态，调主数据')
-        } else {
-            // console.log( '调SCM数据')
+        this.getValue();
+        if (this.isPlaceTypeForSearch()) {
+            // console.log(this.isPlaceTypeForSearch())
+            // '已审核'状态调主数据，其他状态调SCM数据
+            if (sState === '2') {
+                // console.log('已审核状态，调主数据')
+                onSearch(this.searchData);
+            } else {
+                // console.log( '调SCM数据')
+            }
         }
-        onSearch(this.searchData);
     }
 
     // 添加/新增
     handleAddValue() {
         const { onInput } = this.props;
         this.getValue();
-        if (this.isPlaceType()) {
-            // console.log(this.isPlaceType())
+        if (this.searchData.supplierType !== '-1') {
+            // console.log('已选供应商类型')
+            if (this.isPlaceTypeForAdd()) {
+                // console.log(this.isPlaceTypeForAdd())
+                onInput();
+            }
+        } else {
+            message.error('请选择供应商类型！');
         }
-
-        onInput();
     }
 
     // 重置
@@ -134,14 +147,14 @@ class SearchForm extends Component {
     }
 
     // 供应商状态select
-    // handleSupplierStatusChange(value) {
-    //     console.log(value)
-    // }
+    handleSupplierStatusChange(value) {
+        message.success(value)
+    }
 
     // 供应商等级select
-    // handleSupplierLevelChange(value) {
-    //     console.log(value)
-    // }
+    handleSupplierLevelChange(value) {
+        message.success(value)
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;

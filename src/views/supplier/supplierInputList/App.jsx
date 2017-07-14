@@ -56,11 +56,11 @@ class SupplierInputList extends PureComponent {
     }
 
     componentDidMount() {
-        // this.props.fetchSupplierList({
-        //     pageSize: PAGE_SIZE,
-        //     pageNum: this.current,
-        //     ...this.searchForm
-        // });
+        this.props.fetchSupplierList({
+            pageSize: PAGE_SIZE,
+            pageNum: this.current,
+            ...this.searchForm
+        });
     }
 
     handleSelect(record, index, items) {
