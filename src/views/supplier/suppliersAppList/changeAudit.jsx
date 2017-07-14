@@ -1,3 +1,10 @@
+/**
+ * @file changeAudit.jsx
+ * @author Tan junfeng
+ *
+ * 供应商入驻申请列表
+ */
+
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -12,7 +19,7 @@ import {
 } from 'antd';
 
 import { modifyAuditVisible, insertSupplierSettlementInfo } from '../../../actions';
-import { validatorRebate } from '../../../util/validator';
+// import { validatorRebate } from '../../../util/validator';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

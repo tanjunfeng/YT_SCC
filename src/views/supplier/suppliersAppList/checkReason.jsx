@@ -1,3 +1,10 @@
+/**
+ * @file checkReason.jsx
+ * @author Tan junfeng
+ *
+ * 供应商入驻申请列表
+ */
+
 import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';

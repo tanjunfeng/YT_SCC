@@ -55,6 +55,7 @@ const columns = suppliersAppList;
 class SuppliersAppList extends PureComponent {
     constructor(props) {
         super(props);
+
         this.renderOperation = this.renderOperation.bind(this);
         this.handleFormSearch = this.handleFormSearch.bind(this);
         this.handleFormReset = this.handleFormReset.bind(this);
@@ -67,6 +68,7 @@ class SuppliersAppList extends PureComponent {
         this.current = 1;
     }
 
+    // 加载刷新列表
     componentDidMount() {
         this.props.fetchProviderEnterList({
             pageNum: this.current,
@@ -75,6 +77,7 @@ class SuppliersAppList extends PureComponent {
         });
     }
 
+    // 表单操作弹出层
     handleSelect(record, index, item) {
         const { key } = item;
         switch (key) {
@@ -89,25 +92,30 @@ class SuppliersAppList extends PureComponent {
         }
     }
 
+    // 表单页搜索栏等功能
     handleFormSearch(data) {
         this.searchForm = data;
         this.handlePaginationChange();
     }
 
+    // 重置
     handleFormReset(data) {
         this.searchForm = data;
         this.handlePaginationChange();
     }
 
+    // 导出
     handleDownLoad(data) {
         Utils.exportExcel(exportSupplierEnterList, data);
     }
 
+    // 新增
     handleInputSupplier() {
         const { history } = this.props;
         history.push('/applicationList/add');
     }
 
+    // 分页
     handlePaginationChange(goto = 1) {
         this.current = goto;
         this.props.fetchProviderEnterList({
@@ -135,20 +143,19 @@ class SuppliersAppList extends PureComponent {
                     <Link to={`${pathname}/${id}`}>供应商详情</Link>
                 </Menu.Item>
                 {
-                    status === 0 &&
+                    status === 1 &&
                     <Menu.Item key="changeAudit">
                         <a target="_blank" rel="noopener noreferrer">入驻审核</a>
                     </Menu.Item>
                 }
                 {
-                    status === 1 &&
+                    status === 0 &&
                     <Menu.Item key="CheckReason">
                         <a target="_blank" rel="noopener noreferrer">修改审核</a>
                     </Menu.Item>
                 }
             </Menu>
         )
-
         return (
             <Dropdown overlay={menu} placement="bottomCenter" record>
                 <a className="ant-dropdown-link">
@@ -159,8 +166,8 @@ class SuppliersAppList extends PureComponent {
     }
 
     render() {
-        columns[columns.length - 1].render = this.renderOperation;
         const { data, pageNum, pageSize, total } = this.props.applicationData;
+        columns[columns.length - 1].render = this.renderOperation;
 
         return (
             <div className="application tjf-css-min-width">
