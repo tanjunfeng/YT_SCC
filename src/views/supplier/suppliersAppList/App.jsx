@@ -97,10 +97,6 @@ class SuppliersAppList extends PureComponent {
 
     /**
      * 搜索
-     *
-     * @param {Object} data 搜索的数据
-     * @param {bool} bool true：调主数据；false：调SCM数据
-     *
      */
     handleFormSearch(data, bool) {
         this.searchForm = data;
@@ -117,9 +113,6 @@ class SuppliersAppList extends PureComponent {
 
     /**
      * 重置
-     *
-     * @param {Object} data 重置的参数
-     *
      */
     handleFormReset(data) {
         this.searchForm = data;
@@ -128,15 +121,13 @@ class SuppliersAppList extends PureComponent {
 
     /**
      * 导出
-     *
-     * @param {Object} data 导出的参数
-     *
      */
     handleDownLoad(data) {
         Utils.exportExcel(exportSupplierEnterList, data);
     }
 
     /**
+     *列表分页
      *
      * @param {string} goto 数据列表分页
      */

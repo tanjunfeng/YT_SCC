@@ -85,8 +85,6 @@ class SupplierInputList extends PureComponent {
      *
      * @param {Object} data 搜索的数据
      * @param {bool} bool true：调主数据；false：调SCM数据
-     *
-     * 列表数据加载
      */
     handleFormSearch(data, bool) {
         this.searchForm = data;
@@ -103,9 +101,6 @@ class SupplierInputList extends PureComponent {
 
     /**
      * 重置
-     *
-     *
-     *
      */
     handleFormReset() {
         this.searchForm = {};
@@ -144,6 +139,7 @@ class SupplierInputList extends PureComponent {
     }
 
     /**
+     * 列表分页
      *
      * @param {string} goto 数据列表分页
      */
@@ -157,6 +153,7 @@ class SupplierInputList extends PureComponent {
     }
 
     /**
+     * 列表页操作下拉菜单
      *
      * @param {string} text 文本内容
      * @param {Object} record 模态框状态
