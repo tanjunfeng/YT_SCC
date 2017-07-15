@@ -17,11 +17,11 @@ var rules = [];
 
 // 联调环境szz
 if (__TEST__) {
-    host = 'sitxcsc-static.yatang.cn';
+    host = 'sitxcsc-static.yatang.com.cn';
     rules = [{
         pattern: /https?:\/\/[-\w\.]*(?::\d+)?\/(.+)/,
         // responder: 'http://172.30.10.157:8080/$1',
-        responder: 'http://sitxcsc.yatang.com.cn:/api/$1'
+        responder: 'http://sitxcsc.yatang.com.cn/api/$1'
 
     }];
 

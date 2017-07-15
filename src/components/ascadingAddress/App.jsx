@@ -275,11 +275,11 @@ CasadingAddress.propTypes = {
 };
 
 CasadingAddress.defaultProps = {
-    showNum: 3,
+    showNum: '3',
     onChange: () => {},
     hasAll: false,
     defaultValue: [],
-    width: '140px',
+    width: '100px',
     marginRight: '10px'
 }
 
