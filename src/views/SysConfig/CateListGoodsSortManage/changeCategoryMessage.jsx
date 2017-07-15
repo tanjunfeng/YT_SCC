@@ -112,7 +112,8 @@ class ChangeMessage extends PureComponent {
     }
 
     handleInformationOk() {
-        const name1 = this.props.querygoodsname;
+        const { querygoodsname = '' } = this.props;
+        const name1 = querygoodsname === null ? '' : querygoodsname;
         const {
             name,
             productNo,
@@ -211,7 +212,8 @@ class ChangeMessage extends PureComponent {
             isEdit
         } = this.props.visibleData;
         const productNo = id;
-        const name1 = this.props.querygoodsname;
+        const { querygoodsname = '' } = this.props;
+        const name1 = querygoodsname === null ? '' : querygoodsname;
         const { isDisabled } = this.state;
         return (
             <div>

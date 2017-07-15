@@ -188,6 +188,24 @@ class Utils {
         window.open(`${config.apiHost}${url}?${util.parseQuerystring(query)}`)
         /* eslint-enable */
     }
+
+    static diff(arr, arrays) {
+        const argsLen = arguments.length;
+        const len = arr.length;
+        const res = [];
+        let i = -1;
+
+        if (argsLen === 1) {
+            return arr;
+        }
+
+        while (++i < len) {
+            if (arrays.indexOf(arr[i]) === -1) {
+                res.push(arr[i]);
+            }
+        }
+        return res;
+    }
 }
 
 export default Utils;

@@ -1,0 +1,24 @@
+.supplier-add-space {
+    .base {
+        .ant-upload {
+            text-align: left !important;
+        }
+        div.ant-col-8:nth-of-type(even) {
+            width: 530px;
+        }
+        div.ant-col-8:nth-of-type(odd) {
+            width: 477px;
+        }
+    }
+    .basic {
+        @extend .base;
+        div.ant-col-8:nth-of-type(odd) {
+            & > span:first-child {
+                width: 158px;
+            }
+        }
+    }
+    &-basic {
+        @extend .basic;
+    }
+}

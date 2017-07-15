@@ -177,7 +177,7 @@ class SupplierManageList extends PureComponent {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/${id}`}>供应商详情</Link>
+                    <Link to={`${pathname}/${id}/4`}>供应商详情</Link>
                 </Menu.Item>
                 <Menu.Item key="changeMessage">
                     <a target="_blank" rel="noopener noreferrer">修改合作信息</a>

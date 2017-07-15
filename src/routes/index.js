@@ -18,9 +18,9 @@ import SuppliersApplicationList from 'bundle-loader?lazy!../views/supplier/suppl
 // 供应商修改资料申请
 import SupplierModifyApplication from 'bundle-loader?lazy!../views/supplier/supplierModifyApplication';
 // 供应商详情
-import SupplierDetail from 'bundle-loader?lazy!../views/supplierDetail';
+import SupplierDetail from 'bundle-loader?lazy!../views/supplier/detail';
 // 添加供应商
-import AddSupplier from 'bundle-loader?lazy!../views/addSupplier';
+import AddSupplier from 'bundle-loader?lazy!../views/supplier/addEdit';
 // 在售商品管理
 import OnSale from 'bundle-loader?lazy!../views/commodity/onSale';
 // 待售商品管理
@@ -232,6 +232,11 @@ const routes = [
                         />
                         <Route
                             path="/supplierList/:id"
+                            exact
+                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/supplierList/:id/:type"
                             render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
