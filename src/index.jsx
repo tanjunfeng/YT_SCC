@@ -102,7 +102,7 @@ startApp({
                     {
                         "code": "goodsClassification",
                         "name": "商品分类列表"
-                    }
+                    },
                 ]
             },
             {
@@ -118,17 +118,25 @@ startApp({
                         name: "供应商入驻申请列表"
                     },
                     {
+                        code: "suppliersAppList",
+                        name: "供应商入驻申请列表"
+                    },
+                    {
                         code: "modifyApplication",
                         name: "供应商修改资料申请"
                     },
                     {
                         code: "supplierAreaManagement",
                         name: "供应商配送区域管理"
-                    }
+                    },
+                    {
+                        code: "supplierInputList",
+                        name: "供应商录入管理"
+                    },
                 ]
             },
             {
-                code: "gylxtpz",
+                code: 'gylxtpz',
                 name: "系统配置",
                 submenu: [
                     {

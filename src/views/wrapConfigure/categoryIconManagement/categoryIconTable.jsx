@@ -1,8 +1,15 @@
+/**
+ * @file App.jsx
+ *
+ * @author caoyanxuan
+ *
+ * 分类图标管理--子组件--模态框
+ */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Table, Modal, Button, message } from 'antd';
+import { Table, Modal, message } from 'antd';
 import { uploadImageBase64Data } from '../../../service';
 import { modifyCategoryIcon, fetchCategoryId } from '../../../actions/wap';
 import FileCut from '../fileCut';
@@ -90,6 +97,7 @@ class CategoryIconTable extends PureComponent {
         }
         return null;
     }
+
     saveItems(id, imgUrl) {
         const { categoryInfos} = this.props;
         const { lv2Id } = categoryInfos;
@@ -113,6 +121,7 @@ class CategoryIconTable extends PureComponent {
             img: null
         });
     }
+
     uploadIconModal(record) {
         this.setState({
             visible: true,
@@ -134,7 +143,7 @@ class CategoryIconTable extends PureComponent {
                 <Table
                     dataSource={ciData}
                     columns={this.columns}
-                    rowKey="categoryName"
+                    rowKey={lv3Name}
                     pagination={false}
                     footer={null}
                 />

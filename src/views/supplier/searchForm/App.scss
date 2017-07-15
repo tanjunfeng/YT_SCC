@@ -1,0 +1,31 @@
+.ant-form {
+    .sc-form{
+        &-item{
+            min-width: 340px;
+            margin-right: 16px;
+            display: inline-block;
+            &-label{
+                min-width: 60px;
+                margin-right: 8px;
+                display: inline-block;
+            }
+            &-input{
+                width: 270px;
+                display: inline-block;
+            }
+            &-select{
+                width: 270px;
+                display: inline-block;
+            }
+            &-input-license{
+                width: 234px;
+            }
+            &-date-picker{
+                width: 246px;
+            }
+        }
+        &-button-group{
+            display: inline-block;
+        }
+    }
+}

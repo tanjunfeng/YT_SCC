@@ -9,12 +9,16 @@ import { Route, Switch } from 'react-router-dom';
 import Bundle from 'freed-spa/src/bundle';
 /* eslint-disable */
 import Home from 'bundle-loader?lazy!../views/home/App';
+// 供应商录入列表
+import SupplierInputList from 'bundle-loader?lazy!../views/supplier/supplierInputList';
 // 供应商管理列表
 import SupplierManageList from 'bundle-loader?lazy!../views/supplier/supplierManageList';
 // 供应区域列表管理
 import SupplierAreaManagement from 'bundle-loader?lazy!../views/supplier/supplierAreaManagement';
 // 供应商入驻申请列表
 import SuppliersApplicationList from 'bundle-loader?lazy!../views/supplier/suppliersApplicationList';
+// 供应商入驻申请列表(改)
+import SuppliersAppList from 'bundle-loader?lazy!../views/supplier/suppliersAppList';
 // 供应商修改资料申请
 import SupplierModifyApplication from 'bundle-loader?lazy!../views/supplier/supplierModifyApplication';
 // 供应商详情
@@ -252,7 +256,7 @@ const routes = [
                         <Route
                             path="/applicationList"
                             exact
-                            render={() => (<Bundle load={SuppliersApplicationList}>
+                            render={() => (<Bundle load={SuppliersAppList}>
                                 {(App) => <App />}
                             </Bundle>)}
                         />
@@ -267,6 +271,36 @@ const routes = [
                         />
                         <Route
                             path="/applicationList/:id"
+                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
+            // 供应商入驻申请列表(改)
+            {
+                path: '/suppliersAppList',
+                parent: 'gysgl',
+                key: 'suppliersAppList',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/SuppliersAppList"
+                            exact
+                            render={() => (<Bundle load={SuppliersAppList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/SuppliersAppList/add"
+                            exact
+                            render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/SuppliersAppList/edit/:id"
+                            render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/SuppliersAppList/:id"
                             render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
@@ -308,7 +342,21 @@ const routes = [
                         </Bundle>)}
                     />
                 )
-            }
+            },
+            // 供应商录入管理
+            {
+                path: '/supplierInputList',
+                parent: 'gysgl',
+                key: 'supplierInputList',
+                component: () => (
+                    <Route
+                        path="/supplierInputList"
+                        render={() => (<Bundle load={SupplierInputList}>
+                            {(App) => <App />}
+                        </Bundle>)}
+                    />
+                )
+            },
         ]
     },
     // wap端页面配置

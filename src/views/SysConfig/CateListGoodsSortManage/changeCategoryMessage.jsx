@@ -64,6 +64,7 @@ class ChangeMessage extends PureComponent {
         }
     }
 
+    // 根据商品编号查询商品名称
     handleBackShow() {
         const {
             productNo
@@ -81,6 +82,7 @@ class ChangeMessage extends PureComponent {
         })
     }
 
+    // 三级下拉菜单
     handleSelectChange(data, that) {
         const { first, second, third } = data;
         if (third.id !== -1) {
@@ -107,10 +109,12 @@ class ChangeMessage extends PureComponent {
         this.classifyRef = that;
     }
 
+    // 模态框信息
     handleInformationCancel() {
         this.props.modifyCategoryVisible({isVisible: false});
     }
 
+    // 模态框确定事件
     handleInformationOk() {
         const { querygoodsname = '' } = this.props;
         const name1 = querygoodsname === null ? '' : querygoodsname;
