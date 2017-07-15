@@ -30,10 +30,16 @@ class ChangeMessage extends PureComponent {
         this.handleInformationCancel = this.handleInformationCancel.bind(this);
     }
 
+    /**
+     * 模态框取消按钮
+     */
     handleInformationCancel() {
         this.props.modifyInformationVisible({isVisible: false});
     }
 
+    /**
+     * 模态框确认按钮
+     */
     handleInformationOk() {
         this.props.form.validateFields((err) => {
             if (!err) {
