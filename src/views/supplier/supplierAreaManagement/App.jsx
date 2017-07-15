@@ -137,7 +137,9 @@
 // export default Form.create()(withRouter(SupplierAreaManagement));
 
 import React, { Component } from 'react';
+import { Input } from 'antd';
 import InlineTree from '../../../components/inlineTree';
+import SearchInput from '../../../components/searchInput';
 
 // mock
 import queryAllLargerRegionProvince from '../../../../mock/queryAllLargerRegionProvince';
@@ -145,9 +147,14 @@ import queryAllLargerRegionProvince from '../../../../mock/queryAllLargerRegionP
 class Demo extends React.Component {
     render() {
         return (
-            <InlineTree
-                initValue={queryAllLargerRegionProvince.data}
-            />
+            <div>
+                <SearchInput>
+                    <Input />
+                </SearchInput>
+                <InlineTree
+                    initValue={queryAllLargerRegionProvince.data}
+                />
+            </div>
         );
     }
 }
