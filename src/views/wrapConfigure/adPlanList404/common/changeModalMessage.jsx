@@ -167,6 +167,12 @@ class ChangeMessage extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const mtitle = this.props.modalTitle;
         const isShowValue = (mtitle === '修改广告方案');
+        /* eslint-disable */
+        const imgPattern = {
+            pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/,
+            message: '请输入正确的url地址'
+        }
+        /* eslint-enable */
         return (
             <Modal
                 title={typeof (mtitle) === 'string' ? mtitle : ''}
@@ -218,13 +224,7 @@ class ChangeMessage extends PureComponent {
                             rules: [{
                                 required: true,
                                 message: '请输入链接地址'
-                            },
-                            /* eslint-disable */
-                            {
-                                pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/,
-                                message: '请输入正确的url地址'
-                            }
-                            /* eslint-enable */
+                            }, imgPattern
                             ],
                             initialValue: isShowValue ? linkUrl1 : ''
                         })(
@@ -272,13 +272,7 @@ class ChangeMessage extends PureComponent {
                             rules: [{
                                 required: true,
                                 message: '请输入链接地址'
-                            },
-                            /* eslint-disable */
-                            {
-                                pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/,
-                                message: '请输入正确的url地址'
-                            }
-                            /* eslint-enable */
+                            }, imgPattern
                             ],
                             initialValue: isShowValue ? linkUrl2 : ''
                         })(
