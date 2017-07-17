@@ -117,33 +117,40 @@ class SearchForm extends Component {
     * 查询/搜索
     */
     handleGetValue() {
-        const { onSearch } = this.props;
-        const sState = this.searchData.supplierState;
         this.getValue();
+        const { onSearch } = this.props;
+        const { supplierState } = this.searchData;
         if (this.isPlaceTypeForSearch()) {
             // '已审核'状态调主数据，其他状态调SCM数据
-            if (sState === '2') {
-                // console.log('已审核状态，调主数据')
-                onSearch(this.searchData);
+            if (supplierState === '2') {
+                // 已审核状态，调主数据
+                onSearch(this.searchData, true);
+            } else {
+                // 调SCM数据
+                onSearch(this.searchData, false);
             }
-            // console.log( '调SCM数据')
-            onSearch(this.searchData);
         }
     }
 
     /**
-    * 添加/新增
+    * 添加/新增/创建
     */
     handleAddValue() {
         const { onInput } = this.props;
         this.getValue();
         if (this.searchData.supplierType !== '-1') {
-            // console.log('已选供应商类型')
+            // 已选供应商类型
             if (this.isPlaceTypeForAdd()) {
-                onInput();
+                // 状态为供应商，不传供应商编码
+                if (this.searchData.supplierType === '0') {
+                    onInput('addSupplier');
+                } else {
+                    onInput(this.searchData.supplierNumber);
+                }
             }
+        } else {
+            message.error('请选择供应商类型！');
         }
-        message.error('请选择供应商类型！');
     }
 
     /**
