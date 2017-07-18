@@ -11,7 +11,7 @@
  * @param {string} value, 输入框返回的值
  * @return {Promise}
  */
-handleTestFetch = (value) => {
+handleTestFetch = ({ value, pagination }) => {
     return new Promise(resolve => {
         switch (value) {
             case 'd': {
@@ -110,6 +110,9 @@ render() {
 | quickSearch | 是否启用快速搜索(keyup 即搜索) | boolean | true |
 | onChoosed | 点击下拉菜单的搜索内容的回调 | function({ record, index, event }) |  |
 | renderChoosedInputRaw | 点击下拉菜单的搜索内容的回调，渲染指定元素作为选择的数据显示 | function(data) |  |
+| compKey | Unique Component Key | string | null  |
+| rowKey | by Antd | string, function(record) | 'id'  |
+| defaultValue | Input default value | string | ''  |
 
 
 
