@@ -14,11 +14,12 @@ import { connect } from 'react-redux';
 import { message } from 'antd';
 import Utils from '../../../util/util';
 import LevelTree from '../../../common/levelTree';
+import SearchMind from '../../../components/searchMind';
 import {
     fetchAction,
     receiveData,
+    fetchTest,
 } from '../../../actions/classifiedList';
-import ImageUploader from '../../../common/preImage';
 
 @connect(
     state => ({
@@ -38,9 +39,9 @@ class ClassifiedList extends Component {
 
         // Test
         this.handleSave = ::this.handleSave;
-
         this.state = {
-            img: null
+            img: null,
+            chooseMe: {}
         }
     }
 
@@ -144,6 +145,18 @@ class ClassifiedList extends Component {
         })
     }
 
+    handleTestFetch = ({ value, pagination }) => {
+        console.log(value, pagination);
+
+        return fetchTest({
+            value,
+        });
+    }
+
+    handleTestChoose = ({ record, compKey, index, event }) => {
+        console.log(compKey, record)
+    }
+
     render() {
         return (
             <div>
@@ -153,33 +166,79 @@ class ClassifiedList extends Component {
                     handleChangeSort={this.handleChangeSort}
                     handleChangeStatus={this.handleChangeStatus}
                 />
-                <br />
-                <input
-                    type="button" value="截取图片" onClick={this.handleSave}
+                <div>{this.state.chooseMe.key} - {this.state.chooseMe.name}</div>
+
+                {/* Demo 1 */}
+                <SearchMind
+                    compKey="search-mind-key1"
+                    ref={ref => { this.searchMind = ref }}
+                    fetch={(value, pager) => this.handleTestFetch(value, pager)}
+                    addonBefore="供应商 asfsafsafa"
+                    onChoosed={this.handleTestChoose}
+                    renderChoosedInputRaw={(data) => (
+                        <div>{data.id} - {data.name}</div>
+                    )}
+                    pageSize={2}
+                    columns={[
+                        {
+                            title: 'Name',
+                            dataIndex: 'name',
+                            width: 150,
+                        }, {
+                            title: 'Address',
+                            dataIndex: 'address',
+                            width: 200,
+                        }
+                    ]}
                 />
-                <div
-                    style={{
-                        position: 'relative',
-                        marginLeft: '200px'
-                    }}
-                >
-                <ImageUploader
-                    ref={ref => { this.imageUploader = ref }}
-                    accept={['jpg', 'jpeg', 'png']}
+
+                {/* Demo 2 */}
+                <SearchMind
+                    style={{ marginLeft: 10 }}
+                    compKey="search-mind-key2"
+                    fetch={(value, pager) => this.handleTestFetch(value, pager)}
+                    addonBefore="仓库"
+                    onChoosed={this.handleTestChoose}
+                    renderChoosedInputRaw={(data) => (
+                        <div>{data.id} - {data.name}</div>
+                    )}
+                    pageSize={1}
+                    columns={[
+                        {
+                            title: 'Name',
+                            dataIndex: 'name',
+                            width: 150,
+                        }, {
+                            title: 'Address',
+                            dataIndex: 'address',
+                            width: 200,
+                        }
+                    ]}
                 />
-                </div>
-                {/* test */}
-                <div>
-                    {this.state.img
-                        ? <img
-                            style={{
-                                display: 'block'
-                            }}
-                            src={this.state.img}
-                        />
-                        : null
-                    }
-                </div>
+
+                {/* Demo 3 */}
+                <SearchMind
+                    style={{ marginLeft: 10 }}
+                    compKey="search-mind-key3"
+                    fetch={(value, pager) => this.handleTestFetch(value, pager)}
+                    addonBefore="商品"
+                    onChoosed={this.handleTestChoose}
+                    renderChoosedInputRaw={(data) => (
+                        <div>{data.id} - {data.name}</div>
+                    )}
+                    defaultValue="Hello"
+                    columns={[
+                        {
+                            title: 'Name',
+                            dataIndex: 'name',
+                            width: 150,
+                        }, {
+                            title: 'Address',
+                            dataIndex: 'address',
+                            width: 200,
+                        }
+                    ]}
+                />
             </div>
         )
     }

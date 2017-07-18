@@ -6,7 +6,7 @@
 
 import Promise from 'bluebird';
 import ActionType from './ActionType';
-import { queryCategorys } from '../service';
+import { queryCategorys, testApi } from '../service';
 import { ClassifiedList } from '../view-model';
 
 export const addAction = () => {}
@@ -31,6 +31,16 @@ export const fetchAction = (params) => dispatch => (
                 )
             );
         })
+        .catch(err => Promise.reject(err))
+)
+
+/**
+ * 请求列表信息
+ * @param params
+ */
+export const fetchTest = (params) => (
+    testApi(params)
+        .then(res => Promise.resolve(res))
         .catch(err => Promise.reject(err))
 )
 

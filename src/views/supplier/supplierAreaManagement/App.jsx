@@ -139,7 +139,6 @@
 import React, { Component } from 'react';
 import { Input } from 'antd';
 import InlineTree from '../../../components/inlineTree';
-import SearchInput from '../../../components/searchInput';
 
 // mock
 import queryAllLargerRegionProvince from '../../../../mock/queryAllLargerRegionProvince';
@@ -148,9 +147,6 @@ class Demo extends React.Component {
     render() {
         return (
             <div>
-                <SearchInput>
-                    <Input />
-                </SearchInput>
                 <InlineTree
                     initValue={queryAllLargerRegionProvince.data}
                 />
