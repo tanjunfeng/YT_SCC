@@ -103,6 +103,10 @@ startApp({
                         "code": "goodsClassification",
                         "name": "商品分类列表"
                     },
+                    {
+                        code: 'managementList',
+                        name: '商品管理列表'
+                    },
                 ]
             },
             {
