@@ -1,4 +1,4 @@
-import SearchRecommendConfig from './App';
+import AdPlanList404 from './App';
 import './index.scss';
 
-export default SearchRecommendConfig;
+export default AdPlanList404;
