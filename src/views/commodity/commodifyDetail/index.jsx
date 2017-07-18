@@ -1,4 +1,4 @@
-import SaleDetail from './App';
+import CommodifyDetail from './App';
 import './App.scss';
 
-export default SaleDetail;
+export default CommodifyDetail;

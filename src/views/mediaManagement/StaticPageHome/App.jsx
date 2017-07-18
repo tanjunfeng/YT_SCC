@@ -141,8 +141,6 @@ class CateGory extends Component {
     renderOperation(text, record, index) {
         const { id } = record;
         const { pathname } = this.props.location;
-        console.log(pathname)
-
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="changeMessage">

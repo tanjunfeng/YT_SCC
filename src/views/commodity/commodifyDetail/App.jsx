@@ -123,7 +123,7 @@ class CommodifyDetail extends PureComponent {
         // 关键字
         const keywords = '包装,蓝梅,青柠,罐装'
         return (
-            <div className="supplier-detail-message" style={{ marginTop: '15px' }}>
+            <div className="commodify-detail-message" style={{ marginTop: '15px' }}>
                 <div className="supplier-detail-item">
                     <div className="detail-message">
                         <div className="detail-message-header">
