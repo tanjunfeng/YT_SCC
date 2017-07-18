@@ -577,7 +577,8 @@ class BasicInfo extends PureComponent {
                         </div>
                     </div>
                     <div className="add-message-handle">
-                        <Button onClick={this.handleNextStep}>下一步</Button>
+                        <Button onClick={this.handleNextStep}>提    交</Button>
+                        <Button onClick={this.handleNextStep}>保存草稿 </Button>
                     </div>
                 </Form>
             </div>

@@ -7,11 +7,9 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import moment from 'moment';
-import { Icon, Input, Form, Button, Select, Row, Col, DatePicker } from 'antd';
+import { Icon, Input, Form, Button, Select, Row, Col} from 'antd';
 
 import Utils from '../../../util/util';
 import { Validator } from '../../../util/validator';
@@ -241,6 +239,7 @@ class BankInfo extends PureComponent {
                         </div>
                     </div>
                     <div className="add-message-handle">
+                        <Button onClick={this.handleNextStep}>上一步</Button>
                         <Button onClick={this.handleNextStep}>下一步</Button>
                     </div>
                 </Form>

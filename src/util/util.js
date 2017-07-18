@@ -206,6 +206,23 @@ class Utils {
         }
         return res;
     }
+
+    /**
+     * 价格区间是否连续
+     *
+     * @param {Array[number]} arr 价格区间数组
+     * @return {boolean} 是否连续
+     */
+    static isContinuity(arr) {
+        let i = 0;
+        while (arr[i + 1]) {
+            if (arr[i].endNumber + 1 !== arr[i + 1].startNumber) {
+                return false;
+            }
+            i++;
+        }
+        return true;
+    }
 }
 
 export default Utils;

@@ -349,12 +349,36 @@ const routes = [
                 parent: 'gysgl',
                 key: 'supplierInputList',
                 component: () => (
-                    <Route
-                        path="/supplierInputList"
-                        render={() => (<Bundle load={SupplierInputList}>
-                            {(App) => <App />}
-                        </Bundle>)}
-                    />
+                    <Switch>
+                        <Route
+                            path="/supplierInputList"
+                            exact
+                            render={() => (<Bundle load={SupplierInputList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/supplierInputList/supplier/add"
+                            exact
+                            render={() => (<Bundle load={AddSupplier}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/supplierInputList/:type/:id"
+                            exact
+                            render={() => (<Bundle load={SupplierDetail}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/supplierInputList/place/:type/:id"
+                            exact
+                            render={() => (<Bundle load={SupplierDetail}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                    </Switch>
                 )
             },
         ]
@@ -440,7 +464,9 @@ const routes = [
                     <Route
                         path="/categoryIconManagement"
                         exact
-                        render={() => <Bundle load={CategoryIconManagement}>{(App) => <App />}</Bundle>}
+                        render={() => (<Bundle load={CategoryIconManagement}>
+                            {(App) => <App />}
+                        </Bundle>)}
                     />
                 ),
             },
