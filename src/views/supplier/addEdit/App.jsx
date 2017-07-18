@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import { getSupplierDetail } from '../../../actions/supplier';
 
 import BasicInfo from './basicInfo';
-import BankInfo from './BankInfo';
+import BankInfo from './bankInfo';
 import LicenseInfo from './licenseInfo';
 import LocationInformation from '../locationInformation';
 
@@ -35,7 +35,7 @@ class AddSupplier extends PureComponent {
         this.handleGoTo = ::this.handleGoTo;
         this.state = {
             activeKey: '1',
-            edit: false
+            edit: false,
         }
     }
 
@@ -69,6 +69,13 @@ class AddSupplier extends PureComponent {
         // })
     }
 
+    // changeTabs() {
+    //     this.setState({
+    //         showLoca: true,
+    //         activeKey: '4'
+    //     })
+    // }
+
     render() {
         const { activeKey, edit } = this.state;
         const { detailData } = this.props;
@@ -88,9 +95,6 @@ class AddSupplier extends PureComponent {
                 </TabPane>
                 <TabPane tab="证照信息" key="3">
                     <LicenseInfo />
-                </TabPane>
-                <TabPane tab="供应商地点信息" key="4">
-                    <LocationInformation />
                 </TabPane>
             </Tabs>
         )

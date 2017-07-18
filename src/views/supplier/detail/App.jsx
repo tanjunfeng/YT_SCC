@@ -26,6 +26,7 @@ import BasicInfo from './basicInfo';
 import BankInfo from './bankInfo';
 import LicenseInfo from './licenseInfo';
 import SupplierSpace from './supplierSpace';
+import LocationInfoManagement from '../locationInformation';
 
 const TabPane = Tabs.TabPane;
 
@@ -46,16 +47,16 @@ class SupplierDetail extends PureComponent {
         this.canEdit = false;
         this.canExamine = false;
         this.showReson = false;
-        const { type = '1' } = this.props.match.params;
+        const { type = 'supplier' } = this.props.match.params;
         this.state = {
-            current: type
+            current: type === 'add' || type === 'place' ? '4' : '1'
         }
     }
 
     componentDidMount() {
         const { id } = this.props.match.params;
         const { match } = this.props;
-        this.props.getSupplierDetail({spId: id});
+        // this.props.getSupplierDetail({spId: id});
     }
 
     handleClick(goto) {
@@ -70,6 +71,7 @@ class SupplierDetail extends PureComponent {
     }
 
     render() {
+        const { type = 'supplier' } = this.props.match.params;
         const props = {
             data: this.props.detailData,
             canEdit: this.canEdit,
@@ -83,6 +85,7 @@ class SupplierDetail extends PureComponent {
                 defaultActiveKey="1"
                 onChange={this.handleClick}
                 activeKey={this.state.current}
+                className="suppplier-add"
                 style={{marginTop: '16px'}}
             >
                 <TabPane tab="基本信息" key="1">
@@ -94,9 +97,18 @@ class SupplierDetail extends PureComponent {
                 <TabPane tab="证照信息" key="3">
                     <LicenseInfo />
                 </TabPane>
-                <TabPane tab="供应商地点信息" key="4">
-                    <SupplierSpace />
-                </TabPane>
+                {
+                    type === 'place' &&
+                    <TabPane tab="供应商地点信息" key="4">
+                        <SupplierSpace />
+                    </TabPane>
+                }
+                {
+                    type === 'add' &&
+                    <TabPane tab="供应商地点信息" key="4">
+                        <LocationInfoManagement />
+                    </TabPane>
+                }
             </Tabs>
         )
     }
