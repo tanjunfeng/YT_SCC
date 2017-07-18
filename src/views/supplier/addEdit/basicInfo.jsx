@@ -185,17 +185,7 @@ class BasicInfo extends PureComponent {
                                 <Row>
                                     <Col span={8}>
                                         <span>供应商编号：</span>
-                                        <FormItem>
-                                            {getFieldDecorator('spNo', {
-                                                rules: [{ required: true, message: '请输入供应商编号!' }],
-                                                initialValue: supplierBasicInfo.spNo
-                                            })(
-                                                <Input
-                                                    placeholder="供应商编号"
-                                                    onBlur={(e) => { Validator.repeat.spNo(e, this, supplierBasicInfo.id) }}
-                                                />
-                                            )}
-                                        </FormItem>
+                                        <span>YTXC1001</span>
                                     </Col>
                                     <Col span={8}>
                                         <span>供应商名称：</span>
@@ -236,7 +226,7 @@ class BasicInfo extends PureComponent {
                                         <FormItem>
                                             {getFieldDecorator('arrivalDate', {
                                                 rules: [{required: true, message: '请选择供应商入驻日期'}],
-                                                initialValue: moment('2015/01/01', dateFormat)
+                                                initialValue: null
                                             })(
                                                 <DatePicker
                                                     getCalendarContainer={() => document.getElementById('in-time')}

@@ -49,6 +49,9 @@
     }
     &-handle {
         text-align: center;
+        button {
+            margin-right: 10px;
+        }
     }
     &-pre {
         margin-right: 10px;
@@ -145,5 +148,13 @@
     }
     .ant-calendar-picker {
         width: 200px;
+    }
+    .ant-upload-select-text {
+        display: block;
+    }
+    .inline-upload-file {
+        .ant-calendar-picker {
+            width: 100px;
+        }
     }
 }
