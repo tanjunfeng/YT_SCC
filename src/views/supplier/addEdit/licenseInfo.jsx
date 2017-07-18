@@ -161,6 +161,10 @@ class LicenseInfo extends PureComponent {
         // }
     }
 
+    handleNextStep() {
+        this.props.history.push('/supplierInputList/place/add/123123')
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const { detailData, isEdit } = this.props;
@@ -208,37 +212,27 @@ class LicenseInfo extends PureComponent {
                                 <Row>
                                     <Col span={8}>
                                         <span>食品安全认证：</span>
-                                        <FormItem>
-                                            <InlineUpload />
-                                        </FormItem>
+                                        <InlineUpload />
                                     </Col>
                                     <Col span={8}>
                                         <span>商标注册证/受理通知书：</span>
-                                        <FormItem>
-                                            <InlineUpload />
-                                        </FormItem>
+                                        <InlineUpload />
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col span={8}>
                                         <span>食品安全认证：</span>
-                                        <FormItem>
-                                            <InlineUpload />
-                                        </FormItem>
+                                        <InlineUpload />
                                     </Col>
                                     <Col span={8}>
                                         <span>一般纳税人资格证电子版：</span>
-                                        <FormItem>
-                                            <InlineUpload />
-                                        </FormItem>
+                                        <InlineUpload />
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col span={8}>
                                         <span>食品经营许可证：</span>
-                                        <FormItem>
-                                            <InlineUpload />
-                                        </FormItem>
+                                        <InlineUpload />
                                     </Col>
                                 </Row>
                             </div>
@@ -286,14 +280,6 @@ class LicenseInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>法人身份证电子版：</span>
-                                        <FormItem>
-                                            <InlineUpload />
-                                        </FormItem>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col span={8}>
                                         <span>法人身份证号：</span>
                                         <FormItem>
                                             {getFieldDecorator('companyDetailAddress', {
@@ -307,6 +293,8 @@ class LicenseInfo extends PureComponent {
                                             )}
                                         </FormItem>
                                     </Col>
+                                </Row>
+                                <Row>
                                     <Col span={8} id="create-time">
                                         <span>成立日期：</span>
                                         {getFieldDecorator('establishDate', {
@@ -319,27 +307,11 @@ class LicenseInfo extends PureComponent {
                                             />
                                         )}
                                     </Col>
-                                </Row>
-                                <Row>
                                     <Col span={8}>
                                         <span>营业执照所在地：</span>
                                         <CasadingAddress
                                             id="licenseLoc"
                                         />
-                                    </Col>
-                                    <Col span={8}>
-                                        <span>营业执照详细地址：</span>
-                                        <FormItem>
-                                            {getFieldDecorator('companyDetailAddress', {
-                                                rules: [{ required: true, message: '请输入营业执照详细地址!' }],
-                                                initialValue: supplierBasicInfo.spNo
-                                            })(
-                                                <Input
-                                                    placeholder="营业执照详细地址"
-                                                    onBlur={(e) => { Validator.repeat.spNo(e, this, supplierBasicInfo.id) }}
-                                                />
-                                            )}
-                                        </FormItem>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -371,6 +343,22 @@ class LicenseInfo extends PureComponent {
                                         </span>
                                     </Col>
                                     <Col span={8}>
+                                        <span>营业执照详细地址：</span>
+                                        <FormItem>
+                                            {getFieldDecorator('companyDetailAddress', {
+                                                rules: [{ required: true, message: '请输入营业执照详细地址!' }],
+                                                initialValue: supplierBasicInfo.spNo
+                                            })(
+                                                <Input
+                                                    placeholder="营业执照详细地址"
+                                                    onBlur={(e) => { Validator.repeat.spNo(e, this, supplierBasicInfo.id) }}
+                                                />
+                                            )}
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span={8}>
                                         <span>注册资本：</span>
                                         <FormItem>
                                             {getFieldDecorator('registeredCapital', {
@@ -382,7 +370,22 @@ class LicenseInfo extends PureComponent {
                                                     onBlur={(e) => { Validator.repeat.spNo(e, this, supplierBasicInfo.id) }}
                                                 />
                                             )}
-                                            万元
+                                            &nbsp;万元
+                                        </FormItem>
+                                    </Col>
+                                    <Col span={8}>
+                                        <span>供应商质保金收取金额：</span>
+                                        <FormItem>
+                                            {getFieldDecorator('guaranteeMoney', {
+                                                rules: [{ required: true, message: '请输入供应商质保金收取金额!' }],
+                                                initialValue: supplierBasicInfo.spNo
+                                            })(
+                                                <Input
+                                                    placeholder="供应商质保金收取金额"
+                                                    onBlur={(e) => { Validator.repeat.spNo(e, this, supplierBasicInfo.id) }}
+                                                />
+                                            )}
+                                            &nbsp;元
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -402,26 +405,18 @@ class LicenseInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>供应商质保金收取金额：</span>
-                                        <FormItem>
-                                            {getFieldDecorator('guaranteeMoney', {
-                                                rules: [{ required: true, message: '请输入供应商质保金收取金额!' }],
-                                                initialValue: supplierBasicInfo.spNo
-                                            })(
-                                                <Input
-                                                    placeholder="供应商质保金收取金额"
-                                                    onBlur={(e) => { Validator.repeat.spNo(e, this, supplierBasicInfo.id) }}
-                                                />
-                                            )}
-                                            元
-                                        </FormItem>
+                                        <span>法人身份证电子版：</span>
+                                        <InlineUpload />
                                     </Col>
                                 </Row>
                             </div>
                         </div>
                     </div>
                     <div className="add-message-handle">
-                        <Button onClick={this.handleNextStep}>下一步</Button>
+                        <Button onClick={this.handleNextStep}>上一步</Button>
+                        <Button onClick={this.handleNextStep}>提交</Button>
+                        <Button onClick={this.handleNextStep}>创建供应商地点</Button>
+                        <Button onClick={this.handleNextStep}>保存草稿</Button>
                     </div>
                 </Form>
             </div>
@@ -436,4 +431,4 @@ LicenseInfo.propTypes = {
     detailData: PropTypes.objectOf(PropTypes.any),
     addSupplierMessage1: PropTypes.func,
 }
-export default Form.create()(LicenseInfo);
+export default Form.create()(withRouter(LicenseInfo));

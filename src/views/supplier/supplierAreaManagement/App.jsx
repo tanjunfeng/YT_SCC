@@ -139,16 +139,21 @@
 import React, { Component } from 'react';
 import { Input } from 'antd';
 import InlineTree from '../../../components/inlineTree';
-
-// mock
-import queryAllLargerRegionProvince from '../../../../mock/queryAllLargerRegionProvince';
+import SteppedPrice from '../../commodity/steppedPrice';
 
 class Demo extends React.Component {
     render() {
         return (
-            <div>
-                <InlineTree
-                    initValue={queryAllLargerRegionProvince.data}
+            <div onClick={() => {
+            console.log(this.sreppedPrice.getValue())
+            }}>
+                <SteppedPrice
+                    ref={node => (this.sreppedPrice = node)}
+                    defaultValue={[]}
+                    maxLength={6}
+                    handleChange={(item) => {
+                        console.log(item);
+                    }}
                 />
             </div>
         );

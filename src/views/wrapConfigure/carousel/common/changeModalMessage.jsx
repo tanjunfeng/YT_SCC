@@ -247,6 +247,7 @@ class ChangeMessage extends PureComponent {
                             width={200}
                             height={200}
                             dpr={2}
+                            defaultImge={picAddress}
                             accept={['jpg', 'jpeg', 'png']}
                         />
                     </FormItem>

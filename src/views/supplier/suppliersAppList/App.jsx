@@ -24,13 +24,9 @@ import {
     modifyAuditVisible,
     modifyCheckReasonVisible
 } from '../../../actions';
-import SearchForm from '../../../components/searchForm';
+import SearchForm from '../searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
-import {
-    spplierSelectType,
-    suplierStatusSelect
-} from '../../../constant/searchParams';
 import { suppliersAppList } from '../../../constant/formColumns';
 import { exportSupplierEnterList } from '../../../service';
 import ChangeAudit from './changeAudit';
@@ -61,14 +57,15 @@ class SuppliersAppList extends PureComponent {
         this.handleFormReset = this.handleFormReset.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
         this.handleDownLoad = this.handleDownLoad.bind(this);
-        this.handleInputSupplier = this.handleInputSupplier.bind(this);
         // this.handleGetList = this.handleGetList.bind(this);
 
         this.searchForm = {};
         this.current = 1;
     }
 
-    // 加载刷新列表
+    /**
+     * 加载刷新列表
+     */
     componentDidMount() {
         this.props.fetchProviderEnterList({
             pageNum: this.current,
@@ -77,7 +74,13 @@ class SuppliersAppList extends PureComponent {
         });
     }
 
-    // 表单操作弹出层
+    /**
+     * 表单操作弹出层
+     *
+     * @param {string} text 文本内容
+     * @param {Object} record 模态框状态
+     * @param {string} index 下标
+     */
     handleSelect(record, index, item) {
         const { key } = item;
         switch (key) {
@@ -92,30 +95,42 @@ class SuppliersAppList extends PureComponent {
         }
     }
 
-    // 表单页搜索栏等功能
-    handleFormSearch(data) {
+    /**
+     * 搜索
+     */
+    handleFormSearch(data, bool) {
         this.searchForm = data;
-        this.handlePaginationChange();
+        if (bool) {
+            // 主数据
+            // console.log('主数据')
+            this.handlePaginationChange();
+        } else {
+            // SCM数据
+            // console.log('SCM数据')
+            this.handlePaginationChange();
+        }
     }
 
-    // 重置
+    /**
+     * 重置
+     */
     handleFormReset(data) {
         this.searchForm = data;
         this.handlePaginationChange();
     }
 
-    // 导出
+    /**
+     * 导出
+     */
     handleDownLoad(data) {
         Utils.exportExcel(exportSupplierEnterList, data);
     }
 
-    // 新增
-    handleInputSupplier() {
-        const { history } = this.props;
-        history.push('/applicationList/add');
-    }
-
-    // 分页
+    /**
+     *列表分页
+     *
+     * @param {string} goto 数据列表分页
+     */
     handlePaginationChange(goto = 1) {
         this.current = goto;
         this.props.fetchProviderEnterList({
@@ -172,13 +187,9 @@ class SuppliersAppList extends PureComponent {
         return (
             <div className="application tjf-css-min-width">
                 <SearchForm
-                    suplierSelect={spplierSelectType}
-                    suplierStatusSelect={suplierStatusSelect}
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
                     onExcel={this.handleDownLoad}
-                    onInput={this.handleInputSupplier}
-                    type="Application"
                 />
                 <div className="application-list">
                     <Table

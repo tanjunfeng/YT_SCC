@@ -212,3 +212,72 @@ export const supplierPlaceLevelOptions = {
         value: '其他'
     }]
 }
+
+// 商品状态
+export const commodityStatusOptions = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '生效'
+    }, {
+        key: '1',
+        value: '暂停使用'
+    }, {
+        key: '2',
+        value: '停止使用'
+    }]
+}
+
+// 供货状态
+export const deliveryStatusOptions = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '生效'
+    }, {
+        key: '1',
+        value: '失效'
+    }]
+}
+
+// 子公司状态
+export const subCompanyStatusOptions = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '生效'
+    }, {
+        key: '1',
+        value: '失效'
+    }]
+}
+
+// 商品管理列表页-排序
+export const commoditySortOptions = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '按所属分类排序'
+    }, {
+        key: '1',
+        value: '按所属品牌排序'
+    }, {
+        key: '2',
+        value: '按商品编号升序排列'
+    }, {
+        key: '3',
+        value: '按商品编号降序排列'
+    }]
+}

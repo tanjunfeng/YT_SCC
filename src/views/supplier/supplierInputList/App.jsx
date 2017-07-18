@@ -11,7 +11,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Table, Form, Icon, Menu, Dropdown, Modal } from 'antd';
+import { Table, Form, Icon, Menu, Dropdown, message } from 'antd';
 
 import {
     fetchSupplierList,
@@ -21,7 +21,6 @@ import {
 } from '../../../actions';
 import SearchForm from '../searchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { spplierSelectType } from '../../../constant/searchParams';
 import { supplierInputList } from '../../../constant/formColumns';
 import Utils from '../../../util/util';
 import { exportSupplierList } from '../../../service';
@@ -81,23 +80,56 @@ class SupplierInputList extends PureComponent {
         }
     }
 
-    handleFormSearch(data) {
+    /**
+     * 搜索
+     *
+     * @param {Object} data 搜索的数据
+     * @param {bool} bool true：调主数据；false：调SCM数据
+     */
+    handleFormSearch(data, bool) {
         this.searchForm = data;
-        this.handlePaginationChange();
+        if (bool) {
+            // 主数据
+            // console.log('主数据')
+            this.handlePaginationChange();
+        } else {
+            // SCM数据
+            // console.log('SCM数据')
+            this.handlePaginationChange();
+        }
     }
 
-    handleFormReset(data) {
+    /**
+     * 重置
+     */
+    handleFormReset() {
         this.searchForm = {};
         this.handlePaginationChange();
     }
-    handleInputSupplier() {
+
+    /**
+     * 创建
+     *
+     * @param {string} data 'addSupplier':供应商类型为供应商；否则为供应商地点，data为供应商编码
+     */
+    handleInputSupplier(data) {
+        message.success(data)
         const { history } = this.props;
         history.push('/applicationList/add');
     }
+
+    /**
+     * 导出
+     *
+     * @param {string} data 'addSupplier':供应商类型为供应商；否则为供应商地点，data为供应商编码
+     */
     handleDownLoad(data) {
         Utils.exportExcel(exportSupplierList, data);
     }
 
+    /**
+     * 数据列表查询
+     */
     handleGetList() {
         this.props.fetchSupplierList({
             pageSize: PAGE_SIZE,
@@ -106,6 +138,11 @@ class SupplierInputList extends PureComponent {
         });
     }
 
+    /**
+     * 列表分页
+     *
+     * @param {string} goto 数据列表分页
+     */
     handlePaginationChange(goto = 1) {
         this.current = goto;
         this.props.fetchSupplierList({
@@ -115,6 +152,15 @@ class SupplierInputList extends PureComponent {
         });
     }
 
+    /**
+     * 列表页操作下拉菜单
+     *
+     * @param {string} text 文本内容
+     * @param {Object} record 模态框状态
+     * @param {string} index 下标
+     *
+     * return 列表页操作下拉菜单
+     */
     renderOperation(text, record, index) {
         const { status, id } = record;
         const { pathname } = this.props.location;
@@ -232,13 +278,10 @@ class SupplierInputList extends PureComponent {
 
 SupplierInputList.propTypes = {
     fetchSupplierList: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     supplier: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     modifyInformationVisible: PropTypes.func,
-    modifySupplierFrozen: PropTypes.func,
-    modifyCollaboration: PropTypes.func,
     informationVisible: PropTypes.bool
 }
 

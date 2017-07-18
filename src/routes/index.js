@@ -33,6 +33,9 @@ import ForSale from 'bundle-loader?lazy!../views/commodity/forSale';
 import SaleDetail from 'bundle-loader?lazy!../views/commodity/detail';
 // 商品分类管理
 import ClassifiedList from 'bundle-loader?lazy!../views/commodity/classifiedList';
+// 商品管理列表
+import ManagementList from 'bundle-loader?lazy!../views/commodity/managementList';
+import CommodifyDetail from 'bundle-loader?lazy!../views/commodity/commodifyDetail';
 // 销售价格
 import FindPriceInfo from 'bundle-loader?lazy!../views/commodity/findPriceInfo';
 // 销售价格
@@ -214,6 +217,33 @@ const routes = [
                     </Switch>
                 )
             },
+            // 商品管理列表
+            {
+                path: '/managementList',
+                parent: 'gylspgl',
+                key: 'managementList',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/managementList"
+                            exact
+                            render={() => <Bundle load={ManagementList}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/managementList/commodifyDetail/:id"
+                            render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/managementList/:id"
+                            render={() => <Bundle load={ManagementList}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/managementList/:id"
+                            render={() => <Bundle load={ManagementList}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
         ]
     },
     {
@@ -349,12 +379,36 @@ const routes = [
                 parent: 'gysgl',
                 key: 'supplierInputList',
                 component: () => (
-                    <Route
-                        path="/supplierInputList"
-                        render={() => (<Bundle load={SupplierInputList}>
-                            {(App) => <App />}
-                        </Bundle>)}
-                    />
+                    <Switch>
+                        <Route
+                            path="/supplierInputList"
+                            exact
+                            render={() => (<Bundle load={SupplierInputList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/supplierInputList/supplier/add"
+                            exact
+                            render={() => (<Bundle load={AddSupplier}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/supplierInputList/:type/:id"
+                            exact
+                            render={() => (<Bundle load={SupplierDetail}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/supplierInputList/place/:type/:id"
+                            exact
+                            render={() => (<Bundle load={SupplierDetail}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                    </Switch>
                 )
             },
         ]
@@ -440,7 +494,9 @@ const routes = [
                     <Route
                         path="/categoryIconManagement"
                         exact
-                        render={() => <Bundle load={CategoryIconManagement}>{(App) => <App />}</Bundle>}
+                        render={() => (<Bundle load={CategoryIconManagement}>
+                            {(App) => <App />}
+                        </Bundle>)}
                     />
                 ),
             },
