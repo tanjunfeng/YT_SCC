@@ -13,17 +13,17 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Form, Input, Button, Row, Col, Select, Icon, Table, Menu, Dropdown, message, Modal} from 'antd';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import ClassifiedSelect from '../../../components/threeStageClassification';
+import SearchMind from '../../../components/searchMind';
 import {
     commodityStatusOptions,
     deliveryStatusOptions,
     subCompanyStatusOptions,
     commoditySortOptions
 } from '../../../constant/searchParams';
+import {fetchTest} from '../../../actions/classifiedList';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const InputGroup = Input.Group;
 const confirm = Modal.confirm;
 const commodityML = 'commodity-management'
 
@@ -31,6 +31,7 @@ const columns = [{
     title: '商品信息',
     dataIndex: 'name',
     key: 'name',
+    width: 400,
     render: (text, record) => {
         const {
             id,
@@ -103,7 +104,6 @@ const datas = [{
 }, {
     id: 'pro4554',
     name: '百事可乐 极度（Max）碳酸饮料 把乐带回家 330ml*12听箱装',
-    imageUrl: 'http://sit.image.com/group1/M00/00/FB/rB4KPVlsFXOAGDZWAABb5O0UTso681.jpg',
     department: '饮料酒水',
     bigClass: '水饮料',
     middleClass: '有汽饮料',
@@ -127,9 +127,23 @@ class ManagementList extends Component {
         this.handleSelectChange = ::this.handleSelectChange;
         this.renderOperation = ::this.renderOperation;
         this.onCopy = ::this.onCopy;
-        this.handleButtonClick = ::this.handleButtonClick;
+        this.handleSuspendPurchase = ::this.handleSuspendPurchase;
+        this.handleRestorePurchases = ::this.handleRestorePurchases;
+        this.handleAreaDownSold = ::this.handleAreaDownSold;
+        this.handleAreaUpSold = ::this.handleAreaUpSold;
+        this.handleNationalDownSold = ::this.handleNationalDownSold;
+        this.handleNationalUpSold = ::this.handleNationalUpSold;
+        this.handleFormReset = ::this.handleFormReset;
+        this.handleFormSearch = ::this.handleFormSearch;
+        this.handleBrandChoose = ::this.handleBrandChoose;
+        this.handleSupplyChoose = ::this.handleSupplyChoose;
+        this.handleSubsidiaryChoose = ::this.handleSubsidiaryChoose;
+        this.searchMind1 = null;
         this.state = {
             choose: [],
+            brandChoose: null,
+            supplyChoose: null,
+            subsidiaryChoose: null,
         }
     }
 
@@ -145,7 +159,6 @@ class ManagementList extends Component {
 
     /**
      * 三级下拉菜单
-     *
      * @param {Object} data 各级
      * @param {string} that 回显信息
      */
@@ -175,6 +188,9 @@ class ManagementList extends Component {
         this.classifyRef = that;
     }
 
+    /**
+     * table复选框
+     */
     rowSelection = {
         onChange: (selectedRowKeys) => {
             this.setState({
@@ -182,87 +198,155 @@ class ManagementList extends Component {
             });
         }
     }
+    /**
+     * 品牌-值清单
+     */
+    handleBrandChoose = ({ record }) => {
+        this.setState({
+            brandChoose: record,
+        });
+    }
 
     /**
-     * 暂停购进/恢复采购/区域下架/区域上架/全国性上架/全国性下架按钮事件
-     *
-     * @param {string} witchButton 传入具体的哪个按钮，用以区分
+     * 供货供应商-值清单
      */
-    handleButtonClick(witchButton) {
-        let titleIndex = 0;
-        const confirmTitles = [
-            '请确认对选中商品进行暂停购进操作，商品将不可进行采购下单',
-            '请确认对选中商品进行恢复采购操作',
-            '请确认对选中商品进行区域下架操作，商品将在该区域停止销售',
-            '请确认对选中商品进行区域上架操作，商品将在该区域恢复销售',
-            '请确认对选中商品进行全国性上架操作',
-            '请确认对选中商品进行全国性下架操作'
-        ]
-        switch (witchButton) {
-            case '暂停购进':
-                titleIndex = 0
-                break;
-            case '恢复采购':
-                titleIndex = 1
-                break;
-            case '区域下架':
-                titleIndex = 2
-                break;
-            case '区域上架':
-                titleIndex = 3
-                break;
-            case '全国性上架':
-                titleIndex = 4
-                break;
-            case '全国性下架':
-                titleIndex = 5
-                break;
-            default:
-                break;
-        }
+    handleSupplyChoose = ({ record }) => {
+        this.setState({
+            supplyChoose: record,
+        });
+    }
+
+    /**
+     * 经营子公司-值清单
+     */
+    handleSubsidiaryChoose = ({ record }) => {
+        this.setState({
+            subsidiaryChoose: record,
+        });
+    }
+
+    /**
+     * 暂停购进
+     */
+    handleSuspendPurchase() {
         confirm({
-            title: witchButton,
-            content: confirmTitles[titleIndex],
+            title: '暂停购进',
+            content: '请确认对选中商品进行暂停购进操作，商品将不可进行采购下单',
             onOk: () => {
-                switch (witchButton) {
-                    case '暂停购进':
-                        break;
-                    case '恢复采购':
-                        break;
-                    case '区域下架':
-                        break;
-                    case '区域上架':
-                        break;
-                    case '全国性上架':
-                        break;
-                    case '全国性下架':
-                        // console.log(this.state.choose)
-                        break;
-                    default:
-                        break;
-                }
             },
             onCancel() { },
         });
     }
 
     /**
+     * 恢复采购
+     */
+    handleRestorePurchases() {
+        confirm({
+            title: '恢复采购',
+            content: '请确认对选中商品进行恢复采购操作',
+            onOk: () => {
+            },
+            onCancel() { },
+        });
+    }
+
+    /**
+     * 区域下架
+     */
+    handleAreaDownSold() {
+        confirm({
+            title: '区域下架',
+            content: '请确认对选中商品进行区域下架操作，商品将在该区域停止销售',
+            onOk: () => {
+            },
+            onCancel() { },
+        });
+    }
+
+    /**
+     * 区域上架
+     */
+    handleAreaUpSold() {
+        confirm({
+            title: '区域上架',
+            content: '请确认对选中商品进行区域上架操作，商品将在该区域恢复销售',
+            onOk: () => {
+            },
+            onCancel() { },
+        });
+    }
+
+    /**
+     * 全国性下架
+     */
+    handleNationalDownSold() {
+        const { choose } = this.state;
+        confirm({
+            title: '全国性下架',
+            content: '请确认对选中商品进行全国性下架操作',
+            onOk: () => {
+                message.success(choose);
+            },
+            onCancel() { },
+        });
+    }
+
+    /**
+     * 全国性上架
+     */
+    handleNationalUpSold() {
+        const { choose } = this.state;
+        confirm({
+            title: '全国性上架',
+            content: '请确认对选中商品进行全国性上架操作',
+            onOk: () => {
+                message.success(choose);
+            },
+            onCancel() { },
+        });
+    }
+
+    /**
+     * 重置
+     */
+    handleFormReset() {
+        this.props.form.resetFields();
+    }
+
+    /**
+     * 查询
+     */
+    handleFormSearch() {
+    }
+
+    /**
+     * 值清单请求
+     * @param {string} value, 输入框返回的值
+     * @param {number} pagination, 分页
+     * @return {Promise}
+     */
+    handleTestFetch = ({ value, pagination }) => fetchTest({
+        value,
+        pagination
+    })
+
+    /**
      * 表单操作
-     *
      * @param {Object} text 当前行的值
      * @param {object} record 单行数据
      */
     renderOperation(text, record) {
         const { id } = record;
         const { pathname } = this.props.location;
-        const url = window.location.href;
+        const origin = window.location.origin;
         const menu = (
             <Menu>
                 <Menu.Item key={0}>
                     <Link to={`${pathname}/commodifyDetail/${id}`}>商品详情</Link>
                 </Menu.Item>
                 <Menu.Item key={1}>
-                    <CopyToClipboard text={`${url}${id}`} onCopy={this.onCopy}>
+                    <CopyToClipboard text={`${origin}${pathname}/commodifyDetail/${id}`} onCopy={this.onCopy}>
                         <span>复制链接</span>
                     </CopyToClipboard>
                 </Menu.Item>
@@ -285,13 +369,21 @@ class ManagementList extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         columns[columns.length - 1].render = this.renderOperation;
+        const isPurchaseDisabled = !(
+            this.state.supplyChoose !== null
+            && this.state.choose.length !== 0
+        );
+        const isSoldDisabled = !(
+            this.state.subsidiaryChoose !== null
+            && this.state.choose.length !== 0
+        );
         return (
             <div className={`${commodityML}`}>
                 <div className="manage-form">
                     <Form layout="inline">
                         <div className="gutter-example">
                             <Row gutter={16}>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={8}>
                                     {/* 商品名称 */}
                                     <FormItem className="">
                                         <div>
@@ -305,12 +397,12 @@ class ManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={8}>
                                     {/* 商品编号 */}
                                     <FormItem className="">
                                         <div>
                                             <span className="sc-form-item-label">商品编号</span>
-                                            {getFieldDecorator('commodityName')(
+                                            {getFieldDecorator('commodityNumber')(
                                                 <Input
                                                     className="input"
                                                     placeholder="商品编号"
@@ -319,22 +411,20 @@ class ManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={10}>
+                                <Col className="gutter-row" span={8}>
                                     {/* 商品分类 */}
                                     <FormItem className="">
                                         <div>
                                             <span className="sc-form-item-label">商品分类</span>
                                             <div className="level-four-classification">
-                                                <ClassifiedSelect
-                                                    onChange={this.handleSelectChange}
-                                                />
+                                                <Input />
                                             </div>
                                         </div>
                                     </FormItem>
                                 </Col>
                             </Row>
                             <Row gutter={16}>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={8}>
                                     {/* 商品条码 */}
                                     <FormItem className="">
                                         <div>
@@ -348,7 +438,7 @@ class ManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={8}>
                                     {/* 商品状态 */}
                                     <FormItem className="">
                                         <div>
@@ -375,39 +465,75 @@ class ManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={10}>
+                                <Col className="gutter-row" span={8}>
                                     {/* 品牌 */}
                                     <FormItem className="">
                                         <div>
                                             <span className="sc-form-item-label">品牌</span>
-                                            {getFieldDecorator('commodityBrand')(
-                                                <Input
-                                                    className="input"
-                                                    placeholder="品牌"
-                                                />
-                                            )}
+                                            <SearchMind
+                                                compKey="search-mind-brand"
+                                                ref={ref => { this.searchMind1 = ref }}
+                                                fetch={(value, pager) =>
+                                                    this.handleTestFetch(value, pager)
+                                                }
+                                                addonBefore=""
+                                                onChoosed={this.handleBrandChoose}
+                                                renderChoosedInputRaw={(data) => (
+                                                    <div>{data.id} - {data.address}</div>
+                                                )}
+                                                pageSize={2}
+                                                columns={[
+                                                    {
+                                                        title: 'Name',
+                                                        dataIndex: 'name',
+                                                        width: 150,
+                                                    }, {
+                                                        title: 'Address',
+                                                        dataIndex: 'address',
+                                                        width: 200,
+                                                    }
+                                                ]}
+                                            />
                                         </div>
                                     </FormItem>
                                 </Col>
                             </Row>
                             <Row gutter={16}>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={8}>
                                     {/* 供货供应商 */}
                                     <FormItem className="">
                                         <div>
                                             <span className="sc-form-item-label">供货供应商</span>
                                             <span className="value-list-input">
-                                                {getFieldDecorator('commodityCode')(
-                                                    <InputGroup>
-                                                        <Input style={{ width: '30%' }} />
-                                                        <Input style={{ width: '60%' }} />
-                                                    </InputGroup>
-                                                )}
+                                                <SearchMind
+                                                    compKey="search-mind-supply"
+                                                    ref={ref => { this.searchMind = ref }}
+                                                    fetch={(value, pager) =>
+                                                        this.handleTestFetch(value, pager)
+                                                    }
+                                                    addonBefore=""
+                                                    onChoosed={this.handleSupplyChoose}
+                                                    renderChoosedInputRaw={(data) => (
+                                                        <div>{data.id} - {data.name}</div>
+                                                    )}
+                                                    pageSize={2}
+                                                    columns={[
+                                                        {
+                                                            title: 'Name',
+                                                            dataIndex: 'name',
+                                                            width: 150,
+                                                        }, {
+                                                            title: 'Address',
+                                                            dataIndex: 'address',
+                                                            width: 200,
+                                                        }
+                                                    ]}
+                                                />
                                             </span>
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={8}>
                                     {/* 供货状态 */}
                                     <FormItem className="">
                                         <div>
@@ -434,43 +560,59 @@ class ManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={10}>
+                                <Col className="gutter-row" span={8}>
                                     <FormItem className="">
                                         <Button
                                             size="default"
-                                            onClick={() => {
-                                                this.handleButtonClick('暂停购进')
-                                            }}
+                                            disabled={isPurchaseDisabled}
+                                            onClick={this.handleSuspendPurchase}
                                         >暂停购进</Button>
                                     </FormItem>
                                     <FormItem className="">
                                         <Button
                                             size="default"
-                                            onClick={() => {
-                                                this.handleButtonClick('恢复采购')
-                                            }}
+                                            disabled={isPurchaseDisabled}
+                                            onClick={this.handleRestorePurchases}
                                         >恢复采购</Button>
                                     </FormItem>
                                 </Col>
                             </Row>
                             <Row gutter={16}>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={8}>
                                     {/* 经营子公司 */}
                                     <FormItem className="">
                                         <div>
                                             <span className="sc-form-item-label">经营子公司</span>
                                             <span className="value-list-input">
-                                                {getFieldDecorator('commodityCode')(
-                                                    <InputGroup>
-                                                        <Input style={{ width: '30%' }} />
-                                                        <Input style={{ width: '60%' }} />
-                                                    </InputGroup>
-                                                )}
+                                                <SearchMind
+                                                    compKey="search-mind-subsidiary"
+                                                    ref={ref => { this.searchMind = ref }}
+                                                    fetch={(value, pager) =>
+                                                        this.handleTestFetch(value, pager)
+                                                    }
+                                                    addonBefore=""
+                                                    onChoosed={this.handleSubsidiaryChoose}
+                                                    renderChoosedInputRaw={(data) => (
+                                                        <div>{data.id} - {data.name}</div>
+                                                    )}
+                                                    pageSize={2}
+                                                    columns={[
+                                                        {
+                                                            title: 'Name',
+                                                            dataIndex: 'name',
+                                                            width: 150,
+                                                        }, {
+                                                            title: 'Address',
+                                                            dataIndex: 'address',
+                                                            width: 200,
+                                                        }
+                                                    ]}
+                                                />
                                             </span>
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={8}>
                                     {/* 子公司状态 */}
                                     <FormItem className="">
                                         <div>
@@ -497,45 +639,41 @@ class ManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={10}>
+                                <Col className="gutter-row" span={8}>
                                     <FormItem className="">
                                         <Button
                                             size="default"
-                                            onClick={() => {
-                                                this.handleButtonClick('区域下架')
-                                            }}
+                                            disabled={isSoldDisabled}
+                                            onClick={this.handleAreaDownSold}
                                         >区域下架</Button>
                                     </FormItem>
                                     <FormItem className="">
                                         <Button
                                             size="default"
-                                            onClick={() => {
-                                                this.handleButtonClick('区域上架')
-                                            }}
+                                            disabled={isSoldDisabled}
+                                            onClick={this.handleAreaUpSold}
                                         >区域上架</Button>
                                     </FormItem>
                                 </Col>
                             </Row>
                             <Row gutter={16}>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={8}>
                                     <FormItem className="">
                                         <Button
                                             size="default"
-                                            onClick={() => {
-                                                this.handleButtonClick('全国性上架')
-                                            }}
-                                        >全国性上架</Button>
-                                    </FormItem>
-                                    <FormItem className="">
-                                        <Button
-                                            size="default"
-                                            onClick={() => {
-                                                this.handleButtonClick('全国性下架')
-                                            }}
+                                            disabled={this.state.choose.length === 0}
+                                            onClick={this.handleNationalDownSold}
                                         >全国性下架</Button>
                                     </FormItem>
+                                    <FormItem className="">
+                                        <Button
+                                            size="default"
+                                            disabled={this.state.choose.length === 0}
+                                            onClick={this.handleNationalUpSold}
+                                        >全国性上架</Button>
+                                    </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={8}>
                                     {/* 排序 */}
                                     <FormItem className="">
                                         <div>
@@ -562,12 +700,19 @@ class ManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={10}>
+                                <Col className="gutter-row" span={8}>
                                     <FormItem className="">
-                                        <Button type="primary" size="default">查询</Button>
+                                        <Button
+                                            type="primary"
+                                            size="default"
+                                            onClick={this.handleFormSearch}
+                                        >查询</Button>
                                     </FormItem>
                                     <FormItem className="">
-                                        <Button size="default">重置</Button>
+                                        <Button
+                                            size="default"
+                                            onClick={this.handleFormReset}
+                                        >重置</Button>
                                     </FormItem>
                                 </Col>
                             </Row>
