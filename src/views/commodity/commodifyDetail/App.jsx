@@ -10,9 +10,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Icon, Button } from 'antd';
-
 import { commodityDetails } from '../../../actions/producthome';
-// import { imgext } from '../../../constant';
 
 @connect(
     state => ({
@@ -22,7 +20,6 @@ import { commodityDetails } from '../../../actions/producthome';
         commodityDetails
     }, dispatch)
 )
-
 class CommodifyDetail extends PureComponent {
     constructor(props) {
         super(props);
@@ -43,19 +40,10 @@ class CommodifyDetail extends PureComponent {
     }
 
     render() {
-        // const { commodityDetail } = this.props;
-        // const { ...commodity } = commodityDetail;
-        // const {
-        //     internationalCodes = [],
-        //     childSkus = [],
-        //     skuInputVos = [],
-        //     mainImage,
-        //     images
-        // } = commodity;
         // 商品基本信息
         const commodity = {
             commodityNumber: 123456,
-            internationalCodes: [7241123033332000000, 7241123033332000001],
+            internationalCodes: [7241123033332000000, 132132132132132132132],
             firstLevelCategoryName: '饮料烟酒',
             secondLevelCategoryName: '水饮料',
             thirdLevelCategoryName: '碳酸饮料',
@@ -144,7 +132,7 @@ class CommodifyDetail extends PureComponent {
                                         <span>国标码：</span>
                                         {
                                             commodity.internationalCodes.map(item => (
-                                                <span key={item}>{item}</span>
+                                                <span className="international-codes" key={item}>{item}</span>
                                             ))
                                         }
                                     </li>
@@ -291,7 +279,7 @@ class CommodifyDetail extends PureComponent {
                                 {
                                     skuInputVos &&
                                     skuInputVos.map(item => (
-                                        <li className="detail-message-item" key={item.value}>
+                                        <li className="detail-message-item" key={item.attrName}>
                                             {item.attrName &&
                                             <span>
                                                 {`属性名称：${item.attrName}`}
@@ -310,43 +298,48 @@ class CommodifyDetail extends PureComponent {
                     <div className="detail-message-header">
                         <Icon type="picture" className="detail-message-header-icon" />
                         <span>商品图片信息</span>
-                        <span className="detail-prompt">(备注：图片尺寸为800*800像素，单张图片大小不超过1M，第一张为主图)</span>
+                        <span className="detail-prompt">
+                            (备注：图片尺寸为800*800像素，单张图片大小不超过1M，第一张为主图)
+                        </span>
                     </div>
                     <div className="detail-message-body">
                         <table className="detail-img-list" >
-                            <tr>
-                                <td>商品图片:</td>
-                                {imgs.commodityImgs && imgs.commodityImgs.map(item => (
-                                    <td key={item}>
-                                        <img src={item} alt="" />
-                                    </td>
-                                ))
-                                }
-                            </tr>
-                            {
-                                imgs.subCommodityImgs && imgs.subCommodityImgs.map(item => (
-                                    <tr key={item.name}>
-                                        <td>
-                                            {item.name}
+                            <tbody>
+                                <tr>
+                                    <td>商品图片:</td>
+                                    {imgs.commodityImgs && imgs.commodityImgs.map(item => (
+                                        <td key={item}>
+                                            <img src={item} alt="" />
                                         </td>
-                                        {
-                                            item.subCommodityImg.map(other => (
-                                                <td key={other}>
-                                                    <img src={other} alt="" />
-                                                </td>
-                                            ))
-                                        }
-                                    </tr>
-                                ))
-                            }
+                                    ))
+                                    }
+                                </tr>
+                                {
+                                    imgs.subCommodityImgs && imgs.subCommodityImgs.map(item => (
+                                        <tr key={item.name}>
+                                            <td>
+                                                {item.name}
+                                            </td>
+                                            {
+                                                item.subCommodityImg.map(other => (
+                                                    <td key={other}>
+                                                        <img src={other} alt="" />
+                                                    </td>
+                                                ))
+                                            }
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
                         </table>
                     </div>
                 </div>
                 {
-                    keywords && <div className="supplier-detail-item">
+                    keywords &&
+                    <div className="supplier-detail-item">
                         <div className="detail-message-header">
                             <Icon type="link" className="detail-message-header-icon" />商品搜索关键字
-                    </div>
+                        </div>
                         <div className="detail-message-body">
                             <ul className="detail-message-list">
                                 <li className="detail-message-item"><span>关键字：</span><span>{keywords}</span></li>
