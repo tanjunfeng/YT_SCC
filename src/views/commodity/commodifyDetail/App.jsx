@@ -307,15 +307,18 @@ class CommodifyDetail extends PureComponent {
                             <tbody>
                                 <tr>
                                     <td>商品图片:</td>
-                                    {imgs.commodityImgs && imgs.commodityImgs.map(item => (
-                                        <td key={item}>
-                                            <img src={item} alt="" />
-                                        </td>
-                                    ))
+                                    {
+                                        imgs.commodityImgs &&
+                                        imgs.commodityImgs.map(item => (
+                                            <td key={item}>
+                                                <img src={item} alt="" />
+                                            </td>
+                                        ))
                                     }
                                 </tr>
                                 {
-                                    imgs.subCommodityImgs && imgs.subCommodityImgs.map(item => (
+                                    imgs.subCommodityImgs &&
+                                    imgs.subCommodityImgs.map(item => (
                                         <tr key={item.name}>
                                             <td>
                                                 {item.name}
@@ -338,11 +341,15 @@ class CommodifyDetail extends PureComponent {
                     keywords &&
                     <div className="supplier-detail-item">
                         <div className="detail-message-header">
-                            <Icon type="link" className="detail-message-header-icon" />商品搜索关键字
+                            <Icon type="link" className="detail-message-header-icon" />
+                            商品搜索关键字
                         </div>
                         <div className="detail-message-body">
                             <ul className="detail-message-list">
-                                <li className="detail-message-item"><span>关键字：</span><span>{keywords}</span></li>
+                                <li className="detail-message-item">
+                                    <span>关键字：</span>
+                                    <span>{keywords}</span>
+                                </li>
                             </ul>
                         </div>
                     </div>
