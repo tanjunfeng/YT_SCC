@@ -52,6 +52,8 @@ class SearchMind extends PureComponent {
              */
             selectedRawData: null,
 
+            disabled: false,
+
             /**
              * 此处由 state 控制分页
              */
@@ -88,11 +90,21 @@ class SearchMind extends PureComponent {
         clearTimeout(this.searchDelayTimerId);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.disabled !== this.props.disabled) {
+            this.setState({
+                disabled: nextProps.disabled,
+                dropHide: true,
+                isFocus: false,
+            })
+        }
+    }
+
     /**
-     * 获取选择的源数据
+     * API 获取选择的源数据
      * @return {null}
      */
-    getChooseData() {
+    getData() {
         return this.state.selectedRawData;
     }
 
@@ -111,7 +123,7 @@ class SearchMind extends PureComponent {
             isFocus: true,
         });
 
-        if (!this.isEmpty()) {
+        if (!this.isEmpty() && this.state.dropHide) {
             this.query();
         }
     }
@@ -187,8 +199,12 @@ class SearchMind extends PureComponent {
      * 发送搜索请求
      */
     query() {
-        const { value, pagination } = this.state;
+        const { value, pagination, disabled } = this.state;
         const { totalIndex } = this.props;
+
+        if (disabled) {
+            return;
+        }
 
         const params = {
             value,
@@ -221,7 +237,12 @@ class SearchMind extends PureComponent {
      * 这里是实际控制下拉框显示隐藏的地方，容器获得焦点状态以及鼠标在容器内部，都不关闭下拉框
      */
     dropListener() {
-        const { isFocus, inArea } = this.state;
+        const { isFocus, inArea, disabled } = this.state;
+
+        // 禁用状态，不再进行任何操作反馈
+        if (disabled) {
+            return;
+        }
 
         if (isFocus || inArea) {
             this.setState({
@@ -300,6 +321,16 @@ class SearchMind extends PureComponent {
     }
 
     /**
+     * 点击清除按钮的回调
+     */
+    onClearCallback() {
+        this.props.onClear({
+            value: this.state.value,
+            raw: this.state.selectedRawData,
+        });
+    }
+
+    /**
      * 清空数据按钮
      * 1. 下拉框展示的时候，代表需要清空输入框内容
      * 2. 下拉框关闭的时候，代表需要清空选择的数据
@@ -311,13 +342,13 @@ class SearchMind extends PureComponent {
             this.setState({
                 value: '',
                 data: [],
-            });
+            }, () => this.onClearCallback());
 
             this.ywcSmindInput.focus();
         } else {
             this.setState({
                 selectedRawData: null,
-            });
+            }, () => this.onClearCallback());
         }
     }
 
@@ -329,6 +360,7 @@ class SearchMind extends PureComponent {
             value,
             isFocus,
             selectedRawData,
+            disabled,
             pagination,
         } = this.state;
 
@@ -340,11 +372,13 @@ class SearchMind extends PureComponent {
             renderChoosedInputRaw,
             rowKey,
             placeholder,
+            dropWidth,
         } = this.props;
 
         const layoutCls = classNames('ywc-smind', {
             'ywc-smind-drop-hide': dropHide || data.length === 0,
             'ywc-smind-has-input-view': renderChoosedInputRaw,
+            'ywc-smind-disabled': disabled,
         });
 
         const clearCls = classNames('ywc-smind-clear', {
@@ -354,6 +388,10 @@ class SearchMind extends PureComponent {
                 // 输入框无焦点，同时有选择内容展示的情况
                 || (!isFocus && selectedRawData)
         });
+
+        const inputProps = {
+            ...(disabled && { disabled: 'disabled'})
+        };
 
         return (
             <div
@@ -378,6 +416,7 @@ class SearchMind extends PureComponent {
                             onBlur={this.handleBlur}
                             onChange={this.handleChange}
                             value={value}
+                            { ...inputProps }
                         />
                         {(!isFocus && this.isEmpty()) &&
                             <div className="ywc-smind-input-view">
@@ -404,7 +443,13 @@ class SearchMind extends PureComponent {
                     </span>
                 </div>
                 {/* 默认隐藏 */}
-                <div className="ywc-smind-drop-layout">
+                <div
+                    style={{
+                        ...(dropWidth && { width: dropWidth })
+                    }}
+                    ref={ref => { this.ywcSmindDropList = ref }}
+                    className="ywc-smind-drop-layout"
+                >
                     {data && data.length > 0 &&
                         <Table
                             rowKey={rowKey}
@@ -471,6 +516,11 @@ SearchMind.propTypes = {
     onChoosed: PropTypes.func,
 
     /**
+     * 用户点击 claer 的回调
+     */
+    onClear: PropTypes.func,
+
+    /**
      * 未输入的提示信息
      */
     placeholder: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
@@ -486,6 +536,13 @@ SearchMind.propTypes = {
     pageSize: PropTypes.number,
 
     defaultValue: PropTypes.string,
+
+    disabled: PropTypes.bool,
+
+    /**
+     * 手动指定下拉框的宽度
+     */
+    dropWidth: PropTypes.oneOfType([PropTypes.objectOf(), PropTypes.number]),
 }
 
 SearchMind.defaultProps = {
@@ -504,6 +561,9 @@ SearchMind.defaultProps = {
     quickSearch: true,
     onChoosed: () => {},
     renderChoosedInputRaw: null,
+    disabled: false,
+    onClear: () => {},
+    dropWidth: null,
 }
 
 
