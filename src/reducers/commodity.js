@@ -56,7 +56,14 @@ const initState = Immutable.fromJS({
     // 查询供应商
     queryAll: [],
 
+    // IBM 修改
+    // 查看是否存在主供应商
+    checkMainSupplier: {},
+    // 查询商品价格信息
+    getProdPurchaseById: [],
 
+    // 根据条件查询商品价格信息
+    queryProdPurchaseExtByCondition: []
 });
 
 export default function (state = initState, action) {
@@ -129,6 +136,16 @@ export default function (state = initState, action) {
             // 在售商品列表下架功能
             return state;
         }
+
+        case ActionType.CHECK_MAIN_SUPPLIER:
+            return state.set('checkMainSupplier', action.payload);
+
+        case ActionType.GET_PRODPURCHASE_BYID:
+            return state.set('getProdPurchaseById', action.payload);
+
+        case ActionType.QUERY_PRODPURCHASE_BYID:
+            return state.set('queryProdPurchaseExtByCondition', action.payload);
+
         default:
             return state;
     }

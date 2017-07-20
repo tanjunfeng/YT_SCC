@@ -1,0 +1,19 @@
+.tjf-css-inputLine{
+    .sc-form-item-label{
+        min-width: 30px;
+    }
+    #supplierNumber,#addressNumber,#companyNumber{
+        width: 50px;
+    }
+    #supplier,#address,#company{
+        width: 150px;
+    }
+}
+.tjf-css-supplierType{
+    .sc-form-item-label{
+        min-width: 50px;
+    }
+    .sc-form-item-select{
+        width: 150px;
+    }
+}

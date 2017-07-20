@@ -405,3 +405,15 @@ export const queryAllSupplier = (params) => http.get('/price/queryAllSupplier', 
 // 新增数据字典
 export const insertDictionary = (params) => http.post('/dictionary/insertDictionary', params);
 
+// IBM 修改
+// 查看是否存在主供应商
+export const checkMainSupplier = (params) => http.get('/prodPurchase/checkMainSupplier', params);
+
+// 查看是否存在主供应商
+export const getProdPurchaseById = (params) => http.get('/prodPurchase/getProdPurchaseById', params);
+
+// 销售价格信息
+export const findPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
+
+// 根据条件查询商品价格信息
+export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);

@@ -100,8 +100,16 @@ startApp({
                         name: "商品参数管理"
                     },
                     {
-                        "code": "goodsClassification",
-                        "name": "商品分类列表"
+                        code: "goodsClassification",
+                        name: "商品分类列表"
+                    },
+                    {
+                        code: "procurementMaintenance",
+                        name: "商品采购关系维护"
+                    },
+                    {
+                        code: "salesMaintenance",
+                        name: "商品销售关系维护"
                     },
                 ]
             },

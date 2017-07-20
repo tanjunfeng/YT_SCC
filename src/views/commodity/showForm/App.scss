@@ -1,0 +1,14 @@
+.manage-form{
+    .css-breadcrumb{
+        display: inline-block;
+    }
+    .css-appstore{
+        color: #f90;
+    }
+    .css-row-padding>.css-col{
+        margin-top: 5px;
+        &>span{
+            padding-right: 5px;
+        }
+    }
+}
