@@ -305,15 +305,17 @@ export const fectheEditorContent = (params) => http.post('/staticPage/updateStat
 // 查询所有轮播
 export const queryCarouselAdList = (params) => http.get('/homeAd/queryCarouselAdList', params);
 
-// 修改分类信息
+// 轮播广告管理-修改
 export const updateCarouselAd = (params) => http.post('/homeAd/updateCarouselAd', params);
+
+// 轮播广告-启停（cyx）
+export const updateCarouselAdStatus = (params) => http.post('/homeAd/updateCarouselAdStatus', params);
 
 // 删除某个轮播
 export const deleteCarouselAd = (params) => http.post('/homeAd/deleteCarouselAd', params);
 
 // 新增轮播
 export const insertCarouselAd = (params) => http.post('/homeAd/insertCarouselAd', params);
-
 
 // 判断序号是否重复
 export const queryCarouselAdBySorting = (params) => http.get('/homeAd/queryCarouselAdBySorting', params);
@@ -322,7 +324,7 @@ export const queryCarouselAdBySorting = (params) => http.get('/homeAd/queryCarou
 export const queryCarouselAdListById = (params) => http.get('/homeAd/queryCarouselAdListById', params);
 
 // 查询轮播间隔时间
-export const queryCarouselIntervalList = (params) => http.get('/homeAd/queryCarouselInterval', params);
+export const queryCarouselInterval = (params) => http.get('/homeAd/queryCarouselInterval', params);
 
 // 修改轮播间隔时间
 export const updateCarouselInterval = (params) => http.post('/homeAd/updateCarouselInterval', params);
