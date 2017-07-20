@@ -7,6 +7,8 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import QueueAnim from 'rc-queue-anim';
+
 import Utils from '../../../util/util';
 
 import InputItem from './inputItem';
@@ -33,7 +35,7 @@ class SteppedPrice extends PureComponent {
     getValue() {
         const { defaultValue } = this.state;
         return {
-            values: defaultValue,
+            results: defaultValue,
             isContinuity: Utils.isContinuity(defaultValue)
         }
     }
@@ -41,7 +43,7 @@ class SteppedPrice extends PureComponent {
     handleChange() {
         const { defaultValue } = this.state;
         this.props.handleChange({
-            values: defaultValue,
+            results: defaultValue,
             isContinuity: Utils.isContinuity(defaultValue)
         })
     }
@@ -93,37 +95,33 @@ class SteppedPrice extends PureComponent {
         return (
             <div className={prefixCls}>
                 <div>
-                    <div>
-                        添加阶梯价格
-                        <span className={`${prefixCls}-tip`}>
-                            &nbsp;(请按从小到大的顺序添加)
-                        </span>
-                    </div>
                     <div className={`${prefixCls}-title`}>
                         <span className={`${prefixCls}-title-left`}>数量区间</span>
                         <span className={`${prefixCls}-title-right`}>售价/元</span>
                     </div>
                     <ul className={`${prefixCls}-content`}>
-                        {
-                            defaultValue.map((item, index) => {
-                                const { startNumber, endNumber, price } = item;
-                                return (
-                                    <InputItem
-                                        {...this.props}
-                                        data-item={index}
-                                        index={index}
-                                        allLength={len}
-                                        key={`${item.startNumber}${item.endNumber}${item.price}`}
-                                        handleAddItem={this.handleAddItem}
-                                        handleDeleteItem={this.handleDeleteItem}
-                                        handleValueChange={this.handleValueChange}
-                                        firstDefault={startNumber}
-                                        scondDefault={endNumber}
-                                        resultDefault={price}
-                                    />
-                                )
-                            })
-                        }
+                        <QueueAnim type={'left'}>
+                            {
+                                defaultValue.map((item, index) => {
+                                    const { startNumber, endNumber, price } = item;
+                                    return (
+                                        <InputItem
+                                            {...this.props}
+                                            data-item={index}
+                                            index={index}
+                                            allLength={len}
+                                            key={`${item.startNumber}${item.endNumber}${item.price}`}
+                                            handleAddItem={this.handleAddItem}
+                                            handleDeleteItem={this.handleDeleteItem}
+                                            handleValueChange={this.handleValueChange}
+                                            firstDefault={startNumber}
+                                            scondDefault={endNumber}
+                                            resultDefault={price}
+                                        />
+                                    )
+                                })
+                            }
+                        </QueueAnim>
                     </ul>
                 </div>
             </div>

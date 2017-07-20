@@ -41,7 +41,8 @@ class ClassifiedList extends Component {
         this.handleSave = ::this.handleSave;
         this.state = {
             img: null,
-            chooseMe: {}
+            chooseMe: {},
+            disabled: false,
         }
     }
 
@@ -49,6 +50,12 @@ class ClassifiedList extends Component {
 
     componentDidMount() {
         this.props.fetchAction();
+
+        setTimeout(() => {
+            this.setState({
+                disabled: true,
+            });
+        }, 2000);
     }
 
     /**
@@ -174,6 +181,9 @@ class ClassifiedList extends Component {
                     ref={ref => { this.searchMind = ref }}
                     fetch={(value, pager) => this.handleTestFetch(value, pager)}
                     addonBefore="供应商 asfsafsafa"
+                    onClear={({ value, raw }) => {
+                        console.log({ value, raw });
+                    }}
                     onChoosed={this.handleTestChoose}
                     renderChoosedInputRaw={(data) => (
                         <div>{data.id} - {data.name}</div>
@@ -199,6 +209,7 @@ class ClassifiedList extends Component {
                     fetch={(value, pager) => this.handleTestFetch(value, pager)}
                     addonBefore="仓库"
                     onChoosed={this.handleTestChoose}
+                    disabled={this.state.disabled}
                     renderChoosedInputRaw={(data) => (
                         <div>{data.id} - {data.name}</div>
                     )}
@@ -226,6 +237,7 @@ class ClassifiedList extends Component {
                     renderChoosedInputRaw={(data) => (
                         <div>{data.id} - {data.name}</div>
                     )}
+                    dropWidth={500}
                     defaultValue="Hello"
                     columns={[
                         {

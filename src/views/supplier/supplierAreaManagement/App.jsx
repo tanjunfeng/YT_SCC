@@ -138,10 +138,15 @@
 
 import React, { Component } from 'react';
 import { Input } from 'antd';
+import DeepDiff from 'deep-diff-object';
 import InlineTree from '../../../components/inlineTree';
 import SteppedPrice from '../../commodity/steppedPrice';
+import SellPriceModal from '../../commodity/sellPriceModal';
+import ProdPurchaseModal from '../../commodity/prodPurchaseModal';
+
 
 class Demo extends React.Component {
+
     render() {
         return (
             <div onClick={() => {
@@ -151,10 +156,13 @@ class Demo extends React.Component {
                     ref={node => (this.sreppedPrice = node)}
                     defaultValue={[]}
                     maxLength={6}
+                    inputSize="default"
                     handleChange={(item) => {
                         console.log(item);
                     }}
                 />
+                <SellPriceModal />
+                <ProdPurchaseModal />
             </div>
         );
     }

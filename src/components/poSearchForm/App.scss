@@ -1,0 +1,35 @@
+.search {
+  &-box {
+    background: #ffffff;
+    border: 1px solid #c4c5c9;
+    margin: 10px 0;
+    padding: 5px 18px;
+    display: flex;
+    flex-direction: column;
+
+    .row {
+      display: flex;
+      line-height: 46px;
+      justify-content: space-between;
+
+      .item-box {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .label {
+        margin-right: 8px;
+        display: inline-block;
+      }
+    }
+  }
+}
+
+.ant-form-item-label label:after {
+  content: "";
+}
+
+.ant-form-item-label label {
+  min-width: 80px;
+  display: inline-block;
+}
