@@ -425,7 +425,13 @@ export const updateProdPurchase = (params) => http.post('/prodPurchase/updatePro
 export const deleteProdPurchaseById = (params) => http.get('/prodPurchase/deleteProdPurchaseById', params);
 
 // 更改供应商类型
-export const changeSupplierType = (params) => http.get('/prodPurchase/changeSupplierType', params);
+export const fetchChangeSupType = (params) => http.get('/prodPurchase/changeSupplierType', params);
+
+// 更改商品采购价格启禁用状态
+export const changeProPurchaseStatus = (params) => http.get('/prodPurchase/changeProPurchaseStatus', params);
+
+// 商品的暂停购进和恢复采购
+export const batchChangeProPurchaseStatus = (params) => http.post('/prodPurchase/batchChangeProPurchaseStatus', params);
 
 // 根据条件查询商品价格信息
 export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);

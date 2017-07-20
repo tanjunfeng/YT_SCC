@@ -11,6 +11,7 @@ import { Form, Card, Checkbox, Modal } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PAGE_SIZE } from '../../../constant';
+import { fetchChangeSupType } from '../../../actions';
 
 @connect(
     state => ({
@@ -33,11 +34,12 @@ class Cardline extends Component {
         this.state = {
             state: 0,
             checked: true,
+            id: this.props.index
         }
     }
 
-    // componentDidUpdate() {
-    // }
+    componentDidUpdate() {
+    }
 
     /**
      * 主供应商和启、停用 复选框
@@ -64,7 +66,7 @@ class Cardline extends Component {
             cancelText: '取消',
             maskClosable: false,
             onCancel: this.handleCheckCancel,
-            handleCheckOk: this.handleCheckOk
+            onOk: this.handleCheckOk
         });
     }
 
@@ -79,7 +81,7 @@ class Cardline extends Component {
             cancelText: '取消',
             maskClosable: false,
             onCancel: this.handleCheckCancel,
-            handleCheckOk: this.handleCheckOk
+            onOk: this.handleCheckOk
         });
     }
 
@@ -93,6 +95,7 @@ class Cardline extends Component {
      * 修改主供应商或者修改启用时的确认按钮回调
      */
     handleCheckOk() {
+        console.log(this.state)
         // const { selected } = this.state;
         // const { visibleData } = this.props;
         // if (selected === -1) {

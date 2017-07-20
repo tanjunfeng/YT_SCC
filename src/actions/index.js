@@ -39,6 +39,7 @@ import fectheEditorContent from './fetch/fectheEditorContent';
 import fecthCheckMainSupplier from './fetch/fetchCheckMainSupplier';
 import fecthGetProdPurchaseById from './fetch/fetchGetProdPurchaseById';
 import fetchQueryProdPurchase from './fetch/fetchQueryProdPurchase';
+import fetchChangeSupType from './fetch/fetchChangeSupType'
 
 export {
     fetchSupplierList,
@@ -72,4 +73,5 @@ export {
     fecthCheckMainSupplier,
     fecthGetProdPurchaseById,
     fetchQueryProdPurchase,
+    fetchChangeSupType,
 }
