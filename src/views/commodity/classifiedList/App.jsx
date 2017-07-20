@@ -43,6 +43,7 @@ class ClassifiedList extends Component {
             img: null,
             chooseMe: {},
             disabled: false,
+            defaultValue: 'Hello',
         }
     }
 
@@ -56,6 +57,12 @@ class ClassifiedList extends Component {
                 disabled: true,
             });
         }, 2000);
+
+        setTimeout(() => {
+            this.setState({
+                defaultValue: 'Hi',
+            });
+        }, 3000);
     }
 
     /**
@@ -238,7 +245,7 @@ class ClassifiedList extends Component {
                         <div>{data.id} - {data.name}</div>
                     )}
                     dropWidth={500}
-                    defaultValue="Hello"
+                    defaultValue={this.state.defaultValue}
                     columns={[
                         {
                             title: 'Name',
