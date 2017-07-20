@@ -111,6 +111,10 @@ startApp({
                         code: "salesMaintenance",
                         name: "商品销售关系维护"
                     },
+                    {
+                        code: 'managementList',
+                        name: '商品管理列表'
+                    },
                 ]
             },
             {

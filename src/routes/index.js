@@ -33,6 +33,9 @@ import ForSale from 'bundle-loader?lazy!../views/commodity/forSale';
 import SaleDetail from 'bundle-loader?lazy!../views/commodity/detail';
 // 商品分类管理
 import ClassifiedList from 'bundle-loader?lazy!../views/commodity/classifiedList';
+// 商品管理列表
+import ManagementList from 'bundle-loader?lazy!../views/commodity/managementList';
+import CommodifyDetail from 'bundle-loader?lazy!../views/commodity/commodifyDetail';
 // 销售价格
 import FindPriceInfo from 'bundle-loader?lazy!../views/commodity/findPriceInfo';
 // 销售价格
@@ -220,6 +223,7 @@ const routes = [
                     </Switch>
                 )
             },
+<<<<<<< HEAD
             // 商品采购关系维护
             {
                 path: '/procurementMaintenance',
@@ -254,6 +258,31 @@ const routes = [
                         <Route
                             path="/salesMaintenance/:id"
                             render={() => <Bundle load={SalesMaintenance}>{(App) => <App />}</Bundle>}
+=======
+            // 商品管理列表
+            {
+                path: '/managementList',
+                parent: 'gylspgl',
+                key: 'managementList',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/managementList"
+                            exact
+                            render={() => <Bundle load={ManagementList}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/managementList/commodifyDetail/:id"
+                            render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/managementList/:id"
+                            render={() => <Bundle load={ManagementList}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/managementList/:id"
+                            render={() => <Bundle load={ManagementList}>{(App) => <App />}</Bundle>}
+>>>>>>> 08d787d8236b521827c1d813c7c3448f71277642
                         />
                     </Switch>
                 )
