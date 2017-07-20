@@ -409,11 +409,23 @@ export const insertDictionary = (params) => http.post('/dictionary/insertDiction
 // 查看是否存在主供应商
 export const checkMainSupplier = (params) => http.get('/prodPurchase/checkMainSupplier', params);
 
-// 查看是否存在主供应商
+// 查询商品价格信息
 export const getProdPurchaseById = (params) => http.get('/prodPurchase/getProdPurchaseById', params);
 
 // 销售价格信息
 export const findPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
+
+// 新增商品采购关系
+export const addProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
+
+// 更新商品采购关系
+export const updateProdPurchase = (params) => http.post('/prodPurchase/updateProdPurchase', params);
+
+// 删除商品价格信息
+export const deleteProdPurchaseById = (params) => http.get('/prodPurchase/deleteProdPurchaseById', params);
+
+// 更改供应商类型
+export const changeSupplierType = (params) => http.get('/prodPurchase/changeSupplierType', params);
 
 // 根据条件查询商品价格信息
 export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);

@@ -2,20 +2,25 @@
     display: inline-block;
     padding: 0;
     margin: 0 20px 10px 20px;
+    color: #e1e6ec;
+    cursor: pointer;
     .card-line-card-list {
         display: inline-block;
         margin-right: 10px;
+        margin-bottom: 10px;
         /**
         *都未选中
         */
         .card-line-card-0-0 {
-            border: 1px solid rgb(225, 105, 245);
+            border: 1px solid;
             border-radius: 3px;
             p{
                 margin-bottom: 10px;
             }
             .card-line-close {
-                float: right;
+                position: absolute;
+                right: 10px;
+                top: 10px;
                 border: 1px solid #ddd;
                 width: 20px;
                 height: 20px;
@@ -26,7 +31,7 @@
                 font-size: 16px;
                 line-height: 15px;
                 cursor: pointer;
-                color: #000;
+                color: #ddd;
             }
             .card-line-close::after {
                 clear: both;
@@ -35,57 +40,73 @@
             .card-line-close:hover {
                 background: #ccc;
                 color: #fff;
-            }
-            .tjf-css-fontColor {
-                color: rgb(225, 105, 245);
             }
         }
         /**
         *选中主供应商
         */
         .card-line-card-1-0 {
-            border: 1px solid #cc842b;
+            border: 1px solid;
             border-radius: 3px;
+            position: relative;
+            .card-line-supplierType-img{
+                border-top: 40px solid #ddd;
+                border-right: 40px solid transparent;
+                position: absolute;
+                top: 0;
+                left: 0;
+                span{
+                    position: absolute;
+                    top: -35px;
+                    left: 5px;
+                    color: #fff;
+                }
+            }
             p{
                 margin-bottom: 10px;
             }
             .card-line-close {
-                float: right;
-                border: 1px solid #ddd;
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-                -webkit-border-radius: 50%;
-                -moz-border-radius: 50%;
-                text-align: center;
-                font-size: 16px;
-                line-height: 15px;
-                cursor: pointer;
-                color: #000;
+                    position: absolute;
+                    right: 10px;
+                    top: 10px;
+                    border: 1px solid #ddd;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    -webkit-border-radius: 50%;
+                    -moz-border-radius: 50%;
+                    text-align: center;
+                    font-size: 16px;
+                    line-height: 15px;
+                    cursor: pointer;
+                    color: #000;
             }
             .card-line-close::after {
                 clear: both;
                 overflow: hidden;
             }
-            .ccard-line-close:hover {
+            .card-line-close:hover {
                 background: #ccc;
                 color: #fff;
             }
-            .tjf-css-fontColor{
-                color: #cc842b;
+            .card-line-checkboxGroup.tjf-css-fontColor{
+                color: #000;
             }
         }
         /**
         *选启用
         */
         .card-line-card-0-1 {
-            border: 1px solid #d4562f;
+            border: 1px solid #e1e6ec;
             border-radius: 3px;
+            color: #000;
             p{
                 margin-bottom: 10px;
             }
             .card-line-close {
-                float: right;
+                position: absolute;
+                right: 10px;
+                top: 10px;
                 border: 1px solid #ddd;
                 width: 20px;
                 height: 20px;
@@ -105,22 +126,35 @@
             .card-line-close:hover {
                 background: #ccc;
                 color: #fff;
-            }
-            .tjf-css-fontColor {
-                color: #d4562f;
             }
         }
         /**
         *选中主供应商和启用
         */
         .card-line-card-1-1 {
-            border: 1px solid rgb(39, 158, 243);
+            border: 1px solid #e1e6ec;
             border-radius: 3px;
+            color: #000;
+            .card-line-supplierType-img{
+                border-top: 40px solid rgb(234, 115, 115);
+                border-right: 40px solid transparent;
+                position: absolute;
+                top: 0;
+                left: 0;
+                span{
+                    position: absolute;
+                    top: -35px;
+                    left: 5px;
+                    color: #fff;
+                }
+            }
             p{
                 margin-bottom: 10px;
             }
             .card-line-close {
-                float: right;
+                position: absolute;
+                right: 10px;
+                top: 10px;
                 border: 1px solid #ddd;
                 width: 20px;
                 height: 20px;
@@ -140,9 +174,6 @@
             .card-line-close:hover {
                 background: #ccc;
                 color: #fff;
-            }
-            .tjf-css-fontColor {
-                color: rgb(39, 158, 243);
             }
         }
     }

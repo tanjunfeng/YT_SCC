@@ -36,6 +36,40 @@
         "createUserId": null,
         "modifyTime": null,
         "modifyUserId": null
+    }, {
+        "id": 3,
+        "spId": "1234",
+        "spAdrId": "123455",
+        "productId": "xpro123",
+        "companyCode": "cp123",
+        "supplierType": 1,
+        "purchaseInsideNumber": 2,
+        "purchasePrice": 10.23,
+        "internationalCode": "xcd123456",
+        "distributeWarehouseId": 123455,
+        "status": 0,
+        "deleteStatus": 0,
+        "createTime": 1500256803000,
+        "createUserId": null,
+        "modifyTime": null,
+        "modifyUserId": null
+    }, {
+        "id": 4,
+        "spId": "1234",
+        "spAdrId": "123455",
+        "productId": "xpro123",
+        "companyCode": "cp123",
+        "supplierType": 0,
+        "purchaseInsideNumber": 2,
+        "purchasePrice": 10.23,
+        "internationalCode": "xcd123456",
+        "distributeWarehouseId": 123455,
+        "status": 1,
+        "deleteStatus": 0,
+        "createTime": 1500256803000,
+        "createUserId": null,
+        "modifyTime": null,
+        "modifyUserId": null
     }],
     "success": true
 }

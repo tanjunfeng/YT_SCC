@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import { Form, Card, Checkbox, Modal } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { PAGE_SIZE } from '../../../constant';
 
 @connect(
     state => ({
@@ -27,6 +28,7 @@ class Cardline extends Component {
         this.confirmMain = ::this.confirmMain;
         this.confirmUsed = ::this.confirmUsed;
         this.handleCheckCancel = ::this.handleCheckCancel;
+        this.handleDelete = ::this.handleDelete;
 
         this.state = {
             state: 0,
@@ -34,8 +36,8 @@ class Cardline extends Component {
         }
     }
 
-    componentDidUpdate() {
-    }
+    // componentDidUpdate() {
+    // }
 
     /**
      * 主供应商和启、停用 复选框
@@ -110,6 +112,19 @@ class Cardline extends Component {
         // })
     }
 
+    handleDelete() {
+        Modal.confirm({
+            title: 'Do you want to delete these items?',
+            content: 'When clicked the OK button, this dialog will be closed after 1 second',
+            onOk() {
+                return new Promise((resolve, reject) => {
+                    setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+                }).catch(() => console.log('Oops errors!'));
+            },
+            onCancel() { },
+        });
+    }
+
     render() {
         const { id, prefixCls, ProdPurchases } = this.props;
         const cardData = ProdPurchases.map(item => {
@@ -121,63 +136,68 @@ class Cardline extends Component {
                     <Card
                         style={{ width: 350 }}
                         className={
-                                `${prefixCls}-card-${item.supplierType}-${item.status}`
+                            `${prefixCls}-card-${item.supplierType}-${item.status}
+                            ${prefixCls}-supplierType-img`
                         }
                     >
-                        <p
+                        {
+                            item.supplierType === 1 &&
+                            <p className={`${prefixCls}-supplierType-img`}><span>主</span></p>
+                        }
+                        <a
                             className={`${prefixCls}-close`}
                             style={{ float: 'right' }}
+                            onClick={this.handleDelete}
                         >
                             &times;
-                                </p>
+                        </a>
                         <p>
-                            <span>供应商:</span>
+                            <span>供应商 : </span>
                             <span>{item.spId}</span>
                             <b>-</b>
                             <span>{item.spName}</span>
                         </p>
                         <p>
-                            <span>地点:</span>
+                            <span>地点 : </span>
                             <span>{item.spAdrId}</span>
                             <b>-</b>
                             <span>{item.spAdrName}</span>
                         </p>
                         <p>
-                            <span>条码:</span>
+                            <span>条码 : </span>
                             <span>{item.internationalCode}</span>
                         </p>
                         <p>
-                            <span>采购内装数:</span>
+                            <span>采购内装数 : </span>
                             <span>{item.purchaseInsideNumber}</span>
                         </p>
                         <p>
-                            <span>送货仓库:</span>
+                            <span>送货仓库 : </span>
                             <span>{item.distributeWarehouseId}</span>
                         </p>
                         <p>
-                            <span>采购价格 / 元:</span>
+                            <span>采购价格 / 元 : </span>
                             <span>{item.purchasePrice}</span>
                         </p>
                         <div className={`${prefixCls}-checkboxGroup tjf-css-fontColor`} >
                             {
-                                this.props.ProdPurchases.id !== 0 ?
-                                    <Checkbox
-                                        checked={item.supplierType}
-                                        onChange={this.confirmMain}
-                                        defaultChecked={
-                                            item.supplierType === 1
+                                this.props.ProdPurchases.id !== 0 &&
+                                <Checkbox
+                                    checked={item.supplierType}
+                                    onChange={this.confirmMain}
+                                    defaultChecked={
+                                        item.supplierType === 1
                                             ? this.state.checked : !this.state.checked
-                                        }
-                                    >主供应商
+                                    }
+                                >主供应商
                                     </Checkbox>
-                                    : ''
                             }
                             <Checkbox
                                 checked={item.status}
                                 onChange={this.confirmUsed}
                                 defaultChecked={
                                     item.status === 1 ?
-                                    this.state.checked : !this.state.checked
+                                        this.state.checked : !this.state.checked
                                 }
                             >启用</Checkbox>
                         </div>
