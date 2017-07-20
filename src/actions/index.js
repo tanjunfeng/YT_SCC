@@ -34,7 +34,8 @@ import modifyToAddInsertpage from './modify/modifyToAddInsertpage';
 import modifyUpdatePageBase from './modify/modifyUpdatePageBase';
 import fetchFindStaticPageList from './fetch/fetchStaticPageHome';
 import fectheEditorContent from './fetch/fectheEditorContent';
-
+/*********************procurement added by twh************************* */
+import { changePoMngSelectedRows, fetchMaterialByCd, fetchPoMngList, deletePoByIds, fetchPoPrintList } from './procurement';
 
 export {
     fetchSupplierList,
@@ -63,5 +64,11 @@ export {
     modifyMediaAddVisible,
     modifyDeleteOrderNum,
     modifyToAddInsertpage,
-    fetchFindStaticPageList
+    fetchFindStaticPageList,
+    /*********************procurement added by twh************************* */
+    fetchPoMngList,
+    changePoMngSelectedRows,
+    fetchMaterialByCd,
+    deletePoByIds,
+    fetchPoPrintList
 }
