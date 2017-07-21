@@ -22,10 +22,12 @@ import {
     changeAdPlanState,
     addAdPlan,
     updateAdPlan,
-    queryCarouselIntervalList,
+    queryCarouselInterval,
     deleteCarouselAd,
     updateCarouselAd,
+    updateCarouselAdStatus,
     updateCarouselInterval,
+    insertCarouselAd,
 } from '../service';
 import ActionType from './ActionType';
 
@@ -52,7 +54,7 @@ const receiveCarouselInterval = (data) => ({
 
 // 轮播广告管理（cyx）-查询轮播间隔时间
 export const fetchCarouselInterval = (data) => dispatch => (
-    queryCarouselIntervalList(data)
+    queryCarouselInterval(data)
         .then(res => {
             dispatch(
                 receiveCarouselInterval(res.data)
@@ -309,28 +311,56 @@ export const modifyAdPlanList = (data, callBack) => () => (
 )
 
 // 轮播广告管理-删除项(cyx)
-export const removeCarouselAd = (data, callBack) => () => (
-    deleteCarouselAd(data)
-        .then(res => {
-            callBack(res.data)
-        })
-        .catch(err => Promise.reject(err))
+export const removeCarouselAd = (data) => (
+    new Promise((resolve, reject) => {
+        deleteCarouselAd(data)
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
 )
 
 // 轮播广告管理-启停项(cyx)
-export const modifyCarouselAd = (data, callBack) => () => (
-    updateCarouselAd(data)
-        .then(res => {
-            callBack(res.data)
-        })
-        .catch(err => Promise.reject(err))
+export const modifyCarouselAdStatus = (data) => (
+    new Promise((resolve, reject) => {
+        updateCarouselAdStatus(data)
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
 )
 
 // 轮播广告管理-修改轮播时间间隔(cyx)
-export const modifyCarouselInterval = (data, callBack) => () => (
-    updateCarouselInterval(data)
-        .then(res => {
-            callBack(res.data)
-        })
-        .catch(err => Promise.reject(err))
+export const modifyCarouselInterval = (data) => (
+    new Promise((resolve, reject) => {
+        updateCarouselInterval(data)
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
+// 轮播广告管理-新增
+export const addCarouselAd = (data) => (
+    new Promise((resolve, reject) => {
+        insertCarouselAd(data)
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
+// 轮播广告管理-修改
+export const modifyCarouselAd = (data) => (
+    new Promise((resolve, reject) => {
+        updateCarouselAd(data)
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
 )

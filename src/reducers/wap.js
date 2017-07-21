@@ -42,7 +42,7 @@ const initState = fromJS({
     // 404页面广告配置-查询table(cyx)
     aaplData: [],
     // 轮播广告管理-查询轮播间隔时间(cyx)
-    intervalData: {},
+    intervalData: 3,
 });
 
 export default function (state = initState, action) {
