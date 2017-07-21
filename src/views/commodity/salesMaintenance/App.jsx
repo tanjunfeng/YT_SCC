@@ -4,7 +4,6 @@
  *
  * 供应商入驻申请列表
  */
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -99,6 +98,7 @@ class SalesMaintenance extends PureComponent {
 
     /**
      * 搜索
+     * 
      * @param {Object} data 展示数据
      * @param {bool} bool 通过返回值操控请求
      */

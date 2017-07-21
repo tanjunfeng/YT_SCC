@@ -1,6 +1,7 @@
 /**
  * @file App.jsx
  * @author tanjf
+ * 
  * searchForm
  */
 import React, { Component } from 'react';
@@ -58,6 +59,7 @@ class SearchForm extends Component {
 
     /**
      * 搜索
+     *
      * @param {Object} data 展示数据
      * @param {bool} bool 通过返回值操控请求
      */
@@ -116,7 +118,7 @@ class SearchForm extends Component {
                 <Form layout="inline" style={{paddingLeft: 22}}>
                     {/* 供应商 */}
                     <FormItem className="sc-form-item">
-                        <div className="tjf-css-inputLine">
+                        <div className="gys-css-inputLine">
                             <span className="sc-form-item-label">供应商</span>
                             {getFieldDecorator('supplierNumber')(
                                 <Input
@@ -132,7 +134,7 @@ class SearchForm extends Component {
                     </FormItem>
                     {/* 地点 */}
                     <FormItem className="sc-form-item">
-                        <div className="tjf-css-inputLine">
+                        <div className="gys-css-inputLine">
                             <span className="sc-form-item-label">供应商</span>
                             {getFieldDecorator('addressNumber')(
                                 <Input
@@ -148,7 +150,7 @@ class SearchForm extends Component {
                     </FormItem>
                     {/* 子公司 */}
                     <FormItem className="sc-form-item">
-                        <div className="tjf-css-inputLine">
+                        <div className="gys-css-inputLine">
                             <span className="sc-form-item-label">子公司</span>
                             {getFieldDecorator('companyNumber')(
                                 <Input
@@ -164,7 +166,7 @@ class SearchForm extends Component {
                     </FormItem>
                     {/* 启用状态 */}
                     <FormItem className="sc-form-item">
-                        <div className="tjf-css-supplierType">
+                        <div className="gys-css-supplierType">
                             <span className="sc-form-item-label">启用状态</span>
                             {getFieldDecorator('supplierType', {
                                 initialValue: initiateModeOptions.defaultValue
@@ -187,7 +189,7 @@ class SearchForm extends Component {
                     </FormItem>
                     {/* 主供应商 */}
                     <FormItem className="sc-form-item">
-                        <div className="tjf-css-supplierType">
+                        <div className="gys-css-supplierType">
                             <span className="sc-form-item-label">主供应商</span>
                             {getFieldDecorator('mainSupplier', {
                                 initialValue: mainSupplierOptions.defaultValue

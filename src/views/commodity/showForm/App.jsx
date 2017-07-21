@@ -1,6 +1,5 @@
 /**
  * @file App.jsx
- *
  * @author shijinhua,caoyanxuan
  *
  * 公共searchForm

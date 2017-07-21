@@ -4,7 +4,6 @@
  *
  * 供应商入驻申请列表
  */
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -24,8 +23,6 @@ import SearchForm from '../searchForm';
 import ShowForm from '../showForm';
 import Cardline from '../card';
 import { PAGE_SIZE } from '../../../constant';
-import ChangeAudit from './changeAudit';
-import CheckReason from './checkReason';
 
 
 @connect(
@@ -111,6 +108,7 @@ class ProcurementMaintenance extends PureComponent {
 
     /**
      * 搜索
+     *
      * @param {Object} data 展示数据
      * @param {bool} bool 通过返回值操控请求
      */
@@ -129,6 +127,7 @@ class ProcurementMaintenance extends PureComponent {
 
     /**
      * 重置
+     *
      * @param {Object} data 重置的表单
      */
     handleFormReset(data) {
@@ -151,7 +150,7 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     render() {
-        const { queryProdPurchases, prefixCls } = this.props;
+        const { prefixCls } = this.props;
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm />
@@ -163,14 +162,6 @@ class ProcurementMaintenance extends PureComponent {
                 <div>
                     <Cardline />
                 </div>
-                {
-                    this.props.auditVisible &&
-                    <ChangeAudit />
-                }
-                {
-                    this.props.checkResonVisible &&
-                    <CheckReason />
-                }
             </div>
         );
     }
