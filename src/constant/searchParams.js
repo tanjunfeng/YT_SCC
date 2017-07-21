@@ -261,7 +261,7 @@ export const mainSupplierOptions = {
     }, {
         key: '1',
         value: '否'
-    }
+    }]
 }
 
 // 供货状态

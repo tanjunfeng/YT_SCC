@@ -1,8 +1,6 @@
 /**
  * @file App.jsx
- *
  * @author tanjf
- *
  * searchForm
  */
 import React, { Component } from 'react';

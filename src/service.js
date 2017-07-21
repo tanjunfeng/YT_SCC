@@ -405,7 +405,6 @@ export const queryAllSupplier = (params) => http.get('/price/queryAllSupplier', 
 // 新增数据字典
 export const insertDictionary = (params) => http.post('/dictionary/insertDictionary', params);
 
-<<<<<<< HEAD
 // IBM 修改
 // 查看是否存在主供应商
 export const checkMainSupplier = (params) => http.get('/prodPurchase/checkMainSupplier', params);
@@ -436,6 +435,6 @@ export const batchChangeProPurchaseStatus = (params) => http.post('/prodPurchase
 
 // 根据条件查询商品价格信息
 export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
-=======
+
 export const testApi = (params) => http.get('/test', params);
->>>>>>> 08d787d8236b521827c1d813c7c3448f71277642
+

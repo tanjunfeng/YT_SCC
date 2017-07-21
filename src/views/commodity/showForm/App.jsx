@@ -10,8 +10,6 @@ import PropTypes from 'prop-types';
 import { Form, Breadcrumb, Row, Col, Icon } from 'antd';
 
 import Utils from '../../../util/util';
-import {
-} from '../../../constant/searchParams';
 
 class ShowForm extends Component {
     constructor(props) {

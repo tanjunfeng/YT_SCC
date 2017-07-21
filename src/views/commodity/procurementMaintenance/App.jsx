@@ -75,7 +75,9 @@ class ProcurementMaintenance extends PureComponent {
         });
     }
 
-    // 新增
+    /**
+     * 新增
+     */
     handleAdd() {
         this.props.modifyCategoryVisible({
             isVisible: true,

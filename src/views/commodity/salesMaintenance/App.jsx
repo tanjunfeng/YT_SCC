@@ -117,6 +117,7 @@ class SalesMaintenance extends PureComponent {
 
     /**
      * 重置
+     *
      * @param {Object} data 重置的表单
      */
     handleFormReset(data) {
@@ -145,38 +146,6 @@ class SalesMaintenance extends PureComponent {
     //         ...this.searchForm
     //     });
     // }
-
-    renderOperation(text, record, index) {
-        const { status, id } = record;
-        const { pathname } = this.props.location;
-
-        const menu = (
-            <Menu onClick={(item) => this.handleSelect(record, index, item)}>
-                <Menu.Item key="detail">
-                    <Link to={`${pathname}/${id}`}>供应商详情</Link>
-                </Menu.Item>
-                {
-                    status === 1 &&
-                    <Menu.Item key="changeAudit">
-                        <a target="_blank" rel="noopener noreferrer">入驻审核</a>
-                    </Menu.Item>
-                }
-                {
-                    status === 0 &&
-                    <Menu.Item key="CheckReason">
-                        <a target="_blank" rel="noopener noreferrer">修改审核</a>
-                    </Menu.Item>
-                }
-            </Menu>
-        )
-        return (
-            <Dropdown overlay={menu} placement="bottomCenter" record>
-                <a className="ant-dropdown-link">
-                    表单操作 <Icon type="down" />
-                </a>
-            </Dropdown>
-        )
-    }
 
     render() {
         const { queryProdPurchases, prefixCls } = this.props;

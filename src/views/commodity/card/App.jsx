@@ -182,7 +182,7 @@ class Cardline extends Component {
                             <span>采购价格 / 元 : </span>
                             <span>{item.purchasePrice}</span>
                         </p>
-                        <div className={`${prefixCls}-checkboxGroup tjf-css-fontColor`} >
+                        <div className={`${prefixCls}-checkboxGroup`} >
                             {
                                 this.props.ProdPurchases.id !== 0 &&
                                 <Checkbox
