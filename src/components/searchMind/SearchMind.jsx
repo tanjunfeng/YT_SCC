@@ -416,7 +416,7 @@ class SearchMind extends PureComponent {
                             onBlur={this.handleBlur}
                             onChange={this.handleChange}
                             value={value}
-                            { ...inputProps }
+                            {...inputProps}
                         />
                         {(!isFocus && this.isEmpty()) &&
                             <div className="ywc-smind-input-view">

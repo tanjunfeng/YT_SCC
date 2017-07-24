@@ -1,4 +1,4 @@
-import SalesMaintenance from './App';
-import './App.scss';
+import ClassifiedList from './App';
+import './index.scss';
 
-export default SalesMaintenance;
+export default ClassifiedList;

@@ -10,10 +10,10 @@ import { Button, Input, Form, Select, DatePicker, message } from 'antd';
 
 import Utils from '../../../util/util';
 import {
+    supplierStore,
+    adjustmentType,
     supplierTypeOptions,
     supplierStatusOptions,
-    supplierLevelOptions,
-    supplierPlaceLevelOptions
 } from '../../../constant/searchParams';
 
 const FormItem = Form.Item;
@@ -186,32 +186,89 @@ class SearchForm extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { supplierType } = this.state;
-        const supplierTypeItems =
-        supplierType > 0 ? supplierPlaceLevelOptions : supplierLevelOptions;
         return (
             <div className="manage-form">
                 <Form layout="inline">
-                    {/* 供应商编码 */}
+                    {/* 单据编号 */}
                     <FormItem className="sc-form-item">
                         <div>
-                            <span className="sc-form-item-label">供应商编码</span>
+                            <span className="sc-form-item-label">单据编号</span>
                             {getFieldDecorator('supplierNumber')(
                                 <Input
                                     className="sc-form-item-input"
-                                    placeholder="供应商编码"
+                                    placeholder="单据编号"
                                 />
                             )}
                         </div>
                     </FormItem>
-                    {/* 供应商名称 */}
+                    {/* 状态 */}
                     <FormItem className="sc-form-item">
                         <div>
-                            <span className="sc-form-item-label">供应商名称</span>
-                            {getFieldDecorator('supplierName')(
+                            <span className="sc-form-item-label">状态</span>
+                            {getFieldDecorator('supplierType', {
+                                initialValue: supplierStore.defaultValue
+                            })(
+                                <Select
+                                    className="sc-form-item-select"
+                                    size="default"
+                                    onChange={this.handleSupplierTypeChange}
+                                >
+                                    {
+                                        supplierStore.data.map((item) =>
+                                            (<Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Option>)
+                                        )
+                                    }
+                                </Select>
+                            )}
+                        </div>
+                    </FormItem>
+                    {/* 创建日期 */}
+                    <FormItem className="sc-form-item">
+                        <div>
+                            <span className="sc-form-item-label">创建日期</span>
+                            <DatePicker
+                                className="sc-form-item-date-picker"
+                                showToday
+                                onChange={this.onEnterTimeChange}
+                                value={this.state.rengeTime}
+                                format="YYYY/MM/DD"
+                                placeholder="创建日期"
+                            />
+                        </div>
+                    </FormItem>
+                    {/* 调整类型 */}
+                    <FormItem className="sc-form-item">
+                        <div>
+                            <span className="sc-form-item-label">调整类型</span>
+                            {getFieldDecorator('supplierTy', {
+                                initialValue: adjustmentType.defaultValue
+                            })(
+                                <Select
+                                    className="sc-form-item-select"
+                                    size="default"
+                                    onChange={this.handleSupplierTypeChange}
+                                >
+                                    {
+                                        adjustmentType.data.map((item) =>
+                                            (<Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Option>)
+                                        )
+                                    }
+                                </Select>
+                            )}
+                        </div>
+                    </FormItem>
+                    {/* 调整仓库 */}
+                    <FormItem className="sc-form-item">
+                        <div>
+                            <span className="sc-form-item-label">调整仓库</span>
+                            {getFieldDecorator('supplierNum')(
                                 <Input
                                     className="sc-form-item-input"
-                                    placeholder="供应商名称"
+                                    placeholder="调整仓库"
                                 />
                             )}
                         </div>
@@ -271,41 +328,6 @@ class SearchForm extends Component {
                             </Select>
                         )}
                     </FormItem>
-                    {/* 供应商等级 */}
-                    <FormItem className="sc-form-item">
-                        <span className="sc-form-item-label">供应商等级</span>
-                        {getFieldDecorator('supplierLevel', {
-                            initialValue: supplierTypeItems.defaultValue
-                        })(
-                            <Select
-                                className="sc-form-item-select"
-                                size="default"
-                                disabled={this.state.supplierType === '-1'}
-                            >
-                                {
-                                    supplierTypeItems.data.map((item) =>
-                                        (<Option key={item.key} value={item.key}>
-                                            {item.value}
-                                        </Option>)
-                                    )
-                                }
-                            </Select>
-                        )}
-                    </FormItem>
-                    {/* 供应商入驻日期 */}
-                    <FormItem className="sc-form-item">
-                        <div>
-                            <span className="sc-form-item-label">供应商入驻日期</span>
-                            <DatePicker
-                                className="sc-form-item-date-picker"
-                                showToday
-                                onChange={this.onEnterTimeChange}
-                                value={this.state.rengeTime}
-                                format="YYYY/MM/DD"
-                                placeholder="入驻日期"
-                            />
-                        </div>
-                    </FormItem>
                     <div className="sc-form-button-group">
                         <FormItem>
                             <Button
@@ -331,11 +353,6 @@ class SearchForm extends Component {
                         <FormItem>
                             <Button size="default" onClick={this.handleResetValue}>
                                 重置
-                            </Button>
-                        </FormItem>
-                        <FormItem>
-                            <Button size="default" onClick={this.handleDownload}>
-                                导出供应商列表
                             </Button>
                         </FormItem>
                     </div>

@@ -65,6 +65,8 @@ import AdPlanList404 from 'bundle-loader?lazy!../views/wrapConfigure/adPlanList4
 import ProcurementMaintenance from 'bundle-loader?lazy!../views/commodity/procurementMaintenance';
 // 商品销售关系维护
 import SalesMaintenance from 'bundle-loader?lazy!../views/commodity/salesMaintenance';
+// 库存调整列表
+import StoreAdjList from 'bundle-loader?lazy!../views/storeAdjustment/storeAdjList';
 /* eslint-enable */
 
 
@@ -517,6 +519,28 @@ const routes = [
                     />
                 ),
             },
+        ]
+    },
+    {
+        // 库存调整
+        key: 'kctz',
+        iconType: 'switcher',
+        routes: [
+            // 库存调整列表
+            {
+                path: '/storeAdjList',
+                parent: 'kctz',
+                key: 'kctzlb',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/storeAdjList"
+                            exact
+                            render={() => <Bundle load={StoreAdjList}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            }
         ]
     }
 ];

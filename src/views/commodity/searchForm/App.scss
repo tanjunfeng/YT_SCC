@@ -1,19 +1,11 @@
-.gys-css-inputLine {
-    .sc-form-item-label {
-        min-width: 30px;
+.select-line-content{
+    margin-left: 21px; 
+    .select-line-select{
+        min-width: 60px;
+        margin-right: 8px;
     }
-    #supplierNumber,#addressNumber,#companyNumber {
-        width: 50px;
-    }
-    #supplier,#address,#company {
-        width: 150px;
-    }
-}
-.gys-css-supplierType {
-    .sc-form-item-label {
-        min-width: 50px;
-    }
-    .sc-form-item-select {
-        width: 150px;
+    .select-line-flex{
+        margin-top: 10px;
+        margin-bottom: 5px;
     }
 }

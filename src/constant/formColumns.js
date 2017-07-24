@@ -298,14 +298,10 @@ export const suppliersAppList = [
         render: (text) => {
             switch (parseInt(text, 10)) {
                 case 0:
-                    return '工作表';
+                    return '已提交';
                 case 1:
                     return '已审核';
                 case 2:
-                    return '已提交';
-                case 3:
-                    return '修改中';
-                case 4:
                     return '已拒绝';
                 default:
                     return null;
@@ -358,14 +354,10 @@ export const supplierInputList = [
         render: (text) => {
             switch (parseInt(text, 10)) {
                 case 0:
-                    return '工作表';
+                    return '已提交';
                 case 1:
                     return '已审核';
                 case 2:
-                    return '已提交';
-                case 3:
-                    return '修改中';
-                case 4:
                     return '已拒绝';
                 default:
                     return null;
