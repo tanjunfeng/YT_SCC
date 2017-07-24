@@ -60,7 +60,13 @@ import SearchRecommendConfig from 'bundle-loader?lazy!../views/wrapConfigure/sea
 import CategoryIconManagement from 'bundle-loader?lazy!../views/wrapConfigure/categoryIconManagement';
 // wap端分类图标管理
 import AdPlanList404 from 'bundle-loader?lazy!../views/wrapConfigure/adPlanList404';
+// IBM 修改
+// 商品采购关系维护
+import ProcurementMaintenance from 'bundle-loader?lazy!../views/commodity/procurementMaintenance';
+// 商品销售关系维护
+import SalesMaintenance from 'bundle-loader?lazy!../views/commodity/salesMaintenance';
 /* eslint-enable */
+
 
 /**
  * 路由配置
@@ -217,29 +223,40 @@ const routes = [
                     </Switch>
                 )
             },
-            // 商品管理列表
+            // 商品采购关系维护
             {
-                path: '/managementList',
+                path: '/procurementMaintenance',
                 parent: 'gylspgl',
-                key: 'managementList',
+                key: 'procurementMaintenance',
                 component: () => (
                     <Switch>
                         <Route
-                            path="/managementList"
+                            path="/procurementMaintenance"
                             exact
-                            render={() => <Bundle load={ManagementList}>{(App) => <App />}</Bundle>}
+                            render={() => <Bundle load={ProcurementMaintenance}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/managementList/commodifyDetail/:id"
-                            render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
+                            path="/procurementMaintenance/:id"
+                            render={() => <Bundle load={ProcurementMaintenance}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
+            // 商品销售关系维护
+            {
+                path: '/salesMaintenance',
+                parent: 'gylspgl',
+                key: 'salesMaintenance',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/salesMaintenance"
+                            exact
+                            render={() => <Bundle load={SalesMaintenance}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/managementList/:id"
-                            render={() => <Bundle load={ManagementList}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/managementList/:id"
-                            render={() => <Bundle load={ManagementList}>{(App) => <App />}</Bundle>}
+                            path="/salesMaintenance/:id"
+                            render={() => <Bundle load={SalesMaintenance}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )

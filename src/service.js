@@ -407,4 +407,36 @@ export const queryAllSupplier = (params) => http.get('/price/queryAllSupplier', 
 // 新增数据字典
 export const insertDictionary = (params) => http.post('/dictionary/insertDictionary', params);
 
+// IBM 修改
+// 查看是否存在主供应商
+export const checkMainSupplier = (params) => http.get('/prodPurchase/checkMainSupplier', params);
+
+// 查询商品价格信息
+export const getProdPurchaseById = (params) => http.get('/prodPurchase/getProdPurchaseById', params);
+
+// 销售价格信息
+export const findPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
+
+// 新增商品采购关系
+export const addProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
+
+// 更新商品采购关系
+export const updateProdPurchase = (params) => http.post('/prodPurchase/updateProdPurchase', params);
+
+// 删除商品价格信息
+export const deleteProdPurchaseById = (params) => http.get('/prodPurchase/deleteProdPurchaseById', params);
+
+// 更改供应商类型
+export const fetchChangeSupType = (params) => http.get('/prodPurchase/changeSupplierType', params);
+
+// 更改商品采购价格启禁用状态
+export const changeProPurchaseStatus = (params) => http.get('/prodPurchase/changeProPurchaseStatus', params);
+
+// 商品的暂停购进和恢复采购
+export const batchChangeProPurchaseStatus = (params) => http.post('/prodPurchase/batchChangeProPurchaseStatus', params);
+
+// 根据条件查询商品价格信息
+export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
+
 export const testApi = (params) => http.get('/test', params);
+

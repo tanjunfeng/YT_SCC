@@ -35,6 +35,11 @@ import modifyUpdatePageBase from './modify/modifyUpdatePageBase';
 import fetchFindStaticPageList from './fetch/fetchStaticPageHome';
 import fectheEditorContent from './fetch/fectheEditorContent';
 
+// IBM
+import fecthCheckMainSupplier from './fetch/fetchCheckMainSupplier';
+import fecthGetProdPurchaseById from './fetch/fetchGetProdPurchaseById';
+import fetchQueryProdPurchase from './fetch/fetchQueryProdPurchase';
+import fetchChangeSupType from './fetch/fetchChangeSupType'
 
 export {
     fetchSupplierList,
@@ -57,11 +62,16 @@ export {
     fetchCategory,
     fectheEditorContent,
     modifyUpDateCategory,
-    fetchInsertCategoryGoodsOrder,
     modifyUpdatePageBase,
     modifyToAddCategory,
     modifyMediaAddVisible,
     modifyDeleteOrderNum,
     modifyToAddInsertpage,
-    fetchFindStaticPageList
+    fetchFindStaticPageList,
+
+    // IBM
+    fecthCheckMainSupplier,
+    fecthGetProdPurchaseById,
+    fetchQueryProdPurchase,
+    fetchChangeSupType,
 }
