@@ -46,7 +46,7 @@ class CategoryIconManagement extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchCategorys();
+        this.props.fetchCategorys({parentId: ''});
     }
 
     clickLV1(cId, cName) {
@@ -91,6 +91,7 @@ class CategoryIconManagement extends Component {
 
     render() {
         const { categorys } = this.props;
+        console.log(categorys)
         const { secondDate } = this.state;
         const firstLists = categorys.map(item =>
             (<li><a
@@ -134,13 +135,13 @@ class CategoryIconManagement extends Component {
                 </div>
                 <div>
                     <Row gutter={16}>
-                        <Col span={6}>
+                        <Col span={5}>
                             <Card title="一级分类" >
                                 <ul>{firstLists}</ul>
                             </Card>
                         </Col>
                         <Col
-                            span={6}
+                            span={5}
                             style={this.state.expand1}
                         >
                             <Card title="二级分类" >
@@ -148,7 +149,15 @@ class CategoryIconManagement extends Component {
                             </Card>
                         </Col>
                         <Col
-                            span={10}
+                            span={5}
+                            style={this.state.expand1}
+                        >
+                            <Card title="二级分类" >
+                                <ul>{SecondLists}</ul>
+                            </Card>
+                        </Col>
+                        <Col
+                            span={8}
                             className="category-lv3-card"
                             style={this.state.expand2}
                         >
