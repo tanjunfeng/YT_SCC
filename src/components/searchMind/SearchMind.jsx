@@ -352,6 +352,17 @@ class SearchMind extends PureComponent {
         }
     }
 
+    /**
+     * 重置组件
+     */
+    reset() {
+        this.setState({
+            value: '',
+            data: [],
+            selectedRawData: null,
+        })
+    }
+
     render() {
         const {
             type,

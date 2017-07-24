@@ -148,6 +148,20 @@ startApp({
                 ]
             },
             {
+                code: "procurementMng",
+                name: "采购管理管理",
+                submenu: [
+                    {
+                        code: "poMngList",
+                        name: "采购单管理列表"
+                    },
+                    {
+                        code: "poPrintList",
+                        name: "采购单打印列表"
+                    }
+                ]
+            },
+            {
                 code: 'gylxtpz',
                 name: "系统配置",
                 submenu: [

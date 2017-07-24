@@ -108,7 +108,10 @@ export const updateSupplierStatus = (params) => http.post('/provider/updateSuppl
 export const fetchSupplierEditApply = (params) => http.get('/provider/supplierEditApplyList', params);
 
 // 供应商申请入驻管理
-export const fetchProviderEnter = (params) => http.get('/provider/queryProviderEnterList', params);
+export const fetchProviderEnter = (params) => http.get('/region/queryAllLargerRegionProvince', params);
+
+// 供应商入驻列表(改)
+export const querySettledList = (params) => http.get('/supplier/querySettledList', params);
 
 // 供应商综合审核录入
 export const insertSupplierAuditInfo = (params) => http.post('/provider/insertSupplierAuditInfo', params);
