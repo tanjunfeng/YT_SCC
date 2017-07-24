@@ -138,6 +138,9 @@ class ManagementList extends Component {
         this.handleBrandChoose = ::this.handleBrandChoose;
         this.handleSupplyChoose = ::this.handleSupplyChoose;
         this.handleSubsidiaryChoose = ::this.handleSubsidiaryChoose;
+        this.handleBrandClear = ::this.handleBrandClear;
+        this.handleSupplyClear = ::this.handleSupplyClear;
+        this.handleSubsidiaryClear = ::this.handleSubsidiaryClear;
         this.searchMind1 = null;
         this.state = {
             choose: [],
@@ -234,7 +237,7 @@ class ManagementList extends Component {
             content: '请确认对选中商品进行暂停购进操作，商品将不可进行采购下单',
             onOk: () => {
             },
-            onCancel() { },
+            onCancel() {},
         });
     }
 
@@ -247,7 +250,7 @@ class ManagementList extends Component {
             content: '请确认对选中商品进行恢复采购操作',
             onOk: () => {
             },
-            onCancel() { },
+            onCancel() {},
         });
     }
 
@@ -260,7 +263,7 @@ class ManagementList extends Component {
             content: '请确认对选中商品进行区域下架操作，商品将在该区域停止销售',
             onOk: () => {
             },
-            onCancel() { },
+            onCancel() {},
         });
     }
 
@@ -273,7 +276,7 @@ class ManagementList extends Component {
             content: '请确认对选中商品进行区域上架操作，商品将在该区域恢复销售',
             onOk: () => {
             },
-            onCancel() { },
+            onCancel() {},
         });
     }
 
@@ -288,7 +291,7 @@ class ManagementList extends Component {
             onOk: () => {
                 message.success(choose);
             },
-            onCancel() { },
+            onCancel() {},
         });
     }
 
@@ -303,7 +306,34 @@ class ManagementList extends Component {
             onOk: () => {
                 message.success(choose);
             },
-            onCancel() { },
+            onCancel() {},
+        });
+    }
+
+    /**
+     * 品牌值清单-清除
+     */
+    handleBrandClear() {
+        this.setState({
+            brandChoose: null,
+        });
+    }
+
+    /**
+     * 供货供应商值清单-清除
+     */
+    handleSupplyClear() {
+        this.setState({
+            supplyChoose: null,
+        });
+    }
+
+    /**
+     * 经营子公司值清单-清除
+     */
+    handleSubsidiaryClear() {
+        this.setState({
+            subsidiaryChoose: null,
         });
     }
 
@@ -311,6 +341,9 @@ class ManagementList extends Component {
      * 重置
      */
     handleFormReset() {
+        this.brandSearchMind.handleClear();
+        this.supplySearchMind.handleClear();
+        this.subsidiarySearchMind.handleClear();
         this.props.form.resetFields();
     }
 
@@ -472,12 +505,12 @@ class ManagementList extends Component {
                                             <span className="sc-form-item-label">品牌</span>
                                             <SearchMind
                                                 compKey="search-mind-brand"
-                                                ref={ref => { this.searchMind1 = ref }}
+                                                ref={ref => { this.brandSearchMind = ref }}
                                                 fetch={(value, pager) =>
                                                     this.handleTestFetch(value, pager)
                                                 }
-                                                addonBefore=""
                                                 onChoosed={this.handleBrandChoose}
+                                                onClear={this.handleBrandClear}
                                                 renderChoosedInputRaw={(data) => (
                                                     <div>{data.id} - {data.address}</div>
                                                 )}
@@ -507,12 +540,13 @@ class ManagementList extends Component {
                                             <span className="value-list-input">
                                                 <SearchMind
                                                     compKey="search-mind-supply"
-                                                    ref={ref => { this.searchMind = ref }}
+                                                    ref={ref => { this.supplySearchMind = ref }}
                                                     fetch={(value, pager) =>
                                                         this.handleTestFetch(value, pager)
                                                     }
                                                     addonBefore=""
                                                     onChoosed={this.handleSupplyChoose}
+                                                    onClear={this.handleSupplyClear}
                                                     renderChoosedInputRaw={(data) => (
                                                         <div>{data.id} - {data.name}</div>
                                                     )}
@@ -586,12 +620,13 @@ class ManagementList extends Component {
                                             <span className="value-list-input">
                                                 <SearchMind
                                                     compKey="search-mind-subsidiary"
-                                                    ref={ref => { this.searchMind = ref }}
+                                                    ref={ref => { this.subsidiarySearchMind = ref }}
                                                     fetch={(value, pager) =>
                                                         this.handleTestFetch(value, pager)
                                                     }
                                                     addonBefore=""
                                                     onChoosed={this.handleSubsidiaryChoose}
+                                                    onClear={this.handleSubsidiaryClear}
                                                     renderChoosedInputRaw={(data) => (
                                                         <div>{data.id} - {data.name}</div>
                                                     )}
