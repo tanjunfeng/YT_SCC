@@ -34,8 +34,15 @@ import modifyToAddInsertpage from './modify/modifyToAddInsertpage';
 import modifyUpdatePageBase from './modify/modifyUpdatePageBase';
 import fetchFindStaticPageList from './fetch/fetchStaticPageHome';
 import fectheEditorContent from './fetch/fectheEditorContent';
+
 /*********************procurement added by twh************************* */
 import { changePoMngSelectedRows, fetchMaterialByCd, fetchPoMngList, deletePoByIds, fetchPoPrintList } from './procurement';
+
+// IBM
+import fecthCheckMainSupplier from './fetch/fetchCheckMainSupplier';
+import fecthGetProdPurchaseById from './fetch/fetchGetProdPurchaseById';
+import fetchQueryProdPurchase from './fetch/fetchQueryProdPurchase';
+import fetchChangeSupType from './fetch/fetchChangeSupType'
 
 export {
     fetchSupplierList,
@@ -58,7 +65,6 @@ export {
     fetchCategory,
     fectheEditorContent,
     modifyUpDateCategory,
-    fetchInsertCategoryGoodsOrder,
     modifyUpdatePageBase,
     modifyToAddCategory,
     modifyMediaAddVisible,
@@ -70,5 +76,11 @@ export {
     changePoMngSelectedRows,
     fetchMaterialByCd,
     deletePoByIds,
-    fetchPoPrintList
+    fetchPoPrintList,
+
+    // IBM
+    fecthCheckMainSupplier,
+    fecthGetProdPurchaseById,
+    fetchQueryProdPurchase,
+    fetchChangeSupType,
 }

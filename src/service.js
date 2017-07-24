@@ -305,15 +305,17 @@ export const fectheEditorContent = (params) => http.post('/staticPage/updateStat
 // 查询所有轮播
 export const queryCarouselAdList = (params) => http.get('/homeAd/queryCarouselAdList', params);
 
-// 修改分类信息
+// 轮播广告管理-修改
 export const updateCarouselAd = (params) => http.post('/homeAd/updateCarouselAd', params);
+
+// 轮播广告-启停（cyx）
+export const updateCarouselAdStatus = (params) => http.post('/homeAd/updateCarouselAdStatus', params);
 
 // 删除某个轮播
 export const deleteCarouselAd = (params) => http.post('/homeAd/deleteCarouselAd', params);
 
 // 新增轮播
 export const insertCarouselAd = (params) => http.post('/homeAd/insertCarouselAd', params);
-
 
 // 判断序号是否重复
 export const queryCarouselAdBySorting = (params) => http.get('/homeAd/queryCarouselAdBySorting', params);
@@ -322,7 +324,7 @@ export const queryCarouselAdBySorting = (params) => http.get('/homeAd/queryCarou
 export const queryCarouselAdListById = (params) => http.get('/homeAd/queryCarouselAdListById', params);
 
 // 查询轮播间隔时间
-export const queryCarouselIntervalList = (params) => http.get('/homeAd/queryCarouselInterval', params);
+export const queryCarouselInterval = (params) => http.get('/homeAd/queryCarouselInterval', params);
 
 // 修改轮播间隔时间
 export const updateCarouselInterval = (params) => http.post('/homeAd/updateCarouselInterval', params);
@@ -405,6 +407,37 @@ export const queryAllSupplier = (params) => http.get('/price/queryAllSupplier', 
 // 新增数据字典
 export const insertDictionary = (params) => http.post('/dictionary/insertDictionary', params);
 
+// IBM 修改
+// 查看是否存在主供应商
+export const checkMainSupplier = (params) => http.get('/prodPurchase/checkMainSupplier', params);
+
+// 查询商品价格信息
+export const getProdPurchaseById = (params) => http.get('/prodPurchase/getProdPurchaseById', params);
+
+// 销售价格信息
+export const findPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
+
+// 新增商品采购关系
+export const addProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
+
+// 更新商品采购关系
+export const updateProdPurchase = (params) => http.post('/prodPurchase/updateProdPurchase', params);
+
+// 删除商品价格信息
+export const deleteProdPurchaseById = (params) => http.get('/prodPurchase/deleteProdPurchaseById', params);
+
+// 更改供应商类型
+export const fetchChangeSupType = (params) => http.get('/prodPurchase/changeSupplierType', params);
+
+// 更改商品采购价格启禁用状态
+export const changeProPurchaseStatus = (params) => http.get('/prodPurchase/changeProPurchaseStatus', params);
+
+// 商品的暂停购进和恢复采购
+export const batchChangeProPurchaseStatus = (params) => http.post('/prodPurchase/batchChangeProPurchaseStatus', params);
+
+// 根据条件查询商品价格信息
+export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
+
 export const testApi = (params) => http.get('/test', params);
 
 // 查询采购单列表
@@ -415,4 +448,3 @@ export const fetchMaterialByCd = (params) => http.get('/provider/queryMaterialBy
 export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
 // 查询采购单打印列表
 export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
-

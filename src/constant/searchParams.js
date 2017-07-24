@@ -213,6 +213,21 @@ export const supplierPlaceLevelOptions = {
     }]
 }
 
+// 启用状态
+export const initiateModeOptions = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '启用'
+    }, {
+        key: '1',
+        value: '未启用'
+    }]
+}
+
 // 商品状态
 export const commodityStatusOptions = {
     defaultValue: '-1',
@@ -231,6 +246,21 @@ export const commodityStatusOptions = {
     }, {
         key: 'I',
         value: '停止使用'
+    }]
+}
+
+// 主供应商
+export const mainSupplierOptions = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '是'
+    }, {
+        key: '1',
+        value: '否'
     }]
 }
 

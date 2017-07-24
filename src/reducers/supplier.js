@@ -33,7 +33,8 @@ const initState = fromJS({
     changeData: [],
     informationVisible: false,
     checkResonVisible: false,
-    areaVisible: false
+    areaVisible: false,
+
 });
 
 export default function (state = initState, action) {
@@ -105,7 +106,8 @@ export default function (state = initState, action) {
         }
 
         case ActionType.RECEIVE_SHOW_DATA:
-            return state.set('changeData', fromJS(action.payload))
+            return state.set('changeData', fromJS(action.payload));
+
         default:
             return state;
     }
