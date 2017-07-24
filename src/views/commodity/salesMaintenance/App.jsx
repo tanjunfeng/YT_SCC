@@ -27,9 +27,6 @@ import SearchForm from '../searchForm';
 import ShowForm from '../showForm';
 import Cardline from '../card';
 import { PAGE_SIZE } from '../../../constant';
-import ChangeAudit from './changeAudit';
-import CheckReason from './checkReason';
-
 
 @connect(
     state => ({

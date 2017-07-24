@@ -1,19 +1,18 @@
 .stepped-Price {
     display: inline-block;
-    padding: 10px;
+    width: 100%;
     &-tip {
         color: #ccc;
     }
     &-title {
         overflow: hidden;
-        margin: 10px;
     }
     &-title-left {
         float: left;
     }
     &-title-right {
-        float: right;
-        margin-right: 10px;
+        // float: right;
+        margin-left: 174px;
     }
     &-item-result {
         margin-left: 20px;
@@ -24,15 +23,11 @@
     }
     &-icon-minus, &-icon-plus {
         cursor: pointer;
-        margin-left: 10px;
+        margin-left: 4px;
         &:hover {
             color: #108ee9;
         }
     }
-    &-item {
-        margin: 10px 0;
-    }
-
     .ant-input-number {
         width: 90px;
     }

@@ -440,3 +440,11 @@ export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurcha
 
 export const testApi = (params) => http.get('/test', params);
 
+// 查询采购单列表
+export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
+// 根据商品编码获取商品详情
+export const fetchMaterialByCd = (params) => http.get('/provider/queryMaterialByCd', params);
+// 删除采购单
+export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
+// 查询采购单打印列表
+export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);

@@ -60,6 +60,11 @@ import SearchRecommendConfig from 'bundle-loader?lazy!../views/wrapConfigure/sea
 import CategoryIconManagement from 'bundle-loader?lazy!../views/wrapConfigure/categoryIconManagement';
 // wap端分类图标管理
 import AdPlanList404 from 'bundle-loader?lazy!../views/wrapConfigure/adPlanList404';
+
+import PoMngList from 'bundle-loader?lazy!../views/procurement/poMngList';
+import PoDetail from 'bundle-loader?lazy!../views/procurement/PoDetail';
+import PoPrintList from 'bundle-loader?lazy!../views/procurement/PoPrintList';
+
 // IBM 修改
 // 商品采购关系维护
 import ProcurementMaintenance from 'bundle-loader?lazy!../views/commodity/procurementMaintenance';
@@ -517,6 +522,55 @@ const routes = [
                     />
                 ),
             },
+        ]
+    },
+    // 采购管理
+    {
+        key: 'procurementMng',
+        iconType: 'solution',
+        routes: [
+            // 采购单管理列表
+            {
+                path: '/po',
+                parent: 'procurementMng',
+                key: 'poMngList',
+                 component: () => (
+                    <Switch>
+                        <Route
+                            path="/po"
+                            exact
+                            render={() => (<Bundle load={PoMngList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/po/create"
+                            exact
+                            render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/po/:id/:detail"
+                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
+             {
+                path: '/poprintlist',
+                parent: 'procurementMng',
+                key: 'poPrintList',
+                 component: () => (
+                    <Switch>
+                        <Route
+                            path="/poprintlist"
+                            exact
+                            render={() => (<Bundle load={PoPrintList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                    </Switch>
+                )
+            }
         ]
     }
 ];
