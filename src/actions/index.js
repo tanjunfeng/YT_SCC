@@ -44,6 +44,8 @@ import fecthGetProdPurchaseById from './fetch/fetchGetProdPurchaseById';
 import fetchQueryProdPurchase from './fetch/fetchQueryProdPurchase';
 import fetchChangeSupType from './fetch/fetchChangeSupType'
 
+import fetchQuerySettledList from './fetch/fetchQuerySettledList';
+
 export {
     fetchSupplierList,
     modifyInformationVisible,
@@ -83,4 +85,6 @@ export {
     fecthGetProdPurchaseById,
     fetchQueryProdPurchase,
     fetchChangeSupType,
+
+    fetchQuerySettledList,
 }

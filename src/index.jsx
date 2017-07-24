@@ -42,7 +42,7 @@ startApp({
     user: {
         employeeName: 'admin'
     },
-    "topMenus": {
+    topMenus: {
         "menu": [
             {
                 "id": 39,
@@ -212,6 +212,16 @@ startApp({
                         code: 'categoryIcon',
                         name: '分类图标管理'
                     }
+                ]
+            },
+            {
+                code: "kctz",
+                name: "库存调整",
+                submenu: [
+                    {
+                        code: "kctzlb",
+                        name: "库存调整列表",
+                    },
                 ]
             }
         ]

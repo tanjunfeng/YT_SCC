@@ -2,7 +2,7 @@
  * @file app.jsx
  * @author Tan junfeng
  *
- * 供应商入驻申请列表
+ * 商品采购关系维护
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';

@@ -21,6 +21,7 @@ import {
 
 import {
     fetchProviderEnterList,
+    fetchQuerySettledList,
     modifyAuditVisible,
     modifyCheckReasonVisible
 } from '../../../actions';
@@ -40,9 +41,11 @@ const columns = suppliersAppList;
         applicationData: state.toJS().supplier.applicationData,
         auditVisible: state.toJS().supplier.auditVisible,
         checkResonVisible: state.toJS().supplier.checkResonVisible,
-        insertSettlementResult: state.toJS().supplier.insertSettlementResult
+        insertSettlementResult: state.toJS().supplier.insertSettlementResult,
+        querySettledList: state.toJS().supplier.querySettledList,
     }),
     dispatch => bindActionCreators({
+        fetchQuerySettledList,
         fetchProviderEnterList,
         modifyAuditVisible,
         modifyCheckReasonVisible
@@ -67,11 +70,7 @@ class SuppliersAppList extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
-        this.props.fetchProviderEnterList({
-            pageNum: this.current,
-            pageSize: PAGE_SIZE,
-            ...this.searchForm
-        });
+        this.props.fetchQuerySettledList();
     }
 
     /**
@@ -140,14 +139,6 @@ class SuppliersAppList extends PureComponent {
         });
     }
 
-    // handleGetList() {
-    //     this.props.fetchProviderEnterList({
-    //         pageNum: this.current,
-    //         pageSize: PAGE_SIZE,
-    //         ...this.searchForm
-    //     });
-    // }
-
     renderOperation(text, record, index) {
         const { status, id } = record;
         const { pathname } = this.props.location;
@@ -182,8 +173,8 @@ class SuppliersAppList extends PureComponent {
 
     render() {
         const { data, pageNum, pageSize, total } = this.props.applicationData;
+        const { querySettledList } = this.props;
         columns[columns.length - 1].render = this.renderOperation;
-
         return (
             <div className="application tjf-css-min-width">
                 <SearchForm
@@ -193,7 +184,7 @@ class SuppliersAppList extends PureComponent {
                 />
                 <div className="application-list">
                     <Table
-                        dataSource={data}
+                        dataSource={querySettledList.data}
                         columns={columns}
                         rowKey="id"
                         pagination={{
@@ -219,6 +210,7 @@ class SuppliersAppList extends PureComponent {
 }
 
 SuppliersAppList.propTypes = {
+    fetchQuerySettledList: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     fetchProviderEnterList: PropTypes.bool,
     location: PropTypes.objectOf(PropTypes.any),

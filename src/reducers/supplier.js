@@ -35,6 +35,9 @@ const initState = fromJS({
     checkResonVisible: false,
     areaVisible: false,
 
+    // 供应商入驻列表
+    querySettledList: {}
+
 });
 
 export default function (state = initState, action) {
@@ -107,6 +110,9 @@ export default function (state = initState, action) {
 
         case ActionType.RECEIVE_SHOW_DATA:
             return state.set('changeData', fromJS(action.payload));
+
+        case ActionType.QUERY_SETTLED_LIST:
+            return state.set('querySettledList', fromJS(action.payload));
 
         default:
             return state;

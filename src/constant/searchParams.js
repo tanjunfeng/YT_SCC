@@ -314,3 +314,33 @@ export const commoditySortOptions = {
         value: '按商品编号降序排列'
     }]
 }
+
+// 状态
+export const supplierStore = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '草稿'
+    }, {
+        key: '1',
+        value: '生效'
+    }]
+}
+
+// 调整类型
+export const adjustmentType = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '库存同步'
+    }, {
+        key: '1',
+        value: '异常处理'
+    }]
+}

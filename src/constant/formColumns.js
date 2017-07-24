@@ -263,33 +263,33 @@ export const supplierApplicationList = [
 export const suppliersAppList = [
     {
         title: '供应商编码',
-        dataIndex: 'spRegNo',
-        key: 'spRegNo',
+        dataIndex: 'providerNo',
+        key: 'providerNo',
     },
     {
         title: '供应商名称',
-        dataIndex: 'companyName',
-        key: 'companyName',
+        dataIndex: 'providerName',
+        key: 'providerName',
     },
     {
         title: '供应商营业执照号',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'registLicenceNumber',
+        key: 'registLicenceNumber',
     },
     {
         title: '供应商类型',
-        dataIndex: 'phone',
-        key: 'phone',
+        dataIndex: 'providerType',
+        key: 'providerType',
     },
     {
         title: '供应商等级',
-        dataIndex: 'email',
-        key: 'email',
+        dataIndex: 'grade',
+        key: 'grade',
     },
     {
         title: '供应商入驻日期',
-        dataIndex: 'spNo',
-        key: 'spNo',
+        dataIndex: 'settledDate',
+        key: 'settledDate',
     },
     {
         title: '供应商状态',
@@ -298,15 +298,15 @@ export const suppliersAppList = [
         render: (text) => {
             switch (parseInt(text, 10)) {
                 case 0:
-                    return '工作表';
+                    return '草稿';
                 case 1:
-                    return '已审核';
+                    return '待审核';
                 case 2:
-                    return '已提交';
+                    return '已审核';
                 case 3:
-                    return '修改中';
-                case 4:
                     return '已拒绝';
+                case 4:
+                    return '修改中';
                 default:
                     return null;
             }
@@ -358,14 +358,10 @@ export const supplierInputList = [
         render: (text) => {
             switch (parseInt(text, 10)) {
                 case 0:
-                    return '工作表';
+                    return '已提交';
                 case 1:
                     return '已审核';
                 case 2:
-                    return '已提交';
-                case 3:
-                    return '修改中';
-                case 4:
                     return '已拒绝';
                 default:
                     return null;

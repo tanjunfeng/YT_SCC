@@ -7,7 +7,7 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import QueueAnim from 'rc-queue-anim';
+// import QueueAnim from 'rc-queue-anim';
 
 import InputItem from './inputItem';
 
