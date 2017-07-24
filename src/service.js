@@ -354,7 +354,7 @@ export const saveItemAd = (params) => http.post('/homeAd/saveItemAd', params);
 export const uploadImageBase64Data = (params) => http.post('/commonUploadFile/uploadImageBase64Data', params);
 
 // 查询全部分类信息
-export const queryCategorys = (params) => http.get('/category/queryCategories', params);
+export const queryCategorys = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
 
 // 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
 export const saveInput = (params) => http.post('/rk/saveInput', params);
@@ -440,3 +440,11 @@ export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurcha
 
 export const testApi = (params) => http.get('/test', params);
 
+// 查询采购单列表
+export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
+// 根据商品编码获取商品详情
+export const fetchMaterialByCd = (params) => http.get('/provider/queryMaterialByCd', params);
+// 删除采购单
+export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
+// 查询采购单打印列表
+export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);

@@ -35,6 +35,9 @@ import modifyUpdatePageBase from './modify/modifyUpdatePageBase';
 import fetchFindStaticPageList from './fetch/fetchStaticPageHome';
 import fectheEditorContent from './fetch/fectheEditorContent';
 
+/*********************procurement added by twh************************* */
+import { changePoMngSelectedRows, fetchMaterialByCd, fetchPoMngList, deletePoByIds, fetchPoPrintList } from './procurement';
+
 // IBM
 import fecthCheckMainSupplier from './fetch/fetchCheckMainSupplier';
 import fecthGetProdPurchaseById from './fetch/fetchGetProdPurchaseById';
@@ -68,6 +71,12 @@ export {
     modifyDeleteOrderNum,
     modifyToAddInsertpage,
     fetchFindStaticPageList,
+    /*********************procurement added by twh************************* */
+    fetchPoMngList,
+    changePoMngSelectedRows,
+    fetchMaterialByCd,
+    deletePoByIds,
+    fetchPoPrintList,
 
     // IBM
     fecthCheckMainSupplier,

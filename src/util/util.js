@@ -189,6 +189,13 @@ class Utils {
         /* eslint-enable */
     }
 
+    /**
+     * 筛选出数组中不通项
+     *
+     * @param {Array[*]} arr 目标数组
+     * @param {Array[*]} arrays 被检测数组
+     * @return {Array[*]} res 新的数组
+     */
     static diff(arr, arrays) {
         const argsLen = arguments.length;
         const len = arr.length;
@@ -205,23 +212,6 @@ class Utils {
             }
         }
         return res;
-    }
-
-    /**
-     * 价格区间是否连续
-     *
-     * @param {Array[number]} arr 价格区间数组
-     * @return {boolean} 是否连续
-     */
-    static isContinuity(arr) {
-        let i = 0;
-        while (arr[i + 1]) {
-            if (arr[i].endNumber + 1 !== arr[i + 1].startNumber) {
-                return false;
-            }
-            i++;
-        }
-        return true;
     }
 }
 
