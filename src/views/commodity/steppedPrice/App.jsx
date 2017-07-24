@@ -9,8 +9,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import QueueAnim from 'rc-queue-anim';
 
-import Utils from '../../../util/util';
-
 import InputItem from './inputItem';
 
 const initValue = [{
@@ -18,6 +16,23 @@ const initValue = [{
     endNumber: 2,
     price: 0
 }]
+
+/**
+ * 价格区间是否连续
+ *
+ * @param {Array[number]} arr 价格区间数组
+ * @return {boolean} 是否连续
+ */
+const isContinuity = (arr) => {
+    let i = 0;
+    while (arr[i + 1]) {
+        if (arr[i].endNumber + 1 !== arr[i + 1].startNumber) {
+            return false;
+        }
+        i++;
+    }
+    return true;
+}
 
 class SteppedPrice extends PureComponent {
     constructor(props) {
@@ -36,7 +51,7 @@ class SteppedPrice extends PureComponent {
         const { defaultValue } = this.state;
         return {
             results: defaultValue,
-            isContinuity: Utils.isContinuity(defaultValue)
+            isContinuity: isContinuity(defaultValue)
         }
     }
 
@@ -44,7 +59,7 @@ class SteppedPrice extends PureComponent {
         const { defaultValue } = this.state;
         this.props.handleChange({
             results: defaultValue,
-            isContinuity: Utils.isContinuity(defaultValue)
+            isContinuity: isContinuity(defaultValue)
         })
     }
 
