@@ -17,6 +17,7 @@
   "dependencies": {
     "antd": "^2.10.2",
     "bluebird": "^3.5.0",
+    "deepmerge": "^1.5.0",
     "freed-spa": "https://github.com/freed-framework/freed-spa.git",
     "immutable": "^3.8.1",
     "moment": "^2.18.1",

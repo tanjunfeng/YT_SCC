@@ -1,0 +1,46 @@
+{
+    "timestamp": 1500446884966,
+    "code": 200,
+    "message": {},
+    "data": {
+        "pageNum": 1,
+        "pageSize": 10,
+        "total": 4,
+        "data": [
+            {
+                "id": "xprov151",
+                "providerNo": "100003",
+                "providerName": "旺旺食品有限公司",
+                "registLicenceNumber": "52352346346456",
+                "providerType": 1,
+                "grade": 2,
+                "status": 0,
+                "settledDate": "2015-07-15",
+                "auditType": 1
+            },
+            {
+                "id": "xprov150",
+                "providerNo": "100002",
+                "providerName": "深圳市豪利门业实业有限公司",
+                "registLicenceNumber": "52352346346456",
+                "providerType": 1,
+                "grade": 2,
+                "status": 0,
+                "settledDate": "2015-07-15",
+                "auditType": 1
+            },
+            {
+                "id": "xprov149",
+                "providerNo": "100001",
+                "providerName": "统一食品有限公司",
+                "registLicenceNumber": "52352346346436",
+                "providerType": 1,
+                "grade": 1,
+                "status": 1,
+                "settledDate": "2017-07-02",
+                "auditType": 2
+            }
+        ]
+    },
+    "success": true
+}

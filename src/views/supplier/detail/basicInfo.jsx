@@ -8,6 +8,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Icon, Table } from 'antd';
+import moment from 'moment';
 
 const columns = [{
     key: 'regionName',
@@ -32,13 +33,53 @@ class BasicInfo extends Component {
         super(props);
     }
 
-    ComponentDidMount() {
-        // const { orderNumber } = this.props.match.params;
+    /**
+     * 供应商状态转换
+     * @param {string} status 供应商状态
+     */
+    renderStatus(status) {
+        switch(status) {
+            case 0:
+                return '草稿'
+            case 1:
+                return '待审核'
+            case 2:
+                return '已审核'
+            case 3:
+                return '已拒绝'
+            case 4:
+                return '修改中'
+            default:
+                break;
+        }
+        return null;
+    }
+
+    /**
+     * 供应商等级转换
+     * @param {number} grade 供应商等级
+     */
+    renderGrade(grade) {
+        switch(grade) {
+            case 1:
+                return '战略供应商'
+            case 2:
+                return '核心供应商'
+            case 3:
+                return '可替代供应商'
+            default:
+                break;
+        }
+        return null;
     }
 
     render() {
-        const { initValue = {} } = this.props;
-        // const { orderNumber } = this.props.match.params;
+        const { detailData = {} } = this.props;
+        const {
+            supplierBasicInfo = {},
+            status = 0
+        } = detailData
+
         return (
             <div className="supplier-detail">
                 <div className="supplier-detail-item">
@@ -50,15 +91,39 @@ class BasicInfo extends Component {
                         <div className="detail-message-body">
                             <Row>
                                 <Col span={8}><span>供应商类型：</span><span>供应商</span></Col>
-                                <Col span={8}><span>供应商状态：</span><span>工作表</span></Col>
+                                <Col span={8}><span>供应商状态：</span>
+                                    <span>
+                                        {
+                                            this.renderStatus(status)
+                                        }
+                                    </span>
+                                </Col>
                             </Row>
                             <Row>
-                                <Col span={8}><span>供应商编号：</span><span>10000001</span></Col>
-                                <Col span={8}><span>供应商名称：</span><span>深圳市豪利门业实业有限公司</span></Col>
+                                <Col span={8}><span>供应商编号：</span>
+                                    <span>
+                                        {
+                                            supplierBasicInfo.spNo
+                                        }
+                                    </span>
+                                </Col>
+                                <Col span={8}><span>供应商名称：</span>
+                                    <span>{supplierBasicInfo.companyName}</span>
+                                </Col>
                             </Row>
                             <Row>
-                                <Col span={8}><span>供应商等级：</span><span>战略供应商</span></Col>
-                                <Col span={8}><span>供应商入驻日期：</span><span>2017-07-02 </span></Col>
+                                <Col span={8}><span>供应商等级：</span>
+                                    <span>
+                                        {
+                                            this.renderGrade(supplierBasicInfo.grade)
+                                        }
+                                    </span>
+                                </Col>
+                                <Col span={8}><span>供应商入驻日期：</span>
+                                    <span>
+                                        {moment(supplierBasicInfo.settledTime).format('YYYY-MM-DD')}
+                                    </span>
+                                </Col>
                             </Row>
                         </div>
                     </div>
@@ -73,8 +138,8 @@ class BasicInfo extends Component {
                             <Table
                                 dataSource={list}
                                 columns={columns}
-                                rowKey="province"
-                                title={() => '深圳市豪利门业实业有限公司'}
+                                rowKey="id"
+                                title={() => supplierBasicInfo.companyName}
                                 pagination={false}
                                 className="area-detail"
                                 bordered

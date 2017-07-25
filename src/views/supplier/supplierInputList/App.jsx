@@ -21,6 +21,10 @@ import {
     modifySupplierFrozen,
     modifyCollaboration
 } from '../../../actions';
+import {
+    getSupplierManageList
+} from '../../../actions/supplier';
+
 import SearchForm from '../searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { supplierInputList } from '../../../constant/formColumns';
@@ -29,6 +33,7 @@ import { exportSupplierList } from '../../../service';
 import ChangeMessage from './changeMessage';
 import ChangeAudit from './changeAudit';
 import CheckReason from './checkReason';
+
 
 const columns = supplierInputList;
 
@@ -39,6 +44,7 @@ const columns = supplierInputList;
         queryManageList: state.toJS().supplier.queryManageList,
     }),
     dispatch => bindActionCreators({
+        getSupplierManageList,
         fetchProviderEnterList,
         fetchQueryManageList,
         fetchSupplierList,
@@ -50,7 +56,6 @@ const columns = supplierInputList;
 class SupplierInputList extends PureComponent {
     constructor(props) {
         super(props);
-
 
         this.handleSelect = this.handleSelect.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);

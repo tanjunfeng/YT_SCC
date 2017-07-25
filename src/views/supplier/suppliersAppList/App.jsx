@@ -27,6 +27,9 @@ import {
     modifyAuditVisible,
     modifyCheckReasonVisible
 } from '../../../actions';
+import {
+    getSupplierSettledList
+} from '../../../actions/supplier';
 import SearchForm from '../searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
@@ -35,18 +38,20 @@ import { exportSupplierEnterList } from '../../../service';
 import ChangeAudit from './changeAudit';
 import CheckReason from './checkReason';
 
-
 const columns = suppliersAppList;
 
 @connect(
     state => ({
-        applicationData: state.toJS().supplier.applicationData,
+        applicationData: state.toJS().supplier.data,
         auditVisible: state.toJS().supplier.auditVisible,
         checkResonVisible: state.toJS().supplier.checkResonVisible,
         insertSettlementResult: state.toJS().supplier.insertSettlementResult,
         querySettledList: state.toJS().supplier.querySettledList,
     }),
     dispatch => bindActionCreators({
+        modifyAuditVisible,
+        modifyCheckReasonVisible,
+        getSupplierSettledList,
         fetchQuerySettledList,
         fetchProviderEnterList,
         modifyAuditVisible,
@@ -74,7 +79,7 @@ class SuppliersAppList extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
-        this.props.fetchProviderEnterList({
+        this.props.getSupplierSettledList({
             pageNum: this.current,
             pageSize: PAGE_SIZE,
             ...this.searchForm
@@ -152,7 +157,7 @@ class SuppliersAppList extends PureComponent {
      */
     handlePaginationChange(goto = 1) {
         this.current = goto;
-        this.props.fetchProviderEnterList({
+        this.props.getSupplierSettledList({
             pageNum: goto,
             pageSize: PAGE_SIZE,
             ...this.searchForm
@@ -248,7 +253,7 @@ SuppliersAppList.propTypes = {
     querySettledList: PropTypes.objectOf(PropTypes.any),
     fetchQuerySettledList: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
-    fetchProviderEnterList: PropTypes.bool,
+    getSupplierSettledList: PropTypes.bool,
     location: PropTypes.objectOf(PropTypes.any),
     modifyAuditVisible: PropTypes.bool,
     modifyCheckReasonVisible: PropTypes.bool,

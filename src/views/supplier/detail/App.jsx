@@ -55,8 +55,7 @@ class SupplierDetail extends PureComponent {
 
     componentDidMount() {
         const { id } = this.props.match.params;
-        const { match } = this.props;
-        // this.props.getSupplierDetail({spId: id});
+        this.props.getSupplierDetail({spId: id});
     }
 
     handleClick(goto) {
@@ -80,8 +79,6 @@ class SupplierDetail extends PureComponent {
             getDtail: this.handleGetDetail,
             ...this.props
         }
-        const { id } = this.props.match.params;
-        // console.log(this.props.match)
         return (
             <Tabs
                 defaultActiveKey="1"
@@ -91,24 +88,24 @@ class SupplierDetail extends PureComponent {
                 style={{marginTop: '16px'}}
             >
                 <TabPane tab="基本信息" key="1">
-                    <BasicInfo id={id} />
+                    <BasicInfo {...props} />
                 </TabPane>
                 <TabPane tab="银行信息" key="2">
-                    <BankInfo />
+                    <BankInfo {...props} />
                 </TabPane>
                 <TabPane tab="证照信息" key="3">
-                    <LicenseInfo />
+                    <LicenseInfo {...props} />
                 </TabPane>
                 {
                     type === 'place' &&
                     <TabPane tab="供应商地点信息" key="4">
-                        <SupplierSpace />
+                        <SupplierSpace {...props} />
                     </TabPane>
                 }
                 {
                     type === 'add' &&
                     <TabPane tab="供应商地点信息" key="4">
-                        <LocationInfoManagement />
+                        <LocationInfoManagement {...props} />
                     </TabPane>
                 }
             </Tabs>

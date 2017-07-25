@@ -7,7 +7,11 @@
 import Promise from 'bluebird';
 import ActionType from './ActionType';
 
-import { insertSupplierSettlementInfo, findAuditFailedReason } from '../service';
+import {
+    insertSupplierSettlementInfo,
+    findAuditFailedReason,
+    queryAllLargerRegionProvince
+} from '../service';
 
 const receiveData = (data) => ({
     type: ActionType.ADD_SUPPLIER_MESSAGE,
@@ -48,4 +52,25 @@ export const findFailedReason = (data) => dispatch => (
             );
         })
         .catch(err => Promise.reject(err))
+)
+
+/**
+ * 获取所有大区
+ */
+const receiveLargerRegion = (data) => ({
+    type: ActionType.RECEIVE_LARGER_REGIN,
+    payload: data,
+})
+
+export const getLargerRegion = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryAllLargerRegionProvince(params)
+            .then(res => {
+                dispatch(
+                    receiveLargerRegion(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
 )
