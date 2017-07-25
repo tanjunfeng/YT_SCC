@@ -11,7 +11,8 @@ import { Button, Input, Form, Select, DatePicker, message } from 'antd';
 import Utils from '../../../util/util';
 import {
     supplierTypeOptions,
-    supplierStatusOptions,
+    firstSupplierStatusOptions,
+    secondSupplierStatusOptions,
     supplierLevelOptions,
     supplierPlaceLevelOptions
 } from '../../../constant/searchParams';
@@ -189,6 +190,9 @@ class SearchForm extends Component {
         const { supplierType } = this.state;
         const supplierTypeItems =
         supplierType > 0 ? supplierPlaceLevelOptions : supplierLevelOptions;
+        const supplierStatusOptionss =
+        this.props.isSuplierInputList ? secondSupplierStatusOptions
+        : firstSupplierStatusOptions;
         return (
             <div className="manage-form">
                 <Form layout="inline">
@@ -196,7 +200,7 @@ class SearchForm extends Component {
                     <FormItem className="sc-form-item">
                         <div>
                             <span className="sc-form-item-label">供应商编码</span>
-                            {getFieldDecorator('supplierNumber')(
+                            {getFieldDecorator('providerNo')(
                                 <Input
                                     className="sc-form-item-input"
                                     placeholder="供应商编码"
@@ -208,7 +212,7 @@ class SearchForm extends Component {
                     <FormItem className="sc-form-item">
                         <div>
                             <span className="sc-form-item-label">供应商名称</span>
-                            {getFieldDecorator('supplierName')(
+                            {getFieldDecorator('providerName')(
                                 <Input
                                     className="sc-form-item-input"
                                     placeholder="供应商名称"
@@ -220,7 +224,7 @@ class SearchForm extends Component {
                     <FormItem className="sc-form-item">
                         <div>
                             <span className="sc-form-item-label">供应商营业执照号</span>
-                            {getFieldDecorator('supplierLicense')(
+                            {getFieldDecorator('registLicenceNumber')(
                                 <Input
                                     className="sc-form-item-input-license sc-form-item-input"
                                     placeholder="供应商营业执照号"
@@ -232,7 +236,7 @@ class SearchForm extends Component {
                     <FormItem className="sc-form-item">
                         <div>
                             <span className="sc-form-item-label">供应商类型</span>
-                            {getFieldDecorator('supplierType', {
+                            {getFieldDecorator('providerType', {
                                 initialValue: supplierTypeOptions.defaultValue
                             })(
                                 <Select
@@ -254,15 +258,15 @@ class SearchForm extends Component {
                     {/* 供应商状态 */}
                     <FormItem className="sc-form-item">
                         <span className="sc-form-item-label">供应商状态</span>
-                        {getFieldDecorator('supplierState', {
-                            initialValue: supplierStatusOptions.defaultValue
+                        {getFieldDecorator('status', {
+                            initialValue: supplierStatusOptionss.defaultValue
                         })(
                             <Select
                                 className="sc-form-item-select"
                                 size="default"
                             >
                                 {
-                                    supplierStatusOptions.data.map((item) =>
+                                    supplierStatusOptionss.data.map((item) =>
                                         (<Option key={item.key} value={item.key}>
                                             {item.value}
                                         </Option>)
@@ -274,7 +278,7 @@ class SearchForm extends Component {
                     {/* 供应商等级 */}
                     <FormItem className="sc-form-item">
                         <span className="sc-form-item-label">供应商等级</span>
-                        {getFieldDecorator('supplierLevel', {
+                        {getFieldDecorator('grade', {
                             initialValue: supplierTypeItems.defaultValue
                         })(
                             <Select
@@ -351,6 +355,7 @@ SearchForm.propTypes = {
     onExcel: PropTypes.func,
     onInput: PropTypes.func,
     isSuplierAddMenu: PropTypes.bool,
+    isSuplierInputList: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
 };
 

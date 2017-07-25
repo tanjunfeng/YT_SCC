@@ -14,6 +14,8 @@ import { Link } from 'react-router-dom';
 import { Table, Form, Icon, Menu, Dropdown, message } from 'antd';
 
 import {
+    fetchProviderEnterList,
+    fetchQueryManageList,
     fetchSupplierList,
     modifyInformationVisible,
     modifySupplierFrozen,
@@ -25,6 +27,8 @@ import { supplierInputList } from '../../../constant/formColumns';
 import Utils from '../../../util/util';
 import { exportSupplierList } from '../../../service';
 import ChangeMessage from './changeMessage';
+import ChangeAudit from './changeAudit';
+import CheckReason from './checkReason';
 
 const columns = supplierInputList;
 
@@ -32,8 +36,11 @@ const columns = supplierInputList;
     state => ({
         supplier: state.toJS().supplier.data,
         informationVisible: state.toJS().supplier.informationVisible,
+        queryManageList: state.toJS().supplier.queryManageList,
     }),
     dispatch => bindActionCreators({
+        fetchProviderEnterList,
+        fetchQueryManageList,
         fetchSupplierList,
         modifyInformationVisible,
         modifySupplierFrozen,
@@ -61,12 +68,16 @@ class SupplierInputList extends PureComponent {
         }
     }
 
+    /**
+     * 加载刷新列表
+     */
     componentDidMount() {
-        this.props.fetchSupplierList({
-            pageSize: PAGE_SIZE,
+        this.props.fetchProviderEnterList({
             pageNum: this.current,
+            pageSize: PAGE_SIZE,
             ...this.searchForm
-        });
+        })
+        this.props.fetchQueryManageList();
     }
 
     handleSelect(record, index, items) {
@@ -104,7 +115,6 @@ class SupplierInputList extends PureComponent {
      */
     handleFormReset() {
         this.searchForm = {};
-        this.handlePaginationChange();
     }
 
     /**
@@ -131,7 +141,7 @@ class SupplierInputList extends PureComponent {
      * 数据列表查询
      */
     handleGetList() {
-        this.props.fetchSupplierList({
+        this.props.fetchQueryManageList({
             pageSize: PAGE_SIZE,
             pageNum: this.current,
             ...this.searchForm
@@ -145,7 +155,7 @@ class SupplierInputList extends PureComponent {
      */
     handlePaginationChange(goto = 1) {
         this.current = goto;
-        this.props.fetchSupplierList({
+        this.props.fetchQueryManageList({
             pageSize: PAGE_SIZE,
             pageNum: goto,
             ...this.searchForm
@@ -162,21 +172,14 @@ class SupplierInputList extends PureComponent {
      * return 列表页操作下拉菜单
      */
     renderOperation(text, record, index) {
-        const { status, id } = record;
+        const { status, id, providerType } = record;
         const { pathname } = this.props.location;
 
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/${id}`}>供应商详情</Link>
+                    <Link to={`${pathname}/supplier/${id}`}>供应商详情</Link>
                 </Menu.Item>
-                {
-                    <Menu.Item key="audit">
-                        <a target="_blank" rel="noopener noreferrer">
-                            查看供应商详情
-                        </a>
-                    </Menu.Item>
-                }
                 {
                     <Menu.Item key="modifySupInfor">
                         <a target="_blank" rel="noopener noreferrer">
@@ -197,15 +200,8 @@ class SupplierInputList extends PureComponent {
         const menu1 = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="AddDetail">
-                    <Link to={`${pathname}/${id}`}>供应商地点详情</Link>
+                    <Link to={`${pathname}/place/${id}`}>供应商地点详情</Link>
                 </Menu.Item>
-                {
-                    <Menu.Item key="auditAdd">
-                        <a target="_blank" rel="noopener noreferrer">
-                            查看供应商地点详情
-                        </a>
-                    </Menu.Item>
-                }
                 {
                     <Menu.Item key="modifySupAddInfor">
                         <a target="_blank" rel="noopener noreferrer">
@@ -225,7 +221,7 @@ class SupplierInputList extends PureComponent {
 
         return (
             <Dropdown
-                overlay={status === 6 ? menu : menu1}
+                overlay={providerType === 1 ? menu : menu1}
                 placement="bottomCenter"
             >
                 <a className="ant-dropdown-link">
@@ -236,13 +232,14 @@ class SupplierInputList extends PureComponent {
     }
 
     render() {
-        columns[columns.length - 1].render = this.renderOperation;
         const { data, total, pageNum, pageSize } = this.props.supplier;
-
+        const { queryManageList } = this.props;
+        columns[columns.length - 1].render = this.renderOperation;
         return (
             <div className="manage">
                 <SearchForm
                     isSuplierAddMenu
+                    isSuplierInputList
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
                     onInput={this.handleInputSupplier}
@@ -251,7 +248,7 @@ class SupplierInputList extends PureComponent {
                 <Form>
                     <div className="manage-list">
                         <Table
-                            dataSource={data}
+                            dataSource={queryManageList.data}
                             columns={columns}
                             rowKey="id"
                             scroll={{ x: 1300 }}
@@ -266,17 +263,20 @@ class SupplierInputList extends PureComponent {
                     </div>
                     {
                         this.props.informationVisible &&
-                        <ChangeMessage
-                            getList={this.handleGetList}
-                        />
+                        <ChangeMessage getList={this.handleGetList} />
                     }
                 </Form>
+                <ChangeAudit />
+                <CheckReason />
             </div>
         )
     }
 }
 
 SupplierInputList.propTypes = {
+    fetchProviderEnterList: PropTypes.objectOf(PropTypes.any),
+    queryManageList: PropTypes.objectOf(PropTypes.any),
+    fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
     fetchSupplierList: PropTypes.func,
     history: PropTypes.objectOf(PropTypes.any),
     supplier: PropTypes.objectOf(PropTypes.any),

@@ -68,7 +68,7 @@ class ProcurementMaintenance extends PureComponent {
      */
     componentDidMount() {
         this.props.fecthGetProdPurchaseById({
-            id: 2,
+            productId: 'xpro12333'
         });
     }
 

@@ -45,6 +45,7 @@ import fetchQueryProdPurchase from './fetch/fetchQueryProdPurchase';
 import fetchChangeSupType from './fetch/fetchChangeSupType'
 
 import fetchQuerySettledList from './fetch/fetchQuerySettledList';
+import fetchQueryManageList from './fetch/fetchQueryManageList';
 
 export {
     fetchSupplierList,
@@ -87,4 +88,5 @@ export {
     fetchChangeSupType,
 
     fetchQuerySettledList,
+    fetchQueryManageList,
 }

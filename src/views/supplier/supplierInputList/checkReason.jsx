@@ -89,10 +89,9 @@ class CheckReason extends PureComponent {
 
     render() {
         const {
-            providerName,
+            companyName,
             name,
         } = this.props.visibleData;
-        console.log(this.props.visibleData)
 
         const columns = [{
             title: '项目',
@@ -123,8 +122,8 @@ class CheckReason extends PureComponent {
         const data = [{
             key: '1',
             name: '公司所在地',
-            before: providerName,
-            after: providerName,
+            before: companyName,
+            after: companyName,
         }, {
             key: '2',
             name: '详细地址',

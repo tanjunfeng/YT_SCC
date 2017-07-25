@@ -43,7 +43,10 @@ http.response(
 export const exportSupplierList = 'provider/exportSupplierList';
 
 // 下载供应商入驻列表
-export const exportSupplierEnterList = 'provider/exportSupplierEnterList';
+// export const exportSupplierEnterList = 'provider/exportSupplierEnterList';
+
+// 下载供应商入驻列表
+export const exportSupplierEnterList = '/supplier/exportSettledList';
 
 // 下载供应商修改列表
 export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
@@ -109,6 +112,9 @@ export const fetchSupplierEditApply = (params) => http.get('/provider/supplierEd
 
 // 供应商申请入驻管理
 export const fetchProviderEnter = (params) => http.get('/region/queryAllLargerRegionProvince', params);
+
+// 供应商管理列表(改)
+export const fetchQueryManageList = (params) => http.get('/supplier/queryManageList', params);
 
 // 供应商入驻列表(改)
 export const querySettledList = (params) => http.get('/supplier/querySettledList', params);
@@ -415,7 +421,7 @@ export const insertDictionary = (params) => http.post('/dictionary/insertDiction
 export const checkMainSupplier = (params) => http.get('/prodPurchase/checkMainSupplier', params);
 
 // 查询商品价格信息
-export const getProdPurchaseById = (params) => http.get('/prodPurchase/getProdPurchaseById', params);
+export const getProdPurchaseById = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
 
 // 销售价格信息
 export const findPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);

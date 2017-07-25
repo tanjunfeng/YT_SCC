@@ -143,7 +143,7 @@ startApp({
                     },
                     {
                         code: "supplierInputList",
-                        name: "供应商录入管理"
+                        name: "供应商管理列表"
                     },
                 ]
             },
