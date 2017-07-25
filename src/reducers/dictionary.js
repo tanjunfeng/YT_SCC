@@ -23,7 +23,7 @@ const initState = Immutable.fromJS({
     dictionaryData: {},
 
     // 查询显示字典维护内容列表
-    contentlistData: {},
+    contentlistData: [],
 });
 
 export default function (state = initState, action) {
@@ -42,10 +42,12 @@ export default function (state = initState, action) {
         }
         // 维护字典内容
         case ActionType.MAINTENANCE_DICTIONARY_VISIBLE: {
-            const { isVisible, id } = action.payload;
+            const { isVisible, id, dictionary, remark } = action.payload;
             return state
                 .set('maintenanceVisible', isVisible)
                 .set('id', id)
+                .set('dictionary', dictionary)
+                .set('remark', remark)
                 ;
         }
         default:

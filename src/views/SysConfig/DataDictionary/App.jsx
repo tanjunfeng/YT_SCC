@@ -76,8 +76,8 @@ class DataDictionary extends PureComponent {
             onCancel() { },
         })
     }
-    handleMaintain(id) {
-        this.props.DicContentListVisible({ isVisible: true, id });
+    handleMaintain(id, dictionary, remark) {
+        this.props.DicContentListVisible({ isVisible: true, id, dictionary, remark });
     }
     handleSelect(record, index, item) {
         const { key } = item;
@@ -95,7 +95,7 @@ class DataDictionary extends PureComponent {
     }
 
     renderOperation(text, record, index) {
-        const { id } = record;
+        const { id, dictionary, remark } = record;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(index, record, item)}>
                 <Menu.Item key="modify">
@@ -105,7 +105,7 @@ class DataDictionary extends PureComponent {
                     <a rel="noopener noreferrer" onClick={() => this.handleDelete(id)}>删除</a>
                 </Menu.Item>
                 <Menu.Item key={id}>
-                    <a rel="noopener noreferrer" onClick={() => this.handleMaintain(id)}>维护字典内容</a>
+                    <a rel="noopener noreferrer" onClick={() => this.handleMaintain(id, dictionary, remark)}>维护字典内容</a>
                 </Menu.Item>
             </Menu>
         );

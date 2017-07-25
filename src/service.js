@@ -412,4 +412,6 @@ export const updateDictionary = (params) => http.post('/dictionary/updateDiction
 // 删除数据字典
 export const deleteDictionary = (params) => http.get('/dictionary/deleteDictionary', params);
 
+// 修改字典内容或设置状态
+export const updateContent = (params) => http.post('/dictionary/updateContent', params);
 
