@@ -199,13 +199,23 @@ startApp({
                 ]
             },
             {
+                code: 'ordergl',
+                name: '订单管理',
+                submenu: [
+                    {
+                        code: 'orderList',
+                        name: '订单管理列表',
+                    },
+                ]
+            },
+            {
                 code: "kctz",
                 name: "库存调整",
                 submenu: [
                     {
                         code: "kctzlb",
                         name: "库存调整列表",
-                    },
+                    }
                 ]
             }
         ]
