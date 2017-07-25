@@ -1,4 +1,4 @@
-import deepmerge from 'deepmerge';
+// import deepmerge from 'deepmerge';
 
 class Tools {
     static checkAddress(data, name, that) {
@@ -22,7 +22,7 @@ class Tools {
         for (let i = 0; i < datas.length; i++) {
             
             const parseResult = this.parseItem(datas[i]);
-            this.areaData = deepmerge(this.areaData, parseResult);
+            // this.areaData = deepmerge(this.areaData, parseResult);
             // this.areaData.push(parseResult);
         }
         console.log(this.areaData)
