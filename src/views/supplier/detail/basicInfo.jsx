@@ -32,8 +32,13 @@ class BasicInfo extends Component {
         super(props);
     }
 
+    ComponentDidMount() {
+        // const { orderNumber } = this.props.match.params;
+    }
+
     render() {
         const { initValue = {} } = this.props;
+        // const { orderNumber } = this.props.match.params;
         return (
             <div className="supplier-detail">
                 <div className="supplier-detail-item">
@@ -68,7 +73,7 @@ class BasicInfo extends Component {
                             <Table
                                 dataSource={list}
                                 columns={columns}
-                                rowKey="id"
+                                rowKey="province"
                                 title={() => '深圳市豪利门业实业有限公司'}
                                 pagination={false}
                                 className="area-detail"
@@ -83,6 +88,7 @@ class BasicInfo extends Component {
 }
 
 BasicInfo.propTypes = {
+    match: PropTypes.objectOf(PropTypes.any),
     initValue: PropTypes.objectOf(PropTypes.any),
 };
 

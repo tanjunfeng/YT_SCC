@@ -17,11 +17,13 @@ import {
     Table,
     Menu,
     Dropdown,
+    message
 } from 'antd';
 
 import {
     fetchProviderEnterList,
     fetchQuerySettledList,
+    fetchQueryManageList,
     modifyAuditVisible,
     modifyCheckReasonVisible
 } from '../../../actions';
@@ -33,8 +35,8 @@ import { exportSupplierEnterList } from '../../../service';
 import ChangeAudit from './changeAudit';
 import CheckReason from './checkReason';
 
-const columns = suppliersAppList;
 
+const columns = suppliersAppList;
 
 @connect(
     state => ({
@@ -48,6 +50,7 @@ const columns = suppliersAppList;
         fetchQuerySettledList,
         fetchProviderEnterList,
         modifyAuditVisible,
+        fetchQueryManageList,
         modifyCheckReasonVisible
     }, dispatch)
 )
@@ -60,6 +63,7 @@ class SuppliersAppList extends PureComponent {
         this.handleFormReset = this.handleFormReset.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
         this.handleDownLoad = this.handleDownLoad.bind(this);
+        this.handleInputSupplier = this.handleInputSupplier.bind(this);
         // this.handleGetList = this.handleGetList.bind(this);
 
         this.searchForm = {};
@@ -70,6 +74,11 @@ class SuppliersAppList extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
+        this.props.fetchProviderEnterList({
+            pageNum: this.current,
+            pageSize: PAGE_SIZE,
+            ...this.searchForm
+        })
         this.props.fetchQuerySettledList();
     }
 
@@ -83,7 +92,7 @@ class SuppliersAppList extends PureComponent {
     handleSelect(record, index, item) {
         const { key } = item;
         switch (key) {
-            case 'changeAudit':
+            case 'ChangeAudit':
                 this.props.modifyAuditVisible({isVisible: true, record});
                 break;
             case 'CheckReason':
@@ -102,11 +111,11 @@ class SuppliersAppList extends PureComponent {
         if (bool) {
             // 主数据
             // console.log('主数据')
-            this.handlePaginationChange();
+            this.props.fetchQueryManageList();
         } else {
             // SCM数据
             // console.log('SCM数据')
-            this.handlePaginationChange();
+            this.props.fetchQueryManageList();
         }
     }
 
@@ -116,6 +125,17 @@ class SuppliersAppList extends PureComponent {
     handleFormReset(data) {
         this.searchForm = data;
         this.handlePaginationChange();
+    }
+
+    /**
+     * 创建
+     *
+     * @param {string} data 'addSupplier':供应商类型为供应商；否则为供应商地点，data为供应商编码
+     */
+    handleInputSupplier(data) {
+        message.success(data)
+        const { history } = this.props;
+        history.push('/applicationList/add');
     }
 
     /**
@@ -140,24 +160,42 @@ class SuppliersAppList extends PureComponent {
     }
 
     renderOperation(text, record, index) {
-        const { status, id } = record;
+        const { status, id, providerType } = record;
         const { pathname } = this.props.location;
-
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
-                <Menu.Item key="detail">
-                    <Link to={`${pathname}/${id}`}>供应商详情</Link>
-                </Menu.Item>
                 {
-                    status === 1 &&
-                    <Menu.Item key="changeAudit">
-                        <a target="_blank" rel="noopener noreferrer">入驻审核</a>
+                    providerType === 1 ?
+                        <Menu.Item key="detail">
+                            <Link to={`${pathname}/${id}`}>供应商详情</Link>
+                        </Menu.Item>
+                        :
+                        <Menu.Item key="AddDetail">
+                            <Link to={`${pathname}/${id}`}>供应商地点详情</Link>
+                        </Menu.Item>
+                }
+                {
+                    providerType === 1 && status === 4 &&
+                    <Menu.Item key="addAddress">
+                        <Link to={`${pathname}/add`}>新增供应商地点信息</Link>
                     </Menu.Item>
                 }
                 {
-                    status === 0 &&
+                    providerType === 1 ?
+                        <Menu.Item key="modifySupInfor">
+                            <Link to={`${pathname}/edit/${id}`}>修改供应商信息</Link>
+                        </Menu.Item>
+                        :
+                        <Menu.Item key="modifySupAddInfor">
+                            <Link to={`${pathname}/place/:type/${id}`}>
+                                修改供应商地点信息
+                            </Link>
+                        </Menu.Item>
+                }
+                {
+                    status === 3 &&
                     <Menu.Item key="CheckReason">
-                        <a target="_blank" rel="noopener noreferrer">修改审核</a>
+                        <a target="_blank" rel="noopener noreferrer">查看原因</a>
                     </Menu.Item>
                 }
             </Menu>
@@ -178,7 +216,9 @@ class SuppliersAppList extends PureComponent {
         return (
             <div className="application tjf-css-min-width">
                 <SearchForm
+                    isSuplierAddMenu
                     onSearch={this.handleFormSearch}
+                    onInput={this.handleInputSupplier}
                     onReset={this.handleFormReset}
                     onExcel={this.handleDownLoad}
                 />
@@ -195,21 +235,17 @@ class SuppliersAppList extends PureComponent {
                             onChange: this.handlePaginationChange
                         }}
                     />
-                </div>
-                {
-                    this.props.auditVisible &&
                     <ChangeAudit />
-                }
-                {
-                    this.props.checkResonVisible &&
                     <CheckReason />
-                }
+                </div>
             </div>
         );
     }
 }
 
 SuppliersAppList.propTypes = {
+    fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
+    querySettledList: PropTypes.objectOf(PropTypes.any),
     fetchQuerySettledList: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     fetchProviderEnterList: PropTypes.bool,

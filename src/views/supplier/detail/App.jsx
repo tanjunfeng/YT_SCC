@@ -80,6 +80,8 @@ class SupplierDetail extends PureComponent {
             getDtail: this.handleGetDetail,
             ...this.props
         }
+        const { id } = this.props.match.params;
+        // console.log(this.props.match)
         return (
             <Tabs
                 defaultActiveKey="1"
@@ -89,7 +91,7 @@ class SupplierDetail extends PureComponent {
                 style={{marginTop: '16px'}}
             >
                 <TabPane tab="基本信息" key="1">
-                    <BasicInfo />
+                    <BasicInfo id={id} />
                 </TabPane>
                 <TabPane tab="银行信息" key="2">
                     <BankInfo />

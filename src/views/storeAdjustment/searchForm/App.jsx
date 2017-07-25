@@ -186,6 +186,9 @@ class SearchForm extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
+        const supplierStatusOptionss =
+        this.props.isSuplierInputList ? secondSupplierStatusOptions
+        : firstSupplierStatusOptions;
         return (
             <div className="manage-form">
                 <Form layout="inline">
@@ -312,14 +315,14 @@ class SearchForm extends Component {
                     <FormItem className="sc-form-item">
                         <span className="sc-form-item-label">供应商状态</span>
                         {getFieldDecorator('supplierState', {
-                            initialValue: supplierStatusOptions.defaultValue
+                            initialValue: supplierStatusOptionss.defaultValue
                         })(
                             <Select
                                 className="sc-form-item-select"
                                 size="default"
                             >
                                 {
-                                    supplierStatusOptions.data.map((item) =>
+                                    supplierStatusOptionss.data.map((item) =>
                                         (<Option key={item.key} value={item.key}>
                                             {item.value}
                                         </Option>)

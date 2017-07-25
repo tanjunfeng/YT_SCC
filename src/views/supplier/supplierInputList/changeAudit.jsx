@@ -1,49 +1,45 @@
 /**
- * @file checkReason.jsx
+ * @file changeAudit.jsx
  * @author Tan junfeng
  *
  * 供应商入驻申请列表
  */
 
 import React, { PureComponent } from 'react';
-import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import {
     Form,
     Input,
     Select,
     Modal,
-    message,
-    Table,
-    Icon
+    message
 } from 'antd';
 
-import {
-    modifyCheckReasonVisible,
-    insertSupplierSettlementInfo
-} from '../../../actions';
+import { modifyAuditVisible, insertSupplierSettlementInfo } from '../../../actions';
+// import { validatorRebate } from '../../../util/validator';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 @connect(
     state => ({
-        checkResonVisible: state.toJS().supplier.checkResonVisible,
-        visibleData: state.toJS().supplier.visibleData,
+        auditVisible: state.toJS().supplier.auditVisible,
+        visibleData: state.toJS().supplier.visibleData
     }),
     dispatch => bindActionCreators({
-        modifyCheckReasonVisible,
+        modifyAuditVisible,
         insertSupplierSettlementInfo
     }, dispatch)
 )
-class CheckReason extends PureComponent {
+class ChangeAudit extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.handleCheckOk = ::this.handleCheckOk;
-        this.handleCheckCancel = ::this.handleCheckCancel;
+        this.handleAuditCancel = ::this.handleAuditCancel;
+        this.handleAuditOk = ::this.handleAuditOk;
         this.handleSelectChange = ::this.handleSelectChange;
         this.handleTextChange = ::this.handleTextChange;
     }
@@ -52,12 +48,11 @@ class CheckReason extends PureComponent {
         selected: -1
     }
 
-
-    handleCheckCancel() {
-        this.props.modifyCheckReasonVisible(false);
+    handleAuditCancel() {
+        this.props.modifyAuditVisible({isVisible: false});
     }
 
-    handleCheckOk() {
+    handleAuditOk() {
         const { selected } = this.state;
         const { visibleData } = this.props;
         if (selected === -1) {
@@ -88,77 +83,19 @@ class CheckReason extends PureComponent {
     }
 
     render() {
-        const {
-            providerName,
-            name,
-        } = this.props.visibleData;
-        console.log(this.props.visibleData)
-
-        const columns = [{
-            title: '项目',
-            dataIndex: 'name',
-        }, {
-            title: '修改前',
-            dataIndex: 'before',
-            render: (text, row, index) => {
-                if (index > 1) {
-                    return <a href="#"><Icon type="picture" />{text}</a>;
-                }
-                return {
-                    children: text,
-                };
-            },
-        }, {
-            title: '修改后',
-            dataIndex: 'after',
-            render: (text, row, index) => {
-                if (index > 1) {
-                    return <a href="#"><Icon type="picture" />{text}</a>;
-                }
-                return {
-                    children: text,
-                };
-            },
-        }];
-        const data = [{
-            key: '1',
-            name: '公司所在地',
-            before: providerName,
-            after: providerName,
-        }, {
-            key: '2',
-            name: '详细地址',
-            before: name,
-            after: name,
-        }, {
-            key: '3',
-            name: '税务登记证电子版',
-            before: '查看',
-            after: '查看',
-        }];
         const { getFieldDecorator } = this.props.form;
 
         return (
             <Modal
-                title="供应商修改资料审核"
-                visible={this.props.checkResonVisible}
-                onOk={this.handleCheckOk}
-                onCancel={this.handleCheckCancel}
-                maskClosable={false}
+                title="商家入住审核"
+                visible={this.props.auditVisible}
+                onOk={this.handleAuditOk}
+                onCancel={this.handleAuditCancel}
             >
-                <span>修改资料详情</span>
-                <Table
-                    columns={columns}
-                    dataSource={data}
-                    pagination={false}
-                    size="small"
-                />
                 <div>
-                    <div className="application-modal-tip">
-                        注意：审核通过，供应商的所有账号可正常登录商家后台系统。
-                    </div>
+                    <div className="application-modal-tip">注意：审核通过，供应商的所有账号可正常登录商家后台系统。</div>
                     {
-                        this.props.modifyCheckReasonVisible &&
+                        this.props.auditVisible &&
                         <div className="application-modal-select">
                             <span className="application-modal-label">审核：</span>
                             <Select
@@ -173,10 +110,10 @@ class CheckReason extends PureComponent {
                         </div>
                     }
                     {
-                        this.props.modifyCheckReasonVisible && this.state.selected === '1' &&
+                        this.props.auditVisible && this.state.selected === '1' &&
                         <Form layout="inline">
                             <FormItem className="application-form-item">
-                                <span className="application-modal-label">*不通过原因：</span>
+                                <span className="application-modal-label"><b className="tjf-css-import">*</b>不通过原因：</span>
                                 {getFieldDecorator('failedReason', {
                                     rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
                                 })(
@@ -191,19 +128,25 @@ class CheckReason extends PureComponent {
                             </FormItem>
                         </Form>
                     }
+                    {
+                        this.props.auditVisible && this.state.selected === '2' &&
+                        <div className="tjf-css-passCheck">
+                            <span>确认通过审核？</span>
+                        </div>
+                    }
                 </div>
             </Modal>
         );
     }
 }
 
-CheckReason.propTypes = {
-    modifyCheckReasonVisible: PropTypes.bool,
-    checkResonVisible: PropTypes.bool,
+ChangeAudit.propTypes = {
+    modifyAuditVisible: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
+    auditVisible: PropTypes.bool,
+    insertSupplierSettlementInfo: PropTypes.func,
     visibleData: PropTypes.objectOf(PropTypes.any),
-    insertSupplierSettlementInfo: PropTypes.objectOf(PropTypes.any),
     getList: PropTypes.objectOf(PropTypes.any),
 }
 
-export default withRouter(Form.create()(CheckReason));
+export default withRouter(Form.create()(ChangeAudit));

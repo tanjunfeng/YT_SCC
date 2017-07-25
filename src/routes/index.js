@@ -354,8 +354,15 @@ const routes = [
                             render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/SuppliersAppList/:id"
+                            path="/SuppliersAppList/:type/:id"
                             render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/SuppliersAppList/place/:type/:id"
+                            exact
+                            render={() => (<Bundle load={SupplierDetail}>
+                                {(App) => <App />}
+                            </Bundle>)}
                         />
                     </Switch>
                 )
@@ -397,7 +404,7 @@ const routes = [
                     />
                 )
             },
-            // 供应商录入管理
+            // 供应商管理列表
             {
                 path: '/supplierInputList',
                 parent: 'gysgl',

@@ -11,7 +11,7 @@ import { Form, Card, Checkbox, Modal } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PAGE_SIZE } from '../../../constant';
-import { fetchChangeSupType } from '../../../actions';
+import { fecthGetProdPurchaseById } from '../../../actions';
 
 @connect(
     state => ({
@@ -20,6 +20,7 @@ import { fetchChangeSupType } from '../../../actions';
         queryProdPurchases: state.toJS().commodity.queryProdPurchase,
     }),
     dispatch => bindActionCreators({
+        fecthGetProdPurchaseById
     }, dispatch)
 )
 class Cardline extends Component {
@@ -39,6 +40,9 @@ class Cardline extends Component {
     }
 
     componentDidUpdate() {
+        this.props.fecthGetProdPurchaseById({
+            productId: 'xpro12333'
+        });
     }
 
     /**
