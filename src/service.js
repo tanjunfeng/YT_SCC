@@ -155,9 +155,6 @@ export const settledCont = (params) => http.get('/provider/checkSupplierSettledC
 // 查看失败原因
 export const findAuditFailedReason = (params) => http.get('/provider/findAuditFailedReason', params);
 
-// 获取供应商详情
-export const queryProviderDetail = (params) => http.get('/provider/queryProviderDetail', params);
-
 // 修改供应商营业执照信息 (未联调)
 export const updateSupplierLicenseInfo = (params) => http.post('/provider/updateSupplierLicenseInfo', params);
 
@@ -457,3 +454,15 @@ export const fetchMaterialByCd = (params) => http.get('/provider/queryMaterialBy
 export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
 // 查询采购单打印列表
 export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
+
+/**
+ * 供应商相关
+ */
+// 供应商详情
+export const queryProviderDetail = (params) => http.get('/supplier/queryProviderDetail', params);
+// 查询所有大区
+export const queryAllLargerRegionProvince = (params) => http.get('/region/queryAllLargerRegionProvince', params);
+// 获取供应商或者供应商地点信息
+export const getSupplierNo = (params) => http.get('/supplier/getSupplierNo', params);
+// 新增或修改供应商信息
+export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/insertOrUpdateSupplierInfo', params);

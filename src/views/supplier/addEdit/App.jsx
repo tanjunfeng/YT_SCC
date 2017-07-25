@@ -11,7 +11,7 @@ import { withRouter } from 'react-router';
 import { Tabs } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { getSupplierDetail } from '../../../actions/supplier';
+import { getSupplierDetail, fetchSupplierNo } from '../../../actions/supplier';
 
 import BasicInfo from './basicInfo';
 import BankInfo from './bankInfo';
@@ -22,10 +22,12 @@ const TabPane = Tabs.TabPane;
 
 @connect(
     state => ({
-        detailData: state.toJS().supplier.detailData
+        detailData: state.toJS().supplier.detailData,
+        supplierId: state.toJS().supplier.supplierId
     }),
     dispatch => bindActionCreators({
-        getSupplierDetail
+        getSupplierDetail,
+        fetchSupplierNo
     }, dispatch)
 )
 class AddSupplier extends PureComponent {
@@ -41,6 +43,7 @@ class AddSupplier extends PureComponent {
 
     componentDidMount() {
         const { detailData, match } = this.props;
+        this.props.fetchSupplierNo({type: 'SP'})
         if (!detailData.id && match.params.id) {
             this.props.getSupplierDetail({spId: match.params.id}).then(() => {
                 this.setState({

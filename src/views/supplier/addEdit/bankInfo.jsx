@@ -19,9 +19,6 @@ import { addSupplierMessage1 } from '../../../actions/addSupplier';
 import InlineTree from '../../../components/inlineTree';
 import Tools from './utils';
 
-// mock
-import queryAllLargerRegionProvince from '../../../../mock/queryAllLargerRegionProvince';
-
 const dateFormat = 'YYYY-MM-DD';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -181,8 +178,9 @@ class BankInfo extends PureComponent {
                                     <Col span={8}>
                                         <span>供应商发票抬头：</span>
                                         <FormItem>
-                                            {getFieldDecorator('taitou', {
+                                            {getFieldDecorator('invoiceHead', {
                                                 rules: [{required: true, message: '请选择供应商发票抬头'}],
+                                                initialValue: supplierBankInfo.invoiceHead
                                             })(
                                                 <Input
                                                     placeholder="供应商发票抬头"
@@ -204,7 +202,7 @@ class BankInfo extends PureComponent {
                                         <FormItem>
                                             {getFieldDecorator('openBank', {
                                                 rules: [{ required: true, message: '请输入开户行!' }],
-                                                initialValue: supplierBasicInfo.spNo
+                                                initialValue: supplierBankInfo.openBank
                                             })(
                                                 <Input
                                                     placeholder="供应商开户行"
@@ -221,7 +219,7 @@ class BankInfo extends PureComponent {
                                         <FormItem>
                                             {getFieldDecorator('bankAccount', {
                                                 rules: [{ required: true, message: '请输入银行账号!' }],
-                                                initialValue: supplierBasicInfo.companyName
+                                                initialValue: supplierBankInfo.bankAccount
                                             })(
                                                 <Input
                                                     placeholder="银行账号"

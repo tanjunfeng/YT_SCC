@@ -29,7 +29,6 @@ const initState = fromJS({
 });
 
 export default function (state = initState, action) {
-    console.log("state", state);
     switch (action.type) {
         case ActionType.RECEIVE_PO_MNG_LIST://查询采购单
             return state.set('poList', fromJS(action.payload));
