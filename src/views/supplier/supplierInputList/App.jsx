@@ -17,9 +17,8 @@ import {
     fetchProviderEnterList,
     fetchQueryManageList,
     fetchSupplierList,
+    modifyAuditVisible,
     modifyInformationVisible,
-    modifySupplierFrozen,
-    modifyCollaboration
 } from '../../../actions';
 import SearchForm from '../searchForm';
 import { PAGE_SIZE } from '../../../constant';
@@ -43,8 +42,7 @@ const columns = supplierInputList;
         fetchQueryManageList,
         fetchSupplierList,
         modifyInformationVisible,
-        modifySupplierFrozen,
-        modifyCollaboration
+        modifyAuditVisible,
     }, dispatch)
 )
 class SupplierInputList extends PureComponent {
@@ -83,7 +81,10 @@ class SupplierInputList extends PureComponent {
     handleSelect(record, index, items) {
         const { key } = items;
         switch (key) {
-            case 'checkReason':
+            case 'ChangeAudit':
+                this.props.modifyAuditVisible({isVisible: true, record});
+                break;
+            case 'CheckReason':
                 this.props.modifyInformationVisible({isVisible: true, record});
                 break;
             default:
@@ -182,15 +183,22 @@ class SupplierInputList extends PureComponent {
                 </Menu.Item>
                 {
                     <Menu.Item key="modifySupInfor">
-                        <a target="_blank" rel="noopener noreferrer">
+                        <Link to={`${pathname}/edit/:type/${id}`}>
                             修改供应商信息
-                        </a>
+                        </Link>
                     </Menu.Item>
                 }
                 {
                     <Menu.Item key="addAddress">
-                        <a target="_blank" rel="noopener noreferrer">
+                        <Link to={`${pathname}/place/:type/${id}`}>
                             新增供应商地点信息
+                        </Link>
+                    </Menu.Item>
+                }
+                {
+                    <Menu.Item key="ChangeAudit">
+                        <a target="_blank" rel="noopener noreferrer">
+                            审核
                         </a>
                     </Menu.Item>
                 }
@@ -200,17 +208,17 @@ class SupplierInputList extends PureComponent {
         const menu1 = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="AddDetail">
-                    <Link to={`${pathname}/place/${id}`}>供应商地点详情</Link>
+                    <Link to={`${pathname}/place/:type/${id}`}>供应商地点详情</Link>
                 </Menu.Item>
                 {
                     <Menu.Item key="modifySupAddInfor">
-                        <a target="_blank" rel="noopener noreferrer">
+                        <Link to={`${pathname}/place/:type/${id}`}>
                             修改供应商地点信息
-                        </a>
+                        </Link>
                     </Menu.Item>
                 }
                 {
-                    <Menu.Item key="checkReason">
+                    <Menu.Item key="CheckReason">
                         <a target="_blank" rel="noopener noreferrer">
                             查看审核已拒绝原因
                         </a>
@@ -277,7 +285,7 @@ SupplierInputList.propTypes = {
     fetchProviderEnterList: PropTypes.objectOf(PropTypes.any),
     queryManageList: PropTypes.objectOf(PropTypes.any),
     fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
-    fetchSupplierList: PropTypes.func,
+    modifyAuditVisible: PropTypes.func,
     history: PropTypes.objectOf(PropTypes.any),
     supplier: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),

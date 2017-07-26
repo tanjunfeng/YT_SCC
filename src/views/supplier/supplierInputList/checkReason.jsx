@@ -32,6 +32,7 @@ const Option = Select.Option;
     state => ({
         checkResonVisible: state.toJS().supplier.checkResonVisible,
         visibleData: state.toJS().supplier.visibleData,
+        editBeforeAfter: state.toJS().supplier.editBeforeAfter,
     }),
     dispatch => bindActionCreators({
         modifyCheckReasonVisible,
@@ -90,9 +91,9 @@ class CheckReason extends PureComponent {
     render() {
         const {
             companyName,
-            name,
+            companyDetailAddress
         } = this.props.visibleData;
-
+        console.log(this.props.editBeforeAfter)
         const columns = [{
             title: '项目',
             dataIndex: 'name',
@@ -127,8 +128,8 @@ class CheckReason extends PureComponent {
         }, {
             key: '2',
             name: '详细地址',
-            before: name,
-            after: name,
+            before: companyDetailAddress,
+            after: companyDetailAddress,
         }, {
             key: '3',
             name: '税务登记证电子版',

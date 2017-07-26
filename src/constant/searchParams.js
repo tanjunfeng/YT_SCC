@@ -137,12 +137,12 @@ export const settlementAccount = {
 
 // 供应商类型
 export const supplierTypeOptions = {
-    defaultValue: '-1',
+    defaultValue: '1',
     data: [{
-        key: '-1',
+        key: '1',
         value: '供应商'
     }, {
-        key: '0',
+        key: '2',
         value: '供应商地点'
     }]
 }

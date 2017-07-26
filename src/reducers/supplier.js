@@ -38,7 +38,9 @@ const initState = fromJS({
     // 供应商入驻列表
     querySettledList: {},
     // 供应商入驻列表
-    queryManageList: {}
+    queryManageList: {},
+    // 查询供应商修改前修改后的信息
+    editBeforeAfter: {}
 
 });
 
@@ -118,6 +120,10 @@ export default function (state = initState, action) {
 
         case ActionType.QUERY_MANAGE_LIST:
             return state.set('queryManageList', fromJS(action.payload));
+
+        case ActionType.EDIT_BEFORE_AFTER: {
+            return state.set('editBeforeAfter', action.payload);
+        }
 
         default:
             return state;

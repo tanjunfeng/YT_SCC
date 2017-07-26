@@ -345,12 +345,12 @@ const routes = [
                             </Bundle>)}
                         />
                         <Route
-                            path="/SuppliersAppList/add"
+                            path="/SuppliersAppList/add/:type"
                             exact
                             render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/SuppliersAppList/edit/:id"
+                            path="/SuppliersAppList/edit/:type/:id"
                             render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
                         />
                         <Route
@@ -433,7 +433,7 @@ const routes = [
                             </Bundle>)}
                         />
                         <Route
-                            path="/supplierInputList/place/:type/:id"
+                            path="/supplierInputList/edit/:type/:id"
                             exact
                             render={() => (<Bundle load={SupplierDetail}>
                                 {(App) => <App />}
