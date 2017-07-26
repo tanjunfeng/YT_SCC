@@ -121,9 +121,9 @@ export default function (state = initState, action) {
         case ActionType.QUERY_MANAGE_LIST:
             return state.set('queryManageList', fromJS(action.payload));
 
-        case ActionType.EDIT_BEFORE_AFTER: {
+        case ActionType.EDIT_BEFORE_AFTER:
+        console.log(action.payload)
             return state.set('editBeforeAfter', action.payload);
-        }
 
         default:
             return state;

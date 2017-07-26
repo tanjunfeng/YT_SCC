@@ -170,19 +170,22 @@ export const firstSupplierStatusOptions = {
 
 // 入驻-供应商状态
 export const secondSupplierStatusOptions = {
-    defaultValue: '-1',
+    defaultValue: '0',
     data: [{
-        key: '-1',
-        value: '全部'
-    }, {
         key: '0',
-        value: '已提交'
+        value: '制单'
     }, {
         key: '1',
-        value: '已审核'
+        value: '已提交'
     }, {
         key: '2',
+        value: '已审核'
+    }, {
+        key: '3',
         value: '已拒绝'
+    }, {
+        key: '4',
+        value: '修改中'
     }]
 }
 

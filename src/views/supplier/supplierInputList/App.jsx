@@ -12,14 +12,18 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Table, Form, Icon, Menu, Dropdown, message } from 'antd';
-
 import {
     fetchProviderEnterList,
     fetchQueryManageList,
     fetchSupplierList,
     modifyAuditVisible,
+    modifyCheckReasonVisible,
     modifyInformationVisible,
+    fetchGetProductById
 } from '../../../actions';
+import {
+    getProductById
+} from '../../../actions/supplier';
 import SearchForm from '../searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { supplierInputList } from '../../../constant/formColumns';
@@ -36,13 +40,17 @@ const columns = supplierInputList;
         supplier: state.toJS().supplier.data,
         informationVisible: state.toJS().supplier.informationVisible,
         queryManageList: state.toJS().supplier.queryManageList,
+        editBeforeAfter: state.toJS().supplier.editBeforeAfter,
     }),
     dispatch => bindActionCreators({
         fetchProviderEnterList,
         fetchQueryManageList,
         fetchSupplierList,
-        modifyInformationVisible,
+        modifyCheckReasonVisible,
         modifyAuditVisible,
+        modifyInformationVisible,
+        getProductById,
+        fetchGetProductById
     }, dispatch)
 )
 class SupplierInputList extends PureComponent {
@@ -85,6 +93,9 @@ class SupplierInputList extends PureComponent {
                 this.props.modifyAuditVisible({isVisible: true, record});
                 break;
             case 'CheckReason':
+                this.props.modifyCheckReasonVisible({isVisible: true, record});
+                break;
+            case 'changeMessage':
                 this.props.modifyInformationVisible({isVisible: true, record});
                 break;
             default:
@@ -175,7 +186,6 @@ class SupplierInputList extends PureComponent {
     renderOperation(text, record, index) {
         const { status, id, providerType } = record;
         const { pathname } = this.props.location;
-
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
@@ -196,9 +206,18 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
+                    status === 1 &&
                     <Menu.Item key="ChangeAudit">
                         <a target="_blank" rel="noopener noreferrer">
-                            审核
+                            供应商审核
+                        </a>
+                    </Menu.Item>
+                }
+                {
+                    status === 1 &&
+                    <Menu.Item key="CheckReason">
+                        <a target="_blank" rel="noopener noreferrer">
+                            修改供应商审核
                         </a>
                     </Menu.Item>
                 }
@@ -218,9 +237,26 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    <Menu.Item key="CheckReason">
+                    status === 3 &&
+                    <Menu.Item key="changeMessage">
                         <a target="_blank" rel="noopener noreferrer">
                             查看审核已拒绝原因
+                        </a>
+                    </Menu.Item>
+                }
+                {
+                    status === 1 &&
+                    <Menu.Item key="ChangeAudit">
+                        <a target="_blank" rel="noopener noreferrer">
+                            供应商地点审核
+                        </a>
+                    </Menu.Item>
+                }
+                {
+                    status === 1 &&
+                    <Menu.Item key="CheckReason">
+                        <a target="_blank" rel="noopener noreferrer">
+                            修改供应商地点审核
                         </a>
                     </Menu.Item>
                 }
@@ -289,6 +325,7 @@ SupplierInputList.propTypes = {
     history: PropTypes.objectOf(PropTypes.any),
     supplier: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
+    modifyCheckReasonVisible: PropTypes.func,
     modifyInformationVisible: PropTypes.func,
     informationVisible: PropTypes.bool
 }

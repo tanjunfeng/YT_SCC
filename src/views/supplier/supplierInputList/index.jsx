@@ -1,4 +1,4 @@
-import SupplierManageList from './App';
+import SupplierInputList from './App';
 import './App.scss';
 
-export default SupplierManageList;
+export default SupplierInputList;

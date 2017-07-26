@@ -19,10 +19,10 @@ import {
     Table,
     Icon
 } from 'antd';
-
 import {
     modifyCheckReasonVisible,
-    insertSupplierSettlementInfo
+    insertSupplierSettlementInfo,
+    fetchGetProductById
 } from '../../../actions';
 
 const FormItem = Form.Item;
@@ -36,7 +36,8 @@ const Option = Select.Option;
     }),
     dispatch => bindActionCreators({
         modifyCheckReasonVisible,
-        insertSupplierSettlementInfo
+        insertSupplierSettlementInfo,
+        fetchGetProductById
     }, dispatch)
 )
 class CheckReason extends PureComponent {
@@ -89,11 +90,6 @@ class CheckReason extends PureComponent {
     }
 
     render() {
-        const {
-            companyName,
-            companyDetailAddress
-        } = this.props.visibleData;
-        console.log(this.props.editBeforeAfter)
         const columns = [{
             title: '项目',
             dataIndex: 'name',
@@ -123,13 +119,13 @@ class CheckReason extends PureComponent {
         const data = [{
             key: '1',
             name: '公司所在地',
-            before: companyName,
-            after: companyName,
+            before: 1,
+            after: 1,
         }, {
             key: '2',
             name: '详细地址',
-            before: companyDetailAddress,
-            after: companyDetailAddress,
+            before: 1,
+            after: 1,
         }, {
             key: '3',
             name: '税务登记证电子版',
