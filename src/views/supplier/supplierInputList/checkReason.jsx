@@ -2,7 +2,7 @@
  * @file checkReason.jsx
  * @author Tan junfeng
  *
- * 供应商入驻申请列表
+ * 供应商管理列表
  */
 
 import React, { PureComponent } from 'react';
@@ -19,10 +19,10 @@ import {
     Table,
     Icon
 } from 'antd';
-
 import {
     modifyCheckReasonVisible,
-    insertSupplierSettlementInfo
+    insertSupplierSettlementInfo,
+    fetchGetProductById
 } from '../../../actions';
 
 const FormItem = Form.Item;
@@ -32,10 +32,12 @@ const Option = Select.Option;
     state => ({
         checkResonVisible: state.toJS().supplier.checkResonVisible,
         visibleData: state.toJS().supplier.visibleData,
+        editBeforeAfter: state.toJS().supplier.editBeforeAfter,
     }),
     dispatch => bindActionCreators({
         modifyCheckReasonVisible,
-        insertSupplierSettlementInfo
+        insertSupplierSettlementInfo,
+        fetchGetProductById
     }, dispatch)
 )
 class CheckReason extends PureComponent {
@@ -88,11 +90,6 @@ class CheckReason extends PureComponent {
     }
 
     render() {
-        const {
-            companyName,
-            name,
-        } = this.props.visibleData;
-
         const columns = [{
             title: '项目',
             dataIndex: 'name',
@@ -122,13 +119,13 @@ class CheckReason extends PureComponent {
         const data = [{
             key: '1',
             name: '公司所在地',
-            before: companyName,
-            after: companyName,
+            before: 1,
+            after: 1,
         }, {
             key: '2',
             name: '详细地址',
-            before: name,
-            after: name,
+            before: 1,
+            after: 1,
         }, {
             key: '3',
             name: '税务登记证电子版',

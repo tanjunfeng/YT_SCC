@@ -1,6 +1,6 @@
 /**
  * @file supplierInputList.jsx
- * @author shijh,tanjf
+ * @author tanjf
  *
  * 管理列表页面
  */
@@ -12,18 +12,15 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Table, Form, Icon, Menu, Dropdown, message } from 'antd';
-
 import {
     fetchProviderEnterList,
     fetchQueryManageList,
     fetchSupplierList,
+    modifyAuditVisible,
+    modifyCheckReasonVisible,
     modifyInformationVisible,
-    modifySupplierFrozen,
-    modifyCollaboration
+    fetchGetProductById
 } from '../../../actions';
-import {
-    getSupplierManageList
-} from '../../../actions/supplier';
 
 import SearchForm from '../searchForm';
 import { PAGE_SIZE } from '../../../constant';
@@ -42,15 +39,17 @@ const columns = supplierInputList;
         supplier: state.toJS().supplier.data,
         informationVisible: state.toJS().supplier.informationVisible,
         queryManageList: state.toJS().supplier.queryManageList,
+        editBeforeAfter: state.toJS().supplier.editBeforeAfter,
     }),
     dispatch => bindActionCreators({
         getSupplierManageList,
         fetchProviderEnterList,
         fetchQueryManageList,
         fetchSupplierList,
+        modifyCheckReasonVisible,
+        modifyAuditVisible,
         modifyInformationVisible,
-        modifySupplierFrozen,
-        modifyCollaboration
+        fetchGetProductById
     }, dispatch)
 )
 class SupplierInputList extends PureComponent {
@@ -88,7 +87,13 @@ class SupplierInputList extends PureComponent {
     handleSelect(record, index, items) {
         const { key } = items;
         switch (key) {
-            case 'checkReason':
+            case 'ChangeAudit':
+                this.props.modifyAuditVisible({isVisible: true, record});
+                break;
+            case 'CheckReason':
+                this.props.modifyCheckReasonVisible({isVisible: true, record});
+                break;
+            case 'changeMessage':
                 this.props.modifyInformationVisible({isVisible: true, record});
                 break;
             default:
@@ -179,7 +184,6 @@ class SupplierInputList extends PureComponent {
     renderOperation(text, record, index) {
         const { status, id, providerType } = record;
         const { pathname } = this.props.location;
-
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
@@ -187,15 +191,31 @@ class SupplierInputList extends PureComponent {
                 </Menu.Item>
                 {
                     <Menu.Item key="modifySupInfor">
-                        <a target="_blank" rel="noopener noreferrer">
+                        <Link to={`${pathname}/edit/:type/${id}`}>
                             修改供应商信息
-                        </a>
+                        </Link>
                     </Menu.Item>
                 }
                 {
                     <Menu.Item key="addAddress">
-                        <a target="_blank" rel="noopener noreferrer">
+                        <Link to={`${pathname}/place/:type/${id}`}>
                             新增供应商地点信息
+                        </Link>
+                    </Menu.Item>
+                }
+                {
+                    status === 1 &&
+                    <Menu.Item key="ChangeAudit">
+                        <a target="_blank" rel="noopener noreferrer">
+                            供应商审核
+                        </a>
+                    </Menu.Item>
+                }
+                {
+                    status === 1 &&
+                    <Menu.Item key="CheckReason">
+                        <a target="_blank" rel="noopener noreferrer">
+                            修改供应商审核
                         </a>
                     </Menu.Item>
                 }
@@ -205,19 +225,36 @@ class SupplierInputList extends PureComponent {
         const menu1 = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="AddDetail">
-                    <Link to={`${pathname}/place/${id}`}>供应商地点详情</Link>
+                    <Link to={`${pathname}/place/:type/${id}`}>供应商地点详情</Link>
                 </Menu.Item>
                 {
                     <Menu.Item key="modifySupAddInfor">
-                        <a target="_blank" rel="noopener noreferrer">
+                        <Link to={`${pathname}/place/:type/${id}`}>
                             修改供应商地点信息
+                        </Link>
+                    </Menu.Item>
+                }
+                {
+                    status === 3 &&
+                    <Menu.Item key="changeMessage">
+                        <a target="_blank" rel="noopener noreferrer">
+                            查看审核已拒绝原因
                         </a>
                     </Menu.Item>
                 }
                 {
-                    <Menu.Item key="checkReason">
+                    status === 1 &&
+                    <Menu.Item key="ChangeAudit">
                         <a target="_blank" rel="noopener noreferrer">
-                            查看审核已拒绝原因
+                            供应商地点审核
+                        </a>
+                    </Menu.Item>
+                }
+                {
+                    status === 1 &&
+                    <Menu.Item key="CheckReason">
+                        <a target="_blank" rel="noopener noreferrer">
+                            修改供应商地点审核
                         </a>
                     </Menu.Item>
                 }
@@ -282,10 +319,11 @@ SupplierInputList.propTypes = {
     fetchProviderEnterList: PropTypes.objectOf(PropTypes.any),
     queryManageList: PropTypes.objectOf(PropTypes.any),
     fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
-    fetchSupplierList: PropTypes.func,
+    modifyAuditVisible: PropTypes.func,
     history: PropTypes.objectOf(PropTypes.any),
     supplier: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
+    modifyCheckReasonVisible: PropTypes.func,
     modifyInformationVisible: PropTypes.func,
     informationVisible: PropTypes.bool
 }

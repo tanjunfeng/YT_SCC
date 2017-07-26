@@ -70,8 +70,14 @@ import PoPrintList from 'bundle-loader?lazy!../views/procurement/PoPrintList';
 import ProcurementMaintenance from 'bundle-loader?lazy!../views/commodity/procurementMaintenance';
 // 商品销售关系维护
 import SalesMaintenance from 'bundle-loader?lazy!../views/commodity/salesMaintenance';
+// 订单管理列表
+import OrderManagementList from 'bundle-loader?lazy!../views/orderManagement/orderList';
+// 订单管理-详情页
+import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/orderDetails';
+
 // 库存调整列表
 import StoreAdjList from 'bundle-loader?lazy!../views/storeAdjustment/storeAdjList';
+
 /* eslint-enable */
 
 
@@ -345,12 +351,12 @@ const routes = [
                             </Bundle>)}
                         />
                         <Route
-                            path="/SuppliersAppList/add"
+                            path="/SuppliersAppList/add/:type"
                             exact
                             render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/SuppliersAppList/edit/:id"
+                            path="/SuppliersAppList/edit/:type/:id"
                             render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
                         />
                         <Route
@@ -433,7 +439,7 @@ const routes = [
                             </Bundle>)}
                         />
                         <Route
-                            path="/supplierInputList/place/:type/:id"
+                            path="/supplierInputList/edit/:type/:id"
                             exact
                             render={() => (<Bundle load={SupplierDetail}>
                                 {(App) => <App />}
@@ -586,11 +592,11 @@ const routes = [
                     </Switch>
                 )
             },
-             {
+            {
                 path: '/poprintlist',
                 parent: 'procurementMng',
                 key: 'poPrintList',
-                 component: () => (
+                component: () => (
                     <Switch>
                         <Route
                             path="/poprintlist"
@@ -598,6 +604,33 @@ const routes = [
                             render={() => (<Bundle load={PoPrintList}>
                                 {(App) => <App />}
                             </Bundle>)}
+                        />
+                    </Switch>
+                )
+            }
+        ]
+    },
+    {
+        // 订单管理
+        key: 'ordergl',
+        iconType: 'pushpin',
+        routes: [
+            // 订单管理列表
+            {
+                path: '/orderList',
+                parent: 'ordergl',
+                key: 'orderList',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/orderList"
+                            exact
+                            render={() =>
+                                <Bundle load={OrderManagementList}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/orderList/orderDetails/:orderNumber"
+                            render={() => <Bundle load={OrderManagementDetails}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )

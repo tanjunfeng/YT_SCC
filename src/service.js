@@ -119,6 +119,9 @@ export const fetchQueryManageList = (params) => http.get('/supplier/queryManageL
 // 供应商入驻列表(改)
 export const querySettledList = (params) => http.get('/supplier/querySettledList', params);
 
+// 查询供应商修改前修改后的信息(改)
+export const editBeforeAfter = (params) => http.get('/supplier/editBeforeAfter', params);
+
 // 供应商综合审核录入
 export const insertSupplierAuditInfo = (params) => http.post('/provider/insertSupplierAuditInfo', params);
 
@@ -443,6 +446,9 @@ export const batchChangeProPurchaseStatus = (params) => http.post('/prodPurchase
 
 // 根据条件查询商品价格信息
 export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
+
+// 查询商品信息
+export const getProductById = (params) => http.get('/prodPurchase/getProductById', params);
 
 export const testApi = (params) => http.get('/test', params);
 

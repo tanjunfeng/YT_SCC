@@ -107,15 +107,24 @@ class SuppliersAppList extends PureComponent {
      * 搜索
      */
     handleFormSearch(data, bool) {
+        console.log(data)
         this.searchForm = data;
         if (bool) {
             // 主数据
             // console.log('主数据')
-            this.props.fetchQueryManageList();
+            this.props.fetchQueryManageList({
+                pageNum: this.current,
+                pageSize: PAGE_SIZE,
+                ...this.searchForm
+            });
         } else {
             // SCM数据
             // console.log('SCM数据')
-            this.props.fetchQueryManageList();
+            this.props.fetchQueryManageList({
+                pageNum: this.current,
+                pageSize: PAGE_SIZE,
+                ...this.searchForm
+            });
         }
     }
 
@@ -177,13 +186,13 @@ class SuppliersAppList extends PureComponent {
                 {
                     providerType === 1 && status === 4 &&
                     <Menu.Item key="addAddress">
-                        <Link to={`${pathname}/add`}>新增供应商地点信息</Link>
+                        <Link to={`${pathname}/place/:type/${id}`}>新增供应商地点信息</Link>
                     </Menu.Item>
                 }
                 {
                     providerType === 1 ?
                         <Menu.Item key="modifySupInfor">
-                            <Link to={`${pathname}/edit/${id}`}>修改供应商信息</Link>
+                            <Link to={`${pathname}/edit/:type/${id}`}>修改供应商信息</Link>
                         </Menu.Item>
                         :
                         <Menu.Item key="modifySupAddInfor">

@@ -1,4 +1,4 @@
-import deepmerge from 'deepmerge';
+// import deepmerge from 'deepmerge';
 
 const codeInObject = (source, targetCode) => {
     for (let i = 0; i < source.length; i++) {
@@ -27,7 +27,9 @@ class Tools {
             that.props.form.setFields({...err});
         }
     }
+
     static areaData = [];
+
     static encodeArea(datas) {
         for (let i = 0; i < datas.length; i++) {
             this.parseItem(datas[i]);

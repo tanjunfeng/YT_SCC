@@ -91,7 +91,6 @@ class CategoryIconManagement extends Component {
 
     render() {
         const { categorys } = this.props;
-        console.log(categorys)
         const { secondDate } = this.state;
         const firstLists = categorys.map(item =>
             (<li><a

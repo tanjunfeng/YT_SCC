@@ -400,7 +400,7 @@ export const supplierInputList = [
                 case 0:
                     return '制单';
                 case 1:
-                    return '待审核';
+                    return '已提交';
                 case 2:
                     return '已审核';
                 case 3:
