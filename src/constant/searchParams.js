@@ -204,7 +204,7 @@ export const supplierLevelOptions = {
     }]
 }
 
-// 供应商类型
+// 供应商地点等级
 export const supplierPlaceLevelOptions = {
     defaultValue: '-1',
     data: [{
@@ -330,6 +330,71 @@ export const commoditySortOptions = {
     }]
 }
 
+export const orderTypeOptions = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '加盟商 '
+    }, {
+        key: '1',
+        value: '直营店'
+    }]
+}
+
+// 订单管理-订单状态
+export const orderStatusOptions = {
+    defaultValue: '0',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '待审核'
+    }, {
+        key: '1',
+        value: '待人工审核'
+    }, {
+        key: '2',
+        value: '已审核'
+    }, {
+        key: '3',
+        value: '已拒绝'
+    }, {
+        key: '4',
+        value: '已取消'
+    }, {
+        key: '5',
+        value: '已完成'
+    }]
+}
+
+// 订单管理-支付状态
+export const payStatusOptions = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '未支付'
+    }, {
+        key: '1',
+        value: '已支付'
+    }, {
+        key: '2',
+        value: '取消支付'
+    }, {
+        key: '3',
+        value: '退款待审核'
+    }, {
+        key: '4',
+        value: '已审核'
+    }]
+}
+
 // 状态
 export const supplierStore = {
     defaultValue: '-1',
@@ -342,6 +407,39 @@ export const supplierStore = {
     }, {
         key: '1',
         value: '生效'
+    }]
+}
+
+// 订单管理-物流状态
+export const logisticsStatusOptions = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '待处理'
+    }, {
+        key: '1',
+        value: '未传送'
+    }, {
+        key: '2',
+        value: '待出库'
+    }, {
+        key: '3',
+        value: '待收货'
+    }, {
+        key: '4',
+        value: '已签收'
+    }, {
+        key: '5',
+        value: '未送达'
+    }, {
+        key: '6',
+        value: '取消送货'
+    }, {
+        key: '7',
+        value: '采购未到货'
     }]
 }
 

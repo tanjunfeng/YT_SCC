@@ -21,21 +21,8 @@ if (__TEST__) {
     rules = [{
         pattern: /https?:\/\/[-\w\.]*(?::\d+)?\/(.+)/,
         // responder: 'http://172.30.10.157:8080/$1',
-        responder: 'http://sitxcsc.yatang.com.cn/api/$1'
-
+        responder: 'http://sitxcsc.yatang.com.cn/$1'
     }];
-
-    // localConfig.userMsg = {
-    //     url: 'http://sitxcoc.yatang.cn:81/sys/user/sysLogin.htm', // 模拟登录地址
-    //     headers: {
-    //         'Content-Type': 'application/x-www-form-urlencoded',
-    //     },
-    //     req: {
-    //         login: 'admin',
-    //         password: '123456'
-    //     }
-    // }
-
 } else {
     host = 'localhost';
     rules = [{

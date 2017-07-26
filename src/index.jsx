@@ -122,24 +122,8 @@ startApp({
                 name: "供应商管理",
                 submenu: [
                     {
-                        code: "supplierManagement",
-                        name: "供应商管理列表"
-                    },
-                    {
-                        code: "supplierApplication",
-                        name: "供应商入驻申请列表"
-                    },
-                    {
                         code: "suppliersAppList",
-                        name: "供应商入驻申请列表"
-                    },
-                    {
-                        code: "modifyApplication",
-                        name: "供应商修改资料申请"
-                    },
-                    {
-                        code: "supplierAreaManagement",
-                        name: "供应商配送区域管理"
+                        name: "供应商管理列表"
                     },
                     {
                         code: "supplierInputList",
@@ -215,13 +199,23 @@ startApp({
                 ]
             },
             {
+                code: 'ordergl',
+                name: '订单管理',
+                submenu: [
+                    {
+                        code: 'orderList',
+                        name: '订单管理列表',
+                    },
+                ]
+            },
+            {
                 code: "kctz",
                 name: "库存调整",
                 submenu: [
                     {
                         code: "kctzlb",
                         name: "库存调整列表",
-                    },
+                    }
                 ]
             }
         ]

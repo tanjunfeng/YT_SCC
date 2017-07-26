@@ -19,6 +19,7 @@ import InlineUpload from '../../../components/inlineUpload';
 import CasadingAddress from '../../../components/ascadingAddress';
 import { addSupplierMessage1 } from '../../../actions/addSupplier';
 import InlineTree from '../../../components/inlineTree';
+import { getLargerRegion } from '../../../actions/addSupplier';
 import Tools from './utils';
 
 // mock
@@ -31,10 +32,11 @@ const Option = Select.Option;
 
 @connect(
     state => ({
-        data: state.toJS().addSupplier.data
+        largeRegin: state.toJS().addSupplier.largeRegin,
+        supplierId: state.toJS().supplier.supplierId
     }),
     dispatch => bindActionCreators({
-        addSupplierMessage1
+        getLargerRegion
     }, dispatch)
 )
 class BasicInfo extends PureComponent {
@@ -44,6 +46,7 @@ class BasicInfo extends PureComponent {
         this.handleNextStep = ::this.handleNextStep;
         this.handleCompanyAddressChange = ::this.handleCompanyAddressChange;
         this.handleBankLocChange = ::this.handleBankLocChange;
+        this.handleCheck = ::this.handleCheck;
         this.companyAddress = {};
         this.bankLoc = {};
         this.submitData = {
@@ -54,7 +57,8 @@ class BasicInfo extends PureComponent {
     }
 
     componentDidMount() {
-        this.props.form.refs = this;
+        this.props.getLargerRegion();
+
     }
 
     handleNextStep() {
@@ -157,9 +161,13 @@ class BasicInfo extends PureComponent {
         // }
     }
 
+    handleCheck(data) {
+        Tools.encodeArea(data)
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { detailData, isEdit } = this.props;
+        const { detailData, isEdit, largeRegin = [] } = this.props;
         let initData = detailData;
         if (!isEdit) {
             initData = {};
@@ -185,7 +193,7 @@ class BasicInfo extends PureComponent {
                                 <Row>
                                     <Col span={8}>
                                         <span>供应商编号：</span>
-                                        <span>YTXC1001</span>
+                                        <span>{this.props.supplierId}</span>
                                     </Col>
                                     <Col span={8}>
                                         <span>供应商名称：</span>
@@ -206,17 +214,17 @@ class BasicInfo extends PureComponent {
                                     <Col span={8}>
                                         <span>供应商等级：</span>
                                         <FormItem>
-                                            {getFieldDecorator('supplierLevel', {
+                                            {getFieldDecorator('grade', {
                                                 rules: [{required: true, message: '请选择等级'}],
-                                                initialValue: String(supplierOperTaxInfo.taxpayerType ? supplierOperTaxInfo.taxpayerType : 0)
+                                                initialValue: String(supplierOperTaxInfo.taxpayerType ? supplierOperTaxInfo.taxpayerType : 1)
                                             })(
                                                 <Select
                                                     style={{ width: 140 }}
                                                     placeholder="请选择供应商等级"
                                                 >
-                                                    <Option value="0">战略供应商</Option>
-                                                    <Option value="1">核心供应商</Option>
-                                                    <Option value="2">可替代供应商</Option>
+                                                    <Option value="1">战略供应商</Option>
+                                                    <Option value="2">核心供应商</Option>
+                                                    <Option value="3">可替代供应商</Option>
                                                 </Select>
                                             )}
                                         </FormItem>
@@ -224,7 +232,7 @@ class BasicInfo extends PureComponent {
                                     <Col span={8} id="in-time">
                                         <span>供应商入驻日期：</span>
                                         <FormItem>
-                                            {getFieldDecorator('arrivalDate', {
+                                            {getFieldDecorator('settledTime', {
                                                 rules: [{required: true, message: '请选择供应商入驻日期'}],
                                                 initialValue: null
                                             })(
@@ -246,11 +254,16 @@ class BasicInfo extends PureComponent {
                             <div className="add-message-header">
                                 <Icon type="solution" className="add-message-header-icon" />供应商辐射城市
                             </div>
-                            <div className="add-message-body">
-                                <InlineTree
-                                    initValue={queryAllLargerRegionProvince.data}
-                                />
-                            </div>
+                            {
+                                largeRegin.length > 0 &&
+                                <div className="add-message-body">
+                                    <InlineTree
+                                        handleCheck={this.handleCheck}
+                                        initValue={largeRegin}
+                                    />
+                                </div>
+
+                            }
                         </div>
                     </div>
                     <div className="add-message-handle">
@@ -262,11 +275,25 @@ class BasicInfo extends PureComponent {
     }
 }
 
+function encodeArea(data = []) {
+    const a = [];
+    for ( let i of data) {
+        console.log(i);
+        const key = i.key;
+        const hideTitle = i.props.hideTitle;
+        const keys = key.split('-');
+        const titles = hideTitle.split('-');
+        const len = keys.length;
+        
+    }
+}
+
 BasicInfo.propTypes = {
     onGoTo: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     isEdit: PropTypes.bool,
     detailData: PropTypes.objectOf(PropTypes.any),
-    addSupplierMessage1: PropTypes.func,
+    getLargerRegion: PropTypes.func,
 }
+
 export default Form.create()(BasicInfo);

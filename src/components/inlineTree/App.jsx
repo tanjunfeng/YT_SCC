@@ -13,12 +13,14 @@ class InlineTree extends PureComponent {
     constructor(props) {
         super(props);
         this.defaultOpen = props.defaultOpen;
+        this.getValue = ::this.getValue;
         this.state = {
             expandedKeys: this.defaultOpen,
             autoExpandParent: true,
             checkedKeys: [],
             selectedKeys: props.selects,
         }
+        this.checkedNodes = [];
     }
 
     componentDidMount() {
@@ -49,11 +51,18 @@ class InlineTree extends PureComponent {
         });
     }
 
-    onCheck = (checkedKeys) => {
+    onCheck = (checkedKeys, allData) => {
+        this.checkedNodes = allData.checkedNodes;
         this.setState({
             checkedKeys,
             selectedKeys: [],
+        }, () => {
+            this.props.handleCheck(this.checkedNodes);
         });
+    }
+
+    getValue() {
+        return this.checkedNodes;
     }
 
     onSelect = (selectedKeys) => {
@@ -66,15 +75,30 @@ class InlineTree extends PureComponent {
 
     render() {
         const { initValue } = this.props;
-        const loop = data => data.map((item) => {
+        const loop = (data, parentCode, parentName) => data.map((item) => {
+            let code = item.code;
+            let hideTitle = item.regionName;
+            if (parentCode && parentName) {
+                code = `${parentCode}-${item.code}`;
+                hideTitle = `${parentName}-${item.regionName}`;
+            }
             if (item.regions) {
                 return (
-                    <TreeNode key={item.code} title={item.regionName}>
-                        {loop(item.regions)}
+                    <TreeNode
+                        key={code}
+                        hideTitle={hideTitle}
+                        title={item.regionName}
+                    >
+                        {loop(item.regions, code, hideTitle)}
                     </TreeNode>
                 );
             }
-            return <TreeNode key={item.code} title={item.regionName} />;
+            return (
+                <TreeNode
+                    key={code}
+                    hideTitle={hideTitle}
+                    title={item.regionName}
+                />)
         });
         return (
             <Tree
@@ -97,11 +121,14 @@ class InlineTree extends PureComponent {
 InlineTree.propTypes = {
     defaultOpen: PropTypes.arrayOf(PropTypes.any),
     selects: PropTypes.arrayOf(PropTypes.any),
+    initValue: PropTypes.arrayOf(PropTypes.any),
+    handleCheck: PropTypes.func,
 }
 
 InlineTree.defaultProps = {
     defaultOpen: defaultData,
-    selects: []
+    selects: [],
+    handleCheck: () => {}
 }
 
 export default InlineTree;
