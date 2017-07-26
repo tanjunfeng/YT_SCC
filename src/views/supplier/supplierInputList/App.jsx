@@ -1,6 +1,6 @@
 /**
  * @file supplierInputList.jsx
- * @author shijh,tanjf
+ * @author tanjf
  *
  * 管理列表页面
  */

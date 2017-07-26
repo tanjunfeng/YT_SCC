@@ -61,7 +61,7 @@ class CheckReason extends PureComponent {
     handleCheckOk() {
         const { selected } = this.state;
         const { editBeforeAfter, visibleData } = this.props;
-        console.log(editBeforeAfter)
+        // console.log(editBeforeAfter)
         if (selected === -1) {
             message.error('请选择审核结果');
             return;

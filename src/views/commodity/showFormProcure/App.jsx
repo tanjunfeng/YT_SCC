@@ -1,6 +1,6 @@
 /**
  * @file App.jsx
- * @author shijinhua,caoyanxuan
+ * @author Tanjf
  *
  * 公共searchForm
  */
@@ -45,7 +45,7 @@ class ShowForm extends Component {
 
     render() {
         const state = this.state;
-        console.log(this.props.innitalvalue)
+        // console.log(this.props.innitalvalue)
         const {
             brandName,
             deductibleTaxRate,

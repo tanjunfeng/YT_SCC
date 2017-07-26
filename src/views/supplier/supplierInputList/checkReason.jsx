@@ -2,7 +2,7 @@
  * @file checkReason.jsx
  * @author Tan junfeng
  *
- * 供应商入驻申请列表
+ * 供应商管理列表
  */
 
 import React, { PureComponent } from 'react';
