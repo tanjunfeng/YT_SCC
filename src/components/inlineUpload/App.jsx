@@ -10,7 +10,9 @@ class InlineUpload extends Component {
         this.handleChange = ::this.handleChange;
         this.handleDelete = ::this.handleDelete;
         this.getValue = ::this.getValue;
+        this.handleTimeChange = ::this.handleTimeChange;
         this.result = [];
+        this.time = null;
     }
 
     state = {
@@ -27,12 +29,16 @@ class InlineUpload extends Component {
         }
     }
 
+    handleTimeChange(date) {
+        this.time = date._d * 1;
+    }
+
     handleChange(info) {
         const status = info.file.status;
         if (status === 'done') {
             const { response } = info.file;
             this.result.push(response.data.fileOnServerUrl);
-            this.props.onChange(this.result);
+            this.props.onChange({ files: this.result, time: this.time });
         }
         let fileList = info.fileList;
         this.setState({ fileList });
@@ -48,7 +54,10 @@ class InlineUpload extends Component {
     }
 
     getValue() {
-        return this.result;
+        return {
+            files: this.result,
+            time: this.time
+        };
     }
 
     render() {
@@ -107,10 +116,15 @@ class InlineUpload extends Component {
                             )
                         })
                     }
-                    <div className="effective-time-document">
-                        <span>证件有效时间：</span>
-                        <DatePicker />
-                    </div>
+                    {
+                        this.props.showEndTime &&
+                        <div className="effective-time-document">
+                            <span>证件有效时间：</span>
+                            <DatePicker
+                                onChange={this.handleTimeChange}
+                            />
+                        </div>
+                    }
                 </div>
             </div>
         );
@@ -122,11 +136,13 @@ InlineUpload.propTypes = {
     handleChange: PropTypes.func,
     datas: PropTypes.arrayOf(PropTypes.any),
     onChange: PropTypes.func,
+    showEndTime: PropTypes.bool,
 };
 
 InlineUpload.defaultProps = {
     handleChange: () => {},
-    onChange: () => {}
+    onChange: () => {},
+    showEndTime: false
 }
 
 export default InlineUpload;

@@ -36,7 +36,8 @@ const Option = Select.Option;
         supplierId: state.toJS().supplier.supplierId
     }),
     dispatch => bindActionCreators({
-        getLargerRegion
+        getLargerRegion,
+        addSupplierMessage1
     }, dispatch)
 )
 class BasicInfo extends PureComponent {
@@ -46,14 +47,9 @@ class BasicInfo extends PureComponent {
         this.handleNextStep = ::this.handleNextStep;
         this.handleCompanyAddressChange = ::this.handleCompanyAddressChange;
         this.handleBankLocChange = ::this.handleBankLocChange;
-        this.handleCheck = ::this.handleCheck;
         this.companyAddress = {};
         this.bankLoc = {};
-        this.submitData = {
-            supplierBasicInfo: {},
-            supplierOperTaxInfo: {},
-            supplierBankInfo: {}
-        };
+        this.submitData = {};
     }
 
     componentDidMount() {
@@ -65,73 +61,37 @@ class BasicInfo extends PureComponent {
         const { form, onGoTo, isEdit, detailData = {} } = this.props;
         Tools.checkAddress(this.companyAddress, 'companyAddress', this);
         Tools.checkAddress(this.bankLoc, 'bankLoc', this);
+        const data = Tools.encodeArea(this.areaCheck.getValue());
+        console.log(data);
         form.validateFields((err, values) => {
             if (!err) {
                 const {
-                    accountName,
-                    bankAccount,
-                    taxpayerType,
-                    companyDetailAddress,
                     companyName,
-                    mainAccountNo,
-                    openBank,
-                    spNo,
-                    spRegNo,
-                    taxpayerNumber,
-                } = values;
-
+                    grade,
+                    settledTime
+                } = values
+                
                 this.submitData.supplierBasicInfo = {
                     companyName,
-                    spNo,
-                    spRegNo,
-                    mainAccountNo
+                    grade,
+                    settledTime: settledTime._d * 1,
+                    spNo: this.props.supplierId
                 };
 
-                const { firstValue, secondValue, thirdValue } = this.companyAddress;
-
-                this.submitData.supplierOperTaxInfo = {
-                    companyLocProvince: firstValue.regionName,
-                    companyLocCity: secondValue.regionName,
-                    companyLocCounty: thirdValue.regionName,
-                    companyLocProvinceCode: firstValue.code,
-                    companyLocCityCode: secondValue.code,
-                    companyLocCountyCode: thirdValue.code,
-                    companyDetailAddress,
-                    registrationCertificate: this.certificate.getValue()[0],
-                    qualityIdentification: this.quality.getValue()[0],
-                    taxRegCertificate: this.taxReg.getValue()[0],
-                    taxpayerNumber,
-                    taxpayerType,
-                    generalTaxpayerQualifiCerti: this.general.getValue()[0],
-                }
-
-                this.submitData.supplierBankInfo = {
-                    accountName,
-                    openBank,
-                    bankAccount,
-                    bankAccountLicense: this.bank.getValue()[0],
-                    bankLocProvince: this.bankLoc.firstValue.regionName,
-                    bankLocCity: this.bankLoc.secondValue.regionName,
-                    bankLocCounty: this.bankLoc.thirdValue.regionName,
-                    bankLocCountyCode: this.bankLoc.thirdValue.code,
-                    bankLocCityCode: this.bankLoc.secondValue.code,
-                    bankLocProvinceCode: this.bankLoc.firstValue.code,
-                }
-
-                if (isEdit) {
-                    Object.assign(
-                        this.submitData.supplierBasicInfo,
-                        {id: detailData.supplierBasicInfo.id}
-                    )
-                    Object.assign(
-                        this.submitData.supplierOperTaxInfo,
-                        {id: detailData.supplierOperTaxInfo.id}
-                    )
-                    Object.assign(
-                        this.submitData.supplierBankInfo,
-                        {id: detailData.supplierBankInfo.id}
-                    )
-                }
+                // // if (isEdit) {
+                // //     Object.assign(
+                // //         this.submitData.supplierBasicInfo,
+                // //         {id: detailData.supplierBasicInfo.id}
+                // //     )
+                // //     Object.assign(
+                // //         this.submitData.supplierOperTaxInfo,
+                // //         {id: detailData.supplierOperTaxInfo.id}
+                // //     )
+                // //     Object.assign(
+                // //         this.submitData.supplierBankInfo,
+                // //         {id: detailData.supplierBankInfo.id}
+                // //     )
+                // // }
 
                 this.props.addSupplierMessage1(this.submitData)
                 onGoTo('2');
@@ -141,28 +101,10 @@ class BasicInfo extends PureComponent {
 
     handleCompanyAddressChange(data) {
         this.companyAddress = data;
-        // if ( data.thirdValue !== '-1' ) {
-        //     this.props.form.setFields({
-        //         companyAddress: {
-        //             errors: null,
-        //         }
-        //     });
-        // }
     }
 
     handleBankLocChange(data) {
         this.bankLoc = data;
-        // if ( data.thirdValue !== '-1' ) {
-        //     this.props.form.setFields({
-        //         bankLoc: {
-        //             errors: null,
-        //         }
-        //     });
-        // }
-    }
-
-    handleCheck(data) {
-        Tools.encodeArea(data)
     }
 
     render() {
@@ -204,7 +146,6 @@ class BasicInfo extends PureComponent {
                                             })(
                                                 <Input
                                                     placeholder="供应商名称"
-                                                    onBlur={(e) => { Validator.repeat.companyName(e, this, supplierBasicInfo.id) }}
                                                 />
                                             )}
                                         </FormItem>
@@ -260,6 +201,7 @@ class BasicInfo extends PureComponent {
                                     <InlineTree
                                         handleCheck={this.handleCheck}
                                         initValue={largeRegin}
+                                        ref={node => { this.areaCheck = node }}
                                     />
                                 </div>
 
@@ -278,7 +220,6 @@ class BasicInfo extends PureComponent {
 function encodeArea(data = []) {
     const a = [];
     for ( let i of data) {
-        console.log(i);
         const key = i.key;
         const hideTitle = i.props.hideTitle;
         const keys = key.split('-');

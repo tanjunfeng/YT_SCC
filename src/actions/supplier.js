@@ -10,7 +10,8 @@ import ActionType from './ActionType';
 import {
     queryProviderDetail,
     getSupplierNo,
-    insertOrUpdateSupplierInfo
+    insertOrUpdateSupplierInfo,
+    queryProviderPlaceInfo
 } from '../service';
 
 /**
@@ -24,6 +25,19 @@ const receiveDetail = (data) => ({
 export const getSupplierDetail = (params) => dispatch => (
     new Promise((resolve, reject) => {
         queryProviderDetail(params)
+            .then(res => {
+                dispatch(
+                    receiveDetail(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
+export const getProviderDetail = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryProviderPlaceInfo(params)
             .then(res => {
                 dispatch(
                     receiveDetail(res.data)

@@ -466,3 +466,5 @@ export const queryAllLargerRegionProvince = (params) => http.get('/region/queryA
 export const getSupplierNo = (params) => http.get('/supplier/getSupplierNo', params);
 // 新增或修改供应商信息
 export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/insertOrUpdateSupplierInfo', params);
+// 查询供应商地点详情
+export const queryProviderPlaceInfo = (params) => http.get('/supplier/queryProviderPlaceInfo', params);

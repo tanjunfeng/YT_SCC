@@ -12,15 +12,10 @@ import { Tabs } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { getSupplierDetail } from '../../../actions/supplier';
-// // 商家信息
-// import SupplierMessage from './SupplierMessage';
-// // 公司资质
-// import Qualification from './Qualification';
-// // 联系信息
-// import Contact from './Contact';
-// // 合作信息
-// import Cooperative from './common/Cooperative';
+import {
+    getSupplierDetail,
+    getProviderDetail
+} from '../../../actions/supplier';
 
 import BasicInfo from './basicInfo';
 import BankInfo from './bankInfo';
@@ -35,7 +30,8 @@ const TabPane = Tabs.TabPane;
         detailData: state.toJS().supplier.detailData
     }),
     dispatch => bindActionCreators({
-        getSupplierDetail
+        getSupplierDetail,
+        getProviderDetail
     }, dispatch)
 )
 class SupplierDetail extends PureComponent {
@@ -54,7 +50,11 @@ class SupplierDetail extends PureComponent {
     }
 
     componentDidMount() {
-        const { id } = this.props.match.params;
+        const { id, type } = this.props.match.params;
+        if (type === 'place') {
+            this.props.getProviderDetail({adrInfoId: id})
+            return ;
+        }
         this.props.getSupplierDetail({spId: id});
     }
 
@@ -71,13 +71,20 @@ class SupplierDetail extends PureComponent {
 
     render() {
         const { type = 'supplier' } = this.props.match.params;
+        const { detailData } = this.props;
+        const detailSp = {};
+        if (type === 'place') {
+            Object.assign(detailData, detailData.supplierInfoDto);
+            Object.assign(detailSp, detailData.supplierAdrInfoDto);
+        }
         const props = {
             data: this.props.detailData,
             canEdit: this.canEdit,
             canExamine: this.canExamine,
             failedReason: this.showReson,
             getDtail: this.handleGetDetail,
-            ...this.props
+            detailData,
+            detailSp
         }
         return (
             <Tabs

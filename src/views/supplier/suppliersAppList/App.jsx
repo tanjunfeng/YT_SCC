@@ -27,9 +27,6 @@ import {
     modifyAuditVisible,
     modifyCheckReasonVisible
 } from '../../../actions';
-import {
-    getSupplierSettledList
-} from '../../../actions/supplier';
 import SearchForm from '../searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
@@ -51,7 +48,6 @@ const columns = suppliersAppList;
     dispatch => bindActionCreators({
         modifyAuditVisible,
         modifyCheckReasonVisible,
-        getSupplierSettledList,
         fetchQuerySettledList,
         fetchProviderEnterList,
         modifyAuditVisible,
@@ -79,12 +75,11 @@ class SuppliersAppList extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
-        this.props.getSupplierSettledList({
+        this.props.fetchQuerySettledList({
             pageNum: this.current,
             pageSize: PAGE_SIZE,
             ...this.searchForm
-        })
-        this.props.fetchQuerySettledList();
+        });
     }
 
     /**
@@ -140,7 +135,7 @@ class SuppliersAppList extends PureComponent {
     handleInputSupplier(data) {
         message.success(data)
         const { history } = this.props;
-        history.push('/applicationList/add');
+        history.push('/applicationList/supplier/add');
     }
 
     /**
@@ -172,11 +167,11 @@ class SuppliersAppList extends PureComponent {
                 {
                     providerType === 1 ?
                         <Menu.Item key="detail">
-                            <Link to={`${pathname}/${id}`}>供应商详情</Link>
+                            <Link to={`${pathname}/supplier/${id}`}>供应商详情</Link>
                         </Menu.Item>
                         :
                         <Menu.Item key="AddDetail">
-                            <Link to={`${pathname}/${id}`}>供应商地点详情</Link>
+                            <Link to={`${pathname}/place/${id}`}>供应商地点详情</Link>
                         </Menu.Item>
                 }
                 {

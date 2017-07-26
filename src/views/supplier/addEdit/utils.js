@@ -1,5 +1,15 @@
 import deepmerge from 'deepmerge';
 
+const codeInObject = (source, targetCode) => {
+    for (let i = 0; i < source.length; i++) {
+        const { code, regions } = source[i]
+        if (code === targetCode) {
+            return {regions, i};
+        }
+    }
+    return null;
+}
+
 class Tools {
     static checkAddress(data, name, that) {
         const {firstValue, secondValue, thirdValue} = data;
@@ -20,38 +30,18 @@ class Tools {
     static areaData = [];
     static encodeArea(datas) {
         for (let i = 0; i < datas.length; i++) {
-            
-            const parseResult = this.parseItem(datas[i]);
-            this.areaData = deepmerge(this.areaData, parseResult);
-            // this.areaData.push(parseResult);
+            this.parseItem(datas[i]);
         }
-        console.log(this.areaData)
-        
+        return this.areaData;
     }
+
     static parseItem(item) {
         const keys = item.key.split('-');
         const titles = item.props.hideTitle.split('-');
         const len = keys.length;
-        if (len === 1) {
-            return [{
-                code: keys[0],
-                regionName: titles[0]
-            }]
-        }
-        else if (len === 2) {
-            return [{
-                code: keys[0],
-                regionName: titles[0],
-                regions: [
-                    {
-                        code: keys[1],
-                        regionName: titles[1],
-                    }
-                ]
-            }]
-        }
-        else if (len === 3) {
-            return [{
+        let current = this.areaData;
+        if (len === 3) {
+            const parseData = {
                 code: keys[0],
                 regionName: titles[0],
                 regions: [
@@ -66,10 +56,32 @@ class Tools {
                         ]
                     }
                 ]
-            }]
+            }
+            current = codeInObject(current, keys[0]);
+
+            const parentC1 = {};
+            Object.assign(parentC1, current);
+            if (!current) {
+                this.areaData.push(parseData);
+                return null;
+            }
+            else {
+                current = codeInObject(parentC1.regions, keys[1])
+                const parentC2 = {};
+                Object.assign(parentC2, current);
+                if (!current) {
+                    this.areaData[parentC1.i].regions.push(parseData.regions[0]);
+                    return null;
+                }
+                else {
+                    current = codeInObject(parentC2.regions, keys[2]);
+                    if (!current) {
+                        this.areaData[parentC1.i].regions[parentC2.i].regions.push(parseData.regions[0].regions[0]);
+                        return null;
+                    }
+                }
+            }
         }
-        console.log(keys);
-        console.log(titles);
     }
 }
 
