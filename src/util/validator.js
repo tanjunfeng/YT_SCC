@@ -227,9 +227,11 @@ export class Validator {
         }
     }
     static REGEX = {
-        number: /^\d+(\.\d+)?$/
+        number: /^\d+(\.\d+)?$/,
     }
     static type = {
-        number: {pattern: /^\d+(\.\d+)?$/, message: '无效的数字!'}
+        number: {pattern: /^\d+(\.\d+)?$/, message: '无效的数字!'},
+        phone: {pattern: /^0?(13|14|15|18)[0-9]{9}$/, message: '请输入正确的手机号'},
+        spNo: {pattern: /^XTXC.{4}$/, message: '请输入正确编码格式：YTXC+4位数字 例如（YTXC1001）'}
     }
 }

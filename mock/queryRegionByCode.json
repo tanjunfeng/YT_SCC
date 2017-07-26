@@ -1,0 +1,323 @@
+{
+  "timestamp": 1496319809652,
+  "code": 200,
+  "message": null,
+  "data": [
+    {
+      "id": 2,
+      "code": "110000",
+      "parentCode": "100000",
+      "regionName": "北京",
+      "abbName": "beijing",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 20,
+      "code": "120000",
+      "parentCode": "100000",
+      "regionName": "天津",
+      "abbName": "tianjin",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 38,
+      "code": "130000",
+      "parentCode": "100000",
+      "regionName": "河北省",
+      "abbName": "hebeisheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 221,
+      "code": "140000",
+      "parentCode": "100000",
+      "regionName": "山西省",
+      "abbName": "shanxisheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 352,
+      "code": "150000",
+      "parentCode": "100000",
+      "regionName": "内蒙古自治区",
+      "abbName": "neimengguzizhi",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 467,
+      "code": "210000",
+      "parentCode": "100000",
+      "regionName": "辽宁省",
+      "abbName": "liaoningsheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 586,
+      "code": "220000",
+      "parentCode": "100000",
+      "regionName": "吉林省",
+      "abbName": "jilinsheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 656,
+      "code": "230000",
+      "parentCode": "100000",
+      "regionName": "黑龙江省",
+      "abbName": "heilongjiangsheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 802,
+      "code": "310000",
+      "parentCode": "100000",
+      "regionName": "上海",
+      "abbName": "shanghai",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 821,
+      "code": "320000",
+      "parentCode": "100000",
+      "regionName": "江苏省",
+      "abbName": "jiangsusheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 934,
+      "code": "330000",
+      "parentCode": "100000",
+      "regionName": "浙江省",
+      "abbName": "zhejiangsheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 1047,
+      "code": "340000",
+      "parentCode": "100000",
+      "regionName": "安徽省",
+      "abbName": "anhuisheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 1169,
+      "code": "350000",
+      "parentCode": "100000",
+      "regionName": "福建省",
+      "abbName": "fujiansheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 1264,
+      "code": "360000",
+      "parentCode": "100000",
+      "regionName": "江西省",
+      "abbName": "jiangxisheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 1376,
+      "code": "370000",
+      "parentCode": "100000",
+      "regionName": "山东省",
+      "abbName": "shandongsheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 1533,
+      "code": "410000",
+      "parentCode": "100000",
+      "regionName": "河南省",
+      "abbName": "henansheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 1710,
+      "code": "420000",
+      "parentCode": "100000",
+      "regionName": "湖北省",
+      "abbName": "hubeisheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 1828,
+      "code": "430000",
+      "parentCode": "100000",
+      "regionName": "湖南省",
+      "abbName": "hunansheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 1965,
+      "code": "440000",
+      "parentCode": "100000",
+      "regionName": "广东省",
+      "abbName": "guangdongsheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 2163,
+      "code": "450000",
+      "parentCode": "100000",
+      "regionName": "广西壮族自治区",
+      "abbName": "guangxizhuangzuzizhi",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 2292,
+      "code": "460000",
+      "parentCode": "100000",
+      "regionName": "海南省",
+      "abbName": "hainansheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 2324,
+      "code": "500000",
+      "parentCode": "100000",
+      "regionName": "重庆",
+      "abbName": "zhongqing",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 2368,
+      "code": "510000",
+      "parentCode": "100000",
+      "regionName": "四川省",
+      "abbName": "sichuansheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 2573,
+      "code": "520000",
+      "parentCode": "100000",
+      "regionName": "贵州省",
+      "abbName": "guizhousheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 2671,
+      "code": "530000",
+      "parentCode": "100000",
+      "regionName": "云南省",
+      "abbName": "yunnansheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 2817,
+      "code": "540000",
+      "parentCode": "100000",
+      "regionName": "西藏自治区",
+      "abbName": "xizangzizhi",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 2899,
+      "code": "610000",
+      "parentCode": "100000",
+      "regionName": "陕西省",
+      "abbName": "shanxisheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 3023,
+      "code": "620000",
+      "parentCode": "100000",
+      "regionName": "甘肃省",
+      "abbName": "gansusheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 3127,
+      "code": "630000",
+      "parentCode": "100000",
+      "regionName": "青海省",
+      "abbName": "qinghaisheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 3179,
+      "code": "640000",
+      "parentCode": "100000",
+      "regionName": "宁夏回族自治区",
+      "abbName": "ningxiahuizuzizhi",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 3207,
+      "code": "650000",
+      "parentCode": "100000",
+      "regionName": "新疆维吾尔自治区",
+      "abbName": "xinjiangweiwuerzizhi",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 3326,
+      "code": "710000",
+      "parentCode": "100000",
+      "regionName": "台湾",
+      "abbName": "taiwan",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 3717,
+      "code": "810000",
+      "parentCode": "100000",
+      "regionName": "香港特别行政区",
+      "abbName": "xianggangtebiexingzheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 3739,
+      "code": "820000",
+      "parentCode": "100000",
+      "regionName": "澳门特别行政区",
+      "abbName": "aomentebiexingzheng",
+      "regionType": "2",
+      "zip": ""
+    },
+    {
+      "id": 3750,
+      "code": "900000",
+      "parentCode": "100000",
+      "regionName": "钓鱼岛",
+      "abbName": "diaoyudao",
+      "regionType": "2",
+      "zip": ""
+    }
+  ],
+  "success": true
+}

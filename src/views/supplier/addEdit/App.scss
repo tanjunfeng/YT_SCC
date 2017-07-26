@@ -1,0 +1,160 @@
+.supplier-add-item {
+    margin-bottom: 15px;
+    border: 1px solid #C3C4C7;
+    color: #515151;
+    border-radius: 2px;
+    .ant-input {
+        // width: initial;
+    }
+}
+
+.add-message {
+    &-header {
+        background-color: #F9f9f9;
+        border-bottom: 1px solid #C3C4C7;
+        padding: 8px 18px;
+        color: #242424;
+        font-size: 14px;
+        &-icon {
+            font-size: 16px;
+            margin-right: 8px;
+        }
+    }
+    &-body {
+        padding: 0 18px;
+    }
+    &-list {
+        height: 100%;
+        .ant-form-item {
+            margin-bottom: 0;
+        }
+        .add-message-button {
+            margin: 10px 0 20px 116px;
+        }
+        .ant-form-explain {
+            margin-left: 118px;
+        }
+    }
+    &-item {
+        line-height: 40px;
+        & > span {
+            vertical-align: middle;
+            &:first-child {
+                display: inline-block;
+                min-width: 120px;
+                text-align: right;
+            }
+        }
+        
+    }
+    &-handle {
+        text-align: center;
+        button {
+            margin-right: 10px;
+        }
+    }
+    &-pre {
+        margin-right: 10px;
+    }
+}
+
+.font_color {
+    font-size: 13px;
+    color: #333;
+}
+.suppplier-add {
+    @extend .font_color;
+    overflow: initial;
+    .ant-row {
+        .ant-col-8 {
+            margin: 10px 0;
+            & > span:first-child {
+                margin-right: 10px;
+                display: inline-block;
+                width: 164px;
+                text-align: right;
+                vertical-align: middle;
+                line-height: 32px;
+            }
+            .ant-input {
+                width: 200px;
+            }
+            .ant-calendar-picker {
+                .ant-input {
+                    width: 100%;
+                }
+            }
+            .ant-form-item {
+                display: inline-block;
+                margin-bottom: 0;
+            }
+        }
+    }
+    .supplier-area {
+        .detail-message-body {
+            padding: 0;
+        }
+        .ant-table.ant-table-bordered .ant-table-title {
+            border: none;
+        }
+        .ant-table {
+            @extend .font_color;
+        }
+    }
+    .base {
+        .ant-upload {
+            text-align: left !important;
+        }
+        div.ant-col-8:nth-of-type(even) {
+            width: 530px;
+        }
+        div.ant-col-8:nth-of-type(odd) {
+            width: 477px;
+        }
+    }
+    .first-col-1 {
+        @extend .base;
+        div.ant-col-8:nth-of-type(odd) {
+            & > span:first-child {
+                width: 78px;
+            }
+        }
+    }
+    .first-col-2 {
+        @extend .base;
+        div.ant-col-8:nth-of-type(odd) {
+            & > span:first-child {
+                width: 106px;
+            }
+        }
+        
+    }
+    .first-col-3 {
+        @extend .base;
+        div.ant-col-8:nth-of-type(odd) {
+            & > span:first-child {
+                width: 91px;
+            }
+        }
+    }
+    .supplier-add-basic {
+        @extend .first-col-1;
+    }
+    .supplier-add-bank {
+        @extend .first-col-3
+    }
+    .supplier-add-license {
+        @extend .first-col-2;
+    }
+    .ant-calendar-picker {
+        width: 200px;
+    }
+    .ant-upload-select-text {
+        display: block;
+    }
+    .inline-upload-file {
+        .ant-calendar-picker {
+            width: 100px;
+        }
+    }
+}

@@ -188,6 +188,31 @@ class Utils {
         window.open(`${config.apiHost}${url}?${util.parseQuerystring(query)}`)
         /* eslint-enable */
     }
+
+    /**
+     * 筛选出数组中不通项
+     *
+     * @param {Array[*]} arr 目标数组
+     * @param {Array[*]} arrays 被检测数组
+     * @return {Array[*]} res 新的数组
+     */
+    static diff(arr, arrays) {
+        const argsLen = arguments.length;
+        const len = arr.length;
+        const res = [];
+        let i = -1;
+
+        if (argsLen === 1) {
+            return arr;
+        }
+
+        while (++i < len) {
+            if (arrays.indexOf(arr[i]) === -1) {
+                res.push(arr[i]);
+            }
+        }
+        return res;
+    }
 }
 
 export default Utils;

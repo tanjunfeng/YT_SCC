@@ -33,22 +33,25 @@ class ClassifiedSelect extends Component {
         this.onFirstChange = ::this.onFirstChange;
         this.onSecondChange = ::this.onSecondChange;
         this.onThirdChange = ::this.onThirdChange;
+        this.onFourthChange = ::this.onFourthChange;
 
         this.state = {
             secondDate: All,
             thirdDate: All,
+            fourthDate: All,
             firstSelect: All[0].categoryName,
             secondSelect: All[0].categoryName,
-            thirdSelect: All[0].categoryName
+            thirdSelect: All[0].categoryName,
+            fourthSelect: All[0].categoryName,
         }
 
         this.result = {
             first: All[0],
             second: All[0],
-            third: All[0]
+            third: All[0],
+            fourth: All[0]
         }
     }
-
 
     componentDidMount() {
         const { defaultValue } = this.props;
@@ -62,7 +65,6 @@ class ClassifiedSelect extends Component {
     componentWillReceiveProps(nextProps) {
         const { defaultValue } = nextProps;
         if (defaultValue !== this.props.defaultValue) {
-            console.log(23123);
             this.onFirstChange(defaultValue[0]);
             this.onSecondChange(defaultValue[1]);
             this.onThirdChange(defaultValue[2])
@@ -128,11 +130,34 @@ class ClassifiedSelect extends Component {
         })
 
         Object.assign(this.result, {
-            third: (current.length > 0 ? current[0] : All[0])
+            third: (current.length > 0 ? current[0] : All[0]),
+            fourth: All[0]
         });
 
         this.setState({
-            thirdSelect: this.result.third.categoryName
+            fourthDate: All.concat(current.length > 0 ? current[0].childCategories : []),
+            thirdSelect: this.result.third.categoryName,
+            fourthSelect: this.result.fourth.categoryName
+        }, () => {
+            this.props.onChange(this.result, this);
+        })
+    }
+
+    onFourthChange(key) {
+        const { fourthDate } = this.state;
+        const current = fourthDate.filter(item => {
+            if (item.categoryName === key) {
+                return item;
+            }
+            return null;
+        })
+
+        Object.assign(this.result, {
+            fourth: (current.length > 0 ? current[0] : All[0])
+        });
+
+        this.setState({
+            fourthSelect: this.result.fourth.categoryName
         }, () => {
             this.props.onChange(this.result, this);
         })
@@ -142,7 +167,8 @@ class ClassifiedSelect extends Component {
         Object.assign(this.result, {
             first: All[0],
             second: All[0],
-            third: All[0]
+            third: All[0],
+            fourth: All[0],
         })
         this.setState({
             firstSelect: All[0].categoryName
@@ -154,8 +180,11 @@ class ClassifiedSelect extends Component {
     render() {
         const { wrapClass, width } = this.props;
         let { categorys } = this.props;
-        const { secondDate, thirdDate, firstSelect, thirdSelect, secondSelect } = this.state;
-        const { first, second } = this.result;
+        const {
+            secondDate, thirdDate, fourthDate,
+            firstSelect, thirdSelect, secondSelect, fourthSelect
+        } = this.state;
+        const { first, second, third } = this.result;
         categorys = All.concat(categorys);
         const firstOptions = categorys.map(item =>
             <Option key={item.categoryName}>{item.categoryName}</Option>
@@ -166,7 +195,9 @@ class ClassifiedSelect extends Component {
         const ThirdOptions = thirdDate.map(item =>
             <Option key={item.categoryName}>{item.categoryName}</Option>
         );
-
+        const FourthOptions = fourthDate.map(item =>
+            <Option key={item.categoryName}>{item.categoryName}</Option>
+        );
         return (
             <div className={wrapClass}>
                 <Select
@@ -203,6 +234,18 @@ class ClassifiedSelect extends Component {
                         {ThirdOptions}
                     </Select>
                 }
+                {
+                    third.id !== -1 &&
+                    <Select
+                        className="classify-selete-item classify-selete-item4"
+                        value={fourthSelect}
+                        placeholder="请选择"
+                        style={{ width }}
+                        onChange={this.onFourthChange}
+                    >
+                        {FourthOptions}
+                    </Select>
+                }
             </div>
         );
     }
@@ -218,7 +261,7 @@ ClassifiedSelect.propTypes = {
 
 ClassifiedSelect.defaultProps = {
     onChange: () => {},
-    width: 90,
+    width: 80,
 }
 
 export default ClassifiedSelect;

@@ -42,7 +42,7 @@ startApp({
     user: {
         employeeName: 'admin'
     },
-    "topMenus": {
+    topMenus: {
         "menu": [
             {
                 "id": 39,
@@ -100,9 +100,21 @@ startApp({
                         name: "商品参数管理"
                     },
                     {
-                        "code": "goodsClassification",
-                        "name": "商品分类列表"
-                    }
+                        code: "goodsClassification",
+                        name: "商品分类列表"
+                    },
+                    {
+                        code: "procurementMaintenance",
+                        name: "商品采购关系维护"
+                    },
+                    {
+                        code: "salesMaintenance",
+                        name: "商品销售关系维护"
+                    },
+                    {
+                        code: 'managementList',
+                        name: '商品管理列表'
+                    },
                 ]
             },
             {
@@ -110,25 +122,31 @@ startApp({
                 name: "供应商管理",
                 submenu: [
                     {
-                        code: "supplierManagement",
+                        code: "suppliersAppList",
                         name: "供应商管理列表"
                     },
                     {
-                        code: "supplierApplication",
-                        name: "供应商入驻申请列表"
+                        code: "supplierInputList",
+                        name: "供应商管理列表"
+                    },
+                ]
+            },
+            {
+                code: "procurementMng",
+                name: "采购管理管理",
+                submenu: [
+                    {
+                        code: "poMngList",
+                        name: "采购单管理列表"
                     },
                     {
-                        code: "modifyApplication",
-                        name: "供应商修改资料申请"
-                    },
-                    {
-                        code: "supplierAreaManagement",
-                        name: "供应商配送区域管理"
+                        code: "poPrintList",
+                        name: "采购单打印列表"
                     }
                 ]
             },
             {
-                code: "gylxtpz",
+                code: 'gylxtpz',
                 name: "系统配置",
                 submenu: [
                     {
@@ -177,6 +195,26 @@ startApp({
                     {
                         code: 'categoryIcon',
                         name: '分类图标管理'
+                    }
+                ]
+            },
+            {
+                code: 'ordergl',
+                name: '订单管理',
+                submenu: [
+                    {
+                        code: 'orderList',
+                        name: '订单管理列表',
+                    },
+                ]
+            },
+            {
+                code: "kctz",
+                name: "库存调整",
+                submenu: [
+                    {
+                        code: "kctzlb",
+                        name: "库存调整列表",
                     }
                 ]
             }

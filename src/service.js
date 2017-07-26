@@ -43,7 +43,10 @@ http.response(
 export const exportSupplierList = 'provider/exportSupplierList';
 
 // 下载供应商入驻列表
-export const exportSupplierEnterList = 'provider/exportSupplierEnterList';
+// export const exportSupplierEnterList = 'provider/exportSupplierEnterList';
+
+// 下载供应商入驻列表
+export const exportSupplierEnterList = '/supplier/exportSettledList';
 
 // 下载供应商修改列表
 export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
@@ -108,7 +111,13 @@ export const updateSupplierStatus = (params) => http.post('/provider/updateSuppl
 export const fetchSupplierEditApply = (params) => http.get('/provider/supplierEditApplyList', params);
 
 // 供应商申请入驻管理
-export const fetchProviderEnter = (params) => http.get('/provider/queryProviderEnterList', params);
+export const fetchProviderEnter = (params) => http.get('/region/queryAllLargerRegionProvince', params);
+
+// 供应商管理列表(改)
+export const fetchQueryManageList = (params) => http.get('/supplier/queryManageList', params);
+
+// 供应商入驻列表(改)
+export const querySettledList = (params) => http.get('/supplier/querySettledList', params);
 
 // 供应商综合审核录入
 export const insertSupplierAuditInfo = (params) => http.post('/provider/insertSupplierAuditInfo', params);
@@ -145,9 +154,6 @@ export const settledCont = (params) => http.get('/provider/checkSupplierSettledC
 
 // 查看失败原因
 export const findAuditFailedReason = (params) => http.get('/provider/findAuditFailedReason', params);
-
-// 获取供应商详情
-export const queryProviderDetail = (params) => http.get('/provider/queryProviderDetail', params);
 
 // 修改供应商营业执照信息 (未联调)
 export const updateSupplierLicenseInfo = (params) => http.post('/provider/updateSupplierLicenseInfo', params);
@@ -306,15 +312,17 @@ export const fectheEditorContent = (params) => http.post('/staticPage/updateStat
 // 查询所有轮播
 export const queryCarouselAdList = (params) => http.get('/homeAd/queryCarouselAdList', params);
 
-// 修改分类信息
+// 轮播广告管理-修改
 export const updateCarouselAd = (params) => http.post('/homeAd/updateCarouselAd', params);
+
+// 轮播广告-启停（cyx）
+export const updateCarouselAdStatus = (params) => http.post('/homeAd/updateCarouselAdStatus', params);
 
 // 删除某个轮播
 export const deleteCarouselAd = (params) => http.post('/homeAd/deleteCarouselAd', params);
 
 // 新增轮播
 export const insertCarouselAd = (params) => http.post('/homeAd/insertCarouselAd', params);
-
 
 // 判断序号是否重复
 export const queryCarouselAdBySorting = (params) => http.get('/homeAd/queryCarouselAdBySorting', params);
@@ -323,7 +331,7 @@ export const queryCarouselAdBySorting = (params) => http.get('/homeAd/queryCarou
 export const queryCarouselAdListById = (params) => http.get('/homeAd/queryCarouselAdListById', params);
 
 // 查询轮播间隔时间
-export const queryCarouselIntervalList = (params) => http.get('/homeAd/queryCarouselInterval', params);
+export const queryCarouselInterval = (params) => http.get('/homeAd/queryCarouselInterval', params);
 
 // 修改轮播间隔时间
 export const updateCarouselInterval = (params) => http.post('/homeAd/updateCarouselInterval', params);
@@ -353,7 +361,7 @@ export const saveItemAd = (params) => http.post('/homeAd/saveItemAd', params);
 export const uploadImageBase64Data = (params) => http.post('/commonUploadFile/uploadImageBase64Data', params);
 
 // 查询全部分类信息
-export const queryCategorys = (params) => http.get('/category/queryCategories', params);
+export const queryCategorys = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
 
 // 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
 export const saveInput = (params) => http.post('/rk/saveInput', params);
@@ -406,6 +414,7 @@ export const queryAllSupplier = (params) => http.get('/price/queryAllSupplier', 
 // 新增数据字典
 export const insertDictionary = (params) => http.post('/dictionary/insertDictionary', params);
 
+<<<<<<< HEAD
 // 修改数据字典
 export const updateDictionary = (params) => http.post('/dictionary/updateDictionary', params);
 
@@ -415,3 +424,58 @@ export const deleteDictionary = (params) => http.get('/dictionary/deleteDictiona
 // 修改字典内容或设置状态
 export const updateContent = (params) => http.post('/dictionary/updateContent', params);
 
+=======
+// IBM 修改
+// 查看是否存在主供应商
+export const checkMainSupplier = (params) => http.get('/prodPurchase/checkMainSupplier', params);
+
+// 查询商品价格信息
+export const getProdPurchaseById = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
+
+// 销售价格信息
+export const findPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
+
+// 新增商品采购关系
+export const addProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
+
+// 更新商品采购关系
+export const updateProdPurchase = (params) => http.post('/prodPurchase/updateProdPurchase', params);
+
+// 删除商品价格信息
+export const deleteProdPurchaseById = (params) => http.get('/prodPurchase/deleteProdPurchaseById', params);
+
+// 更改供应商类型
+export const fetchChangeSupType = (params) => http.get('/prodPurchase/changeSupplierType', params);
+
+// 更改商品采购价格启禁用状态
+export const changeProPurchaseStatus = (params) => http.get('/prodPurchase/changeProPurchaseStatus', params);
+
+// 商品的暂停购进和恢复采购
+export const batchChangeProPurchaseStatus = (params) => http.post('/prodPurchase/batchChangeProPurchaseStatus', params);
+
+// 根据条件查询商品价格信息
+export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
+
+export const testApi = (params) => http.get('/test', params);
+
+// 查询采购单列表
+export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
+// 根据商品编码获取商品详情
+export const fetchMaterialByCd = (params) => http.get('/provider/queryMaterialByCd', params);
+// 删除采购单
+export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
+// 查询采购单打印列表
+export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
+
+/**
+ * 供应商相关
+ */
+// 供应商详情
+export const queryProviderDetail = (params) => http.get('/supplier/queryProviderDetail', params);
+// 查询所有大区
+export const queryAllLargerRegionProvince = (params) => http.get('/region/queryAllLargerRegionProvince', params);
+// 获取供应商或者供应商地点信息
+export const getSupplierNo = (params) => http.get('/supplier/getSupplierNo', params);
+// 新增或修改供应商信息
+export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/insertOrUpdateSupplierInfo', params);
+>>>>>>> 0f5c9e5cefd88da53259a89a87708905cfdce8e7

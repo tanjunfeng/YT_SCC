@@ -199,7 +199,7 @@ SuppliersApplicationList.propTypes = {
     modifyCheckReasonVisible: PropTypes.bool,
     applicationData: PropTypes.objectOf(PropTypes.any),
     auditVisible: PropTypes.bool,
-    checkReasonVisible: PropTypes.bool
+    checkResonVisible: PropTypes.bool,
 }
 
 export default withRouter(Form.create()(SuppliersApplicationList));

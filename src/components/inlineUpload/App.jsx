@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Upload, Button, Icon } from 'antd';
+import { Upload, Button, Icon, Tooltip, DatePicker } from 'antd';
 import classnames from 'classnames';
 
 class InlineUpload extends Component {
@@ -63,11 +63,13 @@ class InlineUpload extends Component {
         return (
             <div className={classnames('inline-upload', {'inline-upload-limit': this.result.length >= limit})}>
                 {
-                    <Upload {...props} fileList={this.state.fileList} >
-                        <Button>
-                            <Icon type="upload" />
-                            点击上传
-                        </Button>
+                    <Upload {...props} fileList={this.state.fileList}>
+                        <Tooltip placement="top" title="图片仅支持JPG、GIF、PNG格式的图片，大小不超过1M。">
+                            <Button>
+                                上传
+                            </Button>
+                        </Tooltip>
+                        
                     </Upload>
                 }
                 <div className="inline-upload-file">
@@ -105,6 +107,10 @@ class InlineUpload extends Component {
                             )
                         })
                     }
+                    <div className="effective-time-document">
+                        <span>证件有效时间：</span>
+                        <DatePicker />
+                    </div>
                 </div>
             </div>
         );
