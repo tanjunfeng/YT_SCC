@@ -17,10 +17,11 @@ import {
     fecthCheckMainSupplier,
     modifyAuditVisible,
     modifyCheckReasonVisible,
-    fecthGetProdPurchaseById
+    fecthGetProdPurchaseById,
+    fetchGetProductById
 } from '../../../actions';
-import SearchForm from '../searchForm';
-import ShowForm from '../showForm';
+import SearchForm from '../searchFormProcure';
+import ShowForm from '../showFormProcure';
 import Cardline from '../card';
 import { PAGE_SIZE } from '../../../constant';
 
@@ -34,19 +35,20 @@ import { PAGE_SIZE } from '../../../constant';
         prodPurchase: state.toJS().commodity.prodPurchase,
         ProdPurchases: state.toJS().commodity.getProdPurchaseById,
         queryProdPurchases: state.toJS().commodity.getProdPurchaseById,
+        getProductById: state.toJS().commodity.getProductById,
     }),
     dispatch => bindActionCreators({
         fecthCheckMainSupplier,
         modifyAuditVisible,
         modifyCheckReasonVisible,
-        fecthGetProdPurchaseById
+        fecthGetProdPurchaseById,
+        fetchGetProductById
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.handleFormSearch = this.handleFormSearch.bind(this);
         this.handleFormReset = this.handleFormReset.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
@@ -70,19 +72,15 @@ class ProcurementMaintenance extends PureComponent {
         this.props.fecthGetProdPurchaseById({
             productId: 'xpro12333'
         });
+        this.props.fetchGetProductById({
+            productId: 1001
+        });
     }
 
     /**
      * 新增
      */
     handleAdd() {
-        this.props.modifyCategoryVisible({
-            isVisible: true,
-            record: {
-                toAddCategoryTitle: '新增分类商品排序',
-                isEdit: false
-            }
-        });
     }
 
     /**
@@ -107,32 +105,12 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     /**
-     * 搜索
-     *
-     * @param {Object} data 展示数据
-     * @param {bool} bool 通过返回值操控请求
-     */
-    handleFormSearch(data, bool) {
-        this.searchForm = data;
-        if (bool) {
-            // 主数据
-            // console.log('主数据')
-            this.handlePaginationChange();
-        } else {
-            // SCM数据
-            // console.log('SCM数据')
-            this.handlePaginationChange();
-        }
-    }
-
-    /**
      * 重置
      *
      * @param {Object} data 重置的表单
      */
     handleFormReset(data) {
         this.searchForm = data;
-        this.handlePaginationChange();
     }
 
     /**
@@ -142,18 +120,19 @@ class ProcurementMaintenance extends PureComponent {
      */
     handlePaginationChange(goto = 1) {
         this.current = goto;
-        // this.props.fetchProviderEnterList({
-        //     pageNum: goto,
-        //     pageSize: PAGE_SIZE,
-        //     ...this.searchForm
-        // });
+        this.props.fetchProviderEnterList({
+            pageNum: goto,
+            pageSize: PAGE_SIZE,
+            ...this.searchForm
+        });
     }
 
     render() {
-        const { prefixCls } = this.props;
+        const { prefixCls, getProductById } = this.props;
+        const innitalvalue = getProductById;
         return (
             <div className={`${prefixCls}-min-width application`}>
-                <ShowForm />
+                <ShowForm innitalvalue={innitalvalue} />
                 <SearchForm
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
@@ -168,14 +147,13 @@ class ProcurementMaintenance extends PureComponent {
 }
 
 ProcurementMaintenance.propTypes = {
+    fetchGetProductById: PropTypes.objectOf(PropTypes.any),
+    fetchProviderEnterList: PropTypes.objectOf(PropTypes.any),
     fecthGetProdPurchaseById: PropTypes.func,
-    fetchProviderEnterList: PropTypes.bool,
     modifyAuditVisible: PropTypes.bool,
     modifyCheckReasonVisible: PropTypes.bool,
-    auditVisible: PropTypes.bool,
-    checkResonVisible: PropTypes.bool,
     prefixCls: PropTypes.string,
-    queryProdPurchases: PropTypes.objectOf(PropTypes.any)
+    getProductById: PropTypes.objectOf(PropTypes.any)
 }
 
 ProcurementMaintenance.defaultProps = {

@@ -1,3 +1,10 @@
+/**
+ * @file changeMessage.jsx
+ * @author Tan junfeng
+ *
+ * 供应商管理列表
+ */
+
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';

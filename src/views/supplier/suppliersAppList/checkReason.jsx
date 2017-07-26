@@ -32,6 +32,7 @@ const Option = Select.Option;
     state => ({
         checkResonVisible: state.toJS().supplier.checkResonVisible,
         visibleData: state.toJS().supplier.visibleData,
+        editBeforeAfter: state.toJS().supplier.editBeforeAfter,
     }),
     dispatch => bindActionCreators({
         modifyCheckReasonVisible,
@@ -59,7 +60,8 @@ class CheckReason extends PureComponent {
 
     handleCheckOk() {
         const { selected } = this.state;
-        const { visibleData } = this.props;
+        const { editBeforeAfter, visibleData } = this.props;
+        // console.log(editBeforeAfter)
         if (selected === -1) {
             message.error('请选择审核结果');
             return;
@@ -92,7 +94,6 @@ class CheckReason extends PureComponent {
             providerName,
             name,
         } = this.props.visibleData;
-        console.log(this.props.visibleData)
 
         const columns = [{
             title: '项目',

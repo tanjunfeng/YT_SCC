@@ -13,7 +13,7 @@ const initState = Immutable.fromJS({
     // 供应商管理列表
     data: {},
 
-    // 弹出框数据 
+    // 弹出框数据
     visibleData: {},
 
     informationVisible: false,
@@ -67,6 +67,9 @@ const initState = Immutable.fromJS({
 
     // 根据条件查询商品价格信息
     changeSupType: {},
+
+    // 查询商品信息
+    getProductById: {},
 });
 
 export default function (state = initState, action) {
@@ -151,6 +154,9 @@ export default function (state = initState, action) {
 
         case ActionType.CHANGE_SUPPLIER_TYPE:
             return state.set('changeSupType', action.payload);
+
+        case ActionType.GET_PRODUCT_BYID:
+            return state.set('getProductById', action.payload);
 
         default:
             return state;
