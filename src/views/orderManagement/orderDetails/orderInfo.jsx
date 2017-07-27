@@ -80,32 +80,35 @@ class OrderInformation extends PureComponent {
     }
 
     /**
-     * 保存
+     * 保存备注信息
      */
     handleOrderSave() {
         confirm({
             title: '保存',
             content: '确认保存备注信息？',
             onOk: () => {
+                // ToDo：带数据（备注-this.state.textAreaNote）发请求
             },
             onCancel() {},
         });
     }
 
     /**
-     * 审核
+     * 审核该订单
      */
     handleOrderAudit() {
+        // ToDo: 发请求
     }
 
     /**
-     * 取消
+     * 取消该订单
      */
     handleOrderCancel() {
         confirm({
             title: '取消订单',
             content: '确认取消该订单？',
             onOk: () => {
+                // ToDo: 发请求
             },
             onCancel() {},
         });
@@ -113,6 +116,18 @@ class OrderInformation extends PureComponent {
 
     render() {
         const { initialData } = this.props;
+        const tableFooter = () =>
+            (<div>
+                <span className="table-footer-item">
+                    <span>共</span>
+                    <span className="red-number">{initialData.commodifyNumber}</span>
+                    <span>件商品</span>
+                </span>
+                <span className="table-footer-item">
+                    <span>总金额： ￥</span>
+                    <span className="red-number">{initialData.commifyTotalMoney}</span>
+                </span>
+            </div>)
         return (
             <div>
                 <div className="order-details-item">
@@ -169,6 +184,8 @@ class OrderInformation extends PureComponent {
                                     <span className="details-info-lable">备注:</span>
                                     <TextArea
                                         autosize={{ minRows: 3, maxRows: 6 }}
+                                        style={{resize: 'none' }}
+                                        maxLength="250"
                                         onBlur={(e) => {
                                             this.setState({
                                                 textAreaNote: e.target.value
@@ -230,33 +247,49 @@ class OrderInformation extends PureComponent {
                             <Icon type="picture" className="detail-message-header-icon" />
                             商品信息
                         </div>
-                        <div className="detail-message-body">
+                        <div>
                             <Table
                                 dataSource={initialData.commodifyInfo}
                                 columns={columns}
                                 pagination={false}
                                 rowKey="commodifyNumber"
+                                footer={tableFooter}
                             />
                         </div>
                     </div>
                 </div>
                 <div className="order-details-btns">
                     <Row>
-                        <Col className="gutter-row" span={14} offset={10}>
+                        <Col className="gutter-row" span={14} offset={9}>
                             <Button
                                 size="default"
                                 onClick={this.handleOrderSave}
                                 type="primary"
                             >保存</Button>
+                            {
+                                (initialData.orderStatus === '待审核' ||
+                                initialData.orderStatus === '待人工审核') &&
+                                <Button
+                                    size="default"
+                                    onClick={this.handleOrderAudit}
+                                >审核</Button>
+                            }
+                            {
+                                (initialData.logisticsStatus !== '待收货' &&
+                                initialData.logisticsStatus !== '未送达' &&
+                                initialData.logisticsStatus !== '已签收') &&
+                                <Button
+                                    size="default"
+                                    onClick={this.handleOrderCancel}
+                                    type="danger"
+                                >取消</Button>
+                            }
                             <Button
                                 size="default"
-                                onClick={this.handleOrderAudit}
-                            >审核</Button>
-                            <Button
-                                size="default"
-                                onClick={this.handleOrderCancel}
-                                type="danger"
-                            >取消</Button>
+                                onClick={() => {
+                                    window.history.back();
+                                }}
+                            >返回</Button>
                         </Col>
                     </Row>
                 </div>

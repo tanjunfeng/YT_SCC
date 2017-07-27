@@ -8,7 +8,7 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import { Form, Icon, Table, Row, Col, Button } from 'antd';
+import { Form, Icon, Table, Row, Col, Button, message } from 'antd';
 import moment from 'moment';
 
 class PayInformation extends PureComponent {
@@ -72,16 +72,28 @@ class PayInformation extends PureComponent {
             title: '操作',
             dataIndex: 'operation',
             key: 'operation',
-            render: (text, record) => (
-                <a
-                    onClick={() => {
-                        this.handleRefundMoney(record);
-                    }}
-                >确认退款</a>
-            )
+            render: (text, record) => {
+                switch (text) {
+                    case 0:
+                        return (<a
+                            onClick={() => {
+                                this.handleAuditRefund(record);
+                            }}
+                        >审核退款</a>)
+                    case 1:
+                        return (<a
+                            onClick={() => {
+                                this.handleRefundOk(record);
+                            }}
+                        >确认退款</a>)
+                    default:
+                        return null;
+                }
+            }
         }];
 
-        this.handleRefundMoney = ::this.handleRefundMoney;
+        this.handleAuditRefund = ::this.handleAuditRefund;
+        this.handleRefundOk = ::this.handleRefundOk;
 
         this.state = {
         }
@@ -91,12 +103,23 @@ class PayInformation extends PureComponent {
     }
 
     /**
+     * 审核退款
+     * @param {Object} record 该行数据
+     */
+    handleAuditRefund(record) {
+        // ToDo: 带数据发请求
+        message.success(record)
+    }
+
+    /**
      * 确认退款
      * @param {Object} record 该行数据
      */
-    handleRefundMoney(record) {
-
+    handleRefundOk(record) {
+        // ToDo: 带数据发请求
+        message.success(record)
     }
+
     render() {
         const { initialData } = this.props;
         const {
@@ -105,6 +128,25 @@ class PayInformation extends PureComponent {
             refungMoney,
             differMoney
         } = initialData.payInfoFooter;
+        const tableFooter = () =>
+            (<div>
+                <span className="table-footer-item">
+                    <span>总金额： ￥</span>
+                    <span className="red-number">{totalMoney}</span>
+                </span>
+                <span className="table-footer-item">
+                    <span>付款： ￥</span>
+                    <span className="red-number">{payMoney}</span>
+                </span>
+                <span className="table-footer-item">
+                    <span>退款： ￥</span>
+                    <span className="red-number">{refungMoney}</span>
+                </span>
+                <span className="table-footer-item">
+                    <span>差额： ￥</span>
+                    <span className="red-number">{differMoney}</span>
+                </span>
+            </div>)
         return (
             <div>
                 <div className="order-details-item">
@@ -113,24 +155,13 @@ class PayInformation extends PureComponent {
                             <Icon type="wallet" className="detail-message-header-icon" />
                             支付信息
                         </div>
-                        <div className="detail-message-body">
+                        <div>
                             <Table
                                 dataSource={initialData.payInfo}
                                 columns={this.columns}
                                 pagination={false}
                                 rowKey="payNumber"
-                                footer={() => (
-                                    <div>
-                                        <span>总金额： ￥</span>
-                                        <span className="red-number">{totalMoney}</span>
-                                        <span>付款： ￥</span>
-                                        <span className="red-number">{payMoney}</span>
-                                        <span>退款： ￥</span>
-                                        <span className="red-number">{refungMoney}</span>
-                                        <span>差额： ￥</span>
-                                        <span className="red-number">{differMoney}</span>
-                                    </div>
-                                )}
+                                footer={tableFooter}
                             />
                         </div>
                     </div>
@@ -147,7 +178,6 @@ class PayInformation extends PureComponent {
                                 onClick={() => {
                                     window.history.back();
                                 }}
-                                type="primary"
                             >返回</Button>
                         </Col>
                     </Row>

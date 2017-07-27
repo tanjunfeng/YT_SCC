@@ -48,14 +48,21 @@
         text-align: right;
         .red-number {
             color: #f00;
+        }
+        .table-footer-item {
             margin-right: 30px;
+            display: inline-block;
         }
     }
     .red-star {
         color: red;
     }
-    .arrival-date-picker .ant-calendar-picker-input{
+    .arrival-date-picker .ant-calendar-picker-input {
         width: 222px !important;
+    }
+    .gys-layout, .manage-form, .application-form, .area-form {
+        margin: 0;
+        border: 0;
     }
 }
 

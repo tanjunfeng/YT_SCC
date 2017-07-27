@@ -47,7 +47,7 @@ const columns = [{
     dataIndex: 'differMoney',
     key: 'differMoney',
     render: (text) => (
-        <span>￥{text}</span>
+        <span>{text}元</span>
     )
 }];
 
@@ -55,9 +55,12 @@ class DistributionInformation extends PureComponent {
     constructor(props) {
         super(props);
         this.handleDistributionSave = ::this.handleDistributionSave;
-        this.handleDistributionReturn = ::this.handleDistributionReturn;
+        this.onDeliveryDateChange = ::this.onDeliveryDateChange;
+        this.onWillArrivalDateChange = ::this.onWillArrivalDateChange;
 
         this.state = {
+            deliveryDate: props.initialData.deliveryDate,
+            willArrivalDate: props.initialData.willArrivalDate
         }
     }
 
@@ -65,16 +68,46 @@ class DistributionInformation extends PureComponent {
     }
 
     /**
+     * 配送日期
+     * @param {moment} date moment对象
+     */
+    onDeliveryDateChange(date) {
+        this.setState({
+            deliveryDate: date === null ? null : String(date.valueOf())
+        })
+    }
+
+    /**
+     * 预期到达日期
+     * @param {moment} date moment对象
+     */
+    onWillArrivalDateChange(date) {
+        this.setState({
+            willArrivalDate: date === null ? null : String(date.valueOf())
+        })
+    }
+
+    /**
      * 保存
      */
     handleDistributionSave() {
+        // const {
+        //     logisticsProvider,
+        //     logisticsNumber,
+        //     deliverier,
+        //     contact
+        // } = this.props.form.getFieldsValue();
         confirm({
             title: '保存',
             content: '确认保存备注信息？',
             onOk: () => {
-                // console.log(this.state.textAreaNote)
                 this.props.form.validateFields((err) => {
                     if (!err) {
+                        // ToDo：带数据发请求，提交表单
+
+                        // 日期（时间戳）
+                        // console.log( this.state.deliveryDate)
+                        // console.log( this.state.willArrivalDate)
                         message.success('保存成功！');
                     }
                 })
@@ -83,16 +116,11 @@ class DistributionInformation extends PureComponent {
         });
     }
 
-    /**
-     * 返回
-     */
-    handleDistributionReturn() {
-
-    }
-
     render() {
         const { getFieldDecorator } = this.props.form;
         const { initialData } = this.props;
+        const deliveryDate = moment(parseInt(initialData.deliveryDate, 10)).format('YYYY-MM-DD');
+        const willArrivalDate = moment(parseInt(initialData.willArrivalDate, 10)).format('YYYY-MM-DD');
         return (
             <div>
                 <div className="order-details-item">
@@ -101,7 +129,7 @@ class DistributionInformation extends PureComponent {
                             <Icon type="credit-card" className="detail-message-header-icon" />
                             配送汇总
                         </div>
-                        <div className="detail-message-body">
+                        <div>
                             <Form layout="inline" className="manage-form">
                                 <div className="gutter-example">
                                     <Row gutter={16}>
@@ -121,7 +149,9 @@ class DistributionInformation extends PureComponent {
                                                                 callback();
                                                             }
                                                         }],
-                                                        initialValue: initialData.logisticsProvider ? initialData.logisticsProvider : '全部'
+                                                        initialValue: initialData.logisticsProvider ?
+                                                        initialData.logisticsProvider :
+                                                        '全部'
                                                     })(
                                                         <Select
                                                             size="default"
@@ -149,18 +179,10 @@ class DistributionInformation extends PureComponent {
                                                         <span className="red-star">*</span>
                                                         配送日期
                                                     </span>
-                                                    {getFieldDecorator('deliveryDate', {
-                                                        rules: [{
-                                                            required: true,
-                                                            message: '请选择配送日期!'
-                                                        }],
-                                                        initialValue: moment(initialData.deliveryDate, 'YYYY-MM-DD')
-                                                    })(
-                                                        <DatePicker
-                                                            onChange={this.onChange}
-                                                            className="arrival-date-picker"
-                                                        />
-                                                    )}
+                                                    <DatePicker
+                                                        defaultValue={moment(deliveryDate, 'YYYY-MM-DD')}
+                                                        onChange={this.onDeliveryDateChange}
+                                                    />
                                                 </div>
                                             </FormItem>
                                         </Col>
@@ -200,10 +222,10 @@ class DistributionInformation extends PureComponent {
                                                             required: true,
                                                             message: '请选择预计达到日期!'
                                                         }],
-                                                        initialValue: moment(initialData.willArrivalDate, 'YYYY-MM-DD')
+                                                        initialValue: moment(willArrivalDate, 'YYYY-MM-DD')
                                                     })(
                                                         <DatePicker
-                                                            onChange={this.onChange}
+                                                            onChange={this.onWillArrivalDateChange}
                                                             className="arrival-date-picker"
                                                         />
                                                     )}
@@ -267,7 +289,7 @@ class DistributionInformation extends PureComponent {
                             <Icon type="file-text" className="detail-message-header-icon" />
                             配送列表
                         </div>
-                        <div className="detail-message-body">
+                        <div>
                             <Table
                                 dataSource={initialData.distributionInfo}
                                 columns={columns}
@@ -287,7 +309,9 @@ class DistributionInformation extends PureComponent {
                             >保存</Button>
                             <Button
                                 size="default"
-                                onClick={this.handleDistributionReturn}
+                                onClick={() => {
+                                    window.history.back();
+                                }}
                             >返回</Button>
                         </Col>
                     </Row>
