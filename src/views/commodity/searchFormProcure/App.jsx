@@ -18,7 +18,9 @@ import {
     receiveData,
     fetchTest,
 } from '../../../actions/classifiedList';
-
+import {
+    fetchGetProductById
+} from '../../../actions';
 import {
     initiateModeOptions,
     mainSupplierOptions,
@@ -33,7 +35,11 @@ const Option = Select.Option;
         rights: state.toJS().user.rights,
         data: state.toJS().commodity.classifiedList,
     }),
-    dispatch => bindActionCreators({ fetchAction, receiveData }, dispatch)
+    dispatch => bindActionCreators({
+        fetchAction,
+        receiveData,
+        fetchGetProductById
+    }, dispatch)
 )
 class SearchForm extends Component {
     constructor(props) {
@@ -43,6 +49,7 @@ class SearchForm extends Component {
         this.handleChangeSort = ::this.handleChangeSort;
         this.handleChangeStatus = ::this.handleChangeStatus;
         this.handleResetValue = ::this.handleResetValue;
+        this.handleGetValue = ::this.handleGetValue;
 
         // Test
         this.handleSave = ::this.handleSave;
@@ -63,6 +70,15 @@ class SearchForm extends Component {
                 disabled: true,
             });
         }, 2000);
+    }
+
+    /**
+     * 搜索
+     */
+    handleGetValue() {
+        this.props.fetchGetProductById({
+            productId: 1001
+        });
     }
 
     /**
@@ -349,6 +365,8 @@ class SearchForm extends Component {
 }
 
 SearchForm.propTypes = {
+    fetchGetProductById: PropTypes.objectOf(PropTypes.any),
+    fetchAction: PropTypes.objectOf(PropTypes.any),
     prefixCls: PropTypes.string,
     user: PropTypes.objectOf(PropTypes.string),
     form: PropTypes.objectOf(PropTypes.any),

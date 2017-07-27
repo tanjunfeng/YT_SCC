@@ -14,8 +14,9 @@ import {
     firstSupplierStatusOptions,
     secondSupplierStatusOptions,
     supplierLevelOptions,
-    supplierPlaceLevelOptions
+    supplierPlaceLevelOptions,
 } from '../../../constant/searchParams';
+import { PAGE_SIZE } from '../../../constant';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -39,7 +40,7 @@ class SearchForm extends Component {
             // 控制DatePicker的value
             rengeTime: null,
             // DatePicker选取后返回的格式化后的日期
-            inTime: null,
+            settledDate: null,
             // 供应商类型
             supplierType: '-1',
         }
@@ -51,10 +52,10 @@ class SearchForm extends Component {
     * @param {moment} data 日期的moment对象
     * @param {string} dateString 格式化后的日期
     */
-    onEnterTimeChange(date, dateString) {
+    onEnterTimeChange(date) {
         this.setState({
             rengeTime: date,
-            inTime: dateString,
+            settledDate: date._d*1,
         });
     }
 
@@ -63,21 +64,21 @@ class SearchForm extends Component {
     */
     getValue() {
         const {
-            supplierNumber,
-            supplierName,
-            supplierLicense,
-            supplierType,
-            supplierState,
-            supplierLevel,
+            providerName,
+            providerNo,
+            registLicenceNumber,
+            providerType,
+            status,
+            grade,
         } = this.props.form.getFieldsValue();
         const searchData = {
-            supplierNumber,
-            supplierName,
-            supplierLicense,
-            supplierType,
-            supplierState,
-            supplierLevel,
-            inTime: this.state.inTime
+            providerName,
+            providerNo,
+            registLicenceNumber,
+            providerType,
+            status,
+            grade,
+            settledDate: this.state.settledDate
         };
         this.searchData = Utils.removeInvalid(searchData);
     }

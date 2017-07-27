@@ -17,7 +17,7 @@ class SellPriceModal extends Component {
     }
 
     handleTestFetch = ({ value, pagination }) => {
-        console.log(value, pagination);
+        // console.log(value, pagination);
 
         return fetchTest({
             value,
@@ -36,7 +36,7 @@ class SellPriceModal extends Component {
             return;
         }
         validateFields((err, values) => {
-            console.log(values);
+            // console.log(values);
             const result = values;
             result.sellSectionPrices = results;
             // TODO post data
