@@ -9,8 +9,8 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import {
-    Form, Icon, Row, Col, Select, Modal, InputNumber,
-    DatePicker, Button, message, Table, Input,
+    Form, Icon, Row, Col, Select, Modal,
+    Input, DatePicker, Button, message, Table
 } from 'antd';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../constant/index';
@@ -19,86 +19,53 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 const confirm = Modal.confirm;
 
+const columns = [{
+    title: '商品编码',
+    dataIndex: 'commodifyNumber',
+    key: 'commodifyNumber',
+}, {
+    title: '商品名称',
+    dataIndex: 'commodifyName',
+    key: 'commodifyName',
+}, {
+    title: '订单数量',
+    dataIndex: 'number',
+    key: 'number',
+}, {
+    title: '配送数量',
+    dataIndex: 'deliveryNumber',
+    key: 'deliveryNumber',
+}, {
+    title: '单价',
+    dataIndex: 'price',
+    key: 'price',
+    render: (text) => (
+        <span>￥{text}</span>
+    )
+}, {
+    title: '签收数量',
+    dataIndex: 'getNumber',
+    key: 'getNumber',
+}, {
+    title: '签收差额',
+    dataIndex: 'differMoney',
+    key: 'differMoney',
+    render: (text) => (
+        <span>{text}元</span>
+    )
+}];
+
 class DistributionInformation extends PureComponent {
     constructor(props) {
         super(props);
         this.handleDistributionSave = ::this.handleDistributionSave;
         this.onDeliveryDateChange = ::this.onDeliveryDateChange;
         this.onWillArrivalDateChange = ::this.onWillArrivalDateChange;
-        this.deliveryNumberChange = ::this.deliveryNumberChange;
-        this.getNumberChange = ::this.getNumberChange;
 
         this.state = {
             deliveryDate: props.initialData.deliveryDate,
-            willArrivalDate: props.initialData.willArrivalDate,
+            willArrivalDate: props.initialData.willArrivalDate
         }
-        this.columns = [{
-            title: '商品编码',
-            dataIndex: 'commodifyNumber',
-            key: 'commodifyNumber',
-        }, {
-            title: '商品名称',
-            dataIndex: 'commodifyName',
-            key: 'commodifyName',
-        }, {
-            title: '订单数量',
-            dataIndex: 'number',
-            key: 'number',
-            render: (text) => (
-                <span>
-                    <span>{text}</span>
-                    <span>{props.initialData.unit}</span>
-                </span>
-            )
-        }, {
-            title: '配送数量',
-            dataIndex: 'deliveryNumber',
-            key: 'deliveryNumber',
-            render: (text) => (
-                <span>
-                    <InputNumber
-                        defaultValue={text}
-                        min="0"
-                        max={props.initialData.distributionInfo.number}
-                        onChange={(value) => {
-                            this.deliveryNumberChange(value)
-                        }}
-                    />
-                    <span>{props.initialData.unit}</span>
-                </span>
-            )
-        }, {
-            title: '单价',
-            dataIndex: 'price',
-            key: 'price',
-            render: (text) => (
-                <span>￥{text}</span>
-            )
-        }, {
-            title: '签收数量',
-            dataIndex: 'getNumber',
-            key: 'getNumber',
-            render: (text) => (
-                <span>
-                    <InputNumber
-                        defaultValue={text}
-                        min="0"
-                        max={this.state.deliveryNumber}
-                        onChange={(value) => {
-                            this.getNumberChange(value)
-                        }}
-                    />
-                    <span>{props.initialData.unit}</span>
-                </span>
-            )
-        }, {
-            title: '签收差额',
-            dataIndex: 'differMoney',
-            key: 'differMoney',
-            render: (text) => (
-                <span>{text}元</span>
-            )
-        }];
     }
 
     componentDidMount() {
@@ -124,29 +91,6 @@ class DistributionInformation extends PureComponent {
         })
     }
 
-    setDifferMoney() {
-
-    }
-
-    /**
-     * 修改签收数量时，触发
-     * @param {number} value 签收数量的change值
-     */
-    getNumberChange(value) {
-        this.setState({
-            getNumber: value,
-        })
-    }
-
-    /**
-     * 修改配送数量时，触发
-     * @param {number} value 配送数量的change值
-     */
-    deliveryNumberChange(value) {
-        this.setState({
-            deliveryNumber: value,
-        })
-    }
     /**
      * 保存
      */
@@ -353,7 +297,7 @@ class DistributionInformation extends PureComponent {
                         <div>
                             <Table
                                 dataSource={initialData.distributionInfo}
-                                columns={this.columns}
+                                columns={columns}
                                 pagination={false}
                                 rowKey="commodifyNumber"
                             />
