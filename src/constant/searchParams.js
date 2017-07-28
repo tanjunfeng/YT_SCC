@@ -330,9 +330,7 @@ export const commoditySortOptions = {
     }]
 }
 
-<<<<<<< HEAD
 // 库存管理状态
-=======
 // 订单管理-订单类型
 export const orderTypeOptions = {
     defaultValue: '-1',
@@ -400,7 +398,6 @@ export const payStatusOptions = {
 }
 
 // 状态
->>>>>>> e4734c845987fe14682b1a89a08c85ad302cb467
 export const supplierStore = {
     defaultValue: '-1',
     data: [{
@@ -408,20 +405,13 @@ export const supplierStore = {
         value: '全部'
     }, {
         key: '0',
-<<<<<<< HEAD
-        value: '制表'
-=======
         value: '制单'
->>>>>>> e4734c845987fe14682b1a89a08c85ad302cb467
     }, {
         key: '1',
         value: '生效'
     }]
 }
 
-<<<<<<< HEAD
-// 库存调整类型
-=======
 // 订单管理-物流状态
 export const logisticsStatusOptions = {
     defaultValue: '-1',
@@ -456,7 +446,6 @@ export const logisticsStatusOptions = {
 }
 
 // 调整类型
->>>>>>> e4734c845987fe14682b1a89a08c85ad302cb467
 export const adjustmentType = {
     defaultValue: '-1',
     data: [

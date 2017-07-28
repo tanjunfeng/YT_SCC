@@ -275,7 +275,6 @@ class SearchForm extends Component {
                     </FormItem>
                     {/* 外部单据号 */}
                     <FormItem className="sc-form-item">
-<<<<<<< HEAD
                         <div>
                             <span className="sc-form-item-label">外部单据号</span>
                             {getFieldDecorator('ExternalDocNumber')(
@@ -299,7 +298,6 @@ class SearchForm extends Component {
                                 placeholder={['开始日期', '结束日期']}
                             />
                         </div>
-=======
                         <span className="sc-form-item-label">供应商状态</span>
                         {getFieldDecorator('supplierState', {
                             initialValue: supplierStatusOptionss.defaultValue
@@ -317,7 +315,6 @@ class SearchForm extends Component {
                                 }
                             </Select>
                         )}
->>>>>>> e4734c845987fe14682b1a89a08c85ad302cb467
                     </FormItem>
                     <div className="sc-form-button-group">
                         <FormItem>

@@ -77,11 +77,8 @@ import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/
 
 // 库存调整列表
 import StoreAdjList from 'bundle-loader?lazy!../views/storeAdjustment/storeAdjList';
-<<<<<<< HEAD
 import ItemDetail from 'bundle-loader?lazy!../views/storeAdjustment/itemDetail';
-=======
 
->>>>>>> e4734c845987fe14682b1a89a08c85ad302cb467
 /* eslint-enable */
 
 

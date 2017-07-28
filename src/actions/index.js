@@ -93,13 +93,10 @@ export {
     fetchChangeSupType,
 
     fetchQuerySettledList,
-<<<<<<< HEAD
 
     // 库存调整
     stockAdjust,
-    stockListDetail
-=======
+    stockListDetail,
     fetchQueryManageList,
     fetchGetProductById,
->>>>>>> e4734c845987fe14682b1a89a08c85ad302cb467
 }

@@ -30,13 +30,10 @@ import mediaManage from './mediaManage';
 import dictionary from './dictionary';
 
 import wap from './wap';
-<<<<<<< HEAD
 /* ********************procurement************************* */
-=======
 
 import order from './order';
-/*********************procurement************************* */
->>>>>>> e4734c845987fe14682b1a89a08c85ad302cb467
+/* ********************procurement************************* */
 import procurement from './procurement';
 
 import stockAdjust from './stockAdjust';
