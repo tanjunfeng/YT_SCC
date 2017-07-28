@@ -112,7 +112,7 @@ class SuppliersAppList extends PureComponent {
      * 搜索
      */
     handleFormSearch(data, bool) {
-        console.log(data)
+        // console.log(data)
         this.searchForm = data;
         if (bool) {
             // 主数据
@@ -131,6 +131,7 @@ class SuppliersAppList extends PureComponent {
                 ...this.searchForm
             });
         }
+        this.handlePaginationChange();
     }
 
     /**

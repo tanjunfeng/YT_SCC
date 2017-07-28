@@ -7,7 +7,7 @@
 class ViewModel {
     getObject(oldValue, newValue, type) {
         return {
-            type, 
+            type,
             old: oldValue,
             new: newValue
         }
