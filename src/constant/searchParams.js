@@ -318,7 +318,6 @@ export const commoditySortOptions = {
     }]
 }
 
-// 库存管理状态
 // 订单管理-订单类型
 export const orderTypeOptions = {
     defaultValue: '-1',

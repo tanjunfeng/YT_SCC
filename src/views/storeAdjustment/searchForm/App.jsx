@@ -158,9 +158,9 @@ class SearchForm extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const supplierStatusOptionss =
-        this.props.isSuplierInputList ? secondSupplierStatusOptions
-        : firstSupplierStatusOptions;
+        // const supplierStatusOptionss =
+        // this.props.isSuplierInputList ? secondSupplierStatusOptions
+        // : firstSupplierStatusOptions;
         return (
             <div className="manage-form-content">
                 <Form layout="inline">
@@ -345,7 +345,7 @@ class SearchForm extends Component {
 SearchForm.propTypes = {
     onSearch: PropTypes.func,
     // onReset: PropTypes.func,
-    onExcel: PropTypes.func,
+    // onExcel: PropTypes.func,
     // onInput: PropTypes.func,
     // isSuplierAddMenu: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),

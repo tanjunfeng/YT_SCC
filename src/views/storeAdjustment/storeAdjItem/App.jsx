@@ -1,17 +1,14 @@
-
 /**
- * 库存列表查询结果
- *
+ * @file StoreAdjItem.jsx
  * @author zhangbaihua
- * @class StoreAdjItem
- * @extends {Compoment}
+ *
+ * 库存列表查询结果
  */
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Table, Pagination } from 'antd';
+import { Table } from 'antd';
 import { Link } from 'react-router-dom';
-// import { stcokColumns } from '../../../constant/formColumns';
 
 // 库存调整查询标题
 const stcokColumns = [{
@@ -38,25 +35,17 @@ const stcokColumns = [{
 }, {
     title: '操作',
     dataIndex: 'operation',
-    render: (text, record, index) => (<Link to={`storeAdjList/${index}`}>{text}</Link>)
+    render: (text, record, index) => (
+        <Link to={`storeAdjList/${index}`}>{text}</Link>
+    )
 }];
 
 class StoreAdjItem extends Component {
-    static propTypes = {
-        searchDateList: PropTypes.objectOf(PropTypes.any),
-        onChangePagination: PropTypes.func,
-    };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            text: ''
-        };
-    }
 
     handlePaginationChange = (pageNum) => {
         this.props.onChangePagination(pageNum);
     };
+
     render() {
         const { data, pageSize, total, pageNum } = this.props.searchDateList;
         return (
@@ -64,7 +53,6 @@ class StoreAdjItem extends Component {
                 <Table
                     columns={stcokColumns}
                     dataSource={data}
-                    // rowKey="id"
                     pagination={{
                         current: pageNum,
                         total,
@@ -76,5 +64,10 @@ class StoreAdjItem extends Component {
         );
     }
 }
+
+StoreAdjItem.propTypes = {
+    searchDateList: PropTypes.objectOf(PropTypes.any),
+    onChangePagination: PropTypes.func,
+};
 
 export default StoreAdjItem;

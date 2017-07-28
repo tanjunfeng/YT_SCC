@@ -72,6 +72,11 @@ class StoreAdjList extends Component {
         });
     }
 
+    /**
+     * @param pageNUmber  {type: number, desc, "页码数" }
+     *
+     * 根据页面请求数据
+     */
     handlePaginationChange = (pageNumber) => {
         this.current = pageNumber;
         this.props.stockAdjust({
@@ -81,7 +86,11 @@ class StoreAdjList extends Component {
         });
     }
 
-    // 搜索
+    /**
+     * @param  data { type: object, desc: '搜索条件' }
+     *
+     *按条件搜索
+     */
     handleSearch = (data) => {
         console.log(data);
         this.props.stockAdjust({
@@ -137,7 +146,7 @@ StoreAdjList.propTypes = {
     // fetchCategoryList: PropTypes.func,
     // modifyCategoryVisible: PropTypes.func,
     stockAdjStore: PropTypes.arrayOf(PropTypes.any),
-    form: PropTypes.objectOf(PropTypes.any),
+    // form: PropTypes.objectOf(PropTypes.any),
     // categoryorderlist: PropTypes.objectOf(PropTypes.any),
     stockAdjust: PropTypes.func
 }

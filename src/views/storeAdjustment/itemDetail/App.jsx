@@ -1,3 +1,10 @@
+/**
+ * @file itemDetail.jsx
+ * @author zhangbaihua
+ *
+ * 库存管理详情页
+ */
+
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -51,11 +58,6 @@ const columns = [
 )
 
 class ItemDetail extends PureComponent {
-    static propTypes = {
-        ListDetail: PropTypes.objectOf(PropTypes.any),
-        stockListDetail: PropTypes.func,
-        match: PropTypes.objectOf(PropTypes.any)
-    };
     componentWillMount() {
         const match = this.props.match.params;
         this.props.stockListDetail({
@@ -150,5 +152,11 @@ class ItemDetail extends PureComponent {
         );
     }
 }
+
+ItemDetail.propTypes = {
+    ListDetail: PropTypes.objectOf(PropTypes.any),
+    stockListDetail: PropTypes.func,
+    match: PropTypes.objectOf(PropTypes.any)
+};
 
 export default withRouter(ItemDetail);
