@@ -427,7 +427,7 @@ export const getProdPurchaseById = (params) => http.get('/prodPurchase/queryProd
 export const findPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
 
 // 新增商品采购关系
-export const addProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
+export const fetchAddProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
 
 // 更新商品采购关系
 export const updateProdPurchase = (params) => http.post('/prodPurchase/updateProdPurchase', params);

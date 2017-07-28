@@ -87,8 +87,8 @@ class SupplierInputList extends PureComponent {
     handleSelect(record, index, items) {
         const { key } = items;
         this.props.fetchEditBeforeAfter({
-            spId: String(record.id)
-            // spId: 'xprov139'
+            // spId: String(record.id)
+            spId: 'xprov139'
         })
         .then(() => {
             switch (key) {
@@ -169,7 +169,7 @@ class SupplierInputList extends PureComponent {
      *
      * @param {string} goto 数据列表分页
      */
-    handlePaginationChange(goto = 1) {
+    handlePaginationChange(goto) {
         this.current = goto;
         this.props.fetchQueryManageList({
             pageSize: PAGE_SIZE,
@@ -190,27 +190,30 @@ class SupplierInputList extends PureComponent {
     renderOperation(text, record, index) {
         const { status, id, providerType } = record;
         const { pathname } = this.props.location;
+        const info = () => {
+            message.info('供应商地点状态不正确，不能进行修改');
+        };
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/supplier/${id}`}>供应商详情</Link>
                 </Menu.Item>
-                {
+                {/* {
                     <Menu.Item key="modifySupInfor">
                         <Link to={`${pathname}/edit/:type/${id}`}>
                             修改供应商信息
                         </Link>
                     </Menu.Item>
-                }
-                {
+                } */}
+                {/* {
                     <Menu.Item key="addAddress">
                         <Link to={`${pathname}/place/:type/${id}`}>
                             新增供应商地点信息
                         </Link>
                     </Menu.Item>
-                }
+                } */}
                 {
-                    status === 1 &&
+                    status === 2 &&
                     <Menu.Item key="ChangeAudit">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商审核
@@ -218,9 +221,25 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    status === 1 &&
+                    status === 1 && status === 3 && status === 4 && status === 5 &&
+                    <Menu.Item>
+                        <a onClick={info}>
+                            供应商审核
+                        </a>
+                    </Menu.Item>
+                }
+                {
+                    status === 2 &&
                     <Menu.Item key="CheckReason">
                         <a target="_blank" rel="noopener noreferrer">
+                            修改供应商审核
+                        </a>
+                    </Menu.Item>
+                }
+                {
+                    status === 1 && status === 3 && status === 4 && status === 5 &&
+                    <Menu.Item>
+                        <a onClick={info}>
                             修改供应商审核
                         </a>
                     </Menu.Item>
@@ -234,6 +253,7 @@ class SupplierInputList extends PureComponent {
                     <Link to={`${pathname}/place/:type/${id}`}>供应商地点详情</Link>
                 </Menu.Item>
                 {
+                    status === 1 && status === 3 && status === 4 &&
                     <Menu.Item key="modifySupAddInfor">
                         <Link to={`${pathname}/place/:type/${id}`}>
                             修改供应商地点信息
@@ -241,7 +261,15 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    status === 3 &&
+                    status === 2 && status === 5 &&
+                    <Menu.Item>
+                        <a onClick={info}>
+                            修改供应商地点信息
+                        </a>
+                    </Menu.Item>
+                }
+                {
+                    status === 4 &&
                     <Menu.Item key="changeMessage">
                         <a target="_blank" rel="noopener noreferrer">
                             查看审核已拒绝原因
@@ -249,7 +277,7 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    status === 1 &&
+                    status === 2 &&
                     <Menu.Item key="ChangeAudit">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商地点审核
@@ -257,9 +285,17 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    status === 1 &&
+                    status === 2 &&
                     <Menu.Item key="CheckReason">
                         <a target="_blank" rel="noopener noreferrer">
+                            修改供应商地点审核
+                        </a>
+                    </Menu.Item>
+                }
+                {
+                    status === 1 && status === 3 && status === 4 && status === 5 &&
+                    <Menu.Item>
+                        <a onClick={info}>
                             修改供应商地点审核
                         </a>
                     </Menu.Item>
@@ -280,7 +316,7 @@ class SupplierInputList extends PureComponent {
     }
 
     render() {
-        const { data, total, pageNum, pageSize } = this.props.supplier;
+        const { data, total, pageNum, pageSize } = this.props.queryManageList;
         const { queryManageList } = this.props;
         columns[columns.length - 1].render = this.renderOperation;
         return (
