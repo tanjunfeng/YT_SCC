@@ -30,6 +30,8 @@ import mediaManage from './mediaManage';
 import dictionary from './dictionary';
 
 import wap from './wap';
+
+import order from './order';
 /*********************procurement************************* */
 import procurement from './procurement';
 
@@ -41,6 +43,7 @@ export default Immutable.fromJS({
      * Others Reducers
      */
     wap,
+    order,
     book,
     topic,
     category,

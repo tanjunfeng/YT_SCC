@@ -330,6 +330,7 @@ export const commoditySortOptions = {
     }]
 }
 
+// 订单管理-订单类型
 export const orderTypeOptions = {
     defaultValue: '-1',
     data: [{
@@ -337,10 +338,10 @@ export const orderTypeOptions = {
         value: '全部'
     }, {
         key: '0',
-        value: '加盟商 '
+        value: '正常销售 '
     }, {
         key: '1',
-        value: '直营店'
+        value: '直营店要货'
     }]
 }
 
@@ -361,12 +362,9 @@ export const orderStatusOptions = {
         value: '已审核'
     }, {
         key: '3',
-        value: '已拒绝'
-    }, {
-        key: '4',
         value: '已取消'
     }, {
-        key: '5',
+        key: '4',
         value: '已完成'
     }]
 }
@@ -391,7 +389,10 @@ export const payStatusOptions = {
         value: '退款待审核'
     }, {
         key: '4',
-        value: '已审核'
+        value: '退款待确认'
+    }, {
+        key: '5',
+        value: '已退款'
     }]
 }
 

@@ -20,6 +20,7 @@ const orderDT = 'order-details';
 
 @connect(
     state => ({
+        // ToDo：接受回显相关数据
     }),
     dispatch => bindActionCreators({
 
@@ -36,6 +37,7 @@ class OrderManagementDetails extends Component {
 
     componentDidMount() {
         // const { orderNumber } = this.props.match.params;
+        // ToDo 根据url带过来的参数orderNumber，发请求，获取回显数据
     }
 
     handleTabsClick() {
@@ -46,7 +48,7 @@ class OrderManagementDetails extends Component {
             orderNumber: 'YT000999',
             parentOrderNumber: 'XXXXXXXXX',
             orderType: '正常销售',
-            orderStatus: '已审核（自动）',
+            orderStatus: '待审核',
             payStatus: '已支付',
             logisticsStatus: '未传送',
             subCompany: '雅堂小超北京子公司',
@@ -60,11 +62,15 @@ class OrderManagementDetails extends Component {
             cellphone: '028 - XXXXXXXX',
             mail: '210800',
             logisticsProvider: 'EMS',
-            deliveryDate: '2017-07-25',
+            deliveryDate: '1500876718',
             logisticsNumber: 'YT00000999',
-            willArrivalDate: '2017-07-25',
+            willArrivalDate: '1500876718',
             deliverier: '张三',
             contact: '186XXX26940',
+            commodifyNumber: '24',
+            commifyTotalMoney: '3257.5',
+            unit: '袋',
+
             commodifyInfo: [{
                 commodifyImg: 'http://sit.image.com/group1/M00/00/FB/rB4KPVlsFXOAGDZWAABb5O0UTso681.jpg',
                 commodifyNumber: 'SKU000000001',
@@ -93,7 +99,8 @@ class OrderManagementDetails extends Component {
                 refundCause: '取消订单',
                 payNote: 'XXXXXXXXXX',
                 payOperater: '张三',
-                payOperateDate: '1500876718'
+                payOperateDate: '1500876718',
+                operation: 0
             }, {
                 payNumber: '2',
                 payType: '付款',
@@ -104,7 +111,20 @@ class OrderManagementDetails extends Component {
                 refundCause: '取消订单',
                 payNote: 'XXXXXXXXXX',
                 payOperater: '张三',
-                payOperateDate: '1500876718'
+                payOperateDate: '1500876718',
+                operation: 1
+            }, {
+                payNumber: '3',
+                payType: '付款',
+                payDate: '1500876718',
+                payMoney: '140.00',
+                payWay: '微信',
+                payPromiseNum: '支付流水000000000001',
+                refundCause: '取消订单',
+                payNote: 'XXXXXXXXXX',
+                payOperater: '张三',
+                payOperateDate: '1500876718',
+                operation: 2
             }],
             payInfoFooter: {
                 totalMoney: 140,
@@ -115,19 +135,19 @@ class OrderManagementDetails extends Component {
             distributionInfo: [{
                 commodifyNumber: 'SKU000000001',
                 commodifyName: '巴马火麻素食营养餐巴马特产冲食产品',
-                number: '8袋',
-                deliveryNumber: '8袋',
-                price: '140',
-                getNumber: '0袋',
-                differMoney: '0',
+                number: 8,
+                deliveryNumber: 8,
+                price: 140,
+                getNumber: 0,
+                differMoney: 0,
             }, {
                 commodifyNumber: 'SKU000000002',
                 commodifyName: '巴马火麻素食营养餐巴马特产冲食产品',
-                number: '8袋',
-                deliveryNumber: '8袋',
-                price: '140',
-                getNumber: '0袋',
-                differMoney: '0',
+                number: 8,
+                deliveryNumber: 8,
+                price: 140,
+                getNumber: 0,
+                differMoney: 0,
             }],
             logisticsProviders: [
                 '全部',
