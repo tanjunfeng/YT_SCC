@@ -89,8 +89,8 @@ class AuditModal extends PureComponent {
         return (
             <div>
                 {
-                    auditModalVisible &&
-                    <Modal
+                    auditModalVisible
+                    && <Modal
                         title="订单审核"
                         visible={auditModalVisible}
                         onOk={this.handleTableAuditOk}
@@ -116,12 +116,12 @@ class AuditModal extends PureComponent {
                                 </div>
                             </FormItem>
                             {
-                                this.state.auditOption === '通过' &&
-                                <span className="audit-pass">确认通过审核？</span>
+                                this.state.auditOption === '通过'
+                                && <span className="audit-pass">确认通过审核？</span>
                             }
                             {
-                                this.state.auditOption === '不通过' &&
-                                <FormItem>
+                                this.state.auditOption === '不通过'
+                                && <FormItem>
                                     <div>
                                         <span className="order-modal-label">
                                             <span style={{color: '#f00'}}>*</span>

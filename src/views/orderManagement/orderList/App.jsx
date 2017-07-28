@@ -27,6 +27,7 @@ import {
 import {fetchTest} from '../../../actions/classifiedList';
 import AuditModal from './auditModal';
 import { modifyAuditModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
+import { TIME_FORMAT, DATE_FORMAT } from '../../../constant/index';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -61,7 +62,7 @@ const columns = [{
     key: 'orderDate',
     render: (text) => (
         <span>
-            {moment(parseInt(text, 10)).format('YYYY-MM-DD HH:mm:ss')}
+            {moment(parseInt(text, 10)).format(TIME_FORMAT)}
         </span>
     )
 }, {
@@ -324,7 +325,7 @@ class OrderManagementList extends Component {
                 break;
             case 'tableShowFailure':
                 Modal.info({
-                    title: '审核未通过原因',
+                    title: '取消原因',
                     content: (
                         <div>
                             <p>{orderNumber}</p>
@@ -354,23 +355,24 @@ class OrderManagementList extends Component {
                     <Link to={`${pathname}/orderDetails/${orderNumber}`}>查看订单详情</Link>
                 </Menu.Item>
                 {
-                    (orderStatus === '待人工审核' || orderStatus === '待审核') &&
-                    <Menu.Item key="tableAudit">
+                    (orderStatus === '待人工审核'
+                    || orderStatus === '待审核')
+                    && <Menu.Item key="tableAudit">
                         <a target="_blank" rel="noopener noreferrer">审核</a>
                     </Menu.Item>
                 }
                 {
-                    (logisticsStatus !== '待收货' &&
-                    logisticsStatus !== '未送达' &&
-                    logisticsStatus !== '已签收') &&
-                    <Menu.Item key="tableCancel">
+                    (logisticsStatus !== '待收货'
+                    && logisticsStatus !== '未送达'
+                    && logisticsStatus !== '已签收')
+                    && <Menu.Item key="tableCancel">
                         <a target="_blank" rel="noopener noreferrer">取消</a>
                     </Menu.Item>
                 }
                 {
-                    orderStatus === '已取消' &&
-                    <Menu.Item key="tableShowFailure">
-                        <a target="_blank" rel="noopener noreferrer">查看审核未通过原因</a>
+                    orderStatus === '已取消'
+                    && <Menu.Item key="tableShowFailure">
+                        <a target="_blank" rel="noopener noreferrer">查看取消原因</a>
                     </Menu.Item>
                 }
             </Menu>
@@ -601,7 +603,7 @@ class OrderManagementList extends Component {
                                                 style={{width: '240px'}}
                                                 className="manage-form-enterTime"
                                                 value={this.state.rengeTime}
-                                                format="YYYY-MM-DD"
+                                                format={DATE_FORMAT}
                                                 placeholder={['开始时间', '结束时间']}
                                                 onChange={this.onEnterTimeChange}
                                             />

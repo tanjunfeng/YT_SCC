@@ -10,6 +10,7 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { Form, Icon, Row, Col, Input, Table, Button, Modal } from 'antd';
 import moment from 'moment';
+import { TIME_FORMAT } from '../../../constant/index';
 
 const confirm = Modal.confirm;
 const { TextArea } = Input;
@@ -196,7 +197,7 @@ class OrderInformation extends PureComponent {
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">下单日期:</span>
                                     <span>
-                                        {moment(parseInt(initialData.orderData, 10)).format('YYYY-MM-DD HH:mm:ss')}
+                                        {moment(parseInt(initialData.orderData, 10)).format(TIME_FORMAT)}
                                     </span>
                                 </Col>
                             </Row>
@@ -265,31 +266,39 @@ class OrderInformation extends PureComponent {
                                 size="default"
                                 onClick={this.handleOrderSave}
                                 type="primary"
-                            >保存</Button>
+                            >
+                                保存
+                            </Button>
                             {
-                                (initialData.orderStatus === '待审核' ||
-                                initialData.orderStatus === '待人工审核') &&
-                                <Button
+                                (initialData.orderStatus === '待审核'
+                                || initialData.orderStatus === '待人工审核')
+                                && <Button
                                     size="default"
                                     onClick={this.handleOrderAudit}
-                                >审核</Button>
+                                >
+                                    审核
+                                </Button>
                             }
                             {
-                                (initialData.logisticsStatus !== '待收货' &&
-                                initialData.logisticsStatus !== '未送达' &&
-                                initialData.logisticsStatus !== '已签收') &&
-                                <Button
+                                (initialData.logisticsStatus !== '待收货'
+                                && initialData.logisticsStatus !== '未送达'
+                                && initialData.logisticsStatus !== '已签收')
+                                && <Button
                                     size="default"
                                     onClick={this.handleOrderCancel}
                                     type="danger"
-                                >取消</Button>
+                                >
+                                    取消
+                                </Button>
                             }
                             <Button
                                 size="default"
                                 onClick={() => {
-                                    window.history.back();
+                                    this.props.history.pop();
                                 }}
-                            >返回</Button>
+                            >
+                                返回
+                            </Button>
                         </Col>
                     </Row>
                 </div>
@@ -300,6 +309,7 @@ class OrderInformation extends PureComponent {
 
 OrderInformation.propTypes = {
     initialData: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
 }
 
 OrderInformation.defaultProps = {

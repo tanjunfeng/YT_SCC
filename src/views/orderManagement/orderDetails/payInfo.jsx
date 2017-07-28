@@ -10,6 +10,7 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { Form, Icon, Table, Row, Col, Button, message } from 'antd';
 import moment from 'moment';
+import { TIME_FORMAT, DATE_FORMAT } from '../../../constant/index';
 
 class PayInformation extends PureComponent {
     constructor(props) {
@@ -29,7 +30,7 @@ class PayInformation extends PureComponent {
             key: 'payDate',
             render: (text) => (
                 <span>
-                    {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+                    {moment(parseInt(text, 10)).format(DATE_FORMAT)}
                 </span>
             )
         }, {
@@ -65,7 +66,7 @@ class PayInformation extends PureComponent {
             key: 'payOperateDate',
             render: (text) => (
                 <span>
-                    {moment(parseInt(text, 10)).format('YYYY-MM-DD HH:mm:ss')}
+                    {moment(parseInt(text, 10)).format(TIME_FORMAT)}
                 </span>
             )
         }, {
@@ -176,9 +177,11 @@ class PayInformation extends PureComponent {
                             <Button
                                 size="default"
                                 onClick={() => {
-                                    window.history.back();
+                                    this.props.history.pop();
                                 }}
-                            >返回</Button>
+                            >
+                                返回
+                            </Button>
                         </Col>
                     </Row>
                 </div>
@@ -189,6 +192,7 @@ class PayInformation extends PureComponent {
 
 PayInformation.propTypes = {
     initialData: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
 }
 
 PayInformation.defaultProps = {

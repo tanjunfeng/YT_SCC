@@ -69,6 +69,7 @@ class OrderManagementDetails extends Component {
             contact: '186XXX26940',
             commodifyNumber: '24',
             commifyTotalMoney: '3257.5',
+            unit: '袋',
 
             commodifyInfo: [{
                 commodifyImg: 'http://sit.image.com/group1/M00/00/FB/rB4KPVlsFXOAGDZWAABb5O0UTso681.jpg',
@@ -134,19 +135,19 @@ class OrderManagementDetails extends Component {
             distributionInfo: [{
                 commodifyNumber: 'SKU000000001',
                 commodifyName: '巴马火麻素食营养餐巴马特产冲食产品',
-                number: '8袋',
-                deliveryNumber: '8袋',
-                price: '140',
-                getNumber: '0袋',
-                differMoney: '0',
+                number: 8,
+                deliveryNumber: 8,
+                price: 140,
+                getNumber: 0,
+                differMoney: 0,
             }, {
                 commodifyNumber: 'SKU000000002',
                 commodifyName: '巴马火麻素食营养餐巴马特产冲食产品',
-                number: '8袋',
-                deliveryNumber: '8袋',
-                price: '140',
-                getNumber: '0袋',
-                differMoney: '0',
+                number: 8,
+                deliveryNumber: 8,
+                price: 140,
+                getNumber: 0,
+                differMoney: 0,
             }],
             logisticsProviders: [
                 '全部',
