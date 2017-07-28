@@ -1,25 +1,24 @@
 /**
- * @file fetchGetProductById.js
+ * @file fetchChangeSupType.js
  * @author Tanjunfeng
  *
- * 查询商品价格信息
+ * 分类列表页商品排序管理
  */
 
 import Promise from 'bluebird';
-import { getProductById } from '../../service';
+import { fetchAddProdPurchase } from '../../service';
 import ActionType from '../ActionType';
 
 const receive = (data) => ({
-    type: ActionType.GET_PRODUCT_BYID,
+    type: ActionType.ADD_PROD_PURCHASE,
     payload: data,
 });
 
 export default (params) => dispatch => (
     new Promise((resolve, reject) => {
-        getProductById(params)
+        fetchAddProdPurchase(params)
             .then(res => {
                 dispatch(receive(res.data));
-                resolve(res.data)
             })
             .catch(err => {
                 reject(err);
