@@ -48,6 +48,10 @@ import fetchQuerySettledList from './fetch/fetchQuerySettledList';
 import fetchQueryManageList from './fetch/fetchQueryManageList';
 import fetchGetProductById from './fetch/fetchGetProductById';
 
+// 库存调整
+import stockAdjust from './stockAdjust';
+import stockListDetail from './stockListDetail';
+
 export {
     fetchSupplierList,
     modifyInformationVisible,
@@ -75,7 +79,7 @@ export {
     modifyDeleteOrderNum,
     modifyToAddInsertpage,
     fetchFindStaticPageList,
-    /*********************procurement added by twh************************* */
+    /* ********************procurement added by twh************************* */
     fetchPoMngList,
     changePoMngSelectedRows,
     fetchMaterialByCd,
@@ -89,6 +93,13 @@ export {
     fetchChangeSupType,
 
     fetchQuerySettledList,
+<<<<<<< HEAD
+
+    // 库存调整
+    stockAdjust,
+    stockListDetail
+=======
     fetchQueryManageList,
     fetchGetProductById,
+>>>>>>> e4734c845987fe14682b1a89a08c85ad302cb467
 }

@@ -461,6 +461,13 @@ export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', par
 // 查询采购单打印列表
 export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
 
+<<<<<<< HEAD
+// 查询库存调整列表{mock}
+export const queryAdjustLibList = (params) => http.post('/provider/queryAdjustLibList', params);
+
+// 查询库存调整单详情{mock}
+export const queryAdjustDetail = (params) => http.post('/provider/queryAdjustDetail', params);
+=======
 /**
  * 供应商相关
  */
@@ -472,3 +479,4 @@ export const queryAllLargerRegionProvince = (params) => http.get('/region/queryA
 export const getSupplierNo = (params) => http.get('/supplier/getSupplierNo', params);
 // 新增或修改供应商信息
 export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/insertOrUpdateSupplierInfo', params);
+>>>>>>> e4734c845987fe14682b1a89a08c85ad302cb467

@@ -1,0 +1,9 @@
+{
+    "timestamp": 1497324068759,
+    "code": 200,
+    "message": null,
+    "data": [
+      {"a": 123}
+    ],
+    "success": true
+}

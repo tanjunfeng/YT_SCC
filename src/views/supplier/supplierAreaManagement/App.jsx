@@ -136,6 +136,91 @@
 
 // export default Form.create()(withRouter(SupplierAreaManagement));
 
+<<<<<<< HEAD
+
+import React, { Component } from 'react';
+import { Input } from 'antd';
+import Align from 'rc-align';
+import InlineTree from '../../../components/inlineTree';
+import SteppedPrice from '../../commodity/steppedPrice';
+import SellPriceModal from '../../commodity/sellPriceModal';
+import ProdPurchaseModal from '../../commodity/prodPurchaseModal';
+
+
+class Demo extends React.Component {
+    state = {
+        monitor: true,
+        align: {
+            points: ['cc', 'cc'],
+        },
+    }
+
+    getTarget = () => {
+        let ref = this.refs.container;
+        if (!ref) {
+            // parent ref not attached
+            ref = document.getElementById('container');
+        }
+        return ref;
+    }
+
+    toggleMonitor = () => {
+        // this.setState({
+        //     monitor: !this.state.monitor,
+        // });
+    }
+
+    forceAlign = () => {
+        this.setState({
+            align: assign({}, this.state.align),
+        });
+    }
+
+    render() {
+        return (
+            <div
+                style={{
+                    margin: 50,
+                }}
+            >
+                <p>
+                    <button onClick={this.forceAlign}>force align</button>
+                    &nbsp;&nbsp;&nbsp;
+          <button onClick={this.toggleMonitor}>toggle monitor</button>
+                </p>
+                <div
+                    ref="container"
+                    id="container"
+                    style={{
+                        width: '80%',
+                        height: 500,
+                        border: '1px solid red',
+                    }}
+                >
+                    <Align
+                        target={this.getTarget}
+                        monitorWindowResize={this.state.monitor}
+                        align={this.state.align}
+                    >
+                        <div
+                            style={{
+                                position: 'absolute',
+                                width: 50,
+                                height: 50,
+                                background: 'yellow',
+                            }}
+                        >
+                            source
+            </div>
+                    </Align>
+                </div>
+            </div>
+        );
+    }
+}
+
+export default Demo;
+=======
 import React, { Component } from 'react';
 import { Input } from 'antd';
 import Align from 'rc-align';
@@ -219,3 +304,4 @@ class Demo extends React.Component {
 
 export default Demo;
 
+>>>>>>> e4734c845987fe14682b1a89a08c85ad302cb467
