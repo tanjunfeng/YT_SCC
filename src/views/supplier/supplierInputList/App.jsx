@@ -13,13 +13,13 @@ import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Table, Form, Icon, Menu, Dropdown, message } from 'antd';
 import {
-    fetchProviderEnterList,
     fetchQueryManageList,
     fetchSupplierList,
     modifyAuditVisible,
     modifyCheckReasonVisible,
     modifyInformationVisible,
-    fetchGetProductById
+    fetchGetProductById,
+    fetchEditBeforeAfter
 } from '../../../actions';
 
 import SearchForm from '../searchForm';
@@ -48,7 +48,8 @@ const columns = supplierInputList;
         modifyCheckReasonVisible,
         modifyAuditVisible,
         modifyInformationVisible,
-        fetchGetProductById
+        fetchGetProductById,
+        fetchEditBeforeAfter
     }, dispatch)
 )
 class SupplierInputList extends PureComponent {
@@ -75,29 +76,37 @@ class SupplierInputList extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
-        this.props.fetchProviderEnterList({
-            pageNum: this.current,
-            pageSize: PAGE_SIZE,
-            ...this.searchForm
-        })
         this.props.fetchQueryManageList();
     }
 
+    /**
+     * 表单操作
+     *
+     * @param {Object} record 传值所有数据对象
+     * @param {number} index 下标
+     * @param {Object} items 方法属性
+     */
     handleSelect(record, index, items) {
         const { key } = items;
-        switch (key) {
-            case 'ChangeAudit':
-                this.props.modifyAuditVisible({isVisible: true, record});
-                break;
-            case 'CheckReason':
-                this.props.modifyCheckReasonVisible({isVisible: true, record});
-                break;
-            case 'changeMessage':
-                this.props.modifyInformationVisible({isVisible: true, record});
-                break;
-            default:
-                break;
-        }
+        this.props.fetchEditBeforeAfter({
+            spId: String(record.id)
+            // spId: 'xprov139'
+        })
+        .then(() => {
+            switch (key) {
+                case 'ChangeAudit':
+                    this.props.modifyAuditVisible({isVisible: true, record});
+                    break;
+                case 'CheckReason':
+                    this.props.modifyCheckReasonVisible({isVisible: true, record});
+                    break;
+                case 'changeMessage':
+                    this.props.modifyInformationVisible({isVisible: true, record});
+                    break;
+                default:
+                    break;
+            }
+        });
     }
 
     /**
@@ -315,7 +324,7 @@ class SupplierInputList extends PureComponent {
 }
 
 SupplierInputList.propTypes = {
-    fetchProviderEnterList: PropTypes.objectOf(PropTypes.any),
+    fetchEditBeforeAfter: PropTypes.func,
     queryManageList: PropTypes.objectOf(PropTypes.any),
     fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
     modifyAuditVisible: PropTypes.func,

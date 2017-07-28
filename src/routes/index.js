@@ -61,9 +61,14 @@ import CategoryIconManagement from 'bundle-loader?lazy!../views/wrapConfigure/ca
 // wap端分类图标管理
 import AdPlanList404 from 'bundle-loader?lazy!../views/wrapConfigure/adPlanList404';
 
+/*********************procurement************************* */
 import PoMngList from 'bundle-loader?lazy!../views/procurement/poMngList';
 import PoDetail from 'bundle-loader?lazy!../views/procurement/PoDetail';
 import PoPrintList from 'bundle-loader?lazy!../views/procurement/PoPrintList';
+import PoRcvMngList from 'bundle-loader?lazy!../views/procurement/PoRcvMngList';
+import PoRcvList from 'bundle-loader?lazy!../views/procurement/PoRcvList';
+import PoRcvDetail from 'bundle-loader?lazy!../views/procurement/PoRcvDetail';
+
 
 // IBM 修改
 // 商品采购关系维护
@@ -294,16 +299,26 @@ const routes = [
                                 {(App) => <App />}
                             </Bundle>)}
                         />
+                        {/* 
+                          * /suppliersAppList/supplier/xprov334#/  供应商详情
+                          * /suppliersAppList/place/14#/ 供应商地点详情
+                          * /suppliersAppList/add/14#/ 新增供应商地点
+                          * /suppliersAppList/edit/14#/ 修改供应商地点
+                         */}
                         <Route
                             path="/SuppliersAppList/:type/:id"
                             exact
                             render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
                         />
+                        {/* 新增供应商  */}
                         <Route
                             path="/SuppliersAppList/add"
                             exact
                             render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
                         />
+                        {/*
+                         * /SuppliersAppList/edit/supplier/xprov334 编辑供应商地点
+                        */}
                         <Route
                             path="/SuppliersAppList/edit/:type/:id"
                             exact
@@ -326,26 +341,30 @@ const routes = [
                                 {(App) => <App />}
                             </Bundle>)}
                         />
-                        <Route
-                            path="/supplierInputList/add"
-                            exact
-                            render={() => (<Bundle load={AddSupplier}>
-                                {(App) => <App />}
-                            </Bundle>)}
-                        />
+                        {/* 
+                          * /supplierInputList/supplier/xprov334#/  供应商详情
+                          * /supplierInputList/place/14#/ 供应商地点详情
+                          * /supplierInputList/add/14#/ 新增供应商地点
+                          * /supplierInputList/edit/14#/ 修改供应商地点
+                         */}
                         <Route
                             path="/supplierInputList/:type/:id"
                             exact
-                            render={() => (<Bundle load={SupplierDetail}>
-                                {(App) => <App />}
-                            </Bundle>)}
+                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
                         />
+                        {/* 新增供应商  */}
+                        <Route
+                            path="/supplierInputList/add"
+                            exact
+                            render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
+                        />
+                        {/*
+                         * /supplierInputList/edit/supplier/xprov334 编辑供应商地点
+                        */}
                         <Route
                             path="/supplierInputList/edit/:type/:id"
                             exact
-                            render={() => (<Bundle load={SupplierDetail}>
-                                {(App) => <App />}
-                            </Bundle>)}
+                            render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )
@@ -473,7 +492,7 @@ const routes = [
                 path: '/po',
                 parent: 'procurementMng',
                 key: 'poMngList',
-                 component: () => (
+                component: () => (
                     <Switch>
                         <Route
                             path="/po"
@@ -488,8 +507,9 @@ const routes = [
                             render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/po/:id/:detail"
-                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
+                            path="/po/:poid"
+                            exact
+                            render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )
@@ -506,6 +526,49 @@ const routes = [
                             render={() => (<Bundle load={PoPrintList}>
                                 {(App) => <App />}
                             </Bundle>)}
+                        />
+                    </Switch>
+                )
+            },
+            {
+                path: '/porcvmnglist',
+                parent: 'procurementMng',
+                key: 'poRcvMngList',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/porcvmnglist"
+                            exact
+                            render={() => (<Bundle load={PoRcvMngList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                         <Route
+                            path="/porcvmnglist/:porcvid"
+                            exact
+                            render={() => <Bundle load={PoRcvDetail}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
+            {
+                path: '/porcvlist',
+                parent: 'procurementMng',
+                key: 'poRcvList',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/porcvlist"
+                            exact
+                            render={() => (<Bundle load={PoRcvList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+
+                        <Route
+                            path="/porcvlist/create/:poid"
+                            exact
+                            render={() => <Bundle load={PoRcvDetail}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )

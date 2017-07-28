@@ -168,63 +168,51 @@ export const firstSupplierStatusOptions = {
     }]
 }
 
-// 入驻-供应商状态
+// 供应商管理-供应商状态
 export const secondSupplierStatusOptions = {
-    defaultValue: '0',
+    defaultValue: '1',
     data: [{
-        key: '0',
-        value: '制单'
-    }, {
         key: '1',
-        value: '已提交'
+        value: '待审核'
     }, {
         key: '2',
         value: '已审核'
     }, {
         key: '3',
-        value: '已拒绝'
+        value: '已提交'
     }, {
         key: '4',
-        value: '修改中'
+        value: '已拒绝'
     }]
 }
 
 // 供应商类型
 export const supplierLevelOptions = {
-    defaultValue: '-1',
+    defaultValue: '1',
     data: [{
-        key: '-1',
+        key: '1',
         value: '战略供应商'
     }, {
-        key: '0',
+        key: '2',
         value: '核心供应商'
     }, {
-        key: '1',
+        key: '3',
         value: '可替代供应商'
     }]
 }
 
 // 供应商地点等级
 export const supplierPlaceLevelOptions = {
-    defaultValue: '-1',
+    defaultValue: '1',
     data: [{
-        key: '-1',
-        value: '全部'
-    }, {
-        key: '0',
-        value: '生产厂家'
-    }, {
         key: '1',
-        value: '批发商'
+        value: '战略供应商'
     }, {
         key: '2',
-        value: '经销商'
+        value: '核心供应商'
     }, {
         key: '3',
-        value: '代销商'
-    }, {
-        key: '4',
-        value: '其他'
+        value: '可替代供应商'
     }]
 }
 
@@ -330,6 +318,7 @@ export const commoditySortOptions = {
     }]
 }
 
+// 订单管理-订单类型
 export const orderTypeOptions = {
     defaultValue: '-1',
     data: [{
@@ -337,10 +326,10 @@ export const orderTypeOptions = {
         value: '全部'
     }, {
         key: '0',
-        value: '加盟商 '
+        value: '正常销售 '
     }, {
         key: '1',
-        value: '直营店'
+        value: '直营店要货'
     }]
 }
 
@@ -361,12 +350,9 @@ export const orderStatusOptions = {
         value: '已审核'
     }, {
         key: '3',
-        value: '已拒绝'
-    }, {
-        key: '4',
         value: '已取消'
     }, {
-        key: '5',
+        key: '4',
         value: '已完成'
     }]
 }
@@ -391,7 +377,10 @@ export const payStatusOptions = {
         value: '退款待审核'
     }, {
         key: '4',
-        value: '已审核'
+        value: '退款待确认'
+    }, {
+        key: '5',
+        value: '已退款'
     }]
 }
 

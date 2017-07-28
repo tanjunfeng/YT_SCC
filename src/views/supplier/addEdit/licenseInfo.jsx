@@ -68,6 +68,7 @@ class LicenseInfo extends PureComponent {
     getVlaue() {
         const { form, onGoTo, isEdit, detailData = {}, data } = this.props;
         Tools.checkAddress(this.companyAddress, 'companyAddress', this);
+        console.log(this.refs['qualityIdentification'].getValue())
         form.validateFields((err, values) => {
             if (!err) {
                 const { firstValue, secondValue, thirdValue } = this.companyAddress;
@@ -147,7 +148,7 @@ class LicenseInfo extends PureComponent {
         const { isEdit } = this.props;
         this.getVlaue();
         this.submitData.commitType = type;
-        this.props.hanldeSupplier(params, isEdit ? 'updateSupplierInfo' : 'insertSupplierInfo')
+        this.props.hanldeSupplier(this.submitData, isEdit ? 'updateSupplierInfo' : 'insertSupplierInfo')
             .then((res) => {
                 const { location, history } = this.props;
                 history.push(`${location.pathname}/${res.data}`)
@@ -155,7 +156,7 @@ class LicenseInfo extends PureComponent {
     }
 
     handleSaveDraft() {
-        
+        this.submit(0);
     }
 
     handleCreatePlace() {
@@ -163,7 +164,7 @@ class LicenseInfo extends PureComponent {
     }
 
     handleSubmit() {
-
+        this.submit(1);
     }
 
     handlePreStep() {

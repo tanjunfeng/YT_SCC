@@ -17,7 +17,13 @@ import Utils from '../../../util/util';
 import { Validator } from '../../../util/validator';
 import InlineUpload from '../../../components/inlineUpload';
 import CasadingAddress from '../../../components/ascadingAddress';
-import { addSupplierMessage1, getWarehouse, fetchWarehouseInfo, deleteWarehouseInfo, insertSupplierAddress } from '../../../actions/addSupplier';
+import {
+    addSupplierMessage1, getWarehouse, fetchWarehouseInfo,
+    deleteWarehouseInfo, insertSupplierAddress
+} from '../../../actions/addSupplier';
+import {
+    queryPlaceRegion
+} from '../../../actions/supplier';
 import InlineTree from '../../../components/inlineTree';
 import { fetchSupplierNo } from '../../../actions/supplier';
 import Warehouse from './warehouse';
@@ -32,7 +38,8 @@ const Option = Select.Option;
         data: state.toJS().addSupplier.data,
         supplierId: state.toJS().supplier.supplierId,
         warehouseInfo: state.toJS().addSupplier.warehouseInfo,
-        warehouseData: state.toJS().addSupplier.warehouseData
+        warehouseData: state.toJS().addSupplier.warehouseData,
+        placeRegion: state.toJS().supplier.placeRegion,
     }),
     dispatch => bindActionCreators({
         addSupplierMessage1,
@@ -40,7 +47,8 @@ const Option = Select.Option;
         getWarehouse,
         fetchWarehouseInfo,
         deleteWarehouseInfo,
-        insertSupplierAddress
+        insertSupplierAddress,
+        queryPlaceRegion
     }, dispatch)
 )
 class BasicInfo extends PureComponent {
@@ -57,10 +65,15 @@ class BasicInfo extends PureComponent {
     }
 
     componentDidMount() {
-        this.props.fetchSupplierNo({type: 'SP_ADR'})
+        const { detailData, isEdit } = this.props;
+        if (!isEdit) {
+            this.props.fetchSupplierNo({type: 'SP_ADR'});
+        }
+        else {
+            this.props.queryPlaceRegion({spId: detailData.id})
+        }
     }
 
-    
     getValue(callback) {
         const { form, detailData, detailSp } = this.props;
         const { supplierBasicInfo = {}, } = detailData;
@@ -170,9 +183,27 @@ class BasicInfo extends PureComponent {
         return null;
     }
 
+    renderStatus(status) {
+        switch(status) {
+            case 0:
+                return '草稿'
+            case 1:
+                return '待审核'
+            case 2:
+                return '已审核'
+            case 3:
+                return '已拒绝'
+            case 4:
+                return '修改中'
+            default:
+                break;
+        }
+        return null;
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { detailData, detailSp, isEdit } = this.props;
+        const { detailData, detailSp, isEdit, placeRegion = [] } = this.props;
         // let initData = detailData;
         // if (!isEdit) {
         //     initData = {};
@@ -186,6 +217,7 @@ class BasicInfo extends PureComponent {
             spAdrBasic = {},
             spAdrContact = {},
         } = detailSp
+
         return (
             <div className="supplier-add-message supplier-add-space">
                 <Form>
@@ -222,7 +254,9 @@ class BasicInfo extends PureComponent {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col span={8}><span>供应商地点状态：</span><span>草稿</span></Col>
+                                    <Col span={8}><span>供应商地点状态：</span>
+                                        <span>{isEdit ? this.renderStatus(detailSp.status) : '草稿'}</span>
+                                    </Col>
                                     <Col span={8}>
                                         <span>供应商地点经营状态：</span>
                                         <FormItem>
@@ -306,8 +340,14 @@ class BasicInfo extends PureComponent {
                                                     style={{ width: 140 }}
                                                     placeholder="供应商地点所属区域"
                                                 >
-                                                    <Option value="0">四川</Option>
-                                                    <Option value="1">广州</Option>
+                                                    {
+                                                        placeRegion.map((item) => <Option
+                                                            key={item.code}
+                                                            value={item.code}
+                                                        >
+                                                            {item.name}
+                                                        </Option>)
+                                                    }
                                                 </Select>
                                             )}
                                         </FormItem>

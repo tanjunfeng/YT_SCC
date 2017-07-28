@@ -8,73 +8,166 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import { Form, Icon, Row, Col, Select, Modal, Input, DatePicker, Button, message, Table } from 'antd';
+import {
+    Form, Icon, Row, Col, Select, Modal, InputNumber,
+    DatePicker, Button, message, Table, Input,
+} from 'antd';
 import moment from 'moment';
+import { DATE_FORMAT } from '../../../constant/index';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
 const confirm = Modal.confirm;
 
-const columns = [{
-    title: '商品编码',
-    dataIndex: 'commodifyNumber',
-    key: 'commodifyNumber',
-}, {
-    title: '商品名称',
-    dataIndex: 'commodifyName',
-    key: 'commodifyName',
-}, {
-    title: '订单数量',
-    dataIndex: 'number',
-    key: 'number',
-}, {
-    title: '配送数量',
-    dataIndex: 'deliveryNumber',
-    key: 'deliveryNumber',
-}, {
-    title: '单价',
-    dataIndex: 'price',
-    key: 'price',
-    render: (text) => (
-        <span>￥{text}</span>
-    )
-}, {
-    title: '签收数量',
-    dataIndex: 'getNumber',
-    key: 'getNumber',
-}, {
-    title: '签收差额',
-    dataIndex: 'differMoney',
-    key: 'differMoney',
-    render: (text) => (
-        <span>￥{text}</span>
-    )
-}];
-
 class DistributionInformation extends PureComponent {
     constructor(props) {
         super(props);
         this.handleDistributionSave = ::this.handleDistributionSave;
-        this.handleDistributionReturn = ::this.handleDistributionReturn;
+        this.onDeliveryDateChange = ::this.onDeliveryDateChange;
+        this.onWillArrivalDateChange = ::this.onWillArrivalDateChange;
+        this.deliveryNumberChange = ::this.deliveryNumberChange;
+        this.getNumberChange = ::this.getNumberChange;
 
         this.state = {
+            deliveryDate: props.initialData.deliveryDate,
+            willArrivalDate: props.initialData.willArrivalDate,
         }
+        this.columns = [{
+            title: '商品编码',
+            dataIndex: 'commodifyNumber',
+            key: 'commodifyNumber',
+        }, {
+            title: '商品名称',
+            dataIndex: 'commodifyName',
+            key: 'commodifyName',
+        }, {
+            title: '订单数量',
+            dataIndex: 'number',
+            key: 'number',
+            render: (text) => (
+                <span>
+                    <span>{text}</span>
+                    <span>{props.initialData.unit}</span>
+                </span>
+            )
+        }, {
+            title: '配送数量',
+            dataIndex: 'deliveryNumber',
+            key: 'deliveryNumber',
+            render: (text) => (
+                <span>
+                    <InputNumber
+                        defaultValue={text}
+                        min="0"
+                        max={props.initialData.distributionInfo.number}
+                        onChange={(value) => {
+                            this.deliveryNumberChange(value)
+                        }}
+                    />
+                    <span>{props.initialData.unit}</span>
+                </span>
+            )
+        }, {
+            title: '单价',
+            dataIndex: 'price',
+            key: 'price',
+            render: (text) => (
+                <span>￥{text}</span>
+            )
+        }, {
+            title: '签收数量',
+            dataIndex: 'getNumber',
+            key: 'getNumber',
+            render: (text) => (
+                <span>
+                    <InputNumber
+                        defaultValue={text}
+                        min="0"
+                        max={this.state.deliveryNumber}
+                        onChange={(value) => {
+                            this.getNumberChange(value)
+                        }}
+                    />
+                    <span>{props.initialData.unit}</span>
+                </span>
+            )
+        }, {
+            title: '签收差额',
+            dataIndex: 'differMoney',
+            key: 'differMoney',
+            render: (text) => (
+                <span>{text}元</span>
+            )
+        }];
     }
 
     componentDidMount() {
     }
 
     /**
+     * 配送日期
+     * @param {moment} date moment对象
+     */
+    onDeliveryDateChange(date) {
+        this.setState({
+            deliveryDate: date === null ? null : String(date.valueOf())
+        })
+    }
+
+    /**
+     * 预期到达日期
+     * @param {moment} date moment对象
+     */
+    onWillArrivalDateChange(date) {
+        this.setState({
+            willArrivalDate: date === null ? null : String(date.valueOf())
+        })
+    }
+
+    setDifferMoney() {
+
+    }
+
+    /**
+     * 修改签收数量时，触发
+     * @param {number} value 签收数量的change值
+     */
+    getNumberChange(value) {
+        this.setState({
+            getNumber: value,
+        })
+    }
+
+    /**
+     * 修改配送数量时，触发
+     * @param {number} value 配送数量的change值
+     */
+    deliveryNumberChange(value) {
+        this.setState({
+            deliveryNumber: value,
+        })
+    }
+    /**
      * 保存
      */
     handleDistributionSave() {
+        // const {
+        //     logisticsProvider,
+        //     logisticsNumber,
+        //     deliverier,
+        //     contact
+        // } = this.props.form.getFieldsValue();
         confirm({
             title: '保存',
             content: '确认保存备注信息？',
             onOk: () => {
-                // console.log(this.state.textAreaNote)
                 this.props.form.validateFields((err) => {
                     if (!err) {
+                        // ToDo：带数据发请求，提交表单
+
+                        // 日期（时间戳）
+                        // console.log( this.state.deliveryDate)
+                        // console.log( this.state.willArrivalDate)
                         message.success('保存成功！');
                     }
                 })
@@ -83,16 +176,12 @@ class DistributionInformation extends PureComponent {
         });
     }
 
-    /**
-     * 返回
-     */
-    handleDistributionReturn() {
-
-    }
-
     render() {
         const { getFieldDecorator } = this.props.form;
         const { initialData } = this.props;
+        const deliveryDate = moment(parseInt(initialData.deliveryDate, 10)).format(DATE_FORMAT);
+        const willArrivalDate
+        = moment(parseInt(initialData.willArrivalDate, 10)).format(DATE_FORMAT);
         return (
             <div>
                 <div className="order-details-item">
@@ -101,7 +190,7 @@ class DistributionInformation extends PureComponent {
                             <Icon type="credit-card" className="detail-message-header-icon" />
                             配送汇总
                         </div>
-                        <div className="detail-message-body">
+                        <div>
                             <Form layout="inline" className="manage-form">
                                 <div className="gutter-example">
                                     <Row gutter={16}>
@@ -121,7 +210,9 @@ class DistributionInformation extends PureComponent {
                                                                 callback();
                                                             }
                                                         }],
-                                                        initialValue: initialData.logisticsProvider ? initialData.logisticsProvider : '全部'
+                                                        initialValue: initialData.logisticsProvider
+                                                        ? initialData.logisticsProvider
+                                                        : '全部'
                                                     })(
                                                         <Select
                                                             size="default"
@@ -149,18 +240,10 @@ class DistributionInformation extends PureComponent {
                                                         <span className="red-star">*</span>
                                                         配送日期
                                                     </span>
-                                                    {getFieldDecorator('deliveryDate', {
-                                                        rules: [{
-                                                            required: true,
-                                                            message: '请选择配送日期!'
-                                                        }],
-                                                        initialValue: moment(initialData.deliveryDate, 'YYYY-MM-DD')
-                                                    })(
-                                                        <DatePicker
-                                                            onChange={this.onChange}
-                                                            className="arrival-date-picker"
-                                                        />
-                                                    )}
+                                                    <DatePicker
+                                                        defaultValue={moment(deliveryDate, DATE_FORMAT)}
+                                                        onChange={this.onDeliveryDateChange}
+                                                    />
                                                 </div>
                                             </FormItem>
                                         </Col>
@@ -200,10 +283,10 @@ class DistributionInformation extends PureComponent {
                                                             required: true,
                                                             message: '请选择预计达到日期!'
                                                         }],
-                                                        initialValue: moment(initialData.willArrivalDate, 'YYYY-MM-DD')
+                                                        initialValue: moment(willArrivalDate, DATE_FORMAT)
                                                     })(
                                                         <DatePicker
-                                                            onChange={this.onChange}
+                                                            onChange={this.onWillArrivalDateChange}
                                                             className="arrival-date-picker"
                                                         />
                                                     )}
@@ -267,10 +350,10 @@ class DistributionInformation extends PureComponent {
                             <Icon type="file-text" className="detail-message-header-icon" />
                             配送列表
                         </div>
-                        <div className="detail-message-body">
+                        <div>
                             <Table
                                 dataSource={initialData.distributionInfo}
-                                columns={columns}
+                                columns={this.columns}
                                 pagination={false}
                                 rowKey="commodifyNumber"
                             />
@@ -284,11 +367,17 @@ class DistributionInformation extends PureComponent {
                                 size="default"
                                 onClick={this.handleDistributionSave}
                                 type="primary"
-                            >保存</Button>
+                            >
+                                保存
+                            </Button>
                             <Button
                                 size="default"
-                                onClick={this.handleDistributionReturn}
-                            >返回</Button>
+                                onClick={() => {
+                                    this.props.history.pop();
+                                }}
+                            >
+                                返回
+                            </Button>
                         </Col>
                     </Row>
                 </div>
@@ -300,6 +389,7 @@ class DistributionInformation extends PureComponent {
 DistributionInformation.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     initialData: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
 }
 
 DistributionInformation.defaultProps = {

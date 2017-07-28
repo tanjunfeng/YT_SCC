@@ -75,7 +75,7 @@ class BankInfo extends PureComponent {
                     bankLocCountyCode: thirdValue.code,
                 }
                 if (isEdit) {
-                    Object.assign(supplierBankInfo, {id: detailData.supplierBankInfo});
+                    Object.assign(supplierBankInfo, {id: detailData.supplierBankInfo.id});
                 }
 
                 this.props.addSupplierMessage1({supplierBankInfo, ...data});
@@ -130,13 +130,11 @@ class BankInfo extends PureComponent {
                                         <CasadingAddress
                                             id="licenseLoc"
                                             defaultValue={
-                                                isEdit
-                                                ? [
+                                                isEdit && [
                                                     supplierBankInfo.bankLocProvinceCode,
                                                     supplierBankInfo.bankLocCityCode,
                                                     supplierBankInfo.bankLocCountyCode
                                                 ]
-                                                : null
                                             }
                                             onChange={this.handleCompanyAddressChange}
                                         />

@@ -44,14 +44,16 @@ class SupplierDetail extends PureComponent {
         this.canExamine = false;
         this.showReson = false;
         const { type = 'supplier' } = this.props.match.params;
+        const current = type === 'add' || type === 'place' || type === 'edit' ? '4' : '1'
         this.state = {
-            current: type === 'add' || type === 'place' ? '4' : '1'
+            current,
+            isEdit: type === 'edit'
         }
     }
 
     componentDidMount() {
         const { id, type } = this.props.match.params;
-        if (type === 'place') {
+        if (type === 'place' || type === 'edit') {
             this.props.getProviderDetail({adrInfoId: id})
             return ;
         }
@@ -110,9 +112,12 @@ class SupplierDetail extends PureComponent {
                     </TabPane>
                 }
                 {
-                    type === 'add' &&
+                    type === 'add' || type === 'edit' &&
                     <TabPane tab="供应商地点信息" key="4">
-                        <LocationInfoManagement {...props} />
+                        <LocationInfoManagement
+                            {...props}
+                            isEdit={this.state.isEdit}
+                        />
                     </TabPane>
                 }
             </Tabs>

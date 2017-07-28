@@ -36,7 +36,33 @@ import fetchFindStaticPageList from './fetch/fetchStaticPageHome';
 import fectheEditorContent from './fetch/fectheEditorContent';
 
 /*********************procurement added by twh************************* */
-import { changePoMngSelectedRows, fetchMaterialByCd, fetchPoMngList, deletePoByIds, fetchPoPrintList } from './procurement';
+import {
+    changePoMngSelectedRows,
+    fetchPoMngList,
+    deletePoByIds,
+    fetchPoPrintList,
+    getWarehouseAddressMap,
+    getShopAddressMap,
+    getSupplierMap,
+    getSupplierLocMap,
+    getBigClassMap,
+    getMaterialMap,
+    initPoDetail,
+    createPo,
+    auditPo,
+    fetchPoDetail,
+    updatePoBasicinfo,
+    addPoLines,
+    updatePoLine,
+    deletePoLine,
+    fetchPoRcvMngList,
+    fetchPoRcvList,
+    fetchPoRcvDetail,
+    fetchPoRcvInit,
+    updatePoRcvLine,
+    updatePoRcvBasicinfo,
+    createPoRcv
+} from './procurement';
 
 // IBM
 import fecthCheckMainSupplier from './fetch/fetchCheckMainSupplier';
@@ -47,6 +73,7 @@ import fetchChangeSupType from './fetch/fetchChangeSupType'
 import fetchQuerySettledList from './fetch/fetchQuerySettledList';
 import fetchQueryManageList from './fetch/fetchQueryManageList';
 import fetchGetProductById from './fetch/fetchGetProductById';
+import fetchEditBeforeAfter from './fetch/fetchEditBeforeAfter';
 
 export {
     fetchSupplierList,
@@ -76,11 +103,31 @@ export {
     modifyToAddInsertpage,
     fetchFindStaticPageList,
     /*********************procurement added by twh************************* */
-    fetchPoMngList,
+     fetchPoMngList,
     changePoMngSelectedRows,
-    fetchMaterialByCd,
     deletePoByIds,
     fetchPoPrintList,
+    getWarehouseAddressMap,
+    getShopAddressMap,
+    getSupplierMap,
+    getSupplierLocMap,
+    getBigClassMap,
+    getMaterialMap,
+    initPoDetail,
+    createPo,
+    auditPo,
+    fetchPoDetail,
+    updatePoBasicinfo,
+    addPoLines,
+    updatePoLine,
+    deletePoLine,
+    fetchPoRcvMngList,
+    fetchPoRcvList,
+    fetchPoRcvDetail,
+    fetchPoRcvInit,
+    updatePoRcvLine,
+    updatePoRcvBasicinfo,
+    createPoRcv,
 
     // IBM
     fecthCheckMainSupplier,
@@ -91,4 +138,5 @@ export {
     fetchQuerySettledList,
     fetchQueryManageList,
     fetchGetProductById,
+    fetchEditBeforeAfter,
 }

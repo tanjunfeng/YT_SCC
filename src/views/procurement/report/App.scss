@@ -1,5 +1,7 @@
 .print {
-  &-box {
+  &-container{
+     width: 100%;
+ .content {
     clear: both;
     background: #ffffff;
     border: 1px solid #c4c5c9;
@@ -25,4 +27,6 @@
       border-bottom: 1px solid #000;
     }
   }
+  }
+ 
 }
