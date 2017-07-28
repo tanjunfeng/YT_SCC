@@ -10,7 +10,9 @@ import ActionType from './ActionType';
 import {
     queryProviderDetail,
     getSupplierNo,
-    insertOrUpdateSupplierInfo
+    insertOrUpdateSupplierInfo,
+    querySettledList,
+    fetchQueryManageList
 } from '../service';
 
 /**
@@ -38,7 +40,7 @@ export const getSupplierDetail = (params) => dispatch => (
  * 供应商入驻列表action
  */
 const receiveSettledList = (data) => ({
-    type: ActionType.RECEIVE_SUPPLIER_SETTLED_LIST,
+    type: ActionType.QUERY_SETTLED_LIST,
     payload: data,
 })
 
@@ -65,7 +67,7 @@ const receiveManageList = (data) => ({
 
 export const getSupplierManageList = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        queryManageList(params)
+        fetchQueryManageList(params)
             .then(res => {
                 dispatch(
                     receiveManageList(res.data)
