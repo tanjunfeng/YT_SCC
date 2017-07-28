@@ -1,6 +1,5 @@
 /**
  * @file fetchChangeSupType.js
- *
  * @author Tanjunfeng
  *
  * 分类列表页商品排序管理

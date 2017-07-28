@@ -2,7 +2,6 @@
  * @file fetchGetProdPurchaseById.js
  *
  * @author Tanjunfeng
- *
  * 查询商品价格信息
  */
 

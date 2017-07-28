@@ -120,7 +120,7 @@ export const fetchQueryManageList = (params) => http.get('/supplier/queryManageL
 export const querySettledList = (params) => http.get('/supplier/querySettledList', params);
 
 // 查询供应商修改前修改后的信息(改)
-export const editBeforeAfter = (params) => http.get('/supplier/editBeforeAfter', params);
+export const fetchEditBeforeAfter = (params) => http.get('/supplier/editBeforeAfter', params);
 
 // 供应商综合审核录入
 export const insertSupplierAuditInfo = (params) => http.post('/provider/insertSupplierAuditInfo', params);

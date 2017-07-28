@@ -123,7 +123,7 @@ startApp({
                 submenu: [
                     {
                         code: "suppliersAppList",
-                        name: "供应商管理列表"
+                        name: "供应商入驻申请列表"
                     },
                     {
                         code: "supplierInputList",
