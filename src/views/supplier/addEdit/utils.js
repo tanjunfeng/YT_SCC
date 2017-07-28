@@ -37,6 +37,22 @@ class Tools {
         return this.areaData;
     }
 
+    static decodeArea(data) {
+        const checked = [];
+        const loop = (item, parentCode) => item.map((item) => {
+            let code = item.code;
+            if (parentCode) {
+                code = `${parentCode}-${code}`
+            }
+            if (item.regions) {
+                loop(item.regions, code);
+            }
+            checked.push(code);
+        })
+        loop(data);
+        return checked;
+    }
+
     static parseItem(item) {
         const keys = item.key.split('-');
         const titles = item.props.hideTitle.split('-');
@@ -44,16 +60,16 @@ class Tools {
         let current = this.areaData;
         if (len === 3) {
             const parseData = {
-                code: keys[0],
-                regionName: titles[0],
-                regions: [
+                "code": keys[0],
+                "regionName": titles[0],
+                "regions": [
                     {
-                        code: keys[1],
-                        regionName: titles[1],
-                        regions: [
+                        "code": keys[1],
+                        "regionName": titles[1],
+                        "regions": [
                             {
-                                code: keys[2],
-                                regionName: titles[2],
+                                "code": keys[2],
+                                "regionName": titles[2],
                             }
                         ]
                     }

@@ -17,13 +17,10 @@ import Utils from '../../../util/util';
 import { Validator } from '../../../util/validator';
 import InlineUpload from '../../../components/inlineUpload';
 import CasadingAddress from '../../../components/ascadingAddress';
-import { addSupplierMessage1 } from '../../../actions/addSupplier';
+import { addSupplierMessage1, getWarehouse, fetchWarehouseInfo, deleteWarehouseInfo, insertSupplierAddress } from '../../../actions/addSupplier';
 import InlineTree from '../../../components/inlineTree';
 import { fetchSupplierNo } from '../../../actions/supplier';
 import Warehouse from './warehouse';
-
-// mock
-import queryAllLargerRegionProvince from '../../../../mock/queryAllLargerRegionProvince';
 
 const dateFormat = 'YYYY-MM-DD';
 const FormItem = Form.Item;
@@ -33,109 +30,104 @@ const Option = Select.Option;
 @connect(
     state => ({
         data: state.toJS().addSupplier.data,
-        supplierId: state.toJS().supplier.supplierId
+        supplierId: state.toJS().supplier.supplierId,
+        warehouseInfo: state.toJS().addSupplier.warehouseInfo,
+        warehouseData: state.toJS().addSupplier.warehouseData
     }),
     dispatch => bindActionCreators({
         addSupplierMessage1,
-        fetchSupplierNo
+        fetchSupplierNo,
+        getWarehouse,
+        fetchWarehouseInfo,
+        deleteWarehouseInfo,
+        insertSupplierAddress
     }, dispatch)
 )
 class BasicInfo extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.handleNextStep = ::this.handleNextStep;
         this.handleCompanyAddressChange = ::this.handleCompanyAddressChange;
         this.handleBankLocChange = ::this.handleBankLocChange;
+        this.handleSaveDraft = ::this.handleSaveDraft;
+        this.getValue = ::this.getValue;
+        this.submit = ::this.submit;
         this.companyAddress = {};
         this.bankLoc = {};
-        this.submitData = {
-            supplierBasicInfo: {},
-            supplierOperTaxInfo: {},
-            supplierBankInfo: {}
-        };
     }
 
     componentDidMount() {
         this.props.fetchSupplierNo({type: 'SP_ADR'})
     }
 
-    handleNextStep() {
-        // const { form, onGoTo, isEdit, detailData = {} } = this.props;
-        // Tools.checkAddress(this.companyAddress, 'companyAddress', this);
-        // Tools.checkAddress(this.bankLoc, 'bankLoc', this);
-        // form.validateFields((err, values) => {
-        //     if (!err) {
-        //         const {
-        //             accountName,
-        //             bankAccount,
-        //             taxpayerType,
-        //             companyDetailAddress,
-        //             companyName,
-        //             mainAccountNo,
-        //             openBank,
-        //             spNo,
-        //             spRegNo,
-        //             taxpayerNumber,
-        //         } = values;
+    
+    getValue(callback) {
+        const { form, detailData, detailSp } = this.props;
+        const { supplierBasicInfo = {}, } = detailData;
+        form.validateFields((err, values) => {
+            if (!err) {
+                const {
+                    belongArea,
+                    goodsArrivalCycle,
+                    grade,
+                    operaStatus,
+                    payType,
+                    providerEmail,
+                    providerUserName,
+                    providerPhone,
+                    purchaseEmail,
+                    purchaseName,
+                    purchasePhone,
+                    settlementPeriod
+                } = values
+                const wareHouseIds = this.wareHouse.getValue();
+                const submit = {
+                    spAdrBasic: {
+                        providerNo: supplierBasicInfo.spNo,
+                        providerName: "四川 - 深圳市豪利门业实业有限公司",
+                        goodsArrivalCycle,
+                        orgId: this.props.supplierId,
+                        grade,
+                        operaStatus,
+                        settlementPeriod,
+                        belongArea,
+                        payType
+                    },
+                    spAdrContact: {
+                        providerName: providerUserName,
+                        providerPhone,
+                        providerEmail,
+                        purchaseName,
+                        purchasePhone,
+                        purchaseEmail
+                    },
+                    spAdrDeliverys: wareHouseIds.map((item) => {
+                        return {warehouseId: item};
+                    }),
+                    parentId: supplierBasicInfo.id
+                }
 
-        //         this.submitData.supplierBasicInfo = {
-        //             companyName,
-        //             spNo,
-        //             spRegNo,
-        //             mainAccountNo
-        //         };
+                callback(submit)
+            }
+        })
+    }
 
-        //         const { firstValue, secondValue, thirdValue } = this.companyAddress;
+    handleSaveDraft() {
+        this.getValue((data) => {
+            data.commitType = 0;
+            this.props.insertSupplierAddress(data).then((res) => {
+                this.props.history.push('/supplierInputList/place/7')
+            });
+        });
+    }
 
-        //         this.submitData.supplierOperTaxInfo = {
-        //             companyLocProvince: firstValue.regionName,
-        //             companyLocCity: secondValue.regionName,
-        //             companyLocCounty: thirdValue.regionName,
-        //             companyLocProvinceCode: firstValue.code,
-        //             companyLocCityCode: secondValue.code,
-        //             companyLocCountyCode: thirdValue.code,
-        //             companyDetailAddress,
-        //             registrationCertificate: this.certificate.getValue()[0],
-        //             qualityIdentification: this.quality.getValue()[0],
-        //             taxRegCertificate: this.taxReg.getValue()[0],
-        //             taxpayerNumber,
-        //             taxpayerType,
-        //             generalTaxpayerQualifiCerti: this.general.getValue()[0],
-        //         }
-
-        //         this.submitData.supplierBankInfo = {
-        //             accountName,
-        //             openBank,
-        //             bankAccount,
-        //             bankAccountLicense: this.bank.getValue()[0],
-        //             bankLocProvince: this.bankLoc.firstValue.regionName,
-        //             bankLocCity: this.bankLoc.secondValue.regionName,
-        //             bankLocCounty: this.bankLoc.thirdValue.regionName,
-        //             bankLocCountyCode: this.bankLoc.thirdValue.code,
-        //             bankLocCityCode: this.bankLoc.secondValue.code,
-        //             bankLocProvinceCode: this.bankLoc.firstValue.code,
-        //         }
-
-        //         if (isEdit) {
-        //             Object.assign(
-        //                 this.submitData.supplierBasicInfo,
-        //                 {id: detailData.supplierBasicInfo.id}
-        //             )
-        //             Object.assign(
-        //                 this.submitData.supplierOperTaxInfo,
-        //                 {id: detailData.supplierOperTaxInfo.id}
-        //             )
-        //             Object.assign(
-        //                 this.submitData.supplierBankInfo,
-        //                 {id: detailData.supplierBankInfo.id}
-        //             )
-        //         }
-
-        //         this.props.addSupplierMessage1(this.submitData)
-        //         onGoTo('2');
-        //     }
-        // })
+    submit() {
+        this.getValue((data) => {
+            data.commitType = 1;
+            this.props.insertSupplierAddress(data).then((res) => {
+                this.props.history.push('/supplierInputList/place/7')
+            });
+        });
     }
 
     handleCompanyAddressChange(data) {
@@ -323,15 +315,21 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}>
-                                        <span>供应商地点到货周期：</span>
+                                        <span>供应商付款方式：</span>
                                         <FormItem>
-                                            {getFieldDecorator('goodsArrivalCycle', {
-                                                rules: [{ required: true, message: '请输入供应商地点到货周期!' }],
-                                                initialValue: spAdrBasic.goodsArrivalCycle
+                                            {getFieldDecorator('payType', {
+                                                rules: [{required: true, message: '请选择付款方式！'}],
+                                                initialValue: spAdrBasic.settlementPeriod || '0'
                                             })(
-                                                <Input
-                                                    placeholder="供应商地点到货周期"
-                                                />
+                                                <Select
+                                                    style={{ width: 140 }}
+                                                    placeholder="付款方式"
+                                                >
+                                                    <Option value="0">网银</Option>
+                                                    <Option value="1">银行转账</Option>
+                                                    <Option value="2">现金</Option>
+                                                    <Option value="3">支票</Option>
+                                                </Select>
                                             )}
                                         </FormItem>
                                     </Col>
@@ -354,35 +352,6 @@ class BasicInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                 </Row>
-                                <Row>
-                                    <Col span={8}>
-                                        <span>供应商审核人：</span>
-                                        <FormItem>
-                                            {getFieldDecorator('auditPerson', {
-                                                rules: [{ required: true, message: '请输入供应商审核人!' }],
-                                                initialValue: spAdrBasic.auditPerson
-                                            })(
-                                                <Input
-                                                    placeholder="供应商审核人"
-                                                />
-                                            )}
-                                        </FormItem>
-                                    </Col>
-                                    <Col span={8} id="handle-time">
-                                        <span>供应商审核日期：</span>
-                                        <FormItem>
-                                            {getFieldDecorator('auditDate', {
-                                                rules: [{required: true, message: '请选择供应商审核日期'}],
-                                                initialValue: moment(spAdrBasic.auditDate || null)
-                                            })(
-                                                <DatePicker
-                                                    getCalendarContainer={() => document.getElementById('handle-time')}
-                                                    format={dateFormat}
-                                                />
-                                            )}
-                                        </FormItem>
-                                    </Col>
-                                </Row>
                             </div>
                         </div>
                     </div>
@@ -392,7 +361,13 @@ class BasicInfo extends PureComponent {
                                 <Icon type="solution" className="add-message-header-icon" />送货信息
                             </div>
                             <div className="add-message-body">
-                                <Warehouse />
+                                <Warehouse
+                                    fetch={this.props.getWarehouse}
+                                    data={this.props.warehouseData}
+                                    handleChoose={this.props.fetchWarehouseInfo}
+                                    handleDelete={this.props.deleteWarehouseInfo}
+                                    ref={node => (this.wareHouse = node)}
+                                />
                             </div>
                         </div>
                     </div>
@@ -406,7 +381,7 @@ class BasicInfo extends PureComponent {
                                     <Col span={8}>
                                         <span>供应商姓名：</span>
                                         <FormItem>
-                                            {getFieldDecorator('providerName', {
+                                            {getFieldDecorator('providerUserName', {
                                                 rules: [{ required: true, message: '请输入供应商姓名!' }],
                                                 initialValue: spAdrContact.providerName
                                             })(
@@ -422,7 +397,6 @@ class BasicInfo extends PureComponent {
                                             {getFieldDecorator('providerPhone', {
                                                 rules: [
                                                     { required: true, message: '请输入供应商电话!' },
-                                                    Validator.phone
                                                 ],
                                                 initialValue: spAdrContact.providerPhone
                                             })(
@@ -471,7 +445,6 @@ class BasicInfo extends PureComponent {
                                             {getFieldDecorator('purchasePhone', {
                                                 rules: [
                                                     { required: true, message: '请输入采购员电话!' },
-                                                    Validator.phone
                                                 ],
                                                 initialValue: spAdrContact.purchasePhone
                                             })(
@@ -504,8 +477,8 @@ class BasicInfo extends PureComponent {
                         </div>
                     </div>
                     <div className="add-message-handle">
-                        <Button onClick={this.handleNextStep}>提    交</Button>
-                        <Button onClick={this.handleNextStep}>保存草稿 </Button>
+                        <Button onClick={this.submit}>提    交</Button>
+                        <Button onClick={this.handleSaveDraft}>保存草稿 </Button>
                     </div>
                 </Form>
             </div>
@@ -520,4 +493,4 @@ BasicInfo.propTypes = {
     detailData: PropTypes.objectOf(PropTypes.any),
     addSupplierMessage1: PropTypes.func,
 }
-export default Form.create()(BasicInfo);
+export default Form.create()(withRouter(BasicInfo));

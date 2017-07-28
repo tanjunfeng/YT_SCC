@@ -17,25 +17,27 @@ import Utils from '../../../util/util';
 import { Validator } from '../../../util/validator';
 import InlineUpload from '../../../components/inlineUpload';
 import CasadingAddress from '../../../components/ascadingAddress';
-import { addSupplierMessage1 } from '../../../actions/addSupplier';
+import {
+    addSupplierMessage1,
+} from '../../../actions/addSupplier';
+import {
+    hanldeSupplier
+} from '../../../actions/supplier';
 import InlineTree from '../../../components/inlineTree';
 import Tools from './utils';
-
-// mock
-import queryAllLargerRegionProvince from '../../../../mock/queryAllLargerRegionProvince';
 
 const dateFormat = 'YYYY-MM-DD';
 const { RangePicker } = DatePicker
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-
 @connect(
     state => ({
         data: state.toJS().addSupplier.data
     }),
     dispatch => bindActionCreators({
-        addSupplierMessage1
+        addSupplierMessage1,
+        hanldeSupplier
     }, dispatch)
 )
 class LicenseInfo extends PureComponent {
@@ -49,7 +51,9 @@ class LicenseInfo extends PureComponent {
         this.handleCreatePlace = ::this.handleCreatePlace;
         this.handleSubmit = ::this.handleSubmit;
         this.handlePreStep = :: this.handlePreStep;
+        this.handleSaveDraft = ::this.handleSaveDraft;
         this.handleCompanyLicenseLocChange = ::this.handleCompanyLicenseLocChange;
+        this.submit = ::this.submit;
         this.companyAddress = {};
         this.licenseLoc = {}
         this.state = {
@@ -61,104 +65,10 @@ class LicenseInfo extends PureComponent {
     componentDidMount() {
     }
 
-    handleNextStep() {
-        const { form, onGoTo, isEdit, detailData = {} } = this.props;
-        Tools.checkAddress(this.companyAddress, 'companyAddress', this);
-        Tools.checkAddress(this.bankLoc, 'bankLoc', this);
-        form.validateFields((err, values) => {
-            if (!err) {
-                const {
-                    accountName,
-                    bankAccount,
-                    taxpayerType,
-                    companyDetailAddress,
-                    companyName,
-                    mainAccountNo,
-                    openBank,
-                    spNo,
-                    spRegNo,
-                    taxpayerNumber,
-                } = values;
-
-                this.submitData.supplierBasicInfo = {
-                    companyName,
-                    spNo,
-                    spRegNo,
-                    mainAccountNo
-                };
-
-                const { firstValue, secondValue, thirdValue } = this.companyAddress;
-                this.submitData.supplierOperTaxInfo = {
-                    companyLocProvince: firstValue.regionName,
-                    companyLocCity: secondValue.regionName,
-                    companyLocCounty: thirdValue.regionName,
-                    companyLocProvinceCode: firstValue.code,
-                    companyLocCityCode: secondValue.code,
-                    companyLocCountyCode: thirdValue.code,
-                    companyDetailAddress,
-                    registrationCertificate: this.certificate.getValue()[0],
-                    qualityIdentification: this.quality.getValue()[0],
-                    taxRegCertificate: this.taxReg.getValue()[0],
-                    taxpayerNumber,
-                    taxpayerType,
-                    generalTaxpayerQualifiCerti: this.general.getValue()[0],
-                }
-
-                this.submitData.supplierBankInfo = {
-                    accountName,
-                    openBank,
-                    bankAccount,
-                    bankAccountLicense: this.bank.getValue()[0],
-                    bankLocProvince: this.bankLoc.firstValue.regionName,
-                    bankLocCity: this.bankLoc.secondValue.regionName,
-                    bankLocCounty: this.bankLoc.thirdValue.regionName,
-                    bankLocCountyCode: this.bankLoc.thirdValue.code,
-                    bankLocCityCode: this.bankLoc.secondValue.code,
-                    bankLocProvinceCode: this.bankLoc.firstValue.code,
-                }
-
-                if (isEdit) {
-                    Object.assign(
-                        this.submitData.supplierBasicInfo,
-                        {id: detailData.supplierBasicInfo.id}
-                    )
-                    Object.assign(
-                        this.submitData.supplierOperTaxInfo,
-                        {id: detailData.supplierOperTaxInfo.id}
-                    )
-                    Object.assign(
-                        this.submitData.supplierBankInfo,
-                        {id: detailData.supplierBankInfo.id}
-                    )
-                }
-
-                this.props.addSupplierMessage1(this.submitData)
-                onGoTo('2');
-            }
-        })
-    }
-
-    handleSaveDraft() {
-        this.getVlaue()
-    }
-
-    handleCreatePlace() {
-
-    }
-
-    handleSubmit() {
-
-    }
-
-    handlePreStep() {
-
-    }
-
     getVlaue() {
-        const { form, onGoTo, isEdit, detailData = {} } = this.props;
+        const { form, onGoTo, isEdit, detailData = {}, data } = this.props;
         Tools.checkAddress(this.companyAddress, 'companyAddress', this);
         form.validateFields((err, values) => {
-            console.log(values)
             if (!err) {
                 const { firstValue, secondValue, thirdValue } = this.companyAddress;
                 const {
@@ -173,7 +83,7 @@ class LicenseInfo extends PureComponent {
                     registeredCapital,
                     startEndDate
                 } = values;
-                this.submitData.supplierOperTaxInfo = {
+                const supplierOperTaxInfo = {
                     companyLocProvince: firstValue.regionName,
                     companyLocCity: secondValue.regionName,
                     companyLocCounty: thirdValue.regionName,
@@ -186,9 +96,12 @@ class LicenseInfo extends PureComponent {
                     qualityIdentification: this.refs['qualityIdentification'].getValue().files[0],
                     quaIdeExpiringDate: this.refs['qualityIdentification'].getValue().time,
                     generalTaxpayerQualifiCerti: this.refs['generalTaxpayerQualifiCerti'].getValue().files[0],
-                    taxpayerCertExpiringDate: this.refs['generalTaxpayerQualifiCerti'].getValue().files[0],
+                    taxpayerCertExpiringDate: this.refs['generalTaxpayerQualifiCerti'].getValue().time,
+                    foodBusinessLicense: this.refs['foodBusinessLicense'].getValue().files[0],
+                    businessLicenseExpiringDate: this.refs['foodBusinessLicense'].getValue().time
+
                 }
-                this.submitData.supplierlicenseInfo = {
+                const supplierlicenseInfo = {
                     companyName: this.props.data.supplierBasicInfo.companyName,
                     registLicenceNumber,
                     legalRepresentative,
@@ -198,9 +111,9 @@ class LicenseInfo extends PureComponent {
                     licenseLocProvince: this.licenseLoc.firstValue.regionName,
                     licenseLocCity: this.licenseLoc.secondValue.regionName,
                     licenseLocCounty: this.licenseLoc.thirdValue.regionName,
-                    licenseLocProvinceCode: this.licenseLoc.thirdValue.code,
+                    licenseLocProvinceCode: this.licenseLoc.firstValue.code,
                     licenseLocCityCode: this.licenseLoc.secondValue.code,
-                    licenseLocCountyCode: this.licenseLoc.firstValue.code,
+                    licenseLocCountyCode: this.licenseLoc.thirdValue.code,
                     licenseAddress,
                     establishDate: establishDate._d * 1,
                     startDate: startEndDate[0]._d * 1,
@@ -211,10 +124,50 @@ class LicenseInfo extends PureComponent {
                     registLicencePic: this.refs['registLicencePic'].getValue().files[0],
                     guaranteeMoney
                 }
-
-                console.log(this.submitData);
+                
+                if (isEdit) {
+                    Object.assign(supplierOperTaxInfo, {id: detailData.supplierOperTaxInfo.id});
+                    Object.assign(supplierlicenseInfo, {id: detailData.supplierlicenseInfo.id});
+                }
+                Object.assign(
+                    this.submitData,
+                    {
+                        supplierOperTaxInfo,
+                        supplierlicenseInfo,
+                        id: detailData.id,
+                        status: detailData.status,
+                        ...data
+                    }
+                )
             }
         })
+    }
+
+    submit(type) {
+        const { isEdit } = this.props;
+        this.getVlaue();
+        this.submitData.commitType = type;
+        this.props.hanldeSupplier(params, isEdit ? 'updateSupplierInfo' : 'insertSupplierInfo')
+            .then((res) => {
+                const { location, history } = this.props;
+                history.push(`${location.pathname}/${res.data}`)
+            });
+    }
+
+    handleSaveDraft() {
+        
+    }
+
+    handleCreatePlace() {
+
+    }
+
+    handleSubmit() {
+
+    }
+
+    handlePreStep() {
+
     }
 
     handleCompanyAddressChange(data) {
@@ -246,7 +199,6 @@ class LicenseInfo extends PureComponent {
         }
         const {
             supplierOperTaxInfo = {},
-            supplierBankInfo = {},
             supplierlicenseInfo = {}
         } = initData;
         return (
@@ -263,6 +215,15 @@ class LicenseInfo extends PureComponent {
                                         <span>公司所在地：</span>
                                         <CasadingAddress
                                             id="companyLoc"
+                                            defaultValue={
+                                                isEdit
+                                                ? [
+                                                    supplierOperTaxInfo.companyLocProvinceCode,
+                                                    supplierOperTaxInfo.companyLocCityCode,
+                                                    supplierOperTaxInfo.companyLocCountyCode
+                                                ]
+                                                : []
+                                            }
                                             onChange={this.handleCompanyAddressChange}
                                         />
                                     </Col>
@@ -286,6 +247,8 @@ class LicenseInfo extends PureComponent {
                                         <span>食品安全认证：</span>
                                         <InlineUpload
                                             showEndTime
+                                            datas={isEdit ? [supplierOperTaxInfo.supplierOperTaxInfo] : []}
+                                            defaultTime={isEdit ? supplierOperTaxInfo.quaIdeExpiringDate : null}
                                             ref="qualityIdentification"
                                         />
                                     </Col>
@@ -293,6 +256,8 @@ class LicenseInfo extends PureComponent {
                                         <span>商标注册证/受理通知书：</span>
                                         <InlineUpload
                                             showEndTime
+                                            datas={isEdit ? [supplierOperTaxInfo.registrationCertificate] : []}
+                                            defaultTime={isEdit ? supplierOperTaxInfo.regCerExpiringDate : null}
                                             ref="registrationCertificate"
                                         />
                                     </Col>
@@ -302,12 +267,17 @@ class LicenseInfo extends PureComponent {
                                         <span>食品经营许可证：</span>
                                         <InlineUpload
                                             showEndTime
+                                            datas={isEdit ? [supplierOperTaxInfo.foodBusinessLicense] : []}
+                                            defaultTime={isEdit ? supplierOperTaxInfo.businessLicenseExpiringDate : null}
+                                            ref="foodBusinessLicense"
                                         />
                                     </Col>
                                     <Col span={8}>
                                         <span>一般纳税人资格证电子版：</span>
                                         <InlineUpload
                                             showEndTime
+                                            datas={isEdit ? [supplierOperTaxInfo.generalTaxpayerQualifiCerti] : []}
+                                            defaultTime={isEdit ? supplierOperTaxInfo.taxpayerCertExpiringDate : null}
                                             ref="generalTaxpayerQualifiCerti"
                                         />
                                     </Col>
@@ -373,7 +343,7 @@ class LicenseInfo extends PureComponent {
                                         <span>成立日期：</span>
                                         {getFieldDecorator('establishDate', {
                                             rules: [{required: true, message: '请选择供应商入驻日期'}],
-                                            initialValue: supplierlicenseInfo.establishDate
+                                            initialValue: isEdit ? moment(supplierlicenseInfo.establishDate) : null
                                         })(
                                             <DatePicker
                                                 getCalendarContainer={() => document.getElementById('createTime')}
@@ -384,7 +354,16 @@ class LicenseInfo extends PureComponent {
                                     <Col span={8}>
                                         <span>营业执照所在地：</span>
                                         <CasadingAddress
-                                            id="licenseLoc"
+                                            id="licenseLocSpace"
+                                            defaultValue={
+                                                isEdit
+                                                ? [
+                                                    supplierlicenseInfo.licenseLocProvinceCode,
+                                                    supplierlicenseInfo.licenseLocCityCode,
+                                                    supplierlicenseInfo.licenseLocCountyCode
+                                                ]
+                                                : []
+                                            }
                                             onChange={this.handleCompanyLicenseLocChange}
                                         />
                                     </Col>
@@ -394,19 +373,18 @@ class LicenseInfo extends PureComponent {
                                         <span>营业期限：</span>
                                         {getFieldDecorator('startEndDate', {
                                             rules: [{required: true, message: '请选择供应商入驻日期'}],
-                                            initialValue: supplierlicenseInfo.establishDate
+                                            initialValue: [
+                                                isEdit
+                                                ? moment(supplierlicenseInfo.startDate)
+                                                : null,
+                                                isEdit
+                                                ? moment(supplierlicenseInfo.endDate)
+                                                : null
+                                            ]
                                         })(
                                             <RangePicker
                                                 disabled={this.state.checked}
                                                 getCalendarContainer={() => document.getElementById('useDate')}
-                                                defaultValue={[
-                                                    isEdit
-                                                    ? moment(new Date(supplierlicenseInfo.startDate), dateFormat)
-                                                    : null,
-                                                    isEdit
-                                                    ? moment(new Date(supplierlicenseInfo.endDate), dateFormat)
-                                                    : null
-                                                ]}
                                             />
                                         )}
                                         <span style={{marginLeft: '10px'}}>
@@ -484,6 +462,14 @@ class LicenseInfo extends PureComponent {
                                         <InlineUpload
                                             showEndTime={false}
                                             limit={2}
+                                            datas={
+                                                isEdit
+                                                ? [
+                                                    supplierlicenseInfo.legalRepreCardPic1,
+                                                    supplierlicenseInfo.legalRepreCardPic2
+                                                ]
+                                                : []
+                                            }
                                             ref="legalRepreCardPic"
                                         />
                                     </Col>
@@ -493,6 +479,11 @@ class LicenseInfo extends PureComponent {
                                         <span>* 营业执照副本电子版 ：</span>
                                         <InlineUpload
                                             showEndTime={false}
+                                            datas={isEdit
+                                                ? [
+                                                    supplierlicenseInfo.registLicencePic
+                                                ]
+                                                : []}
                                             ref="registLicencePic"
                                         />
                                     </Col>

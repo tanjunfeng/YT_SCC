@@ -280,62 +280,6 @@ const routes = [
         key: 'gysgl',
         iconType: 'solution',
         routes: [
-            // 供应商管理列表
-            {
-                path: '/supplierList',
-                parent: 'gysgl',
-                key: 'supplierManagement',
-                component: () => (
-                    <Switch>
-                        <Route
-                            path="/supplierList"
-                            exact
-                            render={() => (<Bundle load={SupplierManageList}>
-                                {(App) => <App />}
-                            </Bundle>)}
-                        />
-                        <Route
-                            path="/supplierList/:id"
-                            exact
-                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/supplierList/:id/:type"
-                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
-                        />
-                    </Switch>
-                )
-            },
-            // 供应商入驻申请列表
-            {
-                path: '/applicationList',
-                parent: 'gysgl',
-                key: 'supplierApplication',
-                component: () => (
-                    <Switch>
-                        <Route
-                            path="/applicationList"
-                            exact
-                            render={() => (<Bundle load={SuppliersAppList}>
-                                {(App) => <App />}
-                            </Bundle>)}
-                        />
-                        <Route
-                            path="/applicationList/add"
-                            exact
-                            render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/applicationList/edit/:id"
-                            render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/applicationList/:id"
-                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
-                        />
-                    </Switch>
-                )
-            },
             // 供应商入驻申请列表(改)
             {
                 path: '/suppliersAppList',
@@ -351,63 +295,21 @@ const routes = [
                             </Bundle>)}
                         />
                         <Route
-                            path="/SuppliersAppList/add/:type"
+                            path="/SuppliersAppList/:type/:id"
+                            exact
+                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/SuppliersAppList/add"
                             exact
                             render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
                         />
                         <Route
                             path="/SuppliersAppList/edit/:type/:id"
+                            exact
                             render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
                         />
-                        <Route
-                            path="/SuppliersAppList/:type/:id"
-                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/SuppliersAppList/place/:type/:id"
-                            exact
-                            render={() => (<Bundle load={SupplierDetail}>
-                                {(App) => <App />}
-                            </Bundle>)}
-                        />
                     </Switch>
-                )
-            },
-            // 供应商修改资料申请
-            {
-                path: '/modifyApplication',
-                parent: 'gysgl',
-                key: 'modifyApplication',
-                component: () => (
-                    <Switch>
-                        <Route
-                            path="/modifyApplication"
-                            exact
-                            render={() => (<Bundle load={SupplierModifyApplication}>
-                                {(App) => <App />}
-                            </Bundle>)}
-                        />
-                        <Route
-                            path="/modifyApplication/:id"
-                            render={() => (<Bundle load={SupplierDetail}>
-                                {(App) => <App />}
-                            </Bundle>)}
-                        />
-                    </Switch>
-                )
-            },
-            // 供应商配送区域管理
-            {
-                path: '/areaManagement',
-                parent: 'gysgl',
-                key: 'supplierAreaManagement',
-                component: () => (
-                    <Route
-                        path="/areaManagement"
-                        render={() => (<Bundle load={SupplierAreaManagement}>
-                            {(App) => <App />}
-                        </Bundle>)}
-                    />
                 )
             },
             // 供应商管理列表
@@ -425,7 +327,7 @@ const routes = [
                             </Bundle>)}
                         />
                         <Route
-                            path="/supplierInputList/supplier/add"
+                            path="/supplierInputList/add"
                             exact
                             render={() => (<Bundle load={AddSupplier}>
                                 {(App) => <App />}

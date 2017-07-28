@@ -10,9 +10,19 @@ import ActionType from './ActionType';
 import {
     queryProviderDetail,
     getSupplierNo,
-    insertOrUpdateSupplierInfo,
-    queryProviderPlaceInfo
+    queryProviderPlaceInfo,
+    insertSupplierInfo,
+    updateSupplierInfo,
+    insertSupplierAddressInfo,
+    updateSupplierAddressInfo
 } from '../service';
+
+const handleServer = {
+    insertSupplierInfo,
+    updateSupplierInfo,
+    insertSupplierAddressInfo,
+    updateSupplierAddressInfo
+}
 
 /**
  * 供应商详情action
@@ -119,9 +129,9 @@ const receiveinSupplierInfo = (data) => ({
     payload: data,
 })
 
-export const fetchSupplierInfo = (params) => dispatch => (
+export const hanldeSupplier = (params, type) => dispatch => (
     new Promise((resolve, reject) => {
-        insertOrUpdateSupplierInfo(params)
+        handleServer[type](params)
             .then(res => {
                 dispatch(
                     receiveinSupplierInfo(res.data)

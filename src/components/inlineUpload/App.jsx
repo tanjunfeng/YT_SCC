@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Upload, Button, Icon, Tooltip, DatePicker } from 'antd';
 import classnames from 'classnames';
+import moment from 'moment';
 
 class InlineUpload extends Component {
     constructor(props) {
@@ -12,7 +13,7 @@ class InlineUpload extends Component {
         this.getValue = ::this.getValue;
         this.handleTimeChange = ::this.handleTimeChange;
         this.result = [];
-        this.time = null;
+        this.time = props.defaultTime;
     }
 
     state = {
@@ -25,6 +26,7 @@ class InlineUpload extends Component {
             && nextProps.datas != this.props.datas
         ) {
             this.result = nextProps.datas;
+            this.time = nextProps.defaultTime;
             this.props.onChange(this.result);
         }
     }
@@ -121,7 +123,9 @@ class InlineUpload extends Component {
                         <div className="effective-time-document">
                             <span>证件有效时间：</span>
                             <DatePicker
+                                defaultValue={this.time ? moment(this.time) : null}
                                 onChange={this.handleTimeChange}
+                                format="YYYY-MM-DD"
                             />
                         </div>
                     }
@@ -137,12 +141,14 @@ InlineUpload.propTypes = {
     datas: PropTypes.arrayOf(PropTypes.any),
     onChange: PropTypes.func,
     showEndTime: PropTypes.bool,
+    defaultTime: PropTypes.objectOf(PropTypes.any),
 };
 
 InlineUpload.defaultProps = {
     handleChange: () => {},
     onChange: () => {},
-    showEndTime: false
+    showEndTime: false,
+    defaultTime: null
 }
 
 export default InlineUpload;

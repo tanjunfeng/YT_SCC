@@ -42,7 +42,6 @@ const columns = supplierInputList;
         editBeforeAfter: state.toJS().supplier.editBeforeAfter,
     }),
     dispatch => bindActionCreators({
-        getSupplierManageList,
         fetchProviderEnterList,
         fetchQueryManageList,
         fetchSupplierList,
@@ -191,14 +190,14 @@ class SupplierInputList extends PureComponent {
                 </Menu.Item>
                 {
                     <Menu.Item key="modifySupInfor">
-                        <Link to={`${pathname}/edit/:type/${id}`}>
+                        <Link to={`${pathname}/supplier/${id}`}>
                             修改供应商信息
                         </Link>
                     </Menu.Item>
                 }
                 {
                     <Menu.Item key="addAddress">
-                        <Link to={`${pathname}/place/:type/${id}`}>
+                        <Link to={`${pathname}/add/${id}`}>
                             新增供应商地点信息
                         </Link>
                     </Menu.Item>
@@ -225,11 +224,11 @@ class SupplierInputList extends PureComponent {
         const menu1 = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="AddDetail">
-                    <Link to={`${pathname}/place/:type/${id}`}>供应商地点详情</Link>
+                    <Link to={`${pathname}/place/${id}`}>供应商地点详情</Link>
                 </Menu.Item>
                 {
                     <Menu.Item key="modifySupAddInfor">
-                        <Link to={`${pathname}/place/:type/${id}`}>
+                        <Link to={`${pathname}/add/${id}`}>
                             修改供应商地点信息
                         </Link>
                     </Menu.Item>

@@ -61,7 +61,7 @@ class BankInfo extends PureComponent {
                     openBank
                 } = values;
 
-                this.submitData.supplierBankInfo = {
+                const supplierBankInfo = {
                     bankAccount,
                     invoiceHead,
                     openBank,
@@ -74,25 +74,11 @@ class BankInfo extends PureComponent {
                     bankLocCityCode: secondValue.code,
                     bankLocCountyCode: thirdValue.code,
                 }
+                if (isEdit) {
+                    Object.assign(supplierBankInfo, {id: detailData.supplierBankInfo});
+                }
 
-                Object.assign(this.submitData, data);
-
-                // if (isEdit) {
-                //     Object.assign(
-                //         this.submitData.supplierBasicInfo,
-                //         {id: detailData.supplierBasicInfo.id}
-                //     )
-                //     Object.assign(
-                //         this.submitData.supplierOperTaxInfo,
-                //         {id: detailData.supplierOperTaxInfo.id}
-                //     )
-                //     Object.assign(
-                //         this.submitData.supplierBankInfo,
-                //         {id: detailData.supplierBankInfo.id}
-                //     )
-                // }
-
-                this.props.addSupplierMessage1(this.submitData)
+                this.props.addSupplierMessage1({supplierBankInfo, ...data});
                 onGoTo('3');
             }
         })
@@ -111,8 +97,6 @@ class BankInfo extends PureComponent {
             initData = {};
         }
         const {
-            supplierBasicInfo = {},
-            supplierOperTaxInfo = {},
             supplierBankInfo = {}
         } = initData;
         return (
@@ -145,6 +129,15 @@ class BankInfo extends PureComponent {
                                         <span>开户行所在地：</span>
                                         <CasadingAddress
                                             id="licenseLoc"
+                                            defaultValue={
+                                                isEdit
+                                                ? [
+                                                    supplierBankInfo.bankLocProvinceCode,
+                                                    supplierBankInfo.bankLocCityCode,
+                                                    supplierBankInfo.bankLocCountyCode
+                                                ]
+                                                : null
+                                            }
                                             onChange={this.handleCompanyAddressChange}
                                         />
                                     </Col>
@@ -180,6 +173,7 @@ class BankInfo extends PureComponent {
                                     <Col span={8}>
                                         <span>银行开户许可证电子版：</span>
                                         <InlineUpload
+                                            datas={isEdit ? [supplierBankInfo.bankAccountLicense] : []}
                                             ref={node => (this.nodebankFile = node)}
                                         />
                                     </Col>

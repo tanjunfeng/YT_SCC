@@ -50,10 +50,6 @@ class AddSupplier extends PureComponent {
                     edit: true
                 })
             });
-        } else if (detailData.id && match.params.id) {
-            this.setState({
-                edit: true
-            })
         }
     }
 
@@ -83,6 +79,7 @@ class AddSupplier extends PureComponent {
         const { activeKey, edit } = this.state;
         const props = {
             onGoTo: this.handleGoTo,
+            isEdit: edit,
             ...this.props,
             detailSp: {}
         }

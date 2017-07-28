@@ -186,17 +186,17 @@ class SuppliersAppList extends PureComponent {
                 {
                     providerType === 1 && status === 4 &&
                     <Menu.Item key="addAddress">
-                        <Link to={`${pathname}/place/:type/${id}`}>新增供应商地点信息</Link>
+                        <Link to={`${pathname}/add/${id}`}>新增供应商地点信息</Link>
                     </Menu.Item>
                 }
                 {
                     providerType === 1 ?
                         <Menu.Item key="modifySupInfor">
-                            <Link to={`${pathname}/edit/:type/${id}`}>修改供应商信息</Link>
+                            <Link to={`${pathname}/add/${id}`}>修改供应商信息</Link>
                         </Menu.Item>
                         :
                         <Menu.Item key="modifySupAddInfor">
-                            <Link to={`${pathname}/place/:type/${id}`}>
+                            <Link to={`${pathname}/add/${id}`}>
                                 修改供应商地点信息
                             </Link>
                         </Menu.Item>

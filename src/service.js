@@ -18,7 +18,7 @@ const http = new Http();
 http.response(
     res => {
         if (res.data.code === 401) {
-            store.dispatch(receiveLogout());
+            console.log(401);
             LoginLayout();
             return Promise.reject(res);
         }
@@ -28,7 +28,6 @@ http.response(
         if (err.response) {
             const status = err.response.status;
             if (status === 401) {
-                store.dispatch(receiveLogout());
                 LoginLayout();
             }
         }
@@ -60,7 +59,7 @@ export const login = () => http.post('/login');
  * 获取用户权限
  * @param code
  */
-export const fetchRights = (code) => http.get('/system/queryLeftMenusOrButton', { menuId: code });
+export const fetchRights = (code) => http.get('/system/queryButtons', { menuId: code });
 
 /**
  * 获取用户信息及顶部memu数据
@@ -71,7 +70,7 @@ export const user = (params) => http.get('/system/user', params);
 /**
  * 获取侧边栏menus
  */
-export const queryLeftMenus = (params) => http.get('/system/queryLeftMenusOrButton', params);
+export const queryLeftMenus = (params) => http.get('/system/queryLeftMenus', params);
 
 /**
  * 退出登录
@@ -470,7 +469,19 @@ export const queryProviderDetail = (params) => http.get('/supplier/queryProvider
 export const queryAllLargerRegionProvince = (params) => http.get('/region/queryAllLargerRegionProvince', params);
 // 获取供应商或者供应商地点信息
 export const getSupplierNo = (params) => http.get('/supplier/getSupplierNo', params);
-// 新增或修改供应商信息
-export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/insertOrUpdateSupplierInfo', params);
+// 新增供应商信息
+export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);
+// 修改供应商信息
+export const updateSupplierInfo = (params) => http.post('/supplier/updateSupplierInfo', params);
+// 新增供应商地点信息
+export const insertSupplierAddressInfo = (params) => http.post('/supplier/insertSupplierAddressInfo', params);
+// 修改供应商地点信息
+export const updateSupplierAddressInfo = (params) => http.post('/supplier/updateSupplierAddressInfo', params);
 // 查询供应商地点详情
 export const queryProviderPlaceInfo = (params) => http.get('/supplier/queryProviderPlaceInfo', params);
+// 此接口用于根据条件查询仓库信息列表,条件查询范围为仓库名称和仓库地址
+export const getWarehouseInfo2 = (params) => http.get('/warehouse/getWarehouseInfo2', params);
+// 此接口用于根据条件查询仓库信息列表,条件查询范围为仓库编码和仓库名称(应该用get)
+export const getWarehouseInfo1 = (params) => http.post('/warehouse/getWarehouseInfo1', params);
+// 此接口用于根据仓库ID查询仓库的详细信息
+export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehouseInfo', params);
