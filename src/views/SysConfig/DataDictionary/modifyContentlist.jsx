@@ -9,9 +9,9 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Form, Modal, Input, Button } from 'antd';
+import { Form, Modal, Button } from 'antd';
 import { DicContentListVisible, Dictionarycontentlist } from '../../../actions/dictionary';
-const FormItem = Form.Item;
+
 
 @connect(
     state => ({
@@ -95,7 +95,7 @@ class modifyContentlist extends PureComponent {
                             {
                                 contentlistData.map((item, index) => (
                                     <tr className="detail-table-tr">
-                                        <td key={index}>{index}</td>
+                                        <td>{index}</td>
                                         <td>{item.contentName}</td>
                                         <td>{item.state ? '已启用' : '已停用'}</td>
                                         <td>

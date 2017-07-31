@@ -414,7 +414,7 @@ export const queryAllSupplier = (params) => http.get('/price/queryAllSupplier', 
 // 新增数据字典
 export const insertDictionary = (params) => http.post('/dictionary/insertDictionary', params);
 
-<<<<<<< HEAD
+
 // 修改数据字典
 export const updateDictionary = (params) => http.post('/dictionary/updateDictionary', params);
 
@@ -424,7 +424,6 @@ export const deleteDictionary = (params) => http.get('/dictionary/deleteDictiona
 // 修改字典内容或设置状态
 export const updateContent = (params) => http.post('/dictionary/updateContent', params);
 
-=======
 // IBM 修改
 // 查看是否存在主供应商
 export const checkMainSupplier = (params) => http.get('/prodPurchase/checkMainSupplier', params);
@@ -478,4 +477,4 @@ export const queryAllLargerRegionProvince = (params) => http.get('/region/queryA
 export const getSupplierNo = (params) => http.get('/supplier/getSupplierNo', params);
 // 新增或修改供应商信息
 export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/insertOrUpdateSupplierInfo', params);
->>>>>>> 0f5c9e5cefd88da53259a89a87708905cfdce8e7
+
