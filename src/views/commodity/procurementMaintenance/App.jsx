@@ -10,15 +10,16 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {
-    Form,
+    Form, Pagination
 } from 'antd';
 
 import {
-    fecthCheckMainSupplier,
     modifyAuditVisible,
     modifyCheckReasonVisible,
     fecthGetProdPurchaseById,
-    fetchGetProductById
+    fetchGetProductById,
+    fetchAddProdPurchase,
+    fetchQueryProdByCondition
 } from '../../../actions';
 import SearchForm from '../searchFormProcure';
 import ShowForm from '../showFormProcure';
@@ -33,16 +34,15 @@ import { PAGE_SIZE } from '../../../constant';
         checkResonVisible: state.toJS().supplier.checkResonVisible,
         insertSettlementResult: state.toJS().supplier.insertSettlementResult,
         prodPurchase: state.toJS().commodity.prodPurchase,
-        ProdPurchases: state.toJS().commodity.getProdPurchaseById,
-        queryProdPurchases: state.toJS().commodity.getProdPurchaseById,
         getProductById: state.toJS().commodity.getProductById,
     }),
     dispatch => bindActionCreators({
-        fecthCheckMainSupplier,
         modifyAuditVisible,
         modifyCheckReasonVisible,
         fecthGetProdPurchaseById,
-        fetchGetProductById
+        fetchGetProductById,
+        fetchAddProdPurchase,
+        fetchQueryProdByCondition
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
@@ -52,6 +52,7 @@ class ProcurementMaintenance extends PureComponent {
         this.handleFormReset = this.handleFormReset.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
+        this.onChange = ::this.onChange;
 
         this.searchForm = {};
         this.current = 1;
@@ -61,7 +62,8 @@ class ProcurementMaintenance extends PureComponent {
             // 默认值
             value: [],
             // 控制主供应商选项唯一
-            disabled: false
+            disabled: false,
+            current: 1
         }
     }
 
@@ -70,7 +72,7 @@ class ProcurementMaintenance extends PureComponent {
      */
     componentDidMount() {
         this.props.fecthGetProdPurchaseById({
-            productId: 'xpro12333'
+            id: 2
         });
         this.props.fetchGetProductById({
             productId: 1001
@@ -81,8 +83,10 @@ class ProcurementMaintenance extends PureComponent {
      * 新增
      */
     handleAdd() {
-    }
+        // this.props.fetchAddProdPurchase() {
 
+        // }
+    }
     /**
      * 表单操作弹出层
      *
@@ -111,6 +115,7 @@ class ProcurementMaintenance extends PureComponent {
      */
     handleFormReset(data) {
         this.searchForm = data;
+        this.brandSearchMind.handleClear();
     }
 
     /**
@@ -118,14 +123,22 @@ class ProcurementMaintenance extends PureComponent {
      *
      * @param {string} goto 数据列表分页
      */
-    handlePaginationChange(goto = 1) {
+    handlePaginationChange(goto) {
         this.current = goto;
-        this.props.fetchProviderEnterList({
+        this.props.fetchQueryProdByCondition({
             pageNum: goto,
             pageSize: PAGE_SIZE,
             ...this.searchForm
         });
     }
+
+    onChange = (page) => {
+        console.log(page);
+        this.setState({
+            current: page,
+        });
+    }
+
 
     render() {
         const { prefixCls, getProductById } = this.props;
@@ -141,14 +154,19 @@ class ProcurementMaintenance extends PureComponent {
                 <div>
                     <Cardline />
                 </div>
+                <Pagination
+                    current={this.state.current}
+                    onChange={this.handlePaginationChange}
+                    total={10}
+                />
             </div>
         );
     }
 }
 
 ProcurementMaintenance.propTypes = {
+    fetchQueryProdByCondition: PropTypes.func,
     fetchGetProductById: PropTypes.objectOf(PropTypes.any),
-    fetchProviderEnterList: PropTypes.objectOf(PropTypes.any),
     fecthGetProdPurchaseById: PropTypes.func,
     modifyAuditVisible: PropTypes.bool,
     modifyCheckReasonVisible: PropTypes.bool,

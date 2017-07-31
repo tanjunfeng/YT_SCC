@@ -17,7 +17,6 @@ import {
     Modal,
     message,
     Table,
-    Icon
 } from 'antd';
 import {
     modifyCheckReasonVisible,
@@ -303,8 +302,25 @@ class CheckReason extends PureComponent {
             // d.map((ele, index) => (
             //     o.push({key: index, name: ele, before: e[index], after: f[index]})
             // ))
-            hh(before.supplierOperTaxInfo, before.supplierOperTaxInfo, after.supplierOperTaxInfo, 'supplierOperTaxInfo')
-            hh(before.supplierBasicInfo, before.supplierBasicInfo, after.supplierBasicInfo, 'supplierBasicInfo')
+            hh(
+                before.supplierOperTaxInfo, after.supplierOperTaxInfo,
+                before.supplierBasicInfo, after.supplierBasicInfo,
+                before.supplierOperTaxInfo, after.supplierOperTaxInfo,
+                before.supplierBankInfo, after.supplierBankInfo,
+                before.saleRegionInfo, after.saleRegionInfo,
+                before.supplierAdrInfoDto, after.supplierAdrInfoDto,
+                before.spAdrBasic, after.spAdrBasic,
+                before.spAdrContact, after.spAdrContact,
+                'supplierOperTaxInfo')
+            hh(before.supplierOperTaxInfo, after.supplierOperTaxInfo,
+                before.supplierBasicInfo, after.supplierBasicInfo,
+                before.supplierOperTaxInfo, after.supplierOperTaxInfo,
+                before.supplierBankInfo, after.supplierBankInfo,
+                before.saleRegionInfo, after.saleRegionInfo,
+                before.supplierAdrInfoDto, after.supplierAdrInfoDto,
+                before.spAdrBasic, after.spAdrBasic,
+                before.spAdrContact, after.spAdrContact,
+                'supplierBasicInfo')
             // console.log(a)
             // // console.log(b)
             // // console.log(d)

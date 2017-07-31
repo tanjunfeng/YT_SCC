@@ -689,7 +689,7 @@ class ManagementList extends PureComponent {
                                             <span className="value-list-input">
                                                 <SearchMind
                                                     compKey="search-mind-subsidiary"
-                                                    ref={ref => { this.subsidiarySearchMind = ref }}
+                                                    ref={ref => { this.subsidiarySearrchMind = ref }}
                                                     fetch={(value, pager) =>
                                                         this.handleTestFetch(value, pager)
                                                     }

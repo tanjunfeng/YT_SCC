@@ -1,22 +1,22 @@
 /**
- * @file fetchGetProductById.js
- * @author Tanjunfeng
+ * @file fetchGetProdPurchaseById.js
  *
+ * @author Tanjunfeng
  * 查询商品价格信息
  */
 
 import Promise from 'bluebird';
-import { getProductById } from '../../service';
+import { fetchQueryProdByCondition } from '../../service';
 import ActionType from '../ActionType';
 
 const receive = (data) => ({
-    type: ActionType.GET_PRODUCT_BYID,
+    type: ActionType.QUERY_PRODPURCHASE_BYID,
     payload: data,
 });
 
 export default (params) => dispatch => (
     new Promise((resolve, reject) => {
-        getProductById(params)
+        fetchQueryProdByCondition(params)
             .then(res => {
                 dispatch(receive(res.data));
                 resolve(res.data)

@@ -173,16 +173,19 @@ export const secondSupplierStatusOptions = {
     defaultValue: '1',
     data: [{
         key: '1',
-        value: '待审核'
+        value: '制表'
     }, {
         key: '2',
-        value: '已审核'
+        value: '已提交'
     }, {
         key: '3',
-        value: '已提交'
+        value: '已审核'
     }, {
         key: '4',
         value: '已拒绝'
+    }, {
+        key: '5',
+        value: '修改中'
     }]
 }
 
