@@ -10,7 +10,10 @@ import ActionType from './ActionType';
 import {
     insertSupplierSettlementInfo,
     findAuditFailedReason,
-    queryAllLargerRegionProvince
+    queryAllLargerRegionProvince,
+    getWarehouseInfo1,
+    getWarehouseInfo,
+    insertSupplierAddressInfo
 } from '../service';
 
 const receiveData = (data) => ({
@@ -68,6 +71,76 @@ export const getLargerRegion = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     receiveLargerRegion(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
+/**
+ * 查询仓库编码和仓库名称
+ */
+const receiveWarehouse = (data) => ({
+    type: ActionType.RECEIVE_WARE_HOUSE,
+    payload: data,
+})
+
+export const getWarehouse = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        getWarehouseInfo1(params)
+            .then(res => {
+                dispatch(
+                    receiveWarehouse(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
+/**
+ * 获取仓库详情
+ */
+const receiveWarehouseInfo = (data) => ({
+    type: ActionType.RECEIVE_WARE_HOUSE_INFO,
+    payload: data,
+})
+
+export const fetchWarehouseInfo = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        getWarehouseInfo(params)
+            .then(res => {
+                dispatch(
+                    receiveWarehouseInfo(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
+export const deleteWarehouseInfo = (params) => dispatch => (
+    dispatch({
+        type: ActionType.RECEIVE_DELETE_WARE_HOUSE_INFO,
+        payload: params
+    })
+)
+
+/**
+ * 新增供应商地点
+ */
+ const receiveSupplierAddress = (data) => ({
+    type: ActionType.RECEIVE_INSERT_SUPPLIER_ADDRESS,
+    payload: data,
+})
+
+export const insertSupplierAddress = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        insertSupplierAddressInfo(params)
+            .then(res => {
+                dispatch(
+                    receiveSupplierAddress(res.data)
                 );
                 resolve(res);
             })

@@ -3,10 +3,10 @@
 }
 .change-form {
     padding-left: 30px;
-    .ant-form-item {
+    .ant-form {
         margin-bottom: 15px
     }
-    .manage-form-item .nameShow{
+    .manage-form .nameShow {
         width: 300px;
         resize: none;
     }
@@ -21,15 +21,15 @@
         margin-left: 10px;
     }
 }
-.ant-spin-container{
-    .ant-table-thead th,td{
+.ant-spin-container {
+    .ant-table-thead th,td {
         text-align: center;
     }
 }
-.manage-form-item .tjf-css-spfl{
+.manage-form .tjf-css-spfl {
     line-height: 0;
 }
-.tjf-css-modal-spfl .classify-select-label{
+.tjf-css-modal-spfl .classify-select-label {
     display: inline-block;
     width: 60px;
 }

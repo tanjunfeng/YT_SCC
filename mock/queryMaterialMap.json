@@ -1,0 +1,39 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "materialCd": "0001",
+            "materialName": "可口可乐 500ml",
+            "spec": "500ml",
+            "madeIn": "四川成都",
+            "poInnerAmount": 5,
+            "unit": "个",
+            "rate": "17",
+            "poPrice": "2.5",
+            "id": "1000001"
+        },
+        {
+            "materialCd": "0002",
+            "materialName": "康师傅红烧牛肉面 250g",
+            "spec": "250g",
+            "madeIn": "四川成都",
+            "poInnerAmount": 5,
+            "unit": "个",
+            "rate": "17",
+            "poPrice": "2.5",
+            "id": "1000002"
+        },
+        {
+            "materialCd": "0003",
+            "materialName": "康师傅泡椒牛肉面 250g",
+            "spec": "250g",
+            "madeIn": "四川成都",
+            "poInnerAmount": 5,
+            "unit": "个",
+            "rate": "17",
+            "poPrice": "2.5",
+            "id": "1000003"
+        }
+    ],
+    "total": 10
+}

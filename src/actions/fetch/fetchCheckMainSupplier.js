@@ -1,8 +1,8 @@
 /**
- * @file fetchEditorList.js
+ * @file fetchCheckMainSupplier.js
  * @author Tanjunfeng
  *
- * 页面编辑数据列表
+ * 查看是否存在主供应商
  */
 
 import Promise from 'bluebird';
@@ -18,11 +18,12 @@ export default (params) => dispatch => (
     new Promise((resolve, reject) => {
         checkMainSupplier(params)
             .then(res => {
-                dispatch(receive(res.data));
-                resolve(res.data)
+                dispatch(receive(res.success));
+                resolve(res)
             })
             .catch(err => {
                 reject(err);
             })
     })
 )
+

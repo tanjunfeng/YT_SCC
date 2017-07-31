@@ -1,22 +1,62 @@
-.ant-table-pagination {
-    margin-right: 15px;
+.po-detail {
+  .basic-box,materials {
+    margin-bottom: 15px;
+    border: 1px solid #C3C4C7;
+    color: #515151;
+    border-radius: 2px;
+    .header {
+      background-color: #F9f9f9;
+      border-bottom: 1px solid #C3C4C7;
+      padding: 8px 18px;
+      color: #242424;
+      font-size: 14px;
+      &-icon {
+        font-size: 16px;
+        margin-right: 8px;
+      }
+    } 
 }
-.change-form {
-    padding-left: 30px;
-    .ant-form-item {
-        margin-bottom: 15px
+
+  &-body {
+    padding: 0 18px;
+  }
+
+  .ant-form-item-label label {
+    min-width: 80px;
+    display: inline-block;
+  }
+
+  .text {
+    min-width: 80px;
+    display: inline-block;
+    line-height: 32px;
+    font-size: 12px;
+  }
+
+  .small {
+    .ywc-smind {
+      width: 200px;
+    }
+  }
+
+  .middle {
+    .ywc-smind {
+      width: 250px;
+    }
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+
+    .item-box {
+      display: flex;
+      flex-direction: row;
     }
 
-    .ant-form-explain {
-        padding-left: 73px;
+    .label {
+      margin-right: 8px;
+      display: inline-block;
     }
-
-    &-label {
-        min-width: 61px;
-        text-align: right;
-    }
-
-    &-tip {
-        margin-left: 10px;
-    }
+  }
 }

@@ -36,14 +36,37 @@ import fetchFindStaticPageList from './fetch/fetchStaticPageHome';
 import fectheEditorContent from './fetch/fectheEditorContent';
 
 /*********************procurement added by twh************************* */
-import { changePoMngSelectedRows, fetchMaterialByCd, fetchPoMngList,
-    deletePoByIds, fetchPoPrintList
+import {
+    changePoMngSelectedRows,
+    fetchPoMngList,
+    deletePoByIds,
+    fetchPoPrintList,
+    getWarehouseAddressMap,
+    getShopAddressMap,
+    getSupplierMap,
+    getSupplierLocMap,
+    getBigClassMap,
+    getMaterialMap,
+    initPoDetail,
+    createPo,
+    auditPo,
+    fetchPoDetail,
+    updatePoBasicinfo,
+    addPoLines,
+    updatePoLine,
+    deletePoLine,
+    fetchPoRcvMngList,
+    fetchPoRcvList,
+    fetchPoRcvDetail,
+    fetchPoRcvInit,
+    updatePoRcvLine,
+    updatePoRcvBasicinfo,
+    createPoRcv
 } from './procurement';
 
 // IBM
 import fecthCheckMainSupplier from './fetch/fetchCheckMainSupplier';
 import fecthGetProdPurchaseById from './fetch/fetchGetProdPurchaseById';
-import fetchQueryProdPurchase from './fetch/fetchQueryProdPurchase';
 import fetchChangeSupType from './fetch/fetchChangeSupType'
 
 import fetchQuerySettledList from './fetch/fetchQuerySettledList';
@@ -51,7 +74,12 @@ import fetchQueryManageList from './fetch/fetchQueryManageList';
 import fetchGetProductById from './fetch/fetchGetProductById';
 import fetchEditBeforeAfter from './fetch/fetchEditBeforeAfter';
 import fetchAddProdPurchase from './fetch/fetchAddProdPurchase';
+import fetchQueryProdByCondition from './fetch/fetchQueryProdByCondition';
+import fetchUpdateProdPurchase from './fetch/fetchUpdateProdPurchase';
 
+// 库存调整
+import stockAdjust from './stockAdjust';
+import stockListDetail from './stockListDetail';
 
 export {
     fetchSupplierList,
@@ -83,19 +111,44 @@ export {
     /*********************procurement added by twh************************* */
     fetchPoMngList,
     changePoMngSelectedRows,
-    fetchMaterialByCd,
     deletePoByIds,
     fetchPoPrintList,
+    getWarehouseAddressMap,
+    getShopAddressMap,
+    getSupplierMap,
+    getSupplierLocMap,
+    getBigClassMap,
+    getMaterialMap,
+    initPoDetail,
+    createPo,
+    auditPo,
+    fetchPoDetail,
+    updatePoBasicinfo,
+    addPoLines,
+    updatePoLine,
+    deletePoLine,
+    fetchPoRcvMngList,
+    fetchPoRcvList,
+    fetchPoRcvDetail,
+    fetchPoRcvInit,
+    updatePoRcvLine,
+    updatePoRcvBasicinfo,
+    createPoRcv,
 
     // IBM
     fecthCheckMainSupplier,
     fecthGetProdPurchaseById,
-    fetchQueryProdPurchase,
     fetchChangeSupType,
 
     fetchQuerySettledList,
+
+    // 库存调整
+    stockAdjust,
+    stockListDetail,
     fetchQueryManageList,
     fetchGetProductById,
     fetchEditBeforeAfter,
-    fetchAddProdPurchase
+    fetchAddProdPurchase,
+    fetchQueryProdByCondition,
+    fetchUpdateProdPurchase
 }
