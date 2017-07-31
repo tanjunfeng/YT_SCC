@@ -35,6 +35,8 @@ const initState = fromJS({
     supplierId: 0,
     // 新增或修改供应商结果
     supplierInfo: false,
+    // 供应商供应省市信息
+    placeRegion: [],
     informationVisible: false,
     checkResonVisible: false,
     areaVisible: false,
@@ -133,6 +135,9 @@ export default function (state = initState, action) {
 
         case ActionType.EDIT_BEFORE_AFTER:
             return state.set('editBeforeAfter', fromJS(action.payload));
+
+        case ActionType.RECEIVE_PLACE_REGION:
+            return state.set('placeRegion', fromJS(action.payload))
 
         default:
             return state;

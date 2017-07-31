@@ -50,10 +50,6 @@ class AddSupplier extends PureComponent {
                     edit: true
                 })
             });
-        } else if (detailData.id && match.params.id) {
-            this.setState({
-                edit: true
-            })
         }
     }
 
@@ -81,7 +77,12 @@ class AddSupplier extends PureComponent {
 
     render() {
         const { activeKey, edit } = this.state;
-        const { detailData } = this.props;
+        const props = {
+            onGoTo: this.handleGoTo,
+            isEdit: edit,
+            ...this.props,
+            detailSp: {}
+        }
         return (
             <Tabs
                 defaultActiveKey="1"
@@ -91,13 +92,19 @@ class AddSupplier extends PureComponent {
                 style={{marginTop: '16px'}}
             >
                 <TabPane tab="基本信息" key="1">
-                    <BasicInfo />
+                    <BasicInfo
+                        {...props}
+                    />
                 </TabPane>
                 <TabPane tab="银行信息" key="2">
-                    <BankInfo />
+                    <BankInfo
+                        {...props}
+                    />
                 </TabPane>
                 <TabPane tab="证照信息" key="3">
-                    <LicenseInfo />
+                    <LicenseInfo
+                        {...props}
+                    />
                 </TabPane>
             </Tabs>
         )

@@ -21,6 +21,7 @@ import {
     fetchGetProductById,
     fetchEditBeforeAfter
 } from '../../../actions';
+
 import SearchForm from '../searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { supplierInputList } from '../../../constant/formColumns';
@@ -61,6 +62,7 @@ class SupplierInputList extends PureComponent {
         this.handleFormReset = this.handleFormReset.bind(this);
         this.handleDownLoad = this.handleDownLoad.bind(this);
         this.handleGetList = this.handleGetList.bind(this);
+        this.handleInputSupplier = ::this.handleInputSupplier;
 
         this.searchForm = {};
         this.current = 1;
@@ -139,9 +141,9 @@ class SupplierInputList extends PureComponent {
      * @param {string} data 'addSupplier':供应商类型为供应商；否则为供应商地点，data为供应商编码
      */
     handleInputSupplier(data) {
-        message.success(data)
+        const { pathname } = this.props.location;
         const { history } = this.props;
-        history.push('/applicationList/add');
+        history.push(`${pathname}/add`);
     }
 
     /**
@@ -200,14 +202,14 @@ class SupplierInputList extends PureComponent {
                 </Menu.Item>
                 {/* {
                     <Menu.Item key="modifySupInfor">
-                        <Link to={`${pathname}/edit/:type/${id}`}>
+                        <Link to={`${pathname}/supplier/${id}`}>
                             修改供应商信息
                         </Link>
                     </Menu.Item>
                 } */}
                 {/* {
                     <Menu.Item key="addAddress">
-                        <Link to={`${pathname}/place/:type/${id}`}>
+                        <Link to={`${pathname}/add/${id}`}>
                             新增供应商地点信息
                         </Link>
                     </Menu.Item>
@@ -250,12 +252,12 @@ class SupplierInputList extends PureComponent {
         const menu1 = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="AddDetail">
-                    <Link to={`${pathname}/place/:type/${id}`}>供应商地点详情</Link>
+                    <Link to={`${pathname}/place/${id}`}>供应商地点详情</Link>
                 </Menu.Item>
                 {
                     status === 1 && status === 3 && status === 4 &&
                     <Menu.Item key="modifySupAddInfor">
-                        <Link to={`${pathname}/place/:type/${id}`}>
+                        <Link to={`${pathname}/edit/${id}`}>
                             修改供应商地点信息
                         </Link>
                     </Menu.Item>

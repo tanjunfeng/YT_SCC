@@ -1,0 +1,70 @@
+{
+    "timestamp": 1497345020449,
+    "code": 200,
+    "message": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 5,
+        "total": 20,
+        "data": [
+            {
+                "poNo": "1707140001",
+                "poTypeCd": "0001",
+                "poTypeName": "普通采购",
+                "statusCd": "0003",
+                "statusName": "已审核",
+                "supplierCd": "YTXC1001",
+                "supplierName": "深圳市豪利门业实业有限公司",
+                "supplierLocCd": "1000001",
+                "supplierLocName": "四川 - 深圳市豪利门业实业有限公司",
+                "estDeliveryDate": "2017-07-20",
+                "locTypeCd": "0001",
+                "locTypeName": "仓库",
+                "addressCd": "0001",
+                "address": "雅堂一号仓库",
+                "bigCLassCd": "xxxx",
+                "bigCLassName": "水饮料",
+                "id": "1000001"
+            },
+            {
+                "poNo": "1707140002",
+                "poTypeCd": "0001",
+                "poTypeName": "普通采购",
+                "statusCd": "0003",
+                "statusName": "已审核",
+                "supplierCd": "YTXC1001",
+                "supplierName": "深圳市豪利门业实业有限公司",
+                "supplierLocCd": "1000001",
+                "supplierLocName": "四川 - 深圳市豪利门业实业有限公司",
+                "estDeliveryDate": "2017-07-20",
+                "locTypeCd": "0001",
+                "locTypeName": "仓库",
+                "addressCd": "0001",
+                "address": "雅堂一号仓库",
+                "bigCLassCd": "xxxx",
+                "bigCLassName": "水饮料",
+                "id": "1000002"
+            },
+            {
+                "poNo": "1707140003",
+                "poTypeCd": "0001",
+                "poTypeName": "普通采购",
+                "statusCd": "0003",
+                "statusName": "已审核",
+                "supplierCd": "YTXC1001",
+                "supplierName": "深圳市豪利门业实业有限公司",
+                "supplierLocCd": "1000001",
+                "supplierLocName": "四川 - 深圳市豪利门业实业有限公司",
+                "estDeliveryDate": "2017-07-20",
+                "locTypeCd": "0001",
+                "locTypeName": "仓库",
+                "addressCd": "0001",
+                "address": "雅堂一号仓库",
+                "bigCLassCd": "xxxx",
+                "bigCLassName": "水饮料",
+                "id": "1000003"
+            }
+        ]
+    },
+    "success": true
+}

@@ -1,0 +1,65 @@
+{
+    "timestamp": 1497345020449,
+    "code": 200,
+    "message": null,
+    "data": {
+        "basicInfo": {
+            "id": "10099383",
+            "poNo": "1707160001",
+            "poTypeCd": "0001",
+            "poTypeName": "普通采购",
+            "poStatus": "0002",
+            "poStatusName": "制单",
+            "poRcvStatus": "",
+            "poRcvStatusName": "已确认",
+            "supplierCd": "YTXC1001",
+            "supplierName": "深圳市豪利门业实业有限公司",
+            "supplierLocCd": "1000001",
+            "supplierLocName": "四川 - 深圳市XXX有限公司",
+            "estDeliveryDate": "2017-07-20",
+            "locTypeCd": "0001",
+            "locTypeName": "仓库",
+            "bigCLassCd": "xxxx",
+            "bigCLassName": "水饮料",
+            "addressCd": "0001",
+            "address": "雅堂一号仓库",
+            "accountPeriod": 45,
+            "payment": "现金",
+            "createdByName": "张 三",
+            "createdAt": "2017-07-26",
+            "approvedByName": "李 四",
+            "approvedAt": "2017-07-26"
+        },
+        "poLines": [
+            {
+                "materialCd": "0002",
+                "materialName": "康师傅红烧牛肉面 250g",
+                "spec": "250g",
+                "madeIn": "四川成都",
+                "poInnerAmount": 5,
+                "unit": "个",
+                "poQuantity": 100,
+                "deliveriedQuantity": 50,
+                "poPrice": 1,
+                "amount": 100,
+                "rcvQuantity": null,
+                "id": "000001"
+            },
+            {
+                "materialCd": "0001",
+                "materialName": "可口可乐 500ml",
+                "spec": "500ml",
+                "madeIn": "四川成都",
+                "poInnerAmount": 6,
+                "unit": "个",
+                "poQuantity": 12,
+                "deliveriedQuantity": 10,
+                "poPrice": 1,
+                "amount": 12,
+                "rcvQuantity": null,
+                "id": "000002"
+            }
+        ]
+    },
+    "success": true
+}
