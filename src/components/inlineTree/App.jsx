@@ -17,7 +17,7 @@ class InlineTree extends PureComponent {
         this.state = {
             expandedKeys: this.defaultOpen,
             autoExpandParent: true,
-            checkedKeys: [],
+            checkedKeys: props.checkedKeys,
             selectedKeys: props.selects,
         }
         this.checkedNodes = [];
@@ -123,12 +123,14 @@ InlineTree.propTypes = {
     selects: PropTypes.arrayOf(PropTypes.any),
     initValue: PropTypes.arrayOf(PropTypes.any),
     handleCheck: PropTypes.func,
+    checkedKeys: PropTypes.arrayOf(PropTypes.any),
 }
 
 InlineTree.defaultProps = {
     defaultOpen: defaultData,
     selects: [],
-    handleCheck: () => {}
+    handleCheck: () => {},
+    checkedKeys: []
 }
 
 export default InlineTree;

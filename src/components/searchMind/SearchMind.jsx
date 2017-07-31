@@ -227,7 +227,7 @@ class SearchMind extends PureComponent {
 
                 this.setState({
                     type: TYPE.DEFAULT,
-                    data: res.data,
+                    data: res.data.data,
                     pagination: pager,
                 });
             })
@@ -403,7 +403,6 @@ class SearchMind extends PureComponent {
         const inputProps = {
             ...(disabled && { disabled: 'disabled'})
         };
-
         return (
             <div
                 style={style}

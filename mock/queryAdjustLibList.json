@@ -1,0 +1,238 @@
+{
+    "code": 200,
+    "total": 60,
+    "pageSize": 10,
+    "data":[
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "1"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "2"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "3"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "4"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "5"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+           "key": "6"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "22"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "33"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "44"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "55"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+           "key": "66"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "77"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "88"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "99"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "100"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+           "key": "666"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "222"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "3333"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "4444"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "6666"
+        },
+        {
+          "supplierNumber": 1234567891,
+          "stockAddress": "兴隆镇",
+          "stockNumber": 55,
+          "costTotal": 666.00,
+          "outSupplierNum": 976543210,
+          "creator": "张三",
+          "stockStatus": "生效",
+          "operation": "查看详情",
+          "key": "7777"
+        }
+    ]
+}

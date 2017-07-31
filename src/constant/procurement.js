@@ -1,12 +1,12 @@
 // 采购单状态值清单
 export const poStatus = {
-    defaultValue: '',
+    defaultValue: '0003',
     data: [{
         key: '',
         value: '请选择'
     }, {
         key: '0001',
-        value: '草稿'
+        value: '制单'
     }, {
         key: '0002',
         value: '已提交'
@@ -22,7 +22,7 @@ export const poStatus = {
     }]
 }
 
-export const poCodes = {
+export const poStatusCodes = {
     draft: '0001',
     submited: '0002',
     approved: '0003',
@@ -60,4 +60,29 @@ export const poType = {
         key: '0001',
         value: '普通采购'
     }]
+}
+
+export const poTypeCodes = {
+    normal: '0001'
+}
+
+
+//审核值清单
+export const auditType = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '请选择'
+    }, {
+        key: '1',
+        value: '通过'
+    }, {
+        key: '2',
+        value: '拒绝'
+    }]
+}
+
+export const auditTypeCodes = {
+    approve: '1',
+    reject: '2'
 }

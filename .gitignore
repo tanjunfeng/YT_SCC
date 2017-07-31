@@ -7,6 +7,7 @@ node_modules/
 #ide file
 .DS_Store
 .idea/
+.vscode/
 
 #log file
 ncp-debug.log

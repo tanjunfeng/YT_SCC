@@ -14,7 +14,8 @@ import {
     Row,
     Col,
     Icon,
-    Table
+    Table,
+    Button
 } from 'antd';
 
 import { fetchPoMngList } from '../../../actions';
@@ -26,6 +27,7 @@ import { fetchPoMngList } from '../../../actions';
 class Report extends PureComponent {
     constructor(props) {
         super(props);
+        this.handleDownPDF =::this.handleDownPDF;
         this.columns = [{
             title: '行号',
             dataIndex: 'rowNo',
@@ -93,48 +95,67 @@ class Report extends PureComponent {
         }
         ]
     }
+
+    handleDownPDF() {
+        const { onDownPDF } = this.props;
+        //call回调函数
+        if (onDownPDF) {
+            onDownPDF();
+        }
+    }
     render() {
         let poDetail = this.props.data || {};
         let lines = poDetail.lines;
         return (
-            <div className="print-box">
-                <div className="head">
-                    <Row type="flex" justify="end" >
-                        {/*这里放置根据采购单号生成的条形码 */}
-                        <div ><Icon type="barcode" style={{ fontSize: 30 }} /></div>
-                    </Row>
-                    <Row type="flex" justify="center" >
-                        <div><h1 style={{ marginBottom: 20, marginTop: 20 }}>雅堂小超采购订单</h1></div>
-                    </Row>
-                    <Row type="flex" justify="start">
-                        <Col span={6}><label>采购单号：</label><span className="field">{poDetail.poNo}</span></Col>
-                        <Col span={11}><label>供应商：</label><span className="field">{poDetail.supplierLocCd}-{poDetail.supplierLocName}</span></Col>
-                        <Col span={4}><label>采购单类型：</label><span className="field">{poDetail.poTypeName}</span></Col>
-                        <Col span={3}><label>创建人：</label><span className="field">{poDetail.createdByName}</span></Col>
-                    </Row>
-                    <Row type="flex" justify="start">
-                        <Col span={6}><label>收货单位：</label><span className="field">{poDetail.addressCd}-{poDetail.address}</span></Col>
-                        <Col span={11}><label>收货地址：</label><span className="field">{poDetail.rcvAddress}</span></Col>
-                        <Col span={4}><label>联系方式：</label><span className="field">{poDetail.tel}</span></Col>
-                        <Col span={3}><label>货币：</label><span className="field">{poDetail.currencyName}</span></Col>
-                    </Row>
-                    <Row type="flex" justify="start">
-                        <Col span={6}><label>大类：</label><span className="field">{poDetail.bigCLassName}</span></Col>
-                        <Col span={11}><label>收货日期：</label ><span className="field">{poDetail.estDeliveryDate}</span></Col>
-                    </Row>
-                </div>
-                <div style={{ height: 10 }}></div>
-                <div className="material">
-                    <div className="lines">
-                        <Table dataSource={lines} pagination={false} columns={this.columns} bordered rowKey="id" />
-                    </div>
-                    <div className="lines-footer">
+            <div className="print-container">
+                <div className="content">
+                    <div className="head">
+                        <Row type="flex" justify="end" >
+                            {/*这里放置根据采购单号生成的条形码 */}
+                            <div ><Icon type="barcode" style={{ fontSize: 30 }} /></div>
+                        </Row>
+                        <Row type="flex" justify="center" >
+                            <div><h1 style={{ marginBottom: 20, marginTop: 20 }}>雅堂小超采购订单</h1></div>
+                        </Row>
                         <Row type="flex" justify="start">
-                            <Col span={6}><label>合计数量：</label><span className="field">{poDetail.totalQuantity}</span></Col>
-                            <Col span={6}><label>合计金额：</label><span className="field">{poDetail.totalAmount}</span></Col>
-                            <Col span={12}><label>合计金额（大写）：<span className="field">{poDetail.totalAmountInWord}</span></label></Col>
+                            <Col span={6}><label>采购单号：</label><span className="field">{poDetail.poNo}</span></Col>
+                            <Col span={11}><label>供应商：</label><span className="field">{poDetail.supplierLocCd}-{poDetail.supplierLocName}</span></Col>
+                            <Col span={4}><label>采购单类型：</label><span className="field">{poDetail.poTypeName}</span></Col>
+                            <Col span={3}><label>创建人：</label><span className="field">{poDetail.createdByName}</span></Col>
+                        </Row>
+                        <Row type="flex" justify="start">
+                            <Col span={6}><label>收货单位：</label><span className="field">{poDetail.addressCd}-{poDetail.address}</span></Col>
+                            <Col span={11}><label>收货地址：</label><span className="field">{poDetail.rcvAddress}</span></Col>
+                            <Col span={4}><label>联系方式：</label><span className="field">{poDetail.tel}</span></Col>
+                            <Col span={3}><label>货币：</label><span className="field">{poDetail.currencyName}</span></Col>
+                        </Row>
+                        <Row type="flex" justify="start">
+                            <Col span={6}><label>大类：</label><span className="field">{poDetail.bigCLassName}</span></Col>
+                            <Col span={11}><label>收货日期：</label ><span className="field">{poDetail.estDeliveryDate}</span></Col>
                         </Row>
                     </div>
+                    <div style={{ height: 10 }}></div>
+                    <div className="material">
+                        <div className="lines">
+                            <Table dataSource={lines} pagination={false} columns={this.columns} bordered rowKey="id" />
+                        </div>
+                        <div className="lines-footer">
+                            <Row type="flex" justify="start">
+                                <Col span={6}><label>合计数量：</label><span className="field">{poDetail.totalQuantity}</span></Col>
+                                <Col span={6}><label>合计金额：</label><span className="field">{poDetail.totalAmount}</span></Col>
+                                <Col span={12}><label>合计金额（大写）：<span className="field">{poDetail.totalAmountInWord}</span></label></Col>
+                            </Row>
+                        </div>
+                    </div>
+                </div>
+                <div className="actions">
+                    <Row type="flex" justify="end">
+                        <Col span={4} style={{ textAlign: "right" }}>
+                            <Button size="default" onClick={this.handleDownPDF}>
+                                下载PDF
+                                        </Button>
+                        </Col>
+                    </Row>
                 </div>
             </div>
         )

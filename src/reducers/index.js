@@ -30,10 +30,14 @@ import mediaManage from './mediaManage';
 import dictionary from './dictionary';
 
 import wap from './wap';
+/* ********************procurement************************* */
 
 import order from './order';
-/*********************procurement************************* */
+/* ********************procurement************************* */
 import procurement from './procurement';
+
+import stockAdjust from './stockAdjust';
+import stockListDetail from './stockListDetail';
 
 export default Immutable.fromJS({
     pub,
@@ -54,6 +58,8 @@ export default Immutable.fromJS({
     querygoodsname,
     categoryGoodsOrderNum,
     dictionary,
-    /*********************procurement************************* */
-    procurement
+    /* ********************procurement************************* */
+    procurement,
+    stockAdjust,
+    stockListDetail
 });
