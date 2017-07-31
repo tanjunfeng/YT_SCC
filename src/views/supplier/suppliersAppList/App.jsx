@@ -22,7 +22,6 @@ import {
 
 import {
     fetchProviderEnterList,
-    fetchQuerySettledList,
     fetchQueryManageList,
     modifyAuditVisible,
     modifyInformationVisible
@@ -52,7 +51,6 @@ const columns = suppliersAppList;
         modifyAuditVisible,
         modifyInformationVisible,
         getSupplierSettledList,
-        fetchQuerySettledList,
         fetchProviderEnterList,
         modifyAuditVisible,
         fetchQueryManageList,
@@ -78,7 +76,7 @@ class SuppliersAppList extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
-        this.props.fetchQuerySettledList({
+        this.props.getSupplierSettledList({
             pageNum: this.current,
             pageSize: PAGE_SIZE,
             ...this.searchForm
@@ -288,7 +286,6 @@ class SuppliersAppList extends PureComponent {
 SuppliersAppList.propTypes = {
     fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
     querySettledList: PropTypes.objectOf(PropTypes.any),
-    fetchQuerySettledList: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     getSupplierSettledList: PropTypes.bool,
     location: PropTypes.objectOf(PropTypes.any),

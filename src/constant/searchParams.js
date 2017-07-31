@@ -438,14 +438,26 @@ export const logisticsStatusOptions = {
 // 调整类型
 export const adjustmentType = {
     defaultValue: '-1',
-    data: [{
-        key: '-1',
-        value: '全部'
-    }, {
-        key: '0',
-        value: '库存同步'
-    }, {
-        key: '1',
-        value: '异常处理'
-    }]
+    data: [
+        {
+            key: '-1',
+            value: '全部'
+        },
+        {
+            key: '0',
+            value: '物流丢失'
+        },
+        {
+            key: '1',
+            value: '库存报损报溢'
+        },
+        {
+            key: '2',
+            value: '业务发起库存调整'
+        },
+        {
+            key: '3',
+            value: '仓库库存同步'
+        }
+    ]
 }

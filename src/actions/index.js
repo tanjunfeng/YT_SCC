@@ -67,7 +67,6 @@ import {
 // IBM
 import fecthCheckMainSupplier from './fetch/fetchCheckMainSupplier';
 import fecthGetProdPurchaseById from './fetch/fetchGetProdPurchaseById';
-import fetchQueryProdPurchase from './fetch/fetchQueryProdPurchase';
 import fetchChangeSupType from './fetch/fetchChangeSupType'
 
 import fetchQuerySettledList from './fetch/fetchQuerySettledList';
@@ -75,7 +74,12 @@ import fetchQueryManageList from './fetch/fetchQueryManageList';
 import fetchGetProductById from './fetch/fetchGetProductById';
 import fetchEditBeforeAfter from './fetch/fetchEditBeforeAfter';
 import fetchAddProdPurchase from './fetch/fetchAddProdPurchase';
+import fetchQueryProdByCondition from './fetch/fetchQueryProdByCondition';
+import fetchUpdateProdPurchase from './fetch/fetchUpdateProdPurchase';
 
+// 库存调整
+import stockAdjust from './stockAdjust';
+import stockListDetail from './stockListDetail';
 
 export {
     fetchSupplierList,
@@ -105,7 +109,7 @@ export {
     modifyToAddInsertpage,
     fetchFindStaticPageList,
     /*********************procurement added by twh************************* */
-     fetchPoMngList,
+    fetchPoMngList,
     changePoMngSelectedRows,
     deletePoByIds,
     fetchPoPrintList,
@@ -134,12 +138,17 @@ export {
     // IBM
     fecthCheckMainSupplier,
     fecthGetProdPurchaseById,
-    fetchQueryProdPurchase,
     fetchChangeSupType,
 
     fetchQuerySettledList,
+
+    // 库存调整
+    stockAdjust,
+    stockListDetail,
     fetchQueryManageList,
     fetchGetProductById,
     fetchEditBeforeAfter,
-    fetchAddProdPurchase
+    fetchAddProdPurchase,
+    fetchQueryProdByCondition,
+    fetchUpdateProdPurchase
 }

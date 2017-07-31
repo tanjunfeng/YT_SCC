@@ -57,6 +57,7 @@ class SearchForm extends Component {
             img: null,
             chooseMe: {},
             disabled: false,
+            supplyChoose: null,
         }
     }
 
@@ -70,6 +71,33 @@ class SearchForm extends Component {
                 disabled: true,
             });
         }, 2000);
+    }
+
+    /**
+     * 供应商-值清单
+     */
+    handleSupplyChoose = ({ record }) => {
+        this.setState({
+            supplyChoose: record,
+        });
+    }
+
+    /**
+     * 地点-值清单
+     */
+    handleAdressChoose = ({ record }) => {
+        this.setState({
+            supplyChoose: record,
+        });
+    }
+
+    /**
+     * 子公司-值清单
+     */
+    handleCompChoose = ({ record }) => {
+        this.setState({
+            supplyChoose: record,
+        });
     }
 
     /**
@@ -170,6 +198,9 @@ class SearchForm extends Component {
      * 重置
      */
     handleResetValue() {
+        this.addressSearchMind.handleClear();
+        this.supplySearchMind.handleClear();
+        this.supplyCompSearchMind.handleClear();
         this.props.form.resetFields();
     }
 
@@ -206,87 +237,105 @@ class SearchForm extends Component {
                     <Row type="flex" justify="start" className={`${prefixCls}-flex`}>
                         {/* 供应商 */}
                         <Col span={8}>
-                            <SearchMind
-                                compKey="search-mind-key1"
-                                ref={ref => { this.searchMind = ref }}
-                                fetch={(value, pager) => this.handleTestFetch(value, pager)}
-                                addonBefore="供应商"
-                                onClear={({ value, raw }) => {
-                                    console.log({ value, raw });
-                                }}
-                                onChoosed={this.handleTestChoose}
-                                renderChoosedInputRaw={(data) => (
-                                    <div>{data.id} - {data.name}</div>
-                                )}
-                                pageSize={2}
-                                columns={[
-                                    {
-                                        title: 'Name',
-                                        dataIndex: 'name',
-                                        width: 150,
-                                    }, {
-                                        title: 'Address',
-                                        dataIndex: 'address',
-                                        width: 200,
-                                    }
-                                ]}
-                            />
+                            <FormItem className="">
+                                <div>
+                                    <span className="value-list-input">
+                                        <SearchMind
+                                            compKey="search-mind-supply"
+                                            ref={ref => { this.supplySearchMind = ref }}
+                                            fetch={(value, pager) =>
+                                                this.handleTestFetch(value, pager)
+                                            }
+                                            addonBefore="供应商"
+                                            onChoosed={this.handleSupplyChoose}
+                                            onClear={this.handleSupplyClear}
+                                            renderChoosedInputRaw={(data) => (
+                                                <div>{data.id} - {data.name}</div>
+                                            )}
+                                            pageSize={2}
+                                            columns={[
+                                                {
+                                                    title: 'Name',
+                                                    dataIndex: 'name',
+                                                    width: 150,
+                                                }, {
+                                                    title: 'Address',
+                                                    dataIndex: 'address',
+                                                    width: 200,
+                                                }
+                                            ]}
+                                        />
+                                    </span>
+                                </div>
+                            </FormItem>
                         </Col>
                         {/* 地点 */}
                         <Col span={8}>
-                            <SearchMind
-                                compKey="search-mind-key1"
-                                ref={ref => { this.searchMind = ref }}
-                                fetch={(value, pager) => this.handleTestFetch(value, pager)}
-                                addonBefore="地点"
-                                onClear={({ value, raw }) => {
-                                    console.log({ value, raw });
-                                }}
-                                onChoosed={this.handleTestChoose}
-                                renderChoosedInputRaw={(data) => (
-                                    <div>{data.id} - {data.name}</div>
-                                )}
-                                pageSize={2}
-                                columns={[
-                                    {
-                                        title: 'Name',
-                                        dataIndex: 'name',
-                                        width: 150,
-                                    }, {
-                                        title: 'Address',
-                                        dataIndex: 'address',
-                                        width: 200,
-                                    }
-                                ]}
-                            />
+                            <FormItem className="">
+                                <div>
+                                    <span className="value-list-input">
+                                        <SearchMind
+                                            compKey="search-mind-supply"
+                                            ref={ref => { this.addressSearchMind = ref }}
+                                            fetch={(value, pager) =>
+                                                this.handleTestFetch(value, pager)
+                                            }
+                                            addonBefore="地点"
+                                            onChoosed={this.handleAdressChoose}
+                                            onClear={this.handleSupplyClear}
+                                            renderChoosedInputRaw={(data) => (
+                                                <div>{data.id} - {data.name}</div>
+                                            )}
+                                            pageSize={2}
+                                            columns={[
+                                                {
+                                                    title: 'Name',
+                                                    dataIndex: 'name',
+                                                    width: 150,
+                                                }, {
+                                                    title: 'Address',
+                                                    dataIndex: 'address',
+                                                    width: 200,
+                                                }
+                                            ]}
+                                        />
+                                    </span>
+                                </div>
+                            </FormItem>
                         </Col>
                         {/* 子公司 */}
                         <Col span={8}>
-                            <SearchMind
-                                compKey="search-mind-key1"
-                                ref={ref => { this.searchMind = ref }}
-                                fetch={(value, pager) => this.handleTestFetch(value, pager)}
-                                addonBefore="子公司"
-                                onClear={({ value, raw }) => {
-                                    console.log({ value, raw });
-                                }}
-                                onChoosed={this.handleTestChoose}
-                                renderChoosedInputRaw={(data) => (
-                                    <div>{data.id} - {data.name}</div>
-                                )}
-                                pageSize={2}
-                                columns={[
-                                    {
-                                        title: 'Name',
-                                        dataIndex: 'name',
-                                        width: 150,
-                                    }, {
-                                        title: 'Address',
-                                        dataIndex: 'address',
-                                        width: 200,
-                                    }
-                                ]}
-                            />
+                            <FormItem className="">
+                                <div>
+                                    <span className="value-list-input">
+                                        <SearchMind
+                                            compKey="search-mind-supply"
+                                            ref={ref => { this.supplyCompSearchMind = ref }}
+                                            fetch={(value, pager) =>
+                                                this.handleTestFetch(value, pager)
+                                            }
+                                            addonBefore="子公司"
+                                            onChoosed={this.handleCompChoose}
+                                            onClear={this.handleSupplyClear}
+                                            renderChoosedInputRaw={(data) => (
+                                                <div>{data.id} - {data.name}</div>
+                                            )}
+                                            pageSize={2}
+                                            columns={[
+                                                {
+                                                    title: 'Name',
+                                                    dataIndex: 'name',
+                                                    width: 150,
+                                                }, {
+                                                    title: 'Address',
+                                                    dataIndex: 'address',
+                                                    width: 200,
+                                                }
+                                            ]}
+                                        />
+                                    </span>
+                                </div>
+                            </FormItem>
                         </Col>
                     </Row>
                     {/* 是否启用 */}

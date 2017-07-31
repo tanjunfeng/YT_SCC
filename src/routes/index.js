@@ -41,7 +41,7 @@ import FindPriceInfo from 'bundle-loader?lazy!../views/commodity/findPriceInfo';
 // 销售价格
 import PurchasingPice from 'bundle-loader?lazy!../views/commodity/purchasingPice';
 // 分类列表页商品排序管理
-import CateListGoodsSortManage from 'bundle-loader?lazy!../views/sysConfig/CateListGoodsSortManage';
+import CateListGoodsSortManage from 'bundle-loader?lazy!../views/SysConfig/CateListGoodsSortManage';
 // 数据字典
 import DataDictionary from 'bundle-loader?lazy!../views/SysConfig/DataDictionary';
 // 静态页管理
@@ -69,7 +69,6 @@ import PoRcvMngList from 'bundle-loader?lazy!../views/procurement/PoRcvMngList';
 import PoRcvList from 'bundle-loader?lazy!../views/procurement/PoRcvList';
 import PoRcvDetail from 'bundle-loader?lazy!../views/procurement/PoRcvDetail';
 
-
 // IBM 修改
 // 商品采购关系维护
 import ProcurementMaintenance from 'bundle-loader?lazy!../views/commodity/procurementMaintenance';
@@ -82,6 +81,7 @@ import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/
 
 // 库存调整列表
 import StoreAdjList from 'bundle-loader?lazy!../views/storeAdjustment/storeAdjList';
+import ItemDetail from 'bundle-loader?lazy!../views/storeAdjustment/itemDetail';
 
 /* eslint-enable */
 
@@ -476,6 +476,10 @@ const routes = [
                             path="/storeAdjList"
                             exact
                             render={() => <Bundle load={StoreAdjList}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/storeAdjList/:id"
+                            render={() => <Bundle load={ItemDetail}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )
