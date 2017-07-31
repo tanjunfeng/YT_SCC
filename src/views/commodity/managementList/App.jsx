@@ -82,7 +82,7 @@ const columns = [{
 }];
 
 const datas = [{
-    id: 'prod426521',
+    id: '1001',
     name: '百事可乐 极度（Max）碳酸饮料 把乐带回家 330ml*12听箱装,百事可乐 极度（Max）碳酸饮料 把乐带回家 330ml*12听箱装',
     imageUrl: 'http://sit.image.com/group1/M00/00/FB/rB4KPVlsFXOAGDZWAABb5O0UTso681.jpg',
     department: '饮料酒水',
@@ -92,7 +92,7 @@ const datas = [{
     brand: '百事',
     status: '暂停使用',
 }, {
-    id: 'pro12564',
+    id: '1002',
     name: '百事可乐 极度（Max）碳酸饮料 把乐带回家 330ml*12听箱装',
     imageUrl: 'http://sit.image.com/group1/M00/00/FB/rB4KPVlsFXOAGDZWAABb5O0UTso681.jpg',
     department: '饮料酒水',
@@ -102,7 +102,7 @@ const datas = [{
     brand: '百事',
     status: '暂停使用',
 }, {
-    id: 'pro4554',
+    id: '1000',
     name: '百事可乐 极度（Max）碳酸饮料 把乐带回家 330ml*12听箱装',
     department: '饮料酒水',
     bigClass: '水饮料',

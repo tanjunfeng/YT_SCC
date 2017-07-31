@@ -253,7 +253,7 @@ export const updateSellPrice = (params) => http.post('/price/updateSellPrice', p
 export const deletePurchasePriceById = (params) => http.get('/price/deletePurchasePriceById', params);
 
 // 查看商品详情
-export const commodityDetail = (params) => http.get('/product/detailsById', params);
+export const commodityDetail = (params) => http.get('/product/queryProductById', params);
 
 // 查询采购价格list
 export const purchasePriceDetail = (params) => http.get('/price/getPurchasePriceDetail', params);
@@ -362,7 +362,7 @@ export const saveItemAd = (params) => http.post('/homeAd/saveItemAd', params);
 export const uploadImageBase64Data = (params) => http.post('/commonUploadFile/uploadImageBase64Data', params);
 
 // 查询分类信息
-export const queryCategorys = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
+export const queryCategorys = (params) => http.get('/category/queryAllCategoriesWithIconByParentId', params);
 
 // 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
 export const saveInput = (params) => http.post('/rk/saveInput', params);
@@ -386,10 +386,10 @@ export const queryAllHot = (params) => http.get('/rk/queryAllHot', params);
 export const selectInputKeyword = (params) => http.get('/rk/selectInputKeyword', params);
 
 // 搜索推荐配置(cyx)---7.查询搜索框中的关键字查询
-export const queryCategoriesLv3IconList = (params) => http.get('/categoryIcon/queryCategoriesLv3IconList', params);
+export const queryCategoriesLv4IconList = (params) => http.get('/categoryIcon/queryCategoriesLv3IconList', params);
 
 // 分类图标管理(cyx)---上传ICON
-export const addOrUpdateCategoryIcon = (params) => http.post('/categoryIcon/addOrUpdateCategoryIcon', params);
+export const addOrUpdateCategoryIcon = (params) => http.post('/category/addOrUpdateCategoryIcon', params);
 
 // 404页面广告配置(cyx)---查询table
 export const queryAllAdPlanList = (params) => http.get('/adPlan/queryAllAdPlanList', params);

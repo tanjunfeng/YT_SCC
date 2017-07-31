@@ -115,6 +115,7 @@ export const toUpdateSell = (params) => dispatch => (
     })
 )
 
+// 商品管理详情页-commidifyDetail
 const receiveDetail = (data) => ({
     type: ActionType.RECEIVE_COMMODITY_DETAIL,
     payload: data,
