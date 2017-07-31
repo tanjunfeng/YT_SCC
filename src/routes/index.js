@@ -41,7 +41,7 @@ import FindPriceInfo from 'bundle-loader?lazy!../views/commodity/findPriceInfo';
 // 销售价格
 import PurchasingPice from 'bundle-loader?lazy!../views/commodity/purchasingPice';
 // 分类列表页商品排序管理
-import CateListGoodsSortManage from 'bundle-loader?lazy!../views/sysConfig/CateListGoodsSortManage';
+import CateListGoodsSortManage from 'bundle-loader?lazy!../views/SysConfig/CateListGoodsSortManage';
 // 数据字典
 import DataDictionary from 'bundle-loader?lazy!../views/SysConfig/DataDictionary';
 // 静态页管理
@@ -62,8 +62,8 @@ import CategoryIconManagement from 'bundle-loader?lazy!../views/wrapConfigure/ca
 import AdPlanList404 from 'bundle-loader?lazy!../views/wrapConfigure/adPlanList404';
 
 import PoMngList from 'bundle-loader?lazy!../views/procurement/poMngList';
-import PoDetail from 'bundle-loader?lazy!../views/procurement/PoDetail';
-import PoPrintList from 'bundle-loader?lazy!../views/procurement/PoPrintList';
+import PoDetail from 'bundle-loader?lazy!../views/procurement/poDetail';
+import PoPrintList from 'bundle-loader?lazy!../views/procurement/poPrintList';
 
 // IBM 修改
 // 商品采购关系维护
@@ -77,6 +77,7 @@ import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/
 
 // 库存调整列表
 import StoreAdjList from 'bundle-loader?lazy!../views/storeAdjustment/storeAdjList';
+import ItemDetail from 'bundle-loader?lazy!../views/storeAdjustment/itemDetail';
 
 /* eslint-enable */
 
@@ -556,6 +557,10 @@ const routes = [
                             exact
                             render={() => <Bundle load={StoreAdjList}>{(App) => <App />}</Bundle>}
                         />
+                        <Route
+                            path="/storeAdjList/:id"
+                            render={() => <Bundle load={ItemDetail}>{(App) => <App />}</Bundle>}
+                        />
                     </Switch>
                 )
             }
@@ -571,7 +576,7 @@ const routes = [
                 path: '/po',
                 parent: 'procurementMng',
                 key: 'poMngList',
-                 component: () => (
+                component: () => (
                     <Switch>
                         <Route
                             path="/po"

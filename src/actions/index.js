@@ -53,6 +53,10 @@ import fetchEditBeforeAfter from './fetch/fetchEditBeforeAfter';
 import fetchAddProdPurchase from './fetch/fetchAddProdPurchase';
 
 
+// 库存调整
+import stockAdjust from './stockAdjust';
+import stockListDetail from './stockListDetail';
+
 export {
     fetchSupplierList,
     modifyInformationVisible,
@@ -80,7 +84,7 @@ export {
     modifyDeleteOrderNum,
     modifyToAddInsertpage,
     fetchFindStaticPageList,
-    /*********************procurement added by twh************************* */
+    /* ********************procurement added by twh************************* */
     fetchPoMngList,
     changePoMngSelectedRows,
     fetchMaterialByCd,
@@ -94,6 +98,10 @@ export {
     fetchChangeSupType,
 
     fetchQuerySettledList,
+
+    // 库存调整
+    stockAdjust,
+    stockListDetail,
     fetchQueryManageList,
     fetchGetProductById,
     fetchEditBeforeAfter,

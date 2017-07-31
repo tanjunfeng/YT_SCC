@@ -1,0 +1,43 @@
+{
+    "code": 200,
+    "total": 60,
+    "pageSize": 10,
+    "supplier": {
+        "supplierNumber": 1234567891,
+        "stockStatus": "生效",
+        "createDate": "2017-07-28",
+        "adjustType": "库存同步",
+        "adjustDate": "2017-07-30",
+        "adjustLib": "雅堂1号仓库",
+        "approver": "李大嘴",
+        "outSupplierNum": 976543210,
+        "creator": "王大锤",
+        "remarks": "11111111111111112"
+    },
+    "adjustmentList": [{
+            "commodityNum": "66666666",
+            "commodityName" : "卫龙亲嘴烧",
+            "averageCost": 50.00,
+            "existingStock": 100,
+            "adjustmentNum": 10,
+            "adjustmentCost": 20
+        },
+        {
+            "commodityNum": "555555555",
+            "commodityName" : "卫龙大辣条",
+            "averageCost": 50.00,
+            "existingStock": 100,
+            "adjustmentNum": 10,
+            "adjustmentCost": 20
+        },
+        {
+            "commodityNum": "7777777777",
+            "commodityName" : "卫龙小辣条",
+            "averageCost": 50.00,
+            "existingStock": 100,
+            "adjustmentNum": 10,
+            "adjustmentCost": 20
+        }
+    ],
+    "adjustmentNumTotal": 30
+}
