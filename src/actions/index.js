@@ -36,8 +36,32 @@ import fetchFindStaticPageList from './fetch/fetchStaticPageHome';
 import fectheEditorContent from './fetch/fectheEditorContent';
 
 /*********************procurement added by twh************************* */
-import { changePoMngSelectedRows, fetchMaterialByCd, fetchPoMngList,
-    deletePoByIds, fetchPoPrintList
+import {
+    changePoMngSelectedRows,
+    fetchPoMngList,
+    deletePoByIds,
+    fetchPoPrintList,
+    getWarehouseAddressMap,
+    getShopAddressMap,
+    getSupplierMap,
+    getSupplierLocMap,
+    getBigClassMap,
+    getMaterialMap,
+    initPoDetail,
+    createPo,
+    auditPo,
+    fetchPoDetail,
+    updatePoBasicinfo,
+    addPoLines,
+    updatePoLine,
+    deletePoLine,
+    fetchPoRcvMngList,
+    fetchPoRcvList,
+    fetchPoRcvDetail,
+    fetchPoRcvInit,
+    updatePoRcvLine,
+    updatePoRcvBasicinfo,
+    createPoRcv
 } from './procurement';
 
 // IBM
@@ -88,12 +112,32 @@ export {
     modifyDeleteOrderNum,
     modifyToAddInsertpage,
     fetchFindStaticPageList,
-    /* ********************procurement added by twh************************* */
+    /*********************procurement added by twh************************* */
     fetchPoMngList,
     changePoMngSelectedRows,
-    fetchMaterialByCd,
     deletePoByIds,
     fetchPoPrintList,
+    getWarehouseAddressMap,
+    getShopAddressMap,
+    getSupplierMap,
+    getSupplierLocMap,
+    getBigClassMap,
+    getMaterialMap,
+    initPoDetail,
+    createPo,
+    auditPo,
+    fetchPoDetail,
+    updatePoBasicinfo,
+    addPoLines,
+    updatePoLine,
+    deletePoLine,
+    fetchPoRcvMngList,
+    fetchPoRcvList,
+    fetchPoRcvDetail,
+    fetchPoRcvInit,
+    updatePoRcvLine,
+    updatePoRcvBasicinfo,
+    createPoRcv,
 
     // IBM
     fecthCheckMainSupplier,

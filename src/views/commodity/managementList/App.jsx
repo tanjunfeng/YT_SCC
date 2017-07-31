@@ -581,7 +581,7 @@ class ManagementList extends PureComponent {
                                                 renderChoosedInputRaw={(data) => (
                                                     <div>{data.id} - {data.name}</div>
                                                 )}
-                                                pageSize={10}
+                                                pageSize={5}
                                                 columns={[
                                                     {
                                                         title: '编号',

@@ -1,0 +1,27 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "1",
+            "code": "1000001",
+            "name": "四川 - 深圳市豪利门业实业有限公司",
+            "accountPeriod":45,
+            "payment":"现金"
+        },
+        {
+            "id": "2",
+            "code": "1000002",
+            "name": "四川 - 新希望XXX公司",
+            "accountPeriod":45,
+            "payment":"现金"
+        },
+        {
+            "id": "3",
+            "code": "1000003",
+            "name": "四川 - 成都XXX休闲零食公司",
+            "accountPeriod":45,
+            "payment":"现金"
+        }
+    ],
+    "total": 10
+}

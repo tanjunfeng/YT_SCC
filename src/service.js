@@ -18,7 +18,7 @@ const http = new Http();
 http.response(
     res => {
         if (res.data.code === 401) {
-            store.dispatch(receiveLogout());
+            console.log(401);
             LoginLayout();
             return Promise.reject(res);
         }
@@ -28,7 +28,6 @@ http.response(
         if (err.response) {
             const status = err.response.status;
             if (status === 401) {
-                store.dispatch(receiveLogout());
                 LoginLayout();
             }
         }
@@ -60,7 +59,7 @@ export const login = () => http.post('/login');
  * 获取用户权限
  * @param code
  */
-export const fetchRights = (code) => http.get('/system/queryLeftMenusOrButton', { menuId: code });
+export const fetchRights = (code) => http.get('/system/queryButtons', { menuId: code });
 
 /**
  * 获取用户信息及顶部memu数据
@@ -71,7 +70,7 @@ export const user = (params) => http.get('/system/user', params);
 /**
  * 获取侧边栏menus
  */
-export const queryLeftMenus = (params) => http.get('/system/queryLeftMenusOrButton', params);
+export const queryLeftMenus = (params) => http.get('/system/queryLeftMenus', params);
 
 /**
  * 退出登录
@@ -453,14 +452,46 @@ export const getProductById = (params) => http.get('/prodPurchase/getProductById
 // 根据品牌名称分页查询品牌列表
 export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPages', params);
 
+/***************procurement*********** */
 // 查询采购单列表
 export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
-// 根据商品编码获取商品详情
-export const fetchMaterialByCd = (params) => http.get('/provider/queryMaterialByCd', params);
-// 删除采购单
+//删除采购单 参数 1或n个采购单id  [ids] 
 export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
-// 查询采购单打印列表
+//查询采购单打印列表
 export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
+//查询采购单详情
+export const queryPoDetail = (params) => http.get('/provider/queryPoDetail', params);
+//创建采购单详情
+export const createPo = (params) => http.post('/provider/createPo', params);
+//审批
+export const auditPo = (params) => http.post('/provider/auditPo', params);
+
+/**
+ * 采购相关
+ */
+// 地点值清单查询接口
+// 仓库地点值清单
+export const queryWarehouseAddressMap = (params) => http.get('/provider/queryWarehouseAddressMap', params);
+// 门店地点值清单
+export const queryShopAddressMap = (params) => http.get('/provider/queryShopAddressMap', params);
+// 供应商值清单
+export const querySupplierMap = (params) => http.get('/provider/querySupplierMap', params);
+// 供应商地点值清单
+export const querySupplierLocMap = (params) => http.get('/provider/querySupplierLocMap', params);
+// 大类值清单
+export const queryBigClassMap = (params) => http.get('/provider/queryBigClassMap', params);
+// 商品值清单
+export const queryMaterialMap = (params) => http.get('/provider/queryMaterialMap', params);
+
+// 采购收货相关
+// 采购收货单管理列表
+export const queryPoRcvMngList = (params) => http.get('/provider/queryPoRcvMngList', params);
+// 采购单收货列表   采购单筛选条件：已审核、未收货
+export const queryPoRcvList = (params) => http.get('/provider/queryPoRcvList', params);
+// 查询收货详情 查询参数： 收货单id（poRcvId）或采购单id（poId）
+export const queryPoRcvDetail = (params) => http.get('/provider/queryPoRcvDetail', params);
+// 创建采购收货单
+export const createPoRcv = (params) => http.post('/provider/createPoRcv', params);
 
 // 查询库存调整列表{mock}
 export const queryAdjustLibList = (params) => http.post('/provider/queryAdjustLibList', params);
@@ -486,3 +517,21 @@ export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/inser
 
  // 根据条件分页查询商品清单，并排序
 export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);
+// 新增供应商信息
+export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);
+// 修改供应商信息
+export const updateSupplierInfo = (params) => http.post('/supplier/updateSupplierInfo', params);
+// 新增供应商地点信息
+export const insertSupplierAddressInfo = (params) => http.post('/supplier/insertSupplierAddressInfo', params);
+// 修改供应商地点信息
+export const updateSupplierAddressInfo = (params) => http.post('/supplier/updateSupplierAddressInfo', params);
+// 查询供应商地点详情
+export const queryProviderPlaceInfo = (params) => http.get('/supplier/queryProviderPlaceInfo', params);
+// 此接口用于根据条件查询仓库信息列表,条件查询范围为仓库编码和仓库名称(应该用get)
+export const getWarehouseInfo1 = (params) => http.get('/warehouse/getWarehouseLogicInfo', params);
+// 此接口用于根据仓库ID查询仓库的详细信息
+export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehousePhysicalInfo', params);
+// 查询供应商地点所属区域列表
+export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySupplierPlaceRegion', params);
+// 此接口用于通过code和name（后端id就等于code）查询子公司信息
+export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBaseInfo', params);

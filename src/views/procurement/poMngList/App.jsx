@@ -18,13 +18,14 @@ import {
   Menu,
   Dropdown,
   Modal,
-  message
+  message,
+  Button
 } from 'antd';
 
 import { fetchPoMngList, changePoMngSelectedRows, deletePoByIds } from '../../../actions';
 import SearchForm from '../../../components/poSearchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { poCodes } from '../../../constant/procurement';
+import { poStatusCodes } from '../../../constant/procurement';
 import { poMngListColumns } from '../columns';
 import Utils from '../../../util/util';
 
@@ -49,6 +50,7 @@ class PoMngList extends PureComponent {
     this.applyReset = ::this.applyReset;
     this.applyDelete =::this.applyDelete;
     this.queryPoList =::this.queryPoList;
+    this.handleRejectedModalOk =::this.handleRejectedModalOk;
     //初始采购单查询参数
     this.searchParams = {};
     //初始页号
@@ -56,18 +58,29 @@ class PoMngList extends PureComponent {
   }
 
   componentDidMount() {
+    console.log("componentDidMount");
     this.queryPoList();
   }
 
+  /**
+   * 查询采购单管理列表
+   * @param {*} params 
+   */
   queryPoList(params) {
     let tmp = params || {};
-    let searchParams = Object.assign({
+    let allParams = Object.assign({
       pageSize: PAGE_SIZE,
       pageNum: this.current,
-    }, searchParams, tmp);
-    this.props.fetchPoMngList(searchParams).then(function (res) { console.log("res", res); });
+    }, allParams, this.searchParams, tmp);
+    this.props.fetchPoMngList(allParams);
   }
 
+  handleRejectedModalOk = (e) => {
+    console.log(e);
+    // this.setState({
+    //   visible: false,
+    // });
+  }
   onActionMenuSelect(record, index, items) {
     const { id } = record;
     const { key } = items;
@@ -88,6 +101,19 @@ class PoMngList extends PureComponent {
           onCancel() { },
         });
         break;
+      case "rejected":
+        Modal.info({
+          title: '审核拒绝详情',
+          content: (
+            <div>
+              <div>审核时间:</div>
+              <div>审核者:</div>
+              <div>审核内容:  <p>这里是审核拒绝原因内容</p></div>
+            </div>
+          ),
+          onOk() { },
+        });
+        break;
       default:
         break;
     }
@@ -99,6 +125,7 @@ class PoMngList extends PureComponent {
    */
   applySearch(res) {
     this.searchParams = res;
+    console.log("got params", res);
     this.queryPoList();
     //点击查询后清空选中列表
     this.props.changePoMngSelectedRows({
@@ -135,6 +162,12 @@ class PoMngList extends PureComponent {
           selectedRowKeys
         }).then(() => {
           message.success('删除成功');
+          //点击查询后清空选中列表
+          this.props.changePoMngSelectedRows({
+            selectedRowKeys: [],
+            selectedRows: []
+          });
+          //刷新采购单列表
           this.queryPoList();
         })
       },
@@ -142,6 +175,11 @@ class PoMngList extends PureComponent {
     });
   }
 
+  /**
+   * 点击翻页
+   * @param {*} pageNumber 
+   * @param {*} pageSize 
+   */
   onPaginate(pageNumber, pageSize) {
     this.current = pageNumber
     this.queryPoList();
@@ -156,12 +194,16 @@ class PoMngList extends PureComponent {
           <Link to={`${pathname}/${id}`}>采购单详情</Link>
         </Menu.Item>
 
-        {statusCd === poCodes.draft && <Menu.Item key="delete">
+        {statusCd === poStatusCodes.draft && <Menu.Item key="delete">
           <a target="_blank" rel="noopener noreferrer">删除</a>
         </Menu.Item>
         }
+        {statusCd === poStatusCodes.rejected && <Menu.Item key="rejected">
+          <a target="_blank" rel="noopener noreferrer">查看拒绝原因</a>
+        </Menu.Item>
+        }
 
-        {statusCd === poCodes.approved && <Menu.Item key="receive">
+        {statusCd === poStatusCodes.approved && <Menu.Item key="receive">
           <a target="_blank" rel="noopener noreferrer">收货</a>
         </Menu.Item>
         }
@@ -194,13 +236,13 @@ class PoMngList extends PureComponent {
       //选中行
       selectedRowKeys: selectedPoMngRows.selectedRowKeys,
       getCheckboxProps: (record) => ({
-        disabled: record.statusCd !== poCodes.draft,
+        disabled: record.statusCd !== poStatusCodes.draft,
       })
     };
 
     return (
-      <div >
-        <SearchForm auth={{ delete: true, new: true, print: true, downPDF: true }}
+      <div className="po-mng-list">
+        <SearchForm auth={{ delete: true, new: true, print: false, downPDF: true }}
           onSearch={this.applySearch}
           onReset={this.applyReset}
           onDelete={this.applyDelete} />
@@ -224,5 +266,7 @@ PoMngList.propTypes = {
   fetchPoMngList: PropTypes.func,
 
 }
+
+
 
 export default withRouter(Form.create()(PoMngList));
