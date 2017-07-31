@@ -401,7 +401,7 @@ class ManagementList extends PureComponent {
     handleFormSearch = () => {
         const postData = this.getFormAllVulue();
         console.log(postData);
-        // this.props.queryCommodityList({...postData});
+        this.props.queryCommodityList({...postData});
     }
 
     /**
@@ -425,9 +425,6 @@ class ManagementList extends PureComponent {
         console.log(fetchBrandsByPages({
             value
         }));
-        return fetchBrandsByPages({
-            value
-        });
     };
 
 

@@ -43,10 +43,10 @@ export const fetchBrandsByPages = (params) => (
         queryBrandsByPages(params)
         .then(res => {
             console.log(res);
-            Promise.resolve(res);
+            resolve(res);
         })
         .catch(err => {
-            Promise.reject(err);
+            reject(err);
         });
     })
 );

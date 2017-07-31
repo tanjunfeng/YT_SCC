@@ -108,13 +108,10 @@ export {
     fetchQueryManageList,
     fetchGetProductById,
     fetchEditBeforeAfter,
-<<<<<<< HEAD
 
     // 根据条件分页查询商品清单，并排序
-    queryCommodityList
-=======
+    queryCommodityList,
     fetchAddProdPurchase,
     fetchQueryProdByCondition,
     fetchUpdateProdPurchase
->>>>>>> c231f56f0b252c4cd284acfb57c3a9bcebe7d23a
 }
