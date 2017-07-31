@@ -36,7 +36,9 @@ import fetchFindStaticPageList from './fetch/fetchStaticPageHome';
 import fectheEditorContent from './fetch/fectheEditorContent';
 
 /*********************procurement added by twh************************* */
-import { changePoMngSelectedRows, fetchMaterialByCd, fetchPoMngList, deletePoByIds, fetchPoPrintList } from './procurement';
+import { changePoMngSelectedRows, fetchMaterialByCd, fetchPoMngList,
+    deletePoByIds, fetchPoPrintList
+} from './procurement';
 
 // IBM
 import fecthCheckMainSupplier from './fetch/fetchCheckMainSupplier';
@@ -47,6 +49,9 @@ import fetchChangeSupType from './fetch/fetchChangeSupType'
 import fetchQuerySettledList from './fetch/fetchQuerySettledList';
 import fetchQueryManageList from './fetch/fetchQueryManageList';
 import fetchGetProductById from './fetch/fetchGetProductById';
+import fetchEditBeforeAfter from './fetch/fetchEditBeforeAfter';
+import fetchAddProdPurchase from './fetch/fetchAddProdPurchase';
+
 
 export {
     fetchSupplierList,
@@ -91,4 +96,6 @@ export {
     fetchQuerySettledList,
     fetchQueryManageList,
     fetchGetProductById,
+    fetchEditBeforeAfter,
+    fetchAddProdPurchase
 }

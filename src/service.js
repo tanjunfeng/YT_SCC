@@ -120,7 +120,7 @@ export const fetchQueryManageList = (params) => http.get('/supplier/queryManageL
 export const querySettledList = (params) => http.get('/supplier/querySettledList', params);
 
 // 查询供应商修改前修改后的信息(改)
-export const editBeforeAfter = (params) => http.get('/supplier/editBeforeAfter', params);
+export const fetchEditBeforeAfter = (params) => http.get('/supplier/editBeforeAfter', params);
 
 // 供应商综合审核录入
 export const insertSupplierAuditInfo = (params) => http.post('/provider/insertSupplierAuditInfo', params);
@@ -427,7 +427,7 @@ export const getProdPurchaseById = (params) => http.get('/prodPurchase/queryProd
 export const findPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
 
 // 新增商品采购关系
-export const addProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
+export const fetchAddProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
 
 // 更新商品采购关系
 export const updateProdPurchase = (params) => http.post('/prodPurchase/updateProdPurchase', params);

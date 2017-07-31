@@ -1,6 +1,5 @@
 /**
  * @file fetchEditorList.js
- *
  * @author Tanjunfeng
  *
  * 页面编辑数据列表

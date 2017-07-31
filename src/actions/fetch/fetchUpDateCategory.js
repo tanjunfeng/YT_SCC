@@ -1,6 +1,5 @@
 /**
  * @file Updatecategorygoodsordernum.js
- *
  * @author Tanjunfeng
  *
  * 修改分类商品排序号

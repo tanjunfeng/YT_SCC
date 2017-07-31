@@ -18,7 +18,8 @@ import {
     modifyAuditVisible,
     modifyCheckReasonVisible,
     fecthGetProdPurchaseById,
-    fetchGetProductById
+    fetchGetProductById,
+    fetchAddProdPurchase,
 } from '../../../actions';
 import SearchForm from '../searchFormProcure';
 import ShowForm from '../showFormProcure';
@@ -42,7 +43,8 @@ import { PAGE_SIZE } from '../../../constant';
         modifyAuditVisible,
         modifyCheckReasonVisible,
         fecthGetProdPurchaseById,
-        fetchGetProductById
+        fetchGetProductById,
+        fetchAddProdPurchase,
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
@@ -70,10 +72,14 @@ class ProcurementMaintenance extends PureComponent {
      */
     componentDidMount() {
         this.props.fecthGetProdPurchaseById({
-            productId: 'xpro12333'
+            productId: 'xpro12333',
         });
         this.props.fetchGetProductById({
             productId: 1001
+        });
+        this.props.fecthCheckMainSupplier({
+            productId: 'xpro12333',
+            supplierType: 1
         });
     }
 
@@ -81,6 +87,9 @@ class ProcurementMaintenance extends PureComponent {
      * 新增
      */
     handleAdd() {
+        // this.props.fetchAddProdPurchase() {
+
+        // }
     }
 
     /**
@@ -150,6 +159,7 @@ ProcurementMaintenance.propTypes = {
     fetchGetProductById: PropTypes.objectOf(PropTypes.any),
     fetchProviderEnterList: PropTypes.objectOf(PropTypes.any),
     fecthGetProdPurchaseById: PropTypes.func,
+    fecthCheckMainSupplier: PropTypes.func,
     modifyAuditVisible: PropTypes.bool,
     modifyCheckReasonVisible: PropTypes.bool,
     prefixCls: PropTypes.string,
