@@ -177,7 +177,7 @@ class PayInformation extends PureComponent {
                             <Button
                                 size="default"
                                 onClick={() => {
-                                    this.props.history.pop();
+                                    this.props.history.goBack();
                                 }}
                             >
                                 返回
