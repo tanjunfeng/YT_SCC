@@ -33,8 +33,8 @@ import { PAGE_SIZE } from '../../../constant';
         checkResonVisible: state.toJS().supplier.checkResonVisible,
         insertSettlementResult: state.toJS().supplier.insertSettlementResult,
         prodPurchase: state.toJS().commodity.prodPurchase,
-        ProdPurchases: state.toJS().commodity.getProdPurchaseById,
-        queryProdPurchases: state.toJS().commodity.getProdPurchaseById,
+        getProdPurchaseById: state.toJS().commodity.getProdPurchaseById,
+        queryProdPurchases: state.toJS().commodity.queryProdPurchases,
         getProductById: state.toJS().commodity.getProductById,
     }),
     dispatch => bindActionCreators({
