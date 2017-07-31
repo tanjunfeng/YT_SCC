@@ -43,7 +43,6 @@ import { changePoMngSelectedRows, fetchMaterialByCd, fetchPoMngList,
 // IBM
 import fecthCheckMainSupplier from './fetch/fetchCheckMainSupplier';
 import fecthGetProdPurchaseById from './fetch/fetchGetProdPurchaseById';
-import fetchQueryProdPurchase from './fetch/fetchQueryProdPurchase';
 import fetchChangeSupType from './fetch/fetchChangeSupType'
 
 import fetchQuerySettledList from './fetch/fetchQuerySettledList';
@@ -51,7 +50,8 @@ import fetchQueryManageList from './fetch/fetchQueryManageList';
 import fetchGetProductById from './fetch/fetchGetProductById';
 import fetchEditBeforeAfter from './fetch/fetchEditBeforeAfter';
 import fetchAddProdPurchase from './fetch/fetchAddProdPurchase';
-
+import fetchQueryProdByCondition from './fetch/fetchQueryProdByCondition';
+import fetchUpdateProdPurchase from './fetch/fetchUpdateProdPurchase';
 
 export {
     fetchSupplierList,
@@ -90,12 +90,13 @@ export {
     // IBM
     fecthCheckMainSupplier,
     fecthGetProdPurchaseById,
-    fetchQueryProdPurchase,
     fetchChangeSupType,
 
     fetchQuerySettledList,
     fetchQueryManageList,
     fetchGetProductById,
     fetchEditBeforeAfter,
-    fetchAddProdPurchase
+    fetchAddProdPurchase,
+    fetchQueryProdByCondition,
+    fetchUpdateProdPurchase
 }

@@ -421,7 +421,7 @@ export const insertDictionary = (params) => http.post('/dictionary/insertDiction
 export const checkMainSupplier = (params) => http.get('/prodPurchase/checkMainSupplier', params);
 
 // 查询商品价格信息
-export const getProdPurchaseById = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
+export const getProdPurchaseById = (params) => http.get('/prodPurchase/getProdPurchaseById', params);
 
 // 销售价格信息
 export const findPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
@@ -445,7 +445,7 @@ export const changeProPurchaseStatus = (params) => http.get('/prodPurchase/chang
 export const batchChangeProPurchaseStatus = (params) => http.post('/prodPurchase/batchChangeProPurchaseStatus', params);
 
 // 根据条件查询商品价格信息
-export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
+export const fetchQueryProdByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
 
 // 查询商品信息
 export const getProductById = (params) => http.get('/prodPurchase/getProductById', params);
