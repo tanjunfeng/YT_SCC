@@ -422,9 +422,9 @@ class ManagementList extends PureComponent {
      * @return {Promise}
      */
     handlefetchBrandsList = ({ value, pagination }) => {
-        console.log(fetchBrandsByPages({
+        return fetchBrandsByPages({
             value
-        }));
+        });
     };
 
 
@@ -476,6 +476,7 @@ class ManagementList extends PureComponent {
         );
         console.log(this.props.CommodityListData);
         const { data = [], total = 0, pageSize = 10, pageNum = 1 } = this.props.CommodityListData;
+        console.log(total)
         return (
             <div className={`${commodityML}`}>
                 <div className="manage-form">
@@ -578,17 +579,17 @@ class ManagementList extends PureComponent {
                                                 onChoosed={this.handleBrandChoose}
                                                 onClear={this.handleBrandClear}
                                                 renderChoosedInputRaw={(data) => (
-                                                    <div>{data.id} - {data.address}</div>
+                                                    <div>{data.id} - {data.name}</div>
                                                 )}
-                                                pageSize={2}
+                                                pageSize={10}
                                                 columns={[
                                                     {
-                                                        title: 'Name',
-                                                        dataIndex: 'name',
+                                                        title: '编号',
+                                                        dataIndex: 'id',
                                                         width: 150,
                                                     }, {
-                                                        title: 'Address',
-                                                        dataIndex: 'address',
+                                                        title: '名字',
+                                                        dataIndex: 'name',
                                                         width: 200,
                                                     }
                                                 ]}

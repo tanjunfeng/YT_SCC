@@ -451,7 +451,7 @@ export const fetchQueryProdByCondition = (params) => http.get('/prodPurchase/que
 export const getProductById = (params) => http.get('/prodPurchase/getProductById', params);
 
 // 根据品牌名称分页查询品牌列表
-export const querybrandsbypages = (params) => http.get('/product/queryBrandsByPages', params);
+export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPages', params);
 
 // 查询采购单列表
 export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
