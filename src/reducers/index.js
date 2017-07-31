@@ -39,6 +39,8 @@ import procurement from './procurement';
 import stockAdjust from './stockAdjust';
 import stockListDetail from './stockListDetail';
 
+import queryCommodityList from './queryCommodityList';
+
 export default Immutable.fromJS({
     pub,
     user,
@@ -61,5 +63,7 @@ export default Immutable.fromJS({
     /* ********************procurement************************* */
     procurement,
     stockAdjust,
-    stockListDetail
+    stockListDetail,
+
+    queryCommodityList
 });

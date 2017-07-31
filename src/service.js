@@ -450,7 +450,8 @@ export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurcha
 // 查询商品信息
 export const getProductById = (params) => http.get('/prodPurchase/getProductById', params);
 
-export const testApi = (params) => http.get('/test', params);
+// 根据品牌名称分页查询品牌列表
+export const querybrandsbypages = (params) => http.get('/product/queryBrandsByPages', params);
 
 // 查询采购单列表
 export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
@@ -477,3 +478,11 @@ export const queryAllLargerRegionProvince = (params) => http.get('/region/queryA
 export const getSupplierNo = (params) => http.get('/supplier/getSupplierNo', params);
 // 新增或修改供应商信息
 export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/insertOrUpdateSupplierInfo', params);
+
+
+/**
+ * 商品模块
+ */
+
+ // 根据条件分页查询商品清单，并排序
+export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);

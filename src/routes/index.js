@@ -164,56 +164,21 @@ const routes = [
         key: 'gylspgl',
         iconType: 'red-envelope',
         routes: [
-            // 在售商品列表
+            // 商品管理列表
             {
-                path: '/onSale',
+                path: '/commodifyList',
                 parent: 'gylspgl',
-                key: 'onSaleGoodsList',
+                key: 'commodifyList',
                 component: () => (
                     <Switch>
                         <Route
-                            path="/onSale"
+                            path="/commodifyList"
                             exact
-                            render={() => <Bundle load={OnSale}>{(App) => <App />}</Bundle>}
+                            render={() => <Bundle load={ManagementList}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/onSale/detail/:id"
-                            render={() => <Bundle load={SaleDetail}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/onSale/price/:id"
-                            render={() => <Bundle load={FindPriceInfo}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/onSale/purchasingPice/:id"
-                            render={() => <Bundle load={PurchasingPice}>{(App) => <App />}</Bundle>}
-                        />
-                    </Switch>
-                )
-            },
-            // 待售商品列表
-            {
-                path: '/forSale',
-                parent: 'gylspgl',
-                key: 'forSaleGoodsList',
-                component: () => (
-                    <Switch>
-                        <Route
-                            path="/forSale"
-                            exact
-                            render={() => <Bundle load={ForSale}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/forSale/detail/:id"
-                            render={() => <Bundle load={SaleDetail}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/forSale/price/:id"
-                            render={() => <Bundle load={FindPriceInfo}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/forSale/purchasingPice/:id"
-                            render={() => <Bundle load={PurchasingPice}>{(App) => <App />}</Bundle>}
+                            path="/commodifyList/:id"
+                            render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )
@@ -291,18 +256,18 @@ const routes = [
                         <Route
                             path="/supplierList"
                             exact
-                            render={() => (<Bundle load={SupplierManageList}>
+                            render={() => (<Bundle load={ManagementList}>
                                 {(App) => <App />}
                             </Bundle>)}
                         />
                         <Route
                             path="/supplierList/:id"
                             exact
-                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
+                            render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
                         />
                         <Route
                             path="/supplierList/:id/:type"
-                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
+                            render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )
