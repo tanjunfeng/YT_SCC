@@ -74,6 +74,8 @@ import fetchQuerySettledList from './fetch/fetchQuerySettledList';
 import fetchQueryManageList from './fetch/fetchQueryManageList';
 import fetchGetProductById from './fetch/fetchGetProductById';
 import fetchEditBeforeAfter from './fetch/fetchEditBeforeAfter';
+import fetchAddProdPurchase from './fetch/fetchAddProdPurchase';
+
 
 export {
     fetchSupplierList,
@@ -139,4 +141,5 @@ export {
     fetchQueryManageList,
     fetchGetProductById,
     fetchEditBeforeAfter,
+    fetchAddProdPurchase
 }

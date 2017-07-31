@@ -5,7 +5,16 @@
  * 页面公共，不涉及到 异步请求
  */
 import ActionType from './ActionType';
-import { queryRegionByCode, queryCategorys } from '../service';
+import {
+    queryRegionByCode,
+    queryCategorys,
+    findCompanyBaseInfo
+} from '../service';
+
+const pubValueList = {
+    // 通过id，和name 查询分公司值列表
+    findCompanyBaseInfo,
+}
 
 const receiveCollapsed = (isCollapsed) => ({
     type: ActionType.PUB_COLLAPSED,
@@ -45,6 +54,37 @@ export const fetchCategorys = (params) => dispatch => (
         queryCategorys(params)
             .then(res => {
                 dispatch(receiveAllCategorys(res.data));
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+/**
+ * 公共模块获取值列表
+ */
+const receiveValuesList = (data) => ({
+    type: ActionType.RECEIVE_VALUES_LIST,
+    payload: data,
+});
+
+const checkResult = (res) => {
+    let result = res;
+    if (res.data instanceof Array) {
+        result.data = {
+            data: res.data
+        }
+    }
+    return result;
+}
+
+export const pubFetchValueList = (params, type) => dispatch => (
+    new Promise((resolve, reject) => {
+        pubValueList[type](params)
+            .then(res => {
+                dispatch(receiveValuesList(res.data));
+                resolve(checkResult(res));
             })
             .catch(err => {
                 reject(err);

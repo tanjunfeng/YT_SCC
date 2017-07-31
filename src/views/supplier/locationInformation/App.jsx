@@ -11,7 +11,11 @@ import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Icon, Input, Form, Button, Select, Row, Col, DatePicker } from 'antd';
+import {
+    Icon, Input, Form, Button,
+    Select, Row, Col, DatePicker,
+    InputNumber
+ } from 'antd';
 
 import Utils from '../../../util/util';
 import { Validator } from '../../../util/validator';
@@ -22,11 +26,15 @@ import {
     deleteWarehouseInfo, insertSupplierAddress
 } from '../../../actions/addSupplier';
 import {
-    queryPlaceRegion
+    pubFetchValueList
+} from '../../../actions/pub';
+import {
+    hanldeSupplier
 } from '../../../actions/supplier';
 import InlineTree from '../../../components/inlineTree';
 import { fetchSupplierNo } from '../../../actions/supplier';
 import Warehouse from './warehouse';
+import SearchMind from '../../../components/searchMind';
 
 const dateFormat = 'YYYY-MM-DD';
 const FormItem = Form.Item;
@@ -48,7 +56,8 @@ const Option = Select.Option;
         fetchWarehouseInfo,
         deleteWarehouseInfo,
         insertSupplierAddress,
-        queryPlaceRegion
+        pubFetchValueList,
+        hanldeSupplier
     }, dispatch)
 )
 class BasicInfo extends PureComponent {
@@ -60,6 +69,7 @@ class BasicInfo extends PureComponent {
         this.handleSaveDraft = ::this.handleSaveDraft;
         this.getValue = ::this.getValue;
         this.submit = ::this.submit;
+        this.handleSubmit = ::this.handleSubmit;
         this.companyAddress = {};
         this.bankLoc = {};
     }
@@ -69,14 +79,11 @@ class BasicInfo extends PureComponent {
         if (!isEdit) {
             this.props.fetchSupplierNo({type: 'SP_ADR'});
         }
-        else {
-            this.props.queryPlaceRegion({spId: detailData.id})
-        }
     }
 
     getValue(callback) {
-        const { form, detailData, detailSp } = this.props;
-        const { supplierBasicInfo = {}, } = detailData;
+        const { form, detailData, detailSp, isEdit } = this.props;
+        const { supplierBasicInfo = {} } = detailData;
         form.validateFields((err, values) => {
             if (!err) {
                 const {
@@ -120,27 +127,54 @@ class BasicInfo extends PureComponent {
                     parentId: supplierBasicInfo.id
                 }
 
+                if (isEdit) {
+                    Object.assign(
+                        submit.spAdrBasic,
+                        {
+                            id: detailSp.spAdrBasic.id,
+                            status: detailSp.spAdrBasic.status
+                        }
+                    )
+                    Object.assign(
+                        submit.spAdrContact,
+                        {
+                            id: detailSp.spAdrContact.id,
+                            status: detailSp.spAdrContact.status
+                        }
+                    )
+                    Object.assign(submit, {
+                        id: detailSp.id,
+                        parentId: detailSp.parentId,
+                        status: detailSp.status,
+                    })
+
+                }
+
                 callback(submit)
             }
         })
     }
 
-    handleSaveDraft() {
+    submit(type) {
+        const { isEdit } = this.props;
         this.getValue((data) => {
-            data.commitType = 0;
-            this.props.insertSupplierAddress(data).then((res) => {
-                this.props.history.push('/supplierInputList/place/7')
+            data.commitType = type;
+            this.props.hanldeSupplier(data,
+                isEdit
+                ? 'updateSupplierAddressInfo'
+                : 'insertSupplierAddressInfo'
+            ).then((res) => {
+                this.props.history.push(`/supplierInputList/place/${isEdit ? data.id : res.data}`)
             });
         });
     }
 
-    submit() {
-        this.getValue((data) => {
-            data.commitType = 1;
-            this.props.insertSupplierAddress(data).then((res) => {
-                this.props.history.push('/supplierInputList/place/7')
-            });
-        });
+    handleSaveDraft() {
+        this.submit(0)
+    }
+
+    handleSubmit() {
+        this.submit(1)
     }
 
     handleCompanyAddressChange(data) {
@@ -247,7 +281,7 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}><span>供应商地点编号：</span>
-                                        <span>{this.props.supplierId}</span>
+                                        <span>{isEdit ? detailSp.id : this.props.supplierId}</span>
                                     </Col>
                                     <Col span={8}><span>供应商地点名称：</span>
                                         <span>{supplierBasicInfo.companyName}</span>
@@ -262,7 +296,7 @@ class BasicInfo extends PureComponent {
                                         <FormItem>
                                             {getFieldDecorator('operaStatus', {
                                                 rules: [{required: true, message: '请选择供应商地点经营状态'}],
-                                                initialValue: String(spAdrBasic.operaStatus ? spAdrBasic.operaStatus : 0)
+                                                initialValue: isEdit ? `${spAdrBasic.operaStatus}` : '0'
                                             })(
                                                 <Select
                                                     style={{ width: 140 }}
@@ -281,12 +315,14 @@ class BasicInfo extends PureComponent {
                                         <FormItem>
                                             {getFieldDecorator('goodsArrivalCycle', {
                                                 rules: [{ required: true, message: '请输入供应商地点到货周期!' }],
-                                                initialValue: spAdrBasic.goodsArrivalCycle
+                                                initialValue: isEdit ? spAdrBasic.goodsArrivalCycle : null
                                             })(
-                                                <Input
-                                                    placeholder="供应商地点到货周期"
+                                                <InputNumber
+                                                    min={0}
+                                                    placeholder="周期"
                                                 />
                                             )}
+                                            &nbsp;天
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -294,15 +330,16 @@ class BasicInfo extends PureComponent {
                                         <FormItem>
                                             {getFieldDecorator('settlementPeriod', {
                                                 rules: [{required: true, message: '请选择账期！'}],
-                                                initialValue: spAdrBasic.settlementPeriod
+                                                initialValue: isEdit ? `${spAdrBasic.settlementPeriod}` : '0'
                                             })(
                                                 <Select
                                                     style={{ width: 140 }}
                                                     placeholder="供应商账期"
                                                 >
-                                                    <Option value="0">月结</Option>
+                                                    <Option value="0">周结</Option>
                                                     <Option value="1">半月结</Option>
-                                                    <Option value="2">票到付款</Option>
+                                                    <Option value="2">月结</Option>
+                                                    <Option value="3">票到付款</Option>
                                                 </Select>
                                             )}
                                         </FormItem>
@@ -314,7 +351,7 @@ class BasicInfo extends PureComponent {
                                         <FormItem>
                                             {getFieldDecorator('grade', {
                                                 rules: [{required: true, message: '请选择供应商地点级别'}],
-                                                initialValue: spAdrBasic.grade || '1'
+                                                initialValue: isEdit ? `${spAdrBasic.grade}` : '1'
                                             })(
                                                 <Select
                                                     style={{ width: 140 }}
@@ -359,7 +396,7 @@ class BasicInfo extends PureComponent {
                                         <FormItem>
                                             {getFieldDecorator('payType', {
                                                 rules: [{required: true, message: '请选择付款方式！'}],
-                                                initialValue: spAdrBasic.settlementPeriod || '0'
+                                                initialValue: isEdit ? `${spAdrBasic.payType}` : '0'
                                             })(
                                                 <Select
                                                     style={{ width: 140 }}
@@ -374,21 +411,34 @@ class BasicInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>账期：</span>
+                                        <span>供应商地点所属子公司：</span>
                                         <FormItem>
-                                            {getFieldDecorator('settlementPeriod', {
-                                                rules: [{required: true, message: '请选择账期！'}],
-                                                initialValue: spAdrBasic.settlementPeriod || '0'
-                                            })(
-                                                <Select
-                                                    style={{ width: 140 }}
-                                                    placeholder="供应商账期"
-                                                >
-                                                    <Option value="0">月结</Option>
-                                                    <Option value="1">半月结</Option>
-                                                    <Option value="2">票到付款</Option>
-                                                </Select>
-                                            )}
+                                            <SearchMind
+                                                style={{ marginLeft: 10 }}
+                                                compKey="search-mind-key2"
+                                                fetch={(param) =>
+                                                    this.props.pubFetchValueList({
+                                                        branchCompanyName: param.value
+                                                    }, 'findCompanyBaseInfo')
+                                                }
+                                                onChoosed={this.handleChoose}
+                                                placeholder={'请输入子公司名称'}
+                                                renderChoosedInputRaw={(data) => (
+                                                    <div>{data.id} - {data.name}</div>
+                                                )}
+                                                pageSize={100}
+                                                columns={[
+                                                    {
+                                                        title: '子公司编码',
+                                                        dataIndex: 'id',
+                                                        width: 150,
+                                                    }, {
+                                                        title: '子公司名称',
+                                                        dataIndex: 'name',
+                                                        width: 200,
+                                                    }
+                                                ]}
+                                            />
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -517,7 +567,7 @@ class BasicInfo extends PureComponent {
                         </div>
                     </div>
                     <div className="add-message-handle">
-                        <Button onClick={this.submit}>提    交</Button>
+                        <Button onClick={this.handleSubmit}>提    交</Button>
                         <Button onClick={this.handleSaveDraft}>保存草稿 </Button>
                     </div>
                 </Form>

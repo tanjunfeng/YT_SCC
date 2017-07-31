@@ -14,8 +14,13 @@ import { connect } from 'react-redux';
 
 import {
     getSupplierDetail,
-    getProviderDetail
+    getProviderDetail,
+    queryPlaceRegion
 } from '../../../actions/supplier';
+
+import {
+    pubFetchValueList
+} from '../../../actions/pub';
 
 import BasicInfo from './basicInfo';
 import BankInfo from './bankInfo';
@@ -31,7 +36,8 @@ const TabPane = Tabs.TabPane;
     }),
     dispatch => bindActionCreators({
         getSupplierDetail,
-        getProviderDetail
+        getProviderDetail,
+        queryPlaceRegion
     }, dispatch)
 )
 class SupplierDetail extends PureComponent {
@@ -53,9 +59,15 @@ class SupplierDetail extends PureComponent {
 
     componentDidMount() {
         const { id, type } = this.props.match.params;
-        if (type === 'place' || type === 'edit') {
-            this.props.getProviderDetail({adrInfoId: id})
+        if (type === 'place') {
+            this.props.getProviderDetail({adrInfoId: id});
             return ;
+        }
+        else if (type === 'edit') {
+            this.props.getProviderDetail({adrInfoId: id}).then(() => {
+                this.props.queryPlaceRegion({spId: this.props.detailData.id});
+            })
+            return;
         }
         this.props.getSupplierDetail({spId: id});
     }
@@ -75,7 +87,7 @@ class SupplierDetail extends PureComponent {
         const { type = 'supplier' } = this.props.match.params;
         const { detailData } = this.props;
         const detailSp = {};
-        if (type === 'place') {
+        if (type === 'place' || type === 'edit') {
             Object.assign(detailData, detailData.supplierInfoDto);
             Object.assign(detailSp, detailData.supplierAdrInfoDto);
         }
@@ -88,6 +100,7 @@ class SupplierDetail extends PureComponent {
             detailData,
             detailSp
         }
+
         return (
             <Tabs
                 defaultActiveKey="1"
@@ -112,7 +125,7 @@ class SupplierDetail extends PureComponent {
                     </TabPane>
                 }
                 {
-                    type === 'add' || type === 'edit' &&
+                    (type === 'add' || type === 'edit') &&
                     <TabPane tab="供应商地点信息" key="4">
                         <LocationInfoManagement
                             {...props}

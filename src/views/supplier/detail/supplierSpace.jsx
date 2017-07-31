@@ -162,7 +162,7 @@ class SupplierSpace extends Component {
                                     <span>{spAdrBasic.belongArea}</span>
                                 </Col>
                             </Row>
-                            <Row>
+                            {/* <Row>
                                 <Col span={8}><span>供应商审核人：</span>
                                     <span>{spAdrBasic.auditPerson}</span>
                                 </Col>
@@ -171,7 +171,7 @@ class SupplierSpace extends Component {
                                         {moment(spAdrBasic.auditDate).format('YYYY-MM-DD')}
                                     </span>
                                 </Col>
-                            </Row>
+                            </Row> */}
                         </div>
                     </div>
                 </div>

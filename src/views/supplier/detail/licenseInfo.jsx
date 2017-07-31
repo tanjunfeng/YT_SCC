@@ -42,32 +42,32 @@ class LicenseInfo extends Component {
                             </Row>
                             <Row>
                                 <Col span={8}><span>商标注册证/受理通知书：</span>
-                                    <span><a href={supplierOperTaxInfo.registrationCertificate}>点击查看</a></span>
+                                    <span><a href={supplierOperTaxInfo.registrationCertificate} target="_blank">点击查看</a></span>
                                     &nbsp;
-                                    <span>证件到期日期 
+                                    <span className="detail-message-endTime">证件到期日期: 
                                         {moment(supplierOperTaxInfo.regCerExpiringDate).format('YYYY-MM-DD')}
                                     </span>
                                 </Col>
                                 <Col span={8}><span>食品安全认证：</span>
-                                    <span><a href={supplierOperTaxInfo.qualityIdentification}>点击查看</a></span>
+                                    <span><a href={supplierOperTaxInfo.qualityIdentification} target="_blank">点击查看</a></span>
                                     &nbsp;
-                                    <span>证件到期日期 
+                                    <span className="detail-message-endTime">证件到期日期: 
                                         {moment(supplierOperTaxInfo.quaIdeExpiringDate).format('YYYY-MM-DD')}
                                     </span>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col span={8}><span>食品经营许可证：</span>
-                                    <span><a href={supplierOperTaxInfo.qualityIdentification}>点击查看</a></span>
+                                    <span><a href={supplierOperTaxInfo.qualityIdentification} target="_blank">点击查看</a></span>
                                     &nbsp;
-                                    <span>证件到期日期 
+                                    <span className="detail-message-endTime">证件到期日期: 
                                         {moment(supplierOperTaxInfo.quaIdeExpiringDate).format('YYYY-MM-DD')}
                                     </span>
                                 </Col>
                                 <Col span={8}><span>一般纳税人资格证电子版：</span>
-                                    <span><a href={supplierOperTaxInfo.generalTaxpayerQualifiCerti}>点击查看</a></span>
+                                    <span><a href={supplierOperTaxInfo.generalTaxpayerQualifiCerti} target="_blank">点击查看</a></span>
                                     &nbsp;
-                                    <span>证件到期日期 
+                                    <span className="detail-message-endTime">证件到期日期: 
                                         {moment(supplierOperTaxInfo.taxpayerCertExpiringDate).format('YYYY-MM-DD')}
                                     </span>
                                 </Col>

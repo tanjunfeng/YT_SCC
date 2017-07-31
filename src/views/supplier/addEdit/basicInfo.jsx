@@ -83,8 +83,18 @@ class BasicInfo extends PureComponent {
                     spNo: this.props.supplierId
                 };
                 if (isEdit) {
-                    Object.assign(supplierBasicInfo, {id: detailData.supplierBasicInfo.id});
-                    Object.assign(saleRegionInfo, {id: detailData.saleRegionInfo.id});
+                    Object.assign(supplierBasicInfo,
+                        {
+                            id: detailData.supplierBasicInfo.id,
+                            status: detailData.supplierBasicInfo.status,
+                        }
+                    );
+                    Object.assign(saleRegionInfo,
+                        {
+                            id: detailData.saleRegionInfo.id,
+                            status: detailData.saleRegionInfo.status,
+                        }
+                    );
                 }
                 this.props.addSupplierMessage1({supplierBasicInfo, saleRegionInfo})
                 onGoTo('2');

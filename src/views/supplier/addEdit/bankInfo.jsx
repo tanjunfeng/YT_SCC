@@ -75,7 +75,12 @@ class BankInfo extends PureComponent {
                     bankLocCountyCode: thirdValue.code,
                 }
                 if (isEdit) {
-                    Object.assign(supplierBankInfo, {id: detailData.supplierBankInfo.id});
+                    Object.assign(supplierBankInfo,
+                        {
+                            id: detailData.supplierBankInfo.id,
+                            status:  detailData.supplierBankInfo.status
+                        }
+                    );
                 }
 
                 this.props.addSupplierMessage1({supplierBankInfo, ...data});

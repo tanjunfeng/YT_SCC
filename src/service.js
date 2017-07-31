@@ -426,7 +426,7 @@ export const getProdPurchaseById = (params) => http.get('/prodPurchase/queryProd
 export const findPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
 
 // 新增商品采购关系
-export const addProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
+export const fetchAddProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
 
 // 更新商品采购关系
 export const updateProdPurchase = (params) => http.post('/prodPurchase/updateProdPurchase', params);
@@ -511,11 +511,11 @@ export const insertSupplierAddressInfo = (params) => http.post('/supplier/insert
 export const updateSupplierAddressInfo = (params) => http.post('/supplier/updateSupplierAddressInfo', params);
 // 查询供应商地点详情
 export const queryProviderPlaceInfo = (params) => http.get('/supplier/queryProviderPlaceInfo', params);
-// 此接口用于根据条件查询仓库信息列表,条件查询范围为仓库名称和仓库地址
-export const getWarehouseInfo2 = (params) => http.get('/warehouse/getWarehouseInfo2', params);
 // 此接口用于根据条件查询仓库信息列表,条件查询范围为仓库编码和仓库名称(应该用get)
-export const getWarehouseInfo1 = (params) => http.post('/warehouse/getWarehouseInfo1', params);
+export const getWarehouseInfo1 = (params) => http.get('/warehouse/getWarehouseLogicInfo', params);
 // 此接口用于根据仓库ID查询仓库的详细信息
-export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehouseInfo', params);
+export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehousePhysicalInfo', params);
 // 查询供应商地点所属区域列表
 export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySupplierPlaceRegion', params);
+// 此接口用于通过code和name（后端id就等于code）查询子公司信息 
+export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBaseInfo', params);

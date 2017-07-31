@@ -127,8 +127,18 @@ class LicenseInfo extends PureComponent {
                 }
                 
                 if (isEdit) {
-                    Object.assign(supplierOperTaxInfo, {id: detailData.supplierOperTaxInfo.id});
-                    Object.assign(supplierlicenseInfo, {id: detailData.supplierlicenseInfo.id});
+                    Object.assign(supplierOperTaxInfo,
+                        {
+                            id: detailData.supplierOperTaxInfo.id,
+                            status: detailData.supplierOperTaxInfo.status,
+                        }
+                    );
+                    Object.assign(supplierlicenseInfo,
+                        {
+                            id: detailData.supplierlicenseInfo.id,
+                            status: detailData.supplierlicenseInfo.status,
+                        }
+                    );
                 }
                 Object.assign(
                     this.submitData,
@@ -151,7 +161,7 @@ class LicenseInfo extends PureComponent {
         this.props.hanldeSupplier(this.submitData, isEdit ? 'updateSupplierInfo' : 'insertSupplierInfo')
             .then((res) => {
                 const { location, history } = this.props;
-                history.push(`${location.pathname}/${res.data}`)
+                history.push(`${location.pathname}/${isEdit ? this.submitData.id : res.data}`)
             });
     }
 
