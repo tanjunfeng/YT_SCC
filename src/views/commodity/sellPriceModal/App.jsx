@@ -1,19 +1,43 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Form, InputNumber } from 'antd';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import SteppedPrice from '../steppedPrice';
 import SearchMind from '../../../components/searchMind';
 import {
     fetchTest,
 } from '../../../actions/classifiedList';
+import { productAddPriceVisible } from '../../../actions/producthome';
+import { fetchAddProdPurchase } from '../../../actions';
 
 const FormItem = Form.Item;
+
+@connect(
+    state => ({
+        toAddPriceVisible: state.toJS().commodity.toAddPriceVisible
+    }),
+    dispatch => bindActionCreators({
+        productAddPriceVisible,
+        fetchAddProdPurchase
+    }, dispatch)
+)
 
 class SellPriceModal extends Component {
     constructor(props) {
         super(props);
         this.handleOk = ::this.handleOk;
         this.handlePriceChange = ::this.handlePriceChange;
+        this.handleCancel = ::this.handleCancel;
+    }
+
+
+    getValue(isContinuity) {
+        const { defaultValue } = this.state;
+        return {
+            results: defaultValue,
+            isContinuity: isContinuity(defaultValue)
+        }
     }
 
     handleTestFetch = ({ value, pagination }) => {
@@ -27,6 +51,7 @@ class SellPriceModal extends Component {
     handleOk() {
         const { validateFields, setFields } = this.props.form;
         const { isContinuity, results } = this.steppedPrice.getValue();
+        const formData = this.props.form.getFieldsValue();
         if (!isContinuity) {
             setFields({
                 sellSectionPrices: {
@@ -41,6 +66,15 @@ class SellPriceModal extends Component {
             result.sellSectionPrices = results;
             // TODO post data
         })
+        this.props.fetchAddProdPurchase({
+            spId: formData.spId,
+            spAdrId: formData.spAdrId,
+            productId: formData.productId
+        })
+    }
+
+    handleCancel() {
+        this.props.productAddPriceVisible({isVisible: false});
     }
 
     handlePriceChange(result) {
@@ -60,15 +94,18 @@ class SellPriceModal extends Component {
         const { getFieldDecorator } = form;
         const { sellPriceInfoVo = {} } = this.props;
         const { sellSectionPrices = [] } = sellPriceInfoVo;
+        const formData = this.props.form.getFieldsValue();
+        // console.log(formData);
 
         return (
             <Modal
                 title="新增销售价格"
-                visible={true}
+                visible={this.props.toAddPriceVisible}
                 className={prefixCls}
                 onOk={this.handleOk}
                 width={'447px'}
                 onCancel={this.handleCancel}
+                maskClosable={false}
             >
                 <div className={`${prefixCls}-body-wrap`}>
                     <Form layout="inline" onSubmit={this.handleSubmit}>
@@ -121,10 +158,10 @@ class SellPriceModal extends Component {
                             <div className={`${prefixCls}-item-content`}>
                                 <FormItem>
                                     {getFieldDecorator('sellSectionPrices', {
+                                        initialValue: sellSectionPrices
                                     })(
                                         <SteppedPrice
                                             ref={node => (this.steppedPrice = node)}
-                                            defaultValue={sellSectionPrices}
                                             handleChange={this.handlePriceChange}
                                             inputSize="default"
                                         />
@@ -182,6 +219,8 @@ SellPriceModal.propTypes = {
     prefixCls: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
     sellPriceInfoVo: PropTypes.objectOf(PropTypes.any),
+    toAddPriceVisible: PropTypes.bool,
+    productAddPriceVisible: PropTypes.func
 };
 
 SellPriceModal.defaultProps = {

@@ -34,6 +34,7 @@ import modifyToAddInsertpage from './modify/modifyToAddInsertpage';
 import modifyUpdatePageBase from './modify/modifyUpdatePageBase';
 import fetchFindStaticPageList from './fetch/fetchStaticPageHome';
 import fectheEditorContent from './fetch/fectheEditorContent';
+import fetchDeleteProdPurchaseById from './fetch/fetchDeleteProdPurchaseById';
 
 /*********************procurement added by twh************************* */
 import {
@@ -76,6 +77,7 @@ import fetchEditBeforeAfter from './fetch/fetchEditBeforeAfter';
 import fetchAddProdPurchase from './fetch/fetchAddProdPurchase';
 import fetchQueryProdByCondition from './fetch/fetchQueryProdByCondition';
 import fetchUpdateProdPurchase from './fetch/fetchUpdateProdPurchase';
+import fetchChangeProPurchaseStatus from './fetch/fetchChangeProPurchaseStatus';
 
 // 库存调整
 import stockAdjust from './stockAdjust';
@@ -157,5 +159,7 @@ export {
     queryCommodityList,
     fetchAddProdPurchase,
     fetchQueryProdByCondition,
-    fetchUpdateProdPurchase
+    fetchUpdateProdPurchase,
+    fetchChangeProPurchaseStatus,
+    fetchDeleteProdPurchaseById
 }

@@ -10,7 +10,10 @@ import {
     queryCategorys,
     findCompanyBaseInfo,
     queryBrandsByPages,
-    querySuppliersList
+    querySuppliersList,
+    fetchAddProdPurchase,
+    supplierSearchBox,
+    supplierAdrSearchBox
 } from '../service';
 
 const pubValueList = {
@@ -19,7 +22,13 @@ const pubValueList = {
     // 通过表单值查询品牌列表
     queryBrandsByPages,
     // 通过表单值查询供应商地点列表
-    querySuppliersList
+    querySuppliersList,
+    // 新增商品关系
+    fetchAddProdPurchase,
+    // 供应商选择组件
+    supplierSearchBox,
+    // 供应商地点选择组件
+    supplierAdrSearchBox
 }
 
 const receiveCollapsed = (isCollapsed) => ({
@@ -91,7 +100,7 @@ export const pubFetchValueList = (params, type) => dispatch => (
             .then(res => {
                 console.log(res);
                 dispatch(receiveValuesList(res.data));
-                resolve(checkResult(res.data));
+                resolve(checkResult(res));
             })
             .catch(err => {
                 reject(err);
