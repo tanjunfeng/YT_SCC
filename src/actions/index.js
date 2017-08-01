@@ -52,6 +52,7 @@ import fetchEditBeforeAfter from './fetch/fetchEditBeforeAfter';
 import fetchAddProdPurchase from './fetch/fetchAddProdPurchase';
 import fetchQueryProdByCondition from './fetch/fetchQueryProdByCondition';
 import fetchUpdateProdPurchase from './fetch/fetchUpdateProdPurchase';
+import fetchChangeProPurchaseStatus from './fetch/fetchChangeProPurchaseStatus';
 
 // 库存调整
 import stockAdjust from './stockAdjust';
@@ -106,5 +107,6 @@ export {
     fetchEditBeforeAfter,
     fetchAddProdPurchase,
     fetchQueryProdByCondition,
-    fetchUpdateProdPurchase
+    fetchUpdateProdPurchase,
+    fetchChangeProPurchaseStatus
 }

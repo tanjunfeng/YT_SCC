@@ -15,7 +15,8 @@ import {
     fecthGetProdPurchaseById,
     fecthCheckMainSupplier,
     fetchUpdateProdPurchase,
-    fetchQueryProdByCondition
+    fetchQueryProdByCondition,
+    fetchChangeProPurchaseStatus
 } from '../../../actions';
 
 @connect(
@@ -27,7 +28,8 @@ import {
         fecthGetProdPurchaseById,
         fecthCheckMainSupplier,
         fetchUpdateProdPurchase,
-        fetchQueryProdByCondition
+        fetchQueryProdByCondition,
+        fetchChangeProPurchaseStatus
     }, dispatch)
 )
 class Cardline extends Component {
@@ -40,6 +42,7 @@ class Cardline extends Component {
         this.handleDelete = ::this.handleDelete;
         this.handleCheckOk = ::this.handleCheckOk;
         this.handleChangeMain = ::this.handleChangeMain;
+        this.handleCheckUse = ::this.handleCheckUse;
 
         this.state = {
             checked: true,
@@ -59,7 +62,8 @@ class Cardline extends Component {
     }
 
      /**
-     * 将刷新后的categorys值，push到数组中
+     * 将刷新后的getProdPurchaseByIds值赋值给getProdPurchaseByIds
+     *
      * @param {Object} nextProps 刷新后的属性
      */
     componentWillReceiveProps(nextProps) {
@@ -167,13 +171,24 @@ class Cardline extends Component {
             distributeWarehouseId
         }
         this.props.fetchUpdateProdPurchase(data);
-        this.handlePaginationChange();
+        // this.handlePaginationChange();
     }
 
     /**
      * 修改启用时的确认按钮回调
      */
     handleCheckUse() {
+        const { getProdPurchaseByIds } = this.props;
+        this.props.fetchChangeProPurchaseStatus({
+            id: getProdPurchaseByIds.id,
+            productId: getProdPurchaseByIds.productId,
+            status: getProdPurchaseByIds.status
+        })
+        .then((res) => {
+            this.confirmUsed(res.success)
+        }).catch((res) => {
+            message.error(res.message)
+        })
     }
 
     handleDelete() {
@@ -193,7 +208,7 @@ class Cardline extends Component {
         const { prefixCls, getProdPurchaseByIds } = this.props;
         // console.log(getProdPurchaseByIds)
         const cardData =
-            <div
+            (<div
                 key={getProdPurchaseByIds.id}
                 className={`${prefixCls}-card-list`}
             >
@@ -260,10 +275,11 @@ class Cardline extends Component {
                                 getProdPurchaseByIds.status === 1 ?
                                     this.state.checked : !this.state.checked
                             }
+                            innitaivalue={getProdPurchaseByIds}
                         >启用</Checkbox>
                     </div>
                 </Card>
-            </div>
+            </div>)
         return (
             <div className={`${prefixCls}`}>
                 <div>
@@ -280,6 +296,7 @@ Cardline.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
     fecthCheckMainSupplier: PropTypes.func,
     fetchUpdateProdPurchase: PropTypes.func,
+    fetchChangeProPurchaseStatus: PropTypes.func,
     prefixCls: PropTypes.string,
     index: PropTypes.number,
     fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),

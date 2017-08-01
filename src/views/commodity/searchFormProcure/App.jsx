@@ -19,7 +19,8 @@ import {
     fetchTest,
 } from '../../../actions/classifiedList';
 import {
-    fetchGetProductById
+    fetchGetProductById,
+    fetchAddProdPurchase
 } from '../../../actions';
 import {
     initiateModeOptions,
@@ -38,7 +39,8 @@ const Option = Select.Option;
     dispatch => bindActionCreators({
         fetchAction,
         receiveData,
-        fetchGetProductById
+        fetchGetProductById,
+        fetchAddProdPurchase
     }, dispatch)
 )
 class SearchForm extends Component {
@@ -52,12 +54,13 @@ class SearchForm extends Component {
         this.handleGetValue = ::this.handleGetValue;
 
         // Test
-        this.handleSave = ::this.handleSave;
+        // this.handleSave = ::this.handleSave;
         this.state = {
             img: null,
             chooseMe: {},
             disabled: false,
             supplyChoose: null,
+            visible: true
         }
     }
 
@@ -207,27 +210,27 @@ class SearchForm extends Component {
     /**
      * TEST
      */
-    handleSave(event) {
-        this.setState({
-            img: this.imageUploader.getImageByBase64(),
-        })
-    }
+    // handleSave(event) {
+    //     this.setState({
+    //         img: this.imageUploader.getImageByBase64(),
+    //     })
+    // }
 
-    handleTestFetch = ({ value, pagination }) => {
-        console.log(value, pagination);
+    // handleTestFetch = ({ value, pagination }) => {
+    //     // console.log(value, pagination);
 
-        return fetchTest({
-            value,
-        });
-    }
+    //     return fetchTest({
+    //         value,
+    //     });
+    // }
 
-    handleTestChoose = ({ record, compKey, index, event }) => {
-        console.log(compKey, record)
-    }
+    // handleTestChoose = ({ record, compKey, index, event }) => {
+    //     // console.log(compKey, record)
+    // }
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { prefixCls } = this.props;
+        const { prefixCls, innitalvalue } = this.props;
         return (
             <div className={`${prefixCls}-content manage-form`}>
                 <div style={{fontSize: 16, fontWeight: 900}}>
@@ -352,10 +355,10 @@ class SearchForm extends Component {
                             >
                                 {
                                     initiateModeOptions.data.map((item) =>
-                                (<Option key={item.key} value={item.key}>
-                                    {item.value}
-                                </Option>)
-                            )
+                                    (<Option key={item.key} value={item.key}>
+                                        {item.value}
+                                    </Option>)
+                                    )
                                 }
                             </Select>
                         )}
@@ -396,7 +399,7 @@ class SearchForm extends Component {
                             <Button
                                 type="primary"
                                 size="default"
-                                onClick={this.handleAddValue}
+                                onClick={this.props.handleAdd}
                             >
                                 创建
                             </Button>
@@ -416,9 +419,11 @@ class SearchForm extends Component {
 SearchForm.propTypes = {
     fetchGetProductById: PropTypes.objectOf(PropTypes.any),
     fetchAction: PropTypes.objectOf(PropTypes.any),
+    handleAdd: PropTypes.func,
     prefixCls: PropTypes.string,
     user: PropTypes.objectOf(PropTypes.string),
     form: PropTypes.objectOf(PropTypes.any),
+    innitalvalue: PropTypes.objectOf(PropTypes.any),
 }
 
 SearchForm.defaultProps = {
