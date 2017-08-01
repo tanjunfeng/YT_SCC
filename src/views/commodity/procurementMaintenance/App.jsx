@@ -71,11 +71,12 @@ class ProcurementMaintenance extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
+        this.props.fetchGetProductById({
+            // id: this.props.match.id
+            productId: 1001
+        });
         this.props.fecthGetProdPurchaseById({
             id: 2
-        });
-        this.props.fetchGetProductById({
-            productId: 1001
         });
     }
 
@@ -121,12 +122,14 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     render() {
-        const { prefixCls, getProductById } = this.props;
+        const { prefixCls, getProductById, match } = this.props;
         const innitalvalue = getProductById;
+        const { id } = match;
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm innitalvalue={innitalvalue} />
                 <SearchForm
+                    id={id}
                     innitalvalue={innitalvalue}
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
@@ -152,7 +155,8 @@ ProcurementMaintenance.propTypes = {
     fecthGetProdPurchaseById: PropTypes.func,
     productAddPriceVisible: PropTypes.func,
     prefixCls: PropTypes.string,
-    getProductById: PropTypes.objectOf(PropTypes.any)
+    getProductById: PropTypes.objectOf(PropTypes.any),
+    match: PropTypes.objectOf(PropTypes.any)
 }
 
 ProcurementMaintenance.defaultProps = {

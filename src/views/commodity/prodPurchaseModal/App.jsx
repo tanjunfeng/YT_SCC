@@ -11,6 +11,10 @@ import {
 import {
     fetchAddProdPurchase,
 } from '../../../actions';
+import {
+    pubFetchValueList,
+} from '../../../actions/pub';
+
 import { productAddPriceVisible } from '../../../actions/producthome';
 
 const FormItem = Form.Item;
@@ -24,7 +28,8 @@ const FormItem = Form.Item;
     }),
     dispatch => bindActionCreators({
         fetchAddProdPurchase,
-        productAddPriceVisible
+        productAddPriceVisible,
+        pubFetchValueList
     }, dispatch)
 )
 
@@ -65,6 +70,10 @@ class ProdPurchaseModal extends Component {
 
     handleCancel(record) {
         this.props.productAddPriceVisible({isVisible: false, record});
+    }
+
+    handleTestChoose(record) {
+        console.log(record);
     }
 
     handleTestFetch = ({ value, pagination }) => {
@@ -146,7 +155,9 @@ class ProdPurchaseModal extends Component {
                                             style={{ zIndex: 10 }}
                                             compKey="search-mind-key1"
                                             ref={ref => { this.searchMind0 = ref }}
-                                            fetch={(value, pager) => this.handleTestFetch(value, pager)}
+                                            fetch={(params) => this.props.pubFetchValueList({
+                                                id: params.value
+                                            }, 'fetchAddProdPurchase')}
                                             onChoosed={this.handleTestChoose}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.id} - {data.name}</div>
@@ -177,8 +188,9 @@ class ProdPurchaseModal extends Component {
                                             style={{ zIndex: 9 }}
                                             compKey="search-mind-key2"
                                             ref={ref => { this.searchMind1 = ref }}
-                                            fetch={(value, pager) => this.handleTestFetch(value, pager)}
-                                            onChoosed={this.handleTestChoose}
+                                            fetch={(params) => this.props.pubFetchValueList({
+                                                spId: params.value
+                                            }, 'fetchAddProdPurchase')}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.id} - {data.name}</div>
                                             )}
@@ -204,7 +216,9 @@ class ProdPurchaseModal extends Component {
                                             style={{ zIndex: 8 }}
                                             compKey="search-mind-key2"
                                             ref={ref => { this.searchMind2 = ref }}
-                                            fetch={(value, pager) => this.handleTestFetch(value, pager)}
+                                            fetch={(params) => this.props.pubFetchValueList({
+                                                spAdrId: params.value
+                                            }, 'fetchAddProdPurchase')}
                                             onChoosed={this.handleTestChoose}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.id} - {data.name}</div>
@@ -247,6 +261,7 @@ ProdPurchaseModal.propTypes = {
     prefixCls: PropTypes.string,
     toAddPriceVisible: PropTypes.bool,
     productAddPriceVisible: PropTypes.func,
+    pubFetchValueList: PropTypes.func,
     fetchAddProdPurchase: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     prodPurchase: PropTypes.objectOf(PropTypes.any),
