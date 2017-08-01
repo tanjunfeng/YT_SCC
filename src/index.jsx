@@ -37,7 +37,6 @@ const startApp = (data) => {
 //         startApp();
 //     });
 
-
 startApp({
     user: {
         employeeName: 'admin'
@@ -88,16 +87,8 @@ startApp({
                 name: "商品管理",
                 submenu: [
                     {
-                        code: "onSaleGoodsList",
-                        name: "在售商品列表"
-                    },
-                    {
-                        code: "forSaleGoodsList",
-                        name: "待售商品管理"
-                    },
-                    {
-                        code: "goodsParameterManagement",
-                        name: "商品参数管理"
+                        code: 'commodifyList',
+                        name: '商品管理列表'
                     },
                     {
                         code: "goodsClassification",
@@ -110,10 +101,6 @@ startApp({
                     {
                         code: "salesMaintenance",
                         name: "商品销售关系维护"
-                    },
-                    {
-                        code: 'managementList',
-                        name: '商品管理列表'
                     },
                 ]
             },
@@ -133,7 +120,7 @@ startApp({
             },
             {
                 code: "procurementMng",
-                name: "采购管理管理",
+                name: "采购管理",
                 submenu: [
                     {
                         code: "poMngList",
@@ -142,6 +129,14 @@ startApp({
                     {
                         code: "poPrintList",
                         name: "采购单打印列表"
+                    },
+                    // {
+                    //     code: "poRcvList",
+                    //     name: "采购单收货列表"
+                    // },
+                    {
+                        code: "poRcvMngList",
+                        name: "收货单管理列表"
                     }
                 ]
             },

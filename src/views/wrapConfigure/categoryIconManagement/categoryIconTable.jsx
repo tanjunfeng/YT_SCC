@@ -11,17 +11,17 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Table, Modal, message } from 'antd';
 import { uploadImageBase64Data } from '../../../service';
-import { modifyCategoryIcon, fetchCategoryId } from '../../../actions/wap';
+import { modifyCategoryIcon } from '../../../actions/wap';
+import { fetchCategorys } from '../../../actions/pub';
 import FileCut from '../fileCut';
 
 
 @connect(
     state => ({
-        ciData: state.toJS().wap.ciData,
+        categorys: state.toJS().pub.categorys,
     }),
     dispatch => bindActionCreators({
-        modifyCategoryIcon,
-        fetchCategoryId
+        fetchCategorys
     }, dispatch)
 )
 class CategoryIconTable extends PureComponent {
@@ -30,14 +30,15 @@ class CategoryIconTable extends PureComponent {
 
         this.columns = [
             {
-                title: '三级分类名称',
+                title: '四级分类名称',
                 dataIndex: 'categoryName',
                 key: 'categoryName',
             },
             {
                 title: 'ICON',
-                dataIndex: 'iconUrl',
-                key: 'iconUrl',
+                dataIndex: 'iconImg',
+                key: 'iconImg',
+                width: 80,
                 render: (text) => (
                     <img
                         alt="未上传"
@@ -53,6 +54,7 @@ class CategoryIconTable extends PureComponent {
                 title: '操作',
                 dataIndex: 'operation',
                 key: 'operation',
+                width: 80,
                 onCellClick: (record) => {
                     this.uploadIconModal(record)
                 },
@@ -62,12 +64,10 @@ class CategoryIconTable extends PureComponent {
             }
         ];
 
-        this.uploadIconModal = this.uploadIconModal.bind(this);
-        this.handleUploadIconOk = this.handleUploadIconOk.bind(this);
-        this.handleUploadIconCancel = this.handleUploadIconCancel.bind(this);
-        this.handleSave = this.handleSave.bind(this);
-        this.saveBase64 = this.saveBase64.bind(this);
-        this.saveItems = this.saveItems.bind(this);
+        this.uploadIconModal = ::this.uploadIconModal;
+        this.handleUploadIconOk = ::this.handleUploadIconOk;
+        this.handleUploadIconCancel = ::this.handleUploadIconCancel;
+        this.saveItems = ::this.saveItems;
         this.state = {
             visible: false,
             iconRecord: {},
@@ -75,10 +75,9 @@ class CategoryIconTable extends PureComponent {
         }
     }
 
-    saveBase64(data) {
-        return uploadImageBase64Data(data);
-    }
-
+    /**
+     * 模态框确认-将base64图片上传服务器
+     */
     handleUploadIconOk() {
         const { id } = this.state.iconRecord;
         const { isBase64, image } = this.imageUploader.getValue();
@@ -93,27 +92,43 @@ class CategoryIconTable extends PureComponent {
                 this.saveItems(id, fileOnServerUrl);
             })
         } else if (!isBase64) {
+            this.setState({
+                visible: false,
+                iconRecord: {},
+                img: null
+            }, () => {
+                message.warning('您未做修改！');
+            })
             return null;
         }
         return null;
     }
 
+    /**
+     * 上传或修改图标，并刷新第四级以回显
+     * @param {string} id 对应的第四级图标的id
+     * @param {string} imgUrl 对应的图标
+     */
     saveItems(id, imgUrl) {
-        const { categoryInfos} = this.props;
-        const { lv2Id } = categoryInfos;
-        this.props.modifyCategoryIcon({
+        const { lv3Id } = this.props.categoryInfos;
+        modifyCategoryIcon({
             id,
-            iconUrl: imgUrl
-        }, () => {
-            this.props.fetchCategoryId({ categoryId: lv2Id })
+            iconImg: imgUrl
+        }).then(() => {
+            this.props.fetchCategorys({parentId: lv3Id});
             this.setState({
                 visible: false,
                 iconRecord: {},
                 img: null
+            }, () => {
+                message.success('上传/修改成功！');
             })
         })
     }
 
+    /**
+     * 关闭模态框
+     */
     handleUploadIconCancel() {
         this.setState({
             visible: false,
@@ -122,6 +137,10 @@ class CategoryIconTable extends PureComponent {
         });
     }
 
+    /**
+     * 上传按钮
+     * @param {Object} record 上传按钮该行的数据
+     */
     uploadIconModal(record) {
         this.setState({
             visible: true,
@@ -129,42 +148,40 @@ class CategoryIconTable extends PureComponent {
         })
     }
 
-    handleSave() {
-        this.setState({
-            img: this.imageUploader.getImageByBase64(),
-        })
-    }
     render() {
-        const { ciData, categoryInfos} = this.props;
-        const { lv1Name, lv2Name } = categoryInfos;
-        const { categoryName: lv3Name, iconUrl} = this.state.iconRecord;
+        const { lv1Name, lv2Name, lv3Name, fourthArr } = this.props.categoryInfos;
+        const { categoryName, iconImg} = this.state.iconRecord;
         return (
             <div>
                 <Table
-                    dataSource={ciData}
+                    dataSource={fourthArr}
                     columns={this.columns}
-                    rowKey={lv3Name}
+                    rowKey="id"
                     pagination={false}
                     footer={null}
+                    scroll={{ y: 435 }}
                 />
                 {
                     this.state.visible &&
                     <Modal
                         title="三级分类ICON设置"
                         visible={this.state.visible}
+                        maskClosable={false}
                         onOk={this.handleUploadIconOk}
                         onCancel={this.handleUploadIconCancel}
                     >
-                        <h4>{lv1Name}&gt;{lv2Name}&gt;{lv3Name}</h4>
+                        <h4>{lv1Name}&gt;{lv2Name}&gt;{lv3Name}&gt;{categoryName}</h4>
                         <p>分类icon：（说明：PNG，建议大小200X200pix）</p>
-                        <FileCut
-                            ref={ref => { this.imageUploader = ref }}
-                            width={200}
-                            height={200}
-                            dpr={2}
-                            defaultImge={iconUrl}
-                            accept={['png']}
-                        />
+                        <div className="category-icon-modal-file-cut">
+                            <FileCut
+                                ref={ref => { this.imageUploader = ref }}
+                                width={200}
+                                height={200}
+                                dpr={2}
+                                defaultImge={iconImg}
+                                accept={['png']}
+                            />
+                        </div>
                     </Modal>
                 }
             </div>
@@ -173,11 +190,8 @@ class CategoryIconTable extends PureComponent {
 }
 
 CategoryIconTable.propTypes = {
-    ciData: PropTypes.objectOf(PropTypes.any),
     categoryInfos: PropTypes.objectOf(PropTypes.any),
-    modifyCategoryIcon: PropTypes.func,
-    fetchCategoryId: PropTypes.func,
-
+    fetchCategorys: PropTypes.func,
 };
 
 export default CategoryIconTable;
