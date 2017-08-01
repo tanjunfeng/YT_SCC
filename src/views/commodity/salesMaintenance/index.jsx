@@ -1,4 +1,4 @@
-import ClassifiedList from './App';
-import './index.scss';
+import ProcurementMaintenance from './App';
+import './App.scss';
 
-export default ClassifiedList;
+export default ProcurementMaintenance;

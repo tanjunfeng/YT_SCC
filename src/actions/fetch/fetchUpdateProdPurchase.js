@@ -1,26 +1,25 @@
 /**
- * @file fetchGetProdPurchaseById.js
- *
+ * @file fetchUpdateProdPurchase.js
  * @author Tanjunfeng
  *
- * 查询商品价格信息
+ * 更新商品采购关系
  */
 
 import Promise from 'bluebird';
-import { queryProdPurchaseExtByCondition } from '../../service';
+import { updateProdPurchase } from '../../service';
 import ActionType from '../ActionType';
 
 const receive = (data) => ({
-    type: ActionType.QUERY_PRODPURCHASE_BYID,
+    type: ActionType.UPDATE_PROD_PURCHASE,
     payload: data,
 });
 
 export default (params) => dispatch => (
     new Promise((resolve, reject) => {
-        queryProdPurchaseExtByCondition(params)
+        updateProdPurchase(params)
             .then(res => {
-                dispatch(receive(res.data));
-                resolve(res.data)
+                dispatch(receive(res.success));
+                resolve(res)
             })
             .catch(err => {
                 reject(err);

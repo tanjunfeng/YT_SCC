@@ -10,17 +10,19 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {
-    Form,
+    Form, Pagination
 } from 'antd';
 
 import {
-    fecthCheckMainSupplier,
     modifyAuditVisible,
     modifyCheckReasonVisible,
-    fecthGetProdPurchaseById
+    fecthGetProdPurchaseById,
+    fetchGetProductById,
+    fetchAddProdPurchase,
+    fetchQueryProdByCondition
 } from '../../../actions';
-import SearchForm from '../searchForm';
-import ShowForm from '../showForm';
+import SearchForm from '../searchFormProcure';
+import ShowForm from '../showFormProcure';
 import Cardline from '../card';
 import { PAGE_SIZE } from '../../../constant';
 
@@ -32,24 +34,25 @@ import { PAGE_SIZE } from '../../../constant';
         checkResonVisible: state.toJS().supplier.checkResonVisible,
         insertSettlementResult: state.toJS().supplier.insertSettlementResult,
         prodPurchase: state.toJS().commodity.prodPurchase,
-        ProdPurchases: state.toJS().commodity.getProdPurchaseById,
-        queryProdPurchases: state.toJS().commodity.getProdPurchaseById,
+        getProductById: state.toJS().commodity.getProductById,
     }),
     dispatch => bindActionCreators({
-        fecthCheckMainSupplier,
         modifyAuditVisible,
         modifyCheckReasonVisible,
-        fecthGetProdPurchaseById
+        fecthGetProdPurchaseById,
+        fetchGetProductById,
+        fetchAddProdPurchase,
+        fetchQueryProdByCondition
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.handleFormSearch = this.handleFormSearch.bind(this);
         this.handleFormReset = this.handleFormReset.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
+        this.onChange = ::this.onChange;
 
         this.searchForm = {};
         this.current = 1;
@@ -59,7 +62,8 @@ class ProcurementMaintenance extends PureComponent {
             // 默认值
             value: [],
             // 控制主供应商选项唯一
-            disabled: false
+            disabled: false,
+            current: 1
         }
     }
 
@@ -68,7 +72,10 @@ class ProcurementMaintenance extends PureComponent {
      */
     componentDidMount() {
         this.props.fecthGetProdPurchaseById({
-            productId: 'xpro12333'
+            id: 2
+        });
+        this.props.fetchGetProductById({
+            productId: 1001
         });
     }
 
@@ -76,15 +83,10 @@ class ProcurementMaintenance extends PureComponent {
      * 新增
      */
     handleAdd() {
-        this.props.modifyCategoryVisible({
-            isVisible: true,
-            record: {
-                toAddCategoryTitle: '新增分类商品排序',
-                isEdit: false
-            }
-        });
-    }
+        // this.props.fetchAddProdPurchase() {
 
+        // }
+    }
     /**
      * 表单操作弹出层
      *
@@ -107,32 +109,13 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     /**
-     * 搜索
-     *
-     * @param {Object} data 展示数据
-     * @param {bool} bool 通过返回值操控请求
-     */
-    handleFormSearch(data, bool) {
-        this.searchForm = data;
-        if (bool) {
-            // 主数据
-            // console.log('主数据')
-            this.handlePaginationChange();
-        } else {
-            // SCM数据
-            // console.log('SCM数据')
-            this.handlePaginationChange();
-        }
-    }
-
-    /**
      * 重置
      *
      * @param {Object} data 重置的表单
      */
     handleFormReset(data) {
         this.searchForm = data;
-        this.handlePaginationChange();
+        this.brandSearchMind.handleClear();
     }
 
     /**
@@ -140,20 +123,29 @@ class ProcurementMaintenance extends PureComponent {
      *
      * @param {string} goto 数据列表分页
      */
-    handlePaginationChange(goto = 1) {
+    handlePaginationChange(goto) {
         this.current = goto;
-        // this.props.fetchProviderEnterList({
-        //     pageNum: goto,
-        //     pageSize: PAGE_SIZE,
-        //     ...this.searchForm
-        // });
+        this.props.fetchQueryProdByCondition({
+            pageNum: goto,
+            pageSize: PAGE_SIZE,
+            ...this.searchForm
+        });
     }
 
+    onChange = (page) => {
+        console.log(page);
+        this.setState({
+            current: page,
+        });
+    }
+
+
     render() {
-        const { prefixCls } = this.props;
+        const { prefixCls, getProductById } = this.props;
+        const innitalvalue = getProductById;
         return (
             <div className={`${prefixCls}-min-width application`}>
-                <ShowForm />
+                <ShowForm innitalvalue={innitalvalue} />
                 <SearchForm
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
@@ -162,20 +154,24 @@ class ProcurementMaintenance extends PureComponent {
                 <div>
                     <Cardline />
                 </div>
+                <Pagination
+                    current={this.state.current}
+                    onChange={this.handlePaginationChange}
+                    total={10}
+                />
             </div>
         );
     }
 }
 
 ProcurementMaintenance.propTypes = {
+    fetchQueryProdByCondition: PropTypes.func,
+    fetchGetProductById: PropTypes.objectOf(PropTypes.any),
     fecthGetProdPurchaseById: PropTypes.func,
-    fetchProviderEnterList: PropTypes.bool,
     modifyAuditVisible: PropTypes.bool,
     modifyCheckReasonVisible: PropTypes.bool,
-    auditVisible: PropTypes.bool,
-    checkResonVisible: PropTypes.bool,
     prefixCls: PropTypes.string,
-    queryProdPurchases: PropTypes.objectOf(PropTypes.any)
+    getProductById: PropTypes.objectOf(PropTypes.any)
 }
 
 ProcurementMaintenance.defaultProps = {

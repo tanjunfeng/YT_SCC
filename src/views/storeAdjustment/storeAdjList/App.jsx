@@ -19,18 +19,20 @@ import {
     Menu
 } from 'antd';
 import {
-    modifyAuditVisible,
-    modifyCheckReasonVisible,
-    modifyDeleteOrderNum
+    stockAdjust,
+    // modifyCategoryVisible                                               // 弹框显示控制
 } from '../../../actions';
-import { PAGE_SIZE } from '../../../constant';
-import fetchCategoryList from '../../../actions/fetch/fetchCategory';
-import { categoryList } from '../../../constant/formColumns';
-import { modifyCategoryVisible } from '../../../actions';
+
+import { PAGE_SIZE } from '../../../constant';                          // 每页分页条数
+import fetchCategoryList from '../../../actions/fetch/fetchCategory';   // 分类列表页商品排序管理
+import { categoryList } from '../../../constant/formColumns';           // 分类列表页商品排序管理列表
 import SearchForm from '../searchForm';
+import StoreAdjItem from '../storeAdjItem';
+
+import Utils from '../../../util/util';
 
 const confirm = Modal.confirm;
-const FormItem = Form.Item;
+// const FormItem = Form.Item;
 
 const columns = categoryList;
 
@@ -38,30 +40,22 @@ const columns = categoryList;
     state => ({
         categoryorderlist: state.toJS().categoryGoodsOrderNum.categoryOrderList,
         toAddPriceVisible: state.toJS().categoryGoodsOrderNum.toAddPriceVisible,
-        deleteordernum: state.toJS().categoryGoodsOrderNum.toAddPriceVisible
+        deleteordernum: state.toJS().categoryGoodsOrderNum.toAddPriceVisible,
+        stockAdjStore: state.toJS().stockAdjust.data,
     }),
     dispatch => bindActionCreators({
         fetchCategoryList,
-        modifyAuditVisible,
-        modifyCheckReasonVisible,
-        modifyCategoryVisible,
-        modifyDeleteOrderNum,
+        // modifyAuditVisible,
+        // modifyCheckReasonVisible,
+        // modifyCategoryVisible,
+        // modifyDeleteOrderNum,
+        stockAdjust
     }, dispatch)
 )
 class StoreAdjList extends Component {
     constructor(props) {
         super(props);
 
-        this.handleSearch = this.handleSearch.bind(this);
-        this.renderOperation = this.renderOperation.bind(this);
-        this.handlePaginationChange = this.handlePaginationChange.bind(this);
-        this.handleReset = this.handleReset.bind(this);
-        this.handleSelectChange = this.handleSelectChange.bind(this);
-        this.handleAdd = this.handleAdd.bind(this);
-
-        this.state = {
-            times: null
-        }
         this.current = 1;
         this.times = [null, null];
         this.classify = {
@@ -70,182 +64,92 @@ class StoreAdjList extends Component {
             thirdCategoryId: null
         }
     }
-
     componentDidMount() {
-        // this.props.fetchCategoryList({
-        //     pageSize: PAGE_SIZE,
-        //     pageNum: this.current,
-        //     shelfStatus: 0
-        // })
-    }
-
-    handlePaginationChange(goto) {
-        // this.current = goto;
-        // this.props.fetchCategoryList({
-        //     pageSize: PAGE_SIZE,
-        //     pageNum: goto,
-        //     shelfStatus: 0
-        // })
-    }
-
-    // 搜索
-    handleSearch() {    
-        // const {
-        //     id,
-        //     name,
-        //     firstCategoryId,
-        //     secondCategoryId,
-        //     thirdCategoryId
-        // } = this.props.form.getFieldsValue();
-        // const data = {
-        //     firstCategoryId,
-        //     secondCategoryId,
-        //     thirdCategoryId,
-        //     name,
-        //     id,
-        // }
-        // this.props.fetchCategoryList({
-        //     pageSize: PAGE_SIZE,
-        //     pageNum: this.current,
-        //     shelfStatus: 0,
-        //     ...Utils.removeInvalid(this.classify),
-        //     ...Utils.removeInvalid(data)
-        // })
-    }
-
-    // 表单操作
-    handleSelectChange(data, that) {
-        const { first, second, third } = data;
-        this.classify = {
-            firstCategoryId: first.id === -1 ? null : first.id,
-            secondCategoryId: second.id === -1 ? null : second.id,
-            thirdCategoryId: third.id === -1 ? null : third.id
-        }
-        this.classifyRef = that;
-    }
-
-    // 重置按钮
-    handleReset() {
-        this.props.form.resetFields();
-        this.setState({
-            times: null
-        })
-        this.times = [null, null];
-        this.classifyRef && this.classifyRef.resetValue()
-    }
-
-    // 新增
-    handleAdd() {
-        this.props.modifyCategoryVisible({
-            isVisible: true,
-            record: {
-                toAddCategoryTitle: '新增分类商品排序',
-                isEdit: false
-            }
+        this.props.stockAdjust({
+            pageSize: PAGE_SIZE,
+            pageNum: this.current,
+            shelfStatus: 0
         });
     }
 
-    // 下拉选项
-    handleSelect(record, index, items) {
-        const { categoryorderlist = {} } = this.props;
-        const { total, data = {} } = categoryorderlist;
-        const {
-            pkId,
-            firstCategoryName,
-            secondCategoryName,
-        } = data[index];
-        const { key } = items;
-        switch (key) {
-            case 'changeMessage':
-                this.props.modifyCategoryVisible({
-                    isVisible: true,
-                    record: {
-                        toAddCategoryTitle: '修改分类商品排序',
-                        isEdit: true,
-                        ...record
-                    }
-                });
-                break;
-            case 'delete':
-                confirm({
-                    title:
-                    `你确认要删除 ${firstCategoryName} > + ${secondCategoryName} > 中的该商品排序吗？`,
-                    onOk: () => {
-                        this.props.modifyDeleteOrderNum({pkId})
-                        .then(() => {
-                            message.success('删除成功！');
-                            if (total % PAGE_SIZE === 1) {
-                                this.current--;
-                            }
-                            this.props.fetchCategoryList(
-                                {pageSize: PAGE_SIZE,
-                                    pageNum: this.current
-                                });
-                        }).catch(() => {
-                        });
-                    },
-                    onCancel() {},
-                });
-                break;
-
-            default:
-                break;
-        }
+    /**
+     * @param pageNUmber  {type: number, desc, "页码数" }
+     *
+     * 根据页面请求数据
+     */
+    handlePaginationChange = (pageNumber) => {
+        this.current = pageNumber;
+        this.props.stockAdjust({
+            pageSize: PAGE_SIZE,
+            pageNum: this.current,
+            shelfStatus: 0
+        });
     }
 
-    renderOperation(text, record, index) {
-        const menu = (
-            <Menu onClick={(item) => this.handleSelect(record, index, item)}>
-                <Menu.Item key="changeMessage">
-                    <a target="_blank" rel="noopener noreferrer">修改</a>
-                </Menu.Item>
-                <Menu.Item key="delete">
-                    <a target="_blank" rel="noopener noreferrer">删除</a>
-                </Menu.Item>
-            </Menu>
-        );
+    /**
+     * @param  data { type: object, desc: '搜索条件' }
+     *
+     *按条件搜索
+     */
+    handleSearch = (data) => {
+        console.log(data);
+        this.props.stockAdjust({
+            pageSize: PAGE_SIZE,
+            pageNum: this.current,
+            shelfStatus: 0,
+            // ...Utils.removeInvalid(this.classify),
+            ...data
+        });
+    }
 
-        return (
-            <Dropdown overlay={menu} placement="bottomCenter">
-                <a className="ant-dropdown-link">
-                    表单操作 <Icon type="down" />
-                </a>
-            </Dropdown>
-        )
+
+    // 重置按钮
+    handleFormReset = () => {
+        // this.props.form.resetFields();
+        // this.setState({
+        //     times: null
+        // })
+        // this.times = [null, null];
+        // this.classifyRef && this.classifyRef.resetValue()
     }
 
     render() {
-        columns[columns.length - 1].render = this.renderOperation;
+        // columns[columns.length - 1].render = this.renderOperation;
+        if (this.props.stockAdjStore.length === 0) {
+            return null;
+        }
+        console.log(this.props.stockAdjStore);
         return (
             <div className="onsale">
-                <div className="onsale-form">
-                    <Form layout="inline">
-                        <div className="manage-form-item">
-                            <SearchForm
-                                isSuplierAddMenu
-                                onSearch={this.handleFormSearch}
-                                onReset={this.handleFormReset}
-                                onInput={this.handleInputSupplier}
-                                onExcel={this.handleDownLoad}
-                            />
-                        </div>
-                    </Form>
+                <div className="manage-form">
+                    <SearchForm
+                        isSuplierAddMenu
+                        onSearch={this.handleSearch}
+                        onReset={this.handleFormReset}
+                        // onInput={this.handleInputSupplier}
+                        // onExcel={this.handleDownLoad}
+                    />
                 </div>
+                <StoreAdjItem
+                    searchDateList={this.props.stockAdjStore}
+                    onChangePagination={this.handlePaginationChange}
+                    stockAdjust={this.props.stockAdjust}
+                />
             </div>
         );
     }
 }
 
 StoreAdjList.propTypes = {
-    modifyDeleteOrderNum: PropTypes.func,
-    toAddPriceVisible: PropTypes.func,
-    fetchCategoryList: PropTypes.func,
-    modifyCategoryVisible: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any),
-    categoryorderlist: PropTypes.objectOf(PropTypes.any),
+    // modifyDeleteOrderNum: PropTypes.func,
+    // toAddPriceVisible: PropTypes.func,
+    // fetchCategoryList: PropTypes.func,
+    // modifyCategoryVisible: PropTypes.func,
+    stockAdjStore: PropTypes.arrayOf(PropTypes.any),
+    // form: PropTypes.objectOf(PropTypes.any),
+    // categoryorderlist: PropTypes.objectOf(PropTypes.any),
+    stockAdjust: PropTypes.func
 }
 
-StoreAdjList.defaultProps = {
-}
 
 export default withRouter(Form.create()(StoreAdjList));

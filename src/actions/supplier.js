@@ -10,8 +10,23 @@ import ActionType from './ActionType';
 import {
     queryProviderDetail,
     getSupplierNo,
-    insertOrUpdateSupplierInfo
+    queryProviderPlaceInfo,
+    insertSupplierInfo,
+    updateSupplierInfo,
+    insertSupplierAddressInfo,
+    updateSupplierAddressInfo,
+    insertOrUpdateSupplierInfo,
+    querySettledList,
+    fetchQueryManageList,
+    querySupplierPlaceRegion
 } from '../service';
+
+const handleServer = {
+    insertSupplierInfo,
+    updateSupplierInfo,
+    insertSupplierAddressInfo,
+    updateSupplierAddressInfo
+}
 
 /**
  * 供应商详情action
@@ -34,11 +49,24 @@ export const getSupplierDetail = (params) => dispatch => (
     })
 )
 
+export const getProviderDetail = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryProviderPlaceInfo(params)
+            .then(res => {
+                dispatch(
+                    receiveDetail(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
 /**
  * 供应商入驻列表action
  */
 const receiveSettledList = (data) => ({
-    type: ActionType.RECEIVE_SUPPLIER_SETTLED_LIST,
+    type: ActionType.QUERY_SETTLED_LIST,
     payload: data,
 })
 
@@ -65,7 +93,7 @@ const receiveManageList = (data) => ({
 
 export const getSupplierManageList = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        queryManageList(params)
+        fetchQueryManageList(params)
             .then(res => {
                 dispatch(
                     receiveManageList(res.data)
@@ -105,12 +133,33 @@ const receiveinSupplierInfo = (data) => ({
     payload: data,
 })
 
-export const fetchSupplierInfo = (params) => dispatch => (
+export const hanldeSupplier = (params, type) => dispatch => (
     new Promise((resolve, reject) => {
-        insertOrUpdateSupplierInfo(params)
+        handleServer[type](params)
             .then(res => {
                 dispatch(
                     receiveinSupplierInfo(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
+/**
+ * 获取供应商供应省市
+ */
+ const receiveinPlaceRegion = (data) => ({
+    type: ActionType.RECEIVE_PLACE_REGION,
+    payload: data,
+})
+
+export const queryPlaceRegion = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        querySupplierPlaceRegion(params)
+            .then(res => {
+                dispatch(
+                    receiveinPlaceRegion(res.data)
                 );
                 resolve(res);
             })

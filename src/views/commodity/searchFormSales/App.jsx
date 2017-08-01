@@ -18,7 +18,9 @@ import {
     receiveData,
     fetchTest,
 } from '../../../actions/classifiedList';
-
+import {
+    fetchGetProductById
+} from '../../../actions';
 import {
     initiateModeOptions,
     mainSupplierOptions,
@@ -33,7 +35,11 @@ const Option = Select.Option;
         rights: state.toJS().user.rights,
         data: state.toJS().commodity.classifiedList,
     }),
-    dispatch => bindActionCreators({ fetchAction, receiveData }, dispatch)
+    dispatch => bindActionCreators({
+        fetchAction,
+        receiveData,
+        fetchGetProductById
+    }, dispatch)
 )
 class SearchForm extends Component {
     constructor(props) {
@@ -43,6 +49,7 @@ class SearchForm extends Component {
         this.handleChangeSort = ::this.handleChangeSort;
         this.handleChangeStatus = ::this.handleChangeStatus;
         this.handleResetValue = ::this.handleResetValue;
+        this.handleGetValue = ::this.handleGetValue;
 
         // Test
         this.handleSave = ::this.handleSave;
@@ -63,6 +70,15 @@ class SearchForm extends Component {
                 disabled: true,
             });
         }, 2000);
+    }
+
+    /**
+     * 搜索
+     */
+    handleGetValue() {
+        this.props.fetchGetProductById({
+            productId: 1001
+        });
     }
 
     /**
@@ -186,95 +202,36 @@ class SearchForm extends Component {
                 <div style={{fontSize: 16, fontWeight: 900}}>
                     <Icon type="desktop" className="css-appstore" />&nbsp;商品信息
                 </div>
-                <Form layout="inline" className={`${prefixCls}-content`}>
-                    <Row type="flex" justify="start" className={`${prefixCls}-flex`}>
-                        {/* 供应商 */}
-                        <Col span={8}>
-                            <SearchMind
-                                compKey="search-mind-key1"
-                                ref={ref => { this.searchMind = ref }}
-                                fetch={(value, pager) => this.handleTestFetch(value, pager)}
-                                addonBefore="供应商"
-                                onClear={({ value, raw }) => {
-                                    console.log({ value, raw });
-                                }}
-                                onChoosed={this.handleTestChoose}
-                                renderChoosedInputRaw={(data) => (
-                                    <div>{data.id} - {data.name}</div>
-                                )}
-                                pageSize={2}
-                                columns={[
-                                    {
-                                        title: 'Name',
-                                        dataIndex: 'name',
-                                        width: 150,
-                                    }, {
-                                        title: 'Address',
-                                        dataIndex: 'address',
-                                        width: 200,
-                                    }
-                                ]}
-                            />
-                        </Col>
-                        {/* 地点 */}
-                        <Col span={8}>
-                            <SearchMind
-                                compKey="search-mind-key1"
-                                ref={ref => { this.searchMind = ref }}
-                                fetch={(value, pager) => this.handleTestFetch(value, pager)}
-                                addonBefore="地点"
-                                onClear={({ value, raw }) => {
-                                    console.log({ value, raw });
-                                }}
-                                onChoosed={this.handleTestChoose}
-                                renderChoosedInputRaw={(data) => (
-                                    <div>{data.id} - {data.name}</div>
-                                )}
-                                pageSize={2}
-                                columns={[
-                                    {
-                                        title: 'Name',
-                                        dataIndex: 'name',
-                                        width: 150,
-                                    }, {
-                                        title: 'Address',
-                                        dataIndex: 'address',
-                                        width: 200,
-                                    }
-                                ]}
-                            />
-                        </Col>
-                        {/* 子公司 */}
-                        <Col span={8}>
-                            <SearchMind
-                                compKey="search-mind-key1"
-                                ref={ref => { this.searchMind = ref }}
-                                fetch={(value, pager) => this.handleTestFetch(value, pager)}
-                                addonBefore="子公司"
-                                onClear={({ value, raw }) => {
-                                    console.log({ value, raw });
-                                }}
-                                onChoosed={this.handleTestChoose}
-                                renderChoosedInputRaw={(data) => (
-                                    <div>{data.id} - {data.name}</div>
-                                )}
-                                pageSize={2}
-                                columns={[
-                                    {
-                                        title: 'Name',
-                                        dataIndex: 'name',
-                                        width: 150,
-                                    }, {
-                                        title: 'Address',
-                                        dataIndex: 'address',
-                                        width: 200,
-                                    }
-                                ]}
-                            />
-                        </Col>
-                    </Row>
+                <Form layout="inline" className={`${prefixCls}`}>
+                    {/* 子公司 */}
+                    <SearchMind
+                        className={`${prefixCls}-zgs`}
+                        compKey="search-mind-key1"
+                        ref={ref => { this.searchMind = ref }}
+                        fetch={(value, pager) => this.handleTestFetch(value, pager)}
+                        addonBefore="子公司"
+                        onClear={({ value, raw }) => {
+                            console.log({ value, raw });
+                        }}
+                        onChoosed={this.handleTestChoose}
+                        renderChoosedInputRaw={(data) => (
+                            <div>{data.id} - {data.name}</div>
+                        )}
+                        pageSize={2}
+                        columns={[
+                            {
+                                title: 'Name',
+                                dataIndex: 'name',
+                                width: 150,
+                            }, {
+                                title: 'Address',
+                                dataIndex: 'address',
+                                width: 200,
+                            }
+                        ]}
+                    />
                     {/* 是否启用 */}
-                    <FormItem className="sc-form-item">
+                    <FormItem className={`${prefixCls}-qy sc-form-item`}>
                         <span className={`${prefixCls}-select`}>启用</span>
                         {getFieldDecorator('initiateModeOptions', {
                             initialValue: initiateModeOptions.defaultValue
@@ -295,29 +252,7 @@ class SearchForm extends Component {
                             </Select>
                         )}
                     </FormItem>
-                    {/* 是否为主供应商 */}
-                    <FormItem className="sc-form-item">
-                        <span className={`${prefixCls}-select`}>供应商</span>
-                        {getFieldDecorator('mainSupplierOptions', {
-                            initialValue: mainSupplierOptions.defaultValue
-                        })(
-                            <Select
-                                style={{ width: 90 }}
-                                className="sc-form-item-select"
-                                size="default"
-                                disabled={this.state.supplierType === '-1'}
-                            >
-                                {
-                                    mainSupplierOptions.data.map((item) =>
-                                (<Option key={item.key} value={item.key}>
-                                    {item.value}
-                                </Option>)
-                            )
-                                }
-                            </Select>
-                        )}
-                    </FormItem>
-                    <div className="sc-form-button-group">
+                    <div className={`${prefixCls}-btn`}>
                         <FormItem>
                             <Button
                                 type="primary"
@@ -325,6 +260,11 @@ class SearchForm extends Component {
                                 size="default"
                             >
                                 搜索
+                            </Button>
+                        </FormItem>
+                        <FormItem>
+                            <Button size="default" onClick={this.handleResetValue}>
+                                重置
                             </Button>
                         </FormItem>
                         <FormItem>
@@ -336,11 +276,6 @@ class SearchForm extends Component {
                                 创建
                             </Button>
                         </FormItem>
-                        <FormItem>
-                            <Button size="default" onClick={this.handleResetValue}>
-                                重置
-                            </Button>
-                        </FormItem>
                     </div>
                 </Form>
             </div>
@@ -349,6 +284,8 @@ class SearchForm extends Component {
 }
 
 SearchForm.propTypes = {
+    fetchGetProductById: PropTypes.objectOf(PropTypes.any),
+    fetchAction: PropTypes.objectOf(PropTypes.any),
     prefixCls: PropTypes.string,
     user: PropTypes.objectOf(PropTypes.string),
     form: PropTypes.objectOf(PropTypes.any),
@@ -358,7 +295,7 @@ SearchForm.defaultProps = {
     user: {
         name: 'Who?'
     },
-    prefixCls: 'select-line',
+    prefixCls: 'select-line-sales',
 }
 
 export default Form.create()(SearchForm);

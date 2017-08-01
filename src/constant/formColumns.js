@@ -280,16 +280,59 @@ export const suppliersAppList = [
         title: '供应商类型',
         dataIndex: 'providerType',
         key: 'providerType',
+        render: (text) => {
+            switch (parseInt(text, 10)) {
+                case 1:
+                    return '供应商'
+                case 2:
+                    return '供应商地点'
+                default:
+                    break;
+            }
+        }
     },
     {
         title: '供应商等级',
         dataIndex: 'grade',
         key: 'grade',
+        render: (text, record) => {
+            if (record.providerType === 1) {
+                switch (parseInt(text, 10)) {
+                    case 1:
+                        return '战略供应商'
+                    case 2:
+                        return '核心供应商'
+                    case 3:
+                        return '可替代供应商'
+                    default:
+                        break;
+                }
+            }
+            else if (record.providerType === 2) {
+                switch (parseInt(text, 10)) {
+                    case '1':
+                        return '生产厂家'
+                    case '2':
+                        return '批发商'
+                    case '3':
+                        return '经销商'
+                    case '4':
+                        return '代销商'
+                    case '5':
+                        return '其他'
+                    default:
+                        break;
+                }
+            }
+        }
     },
     {
         title: '供应商入驻日期',
         dataIndex: 'settledDate',
         key: 'settledDate',
+        render: (text) => (
+                text !== null ? moment(parseInt(text, 10)).format('YYYY-MM-DD') : ''
+        )
     },
     {
         title: '供应商状态',
@@ -297,15 +340,15 @@ export const suppliersAppList = [
         key: 'status',
         render: (text) => {
             switch (parseInt(text, 10)) {
-                case 0:
-                    return '制单';
                 case 1:
-                    return '待审核';
+                    return '制表';
                 case 2:
-                    return '已审核';
+                    return '已提交';
                 case 3:
-                    return '已拒绝';
+                    return '已审核';
                 case 4:
+                    return '已拒绝';
+                case 5:
                     return '修改中';
                 default:
                     return null;
@@ -390,6 +433,9 @@ export const supplierInputList = [
         title: '供应商入驻日期',
         dataIndex: 'settledDate',
         key: 'settledDate',
+        render: (text) => (
+                text !== null ? moment(parseInt(text, 10)).format('YYYY-MM-DD') : ''
+        )
     },
     {
         title: '供应商状态',
@@ -397,15 +443,15 @@ export const supplierInputList = [
         key: 'status',
         render: (text) => {
             switch (parseInt(text, 10)) {
-                case 0:
-                    return '制单';
                 case 1:
-                    return '待审核';
+                    return '制表';
                 case 2:
-                    return '已审核';
+                    return '已提交';
                 case 3:
-                    return '已拒绝';
+                    return '已审核';
                 case 4:
+                    return '已拒绝';
+                case 5:
                     return '修改中';
                 default:
                     return null;
@@ -558,3 +604,4 @@ export const dictionaryColumns = [{
     dataIndex: 'action',
     key: 'action'
 }]
+

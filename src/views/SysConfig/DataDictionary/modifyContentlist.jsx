@@ -1,6 +1,6 @@
 /**
- * @file list.jsx
- * @author shijh
+ * @file modifyContentlist.jsx
+ * @author shixinyuan
  *
  * 管理列表页面
  */

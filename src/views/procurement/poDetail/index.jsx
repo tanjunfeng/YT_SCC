@@ -1,4 +1,4 @@
-import PoMngList from './App';
+import PoDetail from './App';
 import './App.scss';
 
-export default PoMngList;
+export default PoDetail;

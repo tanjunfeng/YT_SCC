@@ -33,41 +33,41 @@ class LicenseInfo extends Component {
                             <Row>
                                 <Col span={8}><span>公司所在地：</span>
                                     <span>
-                                        {`${supplierOperTaxInfo.licenseLocProvince}${supplierOperTaxInfo.licenseLocCity}${supplierOperTaxInfo.licenseLocCounty}`}
+                                        {`${supplierOperTaxInfo.companyLocProvince}${supplierOperTaxInfo.companyLocCity}${supplierOperTaxInfo.companyLocCounty}`}
                                     </span>
                                 </Col>
                                 <Col span={8}><span>公司详细地址：</span>
-                                    <span>{supplierOperTaxInfo.licenseAddress}</span>
+                                    <span>{supplierOperTaxInfo.companyDetailAddress}</span>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col span={8}><span>商标注册证/受理通知书：</span>
-                                    <span><a href={supplierOperTaxInfo.registrationCertificate}>点击查看</a></span>
+                                    <span><a href={supplierOperTaxInfo.registrationCertificate} target="_blank">点击查看</a></span>
                                     &nbsp;
-                                    <span>证件到期日期 
+                                    <span className="detail-message-endTime">证件到期日期: 
                                         {moment(supplierOperTaxInfo.regCerExpiringDate).format('YYYY-MM-DD')}
                                     </span>
                                 </Col>
                                 <Col span={8}><span>食品安全认证：</span>
-                                    <span><a href={supplierOperTaxInfo.qualityIdentification}>点击查看</a></span>
+                                    <span><a href={supplierOperTaxInfo.qualityIdentification} target="_blank">点击查看</a></span>
                                     &nbsp;
-                                    <span>证件到期日期 
+                                    <span className="detail-message-endTime">证件到期日期: 
                                         {moment(supplierOperTaxInfo.quaIdeExpiringDate).format('YYYY-MM-DD')}
                                     </span>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col span={8}><span>食品经营许可证：</span>
-                                    <span><a href={supplierOperTaxInfo.qualityIdentification}>点击查看</a></span>
+                                    <span><a href={supplierOperTaxInfo.qualityIdentification} target="_blank">点击查看</a></span>
                                     &nbsp;
-                                    <span>证件到期日期 
+                                    <span className="detail-message-endTime">证件到期日期: 
                                         {moment(supplierOperTaxInfo.quaIdeExpiringDate).format('YYYY-MM-DD')}
                                     </span>
                                 </Col>
                                 <Col span={8}><span>一般纳税人资格证电子版：</span>
-                                    <span><a href={supplierOperTaxInfo.generalTaxpayerQualifiCerti}>点击查看</a></span>
+                                    <span><a href={supplierOperTaxInfo.generalTaxpayerQualifiCerti} target="_blank">点击查看</a></span>
                                     &nbsp;
-                                    <span>证件到期日期 
+                                    <span className="detail-message-endTime">证件到期日期: 
                                         {moment(supplierOperTaxInfo.taxpayerCertExpiringDate).format('YYYY-MM-DD')}
                                     </span>
                                 </Col>
@@ -100,8 +100,9 @@ class LicenseInfo extends Component {
                             </Row>
                             <Row>
                                 <Col span={8}><span>法人身份证电子版：</span>
-                                    <span>证件一 <a href={supplierlicenseInfo.legalRepreCardPic1}>点击查看</a></span>
-                                    <span>证件二 <a href={supplierlicenseInfo.legalRepreCardPic2}>点击查看</a></span>
+                                    <span>身份证一： <a target="_blank" href={supplierlicenseInfo.legalRepreCardPic1}>点击查看</a></span>
+                                    &nbsp;&nbsp;
+                                    <span>身份证二： <a target="_blank" href={supplierlicenseInfo.legalRepreCardPic2}>点击查看</a></span>
                                 </Col>
                                 <Col span={8}><span>营业执照所在地：</span>
                                     <span>{`${supplierlicenseInfo.licenseLocProvince}${supplierlicenseInfo.licenseLocCity}${supplierlicenseInfo.licenseLocCounty}`}</span>
@@ -118,7 +119,15 @@ class LicenseInfo extends Component {
                                 </Col>
                             </Row>
                             <Row>
-                                <Col span={8}><span>营业期限：</span><span>2001年3月6日 -  2999年3月6日 / 永久有效</span></Col>
+                                <Col span={8}><span>营业期限：</span>
+                                    <span>
+                                        {
+                                            supplierlicenseInfo.perpetualManagement === 1
+                                            ? '永久有效'
+                                            : `${moment(supplierlicenseInfo.startDate).format('YYYY年MM月DD日')} - ${moment(supplierlicenseInfo.endDate).format('YYYY年MM月DD日')}`
+                                        }
+                                    </span>
+                                </Col>
                                 <Col span={8}><span>注册资本：</span>
                                     <span>{supplierlicenseInfo.registeredCapital}万元</span>
                                 </Col>

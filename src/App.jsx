@@ -56,7 +56,7 @@ class App extends PureComponent {
 
         // 如果当前 pathname 为 login，则跳转到到 index
         if (initData && location.pathname === '/') {
-            history.replace('/supplierList');
+            history.replace('/suppliersAppList');
         }
     }
 

@@ -23,10 +23,28 @@ const columns = [{
     width: '90%'
 }];
 
-const list = [{
-    regionName: '华东',
-    province: '上海市(2) : 市辖区、市辖县 江苏省(13) : 南京市、无锡市、徐州市、常州市、苏州市、南通市、连云港市、淮安市、盐城市、扬州市、镇江市、泰州市、宿迁市 浙江省(11) : 杭州市、宁波市、温州市、嘉兴市、湖州市、绍兴市、金华市、衢州市、舟山市、台州市、丽水市 安徽省(17) : 合肥市、芜湖市、蚌埠市、淮南市、马鞍山市、淮北市、铜陵市、安庆市、黄山市、滁州市、阜阳市、宿州市、巢湖市、六安市、亳州市、池州市、宣城市'
-}]
+const parseString = (data) => {
+    if (!data) {
+        return [];
+    }
+    const area = JSON.parse(data);
+    const region = [];
+    area.map((item) => {
+        let itemData = {};
+        const childItem = item.regions;
+        let province = '';
+        itemData.regionName = item.regionName;
+        childItem.map((i) => {
+            province += `${i.regionName}(${i.regions.length}) : `;
+            i.regions.map((k) => {
+                province += `${k.regionName}、`;
+            })
+        })
+        itemData.province = province;
+        region.push(itemData);
+    })
+    return region;
+}
 
 class BasicInfo extends Component {
     constructor(props) {
@@ -40,7 +58,7 @@ class BasicInfo extends Component {
     renderStatus(status) {
         switch(status) {
             case 0:
-                return '草稿'
+                return '制表'
             case 1:
                 return '待审核'
             case 2:
@@ -77,9 +95,10 @@ class BasicInfo extends Component {
         const { detailData = {} } = this.props;
         const {
             supplierBasicInfo = {},
+            saleRegionInfo = {},
             status = 0
-        } = detailData
-
+        } = detailData;
+        const list = parseString(saleRegionInfo.json);
         return (
             <div className="supplier-detail">
                 <div className="supplier-detail-item">
@@ -138,7 +157,7 @@ class BasicInfo extends Component {
                             <Table
                                 dataSource={list}
                                 columns={columns}
-                                rowKey="id"
+                                rowKey="regionName"
                                 title={() => supplierBasicInfo.companyName}
                                 pagination={false}
                                 className="area-detail"

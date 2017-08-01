@@ -38,14 +38,8 @@ class BankInfo extends PureComponent {
 
         this.handleNextStep = ::this.handleNextStep;
         this.handleCompanyAddressChange = ::this.handleCompanyAddressChange;
-        this.handleBankLocChange = ::this.handleBankLocChange;
         this.companyAddress = {};
-        this.bankLoc = {};
-        this.submitData = {
-            supplierBasicInfo: {},
-            supplierOperTaxInfo: {},
-            supplierBankInfo: {}
-        };
+        this.submitData = {};
     }
 
     componentDidMount() {
@@ -53,115 +47,61 @@ class BankInfo extends PureComponent {
     }
 
     handleNextStep() {
-        const { form, onGoTo, isEdit, detailData = {} } = this.props;
+        const { form, onGoTo, isEdit, detailData = {}, data = {} } = this.props;
+        const { supplierBasicInfo = {} } = data;
         Tools.checkAddress(this.companyAddress, 'companyAddress', this);
-        Tools.checkAddress(this.bankLoc, 'bankLoc', this);
         form.validateFields((err, values) => {
+            const upload = this.nodebankFile.getValue();
+            const { firstValue, secondValue, thirdValue } = this.companyAddress;
             if (!err) {
+
                 const {
-                    accountName,
                     bankAccount,
-                    taxpayerType,
-                    companyDetailAddress,
-                    companyName,
-                    mainAccountNo,
-                    openBank,
-                    spNo,
-                    spRegNo,
-                    taxpayerNumber,
+                    invoiceHead,
+                    openBank
                 } = values;
 
-                this.submitData.supplierBasicInfo = {
-                    companyName,
-                    spNo,
-                    spRegNo,
-                    mainAccountNo
-                };
-
-                const { firstValue, secondValue, thirdValue } = this.companyAddress;
-
-                this.submitData.supplierOperTaxInfo = {
-                    companyLocProvince: firstValue.regionName,
-                    companyLocCity: secondValue.regionName,
-                    companyLocCounty: thirdValue.regionName,
-                    companyLocProvinceCode: firstValue.code,
-                    companyLocCityCode: secondValue.code,
-                    companyLocCountyCode: thirdValue.code,
-                    companyDetailAddress,
-                    registrationCertificate: this.certificate.getValue()[0],
-                    qualityIdentification: this.quality.getValue()[0],
-                    taxRegCertificate: this.taxReg.getValue()[0],
-                    taxpayerNumber,
-                    taxpayerType,
-                    generalTaxpayerQualifiCerti: this.general.getValue()[0],
-                }
-
-                this.submitData.supplierBankInfo = {
-                    accountName,
-                    openBank,
+                const supplierBankInfo = {
                     bankAccount,
-                    bankAccountLicense: this.bank.getValue()[0],
-                    bankLocProvince: this.bankLoc.firstValue.regionName,
-                    bankLocCity: this.bankLoc.secondValue.regionName,
-                    bankLocCounty: this.bankLoc.thirdValue.regionName,
-                    bankLocCountyCode: this.bankLoc.thirdValue.code,
-                    bankLocCityCode: this.bankLoc.secondValue.code,
-                    bankLocProvinceCode: this.bankLoc.firstValue.code,
+                    invoiceHead,
+                    openBank,
+                    accountName: supplierBasicInfo.companyName,
+                    bankAccountLicense: upload.files[0],
+                    bankLocProvince: firstValue.regionName,
+                    bankLocCity: secondValue.regionName,
+                    bankLocCounty: thirdValue.regionName,
+                    bankLocProvinceCode: firstValue.code,
+                    bankLocCityCode: secondValue.code,
+                    bankLocCountyCode: thirdValue.code,
                 }
-
                 if (isEdit) {
-                    Object.assign(
-                        this.submitData.supplierBasicInfo,
-                        {id: detailData.supplierBasicInfo.id}
-                    )
-                    Object.assign(
-                        this.submitData.supplierOperTaxInfo,
-                        {id: detailData.supplierOperTaxInfo.id}
-                    )
-                    Object.assign(
-                        this.submitData.supplierBankInfo,
-                        {id: detailData.supplierBankInfo.id}
-                    )
+                    Object.assign(supplierBankInfo,
+                        {
+                            id: detailData.supplierBankInfo.id,
+                            status:  detailData.supplierBankInfo.status
+                        }
+                    );
                 }
 
-                this.props.addSupplierMessage1(this.submitData)
-                onGoTo('2');
+                this.props.addSupplierMessage1({supplierBankInfo, ...data});
+                onGoTo('3');
             }
         })
     }
 
     handleCompanyAddressChange(data) {
         this.companyAddress = data;
-        // if ( data.thirdValue !== '-1' ) {
-        //     this.props.form.setFields({
-        //         companyAddress: {
-        //             errors: null,
-        //         }
-        //     });
-        // }
-    }
-
-    handleBankLocChange(data) {
-        this.bankLoc = data;
-        // if ( data.thirdValue !== '-1' ) {
-        //     this.props.form.setFields({
-        //         bankLoc: {
-        //             errors: null,
-        //         }
-        //     });
-        // }
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         const { detailData, isEdit } = this.props;
+        const { companyName = '' } = this.props.data.supplierBasicInfo;
         let initData = detailData;
         if (!isEdit) {
             initData = {};
         }
         const {
-            supplierBasicInfo = {},
-            supplierOperTaxInfo = {},
             supplierBankInfo = {}
         } = initData;
         return (
@@ -174,7 +114,7 @@ class BankInfo extends PureComponent {
                             </div>
                             <div className="add-message-body">
                                 <Row>
-                                    <Col span={8}><span>开户名：</span><span>深圳市豪利门业实业有限公司</span></Col>
+                                    <Col span={8}><span>开户名：</span><span>{companyName}</span></Col>
                                     <Col span={8}>
                                         <span>供应商发票抬头：</span>
                                         <FormItem>
@@ -184,7 +124,6 @@ class BankInfo extends PureComponent {
                                             })(
                                                 <Input
                                                     placeholder="供应商发票抬头"
-                                                    onBlur={(e) => { Validator.repeat.companyName(e, this, supplierBasicInfo.id) }}
                                                 />
                                             )}
                                         </FormItem>
@@ -195,6 +134,14 @@ class BankInfo extends PureComponent {
                                         <span>开户行所在地：</span>
                                         <CasadingAddress
                                             id="licenseLoc"
+                                            defaultValue={
+                                                isEdit && [
+                                                    supplierBankInfo.bankLocProvinceCode,
+                                                    supplierBankInfo.bankLocCityCode,
+                                                    supplierBankInfo.bankLocCountyCode
+                                                ]
+                                            }
+                                            onChange={this.handleCompanyAddressChange}
                                         />
                                     </Col>
                                     <Col span={8}>
@@ -206,7 +153,6 @@ class BankInfo extends PureComponent {
                                             })(
                                                 <Input
                                                     placeholder="供应商开户行"
-                                                    onBlur={(e) => { Validator.repeat.spNo(e, this, supplierBasicInfo.id) }}
                                                 />
                                             )}
                                         </FormItem>
@@ -223,14 +169,16 @@ class BankInfo extends PureComponent {
                                             })(
                                                 <Input
                                                     placeholder="银行账号"
-                                                    onBlur={(e) => { Validator.repeat.companyName(e, this, supplierBasicInfo.id) }}
                                                 />
                                             )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
                                         <span>银行开户许可证电子版：</span>
-                                        <InlineUpload />
+                                        <InlineUpload
+                                            datas={isEdit ? [supplierBankInfo.bankAccountLicense] : []}
+                                            ref={node => (this.nodebankFile = node)}
+                                        />
                                     </Col>
                                 </Row>
                             </div>

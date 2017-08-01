@@ -37,7 +37,6 @@ const startApp = (data) => {
 //         startApp();
 //     });
 
-
 startApp({
     user: {
         employeeName: 'admin'
@@ -123,7 +122,7 @@ startApp({
                 submenu: [
                     {
                         code: "suppliersAppList",
-                        name: "供应商管理列表"
+                        name: "供应商入驻申请列表"
                     },
                     {
                         code: "supplierInputList",
@@ -133,7 +132,7 @@ startApp({
             },
             {
                 code: "procurementMng",
-                name: "采购管理管理",
+                name: "采购管理",
                 submenu: [
                     {
                         code: "poMngList",
@@ -142,6 +141,14 @@ startApp({
                     {
                         code: "poPrintList",
                         name: "采购单打印列表"
+                    },
+                    // {
+                    //     code: "poRcvList",
+                    //     name: "采购单收货列表"
+                    // },
+                    {
+                        code: "poRcvMngList",
+                        name: "收货单管理列表"
                     }
                 ]
             },

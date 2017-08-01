@@ -1,6 +1,5 @@
 /**
  * @file fetchStaticPageHome.js
- *
  * @author Tanjunfeng
  *
  * 静态页面列表查询

@@ -21,7 +21,8 @@ import {
     toUpdateSellPrice,
     updateSellPrice,
     updatePurchasePrice,
-    deletePurchasePriceById
+    deletePurchasePriceById,
+    getProductById
 } from '../service';
 import ActionType from './ActionType';
 

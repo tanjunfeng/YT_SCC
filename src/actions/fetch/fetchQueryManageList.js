@@ -1,7 +1,7 @@
 /**
  * @file fetchProviderEnterList.js
- * @author tanjf
  *
+ * @author tanjf
  * 供应商管理列表
  */
 
