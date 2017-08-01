@@ -449,7 +449,8 @@ export const fetchQueryProdByCondition = (params) => http.get('/prodPurchase/que
 // 查询商品信息
 export const getProductById = (params) => http.get('/prodPurchase/getProductById', params);
 
-export const testApi = (params) => http.get('/test', params);
+// 根据品牌名称分页查询品牌列表
+export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPages', params);
 
 /***************procurement*********** */
 // 查询采购单列表
@@ -506,6 +507,18 @@ export const queryProviderDetail = (params) => http.get('/supplier/queryProvider
 export const queryAllLargerRegionProvince = (params) => http.get('/region/queryAllLargerRegionProvince', params);
 // 获取供应商或者供应商地点信息
 export const getSupplierNo = (params) => http.get('/supplier/getSupplierNo', params);
+// 新增或修改供应商信息
+export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/insertOrUpdateSupplierInfo', params);
+
+
+/**
+ * 商品模块
+ */
+
+ // 根据条件分页查询商品清单，并排序
+export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);
+// 获取已审批通过供应商地点下拉框数据
+export const querySuppliersList = (params) => http.get('/supplier/supplierAdrSearchBox', params);
 // 新增供应商信息
 export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);
 // 修改供应商信息
@@ -522,5 +535,5 @@ export const getWarehouseInfo1 = (params) => http.get('/warehouse/getWarehouseLo
 export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehousePhysicalInfo', params);
 // 查询供应商地点所属区域列表
 export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySupplierPlaceRegion', params);
-// 此接口用于通过code和name（后端id就等于code）查询子公司信息 
+// 此接口用于通过code和name（后端id就等于code）查询子公司信息
 export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBaseInfo', params);

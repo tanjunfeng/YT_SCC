@@ -6,7 +6,7 @@
 
 import Promise from 'bluebird';
 import ActionType from './ActionType';
-import { queryCategorys, testApi } from '../service';
+import { queryCategorys, queryBrandsByPages } from '../service';
 import { ClassifiedList } from '../view-model';
 
 export const addAction = () => {}
@@ -35,12 +35,19 @@ export const fetchAction = (params) => dispatch => (
 )
 
 /**
- * 请求列表信息
+ * 请求品牌列表
  * @param params
  */
-export const fetchTest = (params) => (
-    testApi(params)
-        .then(res => Promise.resolve(res))
-        .catch(err => Promise.reject(err))
-)
+export const fetchBrandsByPages = (params) => (
+    new Promise((resolve, reject) => {
+        queryBrandsByPages(params)
+        .then(res => {
+            console.log(res);
+            resolve(res.data);
+        })
+        .catch(err => {
+            reject(err);
+        });
+    })
+);
 
