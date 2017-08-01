@@ -241,6 +241,8 @@ class ManagementList extends PureComponent {
      * 暂停购进
      */
     handleSuspendPurchase() {
+        console.log(this.childCompany.value);
+        const confirmTitle = '';
         confirm({
             title: '暂停购进',
             content: '请确认对选中商品进行暂停购进操作，商品将不可进行采购下单',
