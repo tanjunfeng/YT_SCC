@@ -519,6 +519,14 @@ export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/inser
 export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);
 // 获取已审批通过供应商地点下拉框数据
 export const querySuppliersList = (params) => http.get('/supplier/supplierAdrSearchBox', params);
+// 商品的暂停购进和恢复采购
+export const goodsChangeStatus = (params) => http.post('prodPurchase/batchChangeProPurchaseStatus', params);
+// 商品的区域性批量上架
+export const prodBatchPutAway = (params) => http.post('prodSell/prodBatchPutaway', params);
+// 商品的区域性批量下架
+export const prodBatchUpdate = (params) => http.post('prodSell/prodBatchUpdate', params);
+// 批量全国上下架
+export const availablProducts = (params) => http.post('prodSell/prodBatchUpdate', params);
 // 新增供应商信息
 export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);
 // 修改供应商信息
