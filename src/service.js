@@ -517,6 +517,8 @@ export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/inser
 
  // 根据条件分页查询商品清单，并排序
 export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);
+// 获取已审批通过供应商地点下拉框数据
+export const querySuppliersList = (params) => http.get('/supplier/supplierAdrSearchBox', params);
 // 新增供应商信息
 export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);
 // 修改供应商信息

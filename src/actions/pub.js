@@ -8,12 +8,18 @@ import ActionType from './ActionType';
 import {
     queryRegionByCode,
     queryCategorys,
-    findCompanyBaseInfo
+    findCompanyBaseInfo,
+    queryBrandsByPages,
+    querySuppliersList
 } from '../service';
 
 const pubValueList = {
     // 通过id，和name 查询分公司值列表
     findCompanyBaseInfo,
+    // 通过表单值查询品牌列表
+    queryBrandsByPages,
+    // 通过表单值查询供应商地点列表
+    querySuppliersList
 }
 
 const receiveCollapsed = (isCollapsed) => ({
@@ -83,8 +89,9 @@ export const pubFetchValueList = (params, type) => dispatch => (
     new Promise((resolve, reject) => {
         pubValueList[type](params)
             .then(res => {
+                console.log(res);
                 dispatch(receiveValuesList(res.data));
-                resolve(checkResult(res));
+                resolve(checkResult(res.data));
             })
             .catch(err => {
                 reject(err);

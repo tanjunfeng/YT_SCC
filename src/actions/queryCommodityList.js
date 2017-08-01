@@ -14,9 +14,9 @@ const queryCommodityList = (data) => ({
     payload: data
 });
 
-export default () => dispatch => (
+export default (params) => dispatch => (
     new Promise((resolve, reject) => {
-        queryproductsbypages()
+        queryproductsbypages(params)
             .then(res => {
                 dispatch(queryCommodityList(res.data));
             })

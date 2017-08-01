@@ -20,11 +20,13 @@ import {
     subCompanyStatusOptions,
     commoditySortOptions
 } from '../../../constant/searchParams';
-import { fetchBrandsByPages } from '../../../actions/classifiedList';
+// import { fetchBrandsByPages } from '../../../actions/classifiedList';
+import { pubFetchValueList } from '../../../actions/pub';
 
 import {
     queryCommodityList
 } from '../../../actions';
+import { PAGE_SIZE } from '../../../constant';
 
 import Util from '../../../util/util';
 
@@ -108,7 +110,8 @@ const columns = [{
         CommodityListData: state.toJS().queryCommodityList.data
     }),
     dispatch => bindActionCreators({
-        queryCommodityList
+        queryCommodityList,
+        pubFetchValueList
     }, dispatch)
 )
 class ManagementList extends PureComponent {
@@ -132,6 +135,7 @@ class ManagementList extends PureComponent {
         this.handleSupplyClear = ::this.handleSupplyClear;
         this.handleSubsidiaryClear = ::this.handleSubsidiaryClear;
         this.searchMind1 = null;
+        this.STOP_BUY_DISABLED = true;
         this.state = {
             choose: [],
             brandChoose: null,
@@ -143,7 +147,9 @@ class ManagementList extends PureComponent {
     }
 
     componentDidMount() {
-        this.props.queryCommodityList({});
+        this.props.queryCommodityList({
+            pageSize: PAGE_SIZE
+        });
     }
 
     /**
@@ -208,8 +214,18 @@ class ManagementList extends PureComponent {
      */
     handleSupplyChoose = ({ record }) => {
         this.setState({
-            supplyChoose: record,
+            supplyChoose: record
+        })
+        console.log(record);
+        this.STOP_BUY_DISABLED = false;
+    }
+
+    // 供货供应商值清单-清除
+    handleSupplyClear() {
+        this.setState({
+            supplyChoose: '',
         });
+        this.STOP_BUY_DISABLED = true;
     }
 
     /**
@@ -313,15 +329,6 @@ class ManagementList extends PureComponent {
     }
 
     /**
-     * 供货供应商值清单-清除
-     */
-    handleSupplyClear() {
-        this.setState({
-            supplyChoose: '',
-        });
-    }
-
-    /**
      * 经营子公司值清单-清除
      */
     handleSubsidiaryClear() {
@@ -400,33 +407,22 @@ class ManagementList extends PureComponent {
      */
     handleFormSearch = () => {
         const postData = this.getFormAllVulue();
-        console.log(postData);
         this.props.queryCommodityList({...postData});
     }
 
     /**
-     * 值清单请求
-     * @param {string} value, 输入框返回的值
-     * @param {number} pagination, 分页
-     * @return {Promise}
+     * 分页页码改变的回调
      */
-    handleTestFetch = ({ value, pagination }) => fetchBrandsByPages({
-        value,
-        pagination
-    });
-
-    /**
-     * 品牌查询请求
-     * @param {string}  value       输入框返回的值
-     * @param {number}  pagination  分页
-     * @return {Promise}
-     */
-    handlefetchBrandsList = ({ value, pagination }) => {
-        return fetchBrandsByPages({
-            value
+    handleChangePage = (page) => {
+        const currentPage = page;
+        this.props.queryCommodityList({
+            pageNum: currentPage,
+            pageSize: PAGE_SIZE
         });
-    };
-
+    }
+    changeButtonStatus = () => {
+        // this.SUPPLIER_HAS_value
+    }
 
     /**
      * 表单操作
@@ -474,9 +470,8 @@ class ManagementList extends PureComponent {
             this.state.subsidiaryChoose
             && this.state.choose.length !== 0
         );
-        console.log(this.props.CommodityListData);
-        const { data = [], total = 0, pageSize = 10, pageNum = 1 } = this.props.CommodityListData;
-        console.log(total)
+        console.log(this.STOP_BUY_DISABLED);
+        const { data = [], total = 0, pageNum = 1 } = this.props.CommodityListData;
         return (
             <div className={`${commodityML}`}>
                 <div className="manage-form">
@@ -573,23 +568,29 @@ class ManagementList extends PureComponent {
                                             <SearchMind
                                                 compKey="search-mind-brand"
                                                 ref={ref => { this.brandSearchMind = ref }}
-                                                fetch={(value, pager) =>
-                                                    this.handlefetchBrandsList(value, pager)
+                                                fetch={(param) =>
+                                                    this.props.pubFetchValueList({
+                                                        name: param.value
+                                                    }, 'queryBrandsByPages')
                                                 }
                                                 onChoosed={this.handleBrandChoose}
                                                 onClear={this.handleBrandClear}
-                                                renderChoosedInputRaw={(data) => (
-                                                    <div>{data.id} - {data.name}</div>
+                                                renderChoosedInputRaw={(brandData) => (
+                                                    <div>{brandData.id}-{brandData.name}</div>
                                                 )}
                                                 pageSize={5}
                                                 columns={[
                                                     {
-                                                        title: '编号',
+                                                        title: 'id',
                                                         dataIndex: 'id',
                                                         width: 150,
                                                     }, {
-                                                        title: '名字',
+                                                        title: '名称',
                                                         dataIndex: 'name',
+                                                        width: 200,
+                                                    }, {
+                                                        title: '标签',
+                                                        dataIndex: 'brandLabel',
                                                         width: 200,
                                                     }
                                                 ]}
@@ -608,24 +609,27 @@ class ManagementList extends PureComponent {
                                                 <SearchMind
                                                     compKey="search-mind-supply"
                                                     ref={ref => { this.supplySearchMind = ref }}
-                                                    fetch={(value, pager) =>
-                                                        this.handleTestFetch(value, pager)
+                                                    fetch={(params) =>
+                                                        this.props.pubFetchValueList({
+                                                            condition: params.value
+                                                        }, 'querySuppliersList')
                                                     }
                                                     addonBefore=""
                                                     onChoosed={this.handleSupplyChoose}
                                                     onClear={this.handleSupplyClear}
-                                                    renderChoosedInputRaw={(data) => (
-                                                        <div>{data.id} - {data.name}</div>
+                                                    renderChoosedInputRaw={(companyList) => (
+                                                        <div ref={childCompany => { this.childCompany = childCompany }}>{companyList.spId}-{companyList.companyName}</div>
                                                     )}
-                                                    pageSize={2}
+                                                    rowKey="spAdrid"
+                                                    pageSize={5}
                                                     columns={[
                                                         {
-                                                            title: 'Name',
-                                                            dataIndex: 'name',
+                                                            title: '供应商ID',
+                                                            dataIndex: 'spId',
                                                             width: 150,
                                                         }, {
-                                                            title: 'Address',
-                                                            dataIndex: 'address',
+                                                            title: '供应商名称',
+                                                            dataIndex: 'companyName',
                                                             width: 200,
                                                         }
                                                     ]}
@@ -665,7 +669,7 @@ class ManagementList extends PureComponent {
                                     <FormItem className="">
                                         <Button
                                             size="default"
-                                            disabled={isPurchaseDisabled}
+                                            disabled={this.STOP_BUY_DISABLED}
                                             onClick={this.handleSuspendPurchase}
                                         >暂停购进</Button>
                                     </FormItem>
@@ -688,24 +692,27 @@ class ManagementList extends PureComponent {
                                                 <SearchMind
                                                     compKey="search-mind-subsidiary"
                                                     ref={ref => { this.subsidiarySearrchMind = ref }}
-                                                    fetch={(value, pager) =>
-                                                        this.handleTestFetch(value, pager)
+                                                    fetch={(params) =>
+                                                        this.props.pubFetchValueList({
+                                                            branchCompanyId: (typeof parseFloat(params.value) === 'number') ? params.value : '',
+                                                            branchCompanyName: (typeof parseFloat(params.value) !== 'number') ? params.value : ''
+                                                        }, 'findCompanyBaseInfo')
                                                     }
                                                     addonBefore=""
                                                     onChoosed={this.handleSubsidiaryChoose}
                                                     onClear={this.handleSubsidiaryClear}
                                                     renderChoosedInputRaw={(data) => (
-                                                        <div>{data.id} - {data.name}</div>
+                                                        <div>{data.id}-{data.name}</div>
                                                     )}
                                                     pageSize={2}
                                                     columns={[
                                                         {
-                                                            title: 'Name',
-                                                            dataIndex: 'name',
+                                                            title: '子公司id',
+                                                            dataIndex: 'id',
                                                             width: 150,
                                                         }, {
-                                                            title: 'Address',
-                                                            dataIndex: 'address',
+                                                            title: '子公司名字',
+                                                            dataIndex: 'name',
                                                             width: 200,
                                                         }
                                                     ]}
@@ -716,18 +723,16 @@ class ManagementList extends PureComponent {
                                 </Col>
                                 <Col className="gutter-row" span={8}>
                                     {/* 子公司状态 */}
-                                    <FormItem className="">
+                                    <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">子公司状态</span>
                                             {getFieldDecorator('salesInfo', {
                                                 initialValue: subCompanyStatusOptions.defaultValue
                                             })(
                                                 <Select
-                                                    className=""
                                                     size="default"
                                                 >
-                                                    {
-                                                        subCompanyStatusOptions.data.map((item) =>
+                                                    { subCompanyStatusOptions.data.map((item) =>
                                                             (<Option
                                                                 key={item.key}
                                                                 value={item.key}
@@ -829,9 +834,10 @@ class ManagementList extends PureComponent {
                         columns={columns}
                         pagination={{
                             total,
-                            pageSize,
+                            pageSize: PAGE_SIZE,
                             current: pageNum,
-                            showQuickJumper: true
+                            showQuickJumper: true,
+                            onChange: this.handleChangePage
                         }}
                         rowSelection={this.rowSelection}
                         rowKey="productId"
@@ -846,7 +852,8 @@ ManagementList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     CommodityListData: PropTypes.objectOf(PropTypes.any),
-    queryCommodityList: PropTypes.func
+    queryCommodityList: PropTypes.func,
+    pubFetchValueList: PropTypes.func
 }
 
 ManagementList.defaultProps = {
