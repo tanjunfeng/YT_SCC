@@ -36,6 +36,26 @@ const pathListener = (location, history) => {
     }
 }
 
+/**
+ * 通过code找id
+ * @param {string} code 
+ * @param {Object} data 
+ */
+const findIdByCode = (code, data) => {
+    if (!data || !code) {
+        return;
+    }
+    for (let i of data) {
+        if (i.submenu.length > 0) {
+            for (let j of i.submenu) {
+                if (j.code === code) {
+                    return j.id;
+                }
+            }
+        }
+    }
+}
+
 @connect(
     state => ({}),
     dispatch => bindActionCreators({
@@ -66,9 +86,9 @@ class App extends PureComponent {
     componentDidMount() {
         const { history } = this.props;
 
-        // this.unrights = history.listen(loc => this.getRights());
+        this.unrights = history.listen(loc => this.getRights());
 
-        // this.getRights();
+        this.getRights();
     }
 
     componentWillUnmount() {
@@ -81,10 +101,11 @@ class App extends PureComponent {
      */
     getRights() {
         const { pathname } = this.props.location;
-        const code = findCodeByPath(pathname);
-
-        if (code) {
-            // this.props.fetchRightsAction(code);
+        const { initData } = this.props;
+        const code = findCodeByPath(`/${pathname.split('/')[1]}`);
+        const id = findIdByCode(code, initData.menus.menu);
+        if (code && id) {
+            this.props.fetchRightsAction(id);
         }
     }
 
@@ -107,6 +128,7 @@ App.propTypes = {
     location: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     receiveUser: PropTypes.func,
+    fetchRightsAction: PropTypes.func,
 }
 
 export default withRouter(App);

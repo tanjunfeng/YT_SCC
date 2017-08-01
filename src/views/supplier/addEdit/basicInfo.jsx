@@ -41,11 +41,6 @@ class BasicInfo extends PureComponent {
         super(props);
 
         this.handleNextStep = ::this.handleNextStep;
-        this.handleCompanyAddressChange = ::this.handleCompanyAddressChange;
-        this.handleBankLocChange = ::this.handleBankLocChange;
-        this.companyAddress = {};
-        this.bankLoc = {};
-        this.submitData = {};
     }
 
     componentDidMount() {
@@ -55,8 +50,6 @@ class BasicInfo extends PureComponent {
 
     handleNextStep() {
         const { form, onGoTo, isEdit, detailData = {} } = this.props;
-        Tools.checkAddress(this.companyAddress, 'companyAddress', this);
-        Tools.checkAddress(this.bankLoc, 'bankLoc', this);
         form.validateFields((err, values) => {
             if (!err) {
                 const {
@@ -100,14 +93,6 @@ class BasicInfo extends PureComponent {
                 onGoTo('2');
             }
         })
-    }
-
-    handleCompanyAddressChange(data) {
-        this.companyAddress = data;
-    }
-
-    handleBankLocChange(data) {
-        this.bankLoc = data;
     }
 
     /**
@@ -167,10 +152,11 @@ class BasicInfo extends PureComponent {
                                         <FormItem>
                                             {getFieldDecorator('companyName', {
                                                 rules: [{ required: true, message: '请输入供应商名称!' }],
-                                                initialValue: supplierBasicInfo.companyName
+                                                initialValue: supplierBasicInfo.companyName,
                                             })(
                                                 <Input
                                                     placeholder="供应商名称"
+                                                    onBlur={(e) => { Validator.repeat.companyName(e, this, supplierBasicInfo.id) }}
                                                 />
                                             )}
                                         </FormItem>

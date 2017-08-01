@@ -139,6 +139,15 @@ export const insertSupplierSettlementInfo = (params) => http.post('/provider/ins
 // 查询纳税人是否已存在
 export const taxpayerNumber = (params) => http.get('/provider/checkSupplierOperTaxBytaxpayerNumber', params);
 
+// 公司名是否重复
+export const checkSupplierName = (params) => http.get('/supplier/checkSupplierName', params);
+
+// 银行信息是否重复
+export const checkBankAccount = (params) => http.get('/supplier/checkBankAccount', params);
+
+// 校验营业执照号是否重复
+export const checkLicenseNo = (params) => http.get('/supplier/checkLicenseNo', params);
+
 // 检查银行账号是否存在重复
 export const bankAccount = (params) => http.get('/provider/checkSupplierBankInfoByBankAccount', params);
 

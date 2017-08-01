@@ -70,8 +70,13 @@ class BasicInfo extends PureComponent {
         this.getValue = ::this.getValue;
         this.submit = ::this.submit;
         this.handleSubmit = ::this.handleSubmit;
+        this.handleChoose = ::this.handleChoose;
+        this.handleAreaChange = ::this.handleAreaChange;
         this.companyAddress = {};
         this.bankLoc = {};
+        this.orgId = null;
+        this.company = null;
+        this.childName = null;
     }
 
     componentDidMount() {
@@ -104,14 +109,15 @@ class BasicInfo extends PureComponent {
                 const submit = {
                     spAdrBasic: {
                         providerNo: supplierBasicInfo.spNo,
-                        providerName: "四川 - 深圳市豪利门业实业有限公司",
+                        providerName: this.childName,
                         goodsArrivalCycle,
-                        orgId: this.props.supplierId,
+                        orgId: this.orgId,
                         grade,
                         operaStatus,
                         settlementPeriod,
                         belongArea,
-                        payType
+                        payType,
+                        belongAreaName: this.company
                     },
                     spAdrContact: {
                         providerName: providerUserName,
@@ -169,6 +175,20 @@ class BasicInfo extends PureComponent {
         });
     }
 
+    handleAreaChange(item) {
+        const { placeRegion } = this.props;
+        for (let i of placeRegion) {
+            if (i.code === item) {
+                this.company = i.name;
+                return null;
+            }
+        }
+    }
+
+    handleChoose(item) {
+        this.orgId = item.record.id;
+    }
+
     handleSaveDraft() {
         this.submit(0)
     }
@@ -179,24 +199,10 @@ class BasicInfo extends PureComponent {
 
     handleCompanyAddressChange(data) {
         this.companyAddress = data;
-        // if ( data.thirdValue !== '-1' ) {
-        //     this.props.form.setFields({
-        //         companyAddress: {
-        //             errors: null,
-        //         }
-        //     });
-        // }
     }
 
     handleBankLocChange(data) {
         this.bankLoc = data;
-        // if ( data.thirdValue !== '-1' ) {
-        //     this.props.form.setFields({
-        //         bankLoc: {
-        //             errors: null,
-        //         }
-        //     });
-        // }
     }
 
     /**
@@ -220,7 +226,7 @@ class BasicInfo extends PureComponent {
     renderStatus(status) {
         switch(status) {
             case 0:
-                return '草稿'
+                return '制表'
             case 1:
                 return '待审核'
             case 2:
@@ -235,13 +241,32 @@ class BasicInfo extends PureComponent {
         return null;
     }
 
+    renderName(spAdrBasic, supplierBasicInfo) {
+        const { isEdit } = this.props;
+        const { providerName } = spAdrBasic;
+        const { companyName  } = supplierBasicInfo;
+        {isEdit && !this.company ? spAdrBasic.providerName : `${this.company} - ${supplierBasicInfo.companyName}`}
+        if (isEdit && !this.company) {
+            this.childName = providerName;
+            return providerName;
+        }
+        else if (isEdit && this.company) {
+            this.childName = `${this.company} - ${supplierBasicInfo.companyName}`;
+            return `${this.company} - ${supplierBasicInfo.companyName}`;
+        }
+        else if (!isEdit && !this.company) {
+            this.childName = supplierBasicInfo.companyName;
+            return supplierBasicInfo.companyName;
+        }
+        else if (!isEdit && this.company) {
+            this.childName = `${this.company} - ${supplierBasicInfo.companyName}`;
+            return `${this.company} - ${supplierBasicInfo.companyName}`;
+        }
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const { detailData, detailSp, isEdit, placeRegion = [] } = this.props;
-        // let initData = detailData;
-        // if (!isEdit) {
-        //     initData = {};
-        // }
         const {
             supplierBasicInfo = {},
             supplierOperTaxInfo = {},
@@ -250,6 +275,7 @@ class BasicInfo extends PureComponent {
         const {
             spAdrBasic = {},
             spAdrContact = {},
+            spAdrDeliverys = []
         } = detailSp
 
         return (
@@ -284,7 +310,11 @@ class BasicInfo extends PureComponent {
                                         <span>{isEdit ? detailSp.id : this.props.supplierId}</span>
                                     </Col>
                                     <Col span={8}><span>供应商地点名称：</span>
-                                        <span>{supplierBasicInfo.companyName}</span>
+                                        <span>
+                                            {
+                                                this.renderName(spAdrBasic, supplierBasicInfo)
+                                            }
+                                        </span>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -371,11 +401,12 @@ class BasicInfo extends PureComponent {
                                         <FormItem>
                                             {getFieldDecorator('belongArea', {
                                                 rules: [{required: true, message: '请选择供应商地点所属区域'}],
-                                                initialValue: spAdrBasic.belongArea
+                                                initialValue: isEdit ? `${spAdrBasic.belongArea}` : undefined
                                             })(
                                                 <Select
                                                     style={{ width: 140 }}
                                                     placeholder="供应商地点所属区域"
+                                                    onChange={this.handleAreaChange}
                                                 >
                                                     {
                                                         placeRegion.map((item) => <Option
@@ -454,6 +485,7 @@ class BasicInfo extends PureComponent {
                                 <Warehouse
                                     fetch={this.props.getWarehouse}
                                     data={this.props.warehouseData}
+                                    defaultValue={spAdrDeliverys}
                                     handleChoose={this.props.fetchWarehouseInfo}
                                     handleDelete={this.props.deleteWarehouseInfo}
                                     ref={node => (this.wareHouse = node)}

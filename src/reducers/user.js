@@ -10,7 +10,7 @@ const initState = Immutable.fromJS({
     // 用户信息
     data: {},
 
-    rights: {},
+    rights: ['create_supplier', 'modify'],
 });
 
 export default function (state = initState, action) {

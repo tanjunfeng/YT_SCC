@@ -8,6 +8,7 @@ import ActionType from './ActionType';
 import {
     queryRegionByCode,
     queryCategorys,
+    // 获取子公司列表
     findCompanyBaseInfo
 } from '../service';
 

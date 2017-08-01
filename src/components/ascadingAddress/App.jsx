@@ -90,7 +90,7 @@ class CasadingAddress extends PureComponent {
             if (code && !(gegion[index] && gegion[index][code])) {
                 this.props.fetchRegionByCode({type: index, code}).then(() => {
                     this.setState({
-                        select: index
+                        select: 3
                     });
                 });
             } else if (code) {

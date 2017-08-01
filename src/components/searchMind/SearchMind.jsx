@@ -403,9 +403,15 @@ class SearchMind extends PureComponent {
         const inputProps = {
             ...(disabled && { disabled: 'disabled'})
         };
+
+        const newStyle = Object.assign({
+            zIndex: 100,
+            position: 'relative',
+        }, style)
+
         return (
             <div
-                style={style}
+                style={newStyle}
                 className={`${layoutCls} ${className}`}
                 onMouseOver={this.handleInArea}
                 onMouseOut={this.handleOutArea}

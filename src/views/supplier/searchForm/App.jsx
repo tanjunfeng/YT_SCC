@@ -7,6 +7,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, message } from 'antd';
+import Right from '../../../components/btnRight';
 
 import Utils from '../../../util/util';
 import {
@@ -17,6 +18,7 @@ import {
     supplierPlaceLevelOptions,
 } from '../../../constant/searchParams';
 import { PAGE_SIZE } from '../../../constant';
+import RIGHTS from '../../../constant/right'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -323,6 +325,7 @@ class SearchForm extends Component {
                         </FormItem>
                         {
                             this.props.isSuplierAddMenu &&
+                            <Right right={RIGHTS.SUPPLIER.CREATE_SUPPLIER}>
                             <FormItem>
                                 <Button
                                     type="primary"
@@ -332,6 +335,7 @@ class SearchForm extends Component {
                                     创建
                                 </Button>
                             </FormItem>
+                            </Right>
                         }
                         <FormItem>
                             <Button size="default" onClick={this.handleResetValue}>

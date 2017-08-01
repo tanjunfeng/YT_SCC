@@ -31,7 +31,6 @@ import ChangeMessage from './changeMessage';
 import ChangeAudit from './changeAudit';
 import CheckReason from './checkReason';
 
-
 const columns = supplierInputList;
 
 @connect(
@@ -223,7 +222,7 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    status === 1 && status === 3 && status === 4 && status === 5 &&
+                    (status === 1 || status === 3 || status === 4 || status === 5) &&
                     <Menu.Item>
                         <a onClick={info}>
                             供应商审核
@@ -239,7 +238,7 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    status === 1 && status === 3 && status === 4 && status === 5 &&
+                    (status === 1 || status === 3 || status === 4 || status === 5) &&
                     <Menu.Item>
                         <a onClick={info}>
                             修改供应商审核
@@ -255,7 +254,7 @@ class SupplierInputList extends PureComponent {
                     <Link to={`${pathname}/place/${id}`}>供应商地点详情</Link>
                 </Menu.Item>
                 {
-                    status === 1 && status === 3 && status === 4 &&
+                    (status === 1 || status === 3 || status === 4) &&
                     <Menu.Item key="modifySupAddInfor">
                         <Link to={`${pathname}/edit/${id}`}>
                             修改供应商地点信息
@@ -263,7 +262,7 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    status === 2 && status === 5 &&
+                    (status === 2 || status === 5) &&
                     <Menu.Item>
                         <a onClick={info}>
                             修改供应商地点信息
@@ -280,6 +279,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     status === 2 &&
+
                     <Menu.Item key="ChangeAudit">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商地点审核
@@ -295,7 +295,7 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    status === 1 && status === 3 && status === 4 && status === 5 &&
+                    (status === 1 || status === 3 || status === 4 || status === 5) &&
                     <Menu.Item>
                         <a onClick={info}>
                             修改供应商地点审核
