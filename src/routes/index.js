@@ -187,6 +187,25 @@ const routes = [
                     </Switch>
                 )
             },
+            // 商品管理列表
+            {
+                path: '/managementList',
+                parent: 'gylspgl',
+                key: 'managementList',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/managementList"
+                            exact
+                            render={() => <Bundle load={ManagementList}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/managementList/commodifyDetail/:id"
+                            render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
             // 商品分类列表
             {
                 path: '/classifiedList',
