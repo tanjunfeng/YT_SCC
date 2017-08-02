@@ -1,5 +1,5 @@
 /**
- * @file changeAudit.jsx
+ * @file changeAdrAudit.jsx
  * @author Tan junfeng
  *
  * 供应商地点审核
@@ -21,7 +21,8 @@ import {
 import {
     modifyAuditVisible,
     insertSupplierSettlementInfo,
-    suppplierSettledAudit
+    suppplierSettledAudit,
+    supplierSettledAudit
 } from '../../../actions';
 // import { validatorRebate } from '../../../util/validator';
 
@@ -36,7 +37,8 @@ const Option = Select.Option;
     dispatch => bindActionCreators({
         modifyAuditVisible,
         insertSupplierSettlementInfo,
-        suppplierSettledAudit
+        suppplierSettledAudit,
+        supplierSettledAudit
     }, dispatch)
 )
 class ChangeAudit extends PureComponent {
@@ -66,7 +68,7 @@ class ChangeAudit extends PureComponent {
         }
         this.props.form.validateFields((err) => {
             if (!err) {
-                this.props.suppplierSettledAudit({
+                this.props.supplierSettledAudit({
                     id: visibleData.id,
                     pass: parseInt(selected, 10) === 1 ? false : true,
                     ...this.props.form.getFieldsValue()
@@ -93,9 +95,10 @@ class ChangeAudit extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
+
         return (
             <Modal
-                title="商家入住审核"
+                title="供应商地点审核"
                 visible={this.props.auditVisible}
                 onOk={this.handleAuditOk}
                 onCancel={this.handleAuditCancel}

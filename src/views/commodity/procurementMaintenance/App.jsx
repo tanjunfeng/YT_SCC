@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {
-    Form, Pagination
+    Form,
 } from 'antd';
 
 import {
@@ -31,8 +31,7 @@ import { productAddPriceVisible } from '../../../actions/producthome';
 @connect(
     state => ({
         prodPurchase: state.toJS().commodity.prodPurchase,
-        getProductById: state.toJS().commodity.getProductById,
-        getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
+        getProductByIds: state.toJS().commodity.getProductById,
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
     }),
     dispatch => bindActionCreators({
@@ -71,12 +70,12 @@ class ProcurementMaintenance extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
+        const { match } = this.props;
         this.props.fetchGetProductById({
-            // id: this.props.match.id
-            productId: 1001
+            productId: match.params.id
         });
         this.props.fecthGetProdPurchaseById({
-            id: 2
+            id: match.params.id
         });
     }
 
@@ -122,8 +121,8 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     render() {
-        const { prefixCls, getProductById, match } = this.props;
-        const innitalvalue = getProductById;
+        const { prefixCls, getProductByIds, match } = this.props;
+        const innitalvalue = getProductByIds;
         const { id } = match;
         return (
             <div className={`${prefixCls}-min-width application`}>
@@ -136,13 +135,8 @@ class ProcurementMaintenance extends PureComponent {
                     handleAdd={this.handleAdd}
                 />
                 <div>
-                    <Cardline />
+                    <Cardline innitalvalue={innitalvalue} />
                 </div>
-                <Pagination
-                    current={this.state.current}
-                    onChange={this.handlePaginationChange}
-                    total={10}
-                />
                 <ProdPurchaseModal />
             </div>
         );
@@ -155,7 +149,7 @@ ProcurementMaintenance.propTypes = {
     fecthGetProdPurchaseById: PropTypes.func,
     productAddPriceVisible: PropTypes.func,
     prefixCls: PropTypes.string,
-    getProductById: PropTypes.objectOf(PropTypes.any),
+    getProductByIds: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any)
 }
 
