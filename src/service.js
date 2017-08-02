@@ -509,7 +509,10 @@ export const queryAllLargerRegionProvince = (params) => http.get('/region/queryA
 export const getSupplierNo = (params) => http.get('/supplier/getSupplierNo', params);
 // 新增或修改供应商信息
 export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/insertOrUpdateSupplierInfo', params);
-
+// 供应商入驻审核
+export const suppplierSettledAudit = (params) => http.post('/supplier/suppplierSettledAudit', params);
+// 供应商地点入驻审核
+export const supplierAdrSettledAudit = (params) => http.post('/supplier/supplierAdrSettledAudit ', params);
 
 /**
  * 商品模块

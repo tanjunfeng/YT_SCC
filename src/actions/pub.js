@@ -13,7 +13,8 @@ import {
     querySuppliersList,
     fetchAddProdPurchase,
     supplierSearchBox,
-    supplierAdrSearchBox
+    supplierAdrSearchBox,
+    getWarehouseInfo1
 } from '../service';
 
 const pubValueList = {
@@ -28,7 +29,9 @@ const pubValueList = {
     // 供应商选择组件
     supplierSearchBox,
     // 供应商地点选择组件
-    supplierAdrSearchBox
+    supplierAdrSearchBox,
+    // 查询逻辑仓库列表
+    getWarehouseInfo1
 }
 
 const receiveCollapsed = (isCollapsed) => ({

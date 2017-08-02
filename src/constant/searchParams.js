@@ -209,13 +209,19 @@ export const supplierPlaceLevelOptions = {
     defaultValue: '1',
     data: [{
         key: '1',
-        value: '战略供应商'
+        value: '生产厂家'
     }, {
         key: '2',
-        value: '核心供应商'
+        value: '批发商'
     }, {
         key: '3',
-        value: '可替代供应商'
+        value: '经销商'
+    }, {
+        key: '4',
+        value: '代销商'
+    }, {
+        key: '5',
+        value: '其他'
     }]
 }
 
@@ -263,10 +269,10 @@ export const mainSupplierOptions = {
         value: '全部'
     }, {
         key: '0',
-        value: '是'
+        value: '否'
     }, {
         key: '1',
-        value: '否'
+        value: '是'
     }]
 }
 

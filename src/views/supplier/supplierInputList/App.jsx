@@ -29,7 +29,8 @@ import Utils from '../../../util/util';
 import { exportSupplierList } from '../../../service';
 import ChangeMessage from './changeMessage';
 import ChangeAudit from './changeAudit';
-import CheckReason from './checkReason';
+// import ChangeAdrAudit from './changeAdrAudit';
+import CheckReson from './checkReason';
 
 
 const columns = supplierInputList;
@@ -76,7 +77,13 @@ class SupplierInputList extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
-        this.props.fetchQueryManageList();
+        // TODO 默认加条件
+        this.props.fetchQueryManageList({
+            pageNum: this.current,
+            pageSize: PAGE_SIZE,
+            providerType: 1,
+            status: 0
+        });
     }
 
     /**
@@ -97,7 +104,10 @@ class SupplierInputList extends PureComponent {
                 case 'ChangeAudit':
                     this.props.modifyAuditVisible({isVisible: true, record});
                     break;
-                case 'CheckReason':
+                case 'ChangeAdrAudit':
+                    this.props.modifyAuditVisible({isVisible: true, record});
+                    break;
+                case 'CheckReson':
                     this.props.modifyCheckReasonVisible({isVisible: true, record});
                     break;
                 case 'ChangeMessage':
@@ -120,11 +130,11 @@ class SupplierInputList extends PureComponent {
         if (bool) {
             // 主数据
             // console.log('主数据')
-            this.handlePaginationChange();
+            this.handlePaginationChange(this.current);
         } else {
             // SCM数据
             // console.log('SCM数据')
-            this.handlePaginationChange();
+            this.handlePaginationChange(this.current);
         }
     }
 
@@ -207,7 +217,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     status === 2 &&
-                    <Menu.Item key="CheckReason">
+                    <Menu.Item key="CheckReson">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商审核
                         </a>
@@ -239,7 +249,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     status === 2 &&
-                    <Menu.Item key="ChangeAudit">
+                    <Menu.Item key="ChangeAdrAudit">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商地点审核
                         </a>
@@ -247,7 +257,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     status === 2 &&
-                    <Menu.Item key="CheckReason">
+                    <Menu.Item key="CheckReson">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商地点审核
                         </a>
@@ -306,7 +316,7 @@ class SupplierInputList extends PureComponent {
                 <ChangeAudit />
                 {
                     this.props.checkResonVisible &&
-                    <CheckReason />
+                    <CheckReson />
                 }
             </div>
         )

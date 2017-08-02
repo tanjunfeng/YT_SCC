@@ -78,6 +78,8 @@ import fetchAddProdPurchase from './fetch/fetchAddProdPurchase';
 import fetchQueryProdByCondition from './fetch/fetchQueryProdByCondition';
 import fetchUpdateProdPurchase from './fetch/fetchUpdateProdPurchase';
 import fetchChangeProPurchaseStatus from './fetch/fetchChangeProPurchaseStatus';
+import suppplierSettledAudit from './fetch/suppplierSettledAudit';
+import supplierSettledAudit from './fetch/supplierSettledAudit';
 
 // 库存调整
 import stockAdjust from './stockAdjust';
@@ -147,6 +149,8 @@ export {
     fetchChangeSupType,
 
     fetchQuerySettledList,
+    suppplierSettledAudit,
+    supplierSettledAudit,
 
     // 库存调整
     stockAdjust,

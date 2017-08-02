@@ -76,10 +76,12 @@ class SuppliersAppList extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
+        // TODO 默认加条件
         this.props.getSupplierSettledList({
             pageNum: this.current,
             pageSize: PAGE_SIZE,
-            ...this.searchForm
+            providerType: 1,
+            status: 0
         });
     }
 
@@ -127,7 +129,7 @@ class SuppliersAppList extends PureComponent {
                 ...this.searchForm
             });
         }
-        this.handlePaginationChange();
+        this.handlePaginationChange(this.current);
     }
 
     /**
