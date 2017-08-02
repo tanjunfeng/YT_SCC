@@ -1,5 +1,5 @@
 /**
- * @file changeAdrAudit.jsx
+ * @file changeAudit.jsx
  * @author Tan junfeng
  *
  * 供应商地点审核
@@ -17,12 +17,13 @@ import {
     Modal,
     message
 } from 'antd';
-
+import { PAGE_SIZE } from '../../../constant';
 import {
-    modifyAuditVisible,
+    modifyAuditAdrVisible,
     insertSupplierSettlementInfo,
     suppplierSettledAudit,
-    supplierSettledAudit
+    supplierAdrSettledAudit,
+    fetchQueryManageList
 } from '../../../actions';
 // import { validatorRebate } from '../../../util/validator';
 
@@ -31,14 +32,15 @@ const Option = Select.Option;
 
 @connect(
     state => ({
-        auditVisible: state.toJS().supplier.auditVisible,
+        auditVisible: state.toJS().supplier.auditVisibled,
         visibleData: state.toJS().supplier.visibleData
     }),
     dispatch => bindActionCreators({
-        modifyAuditVisible,
+        modifyAuditAdrVisible,
         insertSupplierSettlementInfo,
         suppplierSettledAudit,
-        supplierSettledAudit
+        supplierAdrSettledAudit,
+        fetchQueryManageList
     }, dispatch)
 )
 class ChangeAudit extends PureComponent {
@@ -49,14 +51,18 @@ class ChangeAudit extends PureComponent {
         this.handleAuditOk = ::this.handleAuditOk;
         this.handleSelectChange = ::this.handleSelectChange;
         this.handleTextChange = ::this.handleTextChange;
+        this.handleGetList = ::this.handleGetList;
+
+        this.searchForm = {};
+        this.current = 1;
+        this.state = {
+            selected: -1,
+        }
     }
 
-    state = {
-        selected: -1,
-    }
 
     handleAuditCancel() {
-        this.props.modifyAuditVisible({isVisible: false});
+        this.props.modifyAuditAdrVisible({isVisible: false});
     }
 
     handleAuditOk() {
@@ -68,15 +74,31 @@ class ChangeAudit extends PureComponent {
         }
         this.props.form.validateFields((err) => {
             if (!err) {
-                this.props.supplierSettledAudit({
-                    id: visibleData.id,
+                this.props.supplierAdrSettledAudit({
+                    id: parseInt(visibleData.id),
                     pass: parseInt(selected, 10) === 1 ? false : true,
                     ...this.props.form.getFieldsValue()
-                }).then(() => {
+                }).then((res) => {
+                    this.props.modifyAuditAdrVisible({isVisible: false});
+                    message.success(res.message)
                     this.props.getList()
+                }).catch(() => {
+                    this.props.modifyAuditAdrVisible({isVisible: false});
+                    message.err('修改审核失败')
                 })
             }
         })
+    }
+
+    /**
+     * 数据列表查询
+     */
+    handleGetList() {
+        this.props.fetchQueryManageList({
+            pageSize: PAGE_SIZE,
+            pageNum: this.current,
+            ...this.searchForm
+        });
     }
 
     handleSelectChange(key) {
@@ -95,10 +117,9 @@ class ChangeAudit extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-
         return (
             <Modal
-                title="供应商地点审核"
+                title="商家地点审核"
                 visible={this.props.auditVisible}
                 onOk={this.handleAuditOk}
                 onCancel={this.handleAuditCancel}
@@ -152,10 +173,11 @@ class ChangeAudit extends PureComponent {
 }
 
 ChangeAudit.propTypes = {
-    modifyAuditVisible: PropTypes.func,
+    modifyAuditAdrVisible: PropTypes.func,
+    fetchQueryManageList: PropTypes.func,
+    supplierAdrSettledAudit: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     auditVisible: PropTypes.bool,
-    insertSupplierSettlementInfo: PropTypes.func,
     visibleData: PropTypes.objectOf(PropTypes.any),
     getList: PropTypes.objectOf(PropTypes.any),
 }

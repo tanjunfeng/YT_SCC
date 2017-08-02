@@ -9,7 +9,7 @@ import Promise from 'bluebird';
 import ActionType from '../ActionType';
 
 const receive = (data) => ({
-    type: ActionType.MODIFY_AUDIT_VISIBLE,
+    type: ActionType.MODIFY_ADR_AUDIT_VISIBLE,
     payload: data,
 });
 

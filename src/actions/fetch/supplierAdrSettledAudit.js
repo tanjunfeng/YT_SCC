@@ -6,7 +6,7 @@
  */
 
 import Promise from 'bluebird';
-import { supplierSettledAudit } from '../../service';
+import { supplierAdrSettledAudit } from '../../service';
 import ActionType from '../ActionType';
 
 const receive = (data) => ({
@@ -16,7 +16,7 @@ const receive = (data) => ({
 
 export default (params) => dispatch => (
     new Promise((resolve, reject) => {
-        supplierSettledAudit(params)
+        supplierAdrSettledAudit(params)
             .then(res => {
                 dispatch(receive(res.success));
                 resolve(res)
