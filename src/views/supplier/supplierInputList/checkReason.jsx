@@ -22,13 +22,14 @@ import {
     modifyCheckReasonVisible,
     insertSupplierSettlementInfo,
     fetchGetProductById,
+    fetchEditBeforeAfter
 } from '../../../actions';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 const TEXT = {
-     supplierBasicInfo: {
+    supplierBasicInfo: {
         // id: '主键ID',
         companyName: '公司名称',
         spNo: '供应商编号',
@@ -159,6 +160,7 @@ const parse = (before, after, TEXT) => {
         modifyCheckReasonVisible,
         insertSupplierSettlementInfo,
         fetchGetProductById,
+        fetchEditBeforeAfter
     }, dispatch)
 )
 class CheckReason extends PureComponent {
@@ -173,6 +175,13 @@ class CheckReason extends PureComponent {
 
     state = {
         selected: -1
+    }
+
+
+    componentDidMount() {
+        this.props.modifyCheckReasonVisible()
+        fetchEditBeforeAfter({
+        })
     }
 
     /**

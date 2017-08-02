@@ -207,7 +207,8 @@ class Cardline extends Component {
     }
 
     render() {
-        const { prefixCls, getProdPurchaseByIds, } = this.props;
+        const { prefixCls, getProdPurchaseByIds } = this.props;
+        // console.log(getProdPurchaseByIds.data.data)
         const cardData =
             (<div
                 key={getProdPurchaseByIds.id}
