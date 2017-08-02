@@ -11,7 +11,11 @@ import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Icon, Input, Form, Button, Select, Row, Col, DatePicker, Checkbox } from 'antd';
+import {
+    Icon, Input, Form, Button,
+    Select, Row, Col, DatePicker,
+    Checkbox, message
+} from 'antd';
 
 import Utils from '../../../util/util';
 import { Validator } from '../../../util/validator';
@@ -56,8 +60,9 @@ class LicenseInfo extends PureComponent {
         this.submit = ::this.submit;
         this.companyAddress = {};
         this.licenseLoc = {}
+        const { supplierlicenseInfo = {} } = props;
         this.state = {
-            checked: false
+            checked: 0
         }
         this.submitData = {};
     }
@@ -67,8 +72,8 @@ class LicenseInfo extends PureComponent {
 
     getVlaue() {
         const { form, onGoTo, isEdit, detailData = {}, data } = this.props;
-        Tools.checkAddress(this.companyAddress, 'companyAddress', this);
-        console.log(this.refs['qualityIdentification'].getValue())
+        Tools.checkAddress(this.companyAddress, 'companyLoc', this);
+        Tools.checkAddress(this.licenseLoc, 'licenseLocSpace', this);
         form.validateFields((err, values) => {
             if (!err) {
                 const { firstValue, secondValue, thirdValue } = this.companyAddress;
@@ -160,8 +165,8 @@ class LicenseInfo extends PureComponent {
         this.submitData.commitType = type;
         this.props.hanldeSupplier(this.submitData, isEdit ? 'updateSupplierInfo' : 'insertSupplierInfo')
             .then((res) => {
-                const { location, history } = this.props;
-                history.push(`${location.pathname}/${isEdit ? this.submitData.id : res.data}`)
+                message.success('保存成功');
+                !isEdit && this.props.handleGetDetail(res.data);
             });
     }
 
@@ -178,7 +183,7 @@ class LicenseInfo extends PureComponent {
     }
 
     handlePreStep() {
-
+        this.props.onGoTo('2');
     }
 
     handleCompanyAddressChange(data) {
@@ -190,7 +195,7 @@ class LicenseInfo extends PureComponent {
     }
  
     handleNextStep() {
-        this.props.history.push('/supplierInputList/place/add/123123')
+        
     }
 
     handleOperatingPeriod() {
@@ -247,7 +252,6 @@ class LicenseInfo extends PureComponent {
                                             })(
                                                 <Input
                                                     placeholder="公司详细地址"
-                                                    onBlur={(e) => { Validator.repeat.spNo(e, this, supplierBasicInfo.id) }}
                                                 />
                                             )}
                                         </FormItem>
@@ -316,6 +320,7 @@ class LicenseInfo extends PureComponent {
                                             })(
                                                 <Input
                                                     placeholder="注册号(营业执照号)"
+                                                    onBlur={(e) => { Validator.repeat.licenseNo(e, this, supplierlicenseInfo.id) }}
                                                 />
                                             )}
                                         </FormItem>
@@ -417,7 +422,6 @@ class LicenseInfo extends PureComponent {
                                             })(
                                                 <Input
                                                     placeholder="营业执照详细地址"
-                                                    onBlur={(e) => { Validator.repeat.spNo(e, this, supplierBasicInfo.id) }}
                                                 />
                                             )}
                                         </FormItem>
@@ -433,7 +437,6 @@ class LicenseInfo extends PureComponent {
                                             })(
                                                 <Input
                                                     placeholder="注册资本"
-                                                    onBlur={(e) => { Validator.repeat.spNo(e, this, supplierBasicInfo.id) }}
                                                 />
                                             )}
                                             &nbsp;万元
@@ -505,7 +508,10 @@ class LicenseInfo extends PureComponent {
                     <div className="add-message-handle">
                         <Button onClick={this.handlePreStep}>上一步</Button>
                         <Button onClick={this.handleSubmit}>提交</Button>
-                        <Button onClick={this.handleCreatePlace}>创建供应商地点</Button>
+                        {
+                            isEdit &&
+                            <Button onClick={this.handleCreatePlace}>创建供应商地点</Button>
+                        }
                         <Button onClick={this.handleSaveDraft}>保存为制单</Button>
                     </div>
                 </Form>

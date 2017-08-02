@@ -9,11 +9,13 @@ import Utils from './util';
 import {
     settlementInfo,
     taxpayerNumber,
-    bankAccount,
     registLicenceNo,
     orgCodeInfoByCode,
     emerCont,
-    settledCont
+    settledCont,
+    checkSupplierName,
+    checkBankAccount,
+    checkLicenseNo
 } from '../service';
 
 /**
@@ -39,7 +41,7 @@ export class Validator {
             if (Utils.trim(value) === '') {
                 return;
             }
-            settlementInfo(
+            checkSupplierName(
                 Utils.removeInvalid({companyName: e.target.value, id: _id})
             ).catch(() => {
                 _this.props.form.setFields({
@@ -119,7 +121,7 @@ export class Validator {
             if (Utils.trim(value) === '') {
                 return;
             }
-            bankAccount(
+            checkBankAccount(
                 Utils.removeInvalid({bankAccount: e.target.value, id: _id})
             ).catch(() => {
                 _this.props.form.setFields({
@@ -130,13 +132,13 @@ export class Validator {
             })
         },
         // 请输入营业执照号是否重复
-        registLicenceNumber: (e, _this, _id = null) => {
+        licenseNo: (e, _this, _id = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
-            registLicenceNo(
-                Utils.removeInvalid({registLicenceNumber: e.target.value, id: _id})
+            checkLicenseNo(
+                Utils.removeInvalid({licenseNo: e.target.value, id: _id})
             ).catch(() => {
                 _this.props.form.setFields({
                     registLicenceNumber: {
