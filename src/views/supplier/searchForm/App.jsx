@@ -299,25 +299,24 @@ class SearchForm extends Component {
                         </FormItem>
                         : <FormItem className="sc-form-item">
                             <span className="sc-form-item-label">供应商地点等级</span>
-                                {getFieldDecorator('grade', {
-                                    initialValue: supplierPlaceLevelOptions.defaultValue
-                                })(
-                                    <Select
-                                        className="sc-form-item-select"
-                                        size="default"
-                                    >
-                                        {
-                                            supplierPlaceLevelOptions.data.map((item) =>
-                                                (<Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Option>)
-                                            )
-                                        }
-                                    </Select>
-                                )}
-                            </FormItem>
+                            {getFieldDecorator('grade', {
+                                initialValue: supplierPlaceLevelOptions.defaultValue
+                            })(
+                                <Select
+                                    className="sc-form-item-select"
+                                    size="default"
+                                >
+                                    {
+                                        supplierPlaceLevelOptions.data.map((item) =>
+                                            (<Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Option>)
+                                        )
+                                    }
+                                </Select>
+                            )}
+                        </FormItem>
                     }
-                    
                     {/* 供应商入驻日期 */}
                     <FormItem className="sc-form-item">
                         <div>

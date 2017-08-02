@@ -17,11 +17,12 @@ import {
     Modal,
     message
 } from 'antd';
-
+import { PAGE_SIZE } from '../../../constant';
 import {
     modifyAuditVisible,
     insertSupplierSettlementInfo,
-    suppplierSettledAudit
+    suppplierSettledAudit,
+    fetchQueryManageList
 } from '../../../actions';
 // import { validatorRebate } from '../../../util/validator';
 
@@ -36,7 +37,8 @@ const Option = Select.Option;
     dispatch => bindActionCreators({
         modifyAuditVisible,
         insertSupplierSettlementInfo,
-        suppplierSettledAudit
+        suppplierSettledAudit,
+        fetchQueryManageList
     }, dispatch)
 )
 class ChangeAudit extends PureComponent {
@@ -47,11 +49,15 @@ class ChangeAudit extends PureComponent {
         this.handleAuditOk = ::this.handleAuditOk;
         this.handleSelectChange = ::this.handleSelectChange;
         this.handleTextChange = ::this.handleTextChange;
+        this.handleGetList = ::this.handleGetList;
+
+        this.searchForm = {};
+        this.current = 1;
+        this.state = {
+            selected: -1,
+        }
     }
 
-    state = {
-        selected: -1,
-    }
 
     handleAuditCancel() {
         this.props.modifyAuditVisible({isVisible: false});
@@ -70,11 +76,27 @@ class ChangeAudit extends PureComponent {
                     id: visibleData.id,
                     pass: parseInt(selected, 10) === 1 ? false : true,
                     ...this.props.form.getFieldsValue()
-                }).then(() => {
+                }).then((res) => {
+                    this.props.modifyAuditVisible({isVisible: false});
+                    message.success(res.message)
                     this.props.getList()
+                }).catch(() => {
+                    this.props.modifyAuditVisible({isVisible: false});
+                    message.err('修改审核失败')
                 })
             }
         })
+    }
+
+    /**
+     * 数据列表查询
+     */
+    handleGetList() {
+        this.props.fetchQueryManageList({
+            pageSize: PAGE_SIZE,
+            pageNum: this.current,
+            ...this.searchForm
+        });
     }
 
     handleSelectChange(key) {
@@ -150,9 +172,9 @@ class ChangeAudit extends PureComponent {
 
 ChangeAudit.propTypes = {
     modifyAuditVisible: PropTypes.func,
+    fetchQueryManageList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     auditVisible: PropTypes.bool,
-    insertSupplierSettlementInfo: PropTypes.func,
     visibleData: PropTypes.objectOf(PropTypes.any),
     getList: PropTypes.objectOf(PropTypes.any),
 }

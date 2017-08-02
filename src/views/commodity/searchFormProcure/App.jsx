@@ -20,7 +20,6 @@ import {
     fetchTest,
 } from '../../../actions/classifiedList';
 import {
-    fetchGetProductById,
     fetchAddProdPurchase,
     fetchQueryProdByCondition,
     fecthGetProdPurchaseById
@@ -46,7 +45,6 @@ const Option = Select.Option;
     dispatch => bindActionCreators({
         fetchAction,
         receiveData,
-        fetchGetProductById,
         fetchAddProdPurchase,
         fetchQueryProdByCondition,
         pubFetchValueList,
@@ -120,9 +118,8 @@ class SearchForm extends Component {
      */
     handleGetValue() {
         const { validateFields } = this.props.form;
-        const { productId } = this.props.getProdPurchaseByIds;
         const { match } = this.props;
-        console.log(this.props.getProdPurchaseByIds)
+        // console.log(match)
         validateFields((err, values) => {
             // console.log(this.state.supplyChoose, this.state.supplyChoose1, this.state.supplyChoose2)
             // console.log(values);
@@ -258,7 +255,6 @@ class SearchForm extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls, innitalvalue, getProdPurchaseByIds } = this.props;
-        console.log(getProdPurchaseByIds)
         return (
             <div className={`${prefixCls}-content manage-form`}>
                 <div style={{fontSize: 16, fontWeight: 900}}>

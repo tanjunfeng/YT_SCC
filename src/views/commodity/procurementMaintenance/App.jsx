@@ -62,7 +62,7 @@ class ProcurementMaintenance extends PureComponent {
             // 控制主供应商选项唯一
             disabled: false,
             current: 1,
-            productId: null
+            productId: ''
         }
     }
 
@@ -71,6 +71,7 @@ class ProcurementMaintenance extends PureComponent {
      */
     componentDidMount() {
         const { match } = this.props;
+        // console.log(match)
         this.props.fetchGetProductById({
             productId: match.params.id
         });
