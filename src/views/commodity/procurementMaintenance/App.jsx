@@ -33,6 +33,7 @@ import { productAddPriceVisible } from '../../../actions/producthome';
         prodPurchase: state.toJS().commodity.prodPurchase,
         getProductByIds: state.toJS().commodity.getProductById,
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
+        getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
     }),
     dispatch => bindActionCreators({
         fecthGetProdPurchaseById,
@@ -122,14 +123,16 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     render() {
-        const { prefixCls, getProductByIds, match } = this.props;
+        const { prefixCls, getProductByIds, match, getProdPurchaseByIds } = this.props;
         const innitalvalue = getProductByIds;
-        const { id } = match;
+        const { data } = getProdPurchaseByIds;
+        // console.log(match.params.id)
+        // console.log(innitalvalue)
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm innitalvalue={innitalvalue} />
                 <SearchForm
-                    id={id}
+                    id={match.params.id}
                     innitalvalue={innitalvalue}
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}

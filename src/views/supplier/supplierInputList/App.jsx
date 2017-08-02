@@ -41,6 +41,7 @@ const columns = supplierInputList;
         informationVisible: state.toJS().supplier.informationVisible,
         queryManageList: state.toJS().supplier.queryManageList,
         checkResonVisible: state.toJS().supplier.checkResonVisible,
+        editBeforeAfters: state.toJS().supplier.editBeforeAfter,
     }),
     dispatch => bindActionCreators({
         fetchQueryManageList,
@@ -78,6 +79,7 @@ class SupplierInputList extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
+        console.log(this.props.queryManageList)
         // TODO 默认加条件
         this.props.fetchQueryManageList({
             // pageNum: this.current,
@@ -85,6 +87,9 @@ class SupplierInputList extends PureComponent {
             // providerType: 1,
             // status: 0
         });
+        fetchEditBeforeAfter({
+            // spId
+        })
     }
 
     /**
@@ -224,6 +229,7 @@ class SupplierInputList extends PureComponent {
                     <Link to={`${pathname}/supplier/${id}`}>供应商详情</Link>
                 </Menu.Item>
                 {
+                    // 1： 已提交状态
                     status === 1 &&
                     <Menu.Item key="ChangeAudit">
                         <a target="_blank" rel="noopener noreferrer">
@@ -232,6 +238,7 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
+                    // 1： 已提交状态
                     status === 1 &&
                     <Menu.Item key="CheckReson">
                         <a target="_blank" rel="noopener noreferrer">
@@ -248,6 +255,7 @@ class SupplierInputList extends PureComponent {
                     <Link to={`${pathname}/place/${id}`}>供应商地点详情</Link>
                 </Menu.Item>
                 {
+                    // 0： 制单状态、2：已审核、3:已拒绝
                     (status === 0 || status === 2 || status === 3) &&
                     <Menu.Item key="modifySupAddInfor">
                         <Link to={`${pathname}/edit/${id}`}>
@@ -256,6 +264,7 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
+                    // 3:已拒绝
                     status === 3 &&
                     <Menu.Item key="ChangeMessage">
                         <a target="_blank" rel="noopener noreferrer">
@@ -272,6 +281,7 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
+                    // 1： 已提交
                     status === 1 &&
                     <Menu.Item key="CheckReson">
                         <a target="_blank" rel="noopener noreferrer">
@@ -296,7 +306,7 @@ class SupplierInputList extends PureComponent {
 
     render() {
         const { data, total, pageNum, pageSize } = this.props.queryManageList;
-        const { queryManageList } = this.props;
+        const { queryManageList, editBeforeAfters } = this.props;
         columns[columns.length - 1].render = this.renderOperation;
         return (
             <div className="manage">
