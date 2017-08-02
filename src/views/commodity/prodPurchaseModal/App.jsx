@@ -55,8 +55,8 @@ class ProdPurchaseModal extends Component {
             console.log(values);
             // TODO post data
             this.props.fetchAddProdPurchase({
-                spId: '12345',
-                spAdrId: '1234567',
+                spId: '145',
+                spAdrId: '14567',
                 productId: 'xpro123',
                 branchCompanyId: 'cp123',
                 supplierType: values.mainSupplier ? 1 : 0,
@@ -109,6 +109,7 @@ class ProdPurchaseModal extends Component {
                 onOk={this.handleOk}
                 width={'500px'}
                 onCancel={this.handleCancel}
+                maskClosable={false}
             >
                 <div className={`${prefixCls}-body-wrap`}>
                     <Form layout="inline" onSubmit={this.handleSubmit}>
@@ -156,21 +157,25 @@ class ProdPurchaseModal extends Component {
                                             compKey="search-mind-key1"
                                             ref={ref => { this.searchMind0 = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                id: params.value
-                                            }, 'fetchAddProdPurchase')}
+                                                condition: params.value
+                                            }, 'getWarehouseInfo1')}
                                             onChoosed={this.handleTestChoose}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.id} - {data.name}</div>
+                                                <div>{data.warehouseCode} - {data.warehouseName}</div>
                                             )}
                                             pageSize={2}
                                             columns={[
                                                 {
-                                                    title: 'Name',
-                                                    dataIndex: 'name',
+                                                    title: '仓库ID',
+                                                    dataIndex: 'id',
                                                     width: 150,
                                                 }, {
-                                                    title: 'Address',
-                                                    dataIndex: 'address',
+                                                    title: '仓库编码',
+                                                    dataIndex: 'warehouseCode',
+                                                    width: 200,
+                                                }, {
+                                                    title: '仓库名称',
+                                                    dataIndex: 'warehouseName',
                                                     width: 200,
                                                 }
                                             ]}
@@ -189,20 +194,32 @@ class ProdPurchaseModal extends Component {
                                             compKey="search-mind-key2"
                                             ref={ref => { this.searchMind1 = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                spId: params.value
-                                            }, 'fetchAddProdPurchase')}
+                                                condition: params.value
+                                            }, 'supplierSearchBox')}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.id} - {data.name}</div>
+                                                <div>{data.spId} - {data.companyName}</div>
                                             )}
                                             pageSize={2}
                                             columns={[
                                                 {
                                                     title: 'Name',
-                                                    dataIndex: 'name',
+                                                    dataIndex: 'spNo',
                                                     width: 150,
                                                 }, {
-                                                    title: 'Address',
-                                                    dataIndex: 'address',
+                                                    title: 'spNo',
+                                                    dataIndex: 'spId',
+                                                    width: 200,
+                                                }, {
+                                                    title: 'companyName',
+                                                    dataIndex: 'companyName',
+                                                    width: 200,
+                                                }, {
+                                                    title: 'spAdrid',
+                                                    dataIndex: 'spAdrid',
+                                                    width: 200,
+                                                }, {
+                                                    title: 'providerNo',
+                                                    dataIndex: 'providerNo',
                                                     width: 200,
                                                 }
                                             ]}
@@ -217,21 +234,37 @@ class ProdPurchaseModal extends Component {
                                             compKey="search-mind-key2"
                                             ref={ref => { this.searchMind2 = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                spAdrId: params.value
-                                            }, 'fetchAddProdPurchase')}
+                                                supplierAddressId: params.value
+                                            }, 'supplierAdrSearchBox')}
                                             onChoosed={this.handleTestChoose}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.id} - {data.name}</div>
+                                                <div>{data.providerNo} - {data.providerName}</div>
                                             )}
                                             pageSize={2}
                                             columns={[
                                                 {
                                                     title: 'Name',
-                                                    dataIndex: 'name',
+                                                    dataIndex: 'spNo',
                                                     width: 150,
                                                 }, {
-                                                    title: 'Address',
-                                                    dataIndex: 'address',
+                                                    title: 'spId',
+                                                    dataIndex: 'spId',
+                                                    width: 200,
+                                                }, {
+                                                    title: 'spAdrid',
+                                                    dataIndex: 'spAdrid',
+                                                    width: 200,
+                                                }, {
+                                                    title: 'companyName',
+                                                    dataIndex: 'companyName',
+                                                    width: 200,
+                                                }, {
+                                                    title: 'providerNo',
+                                                    dataIndex: 'providerNo',
+                                                    width: 200,
+                                                }, {
+                                                    title: 'providerName',
+                                                    dataIndex: 'providerName',
                                                     width: 200,
                                                 }
                                             ]}

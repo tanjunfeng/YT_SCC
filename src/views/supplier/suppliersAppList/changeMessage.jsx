@@ -63,6 +63,7 @@ class ChangeMessage extends PureComponent {
     }
 
     render() {
+        const { failedReason = '' } = this.props.visibleData;
         return (
             <Modal
                 title="平台已拒绝原因"
@@ -75,7 +76,9 @@ class ChangeMessage extends PureComponent {
             >
                 <Form>
                     <FormItem className="manage-form-item">
-                        <span className="manage-form-label">结算账期</span>
+                        <span className="manage-form-label">
+                            {failedReason}
+                        </span>
                     </FormItem>
                 </Form>
             </Modal>

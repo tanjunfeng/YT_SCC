@@ -34,6 +34,7 @@ export default {
     RECEIVE_APPLICATION_LIST: 'RECEIVE_APPLICATION_LIST',
     MODIFY_SUPPLIER_FROZEN: 'MODIFY_SUPPLIER_FROZEN',
     MODIFY_AUDIT_VISIBLE: 'MODIFY_AUDIT_VISIBLE',
+    MODIFY_ADR_AUDIT_VISIBLE: 'MODIFY_ADR_AUDIT_VISIBLE',
     MODIFY_CHECK_REASON_VISIBLE: 'MODIFY_CHECK_REASON_VISIBLE',
     RECEIVE_PARAMETER_LIST: 'RECEIVE_PARAMETER_LIST',
     MODIFY_AREA_VISIBLE: 'MODIFY_AREA_VISIBLE',
@@ -138,28 +139,28 @@ export default {
     FETCH_CAROUSEL_INTERVAL: 'FETCH_CAROUSEL_INTERVAL', // cyx
 
     /*********************procurement************************* */
-    //查询采购单管理列表
+    // 查询采购单管理列表
     RECEIVE_PO_MNG_LIST: 'RECEIVE_PO_MNG_LIST',
-    //更新采购单选中行
+    // 更新采购单选中行
     CHANGE_PO_MNG_SELECTED_ROWS: 'CHANGE_PO_MNG_SELECTED_ROWS',
-    //查询采购单详情
+    // 查询采购单详情
     RECEIVE_PO_DETAIL: 'RECEIVE_PO_DETAIL',
-    //初始采购单详情
+    // 初始采购单详情
     INIT_PO_DETAIL: 'INIT_PO_DETAIL',
-    //删除采购单
+    // 删除采购单
     DELETE_PO_BY_IDS: 'DELETE_PO_BY_IDS',
-    //查询采购单打印列表
+    // 查询采购单打印列表
     RECEIVE_PO_PRINT_LIST: 'RECEIVE_PO_PRINT_LIST',
-    //更新采购单基本信息
+    // 更新采购单基本信息
     UPDATE_PO_BASICINFO: 'UPDATE_PO_BASICINFO',
-    //添加采购单商品
+    // 添加采购单商品
     ADD_PO_LINES: 'ADD_PO_LINES',
-    //删除采购单商品
+    // 删除采购单商品
     DELETE_PO_LINE: 'DELETE_PO_LINE',
-    //更新采购单商品
+    // 更新采购单商品
     UPDATE_PO_LINE: 'UPDATE_PO_LINE',
 
-    /**值清单获取action，请根据实际情况拆分到单独action文件 Begin */
+    /** 值清单获取action，请根据实际情况拆分到单独action文件 Begin */
     // 仓库值清单
     GET_WAREHOUSE_ADDRESS_MAP: 'GET_WAREHOUSE_ADDRESS_MAP',
     // 门店值清单
@@ -187,6 +188,7 @@ export default {
     UPDATE_PO_RCV_LINE: 'UPDATE_PO_RCV_LINE',
 
     // IBM 修改
+    GET_PRODUCT_BY_ID: 'GET_PRODUCT_BY_ID',
     CHECK_MAIN_SUPPLIER: 'CHECK_MAIN_SUPPLIER',
     GET_PRODPURCHASE_BYID: 'GET_PRODPURCHASE_BYID',
     QUERY_PRODPURCHASE_BYID: 'QUERY_PRODPURCHASE_BYID',
@@ -197,6 +199,7 @@ export default {
     QUERY_PRODBY_CONDITION: 'QUERY_PRODBY_CONDITION',
     QUERY_SETTLED_LIST: 'QUERY_SETTLED_LIST',
     DELETE_PROD_PRUCHASE_BYID: 'DELETE_PROD_PRUCHASE_BYID',
+    SETTLED_AUDIT: 'SETTLED_AUDIT',
 
     // 库存调整
     STOCK_ADJUST_LIST: 'STOCK_ADJUST_LIST',

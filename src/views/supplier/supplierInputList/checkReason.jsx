@@ -22,21 +22,22 @@ import {
     modifyCheckReasonVisible,
     insertSupplierSettlementInfo,
     fetchGetProductById,
+    fetchEditBeforeAfter
 } from '../../../actions';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 const TEXT = {
-     supplierBasicInfo: {
-        id: '主键ID',
+    supplierBasicInfo: {
+        // id: '主键ID',
         companyName: '公司名称',
         spNo: '供应商编号',
         grade: '供应商等级',
     },
     supplierOperTaxInfo: {
         spId: '供应商主表ID',
-        id: '主键ID2',
+        // id: '主键ID2',
         companyName: '公司名称2',
         companyLocProvince: '省份名',
         companyLocCity: '城市名',
@@ -55,8 +56,8 @@ const TEXT = {
         taxpayerCertExpiringDate: '一般纳税人资格证到期日'
     },
     supplierBankInfo: {
-        spId: '供应商主表ID',
-        id: '主键ID',
+        // spId: '供应商主表ID',
+        // id: '主键ID',
         accountName: '开户名字',
         openBank: '开户行',
         bankAccount: '银行账户',
@@ -70,7 +71,7 @@ const TEXT = {
         invoiceHead: '供应商发票抬头'
     },
     supplierlicenseInfo: {
-        id: '主键ID',
+        // id: '主键ID',
         companyName: '公司名称',
         registLicenceNumber: '注册号(营业执照号)',
         legalRepresentative: '法定代表人',
@@ -93,29 +94,29 @@ const TEXT = {
         guaranteeMoney: '供应商质保金收取金额（保证金）'
     },
     saleRegionInfo: {
-        id: '主键ID',
+        // id: '主键ID',
         bigArea: '大区',
         province: '省份',
         city: '城市'
     },
     supplierAdrInfoDto: {
-        id: '供应商地点主表ID',
-        parentId: '供应商主表ID',
+        // id: '供应商地点主表ID',
+        // parentId: '供应商主表ID',
         basicId: '基本信息ID',
         contId: '联系信息ID',
         spAdrBasic: '地点基础信息表'
     },
     spAdrBasic: {
-        id: '主键ID',
+        // id: '主键ID',
         providerNo: '供应商地点编码',
         providerName: '供应商地点名称',
         goodsArrivalCycle: '到货周期',
-        orgId: '分公司ID',
+        // orgId: '分公司ID',
         settlementPeriod: '账期',
         belongArea: '所属区域',
     },
     spAdrContact: {
-        id: '供应商主表ID',
+        // id: '供应商主表ID',
         providerName: '供应商姓名',
         providerPhone: '供应商手机',
         providerEmail: '供应商邮箱',
@@ -137,7 +138,7 @@ const parse = (before, after, TEXT) => {
             const cb = b[j];
             const ca = a[j];
             const ct = t[j];
-            if (!ct) {
+            if (ct) {
                 data.push({
                     before: cb,
                     after: ca,
@@ -159,6 +160,7 @@ const parse = (before, after, TEXT) => {
         modifyCheckReasonVisible,
         insertSupplierSettlementInfo,
         fetchGetProductById,
+        fetchEditBeforeAfter
     }, dispatch)
 )
 class CheckReason extends PureComponent {
@@ -173,6 +175,13 @@ class CheckReason extends PureComponent {
 
     state = {
         selected: -1
+    }
+
+
+    componentDidMount() {
+        this.props.modifyCheckReasonVisible()
+        fetchEditBeforeAfter({
+        })
     }
 
     /**
@@ -240,7 +249,6 @@ class CheckReason extends PureComponent {
         const { editBeforeAfters } = this.props;
         const { before = {}, after = {} } = editBeforeAfters;
         const formData = parse(before, after, TEXT);
-        
 
         return (
             <Modal
@@ -256,7 +264,6 @@ class CheckReason extends PureComponent {
                     dataSource={formData}
                     pagination={false}
                     size="small"
-                    rowKey="name"
                 />
                 <div>
                     <div className="application-modal-tip">
@@ -282,7 +289,7 @@ class CheckReason extends PureComponent {
                         <Form layout="inline">
                             <FormItem className="application-form-item">
                                 <span className="application-modal-label">*不通过原因：</span>
-                                {getFieldDecorator('failedReason', {
+                                {getFieldDecorator('failedReson', {
                                     rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
                                 })(
                                     <Input

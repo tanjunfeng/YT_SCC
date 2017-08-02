@@ -16,6 +16,7 @@ import {
     fetchQueryManageList,
     fetchSupplierList,
     modifyAuditVisible,
+    modifyAuditAdrVisible,
     modifyCheckReasonVisible,
     modifyInformationVisible,
     fetchGetProductById,
@@ -29,7 +30,8 @@ import Utils from '../../../util/util';
 import { exportSupplierList } from '../../../service';
 import ChangeMessage from './changeMessage';
 import ChangeAudit from './changeAudit';
-import CheckReason from './checkReason';
+import ChangeAuditAdr from './changeAuditAdr';
+import CheckReson from './checkReason';
 
 const columns = supplierInputList;
 
@@ -39,12 +41,14 @@ const columns = supplierInputList;
         informationVisible: state.toJS().supplier.informationVisible,
         queryManageList: state.toJS().supplier.queryManageList,
         checkResonVisible: state.toJS().supplier.checkResonVisible,
+        editBeforeAfters: state.toJS().supplier.editBeforeAfter,
     }),
     dispatch => bindActionCreators({
         fetchQueryManageList,
         fetchSupplierList,
         modifyCheckReasonVisible,
         modifyAuditVisible,
+        modifyAuditAdrVisible,
         modifyInformationVisible,
         fetchGetProductById,
         fetchEditBeforeAfter
@@ -75,11 +79,21 @@ class SupplierInputList extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
-        this.props.fetchQueryManageList();
+        console.log(this.props.queryManageList)
+        // TODO 默认加条件
+        this.props.fetchQueryManageList({
+            // pageNum: this.current,
+            // pageSize: PAGE_SIZE,
+            // providerType: 1,
+            // status: 0
+        });
+        fetchEditBeforeAfter({
+            // spId
+        })
     }
 
     /**
-     * 表单操作
+     * 供应商表单操作
      *
      * @param {Object} record 传值所有数据对象
      * @param {number} index 下标
@@ -87,25 +101,43 @@ class SupplierInputList extends PureComponent {
      */
     handleSelect(record, index, items) {
         const { key } = items;
-        this.props.fetchEditBeforeAfter({
-            spId: String(record.id)
-            // spId: 'xprov139'
-        })
-        .then(() => {
-            switch (key) {
-                case 'ChangeAudit':
-                    this.props.modifyAuditVisible({isVisible: true, record});
-                    break;
-                case 'CheckReason':
-                    this.props.modifyCheckReasonVisible({isVisible: true, record});
-                    break;
-                case 'ChangeMessage':
-                    this.props.modifyInformationVisible({isVisible: true, record});
-                    break;
-                default:
-                    break;
-            }
-        });
+        switch (key) {
+            case 'ChangeAudit':
+                this.props.modifyAuditVisible({isVisible: true, record});
+                break;
+            case 'CheckReson':
+                this.props.modifyCheckReasonVisible({isVisible: true, record});
+                break;
+            case 'ChangeMessage':
+                this.props.modifyInformationVisible({isVisible: true, record});
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 地点表单操作
+     *
+     * @param {Object} record 传值所有数据对象
+     * @param {number} index 下标
+     * @param {Object} items 方法属性
+     */
+    handleSelects(record, index, items) {
+        const { key } = items;
+        switch (key) {
+            case 'ChangeAuditAdr':
+                this.props.modifyAuditAdrVisible({isVisible: true, record});
+                break;
+            case 'CheckReson':
+                this.props.modifyCheckReasonVisible({isVisible: true, record});
+                break;
+            case 'ChangeMessage':
+                this.props.modifyInformationVisible({isVisible: true, record});
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -119,11 +151,11 @@ class SupplierInputList extends PureComponent {
         if (bool) {
             // 主数据
             // console.log('主数据')
-            this.handlePaginationChange();
+            this.handlePaginationChange(this.current);
         } else {
             // SCM数据
             // console.log('SCM数据')
-            this.handlePaginationChange();
+            this.handlePaginationChange(this.current);
         }
     }
 
@@ -197,7 +229,8 @@ class SupplierInputList extends PureComponent {
                     <Link to={`${pathname}/supplier/${id}`}>供应商详情</Link>
                 </Menu.Item>
                 {
-                    status === 2 &&
+                    // 1： 已提交状态
+                    status === 1 &&
                     <Menu.Item key="ChangeAudit">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商审核
@@ -205,8 +238,9 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    status === 2 &&
-                    <Menu.Item key="CheckReason">
+                    // 1： 已提交状态
+                    status === 1 &&
+                    <Menu.Item key="CheckReson">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商审核
                         </a>
@@ -216,12 +250,13 @@ class SupplierInputList extends PureComponent {
         );
 
         const menu1 = (
-            <Menu onClick={(item) => this.handleSelect(record, index, item)}>
+            <Menu onClick={(item) => this.handleSelects(record, index, item)}>
                 <Menu.Item key="AddDetail">
                     <Link to={`${pathname}/place/${id}`}>供应商地点详情</Link>
                 </Menu.Item>
                 {
-                    (status === 1 || status === 3 || status === 4) &&
+                    // 0： 制单状态、2：已审核、3:已拒绝
+                    (status === 0 || status === 2 || status === 3) &&
                     <Menu.Item key="modifySupAddInfor">
                         <Link to={`${pathname}/edit/${id}`}>
                             修改供应商地点信息
@@ -229,7 +264,8 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    status === 4 &&
+                    // 3:已拒绝
+                    status === 3 &&
                     <Menu.Item key="ChangeMessage">
                         <a target="_blank" rel="noopener noreferrer">
                             查看审核已拒绝原因
@@ -237,17 +273,17 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    status === 2 &&
-
-                    <Menu.Item key="ChangeAudit">
+                    status === 1 &&
+                    <Menu.Item key="ChangeAuditAdr">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商地点审核
                         </a>
                     </Menu.Item>
                 }
                 {
-                    status === 2 &&
-                    <Menu.Item key="CheckReason">
+                    // 1： 已提交
+                    status === 1 &&
+                    <Menu.Item key="CheckReson">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商地点审核
                         </a>
@@ -270,7 +306,7 @@ class SupplierInputList extends PureComponent {
 
     render() {
         const { data, total, pageNum, pageSize } = this.props.queryManageList;
-        const { queryManageList } = this.props;
+        const { queryManageList, editBeforeAfters } = this.props;
         columns[columns.length - 1].render = this.renderOperation;
         return (
             <div className="manage">
@@ -304,9 +340,10 @@ class SupplierInputList extends PureComponent {
                     }
                 </Form>
                 <ChangeAudit />
+                <ChangeAuditAdr />
                 {
                     this.props.checkResonVisible &&
-                    <CheckReason />
+                    <CheckReson />
                 }
             </div>
         )
@@ -319,7 +356,7 @@ SupplierInputList.propTypes = {
     fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
     modifyAuditVisible: PropTypes.func,
     history: PropTypes.objectOf(PropTypes.any),
-    supplier: PropTypes.objectOf(PropTypes.any),
+    modifyAuditAdrVisible: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     modifyCheckReasonVisible: PropTypes.func,
     modifyInformationVisible: PropTypes.func,

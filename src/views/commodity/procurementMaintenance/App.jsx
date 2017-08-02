@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {
-    Form, Pagination
+    Form,
 } from 'antd';
 
 import {
@@ -31,9 +31,9 @@ import { productAddPriceVisible } from '../../../actions/producthome';
 @connect(
     state => ({
         prodPurchase: state.toJS().commodity.prodPurchase,
-        getProductById: state.toJS().commodity.getProductById,
-        getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
+        getProductByIds: state.toJS().commodity.getProductById,
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
+        getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
     }),
     dispatch => bindActionCreators({
         fecthGetProdPurchaseById,
@@ -63,7 +63,7 @@ class ProcurementMaintenance extends PureComponent {
             // 控制主供应商选项唯一
             disabled: false,
             current: 1,
-            productId: null
+            productId: ''
         }
     }
 
@@ -71,12 +71,13 @@ class ProcurementMaintenance extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
+        const { match } = this.props;
+        // console.log(match)
         this.props.fetchGetProductById({
-            // id: this.props.match.id
-            productId: 1001
+            productId: match.params.id
         });
         this.props.fecthGetProdPurchaseById({
-            id: 2
+            id: match.params.id
         });
     }
 
@@ -122,27 +123,24 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     render() {
-        const { prefixCls, getProductById, match } = this.props;
-        const innitalvalue = getProductById;
-        const { id } = match;
+        const { prefixCls, getProductByIds, match, getProdPurchaseByIds } = this.props;
+        const innitalvalue = getProductByIds;
+        const { data } = getProdPurchaseByIds;
+        // console.log(match.params.id)
+        // console.log(innitalvalue)
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm innitalvalue={innitalvalue} />
                 <SearchForm
-                    id={id}
+                    id={match.params.id}
                     innitalvalue={innitalvalue}
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
                     handleAdd={this.handleAdd}
                 />
                 <div>
-                    <Cardline />
+                    <Cardline innitalvalue={innitalvalue} />
                 </div>
-                <Pagination
-                    current={this.state.current}
-                    onChange={this.handlePaginationChange}
-                    total={10}
-                />
                 <ProdPurchaseModal />
             </div>
         );
@@ -155,7 +153,7 @@ ProcurementMaintenance.propTypes = {
     fecthGetProdPurchaseById: PropTypes.func,
     productAddPriceVisible: PropTypes.func,
     prefixCls: PropTypes.string,
-    getProductById: PropTypes.objectOf(PropTypes.any),
+    getProductByIds: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any)
 }
 

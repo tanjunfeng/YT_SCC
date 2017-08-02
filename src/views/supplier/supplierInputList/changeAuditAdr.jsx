@@ -19,9 +19,10 @@ import {
 } from 'antd';
 import { PAGE_SIZE } from '../../../constant';
 import {
-    modifyAuditVisible,
+    modifyAuditAdrVisible,
     insertSupplierSettlementInfo,
     suppplierSettledAudit,
+    supplierAdrSettledAudit,
     fetchQueryManageList
 } from '../../../actions';
 // import { validatorRebate } from '../../../util/validator';
@@ -31,13 +32,14 @@ const Option = Select.Option;
 
 @connect(
     state => ({
-        auditVisible: state.toJS().supplier.auditVisible,
+        auditVisible: state.toJS().supplier.auditVisibled,
         visibleData: state.toJS().supplier.visibleData
     }),
     dispatch => bindActionCreators({
-        modifyAuditVisible,
+        modifyAuditAdrVisible,
         insertSupplierSettlementInfo,
         suppplierSettledAudit,
+        supplierAdrSettledAudit,
         fetchQueryManageList
     }, dispatch)
 )
@@ -60,7 +62,7 @@ class ChangeAudit extends PureComponent {
 
 
     handleAuditCancel() {
-        this.props.modifyAuditVisible({isVisible: false});
+        this.props.modifyAuditAdrVisible({isVisible: false});
     }
 
     handleAuditOk() {
@@ -72,16 +74,16 @@ class ChangeAudit extends PureComponent {
         }
         this.props.form.validateFields((err) => {
             if (!err) {
-                this.props.suppplierSettledAudit({
-                    id: visibleData.id,
+                this.props.supplierAdrSettledAudit({
+                    id: parseInt(visibleData.id),
                     pass: parseInt(selected, 10) === 1 ? false : true,
                     ...this.props.form.getFieldsValue()
                 }).then((res) => {
-                    this.props.modifyAuditVisible({isVisible: false});
+                    this.props.modifyAuditAdrVisible({isVisible: false});
                     message.success(res.message)
                     this.props.getList()
                 }).catch(() => {
-                    this.props.modifyAuditVisible({isVisible: false});
+                    this.props.modifyAuditAdrVisible({isVisible: false});
                     message.err('修改审核失败')
                 })
             }
@@ -117,7 +119,7 @@ class ChangeAudit extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         return (
             <Modal
-                title="商家入住审核"
+                title="商家地点审核"
                 visible={this.props.auditVisible}
                 onOk={this.handleAuditOk}
                 onCancel={this.handleAuditCancel}
@@ -171,8 +173,9 @@ class ChangeAudit extends PureComponent {
 }
 
 ChangeAudit.propTypes = {
-    modifyAuditVisible: PropTypes.func,
+    modifyAuditAdrVisible: PropTypes.func,
     fetchQueryManageList: PropTypes.func,
+    supplierAdrSettledAudit: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     auditVisible: PropTypes.bool,
     visibleData: PropTypes.objectOf(PropTypes.any),
