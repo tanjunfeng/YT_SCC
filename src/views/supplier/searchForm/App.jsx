@@ -325,7 +325,6 @@ class SearchForm extends Component {
                         </FormItem>
                         {
                             this.props.isSuplierAddMenu &&
-                            <Right right={RIGHTS.SUPPLIER.CREATE_SUPPLIER}>
                             <FormItem>
                                 <Button
                                     type="primary"
@@ -335,7 +334,6 @@ class SearchForm extends Component {
                                     创建
                                 </Button>
                             </FormItem>
-                            </Right>
                         }
                         <FormItem>
                             <Button size="default" onClick={this.handleResetValue}>

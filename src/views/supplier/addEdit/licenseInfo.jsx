@@ -60,8 +60,9 @@ class LicenseInfo extends PureComponent {
         this.submit = ::this.submit;
         this.companyAddress = {};
         this.licenseLoc = {}
+        const { supplierlicenseInfo = {} } = props;
         this.state = {
-            checked: false
+            checked: 0
         }
         this.submitData = {};
     }

@@ -98,7 +98,7 @@ class Warehouse extends Component {
                 <Row>
                     <Col span={8}>
                         <span>仓库编号和名字：</span>
-                        <span>{`${item.warehouseCode} - ${item.warehouseName}`}</span>
+                        <span>{`${item.warehouseLogicCode} - ${item.warehouseLogicName}`}</span>
                     </Col>
                 </Row>
                 <Row>

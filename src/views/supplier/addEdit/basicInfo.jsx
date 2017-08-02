@@ -45,7 +45,6 @@ class BasicInfo extends PureComponent {
 
     componentDidMount() {
         !this.props.isEdit && this.props.getLargerRegion();
-
     }
 
     handleNextStep() {

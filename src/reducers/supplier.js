@@ -46,7 +46,9 @@ const initState = fromJS({
     // 供应商入驻列表
     queryManageList: {},
     // 查询供应商修改前修改后的信息
-    editBeforeAfter: []
+    editBeforeAfter: {},
+    // 新增商品采购关系
+    fetchAddProdPurchase: {}
 
 });
 
@@ -134,7 +136,10 @@ export default function (state = initState, action) {
             return state.set('queryManageList', fromJS(action.payload));
 
         case ActionType.EDIT_BEFORE_AFTER:
-            return state.set('editBeforeAfter', fromJS(action.payload));
+            return state.set('editBeforeAfter', fromJS(action.payload || {}));
+
+        case ActionType.ADD_PROD_PURCHASE:
+            return state.set('fetchAddProdPurchase', fromJS(action.payload || {}));
 
         case ActionType.RECEIVE_PLACE_REGION:
             return state.set('placeRegion', fromJS(action.payload))

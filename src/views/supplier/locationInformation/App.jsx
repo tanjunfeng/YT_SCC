@@ -130,7 +130,7 @@ class BasicInfo extends PureComponent {
                     spAdrDeliverys: wareHouseIds.map((item) => {
                         return {warehouseId: item};
                     }),
-                    parentId: supplierBasicInfo.id
+                    parentId: detailData.id
                 }
 
                 if (isEdit) {
@@ -138,7 +138,8 @@ class BasicInfo extends PureComponent {
                         submit.spAdrBasic,
                         {
                             id: detailSp.spAdrBasic.id,
-                            status: detailSp.spAdrBasic.status
+                            status: detailSp.spAdrBasic.status,
+                            orgId: !this.orgId ? detailSp.spAdrBasic.orgId : this.orgId
                         }
                     )
                     Object.assign(
@@ -150,7 +151,7 @@ class BasicInfo extends PureComponent {
                     )
                     Object.assign(submit, {
                         id: detailSp.id,
-                        parentId: detailSp.parentId,
+                        parentId: detailData.id,
                         status: detailSp.status,
                     })
 
@@ -276,7 +277,7 @@ class BasicInfo extends PureComponent {
             spAdrBasic = {},
             spAdrContact = {},
             spAdrDeliverys = []
-        } = detailSp
+        } = detailSp;
 
         return (
             <div className="supplier-add-message supplier-add-space">
@@ -457,6 +458,7 @@ class BasicInfo extends PureComponent {
                                                 renderChoosedInputRaw={(data) => (
                                                     <div>{data.id} - {data.name}</div>
                                                 )}
+                                                defaultValue={isEdit ? `${spAdrBasic.orgId} - ${spAdrBasic.orgName}` : ''}
                                                 pageSize={100}
                                                 columns={[
                                                     {

@@ -8,13 +8,27 @@ import ActionType from './ActionType';
 import {
     queryRegionByCode,
     queryCategorys,
-    // 获取子公司列表
-    findCompanyBaseInfo
+    findCompanyBaseInfo,
+    queryBrandsByPages,
+    querySuppliersList,
+    fetchAddProdPurchase,
+    supplierSearchBox,
+    supplierAdrSearchBox
 } from '../service';
 
 const pubValueList = {
     // 通过id，和name 查询分公司值列表
     findCompanyBaseInfo,
+    // 通过表单值查询品牌列表
+    queryBrandsByPages,
+    // 通过表单值查询供应商地点列表
+    querySuppliersList,
+    // 新增商品关系
+    fetchAddProdPurchase,
+    // 供应商选择组件
+    supplierSearchBox,
+    // 供应商地点选择组件
+    supplierAdrSearchBox
 }
 
 const receiveCollapsed = (isCollapsed) => ({

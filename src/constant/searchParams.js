@@ -241,16 +241,16 @@ export const commodityStatusOptions = {
         key: '-1',
         value: '全部'
     }, {
-        key: 'W',
+        key: '1',
         value: '制单'
     }, {
-        key: 'A',
+        key: '2',
         value: '生效'
     }, {
-        key: 'TD',
+        key: '3',
         value: '暂停使用'
     }, {
-        key: 'I',
+        key: '4',
         value: '停止使用'
     }]
 }
@@ -277,11 +277,11 @@ export const deliveryStatusOptions = {
         key: '-1',
         value: '全部'
     }, {
-        key: 'I',
-        value: '生效'
-    }, {
-        key: 'A',
+        key: '0',
         value: '失效'
+    }, {
+        key: '1',
+        value: '生效'
     }]
 }
 
@@ -292,11 +292,11 @@ export const subCompanyStatusOptions = {
         key: '-1',
         value: '全部'
     }, {
-        key: 'I',
-        value: '生效'
-    }, {
-        key: 'A',
+        key: '0',
         value: '失效'
+    }, {
+        key: '1',
+        value: '生效'
     }]
 }
 

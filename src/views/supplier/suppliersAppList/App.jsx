@@ -173,15 +173,11 @@ class SuppliersAppList extends PureComponent {
     renderOperation(text, record, index) {
         const { status, id, providerType } = record;
         const { pathname } = this.props.location;
-        const info = () => {
-            message.info('供应商地点状态不正确，不能进行修改');
-        };
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
-                 <Menu.Item key="detail">
+                <Menu.Item key="detail">
                     <Link to={`${pathname}/supplier/${id}`}>供应商详情</Link>
                 </Menu.Item>
-                
                 {
                     (status === 1 || status === 3 || status === 4) &&
                     <Menu.Item key="modifySupInfor">

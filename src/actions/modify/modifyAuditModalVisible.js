@@ -1,7 +1,5 @@
-
 /**
  * @file modifyAuditModalVisible.js
- *
  * @author caoyanxuan
  *
  * 弹框显示控制
