@@ -151,7 +151,7 @@ class ManagementList extends PureComponent {
     /**
      * 三级下拉菜单
      * @param {Object} data 各级
-     * @param {string} that 回显信息
+     * @param {string} that 回显信息1
      */
     handleSelectChange = (data, that) => {
         const { first, second, third } = data;
