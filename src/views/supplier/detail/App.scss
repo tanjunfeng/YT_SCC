@@ -61,6 +61,9 @@
                 text-align: right;
                 vertical-align: middle;
             }
+            span {
+                vertical-align: middle
+            }
         }
     }
     .supplier-area {
@@ -74,4 +77,8 @@
             @extend .font_color;
         }
     }
+}
+.detail-message-endTime {
+    margin-left: 10px;
+    color: #999;
 }

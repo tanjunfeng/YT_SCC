@@ -1,6 +1,5 @@
 /**
  * @file App.jsx
- *
  * @author caoyanxuan
  *
  * 分类图标管理
@@ -13,120 +12,132 @@ import { Card, Col, Row, Icon } from 'antd';
 import classnames from 'classnames';
 import CategoryIconTable from './categoryIconTable';
 import { fetchCategorys } from '../../../actions/pub';
-import { fetchCategoryId } from '../../../actions/wap';
 
 @connect(
     state => ({
         categorys: state.toJS().pub.categorys,
-        ciData: state.toJS().wap.ciData,
     }),
     dispatch => bindActionCreators({
         fetchCategorys,
-        fetchCategoryId,
     }, dispatch)
 )
 class CategoryIconManagement extends Component {
     constructor(props) {
         super(props);
-        this.clickLV1 = this.clickLV1.bind(this);
-        this.clickLV2 = this.clickLV2.bind(this);
+        this.fetchCategory = ::this.fetchCategory;
+        this.categoryArrs = []
         this.state = {
-            secondDate: [],
             lv1Id: -1,
             lv1Name: '',
             lv2Id: -2,
             lv2Name: '',
-            expand1: {
-                display: 'none'
-            },
-            expand2: {
-                display: 'none'
-            }
+            lv3Id: -3,
+            lv3Name: '',
         }
     }
 
     componentDidMount() {
-        this.props.fetchCategorys();
+        this.fetchCategory('');
     }
 
-    clickLV1(cId, cName) {
-        const { categorys } = this.props;
-        const current = categorys.filter(item => {
-            if (item.id === cId) {
-                return item;
-            }
-            return null;
-        })
-        this.setState({
-            secondDate: current.length > 0 ? current[0].childCategories : [],
-            lv1Id: cId,
-            lv1Name: cName,
-            expand1: {
-                display: 'inline-block'
-            },
-            expand2: {
-                display: 'none'
-            }
-        })
+    /**
+     * 将刷新后的categorys值，push到数组中
+     * @param {Object} nextProps 刷新后的属性
+     */
+    componentWillReceiveProps(nextProps) {
+        const { categorys } = nextProps;
+        if (categorys !== this.props.categorys) {
+            this.categoryArrs.splice(categorys[0].level - 1)
+            this.categoryArrs.push(categorys);
+        }
     }
-    clickLV2(cId, cName) {
-        this.setState({
-            lv2Id: cId,
-            lv2Name: cName,
-            expand2: {
-                display: 'none'
-            }
-        }, () => {
-            const categoryId = cId;
-            this.props.fetchCategoryId({ categoryId }).then(() => {
-                this.setState({
-                    expand2: {
-                        display: 'inline-block'
-                    }
-                })
-            }).catch(() => {
-            });
-        })
+
+    /**
+     * 根据父id查询下一级分类信息
+     * @param {string} pId 父id
+     */
+    fetchCategory(pId) {
+        this.props.fetchCategorys({parentId: pId});
     }
 
     render() {
-        const { categorys } = this.props;
-        const { secondDate } = this.state;
-        const firstLists = categorys.map(item =>
-            (<li><a
-                key={item.id}
-                className={
-                    classnames('category-li', {
-                        'active-li': this.state.lv1Id === item.id,
-                        'primary-li': this.state.lv1Id !== item.id
-                    })
-                }
-                onClick={() => {
-                    this.clickLV1(item.id, item.categoryName)
-                }}
+        const firstArr = this.categoryArrs[0] ? this.categoryArrs[0] : [];
+        const secondArr = this.categoryArrs[1] ? this.categoryArrs[1] : [];
+        const thirdArr = this.categoryArrs[2] ? this.categoryArrs[2] : [];
+        const fourthArr = this.categoryArrs[3] ? this.categoryArrs[3] : [];
+        const { lv1Name, lv2Name, lv3Name, lv3Id } = this.state;
+        const firstLists = firstArr.map(item =>
+            (<li
+                key={item.categoryName}
             >
-                {item.categoryName}
-                <Icon type="right" />
-            </a></li>)
+                <a
+                    className={
+                        classnames('category-li', {
+                            'active-li': this.state.lv1Id === item.id,
+                            'primary-li': this.state.lv1Id !== item.id
+                        })
+                    }
+                    onClick={() => {
+                        this.fetchCategory(item.id);
+                        this.setState({
+                            lv1Id: item.id,
+                            lv1Name: item.categoryName
+                        })
+                    }}
+                >
+                    {item.categoryName}
+                    <Icon type="right" />
+                </a>
+            </li>)
         );
-        const SecondLists = secondDate.map(item =>
-            (<li><a
-                key={item.id}
-                className={
-                    classnames('category-li', {
-                        'active-li': this.state.lv2Id === item.id,
-                        'primary-li': this.state.lv2Id !== item.id
-                    })
-                }
-                onClick={() => {
-                    this.clickLV2(item.id, item.categoryName)
-                }}
+        const secondLists = secondArr.map(item =>
+            (<li
+                key={item.categoryName}
             >
-                {item.categoryName}
-                <Icon type="right" />
-            </a></li>)
+                <a
+                    className={
+                        classnames('category-li', {
+                            'active-li': this.state.lv2Id === item.id,
+                            'primary-li': this.state.lv2Id !== item.id
+                        })
+                    }
+                    onClick={() => {
+                        this.fetchCategory(item.id);
+                        this.setState({
+                            lv2Id: item.id,
+                            lv2Name: item.categoryName
+                        })
+                    }}
+                >
+                    {item.categoryName}
+                    <Icon type="right" />
+                </a>
+            </li>)
         );
-
+        const thirdLists = thirdArr.map(item =>
+            (<li
+                key={item.categoryName}
+            >
+                <a
+                    className={
+                        classnames('category-li', {
+                            'active-li': this.state.lv3Id === item.id,
+                            'primary-li': this.state.lv3Id !== item.id
+                        })
+                    }
+                    onClick={() => {
+                        this.fetchCategory(item.id);
+                        this.setState({
+                            lv3Id: item.id,
+                            lv3Name: item.categoryName
+                        })
+                    }}
+                >
+                    {item.categoryName}
+                    <Icon type="right" />
+                </a>
+            </li>)
+        );
         return (
             <div className="category-icon-management carousel-management wap-management">
                 <div className="carousel-management-tip wap-management-tip">
@@ -134,34 +145,47 @@ class CategoryIconManagement extends Component {
                 </div>
                 <div>
                     <Row gutter={16}>
-                        <Col span={6}>
+                        <Col span={5}>
                             <Card title="一级分类" >
-                                <ul>{firstLists}</ul>
+                                <ul className="category-card-ul">{firstLists}</ul>
                             </Card>
                         </Col>
-                        <Col
-                            span={6}
-                            style={this.state.expand1}
-                        >
-                            <Card title="二级分类" >
-                                <ul>{SecondLists}</ul>
-                            </Card>
+                        <Col span={5}>
+                            {
+                                secondArr.length > 0
+                                && <Card title="二级分类" >
+                                    <ul className="category-card-ul">{secondLists}</ul>
+                                </Card>
+
+                            }
+                        </Col>
+                        <Col span={5}>
+                            {
+                                thirdArr.length > 0
+                                && <Card title="三级分类" >
+                                    <ul className="category-card-ul">{thirdLists}</ul>
+                                </Card>
+                            }
+                            
                         </Col>
                         <Col
-                            span={10}
-                            className="category-lv3-card"
-                            style={this.state.expand2}
+                            span={8}
+                            className="category-lv4-card"
                         >
-                            <Card title="三级分类" >
-                                <CategoryIconTable
-                                    categoryInfos={{
-                                        lv1Name: this.state.lv1Name,
-                                        lv2Name: this.state.lv2Name,
-                                        lv1Id: this.state.lv1Id,
-                                        lv2Id: this.state.lv2Id,
-                                    }}
-                                />
-                            </Card>
+                            {
+                                fourthArr.length > 0
+                                && <Card title="四级分类" >
+                                    <CategoryIconTable
+                                        categoryInfos={{
+                                            fourthArr,
+                                            lv1Name,
+                                            lv2Name,
+                                            lv3Name,
+                                            lv3Id,
+                                        }}
+                                    />
+                                </Card>
+                            }
                         </Col>
                     </Row>
                 </div>
@@ -173,9 +197,7 @@ class CategoryIconManagement extends Component {
 CategoryIconManagement.propTypes = {
     categorys: PropTypes.arrayOf(PropTypes.any),
     fetchCategorys: PropTypes.func,
-    fetchCategoryId: PropTypes.func,
 };
 CategoryIconManagement.defaultProps = {
 }
 export default CategoryIconManagement;
-

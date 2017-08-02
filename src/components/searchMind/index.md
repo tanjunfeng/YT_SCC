@@ -96,6 +96,7 @@ render() {
 #API
 
 `this.searchMind.getChooseData()` 可以通过 ref 获取被选择的数据
+`this.searchMind.reset()` 重置组件值
 
 
 #Options

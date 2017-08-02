@@ -1,0 +1,33 @@
+.ant-table-pagination {
+    margin-right: 15px;
+}
+.change-form {
+    padding-left: 30px;
+    .ant-form-item {
+        margin-bottom: 15px
+    }
+
+    .ant-form-explain {
+        padding-left: 73px;
+    }
+
+    &-label {
+        min-width: 61px;
+        text-align: right;
+    }
+
+    &-tip {
+        margin-left: 10px;
+    }
+}
+
+.reports{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.actions{
+    width: 100%;
+}

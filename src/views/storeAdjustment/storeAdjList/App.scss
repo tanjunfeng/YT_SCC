@@ -1,0 +1,35 @@
+.ant-table-pagination {
+    margin-right: 15px;
+}
+.change-form {
+    padding-left: 30px;
+    .ant-form {
+        margin-bottom: 15px
+    }
+    .manage-form .nameShow {
+        width: 300px;
+        resize: none;
+    }
+    .ant-form-explain {
+        padding-left: 73px;
+    }
+    &-label {
+        min-width: 66px;
+    }
+
+    &-tip {
+        margin-left: 10px;
+    }
+}
+.ant-spin-container {
+    .ant-table-thead th,td {
+        text-align: center;
+    }
+}
+.manage-form .tjf-css-spfl {
+    line-height: 0;
+}
+.tjf-css-modal-spfl .classify-select-label {
+    display: inline-block;
+    width: 60px;
+}

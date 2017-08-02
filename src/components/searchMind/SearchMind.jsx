@@ -65,6 +65,11 @@ class SearchMind extends PureComponent {
              * 下拉框的数据源
              */
             data: [],
+
+            /**
+             * 默认值
+             */
+            defaultValue: props.defaultValue,
         }
 
         this.handleFocus = ::this.handleFocus;
@@ -142,6 +147,11 @@ class SearchMind extends PureComponent {
             }
 
             this.searchDelayTimerId = setTimeout(() => this.query(), delaySend);
+        }
+        if (nextProps.defaultValue !== this.props.defaultValue) {
+            this.setState({
+                value: nextProps.defaultValue
+            })
         }
     }
 
@@ -247,7 +257,7 @@ class SearchMind extends PureComponent {
 
                 this.setState({
                     type: TYPE.DEFAULT,
-                    data: res.data,
+                    data: res.data.data,
                     pagination: pager,
                 });
             })
@@ -362,6 +372,17 @@ class SearchMind extends PureComponent {
         }
     }
 
+    /**
+     * 重置组件
+     */
+    reset() {
+        this.setState({
+            value: '',
+            data: [],
+            selectedRawData: null,
+        })
+    }
+
     render() {
         const {
             type,
@@ -403,9 +424,14 @@ class SearchMind extends PureComponent {
             ...(disabled && { disabled: 'disabled'})
         };
 
+        const newStyle = Object.assign({
+            zIndex: 100,
+            position: 'relative',
+        }, style)
+
         return (
             <div
-                style={style}
+                style={newStyle}
                 className={`${layoutCls} ${className}`}
                 onMouseOver={this.handleInArea}
                 onMouseOut={this.handleOutArea}

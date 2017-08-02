@@ -11,7 +11,7 @@ import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Icon, Input, Form, Button, Select, Row, Col, DatePicker } from 'antd';
+import { Icon, Input, Form, Button, Select, Row, Col, DatePicker, message } from 'antd';
 
 import Utils from '../../../util/util';
 import { Validator } from '../../../util/validator';
@@ -19,21 +19,20 @@ import InlineUpload from '../../../components/inlineUpload';
 import CasadingAddress from '../../../components/ascadingAddress';
 import { addSupplierMessage1 } from '../../../actions/addSupplier';
 import InlineTree from '../../../components/inlineTree';
+import { getLargerRegion } from '../../../actions/addSupplier';
 import Tools from './utils';
-
-// mock
-import queryAllLargerRegionProvince from '../../../../mock/queryAllLargerRegionProvince';
 
 const dateFormat = 'YYYY-MM-DD';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-
 @connect(
     state => ({
-        data: state.toJS().addSupplier.data
+        largeRegin: state.toJS().addSupplier.largeRegin,
+        supplierId: state.toJS().supplier.supplierId
     }),
     dispatch => bindActionCreators({
+        getLargerRegion,
         addSupplierMessage1
     }, dispatch)
 )
@@ -42,133 +41,93 @@ class BasicInfo extends PureComponent {
         super(props);
 
         this.handleNextStep = ::this.handleNextStep;
-        this.handleCompanyAddressChange = ::this.handleCompanyAddressChange;
-        this.handleBankLocChange = ::this.handleBankLocChange;
-        this.companyAddress = {};
-        this.bankLoc = {};
-        this.submitData = {
-            supplierBasicInfo: {},
-            supplierOperTaxInfo: {},
-            supplierBankInfo: {}
-        };
     }
 
     componentDidMount() {
-        this.props.form.refs = this;
+        !this.props.isEdit && this.props.getLargerRegion();
     }
 
     handleNextStep() {
         const { form, onGoTo, isEdit, detailData = {} } = this.props;
-        Tools.checkAddress(this.companyAddress, 'companyAddress', this);
-        Tools.checkAddress(this.bankLoc, 'bankLoc', this);
         form.validateFields((err, values) => {
             if (!err) {
                 const {
-                    accountName,
-                    bankAccount,
-                    taxpayerType,
-                    companyDetailAddress,
                     companyName,
-                    mainAccountNo,
-                    openBank,
-                    spNo,
-                    spRegNo,
-                    taxpayerNumber,
-                } = values;
-
-                this.submitData.supplierBasicInfo = {
+                    grade,
+                    settledTime
+                } = values
+                const region = Tools.encodeArea(this.areaCheck.getValue());
+                let saleRegionInfo = {};
+                if (isEdit && region.length === 0) {
+                    saleRegionInfo = detailData.saleRegionInfo;
+                }
+                else if (region.length === 0) {
+                    message.error('请选择供应地区')
+                    return;
+                }
+                else {
+                    saleRegionInfo = {json: JSON.stringify(region)}
+                }
+                const supplierBasicInfo = {
                     companyName,
-                    spNo,
-                    spRegNo,
-                    mainAccountNo
+                    grade,
+                    settledTime: settledTime._d * 1,
+                    spNo: this.props.supplierId
                 };
-
-                const { firstValue, secondValue, thirdValue } = this.companyAddress;
-
-                this.submitData.supplierOperTaxInfo = {
-                    companyLocProvince: firstValue.regionName,
-                    companyLocCity: secondValue.regionName,
-                    companyLocCounty: thirdValue.regionName,
-                    companyLocProvinceCode: firstValue.code,
-                    companyLocCityCode: secondValue.code,
-                    companyLocCountyCode: thirdValue.code,
-                    companyDetailAddress,
-                    registrationCertificate: this.certificate.getValue()[0],
-                    qualityIdentification: this.quality.getValue()[0],
-                    taxRegCertificate: this.taxReg.getValue()[0],
-                    taxpayerNumber,
-                    taxpayerType,
-                    generalTaxpayerQualifiCerti: this.general.getValue()[0],
-                }
-
-                this.submitData.supplierBankInfo = {
-                    accountName,
-                    openBank,
-                    bankAccount,
-                    bankAccountLicense: this.bank.getValue()[0],
-                    bankLocProvince: this.bankLoc.firstValue.regionName,
-                    bankLocCity: this.bankLoc.secondValue.regionName,
-                    bankLocCounty: this.bankLoc.thirdValue.regionName,
-                    bankLocCountyCode: this.bankLoc.thirdValue.code,
-                    bankLocCityCode: this.bankLoc.secondValue.code,
-                    bankLocProvinceCode: this.bankLoc.firstValue.code,
-                }
-
                 if (isEdit) {
-                    Object.assign(
-                        this.submitData.supplierBasicInfo,
-                        {id: detailData.supplierBasicInfo.id}
-                    )
-                    Object.assign(
-                        this.submitData.supplierOperTaxInfo,
-                        {id: detailData.supplierOperTaxInfo.id}
-                    )
-                    Object.assign(
-                        this.submitData.supplierBankInfo,
-                        {id: detailData.supplierBankInfo.id}
-                    )
+                    Object.assign(supplierBasicInfo,
+                        {
+                            id: detailData.supplierBasicInfo.id,
+                            status: detailData.supplierBasicInfo.status,
+                        }
+                    );
+                    Object.assign(saleRegionInfo,
+                        {
+                            id: detailData.saleRegionInfo.id,
+                            status: detailData.saleRegionInfo.status,
+                        }
+                    );
                 }
-
-                this.props.addSupplierMessage1(this.submitData)
+                this.props.addSupplierMessage1({supplierBasicInfo, saleRegionInfo})
                 onGoTo('2');
             }
         })
     }
 
-    handleCompanyAddressChange(data) {
-        this.companyAddress = data;
-        // if ( data.thirdValue !== '-1' ) {
-        //     this.props.form.setFields({
-        //         companyAddress: {
-        //             errors: null,
-        //         }
-        //     });
-        // }
-    }
-
-    handleBankLocChange(data) {
-        this.bankLoc = data;
-        // if ( data.thirdValue !== '-1' ) {
-        //     this.props.form.setFields({
-        //         bankLoc: {
-        //             errors: null,
-        //         }
-        //     });
-        // }
+    /**
+     * 供应商状态转换
+     * @param {string} status 供应商状态
+     */
+    renderStatus(status) {
+        switch(status) {
+            case 0:
+                return '制表'
+            case 1:
+                return '待审核'
+            case 2:
+                return '已审核'
+            case 3:
+                return '已拒绝'
+            case 4:
+                return '修改中'
+            default:
+                break;
+        }
+        return null;
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { detailData, isEdit } = this.props;
+        const { detailData, isEdit, largeRegin = [] } = this.props;
         let initData = detailData;
         if (!isEdit) {
             initData = {};
         }
         const {
             supplierBasicInfo = {},
-            supplierOperTaxInfo = {},
-            supplierBankInfo = {}
+            saleRegionInfo={}
         } = initData;
+        const defaultVaue = saleRegionInfo.json ? Tools.decodeArea(JSON.parse(saleRegionInfo.json)) : []
         return (
             <div className="supplier-add-message">
                 <Form>
@@ -180,19 +139,19 @@ class BasicInfo extends PureComponent {
                             <div className="add-message-body">
                                 <Row>
                                     <Col span={8}><span>供应商类型：</span><span>供应商</span></Col>
-                                    <Col span={8}><span>供应商状态：</span><span>工作表</span></Col>
+                                    <Col span={8}><span>供应商状态：</span><span>{isEdit ? this.renderStatus(supplierBasicInfo.status) : '工作表'}</span></Col>
                                 </Row>
                                 <Row>
                                     <Col span={8}>
                                         <span>供应商编号：</span>
-                                        <span>YTXC1001</span>
+                                        <span>{isEdit ? supplierBasicInfo.spNo : this.props.supplierId}</span>
                                     </Col>
                                     <Col span={8}>
                                         <span>供应商名称：</span>
                                         <FormItem>
                                             {getFieldDecorator('companyName', {
                                                 rules: [{ required: true, message: '请输入供应商名称!' }],
-                                                initialValue: supplierBasicInfo.companyName
+                                                initialValue: supplierBasicInfo.companyName,
                                             })(
                                                 <Input
                                                     placeholder="供应商名称"
@@ -206,17 +165,17 @@ class BasicInfo extends PureComponent {
                                     <Col span={8}>
                                         <span>供应商等级：</span>
                                         <FormItem>
-                                            {getFieldDecorator('supplierLevel', {
+                                            {getFieldDecorator('grade', {
                                                 rules: [{required: true, message: '请选择等级'}],
-                                                initialValue: String(supplierOperTaxInfo.taxpayerType ? supplierOperTaxInfo.taxpayerType : 0)
+                                                initialValue: String(supplierBasicInfo.grade || 1)
                                             })(
                                                 <Select
                                                     style={{ width: 140 }}
                                                     placeholder="请选择供应商等级"
                                                 >
-                                                    <Option value="0">战略供应商</Option>
-                                                    <Option value="1">核心供应商</Option>
-                                                    <Option value="2">可替代供应商</Option>
+                                                    <Option value="1">战略供应商</Option>
+                                                    <Option value="2">核心供应商</Option>
+                                                    <Option value="3">可替代供应商</Option>
                                                 </Select>
                                             )}
                                         </FormItem>
@@ -224,13 +183,14 @@ class BasicInfo extends PureComponent {
                                     <Col span={8} id="in-time">
                                         <span>供应商入驻日期：</span>
                                         <FormItem>
-                                            {getFieldDecorator('arrivalDate', {
+                                            {getFieldDecorator('settledTime', {
                                                 rules: [{required: true, message: '请选择供应商入驻日期'}],
-                                                initialValue: null
+                                                initialValue: isEdit ? moment(supplierBasicInfo.settledTime) : null
                                             })(
                                                 <DatePicker
                                                     getCalendarContainer={() => document.getElementById('in-time')}
-                                                    format={dateFormat} />
+                                                    format={dateFormat}
+                                                />
                                             )}
                                         </FormItem>
                                     </Col>
@@ -246,11 +206,18 @@ class BasicInfo extends PureComponent {
                             <div className="add-message-header">
                                 <Icon type="solution" className="add-message-header-icon" />供应商辐射城市
                             </div>
-                            <div className="add-message-body">
-                                <InlineTree
-                                    initValue={queryAllLargerRegionProvince.data}
-                                />
-                            </div>
+                            {
+                                largeRegin.length > 0 &&
+                                <div className="add-message-body">
+                                    <InlineTree
+                                        checkedKeys={defaultVaue}
+                                        handleCheck={this.handleCheck}
+                                        initValue={largeRegin}
+                                        ref={node => { this.areaCheck = node }}
+                                    />
+                                </div>
+
+                            }
                         </div>
                     </div>
                     <div className="add-message-handle">
@@ -262,11 +229,24 @@ class BasicInfo extends PureComponent {
     }
 }
 
+function encodeArea(data = []) {
+    const a = [];
+    for ( let i of data) {
+        const key = i.key;
+        const hideTitle = i.props.hideTitle;
+        const keys = key.split('-');
+        const titles = hideTitle.split('-');
+        const len = keys.length;
+    }
+}
+
 BasicInfo.propTypes = {
     onGoTo: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     isEdit: PropTypes.bool,
     detailData: PropTypes.objectOf(PropTypes.any),
-    addSupplierMessage1: PropTypes.func,
+    getLargerRegion: PropTypes.func,
+    supplierId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 }
+
 export default Form.create()(BasicInfo);

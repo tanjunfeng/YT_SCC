@@ -12,15 +12,15 @@ import { Tabs } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { getSupplierDetail } from '../../../actions/supplier';
-// // 商家信息
-// import SupplierMessage from './SupplierMessage';
-// // 公司资质
-// import Qualification from './Qualification';
-// // 联系信息
-// import Contact from './Contact';
-// // 合作信息
-// import Cooperative from './common/Cooperative';
+import {
+    getSupplierDetail,
+    getProviderDetail,
+    queryPlaceRegion
+} from '../../../actions/supplier';
+
+import {
+    pubFetchValueList
+} from '../../../actions/pub';
 
 import BasicInfo from './basicInfo';
 import BankInfo from './bankInfo';
@@ -35,7 +35,9 @@ const TabPane = Tabs.TabPane;
         detailData: state.toJS().supplier.detailData
     }),
     dispatch => bindActionCreators({
-        getSupplierDetail
+        getSupplierDetail,
+        getProviderDetail,
+        queryPlaceRegion
     }, dispatch)
 )
 class SupplierDetail extends PureComponent {
@@ -48,15 +50,32 @@ class SupplierDetail extends PureComponent {
         this.canExamine = false;
         this.showReson = false;
         const { type = 'supplier' } = this.props.match.params;
+        const current = type === 'add' || type === 'place' || type === 'edit' ? '4' : '1'
         this.state = {
-            current: type === 'add' || type === 'place' ? '4' : '1'
+            current,
+            isEdit: type === 'edit'
         }
     }
 
     componentDidMount() {
-        const { id } = this.props.match.params;
-        const { match } = this.props;
-        // this.props.getSupplierDetail({spId: id});
+        const { id, type } = this.props.match.params;
+        if (type === 'place') {
+            this.props.getProviderDetail({adrInfoId: id});
+            return ;
+        }
+        else if (type === 'edit') {
+            this.props.getProviderDetail({adrInfoId: id}).then(() => {
+                this.props.queryPlaceRegion({spId: this.props.detailData.id});
+            })
+            return;
+        }
+        else if (type === 'add') {
+            this.props.getSupplierDetail({spId: id}).then(() => {
+                this.props.queryPlaceRegion({spId: this.props.detailData.id});
+            })
+            return;
+        }
+        this.props.getSupplierDetail({spId: id});
     }
 
     handleClick(goto) {
@@ -72,14 +91,22 @@ class SupplierDetail extends PureComponent {
 
     render() {
         const { type = 'supplier' } = this.props.match.params;
+        const { detailData } = this.props;
+        const detailSp = {};
+        if (type === 'place' || type === 'edit') {
+            Object.assign(detailData, detailData.supplierInfoDto);
+            Object.assign(detailSp, detailData.supplierAdrInfoDto);
+        }
         const props = {
             data: this.props.detailData,
             canEdit: this.canEdit,
             canExamine: this.canExamine,
             failedReason: this.showReson,
             getDtail: this.handleGetDetail,
-            ...this.props
+            detailData,
+            detailSp
         }
+
         return (
             <Tabs
                 defaultActiveKey="1"
@@ -89,24 +116,27 @@ class SupplierDetail extends PureComponent {
                 style={{marginTop: '16px'}}
             >
                 <TabPane tab="基本信息" key="1">
-                    <BasicInfo />
+                    <BasicInfo {...props} />
                 </TabPane>
                 <TabPane tab="银行信息" key="2">
-                    <BankInfo />
+                    <BankInfo {...props} />
                 </TabPane>
                 <TabPane tab="证照信息" key="3">
-                    <LicenseInfo />
+                    <LicenseInfo {...props} />
                 </TabPane>
                 {
                     type === 'place' &&
                     <TabPane tab="供应商地点信息" key="4">
-                        <SupplierSpace />
+                        <SupplierSpace {...props} />
                     </TabPane>
                 }
                 {
-                    type === 'add' &&
+                    (type === 'add' || type === 'edit') &&
                     <TabPane tab="供应商地点信息" key="4">
-                        <LocationInfoManagement />
+                        <LocationInfoManagement
+                            {...props}
+                            isEdit={this.state.isEdit}
+                        />
                     </TabPane>
                 }
             </Tabs>

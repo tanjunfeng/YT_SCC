@@ -15,7 +15,10 @@ class BankInfo extends Component {
     }
 
     render() {
-        const { initValue = {} } = this.props;
+        const { detailData = {} } = this.props;
+        const {
+            supplierBankInfo = {},
+        } = detailData
         return (
             <div className="supplier-detail supplier-detail-bankInfo">
                 <div className="supplier-detail-item">
@@ -26,16 +29,43 @@ class BankInfo extends Component {
                         </div>
                         <div className="detail-message-body">
                             <Row>
-                                <Col span={8}><span>开户名：</span><span>深圳市豪利门业实业有限公司</span></Col>
-                                <Col span={8}><span>开户行：</span><span>招商银行深圳福永支行</span></Col>
+                                <Col span={8}><span>开户名：</span>
+                                    <span>
+                                        {supplierBankInfo.accountName}
+                                    </span>
+                                </Col>
+                                <Col span={8}><span>开户行：</span>
+                                    <span>
+                                        {supplierBankInfo.openBank}
+                                    </span>
+                                </Col>
                             </Row>
                             <Row>
-                                <Col span={8}><span>开户行所在地：</span><span>广东省深圳市宝安区</span></Col>
-                                <Col span={8}><span>银行账号：</span><span>6225123496585623</span></Col>
+                                <Col span={8}><span>开户行所在地：</span>
+                                    <span>
+                                        {`${supplierBankInfo.bankLocProvince}${supplierBankInfo.bankLocCity}${supplierBankInfo.bankLocCounty}`}
+                                    </span>
+                                </Col>
+                                <Col span={8}><span>银行账号：</span>
+                                    <span>
+                                        {supplierBankInfo.bankAccount}
+                                    </span>
+                                </Col>
                             </Row>
                             <Row>
-                                <Col span={8}><span>银行开户许可证电子版：</span><span>点击查看</span></Col>
-                                <Col span={8}><span>供应商发票抬头：</span><span>深圳市豪利门业实业有限公司</span></Col>
+                                <Col span={8}><span>银行开户许可证电子版：</span>
+                                    <span>
+                                        <a href={supplierBankInfo.bankAccountLicense}>点击查看</a>
+                                    </span>
+                                </Col>
+                                {
+                                    supplierBankInfo.invoiceHead &&
+                                    <Col span={8}><span>供应商发票抬头：</span>
+                                        <span>
+                                            {supplierBankInfo.invoiceHead}
+                                        </span>
+                                    </Col>
+                                }
                             </Row>
                         </div>
                     </div>

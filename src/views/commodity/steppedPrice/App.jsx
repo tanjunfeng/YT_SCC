@@ -7,7 +7,7 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Utils from '../../../util/util';
+// import QueueAnim from 'rc-queue-anim';
 
 import InputItem from './inputItem';
 
@@ -16,6 +16,23 @@ const initValue = [{
     endNumber: 2,
     price: 0
 }]
+
+/**
+ * 价格区间是否连续
+ *
+ * @param {Array[number]} arr 价格区间数组
+ * @return {boolean} 是否连续
+ */
+const isContinuity = (arr) => {
+    let i = 0;
+    while (arr[i + 1]) {
+        if (arr[i].endNumber + 1 !== arr[i + 1].startNumber) {
+            return false;
+        }
+        i++;
+    }
+    return true;
+}
 
 class SteppedPrice extends PureComponent {
     constructor(props) {
@@ -33,16 +50,16 @@ class SteppedPrice extends PureComponent {
     getValue() {
         const { defaultValue } = this.state;
         return {
-            values: defaultValue,
-            isContinuity: Utils.isContinuity(defaultValue)
+            results: defaultValue,
+            isContinuity: isContinuity(defaultValue)
         }
     }
 
     handleChange() {
         const { defaultValue } = this.state;
         this.props.handleChange({
-            values: defaultValue,
-            isContinuity: Utils.isContinuity(defaultValue)
+            results: defaultValue,
+            isContinuity: isContinuity(defaultValue)
         })
     }
 
@@ -93,12 +110,6 @@ class SteppedPrice extends PureComponent {
         return (
             <div className={prefixCls}>
                 <div>
-                    <div>
-                        添加阶梯价格
-                        <span className={`${prefixCls}-tip`}>
-                            &nbsp;(请按从小到大的顺序添加)
-                        </span>
-                    </div>
                     <div className={`${prefixCls}-title`}>
                         <span className={`${prefixCls}-title-left`}>数量区间</span>
                         <span className={`${prefixCls}-title-right`}>售价/元</span>

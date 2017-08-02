@@ -1,0 +1,32 @@
+.print {
+  &-container{
+     width: 100%;
+ .content {
+    clear: both;
+    background: #ffffff;
+    border: 1px solid #c4c5c9;
+    width: 100%;
+    margin: 10px 0;
+    padding: 5px 18px;
+    display: flex;
+    flex-direction: column;
+
+    .material {
+      position: relative;
+
+      .left {
+        text-align: left;
+      }
+
+      .right {
+        text-align: right;
+      }
+    }
+
+    .field {
+      border-bottom: 1px solid #000;
+    }
+  }
+  }
+ 
+}

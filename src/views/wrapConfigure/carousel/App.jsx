@@ -12,7 +12,15 @@ import { connect } from 'react-redux';
 import { Table, Menu, Icon, Dropdown, Modal, Button, Select, message } from 'antd';
 import { CATEGORY_INTERVAL_LIST } from '../../../constant';
 import ChangeModalMessage from './common/changeModalMessage';
-import { fetchCarouselAdList, modifyModalVisible, fetchCarouselInterval, removeCarouselAd, modifyCarouselAd, modifyCarouselInterval } from '../../../actions/wap';
+import {
+    fetchCarouselAdList,
+    modifyModalVisible,
+    fetchCarouselInterval,
+    removeCarouselAd,
+    modifyCarouselAd,
+    modifyCarouselAdStatus,
+    modifyCarouselInterval
+} from '../../../actions/wap';
 
 const confirm = Modal.confirm;
 const Option = Select.Option;
@@ -43,7 +51,12 @@ const columns = [
         title: '图片',
         dataIndex: 'picAddress',
         key: 'picAddress',
-        render: (text) => (<img alt="轮播图片" src={text} />)
+        render: (text) =>
+        (<img
+            alt="轮播图片"
+            src={text}
+            style={{width: 216, height: 102 }}
+        />)
     },
     {
         title: '状态',
@@ -67,8 +80,6 @@ const columns = [
     }),
     dispatch => bindActionCreators({
         fetchCarouselAdList,
-        modifyCarouselInterval,
-        removeCarouselAd,
         fetchCarouselInterval,
         modifyModalVisible,
         modifyCarouselAd,
@@ -80,62 +91,76 @@ class CarouselManagement extends Component {
         this.handleSelect = this.handleSelect.bind(this);
         this.showAddModal = this.showAddModal.bind(this);
         this.renderOperation = this.renderOperation.bind(this);
-        this.showParameterModal = this.showParameterModal.bind(this);
-        this.handleParameterCancel = this.handleParameterCancel.bind(this);
         this.handleIntervalChange = this.handleIntervalChange.bind(this);
         this.state = {
             inputValue: '',
             setModalVisible: false,
             parameterModalVisible: false,
+            interval: this.props.intervalData,
         }
     }
 
     componentDidMount() {
         this.props.fetchCarouselAdList();
-        // this.props.fetchCarouselInterval();
+        this.props.fetchCarouselInterval();
     }
 
-    showParameterModal() {
-        this.setState({
-            parameterModalVisible: true,
-        });
+    componentWillReceiveProps(nextProps) {
+        const { intervalData } = nextProps;
+        if (intervalData !== this.props.intervalData) {
+            this.setState({
+                interval: intervalData,
+            })
+        }
     }
 
-    handleParameterCancel() {
-        this.setState({
-            parameterModalVisible: false,
-        });
-    }
+    /**
+     * 轮播时间切换
+     * @param {number} value 选中的option的时间值
+     */
     handleIntervalChange(value) {
-        this.props.modifyCarouselInterval({ carouselInterval: value.key
-        }, () => {
-            // this.props.fetchCarouselAdList();
-            // this.props.modifyModalVisible({isVisible: false });
-            // message.success('删除成功！');
+        modifyCarouselInterval({
+            carouselInterval: value
+        }).then(() => {
+            this.setState({
+                interval: value,
+            })
+            message.success('修改成功！');
         })
-        // this.setState({
-        //     parameterModalVisible: false,
-        // });
     }
-// “添加”模态框
+
+    /**
+     * “添加”模态框
+     */
     showAddModal() {
-        this.props.modifyModalVisible({isVisible: true, mTitle: '新增轮播广告设置'});
+        this.props.modifyModalVisible({
+            isVisible: true,
+            mTitle: '新增轮播广告设置'
+        });
     }
-    // 选择操作项
+
+    /**
+     * 表单操作项
+     * @param {Object} record 当前行的数据
+     * @param {*} items 当前按钮
+     */
     handleSelect(record, items) {
         const { id } = record;
-        console.log(typeof (id))
         const { key } = items;
         switch (key) {
             case 'changeMessage':
-                this.props.modifyModalVisible({isVisible: true, mTitle: '修改轮播广告设置', record });
+                this.props.modifyModalVisible({
+                    isVisible: true,
+                    mTitle: '修改轮播广告设置',
+                    record
+                });
                 break;
             case 'tableDelete':
                 confirm({
                     title: '你确认要删除此方案吗？',
                     onOk: () => {
-                        this.props.removeCarouselAd({ carouselAdId: id
-                        }, () => {
+                        removeCarouselAd({ carouselAdId: id
+                        }).then(() => {
                             this.props.fetchCarouselAdList();
                             this.props.modifyModalVisible({isVisible: false });
                             message.success('删除成功！');
@@ -148,10 +173,10 @@ class CarouselManagement extends Component {
                 confirm({
                     title: '你确认要启用此方案吗？',
                     onOk: () => {
-                        this.props.modifyCarouselAd({
+                        modifyCarouselAdStatus({
                             id,
                             status: 1
-                        }, () => {
+                        }).then(() => {
                             this.props.fetchCarouselAdList();
                             this.props.modifyModalVisible({isVisible: false });
                             message.success('启用成功！');
@@ -164,10 +189,10 @@ class CarouselManagement extends Component {
                 confirm({
                     title: '你确认要停用此方案吗？',
                     onOk: () => {
-                        this.props.modifyCarouselAd({
+                        modifyCarouselAdStatus({
                             id,
                             status: 0
-                        }, () => {
+                        }).then(() => {
                             this.props.fetchCarouselAdList();
                             this.props.modifyModalVisible({isVisible: false });
                             message.success('停用成功！');
@@ -182,8 +207,11 @@ class CarouselManagement extends Component {
         }
     }
 
-
-    // table操作
+    /**
+     * 表单操作
+     * @param {string} text 当前值
+     * @param {*} record 当前数据
+     */
     renderOperation(text, record) {
         const { status } = record;
         const menu = (
@@ -219,8 +247,6 @@ class CarouselManagement extends Component {
 
     render() {
         const { adData } = this.props;
-        const { data } = this.props.intervalData;
-        console.log(data)
         columns[columns.length - 1].render = this.renderOperation;
         const lists = CATEGORY_INTERVAL_LIST.map(item =>
             (<Option
@@ -231,9 +257,26 @@ class CarouselManagement extends Component {
         );
         return (
             <div className="carousel-management wap-management">
-                <div className="carousel-management-tip wap-management-tip">说明：APP端轮播广告管理，可以设定轮播时间、顺序、内容。</div>
-                <Button type="primary" onClick={this.showParameterModal}>参数设置</Button>
-                <Button type="primary" onClick={this.showAddModal}>新增轮播广告</Button>
+                <div className="carousel-management-tip wap-management-tip">
+                    说明：APP端轮播广告管理，可以设定轮播时间、顺序、内容。
+                </div>
+                <span>
+                    <span className="modal-carousel-interval">
+                        <span style={{color: '#f00' }}>*</span>
+                            轮播间隔
+                    </span>
+                    <Select
+                        className="carousel-management-select"
+                        style={{ width: 70 }}
+                        value={`${this.state.interval}`}
+                        onChange={this.handleIntervalChange}
+                    >
+                        {lists}
+                    </Select>
+                </span>
+                <Button type="primary" onClick={this.showAddModal}>
+                    新增轮播广告
+                </Button>
                 <div className="area-list">
                     <Table
                         dataSource={adData}
@@ -247,27 +290,6 @@ class CarouselManagement extends Component {
                     this.props.modalVisible &&
                     <ChangeModalMessage />
                 }
-                <Modal
-                    title="轮播参数设置"
-                    visible={this.state.parameterModalVisible}
-                    onCancel={this.handleParameterCancel}
-                    footer={null}
-                    maskClosable={false}
-                    width={300}
-                >
-                    <span className="modal-carousel-interval">
-                        <span style={{color: '#f00' }}>*</span>
-                        轮播间隔
-                    </span>
-                    <Select
-                        labelInValue
-                        defaultValue={{ key: '3'}}
-                        style={{ width: 80 }}
-                        onChange={this.handleIntervalChange}
-                    >
-                        {lists}
-                    </Select>
-                </Modal>
             </div>
         );
     }
@@ -277,9 +299,6 @@ CarouselManagement.propTypes = {
     adData: PropTypes.objectOf(PropTypes.any),
     intervalData: PropTypes.objectOf(PropTypes.any),
     fetchCarouselAdList: PropTypes.func,
-    modifyCarouselInterval: PropTypes.func,
-    removeCarouselAd: PropTypes.func,
-    modifyCarouselAd: PropTypes.func,
     fetchCarouselInterval: PropTypes.func,
     modifyModalVisible: PropTypes.func,
     modalVisible: PropTypes.bool,

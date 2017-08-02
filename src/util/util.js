@@ -189,6 +189,13 @@ class Utils {
         /* eslint-enable */
     }
 
+    /**
+     * 筛选出数组中不通项
+     *
+     * @param {Array[*]} arr 目标数组
+     * @param {Array[*]} arrays 被检测数组
+     * @return {Array[*]} res 新的数组
+     */
     static diff(arr, arrays) {
         const argsLen = arguments.length;
         const len = arr.length;

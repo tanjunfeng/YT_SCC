@@ -17,35 +17,43 @@ import {
     Table,
     Menu,
     Dropdown,
+    message
 } from 'antd';
 
 import {
     fetchProviderEnterList,
+    fetchQueryManageList,
     modifyAuditVisible,
-    modifyCheckReasonVisible
+    modifyInformationVisible
 } from '../../../actions';
+import {
+    getSupplierSettledList
+} from '../../../actions/supplier';
 import SearchForm from '../searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import { suppliersAppList } from '../../../constant/formColumns';
 import { exportSupplierEnterList } from '../../../service';
 import ChangeAudit from './changeAudit';
-import CheckReason from './checkReason';
+import ChangeMessage from './changeMessage';
 
 const columns = suppliersAppList;
 
-
 @connect(
     state => ({
-        applicationData: state.toJS().supplier.applicationData,
+        applicationData: state.toJS().supplier.data,
         auditVisible: state.toJS().supplier.auditVisible,
         checkResonVisible: state.toJS().supplier.checkResonVisible,
-        insertSettlementResult: state.toJS().supplier.insertSettlementResult
+        insertSettlementResult: state.toJS().supplier.insertSettlementResult,
+        querySettledList: state.toJS().supplier.querySettledList,
     }),
     dispatch => bindActionCreators({
+        modifyAuditVisible,
+        modifyInformationVisible,
+        getSupplierSettledList,
         fetchProviderEnterList,
         modifyAuditVisible,
-        modifyCheckReasonVisible
+        fetchQueryManageList,
     }, dispatch)
 )
 class SuppliersAppList extends PureComponent {
@@ -57,6 +65,7 @@ class SuppliersAppList extends PureComponent {
         this.handleFormReset = this.handleFormReset.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
         this.handleDownLoad = this.handleDownLoad.bind(this);
+        this.handleInputSupplier = this.handleInputSupplier.bind(this);
         // this.handleGetList = this.handleGetList.bind(this);
 
         this.searchForm = {};
@@ -67,10 +76,12 @@ class SuppliersAppList extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
-        this.props.fetchProviderEnterList({
+        // TODO 默认加条件
+        this.props.getSupplierSettledList({
             pageNum: this.current,
             pageSize: PAGE_SIZE,
-            ...this.searchForm
+            providerType: 1,
+            status: 0
         });
     }
 
@@ -84,11 +95,11 @@ class SuppliersAppList extends PureComponent {
     handleSelect(record, index, item) {
         const { key } = item;
         switch (key) {
-            case 'changeAudit':
+            case 'ChangeAudit':
                 this.props.modifyAuditVisible({isVisible: true, record});
                 break;
-            case 'CheckReason':
-                this.props.modifyCheckReasonVisible({isVisible: true, record});
+            case 'ChangeMessage':
+                this.props.modifyInformationVisible({isVisible: true, record});
                 break;
             default:
                 break;
@@ -99,16 +110,26 @@ class SuppliersAppList extends PureComponent {
      * 搜索
      */
     handleFormSearch(data, bool) {
+        // console.log(data)
         this.searchForm = data;
         if (bool) {
             // 主数据
             // console.log('主数据')
-            this.handlePaginationChange();
+            this.props.fetchQueryManageList({
+                pageNum: this.current,
+                pageSize: PAGE_SIZE,
+                ...this.searchForm
+            });
         } else {
             // SCM数据
             // console.log('SCM数据')
-            this.handlePaginationChange();
+            this.props.fetchQueryManageList({
+                pageNum: this.current,
+                pageSize: PAGE_SIZE,
+                ...this.searchForm
+            });
         }
+        this.handlePaginationChange(this.current);
     }
 
     /**
@@ -117,6 +138,17 @@ class SuppliersAppList extends PureComponent {
     handleFormReset(data) {
         this.searchForm = data;
         this.handlePaginationChange();
+    }
+
+    /**
+     * 创建
+     *
+     * @param {string} data 'addSupplier':供应商类型为供应商；否则为供应商地点，data为供应商编码
+     */
+    handleInputSupplier(data) {
+        const { pathname } = this.props.location;
+        const { history } = this.props;
+        history.push(`${pathname}/add`);
     }
 
     /**
@@ -131,48 +163,82 @@ class SuppliersAppList extends PureComponent {
      *
      * @param {string} goto 数据列表分页
      */
-    handlePaginationChange(goto = 1) {
+    handlePaginationChange(goto) {
         this.current = goto;
-        this.props.fetchProviderEnterList({
+        this.props.getSupplierSettledList({
             pageNum: goto,
             pageSize: PAGE_SIZE,
             ...this.searchForm
         });
     }
 
-    // handleGetList() {
-    //     this.props.fetchProviderEnterList({
-    //         pageNum: this.current,
-    //         pageSize: PAGE_SIZE,
-    //         ...this.searchForm
-    //     });
-    // }
-
     renderOperation(text, record, index) {
-        const { status, id } = record;
+        const { status, id, providerType } = record;
         const { pathname } = this.props.location;
-
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/${id}`}>供应商详情</Link>
+                    <Link to={`${pathname}/supplier/${id}`}>供应商详情</Link>
                 </Menu.Item>
                 {
-                    status === 1 &&
-                    <Menu.Item key="changeAudit">
-                        <a target="_blank" rel="noopener noreferrer">入驻审核</a>
+                    (status === 1 || status === 3 || status === 4) &&
+                    <Menu.Item key="modifySupInfor">
+                        <Link to={`${pathname}/edit/supplier/${id}`}>
+                            修改供应商信息
+                        </Link>
                     </Menu.Item>
                 }
+                <Menu.Item key="addAddress">
+                    <Link to={`${pathname}/add/${id}`}>
+                        新增供应商地点信息
+                    </Link>
+                </Menu.Item>
                 {
-                    status === 0 &&
-                    <Menu.Item key="CheckReason">
-                        <a target="_blank" rel="noopener noreferrer">修改审核</a>
+                    status === 4 &&
+                    <Menu.Item key="ChangeMessage">
+                        <a target="_blank" rel="noopener noreferrer">
+                            查看审核已拒绝原因
+                        </a>
                     </Menu.Item>
                 }
             </Menu>
-        )
+        );
+
+        const menu1 = (
+            <Menu onClick={(item) => this.handleSelect(record, index, item)}>
+                <Menu.Item key="AddDetail">
+                    <Link to={`${pathname}/place/${id}`}>供应商地点详情</Link>
+                </Menu.Item>
+                {
+                    (status === 1 || status === 3 || status === 4) &&
+                    <Menu.Item key="modifySupAddInfor">
+                        <Link to={`${pathname}/edit/${id}`}>
+                            修改供应商地点信息
+                        </Link>
+                    </Menu.Item>
+                }
+                {
+                    (status === 2 || status === 5) &&
+                    <Menu.Item>
+                        <Link to={`${pathname}/edit/${id}`}>修改供应商地点信息</Link>
+                    </Menu.Item>
+                }
+                {
+                    status === 4 &&
+                    <Menu.Item key="ChangeMessage">
+                        <a target="_blank" rel="noopener noreferrer">
+                            查看审核已拒绝原因
+                        </a>
+                    </Menu.Item>
+                }
+            </Menu>
+        );
+
         return (
-            <Dropdown overlay={menu} placement="bottomCenter" record>
+            <Dropdown
+                overlay={providerType === 1 ? menu : menu1}
+                placement="bottomCenter"
+            >
                 <a className="ant-dropdown-link">
                     表单操作 <Icon type="down" />
                 </a>
@@ -181,19 +247,21 @@ class SuppliersAppList extends PureComponent {
     }
 
     render() {
-        const { data, pageNum, pageSize, total } = this.props.applicationData;
+        const { data, pageNum, pageSize, total } = this.props.querySettledList;
+        const { querySettledList } = this.props;
         columns[columns.length - 1].render = this.renderOperation;
-
         return (
             <div className="application tjf-css-min-width">
                 <SearchForm
+                    isSuplierAddMenu
                     onSearch={this.handleFormSearch}
+                    onInput={this.handleInputSupplier}
                     onReset={this.handleFormReset}
                     onExcel={this.handleDownLoad}
                 />
                 <div className="application-list">
                     <Table
-                        dataSource={data}
+                        dataSource={querySettledList.data}
                         columns={columns}
                         rowKey="id"
                         pagination={{
@@ -204,29 +272,23 @@ class SuppliersAppList extends PureComponent {
                             onChange: this.handlePaginationChange
                         }}
                     />
-                </div>
-                {
-                    this.props.auditVisible &&
                     <ChangeAudit />
-                }
-                {
-                    this.props.checkResonVisible &&
-                    <CheckReason />
-                }
+                    <ChangeMessage />
+                </div>
             </div>
         );
     }
 }
 
 SuppliersAppList.propTypes = {
+    fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
+    querySettledList: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
-    fetchProviderEnterList: PropTypes.bool,
+    getSupplierSettledList: PropTypes.bool,
     location: PropTypes.objectOf(PropTypes.any),
     modifyAuditVisible: PropTypes.bool,
-    modifyCheckReasonVisible: PropTypes.bool,
     applicationData: PropTypes.objectOf(PropTypes.any),
-    auditVisible: PropTypes.bool,
-    checkResonVisible: PropTypes.bool,
+    modifyInformationVisible: PropTypes.bool,
 }
 
 export default withRouter(Form.create()(SuppliersAppList));

@@ -53,9 +53,9 @@ export const checkUser = () => (
  * @param pathname
  */
 export const fetchRightsAction = (code) => dispatch => {
-    // fetchRights(code)
-    //     .then(res => dispatch(receiveRights(res.data)))
-    //     .catch(err => Promise.reject(err));
+    fetchRights(code)
+        .then(res => dispatch(receiveRights(res.data)))
+        .catch(err => Promise.reject(err));
 }
 
 /**

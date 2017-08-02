@@ -1,6 +1,5 @@
 /**
  * @file App.jsx
- *
  * @author shijinhua,caoyanxuan
  *
  * 公共searchForm
@@ -8,14 +7,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, message } from 'antd';
+import Right from '../../../components/btnRight';
 
 import Utils from '../../../util/util';
 import {
     supplierTypeOptions,
-    supplierStatusOptions,
+    firstSupplierStatusOptions,
+    secondSupplierStatusOptions,
     supplierLevelOptions,
-    supplierPlaceLevelOptions
+    supplierPlaceLevelOptions,
 } from '../../../constant/searchParams';
+import { PAGE_SIZE } from '../../../constant';
+import RIGHTS from '../../../constant/right'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -39,9 +42,9 @@ class SearchForm extends Component {
             // 控制DatePicker的value
             rengeTime: null,
             // DatePicker选取后返回的格式化后的日期
-            inTime: null,
+            settledDate: null,
             // 供应商类型
-            supplierType: '-1',
+            supplierType: '1',
         }
     }
 
@@ -51,10 +54,10 @@ class SearchForm extends Component {
     * @param {moment} data 日期的moment对象
     * @param {string} dateString 格式化后的日期
     */
-    onEnterTimeChange(date, dateString) {
+    onEnterTimeChange(date) {
         this.setState({
             rengeTime: date,
-            inTime: dateString,
+            settledDate: date._d*1,
         });
     }
 
@@ -63,21 +66,21 @@ class SearchForm extends Component {
     */
     getValue() {
         const {
-            supplierNumber,
-            supplierName,
-            supplierLicense,
-            supplierType,
-            supplierState,
-            supplierLevel,
+            providerName,
+            providerNo,
+            registLicenceNumber,
+            providerType,
+            status,
+            grade,
         } = this.props.form.getFieldsValue();
         const searchData = {
-            supplierNumber,
-            supplierName,
-            supplierLicense,
-            supplierType,
-            supplierState,
-            supplierLevel,
-            inTime: this.state.inTime
+            providerName,
+            providerNo,
+            registLicenceNumber,
+            providerType,
+            status,
+            grade,
+            settledDate: this.state.settledDate
         };
         this.searchData = Utils.removeInvalid(searchData);
     }
@@ -188,8 +191,9 @@ class SearchForm extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { supplierType } = this.state;
-        const supplierTypeItems =
-        supplierType > 0 ? supplierPlaceLevelOptions : supplierLevelOptions;
+        const supplierStatusOptionss =
+        this.props.isSuplierInputList ? secondSupplierStatusOptions
+        : firstSupplierStatusOptions;
         return (
             <div className="manage-form">
                 <Form layout="inline">
@@ -197,7 +201,7 @@ class SearchForm extends Component {
                     <FormItem className="sc-form-item">
                         <div>
                             <span className="sc-form-item-label">供应商编码</span>
-                            {getFieldDecorator('supplierNumber')(
+                            {getFieldDecorator('providerNo')(
                                 <Input
                                     className="sc-form-item-input"
                                     placeholder="供应商编码"
@@ -209,7 +213,7 @@ class SearchForm extends Component {
                     <FormItem className="sc-form-item">
                         <div>
                             <span className="sc-form-item-label">供应商名称</span>
-                            {getFieldDecorator('supplierName')(
+                            {getFieldDecorator('providerName')(
                                 <Input
                                     className="sc-form-item-input"
                                     placeholder="供应商名称"
@@ -221,7 +225,7 @@ class SearchForm extends Component {
                     <FormItem className="sc-form-item">
                         <div>
                             <span className="sc-form-item-label">供应商营业执照号</span>
-                            {getFieldDecorator('supplierLicense')(
+                            {getFieldDecorator('registLicenceNumber')(
                                 <Input
                                     className="sc-form-item-input-license sc-form-item-input"
                                     placeholder="供应商营业执照号"
@@ -233,7 +237,7 @@ class SearchForm extends Component {
                     <FormItem className="sc-form-item">
                         <div>
                             <span className="sc-form-item-label">供应商类型</span>
-                            {getFieldDecorator('supplierType', {
+                            {getFieldDecorator('providerType', {
                                 initialValue: supplierTypeOptions.defaultValue
                             })(
                                 <Select
@@ -255,15 +259,15 @@ class SearchForm extends Component {
                     {/* 供应商状态 */}
                     <FormItem className="sc-form-item">
                         <span className="sc-form-item-label">供应商状态</span>
-                        {getFieldDecorator('supplierState', {
-                            initialValue: supplierStatusOptions.defaultValue
+                        {getFieldDecorator('status', {
+                            initialValue: supplierStatusOptionss.defaultValue
                         })(
                             <Select
                                 className="sc-form-item-select"
                                 size="default"
                             >
                                 {
-                                    supplierStatusOptions.data.map((item) =>
+                                    supplierStatusOptionss.data.map((item) =>
                                         (<Option key={item.key} value={item.key}>
                                             {item.value}
                                         </Option>)
@@ -272,27 +276,48 @@ class SearchForm extends Component {
                             </Select>
                         )}
                     </FormItem>
-                    {/* 供应商等级 */}
-                    <FormItem className="sc-form-item">
-                        <span className="sc-form-item-label">供应商等级</span>
-                        {getFieldDecorator('supplierLevel', {
-                            initialValue: supplierTypeItems.defaultValue
-                        })(
-                            <Select
-                                className="sc-form-item-select"
-                                size="default"
-                                disabled={this.state.supplierType === '-1'}
-                            >
-                                {
-                                    supplierTypeItems.data.map((item) =>
-                                        (<Option key={item.key} value={item.key}>
-                                            {item.value}
-                                        </Option>)
-                                    )
-                                }
-                            </Select>
-                        )}
-                    </FormItem>
+                    {
+                        supplierType === '1'
+                        ? <FormItem className="sc-form-item">
+                            <span className="sc-form-item-label">供应商等级</span>
+                            {getFieldDecorator('grade', {
+                                initialValue: supplierLevelOptions.defaultValue
+                            })(
+                                <Select
+                                    className="sc-form-item-select"
+                                    size="default"
+                                >
+                                    {
+                                        supplierLevelOptions.data.map((item) =>
+                                            (<Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Option>)
+                                        )
+                                    }
+                                </Select>
+                            )}
+                        </FormItem>
+                        : <FormItem className="sc-form-item">
+                            <span className="sc-form-item-label">供应商地点等级</span>
+                                {getFieldDecorator('grade', {
+                                    initialValue: supplierPlaceLevelOptions.defaultValue
+                                })(
+                                    <Select
+                                        className="sc-form-item-select"
+                                        size="default"
+                                    >
+                                        {
+                                            supplierPlaceLevelOptions.data.map((item) =>
+                                                (<Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>)
+                                            )
+                                        }
+                                    </Select>
+                                )}
+                            </FormItem>
+                    }
+                    
                     {/* 供应商入驻日期 */}
                     <FormItem className="sc-form-item">
                         <div>
@@ -352,6 +377,7 @@ SearchForm.propTypes = {
     onExcel: PropTypes.func,
     onInput: PropTypes.func,
     isSuplierAddMenu: PropTypes.bool,
+    isSuplierInputList: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
 };
 
