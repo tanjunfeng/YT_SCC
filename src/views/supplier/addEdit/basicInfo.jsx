@@ -74,20 +74,6 @@ class BasicInfo extends PureComponent {
                     settledTime: settledTime._d * 1,
                     spNo: this.props.supplierId
                 };
-                if (isEdit) {
-                    Object.assign(supplierBasicInfo,
-                        {
-                            id: detailData.supplierBasicInfo.id,
-                            status: detailData.supplierBasicInfo.status,
-                        }
-                    );
-                    Object.assign(saleRegionInfo,
-                        {
-                            id: detailData.saleRegionInfo.id,
-                            status: detailData.saleRegionInfo.status,
-                        }
-                    );
-                }
                 this.props.addSupplierMessage1({supplierBasicInfo, saleRegionInfo})
                 onGoTo('2');
             }
@@ -155,7 +141,7 @@ class BasicInfo extends PureComponent {
                                             })(
                                                 <Input
                                                     placeholder="供应商名称"
-                                                    onBlur={(e) => { Validator.repeat.companyName(e, this, supplierBasicInfo.id) }}
+                                                    onBlur={(e) => { Validator.repeat.companyName(e, this, supplierBasicInfo.id, supplierBasicInfo.status) }}
                                                 />
                                             )}
                                         </FormItem>

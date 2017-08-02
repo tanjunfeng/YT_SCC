@@ -36,13 +36,13 @@ export const validatorRebate = (rule, value, callback) => {
 export class Validator {
     static repeat = {
         // 验证公司名是否重复
-        companyName: (e, _this, _id = null) => {
+        companyName: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             checkSupplierName(
-                Utils.removeInvalid({companyName: e.target.value, id: _id})
+                Utils.removeInvalid({companyName: e.target.value, id: _id, status: _status})
             ).catch(() => {
                 _this.props.form.setFields({
                     companyName: {
@@ -52,13 +52,13 @@ export class Validator {
             })
         },
         // 验证供应商号是否重复
-        spNo: (e, _this, _id = null) => {
+        spNo: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             settlementInfo(
-                Utils.removeInvalid({spNo: e.target.value, id: _id})
+                Utils.removeInvalid({spNo: e.target.value, id: _id, status: _status})
             ).catch(() => {
                 _this.props.form.setFields({
                     spNo: {
@@ -68,13 +68,13 @@ export class Validator {
             })
         },
         // 验证供应商注册号是否重复
-        spRegNo: (e, _this, _id = null) => {
+        spRegNo: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             settlementInfo(
-                Utils.removeInvalid({spRegNo: e.target.value, id: _id})
+                Utils.removeInvalid({spRegNo: e.target.value, id: _id, status: _status})
             ).catch(() => {
                 _this.props.form.setFields({
                     spRegNo: {
@@ -84,13 +84,13 @@ export class Validator {
             })
         },
         // 验证主账号是否重复
-        mainAccountNo: (e, _this, _id = null) => {
+        mainAccountNo: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             settlementInfo(
-                Utils.removeInvalid({mainAccountNo: e.target.value, id: _id})
+                Utils.removeInvalid({mainAccountNo: e.target.value, id: _id, status: _status})
             ).catch(() => {
                 _this.props.form.setFields({
                     mainAccountNo: {
@@ -100,13 +100,13 @@ export class Validator {
             })
         },
         // 验证请输入纳税人识别号是否重复
-        taxpayerNumber: (e, _this, _id = null) => {
+        taxpayerNumber: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             taxpayerNumber(
-                Utils.removeInvalid({taxpayerNumber: e.target.value, id: _id})
+                Utils.removeInvalid({taxpayerNumber: e.target.value, id: _id, status: _status})
             ).catch(() => {
                 _this.props.form.setFields({
                     taxpayerNumber: {
@@ -116,13 +116,13 @@ export class Validator {
             })
         },
         // 验证银行账号是否重复
-        bankAccount: (e, _this, _id = null) => {
+        bankAccount: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             checkBankAccount(
-                Utils.removeInvalid({bankAccount: e.target.value, id: _id})
+                Utils.removeInvalid({bankAccount: e.target.value, id: _id, status: _status})
             ).catch(() => {
                 _this.props.form.setFields({
                     bankAccount: {
@@ -132,13 +132,13 @@ export class Validator {
             })
         },
         // 请输入营业执照号是否重复
-        licenseNo: (e, _this, _id = null) => {
+        licenseNo: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             checkLicenseNo(
-                Utils.removeInvalid({licenseNo: e.target.value, id: _id})
+                Utils.removeInvalid({licenseNo: e.target.value, id: _id, status: _status})
             ).catch(() => {
                 _this.props.form.setFields({
                     registLicenceNumber: {
@@ -148,13 +148,13 @@ export class Validator {
             })
         },
         // 阻止编号是否重复
-        orgCode: (e, _this, _id = null) => {
+        orgCode: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             orgCodeInfoByCode(
-                Utils.removeInvalid({orgCode: e.target.value, id: _id})
+                Utils.removeInvalid({orgCode: e.target.value, id: _id, status: _status})
             ).catch(() => {
                 _this.props.form.setFields({
                     orgCode: {
@@ -164,13 +164,13 @@ export class Validator {
             })
         },
         // 供应商手机号是否重复
-        supplierPhone: (e, _this, _id = null) => {
+        supplierPhone: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             emerCont(
-                Utils.removeInvalid({phone: e.target.value, id: _id})
+                Utils.removeInvalid({phone: e.target.value, id: _id, status: _status})
             ).catch(() => {
                 _this.props.form.setFields({
                     sphone: {
@@ -180,13 +180,13 @@ export class Validator {
             })
         },
         // 供应商公司联系电话是否重复
-        companyPhoneNumber: (e, _this, _id = null) => {
+        companyPhoneNumber: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             emerCont(
-                Utils.removeInvalid({companyPhoneNumber: e.target.value, id: _id})
+                Utils.removeInvalid({companyPhoneNumber: e.target.value, id: _id, status: _status})
             ).catch(() => {
                 _this.props.form.setFields({
                     companyPhoneNumber: {
@@ -196,13 +196,13 @@ export class Validator {
             })
         },
         // 手机号是否重复
-        phone: (e, _this, _id = null) => {
+        phone: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             settledCont(
-                Utils.removeInvalid({phone: e.target.value, id: _id})
+                Utils.removeInvalid({phone: e.target.value, id: _id, status: _status})
             ).catch(() => {
                 _this.props.form.setFields({
                     phone: {
@@ -212,13 +212,13 @@ export class Validator {
             })
         },
         // 邮箱是否重复
-        emial: (e, _this, _id = null) => {
+        emial: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             settledCont(
-                Utils.removeInvalid({email: e.target.value, id: _id})
+                Utils.removeInvalid({email: e.target.value, id: _id, status: _status})
             ).catch(() => {
                 _this.props.form.setFields({
                     email: {

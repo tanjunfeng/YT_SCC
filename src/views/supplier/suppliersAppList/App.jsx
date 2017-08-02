@@ -78,10 +78,10 @@ class SuppliersAppList extends PureComponent {
     componentDidMount() {
         // TODO 默认加条件
         this.props.getSupplierSettledList({
-            // pageNum: this.current,
-            // pageSize: PAGE_SIZE,
-            // providerType: 1,
-            // status: 0
+            pageNum: this.current,
+            pageSize: PAGE_SIZE,
+            providerType: 1,
+            status: 0
         });
     }
 
@@ -181,7 +181,7 @@ class SuppliersAppList extends PureComponent {
                     <Link to={`${pathname}/supplier/${id}`}>供应商详情</Link>
                 </Menu.Item>
                 {
-                    (status === 1 || status === 3 || status === 4) &&
+                     (status === 0 || status === 2 || status === 3) && 
                     <Menu.Item key="modifySupInfor">
                         <Link to={`${pathname}/edit/supplier/${id}`}>
                             修改供应商信息

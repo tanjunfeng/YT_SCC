@@ -74,14 +74,6 @@ class BankInfo extends PureComponent {
                     bankLocCityCode: secondValue.code,
                     bankLocCountyCode: thirdValue.code,
                 }
-                if (isEdit) {
-                    Object.assign(supplierBankInfo,
-                        {
-                            id: detailData.supplierBankInfo.id,
-                            status:  detailData.supplierBankInfo.status
-                        }
-                    );
-                }
 
                 this.props.addSupplierMessage1({supplierBankInfo});
                 onGoTo('3');
@@ -173,7 +165,7 @@ class BankInfo extends PureComponent {
                                             })(
                                                 <Input
                                                     placeholder="银行账号"
-                                                    onBlur={(e) => { Validator.repeat.bankAccount(e, this, supplierBankInfo.id) }}
+                                                    onBlur={(e) => { Validator.repeat.bankAccount(e, this, supplierBankInfo.id, supplierBankInfo.status) }}
                                                 />
                                             )}
                                         </FormItem>

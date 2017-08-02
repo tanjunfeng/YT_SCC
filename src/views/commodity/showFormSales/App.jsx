@@ -62,7 +62,8 @@ class ShowForm extends Component {
             saleName,
             secondLevelCategoryName,
             supplyChainStatus,
-            thirdLevelCategoryName
+            thirdLevelCategoryName,
+            deliveryTime
         } = this.props.innitalvalue;
         return (
             <div className="manage-form">
@@ -71,7 +72,7 @@ class ShowForm extends Component {
                         <Icon type="desktop" className="css-appstore" />&nbsp;商品信息
                     </div>
                     <Row className="css-row-padding" style={{paddingLeft: 22}}>
-                        <Col span={9} className="css-col">
+                        <Col span={8} className="css-col">
                             <span>商品名称:</span>
                             <Breadcrumb className="css-breadcrumb">
                                 <Breadcrumb.Item>
@@ -85,13 +86,15 @@ class ShowForm extends Component {
                                 <Breadcrumb.Item>{brandName}</Breadcrumb.Item>
                             </Breadcrumb>
                         </Col>
-                        <Col span={7} className="css-col">
+                        <Col span={8} className="css-col">
                             <span>商品编号:</span>
                             <Breadcrumb className="css-breadcrumb">
                                 <Breadcrumb.Item>{productCode}</Breadcrumb.Item>
                             </Breadcrumb>
                         </Col>
-                        <Col span={9} className="css-col">
+                    </Row>
+                    <Row className="css-row-padding" style={{paddingLeft: 22}}>
+                        <Col span={8} className="css-col">
                             <span>商品分类:</span>
                             <Breadcrumb separator=">" className="css-breadcrumb">
                                 <Breadcrumb.Item>{firstLevelCategoryName}</Breadcrumb.Item>
@@ -105,6 +108,10 @@ class ShowForm extends Component {
                             <Breadcrumb className="css-breadcrumb">
                                 <Breadcrumb.Item>{inputTaxRate}%</Breadcrumb.Item>
                             </Breadcrumb>
+                        </Col>
+                        <Col span={8} className="css-col">
+                            <span>税率:</span>
+                            <span>下单后{deliveryTime}天内发货</span>
                         </Col>
                     </Row>
                 </div>

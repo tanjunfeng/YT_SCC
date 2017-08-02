@@ -251,6 +251,7 @@ const routes = [
                         />
                         <Route
                             path="/procurementMaintenance/:id"
+                            exact
                             render={() => <Bundle load={ProcurementMaintenance}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>

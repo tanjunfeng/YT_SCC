@@ -23,7 +23,8 @@ import {
     queryPoRcvMngList,
     queryPoRcvList,
     queryPoRcvDetail,
-    createPoRcv as svcCreatePoRcv
+    createPoRcv as svcCreatePoRcv,
+    findStepPriceInfo
 } from '../service';
 
 
@@ -434,3 +435,25 @@ export const createPoRcv = (params) => dispatch => (
             })
     })
 )
+
+/**
+ * 根据条件查询销售价格区间列表
+ * @param {*} data 
+ */
+const rcvPriceInfo = (data) => ({
+    type: ActionType.RECEIVE_PRICE_INFO,
+    payload: data,
+});
+export const fetchPriceInfo = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        findStepPriceInfo(params)
+            .then(res => {
+                dispatch(rcvPriceInfo(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+

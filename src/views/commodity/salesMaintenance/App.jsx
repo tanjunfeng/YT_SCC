@@ -69,11 +69,12 @@ class ProcurementMaintenance extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
-        this.props.fecthGetProdPurchaseById({
-            productId: 'xpro12333'
-        });
+        const { match } = this.props;
+        // this.props.fecthGetProdPurchaseById({
+        //     id: match.params.id
+        // });
         this.props.fetchGetProductById({
-            productId: 1001
+            productId: match.params.id
         });
     }
 

@@ -230,7 +230,7 @@ class Cardline extends Component {
                         onClick={this.handleDelete}
                     >
                         &times;
-                        </a>
+                    </a>
                     <p>
                         <span>供应商 : </span>
                         <span>{getProdPurchaseByIds.spId}</span>

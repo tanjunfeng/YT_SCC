@@ -65,6 +65,7 @@ class LicenseInfo extends PureComponent {
             checked: 0
         }
         this.submitData = {};
+        this.submitId = null;
     }
 
     componentDidMount() {
@@ -74,6 +75,11 @@ class LicenseInfo extends PureComponent {
         const { form, onGoTo, isEdit, detailData = {}, data } = this.props;
         Tools.checkAddress(this.companyAddress, 'companyLoc', this);
         Tools.checkAddress(this.licenseLoc, 'licenseLocSpace', this);
+        const registrationCertificate = this.refs.registrationCertificate.getValue();
+        const qualityIdentification = this.refs.qualityIdentification.getValue();
+        const generalTaxpayerQualifiCerti = this.refs.generalTaxpayerQualifiCerti.getValue();
+        const foodBusinessLicense = this.refs.foodBusinessLicense.getValue();
+        const legalRepreCardPic = this.refs.legalRepreCardPic.getValue();
         form.validateFields((err, values) => {
             if (!err) {
                 const { firstValue, secondValue, thirdValue } = this.companyAddress;
@@ -97,14 +103,14 @@ class LicenseInfo extends PureComponent {
                     companyLocCityCode: secondValue.code,
                     companyLocCountyCode: thirdValue.code,
                     companyDetailAddress,
-                    registrationCertificate: this.refs['registrationCertificate'].getValue().files[0],
-                    regCerExpiringDate: this.refs['registrationCertificate'].getValue().time,
-                    qualityIdentification: this.refs['qualityIdentification'].getValue().files[0],
-                    quaIdeExpiringDate: this.refs['qualityIdentification'].getValue().time,
-                    generalTaxpayerQualifiCerti: this.refs['generalTaxpayerQualifiCerti'].getValue().files[0],
-                    taxpayerCertExpiringDate: this.refs['generalTaxpayerQualifiCerti'].getValue().time,
-                    foodBusinessLicense: this.refs['foodBusinessLicense'].getValue().files[0],
-                    businessLicenseExpiringDate: this.refs['foodBusinessLicense'].getValue().time
+                    registrationCertificate: registrationCertificate.files[0],
+                    regCerExpiringDate: registrationCertificate.time,
+                    qualityIdentification: qualityIdentification.files[0],
+                    quaIdeExpiringDate: qualityIdentification.time,
+                    generalTaxpayerQualifiCerti: generalTaxpayerQualifiCerti.files[0],
+                    taxpayerCertExpiringDate: generalTaxpayerQualifiCerti.time,
+                    foodBusinessLicense: foodBusinessLicense.files[0],
+                    businessLicenseExpiringDate: foodBusinessLicense.time
 
                 }
                 const supplierlicenseInfo = {
@@ -112,8 +118,8 @@ class LicenseInfo extends PureComponent {
                     registLicenceNumber,
                     legalRepresentative,
                     legalRepreCardNum,
-                    legalRepreCardPic1: this.refs['legalRepreCardPic'].getValue().files[0],
-                    legalRepreCardPic2: this.refs['legalRepreCardPic'].getValue().files[1],
+                    legalRepreCardPic1: legalRepreCardPic.files[0],
+                    legalRepreCardPic2: legalRepreCardPic.files[1],
                     licenseLocProvince: this.licenseLoc.firstValue.regionName,
                     licenseLocCity: this.licenseLoc.secondValue.regionName,
                     licenseLocCounty: this.licenseLoc.thirdValue.regionName,
@@ -144,6 +150,24 @@ class LicenseInfo extends PureComponent {
                             status: detailData.supplierlicenseInfo.status,
                         }
                     );
+                    Object.assign(data.supplierBasicInfo,
+                        {
+                            id: detailData.supplierBasicInfo.id,
+                            status: detailData.supplierBasicInfo.status,
+                        }
+                    );
+                    Object.assign(data.saleRegionInfo,
+                        {
+                            id: detailData.saleRegionInfo.id,
+                            status: detailData.saleRegionInfo.status,
+                        }
+                    );
+                    Object.assign(data.supplierBankInfo,
+                        {
+                            id: detailData.supplierBankInfo.id,
+                            status:  detailData.supplierBankInfo.status
+                        }
+                    );
                 }
                 Object.assign(
                     this.submitData,
@@ -166,7 +190,10 @@ class LicenseInfo extends PureComponent {
         this.props.hanldeSupplier(this.submitData, isEdit ? 'updateSupplierInfo' : 'insertSupplierInfo')
             .then((res) => {
                 message.success('保存成功');
-                !isEdit && this.props.handleGetDetail(res.data);
+                this.props.handleGetDetail(!isEdit ? res.data : this.submitData.id);
+                if (!isEdit) {
+                    this.submitId = res.data;
+                }
             });
     }
 
@@ -175,7 +202,8 @@ class LicenseInfo extends PureComponent {
     }
 
     handleCreatePlace() {
-
+        const { detailData = {}, isEdit } = this.props;
+        this.props.history.push(`/supplierInputList/add/${isEdit ? detailData.id : this.submitId}`)
     }
 
     handleSubmit() {
@@ -262,9 +290,10 @@ class LicenseInfo extends PureComponent {
                                         <span>食品安全认证：</span>
                                         <InlineUpload
                                             showEndTime
-                                            datas={isEdit ? [supplierOperTaxInfo.supplierOperTaxInfo] : []}
+                                            datas={isEdit ? [supplierOperTaxInfo.qualityIdentification] : []}
                                             defaultTime={isEdit ? supplierOperTaxInfo.quaIdeExpiringDate : null}
                                             ref="qualityIdentification"
+                                            key="qualityIdentification"
                                         />
                                     </Col>
                                     <Col span={8}>
@@ -274,6 +303,7 @@ class LicenseInfo extends PureComponent {
                                             datas={isEdit ? [supplierOperTaxInfo.registrationCertificate] : []}
                                             defaultTime={isEdit ? supplierOperTaxInfo.regCerExpiringDate : null}
                                             ref="registrationCertificate"
+                                            key="registrationCertificate"
                                         />
                                     </Col>
                                 </Row>
@@ -285,6 +315,7 @@ class LicenseInfo extends PureComponent {
                                             datas={isEdit ? [supplierOperTaxInfo.foodBusinessLicense] : []}
                                             defaultTime={isEdit ? supplierOperTaxInfo.businessLicenseExpiringDate : null}
                                             ref="foodBusinessLicense"
+                                            key="foodBusinessLicense"
                                         />
                                     </Col>
                                     <Col span={8}>
@@ -294,6 +325,7 @@ class LicenseInfo extends PureComponent {
                                             datas={isEdit ? [supplierOperTaxInfo.generalTaxpayerQualifiCerti] : []}
                                             defaultTime={isEdit ? supplierOperTaxInfo.taxpayerCertExpiringDate : null}
                                             ref="generalTaxpayerQualifiCerti"
+                                            key="generalTaxpayerQualifiCerti"
                                         />
                                     </Col>
                                 </Row>
@@ -320,7 +352,7 @@ class LicenseInfo extends PureComponent {
                                             })(
                                                 <Input
                                                     placeholder="注册号(营业执照号)"
-                                                    onBlur={(e) => { Validator.repeat.licenseNo(e, this, supplierlicenseInfo.id) }}
+                                                    onBlur={(e) => { Validator.repeat.licenseNo(e, this, supplierlicenseInfo.id, supplierlicenseInfo.status) }}
                                                 />
                                             )}
                                         </FormItem>
@@ -485,6 +517,7 @@ class LicenseInfo extends PureComponent {
                                                 : []
                                             }
                                             ref="legalRepreCardPic"
+                                            key="legalRepreCardPic"
                                         />
                                     </Col>
                                 </Row>
@@ -499,6 +532,7 @@ class LicenseInfo extends PureComponent {
                                                 ]
                                                 : []}
                                             ref="registLicencePic"
+                                            key="registLicencePic"
                                         />
                                     </Col>
                                 </Row>

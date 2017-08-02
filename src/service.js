@@ -39,13 +39,16 @@ http.response(
  * 下载相关api
  */
 // 下载供应商excel URL
-export const exportSupplierList = 'provider/exportSupplierList';
+// export const exportSupplierList = 'provider/exportSupplierList';
 
 // 下载供应商入驻列表
 // export const exportSupplierEnterList = 'provider/exportSupplierEnterList';
 
 // 下载供应商入驻列表
 export const exportSupplierEnterList = '/supplier/exportSettledList';
+
+// 下载供应商管理列表
+export const exportManageList = '/supplier/exportManageList';
 
 // 下载供应商修改列表
 export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
@@ -553,3 +556,5 @@ export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBa
 export const supplierSearchBox = (params) => http.get('/supplier/supplierSearchBox', params);
 // 供应商地点选择组件
 export const supplierAdrSearchBox = (params) => http.get('/supplier/supplierAdrSearchBox', params);
+// 根据条件查询销售价格区间列表
+export const findStepPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);

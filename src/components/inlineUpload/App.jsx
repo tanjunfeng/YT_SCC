@@ -17,7 +17,7 @@ class InlineUpload extends Component {
 
     state = {
         fileList: [],
-        result: []
+        result: this.props.datas
     }
 
     componentWillReceiveProps(nextProps) {
@@ -76,7 +76,7 @@ class InlineUpload extends Component {
 
     render() {
         const { fileList, result } = this.state;
-        const { limit = 1 } = this.props;
+        const { limit = 1, id } = this.props;
         const { apiHost } = config;
         const props = {
             action: `${apiHost}commonUploadFile/uploadFile`,
@@ -84,7 +84,7 @@ class InlineUpload extends Component {
             showUploadList: false
         };
         return (
-            <div className={classnames('inline-upload', {'inline-upload-limit': result.length >= limit})}>
+            <div key={id} className={classnames('inline-upload', {'inline-upload-limit': result.length >= limit})}>
                 {
                     <Upload {...props} fileList={this.state.fileList}>
                         <Tooltip placement="top" title={this.props.title}>
@@ -155,6 +155,7 @@ InlineUpload.propTypes = {
     showEndTime: PropTypes.bool,
     defaultTime: PropTypes.objectOf([ PropTypes.objectOf(PropTypes.any), PropTypes.number]),
     title: PropTypes.string,
+    id: PropTypes.string,
 };
 
 InlineUpload.defaultProps = {
@@ -162,7 +163,8 @@ InlineUpload.defaultProps = {
     onChange: () => {},
     showEndTime: false,
     defaultTime: null,
-    title: '图片仅支持JPG、GIF、PNG格式的图片，大小不超过1M。'
+    title: '图片仅支持JPG、GIF、PNG格式的图片，大小不超过1M。',
+    id: ''
 }
 
 export default InlineUpload;

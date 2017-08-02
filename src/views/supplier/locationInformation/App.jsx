@@ -171,7 +171,8 @@ class BasicInfo extends PureComponent {
                 ? 'updateSupplierAddressInfo'
                 : 'insertSupplierAddressInfo'
             ).then((res) => {
-                this.props.history.push(`/supplierInputList/place/${isEdit ? data.id : res.data}`)
+                // this.props.history.push(`/supplierInputList/place/${isEdit ? data.id : res.data}`)
+                this.props.history.push('/supplierInputList')
             });
         });
     }
