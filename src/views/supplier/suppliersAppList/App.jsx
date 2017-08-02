@@ -218,6 +218,12 @@ class SuppliersAppList extends PureComponent {
                     </Menu.Item>
                 }
                 {
+                    (status === 2 || status === 5) &&
+                    <Menu.Item>
+                        <Link to={`${pathname}/edit/${id}`}>修改供应商地点信息</Link>
+                    </Menu.Item>
+                }
+                {
                     status === 4 &&
                     <Menu.Item key="ChangeMessage">
                         <a target="_blank" rel="noopener noreferrer">

@@ -16,7 +16,7 @@ import { fetchCategorys } from '../../actions/pub';
 
 const Option = Select.Option;
 
-const All = [{id: -1, categoryName: '全部', childCategories: []}];
+const All = [{categoryId: -1, name: '全部', childCategories: []}];
 
 @connect(
     state => ({
@@ -39,10 +39,10 @@ class ClassifiedSelect extends Component {
             secondDate: All,
             thirdDate: All,
             fourthDate: All,
-            firstSelect: All[0].categoryName,
-            secondSelect: All[0].categoryName,
-            thirdSelect: All[0].categoryName,
-            fourthSelect: All[0].categoryName,
+            firstSelect: All[0].name,
+            secondSelect: All[0].name,
+            thirdSelect: All[0].name,
+            fourthSelect: All[0].name,
         }
 
         this.result = {
@@ -74,7 +74,7 @@ class ClassifiedSelect extends Component {
     onFirstChange(key) {
         const { categorys } = this.props;
         const current = categorys.filter(item => {
-            if (item.categoryName === key) {
+            if (item.name === key) {
                 return item;
             }
             return null;
@@ -90,8 +90,8 @@ class ClassifiedSelect extends Component {
             secondDate: All.concat(current.length > 0 ? current[0].childCategories : []),
             thirdDate: All,
             firstSelect: key,
-            secondSelect: this.result.second.categoryName,
-            thirdSelect: this.result.third.categoryName
+            secondSelect: this.result.second.name,
+            thirdSelect: this.result.third.name
         }, () => {
             this.props.onChange(this.result, this);
         })
@@ -100,7 +100,7 @@ class ClassifiedSelect extends Component {
     onSecondChange(key) {
         const { secondDate } = this.state;
         const current = secondDate.filter(item => {
-            if (item.categoryName === key) {
+            if (item.name === key) {
                 return item;
             }
             return null;
@@ -113,8 +113,8 @@ class ClassifiedSelect extends Component {
 
         this.setState({
             thirdDate: All.concat(current.length > 0 ? current[0].childCategories : []),
-            secondSelect: this.result.second.categoryName,
-            thirdSelect: this.result.third.categoryName
+            secondSelect: this.result.second.name,
+            thirdSelect: this.result.third.name
         }, () => {
             this.props.onChange(this.result, this);
         })
@@ -123,7 +123,7 @@ class ClassifiedSelect extends Component {
     onThirdChange(key) {
         const { thirdDate } = this.state;
         const current = thirdDate.filter(item => {
-            if (item.categoryName === key) {
+            if (item.name === key) {
                 return item;
             }
             return null;
@@ -136,8 +136,8 @@ class ClassifiedSelect extends Component {
 
         this.setState({
             fourthDate: All.concat(current.length > 0 ? current[0].childCategories : []),
-            thirdSelect: this.result.third.categoryName,
-            fourthSelect: this.result.fourth.categoryName
+            thirdSelect: this.result.third.name,
+            fourthSelect: this.result.fourth.name
         }, () => {
             this.props.onChange(this.result, this);
         })
@@ -146,7 +146,7 @@ class ClassifiedSelect extends Component {
     onFourthChange(key) {
         const { fourthDate } = this.state;
         const current = fourthDate.filter(item => {
-            if (item.categoryName === key) {
+            if (item.name === key) {
                 return item;
             }
             return null;
@@ -157,7 +157,7 @@ class ClassifiedSelect extends Component {
         });
 
         this.setState({
-            fourthSelect: this.result.fourth.categoryName
+            fourthSelect: this.result.fourth.name
         }, () => {
             this.props.onChange(this.result, this);
         })
@@ -171,7 +171,7 @@ class ClassifiedSelect extends Component {
             fourth: All[0],
         })
         this.setState({
-            firstSelect: All[0].categoryName
+            firstSelect: All[0].name
         }, () => {
             this.props.onChange(this.result, this);
         })
@@ -187,16 +187,16 @@ class ClassifiedSelect extends Component {
         const { first, second, third } = this.result;
         categorys = All.concat(categorys);
         const firstOptions = categorys.map(item =>
-            <Option key={item.categoryName}>{item.categoryName}</Option>
+            <Option key={item.name}>{item.name}</Option>
         );
         const SecondOptions = secondDate.map(item =>
-            <Option key={item.categoryName}>{item.categoryName}</Option>
+            <Option key={item.name}>{item.name}</Option>
         );
         const ThirdOptions = thirdDate.map(item =>
-            <Option key={item.categoryName}>{item.categoryName}</Option>
+            <Option key={item.name}>{item.name}</Option>
         );
         const FourthOptions = fourthDate.map(item =>
-            <Option key={item.categoryName}>{item.categoryName}</Option>
+            <Option key={item.name}>{item.name}</Option>
         );
         return (
             <div className={wrapClass}>
@@ -211,7 +211,7 @@ class ClassifiedSelect extends Component {
                     {firstOptions}
                 </Select>
                 {
-                    first.id !== -1 &&
+                    first.categoryId !== -1 &&
                     <Select
                         className="classify-selete-item classify-selete-item2"
                         value={secondSelect}
@@ -223,7 +223,7 @@ class ClassifiedSelect extends Component {
                     </Select>
                 }
                 {
-                    second.id !== -1 &&
+                    second.categoryId !== -1 &&
                     <Select
                         className="classify-selete-item classify-selete-item3"
                         value={thirdSelect}
@@ -235,7 +235,7 @@ class ClassifiedSelect extends Component {
                     </Select>
                 }
                 {
-                    third.id !== -1 &&
+                    third.categoryId !== -1 &&
                     <Select
                         className="classify-selete-item classify-selete-item4"
                         value={fourthSelect}

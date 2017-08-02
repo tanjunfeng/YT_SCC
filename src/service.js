@@ -139,6 +139,15 @@ export const insertSupplierSettlementInfo = (params) => http.post('/provider/ins
 // 查询纳税人是否已存在
 export const taxpayerNumber = (params) => http.get('/provider/checkSupplierOperTaxBytaxpayerNumber', params);
 
+// 公司名是否重复
+export const checkSupplierName = (params) => http.get('/supplier/checkSupplierName', params);
+
+// 银行信息是否重复
+export const checkBankAccount = (params) => http.get('/supplier/checkBankAccount', params);
+
+// 校验营业执照号是否重复
+export const checkLicenseNo = (params) => http.get('/supplier/checkLicenseNo', params);
+
 // 检查银行账号是否存在重复
 export const bankAccount = (params) => http.get('/provider/checkSupplierBankInfoByBankAccount', params);
 
@@ -362,7 +371,7 @@ export const saveItemAd = (params) => http.post('/homeAd/saveItemAd', params);
 export const uploadImageBase64Data = (params) => http.post('/commonUploadFile/uploadImageBase64Data', params);
 
 // 查询分类信息
-export const queryCategorys = (params) => http.get('/category/queryAllCategoriesWithIconByParentId', params);
+export const queryCategorys = (params) => http.get('/category/queryAllShowCategories', params);
 
 // 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
 export const saveInput = (params) => http.post('/rk/saveInput', params);

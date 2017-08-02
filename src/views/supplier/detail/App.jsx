@@ -69,6 +69,12 @@ class SupplierDetail extends PureComponent {
             })
             return;
         }
+        else if (type === 'add') {
+            this.props.getSupplierDetail({spId: id}).then(() => {
+                this.props.queryPlaceRegion({spId: this.props.detailData.id});
+            })
+            return;
+        }
         this.props.getSupplierDetail({spId: id});
     }
 

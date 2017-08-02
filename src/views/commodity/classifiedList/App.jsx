@@ -20,6 +20,7 @@ import {
     receiveData,
     fetchTest,
 } from '../../../actions/classifiedList';
+import ClassifiedSelect from '../../../components/threeStageClassification'
 
 @connect(
     state => ({
@@ -174,7 +175,11 @@ class ClassifiedList extends Component {
                     handleChangeStatus={this.handleChangeStatus}
                 />
                 <div>{this.state.chooseMe.key} - {this.state.chooseMe.name}</div>
-
+                <ClassifiedSelect
+                    onChange={(data) => {
+                        console.log(data)
+                    }}
+                />
                 {/* Demo 1 */}
                 <SearchMind
                     compKey="search-mind-key1"
