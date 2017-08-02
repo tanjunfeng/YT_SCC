@@ -20,7 +20,11 @@ import {
     subCompanyStatusOptions,
     commoditySortOptions
 } from '../../../constant/searchParams';
-// import { fetchBrandsByPages } from '../../../actions/classifiedList';
+
+import LevelTree from '../../../common/levelTree';
+import ClassifiedSelect from '../../../components/threeStageClassification'
+
+
 import { pubFetchValueList } from '../../../actions/pub';
 
 import {
@@ -121,18 +125,16 @@ class ManagementList extends PureComponent {
 
         this.state = {
             STOP_BUY_DISABLED: true,
-            STOP_BUY_CHILDCOMPANY_ID: '',
+            SUPPLIER_ID: '',
             chooseGoodsList: [],
-            brandChoose: null,
-            childCompanyMeg: null,
+            brandName: '',
+            childCompanyMeg: {},
             supplyChoose: '',
             subsidiaryChoose: '',
-
-            // 区域上下架
-            AREA_SHELVES_DISABLED: true
+            AREA_SHELVES_DISABLED: true,
+            classify: {},
+            sortType: ''
         };
-
-        this.sortType = '';
     }
 
     componentDidMount() {
@@ -153,30 +155,19 @@ class ManagementList extends PureComponent {
      * @param {Object} data 各级
      * @param {string} that 回显信息1
      */
-    handleSelectChange = (data, that) => {
-        const { first, second, third } = data;
-        if (third.id !== -1) {
-            this.setState({
-                isDisabled: false
-            })
-        } else if (
-            this.classify.thirdCategoryId !== third.id
-            && third.id === -1
-        ) {
-            this.props.form.resetFields(['id']);
-            this.setState({
-                isDisabled: true
-            })
-        }
-        this.classify = {
-            firstCategoryId: first.id,
-            secondCategoryId: second.id,
-            thirdCategoryId: third.id,
-            firstCategoryName: first.categoryName,
-            secondCategoryName: second.categoryName,
-            thirdCategoryName: third.categoryName
-        }
-        this.classifyRef = that;
+    handleSelectChange = (selectData, that) => {
+        this.slect = that;
+        console.log(selectData);
+        const { first, second, third, fourth } = selectData;
+        const NOT_SELECT = -1;
+        this.setState({
+            classify: {
+                firstLevelCategoryId: first.categoryId !== NOT_SELECT ? first.categoryId : '',
+                secondLevelCategoryId: second.categoryId !== NOT_SELECT ? second.categoryId : '',
+                thirdLevelCategoryId: third.categoryId !== NOT_SELECT ? third.categoryId : '',
+                fourthLevelCategoryId: fourth.categoryId !== NOT_SELECT ? fourth.categoryId : '',
+            }
+        })
     }
 
     /**
@@ -187,7 +178,6 @@ class ManagementList extends PureComponent {
             this.setState({
                 chooseGoodsList: selectedRowKeys
             })
-            console.log(selectedRowKeys);
         }
     }
     /**
@@ -195,7 +185,7 @@ class ManagementList extends PureComponent {
      */
     handleBrandChoose = ({ record }) => {
         this.setState({
-            brandChoose: record,
+            brandName: record.name
         });
     }
 
@@ -203,10 +193,10 @@ class ManagementList extends PureComponent {
 
     // 供货供应商-值清单
     handleSupplyChoose = ({ record }) => {
+        console.log(record);
         this.setState({
-            supplyChoose: record,
             STOP_BUY_DISABLED: false,
-            STOP_BUY_CHILDCOMPANY_ID: record.spAdrid
+            SUPPLIER_ID: record.spAdrid
         })
     }
 
@@ -259,7 +249,7 @@ class ManagementList extends PureComponent {
     goodstatusChange = (status) => {
         this.props.pubFetchValueList({
             productIdList: this.state.chooseGoodsList,
-            spAdrId: this.state.STOP_BUY_CHILDCOMPANY_ID,
+            spAdrId: this.state.SUPPLIER_ID,
             status
         }, 'goodsChangeStatus');
     }
@@ -292,6 +282,7 @@ class ManagementList extends PureComponent {
 
     // 选择子公司
     handleSubsidiaryChoose = ({ record }) => {
+        console.log(record);
         this.setState({
             childCompanyMeg: record,
             AREA_SHELVES_DISABLED: false
@@ -301,7 +292,7 @@ class ManagementList extends PureComponent {
     // 清除经营子公司列表值
     handleSubsidiaryClear = () => {
         this.setState({
-            childCompanyMeg: null,
+            childCompanyMeg: {},
             AREA_SHELVES_DISABLED: true
         });
     }
@@ -391,19 +382,21 @@ class ManagementList extends PureComponent {
      */
     handleBrandClear = () => {
         this.setState({
-            brandChoose: null,
+            brandName: '',
         });
     }
 
 
-    /**
-     * 重置
-     */
+    // 重置
     handleFormReset = () => {
         this.brandSearchMind.handleClear();
         this.supplySearchMind.handleClear();
         this.subsidiarySearchMind.handleClear();
         this.props.form.resetFields();
+        this.slect.resetValue();
+        this.setState({
+            classify: {}
+        })
     }
 
     // 获取排序类型
@@ -415,15 +408,18 @@ class ManagementList extends PureComponent {
          * 0 / 1             升序 / 降序
          */
         const sortType = ['dim_flatCategory|0', 'brand|0', 'productCode|0', 'productCode|1'];
-        this.sortType = sortType[value];
+        this.setState({
+            sortType: sortType[value]
+        });
     };
 
     /**
-     * 获取所有查询表单值
+     * 获取所有有效的表单值
      *
      * @return {object}  返回所有填写了有效的表单值
      */
     getFormAllVulue = () => {
+        const { SUPPLIER_ID, classify, childCompanyMeg, brandName, sortType } = this.state;
         const {
             supplyChainStatus,
             internationalCode,
@@ -434,29 +430,36 @@ class ManagementList extends PureComponent {
 
         } = this.props.form.getFieldsValue();
         return Util.removeInvalid({
-            supplyChainStatus,
+            supplyChainStatus: supplyChainStatus + 1 > 0 ? supplyChainStatus : '',
             internationalCode,
             productName,
             productCode,
-            brand: this.state.brandChoose,
-            supplierInfo: this.hasSpecifyValue(this.state.supplyChoose, supplierInfo),
-            salesInfo: this.hasSpecifyValue(this.state.subsidiaryChoose, salesInfo),
-            sort: this.sortType
+            brand: brandName,
+            supplierInfo: this.hasSpecifyValue(SUPPLIER_ID, supplierInfo),
+            salesInfo: this.hasSpecifyValue(childCompanyMeg.id, salesInfo),
+            sort: sortType,
+            ...classify
         });
     }
 
     /**
-     * @param {string} param1  供应商id或子公司id
-     * @param {string} param2  供应商状态或子公司状态
+     * @param {string} id      供应商id或子公司id
+     * @param {string} status  供应商状态或子公司状态
      *
      * 用于拼接供应商id-供货状态，子公司id-子公司状态
      */
-    hasSpecifyValue = (id, status) => {
+    hasSpecifyValue = (id = '', status) => {
         // 代表初始值（全部）
-        const IS_INIT_SELECT = -1;
+        const IS_INIT_SELECT = '-1';
         const SELECT_VALUE = status === IS_INIT_SELECT ? '' : status;
-        const str = (!id && SELECT_VALUE) ? '' : `${id}-${SELECT_VALUE}`;
-
+        let str = '';
+        if (!id && SELECT_VALUE) {
+            str = `-${SELECT_VALUE}`;
+        } else if (id && !SELECT_VALUE) {
+            str = `${id}-`;
+        } else if (id && SELECT_VALUE) {
+            str = `${id}-${SELECT_VALUE}`;
+        }
         return str;
     };
 
@@ -466,7 +469,7 @@ class ManagementList extends PureComponent {
     handleFormSearch = () => {
         const postData = this.getFormAllVulue();
         console.log(postData);
-        // this.props.queryCommodityList({...postData});
+        this.props.queryCommodityList({...postData});
     }
 
     /**
@@ -554,16 +557,24 @@ class ManagementList extends PureComponent {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8}>
+                                <Col className="gutter-row commodityType-wrap" span={8}>
                                     {/* 商品分类 */}
-                                    <FormItem className="">
-                                        <div>
-                                            <span className="sc-form-item-label">商品分类</span>
-                                            <div className="level-four-classification">
-                                                <Input />
-                                            </div>
-                                        </div>
+                                    <FormItem>
+                                        <div className="commodityType-title">商品分类</div>
+                                        <LevelTree
+                                            className="levelTree-wrap"
+                                            // data={this.props.data}
+                                            // handleDrop={this.handleDrop}
+                                        />
+                                        {/* <div>{this.state.chooseMe.key} - {this.state.chooseMe.name}</div> */}
+                                        <ClassifiedSelect
+                                            onChange={this.handleSelectChange}
+                                            // onChange={(selectData) => {
+                                            //     console.log(selectData)
+                                            // }}
+                                        />
                                     </FormItem>
+                                    
                                 </Col>
                             </Row>
                             <Row gutter={16}>
@@ -739,7 +750,7 @@ class ManagementList extends PureComponent {
                                             <span className="value-list-input">
                                                 <SearchMind
                                                     compKey="search-mind-subsidiary"
-                                                    ref={ref => { this.subsidiarySearrchMind = ref }}
+                                                    ref={ref => { this.subsidiarySearchMind = ref }}
                                                     fetch={(params) =>
                                                         this.props.pubFetchValueList({
                                                             branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
