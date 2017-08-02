@@ -340,15 +340,15 @@ export const suppliersAppList = [
         key: 'status',
         render: (text) => {
             switch (parseInt(text, 10)) {
-                case 1:
+                case 0:
                     return '制单';
-                case 2:
+                case 1:
                     return '已提交';
-                case 3:
+                case 2:
                     return '已审核';
-                case 4:
+                case 3:
                     return '已拒绝';
-                case 5:
+                case 4:
                     return '修改中';
                 default:
                     return null;
@@ -411,7 +411,7 @@ export const supplierInputList = [
                         break;
                 }
             }
-            else if (record.providerType === 2) {
+            if (record.providerType === 2) {
                 switch (parseInt(text, 10)) {
                     case '1':
                         return '生产厂家'

@@ -49,6 +49,7 @@ class ChangeAudit extends PureComponent {
         this.handleAuditOk = ::this.handleAuditOk;
         this.handleSelectChange = ::this.handleSelectChange;
         this.handleTextChange = ::this.handleTextChange;
+        this.handleGetList = ::this.handleGetList;
 
         this.searchForm = {};
         this.current = 1;

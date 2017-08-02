@@ -80,10 +80,10 @@ class SupplierInputList extends PureComponent {
     componentDidMount() {
         // TODO 默认加条件
         this.props.fetchQueryManageList({
-            pageNum: this.current,
-            pageSize: PAGE_SIZE,
-            providerType: 1,
-            status: 0
+            // pageNum: this.current,
+            // pageSize: PAGE_SIZE,
+            // providerType: 1,
+            // status: 0
         });
     }
 

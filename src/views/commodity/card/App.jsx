@@ -24,6 +24,7 @@ import {
     state => ({
         prodPurchase: state.toJS().commodity.prodPurchase,
         getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
+        queryProdPurchaseExtByCondition: state.toJS().commodity.queryProdPurchaseExtByCondition,
     }),
     dispatch => bindActionCreators({
         fetchGetProdPurchaseById,
@@ -31,7 +32,7 @@ import {
         fetchUpdateProdPurchase,
         fetchQueryProdByCondition,
         fetchChangeProPurchaseStatus,
-        fetchDeleteProdPurchaseById
+        fetchDeleteProdPurchaseById,
     }, dispatch)
 )
 class Cardline extends Component {
@@ -53,8 +54,6 @@ class Cardline extends Component {
     }
 
     componentDidMount() {
-        const { prefixCls, getProdPurchaseByIds, innitalvalue } = this.props;
-        console.log(innitalvalue);
     }
 
      /**
@@ -208,8 +207,7 @@ class Cardline extends Component {
     }
 
     render() {
-        const { prefixCls, getProdPurchaseByIds, innitalvalue } = this.props;
-        console.log(innitalvalue)
+        const { prefixCls, getProdPurchaseByIds, } = this.props;
         const cardData =
             (<div
                 key={getProdPurchaseByIds.id}

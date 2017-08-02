@@ -148,7 +148,6 @@ export default function (state = initState, action) {
             return state.set('checkMainSupplier', action.payload);
 
         case ActionType.GET_PRODPURCHASE_BYID:
-            console.log(action.payload)
             return state.set('getProdPurchaseById', action.payload);
 
         case ActionType.QUERY_PRODPURCHASE_BYID:

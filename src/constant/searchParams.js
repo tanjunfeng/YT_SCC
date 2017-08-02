@@ -233,10 +233,10 @@ export const initiateModeOptions = {
         value: '全部'
     }, {
         key: '0',
-        value: '启用'
+        value: '失效'
     }, {
         key: '1',
-        value: '未启用'
+        value: '启用'
     }]
 }
 
