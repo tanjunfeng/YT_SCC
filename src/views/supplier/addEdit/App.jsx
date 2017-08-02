@@ -35,6 +35,8 @@ class AddSupplier extends PureComponent {
         super(props);
 
         this.handleGoTo = ::this.handleGoTo;
+        this.handleGetDetail = ::this.handleGetDetail;
+        this.handleTabClick = ::this.handleTabClick;
         this.state = {
             activeKey: '1',
             edit: false,
@@ -53,27 +55,23 @@ class AddSupplier extends PureComponent {
         }
     }
 
+    handleGetDetail(id) {
+        this.props.getSupplierDetail({spId: id}).then(() => {
+            this.setState({
+                edit: true
+            })
+        });
+    }
+
     handleGoTo(item) {
         this.setState({
             activeKey: item
         })
-        const { activeKey } = this.state;
-        const items = [this.supplierMessage, this.qualification, this.contact];
-        // items[activeKey - 1].validateFields((err) => {
-        //     if (!err) {
-        //         this.setState({
-        //             activeKey: item
-        //         })
-        //     }
-        // })
     }
 
-    // changeTabs() {
-    //     this.setState({
-    //         showLoca: true,
-    //         activeKey: '4'
-    //     })
-    // }
+    handleTabClick(item) {
+
+    }
 
     render() {
         const { activeKey, edit } = this.state;
@@ -87,23 +85,27 @@ class AddSupplier extends PureComponent {
             <Tabs
                 defaultActiveKey="1"
                 activeKey={activeKey}
-                onTabClick={this.handleGoTo}
+                onTabClick={this.handleTabClick}
                 className="suppplier-add"
                 style={{marginTop: '16px'}}
             >
                 <TabPane tab="基本信息" key="1">
                     <BasicInfo
                         {...props}
+                        withRef="bbbb"
                     />
                 </TabPane>
                 <TabPane tab="银行信息" key="2">
                     <BankInfo
                         {...props}
+                        withRef="aaaa"
                     />
                 </TabPane>
                 <TabPane tab="证照信息" key="3">
                     <LicenseInfo
                         {...props}
+                        handleGetDetail={this.handleGetDetail}
+                        withRef="ccc"
                     />
                 </TabPane>
             </Tabs>

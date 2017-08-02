@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Icon } from 'antd';
 import moment from 'moment';
+import Warehouse from '../locationInformation/warehouse';
 
 class SupplierSpace extends Component {
     constructor(props) {
@@ -77,17 +78,31 @@ class SupplierSpace extends Component {
         return null;
     }
 
+    renderPeriod(period) {
+        switch(period) {
+            case 0:
+                return '周结'
+            case 1:
+                return '半月结'
+            case 2:
+                return '月结'
+            case 3:
+                return '票到付款'
+            default:
+                break;
+        }
+        return null;
+    }
+
     render() {
         const { detailSp = {}, detailData = {} } = this.props;
-        console.log(detailData);
-        console.log(detailSp);
         const {
             supplierBasicInfo = {},
         } = detailData
         const {
             spAdrBasic = {},
             spAdrContact = {},
-            warehouse = [],
+            spAdrDeliverys = [],
         } = detailSp
         return (
             <div className="supplier-detail">
@@ -149,7 +164,9 @@ class SupplierSpace extends Component {
                                     <span>{spAdrBasic.goodsArrivalCycle}天</span>
                                 </Col>
                                 <Col span={8}><span>账期：</span>
-                                    <span>{spAdrBasic.settlementPeriod}</span>
+                                    <span>
+                                        {this.renderPeriod(spAdrBasic.settlementPeriod)}
+                                    </span>
                                 </Col>
                             </Row>
                             <Row>
@@ -159,19 +176,14 @@ class SupplierSpace extends Component {
                                     </span>
                                 </Col>
                                 <Col span={8}><span>供应商地点所属区域：</span>
-                                    <span>{spAdrBasic.belongArea}</span>
+                                    <span>{spAdrBasic.belongAreaName}</span>
                                 </Col>
                             </Row>
-                            {/* <Row>
-                                <Col span={8}><span>供应商审核人：</span>
-                                    <span>{spAdrBasic.auditPerson}</span>
+                             <Row>
+                                <Col span={8}><span>供应商地点所属子公司：</span>
+                                    <span>{spAdrBasic.orgName}</span>
                                 </Col>
-                                <Col span={8}><span>供应商审核日期：</span>
-                                    <span>
-                                        {moment(spAdrBasic.auditDate).format('YYYY-MM-DD')}
-                                    </span>
-                                </Col>
-                            </Row> */}
+                            </Row> 
                         </div>
                     </div>
                 </div>
@@ -182,44 +194,10 @@ class SupplierSpace extends Component {
                             送货信息
                         </div>
                         <div className="detail-message-body">
-                            {
-                                warehouse.map((item, index) => {
-                                    return (
-                                        <div className="supplier-detail-warehouse">
-                                            <Row>
-                                                <Col span={8}><span>仓库：</span>
-                                                    <span>{`${item.warehouseCode} - ${item.warehouseName}`}</span>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col span={8}><span>仓储服务方：</span>
-                                                    <span>{item.warehouseService}</span>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col span={8}><span>送货仓联系人：</span>
-                                                    <span>{item.contactPerson}</span>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col span={8}><span>送货仓联系方式：</span>
-                                                    <span>{item.contactMode}</span>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col span={8}><span>送货仓区域信息：</span>
-                                                    <span>{item.county}</span>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col span={8}><span>送货仓详细地址：</span>
-                                                    <span>{item.address}</span>
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                    )
-                                })
-                            }
+                            <Warehouse
+                                isShow={false}
+                                defaultValue={spAdrDeliverys}
+                            />
                         </div>
                     </div>
                 </div>

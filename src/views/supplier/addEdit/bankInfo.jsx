@@ -38,6 +38,7 @@ class BankInfo extends PureComponent {
 
         this.handleNextStep = ::this.handleNextStep;
         this.handleCompanyAddressChange = ::this.handleCompanyAddressChange;
+        this.handlePreStep = ::this.handlePreStep;
         this.companyAddress = {};
         this.submitData = {};
     }
@@ -54,7 +55,6 @@ class BankInfo extends PureComponent {
             const upload = this.nodebankFile.getValue();
             const { firstValue, secondValue, thirdValue } = this.companyAddress;
             if (!err) {
-
                 const {
                     bankAccount,
                     invoiceHead,
@@ -83,10 +83,14 @@ class BankInfo extends PureComponent {
                     );
                 }
 
-                this.props.addSupplierMessage1({supplierBankInfo, ...data});
+                this.props.addSupplierMessage1({supplierBankInfo});
                 onGoTo('3');
             }
         })
+    }
+
+    handlePreStep() {
+        this.props.onGoTo('1')
     }
 
     handleCompanyAddressChange(data) {
@@ -133,7 +137,7 @@ class BankInfo extends PureComponent {
                                     <Col span={8}>
                                         <span>开户行所在地：</span>
                                         <CasadingAddress
-                                            id="licenseLoc"
+                                            id="companyAddress"
                                             defaultValue={
                                                 isEdit && [
                                                     supplierBankInfo.bankLocProvinceCode,
@@ -169,6 +173,7 @@ class BankInfo extends PureComponent {
                                             })(
                                                 <Input
                                                     placeholder="银行账号"
+                                                    onBlur={(e) => { Validator.repeat.bankAccount(e, this, supplierBankInfo.id) }}
                                                 />
                                             )}
                                         </FormItem>
@@ -185,7 +190,7 @@ class BankInfo extends PureComponent {
                         </div>
                     </div>
                     <div className="add-message-handle">
-                        <Button onClick={this.handleNextStep}>上一步</Button>
+                        <Button onClick={this.handlePreStep}>上一步</Button>
                         <Button onClick={this.handleNextStep}>下一步</Button>
                     </div>
                 </Form>

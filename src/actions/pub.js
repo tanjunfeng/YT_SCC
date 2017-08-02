@@ -110,7 +110,6 @@ export const pubFetchValueList = (params, type) => dispatch => (
     new Promise((resolve, reject) => {
         pubValueList[type](params)
             .then(res => {
-                console.log(res);
                 dispatch(receiveValuesList(res.data));
                 resolve(checkResult(res));
             })
