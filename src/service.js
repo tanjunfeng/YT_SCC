@@ -432,7 +432,7 @@ export const fetchAddProdPurchase = (params) => http.post('/prodPurchase/addProd
 export const updateProdPurchase = (params) => http.post('/prodPurchase/updateProdPurchase', params);
 
 // 删除商品价格信息
-export const deleteProdPurchaseById = (params) => http.get('/prodPurchase/deleteProdPurchaseById', params);
+export const fetchDeleteProdPurchaseById = (params) => http.get('/prodPurchase/deleteProdPurchaseById', params);
 
 // 更改供应商类型
 export const fetchChangeSupType = (params) => http.get('/prodPurchase/changeSupplierType', params);
@@ -545,3 +545,7 @@ export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehousePhy
 export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySupplierPlaceRegion', params);
 // 此接口用于通过code和name（后端id就等于code）查询子公司信息
 export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBaseInfo', params);
+// 供应商选择组件
+export const supplierSearchBox = (params) => http.get('/supplier/supplierSearchBox', params);
+// 供应商地点选择组件
+export const supplierAdrSearchBox = (params) => http.get('/supplier/supplierAdrSearchBox', params);

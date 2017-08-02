@@ -14,7 +14,10 @@ import {
     goodsChangeStatus,
     prodBatchPutAway,
     prodBatchUpdate,
-    availablProducts
+    availablProducts,
+    fetchAddProdPurchase,
+    supplierSearchBox,
+    supplierAdrSearchBox
 } from '../service';
 
 const pubValueList = {
@@ -31,7 +34,13 @@ const pubValueList = {
     // 商品的区域性批量下架
     prodBatchUpdate,
     // 批量全国上下架
-    availablProducts
+    availablProducts,
+    // 新增商品关系
+    fetchAddProdPurchase,
+    // 供应商选择组件
+    supplierSearchBox,
+    // 供应商地点选择组件
+    supplierAdrSearchBox
 }
 
 const receiveCollapsed = (isCollapsed) => ({

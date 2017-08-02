@@ -39,7 +39,7 @@ const columns = supplierInputList;
         supplier: state.toJS().supplier.data,
         informationVisible: state.toJS().supplier.informationVisible,
         queryManageList: state.toJS().supplier.queryManageList,
-        editBeforeAfter: state.toJS().supplier.editBeforeAfter,
+        checkResonVisible: state.toJS().supplier.checkResonVisible,
     }),
     dispatch => bindActionCreators({
         fetchQueryManageList,
@@ -89,8 +89,8 @@ class SupplierInputList extends PureComponent {
     handleSelect(record, index, items) {
         const { key } = items;
         this.props.fetchEditBeforeAfter({
-            // spId: String(record.id)
-            spId: 'xprov139'
+            spId: String(record.id)
+            // spId: 'xprov139'
         })
         .then(() => {
             switch (key) {
@@ -100,7 +100,7 @@ class SupplierInputList extends PureComponent {
                 case 'CheckReason':
                     this.props.modifyCheckReasonVisible({isVisible: true, record});
                     break;
-                case 'changeMessage':
+                case 'ChangeMessage':
                     this.props.modifyInformationVisible({isVisible: true, record});
                     break;
                 default:
@@ -192,28 +192,11 @@ class SupplierInputList extends PureComponent {
     renderOperation(text, record, index) {
         const { status, id, providerType } = record;
         const { pathname } = this.props.location;
-        const info = () => {
-            message.info('供应商地点状态不正确，不能进行修改');
-        };
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/supplier/${id}`}>供应商详情</Link>
                 </Menu.Item>
-                {/* {
-                    <Menu.Item key="modifySupInfor">
-                        <Link to={`${pathname}/supplier/${id}`}>
-                            修改供应商信息
-                        </Link>
-                    </Menu.Item>
-                } */}
-                {/* {
-                    <Menu.Item key="addAddress">
-                        <Link to={`${pathname}/add/${id}`}>
-                            新增供应商地点信息
-                        </Link>
-                    </Menu.Item>
-                } */}
                 {
                     status === 2 &&
                     <Menu.Item key="ChangeAudit">
@@ -223,25 +206,9 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    status === 1 && status === 3 && status === 4 && status === 5 &&
-                    <Menu.Item>
-                        <a onClick={info}>
-                            供应商审核
-                        </a>
-                    </Menu.Item>
-                }
-                {
                     status === 2 &&
                     <Menu.Item key="CheckReason">
                         <a target="_blank" rel="noopener noreferrer">
-                            修改供应商审核
-                        </a>
-                    </Menu.Item>
-                }
-                {
-                    status === 1 && status === 3 && status === 4 && status === 5 &&
-                    <Menu.Item>
-                        <a onClick={info}>
                             修改供应商审核
                         </a>
                     </Menu.Item>
@@ -263,16 +230,8 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    status === 2 && status === 5 &&
-                    <Menu.Item>
-                        <a onClick={info}>
-                            修改供应商地点信息
-                        </a>
-                    </Menu.Item>
-                }
-                {
                     status === 4 &&
-                    <Menu.Item key="changeMessage">
+                    <Menu.Item key="ChangeMessage">
                         <a target="_blank" rel="noopener noreferrer">
                             查看审核已拒绝原因
                         </a>
@@ -290,14 +249,6 @@ class SupplierInputList extends PureComponent {
                     status === 2 &&
                     <Menu.Item key="CheckReason">
                         <a target="_blank" rel="noopener noreferrer">
-                            修改供应商地点审核
-                        </a>
-                    </Menu.Item>
-                }
-                {
-                    status === 1 && status === 3 && status === 4 && status === 5 &&
-                    <Menu.Item>
-                        <a onClick={info}>
                             修改供应商地点审核
                         </a>
                     </Menu.Item>
@@ -353,7 +304,10 @@ class SupplierInputList extends PureComponent {
                     }
                 </Form>
                 <ChangeAudit />
-                <CheckReason />
+                {
+                    this.props.checkResonVisible &&
+                    <CheckReason />
+                }
             </div>
         )
     }

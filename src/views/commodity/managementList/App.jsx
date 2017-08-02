@@ -117,31 +117,11 @@ const columns = [{
 class ManagementList extends PureComponent {
     constructor(props) {
         super(props);
-        this.handleSelectChange = ::this.handleSelectChange;
-        this.renderOperation = ::this.renderOperation;
-        this.onCopy = ::this.onCopy;
-        this.handleSuspendPurchase = ::this.handleSuspendPurchase;
-        // this.handleRestorePurchases = ::this.handleRestorePurchases;
-        // this.handleAreaDownSold = ::this.handleAreaDownSold;
-        // this.handleAreaUpSold = ::this.handleAreaUpSold;
-        this.handleNationalDownSold = ::this.handleNationalDownSold;
-        this.handleNationalUpSold = ::this.handleNationalUpSold;
-        this.handleFormReset = ::this.handleFormReset;
-        this.handleFormSearch = ::this.handleFormSearch;
-        this.handleBrandChoose = ::this.handleBrandChoose;
-        this.handleSupplyChoose = ::this.handleSupplyChoose;
-        this.handleSubsidiaryChoose = ::this.handleSubsidiaryChoose;
-        this.handleBrandClear = ::this.handleBrandClear;
-        this.handleSupplyClear = ::this.handleSupplyClear;
-        this.handleSubsidiaryClear = ::this.handleSubsidiaryClear;
         this.searchMind1 = null;
-       
-        // 商品的暂停购进和恢复采购
-        this.STOP_BUY_DISABLED = true;
-        this.STOP_BUY_CHILDCOMPANY_ID = '';
-        // this.chooseGoodsList = [];
 
         this.state = {
+            STOP_BUY_DISABLED: true,
+            STOP_BUY_CHILDCOMPANY_ID: '',
             chooseGoodsList: [],
             brandChoose: null,
             childCompanyMeg: null,
@@ -164,7 +144,7 @@ class ManagementList extends PureComponent {
     /**
      * 复制链接
      */
-    onCopy() {
+    onCopy = () => {
         message.success('复制成功')
     }
 
@@ -173,7 +153,7 @@ class ManagementList extends PureComponent {
      * @param {Object} data 各级
      * @param {string} that 回显信息
      */
-    handleSelectChange(data, that) {
+    handleSelectChange = (data, that) => {
         const { first, second, third } = data;
         if (third.id !== -1) {
             this.setState({
@@ -224,18 +204,18 @@ class ManagementList extends PureComponent {
     // 供货供应商-值清单
     handleSupplyChoose = ({ record }) => {
         this.setState({
-            supplyChoose: record
+            supplyChoose: record,
+            STOP_BUY_DISABLED: false,
+            STOP_BUY_CHILDCOMPANY_ID: record.spAdrid
         })
-        this.STOP_BUY_CHILDCOMPANY_ID = record.spAdrid;
-        this.STOP_BUY_DISABLED = false;
     }
 
     // 供货供应商值清单-清除
-    handleSupplyClear() {
+    handleSupplyClear = () => {
         this.setState({
             supplyChoose: '',
+            STOP_BUY_DISABLED: true
         });
-        this.STOP_BUY_DISABLED = true;
     }
 
     /**
@@ -244,7 +224,7 @@ class ManagementList extends PureComponent {
      *
      * 恢复/暂停购进、区域上/下架 逻辑封装
      */
-    handleSuspendPurchase(purchasedata, callback) {
+    handleSuspendPurchase = (purchasedata, callback) => {
         // 列表是否有正确的值
         const HAS_CHILDCOMPANY = !!purchasedata.HAS_SELECT_VALUE;
         const GOODS_LIST_LENGH = this.state.chooseGoodsList.length > 0;
@@ -279,7 +259,7 @@ class ManagementList extends PureComponent {
     goodstatusChange = (status) => {
         this.props.pubFetchValueList({
             productIdList: this.state.chooseGoodsList,
-            spAdrId: this.STOP_BUY_CHILDCOMPANY_ID,
+            spAdrId: this.state.STOP_BUY_CHILDCOMPANY_ID,
             status
         }, 'goodsChangeStatus');
     }
@@ -409,7 +389,7 @@ class ManagementList extends PureComponent {
     /**
      * 品牌值清单-清除
      */
-    handleBrandClear() {
+    handleBrandClear = () => {
         this.setState({
             brandChoose: null,
         });
@@ -419,7 +399,7 @@ class ManagementList extends PureComponent {
     /**
      * 重置
      */
-    handleFormReset() {
+    handleFormReset = () => {
         this.brandSearchMind.handleClear();
         this.supplySearchMind.handleClear();
         this.subsidiarySearchMind.handleClear();
@@ -485,7 +465,8 @@ class ManagementList extends PureComponent {
      */
     handleFormSearch = () => {
         const postData = this.getFormAllVulue();
-        this.props.queryCommodityList({...postData});
+        console.log(postData);
+        // this.props.queryCommodityList({...postData});
     }
 
     /**
@@ -504,7 +485,7 @@ class ManagementList extends PureComponent {
      * @param {Object} text 当前行的值
      * @param {object} record 单行数据
      */
-    renderOperation(text, record) {
+    renderOperation = (text, record) => {
         const { id } = record;
         const { pathname } = this.props.location;
         const origin = window.location.origin;
@@ -736,14 +717,14 @@ class ManagementList extends PureComponent {
                                     <FormItem className="">
                                         <Button
                                             size="default"
-                                            disabled={this.STOP_BUY_DISABLED}
+                                            disabled={this.state.STOP_BUY_DISABLED}
                                             onClick={this.handleStopPurchaseClick}
                                         >暂停购进</Button>
                                     </FormItem>
                                     <FormItem className="">
                                         <Button
                                             size="default"
-                                            disabled={this.STOP_BUY_DISABLED}
+                                            disabled={this.state.STOP_BUY_DISABLED}
                                             onClick={this.handleResumedPurchaseClick}
                                         >恢复采购</Button>
                                     </FormItem>

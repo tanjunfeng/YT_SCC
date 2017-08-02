@@ -48,20 +48,11 @@ class ShowForm extends Component {
         // console.log(this.props.innitalvalue)
         const {
             brandName,
-            deductibleTaxRate,
             firstLevelCategoryName,
             fourthLevelCategoryName,
-            guidePurchasePrice,
-            guideShipmentPrice,
-            id,
-            inputTaxRate,
-            invoiceLimit,
             name,
             productCode,
-            purchaseInsideNumber,
-            saleName,
             secondLevelCategoryName,
-            supplyChainStatus,
             thirdLevelCategoryName
         } = this.props.innitalvalue;
         return (
