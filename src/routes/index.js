@@ -65,9 +65,12 @@ import AdPlanList404 from 'bundle-loader?lazy!../views/wrapConfigure/adPlanList4
 import PoMngList from 'bundle-loader?lazy!../views/procurement/poMngList';
 import PoDetail from 'bundle-loader?lazy!../views/procurement/poDetail';
 import PoPrintList from 'bundle-loader?lazy!../views/procurement/poPrintList';
+<<<<<<< Updated upstream
 import PoRcvMngList from 'bundle-loader?lazy!../views/procurement/poRcvMngList';
 import PoRcvList from 'bundle-loader?lazy!../views/procurement/poRcvList';
 import PoRcvDetail from 'bundle-loader?lazy!../views/procurement/poRcvDetail';
+=======
+>>>>>>> Stashed changes
 
 // IBM 修改
 // 商品采购关系维护
