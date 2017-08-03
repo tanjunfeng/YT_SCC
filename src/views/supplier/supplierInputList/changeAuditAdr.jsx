@@ -89,7 +89,7 @@ class ChangeAudit extends PureComponent {
                     })
                 }).catch(() => {
                     this.props.modifyAuditAdrVisible({isVisible: false});
-                    message.err('修改审核失败')
+                    message.success('修改审核失败')
                 })
             }
         })

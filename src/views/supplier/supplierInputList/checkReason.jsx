@@ -181,6 +181,9 @@ class CheckReason extends PureComponent {
         this.handleTextChange = ::this.handleTextChange;
         this.handleAuditOk = ::this.handleAuditOk;
         this.handleAuditCancel = ::this.handleAuditCancel;
+
+        this.searchForm = {};
+        this.current = 1;
     }
 
     state = {
@@ -219,7 +222,7 @@ class CheckReason extends PureComponent {
                     licenseId: before.supplierlicenseInfo.id,
                     ...this.props.form.getFieldsValue()
                 }).then((res) => {
-                    this.props.checkResonVisible({isVisible: false});
+                    this.props.modifyCheckReasonVisible({isVisible: false});
                     message.success(res.message)
                     this.props.fetchQueryManageList({
                         pageNum: this.current,
@@ -228,8 +231,8 @@ class CheckReason extends PureComponent {
                         status: 0
                     })
                 }).catch(() => {
-                    this.props.checkResonVisible({isVisible: false});
-                    message.err('修改审核失败')
+                    this.props.modifyCheckReasonVisible({isVisible: false});
+                    message.success('修改审核失败')
                 })
             }
         })

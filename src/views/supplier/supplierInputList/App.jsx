@@ -92,10 +92,10 @@ class SupplierInputList extends PureComponent {
         // console.log(this.props.queryManageList)
         // TODO 默认加条件
         this.props.fetchQueryManageList({
-            // pageNum: this.current,
-            // pageSize: PAGE_SIZE,
-            // providerType: 1,
-            // status: 0
+            pageNum: this.current,
+            pageSize: PAGE_SIZE,
+            providerType: 1,
+            status: 0
         });
     }
 
@@ -213,7 +213,7 @@ class SupplierInputList extends PureComponent {
         this.current = goto;
         this.props.fetchQueryManageList({
             pageSize: PAGE_SIZE,
-            pageNum: goto,
+            pageNum: this.current,
             ...this.searchForm
         });
     }
@@ -315,10 +315,9 @@ class SupplierInputList extends PureComponent {
     }
 
     render() {
-        const { total, pageNum, pageSize } = this.props.queryManageList;
+        const { total, pageNum } = this.props.queryManageList;
         const { queryManageList } = this.props;
         columns[columns.length - 1].render = this.renderOperation;
-        // console.log(this.props.checkResonVisibled)
         return (
             <div className="manage">
                 <SearchForm
@@ -339,7 +338,7 @@ class SupplierInputList extends PureComponent {
                             pagination={{
                                 current: pageNum,
                                 total,
-                                pageSize,
+                                pageSize: PAGE_SIZE,
                                 showQuickJumper: true,
                                 onChange: this.handlePaginationChange
                             }}

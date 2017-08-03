@@ -181,6 +181,9 @@ class CheckReason extends PureComponent {
         this.handleTextChange = ::this.handleTextChange;
         this.handleAuditOk = ::this.handleAuditOk;
         this.handleAuditCancel = ::this.handleAuditCancel;
+
+        this.searchForm = {};
+        this.current = 1;
     }
 
     state = {
@@ -237,7 +240,7 @@ class CheckReason extends PureComponent {
                     })
                 }).catch(() => {
                     this.props.modifyAdrVisible({isVisible: false});
-                    message.err('修改审核失败')
+                    message.success('修改审核失败')
                 })
             }
         })

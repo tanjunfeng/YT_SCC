@@ -108,6 +108,7 @@ export default function (state = initState, action) {
 
         case ActionType.MODIFY_CHECK_REASON_VISIBLE: {
             const { isVisible, record } = action.payload;
+            console.log(isVisible)
             return state.set('checkResonVisible', isVisible).set('visibleReasonData', record);
         }
 
