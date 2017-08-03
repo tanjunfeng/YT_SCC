@@ -522,9 +522,9 @@ export const getSupplierNo = (params) => http.get('/supplier/getSupplierNo', par
 // 新增或修改供应商信息
 export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/insertOrUpdateSupplierInfo', params);
 // 供应商入驻审核
-export const suppplierSettledAudit = (params) => http.post('/supplier/suppplierSettledAudit', params);
+export const suppplierSettledAudit = (params) => http.post('/supplier/supplierSettledAudit', params);
 // 供应商地点入驻审核
-export const supplierAdrSettledAudit = (params) => http.post('/supplier/supplierAdrSettledAudit ', params);
+export const supplierAdrSettledAudit = (params) => http.post('/supplier/supplierAdrSettledAudit', params);
 
 /**
  * 商品模块
@@ -558,3 +558,5 @@ export const supplierSearchBox = (params) => http.get('/supplier/supplierSearchB
 export const supplierAdrSearchBox = (params) => http.get('/supplier/supplierAdrSearchBox', params);
 // 根据条件查询销售价格区间列表
 export const findStepPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
+// 删除价格区间
+export const deleteSellPriceById = (params) => http.get('/prodSell/deleteSellPriceById', params);

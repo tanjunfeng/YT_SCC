@@ -45,13 +45,14 @@ class AddSupplier extends PureComponent {
 
     componentDidMount() {
         const { detailData, match } = this.props;
-        this.props.fetchSupplierNo({type: 'SP'})
-        if (!detailData.id && match.params.id) {
+        if (match.params.type === 'supplier') {
             this.props.getSupplierDetail({spId: match.params.id}).then(() => {
                 this.setState({
                     edit: true
                 })
             });
+        } else {
+            this.props.fetchSupplierNo({type: 'SP'})
         }
     }
 

@@ -5,7 +5,10 @@
  * 销售价格
  */
 import React, { PureComponent } from 'react';
-import { Icon, Checkbox, Card, Row, Col, Button, Modal } from 'antd';
+import {
+    Icon, Checkbox, Card, Row,
+    Col, Button, Modal, Icon
+} from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';

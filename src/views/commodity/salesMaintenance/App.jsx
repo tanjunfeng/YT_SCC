@@ -20,11 +20,15 @@ import {
     fecthGetProdPurchaseById,
     fetchGetProductById
 } from '../../../actions';
+import {
+    deleteSellPriceById
+} from '../../../service'
 import SearchForm from '../searchFormSales';
 import ShowForm from '../showFormSales';
 import Cardline from '../card';
 import { PAGE_SIZE } from '../../../constant';
-
+import { fetchPriceInfo } from '../../../actions/procurement';
+import SellPriceModal from '../sellPriceModal'
 
 @connect(
     state => ({
@@ -36,13 +40,15 @@ import { PAGE_SIZE } from '../../../constant';
         getProdPurchaseById: state.toJS().commodity.getProdPurchaseById,
         queryProdPurchases: state.toJS().commodity.queryProdPurchases,
         getProductById: state.toJS().commodity.getProductById,
+        stepPriceList: state.toJS().commodity.stepPriceList,
     }),
     dispatch => bindActionCreators({
         fecthCheckMainSupplier,
         modifyAuditVisible,
         modifyCheckReasonVisible,
         fecthGetProdPurchaseById,
-        fetchGetProductById
+        fetchGetProductById,
+        fetchPriceInfo
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
@@ -70,9 +76,9 @@ class ProcurementMaintenance extends PureComponent {
      */
     componentDidMount() {
         const { match } = this.props;
-        // this.props.fecthGetProdPurchaseById({
-        //     id: match.params.id
-        // });
+        this.props.fetchPriceInfo({
+            productId: match.params.id
+        });
         this.props.fetchGetProductById({
             productId: match.params.id
         });
@@ -121,27 +127,61 @@ class ProcurementMaintenance extends PureComponent {
      */
     handlePaginationChange(goto = 1) {
         this.current = goto;
-        this.props.fetchProviderEnterList({
+        this.props.fetchPriceInfo({
             pageNum: goto,
             pageSize: PAGE_SIZE,
             ...this.searchForm
         });
     }
 
+    /**
+     * 删除card
+     */
+    handleDelete = (id) => {
+        const { getProductById = {} } = this.props;
+        deleteSellPriceById({
+            id,
+            productId: getProductById.id,
+        }).then(() => {
+            this.handlePaginationChange();
+        })
+    }
+
+    handleFormSearch = (data) => {
+        const { getProductById = {} } = this.props;
+        this.props.fetchPriceInfo({
+            pageNum: this.current,
+            pageSize: PAGE_SIZE,
+            productId: getProductById.id,
+            ...data
+        });
+    }
+
+    handleAdd = () => {
+
+    }
+
     render() {
-        const { prefixCls, getProductById } = this.props;
-        const innitalvalue = getProductById;
+        const { prefixCls, getProductById, stepPriceList = {}} = this.props;
         return (
             <div className={`${prefixCls}-min-width application`}>
-                <ShowForm innitalvalue={innitalvalue} />
+                <ShowForm
+                    innitalvalue={getProductById}
+                    isSale
+                />
                 <SearchForm
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
                     handleAdd={this.handleAdd}
                 />
                 <div>
-                    <Cardline />
+                    <Cardline.SaleCard
+                        initalValue={stepPriceList.sellPriceInfoVos || []}
+                        handleDelete={this.handleDelete}
+                        isSale
+                    />
                 </div>
+                <SellPriceModal />
             </div>
         );
     }
@@ -154,7 +194,8 @@ ProcurementMaintenance.propTypes = {
     modifyAuditVisible: PropTypes.bool,
     modifyCheckReasonVisible: PropTypes.bool,
     prefixCls: PropTypes.string,
-    getProductById: PropTypes.objectOf(PropTypes.any)
+    getProductById: PropTypes.objectOf(PropTypes.any),
+    fetchPriceInfo: PropTypes.func,
 }
 
 ProcurementMaintenance.defaultProps = {

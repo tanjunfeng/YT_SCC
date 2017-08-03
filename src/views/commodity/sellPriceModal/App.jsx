@@ -100,7 +100,7 @@ class SellPriceModal extends Component {
         return (
             <Modal
                 title="新增销售价格"
-                visible={this.props.toAddPriceVisible}
+                visible={true}
                 className={prefixCls}
                 onOk={this.handleOk}
                 width={'447px'}

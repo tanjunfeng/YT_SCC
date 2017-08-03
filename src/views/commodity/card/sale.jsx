@@ -7,7 +7,11 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Card, Checkbox, Modal, message, Pagination } from 'antd';
+import classNames from 'classnames';
+import {
+    Form, Card, Checkbox, Modal,
+    message, Pagination, Row, Col, Icon
+} from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PAGE_SIZE } from '../../../constant';
@@ -35,7 +39,7 @@ import {
         fetchDeleteProdPurchaseById,
     }, dispatch)
 )
-class Cardline extends Component {
+class SaleCard extends Component {
     constructor(props) {
         super(props);
         this.handleOnchange = ::this.handleOnchange;
@@ -186,116 +190,127 @@ class Cardline extends Component {
         })
     }
 
-    handleDelete() {
-        const { getProdPurchaseByIds } = this.props;
-        const { id, productId } = getProdPurchaseByIds;
-        Modal.confirm({
-            title: '删除',
-            content: '是否删除当前关系列表?',
-            onOk: () => {
-                this.props.fetchDeleteProdPurchaseById({
-                    id,
-                    productId
-                })
-                .catch((res) =>
-                    message.success(res.message),
-                    this.props.fetchQueryProdByCondition()
-                );
-            },
-            onCancel() { },
-        });
+    handleDelete(e) {
+        const { handleDelete } = this.props;
+        const id = e.target.getAttribute('data-id');
+        handleDelete(id);
+        // Modal.confirm({
+        //     title: '删除',
+        //     content: '是否删除当前关系列表?',
+        //     onOk: () => {
+        //         this.props.fetchDeleteProdPurchaseById({
+        //             id,
+        //             productId
+        //         })
+        //         .catch((res) =>
+        //             message.success(res.message),
+        //             this.props.fetchQueryProdByCondition()
+        //         );
+        //     },
+        //     onCancel() { },
+        // });
+    }
+
+    renderCard = (datas) => {
+        const { prefixCls } = this.props;
+        return datas.map((item) => {
+            return (
+                <div
+                    key={item.id}
+                    className={`${prefixCls}-card-list`}
+                >
+                    <Card
+                        style={{ width: 350 }}
+                        className={
+                            `${prefixCls}-card-${item.status}
+                                ${prefixCls}-supplierType-img`
+                        }
+                    >
+                        <a
+                            className={`${prefixCls}-close`}
+                            data-id={item.id}
+                            style={{ float: 'right' }}
+                            onClick={this.handleDelete}
+                        >
+                            &times;
+                        </a> 
+                        <p>
+                            <span>子公司 : </span>
+                            <span>{item.branchCompanyId}</span>
+                            <b>-</b>
+                            <span>{item.branchCompanyName}</span>
+                        </p>
+                        <p>
+                            <span>销售内装数 : </span>
+                            <span>{item.salesInsideNumber}</span>
+                        </p>
+                        <p>
+                            <span>起订量 : </span>
+                            <span>{item.minNumber}</span>
+                        </p>
+                        <p>
+                            <span>承诺发货时间 : </span>
+                            <span>下单后{item.deliveryDay}天内发货</span>
+                        </p>
+                        <p>
+                            <span>销售价格 : </span>
+                            <ul className={`${prefixCls}-step-price`}>
+                                {
+                                    item.sellSectionPrices.map((i) => {
+                                        return (
+                                            <li className={`${prefixCls}-step-item`}>
+                                                <span className={`${prefixCls}-step-item-left`}>
+                                                    {`${i.startNumber} - ${i.endNumber}`}
+                                                </span>
+                                                <span className={`${prefixCls}-step-item-right`}>
+                                                    {i.price}元
+                                                </span>
+                                            </li>
+                                        )
+                                    })
+                                }
+                            </ul>
+                            
+                        </p>
+                        <p>
+                            <span>建议零售价(元) : </span>
+                            <span>{item.suggestPrice}</span>
+                        </p>
+                        <div className={`${prefixCls}-checkboxGroup`} >
+                            <Checkbox
+                                checked={!!item.status}
+                                onChange={this.handleCheckUse}
+                            >
+                                启用
+                            </Checkbox>
+                        </div>
+                    </Card>
+                </div>
+            )
+        })
     }
 
     render() {
-        const { prefixCls, getProdPurchaseByIds } = this.props;
-        // console.log(getProdPurchaseByIds.data.data)
-        const cardData =
-            (<div
-                key={getProdPurchaseByIds.id}
-                className={`${prefixCls}-card-list`}
-            >
-                <Card
-                    style={{ width: 350 }}
-                    className={
-                        `${prefixCls}-card-${getProdPurchaseByIds.supplierType}-${getProdPurchaseByIds.status}
-                            ${prefixCls}-supplierType-img`
-                    }
-                >
-                    {
-                        getProdPurchaseByIds.supplierType === 1 &&
-                        <p className={`${prefixCls}-supplierType-img`}><span>主</span></p>
-                    }
-                    <a
-                        className={`${prefixCls}-close`}
-                        style={{ float: 'right' }}
-                        onClick={this.handleDelete}
-                    >
-                        &times;
-                    </a>
-                    <p>
-                        <span>供应商 : </span>
-                        <span>{getProdPurchaseByIds.spId}</span>
-                        <b>-</b>
-                        <span>{getProdPurchaseByIds.spName}</span>
-                    </p>
-                    <p>
-                        <span>地点 : </span>
-                        <span>{getProdPurchaseByIds.spAdrId}</span>
-                        <b>-</b>
-                        <span>{getProdPurchaseByIds.spAdrName}</span>
-                    </p>
-                    <p>
-                        <span>条码 : </span>
-                        <span>{getProdPurchaseByIds.internationalCode}</span>
-                    </p>
-                    <p>
-                        <span>采购内装数 : </span>
-                        <span>{getProdPurchaseByIds.purchaseInsideNumber}</span>
-                    </p>
-                    <p>
-                        <span>送货仓库 : </span>
-                        <span>{getProdPurchaseByIds.distributeWarehouseId}</span>
-                    </p>
-                    <p>
-                        <span>采购价格 / 元 : </span>
-                        <span>{getProdPurchaseByIds.purchasePrice}</span>
-                    </p>
-                    <div className={`${prefixCls}-checkboxGroup`} >
-                        <Checkbox
-                            checked={getProdPurchaseByIds.supplierType}
-                            onChange={this.handleCheckOk}
-                            defaultChecked={
-                                getProdPurchaseByIds.supplierType === 1
-                                    ? this.state.checked : !this.state.checked
-                            }
-                        >主供应商
-                        </Checkbox>
-                        <Checkbox
-                            checked={getProdPurchaseByIds.status}
-                            onChange={this.handleCheckUse}
-                            defaultChecked={
-                                getProdPurchaseByIds.status === 1 ?
-                                    this.state.checked : !this.state.checked
-                            }
-                            innitaivalue={getProdPurchaseByIds}
-                        >启用</Checkbox>
-                    </div>
-                </Card>
-            </div>)
+        const { prefixCls, getProdPurchaseByIds, initalValue = {} } = this.props;
         return (
-            <div className={`${prefixCls}`}>
+            <div className={classNames(`${prefixCls}`, `${prefixCls}-sale`)}>
                 <div>
                     {
-                        getProdPurchaseByIds.length > 0 &&
-                        <Form>
-                            <cardData />
+                        initalValue.data && initalValue.data.length > 0
+                        ? <Form>
+                            {
+                                this.renderCard(initalValue.data)
+                            }
                             <Pagination
-                                current={this.state.current}
+                                current={initalValue.pageNumber}
                                 pageSize={PAGE_SIZE}
                                 onChange={this.handlePaginationChange}
-                                total={10}
+                                total={initalValue.total}
                             />
                         </Form>
+                        : <div className={`${prefixCls}-no-data`}>
+                            暂无数据
+                        </div>
                     }
                 </div>
             </div>
@@ -303,7 +318,7 @@ class Cardline extends Component {
     }
 }
 
-Cardline.propTypes = {
+SaleCard.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
     fecthCheckMainSupplier: PropTypes.func,
     fetchDeleteProdPurchaseById: PropTypes.func,
@@ -314,11 +329,15 @@ Cardline.propTypes = {
     fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),
     fetchGetProdPurchaseById: PropTypes.func,
     isSale: PropTypes.bool,
+    initalValue: PropTypes.objectOf(PropTypes.any),
+    handleDelete: PropTypes.func,
 };
 
-Cardline.defaultProps = {
+SaleCard.defaultProps = {
     prefixCls: 'card-line',
-    isSale: false
+    isSale: false,
+    initalValue: {},
+    handleDelete: () => {}
 };
 
-export default Form.create()(Cardline);
+export default Form.create()(SaleCard);

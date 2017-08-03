@@ -22,6 +22,9 @@ import {
     fetchGetProductById
 } from '../../../actions';
 import {
+    pubFetchValueList
+} from '../../../actions/pub'
+import {
     initiateModeOptions,
     mainSupplierOptions,
 } from '../../../constant/searchParams';
@@ -38,7 +41,8 @@ const Option = Select.Option;
     dispatch => bindActionCreators({
         fetchAction,
         receiveData,
-        fetchGetProductById
+        fetchGetProductById,
+        pubFetchValueList
     }, dispatch)
 )
 class SearchForm extends Component {
@@ -51,34 +55,28 @@ class SearchForm extends Component {
         this.handleResetValue = ::this.handleResetValue;
         this.handleGetValue = ::this.handleGetValue;
 
-        // Test
-        this.handleSave = ::this.handleSave;
         this.state = {
             img: null,
             chooseMe: {},
-            disabled: false,
         }
+        this.name = null;
+        this.choose = null;
     }
 
     componentWillMount() {}
 
     componentDidMount() {
         this.props.fetchAction();
-
-        setTimeout(() => {
-            this.setState({
-                disabled: true,
-            });
-        }, 2000);
     }
 
     /**
      * 搜索
      */
     handleGetValue() {
-        this.props.fetchGetProductById({
-            productId: 1001
-        });
+        this.props.onSearch(Utils.removeInvalid({
+            branchCompanyName: this.name,
+            status: this.choose
+        }))
     }
 
     /**
@@ -171,32 +169,31 @@ class SearchForm extends Component {
      */
     handleResetValue() {
         this.props.form.resetFields();
+        this.searchMind.reset();
+        this.name = null;
+        this.props.onReset();
     }
 
-    /**
-     * TEST
-     */
-    handleSave(event) {
-        this.setState({
-            img: this.imageUploader.getImageByBase64(),
-        })
+    handleCanpanyChoose = ({ record, compKey, index, event }) => {
+        this.name = record.id;
     }
 
-    handleTestFetch = ({ value, pagination }) => {
-        console.log(value, pagination);
-
-        return fetchTest({
-            value,
-        });
+    handleClear = () => {
+        this.name = null;
     }
 
-    handleTestChoose = ({ record, compKey, index, event }) => {
-        console.log(compKey, record)
+    handleSelectChange = (item) => {
+        this.choose = item === '-1' ? null : item;
+    }
+
+    handleAddValue = () => {
+        this.props.handleAdd();
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls } = this.props;
+        console.log(this.props.pubFetchValueList)
         return (
             <div className={`${prefixCls}-content manage-form`}>
                 <div style={{fontSize: 16, fontWeight: 900}}>
@@ -208,39 +205,40 @@ class SearchForm extends Component {
                         className={`${prefixCls}-zgs`}
                         compKey="search-mind-key1"
                         ref={ref => { this.searchMind = ref }}
-                        fetch={(value, pager) => this.handleTestFetch(value, pager)}
+                        fetch={(param) => this.props.pubFetchValueList({
+                            branchCompanyName: param.value
+                        }, 'findCompanyBaseInfo')}
                         addonBefore="子公司"
-                        onClear={({ value, raw }) => {
-                            console.log({ value, raw });
-                        }}
-                        onChoosed={this.handleTestChoose}
+                        placeholder="请输入子公司名"
+                        onClear={this.handleClear}
+                        onChoosed={this.handleCanpanyChoose}
                         renderChoosedInputRaw={(data) => (
                             <div>{data.id} - {data.name}</div>
                         )}
-                        pageSize={2}
+                        pageSize={100}
                         columns={[
                             {
-                                title: 'Name',
-                                dataIndex: 'name',
+                                title: '公司编号',
+                                dataIndex: 'id',
                                 width: 150,
                             }, {
-                                title: 'Address',
-                                dataIndex: 'address',
+                                title: '公司名',
+                                dataIndex: 'name',
                                 width: 200,
                             }
                         ]}
                     />
                     {/* 是否启用 */}
-                    <FormItem className={`${prefixCls}-qy sc-form-item`}>
+                    <FormItem className={`${prefixCls}-qy`}>
                         <span className={`${prefixCls}-select`}>启用</span>
                         {getFieldDecorator('initiateModeOptions', {
-                            initialValue: initiateModeOptions.defaultValue
+                            initialValue: '-1'
                         })(
                             <Select
                                 style={{ width: 90 }}
                                 className="sc-form-item-select"
                                 size="default"
-                                disabled={this.state.supplierType === '-1'}
+                                onChange={this.handleSelectChange}
                             >
                                 {
                                     initiateModeOptions.data.map((item) =>
@@ -252,31 +250,29 @@ class SearchForm extends Component {
                             </Select>
                         )}
                     </FormItem>
-                    <div className={`${prefixCls}-btn`}>
-                        <FormItem>
-                            <Button
-                                type="primary"
-                                onClick={this.handleGetValue}
-                                size="default"
-                            >
-                                搜索
-                            </Button>
-                        </FormItem>
-                        <FormItem>
-                            <Button size="default" onClick={this.handleResetValue}>
-                                重置
-                            </Button>
-                        </FormItem>
-                        <FormItem>
-                            <Button
-                                type="primary"
-                                size="default"
-                                onClick={this.handleAddValue}
-                            >
-                                创建
-                            </Button>
-                        </FormItem>
-                    </div>
+                    <FormItem>
+                        <Button
+                            type="primary"
+                            onClick={this.handleGetValue}
+                            size="default"
+                        >
+                            搜索
+                        </Button>
+                    </FormItem>
+                    <FormItem>
+                        <Button size="default" onClick={this.handleResetValue}>
+                            重置
+                        </Button>
+                    </FormItem>
+                    <FormItem>
+                        <Button
+                            type="primary"
+                            size="default"
+                            onClick={this.handleAddValue}
+                        >
+                            创建
+                        </Button>
+                    </FormItem>
                 </Form>
             </div>
         )
@@ -289,6 +285,9 @@ SearchForm.propTypes = {
     prefixCls: PropTypes.string,
     user: PropTypes.objectOf(PropTypes.string),
     form: PropTypes.objectOf(PropTypes.any),
+    onSearch: PropTypes.func,
+    onReset: PropTypes.func,
+    handleAdd: PropTypes.func,
 }
 
 SearchForm.defaultProps = {
@@ -296,6 +295,9 @@ SearchForm.defaultProps = {
         name: 'Who?'
     },
     prefixCls: 'select-line-sales',
+    onSearch: () => {},
+    onReset: () => {},
+    handleAdd: () => {},
 }
 
 export default Form.create()(SearchForm);

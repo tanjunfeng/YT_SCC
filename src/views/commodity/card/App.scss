@@ -93,6 +93,23 @@
         background: #ccc;
         color: #fff;
     }
+    &-step-price {
+
+    }
+    &-step-item {
+        margin: 10px 0;
+    }
+    &-step-item-left {
+        display: inline-block;
+        width: 200px;
+    }
+    &-no-data {
+        color: #ccc;
+        text-align: center;
+    }
+}
+.card-line-sale {
+    display: block;
 }
 .card-line-checkboxGroup {
     text-align: right;

@@ -109,10 +109,13 @@ class ShowForm extends Component {
                                 <Breadcrumb.Item>{inputTaxRate}%</Breadcrumb.Item>
                             </Breadcrumb>
                         </Col>
-                        <Col span={8} className="css-col">
-                            <span>税率:</span>
-                            <span>下单后{deliveryTime}天内发货</span>
-                        </Col>
+                        {
+                            this.props.isSale &&
+                            <Col span={8} className="css-col">
+                                <span>税率:</span>
+                                <span>下单后{deliveryTime}天内发货</span>
+                            </Col>
+                        }
                     </Row>
                 </div>
             </div>
@@ -123,6 +126,7 @@ class ShowForm extends Component {
 ShowForm.propTypes = {
     innitalvalue: PropTypes.objectOf(PropTypes.any),
     form: PropTypes.objectOf(PropTypes.any),
+    isSale: PropTypes.bool,
 };
 
 export default Form.create()(ShowForm);
