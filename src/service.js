@@ -522,6 +522,8 @@ export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/inser
 export const suppplierSettledAudit = (params) => http.post('/supplier/supplierSettledAudit', params);
 // 供应商地点入驻审核
 export const supplierAdrSettledAudit = (params) => http.post('/supplier/supplierAdrSettledAudit', params);
+// 供应商修改审核
+export const auditSupplierEditInfo = (params) => http.post('/supplier/auditSupplierEditInfo', params);
 
 /**
  * 商品模块

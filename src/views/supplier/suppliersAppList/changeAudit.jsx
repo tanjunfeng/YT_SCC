@@ -17,7 +17,7 @@ import {
     Modal,
     message
 } from 'antd';
-
+import { PAGE_SIZE } from '../../../constant';
 import { modifyAuditVisible, insertSupplierSettlementInfo } from '../../../actions';
 // import { validatorRebate } from '../../../util/validator';
 
@@ -42,6 +42,9 @@ class ChangeAudit extends PureComponent {
         this.handleAuditOk = ::this.handleAuditOk;
         this.handleSelectChange = ::this.handleSelectChange;
         this.handleTextChange = ::this.handleTextChange;
+
+        this.searchForm = {};
+        this.current = 1;
     }
 
     state = {
@@ -66,7 +69,12 @@ class ChangeAudit extends PureComponent {
                     status: parseInt(selected, 10),
                     ...this.props.form.getFieldsValue()
                 }).then(() => {
-                    this.props.getList()
+                    this.props.getSupplierSettledList({
+                        pageNum: this.current,
+                        pageSize: PAGE_SIZE,
+                        providerType: 1,
+                        status: 0
+                    });
                 })
             }
         })

@@ -58,11 +58,16 @@ class ChangeAudit extends PureComponent {
         }
     }
 
-
+    /**
+     * 弹框取消事件
+     */
     handleAuditCancel() {
         this.props.modifyAuditVisible({isVisible: false});
     }
 
+    /**
+     * 弹框确认事件
+     */
     handleAuditOk() {
         const { selected } = this.state;
         const { visibleData } = this.props;
@@ -79,10 +84,15 @@ class ChangeAudit extends PureComponent {
                 }).then((res) => {
                     this.props.modifyAuditVisible({isVisible: false});
                     message.success(res.message)
-                    this.props.getList()
+                    this.props.fetchQueryManageList({
+                        pageNum: this.current,
+                        pageSize: PAGE_SIZE,
+                        providerType: 1,
+                        status: 0
+                    })
                 }).catch(() => {
                     this.props.modifyAuditVisible({isVisible: false});
-                    message.err('修改审核失败')
+                    message.success('修改审核失败')
                 })
             }
         })
@@ -91,10 +101,11 @@ class ChangeAudit extends PureComponent {
     /**
      * 数据列表查询
      */
-    handleGetList() {
+    handleGetList(page) {
+        const currentPage = page;
         this.props.fetchQueryManageList({
             pageSize: PAGE_SIZE,
-            pageNum: this.current,
+            pageNum: currentPage,
             ...this.searchForm
         });
     }
@@ -117,7 +128,7 @@ class ChangeAudit extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         return (
             <Modal
-                title="商家入住审核"
+                title="供应商入住审核"
                 visible={this.props.auditVisible}
                 onOk={this.handleAuditOk}
                 onCancel={this.handleAuditCancel}
@@ -144,7 +155,7 @@ class ChangeAudit extends PureComponent {
                         <Form layout="inline">
                             <FormItem className="application-form-item">
                                 <span className="application-modal-label"><b className="tjf-css-import">*</b>不通过原因：</span>
-                                {getFieldDecorator('failedReson', {
+                                {getFieldDecorator('failedReason', {
                                     rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
                                 })(
                                     <Input
