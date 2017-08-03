@@ -11,7 +11,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Table, Form, Icon, Menu, Dropdown, message } from 'antd';
+import { Table, Form, Icon, Menu, Dropdown } from 'antd';
 import {
     fetchQueryManageList,
     fetchSupplierList,
@@ -94,8 +94,6 @@ class SupplierInputList extends PureComponent {
         this.props.fetchQueryManageList({
             pageNum: this.current,
             pageSize: PAGE_SIZE,
-            providerType: 1,
-            status: 0
         });
     }
 
@@ -228,7 +226,7 @@ class SupplierInputList extends PureComponent {
      * return 列表页操作下拉菜单
      */
     renderOperation(text, record, index) {
-        const { status, id, providerType } = record;
+        const { status, id, providerType, auditType } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
@@ -237,7 +235,7 @@ class SupplierInputList extends PureComponent {
                 </Menu.Item>
                 {
                     // 1： 已提交状态
-                    status === 1 &&
+                    status === 1 && auditType === 1 &&
                     <Menu.Item key="ChangeAudit">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商审核
@@ -246,7 +244,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     // 1： 已提交状态
-                    status === 1 &&
+                    status === 1 && auditType === 2 &&
                     <Menu.Item key="CheckReson">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商审核
@@ -262,15 +260,6 @@ class SupplierInputList extends PureComponent {
                     <Link to={`${pathname}/place/${id}`}>供应商地点详情</Link>
                 </Menu.Item>
                 {
-                    // 0： 制单状态、2：已审核、3:已拒绝// 0： 制单状态、2：已审核、3:已拒绝
-                    (status === 0 || status === 2 || status === 3) &&
-                    <Menu.Item key="modifySupAddInfor">
-                        <Link to={`${pathname}/edit/${id}`}>
-                            修改供应商地点信息
-                        </Link>
-                    </Menu.Item>
-                }
-                {
                     // 3:已拒绝
                     status === 3 &&
                     <Menu.Item key="ChangeMessage">
@@ -283,7 +272,7 @@ class SupplierInputList extends PureComponent {
                     // 模拟地点弹出框
                     /* status === 2 && */
                     // 1:已提交
-                    status === 1 &&
+                    status === 1 && auditType === 1 &&
                     <Menu.Item key="ChangeAuditAdr">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商地点审核
@@ -292,7 +281,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     // 1： 已提交
-                    status === 1 &&
+                    status === 1 && auditType === 2 &&
                     <Menu.Item key="CheckReasonAdr">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商地点审核

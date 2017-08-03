@@ -18,7 +18,13 @@ import {
     fetchQueryProdByCondition,
     fetchChangeProPurchaseStatus,
     fetchDeleteProdPurchaseById,
+    fetchGetProductById,
+    fecthGetProdPurchaseById
 } from '../../../actions';
+import {
+    GetProductById,
+    GetProdPurchaseById
+} from '../../../actions/producthome';
 
 @connect(
     state => ({
@@ -33,6 +39,10 @@ import {
         fetchQueryProdByCondition,
         fetchChangeProPurchaseStatus,
         fetchDeleteProdPurchaseById,
+        fetchGetProductById,
+        fecthGetProdPurchaseById,
+        GetProductById,
+        GetProdPurchaseById
     }, dispatch)
 )
 class Cardline extends Component {
@@ -54,13 +64,8 @@ class Cardline extends Component {
     }
 
     componentDidMount() {
-        const { match } = this.props;
-        // console.log(match)
-        this.props.fetchGetProductById({
-            productId: match.params.id
-        });
-        this.props.fecthGetProdPurchaseById({
-            id: match.params.id
+        this.props.GetProdPurchaseById({
+            id: this.props.id
         });
     }
 
@@ -216,7 +221,6 @@ class Cardline extends Component {
 
     render() {
         const { prefixCls, getProdPurchaseByIds } = this.props;
-        console.log(getProdPurchaseByIds)
         const cardData =
             (<div
                 key={getProdPurchaseByIds.id}
@@ -318,9 +322,10 @@ Cardline.propTypes = {
     fetchUpdateProdPurchase: PropTypes.func,
     fetchChangeProPurchaseStatus: PropTypes.func,
     prefixCls: PropTypes.string,
+    id: PropTypes.string,
     index: PropTypes.number,
     fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),
-    fetchGetProdPurchaseById: PropTypes.func,
+    GetProdPurchaseById: PropTypes.func,
 };
 
 Cardline.defaultProps = {
