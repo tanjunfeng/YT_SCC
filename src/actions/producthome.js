@@ -317,7 +317,26 @@ export const AddProdPurchase = (params) => dispatch => (
     new Promise((resolve, reject) => {
         addSellPrice(params)
             .then(res => {
-                dispatch(receiveAddSellPrice(res.data));
+                dispatch(receiveAddProdPurchase(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 新增商品采购关系
+const receiveGetProdPurchaseById = (data) => ({
+    type: ActionType.REQUEST_ADD_SELL_PRICE,
+    payload: data,
+});
+
+export const GetProdPurchaseById = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        addSellPrice(params)
+            .then(res => {
+                dispatch(receiveGetProdPurchaseById(res.data));
                 resolve(res);
             })
             .catch(err => {

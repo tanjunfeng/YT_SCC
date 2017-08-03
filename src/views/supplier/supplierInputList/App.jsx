@@ -20,8 +20,13 @@ import {
     modifyCheckReasonVisible,
     modifyInformationVisible,
     fetchGetProductById,
-    fetchEditBeforeAfter
+    fetchEditBeforeAfter,
 } from '../../../actions';
+import {
+    modifyAuthVisible,
+    modifyAdrVisible,
+    AuditSupplierEditInfo
+} from '../../../actions/supplier';
 
 import SearchForm from '../searchForm';
 import { PAGE_SIZE } from '../../../constant';
@@ -31,6 +36,7 @@ import { exportSupplierList } from '../../../service';
 import ChangeMessage from './changeMessage';
 import ChangeAudit from './changeAudit';
 import ChangeAuditAdr from './changeAuditAdr';
+import CheckReasonAdr from './checkReasonAdr';
 import CheckReson from './checkReason';
 
 const columns = supplierInputList;
@@ -41,6 +47,7 @@ const columns = supplierInputList;
         informationVisible: state.toJS().supplier.informationVisible,
         queryManageList: state.toJS().supplier.queryManageList,
         checkResonVisible: state.toJS().supplier.checkResonVisible,
+        checkResonVisibled: state.toJS().supplier.checkResonVisibled,
         editBeforeAfters: state.toJS().supplier.editBeforeAfter,
     }),
     dispatch => bindActionCreators({
@@ -51,7 +58,10 @@ const columns = supplierInputList;
         modifyAuditAdrVisible,
         modifyInformationVisible,
         fetchGetProductById,
-        fetchEditBeforeAfter
+        fetchEditBeforeAfter,
+        modifyAuthVisible,
+        modifyAdrVisible,
+        AuditSupplierEditInfo
     }, dispatch)
 )
 class SupplierInputList extends PureComponent {
@@ -79,7 +89,7 @@ class SupplierInputList extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
-        console.log(this.props.queryManageList)
+        // console.log(this.props.queryManageList)
         // TODO 默认加条件
         this.props.fetchQueryManageList({
             // pageNum: this.current,
@@ -87,9 +97,6 @@ class SupplierInputList extends PureComponent {
             // providerType: 1,
             // status: 0
         });
-        fetchEditBeforeAfter({
-            // spId
-        })
     }
 
     /**
@@ -106,7 +113,7 @@ class SupplierInputList extends PureComponent {
                 this.props.modifyAuditVisible({isVisible: true, record});
                 break;
             case 'CheckReson':
-                this.props.modifyCheckReasonVisible({isVisible: true, record});
+                this.props.modifyAuthVisible({isVisible: true, record});
                 break;
             case 'ChangeMessage':
                 this.props.modifyInformationVisible({isVisible: true, record});
@@ -129,8 +136,8 @@ class SupplierInputList extends PureComponent {
             case 'ChangeAuditAdr':
                 this.props.modifyAuditAdrVisible({isVisible: true, record});
                 break;
-            case 'CheckReson':
-                this.props.modifyCheckReasonVisible({isVisible: true, record});
+            case 'CheckReasonAdr':
+                this.props.modifyAdrVisible({isVisible: true, record});
                 break;
             case 'ChangeMessage':
                 this.props.modifyInformationVisible({isVisible: true, record});
@@ -255,7 +262,7 @@ class SupplierInputList extends PureComponent {
                     <Link to={`${pathname}/place/${id}`}>供应商地点详情</Link>
                 </Menu.Item>
                 {
-                    // 0： 制单状态、2：已审核、3:已拒绝
+                    // 0： 制单状态、2：已审核、3:已拒绝// 0： 制单状态、2：已审核、3:已拒绝
                     (status === 0 || status === 2 || status === 3) &&
                     <Menu.Item key="modifySupAddInfor">
                         <Link to={`${pathname}/edit/${id}`}>
@@ -273,6 +280,9 @@ class SupplierInputList extends PureComponent {
                     </Menu.Item>
                 }
                 {
+                    // 模拟地点弹出框
+                    /* status === 2 && */
+                    // 1:已提交
                     status === 1 &&
                     <Menu.Item key="ChangeAuditAdr">
                         <a target="_blank" rel="noopener noreferrer">
@@ -283,7 +293,7 @@ class SupplierInputList extends PureComponent {
                 {
                     // 1： 已提交
                     status === 1 &&
-                    <Menu.Item key="CheckReson">
+                    <Menu.Item key="CheckReasonAdr">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商地点审核
                         </a>
@@ -305,9 +315,10 @@ class SupplierInputList extends PureComponent {
     }
 
     render() {
-        const { data, total, pageNum, pageSize } = this.props.queryManageList;
-        const { queryManageList, editBeforeAfters } = this.props;
+        const { total, pageNum, pageSize } = this.props.queryManageList;
+        const { queryManageList } = this.props;
         columns[columns.length - 1].render = this.renderOperation;
+        // console.log(this.props.checkResonVisibled)
         return (
             <div className="manage">
                 <SearchForm
@@ -345,20 +356,26 @@ class SupplierInputList extends PureComponent {
                     this.props.checkResonVisible &&
                     <CheckReson />
                 }
+                {
+                    this.props.checkResonVisibled &&
+                    <CheckReasonAdr />
+                }
             </div>
         )
     }
 }
 
 SupplierInputList.propTypes = {
-    fetchEditBeforeAfter: PropTypes.func,
+    checkResonVisible: PropTypes.func,
+    checkResonVisibled: PropTypes.func,
+    modifyAuthVisible: PropTypes.func,
     queryManageList: PropTypes.objectOf(PropTypes.any),
     fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
     modifyAuditVisible: PropTypes.func,
     history: PropTypes.objectOf(PropTypes.any),
     modifyAuditAdrVisible: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
-    modifyCheckReasonVisible: PropTypes.func,
+    modifyAdrVisible: PropTypes.func,
     modifyInformationVisible: PropTypes.func,
     informationVisible: PropTypes.bool
 }
