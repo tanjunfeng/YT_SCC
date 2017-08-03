@@ -19,7 +19,6 @@ import {
     Dropdown,
     message
 } from 'antd';
-
 import {
     fetchProviderEnterList,
     fetchQueryManageList,
@@ -52,7 +51,6 @@ const columns = suppliersAppList;
         modifyInformationVisible,
         getSupplierSettledList,
         fetchProviderEnterList,
-        modifyAuditVisible,
         fetchQueryManageList,
     }, dispatch)
 )
@@ -166,7 +164,7 @@ class SuppliersAppList extends PureComponent {
     handlePaginationChange(goto) {
         this.current = goto;
         this.props.getSupplierSettledList({
-            pageNum: goto,
+            pageNum: this.current,
             pageSize: PAGE_SIZE,
             ...this.searchForm
         });
@@ -252,7 +250,7 @@ class SuppliersAppList extends PureComponent {
     }
 
     render() {
-        const { data, pageNum, pageSize, total } = this.props.querySettledList;
+        const { total, pageNum } = this.props.querySettledList;
         const { querySettledList } = this.props;
         columns[columns.length - 1].render = this.renderOperation;
         return (
@@ -270,9 +268,9 @@ class SuppliersAppList extends PureComponent {
                         columns={columns}
                         rowKey="id"
                         pagination={{
-                            total,
-                            pageSize,
                             current: pageNum,
+                            total,
+                            pageSize: PAGE_SIZE,
                             showQuickJumper: true,
                             onChange: this.handlePaginationChange
                         }}

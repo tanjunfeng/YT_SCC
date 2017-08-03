@@ -23,7 +23,7 @@ import {
 @connect(
     state => ({
         prodPurchase: state.toJS().commodity.prodPurchase,
-        getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
+        getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseByIds,
         queryProdPurchaseExtByCondition: state.toJS().commodity.queryProdPurchaseExtByCondition,
     }),
     dispatch => bindActionCreators({
@@ -54,6 +54,14 @@ class Cardline extends Component {
     }
 
     componentDidMount() {
+        const { match } = this.props;
+        // console.log(match)
+        this.props.fetchGetProductById({
+            productId: match.params.id
+        });
+        this.props.fecthGetProdPurchaseById({
+            id: match.params.id
+        });
     }
 
      /**
@@ -208,7 +216,7 @@ class Cardline extends Component {
 
     render() {
         const { prefixCls, getProdPurchaseByIds } = this.props;
-        // console.log(getProdPurchaseByIds.data.data)
+        console.log(getProdPurchaseByIds)
         const cardData =
             (<div
                 key={getProdPurchaseByIds.id}
@@ -286,7 +294,7 @@ class Cardline extends Component {
             <div className={`${prefixCls}`}>
                 <div>
                     {
-                        getProdPurchaseByIds.length > 0 &&
+                        getProdPurchaseByIds !== {} &&
                         <Form>
                             <cardData />
                             <Pagination
