@@ -251,6 +251,15 @@ class SupplierInputList extends PureComponent {
                         </a>
                     </Menu.Item>
                 }
+                {
+                    // 3:已拒绝
+                    status === 3 &&
+                    <Menu.Item key="ChangeMessage">
+                        <a target="_blank" rel="noopener noreferrer">
+                            查看审核已拒绝原因
+                        </a>
+                    </Menu.Item>
+                }
             </Menu>
         );
 
