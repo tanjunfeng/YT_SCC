@@ -28,7 +28,7 @@ import {
     AuditSupplierEditInfo
 } from '../../../actions/supplier';
 
-import SearchForm from '../searchForm';
+import SearchForm from '../searchFormInput';
 import { PAGE_SIZE } from '../../../constant';
 import { supplierInputList } from '../../../constant/formColumns';
 import Utils from '../../../util/util';

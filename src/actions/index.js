@@ -83,6 +83,7 @@ import supplierAdrSettledAudit from './fetch/supplierAdrSettledAudit';
 import modifyAuditAdrVisible from './modify/modifyAuditAdrVisible';
 import AuditSupplierEditInfo from '../actions/supplier';
 import getProductById from '../actions/producthome';
+import queryProdPurchaseExtByCondition from '../actions/producthome';
 
 // 库存调整
 import stockAdjust from './stockAdjust';
@@ -156,6 +157,7 @@ export {
     supplierAdrSettledAudit,
     modifyAuditAdrVisible,
     getProductById,
+    queryProdPurchaseExtByCondition,
 
     // 库存调整
     stockAdjust,
