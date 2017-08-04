@@ -143,7 +143,7 @@ class ProcurementMaintenance extends PureComponent {
 
     render() {
         const { prefixCls, getProductByIds, match, purchaseCardData } = this.props;
-        console.log(purchaseCardData.data)
+        // console.log(purchaseCardData.data)
         const innitalvalue = getProductByIds;
         return (
             <div className={`${prefixCls}-min-width application`}>

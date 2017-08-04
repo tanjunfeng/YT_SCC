@@ -160,6 +160,9 @@ class SearchForm extends Component {
         const { onReset } = this.props;
         this.searchData = {};
         this.props.form.resetFields();
+        this.setState({
+            supplierType: 0,
+        });
         this.setState({rengeTime: null});
         onReset(this.searchData);
     }
