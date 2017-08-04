@@ -12,7 +12,6 @@ import { withRouter } from 'react-router';
 import {
     Form,
 } from 'antd';
-
 import {
     fecthGetProdPurchaseById,
     fetchGetProductById,
@@ -33,7 +32,6 @@ import { productAddPriceVisible } from '../../../actions/producthome';
         prodPurchase: state.toJS().commodity.prodPurchase,
         getProductByIds: state.toJS().commodity.getProductById,
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
-        getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
     }),
     dispatch => bindActionCreators({
         fecthGetProdPurchaseById,
@@ -123,11 +121,8 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     render() {
-        const { prefixCls, getProductByIds, match, getProdPurchaseByIds } = this.props;
+        const { prefixCls, getProductByIds, match } = this.props;
         const innitalvalue = getProductByIds;
-        const { data } = getProdPurchaseByIds;
-        // console.log(match.params.id)
-        // console.log(innitalvalue)
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm innitalvalue={innitalvalue} />
@@ -139,7 +134,7 @@ class ProcurementMaintenance extends PureComponent {
                     handleAdd={this.handleAdd}
                 />
                 <div>
-                    <Cardline innitalvalue={innitalvalue} />
+                    <Cardline id={match.params.id} />
                 </div>
                 <ProdPurchaseModal />
             </div>

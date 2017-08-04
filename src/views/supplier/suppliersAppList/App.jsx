@@ -17,7 +17,6 @@ import {
     Table,
     Menu,
     Dropdown,
-    message
 } from 'antd';
 import {
     fetchProviderEnterList,
@@ -78,8 +77,6 @@ class SuppliersAppList extends PureComponent {
         this.props.getSupplierSettledList({
             pageNum: this.current,
             pageSize: PAGE_SIZE,
-            providerType: 1,
-            status: 0
         });
     }
 
