@@ -18,7 +18,8 @@ import {
     insertOrUpdateSupplierInfo,
     querySettledList,
     fetchQueryManageList,
-    querySupplierPlaceRegion
+    querySupplierPlaceRegion,
+    auditSupplierEditInfo
 } from '../service';
 
 const handleServer = {
@@ -160,6 +161,47 @@ export const queryPlaceRegion = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     receiveinPlaceRegion(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
+/**
+ * 供应商信息
+ */
+const receiveAudit = (data) => ({
+    type: ActionType.MODIFY_CHECK_REASON_VISIBLE,
+    payload: data,
+});
+
+export const modifyAuthVisible = (isShow) => dispatch => dispatch(receiveAudit(isShow));
+
+/**
+ * 供应商地点信息
+ */
+const receiveAdr = (data) => ({
+    type: ActionType.MODIFY_CHECK_REASON_ADR_VISIBLE,
+    payload: data,
+});
+
+export const modifyAdrVisible = (isShow) => dispatch => dispatch(receiveAdr(isShow));
+
+/**
+ * 供应商修改审核
+ */
+const receiveAuditSupplierEditInfo = (data) => ({
+    type: ActionType.QUERY_SETTLED_LIST,
+    payload: data,
+})
+
+export const AuditSupplierEditInfo = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        auditSupplierEditInfo(params)
+            .then(res => {
+                dispatch(
+                    receiveAuditSupplierEditInfo(res.data)
                 );
                 resolve(res);
             })

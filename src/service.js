@@ -144,6 +144,15 @@ export const insertSupplierSettlementInfo = (params) => http.post('/provider/ins
 // 查询纳税人是否已存在
 export const taxpayerNumber = (params) => http.get('/provider/checkSupplierOperTaxBytaxpayerNumber', params);
 
+// 公司名是否重复
+export const checkSupplierName = (params) => http.get('/supplier/checkSupplierName', params);
+
+// 银行信息是否重复
+export const checkBankAccount = (params) => http.get('/supplier/checkBankAccount', params);
+
+// 校验营业执照号是否重复
+export const checkLicenseNo = (params) => http.get('/supplier/checkLicenseNo', params);
+
 // 检查银行账号是否存在重复
 export const bankAccount = (params) => http.get('/provider/checkSupplierBankInfoByBankAccount', params);
 
@@ -367,7 +376,7 @@ export const saveItemAd = (params) => http.post('/homeAd/saveItemAd', params);
 export const uploadImageBase64Data = (params) => http.post('/commonUploadFile/uploadImageBase64Data', params);
 
 // 查询分类信息
-export const queryCategorys = (params) => http.get('/category/queryAllCategoriesWithIconByParentId', params);
+export const queryCategorys = (params) => http.get('/category/queryAllShowCategories', params);
 
 // 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
 export const saveInput = (params) => http.post('/rk/saveInput', params);
@@ -437,7 +446,7 @@ export const fetchAddProdPurchase = (params) => http.post('/prodPurchase/addProd
 export const updateProdPurchase = (params) => http.post('/prodPurchase/updateProdPurchase', params);
 
 // 删除商品价格信息
-export const deleteProdPurchaseById = (params) => http.get('/prodPurchase/deleteProdPurchaseById', params);
+export const fetchDeleteProdPurchaseById = (params) => http.get('/prodPurchase/deleteProdPurchaseById', params);
 
 // 更改供应商类型
 export const fetchChangeSupType = (params) => http.get('/prodPurchase/changeSupplierType', params);
@@ -454,7 +463,8 @@ export const fetchQueryProdByCondition = (params) => http.get('/prodPurchase/que
 // 查询商品信息
 export const getProductById = (params) => http.get('/prodPurchase/getProductById', params);
 
-export const testApi = (params) => http.get('/test', params);
+// 根据品牌名称分页查询品牌列表
+export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPages', params);
 
 /***************procurement*********** */
 // 查询采购单列表
@@ -511,6 +521,23 @@ export const queryProviderDetail = (params) => http.get('/supplier/queryProvider
 export const queryAllLargerRegionProvince = (params) => http.get('/region/queryAllLargerRegionProvince', params);
 // 获取供应商或者供应商地点信息
 export const getSupplierNo = (params) => http.get('/supplier/getSupplierNo', params);
+// 新增或修改供应商信息
+export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/insertOrUpdateSupplierInfo', params);
+// 供应商入驻审核
+export const suppplierSettledAudit = (params) => http.post('/supplier/supplierSettledAudit', params);
+// 供应商地点入驻审核
+export const supplierAdrSettledAudit = (params) => http.post('/supplier/supplierAdrSettledAudit', params);
+// 供应商修改审核
+export const auditSupplierEditInfo = (params) => http.post('/supplier/auditSupplierEditInfo', params);
+
+/**
+ * 商品模块
+ */
+
+ // 根据条件分页查询商品清单，并排序
+export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);
+// 获取已审批通过供应商地点下拉框数据
+export const querySuppliersList = (params) => http.get('/supplier/supplierAdrSearchBox', params);
 // 新增供应商信息
 export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);
 // 修改供应商信息
@@ -566,3 +593,8 @@ export const auditRefund = (params) => http.post('/sorder/auditRefund', params);
 // 订单管理-审核退款
 export const confirmRefund = (params) => http.post('/sorder/confirmRefund', params);
 
+// 供应商选择组件
+export const supplierSearchBox = (params) => http.get('/supplier/supplierSearchBox', params);
+
+// 供应商地点选择组件
+export const supplierAdrSearchBox = (params) => http.get('/supplier/supplierAdrSearchBox', params);

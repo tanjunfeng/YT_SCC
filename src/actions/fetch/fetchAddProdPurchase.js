@@ -1,8 +1,8 @@
 /**
- * @file fetchChangeSupType.js
+ * @file fetchAddProdPurchase.js
  * @author Tanjunfeng
  *
- * 分类列表页商品排序管理
+ * 新增商品采购关系
  */
 
 import Promise from 'bluebird';

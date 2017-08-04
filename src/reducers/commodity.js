@@ -14,7 +14,7 @@ const initState = Immutable.fromJS({
     data: {},
 
     // 弹出框数据
-    visibleData: {},
+    visibleData: false,
 
     informationVisible: false,
 
@@ -60,7 +60,9 @@ const initState = Immutable.fromJS({
     // 查看是否存在主供应商
     checkMainSupplier: {},
     // 查询商品价格信息
-    getProdPurchaseById: [],
+    getProdPurchaseById: {},
+    // 根据主键查询商品采购关系
+    getProdPurchaseByIds: {},
 
     // 根据条件查询商品价格信息
     queryProdPurchaseExtByCondition: [],
@@ -70,6 +72,7 @@ const initState = Immutable.fromJS({
 
     // 查询商品信息
     getProductById: {},
+
 });
 
 export default function (state = initState, action) {
@@ -104,7 +107,7 @@ export default function (state = initState, action) {
                 .set('visibleData', id)
                 .set('isEdit', isEdit)
                 .set('pricingId', pricingId)
-                .set('id',id)
+                .set('id', id)
                 ;
         }
 
@@ -128,8 +131,8 @@ export default function (state = initState, action) {
         case ActionType.RECEIVE_GET_PURCHASE_PRICE_DETAIL:
             return state.set('purchasePrice', action.payload);
 
-        case ActionType.REQUEST_ADD_SELL_PRICE:
-            return state.set('toAddPriceVisible', action.payload);
+        // case ActionType.REQUEST_ADD_SELL_PRICE:
+        //     return state.set('toAddPriceVisible', action.payload);
 
         case ActionType.REQUEST_ADD_PURCHASEMENT_PRICE:
             return state.set('toPurchasePriceVisible', action.payload);
@@ -147,15 +150,15 @@ export default function (state = initState, action) {
             return state.set('checkMainSupplier', action.payload);
 
         case ActionType.GET_PRODPURCHASE_BYID:
-            return state.set('getProdPurchaseById', action.payload);
+            return state.set('getProdPurchaseByIds', action.payload);
 
         case ActionType.QUERY_PRODPURCHASE_BYID:
-            return state.set('queryProdPurchaseExtByCondition', action.payload);
+            return state.set('getProdPurchaseById', action.payload);
 
         case ActionType.CHANGE_SUPPLIER_TYPE:
             return state.set('changeSupType', action.payload);
 
-        case ActionType.GET_PRODUCT_BYID:
+        case ActionType.GET_PRODUCT_BY_ID:
             return state.set('getProductById', action.payload);
 
         default:

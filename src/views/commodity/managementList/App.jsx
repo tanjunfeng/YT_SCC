@@ -5,7 +5,7 @@
  * 商品管理列表
  */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -20,7 +20,15 @@ import {
     subCompanyStatusOptions,
     commoditySortOptions
 } from '../../../constant/searchParams';
-import {fetchTest} from '../../../actions/classifiedList';
+// import { fetchBrandsByPages } from '../../../actions/classifiedList';
+import { pubFetchValueList } from '../../../actions/pub';
+
+import {
+    queryCommodityList
+} from '../../../actions';
+import { PAGE_SIZE } from '../../../constant';
+
+import Util from '../../../util/util';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -34,94 +42,79 @@ const columns = [{
     width: 400,
     render: (text, record) => {
         const {
-            id,
-            name,
-            imageUrl,
+            productCode,
+            saleName,
+            thumbnailImage,
         } = record;
         return (
             <div className="table-commodity">
                 <div className="table-commodity-number">
                     <span>商品编号：</span>
-                    <span>{id}</span>
+                    <span>{productCode}</span>
                 </div>
                 <div className="table-commodity-description">
-                    <img alt="未上传" className="table-commodity-description-img" src={imageUrl} />
-                    <span className="table-commodity-description-name">{name}</span>
+                    <img alt="未上传" className="table-commodity-description-img" src={thumbnailImage} />
+                    <span className="table-commodity-description-name">{saleName}</span>
                 </div>
             </div>
         )
     }
 }, {
     title: '部门',
-    dataIndex: 'department',
-    key: 'department',
+    dataIndex: 'firstLevelCategoryName',
+    key: 'firstLevelCategoryName',
 }, {
     title: '大类',
-    dataIndex: 'bigClass',
-    key: 'bigClass',
+    dataIndex: 'secondLevelCategoryName',
+    key: 'secondLevelCategoryName',
 }, {
     title: '中类',
-    dataIndex: 'middleClass',
-    key: 'middleClass',
+    dataIndex: 'thirdLevelCategoryName',
+    key: 'thirdLevelCategoryName',
 }, {
     title: '小类',
-    dataIndex: 'smallClass',
-    key: 'smallClass',
+    dataIndex: 'fourthLevelCategoryName',
+    key: 'fourthLevelCategoryName',
 }, {
     title: '品牌',
     dataIndex: 'brand',
     key: 'brand',
 }, {
     title: '状态',
-    dataIndex: 'status',
-    key: 'status',
+    dataIndex: 'supplyChainStatus',
+    key: 'supplyChainStatus',
+    render: (text) => {
+        switch (text) {
+            case '1':
+                return '草稿';
+            case '2':
+                return '生效';
+            case '3':
+                return '暂停使用';
+            case '4':
+                return '停止使用';
+            default:
+                return text;
+        }
+    }
 }, {
     title: '操作',
     dataIndex: 'operation',
     key: 'operation',
 }];
 
-const datas = [{
-    id: '1001',
-    name: '百事可乐 极度（Max）碳酸饮料 把乐带回家 330ml*12听箱装,百事可乐 极度（Max）碳酸饮料 把乐带回家 330ml*12听箱装',
-    imageUrl: 'http://sit.image.com/group1/M00/00/FB/rB4KPVlsFXOAGDZWAABb5O0UTso681.jpg',
-    department: '饮料酒水',
-    bigClass: '水饮料',
-    middleClass: '有汽饮料',
-    smallClass: '碳酸饮料',
-    brand: '百事',
-    status: '暂停使用',
-}, {
-    id: '1002',
-    name: '百事可乐 极度（Max）碳酸饮料 把乐带回家 330ml*12听箱装',
-    imageUrl: 'http://sit.image.com/group1/M00/00/FB/rB4KPVlsFXOAGDZWAABb5O0UTso681.jpg',
-    department: '饮料酒水',
-    bigClass: '水饮料',
-    middleClass: '有汽饮料',
-    smallClass: '碳酸饮料',
-    brand: '百事',
-    status: '暂停使用',
-}, {
-    id: '1000',
-    name: '百事可乐 极度（Max）碳酸饮料 把乐带回家 330ml*12听箱装',
-    department: '饮料酒水',
-    bigClass: '水饮料',
-    middleClass: '有汽饮料',
-    smallClass: '碳酸饮料',
-    brand: '百事',
-    status: '暂停使用',
-}];
-
 
 @connect(
     state => ({
         goods: state.toJS().commodity.goods,
+        CommodityListData: state.toJS().queryCommodityList.data
     }),
     dispatch => bindActionCreators({
-
+        queryCommodityList,
+        pubFetchValueList
     }, dispatch)
 )
-class ManagementList extends Component {
+class ManagementList extends PureComponent {
     constructor(props) {
         super(props);
         this.handleSelectChange = ::this.handleSelectChange;
@@ -142,15 +135,21 @@ class ManagementList extends Component {
         this.handleSupplyClear = ::this.handleSupplyClear;
         this.handleSubsidiaryClear = ::this.handleSubsidiaryClear;
         this.searchMind1 = null;
+        this.STOP_BUY_DISABLED = true;
         this.state = {
             choose: [],
             brandChoose: null,
-            supplyChoose: null,
-            subsidiaryChoose: null,
-        }
+            supplyChoose: '',
+            subsidiaryChoose: '',
+        };
+
+        this.sortType = '';
     }
 
     componentDidMount() {
+        this.props.queryCommodityList({
+            pageSize: PAGE_SIZE
+        });
     }
 
     /**
@@ -215,8 +214,18 @@ class ManagementList extends Component {
      */
     handleSupplyChoose = ({ record }) => {
         this.setState({
-            supplyChoose: record,
+            supplyChoose: record
+        })
+        console.log(record);
+        this.STOP_BUY_DISABLED = false;
+    }
+
+    // 供货供应商值清单-清除
+    handleSupplyClear() {
+        this.setState({
+            supplyChoose: '',
         });
+        this.STOP_BUY_DISABLED = true;
     }
 
     /**
@@ -232,6 +241,8 @@ class ManagementList extends Component {
      * 暂停购进
      */
     handleSuspendPurchase() {
+        console.log(this.childCompany.value);
+        const confirmTitle = '';
         confirm({
             title: '暂停购进',
             content: '请确认对选中商品进行暂停购进操作，商品将不可进行采购下单',
@@ -320,20 +331,11 @@ class ManagementList extends Component {
     }
 
     /**
-     * 供货供应商值清单-清除
-     */
-    handleSupplyClear() {
-        this.setState({
-            supplyChoose: null,
-        });
-    }
-
-    /**
      * 经营子公司值清单-清除
      */
     handleSubsidiaryClear() {
         this.setState({
-            subsidiaryChoose: null,
+            subsidiaryChoose: '',
         });
     }
 
@@ -347,22 +349,82 @@ class ManagementList extends Component {
         this.props.form.resetFields();
     }
 
+    // 获取排序类型
+    hanldeGetSortType = (value) => {
+        /**
+         * dim_flatCategory  分类排序
+         * brand             品牌排序
+         * productCode       商品编号排序
+         * productCode       商品编号排序
+         * 0 / 1             升序 / 降序
+         */
+        const sortType = ['dim_flatCategory|0', 'brand|0', 'productCode|0', 'productCode|1'];
+        this.sortType = sortType[value];
+    };
+
     /**
-     * 查询
+     * 获取所有查询表单值
+     *
+     * @return {object}  返回所有填写了有效的表单值
      */
-    handleFormSearch() {
+    getFormAllVulue = () => {
+        const {
+            supplyChainStatus,
+            internationalCode,
+            productName,
+            productCode,
+            supplierInfo,
+            salesInfo
+
+        } = this.props.form.getFieldsValue();
+        return Util.removeInvalid({
+            supplyChainStatus,
+            internationalCode,
+            productName,
+            productCode,
+            brand: this.state.brandChoose,
+            supplierInfo: this.hasSpecifyValue(this.state.supplyChoose, supplierInfo),
+            salesInfo: this.hasSpecifyValue(this.state.subsidiaryChoose, salesInfo),
+            sort: this.sortType
+        });
     }
 
     /**
-     * 值清单请求
-     * @param {string} value, 输入框返回的值
-     * @param {number} pagination, 分页
-     * @return {Promise}
+     * @param {string} param1  供应商id或子公司id
+     * @param {string} param2  供应商状态或子公司状态
+     *
+     * 用于拼接供应商id-供货状态，子公司id-子公司状态
      */
-    handleTestFetch = ({ value, pagination }) => fetchTest({
-        value,
-        pagination
-    })
+    hasSpecifyValue = (param1, parma2) => {
+        // 代表初始值（全部）
+        const IS_INIT_SELECT = -1;
+        const SELECT_VALUE = parma2 === IS_INIT_SELECT ? '' : parma2;
+        const str = (!param1 && SELECT_VALUE) ? '' : `${param1}-${SELECT_VALUE}`;
+
+        return str;
+    };
+
+    /**
+     * 查询
+     */
+    handleFormSearch = () => {
+        const postData = this.getFormAllVulue();
+        this.props.queryCommodityList({...postData});
+    }
+
+    /**
+     * 分页页码改变的回调
+     */
+    handleChangePage = (page) => {
+        const currentPage = page;
+        this.props.queryCommodityList({
+            pageNum: currentPage,
+            pageSize: PAGE_SIZE
+        });
+    }
+    changeButtonStatus = () => {
+        // this.SUPPLIER_HAS_value
+    }
 
     /**
      * 表单操作
@@ -370,9 +432,10 @@ class ManagementList extends Component {
      * @param {object} record 单行数据
      */
     renderOperation(text, record) {
-        const { id } = record;
+        const { id, productId } = record;
         const { pathname } = this.props.location;
         const origin = window.location.origin;
+        // console.log(record)
         const menu = (
             <Menu>
                 <Menu.Item key={0}>
@@ -384,10 +447,10 @@ class ManagementList extends Component {
                     </CopyToClipboard>
                 </Menu.Item>
                 <Menu.Item key={2}>
-                    <Link to={`${pathname}/price/${id}`}>销售维护</Link>
+                    <Link to={`${pathname}/price/${productId}`}>销售维护</Link>
                 </Menu.Item>
                 <Menu.Item key={3}>
-                    <Link to={`${pathname}/purchasingPice/${id}`}>采购维护</Link>
+                    <Link to={`${pathname}/procurementMaintenance/${productId}`}>采购维护</Link>
                 </Menu.Item>
             </Menu>
         );
@@ -403,13 +466,15 @@ class ManagementList extends Component {
         const { getFieldDecorator } = this.props.form;
         columns[columns.length - 1].render = this.renderOperation;
         const isPurchaseDisabled = !(
-            this.state.supplyChoose !== null
+            this.state.supplyChoose
             && this.state.choose.length !== 0
         );
         const isSoldDisabled = !(
-            this.state.subsidiaryChoose !== null
+            this.state.subsidiaryChoose
             && this.state.choose.length !== 0
         );
+        console.log(this.STOP_BUY_DISABLED);
+        const { data = [], total = 0, pageNum = 1 } = this.props.CommodityListData;
         return (
             <div className={`${commodityML}`}>
                 <div className="manage-form">
@@ -421,7 +486,7 @@ class ManagementList extends Component {
                                     <FormItem className="">
                                         <div>
                                             <span className="sc-form-item-label">商品名称</span>
-                                            {getFieldDecorator('commodityName')(
+                                            {getFieldDecorator('productName')(
                                                 <Input
                                                     className="input"
                                                     placeholder="商品名称"
@@ -435,7 +500,7 @@ class ManagementList extends Component {
                                     <FormItem className="">
                                         <div>
                                             <span className="sc-form-item-label">商品编号</span>
-                                            {getFieldDecorator('commodityNumber')(
+                                            {getFieldDecorator('productCode')(
                                                 <Input
                                                     className="input"
                                                     placeholder="商品编号"
@@ -462,7 +527,7 @@ class ManagementList extends Component {
                                     <FormItem className="">
                                         <div>
                                             <span className="sc-form-item-label">商品条码</span>
-                                            {getFieldDecorator('commodityCode')(
+                                            {getFieldDecorator('internationalCode')(
                                                 <Input
                                                     className="input"
                                                     placeholder="商品条码"
@@ -476,7 +541,7 @@ class ManagementList extends Component {
                                     <FormItem className="">
                                         <div>
                                             <span className="sc-form-item-label">商品状态</span>
-                                            {getFieldDecorator('supplierStatus', {
+                                            {getFieldDecorator('supplyChainStatus', {
                                                 initialValue: commodityStatusOptions.defaultValue
                                             })(
                                                 <Select
@@ -506,23 +571,29 @@ class ManagementList extends Component {
                                             <SearchMind
                                                 compKey="search-mind-brand"
                                                 ref={ref => { this.brandSearchMind = ref }}
-                                                fetch={(value, pager) =>
-                                                    this.handleTestFetch(value, pager)
+                                                fetch={(param) =>
+                                                    this.props.pubFetchValueList({
+                                                        name: param.value
+                                                    }, 'queryBrandsByPages')
                                                 }
                                                 onChoosed={this.handleBrandChoose}
                                                 onClear={this.handleBrandClear}
-                                                renderChoosedInputRaw={(data) => (
-                                                    <div>{data.id} - {data.address}</div>
+                                                renderChoosedInputRaw={(brandData) => (
+                                                    <div>{brandData.id}-{brandData.name}</div>
                                                 )}
-                                                pageSize={2}
+                                                pageSize={5}
                                                 columns={[
                                                     {
-                                                        title: 'Name',
-                                                        dataIndex: 'name',
+                                                        title: 'id',
+                                                        dataIndex: 'id',
                                                         width: 150,
                                                     }, {
-                                                        title: 'Address',
-                                                        dataIndex: 'address',
+                                                        title: '名称',
+                                                        dataIndex: 'name',
+                                                        width: 200,
+                                                    }, {
+                                                        title: '标签',
+                                                        dataIndex: 'brandLabel',
                                                         width: 200,
                                                     }
                                                 ]}
@@ -541,24 +612,27 @@ class ManagementList extends Component {
                                                 <SearchMind
                                                     compKey="search-mind-supply"
                                                     ref={ref => { this.supplySearchMind = ref }}
-                                                    fetch={(value, pager) =>
-                                                        this.handleTestFetch(value, pager)
+                                                    fetch={(params) =>
+                                                        this.props.pubFetchValueList({
+                                                            condition: params.value
+                                                        }, 'querySuppliersList')
                                                     }
                                                     addonBefore=""
                                                     onChoosed={this.handleSupplyChoose}
                                                     onClear={this.handleSupplyClear}
-                                                    renderChoosedInputRaw={(data) => (
-                                                        <div>{data.id} - {data.name}</div>
+                                                    renderChoosedInputRaw={(companyList) => (
+                                                        <div ref={childCompany => { this.childCompany = childCompany }}>{companyList.spId}-{companyList.companyName}</div>
                                                     )}
-                                                    pageSize={2}
+                                                    rowKey="spAdrid"
+                                                    pageSize={5}
                                                     columns={[
                                                         {
-                                                            title: 'Name',
-                                                            dataIndex: 'name',
+                                                            title: '供应商ID',
+                                                            dataIndex: 'spId',
                                                             width: 150,
                                                         }, {
-                                                            title: 'Address',
-                                                            dataIndex: 'address',
+                                                            title: '供应商名称',
+                                                            dataIndex: 'companyName',
                                                             width: 200,
                                                         }
                                                     ]}
@@ -572,7 +646,7 @@ class ManagementList extends Component {
                                     <FormItem className="">
                                         <div>
                                             <span className="sc-form-item-label">供货状态</span>
-                                            {getFieldDecorator('deliveryStatus', {
+                                            {getFieldDecorator('supplierInfo', {
                                                 initialValue: deliveryStatusOptions.defaultValue
                                             })(
                                                 <Select
@@ -598,7 +672,7 @@ class ManagementList extends Component {
                                     <FormItem className="">
                                         <Button
                                             size="default"
-                                            disabled={isPurchaseDisabled}
+                                            disabled={this.STOP_BUY_DISABLED}
                                             onClick={this.handleSuspendPurchase}
                                         >暂停购进</Button>
                                     </FormItem>
@@ -621,24 +695,27 @@ class ManagementList extends Component {
                                                 <SearchMind
                                                     compKey="search-mind-subsidiary"
                                                     ref={ref => { this.subsidiarySearrchMind = ref }}
-                                                    fetch={(value, pager) =>
-                                                        this.handleTestFetch(value, pager)
+                                                    fetch={(params) =>
+                                                        this.props.pubFetchValueList({
+                                                            branchCompanyId: (typeof parseFloat(params.value) === 'number') ? params.value : '',
+                                                            branchCompanyName: (typeof parseFloat(params.value) !== 'number') ? params.value : ''
+                                                        }, 'findCompanyBaseInfo')
                                                     }
                                                     addonBefore=""
                                                     onChoosed={this.handleSubsidiaryChoose}
                                                     onClear={this.handleSubsidiaryClear}
                                                     renderChoosedInputRaw={(data) => (
-                                                        <div>{data.id} - {data.name}</div>
+                                                        <div>{data.id}-{data.name}</div>
                                                     )}
                                                     pageSize={2}
                                                     columns={[
                                                         {
-                                                            title: 'Name',
-                                                            dataIndex: 'name',
+                                                            title: '子公司id',
+                                                            dataIndex: 'id',
                                                             width: 150,
                                                         }, {
-                                                            title: 'Address',
-                                                            dataIndex: 'address',
+                                                            title: '子公司名字',
+                                                            dataIndex: 'name',
                                                             width: 200,
                                                         }
                                                     ]}
@@ -649,18 +726,16 @@ class ManagementList extends Component {
                                 </Col>
                                 <Col className="gutter-row" span={8}>
                                     {/* 子公司状态 */}
-                                    <FormItem className="">
+                                    <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">子公司状态</span>
-                                            {getFieldDecorator('subCompanyStatus', {
+                                            {getFieldDecorator('salesInfo', {
                                                 initialValue: subCompanyStatusOptions.defaultValue
                                             })(
                                                 <Select
-                                                    className=""
                                                     size="default"
                                                 >
-                                                    {
-                                                        subCompanyStatusOptions.data.map((item) =>
+                                                    { subCompanyStatusOptions.data.map((item) =>
                                                             (<Option
                                                                 key={item.key}
                                                                 value={item.key}
@@ -713,18 +788,20 @@ class ManagementList extends Component {
                                     <FormItem className="">
                                         <div>
                                             <span className="sc-form-item-label">排序</span>
-                                            {getFieldDecorator('commoditySort', {
+                                            {getFieldDecorator('sort', {
                                                 initialValue: commoditySortOptions.defaultValue
                                             })(
                                                 <Select
                                                     className=""
                                                     size="default"
+                                                    onChange={this.hanldeGetSortType}
                                                 >
                                                     {
                                                         commoditySortOptions.data.map((item) =>
                                                             (<Option
                                                                 key={item.key}
                                                                 value={item.key}
+                                                                data-dataIndex={item.dataIndex}
                                                             >
                                                                 {item.value}
                                                             </Option>)
@@ -756,10 +833,17 @@ class ManagementList extends Component {
                 </div>
                 <div className="area-list">
                     <Table
-                        dataSource={datas}
+                        dataSource={data}
                         columns={columns}
+                        pagination={{
+                            total,
+                            pageSize: PAGE_SIZE,
+                            current: pageNum,
+                            showQuickJumper: true,
+                            onChange: this.handleChangePage
+                        }}
                         rowSelection={this.rowSelection}
-                        rowKey="id"
+                        rowKey="productId"
                     />
                 </div>
             </div>
@@ -770,6 +854,9 @@ class ManagementList extends Component {
 ManagementList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
+    CommodityListData: PropTypes.objectOf(PropTypes.any),
+    queryCommodityList: PropTypes.func,
+    pubFetchValueList: PropTypes.func
 }
 
 ManagementList.defaultProps = {

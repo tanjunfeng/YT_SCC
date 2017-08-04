@@ -115,28 +115,26 @@ class SteppedPrice extends PureComponent {
                         <span className={`${prefixCls}-title-right`}>售价/元</span>
                     </div>
                     <ul className={`${prefixCls}-content`}>
-                        <QueueAnim type={'left'}>
-                            {
-                                defaultValue.map((item, index) => {
-                                    const { startNumber, endNumber, price } = item;
-                                    return (
-                                        <InputItem
-                                            {...this.props}
-                                            data-item={index}
-                                            index={index}
-                                            allLength={len}
-                                            key={`${item.startNumber}${item.endNumber}${item.price}`}
-                                            handleAddItem={this.handleAddItem}
-                                            handleDeleteItem={this.handleDeleteItem}
-                                            handleValueChange={this.handleValueChange}
-                                            firstDefault={startNumber}
-                                            scondDefault={endNumber}
-                                            resultDefault={price}
-                                        />
-                                    )
-                                })
-                            }
-                        </QueueAnim>
+                        {
+                            defaultValue.map((item, index) => {
+                                const { startNumber, endNumber, price } = item;
+                                return (
+                                    <InputItem
+                                        {...this.props}
+                                        data-item={index}
+                                        index={index}
+                                        allLength={len}
+                                        key={`${item.startNumber}${item.endNumber}${item.price}`}
+                                        handleAddItem={this.handleAddItem}
+                                        handleDeleteItem={this.handleDeleteItem}
+                                        handleValueChange={this.handleValueChange}
+                                        firstDefault={startNumber}
+                                        scondDefault={endNumber}
+                                        resultDefault={price}
+                                    />
+                                )
+                            })
+                        }
                     </ul>
                 </div>
             </div>

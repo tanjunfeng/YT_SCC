@@ -66,7 +66,7 @@ const receiveAddPriceVisible = (data) => ({
     payload: data,
 });
 
-export const ProductAddPriceVisible = (isShow) => dispatch =>
+export const productAddPriceVisible = (isShow) => dispatch =>
     dispatch(receiveAddPriceVisible(isShow));
 
 // 跳转采购价格弹窗
@@ -307,3 +307,40 @@ export const QueryAllSupplier = (params) => dispatch => (
     })
 )
 
+// 新增商品采购关系
+const receiveAddProdPurchase = (data) => ({
+    type: ActionType.REQUEST_ADD_SELL_PRICE,
+    payload: data,
+});
+
+export const AddProdPurchase = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        addSellPrice(params)
+            .then(res => {
+                dispatch(receiveAddProdPurchase(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 新增商品采购关系
+const receiveGetProdPurchaseById = (data) => ({
+    type: ActionType.REQUEST_ADD_SELL_PRICE,
+    payload: data,
+});
+
+export const GetProdPurchaseById = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        addSellPrice(params)
+            .then(res => {
+                dispatch(receiveGetProdPurchaseById(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)

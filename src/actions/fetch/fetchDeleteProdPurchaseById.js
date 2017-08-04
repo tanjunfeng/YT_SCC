@@ -1,22 +1,22 @@
 /**
- * @file fetchGetProductById.js
+ * @file fetchDeleteProdPurchaseById.js
  * @author Tanjunfeng
  *
- * 查询商品价格信息
+ * 删除商品价格信息
  */
 
 import Promise from 'bluebird';
-import { getProductById } from '../../service';
+import { fetchDeleteProdPurchaseById } from '../../service';
 import ActionType from '../ActionType';
 
 const receive = (data) => ({
-    type: ActionType.GET_PRODUCT_BY_ID,
+    type: ActionType.DELETE_PROD_PRUCHASE_BYID,
     payload: data,
 });
 
 export default (params) => dispatch => (
     new Promise((resolve, reject) => {
-        getProductById(params)
+        fetchDeleteProdPurchaseById(params)
             .then(res => {
                 dispatch(receive(res.data));
                 resolve(res.data)

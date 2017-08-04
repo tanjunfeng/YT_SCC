@@ -1,8 +1,8 @@
 /**
  * @file app.jsx
- * @author Tan junfeng
+ * @author zhangbaihua
  *
- * 分类列表页商品排序管理
+ * 库存调整搜索列表
  */
 
 import React, { Component } from 'react';
@@ -73,7 +73,7 @@ class StoreAdjList extends Component {
     }
 
     /**
-     * @param pageNUmber  {type: number, desc, "页码数" }
+     * @param {number} pageNUmber 页码数
      *
      * 根据页面请求数据
      */
@@ -87,9 +87,9 @@ class StoreAdjList extends Component {
     }
 
     /**
-     * @param  data { type: object, desc: '搜索条件' }
+     * @param  {object}  data   搜索条件
      *
-     *按条件搜索
+     * 按条件搜索
      */
     handleSearch = (data) => {
         console.log(data);

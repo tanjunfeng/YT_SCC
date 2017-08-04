@@ -41,7 +41,7 @@ class SearchForm extends Component {
     /**
     * DatePicker日期选取
     *
-    * @param {moment} data 日期的moment对象
+    * @param {moment} date       日期的moment对象
     * @param {string} dateString 格式化后的日期
     */
     onEnterTimeChange = (date, dateString) => {

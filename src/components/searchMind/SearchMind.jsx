@@ -65,6 +65,11 @@ class SearchMind extends PureComponent {
              * 下拉框的数据源
              */
             data: [],
+
+            /**
+             * 默认值
+             */
+            defaultValue: props.defaultValue,
         }
 
         this.handleFocus = ::this.handleFocus;
@@ -96,6 +101,11 @@ class SearchMind extends PureComponent {
                 disabled: nextProps.disabled,
                 dropHide: true,
                 isFocus: false,
+            })
+        }
+        if (nextProps.defaultValue !== this.props.defaultValue) {
+            this.setState({
+                value: nextProps.defaultValue
             })
         }
     }
@@ -403,9 +413,15 @@ class SearchMind extends PureComponent {
         const inputProps = {
             ...(disabled && { disabled: 'disabled'})
         };
+
+        const newStyle = Object.assign({
+            zIndex: 100,
+            position: 'relative',
+        }, style)
+
         return (
             <div
-                style={style}
+                style={newStyle}
                 className={`${layoutCls} ${className}`}
                 onMouseOver={this.handleInArea}
                 onMouseOut={this.handleOutArea}
@@ -427,6 +443,7 @@ class SearchMind extends PureComponent {
                             onChange={this.handleChange}
                             value={value}
                             {...inputProps}
+                            defaultValue={this.state.defaultValue}
                         />
                         {(!isFocus && this.isEmpty()) &&
                             <div className="ywc-smind-input-view">

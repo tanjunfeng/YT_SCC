@@ -19,7 +19,6 @@ import {
     Dropdown,
     message
 } from 'antd';
-
 import {
     fetchProviderEnterList,
     fetchQueryManageList,
@@ -52,7 +51,6 @@ const columns = suppliersAppList;
         modifyInformationVisible,
         getSupplierSettledList,
         fetchProviderEnterList,
-        modifyAuditVisible,
         fetchQueryManageList,
     }, dispatch)
 )
@@ -76,10 +74,12 @@ class SuppliersAppList extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
+        // TODO 默认加条件
         this.props.getSupplierSettledList({
             pageNum: this.current,
             pageSize: PAGE_SIZE,
-            ...this.searchForm
+            providerType: 1,
+            status: 0
         });
     }
 
@@ -127,7 +127,7 @@ class SuppliersAppList extends PureComponent {
                 ...this.searchForm
             });
         }
-        this.handlePaginationChange();
+        this.handlePaginationChange(this.current);
     }
 
     /**
@@ -164,7 +164,7 @@ class SuppliersAppList extends PureComponent {
     handlePaginationChange(goto) {
         this.current = goto;
         this.props.getSupplierSettledList({
-            pageNum: goto,
+            pageNum: this.current,
             pageSize: PAGE_SIZE,
             ...this.searchForm
         });
@@ -173,16 +173,14 @@ class SuppliersAppList extends PureComponent {
     renderOperation(text, record, index) {
         const { status, id, providerType } = record;
         const { pathname } = this.props.location;
-        const info = () => {
-            message.info('供应商地点状态不正确，不能进行修改');
-        };
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/supplier/${id}`}>供应商详情</Link>
                 </Menu.Item>
                 {
-                    status === 1 && status === 3 && status === 4 &&
+                    // 0： 制单状态、2：已审核、3:已拒绝
+                    (status === 0 || status === 2 || status === 3) &&
                     <Menu.Item key="modifySupInfor">
                         <Link to={`${pathname}/edit/supplier/${id}`}>
                             修改供应商信息
@@ -195,7 +193,8 @@ class SuppliersAppList extends PureComponent {
                     </Link>
                 </Menu.Item>
                 {
-                    status === 4 &&
+                    // 3:已拒绝
+                    status === 3 &&
                     <Menu.Item key="ChangeMessage">
                         <a target="_blank" rel="noopener noreferrer">
                             查看审核已拒绝原因
@@ -211,7 +210,8 @@ class SuppliersAppList extends PureComponent {
                     <Link to={`${pathname}/place/${id}`}>供应商地点详情</Link>
                 </Menu.Item>
                 {
-                    status === 1 && status === 3 && status === 4 &&
+                    // 0： 制单状态、2：已审核、3:已拒绝
+                    (status === 0 || status === 2 || status === 3) &&
                     <Menu.Item key="modifySupAddInfor">
                         <Link to={`${pathname}/edit/${id}`}>
                             修改供应商地点信息
@@ -219,15 +219,15 @@ class SuppliersAppList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    status === 2 && status === 5 &&
+                    // 1: 已提交、 4：修改中
+                    (status === 1 || status === 4) &&
                     <Menu.Item>
-                        <a onClick={info}>
-                            修改供应商地点信息
-                        </a>
+                        <Link to={`${pathname}/edit/${id}`}>修改供应商地点信息</Link>
                     </Menu.Item>
                 }
                 {
-                    status === 4 &&
+                    // 3:已拒绝
+                    status === 3 &&
                     <Menu.Item key="ChangeMessage">
                         <a target="_blank" rel="noopener noreferrer">
                             查看审核已拒绝原因
@@ -250,7 +250,7 @@ class SuppliersAppList extends PureComponent {
     }
 
     render() {
-        const { data, pageNum, pageSize, total } = this.props.querySettledList;
+        const { total, pageNum } = this.props.querySettledList;
         const { querySettledList } = this.props;
         columns[columns.length - 1].render = this.renderOperation;
         return (
@@ -268,9 +268,9 @@ class SuppliersAppList extends PureComponent {
                         columns={columns}
                         rowKey="id"
                         pagination={{
-                            total,
-                            pageSize,
                             current: pageNum,
+                            total,
+                            pageSize: PAGE_SIZE,
                             showQuickJumper: true,
                             onChange: this.handlePaginationChange
                         }}

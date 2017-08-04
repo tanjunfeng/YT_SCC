@@ -63,11 +63,11 @@ import AdPlanList404 from 'bundle-loader?lazy!../views/wrapConfigure/adPlanList4
 
 /*********************procurement************************* */
 import PoMngList from 'bundle-loader?lazy!../views/procurement/poMngList';
-import PoDetail from 'bundle-loader?lazy!../views/procurement/PoDetail';
-import PoPrintList from 'bundle-loader?lazy!../views/procurement/PoPrintList';
-import PoRcvMngList from 'bundle-loader?lazy!../views/procurement/PoRcvMngList';
-import PoRcvList from 'bundle-loader?lazy!../views/procurement/PoRcvList';
-import PoRcvDetail from 'bundle-loader?lazy!../views/procurement/PoRcvDetail';
+import PoDetail from 'bundle-loader?lazy!../views/procurement/poDetail';
+import PoPrintList from 'bundle-loader?lazy!../views/procurement/poPrintList';
+import PoRcvMngList from 'bundle-loader?lazy!../views/procurement/poRcvMngList';
+import PoRcvList from 'bundle-loader?lazy!../views/procurement/poRcvList';
+import PoRcvDetail from 'bundle-loader?lazy!../views/procurement/poRcvDetail';
 
 // IBM 修改
 // 商品采购关系维护
@@ -168,56 +168,32 @@ const routes = [
         key: 'gylspgl',
         iconType: 'red-envelope',
         routes: [
-            // 在售商品列表
+            // 商品管理列表
             {
-                path: '/onSale',
+                path: '/commodifyList',
                 parent: 'gylspgl',
-                key: 'onSaleGoodsList',
+                key: 'commodifyList',
                 component: () => (
                     <Switch>
                         <Route
-                            path="/onSale"
+                            path="/commodifyList"
                             exact
-                            render={() => <Bundle load={OnSale}>{(App) => <App />}</Bundle>}
+                            render={() => <Bundle load={ManagementList}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/onSale/detail/:id"
-                            render={() => <Bundle load={SaleDetail}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/onSale/price/:id"
-                            render={() => <Bundle load={FindPriceInfo}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/onSale/purchasingPice/:id"
-                            render={() => <Bundle load={PurchasingPice}>{(App) => <App />}</Bundle>}
-                        />
-                    </Switch>
-                )
-            },
-            // 待售商品列表
-            {
-                path: '/forSale',
-                parent: 'gylspgl',
-                key: 'forSaleGoodsList',
-                component: () => (
-                    <Switch>
-                        <Route
-                            path="/forSale"
+                            path="/commodifyList/:id"
                             exact
-                            render={() => <Bundle load={ForSale}>{(App) => <App />}</Bundle>}
+                            render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/forSale/detail/:id"
-                            render={() => <Bundle load={SaleDetail}>{(App) => <App />}</Bundle>}
+                            path="/commodifyList/procurementMaintenance/:id"
+                            exact
+                            render={() => <Bundle load={ProcurementMaintenance}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/forSale/price/:id"
-                            render={() => <Bundle load={FindPriceInfo}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/forSale/purchasingPice/:id"
-                            render={() => <Bundle load={PurchasingPice}>{(App) => <App />}</Bundle>}
+                            path="/commodifyList/salesMaintenance/:id"
+                            exact
+                            render={() => <Bundle load={SalesMaintenance}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )
@@ -236,6 +212,7 @@ const routes = [
                         />
                         <Route
                             path="/managementList/commodifyDetail/:id"
+                            exact
                             render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
@@ -304,6 +281,62 @@ const routes = [
         key: 'gysgl',
         iconType: 'solution',
         routes: [
+            // 供应商管理列表
+            {
+                path: '/supplierList',
+                parent: 'gysgl',
+                key: 'supplierManagement',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/supplierList"
+                            exact
+                            render={() => (<Bundle load={ManagementList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/supplierList/:id"
+                            exact
+                            render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/supplierList/:id/:type"
+                            render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
+            // 供应商入驻申请列表
+            {
+                path: '/applicationList',
+                parent: 'gysgl',
+                key: 'supplierApplication',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/applicationList"
+                            exact
+                            render={() => (<Bundle load={SuppliersAppList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/applicationList/add"
+                            exact
+                            render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/applicationList/edit/:id"
+                            render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/applicationList/:id"
+                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
             // 供应商入驻申请列表(改)
             {
                 path: '/suppliersAppList',
