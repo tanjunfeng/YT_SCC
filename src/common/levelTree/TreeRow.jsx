@@ -6,7 +6,7 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Select, Menu, Dropdown, Button, Icon } from 'antd';
+import { Menu, Dropdown, Button, Icon } from 'antd';
 import Utils from '../../util/util';
 
 class TreeRow extends PureComponent {
@@ -29,9 +29,9 @@ class TreeRow extends PureComponent {
      * @param nextProps
      */
     componentWillReceiveProps(nextProps) {
-        if (this.props.index !== nextProps.index) {
+        if (this.props.sort !== nextProps.sort) {
             this.setState({
-                value: this.sort(nextProps.index + 1),
+                value: this.sort(nextProps.sort),
             });
         }
     }
@@ -39,10 +39,25 @@ class TreeRow extends PureComponent {
     /**
      * 处理排序序号
      * @param value
-     * @return {number}
+     * @return {number|string}
      */
     sort(value) {
-        let v = value == null ? this.props.index + 1 : value;
+        const { sort, max } = this.props;
+        let v = value == null ? sort : value;
+
+        if (value == null && sort === null) {
+            return '';
+        }
+
+        // 本身未排序的处理方式，可输入有效数据的最大值 + 1
+        if (sort === null && v > max + 1) {
+            v = max + 1;
+        }
+
+        // 有排序数据的，进行输入只能输入有效数据的最大值
+        if (sort !== null && v > max) {
+            v = max;
+        }
 
         return Utils.trim(v);
     }
@@ -53,20 +68,28 @@ class TreeRow extends PureComponent {
      */
     changeSort(event) {
         const { value } = this.state;
+        const sort = this.sort();
 
         if (value === '') {
             this.setState({
-                value: this.sort(),
+                value: sort,
             });
-
             return;
         }
 
-        if (value === this.sort()) {
+        if (value === sort) {
             return;
         }
 
         this.props.handleChangeSort(event);
+
+        // 这里在输入确认之后根据 componentWillReceiveProps 的操作重新赋值给输入框
+        // 避免外部请求错误之后造成的输入框内容不刷新
+        if (event.currentTarget.value !== sort) {
+            this.setState({
+                value: sort
+            })
+        }
     }
 
     /**
@@ -76,6 +99,10 @@ class TreeRow extends PureComponent {
         this.props.handleChangeStatus(value, option);
     }
 
+    /**
+     * 按回车进行排序
+     * @param event
+     */
     handleKeyUp(event) {
         if (event.keyCode === 13) {
             this.changeSort(event);
@@ -87,7 +114,7 @@ class TreeRow extends PureComponent {
      * @param event
      */
     handleChange(event) {
-        let value = parseInt(event.target.value);
+        let value = parseInt(event.target.value, 10);
 
         if (isNaN(value)) {
             value = '';
@@ -110,7 +137,7 @@ class TreeRow extends PureComponent {
                     <input
                         style={{ marginLeft: 15, textAlign: 'center' }}
                         className="input-middle"
-                        disabled={!item.status}
+                        disabled={item.status === 1}
                         data-key={item.key}
                         data-parentKey={item.parentKey}
                         data-sort={this.sort()}
@@ -124,9 +151,9 @@ class TreeRow extends PureComponent {
                         getPopupContainer={() => this.treeRow}
                         overlay={(
                             <Menu onClick={this.changeStatus}>
-                                {item.status
-                                    ? <Menu.Item mkey={item.key} key="0">隐藏</Menu.Item>
-                                    : <Menu.Item mkey={item.key} key="1">显示</Menu.Item>
+                                {item.status === 0
+                                    ? <Menu.Item mkey={item.key} key="1">隐藏</Menu.Item>
+                                    : <Menu.Item mkey={item.key} key="0">显示</Menu.Item>
                                 }
                             </Menu>
                         )}
@@ -134,7 +161,7 @@ class TreeRow extends PureComponent {
                         <Button
                             className="tree-row-dropmenu"
                         >
-                            {item.status ? '显示' : '隐藏'} <Icon type="down" />
+                            {item.status === 0 ? '显示' : '隐藏'} <Icon type="down" />
                         </Button>
                     </Dropdown>
                 </span>
@@ -144,7 +171,7 @@ class TreeRow extends PureComponent {
 }
 
 TreeRow.propTypes = {
-    index: PropTypes.number,
+    sort: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     handleChangeStatus: PropTypes.func,
     handleChangeSort: PropTypes.func,
     item: PropTypes.objectOf(PropTypes.any),

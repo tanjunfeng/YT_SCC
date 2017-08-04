@@ -213,6 +213,77 @@ class Utils {
         }
         return res;
     }
+
+    /**
+     * 价格区间是否连续
+     *
+     * @param {Array[number]} arr 价格区间数组
+     * @return {boolean} 是否连续
+     */
+    static isContinuity(arr) {
+        let i = 0;
+        while (arr[i + 1]) {
+            if (arr[i].endNumber + 1 !== arr[i + 1].startNumber) {
+                return false;
+            }
+            i++;
+        }
+        return true;
+    }
+
+    static isWindow(obj) {
+        return obj != null && obj == obj.window;
+    }
+
+    static isObject(obj) {
+        const type = typeof obj;
+        return obj != null && (type === 'object' || type === 'function');
+    }
+
+    static isPlainObject(obj) {
+        return this.isObject(obj)
+            && !this.isWindow(obj)
+            && Object.getPrototypeOf(obj) == Object.prototype;
+    }
+
+    /**
+     * 简易版本 对比两个 Object 是否一样
+     *
+     * @param {Object}
+     * @param {Object}
+     */
+    static isEqual(a, b) {
+        // Of course, we can do it use for in
+        // Create arrays of property names
+        const aProps = Object.getOwnPropertyNames(a);
+        const bProps = Object.getOwnPropertyNames(b);
+
+        // If number of properties is different,
+        // objects are not equivalent
+        if (aProps.length !== bProps.length) {
+            return false;
+        }
+
+        for (let i = 0; i < aProps.length; i++) {
+            const propName = aProps[i];
+            const aChild = a[propName];
+            const bChild = b[propName];
+
+            if (this.isPlainObject(aChild) && !this.isEqual(aChild, bChild)) {
+                return false;
+            }
+
+            if ((typeof aChild === 'string' || typeof aChild === 'number') && aChild !== bChild) {
+                // If values of same property are not equal,
+                // objects are not equivalent
+                return false;
+            }
+        }
+
+        // If we made it this far, objects
+        // are considered equivalent
+        return true;
+    }
 }
 
 export default Utils;

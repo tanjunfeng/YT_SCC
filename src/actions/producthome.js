@@ -22,7 +22,10 @@ import {
     updateSellPrice,
     updatePurchasePrice,
     deletePurchasePriceById,
-    getProductById
+    getProductById,
+    addProdPurchase,
+    getProdPurchaseById,
+    queryProdPurchaseExtByCondition
 } from '../service';
 import ActionType from './ActionType';
 
@@ -104,7 +107,7 @@ const receivetoUpdate = (data) => ({
 
 export const toUpdateSell = (params) => dispatch => (
     new Promise((resolve, reject) => {
-       toUpdateSellPrice(params)
+        toUpdateSellPrice(params)
             .then(res => {
                 dispatch(receivetoUpdate(res.data));
                 resolve(res.data);
@@ -315,9 +318,66 @@ const receiveAddProdPurchase = (data) => ({
 
 export const AddProdPurchase = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        addSellPrice(params)
+        addProdPurchase(params)
             .then(res => {
-                dispatch(receiveAddSellPrice(res.data));
+                dispatch(receiveAddProdPurchase(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 查询商品信息
+const receiveGetProductById = (data) => ({
+    type: ActionType.GET_PRODUCT_BY_ID,
+    payload: data,
+});
+
+export const GetProductById = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        getProductById(params)
+            .then(res => {
+                dispatch(receiveGetProductById(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 查询商品信息
+const receiveGetProdPurchaseById = (data) => ({
+    type: ActionType.GET_PRODPURCHASE_BYID,
+    payload: data,
+});
+
+export const GetProdPurchaseById = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        getProdPurchaseById(params)
+            .then(res => {
+                dispatch(receiveGetProdPurchaseById(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 根据条件查询商品价格信息
+const receiveQueryProdPurchaseExtByCondition = (data) => ({
+    type: ActionType.QUERY_PRODBY_CONDITION,
+    payload: data,
+});
+
+export const QueryProdPurchaseExtByCondition = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryProdPurchaseExtByCondition(params)
+            .then(res => {
+                dispatch(receiveQueryProdPurchaseExtByCondition(res.data));
                 resolve(res);
             })
             .catch(err => {

@@ -20,7 +20,6 @@ import {
 } from 'antd';
 import { PAGE_SIZE } from '../../../constant';
 import {
-    modifyCheckReasonVisible,
     insertSupplierSettlementInfo,
     fetchGetProductById,
     fetchEditBeforeAfter,
@@ -28,6 +27,7 @@ import {
     fetchQueryManageList
 } from '../../../actions';
 import {
+    modifyAdrVisible,
     AuditSupplierEditInfo
 } from '../../../actions/supplier';
 
@@ -158,18 +158,18 @@ const parse = (before, after, TEXT) => {
 
 @connect(
     state => ({
-        checkResonVisible: state.toJS().supplier.checkResonVisible,
         visibleData: state.toJS().supplier.visibleData,
         editBeforeAfters: state.toJS().supplier.editBeforeAfter,
         visibleReasonDatas: state.toJS().supplier.visibleReasonData,
+        checkResonVisibled: state.toJS().supplier.checkResonVisibled,
     }),
     dispatch => bindActionCreators({
-        modifyCheckReasonVisible,
         insertSupplierSettlementInfo,
         fetchGetProductById,
         fetchEditBeforeAfter,
         suppplierSettledAudit,
         fetchQueryManageList,
+        modifyAdrVisible,
         AuditSupplierEditInfo
     }, dispatch)
 )
@@ -199,6 +199,13 @@ class CheckReason extends PureComponent {
     }
 
     /**
+     * 弹框取消事件
+     */
+    handleCheckCancel() {
+        this.props.modifyAdrVisible(false);
+    }
+
+    /**
      * 弹框确认事件
      */
     handleAuditOk() {
@@ -206,11 +213,12 @@ class CheckReason extends PureComponent {
         const { selected } = this.state;
         const { visibleData } = this.props;
         const { editBeforeAfters } = this.props;
-        const { before = {}, after = {} } = editBeforeAfters;
+        const { before = {} } = editBeforeAfters;
         if (selected === -1) {
             message.error('请选择审核结果');
             return;
         }
+        console.log(11111)
         this.props.form.validateFields((err) => {
             if (!err) {
                 this.props.AuditSupplierEditInfo({
@@ -222,7 +230,7 @@ class CheckReason extends PureComponent {
                     licenseId: before.supplierlicenseInfo.id,
                     ...this.props.form.getFieldsValue()
                 }).then((res) => {
-                    this.props.modifyCheckReasonVisible({isVisible: false});
+                    this.props.modifyAdrVisible({isVisible: false});
                     message.success(res.message)
                     this.props.fetchQueryManageList({
                         pageNum: this.current,
@@ -231,7 +239,7 @@ class CheckReason extends PureComponent {
                         status: 0
                     })
                 }).catch(() => {
-                    this.props.modifyCheckReasonVisible({isVisible: false});
+                    this.props.modifyAdrVisible({isVisible: false});
                     message.success('修改审核失败')
                 })
             }
@@ -254,7 +262,7 @@ class CheckReason extends PureComponent {
      * 弹框取消事件
      */
     handleAuditCancel() {
-        this.props.modifyCheckReasonVisible({isVisible: false});
+        this.props.modifyAdrVisible({isVisible: false});
     }
 
     /**
@@ -299,8 +307,8 @@ class CheckReason extends PureComponent {
 
         return (
             <Modal
-                title="供应商修改资料审核"
-                visible={this.props.checkResonVisible}
+                title="供应商修改地点审核"
+                visible={this.props.modifyAdrVisible}
                 onOk={this.handleAuditOk}
                 onCancel={this.handleAuditCancel}
                 maskClosable={false}
@@ -317,7 +325,7 @@ class CheckReason extends PureComponent {
                         注意：审核通过，供应商的所有账号可正常登录商家后台系统。
                     </div>
                     {
-                        this.props.modifyCheckReasonVisible &&
+                        this.props.modifyAdrVisible &&
                         <div className="application-modal-select">
                             <span className="application-modal-label">审核：</span>
                             <Select
@@ -332,7 +340,7 @@ class CheckReason extends PureComponent {
                         </div>
                     }
                     {
-                        this.props.modifyCheckReasonVisible && this.state.selected === '1' &&
+                        this.props.modifyAdrVisible && this.state.selected === '1' &&
                         <Form layout="inline">
                             <FormItem className="application-form-item">
                                 <span className="application-modal-label">*不通过原因：</span>
@@ -360,9 +368,10 @@ CheckReason.propTypes = {
     editBeforeAfters: PropTypes.objectOf(PropTypes.any),
     modifyCheckReasonVisible: PropTypes.bool,
     checkResonVisible: PropTypes.bool,
+    fetchEditBeforeAfter: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     visibleData: PropTypes.objectOf(PropTypes.any),
-    insertSupplierSettlementInfo: PropTypes.objectOf(PropTypes.any),
+    modifyAdrVisible: PropTypes.objectOf(PropTypes.any),
     getList: PropTypes.objectOf(PropTypes.any),
 }
 
