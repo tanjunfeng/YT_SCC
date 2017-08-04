@@ -18,8 +18,10 @@ const http = new Http();
 http.response(
     res => {
         if (res.data.code === 401) {
-            console.log(401);
             LoginLayout();
+            return Promise.reject(res);
+        } else if (!res.data.success) {
+            res.code = 8888;
             return Promise.reject(res);
         }
         return Promise.resolve(res);
@@ -49,6 +51,9 @@ export const exportSupplierEnterList = '/supplier/exportSettledList';
 
 // 下载供应商修改列表
 export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
+
+// 下载订单管理列表
+export const exportOrderList = '/sorder/toExcel';
 
 /**
  * 登录 Api
@@ -522,5 +527,42 @@ export const getWarehouseInfo1 = (params) => http.get('/warehouse/getWarehouseLo
 export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehousePhysicalInfo', params);
 // 查询供应商地点所属区域列表
 export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySupplierPlaceRegion', params);
-// 此接口用于通过code和name（后端id就等于code）查询子公司信息 
+// 此接口用于通过code和name（后端id就等于code）查询子公司信息
 export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBaseInfo', params);
+
+// 订单管理-查询订单列表
+export const queryOrder = (params) => http.get('/sorder/queryOrder', params);
+
+// 订单管理-批量审核
+export const batchApproval = (params) => http.post('/sorder/batchApproval', params);
+
+// 订单管理-批量审核
+export const batchCancel = (params) => http.post('/sorder/batchCancel', params);
+
+// 订单管理-重新传送
+export const resendOrder = (params) => http.post('/sorder/resendOrder', params);
+
+// 订单管理-单个取消
+export const cancelOrder = (params) => http.post('/sorder/cancelOrder', params);
+
+// 订单管理-单个审核
+export const approvalOrder = (params) => http.post('/sorder/approvalOrder', params);
+
+// 订单管理-查询订单信息
+export const queryOrderDetailInfo = (params) => http.get('/sorder/orderDetail', params);
+
+// 订单管理-查询支付信息
+export const queryPaymentDetailInfo = (params) => http.get('/sorder/paymentInfo', params);
+
+// 订单管理-查询配送信息
+export const queryShippingDetailInfo = (params) => http.get('/sorder/shippingGroupInfo', params);
+
+// 订单管理-保存订单详情备注信息
+export const orderDescription = (params) => http.post('/sorder/orderDescription', params);
+
+// 订单管理-审核退款
+export const auditRefund = (params) => http.post('/sorder/auditRefund', params);
+
+// 订单管理-审核退款
+export const confirmRefund = (params) => http.post('/sorder/confirmRefund', params);
+

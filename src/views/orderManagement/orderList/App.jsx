@@ -17,6 +17,7 @@ import {
     message, Modal, DatePicker
 } from 'antd';
 import moment from 'moment';
+import Utils from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
 import {
     orderTypeOptions,
@@ -24,100 +25,87 @@ import {
     payStatusOptions,
     logisticsStatusOptions
 } from '../../../constant/searchParams';
+import { exportOrderList } from '../../../service';
 import {fetchTest} from '../../../actions/classifiedList';
-import AuditModal from './auditModal';
-import { modifyAuditModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
-import { TIME_FORMAT, DATE_FORMAT } from '../../../constant/index';
+import CauseModal from './causeModal';
+import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
+import { fetchOrderList, modifyBatchApproval, modifyResendOrder, modifyApprovalOrder } from '../../../actions/order';
+
+
+import { TIME_FORMAT, DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
+
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const confirm = Modal.confirm;
 const orderML = 'order-management';
 const { RangePicker } = DatePicker;
-
+const yesterdayDate = moment().subtract(1, 'days').valueOf().toString();
+const yesterdayrengeDate = [moment().subtract(1, 'days'), moment().subtract(1, 'days')];
 
 const columns = [{
+    title: '序号',
+    dataIndex: 'sort',
+    key: 'sort',
+    render: (text, record, index) => index + 1
+}, {
     title: '订单编号',
-    dataIndex: 'orderNumber',
-    key: 'orderNumber',
+    dataIndex: 'id',
+    key: 'id',
 }, {
     title: '父订单编号',
-    dataIndex: 'parentOrderNumber',
-    key: 'parentOrderNumber',
-}, {
-    title: '订单类型',
-    dataIndex: 'orderType',
-    key: 'orderType',
-}, {
-    title: '加盟商编号',
-    dataIndex: 'JoinerNumber',
-    key: 'JoinerNumber',
-}, {
-    title: '所属子公司',
-    dataIndex: 'belongSubCompany',
-    key: 'belongSubCompany',
+    dataIndex: 'createdByOrderId',
+    key: 'createdByOrderId',
 }, {
     title: '订单日期',
-    dataIndex: 'orderDate',
-    key: 'orderDate',
+    dataIndex: 'submitTime',
+    key: 'submitTime',
     render: (text) => (
         <span>
             {moment(parseInt(text, 10)).format(TIME_FORMAT)}
         </span>
     )
 }, {
+    title: '订单类型',
+    dataIndex: 'orderTypeDesc',
+    key: 'orderTypeDesc',
+}, {
     title: '订单金额',
-    dataIndex: 'orderMoney',
-    key: 'orderMoney',
+    dataIndex: 'total',
+    key: 'total',
 }, {
     title: '订单状态',
-    dataIndex: 'orderStatus',
-    key: 'orderStatus',
+    dataIndex: 'orderStateDesc',
+    key: 'orderStateDesc',
 }, {
     title: '支付状态',
-    dataIndex: 'payStatus',
-    key: 'payStatus',
+    dataIndex: 'paymentStateDesc',
+    key: 'paymentStateDesc',
 }, {
     title: '物流状态',
-    dataIndex: 'logisticsStatus',
-    key: 'logisticsStatus',
+    dataIndex: 'shippingStateDesc',
+    key: 'shippingStateDesc',
+}, {
+    title: '子公司',
+    dataIndex: 'branchCompanyName',
+    key: 'branchCompanyName',
+}, {
+    title: '加盟商编号',
+    dataIndex: 'franchiseeNo',
+    key: 'franchiseeNo',
 }, {
     title: '操作',
     dataIndex: 'operation',
     key: 'operation',
 }];
 
-const datas = [{
-    orderNumber: 'XXXXXXX02',
-    parentOrderNumber: 'XXXXXXX',
-    orderType: '加盟商',
-    JoinerNumber: 'A000999',
-    belongSubCompany: '四川子公司',
-    orderDate: '1500876718',
-    orderMoney: '￥140.00',
-    orderStatus: '待人工审核',
-    payStatus: '未支付',
-    logisticsStatus: '待收货',
-}, {
-    orderNumber: 'XXXXXXX01',
-    parentOrderNumber: 'XXXXXXX',
-    orderType: '加盟商',
-    JoinerNumber: 'A000999',
-    belongSubCompany: '四川子公司',
-    orderDate: '1500876718',
-    orderMoney: '￥140.00',
-    orderStatus: '已取消',
-    payStatus: '未支付',
-    logisticsStatus: '取消送货',
-}];
-
-
 @connect(
     state => ({
-        // ToDo：查询调接口时，需要走redux拿数据
+        orderListData: state.toJS().order.orderListData,
     }),
     dispatch => bindActionCreators({
-        modifyAuditModalVisible
+        modifyCauseModalVisible,
+        fetchOrderList,
     }, dispatch)
 )
 class OrderManagementList extends Component {
@@ -134,19 +122,25 @@ class OrderManagementList extends Component {
         this.handleSubCompanyChoose = ::this.handleSubCompanyChoose;
         this.handleJoiningClear = ::this.handleJoiningClear;
         this.handleSubCompanyClear = ::this.handleSubCompanyClear;
+        this.handlePaginationChange = ::this.handlePaginationChange;
+        this.orderTypeSelect = ::this.orderTypeSelect;
+        this.getSearchData = ::this.getSearchData;
         this.joiningSearchMind = null;
         this.subCompanySearchMind = null;
+        this.searchData = {};
+        this.current = 1;
         this.time = {
-            minSettledDate: null,
-            maxSettledDate: null
+            submitStartTime: yesterdayDate,
+            submitEndTime: yesterdayDate,
         }
         this.state = {
             choose: [],
-            joiningChoose: null,
-            subCompanyChoose: null,
-            rengeTime: null,
+            franchiseeId: null,
+            branchCompanyId: null,
+            rengeTime: yesterdayrengeDate,
             auditModalVisible: false,
             tableOrderNumber: null,
+            isPayDisabled: false
         }
     }
 
@@ -163,15 +157,43 @@ class OrderManagementList extends Component {
         });
         if (result.length === 2) {
             this.time = {
-                minSettledDate: result[0].valueOf().toString(),
-                maxSettledDate: result[1].valueOf().toString()
+                submitStartTime: result[0].valueOf().toString(),
+                submitEndTime: result[1].valueOf().toString()
             }
         } else {
             this.time = {
-                minSettledDate: null,
-                maxSettledDate: null
+                submitStartTime: yesterdayDate,
+                submitEndTime: yesterdayDate,
             }
         }
+    }
+
+    /**
+     * 订单类型
+     */
+    orderTypeSelect(value) {
+        if (value === 'ZYYH') {
+            this.setState({
+                isPayDisabled: true
+            })
+        } else {
+            this.setState({
+                isPayDisabled: false
+            })
+        }
+    }
+
+    /**
+     * 分页查询
+     * @param {number} goto 跳转页码
+     */
+    handlePaginationChange(goto) {
+        this.current = goto;
+        const searchData = this.searchData;
+        searchData.page = goto;
+        this.props.fetchOrderList({
+            ...Utils.removeInvalid(searchData)
+        })
     }
 
     /**
@@ -190,7 +212,7 @@ class OrderManagementList extends Component {
      */
     handleJoiningChoose = ({ record }) => {
         this.setState({
-            joiningChoose: record,
+            franchiseeId: record,
         });
     }
 
@@ -199,7 +221,7 @@ class OrderManagementList extends Component {
      */
     handleSubCompanyChoose = ({ record }) => {
         this.setState({
-            subCompanyChoose: record,
+            branchCompanyId: record,
         });
     }
 
@@ -208,7 +230,7 @@ class OrderManagementList extends Component {
      */
     handleJoiningClear() {
         this.setState({
-            joiningChoose: null,
+            franchiseeId: null,
         });
     }
 
@@ -217,7 +239,7 @@ class OrderManagementList extends Component {
      */
     handleSubCompanyClear() {
         this.setState({
-            subCompanyChoose: null,
+            branchCompanyId: null,
         });
     }
 
@@ -230,7 +252,12 @@ class OrderManagementList extends Component {
             content: '确认批量审核？',
             onOk: () => {
                 // ToDo:带入参数（this.state.choose），调接口
-                message.success('批量审批成功！');
+                modifyBatchApproval(
+                    this.state.choose
+                ).then(() => {
+                    this.getSearchData();
+                    message.success('批量审批成功！');
+                })
             },
             onCancel() {},
         });
@@ -240,37 +267,55 @@ class OrderManagementList extends Component {
      * 批量取消
      */
     handleOrderBatchCancel() {
-        confirm({
-            title: '批量取消',
-            content: '确认批量取消？',
-            onOk: () => {
-                // ToDo:带入参数（this.state.choose），调接口
-                message.success('批量取消成功！');
-            },
-            onCancel() {},
-        });
+        const { choose } = this.state;
+        this.props.modifyCauseModalVisible({ isShow: true, choose})
+        .then(() => {
+            this.getSearchData();
+            message.success('批量取消成功！');
+        })
+    }
+
+    /**
+     * 获取表单信息,并查询列表
+     */
+    getSearchData() {
+        const {
+            id,
+            orderType,
+            orderState,
+            paymentState,
+            cellphone,
+            shippingState,
+        } = this.props.form.getFieldsValue();
+
+        const { submitStartTime, submitEndTime } = this.time;
+        const { franchiseeId, branchCompanyId } = this.state;
+        this.current = 1;
+        this.searchData = {
+            id,
+            orderState: orderState === 'ALL' ? null : orderState,
+            orderType: orderType === 'ALL' ? null : orderType,
+            paymentState: paymentState === 'ALL' ? null : paymentState,
+            cellphone,
+            shippingState: shippingState === 'ALL' ? null : shippingState,
+            franchiseeId,
+            branchCompanyId,
+            // submitStartTime,
+            // submitEndTime,
+            pageSize: PAGE_SIZE,
+        }
+        const searchData = this.searchData;
+        searchData.page = 1;
+        this.props.fetchOrderList({
+            ...Utils.removeInvalid(searchData)
+        })
     }
 
     /**
      * 查询
      */
     handleOrderSearch() {
-        // ToDo:发请求，查询（以下是需要的所有参数）
-
-        // const {
-        //     orderNumber,
-        //     orderType,
-        //     orderStatus,
-        //     payStatus,
-        //     consigneePhone,
-        //     logisticsStatus,
-        // } = this.props.form.getFieldsValue();
-        // 日期对象
-        // console.log(this.time)
-        // 加盟商值清单数据对象
-        // console.log(this.state.joiningChoose)
-        // 子公司值清单数据对象
-        // console.log(this.state.subCompanyChoose)
+        this.getSearchData();
     }
 
     /**
@@ -278,11 +323,12 @@ class OrderManagementList extends Component {
      */
     handleOrderReset() {
         this.setState({
-            rengeTime: null
+            rengeTime: yesterdayrengeDate,
+            isPayDisabled: false
         });
         this.time = {
-            minSettledDate: null,
-            maxSettledDate: null
+            submitStartTime: yesterdayDate,
+            submitEndTime: yesterdayDate,
         }
         this.joiningSearchMind.handleClear();
         this.subCompanySearchMind.handleClear();
@@ -293,7 +339,9 @@ class OrderManagementList extends Component {
      * 导出
      */
     handleOrderOutput() {
-        // ToDo:导出excel
+        const searchData = this.searchData;
+        searchData.page = this.current;
+        Utils.exportExcel(exportOrderList, ...Utils.removeInvalid(searchData));
     }
 
     /**
@@ -310,25 +358,44 @@ class OrderManagementList extends Component {
     // 选择操作项
     handleSelect(record, items) {
         const { key } = items;
-        const { orderNumber } = record;
+        const { cancelReason, id } = record;
         switch (key) {
             case 'tableAudit':
-                this.props.modifyAuditModalVisible({isVisible: true, record });
-                break;
-            case 'tableCancel':
                 confirm({
-                    title: '确定取消？',
+                    title: '审核',
+                    content: '确认审核？',
                     onOk: () => {
+                        modifyApprovalOrder({
+                            id
+                        }).then(res => {
+                            this.getSearchData();
+                            message.success(res.message);
+                        }).catch(err => {
+                            message.success(err.message);
+                        })
                     },
                     onCancel() {},
                 });
+                break;
+            case 'tableCancel':
+                this.props.modifyCauseModalVisible({ isShow: true, id })
+                break;
+            case 'tableRetransfer':
+                modifyResendOrder({
+                    id: record.id
+                }).then(res => {
+                    this.getSearchData();
+                    message.success(res.message);
+                }).catch(err => {
+                    message.success(err.message);
+                })
                 break;
             case 'tableShowFailure':
                 Modal.info({
                     title: '取消原因',
                     content: (
                         <div>
-                            <p>{orderNumber}</p>
+                            <p>{cancelReason}</p>
                         </div>
                     ),
                     okText: '返回',
@@ -347,32 +414,39 @@ class OrderManagementList extends Component {
      * @param {object} record 单行数据
      */
     renderOperation(text, record) {
-        const { orderNumber, orderStatus, logisticsStatus } = record;
+        const { id, orderStateDesc, shippingStateDesc } = record;
         const pathname = window.location.pathname;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
                 <Menu.Item key={0}>
-                    <Link to={`${pathname}/orderDetails/${orderNumber}`}>查看订单详情</Link>
+                    <Link to={`${pathname}/orderDetails/${id}`}>查看订单详情</Link>
                 </Menu.Item>
                 {
-                    (orderStatus === '待人工审核'
-                    || orderStatus === '待审核')
+                    (orderStateDesc === '待审核'
+                    || orderStateDesc === '待人工审核')
                     && <Menu.Item key="tableAudit">
                         <a target="_blank" rel="noopener noreferrer">审核</a>
                     </Menu.Item>
                 }
                 {
-                    (logisticsStatus !== '待收货'
-                    && logisticsStatus !== '未送达'
-                    && logisticsStatus !== '已签收')
+                    shippingStateDesc !== '待收货'
+                    && shippingStateDesc !== '未传送'
+                    && shippingStateDesc !== '已签收'
+                    && orderStateDesc !== '已取消'
                     && <Menu.Item key="tableCancel">
                         <a target="_blank" rel="noopener noreferrer">取消</a>
                     </Menu.Item>
                 }
                 {
-                    orderStatus === '已取消'
+                    orderStateDesc === '已取消'
                     && <Menu.Item key="tableShowFailure">
                         <a target="_blank" rel="noopener noreferrer">查看取消原因</a>
+                    </Menu.Item>
+                }
+                {
+                    shippingStateDesc === '仓库拒收'
+                    && <Menu.Item key="tableRetransfer">
+                        <a target="_blank" rel="noopener noreferrer">重新传送</a>
                     </Menu.Item>
                 }
             </Menu>
@@ -387,6 +461,7 @@ class OrderManagementList extends Component {
     }
     render() {
         const { getFieldDecorator } = this.props.form;
+        const { orderListData } = this.props;
         columns[columns.length - 1].render = this.renderOperation;
         return (
             <div className={`${orderML}`}>
@@ -399,7 +474,7 @@ class OrderManagementList extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">订单编号</span>
-                                            {getFieldDecorator('orderNumber')(
+                                            {getFieldDecorator('id')(
                                                 <Input
                                                     className="input"
                                                     placeholder="订单编号"
@@ -418,6 +493,7 @@ class OrderManagementList extends Component {
                                             })(
                                                 <Select
                                                     size="default"
+                                                    onChange={this.orderTypeSelect}
                                                 >
                                                     {
                                                         orderTypeOptions.data.map((item) =>
@@ -439,7 +515,7 @@ class OrderManagementList extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">订单状态</span>
-                                            {getFieldDecorator('orderStatus', {
+                                            {getFieldDecorator('orderState', {
                                                 initialValue: orderStatusOptions.defaultValue
                                             })(
                                                 <Select
@@ -467,11 +543,12 @@ class OrderManagementList extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">支付状态</span>
-                                            {getFieldDecorator('payStatus', {
+                                            {getFieldDecorator('paymentState', {
                                                 initialValue: payStatusOptions.defaultValue
                                             })(
                                                 <Select
                                                     size="default"
+                                                    disabled={this.state.isPayDisabled}
                                                 >
                                                     {
                                                         payStatusOptions.data.map((item) =>
@@ -559,8 +636,9 @@ class OrderManagementList extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">收货人电话</span>
-                                            {getFieldDecorator('consigneePhone')(
+                                            {getFieldDecorator('cellphone')(
                                                 <Input
+                                                    maxLength={11}
                                                     className="input"
                                                     placeholder="收货人电话"
                                                 />
@@ -573,7 +651,7 @@ class OrderManagementList extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">物流状态</span>
-                                            {getFieldDecorator('logisticsStatus', {
+                                            {getFieldDecorator('shippingState', {
                                                 initialValue: logisticsStatusOptions.defaultValue
                                             })(
                                                 <Select
@@ -616,12 +694,14 @@ class OrderManagementList extends Component {
                                     <FormItem>
                                         <Button
                                             size="default"
+                                            disabled={this.state.choose.length === 0}
                                             onClick={this.handleOrderBatchReview}
                                         >批量审核</Button>
                                     </FormItem>
                                     <FormItem>
                                         <Button
                                             size="default"
+                                            disabled={this.state.choose.length === 0}
                                             onClick={this.handleOrderBatchCancel}
                                         >批量取消</Button>
                                     </FormItem>
@@ -653,14 +733,21 @@ class OrderManagementList extends Component {
                 </div>
                 <div className="area-list">
                     <Table
-                        dataSource={datas}
+                        dataSource={orderListData.data}
                         columns={columns}
                         rowSelection={this.rowSelection}
-                        rowKey="orderNumber"
+                        rowKey="id"
+                        pagination={{
+                            current: orderListData.pageNum,
+                            total: orderListData.total,
+                            pageSize: orderListData.pageSize,
+                            showQuickJumper: true,
+                            onChange: this.handlePaginationChange
+                        }}
                     />
                 </div>
                 <div>
-                    <AuditModal />
+                    <CauseModal getSearchData={this.getSearchData} />
                 </div>
             </div>
         );
@@ -669,7 +756,9 @@ class OrderManagementList extends Component {
 
 OrderManagementList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    modifyAuditModalVisible: PropTypes.func,
+    orderListData: PropTypes.objectOf(PropTypes.any),
+    modifyCauseModalVisible: PropTypes.func,
+    fetchOrderList: PropTypes.func,
 }
 
 OrderManagementList.defaultProps = {

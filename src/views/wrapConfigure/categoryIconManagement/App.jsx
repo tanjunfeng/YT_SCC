@@ -68,7 +68,7 @@ class CategoryIconManagement extends Component {
         const { lv1Name, lv2Name, lv3Name, lv3Id } = this.state;
         const firstLists = firstArr.map(item =>
             (<li
-                key={item.categoryName}
+                key={item.id}
             >
                 <a
                     className={
@@ -92,7 +92,7 @@ class CategoryIconManagement extends Component {
         );
         const secondLists = secondArr.map(item =>
             (<li
-                key={item.categoryName}
+                key={item.id}
             >
                 <a
                     className={
@@ -116,7 +116,7 @@ class CategoryIconManagement extends Component {
         );
         const thirdLists = thirdArr.map(item =>
             (<li
-                key={item.categoryName}
+                key={item.id}
             >
                 <a
                     className={
@@ -166,7 +166,6 @@ class CategoryIconManagement extends Component {
                                     <ul className="category-card-ul">{thirdLists}</ul>
                                 </Card>
                             }
-                            
                         </Col>
                         <Col
                             span={8}
