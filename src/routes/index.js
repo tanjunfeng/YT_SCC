@@ -8,38 +8,20 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Bundle from 'freed-spa/src/bundle';
 /* eslint-disable */
-import Home from 'bundle-loader?lazy!../views/home/App';
 // 供应商录入列表
 import SupplierInputList from 'bundle-loader?lazy!../views/supplier/supplierInputList';
-// 供应商管理列表
-import SupplierManageList from 'bundle-loader?lazy!../views/supplier/supplierManageList';
-// 供应区域列表管理
-import SupplierAreaManagement from 'bundle-loader?lazy!../views/supplier/supplierAreaManagement';
-// 供应商入驻申请列表
-import SuppliersApplicationList from 'bundle-loader?lazy!../views/supplier/suppliersApplicationList';
 // 供应商入驻申请列表(改)
 import SuppliersAppList from 'bundle-loader?lazy!../views/supplier/suppliersAppList';
-// 供应商修改资料申请
-import SupplierModifyApplication from 'bundle-loader?lazy!../views/supplier/supplierModifyApplication';
 // 供应商详情
 import SupplierDetail from 'bundle-loader?lazy!../views/supplier/detail';
+
 // 添加供应商
 import AddSupplier from 'bundle-loader?lazy!../views/supplier/addEdit';
-// 在售商品管理
-import OnSale from 'bundle-loader?lazy!../views/commodity/onSale';
-// 待售商品管理
-import ForSale from 'bundle-loader?lazy!../views/commodity/forSale';
-// 商品详情
-import SaleDetail from 'bundle-loader?lazy!../views/commodity/detail';
 // 商品分类管理
 import ClassifiedList from 'bundle-loader?lazy!../views/commodity/classifiedList';
 // 商品管理列表
 import ManagementList from 'bundle-loader?lazy!../views/commodity/managementList';
 import CommodifyDetail from 'bundle-loader?lazy!../views/commodity/commodifyDetail';
-// 销售价格
-import FindPriceInfo from 'bundle-loader?lazy!../views/commodity/findPriceInfo';
-// 销售价格
-import PurchasingPice from 'bundle-loader?lazy!../views/commodity/purchasingPice';
 // 分类列表页商品排序管理
 import CateListGoodsSortManage from 'bundle-loader?lazy!../views/SysConfig/CateListGoodsSortManage';
 // 数据字典
@@ -198,26 +180,6 @@ const routes = [
                     </Switch>
                 )
             },
-            // 商品管理列表
-            {
-                path: '/managementList',
-                parent: 'gylspgl',
-                key: 'managementList',
-                component: () => (
-                    <Switch>
-                        <Route
-                            path="/managementList"
-                            exact
-                            render={() => <Bundle load={ManagementList}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/managementList/commodifyDetail/:id"
-                            exact
-                            render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
-                        />
-                    </Switch>
-                )
-            },
             // 商品分类列表
             {
                 path: '/classifiedList',
@@ -236,108 +198,13 @@ const routes = [
                         />
                     </Switch>
                 )
-            },
-            // 商品采购关系维护
-            {
-                path: '/procurementMaintenance',
-                parent: 'gylspgl',
-                key: 'procurementMaintenance',
-                component: () => (
-                    <Switch>
-                        <Route
-                            path="/procurementMaintenance"
-                            exact
-                            render={() => <Bundle load={ProcurementMaintenance}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/procurementMaintenance/:id"
-                            exact
-                            render={() => <Bundle load={ProcurementMaintenance}>{(App) => <App />}</Bundle>}
-                        />
-                    </Switch>
-                )
-            },
-            // 商品销售关系维护
-            {
-                path: '/salesMaintenance',
-                parent: 'gylspgl',
-                key: 'salesMaintenance',
-                component: () => (
-                    <Switch>
-                        <Route
-                            path="/salesMaintenance"
-                            exact
-                            render={() => <Bundle load={SalesMaintenance}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/salesMaintenance/:id"
-                            render={() => <Bundle load={SalesMaintenance}>{(App) => <App />}</Bundle>}
-                        />
-                    </Switch>
-                )
-            },
+            }
         ]
     },
     {
         key: 'gysgl',
         iconType: 'solution',
         routes: [
-            // 供应商管理列表
-            {
-                path: '/supplierList',
-                parent: 'gysgl',
-                key: 'supplierManagement',
-                component: () => (
-                    <Switch>
-                        <Route
-                            path="/supplierList"
-                            exact
-                            render={() => (<Bundle load={ManagementList}>
-                                {(App) => <App />}
-                            </Bundle>)}
-                        />
-                        <Route
-                            path="/supplierList/:id"
-                            exact
-                            render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/supplierList/:id/:type"
-                            render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
-                        />
-                    </Switch>
-                )
-            },
-            // 供应商入驻申请列表
-            {
-                path: '/applicationList',
-                parent: 'gysgl',
-                key: 'supplierApplication',
-                component: () => (
-                    <Switch>
-                        <Route
-                            path="/applicationList"
-                            exact
-                            render={() => (<Bundle load={SuppliersAppList}>
-                                {(App) => <App />}
-                            </Bundle>)}
-                        />
-                        <Route
-                            path="/applicationList/add"
-                            exact
-                            render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/applicationList/edit/:id"
-                            render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
-                            path="/applicationList/:id"
-                            render={() => <Bundle load={SupplierDetail}>{(App) => <App />}</Bundle>}
-                        />
-                    </Switch>
-                )
-            },
             // 供应商入驻申请列表(改)
             {
                 path: '/suppliersAppList',

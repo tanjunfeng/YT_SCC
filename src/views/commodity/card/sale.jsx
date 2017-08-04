@@ -16,7 +16,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PAGE_SIZE } from '../../../constant';
 import {
-    fetchGetProdPurchaseById,
     fecthCheckMainSupplier,
     fetchUpdateProdPurchase,
     fetchQueryProdByCondition,
@@ -31,7 +30,6 @@ import {
         queryProdPurchaseExtByCondition: state.toJS().commodity.queryProdPurchaseExtByCondition,
     }),
     dispatch => bindActionCreators({
-        fetchGetProdPurchaseById,
         fecthCheckMainSupplier,
         fetchUpdateProdPurchase,
         fetchQueryProdByCondition,
@@ -209,7 +207,6 @@ class SaleCard extends Component {
     }
 
     handleChangeStatus(e, item) {
-        console.log(item)
         const { handleChangeStatus } = this.props;
         handleChangeStatus({
             id: item.id,
@@ -337,7 +334,6 @@ SaleCard.propTypes = {
     prefixCls: PropTypes.string,
     index: PropTypes.number,
     fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),
-    fetchGetProdPurchaseById: PropTypes.func,
     isSale: PropTypes.bool,
     initalValue: PropTypes.objectOf(PropTypes.any),
     handleDelete: PropTypes.func,

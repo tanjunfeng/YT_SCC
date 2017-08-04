@@ -5,9 +5,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import SearchMind from '../../../components/searchMind';
 import {
-    fetchTest,
-} from '../../../actions/classifiedList';
-import {
     fetchAddProdPurchase,
 } from '../../../actions';
 import {
@@ -110,18 +107,6 @@ class ProdPurchaseModal extends Component {
 
     handleCancel(record) {
         this.props.productAddPriceVisible({isVisible: false, record});
-    }
-
-    // handleTestChoose(record) {
-    //     console.log(record);
-    // }
-
-    handleTestFetch = ({ value, pagination }) => {
-        console.log(value, pagination);
-
-        return fetchTest({
-            value,
-        });
     }
 
     handlePriceChange(result) {

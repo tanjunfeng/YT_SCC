@@ -14,7 +14,8 @@ import moment from 'moment';
 import {
     Icon, Input, Form, Button,
     Select, Row, Col, DatePicker,
-    Checkbox, message
+    Checkbox, message,
+    InputNumber
 } from 'antd';
 
 import Utils from '../../../util/util';
@@ -467,7 +468,10 @@ class LicenseInfo extends PureComponent {
                                                 rules: [{ required: true, message: '请输入注册资本!' }],
                                                 initialValue: supplierlicenseInfo.registeredCapital
                                             })(
-                                                <Input
+                                                <InputNumber
+                                                    style={{width: '200px'}}
+                                                    min={0}
+                                                    max={99999999}
                                                     placeholder="注册资本"
                                                 />
                                             )}
@@ -481,7 +485,10 @@ class LicenseInfo extends PureComponent {
                                                 rules: [{ required: true, message: '请输入供应商质保金收取金额!' }],
                                                 initialValue: supplierlicenseInfo.guaranteeMoney
                                             })(
-                                                <Input
+                                                <InputNumber
+                                                    style={{width: '200px'}}
+                                                    min={0}
+                                                    max={99999999}
                                                     placeholder="供应商质保金收取金额"
                                                 />
                                             )}

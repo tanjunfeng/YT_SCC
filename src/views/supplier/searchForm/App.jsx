@@ -346,7 +346,7 @@ class SearchForm extends Component {
                                 搜索
                             </Button>
                         </FormItem>
-                        {/* {
+                         {
                             this.props.isSuplierAddMenu &&
                             <FormItem>
                                 <Button
@@ -357,7 +357,7 @@ class SearchForm extends Component {
                                     创建
                                 </Button>
                             </FormItem>
-                        } */}
+                        } 
                         <FormItem>
                             <Button size="default" onClick={this.handleResetValue}>
                                 重置
