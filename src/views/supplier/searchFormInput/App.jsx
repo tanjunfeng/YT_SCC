@@ -75,7 +75,7 @@ class SearchForm extends Component {
             providerNo,
             registLicenceNumber,
             providerType: providerType === '0' ? null : providerType,
-            status: status === '-1' ? null : status,
+            status: status === '0' ? null : status,
             grade: grade === '0' ? null : grade,
             settledDate: this.state.settledDate
         };
