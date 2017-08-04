@@ -191,24 +191,30 @@ class SaleCard extends Component {
     }
 
     handleDelete(e) {
+        e.stopPropagation();
         const { handleDelete } = this.props;
         const id = e.target.getAttribute('data-id');
-        handleDelete(id);
-        // Modal.confirm({
-        //     title: '删除',
-        //     content: '是否删除当前关系列表?',
-        //     onOk: () => {
-        //         this.props.fetchDeleteProdPurchaseById({
-        //             id,
-        //             productId
-        //         })
-        //         .catch((res) =>
-        //             message.success(res.message),
-        //             this.props.fetchQueryProdByCondition()
-        //         );
-        //     },
-        //     onCancel() { },
-        // });
+        Modal.confirm({
+            title: '删除',
+            content: '是否删除当前关系列表?',
+            onOk: () => {
+                handleDelete(id);
+            },
+            onCancel() { },
+        });
+    }
+
+    handleCardClick = (item) => {
+        this.props.handleCardClick(item)
+    }
+
+    handleChangeStatus(e, item) {
+        console.log(item)
+        const { handleChangeStatus } = this.props;
+        handleChangeStatus({
+            id: item.id,
+            status: item.status === 1 ? 0 : 1,
+        })
     }
 
     renderCard = (datas) => {
@@ -225,6 +231,7 @@ class SaleCard extends Component {
                             `${prefixCls}-card-${item.status}
                                 ${prefixCls}-supplierType-img`
                         }
+                        onClick={() => this.handleCardClick(item)}
                     >
                         <a
                             className={`${prefixCls}-close`}
@@ -276,10 +283,13 @@ class SaleCard extends Component {
                             <span>建议零售价(元) : </span>
                             <span>{item.suggestPrice}</span>
                         </p>
-                        <div className={`${prefixCls}-checkboxGroup`} >
+                        <div
+                            className={`${prefixCls}-checkboxGroup`}
+                            onClick={(e) => e.stopPropagation()}
+                        >
                             <Checkbox
+                                onClick={(e) => this.handleChangeStatus(e, item)}
                                 checked={!!item.status}
-                                onChange={this.handleCheckUse}
                             >
                                 启用
                             </Checkbox>
@@ -331,13 +341,15 @@ SaleCard.propTypes = {
     isSale: PropTypes.bool,
     initalValue: PropTypes.objectOf(PropTypes.any),
     handleDelete: PropTypes.func,
+    handleChangeStatus: PropTypes.func,
 };
 
 SaleCard.defaultProps = {
     prefixCls: 'card-line',
     isSale: false,
     initalValue: {},
-    handleDelete: () => {}
+    handleDelete: () => {},
+    handleChangeStatus: () => {}
 };
 
 export default Form.create()(SaleCard);

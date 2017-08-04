@@ -175,7 +175,7 @@ class SearchForm extends Component {
     }
 
     handleCanpanyChoose = ({ record, compKey, index, event }) => {
-        this.name = record.id;
+        this.name = record.name;
     }
 
     handleClear = () => {
@@ -193,7 +193,6 @@ class SearchForm extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls } = this.props;
-        console.log(this.props.pubFetchValueList)
         return (
             <div className={`${prefixCls}-content manage-form`}>
                 <div style={{fontSize: 16, fontWeight: 900}}>

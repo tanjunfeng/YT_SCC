@@ -72,7 +72,7 @@ class BasicInfo extends PureComponent {
                     companyName,
                     grade,
                     settledTime: settledTime._d * 1,
-                    spNo: this.props.supplierId
+                    spNo: isEdit ? detailData.supplierBasicInfo.spNo : this.props.supplierId
                 };
                 this.props.addSupplierMessage1({supplierBasicInfo, saleRegionInfo})
                 onGoTo('2');
@@ -113,7 +113,8 @@ class BasicInfo extends PureComponent {
             supplierBasicInfo = {},
             saleRegionInfo={}
         } = initData;
-        const defaultVaue = saleRegionInfo.json ? Tools.decodeArea(JSON.parse(saleRegionInfo.json)) : []
+        const defaultVaue = saleRegionInfo.json ? Tools.decodeArea(JSON.parse(saleRegionInfo.json)) : [];
+        console.log(defaultVaue)
         return (
             <div className="supplier-add-message">
                 <Form>

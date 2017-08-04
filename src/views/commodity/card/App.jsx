@@ -194,7 +194,8 @@ class Cardline extends Component {
         })
     }
 
-    handleDelete() {
+    handleDelete(e) {
+        e.stopPropagation();
         const { getProdPurchaseByIds } = this.props;
         const { id, productId } = getProdPurchaseByIds;
         Modal.confirm({

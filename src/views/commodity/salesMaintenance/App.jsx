@@ -29,6 +29,11 @@ import Cardline from '../card';
 import { PAGE_SIZE } from '../../../constant';
 import { fetchPriceInfo } from '../../../actions/procurement';
 import SellPriceModal from '../sellPriceModal'
+import {
+    postSellPrice,
+    updateSellPrice,
+    updatePriceStatus
+} from '../../../actions/commodity';
 
 @connect(
     state => ({
@@ -48,7 +53,10 @@ import SellPriceModal from '../sellPriceModal'
         modifyCheckReasonVisible,
         fecthGetProdPurchaseById,
         fetchGetProductById,
-        fetchPriceInfo
+        fetchPriceInfo,
+        postSellPrice,
+        updateSellPrice,
+        updatePriceStatus
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
@@ -57,7 +65,6 @@ class ProcurementMaintenance extends PureComponent {
 
         this.handleFormReset = this.handleFormReset.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
-        this.handleAdd = this.handleAdd.bind(this);
 
         this.searchForm = {};
         this.current = 1;
@@ -67,7 +74,9 @@ class ProcurementMaintenance extends PureComponent {
             // 默认值
             value: [],
             // 控制主供应商选项唯一
-            disabled: false
+            disabled: false,
+            // 是否是编辑
+            isEdit: false
         }
     }
 
@@ -82,12 +91,6 @@ class ProcurementMaintenance extends PureComponent {
         this.props.fetchGetProductById({
             productId: match.params.id
         });
-    }
-
-    /**
-     * 新增
-     */
-    handleAdd() {
     }
 
     /**
@@ -143,22 +146,74 @@ class ProcurementMaintenance extends PureComponent {
             id,
             productId: getProductById.id,
         }).then(() => {
-            this.handlePaginationChange();
+            const { getProductById = {} } = this.props;
+            this.props.fetchPriceInfo({
+                pageNum: this.current,
+                pageSize: PAGE_SIZE,
+                productId: getProductById.id,
+                ...this.data
+            });
         })
     }
 
     handleFormSearch = (data) => {
+        this.data = data;
         const { getProductById = {} } = this.props;
         this.props.fetchPriceInfo({
             pageNum: this.current,
             pageSize: PAGE_SIZE,
             productId: getProductById.id,
-            ...data
+            ...this.data
         });
     }
 
     handleAdd = () => {
+        const { getProductById } = this.props
+        this.setState({
+            datas: getProductById,
+            show: true,
+        })
+    }
 
+    handleCardClick = (data) => {
+        this.setState({
+            datas: data,
+            isEdit: true,
+            show: true,
+        })
+    }
+
+    handleClose = () => {
+        this.setState({
+            show: false,
+            isEdit: false
+        })
+    }
+
+    handlePostAdd = (data, isEdit) => {
+        const { getProductById = {} } = this.props;
+        const service = isEdit ? this.props.updateSellPrice : this.props.postSellPrice;
+        service(data).then(() => {
+            this.props.fetchPriceInfo({
+                pageNum: this.current,
+                pageSize: PAGE_SIZE,
+                productId: getProductById.id,
+                ...this.data
+            });
+            this.handleClose()
+        })
+    }
+
+    handleChangeStatus = (data) => {
+        const { getProductById = {} } = this.props;
+        this.props.updatePriceStatus(data).then(() => {
+            this.props.fetchPriceInfo({
+                pageNum: this.current,
+                pageSize: PAGE_SIZE,
+                productId: getProductById.id,
+                ...this.data
+            });
+        });
     }
 
     render() {
@@ -178,10 +233,21 @@ class ProcurementMaintenance extends PureComponent {
                     <Cardline.SaleCard
                         initalValue={stepPriceList.sellPriceInfoVos || []}
                         handleDelete={this.handleDelete}
+                        handleCardClick={this.handleCardClick}
+                        handleChangeStatus={this.handleChangeStatus}
                         isSale
                     />
                 </div>
-                <SellPriceModal />
+                {
+                    this.state.show &&
+                    <SellPriceModal
+                        datas={this.state.datas}
+                        handleClose={this.handleClose}
+                        handleAdd={this.handleAdd}
+                        handlePostAdd={this.handlePostAdd}
+                        isEdit={this.state.isEdit}
+                    />
+                }
             </div>
         );
     }
@@ -196,10 +262,12 @@ ProcurementMaintenance.propTypes = {
     prefixCls: PropTypes.string,
     getProductById: PropTypes.objectOf(PropTypes.any),
     fetchPriceInfo: PropTypes.func,
+    postSellPrice: PropTypes.func,
 }
 
 ProcurementMaintenance.defaultProps = {
     prefixCls: 'card-line',
+    postSellPrice: () => {}
 };
 
 export default withRouter(Form.create()(ProcurementMaintenance));

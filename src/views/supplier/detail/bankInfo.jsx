@@ -55,7 +55,7 @@ class BankInfo extends Component {
                             <Row>
                                 <Col span={8}><span>银行开户许可证电子版：</span>
                                     <span>
-                                        <a href={supplierBankInfo.bankAccountLicense}>点击查看</a>
+                                        <a href={supplierBankInfo.bankAccountLicense} target="_blank">点击查看</a>
                                     </span>
                                 </Col>
                                 {

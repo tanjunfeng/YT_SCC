@@ -112,7 +112,7 @@ class ShowForm extends Component {
                         {
                             this.props.isSale &&
                             <Col span={8} className="css-col">
-                                <span>税率:</span>
+                                <span>承诺发货时间:</span>
                                 <span>下单后{deliveryTime}天内发货</span>
                             </Col>
                         }

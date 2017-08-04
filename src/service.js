@@ -562,3 +562,9 @@ export const supplierAdrSearchBox = (params) => http.get('/supplier/supplierAdrS
 export const findStepPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
 // 删除价格区间
 export const deleteSellPriceById = (params) => http.get('/prodSell/deleteSellPriceById', params);
+// 新增销售价格区间
+export const addStepSellPrice = (params) => http.post('/prodSell/addSellPrice', params);
+// 根据id修改价格区间
+export const updateStepSellPrice = (params) => http.post('/prodSell/updateSellPrice', params);
+// 修改供应商
+export const updateSellPriceStatus = (params) => http.get('/prodSell/updateSellPriceStatus', params);

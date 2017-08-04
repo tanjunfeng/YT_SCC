@@ -139,7 +139,7 @@ class LicenseInfo extends Component {
                                     </span>
                                 </Col>
                                 <Col span={8}><span>营业执照副本电子版：</span>
-                                    <span><a href={supplierlicenseInfo.registLicencePic}>点击查看</a></span>
+                                    <span><a href={supplierlicenseInfo.registLicencePic} target="_blank">点击查看</a></span>
                                 </Col>
                             </Row>
                             <Row>
