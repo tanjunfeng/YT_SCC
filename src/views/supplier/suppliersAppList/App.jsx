@@ -27,7 +27,7 @@ import {
 import {
     getSupplierSettledList
 } from '../../../actions/supplier';
-import SearchForm from '../searchForm';
+import SearchForm from '../searchFormList';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import { suppliersAppList } from '../../../constant/formColumns';

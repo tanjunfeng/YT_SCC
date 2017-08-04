@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, InputNumber, Checkbox } from 'antd';
+import { Modal, Form, InputNumber, Checkbox, message } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import SearchMind from '../../../components/searchMind';
+import { PAGE_SIZE } from '../../../constant';
 import {
     fetchTest,
 } from '../../../actions/classifiedList';
@@ -16,7 +17,8 @@ import {
 
 import {
     productAddPriceVisible,
-    AddProdPurchase
+    AddProdPurchase,
+    QueryProdPurchaseExtByCondition
 } from '../../../actions/producthome';
 
 const FormItem = Form.Item;
@@ -33,7 +35,8 @@ const FormItem = Form.Item;
         fetchAddProdPurchase,
         productAddPriceVisible,
         pubFetchValueList,
-        AddProdPurchase
+        AddProdPurchase,
+        QueryProdPurchaseExtByCondition
     }, dispatch)
 )
 
@@ -59,7 +62,6 @@ class ProdPurchaseModal extends Component {
         this.setState({
             supplyChoose: record,
         });
-        console.log(this.state.supplyChoose)
     }
 
     /**
@@ -69,7 +71,6 @@ class ProdPurchaseModal extends Component {
         this.setState({
             supplyChoose1: record,
         });
-        console.log(this.state.supplyChoose1)
     }
 
     /**
@@ -79,7 +80,6 @@ class ProdPurchaseModal extends Component {
         this.setState({
             supplyChoose2: record,
         });
-        console.log(this.state.supplyChoose2)
     }
 
 
@@ -89,22 +89,31 @@ class ProdPurchaseModal extends Component {
     handleOk() {
         const { validateFields } = this.props.form;
         const { getProductByIds } = this.props;
+        // console.log(this.state.supplyChoose)
+        // console.log(this.state.supplyChoose1)
+        // console.log(this.state.supplyChoose2)
         validateFields((err, values) => {
-            console.log(values);
+            // console.log(values);
             // TODO post data
             this.props.AddProdPurchase({
-                spId: this.state.supplyChoose1.record.spId,
-                spAdrId: this.state.supplyChoose2.record.spAdrid,
-                productId: getProductByIds.record.id,
-                branchCompanyId: this.state.supplyChoose.record.spId,
+                spId: this.state.supplyChoose1.spId,
+                spAdrId: this.state.supplyChoose2.spAdrid,
+                productId: this.props.getProductByIds.id,
+                branchCompanyId: this.state.supplyChoose2.branchCompanyId,
                 supplierType: values.mainSupplier ? 1 : 0,
-                purchaseInsideNumber: this.props.getProductByIds.record.purchaseInsideNumber,
-                purchasePrice: this.props.getProductByIds.record.purchasePrice,
+                purchaseInsideNumber: this.props.getProductByIds.purchaseInsideNumber,
+                purchasePrice: values.purchasePrice.toFixed(2),
                 // 条码
-                internationalCode: this.props.getProductByIds.internationalCode,
+                internationalCode: values.internationalCode,
                 // 仓库ID
                 distributeWarehouseId: this.state.supplyChoose.id
-            });
+            }).then((res) => {
+                this.props.toAddPriceVisible({isVisible: false});
+                message.success(res.message)
+            }).catch((res) => {
+                this.props.toAddPriceVisible({isVisible: false});
+                message.success(res.success)
+            })
         })
     }
 
