@@ -435,7 +435,7 @@ export const getProdPurchaseById = (params) => http.get('/prodPurchase/getProdPu
 export const findPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
 
 // 新增商品采购关系
-export const fetchAddProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
+export const addProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
 
 // 更新商品采购关系
 export const updateProdPurchase = (params) => http.post('/prodPurchase/updateProdPurchase', params);
@@ -453,7 +453,7 @@ export const changeProPurchaseStatus = (params) => http.get('/prodPurchase/chang
 export const batchChangeProPurchaseStatus = (params) => http.post('/prodPurchase/batchChangeProPurchaseStatus', params);
 
 // 根据条件查询商品价格信息
-export const fetchQueryProdByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
+export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
 
 // 查询商品信息
 export const getProductById = (params) => http.get('/prodPurchase/getProductById', params);
