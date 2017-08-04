@@ -373,6 +373,28 @@ export const uploadImageBase64Data = (params) => http.post('/commonUploadFile/up
 // 查询分类信息
 export const queryCategorys = (params) => http.get('/category/queryAllShowCategories', params);
 
+// 查询所有分类
+export const queryAllCategories = () => http.get('/category/queryAllCategories');
+
+/**
+ * 修改排序
+ * @param id
+ * @param sortOrder
+ * @param newSortOrder
+ */
+export const updateSortNum = ({ id, newSortOrder }) => (
+    http.get('/category/updateSortNum', { id, newSortOrder })
+);
+
+/**
+ * 修改展示状态
+ * @param id
+ * @param displayStatus
+ */
+export const updateShowStatus = ({ id, displayStatus }) => (
+    http.get('/category/updateShowStatus', { id, displayStatus })
+);
+
 // 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
 export const saveInput = (params) => http.post('/rk/saveInput', params);
 

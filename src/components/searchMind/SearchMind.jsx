@@ -148,11 +148,6 @@ class SearchMind extends PureComponent {
 
             this.searchDelayTimerId = setTimeout(() => this.query(), delaySend);
         }
-        if (nextProps.defaultValue !== this.props.defaultValue) {
-            this.setState({
-                value: nextProps.defaultValue
-            })
-        }
     }
 
     /**

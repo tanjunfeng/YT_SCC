@@ -18,6 +18,23 @@ const TreeNode = Tree.TreeNode;
 const confirm = Modal.confirm;
 
 /**
+ * 获取有效的数据长度，用于 TreeRow 进行输入判定
+ * @param data
+ * @return {number}
+ */
+const getValidSize = (data) => {
+    let len = 0;
+
+    data.forEach(item => {
+        if (item.sort !== null) {
+            len++;
+        }
+    });
+
+    return len;
+}
+
+/**
  * 循环输出 treeNode 节点
  *
  * @param data
@@ -37,16 +54,22 @@ const renderTreeNode = (data, handleChangeSort, handleChangeStatus) => {
 
         const children = item.children;
 
+        // 这里由js 自己进行序号处理
+        const sort = item.sort === null ? null : item.sort;
+
+        const validSize = getValidSize(data);
+
         return (
             <TreeNode
                 key={item.key}
                 index={i}
+                sort={sort}
                 parentKey={item.parentKey}
-                disabled={!item.status}
+                disabled={item.status === 1}
                 title={
                     <TreeRow
-                        index={i}
-                        max={data.length}
+                        sort={sort}
+                        max={validSize}
                         handleChangeSort={handleChangeSort}
                         handleChangeStatus={handleChangeStatus}
                         item={item}
@@ -78,7 +101,7 @@ class LevelTree extends PureComponent {
         // 所有可展开的节点
         this.allExpandedKeys = [];
         // 顶层所有第一级节点
-        this.topKeys =[];
+        this.topKeys = [];
 
         this.handleExpand = ::this.handleExpand;
         this.handleAllExpanded = ::this.handleAllExpanded;
@@ -93,9 +116,6 @@ class LevelTree extends PureComponent {
             const keys = findKeys(nextProps.data);
             this.allExpandedKeys = keys.all;
             this.topKeys = keys.top;
-            // this.setState({
-            //     data: nextProps.data,
-            // });
         }
     }
 
@@ -141,7 +161,7 @@ class LevelTree extends PureComponent {
 
         confirm({
             title: '提示',
-            content: `是否${value === '0' ? '隐藏' : '显示'}${msg}`,
+            content: `是否${value === '1' ? '隐藏' : '显示'}${msg}`,
             onOk: this.handleOk,
             onCancel: this.handleCancel,
         });
@@ -154,9 +174,9 @@ class LevelTree extends PureComponent {
     handleExpand(expandedKeys) {
         // 这里判断下，当前展开的所有 keys 中是否还有顶级节点
         // 如果没有顶级节点了，则手动更新状态
-        const hasTopOpened = this.topKeys.findIndex(key => {
-            return expandedKeys.indexOf(key) >= 0;
-        });
+        const hasTopOpened = this.topKeys.findIndex(key => (
+            expandedKeys.indexOf(key) >= 0
+        ));
 
         this.setState({
             expandedKeys,

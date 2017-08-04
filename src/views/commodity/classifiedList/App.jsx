@@ -9,18 +9,16 @@ import { fromJS } from 'immutable';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { message } from 'antd';
 import Utils from '../../../util/util';
 import LevelTree from '../../../common/levelTree';
-import SearchMind from '../../../components/searchMind';
 import {
     fetchAction,
     receiveData,
-    fetchTest,
+    updateShowStatusAction,
+    updateSortNumAction,
 } from '../../../actions/classifiedList';
-import ClassifiedSelect from '../../../components/threeStageClassification'
 
 @connect(
     state => ({
@@ -37,33 +35,12 @@ class ClassifiedList extends Component {
         this.handleDrop = ::this.handleDrop;
         this.handleChangeSort = ::this.handleChangeSort;
         this.handleChangeStatus = ::this.handleChangeStatus;
-
-        // Test
-        this.handleSave = ::this.handleSave;
-        this.state = {
-            img: null,
-            chooseMe: {},
-            disabled: false,
-            defaultValue: 'Hello',
-        }
     }
 
     componentWillMount() {}
 
     componentDidMount() {
         this.props.fetchAction();
-
-        setTimeout(() => {
-            this.setState({
-                disabled: true,
-            });
-        }, 2000);
-
-        setTimeout(() => {
-            this.setState({
-                defaultValue: 'Hi',
-            });
-        }, 3000);
     }
 
     /**
@@ -74,6 +51,8 @@ class ClassifiedList extends Component {
         const el = event.currentTarget;
         // 当前排序序号
         const sort = el.getAttribute('data-sort');
+        // 当前节点的 key
+        const key = el.getAttribute('data-key');
         // 当前节点的父级 key
         const parentKey = el.getAttribute('data-parentKey');
 
@@ -81,24 +60,32 @@ class ClassifiedList extends Component {
         const fromIndex = sort - 1;
         const toIndex = el.value - 1;
 
-        this.sortData(parentKey, fromIndex, toIndex);
+        this.sortData(parentKey, key, fromIndex, toIndex);
     }
 
     /**
      * 修改展示状态
      * @param value
-     * @param mkey
+     * @param mkey, categoryId
      */
     handleChangeStatus(value, mkey) {
         const $data = fromJS(this.props.data);
 
-        Utils.find($data, mkey, ($finder, deep) => {
-            const $dealData = $data.setIn(
-                deep.concat('status'),
-                parseInt(value, 10)
-            );
+        updateShowStatusAction({
+            id: mkey,
+            displayStatus: value,
+        }).then(() => {
+            // 本地修改
+            Utils.find($data, mkey, ($finder, deep) => {
+                const $dealData = $data.setIn(
+                    deep.concat('status'),
+                    parseInt(value, 10)
+                );
 
-            this.props.receiveData($dealData);
+                this.props.receiveData($dealData);
+            });
+        }).catch(() => {
+            message.error('操作失败');
         });
     }
 
@@ -109,13 +96,13 @@ class ClassifiedList extends Component {
     handleDrop(info) {
         const dropEl = info.node;
         const dragEl = info.dragNode;
-        const { parentKey } = dragEl.props;
+        const { parentKey, eventKey } = dragEl.props;
         const dropIndex = info.dropPosition;
         const dragIndex = dragEl.props.index;
 
         // 同层级可拖放
         if (dropEl.props.parentKey === parentKey) {
-            this.sortData(parentKey, dragIndex, dropIndex);
+            this.sortData(parentKey, eventKey, dragIndex, dropIndex);
         } else {
             message.warning('只能同级操作');
         }
@@ -124,52 +111,50 @@ class ClassifiedList extends Component {
     /**
      * 重新根据参数排序
      * @param parentKey
+     * @param currentKey 当前操作项的 key
      * @param fromIndex 当前的索引值
      * @param toIndex 更到到数据数组的索引值位置
      */
-    sortData(parentKey, fromIndex, toIndex) {
-        let $dealData = fromJS([]);
+    sortData(parentKey, currentKey, fromIndex, toIndex) {
+        // let $dealData = fromJS([]);
         // 格式化数据
-        const $data = fromJS(this.props.data);
+        // const $data = fromJS(this.props.data);
+        const toSort = toIndex + 1;
 
-        Utils.find($data, parentKey, ($finder, deep, $child) => {
-            // 操作跟节点
-            if ($finder === null) {
-                $dealData = Utils.takeTo($data, fromIndex, toIndex);
-            } else {
-                $dealData = $data.setIn(
-                    deep.concat('children'),
-                    Utils.takeTo($child, fromIndex, toIndex)
-                );
-            }
-        });
+        updateSortNumAction({
+            id: currentKey,
+            newSortOrder: toSort,
+        }).then(() => {
 
-        this.props.receiveData($dealData.toJS());
+            /* TODO -- 切勿删除 */
+            /* 这里暂时不再进行前端排序，请求数据之后，重新发送请求获新数据 */
+            // Utils.find($data, parentKey, ($finder, deep, $child) => {
+            //     // 操作跟节点
+            //     if ($finder === null) {
+            //         $dealData = Utils.takeTo($data, fromIndex, toIndex);
+            //     } else {
+            //         $dealData = $data.setIn(
+            //             deep.concat('children'),
+            //             Utils.takeTo($child, fromIndex, toIndex)
+            //         );
+            //     }
+            // });
+            // Utils.find($data, currentKey, ($finder, deep, $child) => {
+            //     $dealData = $data.setIn(
+            //         deep.concat('sort'),
+            //         toSort
+            //     );
+            // })
+            // this.props.receiveData($dealData.toJS());
+            // if ($dealData) {
+            //     message.success('操作成功');
+            // }
 
-        if ($dealData) {
+            this.props.fetchAction();
             message.success('操作成功');
-        }
-    }
-
-    /**
-     * TEST
-     */
-    handleSave(event) {
-        this.setState({
-            img: this.imageUploader.getImageByBase64(),
+        }).catch(() => {
+            message.error('操作失败');
         })
-    }
-
-    handleTestFetch = ({ value, pagination }) => {
-        console.log(value, pagination);
-
-        return fetchTest({
-            value,
-        });
-    }
-
-    handleTestChoose = ({ record, compKey, index, event }) => {
-        console.log(compKey, record)
     }
 
     render() {
@@ -181,100 +166,8 @@ class ClassifiedList extends Component {
                     handleChangeSort={this.handleChangeSort}
                     handleChangeStatus={this.handleChangeStatus}
                 />
-                <div>{this.state.chooseMe.key} - {this.state.chooseMe.name}</div>
-                <ClassifiedSelect
-                    onChange={(data) => {
-                        console.log(data)
-                    }}
-                />
-                {/* Demo 1 */}
-                <SearchMind
-                    compKey="search-mind-key1"
-                    ref={ref => { this.searchMind = ref }}
-                    fetch={(value, pager) => this.handleTestFetch(value, pager)}
-                    addonBefore="供应商 asfsafsafa"
-                    onClear={({ value, raw }) => {
-                        console.log({ value, raw });
-                    }}
-                    onChoosed={this.handleTestChoose}
-                    renderChoosedInputRaw={(data) => (
-                        <div>{data.id} - {data.name}</div>
-                    )}
-                    pageSize={2}
-                    columns={[
-                        {
-                            title: 'Name',
-                            dataIndex: 'name',
-                            width: 150,
-                        }, {
-                            title: 'Address',
-                            dataIndex: 'address',
-                            width: 200,
-                        }
-                    ]}
-                />
-
-                {/* Demo 2 */}
-                <SearchMind
-                    style={{ marginLeft: 10 }}
-                    compKey="search-mind-key2"
-                    fetch={(value, pager) => this.handleTestFetch(value, pager)}
-                    addonBefore="仓库"
-                    onChoosed={this.handleTestChoose}
-                    disabled={this.state.disabled}
-                    renderChoosedInputRaw={(data) => (
-                        <div>{data.id} - {data.name}</div>
-                    )}
-                    pageSize={1}
-                    columns={[
-                        {
-                            title: 'Name',
-                            dataIndex: 'name',
-                            width: 150,
-                        }, {
-                            title: 'Address',
-                            dataIndex: 'address',
-                            width: 200,
-                        }
-                    ]}
-                />
-
-                {/* Demo 3 */}
-                <SearchMind
-                    style={{ marginLeft: 10 }}
-                    compKey="search-mind-key3"
-                    fetch={(value, pager) => this.handleTestFetch(value, pager)}
-                    addonBefore="商品"
-                    onChoosed={this.handleTestChoose}
-                    renderChoosedInputRaw={(data) => (
-                        <div>{data.id} - {data.name}</div>
-                    )}
-                    dropWidth={500}
-                    defaultValue={this.state.defaultValue}
-                    columns={[
-                        {
-                            title: 'Name',
-                            dataIndex: 'name',
-                            width: 150,
-                        }, {
-                            title: 'Address',
-                            dataIndex: 'address',
-                            width: 200,
-                        }
-                    ]}
-                />
             </div>
         )
-    }
-}
-
-ClassifiedList.propTypes = {
-    user: PropTypes.objectOf(PropTypes.string),
-}
-
-ClassifiedList.defaultProps = {
-    user: {
-        name: 'Who?'
     }
 }
 
