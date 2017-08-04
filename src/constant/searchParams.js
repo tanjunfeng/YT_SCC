@@ -278,9 +278,9 @@ export const mainSupplierOptions = {
 
 // 供货状态
 export const deliveryStatusOptions = {
-    defaultValue: '-1',
+    defaultValue: '',
     data: [{
-        key: '-1',
+        key: '',
         value: '全部'
     }, {
         key: '0',
@@ -293,9 +293,9 @@ export const deliveryStatusOptions = {
 
 // 子公司状态
 export const subCompanyStatusOptions = {
-    defaultValue: '-1',
+    defaultValue: '',
     data: [{
-        key: '-1',
+        key: '',
         value: '全部'
     }, {
         key: '0',

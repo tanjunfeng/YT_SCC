@@ -18,7 +18,9 @@ import {
     fetchAddProdPurchase,
     supplierSearchBox,
     supplierAdrSearchBox,
-    getWarehouseInfo1
+    getWarehouseInfo1,
+    getStoreInfo,
+    querycategories
 } from '../service';
 
 const pubValueList = {
@@ -43,7 +45,11 @@ const pubValueList = {
     // 供应商地点选择组件
     supplierAdrSearchBox,
     // 查询逻辑仓库列表
-    getWarehouseInfo1
+    getWarehouseInfo1,
+    // 查询门店列表
+    getStoreInfo,
+    // 根据分类名字或者编码查询指定等级的分类列表
+    querycategories
 }
 
 const receiveCollapsed = (isCollapsed) => ({
