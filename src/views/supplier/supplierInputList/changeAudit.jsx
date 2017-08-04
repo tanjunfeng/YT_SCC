@@ -87,8 +87,6 @@ class ChangeAudit extends PureComponent {
                     this.props.fetchQueryManageList({
                         pageNum: this.current,
                         pageSize: PAGE_SIZE,
-                        providerType: 1,
-                        status: 0
                     })
                 }).catch(() => {
                     this.props.modifyAuditVisible({isVisible: false});

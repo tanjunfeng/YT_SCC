@@ -11,6 +11,7 @@ import { Form, Card, Checkbox, Modal, message, Pagination } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PAGE_SIZE } from '../../../constant';
+import { ProdPurchaseModal } from '../changePurchaseModal';
 import {
     fetchGetProdPurchaseById,
     fecthCheckMainSupplier,
@@ -23,7 +24,8 @@ import {
 } from '../../../actions';
 import {
     GetProductById,
-    GetProdPurchaseById
+    GetProdPurchaseById,
+    ChangeSupplierType
 } from '../../../actions/producthome';
 
 @connect(
@@ -41,7 +43,8 @@ import {
         fetchGetProductById,
         fecthGetProdPurchaseById,
         GetProductById,
-        GetProdPurchaseById
+        GetProdPurchaseById,
+        ChangeSupplierType
     }, dispatch)
 )
 class Cardline extends Component {
@@ -169,10 +172,10 @@ class Cardline extends Component {
                     productId: item.productId,
                     supplierType: 1
                 })
-                .then((res) => {
+                .then(() => {
                     message.success('修改状态成功');
                     this.props.goto();
-                }).catch((res) => {
+                }).catch(() => {
                     message.error('修改状态失败')
                 })
             }
@@ -183,23 +186,18 @@ class Cardline extends Component {
      * 改变主供应商状态
      */
     handleChangeMain() {
-        const { id, spId, spAdrId, productId, branchCompanyId, supplierType,
-            purchaseInsideNumber, purchasePrice, internationalCode, distributeWarehouseId
+        const {
+            id,
+            productId,
+            supplierType,
         } = this.props.getProdPurchaseByIds;
         const data = {
             id,
-            spId,
-            spAdrId,
             productId,
-            branchCompanyId,
             supplierType,
-            purchaseInsideNumber,
-            purchasePrice,
-            internationalCode,
-            distributeWarehouseId
         }
-        this.props.fetchUpdateProdPurchase(data);
-        // this.handlePaginationChange();
+        this.props.ChangeSupplierType(data);
+        this.props.goto();
     }
 
     handleDelete(e) {
@@ -214,7 +212,7 @@ class Cardline extends Component {
                     productId: proId,
                     id,
                 })
-                .then((res) =>
+                .then(() =>
                     message.success('删除成功'),
                     this.props.goto()
                 );
@@ -228,7 +226,6 @@ class Cardline extends Component {
     }
 
     handleAddPrice = (item) => {
-
     }
 
     renderCard = (datas) => {
@@ -248,7 +245,7 @@ class Cardline extends Component {
                                 `${prefixCls}-card-${item.supplierType}-${item.status}
                             ${prefixCls}-supplierType-img`
                             }
-                            onClick={() => this.handleAddPrice(item)}
+                            onClick={() => this.props.onCliked(item)}
                         >
                             {
                                 item.supplierType === 1 &&
@@ -321,7 +318,7 @@ class Cardline extends Component {
                 <div>
                     {
                         initData.data && initData.data.length > 0 &&
-                        <Form>
+                        <div>
                             {
                                 this.renderCard(initData.data)
                             }
@@ -331,7 +328,7 @@ class Cardline extends Component {
                                 onChange={this.handlePaginationChange}
                                 total={initData.total}
                             />
-                        </Form>
+                        </div>
                     }
                 </div>
             </div>
@@ -343,13 +340,13 @@ Cardline.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
     fecthCheckMainSupplier: PropTypes.func,
     fetchDeleteProdPurchaseById: PropTypes.func,
-    fetchUpdateProdPurchase: PropTypes.func,
+    ChangeSupplierType: PropTypes.func,
+    onCliked: PropTypes.func,
     fetchChangeProPurchaseStatus: PropTypes.func,
     prefixCls: PropTypes.string,
     id: PropTypes.string,
     index: PropTypes.number,
     initData: PropTypes.objectOf(PropTypes.any),
-    GetProdPurchaseById: PropTypes.func,
     goto: PropTypes.func,
     proId: PropTypes.string,
 };

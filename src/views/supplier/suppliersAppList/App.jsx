@@ -124,7 +124,6 @@ class SuppliersAppList extends PureComponent {
                 ...this.searchForm
             });
         }
-        this.handlePaginationChange(this.current);
     }
 
     /**
@@ -132,7 +131,6 @@ class SuppliersAppList extends PureComponent {
      */
     handleFormReset(data) {
         this.searchForm = data;
-        this.handlePaginationChange();
     }
 
     /**
@@ -177,18 +175,21 @@ class SuppliersAppList extends PureComponent {
                 </Menu.Item>
                 {
                     // 0： 制单状态、2：已审核、3:已拒绝
-                    (status === 0 || status === 2 || status === 3) &&
+                    (status === 0 || status === 2 || status === 3 || status === 4) &&
                     <Menu.Item key="modifySupInfor">
                         <Link to={`${pathname}/edit/supplier/${id}`}>
                             修改供应商信息
                         </Link>
                     </Menu.Item>
                 }
-                <Menu.Item key="addAddress">
-                    <Link to={`${pathname}/add/${id}`}>
-                        新增供应商地点信息
-                    </Link>
-                </Menu.Item>
+                {
+                    (status === 0 || status === 1 || status === 2) &&
+                    <Menu.Item key="addAddress">
+                        <Link to={`${pathname}/add/${id}`}>
+                            新增供应商地点信息
+                        </Link>
+                    </Menu.Item>
+                }
                 {
                     // 3:已拒绝
                     status === 3 &&

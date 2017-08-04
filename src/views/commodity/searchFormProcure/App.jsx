@@ -1,8 +1,8 @@
 /**
  * @file App.jsx
- * @author shijh
+ * @author Tanjf
  *
- * 在售商品列表
+ * 采购搜索框
  */
 
 import { fromJS } from 'immutable';
@@ -76,6 +76,7 @@ class SearchForm extends Component {
             supplyChoose1: {},
             supplyChoose2: {},
             visible: true,
+            sort: 1
         }
     }
 
@@ -95,27 +96,48 @@ class SearchForm extends Component {
      * 供应商-值清单
      */
     handleSupplyChoose = ({ record }) => {
-        this.setState({
-            supplyChoose: record,
-        });
+        if (this.state.sort === 1) {
+            this.setState({
+                supplyChoose: record,
+                sort: 2
+            });
+        }
     }
 
     /**
      * 地点-值清单
      */
     handleAdressChoose = ({ record }) => {
-        this.setState({
-            supplyChoose1: record,
-        });
+        if (this.state.sort === 2) {
+            this.setState({
+                supplyChoose1: record,
+                sort: 3
+            });
+        }
+        if (this.state.sort === 1) {
+            this.setState({
+                supplyChoose1: record,
+                sort: 2
+            });
+        }
     }
 
     /**
      * 子公司-值清单
      */
     handleCompChoose = ({ record }) => {
-        this.setState({
-            supplyChoose2: record,
-        });
+        if (this.state.sort === 3) {
+            this.setState({
+                supplyChoose2: record,
+                sort: 1
+            });
+        }
+        if (this.state.sort === 2) {
+            this.setState({
+                supplyChoose1: record,
+                sort: 3
+            });
+        }
     }
 
     /**
@@ -125,12 +147,12 @@ class SearchForm extends Component {
         const { validateFields } = this.props.form;
         const { match } = this.props;
         validateFields((err, values) => {
-            const status = values.mainSupplierOptions === '-1'
-                ? null
-                : values.mainSupplierOptions;
-            const supplierType = values.initiateModeOptions === '-1'
+            const status = values.initiateModeOptions === '-1'
                 ? null
                 : values.initiateModeOptions;
+            const supplierType = values.mainSupplierOptions === '-1'
+                ? null
+                : values.mainSupplierOptions;
             // console.log(this.state.supplyChoose1.spAdrid)
             this.props.onSearch(Utils.removeInvalid({
                 spId: this.state.supplyChoose.spId,
@@ -266,7 +288,7 @@ class SearchForm extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { prefixCls, innitalvalue, getProdPurchaseByIds, getProductByIds } = this.props;
+        const { prefixCls } = this.props;
         return (
             <div className={`${prefixCls}-content manage-form`}>
                 <div style={{fontSize: 16, fontWeight: 900}}>
@@ -302,20 +324,8 @@ class SearchForm extends Component {
                                                     dataIndex: 'spId',
                                                     width: 200,
                                                 }, {
-                                                    title: 'spAdrid',
-                                                    dataIndex: 'spAdrid',
-                                                    width: 200,
-                                                }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'providerNo',
-                                                    dataIndex: 'providerNo',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'providerName',
-                                                    dataIndex: 'providerName',
                                                     width: 200,
                                                 }
                                             ]}
