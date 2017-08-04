@@ -2,7 +2,7 @@
  * @file fetchGetProdPurchaseById.js
  *
  * @author Tanjunfeng
- * 查询商品价格信息
+ * 根据条件查询商品价格信息
  */
 
 import Promise from 'bluebird';

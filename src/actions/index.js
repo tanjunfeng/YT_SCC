@@ -79,7 +79,10 @@ import fetchQueryProdByCondition from './fetch/fetchQueryProdByCondition';
 import fetchUpdateProdPurchase from './fetch/fetchUpdateProdPurchase';
 import fetchChangeProPurchaseStatus from './fetch/fetchChangeProPurchaseStatus';
 import suppplierSettledAudit from './fetch/suppplierSettledAudit';
-import supplierSettledAudit from './fetch/supplierSettledAudit';
+import supplierAdrSettledAudit from './fetch/supplierAdrSettledAudit';
+import modifyAuditAdrVisible from './modify/modifyAuditAdrVisible';
+import AuditSupplierEditInfo from '../actions/supplier';
+import getProductById from '../actions/producthome';
 
 // 库存调整
 import stockAdjust from './stockAdjust';
@@ -150,7 +153,9 @@ export {
 
     fetchQuerySettledList,
     suppplierSettledAudit,
-    supplierSettledAudit,
+    supplierAdrSettledAudit,
+    modifyAuditAdrVisible,
+    getProductById,
 
     // 库存调整
     stockAdjust,
@@ -158,6 +163,7 @@ export {
     fetchQueryManageList,
     fetchGetProductById,
     fetchEditBeforeAfter,
+    AuditSupplierEditInfo,
 
     // 根据条件分页查询商品清单，并排序
     queryCommodityList,

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, InputNumber, Input, Checkbox } from 'antd';
+import { Modal, Form, InputNumber, Checkbox } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import SteppedPrice from '../steppedPrice';
 import SearchMind from '../../../components/searchMind';
 import {
     fetchTest,
@@ -15,7 +14,10 @@ import {
     pubFetchValueList,
 } from '../../../actions/pub';
 
-import { productAddPriceVisible } from '../../../actions/producthome';
+import {
+    productAddPriceVisible,
+    AddProdPurchase
+} from '../../../actions/producthome';
 
 const FormItem = Form.Item;
 
@@ -25,11 +27,13 @@ const FormItem = Form.Item;
         getProductById: state.toJS().commodity.getProductById,
         getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
+        getProductByIds: state.toJS().commodity.getProductById,
     }),
     dispatch => bindActionCreators({
         fetchAddProdPurchase,
         productAddPriceVisible,
-        pubFetchValueList
+        pubFetchValueList,
+        AddProdPurchase
     }, dispatch)
 )
 
@@ -42,28 +46,64 @@ class ProdPurchaseModal extends Component {
 
         this.state = {
             distributeWarehouseId: null,
-            spId: '',
-            spAdrId: '',
-            productId: '',
-            branchCompanyId: ''
+            supplyChoose: {},
+            supplyChoose1: {},
+            supplyChoose2: {},
         }
     }
 
+    /**
+     * 仓库-值清单
+     */
+    handleHouseChoose = ({ record }) => {
+        this.setState({
+            supplyChoose: record,
+        });
+        console.log(this.state.supplyChoose)
+    }
+
+    /**
+     * 供应商-值清单
+     */
+    handleSupplyChoose = ({ record }) => {
+        this.setState({
+            supplyChoose1: record,
+        });
+        console.log(this.state.supplyChoose1)
+    }
+
+    /**
+     * 地点-值清单
+     */
+    handleAdressChoose = ({ record }) => {
+        this.setState({
+            supplyChoose2: record,
+        });
+        console.log(this.state.supplyChoose2)
+    }
+
+
+    /**
+     * 创建弹框OK时间
+     */
     handleOk() {
         const { validateFields } = this.props.form;
+        const { getProductByIds } = this.props;
         validateFields((err, values) => {
             console.log(values);
             // TODO post data
-            this.props.fetchAddProdPurchase({
-                spId: '145',
-                spAdrId: '14567',
-                productId: 'xpro123',
-                branchCompanyId: 'cp123',
+            this.props.AddProdPurchase({
+                spId: this.state.supplyChoose1.record.spId,
+                spAdrId: this.state.supplyChoose2.record.spAdrid,
+                productId: getProductByIds.record.id,
+                branchCompanyId: this.state.supplyChoose.record.spId,
                 supplierType: values.mainSupplier ? 1 : 0,
-                purchaseInsideNumber: values.purchaseInsideNumber,
-                purchasePrice: values.purchasePrice,
-                internationalCode: values.internationalCode,
-                distributeWarehouseId: 123455
+                purchaseInsideNumber: this.props.getProductByIds.record.purchaseInsideNumber,
+                purchasePrice: this.props.getProductByIds.record.purchasePrice,
+                // 条码
+                internationalCode: this.props.getProductByIds.internationalCode,
+                // 仓库ID
+                distributeWarehouseId: this.state.supplyChoose.id
             });
         })
     }
@@ -72,9 +112,9 @@ class ProdPurchaseModal extends Component {
         this.props.productAddPriceVisible({isVisible: false, record});
     }
 
-    handleTestChoose(record) {
-        console.log(record);
-    }
+    // handleTestChoose(record) {
+    //     console.log(record);
+    // }
 
     handleTestFetch = ({ value, pagination }) => {
         console.log(value, pagination);
@@ -101,6 +141,7 @@ class ProdPurchaseModal extends Component {
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
         // const formData = this.props.form.getFieldsValue();
+        const { getProductByIds } = this.props;
         return (
             <Modal
                 title="采购价格"
@@ -121,7 +162,7 @@ class ProdPurchaseModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('purchaseInsideNumber', {
                                             rules: [{ required: true, message: '采购内装数' }],
-                                            initialValue: prodPurchase.purchaseInsideNumber
+                                            initialValue: getProductByIds.purchaseInsideNumber
                                         })(
                                             <InputNumber min={0} placeholder="内装数" />
                                         )}
@@ -132,7 +173,7 @@ class ProdPurchaseModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('purchasePrice', {
                                             rules: [{ required: true, message: '请输入采购价!' }],
-                                            initialValue: prodPurchase.purchasePrice
+                                            initialValue: getProductByIds.guidePurchasePrice
                                         })(
                                             <InputNumber min={0} placeholder="采购价" />
                                         )}
@@ -143,7 +184,7 @@ class ProdPurchaseModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('internationalCode', {
                                             rules: [{ required: true, message: '输入商品条码!' }],
-                                            initialValue: prodPurchase.internationalCode
+                                            initialValue: getProductByIds.productCode
                                         })(
                                             <InputNumber min={0} placeholder="请输入商品条码" />
                                         )}
@@ -159,7 +200,7 @@ class ProdPurchaseModal extends Component {
                                             fetch={(params) => this.props.pubFetchValueList({
                                                 condition: params.value
                                             }, 'getWarehouseInfo1')}
-                                            onChoosed={this.handleTestChoose}
+                                            onChoosed={this.handleHouseChoose}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.warehouseCode} - {data.warehouseName}</div>
                                             )}
@@ -193,6 +234,7 @@ class ProdPurchaseModal extends Component {
                                             style={{ zIndex: 9 }}
                                             compKey="search-mind-key2"
                                             ref={ref => { this.searchMind1 = ref }}
+                                            onChoosed={this.handleSupplyChoose}
                                             fetch={(params) => this.props.pubFetchValueList({
                                                 condition: params.value
                                             }, 'supplierSearchBox')}
@@ -236,7 +278,7 @@ class ProdPurchaseModal extends Component {
                                             fetch={(params) => this.props.pubFetchValueList({
                                                 supplierAddressId: params.value
                                             }, 'supplierAdrSearchBox')}
-                                            onChoosed={this.handleTestChoose}
+                                            onChoosed={this.handleAdressChoose}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.providerNo} - {data.providerName}</div>
                                             )}
@@ -295,7 +337,7 @@ ProdPurchaseModal.propTypes = {
     toAddPriceVisible: PropTypes.bool,
     productAddPriceVisible: PropTypes.func,
     pubFetchValueList: PropTypes.func,
-    fetchAddProdPurchase: PropTypes.func,
+    getProductByIds: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     prodPurchase: PropTypes.objectOf(PropTypes.any),
 };

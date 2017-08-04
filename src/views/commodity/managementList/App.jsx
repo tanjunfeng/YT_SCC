@@ -432,9 +432,10 @@ class ManagementList extends PureComponent {
      * @param {object} record 单行数据
      */
     renderOperation(text, record) {
-        const { id } = record;
+        const { id, productId } = record;
         const { pathname } = this.props.location;
         const origin = window.location.origin;
+        // console.log(record)
         const menu = (
             <Menu>
                 <Menu.Item key={0}>
@@ -446,10 +447,10 @@ class ManagementList extends PureComponent {
                     </CopyToClipboard>
                 </Menu.Item>
                 <Menu.Item key={2}>
-                    <Link to={`${pathname}/price/${id}`}>销售维护</Link>
+                    <Link to={`${pathname}/price/${productId}`}>销售维护</Link>
                 </Menu.Item>
                 <Menu.Item key={3}>
-                    <Link to={`${pathname}/purchasingPice/${id}`}>采购维护</Link>
+                    <Link to={`${pathname}/procurementMaintenance/${productId}`}>采购维护</Link>
                 </Menu.Item>
             </Menu>
         );

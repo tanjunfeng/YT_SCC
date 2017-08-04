@@ -61,6 +61,8 @@ const initState = Immutable.fromJS({
     checkMainSupplier: {},
     // 查询商品价格信息
     getProdPurchaseById: {},
+    // 根据主键查询商品采购关系
+    getProdPurchaseByIds: {},
 
     // 根据条件查询商品价格信息
     queryProdPurchaseExtByCondition: [],
@@ -148,11 +150,10 @@ export default function (state = initState, action) {
             return state.set('checkMainSupplier', action.payload);
 
         case ActionType.GET_PRODPURCHASE_BYID:
-            console.log(action.payload)
-            return state.set('getProdPurchaseById', action.payload);
+            return state.set('getProdPurchaseByIds', action.payload);
 
         case ActionType.QUERY_PRODPURCHASE_BYID:
-            return state.set('queryProdPurchaseExtByCondition', action.payload);
+            return state.set('getProdPurchaseById', action.payload);
 
         case ActionType.CHANGE_SUPPLIER_TYPE:
             return state.set('changeSupType', action.payload);

@@ -17,10 +17,11 @@ import SearchMind from '../../../components/searchMind';
 import {
     fetchAction,
     receiveData,
-    fetchTest,
 } from '../../../actions/classifiedList';
 import {
-    fetchGetProductById,
+    QueryProdPurchaseExtByCondition,
+} from '../../../actions/producthome';
+import {
     fetchAddProdPurchase,
     fetchQueryProdByCondition,
     fecthGetProdPurchaseById
@@ -46,11 +47,11 @@ const Option = Select.Option;
     dispatch => bindActionCreators({
         fetchAction,
         receiveData,
-        fetchGetProductById,
         fetchAddProdPurchase,
         fetchQueryProdByCondition,
         pubFetchValueList,
-        fecthGetProdPurchaseById
+        fecthGetProdPurchaseById,
+        QueryProdPurchaseExtByCondition
     }, dispatch)
 )
 class SearchForm extends Component {
@@ -72,20 +73,20 @@ class SearchForm extends Component {
             supplyChoose: {},
             supplyChoose1: {},
             supplyChoose2: {},
-            visible: true
+            visible: true,
         }
     }
 
     componentWillMount() {}
 
     componentDidMount() {
-        this.props.fetchAction();
+        // this.props.fetchAction();
 
-        setTimeout(() => {
-            this.setState({
-                disabled: true,
-            });
-        }, 2000);
+        // setTimeout(() => {
+        //     this.setState({
+        //         disabled: true,
+        //     });
+        // }, 2000);
     }
 
     /**
@@ -120,15 +121,14 @@ class SearchForm extends Component {
      */
     handleGetValue() {
         const { validateFields } = this.props.form;
-        const { productId } = this.props.getProdPurchaseByIds;
         const { match } = this.props;
-        console.log(this.props.getProdPurchaseByIds)
+        // console.log(match)
         validateFields((err, values) => {
             // console.log(this.state.supplyChoose, this.state.supplyChoose1, this.state.supplyChoose2)
             // console.log(values);
             // TODO post data
             // console.log(this.state.supplyChoose1.spAdrid)
-            this.props.fetchQueryProdByCondition({
+            this.props.QueryProdPurchaseExtByCondition({
                 productId: match.params.id,
                 spId: this.state.supplyChoose.spId,
                 spAdrId: this.state.supplyChoose1.spAdrid,
@@ -258,7 +258,6 @@ class SearchForm extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls, innitalvalue, getProdPurchaseByIds } = this.props;
-        console.log(getProdPurchaseByIds)
         return (
             <div className={`${prefixCls}-content manage-form`}>
                 <div style={{fontSize: 16, fontWeight: 900}}>

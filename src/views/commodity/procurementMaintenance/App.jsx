@@ -12,7 +12,6 @@ import { withRouter } from 'react-router';
 import {
     Form,
 } from 'antd';
-
 import {
     fecthGetProdPurchaseById,
     fetchGetProductById,
@@ -62,7 +61,7 @@ class ProcurementMaintenance extends PureComponent {
             // 控制主供应商选项唯一
             disabled: false,
             current: 1,
-            productId: null
+            productId: ''
         }
     }
 
@@ -71,6 +70,7 @@ class ProcurementMaintenance extends PureComponent {
      */
     componentDidMount() {
         const { match } = this.props;
+        // console.log(match)
         this.props.fetchGetProductById({
             productId: match.params.id
         });
@@ -123,19 +123,18 @@ class ProcurementMaintenance extends PureComponent {
     render() {
         const { prefixCls, getProductByIds, match } = this.props;
         const innitalvalue = getProductByIds;
-        const { id } = match;
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm innitalvalue={innitalvalue} />
                 <SearchForm
-                    id={id}
+                    id={match.params.id}
                     innitalvalue={innitalvalue}
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
                     handleAdd={this.handleAdd}
                 />
                 <div>
-                    <Cardline innitalvalue={innitalvalue} />
+                    <Cardline id={match.params.id} />
                 </div>
                 <ProdPurchaseModal />
             </div>

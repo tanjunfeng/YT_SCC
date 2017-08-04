@@ -457,7 +457,7 @@ export const getProdPurchaseById = (params) => http.get('/prodPurchase/getProdPu
 export const findPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
 
 // 新增商品采购关系
-export const fetchAddProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
+export const addProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
 
 // 更新商品采购关系
 export const updateProdPurchase = (params) => http.post('/prodPurchase/updateProdPurchase', params);
@@ -475,7 +475,7 @@ export const changeProPurchaseStatus = (params) => http.get('/prodPurchase/chang
 export const batchChangeProPurchaseStatus = (params) => http.post('/prodPurchase/batchChangeProPurchaseStatus', params);
 
 // 根据条件查询商品价格信息
-export const fetchQueryProdByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
+export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
 
 // 查询商品信息
 export const getProductById = (params) => http.get('/prodPurchase/getProductById', params);
@@ -541,9 +541,11 @@ export const getSupplierNo = (params) => http.get('/supplier/getSupplierNo', par
 // 新增或修改供应商信息
 export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/insertOrUpdateSupplierInfo', params);
 // 供应商入驻审核
-export const suppplierSettledAudit = (params) => http.post('/supplier/suppplierSettledAudit', params);
+export const suppplierSettledAudit = (params) => http.post('/supplier/supplierSettledAudit', params);
 // 供应商地点入驻审核
-export const supplierAdrSettledAudit = (params) => http.post('/supplier/supplierAdrSettledAudit ', params);
+export const supplierAdrSettledAudit = (params) => http.post('/supplier/supplierAdrSettledAudit', params);
+// 供应商修改审核
+export const auditSupplierEditInfo = (params) => http.post('/supplier/auditSupplierEditInfo', params);
 
 /**
  * 商品模块

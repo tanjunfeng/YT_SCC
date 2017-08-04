@@ -18,12 +18,19 @@ import {
     fetchQueryProdByCondition,
     fetchChangeProPurchaseStatus,
     fetchDeleteProdPurchaseById,
+    fetchGetProductById,
+    fecthGetProdPurchaseById
 } from '../../../actions';
+import {
+    GetProductById,
+    GetProdPurchaseById
+} from '../../../actions/producthome';
 
 @connect(
     state => ({
         prodPurchase: state.toJS().commodity.prodPurchase,
-        getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
+        getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseByIds,
+        queryProdPurchaseExtByCondition: state.toJS().commodity.queryProdPurchaseExtByCondition,
     }),
     dispatch => bindActionCreators({
         fetchGetProdPurchaseById,
@@ -31,7 +38,11 @@ import {
         fetchUpdateProdPurchase,
         fetchQueryProdByCondition,
         fetchChangeProPurchaseStatus,
-        fetchDeleteProdPurchaseById
+        fetchDeleteProdPurchaseById,
+        fetchGetProductById,
+        fecthGetProdPurchaseById,
+        GetProductById,
+        GetProdPurchaseById
     }, dispatch)
 )
 class Cardline extends Component {
@@ -53,8 +64,9 @@ class Cardline extends Component {
     }
 
     componentDidMount() {
-        const { prefixCls, getProdPurchaseByIds, innitalvalue } = this.props;
-        console.log(innitalvalue);
+        this.props.GetProdPurchaseById({
+            id: this.props.id
+        });
     }
 
      /**
@@ -208,8 +220,7 @@ class Cardline extends Component {
     }
 
     render() {
-        const { prefixCls, getProdPurchaseByIds, innitalvalue } = this.props;
-        console.log(innitalvalue)
+        const { prefixCls, getProdPurchaseByIds } = this.props;
         const cardData =
             (<div
                 key={getProdPurchaseByIds.id}
@@ -287,7 +298,7 @@ class Cardline extends Component {
             <div className={`${prefixCls}`}>
                 <div>
                     {
-                        getProdPurchaseByIds.length > 0 &&
+                        getProdPurchaseByIds !== {} &&
                         <Form>
                             <cardData />
                             <Pagination
@@ -311,9 +322,10 @@ Cardline.propTypes = {
     fetchUpdateProdPurchase: PropTypes.func,
     fetchChangeProPurchaseStatus: PropTypes.func,
     prefixCls: PropTypes.string,
+    id: PropTypes.string,
     index: PropTypes.number,
     fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),
-    fetchGetProdPurchaseById: PropTypes.func,
+    GetProdPurchaseById: PropTypes.func,
 };
 
 Cardline.defaultProps = {

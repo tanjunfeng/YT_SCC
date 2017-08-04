@@ -17,11 +17,12 @@ import {
     Modal,
     message
 } from 'antd';
-
+import { PAGE_SIZE } from '../../../constant';
 import {
     modifyAuditVisible,
     insertSupplierSettlementInfo,
-    suppplierSettledAudit
+    suppplierSettledAudit,
+    fetchQueryManageList
 } from '../../../actions';
 // import { validatorRebate } from '../../../util/validator';
 
@@ -36,7 +37,8 @@ const Option = Select.Option;
     dispatch => bindActionCreators({
         modifyAuditVisible,
         insertSupplierSettlementInfo,
-        suppplierSettledAudit
+        suppplierSettledAudit,
+        fetchQueryManageList
     }, dispatch)
 )
 class ChangeAudit extends PureComponent {
@@ -47,16 +49,25 @@ class ChangeAudit extends PureComponent {
         this.handleAuditOk = ::this.handleAuditOk;
         this.handleSelectChange = ::this.handleSelectChange;
         this.handleTextChange = ::this.handleTextChange;
+        this.handleGetList = ::this.handleGetList;
+
+        this.searchForm = {};
+        this.current = 1;
+        this.state = {
+            selected: -1,
+        }
     }
 
-    state = {
-        selected: -1,
-    }
-
+    /**
+     * 弹框取消事件
+     */
     handleAuditCancel() {
         this.props.modifyAuditVisible({isVisible: false});
     }
 
+    /**
+     * 弹框确认事件
+     */
     handleAuditOk() {
         const { selected } = this.state;
         const { visibleData } = this.props;
@@ -70,11 +81,33 @@ class ChangeAudit extends PureComponent {
                     id: visibleData.id,
                     pass: parseInt(selected, 10) === 1 ? false : true,
                     ...this.props.form.getFieldsValue()
-                }).then(() => {
-                    this.props.getList()
+                }).then((res) => {
+                    this.props.modifyAuditVisible({isVisible: false});
+                    message.success(res.message)
+                    this.props.fetchQueryManageList({
+                        pageNum: this.current,
+                        pageSize: PAGE_SIZE,
+                        providerType: 1,
+                        status: 0
+                    })
+                }).catch(() => {
+                    this.props.modifyAuditVisible({isVisible: false});
+                    message.success('修改审核失败')
                 })
             }
         })
+    }
+
+    /**
+     * 数据列表查询
+     */
+    handleGetList(page) {
+        const currentPage = page;
+        this.props.fetchQueryManageList({
+            pageSize: PAGE_SIZE,
+            pageNum: currentPage,
+            ...this.searchForm
+        });
     }
 
     handleSelectChange(key) {
@@ -95,7 +128,7 @@ class ChangeAudit extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         return (
             <Modal
-                title="商家入住审核"
+                title="供应商入住审核"
                 visible={this.props.auditVisible}
                 onOk={this.handleAuditOk}
                 onCancel={this.handleAuditCancel}
@@ -122,7 +155,7 @@ class ChangeAudit extends PureComponent {
                         <Form layout="inline">
                             <FormItem className="application-form-item">
                                 <span className="application-modal-label"><b className="tjf-css-import">*</b>不通过原因：</span>
-                                {getFieldDecorator('failedReson', {
+                                {getFieldDecorator('failedReason', {
                                     rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
                                 })(
                                     <Input
@@ -150,9 +183,9 @@ class ChangeAudit extends PureComponent {
 
 ChangeAudit.propTypes = {
     modifyAuditVisible: PropTypes.func,
+    fetchQueryManageList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     auditVisible: PropTypes.bool,
-    insertSupplierSettlementInfo: PropTypes.func,
     visibleData: PropTypes.objectOf(PropTypes.any),
     getList: PropTypes.objectOf(PropTypes.any),
 }

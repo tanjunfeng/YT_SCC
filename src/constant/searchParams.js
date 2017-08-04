@@ -137,8 +137,11 @@ export const settlementAccount = {
 
 // 供应商类型
 export const supplierTypeOptions = {
-    defaultValue: '1',
+    defaultValue: '0',
     data: [{
+        key: '0',
+        value: '全部'
+    }, {
         key: '1',
         value: '供应商'
     }, {
@@ -149,8 +152,11 @@ export const supplierTypeOptions = {
 
 // 入驻-供应商状态
 export const firstSupplierStatusOptions = {
-    defaultValue: '0',
+    defaultValue: '-1',
     data: [{
+        key: '-1',
+        value: '全部'
+    }, {
         key: '0',
         value: '制单'
     }, {
@@ -170,29 +176,35 @@ export const firstSupplierStatusOptions = {
 
 // 供应商管理-供应商状态
 export const secondSupplierStatusOptions = {
-    defaultValue: '1',
+    defaultValue: '-1',
     data: [{
-        key: '1',
-        value: '制表'
+        key: '-1',
+        value: '全部'
     }, {
-        key: '2',
+        key: '0',
+        value: '制单'
+    }, {
+        key: '1',
         value: '已提交'
     }, {
-        key: '3',
+        key: '2',
         value: '已审核'
     }, {
-        key: '4',
+        key: '3',
         value: '已拒绝'
     }, {
-        key: '5',
+        key: '4',
         value: '修改中'
     }]
 }
 
 // 供应商类型
 export const supplierLevelOptions = {
-    defaultValue: '1',
+    defaultValue: '0',
     data: [{
+        key: '0',
+        value: '全部'
+    }, {
         key: '1',
         value: '战略供应商'
     }, {
@@ -233,10 +245,10 @@ export const initiateModeOptions = {
         value: '全部'
     }, {
         key: '0',
-        value: '启用'
+        value: '失效'
     }, {
         key: '1',
-        value: '未启用'
+        value: '启用'
     }]
 }
 
