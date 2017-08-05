@@ -73,18 +73,6 @@ import ItemDetail from 'bundle-loader?lazy!../views/storeAdjustment/itemDetail';
  * @type {[*]}
  */
 const routes = [
-    {
-        path: '/',
-        key: 'home',
-        exact: true,
-        component: () => (
-            <Route
-                path="/"
-                exact
-                render={() => <Bundle load={Home}>{(App) => <App />}</Bundle>}
-            />
-        )
-    },
     // 系统配置
     {
         key: 'gylxtpz',

@@ -107,7 +107,7 @@ const receivetoUpdate = (data) => ({
 
 export const toUpdateSell = (params) => dispatch => (
     new Promise((resolve, reject) => {
-       toUpdateSellPrice(params)
+        toUpdateSellPrice(params)
             .then(res => {
                 dispatch(receivetoUpdate(res.data));
                 resolve(res.data);
@@ -369,7 +369,7 @@ export const GetProdPurchaseById = (params) => dispatch => (
 
 // 根据条件查询商品价格信息
 const receiveQueryProdPurchaseExtByCondition = (data) => ({
-    type: ActionType.GET_PRODPURCHASE_BYID,
+    type: ActionType.QUERY_PRODBY_CONDITION,
     payload: data,
 });
 

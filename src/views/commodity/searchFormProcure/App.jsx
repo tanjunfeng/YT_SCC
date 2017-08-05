@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { message, Form, Col, Row, Select, Button, Icon } from 'antd';
+import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
 import {
@@ -42,6 +43,7 @@ const Option = Select.Option;
         user: state.toJS().user.data,
         rights: state.toJS().user.rights,
         data: state.toJS().commodity.classifiedList,
+        getProductByIds: state.toJS().commodity.getProductById,
         getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
     }),
     dispatch => bindActionCreators({
@@ -122,20 +124,21 @@ class SearchForm extends Component {
     handleGetValue() {
         const { validateFields } = this.props.form;
         const { match } = this.props;
-        // console.log(match)
         validateFields((err, values) => {
-            // console.log(this.state.supplyChoose, this.state.supplyChoose1, this.state.supplyChoose2)
-            // console.log(values);
-            // TODO post data
+            const status = values.mainSupplierOptions === '-1'
+                ? null
+                : values.mainSupplierOptions;
+            const supplierType = values.initiateModeOptions === '-1'
+                ? null
+                : values.initiateModeOptions;
             // console.log(this.state.supplyChoose1.spAdrid)
-            this.props.QueryProdPurchaseExtByCondition({
-                productId: match.params.id,
+            this.props.onSearch(Utils.removeInvalid({
                 spId: this.state.supplyChoose.spId,
                 spAdrId: this.state.supplyChoose1.spAdrid,
                 branchCompanyId: this.state.supplyChoose2.id,
-                supplierType: values.initiateModeOptions,
-                status: values.mainSupplierOptions
-            });
+                supplierType,
+                status
+            }))
         })
     }
 
@@ -228,10 +231,16 @@ class SearchForm extends Component {
      * 重置
      */
     handleResetValue() {
-        this.addressSearchMind.handleClear();
-        this.supplySearchMind.handleClear();
-        this.supplyCompSearchMind.handleClear();
+        this.addressSearchMind.reset();
+        this.supplySearchMind.reset();
+        this.supplyCompSearchMind.reset();
+        this.setState({
+            supplyChoose: {},
+            supplyChoose1: {},
+            supplyChoose2: {},
+        })
         this.props.form.resetFields();
+        this.props.onReset()
     }
 
     /**
@@ -257,7 +266,7 @@ class SearchForm extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { prefixCls, innitalvalue, getProdPurchaseByIds } = this.props;
+        const { prefixCls, innitalvalue, getProdPurchaseByIds, getProductByIds } = this.props;
         return (
             <div className={`${prefixCls}-content manage-form`}>
                 <div style={{fontSize: 16, fontWeight: 900}}>
@@ -485,6 +494,8 @@ SearchForm.propTypes = {
     user: PropTypes.objectOf(PropTypes.string),
     form: PropTypes.objectOf(PropTypes.any),
     innitalvalue: PropTypes.objectOf(PropTypes.any),
+    onSearch: PropTypes.func,
+    onReset: PropTypes.func,
 }
 
 SearchForm.defaultProps = {
@@ -492,6 +503,8 @@ SearchForm.defaultProps = {
         name: 'Who?'
     },
     prefixCls: 'select-line',
+    onSearch: () => {},
+    onReset: () => {},
 }
 
 export default Form.create()(withRouter(SearchForm));

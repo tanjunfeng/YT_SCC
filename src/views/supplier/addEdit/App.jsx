@@ -71,7 +71,9 @@ class AddSupplier extends PureComponent {
     }
 
     handleTabClick(item) {
-
+        this.setState({
+            activeKey: item
+        })
     }
 
     render() {

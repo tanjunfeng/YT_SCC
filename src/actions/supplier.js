@@ -19,7 +19,8 @@ import {
     querySettledList,
     fetchQueryManageList,
     querySupplierPlaceRegion,
-    auditSupplierEditInfo
+    auditSupplierEditInfo,
+    updateProdPurchase
 } from '../service';
 
 const handleServer = {
@@ -202,6 +203,27 @@ export const AuditSupplierEditInfo = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     receiveAuditSupplierEditInfo(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
+/**
+ * 供应商修改审核
+ */
+const receiveUpdateProdPurchase = (data) => ({
+    type: ActionType.QUERY_SETTLED_LIST,
+    payload: data,
+})
+
+export const UpdateProdPurchase = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        updateProdPurchase(params)
+            .then(res => {
+                dispatch(
+                    receiveUpdateProdPurchase(res.data)
                 );
                 resolve(res);
             })

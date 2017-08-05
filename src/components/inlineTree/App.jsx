@@ -37,7 +37,10 @@ class InlineTree extends PureComponent {
 
     componentWillReceiveProps(nextProps) {
         const { checkedKeys } = nextProps;
-        if (checkedKeys.length !== this.props.checkedKeys) {
+        if (
+            checkedKeys.length > 0
+            && checkedKeys.length !== this.props.checkedKeys
+        ) {
             this.setState({
                 checkedKeys
             })

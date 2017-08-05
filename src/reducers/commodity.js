@@ -65,7 +65,7 @@ const initState = Immutable.fromJS({
     getProdPurchaseByIds: {},
 
     // 根据条件查询商品价格信息
-    queryProdPurchaseExtByCondition: [],
+    purchaseCardData: {},
 
     // 根据条件查询商品价格信息
     changeSupType: {},
@@ -166,6 +166,9 @@ export default function (state = initState, action) {
 
         case ActionType.RECEIVE_PRICE_INFO:
             return state.set('stepPriceList', action.payload)
+
+        case ActionType.QUERY_PRODBY_CONDITION:
+            return state.set('purchaseCardData', action.payload);
 
         default:
             return state;

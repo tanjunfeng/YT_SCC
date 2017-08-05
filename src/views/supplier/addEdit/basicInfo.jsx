@@ -41,10 +41,27 @@ class BasicInfo extends PureComponent {
         super(props);
 
         this.handleNextStep = ::this.handleNextStep;
+        this.state = {
+            regions: []
+        }
     }
 
     componentDidMount() {
         !this.props.isEdit && this.props.getLargerRegion();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { detailData = {} } = nextProps;
+        const { saleRegionInfo = {} } = detailData;
+        const { regions } = this.state;
+        if (
+            saleRegionInfo.json
+            && saleRegionInfo.json !== regions
+        ) {
+            this.state = {
+                regions: Tools.decodeArea(JSON.parse(saleRegionInfo.json))
+            }
+        }
     }
 
     handleNextStep() {
@@ -111,10 +128,8 @@ class BasicInfo extends PureComponent {
         }
         const {
             supplierBasicInfo = {},
-            saleRegionInfo={}
+            saleRegionInfo = {}
         } = initData;
-        const defaultVaue = saleRegionInfo.json ? Tools.decodeArea(JSON.parse(saleRegionInfo.json)) : [];
-        console.log(defaultVaue)
         return (
             <div className="supplier-add-message">
                 <Form>
@@ -134,10 +149,13 @@ class BasicInfo extends PureComponent {
                                         <span>{isEdit ? supplierBasicInfo.spNo : this.props.supplierId}</span>
                                     </Col>
                                     <Col span={8}>
-                                        <span>供应商名称：</span>
+                                        <span>*供应商名称：</span>
                                         <FormItem>
                                             {getFieldDecorator('companyName', {
-                                                rules: [{ required: true, message: '请输入供应商名称!' }],
+                                                rules: [
+                                                    { required: true, message: '请输入供应商名称!' },
+                                                    {max: 150, message: '字符长度超限'}
+                                                ],
                                                 initialValue: supplierBasicInfo.companyName,
                                             })(
                                                 <Input
@@ -150,7 +168,7 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}>
-                                        <span>供应商等级：</span>
+                                        <span>*供应商等级：</span>
                                         <FormItem>
                                             {getFieldDecorator('grade', {
                                                 rules: [{required: true, message: '请选择等级'}],
@@ -168,7 +186,7 @@ class BasicInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8} id="in-time">
-                                        <span>供应商入驻日期：</span>
+                                        <span>*供应商入驻日期：</span>
                                         <FormItem>
                                             {getFieldDecorator('settledTime', {
                                                 rules: [{required: true, message: '请选择供应商入驻日期'}],
@@ -191,13 +209,13 @@ class BasicInfo extends PureComponent {
                     >
                         <div className="add-message">
                             <div className="add-message-header">
-                                <Icon type="solution" className="add-message-header-icon" />供应商辐射城市
+                                <Icon type="solution" className="add-message-header-icon" />供应商辐射城市(必选)
                             </div>
                             {
                                 largeRegin.length > 0 &&
                                 <div className="add-message-body">
                                     <InlineTree
-                                        checkedKeys={defaultVaue}
+                                        checkedKeys={this.state.regions}
                                         handleCheck={this.handleCheck}
                                         initValue={largeRegin}
                                         ref={node => { this.areaCheck = node }}
