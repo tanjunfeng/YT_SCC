@@ -245,7 +245,6 @@ class Cardline extends Component {
                                 `${prefixCls}-card-${item.supplierType}-${item.status}
                             ${prefixCls}-supplierType-img`
                             }
-                            onClick={() => this.props.onCliked(item)}
                         >
                             {
                                 item.supplierType === 1 &&
@@ -258,35 +257,37 @@ class Cardline extends Component {
                                 onClick={this.handleDelete}
                             >
                                 &times;
-                        </a>
-                            <p>
-                                <span>供应商 : </span>
-                                <span>{item.spId}</span>
-                                <b>-</b>
-                                <span>{item.spName}</span>
-                            </p>
-                            <p>
-                                <span>地点 : </span>
-                                <span>{item.spAdrId}</span>
-                                <b>-</b>
-                                <span>{item.spAdrName}</span>
-                            </p>
-                            <p>
-                                <span>条码 : </span>
-                                <span>{item.internationalCode}</span>
-                            </p>
-                            <p>
-                                <span>采购内装数 : </span>
-                                <span>{item.purchaseInsideNumber}</span>
-                            </p>
-                            <p>
-                                <span>送货仓库 : </span>
-                                <span>{item.distributeWarehouseId}</span>
-                            </p>
-                            <p>
-                                <span>采购价格 / 元 : </span>
-                                <span>{item.purchasePrice}</span>
-                            </p>
+                            </a>
+                            <div onClick={() => this.props.onCliked(item)}>
+                                <p>
+                                    <span>供应商 : </span>
+                                    <span>{item.spId}</span>
+                                    <b>-</b>
+                                    <span>{item.spName}</span>
+                                </p>
+                                <p>
+                                    <span>地点 : </span>
+                                    <span>{item.spAdrId}</span>
+                                    <b>-</b>
+                                    <span>{item.spAdrName}</span>
+                                </p>
+                                <p>
+                                    <span>条码 : </span>
+                                    <span>{item.internationalCode}</span>
+                                </p>
+                                <p>
+                                    <span>采购内装数 : </span>
+                                    <span>{item.purchaseInsideNumber}</span>
+                                </p>
+                                <p>
+                                    <span>送货仓库 : </span>
+                                    <span>{item.distributeWarehouseId}</span>
+                                </p>
+                                <p>
+                                    <span>采购价格 / 元 : </span>
+                                    <span>{item.purchasePrice}</span>
+                                </p>
+                            </div>
                             <div className={`${prefixCls}-checkboxGroup`} >
                                 <Checkbox
                                     checked={!!item.supplierType}

@@ -143,7 +143,7 @@ class ProcurementMaintenance extends PureComponent {
      * 修改关系
      */
     handleChange(record) {
-        console.log(record)
+        // console.log(record)
         this.props.UpdateProdPurchase({isVisible: true, record});
     }
 

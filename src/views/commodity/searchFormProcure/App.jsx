@@ -96,48 +96,27 @@ class SearchForm extends Component {
      * 供应商-值清单
      */
     handleSupplyChoose = ({ record }) => {
-        if (this.state.sort === 1) {
-            this.setState({
-                supplyChoose: record,
-                sort: 2
-            });
-        }
+        this.setState({
+            supplyChoose: record,
+        });
     }
 
     /**
      * 地点-值清单
      */
     handleAdressChoose = ({ record }) => {
-        if (this.state.sort === 2) {
-            this.setState({
-                supplyChoose1: record,
-                sort: 3
-            });
-        }
-        if (this.state.sort === 1) {
-            this.setState({
-                supplyChoose1: record,
-                sort: 2
-            });
-        }
+        this.setState({
+            supplyChoose2: record,
+        });
     }
 
     /**
      * 子公司-值清单
      */
     handleCompChoose = ({ record }) => {
-        if (this.state.sort === 3) {
-            this.setState({
-                supplyChoose2: record,
-                sort: 1
-            });
-        }
-        if (this.state.sort === 2) {
-            this.setState({
-                supplyChoose1: record,
-                sort: 3
-            });
-        }
+        this.setState({
+            supplyChoose1: record,
+        });
     }
 
     /**
@@ -495,15 +474,11 @@ class SearchForm extends Component {
 }
 
 SearchForm.propTypes = {
-    fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.objectOf(PropTypes.any),
-    fetchAction: PropTypes.objectOf(PropTypes.any),
     handleAdd: PropTypes.func,
-    fecthGetProdPurchaseById: PropTypes.func,
     prefixCls: PropTypes.string,
     user: PropTypes.objectOf(PropTypes.string),
     form: PropTypes.objectOf(PropTypes.any),
-    innitalvalue: PropTypes.objectOf(PropTypes.any),
     onSearch: PropTypes.func,
     onReset: PropTypes.func,
 }
