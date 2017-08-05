@@ -67,6 +67,7 @@ class ProdModal extends Component {
      * 仓库-值清单
      */
     handleHouseChoose = ({ record }) => {
+        console.log(record)
         this.setState({
             supplyChoose: record,
         });
@@ -76,6 +77,7 @@ class ProdModal extends Component {
      * 供应商-值清单
      */
     handleSupplyChoose = ({ record }) => {
+        console.log(record)
         this.setState({
             supplyChoose1: record,
         });
@@ -85,6 +87,7 @@ class ProdModal extends Component {
      * 地点-值清单
      */
     handleAdressChoose = ({ record }) => {
+        console.log(record)
         this.setState({
             supplyChoose2: record,
         });
@@ -92,11 +95,12 @@ class ProdModal extends Component {
 
 
     /**
-     * 创建弹框OK时间
+     * 创建弹框OK时间 (当没有改变时)
      */
     handleOk() {
         const { validateFields } = this.props.form;
         const { updateProdRecord } = this.props;
+        // console.log(updateProdRecord.supplierType)
         // console.log(this.state.supplyChoose)
         // console.log(this.state.supplyChoose1)
         // console.log(this.state.supplyChoose2)
@@ -105,19 +109,63 @@ class ProdModal extends Component {
             // TODO post data
             this.props.ChangeUpdateProd({
                 id: updateProdRecord.id,
-                spId: this.state.supplyChoose1.spId,
-                spAdrId: this.state.supplyChoose2.spAdrid,
+                // spId: this.state.supplyChoose1.spId,
+                spId: updateProdRecord.distributeWarehouseId,
+                // spAdrId: this.state.supplyChoose2.spAdrid,
+                spAdrId: updateProdRecord.spAdrId,
                 productId: this.props.getProductByIds.id,
-                branchCompanyId: this.state.supplyChoose2.branchCompanyId,
-                supplierType: values.mainSupplier ? 1 : 0,
+                // branchCompanyId: this.state.supplyChoose2.branchCompanyId,
+                branchCompanyId: updateProdRecord.distributeWarehouseId,
+                supplierType: values.supplierType ? 1 : 0,
                 purchaseInsideNumber: this.props.getProductByIds.purchaseInsideNumber,
                 purchasePrice: values.purchasePrice.toFixed(2),
                 // 条码
                 internationalCode: values.internationalCode,
                 // 仓库ID
-                distributeWarehouseId: this.state.supplyChoose.id
+                // distributeWarehouseId: this.state.supplyChoose.id
+                distributeWarehouseId: updateProdRecord.distributeWarehouseId,
             }).then((res) => {
                 this.props.UpdateProdPurchase({isVisible: false});
+                message.success(res.message)
+                this.props.goto()
+            }).catch(() => {
+                message.error('操作失败')
+            })
+        })
+    }
+
+    /**
+     * 创建弹框OK时间 (当发生改变时)
+     */
+    handleOky() {
+        const { validateFields } = this.props.form;
+        const { updateProdRecord } = this.props;
+        console.log(updateProdRecord.supplierType)
+        // console.log(this.state.supplyChoose)
+        // console.log(this.state.supplyChoose1)
+        // console.log(this.state.supplyChoose2)
+        validateFields((err, values) => {
+            // console.log(values);
+            // TODO post data
+            this.props.ChangeUpdateProd({
+                id: updateProdRecord.id,
+                // spId: this.state.supplyChoose1.spId,
+                spId: updateProdRecord.distributeWarehouseId,
+                // spAdrId: this.state.supplyChoose2.spAdrid,
+                spAdrId: updateProdRecord.spAdrId,
+                productId: this.props.getProductByIds.id,
+                // branchCompanyId: this.state.supplyChoose2.branchCompanyId,
+                branchCompanyId: updateProdRecord.distributeWarehouseId,
+                supplierType: updateProdRecord.supplierType,
+                purchaseInsideNumber: this.props.getProductByIds.purchaseInsideNumber,
+                purchasePrice: values.purchasePrice.toFixed(2),
+                // 条码
+                internationalCode: values.internationalCode,
+                // 仓库ID
+                // distributeWarehouseId: this.state.supplyChoose.id
+                distributeWarehouseId: updateProdRecord.distributeWarehouseId,
+            }).then((res) => {
+                this.props.updateProdPurchase({isVisible: false});
                 message.success(res.message)
                 this.props.goto()
             }).catch(() => {
@@ -155,11 +203,12 @@ class ProdModal extends Component {
     }
 
     render() {
-        const { prefixCls, form } = this.props;
+        const { prefixCls, form, updateProdRecord = {} } = this.props;
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
         // const formData = this.props.form.getFieldsValue();
         const { getProductByIds } = this.props;
+        // console.log(updateProdRecord)
         return (
             <Modal
                 title="修改采购价格"
@@ -216,8 +265,9 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-label`}>*供应商：</span>
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
+                                            defaultValue={`${updateProdRecord.spId} - ${updateProdRecord.spName}`}
                                             style={{ zIndex: 9 }}
-                                            compKey="search-mind-key2"
+                                            compKey="search-mind-key"
                                             ref={ref => { this.searchMind1 = ref }}
                                             onChoosed={this.handleSupplyChoose}
                                             fetch={(params) => this.props.pubFetchValueList({
@@ -238,7 +288,7 @@ class ProdModal extends Component {
                                                     width: 200,
                                                 }, {
                                                     title: '供应商名称',
-                                                    dataIndex: 'companyName',
+                                                    dataIndex: 'spName',
                                                     width: 200,
                                                 }
                                             ]}
@@ -249,8 +299,9 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-label`}>*供应商地点：</span>
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
+                                            defaultValue={`${updateProdRecord.spAdrId} - ${updateProdRecord.spAdrName}`}
                                             style={{ zIndex: 8 }}
-                                            compKey="search-mind-key2"
+                                            compKey="search-mind-key1"
                                             ref={ref => { this.searchMind2 = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
                                                 supplierAddressId: params.value
@@ -298,9 +349,10 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-label`}>送货仓：</span>
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
+                                            defaultValue={`${updateProdRecord.distributeWarehouseId} - ${updateProdRecord.distributeWarehouseName}`}
                                             style={{ zIndex: 1 }}
                                             compKey="search-mind-key1"
-                                            ref={ref => { this.searchMind0 = ref }}
+                                            ref={ref => { this.searchMind3 = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
                                                 condition: params.value
                                             }, 'getWarehouseInfo1')}
@@ -330,10 +382,14 @@ class ProdModal extends Component {
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>主供应商：</span>
                                     <span className={`${prefixCls}-warehouse-input`}>
-                                        {getFieldDecorator('mainSupplier', {
+                                        {getFieldDecorator('supplierType', {
                                             initialValue: prodPurchase.salesInsideNumber
                                         })(
-                                            <Checkbox />
+                                            <Checkbox
+                                                defaultChecked={
+                                                    updateProdRecord.supplierType === 1 ? true : false
+                                                }
+                                            />
                                         )}
                                     </span>
                                 </FormItem>
