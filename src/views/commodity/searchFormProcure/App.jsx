@@ -99,6 +99,11 @@ class SearchForm extends Component {
         this.setState({
             supplyChoose: record,
         });
+        if (this.state.supplyChoose === {}) {
+            this.setState({
+                sort: 1,
+            });
+        }
     }
 
     /**
@@ -108,6 +113,9 @@ class SearchForm extends Component {
         this.setState({
             supplyChoose2: record,
         });
+        if (this.state.sort === 1) {
+
+        }
     }
 
     /**
