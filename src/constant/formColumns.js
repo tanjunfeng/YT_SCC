@@ -265,6 +265,7 @@ export const suppliersAppList = [
         title: '供应商编码',
         dataIndex: 'providerNo',
         key: 'providerNo',
+        width: 90,
     },
     {
         title: '供应商名称',
@@ -280,6 +281,7 @@ export const suppliersAppList = [
         title: '供应商类型',
         dataIndex: 'providerType',
         key: 'providerType',
+        width: 90,
         render: (text) => {
             switch (parseInt(text, 10)) {
                 case 1:
@@ -295,6 +297,7 @@ export const suppliersAppList = [
         title: '供应商等级',
         dataIndex: 'grade',
         key: 'grade',
+        width: 90,
         render: (text, record) => {
             if (record.providerType === 1) {
                 switch (parseInt(text, 10)) {
@@ -330,6 +333,7 @@ export const suppliersAppList = [
         title: '供应商入驻日期',
         dataIndex: 'settledDate',
         key: 'settledDate',
+        width: 100,
         render: (text) => (
                 text !== null ? moment(parseInt(text, 10)).format('YYYY-MM-DD') : ''
         )
@@ -338,6 +342,7 @@ export const suppliersAppList = [
         title: '供应商状态',
         dataIndex: 'status',
         key: 'status',
+        width: 90,
         render: (text) => {
             switch (parseInt(text, 10)) {
                 case 0:
@@ -359,6 +364,7 @@ export const suppliersAppList = [
         title: '操作',
         dataIndex: 'operation',
         key: 'operation',
+        width: 90,
     }
 ]
 
@@ -368,6 +374,7 @@ export const supplierInputList = [
         title: '供应商编码',
         dataIndex: 'providerNo',
         key: 'providerNo',
+        width: 90,
     },
     {
         title: '供应商名称',
@@ -383,6 +390,7 @@ export const supplierInputList = [
         title: '供应商类型',
         dataIndex: 'providerType',
         key: 'providerType',
+        width: 90,
         render: (text) => {
             switch (parseInt(text, 10)) {
                 case 1:
@@ -398,6 +406,7 @@ export const supplierInputList = [
         title: '供应商等级',
         dataIndex: 'grade',
         key: 'grade',
+        width: 90,
         render: (text, record) => {
             if (record.providerType === 1) {
                 switch (parseInt(text, 10)) {
@@ -433,6 +442,7 @@ export const supplierInputList = [
         title: '供应商入驻日期',
         dataIndex: 'settledDate',
         key: 'settledDate',
+        width: 100,
         render: (text) => (
                 text !== null ? moment(parseInt(text, 10)).format('YYYY-MM-DD') : ''
         )
@@ -441,6 +451,7 @@ export const supplierInputList = [
         title: '供应商状态',
         dataIndex: 'status',
         key: 'status',
+        width: 90,
         render: (text) => {
             switch (parseInt(text, 10)) {
                 case 0:
@@ -462,6 +473,7 @@ export const supplierInputList = [
         title: '操作',
         dataIndex: 'operation',
         key: 'operation',
+        width: 90,
     }
 ]
 

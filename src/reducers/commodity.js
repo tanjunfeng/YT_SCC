@@ -26,6 +26,8 @@ const initState = Immutable.fromJS({
 
     // 控制弹出框显示影藏
     toAddPriceVisible: false,
+    // 修改采购关系
+    updateProdPurchase: false,
     // 是否是编辑
     isEdit: false,
     purchasingPiceVisible: false,
@@ -72,6 +74,9 @@ const initState = Immutable.fromJS({
 
     // 查询商品信息
     getProductById: {},
+
+    // 更新商品信息
+    updateProdRecord: {},
 
 });
 
@@ -123,6 +128,12 @@ export default function (state = initState, action) {
                 .set('companyName', companyName)
                 .set('pricingId', pricingId)
                 ;
+        }
+
+        // 修改采购价格弹窗
+        case ActionType.UPDATE_PROD_PURCHASE_BYID: {
+            const { isVisible, record } = action.payload;
+            return state.set('updateProdPurchase', isVisible).set('updateProdRecord', record)
         }
 
         case ActionType.RECEIVE_COMMODITY_DETAIL:
