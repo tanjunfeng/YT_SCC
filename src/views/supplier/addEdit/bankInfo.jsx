@@ -21,6 +21,7 @@ import CasadingAddress from '../../../components/ascadingAddress';
 import { addSupplierMessage1 } from '../../../actions/addSupplier';
 import InlineTree from '../../../components/inlineTree';
 import Tools from './utils';
+import { TABCONTENT } from '../../../constant';
 
 const dateFormat = 'YYYY-MM-DD';
 const FormItem = Form.Item;
@@ -39,9 +40,7 @@ class BankInfo extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.handleNextStep = ::this.handleNextStep;
         this.handleCompanyAddressChange = ::this.handleCompanyAddressChange;
-        this.handlePreStep = ::this.handlePreStep;
         this.companyAddress = {};
         this.submitData = {};
         this.state = {
@@ -50,10 +49,10 @@ class BankInfo extends PureComponent {
     }
 
     componentDidMount() {
-        this.props.form.refs = this;
+        TABCONTENT.BankInfo = this;
     }
 
-    handleNextStep() {
+    handleGoTo = (key) => {
         const { form, onGoTo, isEdit, detailData = {}, data = {} } = this.props;
         const { supplierBasicInfo = {} } = data;
         Tools.checkAddress(this.companyAddress, 'companyAddress', this);
@@ -83,13 +82,17 @@ class BankInfo extends PureComponent {
                 }
 
                 this.props.addSupplierMessage1({supplierBankInfo});
-                onGoTo('3');
+                onGoTo(key);
             }
         })
     }
 
+    handlePreStep = () => {
+        this.handleGoTo('3');
+    }
+
     handlePreStep() {
-        this.props.onGoTo('1')
+        this.props.onGoTo('1');
     }
 
     handleCompanyAddressChange(data) {

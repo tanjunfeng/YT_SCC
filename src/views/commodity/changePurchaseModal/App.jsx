@@ -12,6 +12,9 @@ import { connect } from 'react-redux';
 import SearchMind from '../../../components/searchMind';
 import { PAGE_SIZE } from '../../../constant';
 import {
+    fetchTest,
+} from '../../../actions/classifiedList';
+import {
     fetchAddProdPurchase,
 } from '../../../actions';
 import {
@@ -19,9 +22,9 @@ import {
 } from '../../../actions/pub';
 
 import {
-    productAddPriceVisible,
     AddProdPurchase,
-    QueryProdPurchaseExtByCondition
+    UpdateProdPurchase,
+    ChangeUpdateProd
 } from '../../../actions/producthome';
 
 const FormItem = Form.Item;
@@ -33,17 +36,19 @@ const FormItem = Form.Item;
         getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
         getProductByIds: state.toJS().commodity.getProductById,
+        updateProdPurchase: state.toJS().commodity.updateProdPurchase,
+        updateProdRecord: state.toJS().commodity.updateProdRecord,
     }),
     dispatch => bindActionCreators({
         fetchAddProdPurchase,
-        productAddPriceVisible,
         pubFetchValueList,
         AddProdPurchase,
-        QueryProdPurchaseExtByCondition
+        UpdateProdPurchase,
+        ChangeUpdateProd
     }, dispatch)
 )
 
-class ProdPurchaseModal extends Component {
+class ProdModal extends Component {
     constructor(props) {
         super(props);
         this.handleOk = ::this.handleOk;
@@ -91,14 +96,15 @@ class ProdPurchaseModal extends Component {
      */
     handleOk() {
         const { validateFields } = this.props.form;
-        const { getProductByIds } = this.props;
+        const { updateProdRecord } = this.props;
         // console.log(this.state.supplyChoose)
         // console.log(this.state.supplyChoose1)
         // console.log(this.state.supplyChoose2)
         validateFields((err, values) => {
             // console.log(values);
             // TODO post data
-            this.props.AddProdPurchase({
+            this.props.ChangeUpdateProd({
+                id: updateProdRecord.id,
                 spId: this.state.supplyChoose1.spId,
                 spAdrId: this.state.supplyChoose2.spAdrid,
                 productId: this.props.getProductByIds.id,
@@ -111,18 +117,29 @@ class ProdPurchaseModal extends Component {
                 // 仓库ID
                 distributeWarehouseId: this.state.supplyChoose.id
             }).then((res) => {
-                this.props.productAddPriceVisible({isVisible: false});
+                this.props.UpdateProdPurchase({isVisible: false});
                 message.success(res.message)
                 this.props.goto()
             }).catch(() => {
-                this.props.productAddPriceVisible({isVisible: false});
                 message.error('操作失败')
             })
         })
     }
 
     handleCancel(record) {
-        this.props.productAddPriceVisible({isVisible: false, record});
+        this.props.UpdateProdPurchase({isVisible: false, record});
+    }
+
+    // handleTestChoose(record) {
+    //     console.log(record);
+    // }
+
+    handleTestFetch = ({ value, pagination }) => {
+        console.log(value, pagination);
+
+        return fetchTest({
+            value,
+        });
     }
 
     handlePriceChange(result) {
@@ -145,8 +162,8 @@ class ProdPurchaseModal extends Component {
         const { getProductByIds } = this.props;
         return (
             <Modal
-                title="采购价格"
-                visible={this.props.toAddPriceVisible}
+                title="修改采购价格"
+                visible={this.props.updateProdPurchase}
                 className={prefixCls}
                 onOk={this.handleOk}
                 width={'500px'}
@@ -281,7 +298,7 @@ class ProdPurchaseModal extends Component {
                                     <span className={`${prefixCls}-label`}>送货仓：</span>
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
-                                            style={{ zIndex: 10 }}
+                                            style={{ zIndex: 1 }}
                                             compKey="search-mind-key1"
                                             ref={ref => { this.searchMind0 = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
@@ -329,20 +346,22 @@ class ProdPurchaseModal extends Component {
     }
 }
 
-ProdPurchaseModal.propTypes = {
+ProdModal.propTypes = {
     prefixCls: PropTypes.string,
-    toAddPriceVisible: PropTypes.bool,
-    productAddPriceVisible: PropTypes.func,
+    updateProdPurchase: PropTypes.func,
     pubFetchValueList: PropTypes.func,
+    UpdateProdPurchase: PropTypes.func,
     getProductByIds: PropTypes.func,
+    ChangeUpdateProd: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     prodPurchase: PropTypes.objectOf(PropTypes.any),
+    updateProdRecord: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,
 };
 
-ProdPurchaseModal.defaultProps = {
+ProdModal.defaultProps = {
     prefixCls: 'prod-modal',
     goto: () => {},
 }
 
-export default Form.create()(ProdPurchaseModal);
+export default Form.create()(ProdModal);

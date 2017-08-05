@@ -281,7 +281,7 @@ class SupplierInputList extends PureComponent {
                     // 模拟地点弹出框
                     /* status === 2 && */
                     // 1:已提交
-                    status === 1 && auditType === 1 &&
+                    (status === 2 || status === 3) && auditType === 1 &&
                     <Menu.Item key="ChangeAuditAdr">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商地点审核

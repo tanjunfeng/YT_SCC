@@ -30,6 +30,7 @@ import {
 } from '../../../actions/supplier';
 import InlineTree from '../../../components/inlineTree';
 import Tools from './utils';
+import { TABCONTENT } from '../../../constant';
 
 const dateFormat = 'YYYY-MM-DD';
 const { RangePicker } = DatePicker
@@ -62,7 +63,7 @@ class LicenseInfo extends PureComponent {
         this.licenseLoc = {}
         const { supplierlicenseInfo = {} } = props;
         this.state = {
-            checked: 0,
+            checked: supplierlicenseInfo.perpetualManagement ? false : true,
             isSubmit: false
         }
         this.submitData = {};
@@ -70,6 +71,11 @@ class LicenseInfo extends PureComponent {
     }
 
     componentDidMount() {
+        TABCONTENT.LicenseInfo = this;
+    }
+
+    handleGoTo = (key) => {
+        this.props.onGoTo(key);
     }
 
     getVlaue(callback) {
@@ -414,6 +420,11 @@ class LicenseInfo extends PureComponent {
                                         })(
                                             <DatePicker
                                                 getCalendarContainer={() => document.getElementById('createTime')}
+                                                disabledDate={(current) => {
+                                                    return (
+                                                        current && current.valueOf() > Date.now()
+                                                    )
+                                                }}
                                                 format={dateFormat}
                                             />
                                         )}
@@ -441,10 +452,10 @@ class LicenseInfo extends PureComponent {
                                         {getFieldDecorator('startEndDate', {
                                             rules: [{required: true, message: '请选择供应商入驻日期'}],
                                             initialValue: [
-                                                isEdit
+                                                (isEdit && supplierlicenseInfo.startDate)
                                                 ? moment(supplierlicenseInfo.startDate)
                                                 : null,
-                                                isEdit
+                                                (isEdit && supplierlicenseInfo.endDate)
                                                 ? moment(supplierlicenseInfo.endDate)
                                                 : null
                                             ]
@@ -457,7 +468,6 @@ class LicenseInfo extends PureComponent {
                                         <span style={{marginLeft: '10px'}}>
                                             <Checkbox
                                                 checked={this.state.checked}
-                                                defaultChecked={!!supplierlicenseInfo.perpetualManagement}
                                                 onChange={this.handleOperatingPeriod}
                                             >
                                                 {'永久经营'}

@@ -1,6 +1,9 @@
 import React, { PureComponent, Component } from 'react';
 import PropTypes from 'prop-types';
-import { Upload, Button, Icon, Tooltip, DatePicker } from 'antd';
+import {
+    Upload, Button, Icon, Tooltip,
+    DatePicker, Popconfirm, message
+} from 'antd';
 import classnames from 'classnames';
 import moment from 'moment';
 
@@ -118,14 +121,21 @@ class InlineUpload extends Component {
                                     >
                                         查看
                                     </a>
-                                    <span
-                                        title="点击删除"
-                                        className="inline-upload-file-delete"
+                                    <Popconfirm
+                                        title="确定删除该文件?"
                                         data-index={index}
-                                        onClick={this.handleDelete}
+                                        onConfirm={this.handleDelete}
+                                        okText="确定"
+                                        cancelText="取消"
                                     >
-                                        删除
-                                    </span>
+                                        <span
+                                            title="点击删除"
+                                            className="inline-upload-file-delete"
+                                            data-index={index}
+                                        >
+                                            删除
+                                        </span>
+                                    </Popconfirm>
                                 </div>
                             )
                         })

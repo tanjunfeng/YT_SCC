@@ -10,3 +10,5 @@ export const CATEGORY_INTERVAL_LIST = [1, 2, 3, 4, 5];
 export const DATE_FORMAT = 'YYYY-MM-DD';
 // 时间格式
 export const TIME_FORMAT = 'YYYY-MM-DD HH-MM-SS';
+
+export  const TABCONTENT = {}

@@ -17,6 +17,7 @@ import BasicInfo from './basicInfo';
 import BankInfo from './bankInfo';
 import LicenseInfo from './licenseInfo';
 import LocationInformation from '../locationInformation';
+import { TABCONTENT } from '../../../constant';
 
 const TabPane = Tabs.TabPane;
 
@@ -71,9 +72,9 @@ class AddSupplier extends PureComponent {
     }
 
     handleTabClick(item) {
-        this.setState({
-            activeKey: item
-        })
+            const tabs = ['BasicInfo', 'BankInfo', 'LicenseInfo'];
+            const { activeKey } = this.state;
+            TABCONTENT[tabs[activeKey - 1]].handleGoTo(item);
     }
 
     render() {
@@ -95,20 +96,16 @@ class AddSupplier extends PureComponent {
                 <TabPane tab="基本信息" key="1">
                     <BasicInfo
                         {...props}
-                        withRef="bbbb"
                     />
                 </TabPane>
                 <TabPane tab="银行信息" key="2">
                     <BankInfo
                         {...props}
-                        withRef="aaaa"
                     />
                 </TabPane>
                 <TabPane tab="证照信息" key="3">
                     <LicenseInfo
                         {...props}
-                        handleGetDetail={this.handleGetDetail}
-                        withRef="ccc"
                     />
                 </TabPane>
             </Tabs>

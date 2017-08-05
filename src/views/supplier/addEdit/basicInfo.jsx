@@ -21,6 +21,7 @@ import { addSupplierMessage1 } from '../../../actions/addSupplier';
 import InlineTree from '../../../components/inlineTree';
 import { getLargerRegion } from '../../../actions/addSupplier';
 import Tools from './utils';
+import { TABCONTENT } from '../../../constant';
 
 const dateFormat = 'YYYY-MM-DD';
 const FormItem = Form.Item;
@@ -48,6 +49,8 @@ class BasicInfo extends PureComponent {
 
     componentDidMount() {
         !this.props.isEdit && this.props.getLargerRegion();
+        this.props.form.handleNextStep = this.handleNextStep;
+        TABCONTENT.BasicInfo = this;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -64,7 +67,7 @@ class BasicInfo extends PureComponent {
         }
     }
 
-    handleNextStep() {
+    handleGoTo = (key) => {
         const { form, onGoTo, isEdit, detailData = {} } = this.props;
         form.validateFields((err, values) => {
             if (!err) {
@@ -92,9 +95,13 @@ class BasicInfo extends PureComponent {
                     spNo: isEdit ? detailData.supplierBasicInfo.spNo : this.props.supplierId
                 };
                 this.props.addSupplierMessage1({supplierBasicInfo, saleRegionInfo})
-                onGoTo('2');
+                onGoTo(key);
             }
         })
+    }
+
+    handleNextStep = () => {
+        this.handleGoTo('2');
     }
 
     /**
@@ -236,7 +243,7 @@ class BasicInfo extends PureComponent {
 
 function encodeArea(data = []) {
     const a = [];
-    for ( let i of data) {
+    for (let i of data) {
         const key = i.key;
         const hideTitle = i.props.hideTitle;
         const keys = key.split('-');

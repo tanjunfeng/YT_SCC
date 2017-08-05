@@ -45,6 +45,7 @@ class SearchForm extends Component {
             settledDate: null,
             // 供应商类型
             supplierType: '0',
+            pageNum: 1
         }
     }
 
@@ -160,9 +161,13 @@ class SearchForm extends Component {
     * 重置
     */
     handleResetValue() {
+        this.state.pageNum = 1;
         const { onReset } = this.props;
         this.searchData = {};
         this.props.form.resetFields();
+        this.setState({
+            supplierType: 0,
+        });
         this.setState({rengeTime: null});
         onReset(this.searchData);
     }

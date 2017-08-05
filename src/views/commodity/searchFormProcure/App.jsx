@@ -1,8 +1,8 @@
 /**
  * @file App.jsx
- * @author shijh
+ * @author Tanjf
  *
- * 在售商品列表
+ * 采购搜索框
  */
 
 import { fromJS } from 'immutable';
@@ -76,6 +76,7 @@ class SearchForm extends Component {
             supplyChoose1: {},
             supplyChoose2: {},
             visible: true,
+            sort: 1
         }
     }
 
@@ -105,7 +106,7 @@ class SearchForm extends Component {
      */
     handleAdressChoose = ({ record }) => {
         this.setState({
-            supplyChoose1: record,
+            supplyChoose2: record,
         });
     }
 
@@ -114,7 +115,7 @@ class SearchForm extends Component {
      */
     handleCompChoose = ({ record }) => {
         this.setState({
-            supplyChoose2: record,
+            supplyChoose1: record,
         });
     }
 
@@ -125,12 +126,12 @@ class SearchForm extends Component {
         const { validateFields } = this.props.form;
         const { match } = this.props;
         validateFields((err, values) => {
-            const status = values.mainSupplierOptions === '-1'
-                ? null
-                : values.mainSupplierOptions;
-            const supplierType = values.initiateModeOptions === '-1'
+            const status = values.initiateModeOptions === '-1'
                 ? null
                 : values.initiateModeOptions;
+            const supplierType = values.mainSupplierOptions === '-1'
+                ? null
+                : values.mainSupplierOptions;
             // console.log(this.state.supplyChoose1.spAdrid)
             this.props.onSearch(Utils.removeInvalid({
                 spId: this.state.supplyChoose.spId,
@@ -266,7 +267,7 @@ class SearchForm extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { prefixCls, innitalvalue, getProdPurchaseByIds, getProductByIds } = this.props;
+        const { prefixCls } = this.props;
         return (
             <div className={`${prefixCls}-content manage-form`}>
                 <div style={{fontSize: 16, fontWeight: 900}}>
@@ -302,20 +303,8 @@ class SearchForm extends Component {
                                                     dataIndex: 'spId',
                                                     width: 200,
                                                 }, {
-                                                    title: 'spAdrid',
-                                                    dataIndex: 'spAdrid',
-                                                    width: 200,
-                                                }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'providerNo',
-                                                    dataIndex: 'providerNo',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'providerName',
-                                                    dataIndex: 'providerName',
                                                     width: 200,
                                                 }
                                             ]}
@@ -485,15 +474,11 @@ class SearchForm extends Component {
 }
 
 SearchForm.propTypes = {
-    fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.objectOf(PropTypes.any),
-    fetchAction: PropTypes.objectOf(PropTypes.any),
     handleAdd: PropTypes.func,
-    fecthGetProdPurchaseById: PropTypes.func,
     prefixCls: PropTypes.string,
     user: PropTypes.objectOf(PropTypes.string),
     form: PropTypes.objectOf(PropTypes.any),
-    innitalvalue: PropTypes.objectOf(PropTypes.any),
     onSearch: PropTypes.func,
     onReset: PropTypes.func,
 }
