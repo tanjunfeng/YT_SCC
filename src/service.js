@@ -20,9 +20,6 @@ http.response(
         if (res.data.code === 401) {
             LoginLayout();
             return Promise.reject(res);
-        } else if (!res.data.success) {
-            res.code = 8888;
-            return Promise.reject(res);
         }
         return Promise.resolve(res);
     },
