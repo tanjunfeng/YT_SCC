@@ -119,8 +119,7 @@ class PoRcvList extends PureComponent {
                 title: '大类名称',
                 dataIndex: 'bigCLassName',
                 key: 'bigCLassName'
-            }
-            ,
+            },
             {
                 title: '状态',
                 dataIndex: 'statusName',
@@ -143,23 +142,23 @@ class PoRcvList extends PureComponent {
       * @param {*} value 
       */
     onLocTypeChange(value) {
-        //地点类型有值
+        // 地点类型有值
         if (value) {
-            //地点类型有值时，地点可编辑
-            //TODO SearchMind 需实现是否可编辑功能
+            // 地点类型有值时，地点可编辑
+            // TODO SearchMind 需实现是否可编辑功能
         } else {
-            //地点类型无值时，地点不可编辑
-            //TODO SearchMind 需实现是否可编辑功能
+            // 地点类型无值时，地点不可编辑
+            // TODO SearchMind 需实现是否可编辑功能
         }
-        //清空地点值
+        // 清空地点值
         this.poAddress.reset();
     }
     /**
      * 根据供应商值控制供应商地点值清单是否可编辑
      * 供应商有值时：供应商地点值清单可编辑
      * 供应商无值时：供应商地点值清单不可编辑、清空供应商地点值清单
-     * 
-     * @param {*} value 
+     *
+     * @param {*} value
      */
     onSupplierChange(value) {
         if (value) {
@@ -279,11 +278,11 @@ class PoRcvList extends PureComponent {
     * 重置检索条件
     */
     handleResetValue() {
-        //重置检索条件
+        // 重置检索条件
         this.searchParams = {};
-        //重置form
+        // 重置form
         this.props.form.resetFields();
-        //重置值清单
+        // 重置值清单
         this.bigClass.reset();
         this.supplier.reset();
         this.supplierLoc.reset();
@@ -294,22 +293,22 @@ class PoRcvList extends PureComponent {
      * 根据地点类型查询地点值清单
      */
     handleGetAddressMap = ({ value, pagination }) => {
-        //地点类型
+        // 地点类型
         let { locTypeCd } = this.props.form.getFieldsValue(["locTypeCd"])
         console.log("selectedLocTypeCd", locTypeCd);
-        //根据选择的地点类型获取对应地点的值清单
+        // 根据选择的地点类型获取对应地点的值清单
         if (locTypeCd === locTypeCodes.warehouse) {
-            //地点类型为仓库
+            // 地点类型为仓库
             return this.props.getWarehouseAddressMap({
                 value,
             });
         } else if (locTypeCd === locTypeCodes.shop) {
-            //地点类型为门店
+            // 地点类型为门店
             return this.props.getShopAddressMap({
                 value,
             });
         } else {
-            //如果地点类型为空，返回空promise
+            // 如果地点类型为空，返回空promise
             return new Promise(function (resolve, reject) {
                 resolve({ total: 0, data: [] });
             });
@@ -333,7 +332,6 @@ class PoRcvList extends PureComponent {
         return this.props.getSupplierMap({
             value,
         });
-
     }
 
     /**
@@ -346,13 +344,13 @@ class PoRcvList extends PureComponent {
             supplierCd = selectedSupplierRawData.code;
         }
 
-        //如果供应商地点为空，返回空promise
+        // 如果供应商地点为空，返回空promise
         if (!supplierCd) {
             return new Promise(function (resolve, reject) {
                 resolve({ total: 0, data: [] });
             });
         }
-        //根据供应商编码、输入查询内容获取供应商地点信息
+        // 根据供应商编码、输入查询内容获取供应商地点信息
         return this.props.getSupplierLocMap({
             value,
             supplierCd
@@ -387,7 +385,7 @@ class PoRcvList extends PureComponent {
     onActionMenuSelect(record, index, items) {
         const { id } = record;
         const { key } = items;
-        //do nothing
+        // do nothing
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -409,12 +407,7 @@ class PoRcvList extends PureComponent {
                             <Col span={8}>
                                 {/* 采购单号 */}
                                 <FormItem label="采购单号" formItemLayout>
-                                    {getFieldDecorator('poNo', {
-                                    })(
-                                        <Input
-                                        />
-                                        )}
-
+                                    { getFieldDecorator('poNo', {})(<Input />) }
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -623,15 +616,21 @@ class PoRcvList extends PureComponent {
                         </Row>
                     </div>
                     <div >
-                        <Table dataSource={data} columns={this.columns} rowKey="id" scroll={{
-                            x: 1400
-                        }} pagination={{
-                            current: pageNum,
-                            total,
-                            pageSize,
-                            showQuickJumper: true,
-                            onChange: this.onPaginate
-                        }} />
+                        <Table
+                            dataSource={data}
+                            columns={this.columns}
+                            rowKey="id"
+                            scroll={{
+                                x: 1400
+                            }}
+                            pagination={{
+                                current: pageNum,
+                                total,
+                                pageSize,
+                                showQuickJumper: true,
+                                onChange: this.onPaginate
+                            }}
+                        />
                     </div>
                 </Form>
             </div >
@@ -644,7 +643,5 @@ PoRcvList.propTypes = {
     onReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any)
 };
-
-
 
 export default withRouter(Form.create()(PoRcvList));

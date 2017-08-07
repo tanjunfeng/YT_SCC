@@ -8,64 +8,105 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import {
-    Form, Icon, Row, Col, Select, Modal,
-    Input, DatePicker, Button, message, Table
+    Form, Icon, Row, Col, Select, Modal, InputNumber,
+    DatePicker, Button, message, Table, Input,
 } from 'antd';
 import moment from 'moment';
+import { modifyDistributionColumns } from '../../../actions/modify/modifyDistributionColumns';
 import { DATE_FORMAT } from '../../../constant/index';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
 const confirm = Modal.confirm;
 
-const columns = [{
-    title: '商品编码',
-    dataIndex: 'commodifyNumber',
-    key: 'commodifyNumber',
-}, {
-    title: '商品名称',
-    dataIndex: 'commodifyName',
-    key: 'commodifyName',
-}, {
-    title: '订单数量',
-    dataIndex: 'number',
-    key: 'number',
-}, {
-    title: '配送数量',
-    dataIndex: 'deliveryNumber',
-    key: 'deliveryNumber',
-}, {
-    title: '单价',
-    dataIndex: 'price',
-    key: 'price',
-    render: (text) => (
-        <span>￥{text}</span>
-    )
-}, {
-    title: '签收数量',
-    dataIndex: 'getNumber',
-    key: 'getNumber',
-}, {
-    title: '签收差额',
-    dataIndex: 'differMoney',
-    key: 'differMoney',
-    render: (text) => (
-        <span>{text}元</span>
-    )
-}];
-
+@connect(
+    state => ({
+        // ToDo：查询调接口时，需要走redux拿数据
+    }),
+    dispatch => bindActionCreators({
+        modifyDistributionColumns
+    }, dispatch)
+)
 class DistributionInformation extends PureComponent {
     constructor(props) {
         super(props);
         this.handleDistributionSave = ::this.handleDistributionSave;
         this.onDeliveryDateChange = ::this.onDeliveryDateChange;
         this.onWillArrivalDateChange = ::this.onWillArrivalDateChange;
-
         this.state = {
             deliveryDate: props.initialData.deliveryDate,
-            willArrivalDate: props.initialData.willArrivalDate
+            willArrivalDate: props.initialData.willArrivalDate,
         }
+        this.columns = [{
+            title: '商品编码',
+            dataIndex: 'commodifyNumber',
+            key: 'commodifyNumber',
+        }, {
+            title: '商品名称',
+            dataIndex: 'commodifyName',
+            key: 'commodifyName',
+        }, {
+            title: '订单数量',
+            dataIndex: 'number',
+            key: 'number',
+            render: (text) => (
+                <span>
+                    <span>{text}</span>
+                    <span>{props.initialData.unit}</span>
+                </span>
+            )
+        }, {
+            title: '配送数量',
+            dataIndex: 'deliveryNumber',
+            key: 'deliveryNumber',
+            render: (text, record, index) => (
+                <span>
+                    <InputNumber
+                        value={text}
+                        min={0}
+                        max={record.number}
+                        onChange={(value) => {
+                            props.modifyDistributionColumns(index, value, 'deliveryNumber');
+                        }}
+                    />
+                    <span>{}</span>
+                </span>
+            )
+        }, {
+            title: '单价',
+            dataIndex: 'price',
+            key: 'price',
+            render: (text) => (
+                <span>￥{text}</span>
+            )
+        }, {
+            title: '签收数量',
+            dataIndex: 'getNumber',
+            key: 'getNumber',
+            render: (text, record, index) => (
+                <span>
+                    <InputNumber
+                        value={text}
+                        min={0}
+                        max={record.deliveryNumber}
+                        onChange={(value) => {
+                            props.modifyDistributionColumns(index, value, 'getNumber');
+                        }}
+                    />
+                    <span>{}</span>
+                </span>
+            )
+        }, {
+            title: '签收差额',
+            dataIndex: 'differMoney',
+            key: 'differMoney',
+            render: (text) => (
+                <span>{text}元</span>
+            )
+        }];
     }
 
     componentDidMount() {
@@ -297,7 +338,7 @@ class DistributionInformation extends PureComponent {
                         <div>
                             <Table
                                 dataSource={initialData.distributionInfo}
-                                columns={columns}
+                                columns={this.columns}
                                 pagination={false}
                                 rowKey="commodifyNumber"
                             />
@@ -317,7 +358,7 @@ class DistributionInformation extends PureComponent {
                             <Button
                                 size="default"
                                 onClick={() => {
-                                    this.props.history.pop();
+                                    this.props.history.goBack();
                                 }}
                             >
                                 返回
@@ -334,6 +375,7 @@ DistributionInformation.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     initialData: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
+    modifyDistributionColumns: PropTypes.func,
 }
 
 DistributionInformation.defaultProps = {

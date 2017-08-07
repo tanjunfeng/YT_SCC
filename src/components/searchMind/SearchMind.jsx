@@ -52,7 +52,7 @@ class SearchMind extends PureComponent {
              */
             selectedRawData: null,
 
-            disabled: false,
+            disabled: props.disabled,
 
             /**
              * 此处由 state 控制分页
