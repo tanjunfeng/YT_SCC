@@ -183,6 +183,7 @@ class OrderManagementList extends Component {
 
         const { submitStartTime, submitEndTime } = this.time;
         const { franchiseeId, branchCompanyId } = this.state;
+        console.log(branchCompanyId)
         this.current = 1;
         this.searchData = {
             id,
@@ -248,7 +249,7 @@ class OrderManagementList extends Component {
      */
     handleJoiningChoose = ({ record }) => {
         this.setState({
-            franchiseeId: record,
+            franchiseeId: record.franchiseeId,
         });
     }
 
@@ -257,7 +258,7 @@ class OrderManagementList extends Component {
      */
     handleSubCompanyChoose = ({ record }) => {
         this.setState({
-            branchCompanyId: record,
+            branchCompanyId: record.id,
         });
     }
 
@@ -564,24 +565,25 @@ class OrderManagementList extends Component {
                                                 ref={ref => { this.joiningSearchMind = ref }}
                                                 fetch={(params) =>
                                                     this.props.pubFetchValueList({
-                                                        branchCompanyId: (typeof parseFloat(params.value) === 'number') ? params.value : '',
-                                                        branchCompanyName: (typeof parseFloat(params.value) !== 'number') ? params.value : ''
-                                                    }, 'findCompanyBaseInfo')
+                                                        param: params.value,
+                                                        pageNum: params.pagination.current || 1,
+                                                        pageSize: params.pagination.pageSize
+                                                    }, 'getFranchiseeInfo')
                                                 }
                                                 onChoosed={this.handleJoiningChoose}
                                                 onClear={this.handleJoiningClear}
                                                 renderChoosedInputRaw={(data) => (
-                                                    <div>{data.id}</div>
+                                                    <div>{data.franchiseeId}</div>
                                                 )}
-                                                pageSize={2}
+                                                pageSize={6}
                                                 columns={[
                                                     {
-                                                        title: '子公司id',
-                                                        dataIndex: 'id',
+                                                        title: '加盟商id',
+                                                        dataIndex: 'franchiseeId',
                                                         width: 150,
                                                     }, {
-                                                        title: '子公司名字',
-                                                        dataIndex: 'name',
+                                                        title: '加盟商名字',
+                                                        dataIndex: 'franchiseeName',
                                                         width: 200,
                                                     }
                                                 ]}
@@ -599,8 +601,8 @@ class OrderManagementList extends Component {
                                                 ref={ref => { this.subCompanySearchMind = ref }}
                                                 fetch={(params) =>
                                                     this.props.pubFetchValueList({
-                                                        branchCompanyId: (typeof parseFloat(params.value) === 'number') ? params.value : '',
-                                                        branchCompanyName: (typeof parseFloat(params.value) !== 'number') ? params.value : ''
+                                                        branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
+                                                        branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
                                                     }, 'findCompanyBaseInfo')
                                                 }
                                                 onChoosed={this.handleSubCompanyChoose}
@@ -608,7 +610,7 @@ class OrderManagementList extends Component {
                                                 renderChoosedInputRaw={(data) => (
                                                     <div>{data.id}</div>
                                                 )}
-                                                pageSize={2}
+                                                pageSize={6}
                                                 columns={[
                                                     {
                                                         title: '子公司id',
