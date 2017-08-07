@@ -1,8 +1,8 @@
 /**
  * @file App.jsx
- * @author shijh
+ * @author Tanjf
  *
- * 在售商品列表
+ * 采购搜索框
  */
 
 import { fromJS } from 'immutable';
@@ -12,13 +12,16 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { message, Form, Col, Row, Select, Button, Icon } from 'antd';
+import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
 import {
     fetchAction,
     receiveData,
-    fetchTest,
 } from '../../../actions/classifiedList';
+import {
+    QueryProdPurchaseExtByCondition,
+} from '../../../actions/producthome';
 import {
     fetchAddProdPurchase,
     fetchQueryProdByCondition,
@@ -40,6 +43,7 @@ const Option = Select.Option;
         user: state.toJS().user.data,
         rights: state.toJS().user.rights,
         data: state.toJS().commodity.classifiedList,
+        getProductByIds: state.toJS().commodity.getProductById,
         getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
     }),
     dispatch => bindActionCreators({
@@ -48,7 +52,8 @@ const Option = Select.Option;
         fetchAddProdPurchase,
         fetchQueryProdByCondition,
         pubFetchValueList,
-        fecthGetProdPurchaseById
+        fecthGetProdPurchaseById,
+        QueryProdPurchaseExtByCondition
     }, dispatch)
 )
 class SearchForm extends Component {
@@ -70,20 +75,21 @@ class SearchForm extends Component {
             supplyChoose: {},
             supplyChoose1: {},
             supplyChoose2: {},
-            visible: true
+            visible: true,
+            sort: 1
         }
     }
 
     componentWillMount() {}
 
     componentDidMount() {
-        this.props.fetchAction();
+        // this.props.fetchAction();
 
-        setTimeout(() => {
-            this.setState({
-                disabled: true,
-            });
-        }, 2000);
+        // setTimeout(() => {
+        //     this.setState({
+        //         disabled: true,
+        //     });
+        // }, 2000);
     }
 
     /**
@@ -93,6 +99,11 @@ class SearchForm extends Component {
         this.setState({
             supplyChoose: record,
         });
+        if (this.state.supplyChoose === {}) {
+            this.setState({
+                sort: 1,
+            });
+        }
     }
 
     /**
@@ -100,8 +111,11 @@ class SearchForm extends Component {
      */
     handleAdressChoose = ({ record }) => {
         this.setState({
-            supplyChoose1: record,
+            supplyChoose2: record,
         });
+        if (this.state.sort === 1) {
+
+        }
     }
 
     /**
@@ -109,7 +123,7 @@ class SearchForm extends Component {
      */
     handleCompChoose = ({ record }) => {
         this.setState({
-            supplyChoose2: record,
+            supplyChoose1: record,
         });
     }
 
@@ -119,20 +133,21 @@ class SearchForm extends Component {
     handleGetValue() {
         const { validateFields } = this.props.form;
         const { match } = this.props;
-        // console.log(match)
         validateFields((err, values) => {
-            // console.log(this.state.supplyChoose, this.state.supplyChoose1, this.state.supplyChoose2)
-            // console.log(values);
-            // TODO post data
+            const status = values.initiateModeOptions === '-1'
+                ? null
+                : values.initiateModeOptions;
+            const supplierType = values.mainSupplierOptions === '-1'
+                ? null
+                : values.mainSupplierOptions;
             // console.log(this.state.supplyChoose1.spAdrid)
-            this.props.fetchQueryProdByCondition({
-                productId: match.params.id,
+            this.props.onSearch(Utils.removeInvalid({
                 spId: this.state.supplyChoose.spId,
                 spAdrId: this.state.supplyChoose1.spAdrid,
                 branchCompanyId: this.state.supplyChoose2.id,
-                supplierType: values.initiateModeOptions,
-                status: values.mainSupplierOptions
-            });
+                supplierType,
+                status
+            }))
         })
     }
 
@@ -225,10 +240,16 @@ class SearchForm extends Component {
      * 重置
      */
     handleResetValue() {
-        this.addressSearchMind.handleClear();
-        this.supplySearchMind.handleClear();
-        this.supplyCompSearchMind.handleClear();
+        this.addressSearchMind.reset();
+        this.supplySearchMind.reset();
+        this.supplyCompSearchMind.reset();
+        this.setState({
+            supplyChoose: {},
+            supplyChoose1: {},
+            supplyChoose2: {},
+        })
         this.props.form.resetFields();
+        this.props.onReset()
     }
 
     /**
@@ -254,7 +275,7 @@ class SearchForm extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { prefixCls, innitalvalue, getProdPurchaseByIds } = this.props;
+        const { prefixCls } = this.props;
         return (
             <div className={`${prefixCls}-content manage-form`}>
                 <div style={{fontSize: 16, fontWeight: 900}}>
@@ -290,20 +311,8 @@ class SearchForm extends Component {
                                                     dataIndex: 'spId',
                                                     width: 200,
                                                 }, {
-                                                    title: 'spAdrid',
-                                                    dataIndex: 'spAdrid',
-                                                    width: 200,
-                                                }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'providerNo',
-                                                    dataIndex: 'providerNo',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'providerName',
-                                                    dataIndex: 'providerName',
                                                     width: 200,
                                                 }
                                             ]}
@@ -473,15 +482,13 @@ class SearchForm extends Component {
 }
 
 SearchForm.propTypes = {
-    fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.objectOf(PropTypes.any),
-    fetchAction: PropTypes.objectOf(PropTypes.any),
     handleAdd: PropTypes.func,
-    fecthGetProdPurchaseById: PropTypes.func,
     prefixCls: PropTypes.string,
     user: PropTypes.objectOf(PropTypes.string),
     form: PropTypes.objectOf(PropTypes.any),
-    innitalvalue: PropTypes.objectOf(PropTypes.any),
+    onSearch: PropTypes.func,
+    onReset: PropTypes.func,
 }
 
 SearchForm.defaultProps = {
@@ -489,6 +496,8 @@ SearchForm.defaultProps = {
         name: 'Who?'
     },
     prefixCls: 'select-line',
+    onSearch: () => {},
+    onReset: () => {},
 }
 
 export default Form.create()(withRouter(SearchForm));

@@ -17,7 +17,6 @@ import {
     Table,
     Menu,
     Dropdown,
-    message
 } from 'antd';
 import {
     fetchProviderEnterList,
@@ -28,7 +27,7 @@ import {
 import {
     getSupplierSettledList
 } from '../../../actions/supplier';
-import SearchForm from '../searchForm';
+import SearchForm from '../searchFormList';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import { suppliersAppList } from '../../../constant/formColumns';
@@ -78,8 +77,6 @@ class SuppliersAppList extends PureComponent {
         this.props.getSupplierSettledList({
             pageNum: this.current,
             pageSize: PAGE_SIZE,
-            providerType: 1,
-            status: 0
         });
     }
 
@@ -113,7 +110,7 @@ class SuppliersAppList extends PureComponent {
         if (bool) {
             // 主数据
             // console.log('主数据')
-            this.props.fetchQueryManageList({
+            this.props.getSupplierSettledList({
                 pageNum: this.current,
                 pageSize: PAGE_SIZE,
                 ...this.searchForm
@@ -121,13 +118,12 @@ class SuppliersAppList extends PureComponent {
         } else {
             // SCM数据
             // console.log('SCM数据')
-            this.props.fetchQueryManageList({
+            this.props.getSupplierSettledList({
                 pageNum: this.current,
                 pageSize: PAGE_SIZE,
                 ...this.searchForm
             });
         }
-        this.handlePaginationChange(this.current);
     }
 
     /**
@@ -135,7 +131,6 @@ class SuppliersAppList extends PureComponent {
      */
     handleFormReset(data) {
         this.searchForm = data;
-        this.handlePaginationChange();
     }
 
     /**
@@ -180,18 +175,21 @@ class SuppliersAppList extends PureComponent {
                 </Menu.Item>
                 {
                     // 0： 制单状态、2：已审核、3:已拒绝
-                    (status === 0 || status === 2 || status === 3) &&
+                    (status === 0 || status === 2 || status === 3 || status === 4) &&
                     <Menu.Item key="modifySupInfor">
                         <Link to={`${pathname}/edit/supplier/${id}`}>
                             修改供应商信息
                         </Link>
                     </Menu.Item>
                 }
-                <Menu.Item key="addAddress">
-                    <Link to={`${pathname}/add/${id}`}>
-                        新增供应商地点信息
-                    </Link>
-                </Menu.Item>
+                {
+                    (status === 0 || status === 1 || status === 2) &&
+                    <Menu.Item key="addAddress">
+                        <Link to={`${pathname}/add/${id}`}>
+                            新增供应商地点信息
+                        </Link>
+                    </Menu.Item>
+                }
                 {
                     // 3:已拒绝
                     status === 3 &&

@@ -378,8 +378,32 @@ export const uploadImageBase64Data = (params) => http.post('/commonUploadFile/up
 // 查询分类信息
 export const queryCategorys = (params) => http.get('/category/queryAllShowCategories', params);
 
+<<<<<<< HEAD
 // 查询单级分类信息
 export const queryAllCategoriesWithIconByParentId = (params) => http.get('/category/queryAllCategoriesWithIconByParentId', params);
+=======
+// 查询所有分类
+export const queryAllCategories = () => http.get('/category/queryAllCategories');
+
+/**
+ * 修改排序
+ * @param id
+ * @param sortOrder
+ * @param newSortOrder
+ */
+export const updateSortNum = ({ id, newSortOrder }) => (
+    http.get('/category/updateSortNum', { id, newSortOrder })
+);
+
+/**
+ * 修改展示状态
+ * @param id
+ * @param displayStatus
+ */
+export const updateShowStatus = ({ id, displayStatus }) => (
+    http.get('/category/updateShowStatus', { id, displayStatus })
+);
+>>>>>>> f9f37d52954e22b955c98164218b76e781251b42
 
 // 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
 export const saveInput = (params) => http.post('/rk/saveInput', params);
@@ -443,7 +467,7 @@ export const getProdPurchaseById = (params) => http.get('/prodPurchase/getProdPu
 export const findPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
 
 // 新增商品采购关系
-export const fetchAddProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
+export const addProdPurchase = (params) => http.post('/prodPurchase/addProdPurchase', params);
 
 // 更新商品采购关系
 export const updateProdPurchase = (params) => http.post('/prodPurchase/updateProdPurchase', params);
@@ -461,7 +485,7 @@ export const changeProPurchaseStatus = (params) => http.get('/prodPurchase/chang
 export const batchChangeProPurchaseStatus = (params) => http.post('/prodPurchase/batchChangeProPurchaseStatus', params);
 
 // 根据条件查询商品价格信息
-export const fetchQueryProdByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
+export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurchase/queryProdPurchaseExtByCondition', params);
 
 // 查询商品信息
 export const getProductById = (params) => http.get('/prodPurchase/getProductById', params);
@@ -469,7 +493,7 @@ export const getProductById = (params) => http.get('/prodPurchase/getProductById
 // 根据品牌名称分页查询品牌列表
 export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPages', params);
 
-/***************procurement*********** */
+/* **************procurement*********** */
 // 查询采购单列表
 export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
 //删除采购单 参数 1或n个采购单id  [ids] 
@@ -488,15 +512,11 @@ export const auditPo = (params) => http.post('/provider/auditPo', params);
  */
 // 地点值清单查询接口
 // 仓库地点值清单
-export const queryWarehouseAddressMap = (params) => http.get('/provider/queryWarehouseAddressMap', params);
+
 // 门店地点值清单
-export const queryShopAddressMap = (params) => http.get('/provider/queryShopAddressMap', params);
-// 供应商值清单
-export const querySupplierMap = (params) => http.get('/provider/querySupplierMap', params);
-// 供应商地点值清单
-export const querySupplierLocMap = (params) => http.get('/provider/querySupplierLocMap', params);
+export const getStoreInfo = (params) => http.get('/store/getStoreInfo', params);
 // 大类值清单
-export const queryBigClassMap = (params) => http.get('/provider/queryBigClassMap', params);
+export const querycategories = (params) => http.get('/category/queryCategories', params);
 // 商品值清单
 export const queryMaterialMap = (params) => http.get('/provider/queryMaterialMap', params);
 
@@ -541,6 +561,14 @@ export const auditSupplierEditInfo = (params) => http.post('/supplier/auditSuppl
 export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);
 // 获取已审批通过供应商地点下拉框数据
 export const querySuppliersList = (params) => http.get('/supplier/supplierAdrSearchBox', params);
+// 商品的暂停购进和恢复采购
+export const goodsChangeStatus = (params) => http.post('prodPurchase/batchChangeProPurchaseStatus', params);
+// 商品的区域性批量上架
+export const prodBatchPutAway = (params) => http.post('prodSell/prodBatchPutaway', params);
+// 商品的区域性批量下架
+export const prodBatchUpdate = (params) => http.post('prodSell/prodBatchUpdate', params);
+// 批量全国上下架
+export const availablProducts = (params) => http.post('product/availablProducts', params);
 // 新增供应商信息
 export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);
 // 修改供应商信息

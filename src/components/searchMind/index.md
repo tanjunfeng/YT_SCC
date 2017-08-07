@@ -73,8 +73,8 @@ render() {
             ref={ref => { this.searchMind = ref }}
             fetch={(value) => this.handleTestFetch(value)}
             addonBefore="供应商"
-            onChoose={this.handleTestChoose}
-            onChooseForInput={(data) => (
+            onChoosed={this.handleTestChoose}
+            renderChoosedInputRaw={(data) => (
                 <div>{data.key} - {data.name}</div>
             )}
             columns={[
@@ -103,6 +103,7 @@ render() {
 
 | Property             | Description           | Type       |  Default  |
 |---------------- |----------------|----------|----------|
+| compKey | component key | string | null  |
 | fetch | Fetch Promise | Promise | null  |
 | addonBefore | 输入框前缀 | String, Node |  |
 | columns | 下拉框表头 | Array | null |
@@ -114,6 +115,10 @@ render() {
 | compKey | Unique Component Key | string | null  |
 | rowKey | by Antd | string, function(record) | 'id'  |
 | defaultValue | Input default value | string | ''  |
+| dropWidth | Droplist width | number|null | null  |
+| disabled | 是否禁用组件 | boolean | false  |
+
+
 
 
 

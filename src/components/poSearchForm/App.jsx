@@ -16,6 +16,11 @@ import {
     getSupplierLocMap,
     getBigClassMap
 } from '../../actions'
+
+
+import { pubFetchValueList } from '../../actions/pub.js';
+import { PAGE_SIZE } from '../../constant';
+
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 const Option = Select.Option;
@@ -23,9 +28,18 @@ const { RangePicker } = DatePicker;
 const dateFormat = "YYYY-MM-DD";
 @connect(
     state => ({
+
     }),
-    dispatch => bindActionCreators({ getWarehouseAddressMap, getShopAddressMap, getSupplierMap, getSupplierLocMap, getBigClassMap }, dispatch)
+    dispatch => bindActionCreators({
+        getWarehouseAddressMap,
+        getShopAddressMap,
+        getSupplierMap,
+        getSupplierLocMap,
+        getBigClassMap,
+        pubFetchValueList
+    }, dispatch)
 )
+
 class PoSearchForm extends PureComponent {
     constructor(props) {
         super(props);
@@ -34,112 +48,84 @@ class PoSearchForm extends PureComponent {
         this.handleCreate = ::this.handleCreate;
         this.handleDelete =::this.handleDelete;
         this.handleDownPDF =::this.handleDownPDF;
-        this.onLocTypeChange =::this.onLocTypeChange;
-        this.handleGetAddressMap =::this.handleGetAddressMap;
         this.handleGetBigClassMap =::this.handleGetBigClassMap;
         this.handleGetSupplierMap =::this.handleGetSupplierMap;
         this.handleGetSupplierLocMap =::this.handleGetSupplierLocMap;
         this.searchParams = {};
         this.state = {
-            //地点是否可编辑
-            locDisabled: true
+            // 地点是否可编辑
+            locDisabled: true,
+            locationData: {}
         }
-
     }
 
-    onLocTypeChange(value) {
-        //地点类型有值
-        if (value) {
-            //地点类型有值时，地点可编辑
-            //TODO
-        } else {
-            //地点类型无值时，地点不可编辑
-            //TODO
-        }
-        //清空地点值
+    onLocTypeChange = (value) => {
         this.poAddress.reset();
+        this.setState({
+            locDisabled: !value
+        })
+    }
+
+    /**
+     * 地点类型选择
+     *
+     * @return {Promise}
+     */
+    handleGetAddressMap = (param) => {
+        const { locTypeCode } = this.props.form.getFieldsValue(['locTypeCode'])
+        const libraryCode = '0001';
+        const storeCode = '0002';
+        let locationTypeParam = '';
+        if (locTypeCode === libraryCode) {
+            locationTypeParam = 'getWarehouseInfo1';
+            this.setState({
+                locationData: {
+                    code: 'warehouseCode',
+                    name: 'warehouseName'
+                }
+            })
+        }
+        if (locTypeCode === storeCode) {
+            locationTypeParam = 'getStoreInfo';
+            this.setState({
+                locationData: {
+                    code: 'id',
+                    name: 'name'
+                }
+            })
+        }
+        return this.props.pubFetchValueList({
+            pageSize: PAGE_SIZE,
+            param: param.value
+        }, locationTypeParam);
     }
 
     onSupplierChange(value) {
-        //地点类型有值
-        if (value) {
-            //地点类型有值时，供应商地点可编辑
-            //TODO
-        } else {
-            //地点类型无值时，供应商地点不可编辑
-            //TODO
-            //地点类型无值时，供应商清空地点值
-        }
-        //清空地点值
-        this.supplierLoc.reset();
+        
     }
-    getSearchParams() {
+
+    getSearchParams = () => {
         const {
-            poNo,
-            locTypeCd,
-            poTypeCd,
-            statusCd,
+            purchaseNumber,
+            locTypeCode,
+            purchaseTypeCode,
+            statusCode,
         } = this.props.form.getFieldsValue();
 
-        //获取创建日期区间
-        let createdDuringArr = this.props.form.getFieldValue("createdDuring") || [];
-        let createdDuringFrom, createdDuringTo;
-        if (createdDuringArr.length > 0) {
-            createdDuringFrom = createdDuringArr[0].format(dateFormat);
-        }
-        if (createdDuringArr.length > 1) {
-            createdDuringTo = createdDuringArr[1].format(dateFormat);
-        }
-
-        //获取审批日期区间
-        let auditDuringArr = this.props.form.getFieldValue("auditDuring") || [];
-        let auditDuringFrom, auditDuringTo;
-        if (auditDuringArr.length > 0) {
-            auditDuringFrom = auditDuringArr[0].format(dateFormat);
-        }
-        if (auditDuringArr.length > 1) {
-            auditDuringTo = auditDuringArr[1].format(dateFormat);
-        }
-
-        //地点
-        let addressCd;
-        let selectedAddressRawData = this.poAddress.state.selectedRawData;
-        if (selectedAddressRawData) {
-            addressCd = selectedAddressRawData.code;
-        }
-        //供应商
-        let supplierCd;
-        let selectedSupplierRawData = this.supplier.state.selectedRawData;
-        if (selectedSupplierRawData) {
-            supplierCd = selectedSupplierRawData.code;
-        }
-
-        //供应商地点
-        let supplierLocCd;
-        let selectedSupplierLocRawData = this.supplierLoc.state.selectedRawData;
-        if (selectedSupplierLocRawData) {
-            supplierLocCd = selectedSupplierLocRawData.code;
-        }
-
-        //大类
-        let bigClassCd = null;
-        let selectedBigClassRawData = this.bigClass.state.selectedRawData;
-        if (selectedBigClassRawData) {
-            bigClassCd = selectedBigClassRawData.code;
-        }
+        console.log(this.props.form.getFieldsValue());
         const searchParams = {
-            poNo,
-            locTypeCd,
-            addressCd,
-            poTypeCd,
-            statusCd,
-            bigClassCd,
-            supplierCd,
-            supplierLocCd,
-            createdDuringFrom,
-            createdDuringTo,
-            auditDuringFrom,
-            auditDuringTo
+            purchaseOrderNo: purchaseNumber,
+            spNo: '',
+            spAdrId: '',
+            adrType: '',
+            adrTypeCode: '',
+            secondCategoryId: '',
+            purchaseOrderType: '',
+            status: '',
+            startCreateTime: '',
+            endCreateTime: '',
+            startAuditTime: '',
+            endAuditTime: ''
         };
 
         this.searchParams = Utils.removeInvalid(searchParams);
@@ -148,25 +134,24 @@ class PoSearchForm extends PureComponent {
 
     handleSearch() {
         const { onSearch } = this.props;
-        //call回调函数
+        // call回调函数
         if (onSearch) {
             onSearch(this.getSearchParams());
         }
-
     }
 
     handleResetValue() {
         const { onReset } = this.props;
-        //重置查询条件
+        // 重置查询条件
         this.searchParams = {};
-        //重置form
+        // 重置form
         this.props.form.resetFields();
-        //重置值清单
+        // 重置值清单
         this.bigClass.reset();
         this.supplier.reset();
         this.supplierLoc.reset();
         this.poAddress.reset();
-        //call回调函数
+        // call回调函数
         if (onReset) {
             onReset(this.searchParams);
         }
@@ -174,13 +159,13 @@ class PoSearchForm extends PureComponent {
 
     handleDelete() {
         const { onDelete } = this.props;
-        //call回调函数
+        // call回调函数
         onDelete();
     }
 
     handleDownPDF() {
         const { onDownPDF } = this.props;
-        //call回调函数
+        // call回调函数
         if (onDownPDF) {
             onDownPDF();
         }
@@ -192,34 +177,6 @@ class PoSearchForm extends PureComponent {
         const { history } = this.props;
         history.push('/po/create');
     }
-
-    handleGetAddressMap = ({ value, pagination }) => {
-        //地点类型
-        let { locTypeCd } = this.props.form.getFieldsValue(["locTypeCd"])
-        //子公司ID
-        let companyId = null;  //TODO 从session获取子公司ID？
-        let pageNum = pagination.current || 1;
-        console.log("selectedLocTypeCd", locTypeCd);
-        //根据选择的地点类型获取对应地点的值清单
-        if (locTypeCd === locTypeCodes.warehouse) {
-            //地点类型为仓库
-            return this.props.getWarehouseAddressMap({
-                value, companyId, pageNum
-            });
-        } else if (locTypeCd === locTypeCodes.shop) {
-            //地点类型为门店
-            return this.props.getShopAddressMap({
-                value, companyId, pageNum
-            });
-        } else {
-            //如果地点类型为空，返回空promise
-            return new Promise(function (resolve, reject) {
-                resolve({ total: 0, data: [] });
-            });
-        }
-    }
-
-
 
 
     handleGetBigClassMap = ({ value, pagination }) => {
@@ -245,22 +202,22 @@ class PoSearchForm extends PureComponent {
         if (selectedSupplierRawData) {
             supplierCd = selectedSupplierRawData.code;
         }
-        //子公司ID
+        // 子公司ID
         let companyId = null;  //TODO 从session获取子公司ID？
         let pageNum = pagination.current || 1;
-        //如果供应商地点为空，返回空promise
+        // 如果供应商地点为空，返回空promise
         if (!supplierCd) {
             return new Promise(function (resolve, reject) {
                 resolve({ total: 0, data: [] });
             });
         }
-        //根据供应商编码、输入查询内容获取供应商地点信息
+        // 根据供应商编码、输入查询内容获取供应商地点信息
         return this.props.getSupplierLocMap({
             value,
             supplierCd, companyId, pageNum
         });
-
     }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const {
@@ -283,18 +240,14 @@ class PoSearchForm extends PureComponent {
                             <Col span={8}>
                                 {/* 采购单号 */}
                                 <FormItem label="采购单号" formItemLayout>
-                                    {getFieldDecorator('poNo', {
-                                    })(
-                                        <Input
-                                        />
-                                        )}
-
+                                    {getFieldDecorator('purchaseNumber', {
+                                    })(<Input />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
                                 {/* 地点类型 */}
                                 <FormItem label="地点类型">
-                                    {getFieldDecorator('locTypeCd', {
+                                    {getFieldDecorator('locTypeCode', {
                                         initialValue: locType.defaultValue
                                     })(
                                         <Select style={{ width: '153px' }} size="default" onChange={this.onLocTypeChange}>
@@ -313,21 +266,23 @@ class PoSearchForm extends PureComponent {
                                     <div className="row small">
                                         <span className="ant-form-item-label"><label>地点</label> </span>
                                         <SearchMind
+                                            style={{zIndex: 101}}
                                             compKey="comPoAddress"
                                             ref={ref => { this.poAddress = ref }}
-                                            fetch={(value, pager) => this.handleGetAddressMap(value, pager)}
+                                            fetch={(param) => this.handleGetAddressMap(param)}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.code} - {data.name}</div>
+                                                <div ref={locationValue => { this.locationValue = locationValue }}>{data[this.state.locationData.code]} - {data[this.state.locationData.name]}</div>
                                             )}
-                                            pageSize={2}
+                                            disabled={this.state.locDisabled}
+                                            pageSize={5}
                                             columns={[
                                                 {
                                                     title: '编码',
-                                                    dataIndex: 'code',
+                                                    dataIndex: this.state.locationData.code,
                                                     width: 150,
                                                 }, {
                                                     title: '名称',
-                                                    dataIndex: 'name',
+                                                    dataIndex: this.state.locationData.name,
                                                     width: 200,
                                                 }
                                             ]}
@@ -342,7 +297,7 @@ class PoSearchForm extends PureComponent {
                             <Col span={8}>
                                 {/* 采购单类型 */}
                                 <FormItem label="采购单类型">
-                                    {getFieldDecorator('poTypeCd', {
+                                    {getFieldDecorator('purchaseTypeCode', {
                                         initialValue: poType.defaultValue
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
@@ -358,7 +313,7 @@ class PoSearchForm extends PureComponent {
                             <Col span={8}>
                                 {/* 状态 */}
                                 <FormItem label="状态">
-                                    {getFieldDecorator('statusCd', {
+                                    {getFieldDecorator('statusCode', {
                                         initialValue: poStatusCodes.approved
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
@@ -379,19 +334,22 @@ class PoSearchForm extends PureComponent {
                                         <SearchMind
                                             compKey="comBigClass"
                                             ref={ref => { this.bigClass = ref }}
-                                            fetch={(value, pager) => this.handleGetBigClassMap(value, pager)}
+                                            fetch={(param) => this.props.pubFetchValueList({
+                                                param: param.value,
+                                                level: 2
+                                            }, 'querycategories')}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.code} - {data.name}</div>
+                                                <div>{data.id} - {data.categoryName}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={5}
                                             columns={[
                                                 {
                                                     title: '编码',
-                                                    dataIndex: 'code',
+                                                    dataIndex: 'id',
                                                     width: 150,
                                                 }, {
                                                     title: '名称',
-                                                    dataIndex: 'name',
+                                                    dataIndex: 'categoryName',
                                                     width: 200,
                                                 }
                                             ]}
@@ -410,19 +368,24 @@ class PoSearchForm extends PureComponent {
                                         <SearchMind
                                             compKey="comSupplier"
                                             ref={ref => { this.supplier = ref }}
-                                            fetch={(value, pager) => this.handleGetSupplierMap(value, pager)}
+                                            fetch={(param) => this.props.pubFetchValueList({
+                                                condition: param.value,
+                                                pageSize: 2,
+                                                pageNum: 1
+                                            }, 'supplierSearchBox')}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.code} - {data.name}</div>
+                                                <div>{data.spNo} - {data.companyName}</div>
                                             )}
-                                            pageSize={2}
+                                            rowKey="dataIndex"
+                                            pageSize={5}
                                             columns={[
                                                 {
                                                     title: '编码',
-                                                    dataIndex: 'code',
+                                                    dataIndex: 'spNo',
                                                     width: 150,
                                                 }, {
                                                     title: '名称',
-                                                    dataIndex: 'name',
+                                                    dataIndex: 'companyName',
                                                     width: 200,
                                                 }
                                             ]}
@@ -438,19 +401,24 @@ class PoSearchForm extends PureComponent {
                                         <SearchMind
                                             compKey="comSupplierLoc"
                                             ref={ref => { this.supplierLoc = ref }}
-                                            fetch={(value, pager) => this.handleGetSupplierLocMap(value, pager)}
+                                            fetch={(param) => this.props.pubFetchValueList({
+                                                condition: param.value,
+                                                pageSize: 2,
+                                                pageNum: 1
+                                            }, 'supplierAdrSearchBox')}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.code} - {data.name}</div>
+                                                <div>{data.providerNo} - {data.providerName}</div>
                                             )}
+                                            rowKey="dataIndex"
                                             pageSize={2}
                                             columns={[
                                                 {
                                                     title: '编码',
-                                                    dataIndex: 'code',
+                                                    dataIndex: 'providerNo',
                                                     width: 150,
                                                 }, {
                                                     title: '名称',
-                                                    dataIndex: 'name',
+                                                    dataIndex: 'providerName',
                                                     width: 200,
                                                 }
                                             ]}
@@ -537,6 +505,7 @@ class PoSearchForm extends PureComponent {
 }
 
 PoSearchForm.propTypes = {
+    pubFetchValueList: PropTypes.func,
     doSearch: PropTypes.func,
     onReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),

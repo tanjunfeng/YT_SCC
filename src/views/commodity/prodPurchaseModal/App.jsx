@@ -1,21 +1,32 @@
+/**
+* @file app.jsx
+ * @author Tan junfeng
+ *
+ * 商品采购关系维护
+ */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, InputNumber, Input, Checkbox } from 'antd';
+import { Modal, Form, InputNumber, Checkbox, message } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import SteppedPrice from '../steppedPrice';
 import SearchMind from '../../../components/searchMind';
+import { PAGE_SIZE } from '../../../constant';
 import {
     fetchTest,
 } from '../../../actions/classifiedList';
 import {
     fetchAddProdPurchase,
+    fetchCheckMainSupplier,
 } from '../../../actions';
 import {
     pubFetchValueList,
 } from '../../../actions/pub';
 
-import { productAddPriceVisible } from '../../../actions/producthome';
+import {
+    productAddPriceVisible,
+    AddProdPurchase,
+    QueryProdPurchaseExtByCondition
+} from '../../../actions/producthome';
 
 const FormItem = Form.Item;
 
@@ -25,11 +36,15 @@ const FormItem = Form.Item;
         getProductById: state.toJS().commodity.getProductById,
         getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
+        getProductByIds: state.toJS().commodity.getProductById,
     }),
     dispatch => bindActionCreators({
         fetchAddProdPurchase,
         productAddPriceVisible,
-        pubFetchValueList
+        pubFetchValueList,
+        AddProdPurchase,
+        QueryProdPurchaseExtByCondition,
+        fetchCheckMainSupplier,
     }, dispatch)
 )
 
@@ -42,29 +57,81 @@ class ProdPurchaseModal extends Component {
 
         this.state = {
             distributeWarehouseId: null,
-            spId: '',
-            spAdrId: '',
-            productId: '',
-            branchCompanyId: ''
+            supplyChoose: {},
+            supplyChoose1: {},
+            supplyChoose2: {},
         }
     }
 
+    componentDidMount() {
+        const { getProductByIds } = this.props;
+        console.log(getProductByIds)
+        // this.porps.fetchCheckMainSupplier({
+        //     supplierType: 1,
+        //     productId: getProductByIds.productId
+        // })
+    }
+
+    /**
+     * 仓库-值清单
+     */
+    handleHouseChoose = ({ record }) => {
+        this.setState({
+            supplyChoose: record,
+        });
+    }
+
+    /**
+     * 供应商-值清单
+     */
+    handleSupplyChoose = ({ record }) => {
+        this.setState({
+            supplyChoose1: record,
+        });
+    }
+
+    /**
+     * 地点-值清单
+     */
+    handleAdressChoose = ({ record }) => {
+        this.setState({
+            supplyChoose2: record,
+        });
+    }
+
+
+    /**
+     * 创建弹框OK时间
+     */
     handleOk() {
         const { validateFields } = this.props.form;
+        const { getProductByIds } = this.props;
+        // console.log(this.state.supplyChoose)
+        // console.log(this.state.supplyChoose1)
+        // console.log(this.state.supplyChoose2)
         validateFields((err, values) => {
-            console.log(values);
+            // console.log(values);
             // TODO post data
-            this.props.fetchAddProdPurchase({
-                spId: '145',
-                spAdrId: '14567',
-                productId: 'xpro123',
-                branchCompanyId: 'cp123',
+            this.props.AddProdPurchase({
+                spId: this.state.supplyChoose1.spId,
+                spAdrId: this.state.supplyChoose2.spAdrid,
+                productId: this.props.getProductByIds.id,
+                branchCompanyId: this.state.supplyChoose2.branchCompanyId,
                 supplierType: values.mainSupplier ? 1 : 0,
-                purchaseInsideNumber: values.purchaseInsideNumber,
-                purchasePrice: values.purchasePrice,
+                purchaseInsideNumber: this.props.getProductByIds.purchaseInsideNumber,
+                purchasePrice: values.purchasePrice.toFixed(2),
+                // 条码
                 internationalCode: values.internationalCode,
-                distributeWarehouseId: 123455
-            });
+                // 仓库ID
+                distributeWarehouseId: this.state.supplyChoose.id
+            }).then((res) => {
+                this.props.productAddPriceVisible({isVisible: false});
+                message.success(res.message)
+                this.props.goto()
+            }).catch(() => {
+                this.props.productAddPriceVisible({isVisible: false});
+                message.error('操作失败')
+            })
         })
     }
 
@@ -72,9 +139,9 @@ class ProdPurchaseModal extends Component {
         this.props.productAddPriceVisible({isVisible: false, record});
     }
 
-    handleTestChoose(record) {
-        console.log(record);
-    }
+    // handleTestChoose(record) {
+    //     console.log(record);
+    // }
 
     handleTestFetch = ({ value, pagination }) => {
         console.log(value, pagination);
@@ -101,6 +168,7 @@ class ProdPurchaseModal extends Component {
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
         // const formData = this.props.form.getFieldsValue();
+        const { getProductByIds } = this.props;
         return (
             <Modal
                 title="采购价格"
@@ -121,7 +189,7 @@ class ProdPurchaseModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('purchaseInsideNumber', {
                                             rules: [{ required: true, message: '采购内装数' }],
-                                            initialValue: prodPurchase.purchaseInsideNumber
+                                            initialValue: getProductByIds.purchaseInsideNumber
                                         })(
                                             <InputNumber min={0} placeholder="内装数" />
                                         )}
@@ -132,7 +200,7 @@ class ProdPurchaseModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('purchasePrice', {
                                             rules: [{ required: true, message: '请输入采购价!' }],
-                                            initialValue: prodPurchase.purchasePrice
+                                            initialValue: getProductByIds.guidePurchasePrice
                                         })(
                                             <InputNumber min={0} placeholder="采购价" />
                                         )}
@@ -143,10 +211,96 @@ class ProdPurchaseModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('internationalCode', {
                                             rules: [{ required: true, message: '输入商品条码!' }],
-                                            initialValue: prodPurchase.internationalCode
+                                            initialValue: getProductByIds.productCode
                                         })(
                                             <InputNumber min={0} placeholder="请输入商品条码" />
                                         )}
+                                    </span>
+                                </FormItem>
+                            </div>
+                        </div>
+                        <div className={`${prefixCls}-item`}>
+                            <div className={`${prefixCls}-item-content`}>
+                                <FormItem>
+                                    <span className={`${prefixCls}-label`}>*供应商：</span>
+                                    <span className={`${prefixCls}-data-pic`}>
+                                        <SearchMind
+                                            style={{ zIndex: 9 }}
+                                            compKey="search-mind-key2"
+                                            ref={ref => { this.searchMind1 = ref }}
+                                            onChoosed={this.handleSupplyChoose}
+                                            fetch={(params) => this.props.pubFetchValueList({
+                                                condition: params.value
+                                            }, 'supplierSearchBox')}
+                                            renderChoosedInputRaw={(data) => (
+                                                <div>{data.spId} - {data.companyName}</div>
+                                            )}
+                                            pageSize={2}
+                                            columns={[
+                                                {
+                                                    title: '供应商编码',
+                                                    dataIndex: 'spNo',
+                                                    width: 150,
+                                                }, {
+                                                    title: '供应商ID',
+                                                    dataIndex: 'spId',
+                                                    width: 200,
+                                                }, {
+                                                    title: '供应商名称',
+                                                    dataIndex: 'companyName',
+                                                    width: 200,
+                                                }
+                                            ]}
+                                        />
+                                    </span>
+                                </FormItem>
+                                <FormItem>
+                                    <span className={`${prefixCls}-label`}>*供应商地点：</span>
+                                    <span className={`${prefixCls}-data-pic`}>
+                                        <SearchMind
+                                            style={{ zIndex: 8 }}
+                                            compKey="search-mind-key2"
+                                            ref={ref => { this.searchMind2 = ref }}
+                                            fetch={(params) => this.props.pubFetchValueList({
+                                                supplierAddressId: params.value
+                                            }, 'supplierAdrSearchBox')}
+                                            onChoosed={this.handleAdressChoose}
+                                            renderChoosedInputRaw={(data) => (
+                                                <div>{data.providerNo} - {data.providerName}</div>
+                                            )}
+                                            pageSize={2}
+                                            columns={[
+                                                {
+                                                    title: '供应商编码',
+                                                    dataIndex: 'spNo',
+                                                    width: 150,
+                                                }, {
+                                                    title: '供应商ID',
+                                                    dataIndex: 'spId',
+                                                    width: 200,
+                                                }, {
+                                                    title: '供应商地点ID',
+                                                    dataIndex: 'spAdrid',
+                                                    width: 200,
+                                                }, {
+                                                    title: '供应商名称',
+                                                    dataIndex: 'companyName',
+                                                    width: 200,
+                                                }, {
+                                                    title: '供应商地点编码',
+                                                    dataIndex: 'providerNo',
+                                                    width: 200,
+                                                }, {
+                                                    title: '供应商地点名称',
+                                                    dataIndex: 'providerName',
+                                                    width: 200,
+                                                }, {
+                                                    title: '分公司',
+                                                    dataIndex: 'branchCompanyId',
+                                                    width: 200,
+                                                }
+                                            ]}
+                                        />
                                     </span>
                                 </FormItem>
                                 <FormItem>
@@ -159,7 +313,7 @@ class ProdPurchaseModal extends Component {
                                             fetch={(params) => this.props.pubFetchValueList({
                                                 condition: params.value
                                             }, 'getWarehouseInfo1')}
-                                            onChoosed={this.handleTestChoose}
+                                            onChoosed={this.handleHouseChoose}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.warehouseCode} - {data.warehouseName}</div>
                                             )}
@@ -182,95 +336,6 @@ class ProdPurchaseModal extends Component {
                                         />
                                     </span>
                                 </FormItem>
-                            </div>
-                        </div>
-                        <div className={`${prefixCls}-item`}>
-                            <div className={`${prefixCls}-item-content`}>
-                                <FormItem>
-                                    <span className={`${prefixCls}-label`}>*供应商：</span>
-                                    <span className={`${prefixCls}-data-pic`}>
-                                        <SearchMind
-                                            style={{ zIndex: 9 }}
-                                            compKey="search-mind-key2"
-                                            ref={ref => { this.searchMind1 = ref }}
-                                            fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value
-                                            }, 'supplierSearchBox')}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.spId} - {data.companyName}</div>
-                                            )}
-                                            pageSize={2}
-                                            columns={[
-                                                {
-                                                    title: 'Name',
-                                                    dataIndex: 'spNo',
-                                                    width: 150,
-                                                }, {
-                                                    title: 'spNo',
-                                                    dataIndex: 'spId',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'companyName',
-                                                    dataIndex: 'companyName',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'spAdrid',
-                                                    dataIndex: 'spAdrid',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'providerNo',
-                                                    dataIndex: 'providerNo',
-                                                    width: 200,
-                                                }
-                                            ]}
-                                        />
-                                    </span>
-                                </FormItem>
-                                <FormItem>
-                                    <span className={`${prefixCls}-label`}>*供应商地点：</span>
-                                    <span className={`${prefixCls}-data-pic`}>
-                                        <SearchMind
-                                            style={{ zIndex: 8 }}
-                                            compKey="search-mind-key2"
-                                            ref={ref => { this.searchMind2 = ref }}
-                                            fetch={(params) => this.props.pubFetchValueList({
-                                                supplierAddressId: params.value
-                                            }, 'supplierAdrSearchBox')}
-                                            onChoosed={this.handleTestChoose}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.providerNo} - {data.providerName}</div>
-                                            )}
-                                            pageSize={2}
-                                            columns={[
-                                                {
-                                                    title: 'Name',
-                                                    dataIndex: 'spNo',
-                                                    width: 150,
-                                                }, {
-                                                    title: 'spId',
-                                                    dataIndex: 'spId',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'spAdrid',
-                                                    dataIndex: 'spAdrid',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'companyName',
-                                                    dataIndex: 'companyName',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'providerNo',
-                                                    dataIndex: 'providerNo',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'providerName',
-                                                    dataIndex: 'providerName',
-                                                    width: 200,
-                                                }
-                                            ]}
-                                        />
-                                    </span>
-                                </FormItem>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>主供应商：</span>
                                     <span className={`${prefixCls}-warehouse-input`}>
@@ -280,6 +345,11 @@ class ProdPurchaseModal extends Component {
                                             <Checkbox />
                                         )}
                                     </span>
+                                    <p>
+                                        {
+
+                                        }
+                                    </p>
                                 </FormItem>
                             </div>
                         </div>
@@ -295,13 +365,16 @@ ProdPurchaseModal.propTypes = {
     toAddPriceVisible: PropTypes.bool,
     productAddPriceVisible: PropTypes.func,
     pubFetchValueList: PropTypes.func,
-    fetchAddProdPurchase: PropTypes.func,
+    getProductByIds: PropTypes.func,
+    fetchCheckMainSupplier: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     prodPurchase: PropTypes.objectOf(PropTypes.any),
+    goto: PropTypes.func,
 };
 
 ProdPurchaseModal.defaultProps = {
     prefixCls: 'prod-modal',
+    goto: () => {},
 }
 
 export default Form.create()(ProdPurchaseModal);

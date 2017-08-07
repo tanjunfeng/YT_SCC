@@ -7,7 +7,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, message } from 'antd';
-import Right from '../../../components/btnRight';
 
 import Utils from '../../../util/util';
 import {
@@ -17,8 +16,6 @@ import {
     supplierLevelOptions,
     supplierPlaceLevelOptions,
 } from '../../../constant/searchParams';
-import { PAGE_SIZE } from '../../../constant';
-import RIGHTS from '../../../constant/right'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -44,7 +41,7 @@ class SearchForm extends Component {
             // DatePicker选取后返回的格式化后的日期
             settledDate: null,
             // 供应商类型
-            supplierType: '1',
+            supplierType: '0',
         }
     }
 
@@ -77,9 +74,9 @@ class SearchForm extends Component {
             providerName,
             providerNo,
             registLicenceNumber,
-            providerType,
-            status,
-            grade,
+            providerType: providerType === '0' ? null : providerType,
+            status: status === '0' ? null : status,
+            grade: grade === '0' ? null : grade,
             settledDate: this.state.settledDate
         };
         this.searchData = Utils.removeInvalid(searchData);
@@ -163,6 +160,9 @@ class SearchForm extends Component {
         const { onReset } = this.props;
         this.searchData = {};
         this.props.form.resetFields();
+        this.setState({
+            supplierType: 0,
+        });
         this.setState({rengeTime: null});
         onReset(this.searchData);
     }
@@ -277,13 +277,14 @@ class SearchForm extends Component {
                         )}
                     </FormItem>
                     {
-                        supplierType === '1'
-                        ? <FormItem className="sc-form-item">
+                        supplierType === '1' &&
+                        <FormItem className="sc-form-item">
                             <span className="sc-form-item-label">供应商等级</span>
                             {getFieldDecorator('grade', {
                                 initialValue: supplierLevelOptions.defaultValue
                             })(
                                 <Select
+                                    disabled={this.state.supplierType === '-1'}
                                     className="sc-form-item-select"
                                     size="default"
                                 >
@@ -297,12 +298,16 @@ class SearchForm extends Component {
                                 </Select>
                             )}
                         </FormItem>
-                        : <FormItem className="sc-form-item">
+                    }
+                    {
+                        supplierType === '2' &&
+                        <FormItem className="sc-form-item">
                             <span className="sc-form-item-label">供应商地点等级</span>
                             {getFieldDecorator('grade', {
                                 initialValue: supplierPlaceLevelOptions.defaultValue
                             })(
                                 <Select
+                                    disabled={this.state.handleUsed}
                                     className="sc-form-item-select"
                                     size="default"
                                 >
@@ -341,18 +346,6 @@ class SearchForm extends Component {
                                 搜索
                             </Button>
                         </FormItem>
-                        {
-                            this.props.isSuplierAddMenu &&
-                            <FormItem>
-                                <Button
-                                    type="primary"
-                                    size="default"
-                                    onClick={this.handleAddValue}
-                                >
-                                    创建
-                                </Button>
-                            </FormItem>
-                        }
                         <FormItem>
                             <Button size="default" onClick={this.handleResetValue}>
                                 重置

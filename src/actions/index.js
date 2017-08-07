@@ -66,7 +66,7 @@ import {
 } from './procurement';
 
 // IBM
-import fecthCheckMainSupplier from './fetch/fetchCheckMainSupplier';
+import fetchCheckMainSupplier from './fetch/fetchCheckMainSupplier';
 import fecthGetProdPurchaseById from './fetch/fetchGetProdPurchaseById';
 import fetchChangeSupType from './fetch/fetchChangeSupType'
 
@@ -82,6 +82,11 @@ import suppplierSettledAudit from './fetch/suppplierSettledAudit';
 import supplierAdrSettledAudit from './fetch/supplierAdrSettledAudit';
 import modifyAuditAdrVisible from './modify/modifyAuditAdrVisible';
 import AuditSupplierEditInfo from '../actions/supplier';
+import {
+    UpdateProdPurchase,
+    getProductById,
+    queryProdPurchaseExtByCondition
+} from './producthome';
 
 // 库存调整
 import stockAdjust from './stockAdjust';
@@ -146,7 +151,7 @@ export {
     createPoRcv,
 
     // IBM
-    fecthCheckMainSupplier,
+    fetchCheckMainSupplier,
     fecthGetProdPurchaseById,
     fetchChangeSupType,
 
@@ -154,6 +159,9 @@ export {
     suppplierSettledAudit,
     supplierAdrSettledAudit,
     modifyAuditAdrVisible,
+    getProductById,
+    queryProdPurchaseExtByCondition,
+    UpdateProdPurchase,
 
     // 库存调整
     stockAdjust,
