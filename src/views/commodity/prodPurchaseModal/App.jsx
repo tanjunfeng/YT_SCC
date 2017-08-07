@@ -135,7 +135,7 @@ class ProdPurchaseModal extends Component {
     // }
 
     handleTestFetch = ({ value, pagination }) => {
-        console.log(value, pagination);
+        // console.log(value, pagination);
 
         return fetchTest({
             value,

@@ -170,6 +170,7 @@ export default function (state = initState, action) {
             return state.set('changeSupType', action.payload);
 
         case ActionType.GET_PRODUCT_BY_ID:
+        console.log(action.payload)
             return state.set('getProductById', action.payload);
 
         case ActionType.QUERY_PRODBY_CONDITION:

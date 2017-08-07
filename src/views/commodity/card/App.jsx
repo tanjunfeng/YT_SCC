@@ -31,6 +31,7 @@ import {
     state => ({
         prodPurchase: state.toJS().commodity.prodPurchase,
         getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseByIds,
+        checkMainSupplier: state.toJS().commodity.checkMainSupplier,
     }),
     dispatch => bindActionCreators({
         fetchGetProdPurchaseById,
@@ -121,7 +122,6 @@ class Cardline extends Component {
      * 修改启用时弹框
      */
     confirmUsed(item) {
-        console.log(1)
         Modal.confirm({
             title: '提示',
             content: '是否切换当前商品供应商  启用/失效 状态',
@@ -160,6 +160,7 @@ class Cardline extends Component {
             supplierType: 1,
             productId: item.productId
         })
+        // console.log(this.porps.checkMainSupplier)
         Modal.confirm({
             title: '提示',
             content: '是否将当前供应商设置为主供应商',
