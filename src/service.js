@@ -378,6 +378,9 @@ export const uploadImageBase64Data = (params) => http.post('/commonUploadFile/up
 // 查询分类信息
 export const queryCategorys = (params) => http.get('/category/queryAllShowCategories', params);
 
+// 查询单级分类信息
+export const queryAllCategoriesWithIconByParentId = (params) => http.get('/category/queryAllCategoriesWithIconByParentId', params);
+
 // 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
 export const saveInput = (params) => http.post('/rk/saveInput', params);
 

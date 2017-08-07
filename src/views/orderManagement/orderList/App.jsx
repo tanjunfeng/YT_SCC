@@ -26,12 +26,10 @@ import {
     logisticsStatusOptions
 } from '../../../constant/searchParams';
 import { exportOrderList } from '../../../service';
-import {fetchTest} from '../../../actions/classifiedList';
 import CauseModal from './causeModal';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { fetchOrderList, modifyBatchApproval, modifyResendOrder, modifyApprovalOrder } from '../../../actions/order';
-
-
+import { pubFetchValueList } from '../../../actions/pub';
 import { TIME_FORMAT, DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
 
 
@@ -41,7 +39,8 @@ const confirm = Modal.confirm;
 const orderML = 'order-management';
 const { RangePicker } = DatePicker;
 const yesterdayDate = moment().subtract(1, 'days').valueOf().toString();
-const yesterdayrengeDate = [moment().subtract(1, 'days'), moment().subtract(1, 'days')];
+const todayDate = moment().valueOf().toString();
+const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
 
 const columns = [{
     title: '序号',
@@ -106,6 +105,7 @@ const columns = [{
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
         fetchOrderList,
+        pubFetchValueList,
     }, dispatch)
 )
 class OrderManagementList extends Component {
@@ -131,7 +131,7 @@ class OrderManagementList extends Component {
         this.current = 1;
         this.time = {
             submitStartTime: yesterdayDate,
-            submitEndTime: yesterdayDate,
+            submitEndTime: todayDate,
         }
         this.state = {
             choose: [],
@@ -163,9 +163,45 @@ class OrderManagementList extends Component {
         } else {
             this.time = {
                 submitStartTime: yesterdayDate,
-                submitEndTime: yesterdayDate,
+                submitEndTime: todayDate,
             }
         }
+    }
+
+     /**
+     * 获取表单信息,并查询列表
+     */
+    getSearchData() {
+        const {
+            id,
+            orderType,
+            orderState,
+            paymentState,
+            cellphone,
+            shippingState,
+        } = this.props.form.getFieldsValue();
+
+        const { submitStartTime, submitEndTime } = this.time;
+        const { franchiseeId, branchCompanyId } = this.state;
+        this.current = 1;
+        this.searchData = {
+            id,
+            orderState: orderState === 'ALL' ? null : orderState,
+            orderType: orderType === 'ALL' ? null : orderType,
+            paymentState: paymentState === 'ALL' ? null : paymentState,
+            cellphone,
+            shippingState: shippingState === 'ALL' ? null : shippingState,
+            franchiseeId,
+            branchCompanyId,
+            submitStartTime,
+            submitEndTime,
+            pageSize: PAGE_SIZE,
+        }
+        const searchData = this.searchData;
+        searchData.page = 1;
+        this.props.fetchOrderList({
+            ...Utils.removeInvalid(searchData)
+        })
     }
 
     /**
@@ -255,8 +291,8 @@ class OrderManagementList extends Component {
                 modifyBatchApproval(
                     this.state.choose
                 ).then(() => {
-                    this.getSearchData();
                     message.success('批量审批成功！');
+                    this.getSearchData();
                 })
             },
             onCancel() {},
@@ -270,44 +306,8 @@ class OrderManagementList extends Component {
         const { choose } = this.state;
         this.props.modifyCauseModalVisible({ isShow: true, choose})
         .then(() => {
-            this.getSearchData();
             message.success('批量取消成功！');
-        })
-    }
-
-    /**
-     * 获取表单信息,并查询列表
-     */
-    getSearchData() {
-        const {
-            id,
-            orderType,
-            orderState,
-            paymentState,
-            cellphone,
-            shippingState,
-        } = this.props.form.getFieldsValue();
-
-        const { submitStartTime, submitEndTime } = this.time;
-        const { franchiseeId, branchCompanyId } = this.state;
-        this.current = 1;
-        this.searchData = {
-            id,
-            orderState: orderState === 'ALL' ? null : orderState,
-            orderType: orderType === 'ALL' ? null : orderType,
-            paymentState: paymentState === 'ALL' ? null : paymentState,
-            cellphone,
-            shippingState: shippingState === 'ALL' ? null : shippingState,
-            franchiseeId,
-            branchCompanyId,
-            // submitStartTime,
-            // submitEndTime,
-            pageSize: PAGE_SIZE,
-        }
-        const searchData = this.searchData;
-        searchData.page = 1;
-        this.props.fetchOrderList({
-            ...Utils.removeInvalid(searchData)
+            this.getSearchData();
         })
     }
 
@@ -328,7 +328,7 @@ class OrderManagementList extends Component {
         });
         this.time = {
             submitStartTime: yesterdayDate,
-            submitEndTime: yesterdayDate,
+            submitEndTime: todayDate,
         }
         this.joiningSearchMind.handleClear();
         this.subCompanySearchMind.handleClear();
@@ -343,17 +343,6 @@ class OrderManagementList extends Component {
         searchData.page = this.current;
         Utils.exportExcel(exportOrderList, ...Utils.removeInvalid(searchData));
     }
-
-    /**
-     * 值清单请求
-     * @param {string} value, 输入框返回的值
-     * @param {number} pagination, 分页
-     * @return {Promise}
-     */
-    handleTestFetch = ({ value, pagination }) => fetchTest({
-        value,
-        pagination
-    })
 
     // 选择操作项
     handleSelect(record, items) {
@@ -573,23 +562,26 @@ class OrderManagementList extends Component {
                                             <SearchMind
                                                 compKey="search-mind-joining"
                                                 ref={ref => { this.joiningSearchMind = ref }}
-                                                fetch={(value, pager) =>
-                                                    this.handleTestFetch(value, pager)
+                                                fetch={(params) =>
+                                                    this.props.pubFetchValueList({
+                                                        branchCompanyId: (typeof parseFloat(params.value) === 'number') ? params.value : '',
+                                                        branchCompanyName: (typeof parseFloat(params.value) !== 'number') ? params.value : ''
+                                                    }, 'findCompanyBaseInfo')
                                                 }
                                                 onChoosed={this.handleJoiningChoose}
                                                 onClear={this.handleJoiningClear}
                                                 renderChoosedInputRaw={(data) => (
-                                                    <div>{data.id} - {data.address}</div>
+                                                    <div>{data.id}</div>
                                                 )}
                                                 pageSize={2}
                                                 columns={[
                                                     {
-                                                        title: 'Name',
-                                                        dataIndex: 'name',
+                                                        title: '子公司id',
+                                                        dataIndex: 'id',
                                                         width: 150,
                                                     }, {
-                                                        title: 'Address',
-                                                        dataIndex: 'address',
+                                                        title: '子公司名字',
+                                                        dataIndex: 'name',
                                                         width: 200,
                                                     }
                                                 ]}
@@ -605,23 +597,26 @@ class OrderManagementList extends Component {
                                             <SearchMind
                                                 compKey="search-mind-sub-company"
                                                 ref={ref => { this.subCompanySearchMind = ref }}
-                                                fetch={(value, pager) =>
-                                                    this.handleTestFetch(value, pager)
+                                                fetch={(params) =>
+                                                    this.props.pubFetchValueList({
+                                                        branchCompanyId: (typeof parseFloat(params.value) === 'number') ? params.value : '',
+                                                        branchCompanyName: (typeof parseFloat(params.value) !== 'number') ? params.value : ''
+                                                    }, 'findCompanyBaseInfo')
                                                 }
                                                 onChoosed={this.handleSubCompanyChoose}
                                                 onClear={this.handleSubCompanyClear}
                                                 renderChoosedInputRaw={(data) => (
-                                                    <div>{data.id} - {data.address}</div>
+                                                    <div>{data.id}</div>
                                                 )}
                                                 pageSize={2}
                                                 columns={[
                                                     {
-                                                        title: 'Name',
-                                                        dataIndex: 'name',
+                                                        title: '子公司id',
+                                                        dataIndex: 'id',
                                                         width: 150,
                                                     }, {
-                                                        title: 'Address',
-                                                        dataIndex: 'address',
+                                                        title: '子公司名字',
+                                                        dataIndex: 'name',
                                                         width: 200,
                                                     }
                                                 ]}
@@ -759,6 +754,7 @@ OrderManagementList.propTypes = {
     orderListData: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
     fetchOrderList: PropTypes.func,
+    pubFetchValueList: PropTypes.func,
 }
 
 OrderManagementList.defaultProps = {

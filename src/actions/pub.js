@@ -14,7 +14,8 @@ import {
     fetchAddProdPurchase,
     supplierSearchBox,
     supplierAdrSearchBox,
-    getWarehouseInfo1
+    getWarehouseInfo1,
+    queryAllCategoriesWithIconByParentId,
 } from '../service';
 
 const pubValueList = {
@@ -72,6 +73,23 @@ export const fetchCategorys = (params) => dispatch => (
         queryCategorys(params)
             .then(res => {
                 dispatch(receiveAllCategorys(res.data));
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+const receiveCategorysById = (data) => ({
+    type: ActionType.RECEIVE_CATEGORYS_BY_ID,
+    payload: data,
+});
+// 查询单级分类信息
+export const fetchCategorysById = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryAllCategoriesWithIconByParentId(params)
+            .then(res => {
+                dispatch(receiveCategorysById(res.data));
             })
             .catch(err => {
                 reject(err);

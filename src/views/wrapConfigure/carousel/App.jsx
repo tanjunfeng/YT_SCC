@@ -1,6 +1,5 @@
 /**
  * @file App.jsx
- *
  * @author caoyanxuan
  *
  * 轮播广告管理

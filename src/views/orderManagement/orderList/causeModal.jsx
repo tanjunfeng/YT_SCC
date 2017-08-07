@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Form, Input, Modal, message } from 'antd';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
-import { modifyBatchCancel, modifyCancelOrder } from '../../../actions/order';
+import { modifyBatchCancel, modifyCancelOrder, fetchOrderDetailInfo } from '../../../actions/order';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -24,7 +24,8 @@ const { TextArea } = Input;
         causeRecordId: state.toJS().order.causeRecordId,
     }),
     dispatch => bindActionCreators({
-        modifyCauseModalVisible
+        modifyCauseModalVisible,
+        fetchOrderDetailInfo,
     }, dispatch)
 )
 class CauseModal extends PureComponent {
@@ -71,6 +72,7 @@ class CauseModal extends PureComponent {
                             this.props.getSearchData();
                         }
                         this.props.modifyCauseModalVisible({ isShow: false });
+                        this.props.fetchOrderDetailInfo({id: causeRecordId});
                         message.success(res.message);
                     }).catch(err => {
                         message.error(err.message);
@@ -137,6 +139,7 @@ CauseModal.propTypes = {
     causeModalVisible: PropTypes.bool,
     modifyCauseModalVisible: PropTypes.func,
     getSearchData: PropTypes.func,
+    fetchOrderDetailInfo: PropTypes.func,
 }
 
 CauseModal.defaultProps = {

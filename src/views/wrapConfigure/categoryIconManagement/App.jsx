@@ -11,14 +11,14 @@ import { connect } from 'react-redux';
 import { Card, Col, Row, Icon } from 'antd';
 import classnames from 'classnames';
 import CategoryIconTable from './categoryIconTable';
-import { fetchCategorys } from '../../../actions/pub';
+import { fetchCategorysById } from '../../../actions/pub';
 
 @connect(
     state => ({
-        categorys: state.toJS().pub.categorys,
+        categorysById: state.toJS().pub.categorysById,
     }),
     dispatch => bindActionCreators({
-        fetchCategorys,
+        fetchCategorysById,
     }, dispatch)
 )
 class CategoryIconManagement extends Component {
@@ -41,14 +41,14 @@ class CategoryIconManagement extends Component {
     }
 
     /**
-     * 将刷新后的categorys值，push到数组中
+     * 将刷新后的categorysById值，push到数组中
      * @param {Object} nextProps 刷新后的属性
      */
     componentWillReceiveProps(nextProps) {
-        const { categorys } = nextProps;
-        if (categorys !== this.props.categorys) {
-            this.categoryArrs.splice(categorys[0].level - 1)
-            this.categoryArrs.push(categorys);
+        const { categorysById } = nextProps;
+        if (categorysById !== this.props.categorysById) {
+            this.categoryArrs.splice(categorysById[0].level - 1)
+            this.categoryArrs.push(categorysById);
         }
     }
 
@@ -57,10 +57,11 @@ class CategoryIconManagement extends Component {
      * @param {string} pId 父id
      */
     fetchCategory(pId) {
-        this.props.fetchCategorys({parentId: pId});
+        this.props.fetchCategorysById({parentId: pId});
     }
 
     render() {
+        console.log(this.categoryArrs)
         const firstArr = this.categoryArrs[0] ? this.categoryArrs[0] : [];
         const secondArr = this.categoryArrs[1] ? this.categoryArrs[1] : [];
         const thirdArr = this.categoryArrs[2] ? this.categoryArrs[2] : [];
@@ -194,8 +195,8 @@ class CategoryIconManagement extends Component {
 }
 
 CategoryIconManagement.propTypes = {
-    categorys: PropTypes.arrayOf(PropTypes.any),
-    fetchCategorys: PropTypes.func,
+    categorysById: PropTypes.arrayOf(PropTypes.any),
+    fetchCategorysById: PropTypes.func,
 };
 CategoryIconManagement.defaultProps = {
 }

@@ -15,7 +15,7 @@ import moment from 'moment';
 import { TIME_FORMAT } from '../../../constant/index';
 import CauseModal from '../orderList/causeModal';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
-import { savaOrderDescription, modifyApprovalOrder } from '../../../actions/order';
+import { savaOrderDescription, modifyApprovalOrder, fetchOrderDetailInfo } from '../../../actions/order';
 
 const confirm = Modal.confirm;
 const { TextArea } = Input;
@@ -76,6 +76,7 @@ const columns = [{
     }),
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
+        fetchOrderDetailInfo,
     }, dispatch)
 )
 class OrderInformation extends PureComponent {
@@ -86,7 +87,7 @@ class OrderInformation extends PureComponent {
         this.handleOrderCancel = ::this.handleOrderCancel;
         this.id = this.props.match.params.id;
         this.state = {
-            textAreaNote: '',
+            textAreaNote: this.props.orderDetailData.description,
             description: this.props.orderDetailData.description
         }
     }
@@ -95,22 +96,36 @@ class OrderInformation extends PureComponent {
     }
 
     /**
+     * 将刷新后的categorys值，push到数组中
+     * @param {Object} nextProps 刷新后的属性
+     */
+    componentWillReceiveProps(nextProps) {
+        const { orderDetailData } = nextProps;
+        this.setState({
+            textAreaNote: orderDetailData.description,
+            description: orderDetailData.description,
+        })
+    }
+
+    /**
      * 保存备注信息
      */
     handleOrderSave() {
-        const { textAreaNote} = this.state;
+        const { textAreaNote, description } = this.state;
         confirm({
             title: '保存',
             content: '确认保存备注信息？',
             onOk: () => {
-                if (textAreaNote === '') {
-                    message.error('备注未修改！')
+                if (textAreaNote === description) {
+                    message.error('备注未作修改！')
                 } else {
                     savaOrderDescription({
                         orderId: this.id,
                         description: textAreaNote,
                     }).then(() => {
                         message.success('保存成功！')
+                    }).catch(() => {
+                        message.success('保存失败！')
                     })
                 }
             },
@@ -129,6 +144,7 @@ class OrderInformation extends PureComponent {
                 modifyApprovalOrder({
                     id: this.id
                 }).then(res => {
+                    this.props.fetchOrderDetailInfo({id: this.id});
                     message.success(res.message);
                 }).catch(err => {
                     message.success(err.message);
@@ -213,20 +229,17 @@ class OrderInformation extends PureComponent {
                             <Row>
                                 <Col className="gutter-row" span={14}>
                                     <span className="details-info-lable">备注:</span>
-                                    {
-                                        orderDetailData.description
-                                        && <TextArea
-                                            autosize={{ minRows: 3, maxRows: 6 }}
-                                            defaultValue={orderDetailData.description}
-                                            style={{resize: 'none' }}
-                                            maxLength="250"
-                                            onBlur={(e) => {
-                                                this.setState({
-                                                    textAreaNote: e.target.value
-                                                })
-                                            }}
-                                        />
-                                    }
+                                    <TextArea
+                                        autosize={{ minRows: 3, maxRows: 6 }}
+                                        value={this.state.textAreaNote}
+                                        style={{resize: 'none' }}
+                                        maxLength="250"
+                                        onChange={(e) => {
+                                            this.setState({
+                                                textAreaNote: e.target.value
+                                            })
+                                        }}
+                                    />
                                 </Col>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">下单日期:</span>
@@ -357,6 +370,7 @@ OrderInformation.propTypes = {
     history: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
+    fetchOrderDetailInfo: PropTypes.func,
 }
 
 OrderInformation.defaultProps = {
