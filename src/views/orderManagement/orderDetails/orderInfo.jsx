@@ -8,17 +8,22 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import { Form, Icon, Row, Col, Input, Table, Button, Modal } from 'antd';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Form, Icon, Row, Col, Input, Table, Button, Modal, message } from 'antd';
 import moment from 'moment';
 import { TIME_FORMAT } from '../../../constant/index';
+import CauseModal from '../orderList/causeModal';
+import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
+import { savaOrderDescription, modifyApprovalOrder, fetchOrderDetailInfo } from '../../../actions/order';
 
 const confirm = Modal.confirm;
 const { TextArea } = Input;
 
 const columns = [{
     title: '商品图片',
-    dataIndex: 'commodifyImg',
-    key: 'commodifyImg',
+    dataIndex: 'productImg',
+    key: 'productImg',
     render: (text) => (
         <img
             src={text}
@@ -28,52 +33,62 @@ const columns = [{
     )
 }, {
     title: '商品编码',
-    dataIndex: 'commodifyNumber',
-    key: 'commodifyNumber',
+    dataIndex: 'skuId',
+    key: 'skuId',
 }, {
     title: '商品条码',
-    dataIndex: 'commodifyCode',
-    key: 'commodifyCode',
+    dataIndex: 'productCode',
+    key: 'productCode',
 }, {
     title: '商品名称',
-    dataIndex: 'commodifyName',
-    key: 'commodifyName',
+    dataIndex: 'productName',
+    key: 'productName',
 }, {
     title: '商品分类',
     dataIndex: 'commodifyClassify',
     key: 'commodifyClassify',
-    render: (text) => (
-        <span>{text[0]}&gt;{text[1]}</span>
+    render: (text, record) => (
+        <span>{record.secondLevelCategoryName}&gt;{record.thirdLevelCategoryName}</span>
     )
 }, {
     title: '数量',
-    dataIndex: 'number',
-    key: 'number',
+    dataIndex: 'quantity',
+    key: 'quantity',
 }, {
     title: '单价',
     dataIndex: 'price',
     key: 'price',
-    render: (text) => (
-        <span>￥{text}</span>
+    render: (text, record) => (
+        <span>￥{record.itemPrice.salePrice}</span>
     )
 }, {
     title: '金额',
     dataIndex: 'money',
     key: 'money',
-    render: (text) => (
-        <span>￥{text}</span>
+    render: (text, record) => (
+        <span>￥{record.itemPrice.amount}</span>
     )
 }];
 
+@connect(
+    state => ({
+        orderDetailData: state.toJS().order.orderDetailData,
+    }),
+    dispatch => bindActionCreators({
+        modifyCauseModalVisible,
+        fetchOrderDetailInfo,
+    }, dispatch)
+)
 class OrderInformation extends PureComponent {
     constructor(props) {
         super(props);
         this.handleOrderSave = ::this.handleOrderSave;
         this.handleOrderAudit = ::this.handleOrderAudit;
         this.handleOrderCancel = ::this.handleOrderCancel;
-
+        this.id = this.props.match.params.id;
         this.state = {
-            textAreaNote: '',
+            textAreaNote: this.props.orderDetailData.description,
+            description: this.props.orderDetailData.description
         }
     }
 
@@ -81,52 +96,83 @@ class OrderInformation extends PureComponent {
     }
 
     /**
+     * 将刷新后的categorys值，push到数组中
+     * @param {Object} nextProps 刷新后的属性
+     */
+    componentWillReceiveProps(nextProps) {
+        const { orderDetailData } = nextProps;
+        this.setState({
+            textAreaNote: orderDetailData.description,
+            description: orderDetailData.description,
+        })
+    }
+
+    /**
      * 保存备注信息
      */
     handleOrderSave() {
+        const { textAreaNote, description } = this.state;
         confirm({
             title: '保存',
             content: '确认保存备注信息？',
             onOk: () => {
-                // ToDo：带数据（备注-this.state.textAreaNote）发请求
+                if (textAreaNote === description) {
+                    message.error('备注未作修改！')
+                } else {
+                    savaOrderDescription({
+                        orderId: this.id,
+                        description: textAreaNote,
+                    }).then(() => {
+                        message.success('保存成功！')
+                    }).catch(() => {
+                        message.success('保存失败！')
+                    })
+                }
             },
             onCancel() {},
         });
     }
 
     /**
-     * 审核该订单
+     * 单个审核
      */
     handleOrderAudit() {
-        // ToDo: 发请求
-    }
-
-    /**
-     * 取消该订单
-     */
-    handleOrderCancel() {
         confirm({
-            title: '取消订单',
-            content: '确认取消该订单？',
+            title: '审核',
+            content: '确认审核？',
             onOk: () => {
-                // ToDo: 发请求
+                modifyApprovalOrder({
+                    id: this.id
+                }).then(res => {
+                    this.props.fetchOrderDetailInfo({id: this.id});
+                    message.success(res.message);
+                }).catch(err => {
+                    message.success(err.message);
+                })
             },
             onCancel() {},
         });
+    }
+
+    /**
+     * 单个取消
+     */
+    handleOrderCancel() {
+        this.props.modifyCauseModalVisible({ isShow: true, id: this.id });
     }
 
     render() {
-        const { initialData } = this.props;
+        const { orderDetailData } = this.props;
         const tableFooter = () =>
             (<div>
                 <span className="table-footer-item">
                     <span>共</span>
-                    <span className="red-number">{initialData.commodifyNumber}</span>
+                    <span className="red-number">{orderDetailData.countOfItem}</span>
                     <span>件商品</span>
                 </span>
                 <span className="table-footer-item">
                     <span>总金额： ￥</span>
-                    <span className="red-number">{initialData.commifyTotalMoney}</span>
+                    <span className="red-number">{orderDetailData.amount}</span>
                 </span>
             </div>)
         return (
@@ -141,43 +187,43 @@ class OrderInformation extends PureComponent {
                             <Row>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">订单编号:</span>
-                                    <span>{initialData.orderNumber}</span>
+                                    <span>{orderDetailData.id}</span>
                                 </Col>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">父订单编号:</span>
-                                    <span>{initialData.parentOrderNumber}</span>
+                                    <span>{orderDetailData.createdByOrderId}</span>
                                 </Col>
                                 <Col className="gutter-row" span={10}>
                                     <span className="details-info-lable">订单类型:</span>
-                                    <span>{initialData.orderType}</span>
+                                    <span>{orderDetailData.orderTypeDesc}</span>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">订单状态:</span>
-                                    <span>{initialData.orderStatus}</span>
+                                    <span>{orderDetailData.orderStateDesc}</span>
                                 </Col>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">支付状态:</span>
-                                    <span>{initialData.payStatus}</span>
+                                    <span>{orderDetailData.paymentStateDesc}</span>
                                 </Col>
                                 <Col className="gutter-row" span={10}>
                                     <span className="details-info-lable">物流状态:</span>
-                                    <span>{initialData.logisticsStatus}</span>
+                                    <span>{orderDetailData.shippingStateDesc}</span>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">子公司:</span>
-                                    <span>{initialData.subCompany}</span>
+                                    <span>{orderDetailData.branchCompanyName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">加盟商:</span>
-                                    <span>{initialData.joiner}</span>
+                                    <span>{orderDetailData.franchiseeId}</span>
                                 </Col>
                                 <Col className="gutter-row" span={10}>
                                     <span className="details-info-lable">出货仓:</span>
-                                    <span>{initialData.outOfWarehouse}</span>
+                                    <span>{orderDetailData.branchCompanyArehouse}</span>
                                 </Col>
                             </Row>
                             <Row>
@@ -185,9 +231,10 @@ class OrderInformation extends PureComponent {
                                     <span className="details-info-lable">备注:</span>
                                     <TextArea
                                         autosize={{ minRows: 3, maxRows: 6 }}
+                                        value={this.state.textAreaNote}
                                         style={{resize: 'none' }}
                                         maxLength="250"
-                                        onBlur={(e) => {
+                                        onChange={(e) => {
                                             this.setState({
                                                 textAreaNote: e.target.value
                                             })
@@ -197,7 +244,8 @@ class OrderInformation extends PureComponent {
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">下单日期:</span>
                                     <span>
-                                        {moment(parseInt(initialData.orderData, 10)).format(TIME_FORMAT)}
+                                        {moment(parseInt(orderDetailData.creationTime, 10))
+                                        .format(TIME_FORMAT)}
                                     </span>
                                 </Col>
                             </Row>
@@ -214,29 +262,31 @@ class OrderInformation extends PureComponent {
                             <Row>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">收货人</span>
-                                    <span>{initialData.consignee}</span>
+                                    <span>{orderDetailData.consigneeName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">所在地区:</span>
-                                    <span>{initialData.localErea}</span>
+                                    <span>{orderDetailData.province}</span>
+                                    <span>{orderDetailData.city}</span>
+                                    <span>{orderDetailData.district}</span>
                                 </Col>
                                 <Col className="gutter-row" span={10}>
                                     <span className="details-info-lable">街道地址:</span>
-                                    <span>{initialData.streetAdress}</span>
+                                    <span>{orderDetailData.detailAddress}</span>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">手机</span>
-                                    <span>{initialData.telephone}</span>
+                                    <span>{orderDetailData.cellphone}</span>
                                 </Col>
                                 <Col className="gutter-row" span={7}>
                                     <span className="details-info-lable">固定电话:</span>
-                                    <span>{initialData.cellphone}</span>
+                                    <span>{orderDetailData.telephone}</span>
                                 </Col>
                                 <Col className="gutter-row" span={10}>
                                     <span className="details-info-lable">邮编:</span>
-                                    <span>{initialData.mail}</span>
+                                    <span>{orderDetailData.postcode}</span>
                                 </Col>
                             </Row>
                         </div>
@@ -250,10 +300,10 @@ class OrderInformation extends PureComponent {
                         </div>
                         <div>
                             <Table
-                                dataSource={initialData.commodifyInfo}
+                                dataSource={orderDetailData.items}
                                 columns={columns}
                                 pagination={false}
-                                rowKey="commodifyNumber"
+                                rowKey="id"
                                 footer={tableFooter}
                             />
                         </div>
@@ -261,7 +311,11 @@ class OrderInformation extends PureComponent {
                 </div>
                 <div className="order-details-btns">
                     <Row>
-                        <Col className="gutter-row" span={14} offset={9}>
+                        <Col
+                            className="gutter-row"
+                            span={14}
+                            offset={10}
+                        >
                             <Button
                                 size="default"
                                 onClick={this.handleOrderSave}
@@ -270,8 +324,8 @@ class OrderInformation extends PureComponent {
                                 保存
                             </Button>
                             {
-                                (initialData.orderStatus === '待审核'
-                                || initialData.orderStatus === '待人工审核')
+                                (orderDetailData.orderStateDesc === '待审核'
+                                || orderDetailData.orderStateDesc === '待人工审核')
                                 && <Button
                                     size="default"
                                     onClick={this.handleOrderAudit}
@@ -280,9 +334,10 @@ class OrderInformation extends PureComponent {
                                 </Button>
                             }
                             {
-                                (initialData.logisticsStatus !== '待收货'
-                                && initialData.logisticsStatus !== '未送达'
-                                && initialData.logisticsStatus !== '已签收')
+                                orderDetailData.shippingStateDesc !== '待收货'
+                                && orderDetailData.shippingStateDesc !== '未送达'
+                                && orderDetailData.shippingStateDesc !== '已签收'
+                                && orderDetailData.orderStateDesc !== '已取消'
                                 && <Button
                                     size="default"
                                     onClick={this.handleOrderCancel}
@@ -302,14 +357,20 @@ class OrderInformation extends PureComponent {
                         </Col>
                     </Row>
                 </div>
+                <div>
+                    <CauseModal />
+                </div>
             </div>
         );
     }
 }
 
 OrderInformation.propTypes = {
-    initialData: PropTypes.objectOf(PropTypes.any),
+    orderDetailData: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
+    match: PropTypes.objectOf(PropTypes.any),
+    modifyCauseModalVisible: PropTypes.func,
+    fetchOrderDetailInfo: PropTypes.func,
 }
 
 OrderInformation.defaultProps = {

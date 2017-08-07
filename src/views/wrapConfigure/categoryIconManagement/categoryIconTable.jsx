@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { Table, Modal, message } from 'antd';
 import { uploadImageBase64Data } from '../../../service';
 import { modifyCategoryIcon } from '../../../actions/wap';
-import { fetchCategorys } from '../../../actions/pub';
+import { fetchCategorysById } from '../../../actions/pub';
 import FileCut from '../fileCut';
 
 
@@ -21,7 +21,7 @@ import FileCut from '../fileCut';
         categorys: state.toJS().pub.categorys,
     }),
     dispatch => bindActionCreators({
-        fetchCategorys
+        fetchCategorysById
     }, dispatch)
 )
 class CategoryIconTable extends PureComponent {
@@ -115,7 +115,7 @@ class CategoryIconTable extends PureComponent {
             id,
             iconImg: imgUrl
         }).then(() => {
-            this.props.fetchCategorys({parentId: lv3Id});
+            this.props.fetchCategorysById({parentId: lv3Id});
             this.setState({
                 visible: false,
                 iconRecord: {},
@@ -191,7 +191,7 @@ class CategoryIconTable extends PureComponent {
 
 CategoryIconTable.propTypes = {
     categoryInfos: PropTypes.objectOf(PropTypes.any),
-    fetchCategorys: PropTypes.func,
+    fetchCategorysById: PropTypes.func,
 };
 
 export default CategoryIconTable;

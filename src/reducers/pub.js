@@ -14,7 +14,8 @@ const initState = Immutable.fromJS({
     gegion: [],
     categorys: [],
     // 值列表数据
-    valueList: []
+    valueList: [],
+    categorysById: [],
 });
 
 export default (state = initState, action) => {
@@ -31,6 +32,10 @@ export default (state = initState, action) => {
 
         case ActionType.RECEIVE_All_CATEGORYS: {
             return state.set('categorys', action.payload)
+        }
+        
+        case ActionType.RECEIVE_CATEGORYS_BY_ID: {
+            return state.set('categorysById', action.payload)
         }
 
         case ActionType.RECEIVE_VALUES_LIST: {
