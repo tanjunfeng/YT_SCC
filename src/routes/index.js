@@ -182,7 +182,18 @@ const routes = [
                         />
                         <Route
                             path="/commodifyList/:id"
+                            exact
                             render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/commodifyList/procurementMaintenance/:id"
+                            exact
+                            render={() => <Bundle load={ProcurementMaintenance}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/commodifyList/salesMaintenance/:id"
+                            exact
+                            render={() => <Bundle load={SalesMaintenance}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )
@@ -201,6 +212,7 @@ const routes = [
                         />
                         <Route
                             path="/managementList/commodifyDetail/:id"
+                            exact
                             render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
@@ -638,7 +650,7 @@ const routes = [
                                 <Bundle load={OrderManagementList}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/orderList/orderDetails/:orderNumber"
+                            path="/orderList/orderDetails/:id"
                             render={() => <Bundle load={OrderManagementDetails}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>

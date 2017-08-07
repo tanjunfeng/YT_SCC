@@ -1,27 +1,31 @@
 /**
  * @file App.jsx
- * @author shijh
+ * @author Tanjf
  *
- * 在售商品列表
+ * 采购搜索框
  */
 
 import { fromJS } from 'immutable';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { message, Form, Col, Row, Select, Button, Icon } from 'antd';
+import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
 import {
     fetchAction,
     receiveData,
-    fetchTest,
 } from '../../../actions/classifiedList';
 import {
-    fetchGetProductById,
+    QueryProdPurchaseExtByCondition,
+} from '../../../actions/producthome';
+import {
     fetchAddProdPurchase,
-    fetchQueryProdByCondition
+    fetchQueryProdByCondition,
+    fecthGetProdPurchaseById
 } from '../../../actions';
 import {
     initiateModeOptions,
@@ -39,14 +43,17 @@ const Option = Select.Option;
         user: state.toJS().user.data,
         rights: state.toJS().user.rights,
         data: state.toJS().commodity.classifiedList,
+        getProductByIds: state.toJS().commodity.getProductById,
+        getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
     }),
     dispatch => bindActionCreators({
         fetchAction,
         receiveData,
-        fetchGetProductById,
         fetchAddProdPurchase,
         fetchQueryProdByCondition,
-        pubFetchValueList
+        pubFetchValueList,
+        fecthGetProdPurchaseById,
+        QueryProdPurchaseExtByCondition
     }, dispatch)
 )
 class SearchForm extends Component {
@@ -65,21 +72,24 @@ class SearchForm extends Component {
             img: null,
             chooseMe: {},
             disabled: false,
-            supplyChoose: null,
-            visible: true
+            supplyChoose: {},
+            supplyChoose1: {},
+            supplyChoose2: {},
+            visible: true,
+            sort: 1
         }
     }
 
     componentWillMount() {}
 
     componentDidMount() {
-        this.props.fetchAction();
+        // this.props.fetchAction();
 
-        setTimeout(() => {
-            this.setState({
-                disabled: true,
-            });
-        }, 2000);
+        // setTimeout(() => {
+        //     this.setState({
+        //         disabled: true,
+        //     });
+        // }, 2000);
     }
 
     /**
@@ -89,6 +99,11 @@ class SearchForm extends Component {
         this.setState({
             supplyChoose: record,
         });
+        if (this.state.supplyChoose === {}) {
+            this.setState({
+                sort: 1,
+            });
+        }
     }
 
     /**
@@ -96,8 +111,11 @@ class SearchForm extends Component {
      */
     handleAdressChoose = ({ record }) => {
         this.setState({
-            supplyChoose: record,
+            supplyChoose2: record,
         });
+        if (this.state.sort === 1) {
+
+        }
     }
 
     /**
@@ -105,7 +123,7 @@ class SearchForm extends Component {
      */
     handleCompChoose = ({ record }) => {
         this.setState({
-            supplyChoose: record,
+            supplyChoose1: record,
         });
     }
 
@@ -114,17 +132,22 @@ class SearchForm extends Component {
      */
     handleGetValue() {
         const { validateFields } = this.props.form;
+        const { match } = this.props;
         validateFields((err, values) => {
-            console.log(values);
-            // TODO post data
-            this.props.fetchQueryProdByCondition({
-                productId: values.productId,
-                spId: values.spId,
-                spAdrId: values.spAdrId,
-                branchCompanyId: values.branchCompanyId,
-                supplierType: values.initiateModeOptions,
-                status: values.mainSupplierOptions
-            });
+            const status = values.initiateModeOptions === '-1'
+                ? null
+                : values.initiateModeOptions;
+            const supplierType = values.mainSupplierOptions === '-1'
+                ? null
+                : values.mainSupplierOptions;
+            // console.log(this.state.supplyChoose1.spAdrid)
+            this.props.onSearch(Utils.removeInvalid({
+                spId: this.state.supplyChoose.spId,
+                spAdrId: this.state.supplyChoose1.spAdrid,
+                branchCompanyId: this.state.supplyChoose2.id,
+                supplierType,
+                status
+            }))
         })
     }
 
@@ -217,10 +240,16 @@ class SearchForm extends Component {
      * 重置
      */
     handleResetValue() {
-        this.addressSearchMind.handleClear();
-        this.supplySearchMind.handleClear();
-        this.supplyCompSearchMind.handleClear();
+        this.addressSearchMind.reset();
+        this.supplySearchMind.reset();
+        this.supplyCompSearchMind.reset();
+        this.setState({
+            supplyChoose: {},
+            supplyChoose1: {},
+            supplyChoose2: {},
+        })
         this.props.form.resetFields();
+        this.props.onReset()
     }
 
     /**
@@ -240,13 +269,13 @@ class SearchForm extends Component {
     //     });
     // }
 
-    handleTestChoose = ({ record, compKey, index, event }) => {
-        console.log(compKey, record)
-    }
+    // handleTestChoose = ({ record, compKey, index, event }) => {
+    //     console.log(compKey, record)
+    // }
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { prefixCls, innitalvalue } = this.props;
+        const { prefixCls } = this.props;
         return (
             <div className={`${prefixCls}-content manage-form`}>
                 <div style={{fontSize: 16, fontWeight: 900}}>
@@ -269,33 +298,21 @@ class SearchForm extends Component {
                                             onChoosed={this.handleSupplyChoose}
                                             onClear={this.handleSupplyClear}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.id} - {data.name}</div>
+                                                <div>{data.spNo} - {data.companyName}</div>
                                             )}
                                             pageSize={2}
                                             columns={[
                                                 {
-                                                    title: 'Name',
+                                                    title: '供应商编码',
                                                     dataIndex: 'spNo',
                                                     width: 150,
                                                 }, {
-                                                    title: 'spId',
+                                                    title: '供应商ID',
                                                     dataIndex: 'spId',
                                                     width: 200,
                                                 }, {
-                                                    title: 'spAdrid',
-                                                    dataIndex: 'spAdrid',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'companyName',
+                                                    title: '供应商名称',
                                                     dataIndex: 'companyName',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'providerNo',
-                                                    dataIndex: 'providerNo',
-                                                    width: 200,
-                                                }, {
-                                                    title: 'providerName',
-                                                    dataIndex: 'providerName',
                                                     width: 200,
                                                 }
                                             ]}
@@ -319,32 +336,32 @@ class SearchForm extends Component {
                                             onChoosed={this.handleAdressChoose}
                                             onClear={this.handleSupplyClear}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.id} - {data.name}</div>
+                                                <div>{data.providerNo} - {data.providerName}</div>
                                             )}
                                             pageSize={2}
                                             columns={[
                                                 {
-                                                    title: 'Name',
+                                                    title: '供应商编码',
                                                     dataIndex: 'spNo',
                                                     width: 150,
                                                 }, {
-                                                    title: 'spId',
+                                                    title: '供应商ID',
                                                     dataIndex: 'spId',
                                                     width: 200,
                                                 }, {
-                                                    title: 'spAdrid',
+                                                    title: '供应商地点ID',
                                                     dataIndex: 'spAdrid',
                                                     width: 200,
                                                 }, {
-                                                    title: 'companyName',
+                                                    title: '供应商名称',
                                                     dataIndex: 'companyName',
                                                     width: 200,
                                                 }, {
-                                                    title: 'providerNo',
+                                                    title: '供应商地点编码',
                                                     dataIndex: 'providerNo',
                                                     width: 200,
                                                 }, {
-                                                    title: 'providerName',
+                                                    title: '供应商地点名称',
                                                     dataIndex: 'providerName',
                                                     width: 200,
                                                 }
@@ -374,11 +391,11 @@ class SearchForm extends Component {
                                             pageSize={2}
                                             columns={[
                                                 {
-                                                    title: 'Name',
+                                                    title: '子公司ID',
                                                     dataIndex: 'id',
                                                     width: 150,
                                                 }, {
-                                                    title: 'Address',
+                                                    title: '子公司名称',
                                                     dataIndex: 'name',
                                                     width: 200,
                                                 }
@@ -413,7 +430,7 @@ class SearchForm extends Component {
                     </FormItem>
                     {/* 是否为主供应商 */}
                     <FormItem className="sc-form-item">
-                        <span className={`${prefixCls}-select`}>供应商</span>
+                        <span className={`${prefixCls}-select`}>主供应商</span>
                         {getFieldDecorator('mainSupplierOptions', {
                             initialValue: mainSupplierOptions.defaultValue
                         })(
@@ -465,14 +482,13 @@ class SearchForm extends Component {
 }
 
 SearchForm.propTypes = {
-    fetchGetProductById: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.objectOf(PropTypes.any),
-    fetchAction: PropTypes.objectOf(PropTypes.any),
     handleAdd: PropTypes.func,
     prefixCls: PropTypes.string,
     user: PropTypes.objectOf(PropTypes.string),
     form: PropTypes.objectOf(PropTypes.any),
-    innitalvalue: PropTypes.objectOf(PropTypes.any),
+    onSearch: PropTypes.func,
+    onReset: PropTypes.func,
 }
 
 SearchForm.defaultProps = {
@@ -480,6 +496,8 @@ SearchForm.defaultProps = {
         name: 'Who?'
     },
     prefixCls: 'select-line',
+    onSearch: () => {},
+    onReset: () => {},
 }
 
-export default Form.create()(SearchForm);
+export default Form.create()(withRouter(SearchForm));

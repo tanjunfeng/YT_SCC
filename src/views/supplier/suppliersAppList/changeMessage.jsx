@@ -48,21 +48,14 @@ class ChangeMessage extends PureComponent {
      * 模态框确认按钮
      */
     handleInformationOk() {
-        this.props.form.validateFields((err) => {
-            if (!err) {
-                const { supplierCooperationId } = this.props.visibleData;
-                const result = this.props.form.getFieldsValue();
-                this.props.modifySupplierCooperationInfo({
-                    id: supplierCooperationId,
-                    ...result
-                }).then(() => {
-                    this.props.getList()
-                })
-            }
-        })
+        const { visibleData = {} } = this.props;
+        const { id } = visibleData;
+        this.props.history.push(`/suppliersAppList/edit/supplier/${id}`)
     }
 
     render() {
+        const { visibleData = {} } = this.props;
+        const { failedReason = '' } = visibleData;
         return (
             <Modal
                 title="平台已拒绝原因"
@@ -75,7 +68,9 @@ class ChangeMessage extends PureComponent {
             >
                 <Form>
                     <FormItem className="manage-form-item">
-                        <span className="manage-form-label">结算账期</span>
+                        <span className="manage-form-label">
+                            {failedReason}
+                        </span>
                     </FormItem>
                 </Form>
             </Modal>

@@ -265,6 +265,7 @@ export const suppliersAppList = [
         title: '供应商编码',
         dataIndex: 'providerNo',
         key: 'providerNo',
+        width: 90,
     },
     {
         title: '供应商名称',
@@ -280,6 +281,7 @@ export const suppliersAppList = [
         title: '供应商类型',
         dataIndex: 'providerType',
         key: 'providerType',
+        width: 90,
         render: (text) => {
             switch (parseInt(text, 10)) {
                 case 1:
@@ -295,6 +297,7 @@ export const suppliersAppList = [
         title: '供应商等级',
         dataIndex: 'grade',
         key: 'grade',
+        width: 90,
         render: (text, record) => {
             if (record.providerType === 1) {
                 switch (parseInt(text, 10)) {
@@ -330,6 +333,7 @@ export const suppliersAppList = [
         title: '供应商入驻日期',
         dataIndex: 'settledDate',
         key: 'settledDate',
+        width: 100,
         render: (text) => (
             text !== null ? moment(parseInt(text, 10)).format('YYYY-MM-DD') : ''
         )
@@ -338,17 +342,18 @@ export const suppliersAppList = [
         title: '供应商状态',
         dataIndex: 'status',
         key: 'status',
+        width: 90,
         render: (text) => {
             switch (parseInt(text, 10)) {
+                case 0:
+                    return '制单';
                 case 1:
-                    return '制表';
-                case 2:
                     return '已提交';
-                case 3:
+                case 2:
                     return '已审核';
-                case 4:
+                case 3:
                     return '已拒绝';
-                case 5:
+                case 4:
                     return '修改中';
                 default:
                     return null;
@@ -359,6 +364,7 @@ export const suppliersAppList = [
         title: '操作',
         dataIndex: 'operation',
         key: 'operation',
+        width: 90,
     }
 ]
 
@@ -368,6 +374,7 @@ export const supplierInputList = [
         title: '供应商编码',
         dataIndex: 'providerNo',
         key: 'providerNo',
+        width: 90,
     },
     {
         title: '供应商名称',
@@ -383,6 +390,7 @@ export const supplierInputList = [
         title: '供应商类型',
         dataIndex: 'providerType',
         key: 'providerType',
+        width: 90,
         render: (text) => {
             switch (parseInt(text, 10)) {
                 case 1:
@@ -398,6 +406,7 @@ export const supplierInputList = [
         title: '供应商等级',
         dataIndex: 'grade',
         key: 'grade',
+        width: 90,
         render: (text, record) => {
             if (record.providerType === 1) {
                 switch (parseInt(text, 10)) {
@@ -411,7 +420,7 @@ export const supplierInputList = [
                         break;
                 }
             }
-            else if (record.providerType === 2) {
+            if (record.providerType === 2) {
                 switch (parseInt(text, 10)) {
                     case '1':
                         return '生产厂家'
@@ -433,6 +442,7 @@ export const supplierInputList = [
         title: '供应商入驻日期',
         dataIndex: 'settledDate',
         key: 'settledDate',
+        width: 100,
         render: (text) => (
             text !== null ? moment(parseInt(text, 10)).format('YYYY-MM-DD') : ''
         )
@@ -441,17 +451,18 @@ export const supplierInputList = [
         title: '供应商状态',
         dataIndex: 'status',
         key: 'status',
+        width: 90,
         render: (text) => {
             switch (parseInt(text, 10)) {
+                case 0:
+                    return '制单';
                 case 1:
-                    return '制表';
-                case 2:
                     return '已提交';
-                case 3:
+                case 2:
                     return '已审核';
-                case 4:
+                case 3:
                     return '已拒绝';
-                case 5:
+                case 4:
                     return '修改中';
                 default:
                     return null;
@@ -462,6 +473,7 @@ export const supplierInputList = [
         title: '操作',
         dataIndex: 'operation',
         key: 'operation',
+        width: 90,
     }
 ]
 

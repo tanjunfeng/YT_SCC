@@ -18,25 +18,32 @@ import {
     message,
     Table,
 } from 'antd';
+import { PAGE_SIZE } from '../../../constant';
 import {
     modifyCheckReasonVisible,
     insertSupplierSettlementInfo,
     fetchGetProductById,
+    fetchEditBeforeAfter,
+    suppplierSettledAudit,
+    fetchQueryManageList
 } from '../../../actions';
+import {
+    AuditSupplierEditInfo
+} from '../../../actions/supplier';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 const TEXT = {
-     supplierBasicInfo: {
-        id: '主键ID',
+    supplierBasicInfo: {
+        // id: '主键ID',
         companyName: '公司名称',
         spNo: '供应商编号',
         grade: '供应商等级',
     },
     supplierOperTaxInfo: {
         spId: '供应商主表ID',
-        id: '主键ID2',
+        // id: '主键ID2',
         companyName: '公司名称2',
         companyLocProvince: '省份名',
         companyLocCity: '城市名',
@@ -55,8 +62,8 @@ const TEXT = {
         taxpayerCertExpiringDate: '一般纳税人资格证到期日'
     },
     supplierBankInfo: {
-        spId: '供应商主表ID',
-        id: '主键ID',
+        // spId: '供应商主表ID',
+        // id: '主键ID',
         accountName: '开户名字',
         openBank: '开户行',
         bankAccount: '银行账户',
@@ -70,7 +77,7 @@ const TEXT = {
         invoiceHead: '供应商发票抬头'
     },
     supplierlicenseInfo: {
-        id: '主键ID',
+        // id: '主键ID',
         companyName: '公司名称',
         registLicenceNumber: '注册号(营业执照号)',
         legalRepresentative: '法定代表人',
@@ -93,29 +100,29 @@ const TEXT = {
         guaranteeMoney: '供应商质保金收取金额（保证金）'
     },
     saleRegionInfo: {
-        id: '主键ID',
+        // id: '主键ID',
         bigArea: '大区',
         province: '省份',
         city: '城市'
     },
     supplierAdrInfoDto: {
-        id: '供应商地点主表ID',
-        parentId: '供应商主表ID',
+        // id: '供应商地点主表ID',
+        // parentId: '供应商主表ID',
         basicId: '基本信息ID',
         contId: '联系信息ID',
         spAdrBasic: '地点基础信息表'
     },
     spAdrBasic: {
-        id: '主键ID',
+        // id: '主键ID',
         providerNo: '供应商地点编码',
         providerName: '供应商地点名称',
         goodsArrivalCycle: '到货周期',
-        orgId: '分公司ID',
+        // orgId: '分公司ID',
         settlementPeriod: '账期',
         belongArea: '所属区域',
     },
     spAdrContact: {
-        id: '供应商主表ID',
+        // id: '供应商主表ID',
         providerName: '供应商姓名',
         providerPhone: '供应商手机',
         providerEmail: '供应商邮箱',
@@ -137,7 +144,7 @@ const parse = (before, after, TEXT) => {
             const cb = b[j];
             const ca = a[j];
             const ct = t[j];
-            if (!ct) {
+            if (ct) {
                 data.push({
                     before: cb,
                     after: ca,
@@ -154,55 +161,99 @@ const parse = (before, after, TEXT) => {
         checkResonVisible: state.toJS().supplier.checkResonVisible,
         visibleData: state.toJS().supplier.visibleData,
         editBeforeAfters: state.toJS().supplier.editBeforeAfter,
+        visibleReasonDatas: state.toJS().supplier.visibleReasonData,
     }),
     dispatch => bindActionCreators({
         modifyCheckReasonVisible,
         insertSupplierSettlementInfo,
         fetchGetProductById,
+        fetchEditBeforeAfter,
+        suppplierSettledAudit,
+        fetchQueryManageList,
+        AuditSupplierEditInfo
     }, dispatch)
 )
 class CheckReason extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.handleCheckOk = ::this.handleCheckOk;
-        this.handleCheckCancel = ::this.handleCheckCancel;
         this.handleSelectChange = ::this.handleSelectChange;
         this.handleTextChange = ::this.handleTextChange;
+        this.handleAuditOk = ::this.handleAuditOk;
+        this.handleAuditCancel = ::this.handleAuditCancel;
+
+        this.searchForm = {};
+        this.current = 1;
     }
 
     state = {
         selected: -1
     }
 
-    /**
-     * 弹框取消事件
-     */
-    handleCheckCancel() {
-        this.props.modifyCheckReasonVisible(false);
+
+    componentDidMount() {
+        const { id } = this.props.visibleReasonDatas;
+        this.props.fetchEditBeforeAfter({
+            spId: id
+        })
     }
 
     /**
      * 弹框确认事件
      */
-    handleCheckOk() {
+    handleAuditOk() {
+        const { id } = this.props.visibleReasonDatas;
         const { selected } = this.state;
         const { visibleData } = this.props;
+        const { editBeforeAfters } = this.props;
+        const { before = {}, after = {} } = editBeforeAfters;
         if (selected === -1) {
             message.error('请选择审核结果');
             return;
         }
         this.props.form.validateFields((err) => {
             if (!err) {
-                this.props.insertSupplierSettlementInfo({
-                    id: visibleData.id,
-                    status: parseInt(selected, 10),
+                this.props.AuditSupplierEditInfo({
+                    id,
+                    pass: parseInt(selected, 10) === 1 ? false : true,
+                    basicId: before.supplierBasicInfo.id,
+                    bankId: before.supplierBankInfo.id,
+                    operatTaxatId: before.supplierOperTaxInfo.id,
+                    licenseId: before.supplierlicenseInfo.id,
                     ...this.props.form.getFieldsValue()
-                }).then(() => {
-                    this.props.getList()
+                }).then((res) => {
+                    this.props.modifyCheckReasonVisible({isVisible: false});
+                    message.success(res.message)
+                    this.props.fetchQueryManageList({
+                        pageNum: this.current,
+                        pageSize: PAGE_SIZE,
+                        ...this.searchForm
+                    })
+                }).catch(() => {
+                    this.props.modifyCheckReasonVisible({isVisible: false});
+                    message.success('修改审核失败')
                 })
             }
         })
+    }
+
+    /**
+     * 数据列表查询
+     */
+    handleGetList(page) {
+        const currentPage = page;
+        this.props.fetchQueryManageList({
+            pageSize: PAGE_SIZE,
+            pageNum: currentPage,
+            ...this.searchForm
+        });
+    }
+
+    /**
+     * 弹框取消事件
+     */
+    handleAuditCancel() {
+        this.props.modifyCheckReasonVisible({isVisible: false});
     }
 
     /**
@@ -220,8 +271,12 @@ class CheckReason extends PureComponent {
      *
      * @param {*} 值数据
      */
-    handleTextChange(data) {
-        message.data(data.message)
+    handleTextChange() {
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log('Received values of form: ', values);
+            }
+        });
     }
 
     render() {
@@ -240,14 +295,13 @@ class CheckReason extends PureComponent {
         const { editBeforeAfters } = this.props;
         const { before = {}, after = {} } = editBeforeAfters;
         const formData = parse(before, after, TEXT);
-        
 
         return (
             <Modal
                 title="供应商修改资料审核"
                 visible={this.props.checkResonVisible}
-                onOk={this.handleCheckOk}
-                onCancel={this.handleCheckCancel}
+                onOk={this.handleAuditOk}
+                onCancel={this.handleAuditCancel}
                 maskClosable={false}
             >
                 <span>修改资料详情</span>
@@ -256,7 +310,6 @@ class CheckReason extends PureComponent {
                     dataSource={formData}
                     pagination={false}
                     size="small"
-                    rowKey="name"
                 />
                 <div>
                     <div className="application-modal-tip">

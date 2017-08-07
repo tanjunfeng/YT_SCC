@@ -10,7 +10,7 @@ import { getProductById } from '../../service';
 import ActionType from '../ActionType';
 
 const receive = (data) => ({
-    type: ActionType.GET_PRODUCT_BYID,
+    type: ActionType.GET_PRODUCT_BY_ID,
     payload: data,
 });
 

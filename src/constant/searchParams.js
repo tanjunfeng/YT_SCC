@@ -137,8 +137,11 @@ export const settlementAccount = {
 
 // 供应商类型
 export const supplierTypeOptions = {
-    defaultValue: '1',
+    defaultValue: '0',
     data: [{
+        key: '0',
+        value: '全部'
+    }, {
         key: '1',
         value: '供应商'
     }, {
@@ -149,8 +152,11 @@ export const supplierTypeOptions = {
 
 // 入驻-供应商状态
 export const firstSupplierStatusOptions = {
-    defaultValue: '0',
+    defaultValue: '-1',
     data: [{
+        key: '-1',
+        value: '全部'
+    }, {
         key: '0',
         value: '制单'
     }, {
@@ -170,29 +176,29 @@ export const firstSupplierStatusOptions = {
 
 // 供应商管理-供应商状态
 export const secondSupplierStatusOptions = {
-    defaultValue: '1',
+    defaultValue: '0',
     data: [{
-        key: '1',
-        value: '制表'
+        key: '0',
+        value: '全部'
     }, {
-        key: '2',
+        key: '1',
         value: '已提交'
     }, {
-        key: '3',
+        key: '2',
         value: '已审核'
     }, {
-        key: '4',
+        key: '3',
         value: '已拒绝'
-    }, {
-        key: '5',
-        value: '修改中'
     }]
 }
 
 // 供应商类型
 export const supplierLevelOptions = {
-    defaultValue: '1',
+    defaultValue: '0',
     data: [{
+        key: '0',
+        value: '全部'
+    }, {
         key: '1',
         value: '战略供应商'
     }, {
@@ -209,13 +215,19 @@ export const supplierPlaceLevelOptions = {
     defaultValue: '1',
     data: [{
         key: '1',
-        value: '战略供应商'
+        value: '生产厂家'
     }, {
         key: '2',
-        value: '核心供应商'
+        value: '批发商'
     }, {
         key: '3',
-        value: '可替代供应商'
+        value: '经销商'
+    }, {
+        key: '4',
+        value: '代销商'
+    }, {
+        key: '5',
+        value: '其他'
     }]
 }
 
@@ -227,10 +239,10 @@ export const initiateModeOptions = {
         value: '全部'
     }, {
         key: '0',
-        value: '启用'
+        value: '失效'
     }, {
         key: '1',
-        value: '未启用'
+        value: '启用'
     }]
 }
 
@@ -263,18 +275,18 @@ export const mainSupplierOptions = {
         value: '全部'
     }, {
         key: '0',
-        value: '是'
+        value: '否'
     }, {
         key: '1',
-        value: '否'
+        value: '是'
     }]
 }
 
 // 供货状态
 export const deliveryStatusOptions = {
-    defaultValue: '-1',
+    defaultValue: '',
     data: [{
-        key: '-1',
+        key: '',
         value: '全部'
     }, {
         key: '0',
@@ -287,9 +299,9 @@ export const deliveryStatusOptions = {
 
 // 子公司状态
 export const subCompanyStatusOptions = {
-    defaultValue: '-1',
+    defaultValue: '',
     data: [{
-        key: '-1',
+        key: '',
         value: '全部'
     }, {
         key: '0',
@@ -323,66 +335,66 @@ export const commoditySortOptions = {
 
 // 订单管理-订单类型
 export const orderTypeOptions = {
-    defaultValue: '-1',
+    defaultValue: 'ALL',
     data: [{
-        key: '-1',
+        key: 'ALL',
         value: '全部'
     }, {
-        key: '0',
+        key: 'ZCXS',
         value: '正常销售 '
     }, {
-        key: '1',
+        key: 'ZYYH',
         value: '直营店要货'
     }]
 }
 
 // 订单管理-订单状态
 export const orderStatusOptions = {
-    defaultValue: '0',
+    defaultValue: 'W',
     data: [{
-        key: '-1',
+        key: 'ALL',
         value: '全部'
     }, {
-        key: '0',
+        key: 'W',
         value: '待审核'
     }, {
-        key: '1',
+        key: 'M',
         value: '待人工审核'
     }, {
-        key: '2',
+        key: 'A',
         value: '已审核'
     }, {
-        key: '3',
+        key: 'Q',
         value: '已取消'
     }, {
-        key: '4',
+        key: 'C',
         value: '已完成'
     }]
 }
 
 // 订单管理-支付状态
 export const payStatusOptions = {
-    defaultValue: '-1',
+    defaultValue: 'ALL',
     data: [{
-        key: '-1',
+        key: 'ALL',
         value: '全部'
     }, {
-        key: '0',
+        key: 'WZF',
         value: '未支付'
     }, {
-        key: '1',
+        key: 'YZF',
         value: '已支付'
     }, {
-        key: '2',
+        key: 'QXFK',
         value: '取消支付'
     }, {
-        key: '3',
+        key: 'TKD',
         value: '退款待审核'
     }, {
-        key: '4',
+        key: 'TKQ',
         value: '退款待确认'
     }, {
-        key: '5',
+        key: 'YTK',
         value: '已退款'
     }]
 }
@@ -404,34 +416,37 @@ export const supplierStore = {
 
 // 订单管理-物流状态
 export const logisticsStatusOptions = {
-    defaultValue: '-1',
+    defaultValue: 'ALL',
     data: [{
-        key: '-1',
+        key: 'ALL',
         value: '全部'
     }, {
-        key: '0',
+        key: 'DCL',
         value: '待处理'
     }, {
-        key: '1',
+        key: 'WCS',
         value: '未传送'
     }, {
-        key: '2',
+        key: 'DCK',
         value: '待出库'
     }, {
-        key: '3',
+        key: 'DSH',
         value: '待收货'
     }, {
-        key: '4',
+        key: 'YQS',
         value: '已签收'
     }, {
-        key: '5',
-        value: '未送达'
+        key: 'WCS',
+        value: '未传送'
     }, {
-        key: '6',
+        key: 'QX',
         value: '取消送货'
     }, {
-        key: '7',
+        key: 'CGWDH',
         value: '采购未到货'
+    }, {
+        key: 'WJS',
+        value: '仓库拒收'
     }]
 }
 

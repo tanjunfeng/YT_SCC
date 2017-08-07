@@ -52,7 +52,7 @@ class SearchMind extends PureComponent {
              */
             selectedRawData: null,
 
-            disabled: false,
+            disabled: props.disabled,
 
             /**
              * 此处由 state 控制分页
@@ -65,6 +65,11 @@ class SearchMind extends PureComponent {
              * 下拉框的数据源
              */
             data: [],
+
+            /**
+             * 默认值
+             */
+            defaultValue: props.defaultValue,
         }
 
         this.handleFocus = ::this.handleFocus;
@@ -85,19 +90,74 @@ class SearchMind extends PureComponent {
         document.addEventListener('click', this.dropListener);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (!Utils.isEqual(nextProps, this.props)) {
+            const next = { ...nextProps };
+
+            if (nextProps.defaultValue !== this.props.defaultValue) {
+                next.value = nextProps.defaultValue;
+            }
+
+            // 单独处理一下 disabled
+            if (nextProps.disabled !== this.props.disabled) {
+                next.dropHide = true;
+                next.isFocus = false;
+            }
+
+            this.setState({
+                ...next
+            });
+        }
+    }
+
     componentWillUnmount() {
         document.removeEventListener('click', this.dropListener);
         clearTimeout(this.searchDelayTimerId);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.disabled !== this.props.disabled) {
+    /**
+     * 按下回车键 or 由点击搜索按钮触发（!quickSearch）
+     */
+    onPressEnter() {
+        this.query();
+    }
+
+    /**
+     * 按键搜索入口
+     * 实时搜索仅仅在 quickSearch 的情况下启用
+     */
+    onSearch() {
+        clearTimeout(this.searchDelayTimerId);
+
+        const { quickSearch, delaySend } = this.props;
+        const pager = { ...this.state.pagination };
+
+        // 搜索发生变化，清空 current
+        pager.current = 1;
+
+        if (quickSearch) {
             this.setState({
-                disabled: nextProps.disabled,
-                dropHide: true,
-                isFocus: false,
-            })
+                pagination: pager,
+            });
+
+            // 实际上这个位置如果没有 delaySend 延迟，不建议使用实时搜索
+            if (!delaySend) {
+                this.query();
+                return;
+            }
+
+            this.searchDelayTimerId = setTimeout(() => this.query(), delaySend);
         }
+    }
+
+    /**
+     * 点击清除按钮的回调
+     */
+    onClearCallback() {
+        this.props.onClear({
+            value: this.state.value,
+            raw: this.state.selectedRawData,
+        });
     }
 
     /**
@@ -106,13 +166,6 @@ class SearchMind extends PureComponent {
      */
     getData() {
         return this.state.selectedRawData;
-    }
-
-    /**
-     * 按下回车键 or 由点击搜索按钮触发（!quickSearch）
-     */
-    onPressEnter() {
-        this.query();
     }
 
     /**
@@ -153,34 +206,6 @@ class SearchMind extends PureComponent {
         this.setState({
             isFocus: false,
         });
-    }
-
-    /**
-     * 按键搜索入口
-     * 实时搜索仅仅在 quickSearch 的情况下启用
-     */
-    onSearch() {
-        clearTimeout(this.searchDelayTimerId);
-
-        const { quickSearch, delaySend } = this.props;
-        const pager = { ...this.state.pagination };
-
-        // 搜索发生变化，清空 current
-        pager.current = 1;
-
-        if (quickSearch) {
-            this.setState({
-                pagination: pager,
-            });
-
-            // 实际上这个位置如果没有 delaySend 延迟，不建议使用实时搜索
-            if (!delaySend) {
-                this.query();
-                return;
-            }
-
-            this.searchDelayTimerId = setTimeout(() => this.query(), delaySend);
-        }
     }
 
     /**
@@ -321,16 +346,6 @@ class SearchMind extends PureComponent {
     }
 
     /**
-     * 点击清除按钮的回调
-     */
-    onClearCallback() {
-        this.props.onClear({
-            value: this.state.value,
-            raw: this.state.selectedRawData,
-        });
-    }
-
-    /**
      * 清空数据按钮
      * 1. 下拉框展示的时候，代表需要清空输入框内容
      * 2. 下拉框关闭的时候，代表需要清空选择的数据
@@ -403,9 +418,15 @@ class SearchMind extends PureComponent {
         const inputProps = {
             ...(disabled && { disabled: 'disabled'})
         };
+
+        const newStyle = Object.assign({
+            zIndex: 100,
+            position: 'relative',
+        }, style)
+
         return (
             <div
-                style={style}
+                style={newStyle}
                 className={`${layoutCls} ${className}`}
                 onMouseOver={this.handleInArea}
                 onMouseOut={this.handleOutArea}
@@ -569,11 +590,11 @@ SearchMind.defaultProps = {
     placeholder: '请输入内容',
     rowKey: 'id',
     quickSearch: true,
-    onChoosed: () => {},
     renderChoosedInputRaw: null,
     disabled: false,
-    onClear: () => {},
     dropWidth: null,
+    onChoosed: () => {},
+    onClear: () => {},
 }
 
 

@@ -1,8 +1,8 @@
 /**
- * @file fetchEditBeforeAfter.js
+ * @file fetchDeleteProdPurchaseById.js
  * @author Tanjunfeng
  *
- * 查询供应商修改前修改后的信息
+ * 删除商品价格信息
  */
 
 import Promise from 'bluebird';

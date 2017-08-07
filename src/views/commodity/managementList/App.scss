@@ -40,3 +40,13 @@
         z-index: 3;
     }
 }
+.commodityType-wrap {
+    & .commodityType-title {
+        display: inline-block;
+        min-width: 60px;
+        margin-right: 8px;
+        & + div {
+            display: inline-block;
+        }
+    }
+}

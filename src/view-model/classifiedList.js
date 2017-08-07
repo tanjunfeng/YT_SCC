@@ -38,20 +38,21 @@ class ViewModel {
 
     /**
      * 当前状态
-     * @type {number} 0: 隐藏，1: 显示
+     * @type {number} 1: 隐藏，0: 显示
      */
-    stauts = 1;
+    status = 1;
 
-    constructor(data) {
-        this.key = data.id;
-        // 过滤一次后端数据
-        if (data.parentCategoryId !== '' && data.parentCategoryId != null) {
-            this.parentKey = data.parentCategoryId;
-        }
-        this.name = data.categoryName;
-        this.sort = data.sortOrder;
+    constructor(data, pid) {
+        this.key = data.categoryId;
+        // 自己创建一发 parentKey
+        this.parentKey = pid;
+        this.name = data.name;
+        // 如果 sort 为 0，则不进行排序，同时保持输入框值为空
+        this.sort = data.sortOrder === 0 ? null : data.sortOrder;
         this.children = data.childCategories;
-        this.stauts = 1; // data.displayStatus;
+
+        const status = parseInt(data.displayStatus);
+        this.status = isNaN(status) ? 1 : status;
     }
 
     toJSON() {
@@ -60,7 +61,7 @@ class ViewModel {
             parentKey: this.parentKey,
             name: this.name,
             sort: this.sort,
-            status: this.stauts,
+            status: this.status,
             ...(this.children && this.children.length > 0) && { children : this.children },
         }
     }
@@ -69,12 +70,13 @@ class ViewModel {
 /**
  * 遍历处理数据
  * @param data
+ * @param pid parentKey
  */
-const loop = data => data.map(d => {
-    const model = new ViewModel(d).toJSON();
+const loop = (data, pid = null) => data.map(d => {
+    const model = new ViewModel(d, pid).toJSON();
 
     if (model.children) {
-        model.children = loop(model.children);
+        model.children = loop(model.children, d.categoryId);
     }
 
     return model;

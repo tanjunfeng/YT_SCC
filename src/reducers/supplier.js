@@ -27,6 +27,8 @@ const initState = fromJS({
     insertSettlementResult: false,
     // 控制弹出框显示影藏
     auditVisible: false,
+    // 控制地点信息弹出框显示影藏
+    auditVisibled: false,
     // 供应商详情
     detailData: {},
     // 供应商新老数据对比
@@ -39,6 +41,7 @@ const initState = fromJS({
     placeRegion: [],
     informationVisible: false,
     checkResonVisible: false,
+    checkResonVisibled: false,
     areaVisible: false,
 
     // 供应商入驻列表
@@ -48,7 +51,9 @@ const initState = fromJS({
     // 查询供应商修改前修改后的信息
     editBeforeAfter: {},
     // 新增商品采购关系
-    fetchAddProdPurchase: {}
+    fetchAddProdPurchase: {},
+    // 采购关系ID
+    visibleReasonData: {}
 
 });
 
@@ -91,9 +96,20 @@ export default function (state = initState, action) {
             return state.set('auditVisible', isVisible).set('visibleData', record);
         }
 
+        case ActionType.MODIFY_ADR_AUDIT_VISIBLE: {
+            const { isVisible, record } = action.payload;
+            return state.set('auditVisibled', isVisible).set('visibleData', record);
+        }
+
+        case ActionType.MODIFY_CHECK_REASON_ADR_VISIBLE: {
+            const { isVisible, record } = action.payload;
+            return state.set('checkResonVisibled', isVisible).set('visibleReasonData', record);
+        }
+
         case ActionType.MODIFY_CHECK_REASON_VISIBLE: {
             const { isVisible, record } = action.payload;
-            return state.set('checkResonVisible', isVisible).set('visibleData', record);
+            console.log(isVisible)
+            return state.set('checkResonVisible', isVisible).set('visibleReasonData', record);
         }
 
         case ActionType.MODIFY_AREA_VISIBLE: {

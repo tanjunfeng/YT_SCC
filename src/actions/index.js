@@ -66,7 +66,7 @@ import {
 } from './procurement';
 
 // IBM
-import fecthCheckMainSupplier from './fetch/fetchCheckMainSupplier';
+import fetchCheckMainSupplier from './fetch/fetchCheckMainSupplier';
 import fecthGetProdPurchaseById from './fetch/fetchGetProdPurchaseById';
 import fetchChangeSupType from './fetch/fetchChangeSupType'
 
@@ -78,6 +78,15 @@ import fetchAddProdPurchase from './fetch/fetchAddProdPurchase';
 import fetchQueryProdByCondition from './fetch/fetchQueryProdByCondition';
 import fetchUpdateProdPurchase from './fetch/fetchUpdateProdPurchase';
 import fetchChangeProPurchaseStatus from './fetch/fetchChangeProPurchaseStatus';
+import suppplierSettledAudit from './fetch/suppplierSettledAudit';
+import supplierAdrSettledAudit from './fetch/supplierAdrSettledAudit';
+import modifyAuditAdrVisible from './modify/modifyAuditAdrVisible';
+import AuditSupplierEditInfo from '../actions/supplier';
+import {
+    UpdateProdPurchase,
+    getProductById,
+    queryProdPurchaseExtByCondition
+} from './producthome';
 
 // 库存调整
 import stockAdjust from './stockAdjust';
@@ -142,11 +151,17 @@ export {
     createPoRcv,
 
     // IBM
-    fecthCheckMainSupplier,
+    fetchCheckMainSupplier,
     fecthGetProdPurchaseById,
     fetchChangeSupType,
 
     fetchQuerySettledList,
+    suppplierSettledAudit,
+    supplierAdrSettledAudit,
+    modifyAuditAdrVisible,
+    getProductById,
+    queryProdPurchaseExtByCondition,
+    UpdateProdPurchase,
 
     // 库存调整
     stockAdjust,
@@ -154,6 +169,7 @@ export {
     fetchQueryManageList,
     fetchGetProductById,
     fetchEditBeforeAfter,
+    AuditSupplierEditInfo,
 
     // 根据条件分页查询商品清单，并排序
     queryCommodityList,
