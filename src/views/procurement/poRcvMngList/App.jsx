@@ -398,7 +398,7 @@ class PoRcvMngList extends PureComponent {
                                 <FormItem label="采购单号" formItemLayout>
                                     {getFieldDecorator('poNo', {
                                     })(
-                                        <Input
+                                        <Input size="default"
                                         />
                                         )}
 
@@ -410,7 +410,7 @@ class PoRcvMngList extends PureComponent {
                                 <FormItem label="收货单号" formItemLayout>
                                     {getFieldDecorator('poRcvNo', {
                                     })(
-                                        <Input
+                                        <Input size="default"
                                         />
                                         )}
 
