@@ -87,16 +87,8 @@ startApp({
                 name: "商品管理",
                 submenu: [
                     {
-                        code: "onSaleGoodsList",
-                        name: "在售商品列表"
-                    },
-                    {
-                        code: "forSaleGoodsList",
-                        name: "待售商品管理"
-                    },
-                    {
-                        code: "goodsParameterManagement",
-                        name: "商品参数管理"
+                        code: 'commodifyList',
+                        name: '商品管理列表'
                     },
                     {
                         code: "goodsClassification",
@@ -109,10 +101,6 @@ startApp({
                     {
                         code: "salesMaintenance",
                         name: "商品销售关系维护"
-                    },
-                    {
-                        code: 'managementList',
-                        name: '商品管理列表'
                     },
                 ]
             },

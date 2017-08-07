@@ -21,117 +21,48 @@ import { commodityDetails } from '../../../actions/producthome';
     }, dispatch)
 )
 class CommodifyDetail extends PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.handleGoBack = ::this.handleGoBack;
-    }
-
     componentDidMount() {
-        // const { id } = this.props.match.params;
-        // this.props.commodityDetails({ id });
-    }
-
-    /**
-     * 返回按钮
-     */
-    handleGoBack() {
-        window.history.back();
+        const { id } = this.props.match.params;
+        this.props.commodityDetails({ productId: id });
     }
 
     render() {
-        // 商品基本信息
-        const commodity = {
-            commodityNumber: 123456,
-            internationalCodes: [7241123033332000000, 132132132132132132132],
-            firstLevelCategoryName: '饮料烟酒',
-            secondLevelCategoryName: '水饮料',
-            thirdLevelCategoryName: '碳酸饮料',
-            fourthLevelCategoryName: '碳酸饮料',
-            name: '百事可口可乐600ml特惠装',
-            brandName: '脉动',
-            description: '百事可乐 极度（Max）碳酸饮料 把乐带回家百事可乐 极度（Max）碳酸饮料 把乐带回家百事可乐 极度（Max）碳酸饮料 把乐带回家',
-            inputTaxRate: 13,
-            taxRate: 17,
-            deliveryTime: 7,
-            suggestedPrice: 100,
-            suggestedRetailPrice: 100,
-            GuidePurchasePrice: 100,
+        const { commodityDetail } = this.props;
+        const guaranteePeriodUnit = () => {
+            switch (commodityDetail.guaranteePeriodUnit) {
+                case 1:
+                    return '年';
+                case 2:
+                    return '月';
+                case 3:
+                    return '天';
+                default:
+                    return '';
+            }
         }
-        // 货运信息
-        const freight = {
-            producePlace: '成都',
-            packingSpecifications: '330ml',
-            minUnit: '瓶',
-            weight: '500g',
-            volume: '长100mm*宽100mm*高100mm',
-            carton: '2*3*1',
-            qualityGuaranteePeriod: '12月',
-            storageConditions: '常温',
-        }
-        // 销售信息（SKU）
-        const skuInputVos = [{
-            attrName: '口味',
-            value: '青柠、蓝莓',
-        }, {
-            attrName: '包装',
-            value: '瓶装、灌装',
-        }]
-        // 图片信息
-        const imgs = {
-            commodityImgs: [
-                'http://sit.image.com/group1/M00/00/FB/rB4KPVlsFXOAGDZWAABb5O0UTso681.jpg',
-                'http://sit.image.com/group1/M00/00/F0/rB4KPllldGKAM-qXAAIWI0MYAlA563.jpg',
-            ],
-            subCommodityImgs: [
-                {
-                    name: '青柠,瓶装:',
-                    subCommodityImg: [
-                        'http://sit.image.com/group1/M00/00/FB/rB4KPVlsFXOAGDZWAABb5O0UTso681.jpg',
-                        'http://sit.image.com/group1/M00/00/F0/rB4KPllldGKAM-qXAAIWI0MYAlA563.jpg',
-                    ]
-                },
-                {
-                    name: '青柠,罐装:',
-                    subCommodityImg: [
-                        'http://sit.image.com/group1/M00/00/FB/rB4KPVlsFXOAGDZWAABb5O0UTso681.jpg',
-                        'http://sit.image.com/group1/M00/00/F0/rB4KPllldGKAM-qXAAIWI0MYAlA563.jpg',
-                    ]
-                },
-                {
-                    name: '蓝梅,罐装:',
-                    subCommodityImg: [
-                        'http://sit.image.com/group1/M00/00/FB/rB4KPVlsFXOAGDZWAABb5O0UTso681.jpg',
-                        'http://sit.image.com/group1/M00/00/F0/rB4KPllldGKAM-qXAAIWI0MYAlA563.jpg',
-                    ]
-                },
-            ]
-        }
-
-        // 关键字
-        const keywords = '包装,蓝梅,青柠,罐装'
         return (
             <div className="commodify-detail-message" style={{ marginTop: '15px' }}>
                 <div className="supplier-detail-item">
                     <div className="detail-message">
                         <div className="detail-message-header">
-                            <Icon type="solution" className="detail-message-header-icon" />商品基本信息
+                            <Icon type="solution" className="detail-message-header-icon" />
+                            商品基本信息
                         </div>
                         <div className="detail-message-body">
                             <ul className="detail-message-list">
                                 {
-                                    commodity.commodityNumber &&
-                                    <li className="detail-message-item">
+                                    commodityDetail.productCode
+                                    && <li className="detail-message-item">
                                         <span>商品编码：</span>
-                                        <span>{commodity.commodityNumber}</span>
+                                        <span>{commodityDetail.productCode}</span>
                                     </li>
                                 }
                                 {
-                                    commodity.internationalCodes &&
-                                    <li className="detail-message-item">
+                                    commodityDetail.internationalCodes
+                                    && <li className="detail-message-item">
                                         <span>国标码：</span>
                                         {
-                                            commodity.internationalCodes.map(item => (
+                                            commodityDetail.internationalCodes.map(item => (
                                                 <span className="international-codes" key={item}>{item}</span>
                                             ))
                                         }
@@ -140,66 +71,85 @@ class CommodifyDetail extends PureComponent {
                                 <li className="detail-message-item">
                                     <span>商品类目：</span>
                                     <span>
-                                        {commodity.firstLevelCategoryName && `${commodity.firstLevelCategoryName}`}
-                                        {commodity.secondLevelCategoryName && `>${commodity.secondLevelCategoryName}`}
-                                        {commodity.thirdLevelCategoryName && `>${commodity.thirdLevelCategoryName}`}
-                                        {commodity.fourthLevelCategoryName && `>${commodity.fourthLevelCategoryName}`}
+                                        {
+                                            commodityDetail.firstLevelCategoryName
+                                            && `${commodityDetail.firstLevelCategoryName}`
+                                        }
+                                        {
+                                            commodityDetail.secondLevelCategoryName
+                                            && `>${commodityDetail.secondLevelCategoryName}`
+                                        }
+                                        {
+                                            commodityDetail.thirdLevelCategoryName
+                                            && `>${commodityDetail.thirdLevelCategoryName}`
+                                        }
+                                        {
+                                            commodityDetail.fourthLevelCategoryName
+                                            && `>${commodityDetail.fourthLevelCategoryName}`
+                                        }
                                     </span>
                                 </li>
                                 {
-                                    commodity.name &&
-                                    <li className="detail-message-item">
+                                    commodityDetail.saleName
+                                    && <li className="detail-message-item">
                                         <span>商品名称：</span>
-                                        <span>{commodity.name}</span>
+                                        <span>{commodityDetail.saleName}</span>
                                     </li>
                                 }
                                 {
-                                    commodity.brandName &&
-                                    <li className="detail-message-item">
+                                    commodityDetail.brandName
+                                    && <li className="detail-message-item">
                                         <span>商品品牌：</span>
-                                        <span>{commodity.brandName}</span>
+                                        <span>{commodityDetail.brandName}</span>
                                     </li>
                                 }
                                 {
-                                    commodity.description &&
-                                    <li className="detail-message-item">
+                                    commodityDetail.description
+                                    && <li className="detail-message-item">
                                         <span>商品描述：</span>
-                                        <span>{commodity.description}</span>
+                                        <span>{commodityDetail.description}</span>
                                     </li>
                                 }
                                 {
-                                    commodity.inputTaxRate &&
-                                    <li className="detail-message-item">
+                                    commodityDetail.inputTaxRate
+                                    && <li className="detail-message-item">
                                         <span>进项税率：</span>
-                                        <span>{`${commodity.inputTaxRate}%`}</span>
+                                        <span>{`${commodityDetail.inputTaxRate}%`}</span>
                                     </li>
                                 }
                                 {
-                                    commodity.taxRate &&
-                                    <li className="detail-message-item">
+                                    commodityDetail.taxRate
+                                    && <li className="detail-message-item">
                                         <span>销项税率：</span>
-                                        <span>{`${commodity.taxRate}%`}</span>
+                                        <span>{`${commodityDetail.taxRate}%`}</span>
                                     </li>
                                 }
                                 {
-                                    commodity.suggestedPrice &&
-                                    <li className="detail-message-item">
+                                    commodityDetail.deliveryTime
+                                    && <li className="detail-message-item">
+                                        <span>承诺发货时间：</span>
+                                        <span>{`下单后${commodityDetail.deliveryTime}天内发货`}</span>
+                                    </li>
+                                }
+                                {
+                                    commodityDetail.guideShipmentPrice
+                                    && <li className="detail-message-item">
                                         <span>建议出货价(元)：</span>
-                                        <span>{`${commodity.suggestedPrice}元`}</span>
+                                        <span>{`${commodityDetail.guideShipmentPrice}元`}</span>
                                     </li>
                                 }
                                 {
-                                    commodity.suggestedRetailPrice &&
-                                    <li className="detail-message-item">
+                                    commodityDetail.price
+                                    && <li className="detail-message-item">
                                         <span>建议零售价(元)：</span>
-                                        <span>{`${commodity.suggestedRetailPrice}元`}</span>
+                                        <span>{`${commodityDetail.price}元`}</span>
                                     </li>
                                 }
                                 {
-                                    commodity.GuidePurchasePrice &&
-                                    <li className="detail-message-item">
+                                    commodityDetail.guidePurchasePrice
+                                    && <li className="detail-message-item">
                                         <span>指导采购价(元)：</span>
-                                        <span>{`${commodity.GuidePurchasePrice}元`}</span>
+                                        <span>{`${commodityDetail.guidePurchasePrice}元`}</span>
                                     </li>
                                 }
                             </ul>
@@ -208,92 +158,84 @@ class CommodifyDetail extends PureComponent {
                 </div>
                 <div className="supplier-detail-item">
                     <div className="detail-message-header">
-                        <Icon type="car" className="detail-message-header-icon" />货运信息
+                        <Icon type="car" className="detail-message-header-icon" />
+                        货运信息
                     </div>
                     <div className="detail-message-body">
                         <ul className="detail-message-list">
                             {
-                                freight.producePlace &&
-                                <li className="detail-message-item">
+                                commodityDetail.producePlace
+                                && <li className="detail-message-item">
                                     <span>产地：</span>
-                                    <span>{freight.producePlace}</span>
+                                    <span>{commodityDetail.producePlace}</span>
                                 </li>
                             }
                             {
-                                freight.packingSpecifications &&
-                                <li className="detail-message-item">
+                                commodityDetail.packingSpecifications
+                                && <li className="detail-message-item">
                                     <span>规格：</span>
-                                    <span>{freight.packingSpecifications}</span>
+                                    <span>{commodityDetail.packingSpecifications}</span>
                                 </li>
                             }
                             {
-                                freight.minUnit &&
-                                <li className="detail-message-item">
+                                commodityDetail.minUnit
+                                && <li className="detail-message-item">
                                     <span>销售单位：</span>
-                                    <span>{freight.minUnit}瓶</span>
+                                    <span>{commodityDetail.minUnit}</span>
                                 </li>
                             }
                             {
-                                freight.weight &&
-                                <li className="detail-message-item">
+                                commodityDetail.weight
+                                && <li className="detail-message-item">
                                     <span>商品毛重：</span>
-                                    <span>{freight.weight}</span>
+                                    <span>{commodityDetail.weight}</span>
                                 </li>
                             }
-                            <li className="detail-message-item">
-                                <span>体积：</span>
-                                <span>{freight.volume}</span>
-                            </li>
                             {
-                                freight.carton &&
-                                <li className="detail-message-item">
+                                commodityDetail.length
+                                && commodityDetail.width
+                                && commodityDetail.height
+                                && <li className="detail-message-item">
+                                    <span>体积：</span>
+                                    <span>
+                                        {`长${commodityDetail.length}mm * 
+                                        宽${commodityDetail.width}mm * 
+                                        高${commodityDetail.height}mm`}
+                                    </span>
+                                </li>
+                            }
+                            {
+                                commodityDetail.horizontalProductNum
+                                && commodityDetail.verticalProductNum
+                                && commodityDetail.heightProductNum
+                                && <li className="detail-message-item">
                                     <span>箱规：</span>
-                                    <span>{freight.carton}瓶</span>
+                                    <span>
+                                        {`${commodityDetail.horizontalProductNum} * 
+                                        ${commodityDetail.verticalProductNum} * 
+                                        ${commodityDetail.heightProductNum}`}
+                                    </span>
                                 </li>
                             }
                             {
-                                freight.qualityGuaranteePeriod &&
-                                <li className="detail-message-item">
+                                commodityDetail.qualityGuaranteePeriod
+                                && guaranteePeriodUnit
+                                && <li className="detail-message-item">
                                     <span>保质期：</span>
-                                    <span>{freight.qualityGuaranteePeriod}</span>
+                                    <span>{`${commodityDetail.qualityGuaranteePeriod}
+                                        ${guaranteePeriodUnit}`}</span>
                                 </li>
                             }
                             {
-                                freight.storageConditions &&
-                                <li className="detail-message-item">
+                                commodityDetail.storageCondition
+                                && <li className="detail-message-item">
                                     <span>储存条件：</span>
-                                    <span>{freight.storageConditions}</span>
+                                    <span>{commodityDetail.storageCondition}</span>
                                 </li>
                             }
                         </ul>
                     </div>
                 </div>
-                {
-                    skuInputVos.length !== 0 &&
-                    <div className="supplier-detail-item">
-                        <div className="detail-message-header">
-                            <Icon type="line-chart" className="detail-message-header-icon" />销售属性（SKU信息）
-                    </div>
-                        <div className="detail-message-body">
-                            <ul className="detail-message-list">
-                                {
-                                    skuInputVos &&
-                                    skuInputVos.map(item => (
-                                        <li className="detail-message-item" key={item.attrName}>
-                                            {item.attrName &&
-                                            <span>
-                                                {`属性名称：${item.attrName}`}
-                                            </span>}
-                                            <span className="detail-value">
-                                                {`值：${item.value}`}
-                                            </span>
-                                        </li>
-                                    ))
-                                }
-                            </ul>
-                        </div>
-                    </div>
-                }
                 <div className="supplier-detail-item">
                     <div className="detail-message-header">
                         <Icon type="picture" className="detail-message-header-icon" />
@@ -308,38 +250,27 @@ class CommodifyDetail extends PureComponent {
                                 <tr>
                                     <td>商品图片:</td>
                                     {
-                                        imgs.commodityImgs &&
-                                        imgs.commodityImgs.map(item => (
+                                        commodityDetail.mainImage
+                                        && <td>
+                                            <img src={commodityDetail.mainImage} alt="" />
+                                        </td>
+                                    }
+                                    {
+                                        commodityDetail.imgUrls
+                                        && commodityDetail.imgUrls.map(item => (
                                             <td key={item}>
                                                 <img src={item} alt="" />
                                             </td>
                                         ))
                                     }
                                 </tr>
-                                {
-                                    imgs.subCommodityImgs &&
-                                    imgs.subCommodityImgs.map(item => (
-                                        <tr key={item.name}>
-                                            <td>
-                                                {item.name}
-                                            </td>
-                                            {
-                                                item.subCommodityImg.map(other => (
-                                                    <td key={other}>
-                                                        <img src={other} alt="" />
-                                                    </td>
-                                                ))
-                                            }
-                                        </tr>
-                                    ))
-                                }
                             </tbody>
                         </table>
                     </div>
                 </div>
                 {
-                    keywords &&
-                    <div className="supplier-detail-item">
+                    commodityDetail.keywords
+                    && <div className="supplier-detail-item">
                         <div className="detail-message-header">
                             <Icon type="link" className="detail-message-header-icon" />
                             商品搜索关键字
@@ -348,14 +279,19 @@ class CommodifyDetail extends PureComponent {
                             <ul className="detail-message-list">
                                 <li className="detail-message-item">
                                     <span>关键字：</span>
-                                    <span>{keywords}</span>
+                                    <span>{commodityDetail.keywords}</span>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 }
                 <div className="go-back-button">
-                    <Button type="primary" onClick={this.handleGoBack}>返回</Button>
+                    <Button
+                        type="primary"
+                        onClick={() => {
+                            this.props.history.goBack();
+                        }}
+                    >返回</Button>
                 </div>
             </div >
         )
@@ -363,6 +299,9 @@ class CommodifyDetail extends PureComponent {
 }
 CommodifyDetail.propTypes = {
     match: PropTypes.objectOf(PropTypes.any),
+    commodityDetail: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
+    commodityDetails: PropTypes.func
 }
 
 CommodifyDetail.defaultProps = {

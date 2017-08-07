@@ -14,7 +14,7 @@ const initState = Immutable.fromJS({
     data: {},
 
     // 弹出框数据
-    visibleData: {},
+    visibleData: false,
 
     informationVisible: false,
 
@@ -104,7 +104,7 @@ export default function (state = initState, action) {
                 .set('visibleData', id)
                 .set('isEdit', isEdit)
                 .set('pricingId', pricingId)
-                .set('id',id)
+                .set('id', id)
                 ;
         }
 
@@ -128,8 +128,8 @@ export default function (state = initState, action) {
         case ActionType.RECEIVE_GET_PURCHASE_PRICE_DETAIL:
             return state.set('purchasePrice', action.payload);
 
-        case ActionType.REQUEST_ADD_SELL_PRICE:
-            return state.set('toAddPriceVisible', action.payload);
+        // case ActionType.REQUEST_ADD_SELL_PRICE:
+        //     return state.set('toAddPriceVisible', action.payload);
 
         case ActionType.REQUEST_ADD_PURCHASEMENT_PRICE:
             return state.set('toPurchasePriceVisible', action.payload);

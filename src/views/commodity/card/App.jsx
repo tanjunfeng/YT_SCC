@@ -15,7 +15,9 @@ import {
     fecthGetProdPurchaseById,
     fecthCheckMainSupplier,
     fetchUpdateProdPurchase,
-    fetchQueryProdByCondition
+    fetchQueryProdByCondition,
+    fetchChangeProPurchaseStatus,
+    fetchDeleteProdPurchaseById
 } from '../../../actions';
 
 @connect(
@@ -27,7 +29,9 @@ import {
         fecthGetProdPurchaseById,
         fecthCheckMainSupplier,
         fetchUpdateProdPurchase,
-        fetchQueryProdByCondition
+        fetchQueryProdByCondition,
+        fetchChangeProPurchaseStatus,
+        fetchDeleteProdPurchaseById
     }, dispatch)
 )
 class Cardline extends Component {
@@ -40,6 +44,7 @@ class Cardline extends Component {
         this.handleDelete = ::this.handleDelete;
         this.handleCheckOk = ::this.handleCheckOk;
         this.handleChangeMain = ::this.handleChangeMain;
+        this.handleCheckUse = ::this.handleCheckUse;
 
         this.state = {
             checked: true,
@@ -59,7 +64,8 @@ class Cardline extends Component {
     }
 
      /**
-     * 将刷新后的categorys值，push到数组中
+     * 将刷新后的getProdPurchaseByIds值赋值给getProdPurchaseByIds
+     *
      * @param {Object} nextProps 刷新后的属性
      */
     componentWillReceiveProps(nextProps) {
@@ -143,7 +149,7 @@ class Cardline extends Component {
         .then((res) => {
             this.confirmMain(res.success)
         }).catch((res) => {
-            this.confirmMain(res.success)
+            message.error(res.message)
         })
     }
 
@@ -167,23 +173,38 @@ class Cardline extends Component {
             distributeWarehouseId
         }
         this.props.fetchUpdateProdPurchase(data);
-        this.handlePaginationChange();
+        // this.handlePaginationChange();
     }
 
     /**
      * 修改启用时的确认按钮回调
      */
     handleCheckUse() {
+        const { getProdPurchaseByIds } = this.props;
+        this.props.fetchChangeProPurchaseStatus({
+            id: getProdPurchaseByIds.id,
+            productId: getProdPurchaseByIds.productId,
+            status: getProdPurchaseByIds.status
+        })
+        .then((res) => {
+            this.confirmUsed(res.success)
+        }).catch((res) => {
+            message.error(res.message)
+        })
     }
 
     handleDelete() {
+        const { getProdPurchaseByIds } = this.props;
+        const { id, productId } = getProdPurchaseByIds;
         Modal.confirm({
-            title: 'Do you want to delete these items?',
-            content: 'When clicked the OK button, this dialog will be closed after 1 second',
+            title: '删除',
+            content: '是否删除当前关系列表?',
             onOk() {
-                return new Promise((resolve, reject) => {
-                    setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-                }).catch(() => console.log('Oops errors!'));
+                this.props.fetchDeleteProdPurchaseById({
+                    id,
+                    productId
+                })
+                .catch(() => console.log('Oops errors!'));
             },
             onCancel() { },
         });
@@ -193,7 +214,7 @@ class Cardline extends Component {
         const { prefixCls, getProdPurchaseByIds } = this.props;
         // console.log(getProdPurchaseByIds)
         const cardData =
-            <div
+            (<div
                 key={getProdPurchaseByIds.id}
                 className={`${prefixCls}-card-list`}
             >
@@ -260,10 +281,11 @@ class Cardline extends Component {
                                 getProdPurchaseByIds.status === 1 ?
                                     this.state.checked : !this.state.checked
                             }
+                            innitaivalue={getProdPurchaseByIds}
                         >启用</Checkbox>
                     </div>
                 </Card>
-            </div>
+            </div>)
         return (
             <div className={`${prefixCls}`}>
                 <div>
@@ -279,7 +301,9 @@ class Cardline extends Component {
 Cardline.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
     fecthCheckMainSupplier: PropTypes.func,
+    fetchDeleteProdPurchaseById: PropTypes.func,
     fetchUpdateProdPurchase: PropTypes.func,
+    fetchChangeProPurchaseStatus: PropTypes.func,
     prefixCls: PropTypes.string,
     index: PropTypes.number,
     fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),

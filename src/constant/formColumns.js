@@ -331,7 +331,7 @@ export const suppliersAppList = [
         dataIndex: 'settledDate',
         key: 'settledDate',
         render: (text) => (
-                text !== null ? moment(parseInt(text, 10)).format('YYYY-MM-DD') : ''
+            text !== null ? moment(parseInt(text, 10)).format('YYYY-MM-DD') : ''
         )
     },
     {
@@ -434,7 +434,7 @@ export const supplierInputList = [
         dataIndex: 'settledDate',
         key: 'settledDate',
         render: (text) => (
-                text !== null ? moment(parseInt(text, 10)).format('YYYY-MM-DD') : ''
+            text !== null ? moment(parseInt(text, 10)).format('YYYY-MM-DD') : ''
         )
     },
     {
@@ -586,7 +586,7 @@ export const dictionaryColumns = [{
     title: '序号',
     dataIndex: 'id',
     key: 'id',
-    render: text => <a href="#">{text}</a>,
+    render: (text, record, index) => index + 1
 }, {
     title: '字典名称',
     dataIndex: 'dictionary',
@@ -604,4 +604,3 @@ export const dictionaryColumns = [{
     dataIndex: 'action',
     key: 'action'
 }]
-

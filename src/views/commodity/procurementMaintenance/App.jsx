@@ -14,35 +14,34 @@ import {
 } from 'antd';
 
 import {
-    modifyAuditVisible,
-    modifyCheckReasonVisible,
     fecthGetProdPurchaseById,
     fetchGetProductById,
     fetchAddProdPurchase,
-    fetchQueryProdByCondition
+    fetchQueryProdByCondition,
+    modifyAuditVisible
 } from '../../../actions';
 import SearchForm from '../searchFormProcure';
 import ShowForm from '../showFormProcure';
 import Cardline from '../card';
 import { PAGE_SIZE } from '../../../constant';
+import ProdPurchaseModal from '../prodPurchaseModal';
+import { productAddPriceVisible } from '../../../actions/producthome';
 
 
 @connect(
     state => ({
-        applicationData: state.toJS().supplier.applicationData,
-        auditVisible: state.toJS().supplier.auditVisible,
-        checkResonVisible: state.toJS().supplier.checkResonVisible,
-        insertSettlementResult: state.toJS().supplier.insertSettlementResult,
         prodPurchase: state.toJS().commodity.prodPurchase,
         getProductById: state.toJS().commodity.getProductById,
+        getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
+        toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
     }),
     dispatch => bindActionCreators({
-        modifyAuditVisible,
-        modifyCheckReasonVisible,
         fecthGetProdPurchaseById,
         fetchGetProductById,
         fetchAddProdPurchase,
-        fetchQueryProdByCondition
+        fetchQueryProdByCondition,
+        productAddPriceVisible,
+        modifyAuditVisible
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
@@ -51,8 +50,8 @@ class ProcurementMaintenance extends PureComponent {
 
         this.handleFormReset = this.handleFormReset.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
-        this.handleAdd = this.handleAdd.bind(this);
         this.onChange = ::this.onChange;
+        this.handleAdd = ::this.handleAdd;
 
         this.searchForm = {};
         this.current = 1;
@@ -63,7 +62,8 @@ class ProcurementMaintenance extends PureComponent {
             value: [],
             // 控制主供应商选项唯一
             disabled: false,
-            current: 1
+            current: 1,
+            productId: null
         }
     }
 
@@ -71,51 +71,21 @@ class ProcurementMaintenance extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
+        this.props.fetchGetProductById({
+            // id: this.props.match.id
+            productId: 1001
+        });
         this.props.fecthGetProdPurchaseById({
             id: 2
         });
-        this.props.fetchGetProductById({
-            productId: 1001
+    }
+
+
+    onChange = (page) => {
+        // console.log(page);
+        this.setState({
+            current: page,
         });
-    }
-
-    /**
-     * 新增
-     */
-    handleAdd() {
-        // this.props.fetchAddProdPurchase() {
-
-        // }
-    }
-    /**
-     * 表单操作弹出层
-     *
-     * @param {string} text 文本内容
-     * @param {Object} record 模态框状态
-     * @param {string} index 下标
-     */
-    handleSelect(record, index, item) {
-        const { key } = item;
-        switch (key) {
-            case 'changeAudit':
-                this.props.modifyAuditVisible({isVisible: true, record});
-                break;
-            case 'CheckReason':
-                this.props.modifyCheckReasonVisible({isVisible: true, record});
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * 重置
-     *
-     * @param {Object} data 重置的表单
-     */
-    handleFormReset(data) {
-        this.searchForm = data;
-        this.brandSearchMind.handleClear();
     }
 
     /**
@@ -132,21 +102,35 @@ class ProcurementMaintenance extends PureComponent {
         });
     }
 
-    onChange = (page) => {
-        console.log(page);
-        this.setState({
-            current: page,
-        });
+    /**
+     * 重置
+     *
+     * @param {Object} data 重置的表单
+     */
+    handleFormReset(data) {
+        this.searchForm = data;
+        this.brandSearchMind.handleClear();
     }
 
+    /**
+     * 新增
+     *
+     * @param {Object} record 模态框数据
+     */
+    handleAdd() {
+        this.props.productAddPriceVisible({isVisible: true});
+    }
 
     render() {
-        const { prefixCls, getProductById } = this.props;
+        const { prefixCls, getProductById, match } = this.props;
         const innitalvalue = getProductById;
+        const { id } = match;
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm innitalvalue={innitalvalue} />
                 <SearchForm
+                    id={id}
+                    innitalvalue={innitalvalue}
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
                     handleAdd={this.handleAdd}
@@ -159,6 +143,7 @@ class ProcurementMaintenance extends PureComponent {
                     onChange={this.handlePaginationChange}
                     total={10}
                 />
+                <ProdPurchaseModal />
             </div>
         );
     }
@@ -168,10 +153,10 @@ ProcurementMaintenance.propTypes = {
     fetchQueryProdByCondition: PropTypes.func,
     fetchGetProductById: PropTypes.objectOf(PropTypes.any),
     fecthGetProdPurchaseById: PropTypes.func,
-    modifyAuditVisible: PropTypes.bool,
-    modifyCheckReasonVisible: PropTypes.bool,
+    productAddPriceVisible: PropTypes.func,
     prefixCls: PropTypes.string,
-    getProductById: PropTypes.objectOf(PropTypes.any)
+    getProductById: PropTypes.objectOf(PropTypes.any),
+    match: PropTypes.objectOf(PropTypes.any)
 }
 
 ProcurementMaintenance.defaultProps = {

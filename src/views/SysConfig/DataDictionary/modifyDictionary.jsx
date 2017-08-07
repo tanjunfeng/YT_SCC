@@ -16,6 +16,7 @@ const FormItem = Form.Item;
 @connect(
     state => ({
         isEdit: state.toJS().dictionary.isEdit,
+        record: state.toJS().dictionary.record,
         dictionaryVisible: state.toJS().dictionary.dictionaryVisible
     }),
     dispatch => bindActionCreators({
@@ -34,10 +35,10 @@ class modifyDictionary extends PureComponent {
 
     handleOk() {
         const result = this.props.form.getFieldsValue();
-        console.log(result)
+        const { id } = this.props.record;
         this.props.isEdit ?
             this.props.UpdateDictionary({
-                ...result
+                ...result, id
             }).then(() => {
                 this.props.DictionaryVisible({ isVisible: false })
                 this.props.fetchList();
@@ -55,7 +56,7 @@ class modifyDictionary extends PureComponent {
     }
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { isEdit } = this.props;
+        const { isEdit, record } = this.props;
         return (
             <Modal
                 onOk={this.handleOk}
@@ -71,8 +72,11 @@ class modifyDictionary extends PureComponent {
                             rules: [{
                                 message: '请输入字典名称'
                             }],
+                            initialValue: isEdit ? record.dictionary : ''
                         })(
-                            <Input className="manage-form-input" />
+                            <Input
+                                className="manage-form-input"
+                            />
                             )}
                     </FormItem>
                     <FormItem >
@@ -81,13 +85,21 @@ class modifyDictionary extends PureComponent {
                             rules: [{
                                 message: '请输入字典编码'
                             }],
+                            initialValue: isEdit ? record.code : ''
                         })(
                             <Input className="manage-form-input" />
                             )}
                     </FormItem>
                     <FormItem >
                         <span className="manage-form-label change-form-label">说明：</span>
-                        {getFieldDecorator('remark')(<Input className="manage-form-input" type="textarea" />)}
+                        {getFieldDecorator('remark', {
+                            rules: [{
+                                message: '请输入说明'
+                            }],
+                            initialValue: isEdit ? record.remark : ''
+                        })(
+                            <Input className="manage-form-input" type="textarea" />
+                            )}
                     </FormItem>
                 </Form>
             </Modal>

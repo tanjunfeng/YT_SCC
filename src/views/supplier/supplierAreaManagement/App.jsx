@@ -184,7 +184,7 @@ class Demo extends React.Component {
                 <p>
                     <button onClick={this.forceAlign}>force align</button>
                     &nbsp;&nbsp;&nbsp;
-          <button onClick={this.toggleMonitor}>toggle monitor</button>
+                    <button onClick={this.toggleMonitor}>toggle monitor</button>
                 </p>
                 <div
                     ref="container"

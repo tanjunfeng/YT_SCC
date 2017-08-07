@@ -15,7 +15,7 @@ import {
     deleteById,
     updateHot,
     saveHot,
-    queryCategoriesLv3IconList,
+    queryCategoriesLv4IconList,
     addOrUpdateCategoryIcon,
     queryAllAdPlanList,
     deleteAdPlanById,
@@ -215,17 +215,17 @@ export const addSaveInput = (data) => dispatch => (
     })
 )
 
-const receiveCategoriesLv3IconList = (data) => ({
+const receiveCategoriesLv4IconList = (data) => ({
     type: ActionType.FETCH_CATEGORY_ID,
     payload: data,
 })
 
 // 查询热门推荐关键字-Table(cyx)
 export const fetchCategoryId = (data) => dispatch => (
-    queryCategoriesLv3IconList(data)
+    queryCategoriesLv4IconList(data)
         .then(res => {
             dispatch(
-                receiveCategoriesLv3IconList(res.data)
+                receiveCategoriesLv4IconList(res.data)
             );
         })
         .catch(err => Promise.reject(err))
@@ -239,24 +239,22 @@ const receive = (data) => ({
 export const modifyModalVisible = (isShow) => dispatch => dispatch(receive(isShow));
 
 // 分类图标管理-上传或修改ICON(cyx)
-// export const  = (data) => dispatch => (
-//     new Promise((resolve, reject) => {
-//         addOrUpdateCategoryIcon(data)
-//             .then(res => {
-//                 dispatch(
-//                 );
-//                 resolve(res);
-//             })
-//             .catch(err => reject(err))
-//     })
-// )
-export const modifyCategoryIcon = (data, callBack) => () => (
-    addOrUpdateCategoryIcon(data)
-        .then(res => {
-            callBack(res.data)
-        })
-        .catch(err => Promise.reject(err))
+export const modifyCategoryIcon = (data) => (
+    new Promise((resolve, reject) => {
+        addOrUpdateCategoryIcon(data)
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
 )
+// export const modifyCategoryIcon = (data, callBack) => () => (
+//     addOrUpdateCategoryIcon(data)
+//         .then(res => {
+//             callBack(res.data)
+//         })
+//         .catch(err => Promise.reject(err))
+// )
 
 const receiveAllAdPlanList = (data) => ({
     type: ActionType.FETCH_ALL_AD_PLAN_LIST,

@@ -11,7 +11,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import EditableCell from './EditableCell';
-import Audit from '../../../components/Audit';
+import Audit from '../../../components/audit';
 import moment from 'moment';
 import {
   Table,

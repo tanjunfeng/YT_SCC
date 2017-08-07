@@ -8,26 +8,34 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import {
     Form, Icon, Row, Col, Select, Modal, InputNumber,
     DatePicker, Button, message, Table, Input,
 } from 'antd';
 import moment from 'moment';
+import { modifyDistributionColumns } from '../../../actions/modify/modifyDistributionColumns';
 import { DATE_FORMAT } from '../../../constant/index';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
 const confirm = Modal.confirm;
 
+@connect(
+    state => ({
+        // ToDo：查询调接口时，需要走redux拿数据
+    }),
+    dispatch => bindActionCreators({
+        modifyDistributionColumns
+    }, dispatch)
+)
 class DistributionInformation extends PureComponent {
     constructor(props) {
         super(props);
         this.handleDistributionSave = ::this.handleDistributionSave;
         this.onDeliveryDateChange = ::this.onDeliveryDateChange;
         this.onWillArrivalDateChange = ::this.onWillArrivalDateChange;
-        this.deliveryNumberChange = ::this.deliveryNumberChange;
-        this.getNumberChange = ::this.getNumberChange;
-
         this.state = {
             deliveryDate: props.initialData.deliveryDate,
             willArrivalDate: props.initialData.willArrivalDate,
@@ -54,17 +62,17 @@ class DistributionInformation extends PureComponent {
             title: '配送数量',
             dataIndex: 'deliveryNumber',
             key: 'deliveryNumber',
-            render: (text) => (
+            render: (text, record, index) => (
                 <span>
                     <InputNumber
-                        defaultValue={text}
-                        min="0"
-                        max={props.initialData.distributionInfo.number}
+                        value={text}
+                        min={0}
+                        max={record.number}
                         onChange={(value) => {
-                            this.deliveryNumberChange(value)
+                            props.modifyDistributionColumns(index, value, 'deliveryNumber');
                         }}
                     />
-                    <span>{props.initialData.unit}</span>
+                    <span>{}</span>
                 </span>
             )
         }, {
@@ -78,17 +86,17 @@ class DistributionInformation extends PureComponent {
             title: '签收数量',
             dataIndex: 'getNumber',
             key: 'getNumber',
-            render: (text) => (
+            render: (text, record, index) => (
                 <span>
                     <InputNumber
-                        defaultValue={text}
-                        min="0"
-                        max={this.state.deliveryNumber}
+                        value={text}
+                        min={0}
+                        max={record.deliveryNumber}
                         onChange={(value) => {
-                            this.getNumberChange(value)
+                            props.modifyDistributionColumns(index, value, 'getNumber');
                         }}
                     />
-                    <span>{props.initialData.unit}</span>
+                    <span>{}</span>
                 </span>
             )
         }, {
@@ -124,29 +132,6 @@ class DistributionInformation extends PureComponent {
         })
     }
 
-    setDifferMoney() {
-
-    }
-
-    /**
-     * 修改签收数量时，触发
-     * @param {number} value 签收数量的change值
-     */
-    getNumberChange(value) {
-        this.setState({
-            getNumber: value,
-        })
-    }
-
-    /**
-     * 修改配送数量时，触发
-     * @param {number} value 配送数量的change值
-     */
-    deliveryNumberChange(value) {
-        this.setState({
-            deliveryNumber: value,
-        })
-    }
     /**
      * 保存
      */
@@ -373,7 +358,7 @@ class DistributionInformation extends PureComponent {
                             <Button
                                 size="default"
                                 onClick={() => {
-                                    this.props.history.pop();
+                                    this.props.history.goBack();
                                 }}
                             >
                                 返回
@@ -390,6 +375,7 @@ DistributionInformation.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     initialData: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
+    modifyDistributionColumns: PropTypes.func,
 }
 
 DistributionInformation.defaultProps = {

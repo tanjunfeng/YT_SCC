@@ -47,6 +47,11 @@ class DataDictionary extends PureComponent {
         this.handleSelect =::this.handleSelect;
         this.renderOperation = ::this.renderOperation;
         this.fetNewData = ::this.fetNewData;
+        this.handleEdit = ::this.handleEdit;
+        this.handleQuery = ::this.handleQuery;
+        this.handlePaginationChange =::this.handlePaginationChange;
+
+        this.current = 1;
     }
 
 
@@ -79,27 +84,41 @@ class DataDictionary extends PureComponent {
     handleMaintain(id, dictionary, remark) {
         this.props.DicContentListVisible({ isVisible: true, id, dictionary, remark });
     }
-    handleSelect(record, index, item) {
-        const { key } = item;
-        switch (key) {
-            case 'modify':
-                this.props.DictionaryVisible({ isVisible: true, isEdit: true });
-                break;
-            default:
-                break;
-        }
+    handleSelect() {
+
+    }
+
+    handleEdit(record) {
+        this.props.DictionaryVisible({ isVisible: true, isEdit: true, record });
     }
 
     handleAddWatch() {
         this.props.DictionaryVisible({ isVisible: true, isEdit: false })
     }
 
+    handleQuery() {
+        const { productName } = this.props.form.getFieldsValue();
+        this.props.dictionarylist({
+            keyword: productName,
+            pageNum: 1,
+            pageSize: 20
+        })
+    }
+
+    handlePaginationChange(goto) {
+        this.current = goto;
+        this.props.fetNewData({
+            pageSize: PAGE_SIZE,
+            pageNum: goto,
+        })
+    }
+
     renderOperation(text, record, index) {
         const { id, dictionary, remark } = record;
         const menu = (
-            <Menu onClick={(item) => this.handleSelect(index, record, item)}>
+            <Menu onClick={this.handleSelect}>
                 <Menu.Item key="modify">
-                    <span>修改</span>
+                    <a rel="noopener noreferrer" onClick={() => this.handleEdit(record)}>修改</a>
                 </Menu.Item>
                 <Menu.Item key="delete">
                     <a rel="noopener noreferrer" onClick={() => this.handleDelete(id)}>删除</a>
@@ -120,7 +139,12 @@ class DataDictionary extends PureComponent {
     render() {
         columns[columns.length - 1].render = this.renderOperation;
         const { getFieldDecorator } = this.props.form;
-        const { data } = this.props.dictionaryData;
+        const {
+            data,
+            pageNum,
+            pageSize,
+            total
+             } = this.props.dictionaryData;
         return (
             <div className="dictionary-warp">
                 <div className="gys-layout">
@@ -140,9 +164,9 @@ class DataDictionary extends PureComponent {
                                 </Button>
                             </FormItem>
                             <FormItem>
-                                <Button size="default">
+                                <Button size="default" onClick={this.handleQuery}>
                                     查询
-                                    </Button>
+                                </Button>
                             </FormItem>
                         </span>
                     </Form>
@@ -153,7 +177,11 @@ class DataDictionary extends PureComponent {
                         columns={columns}
                         rowKey="id"
                         pagination={{
-
+                            current: pageNum,
+                            total,
+                            pageSize,
+                            showQuickJumper: true,
+                            onChange: this.handlePaginationChange
                         }}
                     />
                 </div>

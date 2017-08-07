@@ -1,7 +1,7 @@
 /**
  * @file supplier.js
  * @author shijh, denglingbo
- * 
+ *
  * 商品管理 reducer
  */
 
@@ -34,10 +34,11 @@ export default function (state = initState, action) {
             return state.set('contentlistData', action.payload);
         // 新增/修改字典内容弹窗
         case ActionType.MODIFY_DICTIONARY_VISIBLE: {
-            const { isVisible, isEdit } = action.payload;
+            const { isVisible, isEdit, record } = action.payload;
             return state
                 .set('dictionaryVisible', isVisible)
                 .set('isEdit', isEdit)
+                .set('record', isEdit ? record : '')
                 ;
         }
         // 维护字典内容

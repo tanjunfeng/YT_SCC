@@ -78,7 +78,7 @@ class ChangeAudit extends PureComponent {
         })
     }
 
-    handleTextChange(value) {
+    handleTextChange() {
 
     }
 

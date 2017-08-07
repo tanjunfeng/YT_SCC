@@ -12,7 +12,9 @@ import {
     dictionaryContentList,
     insertDictionary,
     updateDictionary,
-    deleteDictionary
+    deleteDictionary,
+    updateContent,
+    insertDictionaryContent
 } from '../service';
 import ActionType from './ActionType';
 
@@ -53,7 +55,7 @@ export const Dictionarycontentlist = (params) => dispatch => (
     })
 )
 
-// 新增数据字典
+// 修改字典内容或设置状态
 const receiveUpdateDictionary = (data) => ({
     type: ActionType.REQUEST_INSERT_DICTIONARY,
     payload: data,
@@ -102,6 +104,44 @@ export const DeleteDictionary = (params) => dispatch => (
         deleteDictionary(params)
             .then(res => {
                 dispatch(receiveDeleteDictionary(res.data));
+                resolve(res.data);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 修改字典内容或设置状态
+const receiveUpdateContent = (data) => ({
+    type: ActionType.REQUEST_UPDATE_CONTENT,
+    payload: data,
+});
+
+export const updateContentData = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        updateContent(params)
+            .then(res => {
+                dispatch(receiveUpdateContent(res.data));
+                resolve(res.data);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 新增数据字典内容
+const receiveDictionaryContent = (data) => ({
+    type: ActionType.REQUEST_INSERT_DICTIONARY_CONTENT,
+    payload: data,
+});
+
+export const dictionaryContent = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        insertDictionaryContent(params)
+            .then(res => {
+                dispatch(receiveDictionaryContent(res.data));
                 resolve(res.data);
             })
             .catch(err => {

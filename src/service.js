@@ -253,7 +253,7 @@ export const updateSellPrice = (params) => http.post('/price/updateSellPrice', p
 export const deletePurchasePriceById = (params) => http.get('/price/deletePurchasePriceById', params);
 
 // 查看商品详情
-export const commodityDetail = (params) => http.get('/product/detailsById', params);
+export const commodityDetail = (params) => http.get('/product/queryProductById', params);
 
 // 查询采购价格list
 export const purchasePriceDetail = (params) => http.get('/price/getPurchasePriceDetail', params);
@@ -363,7 +363,7 @@ export const saveItemAd = (params) => http.post('/homeAd/saveItemAd', params);
 export const uploadImageBase64Data = (params) => http.post('/commonUploadFile/uploadImageBase64Data', params);
 
 // 查询分类信息
-export const queryCategorys = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
+export const queryCategorys = (params) => http.get('/category/queryAllCategoriesWithIconByParentId', params);
 
 // 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
 export const saveInput = (params) => http.post('/rk/saveInput', params);
@@ -387,10 +387,10 @@ export const queryAllHot = (params) => http.get('/rk/queryAllHot', params);
 export const selectInputKeyword = (params) => http.get('/rk/selectInputKeyword', params);
 
 // 搜索推荐配置(cyx)---7.查询搜索框中的关键字查询
-export const queryCategoriesLv3IconList = (params) => http.get('/categoryIcon/queryCategoriesLv3IconList', params);
+export const queryCategoriesLv4IconList = (params) => http.get('/categoryIcon/queryCategoriesLv3IconList', params);
 
 // 分类图标管理(cyx)---上传ICON
-export const addOrUpdateCategoryIcon = (params) => http.post('/categoryIcon/addOrUpdateCategoryIcon', params);
+export const addOrUpdateCategoryIcon = (params) => http.post('/category/addOrUpdateCategoryIcon', params);
 
 // 404页面广告配置(cyx)---查询table
 export const queryAllAdPlanList = (params) => http.get('/adPlan/queryAllAdPlanList', params);
@@ -426,6 +426,9 @@ export const deleteDictionary = (params) => http.get('/dictionary/deleteDictiona
 // 修改字典内容或设置状态
 export const updateContent = (params) => http.post('/dictionary/updateContent', params);
 
+// 新增数据字典内容
+export const insertDictionaryContent = (params) => http.post('/dictionary/insertDictionaryContent', params);
+
 // IBM 修改
 // 查看是否存在主供应商
 export const checkMainSupplier = (params) => http.get('/prodPurchase/checkMainSupplier', params);
@@ -443,7 +446,7 @@ export const fetchAddProdPurchase = (params) => http.post('/prodPurchase/addProd
 export const updateProdPurchase = (params) => http.post('/prodPurchase/updateProdPurchase', params);
 
 // 删除商品价格信息
-export const deleteProdPurchaseById = (params) => http.get('/prodPurchase/deleteProdPurchaseById', params);
+export const fetchDeleteProdPurchaseById = (params) => http.get('/prodPurchase/deleteProdPurchaseById', params);
 
 // 更改供应商类型
 export const fetchChangeSupType = (params) => http.get('/prodPurchase/changeSupplierType', params);
@@ -460,7 +463,8 @@ export const fetchQueryProdByCondition = (params) => http.get('/prodPurchase/que
 // 查询商品信息
 export const getProductById = (params) => http.get('/prodPurchase/getProductById', params);
 
-export const testApi = (params) => http.get('/test', params);
+// 根据品牌名称分页查询品牌列表
+export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPages', params);
 
 /***************procurement*********** */
 // 查询采购单列表
@@ -515,11 +519,22 @@ export const queryAdjustDetail = (params) => http.post('/provider/queryAdjustDet
 export const queryProviderDetail = (params) => http.get('/supplier/queryProviderDetail', params);
 // 查询所有大区
 export const queryAllLargerRegionProvince = (params) => http.get('/region/queryAllLargerRegionProvince', params);
+
 // 获取供应商或者供应商地点信息
 export const getSupplierNo = (params) => http.get('/supplier/getSupplierNo', params);
 
 // 新增或修改供应商信息
 export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/insertOrUpdateSupplierInfo', params);
+
+/**
+ * 商品模块
+ */
+
+ // 根据条件分页查询商品清单，并排序
+export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);
+
+// 获取已审批通过供应商地点下拉框数据
+export const querySuppliersList = (params) => http.get('/supplier/supplierAdrSearchBox', params);
 
 // 新增供应商信息
 export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);
@@ -547,4 +562,10 @@ export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySup
 
 // 此接口用于通过code和name（后端id就等于code）查询子公司信息 
 export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBaseInfo', params);
+
+// 供应商选择组件
+export const supplierSearchBox = (params) => http.get('/supplier/supplierSearchBox', params);
+
+// 供应商地点选择组件
+export const supplierAdrSearchBox = (params) => http.get('/supplier/supplierAdrSearchBox', params);
 
