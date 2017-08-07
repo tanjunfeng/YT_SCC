@@ -435,6 +435,22 @@ class PoRcvMngList extends PureComponent {
                         </Row>
                         <Row gutter={40}>
                             <Col span={8}>
+                                {/* 采购单类型 */}
+                                <FormItem label="采购单类型">
+                                    {getFieldDecorator('poTypeCd', {
+                                        initialValue: poType.defaultValue
+                                    })(
+                                        <Select style={{ width: '153px' }} size="default">
+                                            {
+                                                poType.data.map((item) => {
+                                                    return <Option key={item.key} value={item.key}>{item.value}</Option>
+                                                })
+                                            }
+                                        </Select>
+                                        )}
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
                                 {/* 供应商 */}
                                 <FormItem formItemLayout >
                                     <div className="row middle">
@@ -488,22 +504,6 @@ class PoRcvMngList extends PureComponent {
                                             ]}
                                         />
                                     </div>
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 采购单类型 */}
-                                <FormItem label="采购单类型">
-                                    {getFieldDecorator('poTypeCd', {
-                                        initialValue: poType.defaultValue
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {
-                                                poType.data.map((item) => {
-                                                    return <Option key={item.key} value={item.key}>{item.value}</Option>
-                                                })
-                                            }
-                                        </Select>
-                                        )}
                                 </FormItem>
                             </Col>
                         </Row>
