@@ -27,7 +27,8 @@ import {
     getProdPurchaseById,
     queryProdPurchaseExtByCondition,
     fetchChangeSupType,
-    updateProdPurchase
+    updateProdPurchase,
+    changeProPurchaseStatus
 } from '../service';
 import ActionType from './ActionType';
 
@@ -427,6 +428,25 @@ export const ChangeUpdateProd = (params) => dispatch => (
         updateProdPurchase(params)
             .then(res => {
                 dispatch(receiveUpdateProd(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 修改采购关系
+const receiveChangeProPurchaseStatus = (data) => ({
+    type: ActionType.CHANGE_PROPURCHASE_STATUS,
+    payload: data,
+});
+
+export const ChangeProPurchaseStatus = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        changeProPurchaseStatus(params)
+            .then(res => {
+                dispatch(receiveChangeProPurchaseStatus(res.data));
                 resolve(res);
             })
             .catch(err => {

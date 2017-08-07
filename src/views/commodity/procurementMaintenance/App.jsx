@@ -16,7 +16,8 @@ import {
     fetchGetProductById,
     fetchAddProdPurchase,
     fetchQueryProdByCondition,
-    modifyAuditVisible
+    modifyAuditVisible,
+    fetchCheckMainSupplier
 } from '../../../actions';
 import SearchForm from '../searchFormProcure';
 import ShowForm from '../showFormProcure';
@@ -46,7 +47,8 @@ import {
         fetchQueryProdByCondition,
         productAddPriceVisible,
         modifyAuditVisible,
-        UpdateProdPurchase
+        UpdateProdPurchase,
+        fetchCheckMainSupplier
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
@@ -101,8 +103,8 @@ class ProcurementMaintenance extends PureComponent {
         this.current = go ? go : this.current;
         this.props.QueryProdPurchaseExtByCondition({
             productId: match.params.id,
-            PAGE_SIZE,
-            pageSize: this.current,
+            pageNum: this.current,
+            pageSize: PAGE_SIZE,
             ...this.searchForm
         });
     }
@@ -137,7 +139,12 @@ class ProcurementMaintenance extends PureComponent {
      * @param {Object} record 模态框数据
      */
     handleAdd() {
+        const { match } = this.props;
         this.props.productAddPriceVisible({isVisible: true});
+        this.props.fetchCheckMainSupplier({
+            supplierType: 1,
+            productId: match.params.id
+        })
     }
 
     /**
@@ -198,8 +205,10 @@ ProcurementMaintenance.propTypes = {
     fetchQueryProdByCondition: PropTypes.func,
     fetchGetProductById: PropTypes.objectOf(PropTypes.any),
     QueryProdPurchaseExtByCondition: PropTypes.func,
+    fetchCheckMainSupplier: PropTypes.func,
     productAddPriceVisible: PropTypes.func,
     UpdateProdPurchase: PropTypes.bool,
+    updateProdPurchase: PropTypes.bool,
     prefixCls: PropTypes.string,
     getProductByIds: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any),

@@ -60,7 +60,7 @@ const initState = Immutable.fromJS({
 
     // IBM 修改
     // 查看是否存在主供应商
-    checkMainSupplier: {},
+    checkMainSupplier: false,
     // 查询商品价格信息
     getProdPurchaseById: {},
     // 根据主键查询商品采购关系
