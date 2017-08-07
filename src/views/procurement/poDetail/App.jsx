@@ -10,9 +10,9 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import moment from 'moment';
 import EditableCell from './EditableCell';
 import Audit from '../../../components/audit';
-import moment from 'moment';
 import {
 	Table, Form, Input, Select, Icon, Dropdown, Modal, Row,
 	Col, DatePicker, InputNumber, Button, message, Menu, Affix
@@ -164,22 +164,22 @@ class PoDetail extends PureComponent {
 				key: 'rate'
 			},
 			{
-				title: '采购价格（含税）',
-				dataIndex: 'poPrice',
-				key: 'poPrice'
+			title: '采购价格（含税）',
+			dataIndex: 'poPrice',
+			key: 'poPrice'
 			},
 			{
 				title: '采购数量',
 				dataIndex: 'poQuantity',
 				key: 'poQuantity',
 				render: (text, record, index) =>
-				<EditableCell
-					value={text}
-					editable={this.state.editable}
-					step={record.poInnerAmount}
-					poInnerAmount={record.poInnerAmount}
-					onChange={value => this.applyQuantityChange(record, index, value)}
-				/>
+					<EditableCell
+						value={text}
+						editable={this.state.editable}
+						step={record.poInnerAmount}
+						poInnerAmount={record.poInnerAmount}
+						onChange={value => this.applyQuantityChange(record, index, value)}
+					/>
 			},
 			{
 				title: '采购金额（含税）',
@@ -558,7 +558,6 @@ class PoDetail extends PureComponent {
 		return this.props.getMaterialMap({
 			value, supplierLocCd, pageNum
 		});
-
 	}
 
 	S4() {
@@ -593,7 +592,6 @@ class PoDetail extends PureComponent {
 				return result;
 			}
 		}
-
 		return ({ exsited: false, record: null });
 	}
 
@@ -665,7 +663,7 @@ class PoDetail extends PureComponent {
 			<Dropdown overlay={menu} placement="bottomCenter">
 				<a className="ant-dropdown-link">
 					表单操作
-          <Icon type="down" />
+		  <Icon type="down" />
 				</a>
 			</Dropdown>
 		)
@@ -919,7 +917,7 @@ class PoDetail extends PureComponent {
 				<div className="basic-box">
 					<div className="header">
 						<Icon type="solution" className="header-icon" />基础信息
-            </div>
+			</div>
 					<div className="body">
 						<Row >
 							<Col span={8}>
@@ -1040,7 +1038,7 @@ class PoDetail extends PureComponent {
 				<div className="basic-box">
 					<div className="header">
 						<Icon type="solution" className="header-icon" />基础信息
-            </div>
+					</div>
 					<div className="body">
 						<Row >
 							<Col span={8}>
