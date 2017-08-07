@@ -415,7 +415,7 @@ export const supplierInputList = [
                     case 2:
                         return '核心供应商'
                     case 3:
-                        return ':可替代供应商'
+                        return '可替代供应商'
                     default:
                         break;
                 }

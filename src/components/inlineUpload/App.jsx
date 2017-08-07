@@ -163,7 +163,7 @@ InlineUpload.propTypes = {
     datas: PropTypes.arrayOf(PropTypes.any),
     onChange: PropTypes.func,
     showEndTime: PropTypes.bool,
-    defaultTime: PropTypes.objectOf([ PropTypes.objectOf(PropTypes.any), PropTypes.number]),
+    defaultTime: PropTypes.objectOf([PropTypes.objectOf(PropTypes.any), PropTypes.number]),
     title: PropTypes.string,
     id: PropTypes.string,
 };

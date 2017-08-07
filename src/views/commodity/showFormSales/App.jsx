@@ -63,7 +63,7 @@ class ShowForm extends Component {
             secondLevelCategoryName,
             supplyChainStatus,
             thirdLevelCategoryName,
-            deliveryTime
+            deliveryDay
         } = this.props.innitalvalue;
         return (
             <div className="manage-form">
@@ -113,7 +113,7 @@ class ShowForm extends Component {
                             this.props.isSale &&
                             <Col span={8} className="css-col">
                                 <span>承诺发货时间:</span>
-                                <span>下单后{deliveryTime}天内发货</span>
+                                <span>下单后{deliveryDay}天内发货</span>
                             </Col>
                         }
                     </Row>

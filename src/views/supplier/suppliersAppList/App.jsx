@@ -110,16 +110,18 @@ class SuppliersAppList extends PureComponent {
         if (bool) {
             // 主数据
             // console.log('主数据')
+            console.log(this.current)
             this.props.getSupplierSettledList({
-                pageNum: this.current,
+                pageNum: 1,
                 pageSize: PAGE_SIZE,
                 ...this.searchForm
             });
         } else {
             // SCM数据
             // console.log('SCM数据')
+            console.log(this.current)
             this.props.getSupplierSettledList({
-                pageNum: this.current,
+                pageNum: 1,
                 pageSize: PAGE_SIZE,
                 ...this.searchForm
             });

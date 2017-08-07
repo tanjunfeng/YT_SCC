@@ -100,11 +100,9 @@ class SellPriceModal extends Component {
         const { prefixCls, form, datas, isEdit } = this.props;
         const { getFieldDecorator } = form;
         const newDates = JSON.parse(JSON.stringify(datas));
-        
-        console.log(newDates)
         return (
             <Modal
-                title="新增销售价格"
+                title={isEdit ? '编辑销售价格' : '新增销售价格'}
                 visible={true}
                 className={prefixCls}
                 onOk={this.handleOk}
@@ -197,6 +195,7 @@ class SellPriceModal extends Component {
                                         }, 'findCompanyBaseInfo')}
                                         placeholder="请输入公司名"
                                         onChoosed={this.handleChoose}
+                                        disabled={isEdit}
                                         defaultValue={newDates.branchCompanyId ? `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` : undefined}
                                         onClear={this.handleClear}
                                         renderChoosedInputRaw={(data) => (

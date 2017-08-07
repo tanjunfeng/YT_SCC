@@ -213,12 +213,9 @@ function Common(WrappedComponent) {
                         }
                     </ul>
                     {
-                        !isEnabled &&
-                        <div className="home-style-common-isEnabled" />
-                    }
-                    {
                         this.state.uploadVisible &&
                         <Modal
+                            isEnabled
                             title={current.name}
                             visible={this.state.uploadVisible}
                             onOk={this.handleUpOk}

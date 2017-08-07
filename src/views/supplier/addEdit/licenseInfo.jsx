@@ -61,9 +61,10 @@ class LicenseInfo extends PureComponent {
         this.handleCompanyLicenseLocChange = ::this.handleCompanyLicenseLocChange;
         this.companyAddress = {};
         this.licenseLoc = {}
-        const { supplierlicenseInfo = {} } = props;
+        const { detailData = {} } = props;
+        const { supplierlicenseInfo = {} } = detailData; 
         this.state = {
-            checked: supplierlicenseInfo.perpetualManagement ? false : true,
+            checked: !!supplierlicenseInfo.perpetualManagement,
             isSubmit: false
         }
         this.submitData = {};
@@ -372,7 +373,10 @@ class LicenseInfo extends PureComponent {
                                         <span>*注册号(营业执照号)：</span>
                                         <FormItem>
                                             {getFieldDecorator('registLicenceNumber', {
-                                                rules: [{ required: true, message: '请输入注册号(营业执照号)!' }],
+                                                rules: [
+                                                    { required: true, message: '请输入注册号(营业执照号)!' },
+                                                    {max: 15, message: '字符长度超限'}
+                                                ],
                                                 initialValue: supplierlicenseInfo.registLicenceNumber
                                             })(
                                                 <Input
@@ -388,7 +392,17 @@ class LicenseInfo extends PureComponent {
                                         <span>*法定代表：</span>
                                         <FormItem>
                                             {getFieldDecorator('legalRepresentative', {
-                                                rules: [{ required: true, message: '请输入法定代表!' }],
+                                                rules: [
+                                                    { required: true, message: '请输入法定代表!' },
+                                                    {
+                                                        validator: (rule, value, callback) => {
+                                                            if (value && !/^[\u4e00-\u9fa5]{1,6}$/.test(value)) {
+                                                                callback('请输入1-6个汉字')
+                                                            }
+                                                            callback()
+                                                        }
+                                                    }
+                                                ],
                                                 initialValue: supplierlicenseInfo.legalRepresentative
                                             })(
                                                 <Input
@@ -401,7 +415,17 @@ class LicenseInfo extends PureComponent {
                                         <span>*法人身份证号：</span>
                                         <FormItem>
                                             {getFieldDecorator('legalRepreCardNum', {
-                                                rules: [{ required: true, message: '请输入法人身份证号!' }],
+                                                rules: [
+                                                    {required: true, message: '请输入法人身份证号!'},
+                                                    {
+                                                        validator: (rule, value, callback) => {
+                                                            if (value && !/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(value)) {
+                                                                callback('请输入正确的身份证号')
+                                                            }
+                                                            callback()
+                                                        }
+                                                    }
+                                                ],
                                                 initialValue: supplierlicenseInfo.legalRepreCardNum
                                             })(
                                                 <Input
@@ -500,6 +524,7 @@ class LicenseInfo extends PureComponent {
                                                     style={{width: '200px'}}
                                                     min={0}
                                                     max={99999999}
+                                                    precision={2}
                                                     placeholder="注册资本"
                                                 />
                                             )}
@@ -517,6 +542,7 @@ class LicenseInfo extends PureComponent {
                                                     style={{width: '200px'}}
                                                     min={0}
                                                     max={99999999}
+                                                    precision={2}
                                                     placeholder="供应商质保金收取金额"
                                                 />
                                             )}
@@ -529,10 +555,16 @@ class LicenseInfo extends PureComponent {
                                         <span>*经营范围：</span>
                                         <FormItem>
                                             {getFieldDecorator('businessScope', {
-                                                rules: [{ required: true, message: '请输入经营范围!' }],
+                                                rules: [
+                                                    { required: true, message: '请输入经营范围!' },
+                                                    {max: 300, message: '字符长度超限'}
+                                                ],
                                                 initialValue: supplierlicenseInfo.businessScope
                                             })(
                                                 <Input
+                                                    type="textarea"
+                                                    autosize={{ minRows: 2, maxRows: 6 }}
+                                                    style={{maxWidth: '200px'}}
                                                     placeholder="经营范围"
                                                 />
                                             )}
@@ -543,6 +575,7 @@ class LicenseInfo extends PureComponent {
                                         <InlineUpload
                                             showEndTime={false}
                                             limit={2}
+                                            tilte='请上传身份证正反面'
                                             datas={
                                                 isEdit
                                                 ? [

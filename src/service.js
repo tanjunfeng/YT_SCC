@@ -6,9 +6,11 @@
  */
 
 import Http from 'freed-spa/lib/util/http';
+import { message } from 'antd';
 import store from 'freed-spa/src/store';
 import { receiveLogout } from './actions/user';
-import LoginLayout from './views/login/LoginLayout'
+import LoginLayout from './views/login/LoginLayout';
+import ERRORTEXT from './constant/errorText';
 
 const http = new Http();
 
@@ -20,9 +22,13 @@ http.response(
         if (res.data.code === 401) {
             LoginLayout();
             return Promise.reject(res);
-        } else if (!res.data.success) {
-            res.code = 8888;
-            return Promise.reject(res);
+        }
+        else if (res.data.code !== 200) {
+            const { code } = this.data;
+            const mess = this.data.message;
+            const errText = ERRORTEXT[code];
+            const err = mess || (errText || '未知错误')
+            message.error(err);
         }
         return Promise.resolve(res);
     },

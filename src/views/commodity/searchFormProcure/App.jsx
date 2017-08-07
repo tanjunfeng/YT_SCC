@@ -99,11 +99,6 @@ class SearchForm extends Component {
         this.setState({
             supplyChoose: record,
         });
-        if (this.state.supplyChoose === {}) {
-            this.setState({
-                sort: 1,
-            });
-        }
     }
 
     /**
@@ -113,9 +108,6 @@ class SearchForm extends Component {
         this.setState({
             supplyChoose2: record,
         });
-        if (this.state.sort === 1) {
-
-        }
     }
 
     /**
@@ -292,7 +284,9 @@ class SearchForm extends Component {
                                             compKey="search-mind-supply"
                                             ref={ref => { this.supplySearchMind = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
                                             }, 'supplierSearchBox')}
                                             addonBefore="供应商"
                                             onChoosed={this.handleSupplyChoose}
@@ -300,7 +294,7 @@ class SearchForm extends Component {
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.spNo} - {data.companyName}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={6}
                                             columns={[
                                                 {
                                                     title: '供应商编码',
@@ -330,7 +324,9 @@ class SearchForm extends Component {
                                             compKey="search-mind-supply"
                                             ref={ref => { this.addressSearchMind = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
                                             }, 'supplierAdrSearchBox')}
                                             addonBefore="地点"
                                             onChoosed={this.handleAdressChoose}
@@ -338,7 +334,7 @@ class SearchForm extends Component {
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.providerNo} - {data.providerName}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={6}
                                             columns={[
                                                 {
                                                     title: '供应商编码',
@@ -380,7 +376,9 @@ class SearchForm extends Component {
                                             compKey="search-mind-supply"
                                             ref={ref => { this.supplyCompSearchMind = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                branchCompanyName: params.value
+                                                branchCompanyName: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
                                             }, 'findCompanyBaseInfo')}
                                             addonBefore="子公司"
                                             onChoosed={this.handleCompChoose}
@@ -388,7 +386,7 @@ class SearchForm extends Component {
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.id} - {data.name}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={6}
                                             columns={[
                                                 {
                                                     title: '子公司ID',

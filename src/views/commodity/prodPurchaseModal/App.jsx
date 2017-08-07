@@ -30,10 +30,10 @@ const FormItem = Form.Item;
 @connect(
     state => ({
         prodPurchase: state.toJS().commodity.prodPurchase,
-        getProductById: state.toJS().commodity.getProductById,
         getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
         getProductByIds: state.toJS().commodity.getProductById,
+        checkMainSupplier: state.toJS().commodity.checkMainSupplier,
     }),
     dispatch => bindActionCreators({
         fetchAddProdPurchase,
@@ -58,15 +58,6 @@ class ProdPurchaseModal extends Component {
             supplyChoose1: {},
             supplyChoose2: {},
         }
-    }
-
-    componentDidMount() {
-        const { getProductByIds } = this.props;
-        console.log(getProductByIds)
-        // this.porps.fetchCheckMainSupplier({
-        //     supplierType: 1,
-        //     productId: getProductByIds.productId
-        // })
     }
 
     /**
@@ -149,11 +140,10 @@ class ProdPurchaseModal extends Component {
     }
 
     render() {
-        const { prefixCls, form } = this.props;
+        const { prefixCls, form, getProductByIds, checkMainSupplier } = this.props;
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
         // const formData = this.props.form.getFieldsValue();
-        const { getProductByIds } = this.props;
         return (
             <Modal
                 title="采购价格"
@@ -215,12 +205,14 @@ class ProdPurchaseModal extends Component {
                                             ref={ref => { this.searchMind1 = ref }}
                                             onChoosed={this.handleSupplyChoose}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
                                             }, 'supplierSearchBox')}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.spId} - {data.companyName}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={3}
                                             columns={[
                                                 {
                                                     title: '供应商编码',
@@ -247,13 +239,15 @@ class ProdPurchaseModal extends Component {
                                             compKey="search-mind-key2"
                                             ref={ref => { this.searchMind2 = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                supplierAddressId: params.value
+                                                supplierAddressId: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
                                             }, 'supplierAdrSearchBox')}
                                             onChoosed={this.handleAdressChoose}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.providerNo} - {data.providerName}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={3}
                                             columns={[
                                                 {
                                                     title: '供应商编码',
@@ -292,17 +286,19 @@ class ProdPurchaseModal extends Component {
                                     <span className={`${prefixCls}-label`}>送货仓：</span>
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
-                                            style={{ zIndex: 10 }}
+                                            style={{ zIndex: 7 }}
                                             compKey="search-mind-key1"
                                             ref={ref => { this.searchMind0 = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
                                             }, 'getWarehouseInfo1')}
                                             onChoosed={this.handleHouseChoose}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.warehouseCode} - {data.warehouseName}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={3}
                                             columns={[
                                                 {
                                                     title: '仓库ID',
@@ -330,12 +326,17 @@ class ProdPurchaseModal extends Component {
                                             <Checkbox />
                                         )}
                                     </span>
-                                    <p>
-                                        {
-
-                                        }
-                                    </p>
                                 </FormItem>
+                                {
+                                    checkMainSupplier &&
+                                    <p style={{
+                                        textAlign: 'center',
+                                        width: '100%',
+                                        color: 'red',
+                                        fontSize: 14
+                                    }}
+                                    >*主供应商已经存在,是否设置当前新增供应商为只供应商</p>
+                                }
                             </div>
                         </div>
                     </Form>
@@ -347,6 +348,7 @@ class ProdPurchaseModal extends Component {
 
 ProdPurchaseModal.propTypes = {
     prefixCls: PropTypes.string,
+    id: PropTypes.string,
     toAddPriceVisible: PropTypes.bool,
     productAddPriceVisible: PropTypes.func,
     pubFetchValueList: PropTypes.func,
