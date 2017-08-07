@@ -14,34 +14,34 @@ import { Form, Tabs } from 'antd';
 import OrderInformation from './orderInfo';
 import PayInformation from './payInfo';
 import DistributionInformation from './distributionInfo';
+import { fetchOrderDetailInfo, fetchPaymentDetailInfo, fetchShippingDetailInfo } from '../../../actions/order';
+
 
 const TabPane = Tabs.TabPane;
 const orderDT = 'order-details';
 
 @connect(
     state => ({
-        // ToDo：接受回显相关数据
         initialData: state.toJS().order.initialData,
     }),
     dispatch => bindActionCreators({
-
+        fetchOrderDetailInfo,
+        fetchPaymentDetailInfo,
+        fetchShippingDetailInfo,
     }, dispatch)
 )
 class OrderManagementDetails extends Component {
     constructor(props) {
         super(props);
-        this.handleTabsClick = ::this.handleTabsClick;
-
         this.state = {
         }
     }
 
     componentDidMount() {
-        // const { orderNumber } = this.props.match.params;
-        // ToDo 根据url带过来的参数orderNumber，发请求，获取回显数据
-    }
-
-    handleTabsClick() {
+        const { id } = this.props.match.params;
+        this.props.fetchOrderDetailInfo({id});
+        this.props.fetchPaymentDetailInfo({orderId: id});
+        this.props.fetchShippingDetailInfo({id});
     }
 
     render() {
@@ -49,18 +49,17 @@ class OrderManagementDetails extends Component {
             <div>
                 <Tabs
                     defaultActiveKey="1"
-                    onChange={this.handleTabsClick}
                     className={`${orderDT}`}
                     style={{marginTop: '16px'}}
                 >
                     <TabPane tab="订单信息" key="1">
-                        <OrderInformation initialData={this.props.initialData} />
+                        <OrderInformation />
                     </TabPane>
                     <TabPane tab="支付信息" key="2">
-                        <PayInformation initialData={this.props.initialData} />
+                        <PayInformation />
                     </TabPane>
                     <TabPane tab="配送信息" key="3">
-                        <DistributionInformation initialData={this.props.initialData} />
+                        <DistributionInformation />
                     </TabPane>
                 </Tabs>
             </div>
@@ -70,8 +69,9 @@ class OrderManagementDetails extends Component {
 
 OrderManagementDetails.propTypes = {
     match: PropTypes.objectOf(PropTypes.any),
-    initialData: PropTypes.objectOf(PropTypes.any),
-
+    fetchOrderDetailInfo: PropTypes.func,
+    fetchPaymentDetailInfo: PropTypes.func,
+    fetchShippingDetailInfo: PropTypes.func,
 }
 
 OrderManagementDetails.defaultProps = {

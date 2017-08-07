@@ -28,6 +28,7 @@ import {
     updateCarouselAdStatus,
     updateCarouselInterval,
     insertCarouselAd,
+    queryCarouselAdBySorting,
 } from '../service';
 import ActionType from './ActionType';
 
@@ -362,3 +363,15 @@ export const modifyCarouselAd = (data) => (
             .catch(err => reject(err))
     })
 )
+
+// 轮播广告页-查询判断排序是否重复
+export const fetchCarouselAdBySorting = (data) => (
+    new Promise((resolve, reject) => {
+        queryCarouselAdBySorting(data)
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+

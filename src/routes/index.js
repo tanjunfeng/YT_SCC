@@ -506,7 +506,7 @@ const routes = [
                                 <Bundle load={OrderManagementList}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/orderList/orderDetails/:orderNumber"
+                            path="/orderList/orderDetails/:id"
                             render={() => <Bundle load={OrderManagementDetails}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>

@@ -8,26 +8,49 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { Form, Icon, Table, Row, Col, Button, message } from 'antd';
 import moment from 'moment';
+import RefundModal from './refundModal';
 import { TIME_FORMAT, DATE_FORMAT } from '../../../constant/index';
+import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 
+@connect(
+    state => ({
+        paymentDetailData: state.toJS().order.paymentDetailData,
+    }),
+    dispatch => bindActionCreators({
+        modifyCauseModalVisible
+    }, dispatch)
+)
 class PayInformation extends PureComponent {
     constructor(props) {
         super(props);
 
         this.columns = [{
             title: '序号',
-            dataIndex: 'payNumber',
-            key: 'payNumber',
+            dataIndex: 'sort',
+            key: 'sort',
+            render: (text, record, index) => index + 1
         }, {
             title: '类型',
-            dataIndex: 'payType',
-            key: 'payType',
+            dataIndex: 'type',
+            key: 'type',
+            render: (text) => {
+                switch (text) {
+                    case 1:
+                        return '付款记录';
+                    case 2:
+                        return '退款记录';
+                    default:
+                        return '';
+                }
+            }
         }, {
             title: '日期',
-            dataIndex: 'payDate',
-            key: 'payDate',
+            dataIndex: 'createTime',
+            key: 'createTime',
             render: (text) => (
                 <span>
                     {moment(parseInt(text, 10)).format(DATE_FORMAT)}
@@ -35,35 +58,35 @@ class PayInformation extends PureComponent {
             )
         }, {
             title: '金额',
-            dataIndex: 'payMoney',
-            key: 'payMoney',
+            dataIndex: 'amount',
+            key: 'amount',
             render: (text) => (
                 <span>￥{text}</span>
             )
         }, {
             title: '方式',
-            dataIndex: 'payWay',
-            key: 'payWay',
+            dataIndex: 'channel',
+            key: 'channel',
         }, {
             title: '凭证号',
-            dataIndex: 'payPromiseNum',
-            key: 'payPromiseNum',
+            dataIndex: 'transNum',
+            key: 'transNum',
         }, {
             title: '退款原因',
-            dataIndex: 'refundCause',
-            key: 'refundCause',
+            dataIndex: 'refundReason',
+            key: 'refundReason',
         }, {
             title: '备注',
-            dataIndex: 'payNote',
-            key: 'payNote',
+            dataIndex: 'remark',
+            key: 'remark',
         }, {
             title: '操作人',
-            dataIndex: 'payOperater',
-            key: 'payOperater',
+            dataIndex: 'operatorName',
+            key: 'operatorName',
         }, {
             title: '操作日期',
-            dataIndex: 'payOperateDate',
-            key: 'payOperateDate',
+            dataIndex: 'operationTime',
+            key: 'operationTime',
             render: (text) => (
                 <span>
                     {moment(parseInt(text, 10)).format(TIME_FORMAT)}
@@ -71,17 +94,17 @@ class PayInformation extends PureComponent {
             )
         }, {
             title: '操作',
-            dataIndex: 'operation',
-            key: 'operation',
+            dataIndex: 'state',
+            key: 'state',
             render: (text, record) => {
                 switch (text) {
-                    case 0:
+                    case 'pending_audit':
                         return (<a
                             onClick={() => {
                                 this.handleAuditRefund(record);
                             }}
                         >审核退款</a>)
-                    case 1:
+                    case 'approved':
                         return (<a
                             onClick={() => {
                                 this.handleRefundOk(record);
@@ -108,8 +131,7 @@ class PayInformation extends PureComponent {
      * @param {Object} record 该行数据
      */
     handleAuditRefund(record) {
-        // ToDo: 带数据发请求
-        message.success(record)
+        this.props.modifyCauseModalVisible({ isVisible: true, record})
     }
 
     /**
@@ -117,35 +139,29 @@ class PayInformation extends PureComponent {
      * @param {Object} record 该行数据
      */
     handleRefundOk(record) {
-        // ToDo: 带数据发请求
-        message.success(record)
+        this.props.modifyCauseModalVisible({ isVisible: true, record})
     }
 
     render() {
-        const { initialData } = this.props;
-        const {
-            totalMoney,
-            payMoney,
-            refungMoney,
-            differMoney
-        } = initialData.payInfoFooter;
+        const { paymentDetailData } = this.props;
+        const { totalAmount, totalPaidAmount, totalRefundedAmount } = paymentDetailData;
         const tableFooter = () =>
             (<div>
                 <span className="table-footer-item">
                     <span>总金额： ￥</span>
-                    <span className="red-number">{totalMoney}</span>
+                    <span className="red-number">{totalAmount}</span>
                 </span>
                 <span className="table-footer-item">
                     <span>付款： ￥</span>
-                    <span className="red-number">{payMoney}</span>
+                    <span className="red-number">{totalPaidAmount}</span>
                 </span>
                 <span className="table-footer-item">
                     <span>退款： ￥</span>
-                    <span className="red-number">{refungMoney}</span>
+                    <span className="red-number">{totalRefundedAmount}</span>
                 </span>
                 <span className="table-footer-item">
                     <span>差额： ￥</span>
-                    <span className="red-number">{differMoney}</span>
+                    <span className="red-number">{totalPaidAmount - totalRefundedAmount}</span>
                 </span>
             </div>)
         return (
@@ -158,10 +174,10 @@ class PayInformation extends PureComponent {
                         </div>
                         <div>
                             <Table
-                                dataSource={initialData.payInfo}
+                                dataSource={paymentDetailData.paymentGroups}
                                 columns={this.columns}
                                 pagination={false}
-                                rowKey="payNumber"
+                                rowKey="id"
                                 footer={tableFooter}
                             />
                         </div>
@@ -185,14 +201,18 @@ class PayInformation extends PureComponent {
                         </Col>
                     </Row>
                 </div>
+                <div>
+                    <RefundModal />
+                </div>
             </div>
         );
     }
 }
 
 PayInformation.propTypes = {
-    initialData: PropTypes.objectOf(PropTypes.any),
+    paymentDetailData: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
+    modifyCauseModalVisible: PropTypes.func,
 }
 
 PayInformation.defaultProps = {
