@@ -208,10 +208,17 @@ class SaleCard extends Component {
 
     handleChangeStatus(e, item) {
         const { handleChangeStatus } = this.props;
-        handleChangeStatus({
-            id: item.id,
-            status: item.status === 1 ? 0 : 1,
-        })
+        Modal.confirm({
+            title: '提示',
+            content: `确定${item.status === 1 ? '禁用' : '启用'}？`,
+            onOk: () => {
+                handleChangeStatus({
+                    id: item.id,
+                    status: item.status === 1 ? 0 : 1,
+                })
+            },
+            onCancel() { },
+        });
     }
 
     renderCard = (datas) => {
@@ -225,7 +232,7 @@ class SaleCard extends Component {
                     <Card
                         style={{ width: 350 }}
                         className={
-                            `${prefixCls}-card-${item.status}
+                            `${prefixCls}-sale-card-${item.status}
                                 ${prefixCls}-supplierType-img`
                         }
                         onClick={() => this.handleCardClick(item)}
@@ -238,48 +245,50 @@ class SaleCard extends Component {
                         >
                             &times;
                         </a> 
-                        <p>
-                            <span>子公司 : </span>
-                            <span>{item.branchCompanyId}</span>
-                            <b>-</b>
-                            <span>{item.branchCompanyName}</span>
-                        </p>
-                        <p>
-                            <span>销售内装数 : </span>
-                            <span>{item.salesInsideNumber}</span>
-                        </p>
-                        <p>
-                            <span>起订量 : </span>
-                            <span>{item.minNumber}</span>
-                        </p>
-                        <p>
-                            <span>承诺发货时间 : </span>
-                            <span>下单后{item.deliveryDay}天内发货</span>
-                        </p>
-                        <p>
-                            <span>销售价格 : </span>
-                            <ul className={`${prefixCls}-step-price`}>
-                                {
-                                    item.sellSectionPrices.map((i) => {
-                                        return (
-                                            <li className={`${prefixCls}-step-item`}>
-                                                <span className={`${prefixCls}-step-item-left`}>
-                                                    {`${i.startNumber} - ${i.endNumber}`}
-                                                </span>
-                                                <span className={`${prefixCls}-step-item-right`}>
-                                                    {i.price}元
-                                                </span>
-                                            </li>
-                                        )
-                                    })
-                                }
-                            </ul>
-                            
-                        </p>
-                        <p>
-                            <span>建议零售价(元) : </span>
-                            <span>{item.suggestPrice}</span>
-                        </p>
+                        <div className={`${prefixCls}-card-wrap`}>
+                            <p>
+                                <span>子公司 : </span>
+                                <span>{item.branchCompanyId}</span>
+                                <b>-</b>
+                                <span>{item.branchCompanyName}</span>
+                            </p>
+                            <p>
+                                <span>销售内装数 : </span>
+                                <span>{item.salesInsideNumber}</span>
+                            </p>
+                            <p>
+                                <span>起订量 : </span>
+                                <span>{item.minNumber}</span>
+                            </p>
+                            <p>
+                                <span>承诺发货时间 : </span>
+                                <span>下单后{item.deliveryDay}天内发货</span>
+                            </p>
+                            <p>
+                                <span>销售价格 : </span>
+                                <ul className={`${prefixCls}-step-price`}>
+                                    {
+                                        item.sellSectionPrices.map((i) => {
+                                            return (
+                                                <li className={`${prefixCls}-step-item`}>
+                                                    <span className={`${prefixCls}-step-item-left`}>
+                                                        {`${i.startNumber} - ${i.endNumber}`}
+                                                    </span>
+                                                    <span className={`${prefixCls}-step-item-right`}>
+                                                        {i.price}元
+                                                    </span>
+                                                </li>
+                                            )
+                                        })
+                                    }
+                                </ul>
+                                
+                            </p>
+                            <p>
+                                <span>建议零售价(元) : </span>
+                                <span>{item.suggestPrice}</span>
+                            </p>
+                        </div>
                         <div
                             className={`${prefixCls}-checkboxGroup`}
                             onClick={(e) => e.stopPropagation()}

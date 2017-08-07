@@ -171,7 +171,6 @@ class BasicInfo extends PureComponent {
                 ? 'updateSupplierAddressInfo'
                 : 'insertSupplierAddressInfo'
             ).then((res) => {
-                // this.props.history.push(`/supplierInputList/place/${isEdit ? data.id : res.data}`)
                 this.props.history.push('/supplierInputList')
             });
         });
@@ -328,14 +327,14 @@ class BasicInfo extends PureComponent {
                                         <FormItem>
                                             {getFieldDecorator('operaStatus', {
                                                 rules: [{required: true, message: '请选择供应商地点经营状态'}],
-                                                initialValue: isEdit ? `${spAdrBasic.operaStatus}` : '0'
+                                                initialValue: isEdit ? `${spAdrBasic.operaStatus}` : '1'
                                             })(
                                                 <Select
                                                     style={{ width: 140 }}
                                                     placeholder="供应商地点经营状态"
                                                 >
-                                                    <Option value="0">启用</Option>
-                                                    <Option value="1">禁用</Option>
+                                                    <Option value="1">启用</Option>
+                                                    <Option value="0">禁用</Option>
                                                 </Select>
                                             )}
                                         </FormItem>
@@ -476,6 +475,23 @@ class BasicInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                 </Row>
+                                {
+                                    isEdit &&
+                                    <Row>
+                                        {
+                                            spAdrBasic.auditPerson &&
+                                            <Col span={8}><span>供应商审核人：</span>
+                                                <span>{spAdrBasic.auditPerson}</span>
+                                            </Col>
+                                        }
+                                        {
+                                            spAdrBasic.auditDate &&
+                                            <Col span={8}><span>供应商审核时间：</span>
+                                                <span>{moment(spAdrBasic.auditDate).format('YYYY-MM-DD')}</span>
+                                            </Col>
+                                        }
+                                    </Row>
+                                }
                             </div>
                         </div>
                     </div>

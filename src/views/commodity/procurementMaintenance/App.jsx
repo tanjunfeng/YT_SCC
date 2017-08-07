@@ -37,6 +37,7 @@ import {
         getProductByIds: state.toJS().commodity.getProductById,
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
         purchaseCardData: state.toJS().commodity.purchaseCardData,
+        updateProdPurchase: state.toJS().commodity.updateProdPurchase,
     }),
     dispatch => bindActionCreators({
         QueryProdPurchaseExtByCondition,
@@ -157,7 +158,7 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     render() {
-        const { prefixCls, getProductByIds, match, purchaseCardData } = this.props;
+        const { prefixCls, getProductByIds, match } = this.props;
         // console.log(purchaseCardData.data)
         const innitalvalue = getProductByIds;
         return (
@@ -182,9 +183,12 @@ class ProcurementMaintenance extends PureComponent {
                 <ProdPurchaseModal
                     goto={this.getCardData}
                 />
-                <ProdModal
-                    goto={this.getCardData}
-                />
+                {
+                    this.props.updateProdPurchase &&
+                    <ProdModal
+                        goto={this.getCardData}
+                    />
+                }
             </div>
         );
     }

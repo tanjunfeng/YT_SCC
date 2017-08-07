@@ -87,11 +87,11 @@ class BankInfo extends PureComponent {
         })
     }
 
-    handlePreStep = () => {
+    handleNextStep = () => {
         this.handleGoTo('3');
     }
 
-    handlePreStep() {
+    handlePreStep = () => {
         this.props.onGoTo('1');
     }
 

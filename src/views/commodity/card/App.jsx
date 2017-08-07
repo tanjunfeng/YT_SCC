@@ -10,9 +10,10 @@ import { Form, Card, Checkbox, Modal, message, Pagination } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PAGE_SIZE } from '../../../constant';
-import { ProdPurchaseModal } from '../changePurchaseModal';
 import {
     fecthCheckMainSupplier,
+    fetchGetProdPurchaseById,
+    fetchCheckMainSupplier,
     fetchUpdateProdPurchase,
     fetchQueryProdByCondition,
     fetchChangeProPurchaseStatus,
@@ -33,6 +34,8 @@ import {
     }),
     dispatch => bindActionCreators({
         fecthCheckMainSupplier,
+        fetchGetProdPurchaseById,
+        fetchCheckMainSupplier,
         fetchUpdateProdPurchase,
         fetchQueryProdByCondition,
         fetchChangeProPurchaseStatus,
@@ -126,7 +129,7 @@ class Cardline extends Component {
     confirmUsed(item) {
         Modal.confirm({
             title: '提示',
-            content: '是否失效商品供应商关系',
+            content: '是否切换当前商品供应商  启用/失效 状态',
             okText: '确认',
             cancelText: '取消',
             maskClosable: false,
@@ -159,17 +162,22 @@ class Cardline extends Component {
     handleCheckOk(item) {
         Modal.confirm({
             title: '提示',
-            content: '是否切换主供应商',
+            content: '是否将当前供应商设置为主供应商',
             okText: '确认',
             cancelText: '取消',
             maskClosable: false,
             onCancel: this.handleCheckCancel,
             onOk: () => {
-                this.props.fecthCheckMainSupplier({
+                this.props.fetchCheckMainSupplier({
                     productId: item.productId,
                     supplierType: 1
                 })
                 .then(() => {
+                    this.porps.ChangeSupplierType({
+                        id: item.id,
+                        productId: item.productId,
+                        supplierType: item.supplierType,
+                    })
                     message.success('修改状态成功');
                     this.props.goto();
                 }).catch(() => {
@@ -278,7 +286,7 @@ class Cardline extends Component {
                                 </p>
                                 <p>
                                     <span>送货仓库 : </span>
-                                    <span>{item.distributeWarehouseId}</span>
+                                    <span>{item.distributeWarehouseName}</span>
                                 </p>
                                 <p>
                                     <span>采购价格 / 元 : </span>
@@ -336,7 +344,7 @@ class Cardline extends Component {
 
 Cardline.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
-    fecthCheckMainSupplier: PropTypes.func,
+    fetchCheckMainSupplier: PropTypes.func,
     fetchDeleteProdPurchaseById: PropTypes.func,
     ChangeSupplierType: PropTypes.func,
     onCliked: PropTypes.func,

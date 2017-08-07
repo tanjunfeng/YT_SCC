@@ -1,6 +1,6 @@
 // 采购单状态值清单
 export const poStatus = {
-    defaultValue: '0003',
+    defaultValue: '',
     data: [{
         key: '',
         value: '请选择'

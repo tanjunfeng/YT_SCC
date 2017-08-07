@@ -13,6 +13,7 @@ import SearchMind from '../../../components/searchMind';
 import { PAGE_SIZE } from '../../../constant';
 import {
     fetchAddProdPurchase,
+    fetchCheckMainSupplier,
 } from '../../../actions';
 import {
     pubFetchValueList,
@@ -39,7 +40,8 @@ const FormItem = Form.Item;
         productAddPriceVisible,
         pubFetchValueList,
         AddProdPurchase,
-        QueryProdPurchaseExtByCondition
+        QueryProdPurchaseExtByCondition,
+        fetchCheckMainSupplier,
     }, dispatch)
 )
 
@@ -56,6 +58,15 @@ class ProdPurchaseModal extends Component {
             supplyChoose1: {},
             supplyChoose2: {},
         }
+    }
+
+    componentDidMount() {
+        const { getProductByIds } = this.props;
+        console.log(getProductByIds)
+        // this.porps.fetchCheckMainSupplier({
+        //     supplierType: 1,
+        //     productId: getProductByIds.productId
+        // })
     }
 
     /**
@@ -319,6 +330,11 @@ class ProdPurchaseModal extends Component {
                                             <Checkbox />
                                         )}
                                     </span>
+                                    <p>
+                                        {
+
+                                        }
+                                    </p>
                                 </FormItem>
                             </div>
                         </div>
@@ -335,6 +351,7 @@ ProdPurchaseModal.propTypes = {
     productAddPriceVisible: PropTypes.func,
     pubFetchValueList: PropTypes.func,
     getProductByIds: PropTypes.func,
+    fetchCheckMainSupplier: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     prodPurchase: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,

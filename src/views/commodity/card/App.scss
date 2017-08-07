@@ -2,7 +2,7 @@
     display: inline-block;
     padding: 0;
     margin: 0 20px 10px 20px;
-    // color: #e1e6ec;
+    color: #999;
     cursor: pointer;
     p{
         margin-bottom: 10px;
@@ -107,6 +107,17 @@
     &-no-data {
         color: #ccc;
         text-align: center;
+    }
+    &-card-wrap {
+        max-height: 196px;
+        overflow: auto;
+        margin-top: 10px;
+    }
+    &-sale-card-0 {
+        color: #999;
+    }
+    &-sale-card-1 {
+        color: #333;
     }
 }
 .card-line-sale {

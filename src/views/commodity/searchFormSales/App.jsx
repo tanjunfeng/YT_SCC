@@ -171,6 +171,7 @@ class SearchForm extends Component {
         this.props.form.resetFields();
         this.searchMind.reset();
         this.name = null;
+        this.choose = null;
         this.props.onReset();
     }
 
@@ -241,10 +242,10 @@ class SearchForm extends Component {
                             >
                                 {
                                     initiateModeOptions.data.map((item) =>
-                                (<Option key={item.key} value={item.key}>
-                                    {item.value}
-                                </Option>)
-                            )
+                                        (<Option key={item.key} value={item.key}>
+                                            {item.value}
+                                        </Option>)
+                                    )
                                 }
                             </Select>
                         )}

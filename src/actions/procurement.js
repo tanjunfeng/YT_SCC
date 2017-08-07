@@ -66,11 +66,9 @@ export const fetchPoPrintList = (params) => dispatch => (
     })
 )
 
-
-
 /**
  * 仓库值清单 promise
- * @param {*} data 
+ * @param {*} data
  */
 export const getWarehouseAddressMap = (params) => dispatch => (
     new Promise((resolve, reject) => {
@@ -269,7 +267,7 @@ export const initPoDetailAction = (data) => ({
 export const initPoDetail = (params) => dispatch => (
     new Promise((resolve, reject) => {
         dispatch(initPoDetailAction(params));
-        //返回操作结果
+        // 返回操作结果
         resolve(params);
     })
 )

@@ -66,7 +66,7 @@ import {
 } from './procurement';
 
 // IBM
-import fecthCheckMainSupplier from './fetch/fetchCheckMainSupplier';
+import fetchCheckMainSupplier from './fetch/fetchCheckMainSupplier';
 import fecthGetProdPurchaseById from './fetch/fetchGetProdPurchaseById';
 import fetchChangeSupType from './fetch/fetchChangeSupType'
 
@@ -151,7 +151,7 @@ export {
     createPoRcv,
 
     // IBM
-    fecthCheckMainSupplier,
+    fetchCheckMainSupplier,
     fecthGetProdPurchaseById,
     fetchChangeSupType,
 

@@ -18,12 +18,11 @@ class Warehouse extends Component {
         this.handleDelete = ::this.handleDelete;
         this.getValue = ::this.getValue;
         this.warehouseIds = props.defaultValue.map((item) => {
-            return item.id;
+            return item.warehouseId;
         });
         const defaultDatas = props.defaultValue.map((item) => {
-            const { warehouse } = item;
-            const { warehousePhysicalInfo = {} } = warehouse || {};
-            return warehousePhysicalInfo;
+            const { warehouse = {} } = item;
+            return {...warehouse};
         });
         this.state = {
             data: defaultDatas || []
@@ -37,9 +36,8 @@ class Warehouse extends Component {
                 return item.warehouseId;
             });
             const defaultDatas = nextProps.defaultValue.map((item) => {
-                const { warehouse } = item;
-                const { warehousePhysicalInfo = {}, warehouseCode, warehouseName } = warehouse || {};
-                return {...warehousePhysicalInfo, warehouseLogicCode: warehouseCode, warehouseLogicName: warehouseName};
+                const { warehouse = {} } = item;
+                return {...warehouse};
             });
             this.setState({
                 data: defaultDatas

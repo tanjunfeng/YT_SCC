@@ -74,9 +74,9 @@ class SellPriceModal extends Component {
     }
 
     handlePriceChange(result) {
-        const { setFields } = this.props.form;
+        const { setFields, getFieldError } = this.props.form;
         const { isContinuity } = result;
-        if (isContinuity) {
+        if (isContinuity && getFieldError('sellSectionPrices')) {
             setFields({
                 sellSectionPrices: {
                     errors: null,
@@ -99,6 +99,9 @@ class SellPriceModal extends Component {
     render() {
         const { prefixCls, form, datas, isEdit } = this.props;
         const { getFieldDecorator } = form;
+        const newDates = JSON.parse(JSON.stringify(datas));
+        
+        console.log(newDates)
         return (
             <Modal
                 title="新增销售价格"
@@ -119,7 +122,7 @@ class SellPriceModal extends Component {
                                     <span>
                                         {getFieldDecorator('salesInsideNumber', {
                                             rules: [{ required: true, message: '请输入销售内装数' }],
-                                            initialValue: datas.salesInsideNumber
+                                            initialValue: newDates.salesInsideNumber
                                         })(
                                             <InputNumber min={0} />
                                         )}
@@ -130,7 +133,7 @@ class SellPriceModal extends Component {
                                     <span>
                                         {getFieldDecorator('minNumber', {
                                             rules: [{ required: true, message: '请输入最小起订量!' }],
-                                            initialValue: datas.minNumber
+                                            initialValue: newDates.minNumber
                                         })(
                                             <InputNumber min={0} />
                                         )}
@@ -141,7 +144,7 @@ class SellPriceModal extends Component {
                                     <span className={`${prefixCls}-day-input`}>
                                         {getFieldDecorator('deliveryDay', {
                                             rules: [{ required: true, message: '请输入承诺发货时间!' }],
-                                            initialValue: datas.deliveryDay
+                                            initialValue: newDates.deliveryDay
                                         })(
                                             <InputNumber min={0} />
                                         )}
@@ -164,7 +167,7 @@ class SellPriceModal extends Component {
                                         <SteppedPrice
                                             ref={node => (this.steppedPrice = node)}
                                             handleChange={this.handlePriceChange}
-                                            defaultValue={isEdit ? datas.sellSectionPrices : []}
+                                            defaultValue={isEdit ? newDates.sellSectionPrices : []}
                                             inputSize="default"
                                         />
                                     )}
@@ -174,7 +177,7 @@ class SellPriceModal extends Component {
                                     <span>
                                         {getFieldDecorator('suggestPrice', {
                                             rules: [{ required: true, message: '请输入建议零售价!' }],
-                                            initialValue: datas.suggestPrice
+                                            initialValue: newDates.suggestPrice
                                         })(
                                             <InputNumber min={0} />
                                         )}
@@ -194,7 +197,7 @@ class SellPriceModal extends Component {
                                         }, 'findCompanyBaseInfo')}
                                         placeholder="请输入公司名"
                                         onChoosed={this.handleChoose}
-                                        defaultValue={datas.branchCompanyId ? `${datas.branchCompanyId} - ${datas.branchCompanyName}` : undefined}
+                                        defaultValue={newDates.branchCompanyId ? `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` : undefined}
                                         onClear={this.handleClear}
                                         renderChoosedInputRaw={(data) => (
                                            <div>{data.id} - {data.name}</div>
