@@ -519,7 +519,7 @@ export const queryMaterialMap = (params) => http.get('/provider/queryMaterialMap
 
 // 采购收货相关
 // 采购收货单管理列表
-export const queryPoRcvMngList = (params) => http.get('/provider/queryPoRcvMngList', params);
+export const queryPoRcvMngList = (params) => http.get('/pmPurchaseReceipt/queryReceiptList', params);
 // 采购单收货列表   采购单筛选条件：已审核、未收货
 export const queryPoRcvList = (params) => http.get('/provider/queryPoRcvList', params);
 // 查询收货详情 查询参数： 收货单id（poRcvId）或采购单id（poId）

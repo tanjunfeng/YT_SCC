@@ -56,8 +56,8 @@ class PoRcvMngList extends PureComponent {
         this.columns = [
             {
                 title: '收货单号',
-                dataIndex: 'rcvNo',
-                key: 'rcvNo',
+                dataIndex: 'purchaseReceiptNo',
+                key: 'purchaseReceiptNo',
             },
             {
                 title: 'ASN',
@@ -66,8 +66,8 @@ class PoRcvMngList extends PureComponent {
             },
             {
                 title: '采购单号',
-                dataIndex: 'poNo',
-                key: 'poNo',
+                dataIndex: 'purchaseOrderNo',
+                key: 'purchaseOrderNo',
             },
             {
                 title: '采购单类型',
@@ -177,32 +177,31 @@ class PoRcvMngList extends PureComponent {
      */
     editSearchParams() {
         const {
-            poRcvNo,
-            poNo,
-            locTypeCd,
-            poTypeCd,
+            purchaseReceiptNo,
+            purchaseOrderNo,
+            adrType,
+            purchaseOrderType,
         } = this.props.form.getFieldsValue();
 
         //收货日期区间
-        let poRcvDuringArr = this.props.form.getFieldValue("poRcvDuring") || [];
-        let poRcvDuringFrom, poRcvDuringTo;
-        if (poRcvDuringArr.length > 0) {
-            poRcvDuringFrom = poRcvDuringArr[0].format(dateFormat);
+        let receivedDuringArr = this.props.form.getFieldValue("receivedDuring") || [];
+        let receivedTimeStart, receivedTimeEnd;
+        if (receivedDuringArr.length > 0) {
+            receivedTimeStart = Date.parse(receivedDuringArr[0].format(dateFormat));
         }
-        if (poRcvDuringArr.length > 1) {
-            poRcvDuringTo = poRcvDuringArr[1].format(dateFormat);
+        if (receivedDuringArr.length > 1) {
+            receivedTimeEnd = Date.parse(receivedDuringArr[1].format(dateFormat));
         }
 
         //获取采购单审批日期区间
         let auditDuringArr = this.props.form.getFieldValue("auditDuring") || [];
         let auditDuringFrom, auditDuringTo;
         if (auditDuringArr.length > 0) {
-            auditDuringFrom = auditDuringArr[0].format(dateFormat);
+            auditDuringFrom = Date.parse(auditDuringArr[0].format(dateFormat));
         }
         if (auditDuringArr.length > 1) {
-            auditDuringTo = auditDuringArr[1].format(dateFormat);
+            auditDuringTo = Date.parse(auditDuringArr[1].format(dateFormat));
         }
-
 
         //地点
         let addressCd;
@@ -225,15 +224,15 @@ class PoRcvMngList extends PureComponent {
         }
 
         const searchParams = {
-            poRcvNo,
-            poNo,
-            locTypeCd,
+            purchaseReceiptNo,
+            purchaseOrderNo,
+            adrType,
             addressCd,
-            poTypeCd,
+            purchaseOrderType,
             supplierCd,
             supplierLocCd,
-            poRcvDuringFrom,
-            poRcvDuringTo,
+            receivedTimeStart,
+            receivedTimeEnd,
             auditDuringFrom,
             auditDuringTo
         };
@@ -289,16 +288,16 @@ class PoRcvMngList extends PureComponent {
 
     handleGetAddressMap = ({ value, pagination }) => {
         //地点类型
-        let { locTypeCd } = this.props.form.getFieldsValue(["locTypeCd"])
+        let { adrType } = this.props.form.getFieldsValue(["adrType"])
         let companyId = null;//TODO 从session获取？
         let pageNum = pagination.current || 1;
         //根据选择的地点类型获取对应地点的值清单
-        if (locTypeCd === locTypeCodes.warehouse) {
+        if (adrType === locTypeCodes.warehouse) {
             //地点类型为仓库
             return this.props.getWarehouseAddressMap({
                 value, companyId, pageNum
             });
-        } else if (locTypeCd === locTypeCodes.shop) {
+        } else if (adrType === locTypeCodes.shop) {
             //地点类型为门店
             return this.props.getShopAddressMap({
                 value, companyId, pageNum
@@ -396,7 +395,7 @@ class PoRcvMngList extends PureComponent {
                             <Col span={8}>
                                 {/* 采购单号 */}
                                 <FormItem label="采购单号" formItemLayout>
-                                    {getFieldDecorator('poNo', {
+                                    {getFieldDecorator('purchaseOrderNo', {
                                     })(
                                         <Input size="default"
                                         />
@@ -408,7 +407,7 @@ class PoRcvMngList extends PureComponent {
                             <Col span={8}>
                                 {/* 收货单号 */}
                                 <FormItem label="收货单号" formItemLayout>
-                                    {getFieldDecorator('poRcvNo', {
+                                    {getFieldDecorator('purchaseReceiptNo', {
                                     })(
                                         <Input size="default"
                                         />
@@ -421,7 +420,7 @@ class PoRcvMngList extends PureComponent {
                                 <FormItem >
                                     <div>
                                         <span className="ant-form-item-label"><label>收货日期</label> </span>
-                                        {getFieldDecorator('poRcvDuring', {
+                                        {getFieldDecorator('receivedDuring', {
                                             initialValue: [moment(new Date(), dateFormat), moment(new Date(), dateFormat)]
                                         })(
                                             <RangePicker
@@ -437,7 +436,7 @@ class PoRcvMngList extends PureComponent {
                             <Col span={8}>
                                 {/* 采购单类型 */}
                                 <FormItem label="采购单类型">
-                                    {getFieldDecorator('poTypeCd', {
+                                    {getFieldDecorator('purchaseOrderType', {
                                         initialValue: poType.defaultValue
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
@@ -511,7 +510,7 @@ class PoRcvMngList extends PureComponent {
                             <Col span={8}>
                                 {/* 地点类型 */}
                                 <FormItem label="地点类型">
-                                    {getFieldDecorator('locTypeCd', {
+                                    {getFieldDecorator('adrType', {
                                         initialValue: locType.defaultValue
                                     })(
                                         <Select style={{ width: '153px' }} size="default" onChange={this.onLocTypeChange}>

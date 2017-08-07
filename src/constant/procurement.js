@@ -37,17 +37,17 @@ export const locType = {
         key: '',
         value: '请选择'
     }, {
-        key: '0001',
+        key: '0',
         value: '仓库'
     }, {
-        key: '0002',
+        key: '1',
         value: '门店'
     }]
 }
 
 export const locTypeCodes = {
-    warehouse: '0001',
-    shop: '0002'
+    warehouse: '0',
+    shop: '1'
 }
 
 // 采购单类型值清单
