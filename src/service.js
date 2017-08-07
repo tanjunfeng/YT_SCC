@@ -378,10 +378,8 @@ export const uploadImageBase64Data = (params) => http.post('/commonUploadFile/up
 // 查询分类信息
 export const queryCategorys = (params) => http.get('/category/queryAllShowCategories', params);
 
-<<<<<<< HEAD
 // 查询单级分类信息
 export const queryAllCategoriesWithIconByParentId = (params) => http.get('/category/queryAllCategoriesWithIconByParentId', params);
-=======
 // 查询所有分类
 export const queryAllCategories = () => http.get('/category/queryAllCategories');
 
@@ -403,7 +401,6 @@ export const updateSortNum = ({ id, newSortOrder }) => (
 export const updateShowStatus = ({ id, displayStatus }) => (
     http.get('/category/updateShowStatus', { id, displayStatus })
 );
->>>>>>> f9f37d52954e22b955c98164218b76e781251b42
 
 // 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
 export const saveInput = (params) => http.post('/rk/saveInput', params);
