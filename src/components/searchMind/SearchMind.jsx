@@ -165,7 +165,10 @@ class SearchMind extends PureComponent {
      * @return {null}
      */
     getData() {
-        return this.state.selectedRawData;
+        return {
+            value: this.state.value,
+            raw: this.state.selectedRawData,
+        };
     }
 
     /**
