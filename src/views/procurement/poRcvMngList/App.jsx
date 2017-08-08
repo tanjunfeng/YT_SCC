@@ -48,8 +48,8 @@ class PoRcvMngList extends PureComponent {
         this.queryRcvMngPoList =::this.queryRcvMngPoList;
         this.searchParams = {};
         this.state = {
-            //地点是否可编辑
-            locDisabled: true
+            locDisabled: true,  //地点是否可编辑
+            supplyChoose: '',   // 供应商选择
         };
         //初始页号
         this.current = 1;
@@ -71,53 +71,53 @@ class PoRcvMngList extends PureComponent {
             },
             {
                 title: '采购单类型',
-                dataIndex: 'poTypeName',
-                key: 'poTypeName',
+                dataIndex: 'purchaseOrderType',
+                key: 'purchaseOrderType',
             },
             {
                 title: '供应商编号',
-                dataIndex: 'supplierCd',
-                key: 'supplierCd',
+                dataIndex: 'spNo',
+                key: 'spNo',
             },
             {
                 title: '供应商名称',
-                dataIndex: 'supplierName',
-                key: 'supplierName',
+                dataIndex: 'spName',
+                key: 'spName',
             },
             {
                 title: '供应商地点编号',
-                dataIndex: 'supplierLocCd',
-                key: 'supplierLocCd',
+                dataIndex: 'spAdrNo',
+                key: 'spAdrNo',
             }, {
                 title: '供应商地点名称',
-                dataIndex: 'supplierLocName',
-                key: 'supplierLocName',
+                dataIndex: 'spAdrName',
+                key: 'spAdrName',
             },
             {
                 title: '预计送货日期',
-                dataIndex: 'estDeliveryDate',
-                key: 'estDeliveryDate'
+                dataIndex: 'estimatedDeliveryDate',
+                key: 'estimatedDeliveryDate'
             },
             {
                 title: '地点类型',
-                dataIndex: 'locTypeName',
-                key: 'locTypeName'
+                dataIndex: 'adrType',
+                key: 'adrType'
             },
             {
                 title: '地点',
-                dataIndex: 'address',
-                key: 'address'
+                dataIndex: 'adrTypeName',
+                key: 'adrTypeName'
             },
             {
                 title: '预计到货日期',
-                dataIndex: 'deliveryDate',
-                key: 'deliveryDate'
+                dataIndex: 'estimatedReceivedDate',
+                key: 'estimatedReceivedDate'
 
             },
             {
                 title: '收货日期',
-                dataIndex: 'rcvDate',
-                key: 'rcvDate'
+                dataIndex: 'receivedTime',
+                key: 'receivedTime'
             }
             ,
             {
@@ -210,17 +210,17 @@ class PoRcvMngList extends PureComponent {
             addressCd = selectedAddressRawData.code;
         }
         //供应商
-        let supplierCd;
+        let spNo;
         let selectedSupplierRawData = this.supplier.state.selectedRawData;
         if (selectedSupplierRawData) {
-            supplierCd = selectedSupplierRawData.code;
+            spNo = selectedSupplierRawData.code;
         }
 
         //供应商地点
-        let supplierLocCd;
+        let spAdrNo;
         let selectedSupplierLocRawData = this.supplierLoc.state.selectedRawData;
         if (selectedSupplierLocRawData) {
-            supplierLocCd = selectedSupplierLocRawData.code;
+            spAdrNo = selectedSupplierLocRawData.code;
         }
 
         const searchParams = {
@@ -229,8 +229,8 @@ class PoRcvMngList extends PureComponent {
             adrType,
             addressCd,
             purchaseOrderType,
-            supplierCd,
-            supplierLocCd,
+            spNo,
+            spAdrNo,
             receivedTimeStart,
             receivedTimeEnd,
             auditDuringFrom,
@@ -326,15 +326,15 @@ class PoRcvMngList extends PureComponent {
      * 查询供应商地点值清单
      */
     handleGetSupplierLocMap = ({ value, pagination }) => {
-        let supplierCd;
+        let spNo;
         let selectedSupplierRawData = this.supplier.state.selectedRawData;
         if (selectedSupplierRawData) {
-            supplierCd = selectedSupplierRawData.code;
+            spNo = selectedSupplierRawData.code;
         }
         let companyId = null;//TODO 从session获取？
         let pageNum = pagination.current || 1;
         //如果供应商地点为空，返回空promise
-        if (!supplierCd) {
+        if (!spNo) {
             return new Promise(function (resolve, reject) {
                 resolve({ total: 0, data: [] });
             });
@@ -342,7 +342,7 @@ class PoRcvMngList extends PureComponent {
         //根据供应商编码、输入查询内容获取供应商地点信息
         return this.props.getSupplierLocMap({
             value,
-            supplierCd,
+            spNo,
             companyId, pageNum
         });
 
@@ -451,6 +451,42 @@ class PoRcvMngList extends PureComponent {
                             </Col>
                             <Col span={8}>
                                 {/* 供应商 */}
+                                <FormItem formItemLayout>
+                                    <div className="row middle">
+                                        <span className="ant-form-item-label"><label>供应商</label> </span>
+                                        <SearchMind
+                                            style={{ zIndex: 101 }}
+                                            compKey="search-mind-supply"
+                                            ref={ref => { this.supplySearchMind = ref }}
+                                            fetch={(params) =>
+                                                this.props.pubFetchValueList({
+                                                    condition: params.value
+                                                }, 'querySuppliersList')
+                                            }
+                                            addonBefore=""
+                                            onChoosed={this.handleSupplyChoose}
+                                            onClear={this.handleSupplyClear}
+                                            renderChoosedInputRaw={(companyList) => (
+                                                <div ref={supplier => { this.supplier = supplier }}>{companyList.spId}-{companyList.companyName}</div>
+                                            )}
+                                            rowKey="spAdrid"
+                                            pageSize={5}
+                                            columns={[
+                                                {
+                                                    title: '供应商ID',
+                                                    dataIndex: 'spId',
+                                                    width: 150,
+                                                }, {
+                                                    title: '供应商名称',
+                                                    dataIndex: 'companyName',
+                                                    width: 200,
+                                                }
+                                            ]}
+                                        />
+                                    </div>
+                                </FormItem>
+                            </Col>
+                            {/* <Col span={8}>
                                 <FormItem formItemLayout >
                                     <div className="row middle">
                                         <span className="ant-form-item-label"><label>供应商</label> </span>
@@ -476,7 +512,7 @@ class PoRcvMngList extends PureComponent {
                                         />
                                     </div>
                                 </FormItem>
-                            </Col>
+                            </Col> */}
                             <Col span={8}>
                                 {/* 供应商地点 */}
                                 <FormItem formItemLayout >
