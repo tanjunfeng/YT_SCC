@@ -458,9 +458,11 @@ class ManagementList extends PureComponent {
      */
     handleChangePage = (page) => {
         const currentPage = page;
+        const allFormValue = this.getFormAllVulue();
         this.props.queryCommodityList({
             pageNum: currentPage,
-            pageSize: PAGE_SIZE
+            pageSize: PAGE_SIZE,
+            ...allFormValue
         });
     }
 
@@ -653,18 +655,18 @@ class ManagementList extends PureComponent {
                                                     onChoosed={this.handleSupplyChoose}
                                                     onClear={this.handleSupplyClear}
                                                     renderChoosedInputRaw={(companyList) => (
-                                                        <div ref={supplier => { this.supplier = supplier }}>{companyList.spId}-{companyList.companyName}</div>
+                                                        <div ref={supplier => { this.supplier = supplier }}>{companyList.providerNo}-{companyList.providerName}</div>
                                                     )}
                                                     rowKey="spAdrid"
                                                     pageSize={5}
                                                     columns={[
                                                         {
-                                                            title: '供应商ID',
-                                                            dataIndex: 'spId',
+                                                            title: '地点编码',
+                                                            dataIndex: 'providerNo',
                                                             width: 150,
                                                         }, {
-                                                            title: '供应商名称',
-                                                            dataIndex: 'companyName',
+                                                            title: '地点名称',
+                                                            dataIndex: 'providerName',
                                                             width: 200,
                                                         }
                                                     ]}

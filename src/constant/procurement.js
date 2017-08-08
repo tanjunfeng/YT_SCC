@@ -5,19 +5,19 @@ export const poStatus = {
         key: '',
         value: '请选择'
     }, {
-        key: '0001',
+        key: '0',
         value: '制单'
     }, {
-        key: '0002',
+        key: '1',
         value: '已提交'
     }, {
-        key: '0003',
+        key: '2',
         value: '已审核'
     }, {
-        key: '0004',
+        key: '3',
         value: '已拒绝'
     }, {
-        key: '0005',
+        key: '4',
         value: '已关闭'
     }]
 }
@@ -37,10 +37,10 @@ export const locType = {
         key: '',
         value: '请选择'
     }, {
-        key: '0001',
+        key: '0',
         value: '仓库'
     }, {
-        key: '0002',
+        key: '1',
         value: '门店'
     }]
 }
@@ -57,7 +57,7 @@ export const poType = {
         key: '',
         value: '请选择'
     }, {
-        key: '0001',
+        key: '1',
         value: '普通采购'
     }]
 }

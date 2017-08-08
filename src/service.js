@@ -500,8 +500,7 @@ export const getProductById = (params) => http.get('/prodPurchase/getProductById
 export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPages', params);
 
 /* **************procurement*********** */
-// 查询采购单列表
-export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
+
 //删除采购单 参数 1或n个采购单id  [ids] 
 export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
 //查询采购单打印列表
@@ -516,8 +515,8 @@ export const auditPo = (params) => http.post('/provider/auditPo', params);
 /**
  * 采购相关
  */
-// 地点值清单查询接口
-// 仓库地点值清单
+// 查询采购单列表
+export const fetchPurchaseOrder = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderList', params);
 
 // 门店地点值清单
 export const getStoreInfo = (params) => http.get('/store/getStoreInfo', params);

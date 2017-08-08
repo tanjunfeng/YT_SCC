@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { Button, Input, Form, Select, DatePicker, Row, Col, Icon } from 'antd';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
@@ -8,7 +9,6 @@ import AscadeChoice from '../ascadeChoice';
 import Utils from '../../util/util';
 import { poStatus, locType, poType, locTypeCodes, poStatusCodes } from '../../constant/procurement';
 import SearchMind from '../searchMind';
-import moment from 'moment';
 import {
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -25,7 +25,7 @@ const FormItem = Form.Item;
 const InputGroup = Input.Group;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
-const dateFormat = "YYYY-MM-DD";
+const dateFormat = 'YYYY-MM-DD';
 @connect(
     state => ({
 
@@ -55,13 +55,18 @@ class PoSearchForm extends PureComponent {
         this.state = {
             // 地点是否可编辑
             locDisabled: true,
-            locationData: {}
+            locationData: {},
+            startCreateTime: '',
+            endCreateTime: '',
+            endAuditTime: '',
+            startAuditTime: ''
         }
     }
 
+    // 地点类型改变时回调
     onLocTypeChange = (value) => {
         this.poAddress.reset();
-        this.setState({
+        this.setState({ 
             locDisabled: !value
         })
     }
@@ -73,8 +78,8 @@ class PoSearchForm extends PureComponent {
      */
     handleGetAddressMap = (param) => {
         const { locTypeCode } = this.props.form.getFieldsValue(['locTypeCode'])
-        const libraryCode = '0001';
-        const storeCode = '0002';
+        const libraryCode = '1';
+        const storeCode = '2';
         let locationTypeParam = '';
         if (locTypeCode === libraryCode) {
             locationTypeParam = 'getWarehouseInfo1';
@@ -100,41 +105,84 @@ class PoSearchForm extends PureComponent {
         }, locationTypeParam);
     }
 
+    // 选择供应商回调
+    chooseSupplier = (dataList) => {
+        this.supplierEncoded = dataList.spNo;
+        return <div>{dataList.spNo} - {dataList.companyName}</div>
+    }
+
+    // 选择供应商地点回调
+    chooseSupplierAdress = (dataList) => {
+        this.supplierAdressId = dataList.spAdrid;
+        return <div>{dataList.providerNo} - {dataList.providerName}</div>
+    }
+
+    // 选择地点回调
+    chooseAdress = (dataList) => {
+        const encoded = dataList[this.state.locationData.code];
+        this.adressTypeCode = encoded;
+        return <div>{encoded} - {dataList[this.state.locationData.name]}</div>;
+    }
+
+    // 选择大类回调
+    chooseGoodsType = (dataList) => {
+        this.GoodsTypeId = dataList.id;
+        return <div>{dataList.id} - {dataList.categoryName}</div>;
+    }
+
+    // 选择创建时间回调
+    chooseCreateDate = (dates, moments) => {
+        this.setState({
+            startCreateTime: moments[0],
+            endCreateTime: moments[1]
+        })
+    }
+
+    // 选择审批时间回调
+    chooseApproval = (dates, moments) => {
+        this.setState({
+            startAuditTime: moments[0],
+            endAuditTime: moments[1]
+        })
+    }
+
     onSupplierChange(value) {
         
     }
 
+
     getSearchParams = () => {
+        const ordinary = '1';
+        const ordinaryCode = 0;
         const {
             purchaseNumber,
             locTypeCode,
             purchaseTypeCode,
-            statusCode,
+            statusCode
         } = this.props.form.getFieldsValue();
 
-        console.log(this.props.form.getFieldsValue());
+        const { startCreateTime, endCreateTime, startAuditTime, endAuditTime } = this.state;
+        console.log(locTypeCode)
         const searchParams = {
             purchaseOrderNo: purchaseNumber,
-            spNo: '',
-            spAdrId: '',
-            adrType: '',
-            adrTypeCode: '',
-            secondCategoryId: '',
-            purchaseOrderType: '',
-            status: '',
-            startCreateTime: '',
-            endCreateTime: '',
-            startAuditTime: '',
-            endAuditTime: ''
+            spNo: this.supplierEncoded,
+            spAdrId: this.supplierAdressId,
+            adrType: locTypeCode,
+            adrTypeCode: this.adressTypeCode,
+            secondCategoryId: this.GoodsTypeId,
+            purchaseOrderType: purchaseTypeCode === ordinary ? ordinaryCode : '',
+            status: statusCode,
+            startCreateTime,
+            endCreateTime,
+            startAuditTime,
+            endAuditTime
         };
 
-        this.searchParams = Utils.removeInvalid(searchParams);
-        return this.searchParams;
+        return Utils.removeInvalid(searchParams);
     }
 
     handleSearch() {
         const { onSearch } = this.props;
-        // call回调函数
         if (onSearch) {
             onSearch(this.getSearchParams());
         }
@@ -187,13 +235,12 @@ class PoSearchForm extends PureComponent {
     }
 
     handleGetSupplierMap = ({ value, pagination }) => {
-        //子公司ID
-        let companyId = null;  //TODO 从session获取子公司ID？
+        // //子公司ID
+        // let companyId = null;  //TODO 从session获取子公司ID？
         let pageNum = pagination.current || 1;
         return this.props.getSupplierMap({
             value, companyId, pageNum
         });
-
     }
 
     handleGetSupplierLocMap = ({ value, pagination }) => {
@@ -202,10 +249,10 @@ class PoSearchForm extends PureComponent {
         if (selectedSupplierRawData) {
             supplierCd = selectedSupplierRawData.code;
         }
-        // 子公司ID
-        let companyId = null;  //TODO 从session获取子公司ID？
-        let pageNum = pagination.current || 1;
-        // 如果供应商地点为空，返回空promise
+        // // 子公司ID
+        // let companyId = null;  //TODO 从session获取子公司ID？
+        // let pageNum = pagination.current || 1;
+        // // 如果供应商地点为空，返回空promise
         if (!supplierCd) {
             return new Promise(function (resolve, reject) {
                 resolve({ total: 0, data: [] });
@@ -270,9 +317,7 @@ class PoSearchForm extends PureComponent {
                                             compKey="comPoAddress"
                                             ref={ref => { this.poAddress = ref }}
                                             fetch={(param) => this.handleGetAddressMap(param)}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div ref={locationValue => { this.locationValue = locationValue }}>{data[this.state.locationData.code]} - {data[this.state.locationData.name]}</div>
-                                            )}
+                                            renderChoosedInputRaw={this.chooseAdress}
                                             disabled={this.state.locDisabled}
                                             pageSize={5}
                                             columns={[
@@ -314,7 +359,7 @@ class PoSearchForm extends PureComponent {
                                 {/* 状态 */}
                                 <FormItem label="状态">
                                     {getFieldDecorator('statusCode', {
-                                        initialValue: poStatusCodes.approved
+                                        initialValue: poStatus.defaultValue
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
                                             {
@@ -338,9 +383,7 @@ class PoSearchForm extends PureComponent {
                                                 param: param.value,
                                                 level: 2
                                             }, 'querycategories')}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.id} - {data.categoryName}</div>
-                                            )}
+                                            renderChoosedInputRaw={this.chooseGoodsType}
                                             pageSize={5}
                                             columns={[
                                                 {
@@ -373,9 +416,7 @@ class PoSearchForm extends PureComponent {
                                                 pageSize: 2,
                                                 pageNum: 1
                                             }, 'supplierSearchBox')}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.spNo} - {data.companyName}</div>
-                                            )}
+                                            renderChoosedInputRaw={this.chooseSupplier}
                                             rowKey="dataIndex"
                                             pageSize={5}
                                             columns={[
@@ -406,9 +447,7 @@ class PoSearchForm extends PureComponent {
                                                 pageSize: 2,
                                                 pageNum: 1
                                             }, 'supplierAdrSearchBox')}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.providerNo} - {data.providerName}</div>
-                                            )}
+                                            renderChoosedInputRaw={this.chooseSupplierAdress}
                                             rowKey="dataIndex"
                                             pageSize={2}
                                             columns={[
@@ -434,14 +473,12 @@ class PoSearchForm extends PureComponent {
                                 <FormItem >
                                     <div>
                                         <span className="ant-form-item-label"><label>创建日期</label> </span>
-                                        {getFieldDecorator('createdDuring', {
-                                            initialValue: [moment(new Date(), dateFormat), moment(new Date(), dateFormat)]
-                                        })(
-                                            <RangePicker
-                                                style={{ width: '200px' }}
-                                                format={dateFormat}
-                                                placeholder={['开始日期', '结束日期']}
-                                            />)}
+                                        <RangePicker
+                                            style={{ width: '200px' }}
+                                            format={dateFormat}
+                                            placeholder={['开始日期', '结束日期']}
+                                            onChange={this.chooseCreateDate}
+                                        />
                                     </div>
                                 </FormItem>
                             </Col>
@@ -450,14 +487,12 @@ class PoSearchForm extends PureComponent {
                                 <FormItem >
                                     <div>
                                         <span className="ant-form-item-label"><label>审批日期</label> </span>
-                                        {getFieldDecorator('auditDuring', {
-
-                                        })(
-                                            <RangePicker
-                                                style={{ width: '200px' }}
-                                                format={dateFormat}
-                                                placeholder={['开始日期', '结束日期']}
-                                            />)}
+                                        <RangePicker
+                                            style={{ width: '200px' }}
+                                            format={dateFormat}
+                                            placeholder={['开始日期', '结束日期']}
+                                            onChange={this.chooseApproval}
+                                        />
                                     </div>
                                 </FormItem>
                             </Col>
@@ -506,6 +541,7 @@ class PoSearchForm extends PureComponent {
 
 PoSearchForm.propTypes = {
     pubFetchValueList: PropTypes.func,
+    onSearch: PropTypes.func,
     doSearch: PropTypes.func,
     onReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
