@@ -84,7 +84,7 @@ class CasadingAddress extends PureComponent {
             }
             this.setState({...data});
         })
-        for (let i = 0; i < showNum; i++) {
+        for (let i = 0; i < showNum-1; i++) {
             const code = defaultValue[i];
             const index = i + 1;
             if (code && !(gegion[index] && gegion[index][code])) {

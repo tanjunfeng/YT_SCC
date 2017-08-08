@@ -26,20 +26,22 @@ class CommodifyDetail extends PureComponent {
         this.props.commodityDetails({ productId: id });
     }
 
+    guaranteePeriodUnit = (unit) => {
+        switch (unit) {
+            case '1':
+                return '年';
+            case '2':
+                return '月';
+            case '3':
+                return '天';
+            default:
+                return '';
+        }
+    }
+
     render() {
         const { commodityDetail } = this.props;
-        const guaranteePeriodUnit = () => {
-            switch (commodityDetail.guaranteePeriodUnit) {
-                case 1:
-                    return '年';
-                case 2:
-                    return '月';
-                case 3:
-                    return '天';
-                default:
-                    return '';
-            }
-        }
+        
         return (
             <div className="commodify-detail-message" style={{ marginTop: '15px' }}>
                 <div className="supplier-detail-item">
@@ -219,11 +221,10 @@ class CommodifyDetail extends PureComponent {
                             }
                             {
                                 commodityDetail.qualityGuaranteePeriod
-                                && guaranteePeriodUnit
                                 && <li className="detail-message-item">
                                     <span>保质期：</span>
                                     <span>{`${commodityDetail.qualityGuaranteePeriod}
-                                        ${guaranteePeriodUnit}`}</span>
+                                        ${this.guaranteePeriodUnit(commodityDetail.guaranteePeriodUnit)}`}</span>
                                 </li>
                             }
                             {

@@ -29,4 +29,9 @@
         display: inline-block;
         height: 30px;
     }
+    &.ant-modal {
+        .ant-form-inline .ant-form-explain {
+            left: 30px;
+        }
+    }
 }

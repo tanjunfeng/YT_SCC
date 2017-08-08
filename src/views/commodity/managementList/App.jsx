@@ -478,15 +478,15 @@ class ManagementList extends PureComponent {
         const menu = (
             <Menu>
                 <Menu.Item key={0}>
-                    <Link to={`${pathname}/commodifyDetail/${id}`}>商品详情</Link>
+                    <Link to={`/commodifyList/${productId}`}>商品详情</Link>
                 </Menu.Item>
                 <Menu.Item key={1}>
-                    <CopyToClipboard text={`${origin}${pathname}/commodifyDetail/${id}`} onCopy={this.onCopy}>
+                    <CopyToClipboard text={`${origin}${pathname}/commodifyList/${productId}`} onCopy={this.onCopy}>
                         <span>复制链接</span>
                     </CopyToClipboard>
                 </Menu.Item>
                 <Menu.Item key={2}>
-                    <Link to={`${pathname}/price/${productId}`}>销售维护</Link>
+                    <Link to={`${pathname}/salesMaintenance/${productId}`}>销售维护</Link>
                 </Menu.Item>
                 <Menu.Item key={3}>
                     <Link to={`${pathname}/procurementMaintenance/${productId}`}>采购维护</Link>
