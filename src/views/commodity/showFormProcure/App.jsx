@@ -53,7 +53,8 @@ class ShowForm extends Component {
             name,
             productCode,
             secondLevelCategoryName,
-            thirdLevelCategoryName
+            thirdLevelCategoryName,
+            inputTaxRate
         } = this.props.innitalvalue;
         return (
             <div className="manage-form">
@@ -89,6 +90,12 @@ class ShowForm extends Component {
                                 <Breadcrumb.Item>{secondLevelCategoryName}</Breadcrumb.Item>
                                 <Breadcrumb.Item>{thirdLevelCategoryName}</Breadcrumb.Item>
                                 <Breadcrumb.Item>{fourthLevelCategoryName}</Breadcrumb.Item>
+                            </Breadcrumb>
+                        </Col>
+                        <Col span={9} className="css-col">
+                            <span>进项税率:</span>
+                            <Breadcrumb separator=">" className="css-breadcrumb">
+                                <Breadcrumb.Item>{inputTaxRate}%</Breadcrumb.Item>
                             </Breadcrumb>
                         </Col>
                     </Row>

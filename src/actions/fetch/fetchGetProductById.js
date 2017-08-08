@@ -18,10 +18,12 @@ export default (params) => dispatch => (
     new Promise((resolve, reject) => {
         getProductById(params)
             .then(res => {
+                console.log(res)
                 dispatch(receive(res.data));
                 resolve(res.data)
             })
             .catch(err => {
+                console.log(err)
                 reject(err);
             })
     })

@@ -13,18 +13,23 @@ import {
     Form,
 } from 'antd';
 import {
-    fecthGetProdPurchaseById,
     fetchGetProductById,
     fetchAddProdPurchase,
     fetchQueryProdByCondition,
-    modifyAuditVisible
+    modifyAuditVisible,
+    fetchCheckMainSupplier
 } from '../../../actions';
 import SearchForm from '../searchFormProcure';
 import ShowForm from '../showFormProcure';
 import Cardline from '../card';
 import { PAGE_SIZE } from '../../../constant';
 import ProdPurchaseModal from '../prodPurchaseModal';
-import { productAddPriceVisible } from '../../../actions/producthome';
+import ProdModal from '../changePurchaseModal';
+import {
+    productAddPriceVisible,
+    QueryProdPurchaseExtByCondition,
+    UpdateProdPurchase
+} from '../../../actions/producthome';
 
 
 @connect(
@@ -32,14 +37,18 @@ import { productAddPriceVisible } from '../../../actions/producthome';
         prodPurchase: state.toJS().commodity.prodPurchase,
         getProductByIds: state.toJS().commodity.getProductById,
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
+        purchaseCardData: state.toJS().commodity.purchaseCardData,
+        updateProdPurchase: state.toJS().commodity.updateProdPurchase,
     }),
     dispatch => bindActionCreators({
-        fecthGetProdPurchaseById,
+        QueryProdPurchaseExtByCondition,
         fetchGetProductById,
         fetchAddProdPurchase,
         fetchQueryProdByCondition,
         productAddPriceVisible,
-        modifyAuditVisible
+        modifyAuditVisible,
+        UpdateProdPurchase,
+        fetchCheckMainSupplier
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
@@ -50,6 +59,7 @@ class ProcurementMaintenance extends PureComponent {
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
         this.onChange = ::this.onChange;
         this.handleAdd = ::this.handleAdd;
+        this.handleChange = ::this.handleChange;
 
         this.searchForm = {};
         this.current = 1;
@@ -74,9 +84,7 @@ class ProcurementMaintenance extends PureComponent {
         this.props.fetchGetProductById({
             productId: match.params.id
         });
-        this.props.fecthGetProdPurchaseById({
-            id: match.params.id
-        });
+        this.getCardData();
     }
 
 
@@ -84,6 +92,20 @@ class ProcurementMaintenance extends PureComponent {
         // console.log(page);
         this.setState({
             current: page,
+        });
+    }
+
+    /**
+     * 采购价格分页
+     */
+    getCardData = (go) => {
+        const { match } = this.props;
+        this.current = go ? go : this.current;
+        this.props.QueryProdPurchaseExtByCondition({
+            productId: match.params.id,
+            pageNum: this.current,
+            pageSize: PAGE_SIZE,
+            ...this.searchForm
         });
     }
 
@@ -117,16 +139,41 @@ class ProcurementMaintenance extends PureComponent {
      * @param {Object} record 模态框数据
      */
     handleAdd() {
+        const { match } = this.props;
         this.props.productAddPriceVisible({isVisible: true});
+        this.props.fetchCheckMainSupplier({
+            supplierType: 1,
+            productId: match.params.id
+        })
+    }
+
+    /**
+     * 修改关系
+     */
+    handleChange(record) {
+        // console.log(record)
+        this.props.UpdateProdPurchase({isVisible: true, record});
+    }
+
+    handleFormSearch = (data) => {
+        this.searchForm = data;
+        this.getCardData();
+    }
+
+    handleFormReset = () => {
+        this.searchForm = {};
     }
 
     render() {
         const { prefixCls, getProductByIds, match } = this.props;
+        // console.log(purchaseCardData.data)
         const innitalvalue = getProductByIds;
+        // console.log(getProductByIds)
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm innitalvalue={innitalvalue} />
                 <SearchForm
+                    goto={this.getCardData}
                     id={match.params.id}
                     innitalvalue={innitalvalue}
                     onSearch={this.handleFormSearch}
@@ -134,9 +181,22 @@ class ProcurementMaintenance extends PureComponent {
                     handleAdd={this.handleAdd}
                 />
                 <div>
-                    <Cardline id={match.params.id} />
+                    <Cardline
+                        goto={this.getCardData}
+                        initData={this.props.purchaseCardData}
+                        proId={match.params.id}
+                        onCliked={this.handleChange}
+                    />
                 </div>
-                <ProdPurchaseModal />
+                <ProdPurchaseModal
+                    goto={this.getCardData}
+                />
+                {
+                    this.props.updateProdPurchase &&
+                    <ProdModal
+                        goto={this.getCardData}
+                    />
+                }
             </div>
         );
     }
@@ -145,11 +205,15 @@ class ProcurementMaintenance extends PureComponent {
 ProcurementMaintenance.propTypes = {
     fetchQueryProdByCondition: PropTypes.func,
     fetchGetProductById: PropTypes.objectOf(PropTypes.any),
-    fecthGetProdPurchaseById: PropTypes.func,
+    QueryProdPurchaseExtByCondition: PropTypes.func,
+    fetchCheckMainSupplier: PropTypes.func,
     productAddPriceVisible: PropTypes.func,
+    UpdateProdPurchase: PropTypes.bool,
+    updateProdPurchase: PropTypes.bool,
     prefixCls: PropTypes.string,
     getProductByIds: PropTypes.objectOf(PropTypes.any),
-    match: PropTypes.objectOf(PropTypes.any)
+    match: PropTypes.objectOf(PropTypes.any),
+    purchaseCardData: PropTypes.objectOf(PropTypes.any),
 }
 
 ProcurementMaintenance.defaultProps = {

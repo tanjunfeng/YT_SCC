@@ -28,7 +28,7 @@ import {
     AuditSupplierEditInfo
 } from '../../../actions/supplier';
 
-import SearchForm from '../searchForm';
+import SearchForm from '../searchFormInput';
 import { PAGE_SIZE } from '../../../constant';
 import { supplierInputList } from '../../../constant/formColumns';
 import Utils from '../../../util/util';
@@ -156,11 +156,17 @@ class SupplierInputList extends PureComponent {
         if (bool) {
             // 主数据
             // console.log('主数据')
-            this.handlePaginationChange(this.current);
+            this.props.fetchQueryManageList({
+                pageNum: 1,
+                pageSize: PAGE_SIZE,
+            });
         } else {
             // SCM数据
             // console.log('SCM数据')
-            this.handlePaginationChange(this.current);
+            this.props.fetchQueryManageList({
+                pageNum: 1,
+                pageSize: PAGE_SIZE,
+            });
         }
     }
 
@@ -280,8 +286,8 @@ class SupplierInputList extends PureComponent {
                 {
                     // 模拟地点弹出框
                     /* status === 2 && */
-                    // 1:已提交
-                    status === 1 && auditType === 1 &&
+                    // 2:已审核,3、已拒绝
+                    (status === 2 || status === 3) && auditType === 1 &&
                     <Menu.Item key="ChangeAuditAdr">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商地点审核

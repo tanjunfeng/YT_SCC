@@ -7,7 +7,7 @@
 
 import ActionType from './ActionType';
 import {
-    fetchPoMngList as svcFetchPoMngList,
+    fetchPurchaseOrder,
     fetchMaterialByCd as svcFetchMaterialByCd,
     deletePoByIds as svcDeletePoByIds,
     queryPoPrintList as svcQueryPoPrintList,
@@ -52,9 +52,10 @@ const rcvPoPrintList = (data) => ({
     type: ActionType.RECEIVE_PO_PRINT_LIST,
     payload: data,
 });
+
 export const fetchPoPrintList = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        svcQueryPoPrintList(params)
+        fetchPoMngList(params)
             .then(res => {
                 dispatch(rcvPoPrintList(res.data));
                 resolve(res);
@@ -65,11 +66,9 @@ export const fetchPoPrintList = (params) => dispatch => (
     })
 )
 
-
-
 /**
  * 仓库值清单 promise
- * @param {*} data 
+ * @param {*} data
  */
 export const getWarehouseAddressMap = (params) => dispatch => (
     new Promise((resolve, reject) => {
@@ -162,15 +161,17 @@ export const changePoMngSelectedRows = (data) => ({
 
 /**
  * 查询采购单列表
- * @param {*} data 
+ * @param {*} data  Duplicate declaration
  */
 const rcvPoMngList = (data) => ({
     type: ActionType.RECEIVE_PO_MNG_LIST,
     payload: data,
 });
+
+
 export const fetchPoMngList = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        svcFetchPoMngList(params)
+        fetchPurchaseOrder(params)
             .then(res => {
                 dispatch(rcvPoMngList(res.data));
                 resolve(res);
@@ -268,7 +269,7 @@ export const initPoDetailAction = (data) => ({
 export const initPoDetail = (params) => dispatch => (
     new Promise((resolve, reject) => {
         dispatch(initPoDetailAction(params));
-        //返回操作结果
+        // 返回操作结果
         resolve(params);
     })
 )

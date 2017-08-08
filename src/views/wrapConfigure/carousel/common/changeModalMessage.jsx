@@ -1,6 +1,5 @@
 /**
  * @file App.jsx
- *
  * @author caoyanxuan
  *
  * 轮播广告管理--子组件--模态框
@@ -12,12 +11,14 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Modal, Form, Input, message, InputNumber, Radio, Select } from 'antd';
+import Utils from '../../../../util/util';
 import { uploadImageBase64Data } from '../../../../service';
 import {
     modifyModalVisible,
     fetchCarouselAdList,
     addCarouselAd,
-    modifyCarouselAd
+    modifyCarouselAd,
+    fetchCarouselAdBySorting
 } from '../../../../actions/wap';
 import FileCut from '../../fileCut';
 
@@ -43,11 +44,42 @@ class ChangeMessage extends PureComponent {
         this.handleModalOk = this.handleModalOk.bind(this);
         this.handleModalCancel = this.handleModalCancel.bind(this);
         this.handleLinkStyleChange = this.handleLinkStyleChange.bind(this);
+        this.handleSortBlur = this.handleSortBlur.bind(this);
         this.state = {
             visible: false,
             img: null,
+            sortErr: false,
             selectLinkType: this.props.visibleData.linkType,
         }
+    }
+
+    handleSortBlur() {
+        const { sorting } = this.props.form.getFieldsValue();
+        const { modalTitle, visibleData } = this.props;
+        const sortData = {
+            sorting,
+            queryType: modalTitle === '新增轮播广告设置' ? 0 : 1,
+            carouselAdId: visibleData.id
+        }
+        fetchCarouselAdBySorting({
+            ...Utils.removeInvalid(sortData)
+        }).then(() => {
+            message.success('排序可用！');
+            this.setState({
+                sortErr: false
+            })
+        }).catch(() => {
+            message.error('排序不可用！');
+            this.setState({
+                sortErr: true
+            })
+            this.props.form.setFields({
+                sorting: {
+                    value: sorting,
+                    errors: [new Error('排序重复')],
+                },
+            });
+        })
     }
 
     /**
@@ -68,9 +100,12 @@ class ChangeMessage extends PureComponent {
     }
 
     /**
-     * 打开模态框
+     * 模态框确认
      */
     handleModalOk() {
+        if (this.state.sortErr) {
+            return null;
+        }
         const { isBase64, image } = this.imageUploader.getValue();
         if (isBase64 && !image) {
             message.error('请选择需要上传的图片！');
@@ -83,7 +118,7 @@ class ChangeMessage extends PureComponent {
                 this.saveItems(fileOnServerUrl);
             })
         } else if (!isBase64) {
-            return null;
+            this.saveItems(image);
         }
         return null;
     }
@@ -182,9 +217,14 @@ class ChangeMessage extends PureComponent {
                                 required: true,
                                 message: '请输入排序'
                             }],
+                            validateTrigger: 'onBlur',
                             initialValue: isShowValue ? sorting : ''
                         })(
-                            <InputNumber min={0} placeholder="排序" />
+                            <InputNumber
+                                min={0}
+                                placeholder="排序"
+                                onBlur={this.handleSortBlur}
+                            />
                         )}
                     </FormItem>
                     <FormItem className="modal-form-item">
@@ -241,9 +281,7 @@ class ChangeMessage extends PureComponent {
                                 />
                             )}
                             <div className="form-description">
-                                （在商品管理中查看商品编号，
-                                <Link to="/managementList">商品管理</Link>
-                                ）
+                                （在商品管理中查看商品编号）
                             </div>
                         </FormItem>
                     }

@@ -7,7 +7,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, message } from 'antd';
-import Right from '../../../components/btnRight';
 
 import Utils from '../../../util/util';
 import {
@@ -17,8 +16,6 @@ import {
     supplierLevelOptions,
     supplierPlaceLevelOptions,
 } from '../../../constant/searchParams';
-import { PAGE_SIZE } from '../../../constant';
-import RIGHTS from '../../../constant/right'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -77,9 +74,9 @@ class SearchForm extends Component {
             providerName,
             providerNo,
             registLicenceNumber,
-            providerType,
-            status,
-            grade,
+            providerType: providerType === '0' ? null : providerType,
+            status: status === '0' ? null : status,
+            grade: grade === '0' ? null : grade,
             settledDate: this.state.settledDate
         };
         this.searchData = Utils.removeInvalid(searchData);
@@ -163,6 +160,9 @@ class SearchForm extends Component {
         const { onReset } = this.props;
         this.searchData = {};
         this.props.form.resetFields();
+        this.setState({
+            supplierType: 0,
+        });
         this.setState({rengeTime: null});
         onReset(this.searchData);
     }
@@ -346,18 +346,6 @@ class SearchForm extends Component {
                                 搜索
                             </Button>
                         </FormItem>
-                        {/* {
-                            this.props.isSuplierAddMenu &&
-                            <FormItem>
-                                <Button
-                                    type="primary"
-                                    size="default"
-                                    onClick={this.handleAddValue}
-                                >
-                                    创建
-                                </Button>
-                            </FormItem>
-                        } */}
                         <FormItem>
                             <Button size="default" onClick={this.handleResetValue}>
                                 重置

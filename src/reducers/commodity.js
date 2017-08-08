@@ -26,6 +26,8 @@ const initState = Immutable.fromJS({
 
     // 控制弹出框显示影藏
     toAddPriceVisible: false,
+    // 修改采购关系
+    updateProdPurchase: false,
     // 是否是编辑
     isEdit: false,
     purchasingPiceVisible: false,
@@ -58,20 +60,23 @@ const initState = Immutable.fromJS({
 
     // IBM 修改
     // 查看是否存在主供应商
-    checkMainSupplier: {},
+    checkMainSupplier: false,
     // 查询商品价格信息
     getProdPurchaseById: {},
     // 根据主键查询商品采购关系
     getProdPurchaseByIds: {},
 
     // 根据条件查询商品价格信息
-    queryProdPurchaseExtByCondition: [],
+    purchaseCardData: {},
 
     // 根据条件查询商品价格信息
     changeSupType: {},
 
     // 查询商品信息
     getProductById: {},
+
+    // 更新商品信息
+    updateProdRecord: {},
 
 });
 
@@ -125,6 +130,12 @@ export default function (state = initState, action) {
                 ;
         }
 
+        // 修改采购价格弹窗
+        case ActionType.UPDATE_PROD_PURCHASE_BYID: {
+            const { isVisible, record } = action.payload;
+            return state.set('updateProdPurchase', isVisible).set('updateProdRecord', record)
+        }
+
         case ActionType.RECEIVE_COMMODITY_DETAIL:
             return state.set('commodityDetail', action.payload);
 
@@ -159,7 +170,11 @@ export default function (state = initState, action) {
             return state.set('changeSupType', action.payload);
 
         case ActionType.GET_PRODUCT_BY_ID:
+        console.log(action.payload)
             return state.set('getProductById', action.payload);
+
+        case ActionType.QUERY_PRODBY_CONDITION:
+            return state.set('purchaseCardData', action.payload);
 
         default:
             return state;

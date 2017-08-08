@@ -227,8 +227,7 @@ class CheckReason extends PureComponent {
                     this.props.fetchQueryManageList({
                         pageNum: this.current,
                         pageSize: PAGE_SIZE,
-                        providerType: 1,
-                        status: 0
+                        ...this.searchForm
                     })
                 }).catch(() => {
                     this.props.modifyCheckReasonVisible({isVisible: false});

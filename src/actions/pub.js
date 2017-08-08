@@ -11,10 +11,18 @@ import {
     findCompanyBaseInfo,
     queryBrandsByPages,
     querySuppliersList,
+    goodsChangeStatus,
+    prodBatchPutAway,
+    prodBatchUpdate,
+    availablProducts,
     fetchAddProdPurchase,
     supplierSearchBox,
     supplierAdrSearchBox,
-    getWarehouseInfo1
+    getWarehouseInfo1,
+    queryAllCategoriesWithIconByParentId,
+    getStoreInfo,
+    querycategories,
+    getFranchiseeInfo,
 } from '../service';
 
 const pubValueList = {
@@ -24,6 +32,14 @@ const pubValueList = {
     queryBrandsByPages,
     // 通过表单值查询供应商地点列表
     querySuppliersList,
+    // 商品的暂停购进和恢复采购
+    goodsChangeStatus,
+    // 商品的区域性批量上架
+    prodBatchPutAway,
+    // 商品的区域性批量下架
+    prodBatchUpdate,
+    // 批量全国上下架
+    availablProducts,
     // 新增商品关系
     fetchAddProdPurchase,
     // 供应商选择组件
@@ -31,7 +47,13 @@ const pubValueList = {
     // 供应商地点选择组件
     supplierAdrSearchBox,
     // 查询逻辑仓库列表
-    getWarehouseInfo1
+    getWarehouseInfo1,
+    // 查询门店列表
+    getStoreInfo,
+    // 根据分类名字或者编码查询指定等级的分类列表
+    querycategories,
+    // 查询加盟商
+    getFranchiseeInfo 
 }
 
 const receiveCollapsed = (isCollapsed) => ({
@@ -72,6 +94,23 @@ export const fetchCategorys = (params) => dispatch => (
         queryCategorys(params)
             .then(res => {
                 dispatch(receiveAllCategorys(res.data));
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+const receiveCategorysById = (data) => ({
+    type: ActionType.RECEIVE_CATEGORYS_BY_ID,
+    payload: data,
+});
+// 查询单级分类信息
+export const fetchCategorysById = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryAllCategoriesWithIconByParentId(params)
+            .then(res => {
+                dispatch(receiveCategorysById(res.data));
             })
             .catch(err => {
                 reject(err);

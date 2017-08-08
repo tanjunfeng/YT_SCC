@@ -25,7 +25,10 @@ import {
     getProductById,
     addProdPurchase,
     getProdPurchaseById,
-    queryProdPurchaseExtByCondition
+    queryProdPurchaseExtByCondition,
+    fetchChangeSupType,
+    updateProdPurchase,
+    changeProPurchaseStatus
 } from '../service';
 import ActionType from './ActionType';
 
@@ -107,7 +110,7 @@ const receivetoUpdate = (data) => ({
 
 export const toUpdateSell = (params) => dispatch => (
     new Promise((resolve, reject) => {
-       toUpdateSellPrice(params)
+        toUpdateSellPrice(params)
             .then(res => {
                 dispatch(receivetoUpdate(res.data));
                 resolve(res.data);
@@ -369,7 +372,7 @@ export const GetProdPurchaseById = (params) => dispatch => (
 
 // 根据条件查询商品价格信息
 const receiveQueryProdPurchaseExtByCondition = (data) => ({
-    type: ActionType.GET_PRODPURCHASE_BYID,
+    type: ActionType.QUERY_PRODBY_CONDITION,
     payload: data,
 });
 
@@ -378,6 +381,72 @@ export const QueryProdPurchaseExtByCondition = (params) => dispatch => (
         queryProdPurchaseExtByCondition(params)
             .then(res => {
                 dispatch(receiveQueryProdPurchaseExtByCondition(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 更改供应商类型
+const receiveChangeSupplierType = (data) => ({
+    type: ActionType.QUERY_PRODBY_CONDITION,
+    payload: data,
+});
+
+export const ChangeSupplierType = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        fetchChangeSupType(params)
+            .then(res => {
+                dispatch(receiveChangeSupplierType(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 修改采购关系
+const receiveUpdateProdPurchase = (data) => ({
+    type: ActionType.UPDATE_PROD_PURCHASE_BYID,
+    payload: data,
+});
+
+export const UpdateProdPurchase = (isShow) => dispatch =>
+    dispatch(receiveUpdateProdPurchase(isShow));
+
+// 修改采购关系
+const receiveUpdateProd = (data) => ({
+    type: ActionType.UPDATE_PROD_PURCHASE_BY_ID,
+    payload: data,
+});
+
+export const ChangeUpdateProd = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        updateProdPurchase(params)
+            .then(res => {
+                dispatch(receiveUpdateProd(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 修改采购关系
+const receiveChangeProPurchaseStatus = (data) => ({
+    type: ActionType.CHANGE_PROPURCHASE_STATUS,
+    payload: data,
+});
+
+export const ChangeProPurchaseStatus = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        changeProPurchaseStatus(params)
+            .then(res => {
+                dispatch(receiveChangeProPurchaseStatus(res.data));
                 resolve(res);
             })
             .catch(err => {
