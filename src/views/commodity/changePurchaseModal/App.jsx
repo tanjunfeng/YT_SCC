@@ -38,6 +38,7 @@ const FormItem = Form.Item;
         getProductByIds: state.toJS().commodity.getProductById,
         updateProdPurchase: state.toJS().commodity.updateProdPurchase,
         updateProdRecord: state.toJS().commodity.updateProdRecord,
+        purchaseCardData: state.toJS().commodity.purchaseCardData,
     }),
     dispatch => bindActionCreators({
         fetchAddProdPurchase,
@@ -140,7 +141,7 @@ class ProdModal extends Component {
     handleOky() {
         const { validateFields } = this.props.form;
         const { updateProdRecord } = this.props;
-        console.log(updateProdRecord.supplierType)
+        // console.log(updateProdRecord.supplierType)
         // console.log(this.state.supplyChoose)
         // console.log(this.state.supplyChoose1)
         // console.log(this.state.supplyChoose2)
@@ -207,7 +208,6 @@ class ProdModal extends Component {
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
         // const formData = this.props.form.getFieldsValue();
-        const { getProductByIds } = this.props;
         // console.log(updateProdRecord)
         return (
             <Modal
@@ -229,7 +229,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('purchaseInsideNumber', {
                                             rules: [{ required: true, message: '采购内装数' }],
-                                            initialValue: getProductByIds.purchaseInsideNumber
+                                            initialValue: updateProdRecord.purchaseInsideNumber
                                         })(
                                             <InputNumber min={0} placeholder="内装数" />
                                         )}
@@ -240,7 +240,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('purchasePrice', {
                                             rules: [{ required: true, message: '请输入采购价!' }],
-                                            initialValue: getProductByIds.guidePurchasePrice
+                                            initialValue: updateProdRecord.purchasePrice
                                         })(
                                             <InputNumber min={0} placeholder="采购价" />
                                         )}
@@ -251,7 +251,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('internationalCode', {
                                             rules: [{ required: true, message: '输入商品条码!' }],
-                                            initialValue: getProductByIds.productCode
+                                            initialValue: updateProdRecord.internationalCode
                                         })(
                                             <InputNumber min={0} placeholder="请输入商品条码" />
                                         )}
@@ -271,12 +271,14 @@ class ProdModal extends Component {
                                             ref={ref => { this.searchMind1 = ref }}
                                             onChoosed={this.handleSupplyChoose}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
                                             }, 'supplierSearchBox')}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.spId} - {data.companyName}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={3}
                                             columns={[
                                                 {
                                                     title: '供应商编码',
@@ -304,13 +306,15 @@ class ProdModal extends Component {
                                             compKey="search-mind-key1"
                                             ref={ref => { this.searchMind2 = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                supplierAddressId: params.value
+                                                supplierAddressId: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
                                             }, 'supplierAdrSearchBox')}
                                             onChoosed={this.handleAdressChoose}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.providerNo} - {data.providerName}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={3}
                                             columns={[
                                                 {
                                                     title: '供应商编码',
@@ -354,13 +358,15 @@ class ProdModal extends Component {
                                             compKey="search-mind-key1"
                                             ref={ref => { this.searchMind3 = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
                                             }, 'getWarehouseInfo1')}
                                             onChoosed={this.handleHouseChoose}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.warehouseCode} - {data.warehouseName}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={3}
                                             columns={[
                                                 {
                                                     title: '仓库ID',

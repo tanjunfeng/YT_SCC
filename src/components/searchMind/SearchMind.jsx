@@ -100,8 +100,8 @@ class SearchMind extends PureComponent {
 
             // 单独处理一下 disabled
             if (nextProps.disabled !== this.props.disabled) {
-                next.dropHide = true;
-                next.isFocus = false;
+                next.dropHide = nextProps.disabled;
+                next.isFocus = !nextProps.disabled;
             }
 
             this.setState({
@@ -246,8 +246,8 @@ class SearchMind extends PureComponent {
                 const pager = { ...pagination };
 
                 // 重新更换数据 total
-                if (res[totalIndex]) {
-                    pager.total = res[totalIndex];
+                if (res[totalIndex] || res.data[totalIndex]) {
+                    pager.total = res[totalIndex] || res.data[totalIndex];
                 }
 
                 this.setState({
@@ -255,6 +255,11 @@ class SearchMind extends PureComponent {
                     data: res.data.data,
                     pagination: pager,
                 });
+            })
+            .catch(() => {
+                this.setState({
+                    type: TYPE.DEFAULT
+                })
             })
     }
 

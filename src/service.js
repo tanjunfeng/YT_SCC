@@ -20,9 +20,6 @@ http.response(
         if (res.data.code === 401) {
             LoginLayout();
             return Promise.reject(res);
-        } else if (!res.data.success) {
-            res.code = 8888;
-            return Promise.reject(res);
         }
         return Promise.resolve(res);
     },
@@ -390,7 +387,7 @@ export const queryAllCategories = () => http.get('/category/queryAllCategories')
  * @param newSortOrder
  */
 export const updateSortNum = ({ id, newSortOrder }) => (
-    http.get('/category/updateSortNum', { id, newSortOrder })
+    http.post('/category/updateSortNum', { id, newSortOrder })
 );
 
 /**
@@ -399,7 +396,7 @@ export const updateSortNum = ({ id, newSortOrder }) => (
  * @param displayStatus
  */
 export const updateShowStatus = ({ id, displayStatus }) => (
-    http.get('/category/updateShowStatus', { id, displayStatus })
+    http.post('/category/updateShowStatus', { id, displayStatus })
 );
 
 // 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
@@ -491,8 +488,7 @@ export const getProductById = (params) => http.get('/prodPurchase/getProductById
 export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPages', params);
 
 /* **************procurement*********** */
-// 查询采购单列表
-export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
+
 //删除采购单 参数 1或n个采购单id  [ids] 
 export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
 //查询采购单打印列表
@@ -507,8 +503,8 @@ export const auditPo = (params) => http.post('/provider/auditPo', params);
 /**
  * 采购相关
  */
-// 地点值清单查询接口
-// 仓库地点值清单
+// 查询采购单列表
+export const fetchPurchaseOrder = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderList', params);
 
 // 门店地点值清单
 export const getStoreInfo = (params) => http.get('/store/getStoreInfo', params);
@@ -584,6 +580,8 @@ export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehousePhy
 export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySupplierPlaceRegion', params);
 // 此接口用于通过code和name（后端id就等于code）查询子公司信息
 export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBaseInfo', params);
+// 此接口用于通过code和name（后端id就等于code）查询子公司信息
+export const getFranchiseeInfo = (params) => http.get('/sorder/getFranchiseeInfo', params);
 
 // 订单管理-查询订单列表
 export const queryOrder = (params) => http.get('/sorder/queryOrder', params);
