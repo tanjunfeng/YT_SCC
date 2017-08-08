@@ -19,6 +19,7 @@ import {
 
 import Utils from '../../../util/util';
 import { Validator } from '../../../util/validator';
+import Tip from '../../../util/tip';
 import InlineUpload from '../../../components/inlineUpload';
 import CasadingAddress from '../../../components/ascadingAddress';
 import {
@@ -89,6 +90,7 @@ class BasicInfo extends PureComponent {
     getValue(callback) {
         const { form, detailData, detailSp, isEdit } = this.props;
         const { supplierBasicInfo = {} } = detailData;
+        Tip(!this.orgId, '请选择子公司！');
         form.validateFields((err, values) => {
             if (!err) {
                 const {
@@ -187,7 +189,18 @@ class BasicInfo extends PureComponent {
     }
 
     handleChoose(item) {
-        this.orgId = item.record.id;
+        const { detailData, detailSp, isEdit } = this.props;
+        const { id } = item.record;
+        let spId = null;
+        if (isEdit) {
+            spId = detailSp.spAdrBasic.id
+        }
+        Validator.repeat.orgId(id, detailData.id, spId).then(() => {
+            this.orgId = item.record.id;
+        }).catch((res) => {
+            this.orgCompany.reset();
+            this.orgId = null;
+        });
     }
 
     handleSaveDraft() {
@@ -453,6 +466,7 @@ class BasicInfo extends PureComponent {
                                                         branchCompanyName: param.value
                                                     }, 'findCompanyBaseInfo')
                                                 }
+                                                ref={node => (this.orgCompany = node)}
                                                 onChoosed={this.handleChoose}
                                                 placeholder={'请输入子公司名称'}
                                                 renderChoosedInputRaw={(data) => (

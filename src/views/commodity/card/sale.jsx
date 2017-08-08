@@ -15,6 +15,7 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PAGE_SIZE } from '../../../constant';
+import { MAXGOODS } from '../../../constant'
 import {
     fecthCheckMainSupplier,
     fetchUpdateProdPurchase,
@@ -272,7 +273,7 @@ class SaleCard extends Component {
                                             return (
                                                 <li className={`${prefixCls}-step-item`}>
                                                     <span className={`${prefixCls}-step-item-left`}>
-                                                        {`${i.startNumber} - ${i.endNumber}`}
+                                                        {`${i.startNumber} - ${i.endNumber === MAXGOODS ? '任意' : i.endNumber}`}
                                                     </span>
                                                     <span className={`${prefixCls}-step-item-right`}>
                                                         {i.price}元

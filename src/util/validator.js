@@ -15,7 +15,8 @@ import {
     settledCont,
     checkSupplierName,
     checkBankAccount,
-    checkLicenseNo
+    checkLicenseNo,
+    checkSupplierAddOrgId
 } from '../service';
 
 /**
@@ -250,6 +251,11 @@ export class Validator {
                     });
                 }
             })
+        },
+        orgId: (orgId, parentId, id) => {
+            return checkSupplierAddOrgId(
+                Utils.removeInvalid({orgId, parentId, id})
+            )
         }
     }
     static REGEX = {
