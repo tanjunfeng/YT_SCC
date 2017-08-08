@@ -10,6 +10,7 @@ import Utils from '../../../util/util';
 import { poStatus, locType, poType, locTypeCodes, poStatusCodes, poTypeCodes } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import moment from 'moment';
+import { pubFetchValueList } from '../../../actions/pub';
 import {
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -30,7 +31,8 @@ const dateFormat = "YYYY-MM-DD";
         getShopAddressMap,
         getSupplierMap,
         getSupplierLocMap,
-        fetchPoRcvMngList
+        fetchPoRcvMngList,
+        pubFetchValueList
     }, dispatch)
 )
 class PoRcvMngList extends PureComponent {
@@ -41,7 +43,6 @@ class PoRcvMngList extends PureComponent {
         this.handleCreate = ::this.handleCreate;
         this.onLocTypeChange =::this.onLocTypeChange;
         this.handleGetAddressMap =::this.handleGetAddressMap;
-        this.handleGetSupplierMap =::this.handleGetSupplierMap;
         this.handleGetSupplierLocMap =::this.handleGetSupplierLocMap;
         this.onActionMenuSelect = ::this.onActionMenuSelect;
         this.renderActions = ::this.renderActions;
@@ -49,6 +50,7 @@ class PoRcvMngList extends PureComponent {
         this.searchParams = {};
         this.state = {
             locDisabled: true,  //地点是否可编辑
+            spNo: '',
             supplyChoose: '',   // 供应商选择
         };
         //初始页号
@@ -210,11 +212,7 @@ class PoRcvMngList extends PureComponent {
             addressCd = selectedAddressRawData.code;
         }
         //供应商
-        let spNo;
-        let selectedSupplierRawData = this.supplier.state.selectedRawData;
-        if (selectedSupplierRawData) {
-            spNo = selectedSupplierRawData.code;
-        }
+        let spNo = this.state.spNo;
 
         //供应商地点
         let spAdrNo;
@@ -273,9 +271,24 @@ class PoRcvMngList extends PureComponent {
         //重置form
         this.props.form.resetFields();
         //重置值清单
-        this.supplier.reset();
         this.supplierLoc.reset();
         this.poAddress.reset();
+        this.supplySearchMind.handleClear();    // 供应商查询清空
+    }
+
+
+    // 获取供应商编号
+    handleSupplyChoose = ({ record }) => {
+        this.setState({
+            spNo: record.spAdrid
+        })
+    }
+
+    // 供应商值清单-清除
+    handleSupplyClear = () => {
+        this.setState({
+            spNo: ''
+        });
     }
 
     /**
@@ -308,18 +321,6 @@ class PoRcvMngList extends PureComponent {
                 resolve({ total: 0, data: [] });
             });
         }
-    }
-
-    /**
-     * 查询供应商值清单
-     */
-    handleGetSupplierMap = ({ value, pagination }) => {
-        let companyId = null;//TODO 从session获取？
-        let pageNum = pagination.current || 1;
-        return this.props.getSupplierMap({
-            value, companyId, pageNum
-        });
-
     }
 
     /**
@@ -469,7 +470,7 @@ class PoRcvMngList extends PureComponent {
                                             renderChoosedInputRaw={(companyList) => (
                                                 <div ref={supplier => { this.supplier = supplier }}>{companyList.spId}-{companyList.companyName}</div>
                                             )}
-                                            rowKey="spAdrid"
+                                            rowKey="spNo"
                                             pageSize={5}
                                             columns={[
                                                 {
@@ -486,33 +487,6 @@ class PoRcvMngList extends PureComponent {
                                     </div>
                                 </FormItem>
                             </Col>
-                            {/* <Col span={8}>
-                                <FormItem formItemLayout >
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label"><label>供应商</label> </span>
-                                        <SearchMind
-                                            compKey="comSupplier"
-                                            ref={ref => { this.supplier = ref }}
-                                            fetch={(value, pager) => this.handleGetSupplierMap(value, pager)}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.code} - {data.name}</div>
-                                            )}
-                                            pageSize={2}
-                                            columns={[
-                                                {
-                                                    title: '编码',
-                                                    dataIndex: 'code',
-                                                    width: 150,
-                                                }, {
-                                                    title: '名称',
-                                                    dataIndex: 'name',
-                                                    width: 200,
-                                                }
-                                            ]}
-                                        />
-                                    </div>
-                                </FormItem>
-                            </Col> */}
                             <Col span={8}>
                                 {/* 供应商地点 */}
                                 <FormItem formItemLayout >
@@ -647,7 +621,8 @@ class PoRcvMngList extends PureComponent {
 PoRcvMngList.propTypes = {
     doSearch: PropTypes.func,
     onReset: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any)
+    form: PropTypes.objectOf(PropTypes.any),
+    pubFetchValueList: PropTypes.func
 };
 
 
