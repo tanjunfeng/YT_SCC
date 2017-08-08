@@ -28,7 +28,7 @@
         }
     }
     &.ant-tree li ul {
-        padding: 0;
+        //padding: 0;
         vertical-align: middle;
     }
     .ant-tree-child-tree {
@@ -47,6 +47,7 @@
         margin-top: 2px;
         padding: 0 6px !important;
         z-index: 1000;
+
         .ant-tree-node-content-wrapper {
             width: auto;
         }
