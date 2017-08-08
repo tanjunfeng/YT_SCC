@@ -30,16 +30,19 @@ import {
 import SearchMind from '../../../components/searchMind';
 import moment from 'moment';
 import { pubFetchValueList } from '../../../actions/pub';
-import { getWarehouseAddressMap, getShopAddressMap, getSupplierMap, getSupplierLocMap, fetchPoRcvMngList } from '../../../actions'
+import {
+    getWarehouseAddressMap,
+    getShopAddressMap,
+    getSupplierMap,
+    getSupplierLocMap,
+    fetchPoRcvMngList
+} from '../../../actions'
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 const dateFormat = "YYYY-MM-DD";
 @connect(state => ({
-    poRcvMngList: state
-        .toJS()
-        .procurement
-        .poRcvMngList
+    poRcvMngList: state.toJS().procurement.poRcvMngList
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -154,9 +157,7 @@ class PoRcvMngList extends PureComponent {
             //TODO SearchMind 需实现是否可编辑功能
         }
         //清空地点值
-        this
-            .poAddress
-            .reset();
+        this.poAddress.reset();
     }
     /**
          *
@@ -164,18 +165,11 @@ class PoRcvMngList extends PureComponent {
          *
          */
     editSearchParams() {
-        const { purchaseReceiptNo, purchaseOrderNo, adrType, purchaseOrderType } = this
-            .props
-            .form
-            .getFieldsValue();
+        const { purchaseReceiptNo, purchaseOrderNo, adrType, purchaseOrderType } = this.props.form.getFieldsValue();
 
         //收货日期区间
-        let receivedDuringArr = this
-            .props
-            .form
-            .getFieldValue("receivedDuring") || [];
-        let receivedTimeStart,
-            receivedTimeEnd;
+        let receivedDuringArr = this.props.form.getFieldValue("receivedDuring") || [];
+        let receivedTimeStart, receivedTimeEnd;
         if (receivedDuringArr.length > 0) {
             receivedTimeStart = Date.parse(receivedDuringArr[0].format(dateFormat));
         }
@@ -184,12 +178,8 @@ class PoRcvMngList extends PureComponent {
         }
 
         //获取采购单审批日期区间
-        let auditDuringArr = this
-            .props
-            .form
-            .getFieldValue("auditDuring") || [];
-        let auditDuringFrom,
-            auditDuringTo;
+        let auditDuringArr = this.props.form.getFieldValue("auditDuring") || [];
+        let auditDuringFrom, auditDuringTo;
         if (auditDuringArr.length > 0) {
             auditDuringFrom = Date.parse(auditDuringArr[0].format(dateFormat));
         }
@@ -247,31 +237,20 @@ class PoRcvMngList extends PureComponent {
             pageSize: PAGE_SIZE,
             pageNum: this.current
         }, allParams, this.searchParams, tmp);
-        this
-            .props
-            .fetchPoRcvMngList(allParams);
+        this.props.fetchPoRcvMngList(allParams);
     }
 
     /**
-         * 重置检索条件
-         */
+     * 重置检索条件
+     */
     handleResetValue() {
         //重置检索条件
         this.searchParams = {};
         //重置form
-        this
-            .props
-            .form
-            .resetFields();
-        this
-            .poAddress
-            .reset();
-        this
-            .supplySearchMind
-            .handleClear(); // 供应商查询清空
-        this
-            .addressSearchMind
-            .reset(); // 供应商地址清空
+        this.props.form.resetFields();
+        this.poAddress.reset();
+        this.supplySearchMind.handleClear(); // 供应商查询清空
+        this.addressSearchMind.reset(); // 供应商地址清空
     }
 
     // 获取供应商编号
@@ -308,23 +287,16 @@ class PoRcvMngList extends PureComponent {
 
     handleGetAddressMap = ({ value, pagination }) => {
         //地点类型
-        let { adrType } = this
-            .props
-            .form
-            .getFieldsValue(["adrType"])
+        let { adrType } = this.props.form.getFieldsValue(["adrType"])
         let companyId = null; //TODO 从session获取？
         let pageNum = pagination.current || 1;
         //根据选择的地点类型获取对应地点的值清单
         if (adrType === locTypeCodes.warehouse) {
             //地点类型为仓库
-            return this
-                .props
-                .getWarehouseAddressMap({ value, companyId, pageNum });
+            return this.props.getWarehouseAddressMap({ value, companyId, pageNum });
         } else if (adrType === locTypeCodes.shop) {
             //地点类型为门店
-            return this
-                .props
-                .getShopAddressMap({ value, companyId, pageNum });
+            return this.props.getShopAddressMap({ value, companyId, pageNum });
         } else {
             //如果地点类型为空，返回空promise
             return new Promise(function (resolve, reject) {
@@ -343,12 +315,11 @@ class PoRcvMngList extends PureComponent {
                 </Menu.Item>
             </Menu>
         );
-
         return (
             <Dropdown overlay={menu} placement="bottomCenter">
                 <a className="ant-dropdown-link">
                     表单操作
-          <Icon type="down" />
+                    <Icon type="down" />
                 </a>
             </Dropdown>
         )
@@ -538,9 +509,8 @@ class PoRcvMngList extends PureComponent {
                                                 width: '153px'
                                             }}
                                             size="default">
-                                            {poType
-                                                .data
-                                                .map((item) => {
+                                            {
+                                                poType.data.map((item) => {
                                                     return <Option key={item.key} value={item.key}>{item.value}</Option>
                                                 })
                                             }
@@ -631,12 +601,12 @@ class PoRcvMngList extends PureComponent {
                                 <FormItem>
                                     <Button size="default" onClick={this.handleResetValue}>
                                         重置
-                  </Button>
+                                    </Button>
                                 </FormItem>
                                 <FormItem>
                                     <Button type="primary" onClick={this.handleSearch} size="default">
                                         搜索
-                  </Button>
+                                    </Button>
                                 </FormItem>
                             </Col>
                         </Row>
