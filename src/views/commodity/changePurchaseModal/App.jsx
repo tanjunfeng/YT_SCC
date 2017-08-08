@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { Modal, Form, InputNumber, Checkbox, message } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Util from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
 import { PAGE_SIZE } from '../../../constant';
 import {
@@ -57,7 +58,17 @@ class ProdModal extends Component {
         this.handleOk = ::this.handleOk;
         this.handleCancel = ::this.handleCancel;
         this.handlePriceChange = ::this.handlePriceChange;
-
+        this.ids = {
+            // 供应商id
+            spId: props.updateProdRecord.spId,
+            spNo: props.updateProdRecord.spNo,
+            // 供应商地点id
+            supplierAddressId: props.updateProdRecord.spAdrId,
+            // 仓库id
+            warehouseId: props.updateProdRecord.id,
+            // 分公司id
+            childCompanyId: props.updateProdRecord.branchCompanyId,
+        }
         this.state = {
             isDisabled: true,
             distributeWarehouseId: '',
@@ -73,18 +84,31 @@ class ProdModal extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps)
-        this.setState({
-            //
-            spId: nextProps.updateProdRecord.spId,
-            //
-            spAdrId: nextProps.updateProdRecord.spAdrId,
-            //
-            branchCompanyId: nextProps.updateProdRecord.branchCompanyId,
-            // 仓库ID
-            distributeWarehouseId: nextProps.updateProdRecord.id,
-        });
-        console.log(this.state.spId)
+        const { updateProdRecord = {} } = nextProps;
+        if (this.props.updateProdRecord.spId !== updateProdRecord.spId) {
+            this.setState({
+                //
+                spId: nextProps.updateProdRecord.spId,
+                //
+                spAdrId: nextProps.updateProdRecord.spAdrId,
+                //
+                branchCompanyId: nextProps.updateProdRecord.branchCompanyId,
+                // 仓库ID
+                distributeWarehouseId: nextProps.updateProdRecord.id,
+            });
+            console.log(nextProps.updateProdRecord.spAdrId)
+            this.ids = {
+                // 供应商id
+                spId: nextProps.updateProdRecord.spId,
+                // 供应商地点id
+                supplierAddressId: nextProps.updateProdRecord.spAdrId,
+                // 仓库id
+                warehouseId: nextProps.updateProdRecord.id,
+                // 分公司id
+                childCompanyId: nextProps.updateProdRecord.branchCompanyId,
+                spNo: null
+            }
+        }
     }
 
     /**
@@ -95,6 +119,7 @@ class ProdModal extends Component {
         this.setState({
             supplyChoose: record,
         });
+        this.ids.warehouseId = record.id;
     }
 
     /**
@@ -107,8 +132,19 @@ class ProdModal extends Component {
             supplyChoose2: {},
             supplyChoose3: {},
         });
+        this.ids = {
+            spId: record.id,
+            spNo: record.spNo,
+            supplierAddressId: null,
+            warehouseId: null,
+            childCompanyId: null
+        }
         this.searchMind2.reset();
         this.searchMind3.reset();
+    }
+
+    handleSupplierClear = () => {
+        this.ids.spId = null;
     }
 
     /**
@@ -122,15 +158,37 @@ class ProdModal extends Component {
             isDisabled: false
         });
         this.searchMind3.reset();
-        this.props.GetWarehouseInfo1({
-            supplierAddressId: record.spAdrid,
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
-        }).then((res) => {
-            this.setState({
-                supplyChoose: res.data.data[0]
-            });
-        })
+        this.ids.supplierAddressId = record.spAdrid;
+        this.ids.warehouseId = null;
+        this.ids.childCompanyId = record.branchCompanyId;
+
+        const { spId, spNo } = this.ids;
+
+        if (!spId) {
+            this.props.pubFetchValueList({
+                condition: record.spNo,
+                pageSize: 1,
+                pageNum: 1
+            }, 'supplierSearchBox').then((res) => {
+                const { spNo, companyName, spId } = res.data.data;
+                this.ids.spNo = spNo;
+                this.ids.spId = spId;
+                this.setState({
+                    spNo,
+                    companyName
+                })
+            })
+        }
+        
+        // this.props.GetWarehouseInfo1({
+        //     supplierAddressId: record.spAdrid,
+        //     pageNum: 1,
+        //     pageSize: PAGE_SIZE,
+        // }).then((res) => {
+        //     this.setState({
+        //         supplyChoose: res.data.data[0]
+        //     });
+        // })
     }
 
 
@@ -254,6 +312,7 @@ class ProdModal extends Component {
         // const formData = this.props.form.getFieldsValue();
         // console.log(updateProdRecord)
         const { warehouseCode, warehouseName} = this.state.supplyChoose;
+        const { spNo, companyName } = this.state;
         return (
             <Modal
                 title="修改采购价格"
@@ -310,11 +369,12 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-label`}>*供应商：</span>
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
-                                            defaultValue={`${updateProdRecord.spId} - ${updateProdRecord.spName}`}
+                                            defaultValue={`${spNo || updateProdRecord.spId} - ${companyName || updateProdRecord.spName}`}
                                             style={{ zIndex: 9 }}
                                             compKey="search-mind-key"
                                             ref={ref => { this.searchMind1 = ref }}
                                             onChoosed={this.handleSupplyChoose}
+                                            onClear={this.handleSupplierClear}
                                             fetch={(params) => this.props.pubFetchValueList({
                                                 condition: params.value,
                                                 pageSize: params.pagination.pageSize,
@@ -350,11 +410,12 @@ class ProdModal extends Component {
                                             style={{ zIndex: 8 }}
                                             compKey="search-mind-key1"
                                             ref={ref => { this.searchMind2 = ref }}
-                                            fetch={(params) => this.props.pubFetchValueList({
-                                                supplierAddressId: params.value,
+                                            fetch={(params) => this.props.pubFetchValueList(Util.removeInvalid({
+                                                spId: this.ids.spId,
+                                                condition: params.value,
                                                 pageSize: params.pagination.pageSize,
                                                 pageNum: params.pagination.current || 1
-                                            }, 'supplierAdrSearchBox')}
+                                            }), 'supplierAdrSearchBox')}
                                             onChoosed={this.handleAdressChoose}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.providerNo} - {data.providerName}</div>
@@ -391,11 +452,12 @@ class ProdModal extends Component {
                                             disabled={this.state.isDisabled}
                                             compKey="search-mind-key1"
                                             ref={ref => { this.searchMind3 = ref }}
-                                            fetch={(params) => this.props.pubFetchValueList({
+                                            fetch={(params) => this.props.pubFetchValueList(Util.removeInvalid({
+                                                supplierAddressId: this.ids.supplierAddressId,
                                                 condition: params.value,
                                                 pageSize: params.pagination.pageSize,
                                                 pageNum: params.pagination.current || 1
-                                            }, 'getWarehouseInfo1')}
+                                            }), 'getWarehouseInfo1')}
                                             onChoosed={this.handleHouseChoose}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.warehouseCode} - {data.warehouseName}</div>

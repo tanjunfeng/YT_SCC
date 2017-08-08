@@ -158,7 +158,7 @@ SteppedPrice.propTypes = {
 SteppedPrice.defaultProps = {
     prefixCls: 'stepped-Price',
     inputSize: 'small',
-    min: 1,
+    min: 0,
     defaultValue: initValue,
     handleChange: () => {}
 }
