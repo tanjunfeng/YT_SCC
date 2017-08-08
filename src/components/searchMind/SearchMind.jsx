@@ -163,7 +163,10 @@ class SearchMind extends PureComponent {
      * @return {null}
      */
     getData() {
-        return this.state.selectedRawData;
+        return {
+            value: this.state.value,
+            raw: this.state.selectedRawData,
+        };
     }
 
     /**
@@ -253,6 +256,11 @@ class SearchMind extends PureComponent {
                     data: res.data.data,
                     pagination: pager,
                 });
+            })
+            .catch(() => {
+                this.setState({
+                    type: TYPE.DEFAULT
+                })
             })
     }
 

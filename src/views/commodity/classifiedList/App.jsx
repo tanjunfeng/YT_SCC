@@ -20,7 +20,6 @@ import {
     updateShowStatusAction,
     updateSortNumAction,
 } from '../../../actions/classifiedList';
-import SearchMind from '../../../components/searchMind';
 
 @connect(
     state => ({
@@ -66,7 +65,7 @@ class ClassifiedList extends Component {
             });
             hide();
             callback();
-        }, 5000);
+        }, 3000);
     };
 
     /**
@@ -193,7 +192,6 @@ class ClassifiedList extends Component {
 
         return (
             <div>
-                <SearchMind />
                 <LevelTree
                     data={this.props.data}
                     handleDrop={this.handleDrop}
