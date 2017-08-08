@@ -1,3 +1,8 @@
+/**
+ * 采购管理 - 收货单管理列表
+ * 
+ * @author taoqiyu@yatang.cn
+ */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -22,10 +27,8 @@ import Utils from '../../../util/util';
 import {
     poStatus,
     locType,
-    poType,
-    locTypeCodes,
-    poStatusCodes,
-    poTypeCodes
+    receivedCode,
+    poType
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import moment from 'moment';
@@ -36,7 +39,7 @@ import {
     getSupplierMap,
     getSupplierLocMap,
     fetchPoRcvMngList
-} from '../../../actions'
+} from '../../../actions';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -58,7 +61,6 @@ class PoRcvMngList extends PureComponent {
         this.handleResetValue = ::this.handleResetValue;
         this.handleCreate = ::this.handleCreate;
         this.onLocTypeChange =:: this.onLocTypeChange;
-        this.handleGetAddressMap =:: this.handleGetAddressMap;
         this.onActionMenuSelect = ::this.onActionMenuSelect;
         this.renderActions = ::this.renderActions;
         this.queryRcvMngPoList =:: this.queryRcvMngPoList;
@@ -67,6 +69,7 @@ class PoRcvMngList extends PureComponent {
             locDisabled: true, //地点是否可编辑
             spNo: '', // 供应商编码
             spAdrNo: '', // 供应商地点编码
+            adrTypeCode: '' // 地点编码
         };
         //初始页号
         this.current = 1;
@@ -141,12 +144,12 @@ class PoRcvMngList extends PureComponent {
         ]
     }
     /**
-         * 根据地点类型值控制地点值清单是否可编辑
-         * 地点类型有值时：地点值清单可编辑
-         * 地点类型无值时：地点值清单不可编辑、清空地点值清单
-         *
-         * @param {*} value
-         */
+     * 根据地点类型值控制地点值清单是否可编辑
+     * 地点类型有值时：地点值清单可编辑
+     * 地点类型无值时：地点值清单不可编辑、清空地点值清单
+     *
+     * @param {*} value
+     */
     onLocTypeChange(value) {
         //地点类型有值
         if (value) {
@@ -160,10 +163,10 @@ class PoRcvMngList extends PureComponent {
         this.poAddress.reset();
     }
     /**
-         *
-         * 返回查询条件
-         *
-         */
+     *
+     * 返回查询条件
+     *
+     */
     editSearchParams() {
         const { purchaseReceiptNo, purchaseOrderNo, adrType, purchaseOrderType } = this.props.form.getFieldsValue();
 
@@ -187,23 +190,20 @@ class PoRcvMngList extends PureComponent {
             auditDuringTo = Date.parse(auditDuringArr[1].format(dateFormat));
         }
 
-        //地点
-        let addressCd;
-        let selectedAddressRawData = this.poAddress.state.selectedRawData;
-        if (selectedAddressRawData) {
-            addressCd = selectedAddressRawData.code;
-        }
         //供应商编号
         let spNo = this.state.spNo;
 
         //供应商地点编号
         let spAdrNo = this.state.spAdrNo;
 
+        //地点
+        let adrTypeCode = this.state.adrTypeCode;
+
         const searchParams = {
             purchaseReceiptNo,
             purchaseOrderNo,
             adrType,
-            addressCd,
+            adrTypeCode,
             purchaseOrderType,
             spNo,
             spAdrNo,
@@ -218,8 +218,8 @@ class PoRcvMngList extends PureComponent {
     }
 
     /**
-         * 查询收货单管理列表
-         */
+     * 查询收货单管理列表
+     */
     handleSearch() {
         //编辑查询条件
         this.editSearchParams();
@@ -251,6 +251,7 @@ class PoRcvMngList extends PureComponent {
         this.poAddress.reset();
         this.supplySearchMind.handleClear(); // 供应商查询清空
         this.addressSearchMind.reset(); // 供应商地址清空
+        this.searchMind.reset(); // 收货地址清空
     }
 
     // 获取供应商编号
@@ -264,45 +265,39 @@ class PoRcvMngList extends PureComponent {
     }
 
     /**
-         * 获取供应商地点编号
-         */
+     * 获取供应商地点编号
+     */
     handleAdressChoose = ({ record }) => {
         this.setState({ spAdrNo: record.spAdrid });
     }
 
     /**
-         * 清空供应商地点编号
-         */
+     * 清空供应商地点编号
+     */
     handleAdressClear = ({ record }) => {
         this.setState({ spAdrNo: '' });
     }
 
     /**
-         * 点击新建按钮跳转到采购单收货列表
-         */
+     * 获取收货地点编号
+     */
+    handleReceiveAdressChoose = ({ record }) => {
+        this.setState({ adrTypeCode: record.warehouseCode });
+    }
+
+    /**
+     * 清空收货地点编号
+     */
+    handleReceiveAdressClear = ({ record }) => {
+        this.setState({ adrTypeCode: '' });
+    }
+
+    /**
+     * 点击新建按钮跳转到采购单收货列表
+     */
     handleCreate() {
         const { history } = this.props;
         history.push('/porcvlist');
-    }
-
-    handleGetAddressMap = ({ value, pagination }) => {
-        //地点类型
-        let { adrType } = this.props.form.getFieldsValue(["adrType"])
-        let companyId = null; //TODO 从session获取？
-        let pageNum = pagination.current || 1;
-        //根据选择的地点类型获取对应地点的值清单
-        if (adrType === locTypeCodes.warehouse) {
-            //地点类型为仓库
-            return this.props.getWarehouseAddressMap({ value, companyId, pageNum });
-        } else if (adrType === locTypeCodes.shop) {
-            //地点类型为门店
-            return this.props.getShopAddressMap({ value, companyId, pageNum });
-        } else {
-            //如果地点类型为空，返回空promise
-            return new Promise(function (resolve, reject) {
-                resolve({ total: 0, data: [] });
-            });
-        }
     }
 
     renderActions(text, record, index) {
@@ -392,11 +387,9 @@ class PoRcvMngList extends PureComponent {
                                                 width: '153px'
                                             }}
                                             size="default">
-                                            {poType
-                                                .data
-                                                .map((item) => {
-                                                    return <Option key={item.key} value={item.key}>{item.value}</Option>
-                                                })
+                                            {poType.data.map((item) => {
+                                                return <Option key={item.key} value={item.key}>{item.value}</Option>
+                                            })
                                             }
                                         </Select>
                                     )}
@@ -441,7 +434,8 @@ class PoRcvMngList extends PureComponent {
                                                     dataIndex: 'companyName',
                                                     width: 200
                                                 }
-                                            ]} />
+                                            ]}
+                                        />
                                     </div>
                                 </FormItem>
                             </Col>
@@ -496,21 +490,22 @@ class PoRcvMngList extends PureComponent {
                                                     dataIndex: 'providerName',
                                                     width: 200
                                                 }
-                                            ]} />
+                                            ]}
+                                        />
                                     </div>
                                 </FormItem>
                             </Col>
                             <Col span={6}>
                                 {/* 收货单状态 */}
                                 <FormItem label="收货单状态">
-                                    {getFieldDecorator('purchaseReceiptStatus', { initialValue: poType.defaultValue })(
+                                    {getFieldDecorator('purchaseReceiptStatus', { initialValue: receivedCode.defaultValue })(
                                         <Select
                                             style={{
                                                 width: '153px'
                                             }}
                                             size="default">
                                             {
-                                                poType.data.map((item) => {
+                                                receivedCode.data.map((item) => {
                                                     return <Option key={item.key} value={item.key}>{item.value}</Option>
                                                 })
                                             }
@@ -530,11 +525,9 @@ class PoRcvMngList extends PureComponent {
                                             }}
                                             size="default"
                                             onChange={this.onLocTypeChange}>
-                                            {locType
-                                                .data
-                                                .map((item) => {
-                                                    return <Option key={item.key} value={item.key}>{item.value}</Option>
-                                                })
+                                            {locType.data.map((item) => {
+                                                return <Option key={item.key} value={item.key}>{item.value}</Option>
+                                            })
                                             }
                                         </Select>
                                     )}
@@ -548,27 +541,37 @@ class PoRcvMngList extends PureComponent {
                                             <label>地点</label>
                                         </span>
                                         <SearchMind
-                                            compKey="comPoAddress"
-                                            ref={ref => {
-                                                this.poAddress = ref
-                                            }}
-                                            fetch={(value, pager) => this.handleGetAddressMap(value, pager)}
+                                            style={{ zIndex: 7 }}
+                                            compKey="search-mind-key1"
+                                            rowKey="id"
+                                            ref={ref => { this.searchMind = ref }}
+                                            fetch={(params) => this.props.pubFetchValueList({
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
+                                            }, 'getWarehouseInfo1')}
+                                            onChoosed={this.handleReceiveAdressChoose}
+                                            onClear={this.handleReceiveAdressClear}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.code}
-                                                    - {data.name}</div>
+                                                <div>{data.warehouseCode} - {data.warehouseName}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={3}
                                             columns={[
                                                 {
-                                                    title: '编码',
-                                                    dataIndex: 'code',
-                                                    width: 150
+                                                    title: '仓库ID',
+                                                    dataIndex: 'id',
+                                                    width: 150,
                                                 }, {
-                                                    title: '名称',
-                                                    dataIndex: 'name',
-                                                    width: 200
+                                                    title: '仓库编码',
+                                                    dataIndex: 'warehouseCode',
+                                                    width: 200,
+                                                }, {
+                                                    title: '仓库名称',
+                                                    dataIndex: 'warehouseName',
+                                                    width: 200,
                                                 }
-                                            ]} />
+                                            ]}
+                                        />
                                     </div>
                                 </FormItem>
                             </Col>
