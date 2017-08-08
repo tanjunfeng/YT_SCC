@@ -91,7 +91,7 @@ class SearchMind extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        // if (!Utils.isEqual(nextProps, this.props)) {
+        if (!Utils.isEqual(nextProps, this.props)) {
             const next = { ...nextProps };
 
             if (nextProps.defaultValue !== this.props.defaultValue) {
@@ -107,7 +107,7 @@ class SearchMind extends PureComponent {
             this.setState({
                 ...next
             });
-        // }
+        }
     }
 
     componentWillUnmount() {
