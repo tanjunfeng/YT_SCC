@@ -1,6 +1,5 @@
 /**
  * @file App.jsx
- *
  * @author shijinhua,caoyanxuan
  *
  * 公共searchForm
@@ -12,6 +11,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PAGE_SIZE } from '../../../constant';
 import {
+    fecthCheckMainSupplier,
     fetchGetProdPurchaseById,
     fetchCheckMainSupplier,
     fetchUpdateProdPurchase,
@@ -34,6 +34,7 @@ import {
         checkMainSupplier: state.toJS().commodity.checkMainSupplier,
     }),
     dispatch => bindActionCreators({
+        fecthCheckMainSupplier,
         fetchGetProdPurchaseById,
         fetchCheckMainSupplier,
         fetchUpdateProdPurchase,
@@ -409,6 +410,8 @@ Cardline.propTypes = {
     prefixCls: PropTypes.string,
     id: PropTypes.string,
     index: PropTypes.number,
+    fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),
+    isSale: PropTypes.bool,
     initData: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,
     proId: PropTypes.string,
@@ -416,6 +419,7 @@ Cardline.propTypes = {
 
 Cardline.defaultProps = {
     prefixCls: 'card-line',
+    isSale: false,
     goto: () => {},
 };
 
