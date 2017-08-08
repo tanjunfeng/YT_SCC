@@ -6,9 +6,9 @@
  */
 import ActionType from '../ActionType';
 
-const receive = (data) => ({
-    type: ActionType.MODIFY_AUDIT_MODAL_VISIBLE,
+// 订单管理-取消
+const receiveCause = (data) => ({
+    type: ActionType.MODIFY_CAUSE_MODAL_VISIBLE,
     payload: data,
 });
-// 搜索推荐配置页-模态框(cyx)
-export const modifyAuditModalVisible = (isShow) => dispatch => dispatch(receive(isShow));
+export const modifyCauseModalVisible = (isShow) => dispatch => dispatch(receiveCause(isShow));

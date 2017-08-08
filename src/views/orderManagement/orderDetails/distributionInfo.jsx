@@ -11,162 +11,93 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
-    Form, Icon, Row, Col, Select, Modal, InputNumber,
-    DatePicker, Button, message, Table, Input,
+    Form, Icon, Row, Col, Select, Modal,
+    Input, DatePicker, Button, message, Table
 } from 'antd';
 import moment from 'moment';
-import { modifyDistributionColumns } from '../../../actions/modify/modifyDistributionColumns';
 import { DATE_FORMAT } from '../../../constant/index';
 
-const Option = Select.Option;
-const FormItem = Form.Item;
-const confirm = Modal.confirm;
+const columns = [{
+    title: '商品编码',
+    dataIndex: 'skuId',
+    key: 'skuId',
+}, {
+    title: '商品名称',
+    dataIndex: 'productName',
+    key: 'productName',
+}, {
+    title: '订单数量',
+    dataIndex: 'quantity',
+    key: 'quantity',
+    render: (text, record) => (
+        <span>
+            <span>{text}</span>
+            <span>{record.unit}</span>
+        </span>
+    )
+}, {
+    title: '配送数量',
+    dataIndex: 'shippedQuantity',
+    key: 'shippedQuantity',
+    render: (text, record) => (
+        <span>
+            <span>{text}</span>
+            <span>{record.unit}</span>
+        </span>
+    )
+}, {
+    title: '单价',
+    dataIndex: 'salePrice',
+    key: 'salePrice',
+    render: (text) => (
+        <span>￥{text}</span>
+    )
+}, {
+    title: '签收数量',
+    dataIndex: 'completedQuantity',
+    key: 'completedQuantity',
+    render: (text, record) => (
+        <span>
+            <span>{text}</span>
+            <span>{record.unit}</span>
+        </span>
+    )
+}, {
+    title: '签收差额',
+    dataIndex: 'completedMulAmount',
+    key: 'completedMulAmount',
+    render: (text) => (
+        <span>{text}元</span>
+    )
+}];
 
 @connect(
     state => ({
-        // ToDo：查询调接口时，需要走redux拿数据
+        shippingDetailData: state.toJS().order.shippingDetailData,
     }),
     dispatch => bindActionCreators({
-        modifyDistributionColumns
     }, dispatch)
 )
 class DistributionInformation extends PureComponent {
     constructor(props) {
         super(props);
-        this.handleDistributionSave = ::this.handleDistributionSave;
-        this.onDeliveryDateChange = ::this.onDeliveryDateChange;
-        this.onWillArrivalDateChange = ::this.onWillArrivalDateChange;
         this.state = {
-            deliveryDate: props.initialData.deliveryDate,
-            willArrivalDate: props.initialData.willArrivalDate,
         }
-        this.columns = [{
-            title: '商品编码',
-            dataIndex: 'commodifyNumber',
-            key: 'commodifyNumber',
-        }, {
-            title: '商品名称',
-            dataIndex: 'commodifyName',
-            key: 'commodifyName',
-        }, {
-            title: '订单数量',
-            dataIndex: 'number',
-            key: 'number',
-            render: (text) => (
-                <span>
-                    <span>{text}</span>
-                    <span>{props.initialData.unit}</span>
-                </span>
-            )
-        }, {
-            title: '配送数量',
-            dataIndex: 'deliveryNumber',
-            key: 'deliveryNumber',
-            render: (text, record, index) => (
-                <span>
-                    <InputNumber
-                        value={text}
-                        min={0}
-                        max={record.number}
-                        onChange={(value) => {
-                            props.modifyDistributionColumns(index, value, 'deliveryNumber');
-                        }}
-                    />
-                    <span>{}</span>
-                </span>
-            )
-        }, {
-            title: '单价',
-            dataIndex: 'price',
-            key: 'price',
-            render: (text) => (
-                <span>￥{text}</span>
-            )
-        }, {
-            title: '签收数量',
-            dataIndex: 'getNumber',
-            key: 'getNumber',
-            render: (text, record, index) => (
-                <span>
-                    <InputNumber
-                        value={text}
-                        min={0}
-                        max={record.deliveryNumber}
-                        onChange={(value) => {
-                            props.modifyDistributionColumns(index, value, 'getNumber');
-                        }}
-                    />
-                    <span>{}</span>
-                </span>
-            )
-        }, {
-            title: '签收差额',
-            dataIndex: 'differMoney',
-            key: 'differMoney',
-            render: (text) => (
-                <span>{text}元</span>
-            )
-        }];
     }
 
     componentDidMount() {
     }
 
-    /**
-     * 配送日期
-     * @param {moment} date moment对象
-     */
-    onDeliveryDateChange(date) {
-        this.setState({
-            deliveryDate: date === null ? null : String(date.valueOf())
-        })
-    }
-
-    /**
-     * 预期到达日期
-     * @param {moment} date moment对象
-     */
-    onWillArrivalDateChange(date) {
-        this.setState({
-            willArrivalDate: date === null ? null : String(date.valueOf())
-        })
-    }
-
-    /**
-     * 保存
-     */
-    handleDistributionSave() {
-        // const {
-        //     logisticsProvider,
-        //     logisticsNumber,
-        //     deliverier,
-        //     contact
-        // } = this.props.form.getFieldsValue();
-        confirm({
-            title: '保存',
-            content: '确认保存备注信息？',
-            onOk: () => {
-                this.props.form.validateFields((err) => {
-                    if (!err) {
-                        // ToDo：带数据发请求，提交表单
-
-                        // 日期（时间戳）
-                        // console.log( this.state.deliveryDate)
-                        // console.log( this.state.willArrivalDate)
-                        message.success('保存成功！');
-                    }
-                })
-            },
-            onCancel() {},
-        });
-    }
-
     render() {
-        const { getFieldDecorator } = this.props.form;
-        const { initialData } = this.props;
-        const deliveryDate = moment(parseInt(initialData.deliveryDate, 10)).format(DATE_FORMAT);
-        const willArrivalDate
-        = moment(parseInt(initialData.willArrivalDate, 10)).format(DATE_FORMAT);
+        const {
+            shippingMethod,
+            shipOnDate,
+            shippingNo,
+            estimatedArrivalDate,
+            deliveryer,
+            deliveryerPhone,
+            shippingProductDtos,
+        } = this.props.shippingDetailData;
         return (
             <div>
                 <div className="order-details-item">
@@ -175,157 +106,49 @@ class DistributionInformation extends PureComponent {
                             <Icon type="credit-card" className="detail-message-header-icon" />
                             配送汇总
                         </div>
-                        <div>
-                            <Form layout="inline" className="manage-form">
-                                <div className="gutter-example">
-                                    <Row gutter={16}>
-                                        <Col className="gutter-row" span={8}>
-                                            <FormItem>
-                                                <div>
-                                                    <span className="sc-form-item-label">
-                                                        <span className="red-star">*</span>
-                                                        物流商
-                                                    </span>
-                                                    {getFieldDecorator('logisticsProvider', {
-                                                        rules: [{
-                                                            validator: (rule, value, callback) => {
-                                                                if (value === '全部') {
-                                                                    callback('请选择物流商');
-                                                                }
-                                                                callback();
-                                                            }
-                                                        }],
-                                                        initialValue: initialData.logisticsProvider
-                                                        ? initialData.logisticsProvider
-                                                        : '全部'
-                                                    })(
-                                                        <Select
-                                                            size="default"
-                                                        >
-                                                            {
-                                                                initialData.logisticsProviders.map(
-                                                                    (item) =>
-                                                                    (<Option
-                                                                        key={item}
-                                                                        value={item}
-                                                                    >
-                                                                        {item}
-                                                                    </Option>)
-                                                                )
-                                                            }
-                                                        </Select>
-                                                    )}
-                                                </div>
-                                            </FormItem>
-                                        </Col>
-                                        <Col className="gutter-row" span={8}>
-                                            <FormItem>
-                                                <div>
-                                                    <span className="sc-form-item-label">
-                                                        <span className="red-star">*</span>
-                                                        配送日期
-                                                    </span>
-                                                    <DatePicker
-                                                        defaultValue={moment(deliveryDate, DATE_FORMAT)}
-                                                        onChange={this.onDeliveryDateChange}
-                                                    />
-                                                </div>
-                                            </FormItem>
-                                        </Col>
-                                        <Col className="gutter-row" span={8}>
-                                            <FormItem>
-                                                <div>
-                                                    <span className="sc-form-item-label">
-                                                        <span className="red-star">*</span>
-                                                        物流单号
-                                                    </span>
-                                                    {getFieldDecorator('logisticsNumber', {
-                                                        rules: [{
-                                                            required: true,
-                                                            message: '请填写物流单号!',
-                                                            whitespace: true
-                                                        }],
-                                                        initialValue: initialData.logisticsNumber
-                                                    })(
-                                                        <Input
-                                                            placeholder="物流单号"
-                                                        />
-                                                    )}
-                                                </div>
-                                            </FormItem>
-                                        </Col>
-                                    </Row>
-                                    <Row gutter={16}>
-                                        <Col className="gutter-row" span={8}>
-                                            <FormItem>
-                                                <div>
-                                                    <span className="sc-form-item-label">
-                                                        <span className="red-star">*</span>
-                                                        预计达到日期
-                                                    </span>
-                                                    {getFieldDecorator('willArrivalDate', {
-                                                        rules: [{
-                                                            required: true,
-                                                            message: '请选择预计达到日期!'
-                                                        }],
-                                                        initialValue: moment(willArrivalDate, DATE_FORMAT)
-                                                    })(
-                                                        <DatePicker
-                                                            onChange={this.onWillArrivalDateChange}
-                                                            className="arrival-date-picker"
-                                                        />
-                                                    )}
-                                                </div>
-                                            </FormItem>
-                                        </Col>
-                                        <Col className="gutter-row" span={8}>
-                                            <FormItem>
-                                                <div>
-                                                    <span className="sc-form-item-label">
-                                                        <span className="red-star">*</span>
-                                                        送货人
-                                                    </span>
-                                                    {getFieldDecorator('deliverier', {
-                                                        rules: [{
-                                                            required: true,
-                                                            message: '请填写送货人!',
-                                                            whitespace: true
-                                                        }],
-                                                        initialValue: initialData.deliverier
-                                                    })(
-                                                        <Input
-                                                            placeholder="送货人"
-                                                        />
-                                                    )}
-                                                </div>
-                                            </FormItem>
-                                        </Col>
-                                        <Col className="gutter-row" span={8}>
-                                            <FormItem>
-                                                <div>
-                                                    <span className="sc-form-item-label">
-                                                        <span className="red-star">*</span>
-                                                        联系方式
-                                                    </span>
-                                                    {getFieldDecorator('contact', {
-                                                        rules: [{
-                                                            required: true,
-                                                            message: '请填写联系方式!',
-                                                            whitespace: true
-                                                        }],
-                                                        initialValue: initialData.contact
-                                                        
-                                                    })(
-                                                        <Input
-                                                            placeholder="联系方式"
-                                                        />
-                                                    )}
-                                                </div>
-                                            </FormItem>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Form>
+                        <div className="detail-message-body">
+                            <Row>
+                                <Col className="gutter-row" span={7}>
+                                    <span className="details-info-lable">物流商:</span>
+                                    <span>{shippingMethod}</span>
+                                </Col>
+                                <Col className="gutter-row" span={7}>
+                                    <span className="details-info-lable">配送日期:</span>
+                                    {
+                                        shipOnDate
+                                        && <span>
+                                            {moment(
+                                                parseInt(shipOnDate, 10)
+                                            ).format(DATE_FORMAT)}
+                                        </span>
+                                    }
+                                </Col>
+                                <Col className="gutter-row" span={10}>
+                                    <span className="details-info-lable">物流单号:</span>
+                                    <span>{shippingNo}</span>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col className="gutter-row" span={7}>
+                                    <span className="details-info-lable">预计达到日期:</span>
+                                    {
+                                        estimatedArrivalDate
+                                        && <span>
+                                            {moment(
+                                                parseInt(estimatedArrivalDate, 10)
+                                            ).format(DATE_FORMAT)}
+                                        </span>
+                                    }
+                                </Col>
+                                <Col className="gutter-row" span={7}>
+                                    <span className="details-info-lable">送货人:</span>
+                                    <span>{deliveryer}</span>
+                                </Col>
+                                <Col className="gutter-row" span={10}>
+                                    <span className="details-info-lable">联系方式:</span>
+                                    <span>{deliveryerPhone}</span>
+                                </Col>
+                            </Row>
                         </div>
                     </div>
                 </div>
@@ -337,8 +160,8 @@ class DistributionInformation extends PureComponent {
                         </div>
                         <div>
                             <Table
-                                dataSource={initialData.distributionInfo}
-                                columns={this.columns}
+                                dataSource={shippingProductDtos}
+                                columns={columns}
                                 pagination={false}
                                 rowKey="commodifyNumber"
                             />
@@ -350,15 +173,8 @@ class DistributionInformation extends PureComponent {
                         <Col className="gutter-row" span={14} offset={10}>
                             <Button
                                 size="default"
-                                onClick={this.handleDistributionSave}
-                                type="primary"
-                            >
-                                保存
-                            </Button>
-                            <Button
-                                size="default"
                                 onClick={() => {
-                                    this.props.history.goBack();
+                                    this.props.history.pop();
                                 }}
                             >
                                 返回
@@ -372,10 +188,8 @@ class DistributionInformation extends PureComponent {
 }
 
 DistributionInformation.propTypes = {
-    form: PropTypes.objectOf(PropTypes.any),
-    initialData: PropTypes.objectOf(PropTypes.any),
+    shippingDetailData: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
-    modifyDistributionColumns: PropTypes.func,
 }
 
 DistributionInformation.defaultProps = {

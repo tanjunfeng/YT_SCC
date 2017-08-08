@@ -60,7 +60,7 @@ const initState = Immutable.fromJS({
 
     // IBM 修改
     // 查看是否存在主供应商
-    checkMainSupplier: {},
+    checkMainSupplier: false,
     // 查询商品价格信息
     getProdPurchaseById: {},
     // 根据主键查询商品采购关系
@@ -170,6 +170,7 @@ export default function (state = initState, action) {
             return state.set('changeSupType', action.payload);
 
         case ActionType.GET_PRODUCT_BY_ID:
+        console.log(action.payload)
             return state.set('getProductById', action.payload);
 
         case ActionType.QUERY_PRODBY_CONDITION:

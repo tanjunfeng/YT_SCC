@@ -19,8 +19,10 @@ import {
     supplierSearchBox,
     supplierAdrSearchBox,
     getWarehouseInfo1,
+    queryAllCategoriesWithIconByParentId,
     getStoreInfo,
-    querycategories
+    querycategories,
+    getFranchiseeInfo,
 } from '../service';
 
 const pubValueList = {
@@ -49,7 +51,9 @@ const pubValueList = {
     // 查询门店列表
     getStoreInfo,
     // 根据分类名字或者编码查询指定等级的分类列表
-    querycategories
+    querycategories,
+    // 查询加盟商
+    getFranchiseeInfo 
 }
 
 const receiveCollapsed = (isCollapsed) => ({
@@ -90,6 +94,23 @@ export const fetchCategorys = (params) => dispatch => (
         queryCategorys(params)
             .then(res => {
                 dispatch(receiveAllCategorys(res.data));
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+const receiveCategorysById = (data) => ({
+    type: ActionType.RECEIVE_CATEGORYS_BY_ID,
+    payload: data,
+});
+// 查询单级分类信息
+export const fetchCategorysById = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryAllCategoriesWithIconByParentId(params)
+            .then(res => {
+                dispatch(receiveCategorysById(res.data));
             })
             .catch(err => {
                 reject(err);
