@@ -16,6 +16,7 @@ import {
 
 import Utils from '../../../util/util';
 import { Validator } from '../../../util/validator';
+import Tip from '../../../util/tip';
 import InlineUpload from '../../../components/inlineUpload';
 import CasadingAddress from '../../../components/ascadingAddress';
 import { addSupplierMessage1 } from '../../../actions/addSupplier';
@@ -43,8 +44,11 @@ class BankInfo extends PureComponent {
         this.handleCompanyAddressChange = ::this.handleCompanyAddressChange;
         this.companyAddress = {};
         this.submitData = {};
+        const { detailData = {} } = this.props;
+        const { supplierBankInfo = {} } = detailData;
+        const { accountName = '' } = supplierBankInfo;
         this.state = {
-            companyName: ''
+            companyName: accountName,
         }
     }
 
@@ -56,8 +60,13 @@ class BankInfo extends PureComponent {
         const { form, onGoTo, isEdit, detailData = {}, data = {} } = this.props;
         const { supplierBasicInfo = {} } = data;
         Tools.checkAddress(this.companyAddress, 'companyAddress', this);
+        const upload = this.nodebankFile.getValue();
+        console.log(this.companyAddress)
+        if (!upload.files.length) {
+            Tip(true, '请上传银行开户许可证电子版');
+            return;
+        }
         form.validateFields((err, values) => {
-            const upload = this.nodebankFile.getValue();
             const { firstValue, secondValue, thirdValue } = this.companyAddress;
             if (!err) {
                 const {
@@ -97,6 +106,18 @@ class BankInfo extends PureComponent {
 
     handleCompanyAddressChange(data) {
         this.companyAddress = data;
+        const { getFieldError } = this.props.form;
+        if (
+            getFieldError('companyAddress')
+            && this.companyAddress.thirdValue
+            && this.companyAddress.thirdValue !== '-1'
+        ) {
+            this.props.form.setFields({
+                companyAddress: {
+                    error: null
+                }
+            })
+        }
     }
 
     handleCompanyNameChange = (e) => {
@@ -134,7 +155,7 @@ class BankInfo extends PureComponent {
                                                     {required: true, message: '请输入开户名'},
                                                     {max: 150, message: '字符长度超限'}
                                                 ],
-                                                initialValue: this.state.companyName ? this.cn : companyName
+                                                initialValue: this.state.companyName ? this.state.companyName : companyName
                                             })(
                                                 <Input
                                                     onChange={this.handleCompanyNameChange}

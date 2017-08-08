@@ -223,7 +223,7 @@ class CommodifyDetail extends PureComponent {
                                 && <li className="detail-message-item">
                                     <span>保质期：</span>
                                     <span>{`${commodityDetail.qualityGuaranteePeriod}
-                                        ${guaranteePeriodUnit}`}</span>
+                                        ${guaranteePeriodUnit()}`}</span>
                                 </li>
                             }
                             {

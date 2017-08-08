@@ -531,7 +531,9 @@ export const queryPoRcvMngList = (params) => http.get('/provider/queryPoRcvMngLi
 // 采购单收货列表   采购单筛选条件：已审核、未收货
 export const queryPoRcvList = (params) => http.get('/provider/queryPoRcvList', params);
 // 查询收货详情 查询参数： 收货单id（poRcvId）或采购单id（poId）
-export const queryPoRcvDetail = (params) => http.get('/provider/queryPoRcvDetail', params);
+// export const queryPoRcvDetail = (params) => http.get('/provider/queryPoRcvDetail', params);
+// 购收货单详情（id，收货单id）
+export const queryPoRcvDetail = (params) => http.get('/pmPurchaseReceipt/queryReceiptDetailById', params);
 // 创建采购收货单
 export const createPoRcv = (params) => http.post('/provider/createPoRcv', params);
 
