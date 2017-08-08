@@ -120,7 +120,7 @@ class SearchForm extends Component {
     handleGetValue() {
         const { validateFields } = this.props.form;
         const { match } = this.props;
-        console.log(this.state.supplyChoose2)
+        // console.log(this.state.supplyChoose2)
         validateFields((err, values) => {
             const status = values.initiateModeOptions === '-1'
                 ? null

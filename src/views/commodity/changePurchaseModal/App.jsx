@@ -133,7 +133,6 @@ class ProdModal extends Component {
         })
     }
 
-
     /**
      * 创建弹框OK时间 (当没有改变时)
      */
@@ -141,6 +140,7 @@ class ProdModal extends Component {
         const { validateFields } = this.props.form;
         const { updateProdRecord } = this.props;
         // console.log(updateProdRecord)
+        console.log(getData())
         validateFields((err, values) => {
             // console.log(values);
             // TODO post data

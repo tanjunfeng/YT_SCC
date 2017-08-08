@@ -60,7 +60,8 @@ class Cardline extends Component {
 
         this.state = {
             checked: true,
-            id: this.props.index
+            id: this.props.index,
+            change: true
         }
     }
 
@@ -99,7 +100,7 @@ class Cardline extends Component {
     /**
      * 修改主供应商时弹框
      */
-    confirmMain(bool) {
+    confirmMain(bool, item) {
         if (bool) {
             Modal.confirm({
                 title: '提示',
@@ -165,7 +166,6 @@ class Cardline extends Component {
             supplierType: 1,
             productId: item.productId
         })
-        // console.log(this.porps.checkMainSupplier)
         if (bool) {
             Modal.confirm({
                 title: '提示',
@@ -179,7 +179,7 @@ class Cardline extends Component {
                         id: item.id,
                         branchCompanyId: item.branchCompanyId,
                         productId: item.productId,
-                        supplierType: item.supplierType,
+                        supplierType: item.supplierType === 1 ? 0 : 1,
                         // supplierType: 1,
                     })
                     .then(() => {
@@ -193,7 +193,7 @@ class Cardline extends Component {
         } else {
             Modal.confirm({
                 title: '提示',
-                content: '是否将当前供应商设置为主供应商',
+                content: '是否切换当前主供应商状态',
                 okText: '确认',
                 cancelText: '取消',
                 maskClosable: false,
@@ -203,7 +203,7 @@ class Cardline extends Component {
                         id: item.id,
                         branchCompanyId: item.branchCompanyId,
                         productId: item.productId,
-                        supplierType: item.supplierType,
+                        supplierType: item.supplierType === 1 ? 0 : 1,
                         // supplierType: 1,
                     })
                     .then(() => {
