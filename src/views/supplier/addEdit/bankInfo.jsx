@@ -236,7 +236,7 @@ class BankInfo extends PureComponent {
                                             {getFieldDecorator('bankAccount', {
                                                 rules: [
                                                     { required: true, message: '请输入银行账号!' },
-                                                    { max: 23, message: '长度超限' },
+                                                    { max: 20, message: '长度超限' },
                                                     {
                                                         validator: (rule, value, callback) => {
                                                             if (!/^[0-9]*$/.test(value)) {

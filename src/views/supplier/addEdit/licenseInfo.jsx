@@ -88,6 +88,7 @@ class LicenseInfo extends PureComponent {
         const generalTaxpayerQualifiCerti = this.refs.generalTaxpayerQualifiCerti.getValue();
         const foodBusinessLicense = this.refs.foodBusinessLicense.getValue();
         const legalRepreCardPic = this.refs.legalRepreCardPic.getValue();
+
         form.validateFields((err, values) => {
             if (!err) {
                 const { firstValue, secondValue, thirdValue } = this.companyAddress;
@@ -268,6 +269,7 @@ class LicenseInfo extends PureComponent {
             supplierOperTaxInfo = {},
             supplierlicenseInfo = {}
         } = initData;
+
         return (
             <div className="supplier-add-message">
                 <Form>
@@ -313,7 +315,7 @@ class LicenseInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}>
-                                        <span>*食品安全认证：</span>
+                                        <span>食品安全认证：</span>
                                         <InlineUpload
                                             showEndTime
                                             datas={isEdit ? [supplierOperTaxInfo.qualityIdentification] : []}
@@ -335,7 +337,7 @@ class LicenseInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}>
-                                        <span>*食品经营许可证：</span>
+                                        <span>食品经营许可证：</span>
                                         <InlineUpload
                                             showEndTime
                                             datas={isEdit ? [supplierOperTaxInfo.foodBusinessLicense] : []}
@@ -375,12 +377,13 @@ class LicenseInfo extends PureComponent {
                                             {getFieldDecorator('registLicenceNumber', {
                                                 rules: [
                                                     { required: true, message: '请输入注册号(营业执照号)!' },
-                                                    {max: 15, message: '字符长度超限'}
                                                 ],
                                                 initialValue: supplierlicenseInfo.registLicenceNumber
                                             })(
-                                                <Input
+                                                <InputNumber
+                                                    style={{width: '200px'}}
                                                     placeholder="注册号(营业执照号)"
+                                                    max={999999999999999}
                                                     onBlur={(e) => { Validator.repeat.licenseNo(e, this, supplierlicenseInfo.id, supplierlicenseInfo.status) }}
                                                 />
                                             )}

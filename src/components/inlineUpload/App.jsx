@@ -20,18 +20,24 @@ class InlineUpload extends Component {
 
     state = {
         fileList: [],
-        result: this.props.datas
+        result: this.props.datas.filter((item) => {
+            return !!item
+        })
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.datas &&
-            nextProps.datas.length > 0
-            && nextProps.datas != this.props.datas
+        if (
+            nextProps.datas
+            && nextProps.datas.length > 0
+            && nextProps.datas.length !== this.props.datas.length
         ) {
+            const newResut = nextProps.datas.filter((item) => {
+                return !!item
+            })
             this.time = nextProps.defaultTime;
             this.setState({
-                fileList: nextProps.datas,
-                result: nextProps.datas
+                fileList: newResut,
+                result: newResut
             }, () => {
                 this.props.onChange(this.state.result);
             })
