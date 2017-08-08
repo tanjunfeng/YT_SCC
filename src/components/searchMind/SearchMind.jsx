@@ -99,8 +99,8 @@ class SearchMind extends PureComponent {
 
             // 单独处理一下 disabled
             if (nextProps.disabled !== this.props.disabled) {
-                next.dropHide = true;
-                next.isFocus = false;
+                next.dropHide = nextProps.disabled;
+                next.isFocus = !nextProps.disabled;
             }
             
             this.setState({

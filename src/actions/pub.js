@@ -21,7 +21,8 @@ import {
     getWarehouseInfo1,
     queryAllCategoriesWithIconByParentId,
     getStoreInfo,
-    querycategories
+    querycategories,
+    getFranchiseeInfo,
 } from '../service';
 
 const pubValueList = {
@@ -50,7 +51,9 @@ const pubValueList = {
     // 查询门店列表
     getStoreInfo,
     // 根据分类名字或者编码查询指定等级的分类列表
-    querycategories
+    querycategories,
+    // 查询加盟商
+    getFranchiseeInfo 
 }
 
 const receiveCollapsed = (isCollapsed) => ({
