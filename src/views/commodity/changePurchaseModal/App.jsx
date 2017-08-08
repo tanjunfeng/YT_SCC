@@ -66,18 +66,25 @@ class ProdModal extends Component {
             supplyChoose2: {},
 
             // 回显值赋值
-            id: '',
             spId: '',
             spAdrId: '',
-            productId: '',
             branchCompanyId: '',
-            supplierType: '',
-            purchaseInsideNumber: '',
-            purchasePrice: '',
-            // 条码
-            internationalCode: '',
-            // 仓库ID
         }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps)
+        this.setState({
+            //
+            spId: nextProps.updateProdRecord.spId,
+            //
+            spAdrId: nextProps.updateProdRecord.spAdrId,
+            //
+            branchCompanyId: nextProps.updateProdRecord.branchCompanyId,
+            // 仓库ID
+            distributeWarehouseId: nextProps.updateProdRecord.id,
+        });
+        console.log(this.state.spId)
     }
 
     /**
@@ -137,46 +144,35 @@ class ProdModal extends Component {
         validateFields((err, values) => {
             // console.log(values);
             // TODO post data
-            const data = {
+            this.props.ChangeUpdateProd({
                 id: updateProdRecord.id,
-                spId: this.state.supplyChoose.spId,
-                spAdrId: updateProdRecord.spAdrId,
+                //
+                spId: this.state.supplyChoose1 !== updateProdRecord.spId
+                    ? this.state.spId : updateProdRecord.spId,
+                //
+                // spAdrId: updateProdRecord.spAdrId,
+                spAdrId: this.state.spAdrId !== updateProdRecord.spAdrId
+                    ? this.state.spAdrId : updateProdRecord.spAdrId,
                 productId: updateProdRecord.productId,
-                branchCompanyId: updateProdRecord.branchCompanyId,
+                //
+                // branchCompanyId: updateProdRecord.branchCompanyId,
+                branchCompanyId: this.state.branchCompanyId !== updateProdRecord.branchCompanyId
+                    ? this.state.branchCompanyId : updateProdRecord.branchCompanyId,
                 supplierType: updateProdRecord.supplierType,
                 purchaseInsideNumber: values.purchaseInsideNumber,
                 purchasePrice: parseFloat(values.purchasePrice),
-                // 条码
                 internationalCode: values.internationalCode,
                 // 仓库ID
-                distributeWarehouseId: this.state.supplyChoose.id,
-            }
-            console.log(data)
-            this.setState(data);
-        })
-        this.props.ChangeUpdateProd({
-            id: this.state.id,
-            // spId: this.state.supplyChoose1.spId,
-            spId: this.state.spId,
-            // spAdrId: this.state.supplyChoose2.spAdrid,
-            spAdrId: this.state.spAdrId,
-            productId: this.state.productId,
-            // branchCompanyId: this.state.supplyChoose2.branchCompanyId,
-            branchCompanyId: this.state.branchCompanyId,
-            supplierType: this.state.supplierType,
-            purchaseInsideNumber: this.state.purchaseInsideNumber,
-            purchasePrice: parseFloat(this.state.purchasePrice),
-            // 条码
-            internationalCode: this.state.internationalCode,
-            // 仓库ID
-            // distributeWarehouseId: this.state.supplyChoose.id
-            distributeWarehouseId: this.state.distributeWarehouseId,
-        }).then((res) => {
-            this.props.UpdateProdPurchase({isVisible: false});
-            message.success(res.message)
-            this.props.goto()
-        }).catch(() => {
-            message.error('操作失败')
+                // distributeWarehouseId: updateProdRecord.id,
+                distributeWarehouseId: this.state.distributeWarehouseId !== updateProdRecord.distributeWarehouseId
+                    ? this.state.distributeWarehouseId : updateProdRecord.distributeWarehouseId,
+            }).then((res) => {
+                this.props.UpdateProdPurchase({isVisible: false});
+                message.success(res.message)
+                this.props.goto()
+            }).catch(() => {
+                message.error('操作失败')
+            })
         })
     }
 

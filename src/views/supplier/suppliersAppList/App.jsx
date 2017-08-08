@@ -57,7 +57,7 @@ class SuppliersAppList extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.renderOperation = this.renderOperation.bind(this);
+        this.renderOperationList = this.renderOperationList.bind(this);
         this.handleFormSearch = this.handleFormSearch.bind(this);
         this.handleFormReset = this.handleFormReset.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
@@ -110,7 +110,7 @@ class SuppliersAppList extends PureComponent {
         if (bool) {
             // 主数据
             // console.log('主数据')
-            console.log(this.current)
+            // console.log(this.current)
             this.props.getSupplierSettledList({
                 pageNum: 1,
                 pageSize: PAGE_SIZE,
@@ -119,7 +119,7 @@ class SuppliersAppList extends PureComponent {
         } else {
             // SCM数据
             // console.log('SCM数据')
-            console.log(this.current)
+            // console.log(this.current)
             this.props.getSupplierSettledList({
                 pageNum: 1,
                 pageSize: PAGE_SIZE,
@@ -167,7 +167,7 @@ class SuppliersAppList extends PureComponent {
         });
     }
 
-    renderOperation(text, record, index) {
+    renderOperationList(text, record, index) {
         const { status, id, providerType, spStatus } = record;
         const { pathname } = this.props.location;
         const menu = (
@@ -177,7 +177,7 @@ class SuppliersAppList extends PureComponent {
                 </Menu.Item>
                 {
                     // 2：已审核、3:已拒绝
-                    (status === 2 || status === 3) &&
+                    (status === 0 || status === 2 || status === 3 || status === 4) &&
                     <Menu.Item key="modifySupInfor">
                         <Link to={`${pathname}/edit/supplier/${id}`}>
                             修改供应商信息
@@ -185,7 +185,7 @@ class SuppliersAppList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    (status === 1 || status === 2) && (spStatus === 0) &&
+                    (status === 1 || status === 2) &&
                     <Menu.Item key="addAddress">
                         <Link to={`${pathname}/add/${id}`}>
                             新增供应商地点信息
@@ -211,7 +211,7 @@ class SuppliersAppList extends PureComponent {
                 </Menu.Item>
                 {
                     // 0： 制单状态、2：已审核、3:已拒绝
-                    (status === 2 || status === 3) &&
+                    (spStatus === 0 || spStatus === 2 || spStatus === 3 || spStatus === 4) &&
                     <Menu.Item key="modifySupAddInfor">
                         <Link to={`${pathname}/edit/${id}`}>
                             修改供应商地点信息
@@ -245,7 +245,7 @@ class SuppliersAppList extends PureComponent {
     render() {
         const { total, pageNum } = this.props.querySettledList;
         const { querySettledList } = this.props;
-        columns[columns.length - 1].render = this.renderOperation;
+        columns[columns.length - 1].render = this.renderOperationList;
         return (
             <div className="application tjf-css-min-width">
                 <SearchForm

@@ -70,7 +70,7 @@ class SupplierInputList extends PureComponent {
 
         this.handleSelect = this.handleSelect.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
-        this.renderOperation = this.renderOperation.bind(this);
+        this.renderOperationInput = this.renderOperationInput.bind(this);
         this.handleFormSearch = this.handleFormSearch.bind(this);
         this.handleFormReset = this.handleFormReset.bind(this);
         this.handleDownLoad = this.handleDownLoad.bind(this);
@@ -159,6 +159,7 @@ class SupplierInputList extends PureComponent {
             this.props.fetchQueryManageList({
                 pageNum: 1,
                 pageSize: PAGE_SIZE,
+                ...this.searchForm
             });
         } else {
             // SCM数据
@@ -166,6 +167,7 @@ class SupplierInputList extends PureComponent {
             this.props.fetchQueryManageList({
                 pageNum: 1,
                 pageSize: PAGE_SIZE,
+                ...this.searchForm
             });
         }
     }
@@ -231,7 +233,7 @@ class SupplierInputList extends PureComponent {
      *
      * return 列表页操作下拉菜单
      */
-    renderOperation(text, record, index) {
+    renderOperationInput(text, record, index) {
         const { status, id, providerType, auditType, spStatus } = record;
         const { pathname } = this.props.location;
         const menu = (
@@ -296,7 +298,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     // 1： 已提交
-                    (spStatus === 2 || spStatus === 3) && status === 1 && auditType === 2 &&
+                    spStatus === 1 && (status === 2 || status === 3) && auditType === 2 &&
                     <Menu.Item key="CheckReasonAdr">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商地点审核
@@ -321,7 +323,7 @@ class SupplierInputList extends PureComponent {
     render() {
         const { total, pageNum } = this.props.queryManageList;
         const { queryManageList } = this.props;
-        columns[columns.length - 1].render = this.renderOperation;
+        columns[columns.length - 1].render = this.renderOperationInput;
         return (
             <div className="manage">
                 <SearchForm

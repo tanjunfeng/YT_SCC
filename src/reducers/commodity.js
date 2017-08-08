@@ -179,7 +179,6 @@ export default function (state = initState, action) {
             return state.set('purchaseCardData', action.payload);
 
         case ActionType.GER_WARE_HOUSE_LOGIC_INFO:
-        console.log(action.payload)
             return state.set('getWarehouseLogicInfo', action.payload);
 
         default:
