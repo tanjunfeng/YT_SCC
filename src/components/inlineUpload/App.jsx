@@ -1,6 +1,9 @@
 import React, { PureComponent, Component } from 'react';
 import PropTypes from 'prop-types';
-import { Upload, Button, Icon, Tooltip, DatePicker } from 'antd';
+import {
+    Upload, Button, Icon, Tooltip,
+    DatePicker, Popconfirm, message
+} from 'antd';
 import classnames from 'classnames';
 import moment from 'moment';
 
@@ -17,18 +20,24 @@ class InlineUpload extends Component {
 
     state = {
         fileList: [],
-        result: []
+        result: this.props.datas.filter((item) => {
+            return !!item
+        })
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.datas &&
-            nextProps.datas.length > 0
-            && nextProps.datas != this.props.datas
+        if (
+            nextProps.datas
+            && nextProps.datas.length > 0
+            && nextProps.datas.length !== this.props.datas.length
         ) {
+            const newResut = nextProps.datas.filter((item) => {
+                return !!item
+            })
             this.time = nextProps.defaultTime;
             this.setState({
-                fileList: nextProps.datas,
-                result: nextProps.datas
+                fileList: newResut,
+                result: newResut
             }, () => {
                 this.props.onChange(this.state.result);
             })
@@ -76,7 +85,7 @@ class InlineUpload extends Component {
 
     render() {
         const { fileList, result } = this.state;
-        const { limit = 1 } = this.props;
+        const { limit = 1, id } = this.props;
         const { apiHost } = config;
         const props = {
             action: `${apiHost}commonUploadFile/uploadFile`,
@@ -84,7 +93,7 @@ class InlineUpload extends Component {
             showUploadList: false
         };
         return (
-            <div className={classnames('inline-upload', {'inline-upload-limit': result.length >= limit})}>
+            <div key={id} className={classnames('inline-upload', {'inline-upload-limit': result.length >= limit})}>
                 {
                     <Upload {...props} fileList={this.state.fileList}>
                         <Tooltip placement="top" title={this.props.title}>
@@ -118,14 +127,21 @@ class InlineUpload extends Component {
                                     >
                                         查看
                                     </a>
-                                    <span
-                                        title="点击删除"
-                                        className="inline-upload-file-delete"
+                                    <Popconfirm
+                                        title="确定删除该文件?"
                                         data-index={index}
-                                        onClick={this.handleDelete}
+                                        onConfirm={this.handleDelete}
+                                        okText="确定"
+                                        cancelText="取消"
                                     >
-                                        删除
-                                    </span>
+                                        <span
+                                            title="点击删除"
+                                            className="inline-upload-file-delete"
+                                            data-index={index}
+                                        >
+                                            删除
+                                        </span>
+                                    </Popconfirm>
                                 </div>
                             )
                         })
@@ -153,8 +169,9 @@ InlineUpload.propTypes = {
     datas: PropTypes.arrayOf(PropTypes.any),
     onChange: PropTypes.func,
     showEndTime: PropTypes.bool,
-    defaultTime: PropTypes.objectOf([ PropTypes.objectOf(PropTypes.any), PropTypes.number]),
+    defaultTime: PropTypes.objectOf([PropTypes.objectOf(PropTypes.any), PropTypes.number]),
     title: PropTypes.string,
+    id: PropTypes.string,
 };
 
 InlineUpload.defaultProps = {
@@ -162,7 +179,8 @@ InlineUpload.defaultProps = {
     onChange: () => {},
     showEndTime: false,
     defaultTime: null,
-    title: '图片仅支持JPG、GIF、PNG格式的图片，大小不超过1M。'
+    title: '图片仅支持JPG、GIF、PNG格式的图片，大小不超过1M。',
+    id: ''
 }
 
 export default InlineUpload;

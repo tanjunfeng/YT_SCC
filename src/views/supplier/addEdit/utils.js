@@ -47,7 +47,9 @@ class Tools {
             if (item.regions) {
                 loop(item.regions, code);
             }
-            checked.push(code);
+            if (code.split('-').length === 3) {
+                checked.push(code);
+            }
         })
         loop(data);
         return checked;

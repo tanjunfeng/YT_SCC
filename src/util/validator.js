@@ -15,7 +15,8 @@ import {
     settledCont,
     checkSupplierName,
     checkBankAccount,
-    checkLicenseNo
+    checkLicenseNo,
+    checkSupplierAddOrgId
 } from '../service';
 
 /**
@@ -36,196 +37,225 @@ export const validatorRebate = (rule, value, callback) => {
 export class Validator {
     static repeat = {
         // 验证公司名是否重复
-        companyName: (e, _this, _id = null) => {
+        companyName: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             checkSupplierName(
-                Utils.removeInvalid({companyName: e.target.value, id: _id})
-            ).catch(() => {
-                _this.props.form.setFields({
-                    companyName: {
-                        errors: [new Error('公司名重复')],
-                    },
-                });
+                Utils.removeInvalid({companyName: e.target.value, id: _id, status: _status})
+            ).catch((res) => {
+                if (res.code) {
+                    _this.props.form.setFields({
+                        companyName: {
+                            errors: [new Error('公司名重复')],
+                        },
+                    });
+                }
             })
         },
         // 验证供应商号是否重复
-        spNo: (e, _this, _id = null) => {
+        spNo: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             settlementInfo(
-                Utils.removeInvalid({spNo: e.target.value, id: _id})
-            ).catch(() => {
-                _this.props.form.setFields({
-                    spNo: {
-                        errors: [new Error('供应商编号重复')],
-                    },
-                });
+                Utils.removeInvalid({spNo: e.target.value, id: _id, status: _status})
+            ).catch((res) => {
+                if (res.code) {
+                    _this.props.form.setFields({
+                        spNo: {
+                            errors: [new Error('供应商编号重复')],
+                        },
+                    });
+                }
             })
         },
         // 验证供应商注册号是否重复
-        spRegNo: (e, _this, _id = null) => {
+        spRegNo: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             settlementInfo(
-                Utils.removeInvalid({spRegNo: e.target.value, id: _id})
-            ).catch(() => {
-                _this.props.form.setFields({
-                    spRegNo: {
-                        errors: [new Error('供应商注册号重复')],
-                    },
-                });
+                Utils.removeInvalid({spRegNo: e.target.value, id: _id, status: _status})
+            ).catch((res) => {
+                if (res.code) {
+                    _this.props.form.setFields({
+                        spRegNo: {
+                            errors: [new Error('供应商注册号重复')],
+                        },
+                    });
+                }
             })
         },
         // 验证主账号是否重复
-        mainAccountNo: (e, _this, _id = null) => {
+        mainAccountNo: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             settlementInfo(
-                Utils.removeInvalid({mainAccountNo: e.target.value, id: _id})
-            ).catch(() => {
-                _this.props.form.setFields({
-                    mainAccountNo: {
-                        errors: [new Error('供应商主账号重复')],
-                    },
-                });
+                Utils.removeInvalid({mainAccountNo: e.target.value, id: _id, status: _status})
+            ).catch((res) => {
+                if (res.code) {
+                    _this.props.form.setFields({
+                        mainAccountNo: {
+                            errors: [new Error('供应商主账号重复')],
+                        },
+                    });
+                }
             })
         },
         // 验证请输入纳税人识别号是否重复
-        taxpayerNumber: (e, _this, _id = null) => {
+        taxpayerNumber: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             taxpayerNumber(
-                Utils.removeInvalid({taxpayerNumber: e.target.value, id: _id})
-            ).catch(() => {
-                _this.props.form.setFields({
-                    taxpayerNumber: {
-                        errors: [new Error('纳税人识别号重复')],
-                    },
-                });
+                Utils.removeInvalid({taxpayerNumber: e.target.value, id: _id, status: _status})
+            ).catch((res) => {
+                if (res.code) {
+                    _this.props.form.setFields({
+                        taxpayerNumber: {
+                            errors: [new Error('纳税人识别号重复')],
+                        },
+                    });
+                }
             })
         },
         // 验证银行账号是否重复
-        bankAccount: (e, _this, _id = null) => {
+        bankAccount: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             checkBankAccount(
-                Utils.removeInvalid({bankAccount: e.target.value, id: _id})
-            ).catch(() => {
-                _this.props.form.setFields({
-                    bankAccount: {
-                        errors: [new Error('银行账号重复')],
-                    },
-                });
+                Utils.removeInvalid({bankAccount: e.target.value, id: _id, status: _status})
+            ).catch((res) => {
+                if (res.code) {
+                    _this.props.form.setFields({
+                        bankAccount: {
+                            errors: [new Error('银行账号重复')],
+                        },
+                    });
+                }
             })
         },
         // 请输入营业执照号是否重复
-        licenseNo: (e, _this, _id = null) => {
+        licenseNo: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             checkLicenseNo(
-                Utils.removeInvalid({licenseNo: e.target.value, id: _id})
-            ).catch(() => {
-                _this.props.form.setFields({
-                    registLicenceNumber: {
-                        errors: [new Error('营业执照号重复')],
-                    },
-                });
+                Utils.removeInvalid({licenseNo: e.target.value, id: _id, status: _status})
+            ).catch((res) => {
+                if (res.code) {
+                    _this.props.form.setFields({
+                        registLicenceNumber: {
+                            errors: [new Error('营业执照号重复')],
+                        },
+                    });
+                }
             })
         },
         // 阻止编号是否重复
-        orgCode: (e, _this, _id = null) => {
+        orgCode: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             orgCodeInfoByCode(
-                Utils.removeInvalid({orgCode: e.target.value, id: _id})
-            ).catch(() => {
-                _this.props.form.setFields({
-                    orgCode: {
-                        errors: [new Error('组织机构代码号重复')],
-                    },
-                });
+                Utils.removeInvalid({orgCode: e.target.value, id: _id, status: _status})
+            ).catch((res) => {
+                if (res.code) {
+                    _this.props.form.setFields({
+                        orgCode: {
+                            errors: [new Error('组织机构代码号重复')],
+                        },
+                    });
+                }
             })
         },
         // 供应商手机号是否重复
-        supplierPhone: (e, _this, _id = null) => {
+        supplierPhone: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             emerCont(
-                Utils.removeInvalid({phone: e.target.value, id: _id})
-            ).catch(() => {
-                _this.props.form.setFields({
-                    sphone: {
-                        errors: [new Error('紧急联系人手机号重复')],
-                    },
-                });
+                Utils.removeInvalid({phone: e.target.value, id: _id, status: _status})
+            ).catch((res) => {
+                if (res.code) {
+                    _this.props.form.setFields({
+                        sphone: {
+                            errors: [new Error('紧急联系人手机号重复')],
+                        },
+                    });
+                }
             })
         },
         // 供应商公司联系电话是否重复
-        companyPhoneNumber: (e, _this, _id = null) => {
+        companyPhoneNumber: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             emerCont(
-                Utils.removeInvalid({companyPhoneNumber: e.target.value, id: _id})
-            ).catch(() => {
-                _this.props.form.setFields({
-                    companyPhoneNumber: {
-                        errors: [new Error('紧急联系人公司联系号码重复')],
-                    },
-                });
+                Utils.removeInvalid({companyPhoneNumber: e.target.value, id: _id, status: _status})
+            ).catch((res) => {
+                if (res.code) {
+                    _this.props.form.setFields({
+                        companyPhoneNumber: {
+                            errors: [new Error('紧急联系人公司联系号码重复')],
+                        },
+                    });
+                }
             })
         },
         // 手机号是否重复
-        phone: (e, _this, _id = null) => {
+        phone: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             settledCont(
-                Utils.removeInvalid({phone: e.target.value, id: _id})
-            ).catch(() => {
-                _this.props.form.setFields({
-                    phone: {
-                        errors: [new Error('入驻联系人电话重复')],
-                    },
-                });
+                Utils.removeInvalid({phone: e.target.value, id: _id, status: _status})
+            ).catch((res) => {
+                if (res.code) {
+                    _this.props.form.setFields({
+                        phone: {
+                            errors: [new Error('入驻联系人电话重复')],
+                        },
+                    });
+                }
             })
         },
         // 邮箱是否重复
-        emial: (e, _this, _id = null) => {
+        emial: (e, _this, _id = null, _status = null) => {
             const { value } = e.target;
             if (Utils.trim(value) === '') {
                 return;
             }
             settledCont(
-                Utils.removeInvalid({email: e.target.value, id: _id})
-            ).catch(() => {
-                _this.props.form.setFields({
-                    email: {
-                        errors: [new Error('入驻联系人邮箱重复')],
-                    },
-                });
+                Utils.removeInvalid({email: e.target.value, id: _id, status: _status})
+            ).catch((res) => {
+                if (res.code) {
+                    _this.props.form.setFields({
+                        email: {
+                            errors: [new Error('入驻联系人邮箱重复')],
+                        },
+                    });
+                }
             })
+        },
+        orgId: (orgId, parentId, id) => {
+            return checkSupplierAddOrgId(
+                Utils.removeInvalid({orgId, parentId, id})
+            )
         }
     }
     static REGEX = {

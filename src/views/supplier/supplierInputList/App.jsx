@@ -32,7 +32,7 @@ import SearchForm from '../searchFormInput';
 import { PAGE_SIZE } from '../../../constant';
 import { supplierInputList } from '../../../constant/formColumns';
 import Utils from '../../../util/util';
-import { exportSupplierList } from '../../../service';
+import { exportManageList } from '../../../service';
 import ChangeMessage from './changeMessage';
 import ChangeAudit from './changeAudit';
 import ChangeAuditAdr from './changeAuditAdr';
@@ -196,7 +196,7 @@ class SupplierInputList extends PureComponent {
      * @param {string} data 'addSupplier':供应商类型为供应商；否则为供应商地点，data为供应商编码
      */
     handleDownLoad(data) {
-        Utils.exportExcel(exportSupplierList, data);
+        Utils.exportExcel(exportManageList, data);
     }
 
     /**

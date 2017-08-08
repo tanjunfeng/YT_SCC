@@ -12,9 +12,6 @@ import { connect } from 'react-redux';
 import SearchMind from '../../../components/searchMind';
 import { PAGE_SIZE } from '../../../constant';
 import {
-    fetchTest,
-} from '../../../actions/classifiedList';
-import {
     fetchAddProdPurchase,
     fetchCheckMainSupplier,
 } from '../../../actions';
@@ -149,18 +146,6 @@ class ProdPurchaseModal extends Component {
 
     handleCancel(record) {
         this.props.productAddPriceVisible({isVisible: false, record});
-    }
-
-    // handleTestChoose(record) {
-    //     console.log(record);
-    // }
-
-    handleTestFetch = ({ value, pagination }) => {
-        // console.log(value, pagination);
-
-        return fetchTest({
-            value,
-        });
     }
 
     handlePriceChange(result) {

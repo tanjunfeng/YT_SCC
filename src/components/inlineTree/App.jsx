@@ -35,6 +35,18 @@ class InlineTree extends PureComponent {
         })
     }
 
+    componentWillReceiveProps(nextProps) {
+        const { checkedKeys } = nextProps;
+        if (
+            checkedKeys.length > 0
+            && checkedKeys.length !== this.props.checkedKeys
+        ) {
+            this.setState({
+                checkedKeys
+            })
+        }
+    }
+
     componentWillUnmount() {
         this.clickEvent.remove();
     }

@@ -46,13 +46,7 @@ const initState = fromJS({
     //采购单收货列表  列表内容为 已审核且未收货采购单
     poRcvList: {},
     //采购收货单详情信息
-    poRcv: {
-        //收货单基本信息
-        basicInfo: {
-        },
-        //收货单商品明细列表
-        poLines: [],
-    },
+    poRcv: {},
 
 });
 
