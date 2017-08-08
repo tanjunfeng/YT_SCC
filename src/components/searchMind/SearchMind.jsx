@@ -256,6 +256,11 @@ class SearchMind extends PureComponent {
                     pagination: pager,
                 });
             })
+            .catch(() => {
+                this.setState({
+                    type: TYPE.DEFAULT
+                })
+            })
     }
 
     /**

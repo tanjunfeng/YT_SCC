@@ -3,6 +3,10 @@
     display: inline-block;
     width: 300px;
 
+    .ant-table-pagination {
+        margin: 0;
+    }
+
     &-search-bar {
         position: relative;
         display: flex;
@@ -79,7 +83,7 @@
             .ywc-smind-input-placeholder {
                 z-index: 0;
                 box-sizing: border-box;
-                color: #999;
+                color: #ddd;
             }
         }
 
@@ -127,7 +131,7 @@
 
         .ywc-smind-input-placeholder,
         .ywc-smind-input {
-            color: #ddd;
+            color: #eee;
         }
     }
 
