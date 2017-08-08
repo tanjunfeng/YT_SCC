@@ -33,7 +33,7 @@ class Utils {
      *
      * @param {string} str 目标字符串
      */
-    static trim(str) {
+    static trim(str = '') {
         return str.toString().replace(/(^\s*)|(\s*$)/g, '');
     }
 
@@ -42,7 +42,7 @@ class Utils {
      *
      * @param {string} str 目标字符串
      */
-    static ltrim(str) {
+    static ltrim(str = '') {
         return str.toString().replace(/(^\s*)/g, '');
     }
 
@@ -51,7 +51,7 @@ class Utils {
      *
      * @param {string} str 目标字符串
      */
-    static rtrim(str) {
+    static rtrim(str = '') {
         return str.toString().replace(/(\s*$)/g, '');
     }
 

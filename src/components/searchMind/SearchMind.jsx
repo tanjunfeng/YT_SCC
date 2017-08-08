@@ -4,11 +4,12 @@
  *
  * Des
  */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Icon, Table } from 'antd';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Utils from '../../util/util';
+import NoData from './NoData';
 import './searchMind.scss';
 
 const TYPE = {
@@ -16,7 +17,7 @@ const TYPE = {
     DEFAULT: 'search',
 };
 
-class SearchMind extends PureComponent {
+class SearchMind extends Component {
     constructor(props) {
         super(props);
 
@@ -91,21 +92,18 @@ class SearchMind extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!Utils.isEqual(nextProps, this.props)) {
-            const next = { ...nextProps };
-
-            if (nextProps.defaultValue !== this.props.defaultValue) {
-                next.value = nextProps.defaultValue;
-            }
-
-            // 单独处理一下 disabled
-            if (nextProps.disabled !== this.props.disabled) {
-                next.dropHide = nextProps.disabled;
-                next.isFocus = !nextProps.disabled;
-            }
-
+        if (nextProps.defaultValue !== this.props.defaultValue) {
             this.setState({
-                ...next
+                value: nextProps.defaultValue,
+            });
+        }
+
+        // 单独处理一下 disabled
+        if (nextProps.disabled !== this.props.disabled) {
+            this.setState({
+                disabled: nextProps.disabled,
+                dropHide: nextProps.disabled,
+                isFocus: !nextProps.disabled,
             });
         }
     }
@@ -386,31 +384,67 @@ class SearchMind extends PureComponent {
         })
     }
 
+    /**
+     * 获取下拉框内容节点
+     */
+    getDrop() {
+        const {
+            type,
+            data,
+            pagination,
+        } = this.state;
+
+        const {
+            columns,
+            noDataText,
+            rowKey,
+        } = this.props;
+
+        if (this.isEmpty()) {
+            return null;
+        }
+
+        if (data && data.length > 0) {
+            return (
+                <Table
+                    rowKey={rowKey}
+                    columns={columns}
+                    dataSource={data}
+                    pagination={pagination}
+                    loading={type === TYPE.LOADING}
+                    size="middle"
+                    onRowClick={this.handleChoose}
+                    onChange={this.handleTableChange}
+                />
+            )
+        }
+
+        return (
+            <NoData>{noDataText}</NoData>
+        );
+    }
+
     render() {
         const {
             type,
             dropHide,
-            data,
             value,
             isFocus,
             selectedRawData,
             disabled,
-            pagination,
         } = this.state;
 
         const {
             addonBefore,
             className,
             style,
-            columns,
             renderChoosedInputRaw,
-            rowKey,
             placeholder,
             dropWidth,
         } = this.props;
 
         const layoutCls = classNames('ywc-smind', {
-            'ywc-smind-drop-hide': dropHide || data.length === 0,
+            'ywc-smind-drop-hide': dropHide || this.isEmpty(),
             'ywc-smind-has-input-view': renderChoosedInputRaw,
             'ywc-smind-disabled': disabled,
         });
@@ -430,7 +464,7 @@ class SearchMind extends PureComponent {
         const newStyle = Object.assign({
             zIndex: 100,
             position: 'relative',
-        }, style)
+        }, style);
 
         return (
             <div
@@ -489,18 +523,7 @@ class SearchMind extends PureComponent {
                     ref={ref => { this.ywcSmindDropList = ref }}
                     className="ywc-smind-drop-layout"
                 >
-                    {data && data.length > 0 &&
-                        <Table
-                            rowKey={rowKey}
-                            columns={columns}
-                            dataSource={data}
-                            pagination={pagination}
-                            loading={type === TYPE.LOADING}
-                            size="middle"
-                            onRowClick={this.handleChoose}
-                            onChange={this.handleTableChange}
-                        />
-                    }
+                    {this.getDrop()}
                 </div>
             </div>
         )
@@ -578,6 +601,8 @@ SearchMind.propTypes = {
 
     disabled: PropTypes.bool,
 
+    noDataText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+
     /**
      * 手动指定下拉框的宽度
      */
@@ -596,6 +621,7 @@ SearchMind.defaultProps = {
     pageSize: 10,
     delaySend: 320,
     placeholder: '请输入内容',
+    noDataText: '没有匹配的数据',
     rowKey: 'id',
     quickSearch: true,
     renderChoosedInputRaw: null,

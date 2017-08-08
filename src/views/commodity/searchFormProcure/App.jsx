@@ -76,7 +76,9 @@ class SearchForm extends Component {
             supplyChoose1: {},
             supplyChoose2: {},
             visible: true,
-            sort: 1
+            sort: 1,
+
+            ddddd: false,
         }
     }
 
@@ -85,11 +87,11 @@ class SearchForm extends Component {
     componentDidMount() {
         // this.props.fetchAction();
 
-        // setTimeout(() => {
-        //     this.setState({
-        //         disabled: true,
-        //     });
-        // }, 2000);
+        setTimeout(() => {
+            this.setState({
+                ddddd: true,
+            });
+        }, 2000);
     }
 
     /**
@@ -294,6 +296,7 @@ class SearchForm extends Component {
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.spNo} - {data.companyName}</div>
                                             )}
+                                            disabled={this.state.ddddd}
                                             pageSize={6}
                                             columns={[
                                                 {
