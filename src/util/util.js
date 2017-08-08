@@ -273,7 +273,7 @@ class Utils {
                 return false;
             }
 
-            if ((typeof aChild === 'string' || typeof aChild === 'number') && aChild !== bChild) {
+            if (!this.isObject(aChild) && aChild !== bChild) {
                 // If values of same property are not equal,
                 // objects are not equivalent
                 return false;

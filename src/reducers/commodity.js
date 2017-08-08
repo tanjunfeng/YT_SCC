@@ -81,6 +81,9 @@ const initState = Immutable.fromJS({
     // 更新商品信息
     updateProdRecord: {},
 
+    // 地点关联
+    getWarehouseLogicInfo: {}
+
 });
 
 export default function (state = initState, action) {
@@ -173,7 +176,6 @@ export default function (state = initState, action) {
             return state.set('changeSupType', action.payload);
 
         case ActionType.GET_PRODUCT_BY_ID:
-        console.log(action.payload)
             return state.set('getProductById', action.payload);
 
         case ActionType.RECEIVE_PRICE_INFO:
@@ -181,6 +183,9 @@ export default function (state = initState, action) {
 
         case ActionType.QUERY_PRODBY_CONDITION:
             return state.set('purchaseCardData', action.payload);
+
+        case ActionType.GER_WARE_HOUSE_LOGIC_INFO:
+            return state.set('getWarehouseLogicInfo', action.payload);
 
         default:
             return state;

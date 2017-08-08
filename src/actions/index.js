@@ -86,7 +86,8 @@ import {
     UpdateProdPurchase,
     getProductById,
     queryProdPurchaseExtByCondition,
-    ChangeProPurchaseStatus
+    ChangeProPurchaseStatus,
+    GetWarehouseInfo1
 } from './producthome';
 
 // 库存调整
@@ -164,6 +165,7 @@ export {
     queryProdPurchaseExtByCondition,
     UpdateProdPurchase,
     ChangeProPurchaseStatus,
+    GetWarehouseInfo1,
 
     // 库存调整
     stockAdjust,

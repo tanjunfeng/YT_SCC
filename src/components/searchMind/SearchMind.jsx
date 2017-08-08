@@ -91,8 +91,7 @@ class SearchMind extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        // if (!Utils.isEqual(nextProps, this.props)) {
-            const next = { ...nextProps };
+        const next = { ...nextProps };
 
             if (nextProps.defaultValue !== this.props.defaultValue) {
                 next.value = nextProps.defaultValue;
@@ -103,11 +102,10 @@ class SearchMind extends PureComponent {
                 next.dropHide = nextProps.disabled;
                 next.isFocus = !nextProps.disabled;
             }
-
+            
             this.setState({
                 ...next
             });
-        // }
     }
 
     componentWillUnmount() {
@@ -165,7 +163,10 @@ class SearchMind extends PureComponent {
      * @return {null}
      */
     getData() {
-        return this.state.selectedRawData;
+        return {
+            value: this.state.value,
+            raw: this.state.selectedRawData,
+        };
     }
 
     /**
@@ -255,6 +256,11 @@ class SearchMind extends PureComponent {
                     data: res.data.data,
                     pagination: pager,
                 });
+            })
+            .catch(() => {
+                this.setState({
+                    type: TYPE.DEFAULT
+                })
             })
     }
 

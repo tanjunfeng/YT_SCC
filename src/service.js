@@ -399,7 +399,7 @@ export const queryAllCategories = () => http.get('/category/queryAllCategories')
  * @param newSortOrder
  */
 export const updateSortNum = ({ id, newSortOrder }) => (
-    http.get('/category/updateSortNum', { id, newSortOrder })
+    http.post('/category/updateSortNum', { id, newSortOrder })
 );
 
 /**
@@ -408,7 +408,7 @@ export const updateSortNum = ({ id, newSortOrder }) => (
  * @param displayStatus
  */
 export const updateShowStatus = ({ id, displayStatus }) => (
-    http.get('/category/updateShowStatus', { id, displayStatus })
+    http.post('/category/updateShowStatus', { id, displayStatus })
 );
 
 // 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
