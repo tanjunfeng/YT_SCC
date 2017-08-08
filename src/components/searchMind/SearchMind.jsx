@@ -170,6 +170,46 @@ class SearchMind extends Component {
     }
 
     /**
+     * 获取下拉框内容节点
+     */
+    getDrop() {
+        const {
+            type,
+            data,
+            pagination,
+        } = this.state;
+
+        const {
+            columns,
+            noDataText,
+            rowKey,
+        } = this.props;
+
+        if (this.isEmpty()) {
+            return null;
+        }
+
+        if (data && data.length > 0) {
+            return (
+                <Table
+                    rowKey={rowKey}
+                    columns={columns}
+                    dataSource={data}
+                    pagination={pagination}
+                    loading={type === TYPE.LOADING}
+                    size="middle"
+                    onRowClick={this.handleChoose}
+                    onChange={this.handleTableChange}
+                />
+            )
+        }
+
+        return (
+            <NoData>{noDataText}</NoData>
+        );
+    }
+
+    /**
      * 输入框获得焦点 设置 isFocus
      */
     handleFocus() {
@@ -382,46 +422,6 @@ class SearchMind extends Component {
             data: [],
             selectedRawData: null,
         })
-    }
-
-    /**
-     * 获取下拉框内容节点
-     */
-    getDrop() {
-        const {
-            type,
-            data,
-            pagination,
-        } = this.state;
-
-        const {
-            columns,
-            noDataText,
-            rowKey,
-        } = this.props;
-
-        if (this.isEmpty()) {
-            return null;
-        }
-
-        if (data && data.length > 0) {
-            return (
-                <Table
-                    rowKey={rowKey}
-                    columns={columns}
-                    dataSource={data}
-                    pagination={pagination}
-                    loading={type === TYPE.LOADING}
-                    size="middle"
-                    onRowClick={this.handleChoose}
-                    onChange={this.handleTableChange}
-                />
-            )
-        }
-
-        return (
-            <NoData>{noDataText}</NoData>
-        );
     }
 
     render() {
