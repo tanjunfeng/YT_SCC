@@ -168,7 +168,7 @@ class SuppliersAppList extends PureComponent {
     }
 
     renderOperation(text, record, index) {
-        const { status, id, providerType } = record;
+        const { status, id, providerType, spStatus } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
@@ -176,8 +176,8 @@ class SuppliersAppList extends PureComponent {
                     <Link to={`${pathname}/supplier/${id}`}>供应商详情</Link>
                 </Menu.Item>
                 {
-                    // 0： 制单状态、2：已审核、3:已拒绝
-                    (status === 0 || status === 2 || status === 3 || status === 4) &&
+                    // 2：已审核、3:已拒绝
+                    (status === 2 || status === 3) &&
                     <Menu.Item key="modifySupInfor">
                         <Link to={`${pathname}/edit/supplier/${id}`}>
                             修改供应商信息
@@ -185,7 +185,7 @@ class SuppliersAppList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    (status === 0 || status === 1 || status === 2) &&
+                    (status === 1 || status === 2) && (spStatus === 0) &&
                     <Menu.Item key="addAddress">
                         <Link to={`${pathname}/add/${id}`}>
                             新增供应商地点信息
@@ -211,18 +211,11 @@ class SuppliersAppList extends PureComponent {
                 </Menu.Item>
                 {
                     // 0： 制单状态、2：已审核、3:已拒绝
-                    (status === 0 || status === 2 || status === 3) &&
+                    (status === 2 || status === 3) &&
                     <Menu.Item key="modifySupAddInfor">
                         <Link to={`${pathname}/edit/${id}`}>
                             修改供应商地点信息
                         </Link>
-                    </Menu.Item>
-                }
-                {
-                    // 1: 已提交、 4：修改中
-                    (status === 1 || status === 4) &&
-                    <Menu.Item>
-                        <Link to={`${pathname}/edit/${id}`}>修改供应商地点信息</Link>
                     </Menu.Item>
                 }
                 {

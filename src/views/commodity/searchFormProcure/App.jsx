@@ -133,10 +133,13 @@ class SearchForm extends Component {
                 ? null
                 : values.mainSupplierOptions;
             // console.log(this.state.supplyChoose1.spAdrid)
+            console.log(this.state.supplyChoose)
+            console.log(this.state.supplyChoose1)
+            console.log(this.state.supplyChoose2)
             this.props.onSearch(Utils.removeInvalid({
                 spId: this.state.supplyChoose.spId,
                 spAdrId: this.state.supplyChoose1.spAdrid,
-                branchCompanyId: this.state.supplyChoose2.id,
+                branchCompanyId: this.state.supplyChoose2.branchCompanyId,
                 supplierType,
                 status
             }))
@@ -268,6 +271,7 @@ class SearchForm extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls } = this.props;
+        const { warehouseCode, warehouseName} = this.state.supplyChoose;
         return (
             <div className={`${prefixCls}-content manage-form`}>
                 <div style={{fontSize: 16, fontWeight: 900}}>
@@ -341,24 +345,8 @@ class SearchForm extends Component {
                                                     dataIndex: 'spNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '供应商ID',
-                                                    dataIndex: 'spId',
-                                                    width: 200,
-                                                }, {
-                                                    title: '供应商地点ID',
-                                                    dataIndex: 'spAdrid',
-                                                    width: 200,
-                                                }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
-                                                    width: 200,
-                                                }, {
-                                                    title: '供应商地点编码',
-                                                    dataIndex: 'providerNo',
-                                                    width: 200,
-                                                }, {
-                                                    title: '供应商地点名称',
-                                                    dataIndex: 'providerName',
                                                     width: 200,
                                                 }
                                             ]}

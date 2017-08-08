@@ -232,7 +232,7 @@ class SupplierInputList extends PureComponent {
      * return 列表页操作下拉菜单
      */
     renderOperation(text, record, index) {
-        const { status, id, providerType, auditType } = record;
+        const { status, id, providerType, auditType, spStatus } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
@@ -287,7 +287,7 @@ class SupplierInputList extends PureComponent {
                     // 模拟地点弹出框
                     /* status === 2 && */
                     // 2:已审核,3、已拒绝
-                    (status === 2 || status === 3) && auditType === 1 &&
+                    (status === 2 || status === 3) && spStatus === 1 && auditType === 1 &&
                     <Menu.Item key="ChangeAuditAdr">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商地点审核
@@ -296,7 +296,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     // 1： 已提交
-                    status === 1 && auditType === 2 &&
+                    (spStatus === 2 || spStatus === 3) && status === 1 && auditType === 2 &&
                     <Menu.Item key="CheckReasonAdr">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商地点审核
