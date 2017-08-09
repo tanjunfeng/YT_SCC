@@ -230,7 +230,6 @@ class PoMngList extends PureComponent {
                 disabled: record.statusCd !== poStatusCodes.draft,
             })
         };
-
         return (
             <div className="po-mng-list">
                 <SearchForm
