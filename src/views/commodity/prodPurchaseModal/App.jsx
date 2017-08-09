@@ -6,7 +6,7 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, InputNumber, Checkbox, message } from 'antd';
+import { Modal, Form, InputNumber, Checkbox, message, Select } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import SearchMind from '../../../components/searchMind';
@@ -27,6 +27,7 @@ import {
 } from '../../../actions/producthome';
 
 const FormItem = Form.Item;
+const { Option } = Select;
 
 @connect(
     state => ({
@@ -161,11 +162,12 @@ class ProdPurchaseModal extends Component {
     }
 
     render() {
-        const { prefixCls, form, getProductByIds, checkMainSupplier } = this.props;
+        const { prefixCls, form, getProductByIds = {}, checkMainSupplier } = this.props;
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
         const { warehouseCode, warehouseName} = this.state.supplyChoose;
         // const formData = this.props.form.getFieldsValue();
+        const { internationalCodes = [] } = getProductByIds;
         return (
             <Modal
                 title="新增采购价格"
@@ -212,7 +214,19 @@ class ProdPurchaseModal extends Component {
                                             rules: [{ required: true, message: '输入商品条码!' }],
                                             initialValue: getProductByIds.productCode
                                         })(
-                                            <InputNumber min={0} placeholder="请输入商品条码" />
+                                            <Select
+                                                placeholder="请选择商品条码"
+                                            >
+                                                {
+                                                    internationalCodes.map((item) => {
+                                                        return (
+                                                            <Option value={item.internationalCode}>
+                                                                {item.internationalCode}
+                                                            </Option>
+                                                        )
+                                                    })
+                                                }
+                                            </Select>
                                         )}
                                     </span>
                                 </FormItem>

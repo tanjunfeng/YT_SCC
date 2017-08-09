@@ -6,7 +6,7 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, InputNumber, Checkbox, message } from 'antd';
+import { Modal, Form, InputNumber, Checkbox, message, Select } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Util from '../../../util/util';
@@ -30,6 +30,7 @@ import {
 } from '../../../actions/producthome';
 
 const FormItem = Form.Item;
+const { Option } = Select;
 
 @connect(
     state => ({
@@ -38,7 +39,6 @@ const FormItem = Form.Item;
         getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
         updateProdPurchase: state.toJS().commodity.updateProdPurchase,
-        updateProdRecord: state.toJS().commodity.updateProdRecord,
         purchaseCardData: state.toJS().commodity.purchaseCardData,
         getWarehouseLogicInfos: state.toJS().commodity.getWarehouseLogicInfo,
     }),
@@ -60,14 +60,14 @@ class ProdModal extends Component {
         this.handlePriceChange = ::this.handlePriceChange;
         this.ids = {
             // 供应商id
-            spId: props.updateProdRecord.spId,
-            spNo: props.updateProdRecord.spNo,
+            spId: props.initValue.spId,
+            spNo: props.initValue.spNo,
             // 供应商地点id
-            supplierAddressId: props.updateProdRecord.spAdrId,
+            supplierAddressId: props.initValue.spAdrId,
             // 仓库id
-            warehouseId: props.updateProdRecord.id,
+            warehouseId: props.initValue.id,
             // 分公司id
-            childCompanyId: props.updateProdRecord.branchCompanyId,
+            childCompanyId: props.initValue.branchCompanyId,
         }
         this.state = {
             isDisabled: true,
@@ -80,34 +80,7 @@ class ProdModal extends Component {
             spId: '',
             spAdrId: '',
             branchCompanyId: '',
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const { updateProdRecord = {} } = nextProps;
-        if (this.props.updateProdRecord.spId !== updateProdRecord.spId) {
-            this.setState({
-                //
-                spId: nextProps.updateProdRecord.spId,
-                //
-                spAdrId: nextProps.updateProdRecord.spAdrId,
-                //
-                branchCompanyId: nextProps.updateProdRecord.branchCompanyId,
-                // 仓库ID
-                distributeWarehouseId: nextProps.updateProdRecord.id,
-            });
-            console.log(nextProps.updateProdRecord.spAdrId)
-            this.ids = {
-                // 供应商id
-                spId: nextProps.updateProdRecord.spId,
-                // 供应商地点id
-                supplierAddressId: nextProps.updateProdRecord.spAdrId,
-                // 仓库id
-                warehouseId: nextProps.updateProdRecord.id,
-                // 分公司id
-                childCompanyId: nextProps.updateProdRecord.branchCompanyId,
-                spNo: null
-            }
+            checked: props.initValue.supplierType === 1
         }
     }
 
@@ -122,6 +95,10 @@ class ProdModal extends Component {
         this.ids.warehouseId = record.id;
     }
 
+    handleHouseClear = () => {
+        this.ids.warehouseId = null;
+    }
+
     /**
      * 供应商-值清单
      */
@@ -133,7 +110,7 @@ class ProdModal extends Component {
             supplyChoose3: {},
         });
         this.ids = {
-            spId: record.id,
+            spId: record.spId,
             spNo: record.spNo,
             supplierAddressId: null,
             warehouseId: null,
@@ -170,7 +147,7 @@ class ProdModal extends Component {
                 pageSize: 1,
                 pageNum: 1
             }, 'supplierSearchBox').then((res) => {
-                const { spNo, companyName, spId } = res.data.data;
+                const { spNo, companyName, spId } = res.data.data[0];
                 this.ids.spNo = spNo;
                 this.ids.spId = spId;
                 this.setState({
@@ -179,54 +156,56 @@ class ProdModal extends Component {
                 })
             })
         }
-        
-        // this.props.GetWarehouseInfo1({
-        //     supplierAddressId: record.spAdrid,
-        //     pageNum: 1,
-        //     pageSize: PAGE_SIZE,
-        // }).then((res) => {
-        //     this.setState({
-        //         supplyChoose: res.data.data[0]
-        //     });
-        // })
     }
 
+    handleAdressClear = () => {
+        this.ids.supplierAddressId = null;
+        this.ids.warehouseId = null;
+        this.ids.childCompanyId = null;
+    }
 
     /**
      * 创建弹框OK时间 (当没有改变时)
      */
     handleOk() {
         const { validateFields } = this.props.form;
-        const { updateProdRecord } = this.props;
-        // console.log(updateProdRecord)
+        const { initValue, isEdit } = this.props;
+        const subPost = isEdit ? this.props.ChangeUpdateProd : this.props.AddProdPurchase;
+        const { spId, supplierAddressId, childCompanyId, warehouseId } = this.ids;
+        if (!spId) {
+            message.error('请选择供应商');
+            return;
+        }
+        if (!supplierAddressId) {
+            message.error('请选择供应商地点');
+            return;
+        }
+        if (!warehouseId) {
+            message.error('请选择仓库');
+            return;
+        }
         validateFields((err, values) => {
-            // console.log(values);
-            // TODO post data
-            this.props.ChangeUpdateProd({
-                id: updateProdRecord.id,
-                //
-                spId: this.state.supplyChoose1 !== updateProdRecord.spId
-                    ? this.state.spId : updateProdRecord.spId,
-                //
-                // spAdrId: updateProdRecord.spAdrId,
-                spAdrId: this.state.spAdrId !== updateProdRecord.spAdrId
-                    ? this.state.spAdrId : updateProdRecord.spAdrId,
-                productId: updateProdRecord.productId,
-                //
-                // branchCompanyId: updateProdRecord.branchCompanyId,
-                branchCompanyId: this.state.branchCompanyId !== updateProdRecord.branchCompanyId
-                    ? this.state.branchCompanyId : updateProdRecord.branchCompanyId,
-                supplierType: updateProdRecord.supplierType,
+            const subData = Util.removeInvalid({
+                id: isEdit ? initValue.id : null ,
+                // 供应商id
+                spId: this.ids.spId,
+                // 供应商地点id
+                spAdrId: this.ids.supplierAddressId,
+                // 商品id
+                productId: isEdit ? initValue.productId : initValue.id,
+                // 子公司id
+                branchCompanyId: this.ids.childCompanyId,
+                // 供应商类型:0：一般供应商,1:主供应商
+                supplierType: this.state.checked ? 1 : 0,
                 purchaseInsideNumber: values.purchaseInsideNumber,
                 purchasePrice: parseFloat(values.purchasePrice),
                 internationalCode: values.internationalCode,
                 // 仓库ID
-                // distributeWarehouseId: updateProdRecord.id,
-                distributeWarehouseId: this.state.distributeWarehouseId !== updateProdRecord.distributeWarehouseId
-                    ? this.state.distributeWarehouseId : updateProdRecord.distributeWarehouseId,
-            }).then((res) => {
-                this.props.UpdateProdPurchase({isVisible: false});
+                distributeWarehouseId: this.ids.warehouseId,
+            })
+            subPost(subData).then((res) => {
                 message.success(res.message)
+                this.handleCancel();
                 this.props.goto()
             }).catch(() => {
                 message.error('操作失败')
@@ -234,63 +213,9 @@ class ProdModal extends Component {
         })
     }
 
-    /**
-     * 创建弹框OK时间 (当发生改变时)
-     */
-    // handleOky() {
-    //     const { validateFields } = this.props.form;
-    //     const { updateProdRecord } = this.props;
-    //     // console.log(updateProdRecord.supplierType)
-    //     // console.log(this.state.supplyChoose)
-    //     // console.log(this.state.supplyChoose1)
-    //     // console.log(this.state.supplyChoose2)
-    //     validateFields((err, values) => {
-    //         console.log(values);
-    //         // TODO post data
-    //         this.props.ChangeUpdateProd({
-    //             id: updateProdRecord.id,
-    //             // spId: this.state.supplyChoose1.spId,
-    //             spId: updateProdRecord.distributeWarehouseId,
-    //             // spAdrId: this.state.supplyChoose2.spAdrid,
-    //             spAdrId: updateProdRecord.spAdrId,
-    //             productId: this.props.getProductByIds.id,
-    //             // branchCompanyId: this.state.supplyChoose2.branchCompanyId,
-    //             branchCompanyId: updateProdRecord.distributeWarehouseId,
-    //             supplierType: updateProdRecord.supplierType,
-    //             purchaseInsideNumber:
-                        // !this.props.getProductByIds.purchaseInsideNumber
-                        // ? updateProdRecord.supplierType
-                        // : this.props.getProductByIds.purchaseInsideNumber,
-    //             purchasePrice: values.purchasePrice.toFixed(2),
-    //             // 条码
-    //             internationalCode: values.internationalCode,
-    //             // 仓库ID
-    //             // distributeWarehouseId: this.state.supplyChoose.id
-    //             distributeWarehouseId: updateProdRecord.distributeWarehouseId,
-    //         }).then((res) => {
-    //             this.props.updateProdPurchase({isVisible: false});
-    //             message.success(res.message)
-    //             this.props.goto()
-    //         }).catch(() => {
-    //             message.error('操作失败')
-    //         })
-    //     })
-    // }
-
     handleCancel(record) {
-        this.props.UpdateProdPurchase({isVisible: false, record});
-    }
-
-    // handleTestChoose(record) {
-    //     console.log(record);
-    // }
-
-    handleTestFetch = ({ value, pagination }) => {
-        // console.log(value, pagination);
-
-        return fetchTest({
-            value,
-        });
+        this.props.handleClose();
+        // this.props.UpdateProdPurchase({isVisible: false, record});
     }
 
     handlePriceChange(result) {
@@ -305,18 +230,23 @@ class ProdModal extends Component {
         }
     }
 
+    handleCheckBox = (e) => {
+        this.setState({
+            checked: !this.state.checked
+        })
+    }
+
     render() {
-        const { prefixCls, form, updateProdRecord = {} } = this.props;
+        const { prefixCls, form, initValue = {}, isEdit, data } = this.props;
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
-        // const formData = this.props.form.getFieldsValue();
-        // console.log(updateProdRecord)
         const { warehouseCode, warehouseName} = this.state.supplyChoose;
         const { spNo, companyName } = this.state;
+        const { internationalCodes = [] } = data;
         return (
             <Modal
-                title="修改采购价格"
-                visible={this.props.updateProdPurchase}
+                title={isEdit ? '修改采购价格' : '新增采购价格'}
+                visible
                 className={prefixCls}
                 onOk={this.handleOk}
                 width={'500px'}
@@ -333,7 +263,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('purchaseInsideNumber', {
                                             rules: [{ required: true, message: '采购内装数' }],
-                                            initialValue: updateProdRecord.purchaseInsideNumber
+                                            initialValue: initValue.purchaseInsideNumber
                                         })(
                                             <InputNumber min={0} placeholder="内装数" />
                                         )}
@@ -344,7 +274,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('purchasePrice', {
                                             rules: [{ required: true, message: '请输入采购价!' }],
-                                            initialValue: updateProdRecord.purchasePrice
+                                            initialValue: initValue.purchasePrice
                                         })(
                                             <InputNumber min={0} step={0.01} placeholder="采购价" />
                                         )}
@@ -355,9 +285,22 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('internationalCode', {
                                             rules: [{ required: true, message: '输入商品条码!' }],
-                                            initialValue: updateProdRecord.internationalCode
+                                            initialValue: isEdit ? initValue.internationalCode : internationalCodes[0].internationalCode
                                         })(
-                                            <InputNumber min={0} placeholder="请输入商品条码" />
+                                            <Select
+                                                placeholder="请选择商品条码"
+                                                style={{width: '150px'}}
+                                            >
+                                                {
+                                                    internationalCodes.map((item) => {
+                                                        return (
+                                                            <Option value={item.internationalCode}>
+                                                                {item.internationalCode}
+                                                            </Option>
+                                                        )
+                                                    })
+                                                }
+                                            </Select>
                                         )}
                                     </span>
                                 </FormItem>
@@ -369,7 +312,9 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-label`}>*供应商：</span>
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
-                                            defaultValue={`${spNo || updateProdRecord.spId} - ${companyName || updateProdRecord.spName}`}
+                                            defaultValue={
+                                                (spNo || initValue.spId)
+                                                && `${spNo || initValue.spId} - ${companyName || initValue.spName}`}
                                             style={{ zIndex: 9 }}
                                             compKey="search-mind-key"
                                             ref={ref => { this.searchMind1 = ref }}
@@ -406,7 +351,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-label`}>*供应商地点：</span>
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
-                                            defaultValue={`${updateProdRecord.spAdrId} - ${updateProdRecord.spAdrName}`}
+                                            defaultValue={initValue.spAdrId && `${initValue.spAdrId} - ${initValue.spAdrName}`}
                                             style={{ zIndex: 8 }}
                                             compKey="search-mind-key1"
                                             ref={ref => { this.searchMind2 = ref }}
@@ -417,6 +362,7 @@ class ProdModal extends Component {
                                                 pageNum: params.pagination.current || 1
                                             }), 'supplierAdrSearchBox')}
                                             onChoosed={this.handleAdressChoose}
+                                            onClear={this.handleAdressClear}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.providerNo} - {data.providerName}</div>
                                             )}
@@ -447,7 +393,9 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-label`}>送货仓：</span>
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
-                                            defaultValue={`${warehouseCode || updateProdRecord.distributeWarehouseId} - ${warehouseName || updateProdRecord.distributeWarehouseName}`}
+                                            defaultValue={
+                                                (warehouseCode || initValue.distributeWarehouseId)
+                                                && `${warehouseCode || initValue.distributeWarehouseId} - ${warehouseName || initValue.distributeWarehouseName}`}
                                             style={{ zIndex: 1 }}
                                             disabled={this.state.isDisabled}
                                             compKey="search-mind-key1"
@@ -459,6 +407,7 @@ class ProdModal extends Component {
                                                 pageNum: params.pagination.current || 1
                                             }), 'getWarehouseInfo1')}
                                             onChoosed={this.handleHouseChoose}
+                                            onClear={this.handleHouseClear}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.warehouseCode} - {data.warehouseName}</div>
                                             )}
@@ -480,10 +429,6 @@ class ProdModal extends Component {
                                             ]}
                                         />
                                     </span>
-                                    {
-                                        this.state.isDisabled &&
-                                        <p style={{color: 'red', textAlign: 'center'}}>*请先选择地点信息</p>
-                                    }
                                 </FormItem>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>主供应商：</span>
@@ -492,9 +437,8 @@ class ProdModal extends Component {
                                             initialValue: prodPurchase.salesInsideNumber
                                         })(
                                             <Checkbox
-                                                defaultChecked={
-                                                    updateProdRecord.supplierType === 1 ? true : false
-                                                }
+                                                checked={this.state.checked}
+                                                onChange={this.handleCheckBox}
                                             />
                                         )}
                                     </span>
@@ -516,13 +460,16 @@ ProdModal.propTypes = {
     ChangeUpdateProd: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     prodPurchase: PropTypes.objectOf(PropTypes.any),
-    updateProdRecord: PropTypes.objectOf(PropTypes.any),
+    initValue: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,
+    isEdit: PropTypes.bool,
+    data: PropTypes.objectOf(PropTypes.any),
 };
 
 ProdModal.defaultProps = {
     prefixCls: 'prod-modal',
     goto: () => {},
+    data: {}
 }
 
 export default Form.create()(ProdModal);

@@ -23,6 +23,7 @@ import {
     getStoreInfo,
     querycategories,
     getFranchiseeInfo,
+    findCanUseCompanyInfo,
 } from '../service';
 
 const pubValueList = {
@@ -53,7 +54,9 @@ const pubValueList = {
     // 根据分类名字或者编码查询指定等级的分类列表
     querycategories,
     // 查询加盟商
-    getFranchiseeInfo 
+    getFranchiseeInfo,
+    // 查询可用子公司信息
+    findCanUseCompanyInfo
 }
 
 const receiveCollapsed = (isCollapsed) => ({

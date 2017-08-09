@@ -471,9 +471,11 @@ class BasicInfo extends PureComponent {
                                                 style={{ marginLeft: 10 }}
                                                 compKey="search-mind-key2"
                                                 fetch={(param) =>
-                                                    this.props.pubFetchValueList({
-                                                        branchCompanyName: param.value
-                                                    }, 'findCompanyBaseInfo')
+                                                    this.props.pubFetchValueList(Utils.removeInvalid({
+                                                        branchCompanyName: param.value,
+                                                        id: detailSp.id,
+                                                        parentId: detailData.id,
+                                                    }), 'findCanUseCompanyInfo')
                                                 }
                                                 ref={node => (this.orgCompany = node)}
                                                 onChoosed={this.handleChoose}
