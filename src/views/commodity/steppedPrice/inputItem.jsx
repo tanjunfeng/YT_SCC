@@ -134,7 +134,7 @@ class InputItem extends Component {
                 <span className={`${prefixCls}-item-result`}>
                     <InputNumber
                         size={inputSize}
-                        min={min}
+                        min={0}
                         max={max}
                         value={defaultValue}
                         defaultValue={resultDefault}
@@ -184,7 +184,7 @@ InputItem.propTypes = {
 InputItem.defaultProps = {
     prefixCls: 'stepped-Price',
     inputSize: 'small',
-    min: 1,
+    min: 0,
     isLast: false,
     handleValueChange: () => {},
     allLength: 0,

@@ -126,6 +126,9 @@ $margin: 6px;
                 display: block;
             }
         }
+        &-disable {
+            opacity: .6;
+        }
         &-disable:hover {
             .home-style-common-btns1 {
                 display: block;
@@ -155,6 +158,9 @@ $margin: 6px;
     &-modal-input-item {
         margin-top: 6px;
     }
+}
+.manage-form-input {
+    width: initial;
 }
 .cut-img-warp {
     .cut-img-warp-show {

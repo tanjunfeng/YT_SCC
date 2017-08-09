@@ -458,9 +458,11 @@ class ManagementList extends PureComponent {
      */
     handleChangePage = (page) => {
         const currentPage = page;
+        const allFormValue = this.getFormAllVulue();
         this.props.queryCommodityList({
             pageNum: currentPage,
-            pageSize: PAGE_SIZE
+            pageSize: PAGE_SIZE,
+            ...allFormValue
         });
     }
 
@@ -476,15 +478,15 @@ class ManagementList extends PureComponent {
         const menu = (
             <Menu>
                 <Menu.Item key={0}>
-                    <Link to={`${pathname}/commodifyDetail/${id}`}>商品详情</Link>
+                    <Link to={`/commodifyList/${productId}`}>商品详情</Link>
                 </Menu.Item>
                 <Menu.Item key={1}>
-                    <CopyToClipboard text={`${origin}${pathname}/commodifyDetail/${id}`} onCopy={this.onCopy}>
+                    <CopyToClipboard text={`${origin}${pathname}/commodifyList/${productId}`} onCopy={this.onCopy}>
                         <span>复制链接</span>
                     </CopyToClipboard>
                 </Menu.Item>
                 <Menu.Item key={2}>
-                    <Link to={`${pathname}/price/${productId}`}>销售维护</Link>
+                    <Link to={`${pathname}/salesMaintenance/${productId}`}>销售维护</Link>
                 </Menu.Item>
                 <Menu.Item key={3}>
                     <Link to={`${pathname}/procurementMaintenance/${productId}`}>采购维护</Link>
@@ -653,18 +655,18 @@ class ManagementList extends PureComponent {
                                                     onChoosed={this.handleSupplyChoose}
                                                     onClear={this.handleSupplyClear}
                                                     renderChoosedInputRaw={(companyList) => (
-                                                        <div ref={supplier => { this.supplier = supplier }}>{companyList.spId}-{companyList.companyName}</div>
+                                                        <div ref={supplier => { this.supplier = supplier }}>{companyList.providerNo}-{companyList.providerName}</div>
                                                     )}
                                                     rowKey="spAdrid"
                                                     pageSize={5}
                                                     columns={[
                                                         {
-                                                            title: '供应商ID',
-                                                            dataIndex: 'spId',
+                                                            title: '地点编码',
+                                                            dataIndex: 'providerNo',
                                                             width: 150,
                                                         }, {
-                                                            title: '供应商名称',
-                                                            dataIndex: 'companyName',
+                                                            title: '地点名称',
+                                                            dataIndex: 'providerName',
                                                             width: 200,
                                                         }
                                                     ]}

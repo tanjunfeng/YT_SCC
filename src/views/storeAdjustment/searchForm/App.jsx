@@ -89,37 +89,6 @@ class SearchForm extends Component {
     }
 
     /**
-    * 供应商类型为"供应商地点"时，供应商编码为必选项
-    */
-    // isPlaceTypeForSearch() {
-    //     const { supplierNumber, supplierType } = this.searchData;
-    //     if (supplierType === '1' && !supplierNumber) {
-    //         message.error('请输入供应商编码！');
-    //         return false;
-    //     }
-    //     return true;
-    // }
-
-    /**
-    * 1.供应商类型为"供应商地点"时，供应商编码为必选项;
-    * 2.如果供应商类型为供应商地点，当供应商状态为已提交或已审核才通过
-    */
-    // isPlaceTypeForAdd() {
-    //     const { supplierNumber, supplierType, supplierState } = this.searchData;
-    //     if (supplierType === '1' && !supplierNumber) {
-    //         message.error('请输入供应商编码！');
-    //         return false;
-    //     } else if (supplierType === '1'
-    //         && supplierNumber
-    //         && !(supplierState === '1' || supplierState === '2')
-    //     ) {
-    //         message.error('供应商尚未提交审核，不能创建供应商地点！');
-    //         return false;
-    //     }
-    //     return true;
-    // }
-
-    /**
     * 查询/搜索
     */
     handleGetValue = () => {
@@ -145,15 +114,6 @@ class SearchForm extends Component {
         });
         console.log(this.state);
     }
-
-    // /**
-    // * 导出Excel
-    // */
-    // handleDownload = () => {
-    //     this.getValue();
-    //     const { onExcel } = this.props;
-    //     onExcel(this.searchData);
-    // }
 
 
     render() {

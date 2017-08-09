@@ -46,13 +46,7 @@ const initState = fromJS({
     //采购单收货列表  列表内容为 已审核且未收货采购单
     poRcvList: {},
     //采购收货单详情信息
-    poRcv: {
-        //收货单基本信息
-        basicInfo: {
-        },
-        //收货单商品明细列表
-        poLines: [],
-    },
+    poRcv: {},
 
 });
 
@@ -61,9 +55,11 @@ export default function (state = initState, action) {
     let poLines, basicInfo;
     let payload;
     switch (action.type) {
-        case ActionType.RECEIVE_PO_MNG_LIST://查询采购单管理列表
+        // 查询采购单管理列表
+        case ActionType.RECEIVE_PO_MNG_LIST:
             return state.set('poList', fromJS(action.payload));
-        case ActionType.CHANGE_PO_MNG_SELECTED_ROWS://采购单列表界面 选中采购单
+
+        case ActionType.CHANGE_PO_MNG_SELECTED_ROWS:// 采购单列表界面 选中采购单
             return state.set('selectedPoMngRows', fromJS(action.payload));
         case ActionType.RECEIVE_PO_MATERIAL_BY_CD://商品编码获取商品详情
             return state.set("poMaterial", fromJS(action.payload));

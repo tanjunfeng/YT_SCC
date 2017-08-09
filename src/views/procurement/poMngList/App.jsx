@@ -48,10 +48,8 @@ class PoMngList extends PureComponent {
         this.onActionMenuSelect = ::this.onActionMenuSelect;
         this.onPaginate = ::this.onPaginate;
         this.renderActions = ::this.renderActions;
-        this.applySearch = ::this.applySearch;
         this.applyReset = ::this.applyReset;
         this.applyDelete =::this.applyDelete;
-        this.queryPoList =::this.queryPoList;
         this.handleRejectedModalOk =::this.handleRejectedModalOk;
         // 初始采购单查询参数
         this.searchParams = {};
@@ -60,7 +58,6 @@ class PoMngList extends PureComponent {
     }
 
     componentDidMount() {
-        console.log("componentDidMount");
         this.queryPoList();
     }
 
@@ -68,13 +65,8 @@ class PoMngList extends PureComponent {
    * 查询采购单管理列表
    * @param {*} params 
    */
-    queryPoList(params) {
-        let tmp = params || {};
-        let allParams = Object.assign({
-            pageSize: PAGE_SIZE,
-            pageNum: this.current,
-        }, allParams, this.searchParams, tmp);
-        this.props.fetchPoMngList(allParams);
+    queryPoList = (params) => {
+        this.props.fetchPoMngList({});
     }
 
     handleRejectedModalOk = (e) => {
@@ -83,57 +75,14 @@ class PoMngList extends PureComponent {
         //   visible: false,
         // });
     }
-    onActionMenuSelect(record, index, items) {
-        const { id } = record;
-        const { key } = items;
-        // 采购单id  是否换成采购单号？？？？
-        let ids = [record.id];
-        switch (key) {
-            case "delete":
-                Modal.confirm({
-                    title: '你确认要删除该采购单？',
-                    onOk: () => {
-                        this.props.deletePoByIds({
-                            ids
-                        }).then(() => {
-                            message.success('删除成功');
-                            this.queryPoList();
-                        })
-                    },
-                    onCancel() { },
-                });
-                break;
-            case "rejected":
-                Modal.info({
-                    title: '审核拒绝详情',
-                    content: (
-                        <div>
-                            <div>审核时间:</div>
-                            <div>审核者:</div>
-                            <div>审核内容: <p>这里是审核拒绝原因内容</p></div>
-                        </div>
-                    ),
-                    onOk() { },
-                });
-                break;
-            default:
-                break;
-        }
-    }
 
     /**
      * 点击查询按钮回调
      * @param {*} res 
      */
-    applySearch(res) {
+    applySearch = (res) => {
         this.searchParams = res;
-        console.log("got params", res);
-        this.queryPoList();
-        // 点击查询后清空选中列表
-        this.props.changePoMngSelectedRows({
-            selectedRowKeys: [],
-            selectedRows: []
-        });
+        this.queryPoList(this.searchParams);
     }
 
     /**
@@ -186,7 +135,43 @@ class PoMngList extends PureComponent {
         this.current = pageNumber
         this.queryPoList();
     }
-
+    onActionMenuSelect(record, index, items) {
+        const { id } = record;
+        const { key } = items;
+        // 采购单id  是否换成采购单号？？？？
+        let ids = [record.id];
+        switch (key) {
+            case "delete":
+                Modal.confirm({
+                    title: '你确认要删除该采购单？',
+                    onOk: () => {
+                        this.props.deletePoByIds({
+                            ids
+                        }).then(() => {
+                            message.success('删除成功');
+                            this.queryPoList();
+                        })
+                    },
+                    onCancel() { },
+                });
+                break;
+            case "rejected":
+                Modal.info({
+                    title: '审核拒绝详情',
+                    content: (
+                        <div>
+                            <div>审核时间:</div>
+                            <div>审核者:</div>
+                            <div>审核内容: <p>这里是审核拒绝原因内容</p></div>
+                        </div>
+                    ),
+                    onOk() { },
+                });
+                break;
+            default:
+                break;
+        }
+    }
     renderActions(text, record, index) {
         const { statusCd, purchaseOrderNo } = record;
         const { pathname } = this.props.location;
@@ -224,9 +209,11 @@ class PoMngList extends PureComponent {
     }
 
     render() {
-        const data01 = [{purchaseOrderNo: 1}, {purchaseOrderNo: 13, statusName: 0}, {purchaseOrderNo: 20}]
+        // console.log(this.props)
         columns[columns.length - 1].render = this.renderActions;
-        const { data, total, pageNum, pageSize } = this.props.poList;
+        const { poList = {} } = this.props;
+        // console.log(poList)
+        const { data = [], total, pageNum, pageSize } = poList;
         const { selectedPoMngRows } = this.props;
 
         const rowSelection = {
@@ -277,7 +264,7 @@ class PoMngList extends PureComponent {
 
 PoMngList.propTypes = {
     fetchPoMngList: PropTypes.func,
-
+    poList: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(PoMngList));

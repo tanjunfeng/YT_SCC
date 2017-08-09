@@ -9,8 +9,9 @@ import { fromJS } from 'immutable';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 import Utils from '../../../util/util';
 import LevelTree from '../../../common/levelTree';
 import {
@@ -35,6 +36,10 @@ class ClassifiedList extends Component {
         this.handleDrop = ::this.handleDrop;
         this.handleChangeSort = ::this.handleChangeSort;
         this.handleChangeStatus = ::this.handleChangeStatus;
+
+        this.state = {
+            msgHide: true,
+        }
     }
 
     componentWillMount() {}
@@ -42,6 +47,27 @@ class ClassifiedList extends Component {
     componentDidMount() {
         this.props.fetchAction();
     }
+
+    /**
+     * 临时处理后端问题，后端请求要5s 左右才可能返回正确数据
+     * @param callback
+     */
+    locker(callback) {
+        const delay = 3000;
+        const hide = message.loading(`数据处理大约需要${delay / 1000}秒左右，请耐心等待`, 0);
+
+        this.setState({
+            msgHide: false,
+        });
+
+        setTimeout(() => {
+            this.setState({
+                msgHide: true,
+            });
+            hide();
+            callback();
+        }, delay);
+    };
 
     /**
      * 通过输入框排序
@@ -75,14 +101,16 @@ class ClassifiedList extends Component {
             id: mkey,
             displayStatus: value,
         }).then(() => {
-            // 本地修改
-            Utils.find($data, mkey, ($finder, deep) => {
-                const $dealData = $data.setIn(
-                    deep.concat('status'),
-                    parseInt(value, 10)
-                );
+            this.locker(() => {
+                // 本地修改
+                Utils.find($data, mkey, ($finder, deep) => {
+                    const $dealData = $data.setIn(
+                        deep.concat('status'),
+                        parseInt(value, 10)
+                    );
 
-                this.props.receiveData($dealData);
+                    this.props.receiveData($dealData);
+                });
             });
         }).catch(() => {
             message.error('操作失败');
@@ -125,7 +153,6 @@ class ClassifiedList extends Component {
             id: currentKey,
             newSortOrder: toSort,
         }).then(() => {
-
             /* TODO -- 切勿删除 */
             /* 这里暂时不再进行前端排序，请求数据之后，重新发送请求获新数据 */
             // Utils.find($data, parentKey, ($finder, deep, $child) => {
@@ -150,14 +177,20 @@ class ClassifiedList extends Component {
             //     message.success('操作成功');
             // }
 
-            this.props.fetchAction();
-            message.success('操作成功');
+            this.locker(() => {
+                this.props.fetchAction();
+            });
+            // message.success('操作成功');
         }).catch(() => {
             message.error('操作失败');
         })
     }
 
     render() {
+        const clsMsg = classNames('msg-cover', {
+            'msg-cover-hide': this.state.msgHide
+        });
+
         return (
             <div>
                 <LevelTree
@@ -166,6 +199,7 @@ class ClassifiedList extends Component {
                     handleChangeSort={this.handleChangeSort}
                     handleChangeStatus={this.handleChangeStatus}
                 />
+                <div className={clsMsg} />
             </div>
         )
     }

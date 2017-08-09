@@ -7,9 +7,11 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-// import QueueAnim from 'rc-queue-anim';
+import { message } from 'antd';
 
 import InputItem from './inputItem';
+
+import { MAXGOODS } from '../../../constant'
 
 const initValue = [{
     startNumber: 1,
@@ -91,6 +93,10 @@ class SteppedPrice extends PureComponent {
             return;
         }
         const { endNumber } = defaultValue[defaultValue.length - 1];
+        if (endNumber === MAXGOODS) {
+            message.warning('商品数达到最大值，无法再添加！')
+            return;
+        }
         const newItem = {
             startNumber: endNumber + 1,
             endNumber: endNumber + 2,
@@ -152,7 +158,7 @@ SteppedPrice.propTypes = {
 SteppedPrice.defaultProps = {
     prefixCls: 'stepped-Price',
     inputSize: 'small',
-    min: 1,
+    min: 0,
     defaultValue: initValue,
     handleChange: () => {}
 }

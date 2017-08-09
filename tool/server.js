@@ -21,6 +21,7 @@ if (__TEST__) {
     rules = [{
         pattern: /https?:\/\/[-\w\.]*(?::\d+)?\/(.+)/,
         // responder: 'http://172.30.10.157:8080/$1',
+<<<<<<< HEAD
         // responder: 'http://172.30.40.20:8082/$1',
         // responder: 'http://172.30.40.34:8082/$1',
         // responder: 'http://172.30.40.61:8084/$1',
@@ -28,6 +29,10 @@ if (__TEST__) {
         // responder: 'http://172.30.40.101:8082/$1',
         responder: 'http://sitxcsc.yatang.com.cn/$1'
         // responder: 'http://devxcsc.yatang.com.cn/$1'
+=======
+        // responder: 'http://172.30.40.97:8082/$1',
+        responder: 'http://sitxcsc.yatang.com.cn/$1'
+>>>>>>> 9fd880672c0acb21f0c0433ebac3fd56579571b8
     }];
 } else {
     host = 'localhost';
