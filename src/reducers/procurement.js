@@ -71,7 +71,8 @@ export default function (state = initState, action) {
         case ActionType.GET_WAREHOUSE_ADDRESS_MAP:
             //不改变state
             return state;
-        case ActionType.RECEIVE_PO_DETAIL://采购单详情
+        // 采购单详情
+        case ActionType.RECEIVE_PO_DETAIL:
             return state.set('po', fromJS(action.payload));
 
         case ActionType.INIT_PO_DETAIL://初始采购单详情

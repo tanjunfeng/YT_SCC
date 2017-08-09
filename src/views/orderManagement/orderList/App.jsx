@@ -145,6 +145,7 @@ class OrderManagementList extends Component {
     }
 
     componentDidMount() {
+        this.getSearchData();
     }
 
     /**
@@ -183,7 +184,6 @@ class OrderManagementList extends Component {
 
         const { submitStartTime, submitEndTime } = this.time;
         const { franchiseeId, branchCompanyId } = this.state;
-        console.log(branchCompanyId)
         this.current = 1;
         this.searchData = {
             id,

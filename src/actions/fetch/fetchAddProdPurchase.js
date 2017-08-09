@@ -6,7 +6,7 @@
  */
 
 import Promise from 'bluebird';
-import { fetchAddProdPurchase } from '../../service';
+import { addProdPurchase } from '../../service';
 import ActionType from '../ActionType';
 
 const receive = (data) => ({
@@ -16,7 +16,7 @@ const receive = (data) => ({
 
 export default (params) => dispatch => (
     new Promise((resolve, reject) => {
-        fetchAddProdPurchase(params)
+        addProdPurchase(params)
             .then(res => {
                 dispatch(receive(res.data));
             })
