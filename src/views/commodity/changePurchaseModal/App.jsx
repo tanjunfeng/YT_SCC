@@ -97,7 +97,7 @@ class ProdModal extends Component {
                 // 仓库ID
                 distributeWarehouseId: nextProps.updateProdRecord.id,
             });
-            console.log(nextProps.updateProdRecord.spAdrId)
+            // console.log(nextProps.updateProdRecord.spAdrId)
             this.ids = {
                 // 供应商id
                 spId: nextProps.updateProdRecord.spId,

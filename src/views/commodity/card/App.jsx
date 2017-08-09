@@ -162,11 +162,6 @@ class Cardline extends Component {
      * 修改主供应商用时的确认按钮回调
      */
     handleCheckOk(item, bool) {
-        this.props.fetchCheckMainSupplier({
-            branchCompanyId: item.branchCompanyId,
-            supplierType: 1,
-            productId: item.productId
-        })
         if (bool) {
             Modal.confirm({
                 title: '提示',
