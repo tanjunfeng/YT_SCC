@@ -384,7 +384,7 @@ class PoRcvMngList extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40}>
-                            <Col span={4}>
+                            <Col span={6}>
                                 {/* 采购单类型 */}
                                 <FormItem label="采购单类型">
                                     {getFieldDecorator('purchaseOrderType', { initialValue: poType.defaultValue })(
@@ -401,7 +401,7 @@ class PoRcvMngList extends PureComponent {
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
+                            <Col span={6}>
                                 {/* 供应商 */}
                                 <FormItem formItemLayout>
                                     <div className="row middle">
@@ -446,7 +446,7 @@ class PoRcvMngList extends PureComponent {
                                 </FormItem>
                             </Col>
                             {/* 供应商地点 */}
-                            <Col span={8}>
+                            <Col span={6}>
                                 <FormItem className="">
                                     <div className="row middle">
                                         <span className="ant-form-item-label">
@@ -500,7 +500,7 @@ class PoRcvMngList extends PureComponent {
                                     </div>
                                 </FormItem>
                             </Col>
-                            <Col span={4}>
+                            <Col span={6}>
                                 {/* 收货单状态 */}
                                 <FormItem label="收货单状态">
                                     {getFieldDecorator('status', { initialValue: status.defaultValue })(
