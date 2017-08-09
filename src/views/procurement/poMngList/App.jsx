@@ -173,12 +173,12 @@ class PoMngList extends PureComponent {
         }
     }
     renderActions(text, record, index) {
-        const { statusCd, id } = record;
+        const { statusCd, purchaseOrderNo } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.onActionMenuSelect(record, index, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/${id}`}>采购单详情</Link>
+                    <Link to={`${pathname}/${purchaseOrderNo}`}>采购单详情</Link>
                 </Menu.Item>
 
                 {statusCd === poStatusCodes.draft && <Menu.Item key="delete">
@@ -230,7 +230,6 @@ class PoMngList extends PureComponent {
                 disabled: record.statusCd !== poStatusCodes.draft,
             })
         };
-
         return (
             <div className="po-mng-list">
                 <SearchForm
@@ -242,7 +241,7 @@ class PoMngList extends PureComponent {
                 <div>
                     <Table
                         rowSelection={rowSelection}
-                        dataSource={data}
+                        dataSource={data01}
                         columns={columns}
                         rowKey="id"
                         scroll={{

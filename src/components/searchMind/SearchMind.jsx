@@ -12,8 +12,14 @@ import Utils from '../../util/util';
 import './searchMind.scss';
 
 const TYPE = {
+    // 数据加载状态
     LOADING: 'loading',
+    // 默认状态
     DEFAULT: 'search',
+    // 选中状态
+    CHOOSED: 'check',
+    // 输入状态
+    EDIT: 'ellipsis',
 };
 
 class SearchMind extends PureComponent {
@@ -28,7 +34,7 @@ class SearchMind extends PureComponent {
 
             /**
              * 当前 icon 类型
-             * @param search, loading
+             * @param {TYPE}
              */
             type: TYPE.DEFAULT,
 
@@ -135,6 +141,10 @@ class SearchMind extends PureComponent {
         // 搜索发生变化，清空 current
         pager.current = 1;
 
+        this.setState({
+            type: TYPE.EDIT,
+        });
+
         if (quickSearch) {
             this.setState({
                 pagination: pager,
@@ -154,18 +164,67 @@ class SearchMind extends PureComponent {
      * 点击清除按钮的回调
      */
     onClearCallback() {
-        this.props.onClear({
-            value: this.state.value,
-            raw: this.state.selectedRawData,
-        });
+        this.props.onClear(this.getData());
     }
 
     /**
-     * API 获取选择的源数据
-     * @return {null}
+     * 获取选择的数据
+     * @return {{value: *, selected: null}}
      */
     getData() {
-        return this.state.selectedRawData;
+
+        return {
+            value: this.state.value,
+            selected: this.state.selectedRawData,
+        };
+    }
+
+    /**
+     * 获取下拉框内容节点
+     */
+    getDrop() {
+        const {
+            type,
+            data,
+            pagination,
+        } = this.state;
+
+        const {
+            columns,
+            noDataText,
+            loadingText,
+            rowKey,
+        } = this.props;
+
+        if (this.isEmpty()) {
+            return null;
+        }
+
+        if (data && data.length > 0) {
+            return (
+                <Table
+                    rowKey={rowKey}
+                    columns={columns}
+                    dataSource={data}
+                    pagination={pagination}
+                    loading={type === TYPE.LOADING}
+                    size="middle"
+                    onRowClick={this.handleChoose}
+                    onChange={this.handleTableChange}
+                />
+            )
+        }
+
+        if (type === TYPE.EDIT || type === TYPE.LOADING) {
+            return (
+                <NoData>{loadingText}</NoData>
+            );
+        }
+
+        return (
+            <NoData>{noDataText}</NoData>
+        );
+
     }
 
     /**
@@ -203,7 +262,10 @@ class SearchMind extends PureComponent {
     }
 
     handleBlur() {
+        const { value, inArea } = this.state;
+
         this.setState({
+            value: inArea ? value : '',
             isFocus: false,
         });
     }
@@ -225,9 +287,9 @@ class SearchMind extends PureComponent {
      */
     query() {
         const { value, pagination, disabled } = this.state;
-        const { totalIndex } = this.props;
+        const { totalIndex, fetch } = this.props;
 
-        if (disabled) {
+        if (disabled || this.isEmpty() || !fetch) {
             return;
         }
 
@@ -241,7 +303,7 @@ class SearchMind extends PureComponent {
         });
 
         // 将原始数据传递给外部回调
-        this.props.fetch(params)
+        fetch(params)
             .then(res => {
                 const pager = { ...pagination };
 
@@ -255,6 +317,14 @@ class SearchMind extends PureComponent {
                     data: res.data.data,
                     pagination: pager,
                 });
+            })
+
+            .catch(() => {
+                this.setState({
+                    type: TYPE.DEFAULT,
+                    total: 0,
+                    data: [],
+                })
             })
     }
 
@@ -318,6 +388,7 @@ class SearchMind extends PureComponent {
             inArea: false,
             value: '',
             data: [],
+            type: TYPE.CHOOSED,
         });
 
         this.ywcSmindInput.blur();
@@ -354,15 +425,19 @@ class SearchMind extends PureComponent {
         const { dropHide } = this.state;
 
         if (!dropHide) {
+            // 清除输入框
             this.setState({
                 value: '',
                 data: [],
+                type: this.state.selectedRawData === null ? TYPE.DEFAULT : TYPE.CHOOSED
             }, () => this.onClearCallback());
 
             this.ywcSmindInput.focus();
         } else {
+            // 清除选择的数据
             this.setState({
                 selectedRawData: null,
+                type: TYPE.DEFAULT,
             }, () => this.onClearCallback());
         }
     }
@@ -562,6 +637,9 @@ SearchMind.propTypes = {
      */
     renderChoosedInputRaw: PropTypes.oneOfType([PropTypes.func, PropTypes.func]),
 
+    /**
+     * 组件通过什么 key 来查找 total 字段
+     */
     totalIndex: PropTypes.string,
 
     pageSize: PropTypes.number,
@@ -569,6 +647,17 @@ SearchMind.propTypes = {
     defaultValue: PropTypes.string,
 
     disabled: PropTypes.bool,
+
+    /**
+     * 无表格状态下，没有搜索到内容的文字提示
+     */
+    noDataText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+
+
+    /**
+     * 无表格状态下，数据加载文字
+     */
+    loadingText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 
     /**
      * 手动指定下拉框的宽度
@@ -588,6 +677,8 @@ SearchMind.defaultProps = {
     pageSize: 10,
     delaySend: 320,
     placeholder: '请输入内容',
+    noDataText: '没有匹配的数据',
+    loadingText: '数据请求中',
     rowKey: 'id',
     quickSearch: true,
     renderChoosedInputRaw: null,
