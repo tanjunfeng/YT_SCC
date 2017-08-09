@@ -31,7 +31,7 @@ export const poStatusCodes = {
 }
 
 // 收货单状态清单
-export const receivedCode = {
+export const status = {
     defaultValue: '',
     data: [{
         key: '',
@@ -55,7 +55,7 @@ export const receivedCode = {
 }
 
 // 地点类型值清单
-export const locType = {
+export const adrType = {
     defaultValue: '',
     data: [{
         key: '',
@@ -81,7 +81,7 @@ export const poType = {
         key: '',
         value: '请选择'
     }, {
-        key: '1',
+        key: '0',
         value: '普通采购'
     }]
 }
