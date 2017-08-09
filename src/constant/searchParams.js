@@ -399,6 +399,9 @@ export const payStatusOptions = {
     }, {
         key: 'YTK',
         value: '已退款'
+    }, {
+        key: 'GSN',
+        value: '公司内'
     }]
 }
 

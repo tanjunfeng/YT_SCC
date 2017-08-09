@@ -80,11 +80,12 @@ class SearchForm extends Component {
             supplyChoose1: {},
             supplyChoose2: {},
             visible: true,
-            sort: 1
+            sort: 1,
         }
     }
 
     componentDidMount() {
+        // this.props.fetchAction();
     }
 
     /**

@@ -399,7 +399,7 @@ export const queryAllCategories = () => http.get('/category/queryAllCategories')
  * @param newSortOrder
  */
 export const updateSortNum = ({ id, newSortOrder }) => (
-    http.post('/category/updateSortNum', { id, newSortOrder })
+    http.post('/category/updateSortNum', { id, newSortOrder }, true)
 );
 
 /**
@@ -408,7 +408,7 @@ export const updateSortNum = ({ id, newSortOrder }) => (
  * @param displayStatus
  */
 export const updateShowStatus = ({ id, displayStatus }) => (
-    http.post('/category/updateShowStatus', { id, displayStatus })
+    http.post('/category/updateShowStatus', { id, displayStatus }, true)
 );
 
 // 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
@@ -506,7 +506,7 @@ export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', par
 //查询采购单打印列表
 export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
 //查询采购单详情
-export const queryPoDetail = (params) => http.get('/provider/queryPoDetail', params);
+export const queryPoDetail = (params) => http.get('/pmPurchaseOrder/getPurchaseOrderInfoById', params);
 //创建采购单详情
 export const createPo = (params) => http.post('/provider/createPo', params);
 //审批
@@ -612,6 +612,8 @@ export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBa
 export const getFranchiseeInfo = (params) => http.get('/sorder/getFranchiseeInfo', params);
 // 查询可用子公司信息
 export const findCanUseCompanyInfo = (params) => http.get('/supplier/findCompanyBaseInfo', params);
+// 此接口用于查询各级分类（值清单）
+export const queryCategorysByLevel = (params) => http.get('/category/queryCategories', params);
 
 // 订单管理-查询订单列表
 export const queryOrder = (params) => http.get('/sorder/queryOrder', params);

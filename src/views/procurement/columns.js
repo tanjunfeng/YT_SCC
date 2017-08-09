@@ -12,8 +12,8 @@ import moment from 'moment';
 export const poMngListColumns = [
     {
         title: '采购单号',
-        dataIndex: 'poNo',
-        key: 'poNo',
+        dataIndex: 'purchaseOrderNo',
+        key: 'purchaseOrderNo',
     },
     {
         title: '采购单类型',

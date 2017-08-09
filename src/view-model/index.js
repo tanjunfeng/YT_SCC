@@ -20,6 +20,8 @@ import EmerContInfo from './emerContInfo';
 
 import SettledContInfo from './settledContInfo';
 
+import ProcurementDt from './procurementDt';
+
 export {
     ClassifiedList,
     Sider,
@@ -28,5 +30,6 @@ export {
     OperTaxContent,
     BankContent,
     EmerContInfo,
-    SettledContInfo
+    SettledContInfo,
+    ProcurementDt,
 }
