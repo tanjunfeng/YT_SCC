@@ -61,7 +61,6 @@ class BankInfo extends PureComponent {
         const { supplierBasicInfo = {} } = data;
         Tools.checkAddress(this.companyAddress, 'companyAddress', this);
         const upload = this.nodebankFile.getValue();
-        console.log(this.companyAddress)
         if (!upload.files.length) {
             Tip(true, '请上传银行开户许可证电子版');
             return;
@@ -107,17 +106,17 @@ class BankInfo extends PureComponent {
     handleCompanyAddressChange(data) {
         this.companyAddress = data;
         const { getFieldError } = this.props.form;
-        if (
-            getFieldError('companyAddress')
-            && this.companyAddress.thirdValue
-            && this.companyAddress.thirdValue !== '-1'
-        ) {
-            this.props.form.setFields({
-                companyAddress: {
-                    error: null
-                }
-            })
-        }
+        // if (
+        //     getFieldError('companyAddress')
+        //     && this.companyAddress.thirdValue
+        //     && this.companyAddress.thirdValue !== '-1'
+        // ) {
+        //     this.props.form.setFields({
+        //         companyAddress: {
+        //             error: null
+        //         }
+        //     })
+        // }
     }
 
     handleCompanyNameChange = (e) => {

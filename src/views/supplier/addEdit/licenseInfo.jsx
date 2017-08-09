@@ -50,7 +50,6 @@ class LicenseInfo extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.handleNextStep = ::this.handleNextStep;
         this.handleCompanyAddressChange = ::this.handleCompanyAddressChange;
         this.handleOperatingPeriod = ::this.handleOperatingPeriod;
         this.handleSaveDraft = ::this.handleSaveDraft;
@@ -81,8 +80,8 @@ class LicenseInfo extends PureComponent {
 
     getVlaue(callback) {
         const { form, onGoTo, isEdit, detailData = {}, data } = this.props;
-        Tools.checkAddress(this.companyAddress, 'companyLoc', this);
-        Tools.checkAddress(this.licenseLoc, 'licenseLocSpace', this);
+        // Tools.checkAddress(this.companyAddress, 'companyLoc', this);
+        // Tools.checkAddress(this.licenseLoc, 'licenseLocSpace', this);
         const registrationCertificate = this.refs.registrationCertificate.getValue();
         const qualityIdentification = this.refs.qualityIdentification.getValue();
         const generalTaxpayerQualifiCerti = this.refs.generalTaxpayerQualifiCerti.getValue();
@@ -240,14 +239,34 @@ class LicenseInfo extends PureComponent {
 
     handleCompanyAddressChange(data) {
         this.companyAddress = data;
+        const { getFieldError } = this.props.form;
+        // if (
+        //     getFieldError('companyLoc')
+        //     && this.companyAddress.thirdValue
+        //     && this.companyAddress.thirdValue !== '-1'
+        // ) {
+        //     this.props.form.setFields({
+        //         companyLoc: {
+        //             error: null
+        //         }
+        //     })
+        // }
     }
 
     handleCompanyLicenseLocChange(data) {
         this.licenseLoc = data;
-    }
- 
-    handleNextStep() {
-        
+        const { getFieldError } = this.props.form;
+        // if (
+        //     getFieldError('licenseLocSpace')
+        //     && this.companyAddress.thirdValue
+        //     && this.companyAddress.thirdValue !== '-1'
+        // ) {
+        //     this.props.form.setFields({
+        //         licenseLocSpace: {
+        //             error: null
+        //         }
+        //     })
+        // }
     }
 
     handleOperatingPeriod() {
@@ -282,19 +301,22 @@ class LicenseInfo extends PureComponent {
                                 <Row>
                                     <Col span={8}>
                                         <span>*公司所在地：</span>
-                                        <CasadingAddress
-                                            id="companyLoc"
-                                            defaultValue={
-                                                isEdit
-                                                ? [
-                                                    supplierOperTaxInfo.companyLocProvinceCode,
-                                                    supplierOperTaxInfo.companyLocCityCode,
-                                                    supplierOperTaxInfo.companyLocCountyCode
-                                                ]
-                                                : []
-                                            }
-                                            onChange={this.handleCompanyAddressChange}
-                                        />
+                                        {getFieldDecorator('companyLoc', {
+                                        })(
+                                            <CasadingAddress
+                                                id="companyLoc"
+                                                defaultValue={
+                                                    isEdit
+                                                    ? [
+                                                        supplierOperTaxInfo.companyLocProvinceCode,
+                                                        supplierOperTaxInfo.companyLocCityCode,
+                                                        supplierOperTaxInfo.companyLocCountyCode
+                                                    ]
+                                                    : []
+                                                }
+                                                onChange={this.handleCompanyAddressChange}
+                                            />
+                                       )}
                                     </Col>
                                     <Col span={8}>
                                         <span>*公司详细地址：</span>

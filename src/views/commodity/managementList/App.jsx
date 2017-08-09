@@ -55,7 +55,7 @@ const columns = [{
                     <span>{productCode}</span>
                 </div>
                 <div className="table-commodity-description">
-                    <img alt="未上传" className="table-commodity-description-img" src={thumbnailImage} />
+                    <img alt="未上传" className="table-commodity-description-img" src={'http://sit.image.com/' + thumbnailImage} />
                     <span className="table-commodity-description-name">{saleName}</span>
                 </div>
             </div>
