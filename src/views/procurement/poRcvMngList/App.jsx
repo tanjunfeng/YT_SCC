@@ -96,7 +96,16 @@ class PoRcvMngList extends PureComponent {
             }, {
                 title: '采购单类型',
                 dataIndex: 'purchaseOrderType',
-                key: 'purchaseOrderType'
+                key: 'purchaseOrderType',
+                render: poTypeCode => {
+                    let text = '';
+                    poType.data.forEach(item => {
+                        if (poTypeCode === +(item.key)) {
+                            return text = item.value;
+                        }
+                    });
+                    return text;
+                }
             }, {
                 title: '供应商编号',
                 dataIndex: 'spNo',
@@ -118,12 +127,21 @@ class PoRcvMngList extends PureComponent {
                 dataIndex: 'estimatedDeliveryDate',
                 key: 'estimatedDeliveryDate',
                 render: text => {
-                    return moment(new Date(text), dateFormat).format(dateFormat);
+                    return moment(new Date(text)).format(dateFormat);
                 }
             }, {
                 title: '地点类型',
                 dataIndex: 'adrType',
-                key: 'adrType'
+                key: 'adrType',
+                render: adrTypeCode => {
+                    let text = '';
+                    adrType.data.forEach(item => {
+                        if (adrTypeCode === +(item.key)) {
+                            return text = item.value;
+                        }
+                    });
+                    return text;
+                }
             }, {
                 title: '地点',
                 dataIndex: 'adrTypeName',
@@ -133,21 +151,27 @@ class PoRcvMngList extends PureComponent {
                 dataIndex: 'estimatedReceivedDate',
                 key: 'estimatedReceivedDate',
                 render: text => {
-                    return moment(new Date(text), dateFormat).format(dateFormat);
+                    return moment(new Date(text)).format(dateFormat);
                 }
             }, {
                 title: '收货日期',
                 dataIndex: 'receivedTime',
                 key: 'receivedTime',
                 render: text => {
-                    return moment(new Date(text), dateFormat).format(dateFormat);
+                    return moment(new Date(text)).format(dateFormat);
                 }
             }, {
                 title: '收货单状态',
                 dataIndex: 'status',
                 key: 'status',
                 render: statusCode => {
-                    return status.data[statusCode];
+                    let text = '';
+                    status.data.forEach(item => {
+                        if (statusCode === +(item.key)) {
+                            return text = item.value;
+                        }
+                    });
+                    return text;
                 }
             }, {
                 title: '操作',
