@@ -185,7 +185,7 @@ class SuppliersAppList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    (status === 1 || status === 2) &&
+                    (spStatus === 1 || spStatus === 2) && (status === 1 || status === 2) &&
                     <Menu.Item key="addAddress">
                         <Link to={`${pathname}/add/${id}`}>
                             新增供应商地点信息
@@ -194,7 +194,7 @@ class SuppliersAppList extends PureComponent {
                 }
                 {
                     // 3:已拒绝
-                    status === 3 &&
+                    (status === 3 || spStatus === 3) &&
                     <Menu.Item key="ChangeMessage">
                         <a target="_blank" rel="noopener noreferrer">
                             查看审核已拒绝原因
@@ -211,7 +211,7 @@ class SuppliersAppList extends PureComponent {
                 </Menu.Item>
                 {
                     // 0： 制单状态、2：已审核、3:已拒绝
-                    (spStatus === 0 || spStatus === 2 || spStatus === 3 || spStatus === 4) &&
+                    (status === 0 || status === 2 || status === 3 || status === 4) &&
                     <Menu.Item key="modifySupAddInfor">
                         <Link to={`${pathname}/edit/${id}`}>
                             修改供应商地点信息

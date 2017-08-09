@@ -419,7 +419,7 @@ const routes = [
                             render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
                         />
                         <Route
-                            path="/po/:poid"
+                            path="/po/:purchaseOrderNo"
                             exact
                             render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
                         />
