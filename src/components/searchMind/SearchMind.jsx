@@ -193,10 +193,7 @@ class SearchMind extends Component {
             rowKey,
         } = this.props;
 
-        if (this.isEmpty()) {
-            return null;
-        }
-
+        // 有数据列表
         if (data && data.length > 0) {
             return (
                 <Table
@@ -211,6 +208,10 @@ class SearchMind extends Component {
                 />
             )
         }
+
+        // if (type === TYPE.DEFAULT) {
+        //     return null;
+        // }
 
         if (type === TYPE.EDIT || type === TYPE.LOADING) {
             return (
@@ -231,9 +232,10 @@ class SearchMind extends Component {
             isFocus: true,
         });
 
-        if (!this.isEmpty() && this.state.dropHide) {
-            this.query();
-        }
+        // if (!this.isEmpty() && this.state.dropHide) {
+        //     this.query();
+        // }
+        this.query();
     }
 
     /**
@@ -285,7 +287,7 @@ class SearchMind extends Component {
         const { value, pagination, disabled } = this.state;
         const { totalIndex, fetch } = this.props;
 
-        if (disabled || this.isEmpty() || !fetch) {
+        if (disabled || !fetch) {
             return;
         }
 
@@ -425,7 +427,10 @@ class SearchMind extends Component {
                 value: '',
                 data: [],
                 type: this.state.selectedRawData === null ? TYPE.DEFAULT : TYPE.CHOOSED
-            }, () => this.onClearCallback());
+            }, () => {
+                this.onClearCallback();
+                this.query();
+            });
 
             this.ywcSmindInput.focus();
         } else {
@@ -455,6 +460,7 @@ class SearchMind extends Component {
             value,
             isFocus,
             selectedRawData,
+            data,
             disabled,
         } = this.state;
 
@@ -468,7 +474,7 @@ class SearchMind extends Component {
         } = this.props;
 
         const layoutCls = classNames('ywc-smind', {
-            'ywc-smind-drop-hide': dropHide || this.isEmpty(),
+            'ywc-smind-drop-hide': dropHide || (this.isEmpty() && (data && data.length === 0)),
             'ywc-smind-has-input-view': renderChoosedInputRaw,
             'ywc-smind-disabled': disabled,
         });
