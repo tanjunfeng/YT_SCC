@@ -26,7 +26,7 @@ import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import {
     poStatus,
-    adrType,
+    locType as adrType,
     status,
     poType
 } from '../../../constant/procurement';

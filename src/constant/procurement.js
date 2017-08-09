@@ -55,7 +55,7 @@ export const status = {
 }
 
 // 地点类型值清单
-export const adrType = {
+export const locType = {
     defaultValue: '',
     data: [{
         key: '',
