@@ -261,7 +261,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     // 3:已拒绝
-                    (status === 3 || spStatus === 1) &&
+                    (status === 3 || spStatus === 3) &&
                     <Menu.Item key="ChangeMessage">
                         <a target="_blank" rel="noopener noreferrer">
                             查看审核已拒绝原因
