@@ -50,6 +50,11 @@ class SearchMind extends Component {
             value: props.defaultValue,
 
             /**
+             * 点击下拉菜单，储存上次输入框对应的 value
+             */
+            selectedValue: '',
+
+            /**
              * 是否 input 获取了焦点
              */
             isFocus: false,
@@ -88,7 +93,7 @@ class SearchMind extends Component {
         this.dropListener = ::this.dropListener;
         this.handleClear = ::this.handleClear;
         this.handleTableChange = ::this.handleTableChange;
-        this.onPressEnter = ::this.onPressEnter;
+        this.handleQueryBtn = ::this.handleQueryBtn;
 
         this.searchDelayTimerId = null;
     }
@@ -117,13 +122,6 @@ class SearchMind extends Component {
     componentWillUnmount() {
         document.removeEventListener('click', this.dropListener);
         clearTimeout(this.searchDelayTimerId);
-    }
-
-    /**
-     * 按下回车键 or 由点击搜索按钮触发（!quickSearch）
-     */
-    onPressEnter() {
-        this.query();
     }
 
     /**
@@ -209,10 +207,6 @@ class SearchMind extends Component {
             )
         }
 
-        // if (type === TYPE.DEFAULT) {
-        //     return null;
-        // }
-
         if (type === TYPE.EDIT || type === TYPE.LOADING) {
             return (
                 <NoData>{loadingText}</NoData>
@@ -225,17 +219,24 @@ class SearchMind extends Component {
     }
 
     /**
+     * 点击搜索按钮
+     */
+    handleQueryBtn() {
+        this.ywcSmindInput.focus();
+        this.query();
+    }
+
+    /**
      * 输入框获得焦点 设置 isFocus
      */
     handleFocus() {
         this.setState({
             isFocus: true,
-        });
+        }, () => this.query());
 
         // if (!this.isEmpty() && this.state.dropHide) {
         //     this.query();
         // }
-        this.query();
     }
 
     /**
@@ -260,10 +261,7 @@ class SearchMind extends Component {
     }
 
     handleBlur() {
-        const { value, inArea } = this.state;
-
         this.setState({
-            value: inArea ? value : '',
             isFocus: false,
         });
     }
@@ -329,7 +327,7 @@ class SearchMind extends Component {
      * 这里是实际控制下拉框显示隐藏的地方，容器获得焦点状态以及鼠标在容器内部，都不关闭下拉框
      */
     dropListener() {
-        const { isFocus, inArea, disabled } = this.state;
+        const { isFocus, inArea, disabled, value, selectedRawData } = this.state;
 
         // 禁用状态，不再进行任何操作反馈
         if (disabled) {
@@ -342,6 +340,8 @@ class SearchMind extends Component {
             });
         } else {
             this.setState({
+                value: inArea ? value : '',
+                type: selectedRawData === null ? TYPE.DEFAULT : TYPE.CHOOSED,
                 dropHide: true,
             });
         }
@@ -353,7 +353,7 @@ class SearchMind extends Component {
      */
     handleKeyUp(event) {
         if (event.keyCode === 13) {
-            this.onPressEnter();
+            this.query();
         } else {
             this.onSearch();
         }
@@ -379,10 +379,10 @@ class SearchMind extends Component {
 
         this.setState({
             selectedRawData: record,
-            // 清空下列所有数据
             dropHide: true,
             isFocus: false,
             inArea: false,
+            selectedValue: this.state.value,
             value: '',
             data: [],
             type: TYPE.CHOOSED,
@@ -521,16 +521,22 @@ class SearchMind extends Component {
                             value={value}
                             {...inputProps}
                         />
+
+                        {/* 用于被选择的数据展示 */}
                         {(!isFocus && this.isEmpty()) &&
                             <div className="ywc-smind-input-view">
                                 {this.inputRawRender()}
                             </div>
                         }
+
+                        {/* placeholder */}
                         {this.isEmpty() && !selectedRawData &&
                             <div className="ywc-smind-input-placeholder">
                                 {placeholder}
                             </div>
                         }
+
+                        {/* 清空按钮 */}
                         <div
                             className={clearCls}
                             onClick={this.handleClear}
@@ -538,19 +544,21 @@ class SearchMind extends Component {
                             <Icon type="close-circle-o" />
                         </div>
                     </div>
+
+                    {/* 搜索按键 */}
                     <span
                         className="ywc-smind-icon"
-                        onClick={this.onPressEnter}
+                        onClick={this.handleQueryBtn}
                     >
                         <Icon type={type} />
                     </span>
                 </div>
-                {/* 默认隐藏 */}
+
+                {/* 搜索结构下拉菜单 默认隐藏 */}
                 <div
                     style={{
                         ...(dropWidth && { width: dropWidth })
                     }}
-                    ref={ref => { this.ywcSmindDropList = ref }}
                     className="ywc-smind-drop-layout"
                 >
                     {this.getDrop()}
