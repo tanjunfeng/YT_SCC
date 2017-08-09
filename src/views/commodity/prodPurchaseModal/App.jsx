@@ -56,12 +56,58 @@ class ProdPurchaseModal extends Component {
         this.handleCancel = ::this.handleCancel;
         this.handlePriceChange = ::this.handlePriceChange;
 
+        this.ids = {
+            // 供应商id
+            spId: props.getProductByIds.spId,
+            spNo: props.getProductByIds.spNo,
+            // 供应商地点id
+            supplierAddressId: props.getProductByIds.spAdrId,
+            // 仓库id
+            warehouseId: props.getProductByIds.id,
+            // 分公司id
+            childCompanyId: props.getProductByIds.branchCompanyId,
+            distributeWarehouseId: props.getProductByIds.distributeWarehouseId,
+        }
         this.state = {
             isDisabled: true,
-            distributeWarehouseId: null,
+            distributeWarehouseId: '',
             supplyChoose: {},
             supplyChoose1: {},
             supplyChoose2: {},
+
+            // 回显值赋值
+            spId: '',
+            spAdrId: '',
+            branchCompanyId: '',
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { getProductByIds = {} } = nextProps;
+        if (this.props.getProductByIds.spId !== getProductByIds.spId) {
+            this.setState({
+                //
+                spId: nextProps.getProductByIds.spId,
+                //
+                spAdrId: nextProps.getProductByIds.spAdrId,
+                //
+                branchCompanyId: nextProps.getProductByIds.branchCompanyId,
+                // 仓库ID
+                distributeWarehouseId: nextProps.getProductByIds.id,
+            });
+            console.log(nextProps.getProductByIds.spAdrId)
+            this.ids = {
+                // 供应商id
+                spId: nextProps.getProductByIds.spId,
+                // 供应商地点id
+                supplierAddressId: nextProps.getProductByIds.spAdrId,
+                // 仓库id
+                warehouseId: nextProps.getProductByIds.id,
+                // 分公司id
+                childCompanyId: nextProps.getProductByIds.branchCompanyId,
+                distributeWarehouseId: nextProps.getProductByIds.distributeWarehouseId,
+                spNo: null
+            }
         }
     }
 
@@ -72,19 +118,32 @@ class ProdPurchaseModal extends Component {
         this.setState({
             supplyChoose: record,
         });
+        this.ids.warehouseId = record.id;
     }
 
     /**
      * 供应商-值清单
      */
     handleSupplyChoose = ({ record }) => {
+        // console.log(record)
         this.setState({
             supplyChoose1: record,
             supplyChoose2: {},
             supplyChoose3: {},
         });
+        this.ids = {
+            spId: record.id,
+            spNo: record.spNo,
+            supplierAddressId: null,
+            warehouseId: null,
+            childCompanyId: null
+        }
         this.searchMind2.reset();
-        this.searchMind0.reset();
+        this.searchMind3.reset();
+    }
+
+    handleSupplierClear = () => {
+        this.ids.spId = null;
     }
 
     /**
@@ -97,16 +156,28 @@ class ProdPurchaseModal extends Component {
             supplyChoose3: {},
             isDisabled: false
         });
-        this.searchMind0.reset();
-        this.props.GetWarehouseInfo1({
-            supplierAddressId: record.spAdrid,
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
-        }).then((res) => {
-            this.setState({
-                supplyChoose: res.data.data[0]
-            });
-        })
+        this.searchMind3.reset();
+        this.ids.supplierAddressId = record.spAdrid;
+        this.ids.warehouseId = null;
+        this.ids.childCompanyId = record.branchCompanyId;
+
+        const { spId, spNo } = this.ids;
+
+        if (!spId) {
+            this.props.pubFetchValueList({
+                condition: record.spNo,
+                pageSize: 1,
+                pageNum: 1
+            }, 'supplierSearchBox').then((res) => {
+                const { spNo, companyName, spId } = res.data.data;
+                this.ids.spNo = spNo;
+                this.ids.spId = spId;
+                this.setState({
+                    spNo,
+                    companyName
+                })
+            })
+        }
     }
 
 
@@ -123,17 +194,23 @@ class ProdPurchaseModal extends Component {
             // console.log(values);
             // TODO post data
             this.props.AddProdPurchase({
-                spId: this.state.supplyChoose1.spId,
-                spAdrId: this.state.supplyChoose2.spAdrid || this.supplyChoose.id,
-                productId: this.props.getProductByIds.id,
-                branchCompanyId: this.state.supplyChoose2.branchCompanyId,
-                supplierType: values.mainSupplier ? 1 : 0,
-                purchaseInsideNumber: parseFloat(values.purchasePrice),
+                id: getProductByIds.id,
+                //
+                spId: this.ids.spId,
+                //
+                // spAdrId: getProductByIds.spAdrId,
+                spAdrId: this.ids.supplierAddressId,
+                productId: getProductByIds.productId,
+                //
+                // branchCompanyId: getProductByIds.branchCompanyId,
+                branchCompanyId: this.ids.childCompanyId,
+                supplierType: getProductByIds.supplierType,
+                purchaseInsideNumber: values.purchaseInsideNumber,
                 purchasePrice: parseFloat(values.purchasePrice),
-                // 条码
                 internationalCode: values.internationalCode,
                 // 仓库ID
-                distributeWarehouseId: this.state.supplyChoose.id
+                // distributeWarehouseId: getProductByIds.id,
+                distributeWarehouseId: this.ids.distributeWarehouseId,
             }).then((res) => {
                 this.props.productAddPriceVisible({isVisible: false});
                 message.success(res.message)
@@ -240,6 +317,7 @@ class ProdPurchaseModal extends Component {
                                         <SearchMind
                                             style={{ zIndex: 9 }}
                                             compKey="spNo"
+                                            onClear={this.handleSupplierClear}
                                             ref={ref => { this.searchMind1 = ref }}
                                             onChoosed={this.handleSupplyChoose}
                                             fetch={(params) => this.props.pubFetchValueList({

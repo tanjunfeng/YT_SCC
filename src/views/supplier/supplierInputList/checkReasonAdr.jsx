@@ -37,14 +37,14 @@ const Option = Select.Option;
 const TEXT = {
     supplierBasicInfo: {
         // id: '主键ID',
-        companyName: '公司名称',
+        companyName: '供应商名称',
         spNo: '供应商编号',
         grade: '供应商等级',
     },
     supplierOperTaxInfo: {
         spId: '供应商主表ID',
         // id: '主键ID2',
-        companyName: '公司名称2',
+        companyName: '公司名称',
         companyLocProvince: '省份名',
         companyLocCity: '城市名',
         companyLocCounty: '地区名',
@@ -64,7 +64,7 @@ const TEXT = {
     supplierBankInfo: {
         // spId: '供应商主表ID',
         // id: '主键ID',
-        accountName: '开户名字',
+        accountName: '开户名',
         openBank: '开户行',
         bankAccount: '银行账户',
         bankAccountLicense: '银行开户许可证电子版url',
@@ -148,10 +148,10 @@ const parse = (before, after, TEXT) => {
                 data.push({
                     before: cb,
                     after: ca,
-                    name: ct
+                    name: ct,
                 })
             }
-        } 
+        }
     }
     return data;
 }
@@ -302,7 +302,6 @@ class CheckReason extends PureComponent {
         const { editBeforeAfters } = this.props;
         const { before = {}, after = {} } = editBeforeAfters;
         const formData = parse(before, after, TEXT);
-
         return (
             <div>
                 {
@@ -369,13 +368,10 @@ class CheckReason extends PureComponent {
 
 CheckReason.propTypes = {
     editBeforeAfters: PropTypes.objectOf(PropTypes.any),
-    modifyCheckReasonVisible: PropTypes.bool,
-    checkResonVisible: PropTypes.bool,
     fetchEditBeforeAfter: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     visibleData: PropTypes.objectOf(PropTypes.any),
     modifyAdrVisible: PropTypes.objectOf(PropTypes.any),
-    getList: PropTypes.objectOf(PropTypes.any),
 }
 
 export default withRouter(Form.create()(CheckReason));

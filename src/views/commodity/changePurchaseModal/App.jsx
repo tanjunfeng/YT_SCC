@@ -340,7 +340,7 @@ class ProdModal extends Component {
                                                     width: 200,
                                                 }, {
                                                     title: '供应商名称',
-                                                    dataIndex: 'spName',
+                                                    dataIndex: 'companyName',
                                                     width: 200,
                                                 }
                                             ]}

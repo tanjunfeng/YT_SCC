@@ -203,6 +203,7 @@ class ProcurementMaintenance extends PureComponent {
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
                     handleAdd={this.handleAdd}
+                    getData={this.getData}
                 />
                 <div>
                     <Cardline
