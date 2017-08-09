@@ -84,7 +84,11 @@ class PoRcvMngList extends PureComponent {
             }, {
                 title: 'ASN',
                 dataIndex: 'asn',
-                key: 'asn'
+                key: 'asn',
+                render: text => {
+                    if (null === text || undefined === text || '' === text) text = '-';
+                    return text;
+                }
             }, {
                 title: '采购单号',
                 dataIndex: 'purchaseOrderNo',
@@ -93,10 +97,6 @@ class PoRcvMngList extends PureComponent {
                 title: '采购单类型',
                 dataIndex: 'purchaseOrderType',
                 key: 'purchaseOrderType'
-            }, {
-                title: '收货单状态',
-                dataIndex: 'status',
-                key: 'status'
             }, {
                 title: '供应商编号',
                 dataIndex: 'spNo',
@@ -116,7 +116,10 @@ class PoRcvMngList extends PureComponent {
             }, {
                 title: '预计送货日期',
                 dataIndex: 'estimatedDeliveryDate',
-                key: 'estimatedDeliveryDate'
+                key: 'estimatedDeliveryDate',
+                render: text => {
+                    return moment(new Date(text), dateFormat).format(dateFormat);
+                }
             }, {
                 title: '地点类型',
                 dataIndex: 'adrType',
@@ -128,16 +131,24 @@ class PoRcvMngList extends PureComponent {
             }, {
                 title: '预计到货日期',
                 dataIndex: 'estimatedReceivedDate',
-                key: 'estimatedReceivedDate'
-
+                key: 'estimatedReceivedDate',
+                render: text => {
+                    return moment(new Date(text), dateFormat).format(dateFormat);
+                }
             }, {
                 title: '收货日期',
                 dataIndex: 'receivedTime',
-                key: 'receivedTime'
+                key: 'receivedTime',
+                render: text => {
+                    return moment(new Date(text), dateFormat).format(dateFormat);
+                }
             }, {
-                title: '状态',
-                dataIndex: 'statusName',
-                key: 'statusName'
+                title: '收货单状态',
+                dataIndex: 'status',
+                key: 'status',
+                render: statusCode => {
+                    return status.data[statusCode];
+                }
             }, {
                 title: '操作',
                 dataIndex: 'operation',
@@ -218,7 +229,6 @@ class PoRcvMngList extends PureComponent {
             auditDuringFrom,
             auditDuringTo
         };
-
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
     }
@@ -229,7 +239,7 @@ class PoRcvMngList extends PureComponent {
     handleSearch() {
         //编辑查询条件
         this.editSearchParams();
-        //查询收获单列表
+        //查询收货单单列表
         this.queryRcvMngPoList();
     }
 
@@ -306,7 +316,7 @@ class PoRcvMngList extends PureComponent {
     }
 
     renderActions(text, record, index) {
-        const { statusCd, id } = record;
+        const { status, id } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.onActionMenuSelect(record, index, item)}>
