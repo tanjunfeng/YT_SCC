@@ -6,9 +6,11 @@
  */
 
 import Http from 'freed-spa/lib/util/http';
+import { message } from 'antd';
 import store from 'freed-spa/src/store';
 import { receiveLogout } from './actions/user';
-import LoginLayout from './views/login/LoginLayout'
+import LoginLayout from './views/login/LoginLayout';
+import ERRORTEXT from './constant/errorText';
 
 const http = new Http();
 
@@ -20,6 +22,13 @@ http.response(
         if (res.data.code === 401) {
             LoginLayout();
             return Promise.reject(res);
+        }
+        else if (res.data.code !== 200) {
+            const { code } = res.data;
+            const mess = res.data.message;
+            const errText = ERRORTEXT[code];
+            const err = mess || (errText || '未知错误')
+            message.error(err);
         }
         return Promise.resolve(res);
     },
@@ -38,13 +47,16 @@ http.response(
  * 下载相关api
  */
 // 下载供应商excel URL
-export const exportSupplierList = 'provider/exportSupplierList';
+// export const exportSupplierList = 'provider/exportSupplierList';
 
 // 下载供应商入驻列表
 // export const exportSupplierEnterList = 'provider/exportSupplierEnterList';
 
 // 下载供应商入驻列表
 export const exportSupplierEnterList = '/supplier/exportSettledList';
+
+// 下载供应商管理列表
+export const exportManageList = '/supplier/exportManageList';
 
 // 下载供应商修改列表
 export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
@@ -519,7 +531,9 @@ export const queryPoRcvMngList = (params) => http.get('/pmPurchaseReceipt/queryR
 // 采购单收货列表   采购单筛选条件：已审核、未收货
 export const queryPoRcvList = (params) => http.get('/provider/queryPoRcvList', params);
 // 查询收货详情 查询参数： 收货单id（poRcvId）或采购单id（poId）
-export const queryPoRcvDetail = (params) => http.get('/provider/queryPoRcvDetail', params);
+// export const queryPoRcvDetail = (params) => http.get('/provider/queryPoRcvDetail', params);
+// 购收货单详情（id，收货单id）
+export const queryPoRcvDetail = (params) => http.get('/pmPurchaseReceipt/queryReceiptDetailById', params);
 // 创建采购收货单
 export const createPoRcv = (params) => http.post('/provider/createPoRcv', params);
 
@@ -533,18 +547,32 @@ export const queryAdjustDetail = (params) => http.post('/provider/queryAdjustDet
  */
 // 供应商详情
 export const queryProviderDetail = (params) => http.get('/supplier/queryProviderDetail', params);
+
 // 查询所有大区
 export const queryAllLargerRegionProvince = (params) => http.get('/region/queryAllLargerRegionProvince', params);
+
 // 获取供应商或者供应商地点信息
 export const getSupplierNo = (params) => http.get('/supplier/getSupplierNo', params);
+
 // 新增或修改供应商信息
 export const insertOrUpdateSupplierInfo = (params) => http.post('/supplier/insertOrUpdateSupplierInfo', params);
+
 // 供应商入驻审核
 export const suppplierSettledAudit = (params) => http.post('/supplier/supplierSettledAudit', params);
+
 // 供应商地点入驻审核
 export const supplierAdrSettledAudit = (params) => http.post('/supplier/supplierAdrSettledAudit', params);
+
 // 供应商修改审核
 export const auditSupplierEditInfo = (params) => http.post('/supplier/auditSupplierEditInfo', params);
+
+/**
+ * 校验分公司id是否重复
+ * orgId 供应商地点分公司id
+ * id 供应商地点基本信息表id (修改时校验需要传)
+ * parentId 供应商地点对应供应商主表id
+ */
+export const checkSupplierAddOrgId = (params) => http.get('/supplier/checkSupplierAddOrgId', params);
 
 /**
  * 商品模块
@@ -624,3 +652,19 @@ export const supplierSearchBox = (params) => http.get('/supplier/supplierSearchB
 
 // 供应商地点选择组件
 export const supplierAdrSearchBox = (params) => http.get('/supplier/supplierAdrSearchBox', params);
+
+// 根据条件查询销售价格区间列表
+export const findStepPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
+
+// 删除价格区间
+export const deleteSellPriceById = (params) => http.get('/prodSell/deleteSellPriceById', params);
+
+// 新增销售价格区间
+export const addStepSellPrice = (params) => http.post('/prodSell/addSellPrice', params);
+
+// 根据id修改价格区间
+export const updateStepSellPrice = (params) => http.post('/prodSell/updateSellPrice', params);
+
+// 修改供应商
+export const updateSellPriceStatus = (params) => http.get('/prodSell/updateSellPriceStatus', params);
+

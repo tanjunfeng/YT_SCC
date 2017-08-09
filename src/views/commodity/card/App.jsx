@@ -1,6 +1,5 @@
 /**
  * @file App.jsx
- *
  * @author shijinhua,caoyanxuan
  *
  * 公共searchForm
@@ -12,6 +11,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PAGE_SIZE } from '../../../constant';
 import {
+    fecthCheckMainSupplier,
     fetchGetProdPurchaseById,
     fetchCheckMainSupplier,
     fetchUpdateProdPurchase,
@@ -34,6 +34,7 @@ import {
         checkMainSupplier: state.toJS().commodity.checkMainSupplier,
     }),
     dispatch => bindActionCreators({
+        fecthCheckMainSupplier,
         fetchGetProdPurchaseById,
         fetchCheckMainSupplier,
         fetchUpdateProdPurchase,
@@ -99,16 +100,21 @@ class Cardline extends Component {
     /**
      * 修改主供应商时弹框
      */
-    confirmMain(bool, item) {
-        // this.porps.fetchCheckMainSupplier({
-        //     supplierType: 1,
-        //     branchCompanyId: item.branchCompanyId,
-        //     productId: item.productId
-        // })
+    confirmMain(bool) {
         if (bool) {
             Modal.confirm({
                 title: '提示',
                 content: '主供应商已经存在，请确认变更当前供应商',
+                okText: '确认',
+                cancelText: '取消',
+                maskClosable: false,
+                onCancel: this.handleCheckCancel,
+                onOk: this.handleChangeMain
+            });
+        } else {
+            Modal.confirm({
+                title: '提示',
+                content: '是否将当前供应商设置为主供应商',
                 okText: '确认',
                 cancelText: '取消',
                 maskClosable: false,
@@ -154,36 +160,86 @@ class Cardline extends Component {
     /**
      * 修改主供应商用时的确认按钮回调
      */
-    handleCheckOk(item) {
+    handleCheckOk(item, bool) {
         this.props.fetchCheckMainSupplier({
             branchCompanyId: item.branchCompanyId,
             supplierType: 1,
             productId: item.productId
         })
         // console.log(this.porps.checkMainSupplier)
-        Modal.confirm({
-            title: '提示',
-            content: '是否将当前供应商设置为主供应商',
-            okText: '确认',
-            cancelText: '取消',
-            maskClosable: false,
-            onCancel: this.handleCheckCancel,
-            onOk: () => {
-                this.props.ChangeSupplierType({
-                    id: item.id,
-                    branchCompanyId: item.branchCompanyId,
-                    productId: item.productId,
-                    // supplierType: item.supplierType,
-                    supplierType: 1,
-                })
-                .then(() => {
-                    message.success('修改状态成功');
-                    this.props.goto();
-                }).catch(() => {
-                    message.error('修改状态失败')
-                })
-            }
-        });
+        if (bool) {
+            Modal.confirm({
+                title: '提示',
+                content: '主供应商已经存在，请确认变更当前供应商',
+                okText: '确认',
+                cancelText: '取消',
+                maskClosable: false,
+                onCancel: this.handleCheckCancel,
+                onOk: () => {
+                    this.props.ChangeSupplierType({
+                        id: item.id,
+                        branchCompanyId: item.branchCompanyId,
+                        productId: item.productId,
+                        supplierType: item.supplierType,
+                        // supplierType: 1,
+                    })
+                    .then(() => {
+                        message.success('修改状态成功');
+                        this.props.goto();
+                    }).catch(() => {
+                        message.error('修改状态失败')
+                    })
+                }
+            });
+        } else {
+            Modal.confirm({
+                title: '提示',
+                content: '是否将当前供应商设置为主供应商',
+                okText: '确认',
+                cancelText: '取消',
+                maskClosable: false,
+                onCancel: this.handleCheckCancel,
+                onOk: () => {
+                    this.props.ChangeSupplierType({
+                        id: item.id,
+                        branchCompanyId: item.branchCompanyId,
+                        productId: item.productId,
+                        supplierType: item.supplierType,
+                        // supplierType: 1,
+                    })
+                    .then(() => {
+                        message.success('修改状态成功');
+                        this.props.goto();
+                    }).catch(() => {
+                        message.error('修改状态失败')
+                    })
+                }
+            });
+        }
+        //
+        // Modal.confirm({
+        //     title: '提示',
+        //     content: '是否将当前供应商设置为主供应商',
+        //     okText: '确认',
+        //     cancelText: '取消',
+        //     maskClosable: false,
+        //     onCancel: this.handleCheckCancel,
+        //     onOk: () => {
+        //         this.props.ChangeSupplierType({
+        //             id: item.id,
+        //             branchCompanyId: item.branchCompanyId,
+        //             productId: item.productId,
+        //             supplierType: item.supplierType,
+        //             // supplierType: 1,
+        //         })
+        //         .then(() => {
+        //             message.success('修改状态成功');
+        //             this.props.goto();
+        //         }).catch(() => {
+        //             message.error('修改状态失败')
+        //         })
+        //     }
+        // });
     }
 
     /**
@@ -354,6 +410,8 @@ Cardline.propTypes = {
     prefixCls: PropTypes.string,
     id: PropTypes.string,
     index: PropTypes.number,
+    fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),
+    isSale: PropTypes.bool,
     initData: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,
     proId: PropTypes.string,
@@ -361,6 +419,7 @@ Cardline.propTypes = {
 
 Cardline.defaultProps = {
     prefixCls: 'card-line',
+    isSale: false,
     goto: () => {},
 };
 
