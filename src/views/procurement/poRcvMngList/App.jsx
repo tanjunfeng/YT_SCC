@@ -348,7 +348,7 @@ class PoRcvMngList extends PureComponent {
                 <Form layout="inline">
                     <div className="">
                         <Row gutter={40}>
-                            <Col span={6}>
+                            <Col span={5}>
                                 {/* 采购单号 */}
                                 <FormItem label="采购单号" formItemLayout>
                                     {getFieldDecorator('purchaseOrderNo', {})(<Input size="default" />)}
@@ -384,7 +384,7 @@ class PoRcvMngList extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40}>
-                            <Col span={6}>
+                            <Col span={5}>
                                 {/* 采购单类型 */}
                                 <FormItem label="采购单类型">
                                     {getFieldDecorator('purchaseOrderType', { initialValue: poType.defaultValue })(
@@ -520,7 +520,7 @@ class PoRcvMngList extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40}>
-                            <Col span={6}>
+                            <Col span={5}>
                                 {/* 地点类型 */}
                                 <FormItem label="地点类型">
                                     {getFieldDecorator('adrType', { initialValue: adrType.defaultValue })(
