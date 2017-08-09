@@ -7,6 +7,11 @@
         margin: 0;
     }
 
+    &-no-data {
+        padding: 0 8px;
+        text-align: center;
+    }
+
     &-search-bar {
         position: relative;
         display: flex;

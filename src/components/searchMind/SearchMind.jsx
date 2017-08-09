@@ -91,21 +91,23 @@ class SearchMind extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        const next = { ...nextProps };
+        if (!Utils.isEqual(nextProps, this.props)) {
+            const next = { ...nextProps };
 
-        if (nextProps.defaultValue !== this.props.defaultValue) {
-            next.value = nextProps.defaultValue;
+            if (nextProps.defaultValue !== this.props.defaultValue) {
+                next.value = nextProps.defaultValue;
+            }
+
+            // 单独处理一下 disabled
+            if (nextProps.disabled !== this.props.disabled) {
+                next.dropHide = true;
+                next.isFocus = false;
+            }
+
+            this.setState({
+                ...next
+            });
         }
-
-        // 单独处理一下 disabled
-        if (nextProps.disabled !== this.props.disabled) {
-            next.dropHide = nextProps.disabled;
-            next.isFocus = !nextProps.disabled;
-        }
-
-        this.setState({
-            ...next
-        });
     }
 
     componentWillUnmount() {
@@ -163,10 +165,7 @@ class SearchMind extends PureComponent {
      * @return {null}
      */
     getData() {
-        return {
-            value: this.state.value,
-            raw: this.state.selectedRawData,
-        };
+        return this.state.selectedRawData;
     }
 
     /**
@@ -247,8 +246,8 @@ class SearchMind extends PureComponent {
                 const pager = { ...pagination };
 
                 // 重新更换数据 total
-                if (res[totalIndex] || res.data[totalIndex]) {
-                    pager.total = res[totalIndex] || res.data[totalIndex];
+                if (res[totalIndex]) {
+                    pager.total = res[totalIndex];
                 }
 
                 this.setState({
@@ -256,11 +255,6 @@ class SearchMind extends PureComponent {
                     data: res.data.data,
                     pagination: pager,
                 });
-            })
-            .catch(() => {
-                this.setState({
-                    type: TYPE.DEFAULT
-                })
             })
     }
 

@@ -243,7 +243,7 @@ class SupplierInputList extends PureComponent {
                 </Menu.Item>
                 {
                     // 1： 已提交状态
-                    status === 1 && auditType === 1 &&
+                    (status === 1 || spStatus === 1) && auditType === 1 &&
                     <Menu.Item key="ChangeAudit">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商审核
@@ -252,7 +252,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     // 1： 已提交状态
-                    status === 1 && auditType === 2 &&
+                    (status === 1 || spStatus === 1) && auditType === 2 &&
                     <Menu.Item key="CheckReson">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商审核
@@ -261,7 +261,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     // 3:已拒绝
-                    status === 3 &&
+                    (status === 3 || spStatus === 3) &&
                     <Menu.Item key="ChangeMessage">
                         <a target="_blank" rel="noopener noreferrer">
                             查看审核已拒绝原因
@@ -289,7 +289,7 @@ class SupplierInputList extends PureComponent {
                     // 模拟地点弹出框
                     /* status === 2 && */
                     // 2:已审核,3、已拒绝
-                    (status === 2 || status === 3) && spStatus === 1 && auditType === 1 &&
+                    (spStatus === 2 || spStatus === 3) && status === 1 && auditType === 1 &&
                     <Menu.Item key="ChangeAuditAdr">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商地点审核
@@ -298,7 +298,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     // 1： 已提交
-                    spStatus === 1 && (status === 2 || status === 3) && auditType === 2 &&
+                    status === 1 && (spStatus === 2 || spStatus === 3) && auditType === 2 &&
                     <Menu.Item key="CheckReasonAdr">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商地点审核
