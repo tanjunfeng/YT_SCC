@@ -106,17 +106,17 @@ class BankInfo extends PureComponent {
     handleCompanyAddressChange(data) {
         this.companyAddress = data;
         const { getFieldError } = this.props.form;
-        // if (
-        //     getFieldError('companyAddress')
-        //     && this.companyAddress.thirdValue
-        //     && this.companyAddress.thirdValue !== '-1'
-        // ) {
-        //     this.props.form.setFields({
-        //         companyAddress: {
-        //             error: null
-        //         }
-        //     })
-        // }
+        if (
+            getFieldError('companyAddress')
+            && this.companyAddress.thirdValue
+            && this.companyAddress.thirdValue !== '-1'
+        ) {
+            this.props.form.setFields({
+                companyAddress: {
+                    error: null
+                }
+            })
+        }
     }
 
     handleCompanyNameChange = (e) => {
