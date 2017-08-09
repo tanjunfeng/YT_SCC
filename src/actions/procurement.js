@@ -25,7 +25,7 @@ import {
     queryPoRcvDetail,
     createPoRcv as svcCreatePoRcv
 } from '../service';
-
+import { ProcurementDt } from '../view-model';
 
 /**
  * 查询商品值清单
@@ -225,7 +225,11 @@ export const fetchPoDetail = (params) => dispatch => (
     new Promise((resolve, reject) => {
         queryPoDetail(params)
             .then(res => {
-                dispatch(rcvPoDetail(res.data));
+                dispatch(
+                    rcvPoDetail(
+                        ProcurementDt(res.data)
+                    )
+                );
                 resolve(res);
             })
             .catch(err => {

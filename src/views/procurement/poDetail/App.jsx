@@ -34,6 +34,7 @@ import {
 	updatePoLine,
 	deletePoLine
 } from '../../../actions';
+import { pubFetchValueList, fetchCategorys } from '../../../actions/pub';
 import { poStatus, locType, poType, locTypeCodes, poTypeCodes, poStatusCodes, auditType, auditTypeCodes } from '../../../constant/procurement';
 import Utils from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
@@ -75,7 +76,9 @@ const RECORD_STATUS = {
 	updatePoBasicinfo,
 	addPoLines,
 	updatePoLine,
-	deletePoLine
+	deletePoLine,
+	pubFetchValueList,
+	fetchCategorys,
 }, dispatch))
 class PoDetail extends PureComponent {
 	constructor(props) {
@@ -117,7 +120,9 @@ class PoDetail extends PureComponent {
 			actionAuth: {},
 			// 审核弹出框是否可见
 			auditModalVisible: false,
-			editable: false
+			editable: false,
+			locDisabled: true,
+			localType: '0001',
 		}
 		let that = this;
 		// 采购单商品行信息
@@ -130,48 +135,48 @@ class PoDetail extends PureComponent {
 			},
 			{
 				title: '商品编码',
-				dataIndex: 'materialCd',
-				key: 'materialCd',
+				dataIndex: 'productCode',
+				key: 'productCode',
 
 			},
 			{
 				title: '商品名称',
-				dataIndex: 'materialName',
-				key: 'materialName',
+				dataIndex: 'productName',
+				key: 'productName',
 			},
 			{
 				title: '规格',
-				dataIndex: 'spec',
-				key: 'spec',
+				dataIndex: 'packingSpecifications',
+				key: 'packingSpecifications',
 			},
 			{
 				title: '产地',
-				dataIndex: 'madeIn',
-				key: 'madeIn',
+				dataIndex: 'producePlace',
+				key: 'producePlace',
 			}, {
 				title: '采购内装数',
-				dataIndex: 'poInnerAmount',
-				key: 'poInnerAmount',
+				dataIndex: 'purchaseInsideNumber',
+				key: 'purchaseInsideNumber',
 			},
 			{
 				title: '单位',
-				dataIndex: 'unit',
-				key: 'unit'
+				dataIndex: 'unitExplanation',
+				key: 'unitExplanation'
 			},
 			{
 				title: '税率',
-				dataIndex: 'rate',
-				key: 'rate'
+				dataIndex: 'inputTaxRate',
+				key: 'inputTaxRate'
 			},
 			{
-			title: '采购价格（含税）',
-			dataIndex: 'poPrice',
-			key: 'poPrice'
+				title: '采购价格（含税）',
+				dataIndex: 'purchasePrice',
+				key: 'purchasePrice'
 			},
 			{
 				title: '采购数量',
-				dataIndex: 'poQuantity',
-				key: 'poQuantity',
+				dataIndex: 'purchaseNumber',
+				key: 'purchaseNumber',
 				render: (text, record, index) =>
 					<EditableCell
 						value={text}
@@ -183,14 +188,14 @@ class PoDetail extends PureComponent {
 			},
 			{
 				title: '采购金额（含税）',
-				dataIndex: 'amount',
-				key: 'amount'
+				dataIndex: 'totalAmount',
+				key: 'totalAmount'
 			}
 			,
 			{
 				title: '已收货数量',
-				dataIndex: 'rcvQuatity',
-				key: 'rcvQuatity'
+				dataIndex: 'receivedNumber',
+				key: 'receivedNumber'
 			},
 			{
 				title: '操作',
@@ -207,7 +212,7 @@ class PoDetail extends PureComponent {
 		let that = this;
 		const { match } = this.props;
 		//采购单id
-		let poId = match.params.poid;
+		let poId = match.params.purchaseOrderNo;
 		//采购单id不存在
 		if (!poId) {
 			//初始化采购单详情
@@ -231,7 +236,7 @@ class PoDetail extends PureComponent {
 			//1.采购单id存在，查询采购单详情
 			//2.设置界面状态，操作按钮状态
 			that.props.fetchPoDetail({
-				poId: poId
+				id: poId
 			}).then(function (res) {
 				let tmpPageMode = that.getPageMode();
 				that.setState({ pageMode: tmpPageMode });
@@ -263,13 +268,14 @@ class PoDetail extends PureComponent {
 			return pageMode;
 		}
 		//根据采购单状态 判断界面状态
-		let poStatus = basicInfo.poStatus;
-		if (poStatus == poStatusCodes.draft) {
+		let poStatus = basicInfo.status;
+		console.log(poStatus)
+		if (poStatus === 0) {
 			pageMode = PAGE_MODE.UPDATE;
-		} else if ((poStatus == poStatusCodes.submited)
-			|| (poStatus == poStatusCodes.approved)
-			|| (poStatus == poStatusCodes.rejected)
-			|| (poStatus == poStatusCodes.closed)) {
+		} else if ((poStatus === 1)
+			|| (poStatus === 2)
+			|| (poStatus === 3)
+			|| (poStatus === 4)) {
 			pageMode = PAGE_MODE.READONLY;
 		}
 		return pageMode;
@@ -316,7 +322,10 @@ class PoDetail extends PureComponent {
 		//地点类型有值
 		if (value) {
 			//地点类型有值时，地点可编辑
-			this.setState({ locDisabled: false });
+			this.setState({
+				locDisabled: false,
+				localType: value,
+			});
 			//清空地点值
 			this.props.form.setFieldsValue({ addressCd: "", address: "" });
 		} else {
@@ -502,7 +511,6 @@ class PoDetail extends PureComponent {
 	 * @param {*} res 
 	 */
 	applySupplierLocChoosed(res) {
-		console.log(res);
 		if (res) {
 			let record = res.record;
 			if (res.record) {
@@ -599,7 +607,7 @@ class PoDetail extends PureComponent {
 	 * 添加采购商品
 	 *  .检查商品列表中是否存在改商品
 	 *    a.已存在：显示已存在
-	 *    b.未存在：添加该商品(recordStatus:new 新添加)
+	 *    b   在：添加该商品(recordStatus:new 新添加)
 	 */
 	handleChoosedMaterialMap = ({ record, compKey, index, event }) => {
 		//检查商品列表是否已经存在该商品
@@ -651,7 +659,15 @@ class PoDetail extends PureComponent {
 	}
 
 	renderActions(text, record, index) {
-		console.log("");
+		const { status } = this.props.basicInfo;
+		if (
+			(status === 1)
+			|| (status === 2)
+			|| (status === 3)
+			|| (status === 4)
+		) {
+			return;
+		}
 		const menu = (
 			<Menu onClick={(item) => this.onActionMenuSelect(record, index, item)}>
 				<Menu.Item key="delete">
@@ -749,39 +765,49 @@ class PoDetail extends PureComponent {
 	 */
 	getFormBasicInfo() {
 		let formValues = this.props.form.getFieldsValue();
-		//地点
+		//地点---仓库/门店
 		let addressCd, address;
-		let selectedAddressRawData = this.poAddress.state.selectedRawData;
-		if (selectedAddressRawData) {
-			addressCd = selectedAddressRawData.code;
-			address = selectedAddressRawData.name;
+		if (this.state.localType !== '0002') {
+			let selectedAddressRawData = this.poAddress.state.selectedRawData;
+			if (selectedAddressRawData) {
+				addressCd = selectedAddressRawData.warehouseCode;
+				address = selectedAddressRawData.warehouseName;
+			}
+		} else {
+			let selectedAddressRawData = this.poStore.state.selectedRawData;
+			if (selectedAddressRawData) {
+			addressCd1 = selectedAddressRawData.id;
+			address1 = selectedAddressRawData.name;
 		}
+		}
+
 		//供应商
 		let supplierCd, supplierName;
 		let selectedSupplierRawData = this.supplier.state.selectedRawData;
 		if (selectedSupplierRawData) {
-			supplierCd = selectedSupplierRawData.code;
-			supplierName = selectedSupplierRawData.name;
+			supplierCd = selectedSupplierRawData.spId;
+			supplierName = selectedSupplierRawData.companyName;
 		}
 
 		//供应商地点
 		let supplierLocCd, supplierLocName;
 		let selectedSupplierLocRawData = this.supplierLoc.state.selectedRawData;
 		if (selectedSupplierLocRawData) {
-			supplierLocCd = selectedSupplierLocRawData.code;
-			supplierLocName = selectedSupplierLocRawData.name;
+			supplierLocCd = selectedSupplierLocRawData.providerNo;
+			supplierLocName = selectedSupplierLocRawData.providerName;
 		}
 
 		//大类
 		let bigClassCd, bigCLassName;
 		let selectedBigClassRawData = this.bigClass.state.selectedRawData;
 		if (selectedBigClassRawData) {
-			bigClassCd = selectedBigClassRawData.code;
-			bigCLassName = selectedBigClassRawData.name;
+			bigClassCd = selectedBigClassRawData.id;
+			bigCLassName = selectedBigClassRawData.categoryName;
 		}
+
 		let mapValues = { addressCd, address, supplierCd, supplierName, supplierLocCd, supplierLocName, bigClassCd, bigCLassName };
 		let basicInfo = Object.assign({}, formValues, mapValues);
-
+		console.log(basicInfo)
 		return basicInfo;
 	}
 
@@ -792,6 +818,7 @@ class PoDetail extends PureComponent {
 	 *     2.采购商品行信息是否OK
 	 */
 	handleSave() {
+		console.log(this.poAddress)
 		let that = this;
 		//基本信息，商品均校验通过
 		if (this.validateForm() && !this.hasInvalidateMaterial()) {
@@ -912,50 +939,84 @@ class PoDetail extends PureComponent {
 
 	getBaiscInfoElements(pageMode) {
 		const { getFieldDecorator } = this.props.form;
+		const purchaseOrderType = () => {
+			switch (this.props.basicInfo.purchaseOrderType) {
+				case 0:
+					return '普通采购单';
+				default:
+					break;
+			}
+		}
+		const purchaseOrderState = () => {
+			switch (this.props.basicInfo.status) {
+				case 0:
+					return '制单';
+				case 1:
+					return '待审核';
+				case 2:
+					return '已审核';
+				case 3:
+					return '已拒绝';
+				case 4:
+					return '已关闭';
+				default:
+					break;
+			}
+		}
+		const purchaseOrderAdrType = () => {
+			switch (this.props.basicInfo.adrType) {
+				case 0:
+					return '仓库';
+				case 1:
+					return '门店';
+				default:
+					break;
+			}
+		}
+		// 只读
 		if (pageMode === PAGE_MODE.READONLY) {
 			return (
 				<div className="basic-box">
 					<div className="header">
 						<Icon type="solution" className="header-icon" />基础信息
-			</div>
+					</div>
 					<div className="body">
 						<Row >
 							<Col span={8}>
 								{/* 采购单号 */}
 								<span className="ant-form-item-label"><label>采购单号</label> </span>
-								<span className="text">{this.props.basicInfo.poNo}</span>
+								<span className="text">{this.props.basicInfo.purchaseOrderNo}</span>
 							</Col>
 							<Col span={8}>
 								{/* 采购单类型 */}
 								<FormItem label="采购单类型">
-									<span>{this.props.basicInfo.poTypeName}</span>
+									<span>{purchaseOrderType()}</span>
 								</FormItem>
 							</Col>
 							<Col span={8}>
 								{/* 状态 */}
 								<FormItem label="状态">
-									<span>{this.props.basicInfo.poStatusName}</span>
+									<span>{purchaseOrderState()}</span>
 								</FormItem>
 							</Col>
 						</Row>
-
 						<Row >
 							<Col span={8}>
 								{/* 供应商 */}
 								<FormItem label="供应商">
-									<span>{this.props.basicInfo.supplierCd}-{this.props.basicInfo.supplierName}</span>
+									<span>{this.props.basicInfo.spNo}-{this.props.basicInfo.spName}</span>
 								</FormItem>
 							</Col>
 							<Col span={8}>
 								{/* 供应商地点 */}
 								<FormItem label="供应商地点">
-									<span>{this.props.basicInfo.supplierLocCd}-{this.props.basicInfo.supplierLocName}</span>
+									<span>{this.props.basicInfo.spAdrNo}-{this.props.basicInfo.spAdrName}</span>
 								</FormItem>
 							</Col>
 							<Col span={8}>
 								{/* 预计送货日期 */}
 								<FormItem label="预计送货日期">
-									<span>{this.props.basicInfo.estDeliveryDate}</span>
+									<span>{this.props.basicInfo.estimatedDeliveryDate}</span>
 								</FormItem>
 							</Col>
 						</Row>
@@ -963,19 +1024,19 @@ class PoDetail extends PureComponent {
 							<Col span={8}>
 								{/* 地点类型 */}
 								<FormItem label="地点类型">
-									<span>{this.props.basicInfo.locTypeName}</span>
+									<span>{purchaseOrderAdrType()}</span>
 								</FormItem>
 							</Col>
 							<Col span={8}>
 								{/* 地点 */}
 								<FormItem label="地点">
-									<span>{this.props.basicInfo.addressCd}-{this.props.basicInfo.address}</span>
+									<span>{this.props.basicInfo.adrTypeCode}-{this.props.basicInfo.adrTypeName}</span>
 								</FormItem>
 							</Col>
 							<Col span={8}>
 								{/* 大类 */}
 								<FormItem label="大类">
-									<span>{this.props.basicInfo.bigClassName}</span>
+									<span>{this.props.basicInfo.secondCategoryName}</span>
 								</FormItem>
 							</Col>
 						</Row>
@@ -984,20 +1045,20 @@ class PoDetail extends PureComponent {
 								{/* 账期 */}
 								<FormItem formItemLayout >
 									<span className="ant-form-item-label"><label>账期</label> </span>
-									<span>{this.props.basicInfo.accountPeriod}</span>
+									<span>{this.props.basicInfo.settlementPeriod}</span>
 								</FormItem>
 							</Col>
 							<Col span={8}>
 								{/* 付款方式 */}
 								<FormItem formItemLayout >
 									<span className="ant-form-item-label"><label>付款方式</label> </span>
-									<span>{this.props.basicInfo.payment}</span>
+									<span>{this.props.basicInfo.payType}</span>
 								</FormItem>
 							</Col>
 							<Col span={8}>
 								{/* 货币类型 */}
 								<FormItem label="货币类型">
-									<span>{this.props.basicInfo.currencyName}</span>
+									<span>{this.props.basicInfo.currencyCode}</span>
 								</FormItem>
 							</Col>
 						</Row>
@@ -1006,25 +1067,25 @@ class PoDetail extends PureComponent {
 							<Col span={8}>
 								{/* 创建者 */}
 								<FormItem label="创建者">
-									<span>{this.props.basicInfo.createdByName}</span>
+									<span>{this.props.basicInfo.createUserName}</span>
 								</FormItem>
 							</Col>
 							<Col span={4}>
 								{/* 创建日期 */}
 								<FormItem label="创建日期">
-									<span>{this.props.basicInfo.createdAt}</span>
+									<span>{this.props.basicInfo.createTime}</span>
 								</FormItem>
 							</Col>
 							<Col span={8}>
 								{/* 审核人 */}
 								<FormItem label="审核人">
-									<span>{this.props.basicInfo.approvedByName}</span>
+									<span>{this.props.basicInfo.auditUserName}</span>
 								</FormItem>
 							</Col>
 							<Col span={4}>
 								{/* 审核日期 */}
 								<FormItem label="审核日期">
-									<span>{this.props.basicInfo.approvedAt}</span>
+									<span>{this.props.basicInfo.auditTime}</span>
 								</FormItem>
 							</Col>
 						</Row>
@@ -1034,6 +1095,7 @@ class PoDetail extends PureComponent {
 				</div>
 			)
 		} else {
+			// 新增/编辑
 			return (
 				<div className="basic-box">
 					<div className="header">
@@ -1048,7 +1110,13 @@ class PoDetail extends PureComponent {
 							</Col>
 							<Col span={8}>
 								{/* 采购单类型 */}
-								<FormItem label="采购单类型">
+								<FormItem>
+									<span className="ant-form-item-label">
+										<label>
+											<span style={{ color: '#F00' }}>*</span>
+											采购单类型
+											</label>
+									</span>
 									{getFieldDecorator('poTypeCd', {
 										initialValue: this.props.basicInfo.poTypeCd || '',
 										rules: [{ required: true, message: '请选择采购单类型!' }],
@@ -1071,7 +1139,6 @@ class PoDetail extends PureComponent {
 								</FormItem>
 							</Col>
 						</Row>
-
 						<Row >
 							<Col span={8}>
 								{/* 供应商 */}
@@ -1080,23 +1147,29 @@ class PoDetail extends PureComponent {
 										<span className="ant-form-item-label"><label>供应商</label> </span>
 										<SearchMind
 											style={{ zIndex: 10000 }}
-											compKey="comSupplier"
+											compKey="spId"
 											ref={ref => { this.supplier = ref }}
-											fetch={(value, pager) => this.handleGetSupplierMap(value, pager)}
+											fetch={(params) =>
+												this.props.pubFetchValueList({
+													condition: params.value,
+													pageNum: params.pagination.current || 1,
+													pageSize: params.pagination.pageSize
+												}, 'querySuppliersList')
+											}
 											defaultValue={this.props.basicInfo.supplierCd}
 											onChoosed={this.applySupplierChange}
 											renderChoosedInputRaw={(data) => (
-												<div>{data.code} - {data.name}</div>
+												<div>{data.spId} - {data.companyName}</div>
 											)}
-											pageSize={2}
+											pageSize={6}
 											columns={[
 												{
-													title: '编码',
-													dataIndex: 'code',
+													title: '供应商ID',
+													dataIndex: 'spId',
 													width: 150,
 												}, {
-													title: '名称',
-													dataIndex: 'name',
+													title: '供应商名称',
+													dataIndex: 'companyName',
 													width: 200,
 												}
 											]}
@@ -1110,22 +1183,29 @@ class PoDetail extends PureComponent {
 									<div className="row middle">
 										<span className="ant-form-item-label"><label>供应商地点</label> </span>
 										<SearchMind
-											compKey="comSupplierLoc"
+											style={{ zIndex: 10000 }}
+											compKey="providerNo"
 											ref={ref => { this.supplierLoc = ref }}
-											fetch={(value, pager) => this.handleGetSupplierLocMap(value, pager)}
+											fetch={(params) =>
+												this.props.pubFetchValueList({
+													condition: params.value,
+													pageNum: params.pagination.current || 1,
+													pageSize: params.pagination.pageSize
+												}, 'supplierAdrSearchBox')
+											}
 											onChoosed={this.applySupplierLocChoosed}
 											renderChoosedInputRaw={(data) => (
-												<div>{data.code} - {data.name}</div>
+												<div>{data.providerNo} - {data.providerName}</div>
 											)}
-											pageSize={2}
+											pageSize={6}
 											columns={[
 												{
-													title: '编码',
-													dataIndex: 'code',
+													title: '供应商编码',
+													dataIndex: 'providerNo',
 													width: 150,
 												}, {
-													title: '名称',
-													dataIndex: 'name',
+													title: '供应商名称',
+													dataIndex: 'providerName',
 													width: 200,
 												}
 											]}
@@ -1135,7 +1215,13 @@ class PoDetail extends PureComponent {
 							</Col>
 							<Col span={8}>
 								{/* 预计送货日期 */}
-								<FormItem label="预计送货日期" formItemLayout>
+								<FormItem formItemLayout>
+									<span className="ant-form-item-label">
+										<label>
+											<span style={{ color: '#F00' }}>*</span>
+											预计送货日期
+											</label>
+									</span>
 									{getFieldDecorator('poNo', {
 										initialValue: moment('2017-07-20', dateFormat),
 										rules: [{ required: true, message: '请输入预计送货日期' }],
@@ -1149,7 +1235,13 @@ class PoDetail extends PureComponent {
 						<Row >
 							<Col span={8}>
 								{/* 地点类型 */}
-								<FormItem label="地点类型">
+								<FormItem>
+									<span className="ant-form-item-label">
+										<label>
+											<span style={{ color: '#F00' }}>*</span>
+											地点类型
+											</label>
+									</span>
 									{getFieldDecorator('locTypeCd', {
 										initialValue: this.props.basicInfo.locTypeCd || '',
 										rules: [{ required: true, message: '请选择地点类型' }],
@@ -1168,27 +1260,76 @@ class PoDetail extends PureComponent {
 								{/* 地点 */}
 								<FormItem formItemLayout >
 									<div className="row middle">
-										<span className="ant-form-item-label"><label>地点</label> </span>
-										<SearchMind
-											compKey="comPoAddress"
-											ref={ref => { this.poAddress = ref }}
-											fetch={(value, pager) => this.handleGetAddressMap(value, pager)}
-											renderChoosedInputRaw={(data) => (
-												<div>{data.code} - {data.name}</div>
-											)}
-											pageSize={2}
-											columns={[
-												{
-													title: '编码',
-													dataIndex: 'code',
-													width: 150,
-												}, {
-													title: '名称',
-													dataIndex: 'name',
-													width: 200,
+										<span className="ant-form-item-label">
+											<label>
+												<span style={{ color: '#F00' }}>*</span>
+												地点
+											</label>
+										</span>
+										{
+											// 仓库
+											this.state.localType !== '0002'
+											&& <SearchMind
+												style={{ zIndex: 10000 }}
+												disabled={this.state.locDisabled}
+												compKey="warehouseCode"
+												ref={ref => { this.poAddress = ref }}
+												fetch={(params) =>
+													this.props.pubFetchValueList({
+														param: params.value,
+														pageNum: params.pagination.current || 1,
+														pageSize: params.pagination.pageSize
+													}, 'getWarehouseInfo1')
 												}
-											]}
-										/>
+												renderChoosedInputRaw={(data) => (
+													<div>{data.warehouseCode} - {data.warehouseName}</div>
+												)}
+												pageSize={6}
+												columns={[
+													{
+														title: '仓库编码',
+														dataIndex: 'warehouseCode',
+														width: 150,
+													}, {
+														title: '仓库名称',
+														dataIndex: 'warehouseName',
+														width: 200,
+													}
+												]}
+											/>
+										}
+										{
+											// 门店
+											this.state.localType === '0002'
+											&& <SearchMind
+												style={{ zIndex: 10000 }}
+												disabled={this.state.locDisabled}
+												compKey="id"
+												ref={ref => { this.poStore = ref }}
+												fetch={(params) =>
+													this.props.pubFetchValueList({
+														param: params.value,
+														pageNum: params.pagination.current || 1,
+														pageSize: params.pagination.pageSize
+													}, 'getStoreInfo')
+												}
+												renderChoosedInputRaw={(data) => (
+													<div>{data.id} - {data.name}</div>
+												)}
+												pageSize={6}
+												columns={[
+													{
+														title: '门店id',
+														dataIndex: 'id',
+														width: 150,
+													}, {
+														title: '门店名称',
+														dataIndex: 'name',
+														width: 200,
+													}
+												]}
+											/>
+										}
 									</div>
 								</FormItem>
 							</Col>
@@ -1198,21 +1339,27 @@ class PoDetail extends PureComponent {
 									<div className="row small">
 										<span className="ant-form-item-label"><label>大类</label> </span>
 										<SearchMind
-											compKey="comBigClass"
+											style={{ zIndex: 10000 }}
+											compKey="id"
 											ref={ref => { this.bigClass = ref }}
-											fetch={(value, pager) => this.handleGetBigClassMap(value, pager)}
+											fetch={(params) =>
+												this.props.pubFetchValueList({
+													param: params.value,
+													level: '2'
+												}, 'queryCategorysByLevel')
+											}
 											renderChoosedInputRaw={(data) => (
-												<div>{data.code} - {data.name}</div>
+												<div>{data.id} - {data.categoryName}</div>
 											)}
-											pageSize={2}
+											pageSize={6}
 											columns={[
 												{
-													title: '编码',
-													dataIndex: 'code',
+													title: '大类id',
+													dataIndex: 'id',
 													width: 150,
 												}, {
-													title: '名称',
-													dataIndex: 'name',
+													title: '大类名称',
+													dataIndex: 'categoryName',
 													width: 200,
 												}
 											]}
@@ -1298,16 +1445,23 @@ class PoDetail extends PureComponent {
 						<Row >
 							<Col span={8}>
 								<div className="row middle">
+									{/*新增采购单  */}
 									<SearchMind
-										compKey="comPo1Address"
-										ref={ref => { this.poAddress = ref }}
-										fetch={(value, pager) => this.handleGetMaterialMap(value, pager)}
+										compKey="materialCd"
+										ref={ref => { this.addPo = ref }}
+										fetch={(params) =>
+											this.props.pubFetchValueList({
+												condition: params.value,
+												pageNum: params.pagination.current || 1,
+												pageSize: params.pagination.pageSize
+											}, 'supplierAdrSearchBox')
+										}
 										addonBefore="添加商品"
 										onChoosed={this.handleChoosedMaterialMap}
 										renderChoosedInputRaw={(data) => (
 											<div>{data.materialCd} - {data.materialName}</div>
 										)}
-										pageSize={2}
+										pageSize={6}
 										columns={[
 											{
 												title: '编码',

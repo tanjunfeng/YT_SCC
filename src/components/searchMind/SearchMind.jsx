@@ -91,23 +91,21 @@ class SearchMind extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!Utils.isEqual(nextProps, this.props)) {
-            const next = { ...nextProps };
+        const next = { ...nextProps };
 
-            if (nextProps.defaultValue !== this.props.defaultValue) {
-                next.value = nextProps.defaultValue;
-            }
-
-            // 单独处理一下 disabled
-            if (nextProps.disabled !== this.props.disabled) {
-                next.dropHide = true;
-                next.isFocus = false;
-            }
-
-            this.setState({
-                ...next
-            });
+        if (nextProps.defaultValue !== this.props.defaultValue) {
+            next.value = nextProps.defaultValue;
         }
+
+        // 单独处理一下 disabled
+        if (nextProps.disabled !== this.props.disabled) {
+            next.dropHide = true;
+            next.isFocus = false;
+        }
+
+        this.setState({
+            ...next
+        });
     }
 
     componentWillUnmount() {
