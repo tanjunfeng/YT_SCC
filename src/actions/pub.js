@@ -53,7 +53,8 @@ const pubValueList = {
     // 根据分类名字或者编码查询指定等级的分类列表
     querycategories,
     // 查询加盟商
-    getFranchiseeInfo 
+    getFranchiseeInfo,
+
 }
 
 const receiveCollapsed = (isCollapsed) => ({

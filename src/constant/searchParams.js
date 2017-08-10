@@ -255,19 +255,24 @@ export const commodityStatusOptions = {
     data: [{
         key: '-1',
         value: '全部'
-    }, {
-        key: '1',
-        value: '制单'
-    }, {
+    },
+    // {
+    //     key: '1',
+    //     value: '制单'
+    // },
+    {
         key: '2',
         value: '生效'
     }, {
         key: '3',
         value: '暂停使用'
-    }, {
-        key: '4',
-        value: '停止使用'
-    }]
+    },
+    // {
+    //     key: '4',
+    //     value: '停止使用'
+    // }
+    ]
+
 }
 
 // 主供应商
@@ -335,6 +340,56 @@ export const commoditySortOptions = {
         value: '按商品编号降序排列'
     }]
 }
+
+// 商品管理列表
+export const commodityListOptions = [{
+    title: '商品信息',
+    dataIndex: 'name',
+    key: 'name',
+    width: 400,
+}, {
+    title: '部门',
+    dataIndex: 'firstLevelCategoryName',
+    key: 'firstLevelCategoryName',
+}, {
+    title: '大类',
+    dataIndex: 'secondLevelCategoryName',
+    key: 'secondLevelCategoryName',
+}, {
+    title: '中类',
+    dataIndex: 'thirdLevelCategoryName',
+    key: 'thirdLevelCategoryName',
+}, {
+    title: '小类',
+    dataIndex: 'fourthLevelCategoryName',
+    key: 'fourthLevelCategoryName',
+}, {
+    title: '品牌',
+    dataIndex: 'brand',
+    key: 'brand',
+}, {
+    title: '状态',
+    dataIndex: 'supplyChainStatus',
+    key: 'supplyChainStatus',
+    render: (text) => {
+        switch (text) {
+            // case '1':
+            //     return '草稿';
+            case '2':
+                return '生效';
+            case '3':
+                return '暂停使用';
+            // case '4':
+            //     return '停止使用';
+            default:
+                return text;
+        }
+    }
+}, {
+    title: '操作',
+    dataIndex: 'operation',
+    key: 'operation',
+}];
 
 // 订单管理-订单类型
 export const orderTypeOptions = {

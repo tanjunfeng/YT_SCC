@@ -5,15 +5,14 @@
  * 定义列表数据
  */
 import React from 'react';
-import moment from 'moment';
-
+import { locType, poStatus } from '../../constant/procurement';
 
 // 供应商列表
 export const poMngListColumns = [
     {
         title: '采购单号',
-        dataIndex: 'poNo',
-        key: 'poNo',
+        dataIndex: 'purchaseOrderNo',
+        key: 'purchaseOrderNo',
     },
     {
         title: '采购单类型',
@@ -22,59 +21,60 @@ export const poMngListColumns = [
     },
     {
         title: '供应商编号',
-        dataIndex: 'supplierCd',
-        key: 'supplierCd',
+        dataIndex: 'spNo',
+        key: 'spNo',
     },
     {
         title: '供应商名称',
-        dataIndex: 'supplierName',
-        key: 'supplierName',
+        dataIndex: 'spName',
+        key: 'spName',
     },
     {
         title: '供应商地点编号',
-        dataIndex: 'supplierLocCd',
-        key: 'supplierLocCd',
+        dataIndex: 'spAdrNo',
+        key: 'spAdrNo',
     }, {
         title: '供应商地点名称',
-        dataIndex: 'supplierLocName',
-        key: 'supplierLocName',
+        dataIndex: 'spAdrName',
+        key: 'spAdrName',
     },
     {
         title: '预计送货日期',
-        dataIndex: 'estDeliveryDate',
-        key: 'estDeliveryDate'
+        dataIndex: 'estimatedDeliveryDate',
+        key: 'estimatedDeliveryDate'
     },
     {
         title: '地点类型',
-        dataIndex: 'locTypeName',
-        key: 'locTypeName'
+        dataIndex: 'adrType',
+        key: 'adrType',
+        render: (text) => (locType.data[text + 1].value)
     },
     {
         title: '地点',
-        dataIndex: 'address',
-        key: 'address'
+        dataIndex: 'adrTypeName',
+        key: 'adrTypeName'
     },
     {
         title: '大类编号',
-        dataIndex: 'bigCLassCd',
-        key: 'bigCLassCd'
+        dataIndex: 'secondCategoryId',
+        key: 'secondCategoryId'
 
     },
     {
         title: '大类名称',
-        dataIndex: 'bigCLassName',
-        key: 'bigCLassName'
-    }
-    ,
+        dataIndex: 'secondCategoryName',
+        key: 'secondCategoryName'
+    },
     {
         title: '状态',
-        dataIndex: 'statusName',
-        key: 'statusName',
+        dataIndex: 'status',
+        key: 'status',
+        render: (text) => (poStatus.data[text + 1].value)
     },
     {
         title: '操作',
         dataIndex: 'operation',
-        key: 'operation',
+        key: 'operation'
     }
 ]
 
