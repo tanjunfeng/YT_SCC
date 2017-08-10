@@ -143,7 +143,7 @@ class ProdModal extends Component {
 
         if (!spId) {
             this.props.pubFetchValueList({
-                condition: record.spNo,
+                condition: record.spId,
                 pageSize: 1,
                 pageNum: 1
             }, 'supplierSearchBox').then((res) => {
@@ -356,7 +356,7 @@ class ProdModal extends Component {
                                             compKey="search-mind-key1"
                                             ref={ref => { this.searchMind2 = ref }}
                                             fetch={(params) => this.props.pubFetchValueList(Util.removeInvalid({
-                                                spId: this.ids.spId,
+                                                pId: this.ids.spId,
                                                 condition: params.value,
                                                 pageSize: params.pagination.pageSize,
                                                 pageNum: params.pagination.current || 1

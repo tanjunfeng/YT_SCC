@@ -93,7 +93,7 @@ function Common(WrappedComponent) {
                         this.saveItems(values, fileOnServerUrl);
                     })
                 } else if (!isBase64) {
-                    this.saveItems(values);
+                    this.saveItems(values, image);
                 }
             })
         }

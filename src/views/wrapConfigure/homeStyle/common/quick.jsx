@@ -145,8 +145,8 @@ class QuickItem extends Component {
                                         size="default"
                                         placeholder="请选择"
                                     >
-                                        <Option value="静态页面">静态页面</Option>
-                                        <Option value="商品链接">商品链接</Option>
+                                        <Option value="0">静态活动页面</Option>
+                                        <Option value="1">功能链接</Option>
                                     </Select>
                                     )}
                             </FormItem>
@@ -156,7 +156,10 @@ class QuickItem extends Component {
                                     rules: [{
                                         required: true,
                                         message: '请输入名称'
-                                    }],
+                                    },
+                                    {max: 4, message: '最大长度4个字符'},
+                                    {min: 2, message: '最小长度2个字符'}
+                                    ],
                                     initialValue: current.navigationName
                                 })(
                                     <Input
@@ -169,7 +172,10 @@ class QuickItem extends Component {
                             <FormItem className="application-form-item">
                                 <span className="application-modal-label">链接地址：</span>
                                 {getFieldDecorator('linkAddress', {
-                                    rules: [{ required: true, message: '请输入链接地址', whitespace: true }],
+                                    rules: [
+                                        { required: true, message: '请输入链接地址', whitespace: true },
+                                        { pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'}
+                                    ],
                                     initialValue: current.linkAddress
                                 })(
                                     <Input

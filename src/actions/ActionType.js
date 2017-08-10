@@ -187,6 +187,8 @@ export default {
     UPDATE_PO_RCV_BASICINFO: 'UPDATE_PO_RCV_BASICINFO',
     // 更新采购收货单商品
     UPDATE_PO_RCV_LINE: 'UPDATE_PO_RCV_LINE',
+    // 清空详情数据
+    REMOVE_DETAIL_DATA: 'REMOVE_DETAIL_DATA',
 
     // IBM 修改
     GET_PRODUCT_BY_ID: 'GET_PRODUCT_BY_ID',

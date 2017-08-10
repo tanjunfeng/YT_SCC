@@ -608,10 +608,13 @@ export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehousePhy
 export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySupplierPlaceRegion', params);
 // 此接口用于通过code和name（后端id就等于code）查询子公司信息
 export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBaseInfo', params);
+// 此接口用于通过code和name（后端id就等于code）查询子公司信息(通过商品id过滤可用的)
+export const queryBranchCompanyInfo = (params) => http.get('/prodSell/queryBranchCompanyInfo', params);
 // 此接口用于通过code和name（后端id就等于code）查询子公司信息
 export const getFranchiseeInfo = (params) => http.get('/sorder/getFranchiseeInfo', params);
 // 查询可用子公司信息
 export const findCanUseCompanyInfo = (params) => http.get('/supplier/findCompanyBaseInfo', params);
+
 // 此接口用于查询各级分类（值清单）
 export const queryCategorysByLevel = (params) => http.get('/category/queryCategories', params);
 

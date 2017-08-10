@@ -34,6 +34,14 @@ const columns = [
         title: '链接类型',
         dataIndex: 'linkType',
         key: 'linkType',
+        render: (text) => {
+            if (text === '0') {
+                return '静态活动页'
+            }
+            else if (text === '1') {
+                return '商品链接'
+            }
+        }
     },
     {
         title: '商品编号',

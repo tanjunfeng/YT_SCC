@@ -88,6 +88,23 @@ class LicenseInfo extends PureComponent {
         const generalTaxpayerQualifiCerti = this.refs.generalTaxpayerQualifiCerti.getValue();
         const foodBusinessLicense = this.refs.foodBusinessLicense.getValue();
         const legalRepreCardPic = this.refs.legalRepreCardPic.getValue();
+        const registLicencePic = this.refs.registLicencePic.getValue();
+
+        if (generalTaxpayerQualifiCerti) {
+            const { files, time } = generalTaxpayerQualifiCerti;
+            if (files.length === 0 || !time) {
+                message.error('请上传一般纳税人资格证电子版和有限时间！')
+                return null;
+            }
+        }
+
+        if (registLicencePic) {
+            const { files, time } = registLicencePic;
+            if (files.length === 0) {
+                message.error('请上传营业执照副本电子版！')
+                return null;
+            }
+        }
 
         form.validateFields((err, values) => {
             if (!err) {
@@ -143,7 +160,7 @@ class LicenseInfo extends PureComponent {
                     perpetualManagement: this.state.checked ? 1 : 0,
                     registeredCapital,
                     businessScope,
-                    registLicencePic: this.refs['registLicencePic'].getValue().files[0],
+                    registLicencePic: registLicencePic.files[0],
                     guaranteeMoney
                 }
                 
@@ -447,11 +464,10 @@ class LicenseInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>*法人身份证号：</span>
+                                        <span>法人身份证号：</span>
                                         <FormItem>
                                             {getFieldDecorator('legalRepreCardNum', {
                                                 rules: [
-                                                    {required: true, message: '请输入法人身份证号!'},
                                                     {
                                                         validator: (rule, value, callback) => {
                                                             if (value && !/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(value)) {
@@ -614,7 +630,7 @@ class LicenseInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>*法人身份证电子版：</span>
+                                        <span>法人身份证电子版：</span>
                                         <InlineUpload
                                             showEndTime={false}
                                             limit={2}
