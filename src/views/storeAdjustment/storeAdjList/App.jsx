@@ -45,10 +45,6 @@ const columns = categoryList;
     }),
     dispatch => bindActionCreators({
         fetchCategoryList,
-        // modifyAuditVisible,
-        // modifyCheckReasonVisible,
-        // modifyCategoryVisible,
-        // modifyDeleteOrderNum,
         stockAdjust
     }, dispatch)
 )
@@ -141,13 +137,7 @@ class StoreAdjList extends Component {
 }
 
 StoreAdjList.propTypes = {
-    // modifyDeleteOrderNum: PropTypes.func,
-    // toAddPriceVisible: PropTypes.func,
-    // fetchCategoryList: PropTypes.func,
-    // modifyCategoryVisible: PropTypes.func,
     stockAdjStore: PropTypes.arrayOf(PropTypes.any),
-    // form: PropTypes.objectOf(PropTypes.any),
-    // categoryorderlist: PropTypes.objectOf(PropTypes.any),
     stockAdjust: PropTypes.func
 }
 
