@@ -638,12 +638,7 @@ class PoRcvMngList extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
-                            <Col>
-                                {/* <FormItem>
-                                    <Button size="default" onClick={this.handleCreate}>
-                                        新建
-                                        </Button>
-                                </FormItem> */}
+                            <Col className="ant-col-6 ant-col-offset-6 gutter-row">
                                 <FormItem>
                                     <Button size="default" onClick={this.handleResetValue}>
                                         重置
