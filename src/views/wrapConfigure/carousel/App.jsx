@@ -35,10 +35,10 @@ const columns = [
         dataIndex: 'linkType',
         key: 'linkType',
         render: (text) => {
-            if (text === '0') {
+            if (text === 0) {
                 return '静态活动页'
             }
-            else if (text === '1') {
+            else if (text === 1) {
                 return '商品链接'
             }
         }

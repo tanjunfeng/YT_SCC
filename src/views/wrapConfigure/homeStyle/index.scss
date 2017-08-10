@@ -35,6 +35,9 @@ $margin: 6px;
             margin-top: 2 * $margin;
             float: left;
             margin: 8px 15px;
+            &-disabled {
+                opacity: .6;
+            }
         }
         &-img-wrap {
             width: 76px;
@@ -119,6 +122,9 @@ $margin: 6px;
             color: #666666;
         }
     }
+    &-url {
+        width: initial;
+    }
     &-common {
         position: relative;
         &-enable:hover {
@@ -132,6 +138,17 @@ $margin: 6px;
         &-disable:hover {
             .home-style-common-btns1 {
                 display: block;
+            }
+        }
+        &-quick {
+            opacity: 1;
+            .home-style-common-btns {
+                right: -140px;
+            }
+            &:hover {
+                .home-style-common-btns2 {
+                    display: block;
+                }
             }
         }
         &-btns {

@@ -251,7 +251,7 @@ class ChangeMessage extends PureComponent {
                                 required: true,
                                 message: '请选择链接类型'
                             }],
-                            initialValue: linkType
+                            initialValue: `${linkType}`
                         })(
                             <Select
                                 style={{ width: 240 }}

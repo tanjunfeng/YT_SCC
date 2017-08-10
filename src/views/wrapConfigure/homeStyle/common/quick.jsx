@@ -95,7 +95,7 @@ class QuickItem extends Component {
                         itemAds.map((item, index) => {
                             return (
                                 <li
-                                    className="home-style-quick-item"
+                                    className={classnames("home-style-quick-item", {'home-style-quick-item-disabled': item.status === 0})}
                                     key={item.id}
                                 >
                                     <div
@@ -138,7 +138,7 @@ class QuickItem extends Component {
                                         required: true,
                                         message: '请选择类型'
                                     }],
-                                    initialValue: current.navigationType
+                                    initialValue: `${current.navigationType}`
                                 })(
                                     <Select
                                         style={{ width: '153px' }}

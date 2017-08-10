@@ -331,6 +331,9 @@ export const fectheEditorList = (params) => http.get('/staticPage/toUpdateStatic
 // 修改静态页面编辑内容并上传到图片服务器
 export const fectheEditorContent = (params) => http.post('/staticPage/updateStaticPageUpload', params);
 
+// 修改快捷导航状态
+export const batchUpdateQuickNavigation = (params) => http.post('/homeAd/batchUpdateQuickNavigation', params);
+
 /**
  * wrap 端配置相关接口
  */

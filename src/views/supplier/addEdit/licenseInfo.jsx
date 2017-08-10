@@ -81,6 +81,7 @@ class LicenseInfo extends PureComponent {
 
     getVlaue(callback) {
         const { form, onGoTo, isEdit, detailData = {}, data } = this.props;
+        const { checked } = this.state;
         Tools.checkAddress(this.companyAddress, 'companyLoc', this);
         Tools.checkAddress(this.licenseLoc, 'licenseLocSpace', this);
         const registrationCertificate = this.refs.registrationCertificate.getValue();
@@ -122,7 +123,16 @@ class LicenseInfo extends PureComponent {
                     startEndDate
                 } = values;
 
-                const supplierOperTaxInfo = {
+                if (!checked && !startEndDate[0]) {
+                    message.error('请选择营业期限！');
+                    return null;
+                }
+                if (!establishDate) {
+                    message.error('请选择供应商入驻日期！');
+                    return null;
+                }
+
+                const supplierOperTaxInfo = Utils.removeInvalid({
                     companyLocProvince: firstValue.regionName,
                     companyLocCity: secondValue.regionName,
                     companyLocCounty: thirdValue.regionName,
@@ -138,13 +148,13 @@ class LicenseInfo extends PureComponent {
                     taxpayerCertExpiringDate: generalTaxpayerQualifiCerti.time,
                     foodBusinessLicense: foodBusinessLicense.files[0],
                     businessLicenseExpiringDate: foodBusinessLicense.time
-                }
+                })
 
-                const supplierlicenseInfo = {
+                const supplierlicenseInfo = Utils.removeInvalid({
                     companyName: this.props.data.supplierBasicInfo.companyName,
                     registLicenceNumber,
                     legalRepresentative,
-                    legalRepreCardNum,
+                    legalRepreCardNum: legalRepreCardNum === '' ? null : legalRepreCardNum,
                     legalRepreCardPic1: legalRepreCardPic.files[0],
                     legalRepreCardPic2: legalRepreCardPic.files[1],
                     licenseLocProvince: this.licenseLoc.firstValue.regionName,
@@ -162,7 +172,7 @@ class LicenseInfo extends PureComponent {
                     businessScope,
                     registLicencePic: registLicencePic.files[0],
                     guaranteeMoney
-                }
+                })
                 
                 if (isEdit) {
                     Object.assign(supplierOperTaxInfo,
@@ -189,12 +199,17 @@ class LicenseInfo extends PureComponent {
                             status: detailData.saleRegionInfo.status,
                         }
                     );
-                    Object.assign(data.supplierBankInfo,
-                        {
-                            id: detailData.supplierBankInfo.id,
-                            status:  detailData.supplierBankInfo.status
-                        }
-                    );
+
+                    if (!data.supplierBankInfo) {
+                        data.supplierBankInfo = detailData.supplierBankInfo;
+                    } else {
+                        Object.assign(data.supplierBankInfo,
+                            {
+                                id: detailData.supplierBankInfo.id,
+                                status:  detailData.supplierBankInfo.status
+                            }
+                        );
+                    }
                 }
                 Object.assign(
                     this.submitData,
@@ -489,20 +504,22 @@ class LicenseInfo extends PureComponent {
                                 <Row>
                                     <Col span={8} id="createTime">
                                         <span>*成立日期：</span>
-                                        {getFieldDecorator('establishDate', {
-                                            rules: [{required: true, message: '请选择供应商入驻日期'}],
-                                            initialValue: isEdit ? moment(supplierlicenseInfo.establishDate) : null
-                                        })(
-                                            <DatePicker
-                                                getCalendarContainer={() => document.getElementById('createTime')}
-                                                disabledDate={(current) => {
-                                                    return (
-                                                        current && current.valueOf() > Date.now()
-                                                    )
-                                                }}
-                                                format={dateFormat}
-                                            />
-                                        )}
+                                        <FormItem>
+                                            {getFieldDecorator('establishDate', {
+                                                rules: [{required: true, message: '请选择供应商入驻日期'}],
+                                                initialValue: isEdit ? moment(supplierlicenseInfo.establishDate) : null
+                                            })(
+                                                <DatePicker
+                                                    getCalendarContainer={() => document.getElementById('createTime')}
+                                                    disabledDate={(current) => {
+                                                        return (
+                                                            current && current.valueOf() > Date.now()
+                                                        )
+                                                    }}
+                                                    format={dateFormat}
+                                                />
+                                            )}
+                                        </FormItem>
                                     </Col>
                                     <Col span={8}>
                                         <span>*营业执照所在地：</span>
