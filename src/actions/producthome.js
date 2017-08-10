@@ -27,7 +27,9 @@ import {
     getProdPurchaseById,
     queryProdPurchaseExtByCondition,
     fetchChangeSupType,
-    updateProdPurchase
+    updateProdPurchase,
+    changeProPurchaseStatus,
+    getWarehouseInfo1
 } from '../service';
 import ActionType from './ActionType';
 
@@ -427,6 +429,44 @@ export const ChangeUpdateProd = (params) => dispatch => (
         updateProdPurchase(params)
             .then(res => {
                 dispatch(receiveUpdateProd(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 修改采购关系
+const receiveChangeProPurchaseStatus = (data) => ({
+    type: ActionType.CHANGE_PROPURCHASE_STATUS,
+    payload: data,
+});
+
+export const ChangeProPurchaseStatus = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        changeProPurchaseStatus(params)
+            .then(res => {
+                dispatch(receiveChangeProPurchaseStatus(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 查询逻辑仓库列表
+const receiveGetWarehouseInfo1 = (data) => ({
+    type: ActionType.GER_WARE_HOUSE_LOGIC_INFO,
+    payload: data,
+});
+
+export const GetWarehouseInfo1 = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        getWarehouseInfo1(params)
+            .then(res => {
+                dispatch(receiveGetWarehouseInfo1(res.data));
                 resolve(res);
             })
             .catch(err => {

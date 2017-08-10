@@ -65,6 +65,10 @@ class SearchForm extends Component {
         this.handleChangeStatus = ::this.handleChangeStatus;
         this.handleResetValue = ::this.handleResetValue;
         this.handleGetValue = ::this.handleGetValue;
+        this.handleSupplyClear = ::this.handleSupplyClear;
+        this.handleCompChoose = ::this.handleCompChoose;
+        this.handleAdressClear = ::this.handleAdressClear;
+        this.handleCompClear = ::this.handleCompClear;
 
         // Test
         // this.handleSave = ::this.handleSave;
@@ -76,20 +80,12 @@ class SearchForm extends Component {
             supplyChoose1: {},
             supplyChoose2: {},
             visible: true,
-            sort: 1
+            sort: 1,
         }
     }
 
-    componentWillMount() {}
-
     componentDidMount() {
         // this.props.fetchAction();
-
-        // setTimeout(() => {
-        //     this.setState({
-        //         disabled: true,
-        //     });
-        // }, 2000);
     }
 
     /**
@@ -99,11 +95,6 @@ class SearchForm extends Component {
         this.setState({
             supplyChoose: record,
         });
-        if (this.state.supplyChoose === {}) {
-            this.setState({
-                sort: 1,
-            });
-        }
     }
 
     /**
@@ -111,11 +102,8 @@ class SearchForm extends Component {
      */
     handleAdressChoose = ({ record }) => {
         this.setState({
-            supplyChoose2: record,
+            supplyChoose1: record,
         });
-        if (this.state.sort === 1) {
-
-        }
     }
 
     /**
@@ -123,7 +111,7 @@ class SearchForm extends Component {
      */
     handleCompChoose = ({ record }) => {
         this.setState({
-            supplyChoose1: record,
+            supplyChoose2: record,
         });
     }
 
@@ -133,6 +121,7 @@ class SearchForm extends Component {
     handleGetValue() {
         const { validateFields } = this.props.form;
         const { match } = this.props;
+        console.log(this.state.supplyChoose2)
         validateFields((err, values) => {
             const status = values.initiateModeOptions === '-1'
                 ? null
@@ -140,7 +129,9 @@ class SearchForm extends Component {
             const supplierType = values.mainSupplierOptions === '-1'
                 ? null
                 : values.mainSupplierOptions;
-            // console.log(this.state.supplyChoose1.spAdrid)
+            // console.log(this.state.supplyChoose)
+            // console.log(this.state.supplyChoose1)
+            // console.log(this.state.supplyChoose2)
             this.props.onSearch(Utils.removeInvalid({
                 spId: this.state.supplyChoose.spId,
                 spAdrId: this.state.supplyChoose1.spAdrid,
@@ -253,6 +244,33 @@ class SearchForm extends Component {
     }
 
     /**
+     * 供应商清空数据
+     */
+    handleSupplyClear() {
+        this.setState({
+            supplyChoose: {},
+        })
+    }
+
+    /**
+     * 地点清空数据
+     */
+    handleAdressClear() {
+        this.setState({
+            supplyChoose1: {},
+        })
+    }
+
+    /**
+     * 子公司清空数据
+     */
+    handleCompClear() {
+        this.setState({
+            supplyChoose2: {},
+        })
+    }
+
+    /**
      * TEST
      */
     // handleSave(event) {
@@ -276,6 +294,7 @@ class SearchForm extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls } = this.props;
+        const { warehouseCode, warehouseName} = this.state.supplyChoose;
         return (
             <div className={`${prefixCls}-content manage-form`}>
                 <div style={{fontSize: 16, fontWeight: 900}}>
@@ -292,7 +311,9 @@ class SearchForm extends Component {
                                             compKey="search-mind-supply"
                                             ref={ref => { this.supplySearchMind = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
                                             }, 'supplierSearchBox')}
                                             addonBefore="供应商"
                                             onChoosed={this.handleSupplyChoose}
@@ -300,7 +321,7 @@ class SearchForm extends Component {
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.spNo} - {data.companyName}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={6}
                                             columns={[
                                                 {
                                                     title: '供应商编码',
@@ -330,39 +351,25 @@ class SearchForm extends Component {
                                             compKey="search-mind-supply"
                                             ref={ref => { this.addressSearchMind = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
                                             }, 'supplierAdrSearchBox')}
                                             addonBefore="地点"
                                             onChoosed={this.handleAdressChoose}
-                                            onClear={this.handleSupplyClear}
+                                            onClear={this.handleAdressClear}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.providerNo} - {data.providerName}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={6}
                                             columns={[
                                                 {
                                                     title: '供应商编码',
                                                     dataIndex: 'spNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '供应商ID',
-                                                    dataIndex: 'spId',
-                                                    width: 200,
-                                                }, {
-                                                    title: '供应商地点ID',
-                                                    dataIndex: 'spAdrid',
-                                                    width: 200,
-                                                }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
-                                                    width: 200,
-                                                }, {
-                                                    title: '供应商地点编码',
-                                                    dataIndex: 'providerNo',
-                                                    width: 200,
-                                                }, {
-                                                    title: '供应商地点名称',
-                                                    dataIndex: 'providerName',
                                                     width: 200,
                                                 }
                                             ]}
@@ -380,15 +387,17 @@ class SearchForm extends Component {
                                             compKey="search-mind-supply"
                                             ref={ref => { this.supplyCompSearchMind = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                branchCompanyName: params.value
+                                                branchCompanyName: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
                                             }, 'findCompanyBaseInfo')}
                                             addonBefore="子公司"
                                             onChoosed={this.handleCompChoose}
-                                            onClear={this.handleSupplyClear}
+                                            onClear={this.handleCompClear}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.id} - {data.name}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={6}
                                             columns={[
                                                 {
                                                     title: '子公司ID',

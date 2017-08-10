@@ -21,6 +21,7 @@ import { addSupplierMessage1 } from '../../../actions/addSupplier';
 import InlineTree from '../../../components/inlineTree';
 import { getLargerRegion } from '../../../actions/addSupplier';
 import Tools from './utils';
+import { TABCONTENT } from '../../../constant';
 
 const dateFormat = 'YYYY-MM-DD';
 const FormItem = Form.Item;
@@ -41,13 +42,32 @@ class BasicInfo extends PureComponent {
         super(props);
 
         this.handleNextStep = ::this.handleNextStep;
+        this.state = {
+            regions: []
+        }
     }
 
     componentDidMount() {
         !this.props.isEdit && this.props.getLargerRegion();
+        this.props.form.handleNextStep = this.handleNextStep;
+        TABCONTENT.BasicInfo = this;
     }
 
-    handleNextStep() {
+    componentWillReceiveProps(nextProps) {
+        const { detailData = {} } = nextProps;
+        const { saleRegionInfo = {} } = detailData;
+        const { regions } = this.state;
+        if (
+            saleRegionInfo.json
+            && saleRegionInfo.json !== regions
+        ) {
+            this.state = {
+                regions: Tools.decodeArea(JSON.parse(saleRegionInfo.json))
+            }
+        }
+    }
+
+    handleGoTo = (key) => {
         const { form, onGoTo, isEdit, detailData = {} } = this.props;
         form.validateFields((err, values) => {
             if (!err) {
@@ -72,26 +92,16 @@ class BasicInfo extends PureComponent {
                     companyName,
                     grade,
                     settledTime: settledTime._d * 1,
-                    spNo: this.props.supplierId
+                    spNo: isEdit ? detailData.supplierBasicInfo.spNo : this.props.supplierId
                 };
-                if (isEdit) {
-                    Object.assign(supplierBasicInfo,
-                        {
-                            id: detailData.supplierBasicInfo.id,
-                            status: detailData.supplierBasicInfo.status,
-                        }
-                    );
-                    Object.assign(saleRegionInfo,
-                        {
-                            id: detailData.saleRegionInfo.id,
-                            status: detailData.saleRegionInfo.status,
-                        }
-                    );
-                }
                 this.props.addSupplierMessage1({supplierBasicInfo, saleRegionInfo})
-                onGoTo('2');
+                onGoTo(key);
             }
         })
+    }
+
+    handleNextStep = () => {
+        this.handleGoTo('2');
     }
 
     /**
@@ -125,9 +135,8 @@ class BasicInfo extends PureComponent {
         }
         const {
             supplierBasicInfo = {},
-            saleRegionInfo={}
+            saleRegionInfo = {}
         } = initData;
-        const defaultVaue = saleRegionInfo.json ? Tools.decodeArea(JSON.parse(saleRegionInfo.json)) : []
         return (
             <div className="supplier-add-message">
                 <Form>
@@ -147,15 +156,18 @@ class BasicInfo extends PureComponent {
                                         <span>{isEdit ? supplierBasicInfo.spNo : this.props.supplierId}</span>
                                     </Col>
                                     <Col span={8}>
-                                        <span>供应商名称：</span>
+                                        <span>*供应商名称：</span>
                                         <FormItem>
                                             {getFieldDecorator('companyName', {
-                                                rules: [{ required: true, message: '请输入供应商名称!' }],
+                                                rules: [
+                                                    { required: true, message: '请输入供应商名称!' },
+                                                    {max: 150, message: '字符长度超限'}
+                                                ],
                                                 initialValue: supplierBasicInfo.companyName,
                                             })(
                                                 <Input
                                                     placeholder="供应商名称"
-                                                    onBlur={(e) => { Validator.repeat.companyName(e, this, supplierBasicInfo.id) }}
+                                                    onBlur={(e) => { Validator.repeat.companyName(e, this, supplierBasicInfo.id, supplierBasicInfo.status) }}
                                                 />
                                             )}
                                         </FormItem>
@@ -163,7 +175,7 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}>
-                                        <span>供应商等级：</span>
+                                        <span>*供应商等级：</span>
                                         <FormItem>
                                             {getFieldDecorator('grade', {
                                                 rules: [{required: true, message: '请选择等级'}],
@@ -181,7 +193,7 @@ class BasicInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8} id="in-time">
-                                        <span>供应商入驻日期：</span>
+                                        <span>*供应商入驻日期：</span>
                                         <FormItem>
                                             {getFieldDecorator('settledTime', {
                                                 rules: [{required: true, message: '请选择供应商入驻日期'}],
@@ -204,13 +216,13 @@ class BasicInfo extends PureComponent {
                     >
                         <div className="add-message">
                             <div className="add-message-header">
-                                <Icon type="solution" className="add-message-header-icon" />供应商辐射城市
+                                <Icon type="solution" className="add-message-header-icon" />供应商辐射城市(必选)
                             </div>
                             {
                                 largeRegin.length > 0 &&
                                 <div className="add-message-body">
                                     <InlineTree
-                                        checkedKeys={defaultVaue}
+                                        checkedKeys={this.state.regions}
                                         handleCheck={this.handleCheck}
                                         initValue={largeRegin}
                                         ref={node => { this.areaCheck = node }}
@@ -231,7 +243,7 @@ class BasicInfo extends PureComponent {
 
 function encodeArea(data = []) {
     const a = [];
-    for ( let i of data) {
+    for (let i of data) {
         const key = i.key;
         const hideTitle = i.props.hideTitle;
         const keys = key.split('-');

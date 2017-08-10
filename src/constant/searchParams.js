@@ -212,8 +212,11 @@ export const supplierLevelOptions = {
 
 // 供应商地点等级
 export const supplierPlaceLevelOptions = {
-    defaultValue: '1',
+    defaultValue: '0',
     data: [{
+        key: '0',
+        value: '全部'
+    }, {
         key: '1',
         value: '生产厂家'
     }, {
@@ -396,6 +399,9 @@ export const payStatusOptions = {
     }, {
         key: 'YTK',
         value: '已退款'
+    }, {
+        key: 'GSN',
+        value: '公司内'
     }]
 }
 

@@ -361,6 +361,28 @@ export const suppliersAppList = [
         }
     },
     {
+        title: '供应商地点状态',
+        dataIndex: 'spStatus',
+        key: 'spStatus',
+        width: 90,
+        render: (text) => {
+            switch (parseInt(text, 10)) {
+                case 0:
+                    return '制单';
+                case 1:
+                    return '已提交';
+                case 2:
+                    return '已审核';
+                case 3:
+                    return '已拒绝';
+                case 4:
+                    return '修改中';
+                default:
+                    return null;
+            }
+        }
+    },
+    {
         title: '操作',
         dataIndex: 'operation',
         key: 'operation',
@@ -415,7 +437,7 @@ export const supplierInputList = [
                     case 2:
                         return '核心供应商'
                     case 3:
-                        return ':可替代供应商'
+                        return '可替代供应商'
                     default:
                         break;
                 }
@@ -451,6 +473,28 @@ export const supplierInputList = [
         title: '供应商状态',
         dataIndex: 'status',
         key: 'status',
+        width: 90,
+        render: (text) => {
+            switch (parseInt(text, 10)) {
+                case 0:
+                    return '制单';
+                case 1:
+                    return '已提交';
+                case 2:
+                    return '已审核';
+                case 3:
+                    return '已拒绝';
+                case 4:
+                    return '修改中';
+                default:
+                    return null;
+            }
+        }
+    },
+    {
+        title: '供应商地点状态',
+        dataIndex: 'spStatus',
+        key: 'spStatus',
         width: 90,
         render: (text) => {
             switch (parseInt(text, 10)) {

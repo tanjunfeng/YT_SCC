@@ -59,7 +59,8 @@ export default class EditableCell extends PureComponent {
             <div>
                 {
                     <div>
-                        {this.state.editable && <Form.Item validateStatus={this.state.validateStatus}>
+                        {this.state.editable
+                        && <Form.Item validateStatus={this.state.validateStatus}>
                             <InputNumber
                                 value={value}
                                 min={1}

@@ -7,7 +7,7 @@
 
 import ActionType from './ActionType';
 import {
-    fetchPoMngList as svcFetchPoMngList,
+    fetchPurchaseOrder,
     fetchMaterialByCd as svcFetchMaterialByCd,
     deletePoByIds as svcDeletePoByIds,
     queryPoPrintList as svcQueryPoPrintList,
@@ -23,9 +23,10 @@ import {
     queryPoRcvMngList,
     queryPoRcvList,
     queryPoRcvDetail,
-    createPoRcv as svcCreatePoRcv
+    createPoRcv as svcCreatePoRcv,
+    findStepPriceInfo
 } from '../service';
-
+import { ProcurementDt } from '../view-model';
 
 /**
  * 查询商品值清单
@@ -52,9 +53,10 @@ const rcvPoPrintList = (data) => ({
     type: ActionType.RECEIVE_PO_PRINT_LIST,
     payload: data,
 });
+
 export const fetchPoPrintList = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        svcQueryPoPrintList(params)
+        fetchPoMngList(params)
             .then(res => {
                 dispatch(rcvPoPrintList(res.data));
                 resolve(res);
@@ -160,15 +162,17 @@ export const changePoMngSelectedRows = (data) => ({
 
 /**
  * 查询采购单列表
- * @param {*} data 
+ * @param {*} data  Duplicate declaration
  */
 const rcvPoMngList = (data) => ({
     type: ActionType.RECEIVE_PO_MNG_LIST,
     payload: data,
 });
+
+
 export const fetchPoMngList = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        svcFetchPoMngList(params)
+        fetchPurchaseOrder(params)
             .then(res => {
                 dispatch(rcvPoMngList(res.data));
                 resolve(res);
@@ -225,7 +229,11 @@ export const fetchPoDetail = (params) => dispatch => (
     new Promise((resolve, reject) => {
         queryPoDetail(params)
             .then(res => {
-                dispatch(rcvPoDetail(res.data));
+                dispatch(
+                    rcvPoDetail(
+                        ProcurementDt(res.data)
+                    )
+                );
                 resolve(res);
             })
             .catch(err => {
@@ -432,3 +440,25 @@ export const createPoRcv = (params) => dispatch => (
             })
     })
 )
+
+/**
+ * 根据条件查询销售价格区间列表
+ * @param {*} data 
+ */
+const rcvPriceInfo = (data) => ({
+    type: ActionType.RECEIVE_PRICE_INFO,
+    payload: data,
+});
+export const fetchPriceInfo = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        findStepPriceInfo(params)
+            .then(res => {
+                dispatch(rcvPriceInfo(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+

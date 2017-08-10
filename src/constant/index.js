@@ -10,3 +10,7 @@ export const CATEGORY_INTERVAL_LIST = [1, 2, 3, 4, 5];
 export const DATE_FORMAT = 'YYYY-MM-DD';
 // 时间格式
 export const TIME_FORMAT = 'YYYY-MM-DD HH-MM-SS';
+// 新建编辑tab
+export  const TABCONTENT = {}
+// 阶梯价格后端最大的商品数
+export const MAXGOODS = 2147483647;

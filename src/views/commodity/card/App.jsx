@@ -1,6 +1,5 @@
 /**
  * @file App.jsx
- *
  * @author shijinhua,caoyanxuan
  *
  * 公共searchForm
@@ -12,11 +11,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PAGE_SIZE } from '../../../constant';
 import {
+    fecthCheckMainSupplier,
     fetchGetProdPurchaseById,
     fetchCheckMainSupplier,
     fetchUpdateProdPurchase,
     fetchQueryProdByCondition,
-    fetchChangeProPurchaseStatus,
     fetchDeleteProdPurchaseById,
     fetchGetProductById,
     fecthGetProdPurchaseById
@@ -24,26 +23,29 @@ import {
 import {
     GetProductById,
     GetProdPurchaseById,
-    ChangeSupplierType
+    ChangeSupplierType,
+    ChangeProPurchaseStatus,
 } from '../../../actions/producthome';
 
 @connect(
     state => ({
         prodPurchase: state.toJS().commodity.prodPurchase,
         getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseByIds,
+        checkMainSupplier: state.toJS().commodity.checkMainSupplier,
     }),
     dispatch => bindActionCreators({
+        fecthCheckMainSupplier,
         fetchGetProdPurchaseById,
         fetchCheckMainSupplier,
         fetchUpdateProdPurchase,
         fetchQueryProdByCondition,
-        fetchChangeProPurchaseStatus,
+        ChangeProPurchaseStatus,
         fetchDeleteProdPurchaseById,
         fetchGetProductById,
         fecthGetProdPurchaseById,
         GetProductById,
         GetProdPurchaseById,
-        ChangeSupplierType
+        ChangeSupplierType,
     }, dispatch)
 )
 class Cardline extends Component {
@@ -112,7 +114,7 @@ class Cardline extends Component {
         } else {
             Modal.confirm({
                 title: '提示',
-                content: '请确认变更当前供应商',
+                content: '是否将当前供应商设置为主供应商',
                 okText: '确认',
                 cancelText: '取消',
                 maskClosable: false,
@@ -134,7 +136,7 @@ class Cardline extends Component {
             maskClosable: false,
             onCancel: this.handleCheckCancel,
             onOk: () => {
-                this.props.fetchChangeProPurchaseStatus({
+                this.props.ChangeProPurchaseStatus({
                     id: item.id,
                     productId: item.productId,
                     status: item.status === 0 ? 1 : 0
@@ -158,32 +160,86 @@ class Cardline extends Component {
     /**
      * 修改主供应商用时的确认按钮回调
      */
-    handleCheckOk(item) {
-        Modal.confirm({
-            title: '提示',
-            content: '是否将当前供应商设置为主供应商',
-            okText: '确认',
-            cancelText: '取消',
-            maskClosable: false,
-            onCancel: this.handleCheckCancel,
-            onOk: () => {
-                this.props.fetchCheckMainSupplier({
-                    productId: item.productId,
-                    supplierType: 1
-                })
-                .then(() => {
-                    this.porps.ChangeSupplierType({
+    handleCheckOk(item, bool) {
+        this.props.fetchCheckMainSupplier({
+            branchCompanyId: item.branchCompanyId,
+            supplierType: 1,
+            productId: item.productId
+        })
+        // console.log(this.porps.checkMainSupplier)
+        if (bool) {
+            Modal.confirm({
+                title: '提示',
+                content: '主供应商已经存在，请确认变更当前供应商',
+                okText: '确认',
+                cancelText: '取消',
+                maskClosable: false,
+                onCancel: this.handleCheckCancel,
+                onOk: () => {
+                    this.props.ChangeSupplierType({
                         id: item.id,
+                        branchCompanyId: item.branchCompanyId,
                         productId: item.productId,
                         supplierType: item.supplierType,
+                        // supplierType: 1,
                     })
-                    message.success('修改状态成功');
-                    this.props.goto();
-                }).catch(() => {
-                    message.error('修改状态失败')
-                })
-            }
-        });
+                    .then(() => {
+                        message.success('修改状态成功');
+                        this.props.goto();
+                    }).catch(() => {
+                        message.error('修改状态失败')
+                    })
+                }
+            });
+        } else {
+            Modal.confirm({
+                title: '提示',
+                content: '是否将当前供应商设置为主供应商',
+                okText: '确认',
+                cancelText: '取消',
+                maskClosable: false,
+                onCancel: this.handleCheckCancel,
+                onOk: () => {
+                    this.props.ChangeSupplierType({
+                        id: item.id,
+                        branchCompanyId: item.branchCompanyId,
+                        productId: item.productId,
+                        supplierType: item.supplierType,
+                        // supplierType: 1,
+                    })
+                    .then(() => {
+                        message.success('修改状态成功');
+                        this.props.goto();
+                    }).catch(() => {
+                        message.error('修改状态失败')
+                    })
+                }
+            });
+        }
+        //
+        // Modal.confirm({
+        //     title: '提示',
+        //     content: '是否将当前供应商设置为主供应商',
+        //     okText: '确认',
+        //     cancelText: '取消',
+        //     maskClosable: false,
+        //     onCancel: this.handleCheckCancel,
+        //     onOk: () => {
+        //         this.props.ChangeSupplierType({
+        //             id: item.id,
+        //             branchCompanyId: item.branchCompanyId,
+        //             productId: item.productId,
+        //             supplierType: item.supplierType,
+        //             // supplierType: 1,
+        //         })
+        //         .then(() => {
+        //             message.success('修改状态成功');
+        //             this.props.goto();
+        //         }).catch(() => {
+        //             message.error('修改状态失败')
+        //         })
+        //     }
+        // });
     }
 
     /**
@@ -232,6 +288,7 @@ class Cardline extends Component {
     handleAddPrice = (item) => {
     }
 
+
     renderCard = (datas) => {
         const {
             prefixCls,
@@ -262,7 +319,9 @@ class Cardline extends Component {
                             >
                                 &times;
                             </a>
-                            <div onClick={() => this.props.onCliked(item)}>
+                            <div
+                                onClick={() => this.props.onCliked(item)}
+                            >
                                 <p>
                                     <span>供应商 : </span>
                                     <span>{item.spId}</span>
@@ -347,10 +406,12 @@ Cardline.propTypes = {
     fetchDeleteProdPurchaseById: PropTypes.func,
     ChangeSupplierType: PropTypes.func,
     onCliked: PropTypes.func,
-    fetchChangeProPurchaseStatus: PropTypes.func,
+    ChangeProPurchaseStatus: PropTypes.func,
     prefixCls: PropTypes.string,
     id: PropTypes.string,
     index: PropTypes.number,
+    fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),
+    isSale: PropTypes.bool,
     initData: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,
     proId: PropTypes.string,
@@ -358,6 +419,7 @@ Cardline.propTypes = {
 
 Cardline.defaultProps = {
     prefixCls: 'card-line',
+    isSale: false,
     goto: () => {},
 };
 

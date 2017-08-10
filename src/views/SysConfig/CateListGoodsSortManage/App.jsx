@@ -33,7 +33,7 @@ import fetchCategoryList from '../../../actions/fetch/fetchCategory';
 import { categoryList } from '../../../constant/formColumns';
 import ChangeMessage from './changeCategoryMessage';
 import { modifyCategoryVisible } from '../../../actions';
-z
+
 const confirm = Modal.confirm;
 const FormItem = Form.Item;
 

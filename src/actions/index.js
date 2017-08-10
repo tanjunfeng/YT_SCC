@@ -85,7 +85,9 @@ import AuditSupplierEditInfo from '../actions/supplier';
 import {
     UpdateProdPurchase,
     getProductById,
-    queryProdPurchaseExtByCondition
+    queryProdPurchaseExtByCondition,
+    ChangeProPurchaseStatus,
+    GetWarehouseInfo1
 } from './producthome';
 
 // 库存调整
@@ -162,6 +164,8 @@ export {
     getProductById,
     queryProdPurchaseExtByCondition,
     UpdateProdPurchase,
+    ChangeProPurchaseStatus,
+    GetWarehouseInfo1,
 
     // 库存调整
     stockAdjust,

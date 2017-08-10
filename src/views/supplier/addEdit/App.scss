@@ -116,7 +116,7 @@
         @extend .base;
         div.ant-col-8:nth-of-type(odd) {
             & > span:first-child {
-                width: 78px;
+                width: 86px;
             }
         }
     }
@@ -124,7 +124,7 @@
         @extend .base;
         div.ant-col-8:nth-of-type(odd) {
             & > span:first-child {
-                width: 106px;
+                width: 110px;
             }
         }
         
@@ -133,7 +133,7 @@
         @extend .base;
         div.ant-col-8:nth-of-type(odd) {
             & > span:first-child {
-                width: 91px;
+                width: 100px;
             }
         }
     }
@@ -141,7 +141,10 @@
         @extend .first-col-1;
     }
     .supplier-add-bank {
-        @extend .first-col-3
+        @extend .first-col-3;
+        .ant-form-item-control {
+            line-height: initial;
+        }
     }
     .supplier-add-license {
         @extend .first-col-2;

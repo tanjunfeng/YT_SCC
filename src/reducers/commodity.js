@@ -60,7 +60,7 @@ const initState = Immutable.fromJS({
 
     // IBM 修改
     // 查看是否存在主供应商
-    checkMainSupplier: {},
+    checkMainSupplier: false,
     // 查询商品价格信息
     getProdPurchaseById: {},
     // 根据主键查询商品采购关系
@@ -75,8 +75,14 @@ const initState = Immutable.fromJS({
     // 查询商品信息
     getProductById: {},
 
+    // 阶梯价格列表
+    stepPriceList: [],
+
     // 更新商品信息
     updateProdRecord: {},
+
+    // 地点关联
+    getWarehouseLogicInfo: {}
 
 });
 
@@ -172,8 +178,14 @@ export default function (state = initState, action) {
         case ActionType.GET_PRODUCT_BY_ID:
             return state.set('getProductById', action.payload);
 
+        case ActionType.RECEIVE_PRICE_INFO:
+            return state.set('stepPriceList', action.payload)
+
         case ActionType.QUERY_PRODBY_CONDITION:
             return state.set('purchaseCardData', action.payload);
+
+        case ActionType.GER_WARE_HOUSE_LOGIC_INFO:
+            return state.set('getWarehouseLogicInfo', action.payload);
 
         default:
             return state;
