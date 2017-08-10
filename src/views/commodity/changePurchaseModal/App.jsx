@@ -68,6 +68,7 @@ class ProdModal extends Component {
             warehouseId: props.updateProdRecord.id,
             // 分公司id
             childCompanyId: props.updateProdRecord.branchCompanyId,
+            distributeWarehouseId: props.updateProdRecord.distributeWarehouseId,
         }
         this.state = {
             isDisabled: true,
@@ -106,6 +107,7 @@ class ProdModal extends Component {
                 warehouseId: nextProps.updateProdRecord.id,
                 // 分公司id
                 childCompanyId: nextProps.updateProdRecord.branchCompanyId,
+                distributeWarehouseId: nextProps.updateProdRecord.distributeWarehouseId,
                 spNo: null
             }
         }
@@ -179,7 +181,6 @@ class ProdModal extends Component {
                 })
             })
         }
-        
         // this.props.GetWarehouseInfo1({
         //     supplierAddressId: record.spAdrid,
         //     pageNum: 1,
@@ -190,7 +191,6 @@ class ProdModal extends Component {
         //     });
         // })
     }
-
 
     /**
      * 创建弹框OK时间 (当没有改变时)
@@ -205,25 +205,21 @@ class ProdModal extends Component {
             this.props.ChangeUpdateProd({
                 id: updateProdRecord.id,
                 //
-                spId: this.state.supplyChoose1 !== updateProdRecord.spId
-                    ? this.state.spId : updateProdRecord.spId,
+                spId: this.ids.spId,
                 //
                 // spAdrId: updateProdRecord.spAdrId,
-                spAdrId: this.state.spAdrId !== updateProdRecord.spAdrId
-                    ? this.state.spAdrId : updateProdRecord.spAdrId,
+                spAdrId: this.ids.supplierAddressId,
                 productId: updateProdRecord.productId,
                 //
                 // branchCompanyId: updateProdRecord.branchCompanyId,
-                branchCompanyId: this.state.branchCompanyId !== updateProdRecord.branchCompanyId
-                    ? this.state.branchCompanyId : updateProdRecord.branchCompanyId,
+                branchCompanyId: this.ids.childCompanyId,
                 supplierType: updateProdRecord.supplierType,
                 purchaseInsideNumber: values.purchaseInsideNumber,
                 purchasePrice: parseFloat(values.purchasePrice),
                 internationalCode: values.internationalCode,
                 // 仓库ID
                 // distributeWarehouseId: updateProdRecord.id,
-                distributeWarehouseId: this.state.distributeWarehouseId !== updateProdRecord.distributeWarehouseId
-                    ? this.state.distributeWarehouseId : updateProdRecord.distributeWarehouseId,
+                distributeWarehouseId: this.ids.distributeWarehouseId,
             }).then((res) => {
                 this.props.UpdateProdPurchase({isVisible: false});
                 message.success(res.message)

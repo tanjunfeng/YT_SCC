@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { Button, Input, Form, Select, DatePicker, Row, Col, Icon } from 'antd';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
@@ -43,23 +44,17 @@ const dateFormat = 'YYYY-MM-DD';
 class PoSearchForm extends PureComponent {
     constructor(props) {
         super(props);
-        this.handleSearch = ::this.handleSearch;
-        this.handleResetValue = ::this.handleResetValue;
         this.handleCreate = ::this.handleCreate;
         this.handleDelete =::this.handleDelete;
         this.handleDownPDF =::this.handleDownPDF;
         this.handleGetBigClassMap =::this.handleGetBigClassMap;
         this.handleGetSupplierMap =::this.handleGetSupplierMap;
         this.handleGetSupplierLocMap =::this.handleGetSupplierLocMap;
-        this.searchParams = {};
+        // this.searchParams = {};
         this.state = {
             // 地点是否可编辑
             locDisabled: true,
             locationData: {},
-            startCreateTime: '',
-            endCreateTime: '',
-            endAuditTime: '',
-            startAuditTime: ''
         }
     }
 
@@ -78,8 +73,8 @@ class PoSearchForm extends PureComponent {
      */
     handleGetAddressMap = (param) => {
         const { locTypeCode } = this.props.form.getFieldsValue(['locTypeCode'])
-        const libraryCode = '1';
-        const storeCode = '2';
+        const libraryCode = '0';
+        const storeCode = '1';
         let locationTypeParam = '';
         if (locTypeCode === libraryCode) {
             locationTypeParam = 'getWarehouseInfo1';
@@ -130,27 +125,11 @@ class PoSearchForm extends PureComponent {
         return <div>{dataList.id} - {dataList.categoryName}</div>;
     }
 
-    // 选择创建时间回调
-    chooseCreateDate = (dates, moments) => {
-        this.setState({
-            startCreateTime: moments[0],
-            endCreateTime: moments[1]
-        })
-    }
-
-    // 选择审批时间回调
-    chooseApproval = (dates, moments) => {
-        this.setState({
-            startAuditTime: moments[0],
-            endAuditTime: moments[1]
-        })
-    }
-
     onSupplierChange(value) {
         
     }
 
-
+    // 获取用于搜索的所有有效表单值
     getSearchParams = () => {
         const ordinary = '1';
         const ordinaryCode = 0;
@@ -158,11 +137,11 @@ class PoSearchForm extends PureComponent {
             purchaseNumber,
             locTypeCode,
             purchaseTypeCode,
-            statusCode
+            statusCode,
+            createTime,
+            auditTime
         } = this.props.form.getFieldsValue();
 
-        const { startCreateTime, endCreateTime, startAuditTime, endAuditTime } = this.state;
-        console.log(locTypeCode)
         const searchParams = {
             purchaseOrderNo: purchaseNumber,
             spNo: this.supplierEncoded,
@@ -172,36 +151,35 @@ class PoSearchForm extends PureComponent {
             secondCategoryId: this.GoodsTypeId,
             purchaseOrderType: purchaseTypeCode === ordinary ? ordinaryCode : '',
             status: statusCode,
-            startCreateTime,
-            endCreateTime,
-            startAuditTime,
-            endAuditTime
+            startCreateTime: createTime ? createTime[0].format(dateFormat) : '',
+            endCreateTime: createTime ? createTime[1].format(dateFormat) : '',
+            startAuditTime: auditTime ? auditTime[0].format(dateFormat) : '',
+            endAuditTime: auditTime ? auditTime[1].format(dateFormat) : '',
         };
 
         return Utils.removeInvalid(searchParams);
     }
 
-    handleSearch() {
+    // 搜索回调
+    handleSearch = () => {
         const { onSearch } = this.props;
         if (onSearch) {
             onSearch(this.getSearchParams());
         }
     }
 
-    handleResetValue() {
+    // 重置回调
+    handleResetValue = () => {
         const { onReset } = this.props;
-        // 重置查询条件
-        this.searchParams = {};
-        // 重置form
+
         this.props.form.resetFields();
-        // 重置值清单
         this.bigClass.reset();
         this.supplier.reset();
         this.supplierLoc.reset();
         this.poAddress.reset();
-        // call回调函数
+
         if (onReset) {
-            onReset(this.searchParams);
+            onReset();
         }
     }
 
@@ -288,7 +266,7 @@ class PoSearchForm extends PureComponent {
                                 {/* 采购单号 */}
                                 <FormItem label="采购单号" formItemLayout>
                                     {getFieldDecorator('purchaseNumber', {
-                                    })(<Input />)}
+                                    })(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -413,7 +391,7 @@ class PoSearchForm extends PureComponent {
                                             ref={ref => { this.supplier = ref }}
                                             fetch={(param) => this.props.pubFetchValueList({
                                                 condition: param.value,
-                                                pageSize: 2,
+                                                pageSize: 5,
                                                 pageNum: 1
                                             }, 'supplierSearchBox')}
                                             renderChoosedInputRaw={this.chooseSupplier}
@@ -444,7 +422,7 @@ class PoSearchForm extends PureComponent {
                                             ref={ref => { this.supplierLoc = ref }}
                                             fetch={(param) => this.props.pubFetchValueList({
                                                 condition: param.value,
-                                                pageSize: 2,
+                                                pageSize: 5,
                                                 pageNum: 1
                                             }, 'supplierAdrSearchBox')}
                                             renderChoosedInputRaw={this.chooseSupplierAdress}
@@ -472,13 +450,15 @@ class PoSearchForm extends PureComponent {
                                 {/* 创建日期 */}
                                 <FormItem >
                                     <div>
-                                        <span className="ant-form-item-label"><label>创建日期</label> </span>
-                                        <RangePicker
-                                            style={{ width: '200px' }}
-                                            format={dateFormat}
-                                            placeholder={['开始日期', '结束日期']}
-                                            onChange={this.chooseCreateDate}
-                                        />
+                                        <span className="ant-form-item-label"><label>创建日期</label></span>
+                                        {getFieldDecorator('createTime')(
+                                            <RangePicker
+                                                style={{ width: '200px' }}
+                                                format={dateFormat}
+                                                placeholder={['开始日期', '结束日期']}
+                                                onChange={this.chooseCreateDate}
+                                            />
+                                        )}
                                     </div>
                                 </FormItem>
                             </Col>
@@ -487,12 +467,14 @@ class PoSearchForm extends PureComponent {
                                 <FormItem >
                                     <div>
                                         <span className="ant-form-item-label"><label>审批日期</label> </span>
-                                        <RangePicker
-                                            style={{ width: '200px' }}
-                                            format={dateFormat}
-                                            placeholder={['开始日期', '结束日期']}
-                                            onChange={this.chooseApproval}
-                                        />
+                                        {getFieldDecorator('auditTime')(
+                                            <RangePicker
+                                                style={{ width: '200px' }}
+                                                format={dateFormat}
+                                                placeholder={['开始日期', '结束日期']}
+                                                onChange={this.chooseApproval}
+                                            />
+                                        )}
                                     </div>
                                 </FormItem>
                             </Col>
@@ -526,7 +508,7 @@ class PoSearchForm extends PureComponent {
                                 {auth.downPDF &&
                                     <FormItem>
                                         <Button size="default" onClick={this.handleDownPDF}>
-                                            下载PDF
+                                            <Link to="./poprintlist">下载PDF</Link>
                                         </Button>
                                     </FormItem>
                                 }
@@ -542,6 +524,7 @@ class PoSearchForm extends PureComponent {
 PoSearchForm.propTypes = {
     pubFetchValueList: PropTypes.func,
     onSearch: PropTypes.func,
+    onDelete: PropTypes.func,
     doSearch: PropTypes.func,
     onReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),

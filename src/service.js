@@ -399,7 +399,7 @@ export const queryAllCategories = () => http.get('/category/queryAllCategories')
  * @param newSortOrder
  */
 export const updateSortNum = ({ id, newSortOrder }) => (
-    http.post('/category/updateSortNum', { id, newSortOrder })
+    http.post('/category/updateSortNum', { id, newSortOrder }, true)
 );
 
 /**
@@ -408,7 +408,7 @@ export const updateSortNum = ({ id, newSortOrder }) => (
  * @param displayStatus
  */
 export const updateShowStatus = ({ id, displayStatus }) => (
-    http.post('/category/updateShowStatus', { id, displayStatus })
+    http.post('/category/updateShowStatus', { id, displayStatus }, true)
 );
 
 // 搜索推荐配置(cyx)---1.保存或者修改输入框的搜索关键字
@@ -524,10 +524,12 @@ export const getStoreInfo = (params) => http.get('/store/getStoreInfo', params);
 export const querycategories = (params) => http.get('/category/queryCategories', params);
 // 商品值清单
 export const queryMaterialMap = (params) => http.get('/provider/queryMaterialMap', params);
+// 删除处于草稿状态的订单
+export const deletePurchaseList = (params) => http.get('/pmPurchaseOrder/batchDeletePmPurchaseOrderByIds', params);
 
 // 采购收货相关
 // 采购收货单管理列表
-export const queryPoRcvMngList = (params) => http.get('/provider/queryPoRcvMngList', params);
+export const queryPoRcvMngList = (params) => http.get('/pmPurchaseReceipt/queryReceiptList', params);
 // 采购单收货列表   采购单筛选条件：已审核、未收货
 export const queryPoRcvList = (params) => http.get('/provider/queryPoRcvList', params);
 // 查询收货详情 查询参数： 收货单id（poRcvId）或采购单id（poId）

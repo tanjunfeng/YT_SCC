@@ -13,8 +13,14 @@ import NoData from './NoData';
 import './searchMind.scss';
 
 const TYPE = {
+    // 数据加载状态
     LOADING: 'loading',
+    // 默认状态
     DEFAULT: 'search',
+    // 选中状态
+    CHOOSED: 'check',
+    // 输入状态
+    EDIT: 'ellipsis',
 };
 
 class SearchMind extends Component {
@@ -29,7 +35,7 @@ class SearchMind extends Component {
 
             /**
              * 当前 icon 类型
-             * @param search, loading
+             * @param {TYPE}
              */
             type: TYPE.DEFAULT,
 
@@ -51,7 +57,7 @@ class SearchMind extends Component {
             /**
              * 点击下拉菜单，选择好的数据模型
              */
-            selectedRawData: null,
+            selectedRawData: props.defaultRaw,
 
             disabled: props.disabled,
 
@@ -82,7 +88,7 @@ class SearchMind extends Component {
         this.dropListener = ::this.dropListener;
         this.handleClear = ::this.handleClear;
         this.handleTableChange = ::this.handleTableChange;
-        this.onPressEnter = ::this.onPressEnter;
+        this.handleQueryBtn = ::this.handleQueryBtn;
 
         this.searchDelayTimerId = null;
     }
@@ -114,13 +120,6 @@ class SearchMind extends Component {
     }
 
     /**
-     * 按下回车键 or 由点击搜索按钮触发（!quickSearch）
-     */
-    onPressEnter() {
-        this.query();
-    }
-
-    /**
      * 按键搜索入口
      * 实时搜索仅仅在 quickSearch 的情况下启用
      */
@@ -132,6 +131,10 @@ class SearchMind extends Component {
 
         // 搜索发生变化，清空 current
         pager.current = 1;
+
+        this.setState({
+            type: TYPE.EDIT,
+        });
 
         if (quickSearch) {
             this.setState({
@@ -152,20 +155,17 @@ class SearchMind extends Component {
      * 点击清除按钮的回调
      */
     onClearCallback() {
-        this.props.onClear({
-            value: this.state.value,
-            raw: this.state.selectedRawData,
-        });
+        this.props.onClear(this.getData());
     }
 
     /**
-     * API 获取选择的源数据
-     * @return {null}
+     * 获取选择的数据
+     * @return {{value: *, selected: null}}
      */
     getData() {
         return {
             value: this.state.value,
-            raw: this.state.selectedRawData,
+            selected: this.state.selectedRawData,
         };
     }
 
@@ -182,13 +182,11 @@ class SearchMind extends Component {
         const {
             columns,
             noDataText,
+            loadingText,
             rowKey,
         } = this.props;
 
-        if (this.isEmpty()) {
-            return null;
-        }
-
+        // 有数据列表
         if (data && data.length > 0) {
             return (
                 <Table
@@ -204,9 +202,23 @@ class SearchMind extends Component {
             )
         }
 
+        if (type === TYPE.EDIT || type === TYPE.LOADING) {
+            return (
+                <NoData>{loadingText}</NoData>
+            );
+        }
+
         return (
             <NoData>{noDataText}</NoData>
         );
+    }
+
+    /**
+     * 点击搜索按钮
+     */
+    handleQueryBtn() {
+        this.ywcSmindInput.focus();
+        this.query();
     }
 
     /**
@@ -215,11 +227,11 @@ class SearchMind extends Component {
     handleFocus() {
         this.setState({
             isFocus: true,
-        });
+        }, () => this.query());
 
-        if (!this.isEmpty() && this.state.dropHide) {
-            this.query();
-        }
+        // if (!this.isEmpty() && this.state.dropHide) {
+        //     this.query();
+        // }
     }
 
     /**
@@ -266,9 +278,9 @@ class SearchMind extends Component {
      */
     query() {
         const { value, pagination, disabled } = this.state;
-        const { totalIndex } = this.props;
+        const { totalIndex, fetch } = this.props;
 
-        if (disabled) {
+        if (disabled || !fetch) {
             return;
         }
 
@@ -282,7 +294,7 @@ class SearchMind extends Component {
         });
 
         // 将原始数据传递给外部回调
-        this.props.fetch(params)
+        fetch(params)
             .then(res => {
                 const pager = { ...pagination };
 
@@ -299,7 +311,9 @@ class SearchMind extends Component {
             })
             .catch(() => {
                 this.setState({
-                    type: TYPE.DEFAULT
+                    type: TYPE.DEFAULT,
+                    total: 0,
+                    data: [],
                 })
             })
     }
@@ -308,7 +322,7 @@ class SearchMind extends Component {
      * 这里是实际控制下拉框显示隐藏的地方，容器获得焦点状态以及鼠标在容器内部，都不关闭下拉框
      */
     dropListener() {
-        const { isFocus, inArea, disabled } = this.state;
+        const { isFocus, inArea, disabled, selectedRawData } = this.state;
 
         // 禁用状态，不再进行任何操作反馈
         if (disabled) {
@@ -321,6 +335,7 @@ class SearchMind extends Component {
             });
         } else {
             this.setState({
+                type: selectedRawData === null ? TYPE.DEFAULT : TYPE.CHOOSED,
                 dropHide: true,
             });
         }
@@ -332,7 +347,7 @@ class SearchMind extends Component {
      */
     handleKeyUp(event) {
         if (event.keyCode === 13) {
-            this.onPressEnter();
+            this.query();
         } else {
             this.onSearch();
         }
@@ -358,12 +373,13 @@ class SearchMind extends Component {
 
         this.setState({
             selectedRawData: record,
-            // 清空下列所有数据
             dropHide: true,
             isFocus: false,
             inArea: false,
+            selectedValue: this.state.value,
             value: '',
             data: [],
+            type: TYPE.CHOOSED,
         });
 
         this.ywcSmindInput.blur();
@@ -398,17 +414,35 @@ class SearchMind extends Component {
      */
     handleClear() {
         const { dropHide } = this.state;
+        const { defaultValue, defaultRaw } = this.props;
+
+        // 有默认值的时候，清除按钮，直接同时清除 两个数据
+        if (defaultValue.length > 0 && defaultRaw !== null) {
+            this.setState({
+                value: '',
+                selectedRawData: null,
+            }, () => this.ywcSmindInput.focus());
+
+            return;
+        }
 
         if (!dropHide) {
+            // 清除输入框
             this.setState({
                 value: '',
                 data: [],
-            }, () => this.onClearCallback());
+                type: this.state.selectedRawData === null ? TYPE.DEFAULT : TYPE.CHOOSED
+            }, () => {
+                this.onClearCallback();
+                this.query();
+            });
 
             this.ywcSmindInput.focus();
         } else {
+            // 清除选择的数据
             this.setState({
                 selectedRawData: null,
+                type: TYPE.DEFAULT,
             }, () => this.onClearCallback());
         }
     }
@@ -431,6 +465,7 @@ class SearchMind extends Component {
             value,
             isFocus,
             selectedRawData,
+            data,
             disabled,
         } = this.state;
 
@@ -444,7 +479,7 @@ class SearchMind extends Component {
         } = this.props;
 
         const layoutCls = classNames('ywc-smind', {
-            'ywc-smind-drop-hide': dropHide || this.isEmpty(),
+            'ywc-smind-drop-hide': dropHide || (this.isEmpty() && (data && data.length === 0)),
             'ywc-smind-has-input-view': renderChoosedInputRaw,
             'ywc-smind-disabled': disabled,
         });
@@ -491,16 +526,22 @@ class SearchMind extends Component {
                             value={value}
                             {...inputProps}
                         />
-                        {(!isFocus && this.isEmpty()) &&
+
+                        {/* 用于被选择的数据展示 */}
+                        {(!isFocus && selectedRawData !== null && this.isEmpty()) &&
                             <div className="ywc-smind-input-view">
                                 {this.inputRawRender()}
                             </div>
                         }
-                        {this.isEmpty() && !selectedRawData &&
+
+                        {/* placeholder */}
+                        {(!this.isFocus && this.isEmpty() && selectedRawData === null) &&
                             <div className="ywc-smind-input-placeholder">
                                 {placeholder}
                             </div>
                         }
+
+                        {/* 清空按钮 */}
                         <div
                             className={clearCls}
                             onClick={this.handleClear}
@@ -508,19 +549,21 @@ class SearchMind extends Component {
                             <Icon type="close-circle-o" />
                         </div>
                     </div>
+
+                    {/* 搜索按键 */}
                     <span
                         className="ywc-smind-icon"
-                        onClick={this.onPressEnter}
+                        onClick={this.handleQueryBtn}
                     >
                         <Icon type={type} />
                     </span>
                 </div>
-                {/* 默认隐藏 */}
+
+                {/* 搜索结构下拉菜单 默认隐藏 */}
                 <div
                     style={{
                         ...(dropWidth && { width: dropWidth })
                     }}
-                    ref={ref => { this.ywcSmindDropList = ref }}
                     className="ywc-smind-drop-layout"
                 >
                     {this.getDrop()}
@@ -593,15 +636,28 @@ SearchMind.propTypes = {
      */
     renderChoosedInputRaw: PropTypes.oneOfType([PropTypes.func, PropTypes.func]),
 
+    /**
+     * 组件通过什么 key 来查找 total 字段
+     */
     totalIndex: PropTypes.string,
 
     pageSize: PropTypes.number,
 
     defaultValue: PropTypes.string,
 
+    defaultRaw: PropTypes.object,
+
     disabled: PropTypes.bool,
 
+    /**
+     * 无表格状态下，没有搜索到内容的文字提示
+     */
     noDataText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+
+    /**
+     * 无表格状态下，数据加载文字
+     */
+    loadingText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 
     /**
      * 手动指定下拉框的宽度
@@ -617,11 +673,13 @@ SearchMind.defaultProps = {
     style: {},
     columns: [],
     defaultValue: '',
+    defaultRaw: null,
     totalIndex: 'total',
     pageSize: 10,
     delaySend: 320,
     placeholder: '请输入内容',
     noDataText: '没有匹配的数据',
+    loadingText: '数据请求中',
     rowKey: 'id',
     quickSearch: true,
     renderChoosedInputRaw: null,

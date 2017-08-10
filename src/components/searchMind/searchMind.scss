@@ -1,3 +1,6 @@
+/**
+ * 搜索输入框样式
+ */
 .ywc-smind {
     position: relative;
     display: inline-block;
@@ -43,7 +46,7 @@
         .ywc-smind-input-layout {
             flex: auto;
             position: relative;
-            background: #fff;
+            //background: #fff;
             overflow: hidden;
 
             .ywc-smind-input-view,
@@ -103,13 +106,13 @@
         position: absolute;
         z-index: 1;
         width: 100%;
-        border: 1px solid #eee;
+        border: 1px solid #e1e1e1;
         margin-top: -1px;
         background: #fff;
         box-shadow: 2px 2px 6px -3px #ccc;
         border-radius: 0 0 4px 4px;
         opacity: 1;
-        transition: all .3s;
+        transition: all .2s;
         visibility: visible;
     }
 
