@@ -3,6 +3,7 @@ dist/
 
 # node ignore
 node_modules/
+.vscode/
 
 #ide file
 .DS_Store

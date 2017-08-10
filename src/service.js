@@ -322,11 +322,12 @@ export const insertstaticpage = (params) => http.post('/staticPage/insertStaticP
 // 修改静态页面基本信息
 export const updatestaticpagebase = (params) => http.post('/staticPage/updateStaticPageBase', params);
 
-// 显示字典内容
+// 查询显示字典维护内容列表
 export const dictionaryContentList = (params) => http.get('/dictionary/dictionaryContentList', params);
 
 // 页面编辑数据列表
 export const fectheEditorList = (params) => http.get('/staticPage/toUpdateStaticPage', params);
+
 // 修改静态页面编辑内容并上传到图片服务器
 export const fectheEditorContent = (params) => http.post('/staticPage/updateStaticPageUpload', params);
 
@@ -462,6 +463,19 @@ export const queryAllSupplier = (params) => http.get('/price/queryAllSupplier', 
 // 新增数据字典
 export const insertDictionary = (params) => http.post('/dictionary/insertDictionary', params);
 
+
+// 修改数据字典
+export const updateDictionary = (params) => http.post('/dictionary/updateDictionary', params);
+
+// 删除数据字典
+export const deleteDictionary = (params) => http.get('/dictionary/deleteDictionary', params);
+
+// 修改字典内容或设置状态
+export const updateContent = (params) => http.post('/dictionary/updateContent', params);
+
+// 新增数据字典内容
+export const insertDictionaryContent = (params) => http.post('/dictionary/insertDictionaryContent', params);
+
 // IBM 修改
 // 查看是否存在主供应商
 export const checkMainSupplier = (params) => http.get('/prodPurchase/checkMainSupplier', params);
@@ -509,6 +523,15 @@ export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPa
 export const queryPoDetail = (params) => http.get('/pmPurchaseOrder/getPurchaseOrderInfoById', params);
 // 创建采购单详情
 export const createPo = (params) => http.post('/provider/createPo', params);
+// 查询采购单列表
+export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
+
+// 删除采购单 参数 1或n个采购单id  [ids] 
+export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
+
+// 查询采购单打印列表
+export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
+
 // 审批
 export const auditPo = (params) => http.post('/provider/auditPo', params);
 
@@ -520,8 +543,10 @@ export const fetchPurchaseOrder = (params) => http.get('/pmPurchaseOrder/queryPu
 
 // 门店地点值清单
 export const getStoreInfo = (params) => http.get('/store/getStoreInfo', params);
+
 // 大类值清单
 export const querycategories = (params) => http.get('/category/queryCategories', params);
+
 // 商品值清单
 export const queryMaterialMap = (params) => http.get('/provider/queryMaterialMap', params);
 // 删除处于草稿状态的订单
@@ -536,12 +561,15 @@ export const downloadBatchPDF = '/pmPurchaseOrder/exportPdfs';
 // 采购收货相关
 // 采购收货单管理列表
 export const queryPoRcvMngList = (params) => http.get('/pmPurchaseReceipt/queryReceiptList', params);
+
 // 采购单收货列表   采购单筛选条件：已审核、未收货
 export const queryPoRcvList = (params) => http.get('/provider/queryPoRcvList', params);
+
 // 查询收货详情 查询参数： 收货单id（poRcvId）或采购单id（poId）
 // export const queryPoRcvDetail = (params) => http.get('/provider/queryPoRcvDetail', params);
 // 购收货单详情（id，收货单id）
 export const queryPoRcvDetail = (params) => http.get('/pmPurchaseReceipt/queryReceiptDetailById', params);
+
 // 创建采购收货单
 export const createPoRcv = (params) => http.post('/provider/createPoRcv', params);
 
@@ -574,6 +602,7 @@ export const supplierAdrSettledAudit = (params) => http.post('/supplier/supplier
 // 供应商修改审核
 export const auditSupplierEditInfo = (params) => http.post('/supplier/auditSupplierEditInfo', params);
 
+
 /**
  * 校验分公司id是否重复
  * orgId 供应商地点分公司id
@@ -588,8 +617,10 @@ export const checkSupplierAddOrgId = (params) => http.get('/supplier/checkSuppli
 
  // 根据条件分页查询商品清单，并排序
 export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);
+
 // 获取已审批通过供应商地点下拉框数据
 export const querySuppliersList = (params) => http.get('/supplier/supplierAdrSearchBox', params);
+
 // 商品的暂停购进和恢复采购
 export const goodsChangeStatus = (params) => http.post('prodPurchase/batchChangeProPurchaseStatus', params);
 // 商品的区域性批量上架
@@ -598,23 +629,32 @@ export const prodBatchPutAway = (params) => http.post('prodSell/prodBatchPutaway
 export const prodBatchUpdate = (params) => http.post('prodSell/prodBatchUpdate', params);
 // 批量全国上下架
 export const availablProducts = (params) => http.post('product/availablProducts', params);
+
 // 新增供应商信息
 export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);
+
 // 修改供应商信息
 export const updateSupplierInfo = (params) => http.post('/supplier/updateSupplierInfo', params);
+
 // 新增供应商地点信息
 export const insertSupplierAddressInfo = (params) => http.post('/supplier/insertSupplierAddressInfo', params);
+
 // 修改供应商地点信息
 export const updateSupplierAddressInfo = (params) => http.post('/supplier/updateSupplierAddressInfo', params);
+
 // 查询供应商地点详情
 export const queryProviderPlaceInfo = (params) => http.get('/supplier/queryProviderPlaceInfo', params);
+
 // 此接口用于根据条件查询仓库信息列表,条件查询范围为仓库编码和仓库名称(应该用get)
 export const getWarehouseInfo1 = (params) => http.get('/warehouse/getWarehouseLogicInfo', params);
+
 // 此接口用于根据仓库ID查询仓库的详细信息
 export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehousePhysicalInfo', params);
+
 // 查询供应商地点所属区域列表
 export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySupplierPlaceRegion', params);
-// 此接口用于通过code和name（后端id就等于code）查询子公司信息
+
+// 此接口用于通过code和name（后端id就等于code）查询子公司信息 
 export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBaseInfo', params);
 // 此接口用于通过code和name（后端id就等于code）查询子公司信息
 export const getFranchiseeInfo = (params) => http.get('/sorder/getFranchiseeInfo', params);
@@ -677,4 +717,3 @@ export const updateStepSellPrice = (params) => http.post('/prodSell/updateSellPr
 
 // 修改供应商
 export const updateSellPriceStatus = (params) => http.get('/prodSell/updateSellPriceStatus', params);
-

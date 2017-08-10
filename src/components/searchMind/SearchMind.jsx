@@ -50,11 +50,6 @@ class SearchMind extends Component {
             value: props.defaultValue,
 
             /**
-             * 点击下拉菜单，储存上次输入框对应的 value
-             */
-            selectedValue: '',
-
-            /**
              * 是否 input 获取了焦点
              */
             isFocus: false,
@@ -62,7 +57,7 @@ class SearchMind extends Component {
             /**
              * 点击下拉菜单，选择好的数据模型
              */
-            selectedRawData: null,
+            selectedRawData: props.defaultRaw,
 
             disabled: props.disabled,
 
@@ -327,7 +322,7 @@ class SearchMind extends Component {
      * 这里是实际控制下拉框显示隐藏的地方，容器获得焦点状态以及鼠标在容器内部，都不关闭下拉框
      */
     dropListener() {
-        const { isFocus, inArea, disabled, value, selectedRawData } = this.state;
+        const { isFocus, inArea, disabled, selectedRawData } = this.state;
 
         // 禁用状态，不再进行任何操作反馈
         if (disabled) {
@@ -340,7 +335,6 @@ class SearchMind extends Component {
             });
         } else {
             this.setState({
-                value: inArea ? value : '',
                 type: selectedRawData === null ? TYPE.DEFAULT : TYPE.CHOOSED,
                 dropHide: true,
             });
@@ -420,6 +414,17 @@ class SearchMind extends Component {
      */
     handleClear() {
         const { dropHide } = this.state;
+        const { defaultValue, defaultRaw } = this.props;
+
+        // 有默认值的时候，清除按钮，直接同时清除 两个数据
+        if (defaultValue.length > 0 && defaultRaw !== null) {
+            this.setState({
+                value: '',
+                selectedRawData: null,
+            }, () => this.ywcSmindInput.focus());
+
+            return;
+        }
 
         if (!dropHide) {
             // 清除输入框
@@ -523,14 +528,14 @@ class SearchMind extends Component {
                         />
 
                         {/* 用于被选择的数据展示 */}
-                        {(!isFocus && this.isEmpty()) &&
+                        {(!isFocus && selectedRawData !== null && this.isEmpty()) &&
                             <div className="ywc-smind-input-view">
                                 {this.inputRawRender()}
                             </div>
                         }
 
                         {/* placeholder */}
-                        {this.isEmpty() && !selectedRawData &&
+                        {(!this.isFocus && this.isEmpty() && selectedRawData === null) &&
                             <div className="ywc-smind-input-placeholder">
                                 {placeholder}
                             </div>
@@ -640,6 +645,8 @@ SearchMind.propTypes = {
 
     defaultValue: PropTypes.string,
 
+    defaultRaw: PropTypes.object,
+
     disabled: PropTypes.bool,
 
     /**
@@ -666,6 +673,7 @@ SearchMind.defaultProps = {
     style: {},
     columns: [],
     defaultValue: '',
+    defaultRaw: null,
     totalIndex: 'total',
     pageSize: 10,
     delaySend: 320,
