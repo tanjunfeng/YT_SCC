@@ -4,6 +4,7 @@
  *
  */
 window.config = {
+    //apiHost: '/sc/',
     apiHost: '/api/sc/',
     // apiHost: '/sc/',
     topMenusLink: 'http://sitxcoc.yatang.com.cn:81/system/tomain/',

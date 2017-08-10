@@ -49,11 +49,11 @@ class ClassifiedList extends Component {
     }
 
     /**
-     * 临时处理后端问题，后端请求要5s 左右才可能返回正确数据
+     * 临时处理后端问题，后端请求要 N(s) 左右才可能返回正确数据
      * @param callback
      */
     locker(callback) {
-        const delay = 3000;
+        const delay = 2000;
         const hide = message.loading(`数据处理大约需要${delay / 1000}秒左右，请耐心等待`, 0);
 
         this.setState({

@@ -45,16 +45,14 @@ const columns = poMngListColumns;
 class PoMngList extends PureComponent {
     constructor(props) {
         super(props);
-        this.onActionMenuSelect = ::this.onActionMenuSelect;
-        this.onPaginate = ::this.onPaginate;
-        this.renderActions = ::this.renderActions;
-        this.applyReset = ::this.applyReset;
-        this.applyDelete =::this.applyDelete;
-        this.handleRejectedModalOk =::this.handleRejectedModalOk;
-        // 初始采购单查询参数
         this.searchParams = {};
+        this.selectedRowData = {};
         // 初始页号
         this.current = 1;
+        this.state = {
+            auditingVisible: false,
+            deleteListData: []
+        }
     }
 
     componentDidMount() {
@@ -66,175 +64,156 @@ class PoMngList extends PureComponent {
    * @param {*} params 
    */
     queryPoList = (params) => {
-        this.props.fetchPoMngList({});
+        this.props.fetchPoMngList({
+            ...params
+        });
     }
 
-    handleRejectedModalOk = (e) => {
-        console.log(e);
-        // this.setState({
-        //   visible: false,
-        // });
+    // 审核未通过弹窗
+    showAuditingModal = () => {
+        this.setState({
+            auditingVisible: true
+        });
     }
+
+    // 隐藏弹出框
+    handleAuditingCancel = () => {
+        this.setState({
+            auditingVisible: false
+        });
+    }
+
 
     /**
      * 点击查询按钮回调
-     * @param {*} res 
+     * @param {object}  res
      */
     applySearch = (res) => {
         this.searchParams = res;
         this.queryPoList(this.searchParams);
     }
-
-    /**
-     * 点击重置按钮回调
-     * @param {*}  res
-     */
-    applyReset(res) {
-        // 清空查询条件
-        this.searchParams = {};
-    }
   /**
    * 点击删除按钮回调
    * @param {*} res
    */
-    applyDelete(res) {
+    applyDelete = () => {
         // 校验选中项是否可删除
-        const { selectedRowKeys, selectedRows } = this.props.selectedPoMngRows;
+        // const { selectedRowKeys, selectedRows } = this.props.selectedPoMngRows;
         // 没有选择删除对象
-        if (!selectedRowKeys || (selectedRowKeys && selectedRowKeys.length === 0)) {
-            message.error('请选择需要删除的采购单');
-            return;
-        }
+        // if (!selectedRowKeys || (selectedRowKeys && selectedRowKeys.length === 0)) {
+        //     message.error('请选择需要删除的采购单');
+        //     return;
+        // }
+        
         // 删除选中项并刷新采购单列表
         Modal.confirm({
             title: '你确认要删除选中采购单？',
             onOk: () => {
-            this.props.deletePoByIds({
-                selectedRowKeys
-            }).then(() => {
-                message.success('删除成功');
-                // 点击查询后清空选中列表
-                this.props.changePoMngSelectedRows({
-                    selectedRowKeys: [],
-                    selectedRows: []
-                });
-                // 刷新采购单列表
-                this.queryPoList();
-            })
+                this.props.deletePoByIds({
+                    // selectedRowKeys
+                }).then(() => {
+                    message.success('删除成功');
+                    // 点击查询后清空选中列表
+                    // this.props.changePoMngSelectedRows({
+                    //     selectedRowKeys: [],
+                    //     selectedRows: []
+                    // });
+                    // 刷新采购单列表
+                    this.queryPoList();
+                })
             },
             onCancel() { },
         });
     }
 
+    // 重置回调
+    applyReset = () => {
+        this.searchParams = {};
+    }
+
     /**
      * 点击翻页
-     * @param {*} pageNumber
-     * @param {*} pageSize
+     * @param {string}    pageNumber
      */
-    onPaginate(pageNumber, pageSize) {
+    onPaginate = (pageNumber) => {
         this.current = pageNumber
-        this.queryPoList();
+        this.queryPoList({
+            pageSize: PAGE_SIZE,
+            pageNum: this.current,
+            ...this.searchParams
+        });
     }
-    onActionMenuSelect(record, index, items) {
-        const { id } = record;
-        const { key } = items;
-        // 采购单id  是否换成采购单号？？？？
-        let ids = [record.id];
-        switch (key) {
-            case "delete":
-                Modal.confirm({
-                    title: '你确认要删除该采购单？',
-                    onOk: () => {
-                        this.props.deletePoByIds({
-                            ids
-                        }).then(() => {
-                            message.success('删除成功');
-                            this.queryPoList();
-                        })
-                    },
-                    onCancel() { },
-                });
-                break;
-            case "rejected":
-                Modal.info({
-                    title: '审核拒绝详情',
-                    content: (
-                        <div>
-                            <div>审核时间:</div>
-                            <div>审核者:</div>
-                            <div>审核内容: <p>这里是审核拒绝原因内容</p></div>
-                        </div>
-                    ),
-                    onOk() { },
-                });
-                break;
-            default:
-                break;
-        }
-    }
-    renderActions(text, record, index) {
-        const { statusCd, purchaseOrderNo } = record;
+
+    // table列表详情操作
+    renderActions = (text, record) => {
+        this.selectedRowData = record;
+
+        const { status, ipurchaseOrderNo, id } = record;
+        const deleteCode = 0;
+        // const submitCode = 1;
+        const auditingCode = 2;
+        const refuseCOde = 3;
         const { pathname } = this.props.location;
+        const detailLink = `${pathname}/podetail/${ipurchaseOrderNo}`;
         const menu = (
-            <Menu onClick={(item) => this.onActionMenuSelect(record, index, item)}>
+            <Menu>
                 <Menu.Item key="detail">
+                    <Link to={detailLink}>详情</Link>
                     <Link to={`${pathname}/${purchaseOrderNo}`}>采购单详情</Link>
                 </Menu.Item>
 
-                {statusCd === poStatusCodes.draft && <Menu.Item key="delete">
-                    <a target="_blank" rel="noopener noreferrer">删除</a>
-                </Menu.Item>
+                {status === deleteCode && <Menu.Item key="delete">
+                    <Link to={detailLink}>修改</Link>
+                    <Link to=''>删除</Link>
+                    </Menu.Item>
                 }
-                {statusCd === poStatusCodes.rejected && <Menu.Item key="rejected">
-                    <a target="_blank" rel="noopener noreferrer">查看拒绝原因</a>
-                </Menu.Item>
-                }
-
-                {statusCd === poStatusCodes.approved && <Menu.Item key="receive">
-                    <a target="_blank" rel="noopener noreferrer">收货</a>
+                {status === refuseCOde && <Menu.Item key="rejected">
+                    <span onClick={this.showAuditingModal}>查看审核未通过</span>
                 </Menu.Item>
                 }
 
+                {status === auditingCode && <Menu.Item key="receive">
+                    <Link to={`${pathname}/podetail/${id}`}>收货</Link>
+                </Menu.Item>
+                }
             </Menu>
         );
 
         return (
             <Dropdown overlay={menu} placement="bottomCenter">
-                <a className="ant-dropdown-link">
-                表单操作
-                <Icon type="down" />
-                </a>
+                <span>
+                    采购单详情
+                    <Icon type="down" />
+                </span>
             </Dropdown>
         )
     }
 
     render() {
-        const data01 = [{purchaseOrderNo: 1}, {purchaseOrderNo: 29}, {purchaseOrderNo: 32}]
-        // console.log(this.props)
         columns[columns.length - 1].render = this.renderActions;
+
         const { poList = {} } = this.props;
-        // console.log(poList)
-        const { data = [], total, pageNum, pageSize } = poList;
-        const { selectedPoMngRows } = this.props;
+        const { data = [], total, pageNum } = poList;
+
+        const { pathname } = this.props.location;
+        const { auditingVisible } = this.state;
+        const { failedReason = '', auditTime, auditUserId, ipurchaseOrderNo} = this.selectedRowData;
+
+        // const { selectedPoMngRows } = this.props;   
 
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-                this.props.changePoMngSelectedRows({
-                    selectedRowKeys,
-                    selectedRows
-                });
+                console.log(selectedRows);
+                // this.props.changePoMngSelectedRows({
+                //     selectedRowKeys,
+                //     selectedRows
+                // });
             },
-
-            // 选中行
-            selectedRowKeys: selectedPoMngRows.selectedRowKeys,
-            getCheckboxProps: (record) => ({
-                disabled: record.statusCd !== poStatusCodes.draft,
-            })
         };
         return (
             <div className="po-mng-list">
                 <SearchForm
-                    auth={{ delete: true, new: true, print: false, downPDF: true }}
+                    auth={{ delete: true, new: true, print: false }}
                     onSearch={this.applySearch}
                     onReset={this.applyReset}
                     onDelete={this.applyDelete}
@@ -244,19 +223,37 @@ class PoMngList extends PureComponent {
                         rowSelection={rowSelection}
                         dataSource={data01}
                         columns={columns}
-                        rowKey="id"
+                        rowKey="purchaseOrderNo"
                         scroll={{
                             x: 1300
                         }}
                         pagination={{
                             current: pageNum,
                             total,
-                            pageSize,
+                            PAGE_SIZE,
                             showQuickJumper: true,
                             onChange: this.onPaginate
                         }}
                     />
                 </div>
+                {
+                    <Modal
+                        title="平台审核未通过原因"
+                        visible={auditingVisible}
+                        onCancel={this.handleAuditingCancel}
+                        footer={[
+                            <Button type="primary"><Link to={`${pathname}/podetail/${ipurchaseOrderNo}`}>立即修改</Link></Button>
+                        ]}
+                    >
+                        {
+                            <ul>
+                                <li>审核时间: {auditTime}</li>
+                                <li>审核者: {auditUserId}</li>
+                                <li>失败原因: {failedReason}</li>
+                            </ul>
+                        }
+                    </Modal>
+                }
             </div>
         )
     }
@@ -264,7 +261,9 @@ class PoMngList extends PureComponent {
 
 PoMngList.propTypes = {
     fetchPoMngList: PropTypes.func,
-    poList: PropTypes.objectOf(PropTypes.any)
+    poList: PropTypes.objectOf(PropTypes.any),
+    location: PropTypes.objectOf(PropTypes.any),
+    deletePoByIds: PropTypes.func
 }
 
 export default withRouter(Form.create()(PoMngList));
