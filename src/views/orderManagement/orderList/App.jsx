@@ -453,7 +453,7 @@ class OrderManagementList extends Component {
         const { orderListData } = this.props;
         columns[columns.length - 1].render = this.renderOperation;
         return (
-            <div className={`${orderML}`}>
+            <div className={orderML}>
                 <div className="manage-form">
                     <Form layout="inline">
                         <div className="gutter-example">
