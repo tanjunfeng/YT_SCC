@@ -23,6 +23,7 @@ import {
     getStoreInfo,
     querycategories,
     getFranchiseeInfo,
+    queryCategorysByLevel,
 } from '../service';
 
 const pubValueList = {
@@ -55,6 +56,7 @@ const pubValueList = {
     // 查询加盟商
     getFranchiseeInfo,
 
+    queryCategorysByLevel
 }
 
 const receiveCollapsed = (isCollapsed) => ({

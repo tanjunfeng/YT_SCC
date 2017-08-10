@@ -44,7 +44,7 @@ const TEXT = {
     supplierOperTaxInfo: {
         spId: '供应商主表ID',
         // id: '主键ID2',
-        companyName: '公司名称2',
+        companyName: '供应商名称',
         companyLocProvince: '省份名',
         companyLocCity: '城市名',
         companyLocCounty: '地区名',
@@ -64,7 +64,7 @@ const TEXT = {
     supplierBankInfo: {
         // spId: '供应商主表ID',
         // id: '主键ID',
-        accountName: '开户名字',
+        accountName: '开户名',
         openBank: '开户行',
         bankAccount: '银行账户',
         bankAccountLicense: '银行开户许可证电子版url',

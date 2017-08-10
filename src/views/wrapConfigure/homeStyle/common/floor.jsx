@@ -37,7 +37,7 @@ const colums = [
         imgHeight: 140
     },
     {
-        width: 240,
+        width: 270,
         height: 280,
         prefex: 5,
         imgWidth: 133,

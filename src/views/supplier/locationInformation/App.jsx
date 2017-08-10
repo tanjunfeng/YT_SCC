@@ -19,6 +19,7 @@ import {
 
 import Utils from '../../../util/util';
 import { Validator } from '../../../util/validator';
+import Tip from '../../../util/tip';
 import InlineUpload from '../../../components/inlineUpload';
 import CasadingAddress from '../../../components/ascadingAddress';
 import {
@@ -74,7 +75,9 @@ class BasicInfo extends PureComponent {
         this.handleAreaChange = ::this.handleAreaChange;
         this.companyAddress = {};
         this.bankLoc = {};
-        this.orgId = null;
+        const { detailSp = {} } = props;
+        const { spAdrBasic = {} } = detailSp;
+        this.orgId = spAdrBasic.orgId || null;
         this.company = null;
         this.childName = null;
     }
@@ -89,6 +92,13 @@ class BasicInfo extends PureComponent {
     getValue(callback) {
         const { form, detailData, detailSp, isEdit } = this.props;
         const { supplierBasicInfo = {} } = detailData;
+        const wareHouseIds = this.wareHouse.getValue();
+        // 供应商供应地点没选择
+        if (!wareHouseIds.length) {
+            Tip(true, '请选择送货信息！');
+            return;
+        }
+
         form.validateFields((err, values) => {
             if (!err) {
                 const {
@@ -105,7 +115,6 @@ class BasicInfo extends PureComponent {
                     purchasePhone,
                     settlementPeriod
                 } = values
-                const wareHouseIds = this.wareHouse.getValue();
                 const submit = {
                     spAdrBasic: {
                         providerNo: supplierBasicInfo.spNo,
@@ -139,7 +148,8 @@ class BasicInfo extends PureComponent {
                         {
                             id: detailSp.spAdrBasic.id,
                             status: detailSp.spAdrBasic.status,
-                            orgId: !this.orgId ? detailSp.spAdrBasic.orgId : this.orgId
+                            orgId: !this.orgId ? detailSp.spAdrBasic.orgId : this.orgId,
+                            belongAreaName: !this.company ? detailSp.spAdrBasic.belongAreaName : this.company
                         }
                     )
                     Object.assign(
@@ -171,7 +181,7 @@ class BasicInfo extends PureComponent {
                 ? 'updateSupplierAddressInfo'
                 : 'insertSupplierAddressInfo'
             ).then((res) => {
-                this.props.history.push(`/supplierInputList/place/${isEdit ? data.id : res.data}`)
+                this.props.history.push('/supplierInputList')
             });
         });
     }
@@ -188,6 +198,18 @@ class BasicInfo extends PureComponent {
 
     handleChoose(item) {
         this.orgId = item.record.id;
+        // const { detailData, detailSp, isEdit } = this.props;
+        // const { id } = item.record;
+        // let spId = null;
+        // if (isEdit) {
+        //     spId = detailSp.spAdrBasic.id
+        // }
+        // Validator.repeat.orgId(id, detailData.id, spId).then(() => {
+        //     this.orgId = item.record.id;
+        // }).catch((res) => {
+        //     this.orgCompany.reset();
+        //     this.orgId = null;
+        // });
     }
 
     handleSaveDraft() {
@@ -327,14 +349,14 @@ class BasicInfo extends PureComponent {
                                         <FormItem>
                                             {getFieldDecorator('operaStatus', {
                                                 rules: [{required: true, message: '请选择供应商地点经营状态'}],
-                                                initialValue: isEdit ? `${spAdrBasic.operaStatus}` : '0'
+                                                initialValue: isEdit ? `${spAdrBasic.operaStatus}` : '1'
                                             })(
                                                 <Select
                                                     style={{ width: 140 }}
                                                     placeholder="供应商地点经营状态"
                                                 >
-                                                    <Option value="0">启用</Option>
-                                                    <Option value="1">禁用</Option>
+                                                    <Option value="1">启用</Option>
+                                                    <Option value="0">禁用</Option>
                                                 </Select>
                                             )}
                                         </FormItem>
@@ -453,6 +475,7 @@ class BasicInfo extends PureComponent {
                                                         branchCompanyName: param.value
                                                     }, 'findCompanyBaseInfo')
                                                 }
+                                                ref={node => (this.orgCompany = node)}
                                                 onChoosed={this.handleChoose}
                                                 placeholder={'请输入子公司名称'}
                                                 renderChoosedInputRaw={(data) => (
@@ -475,6 +498,23 @@ class BasicInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                 </Row>
+                                {
+                                    isEdit &&
+                                    <Row>
+                                        {
+                                            spAdrBasic.auditPerson &&
+                                            <Col span={8}><span>供应商审核人：</span>
+                                                <span>{spAdrBasic.auditPerson}</span>
+                                            </Col>
+                                        }
+                                        {
+                                            spAdrBasic.auditDate &&
+                                            <Col span={8}><span>供应商审核时间：</span>
+                                                <span>{moment(spAdrBasic.auditDate).format('YYYY-MM-DD')}</span>
+                                            </Col>
+                                        }
+                                    </Row>
+                                }
                             </div>
                         </div>
                     </div>
@@ -506,7 +546,10 @@ class BasicInfo extends PureComponent {
                                         <span>供应商姓名：</span>
                                         <FormItem>
                                             {getFieldDecorator('providerUserName', {
-                                                rules: [{ required: true, message: '请输入供应商姓名!' }],
+                                                rules: [
+                                                    { required: true, message: '请输入供应商姓名!' },
+                                                    {max: 6, message: '字符长度超限'}
+                                                ],
                                                 initialValue: spAdrContact.providerName
                                             })(
                                                 <Input
@@ -521,6 +564,14 @@ class BasicInfo extends PureComponent {
                                             {getFieldDecorator('providerPhone', {
                                                 rules: [
                                                     { required: true, message: '请输入供应商电话!' },
+                                                    {
+                                                        validator: (rule, value, callback) => {
+                                                            if (!/^1[34578]\d{9}$/.test(value)) {
+                                                                callback('手机号码有误')
+                                                            }
+                                                            callback()
+                                                        }
+                                                    }
                                                 ],
                                                 initialValue: spAdrContact.providerPhone
                                             })(
@@ -554,7 +605,10 @@ class BasicInfo extends PureComponent {
                                         <span>采购员姓名：</span>
                                         <FormItem>
                                             {getFieldDecorator('purchaseName', {
-                                                rules: [{ required: true, message: '请输入采购员姓名!' }],
+                                                rules: [
+                                                    { required: true, message: '请输入采购员姓名!' },
+                                                    {max: 6, message: '字符长度超限'}
+                                                ],
                                                 initialValue: spAdrContact.purchaseName
                                             })(
                                                 <Input
@@ -569,6 +623,14 @@ class BasicInfo extends PureComponent {
                                             {getFieldDecorator('purchasePhone', {
                                                 rules: [
                                                     { required: true, message: '请输入采购员电话!' },
+                                                    {
+                                                        validator: (rule, value, callback) => {
+                                                            if (!/^1[34578]\d{9}$/.test(value)) {
+                                                                callback('手机号码有误')
+                                                            }
+                                                            callback()
+                                                        }
+                                                    }
                                                 ],
                                                 initialValue: spAdrContact.purchasePhone
                                             })(

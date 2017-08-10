@@ -1,131 +1,179 @@
+/**
+ * 采购管理 - 收货单管理列表
+ * 
+ * @author taoqiyu@yatang.cn
+ */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, Form, Select, DatePicker, Row, Col, Icon, Table, Menu, Dropdown } from 'antd';
+import {
+    Button,
+    Input,
+    Form,
+    Select,
+    DatePicker,
+    Row,
+    Col,
+    Icon,
+    Table,
+    Menu,
+    Dropdown
+} from 'antd';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
-import { poStatus, locType, poType, locTypeCodes, poStatusCodes, poTypeCodes } from '../../../constant/procurement';
+import {
+    poStatus,
+    locType as adrType,
+    status,
+    poType
+} from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import moment from 'moment';
+import { pubFetchValueList } from '../../../actions/pub';
 import {
     getWarehouseAddressMap,
     getShopAddressMap,
     getSupplierMap,
     getSupplierLocMap,
     fetchPoRcvMngList
-} from '../../../actions'
+} from '../../../actions';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 const dateFormat = "YYYY-MM-DD";
-@connect(
-    state => ({
-        poRcvMngList: state.toJS().procurement.poRcvMngList,
-    }),
-    dispatch => bindActionCreators({
-        getWarehouseAddressMap,
-        getShopAddressMap,
-        getSupplierMap,
-        getSupplierLocMap,
-        fetchPoRcvMngList
-    }, dispatch)
-)
+
+@connect(state => ({
+    poRcvMngList: state.toJS().procurement.poRcvMngList
+}), dispatch => bindActionCreators({
+    getWarehouseAddressMap,
+    getShopAddressMap,
+    getSupplierMap,
+    getSupplierLocMap,
+    fetchPoRcvMngList,
+    pubFetchValueList
+}, dispatch))
 class PoRcvMngList extends PureComponent {
     constructor(props) {
         super(props);
         this.handleSearch = ::this.handleSearch;
         this.handleResetValue = ::this.handleResetValue;
         this.handleCreate = ::this.handleCreate;
-        this.onLocTypeChange =::this.onLocTypeChange;
-        this.handleGetAddressMap =::this.handleGetAddressMap;
-        this.handleGetSupplierMap =::this.handleGetSupplierMap;
-        this.handleGetSupplierLocMap =::this.handleGetSupplierLocMap;
+        this.onLocTypeChange =:: this.onLocTypeChange;
         this.onActionMenuSelect = ::this.onActionMenuSelect;
         this.renderActions = ::this.renderActions;
-        this.queryRcvMngPoList =::this.queryRcvMngPoList;
+        this.queryRcvMngPoList =:: this.queryRcvMngPoList;
         this.searchParams = {};
         this.state = {
-            //地点是否可编辑
-            locDisabled: true
+            locDisabled: true,  //地点是否可编辑
+            spNo: '',   // 供应商编码
+            spAdrNo: '',    // 供应商地点编码
+            adrTypeCode: '',    // 地点编码
+            receivedTypeCode: ''  // 收货单状态编码
         };
         //初始页号
         this.current = 1;
         this.columns = [
             {
                 title: '收货单号',
-                dataIndex: 'rcvNo',
-                key: 'rcvNo',
-            },
-            {
+                dataIndex: 'purchaseReceiptNo',
+                key: 'purchaseReceiptNo'
+            }, {
                 title: 'ASN',
                 dataIndex: 'asn',
                 key: 'asn',
-            },
-            {
+                render: text => {
+                    if (null === text || undefined === text || '' === text) text = '-';
+                    return text;
+                }
+            }, {
                 title: '采购单号',
-                dataIndex: 'poNo',
-                key: 'poNo',
-            },
-            {
+                dataIndex: 'purchaseOrderNo',
+                key: 'purchaseOrderNo'
+            }, {
                 title: '采购单类型',
-                dataIndex: 'poTypeName',
-                key: 'poTypeName',
-            },
-            {
+                dataIndex: 'purchaseOrderType',
+                key: 'purchaseOrderType',
+                render: poTypeCode => {
+                    let text = '';
+                    poType.data.forEach(item => {
+                        if (poTypeCode === +(item.key)) {
+                            return text = item.value;
+                        }
+                    });
+                    return text;
+                }
+            }, {
                 title: '供应商编号',
-                dataIndex: 'supplierCd',
-                key: 'supplierCd',
-            },
-            {
+                dataIndex: 'spNo',
+                key: 'spNo'
+            }, {
                 title: '供应商名称',
-                dataIndex: 'supplierName',
-                key: 'supplierName',
-            },
-            {
+                dataIndex: 'spName',
+                key: 'spName'
+            }, {
                 title: '供应商地点编号',
-                dataIndex: 'supplierLocCd',
-                key: 'supplierLocCd',
+                dataIndex: 'spAdrNo',
+                key: 'spAdrNo'
             }, {
                 title: '供应商地点名称',
-                dataIndex: 'supplierLocName',
-                key: 'supplierLocName',
-            },
-            {
+                dataIndex: 'spAdrName',
+                key: 'spAdrName'
+            }, {
                 title: '预计送货日期',
-                dataIndex: 'estDeliveryDate',
-                key: 'estDeliveryDate'
-            },
-            {
+                dataIndex: 'estimatedDeliveryDate',
+                key: 'estimatedDeliveryDate',
+                render: text => {
+                    return moment(new Date(text)).format(dateFormat);
+                }
+            }, {
                 title: '地点类型',
-                dataIndex: 'locTypeName',
-                key: 'locTypeName'
-            },
-            {
+                dataIndex: 'adrType',
+                key: 'adrType',
+                render: adrTypeCode => {
+                    let text = '';
+                    adrType.data.forEach(item => {
+                        if (adrTypeCode === +(item.key)) {
+                            return text = item.value;
+                        }
+                    });
+                    return text;
+                }
+            }, {
                 title: '地点',
-                dataIndex: 'address',
-                key: 'address'
-            },
-            {
+                dataIndex: 'adrTypeName',
+                key: 'adrTypeName'
+            }, {
                 title: '预计到货日期',
-                dataIndex: 'deliveryDate',
-                key: 'deliveryDate'
-
-            },
-            {
+                dataIndex: 'estimatedReceivedDate',
+                key: 'estimatedReceivedDate',
+                render: text => {
+                    return moment(new Date(text)).format(dateFormat);
+                }
+            }, {
                 title: '收货日期',
-                dataIndex: 'rcvDate',
-                key: 'rcvDate'
-            }
-            ,
-            {
-                title: '状态',
-                dataIndex: 'statusName',
-                key: 'statusName',
-            },
-            {
+                dataIndex: 'receivedTime',
+                key: 'receivedTime',
+                render: text => {
+                    return moment(new Date(text)).format(dateFormat);
+                }
+            }, {
+                title: '收货单状态',
+                dataIndex: 'status',
+                key: 'status',
+                render: statusCode => {
+                    let text = '';
+                    status.data.forEach(item => {
+                        if (statusCode === +(item.key)) {
+                            return text = item.value;
+                        }
+                    });
+                    return text;
+                }
+            }, {
                 title: '操作',
                 dataIndex: 'operation',
                 key: 'operation',
@@ -137,8 +185,8 @@ class PoRcvMngList extends PureComponent {
      * 根据地点类型值控制地点值清单是否可编辑
      * 地点类型有值时：地点值清单可编辑
      * 地点类型无值时：地点值清单不可编辑、清空地点值清单
-     * 
-     * @param {*} value 
+     *
+     * @param {*} value
      */
     onLocTypeChange(value) {
         //地点类型有值
@@ -149,95 +197,62 @@ class PoRcvMngList extends PureComponent {
             //地点类型无值时，地点不可编辑
             //TODO SearchMind 需实现是否可编辑功能
         }
-        //清空地点值
-        this.poAddress.reset();
     }
     /**
-     * 根据供应商值控制供应商地点值清单是否可编辑
-     * 供应商有值时：供应商地点值清单可编辑
-     * 供应商无值时：供应商地点值清单不可编辑、清空供应商地点值清单
-     * 
-     * @param {*} value 
-     */
-    onSupplierChange(value) {
-        if (value) {
-            //供应商有值时，供应商地点可编辑
-            //TODO SearchMind 需实现是否可编辑功能
-        } else {
-            //供应商无值时，供应商地点不可编辑
-            //TODO SearchMind 需实现是否可编辑功能
-        }
-        //清空供应商地点值
-        this.supplierLoc.reset();
-    }
-    /**
-     * 
+     *
      * 返回查询条件
-     * 
+     *
      */
     editSearchParams() {
-        const {
-            poRcvNo,
-            poNo,
-            locTypeCd,
-            poTypeCd,
-        } = this.props.form.getFieldsValue();
+        const { purchaseReceiptNo, purchaseOrderNo, adrType, purchaseOrderType, status } = this.props.form.getFieldsValue();
 
         //收货日期区间
-        let poRcvDuringArr = this.props.form.getFieldValue("poRcvDuring") || [];
-        let poRcvDuringFrom, poRcvDuringTo;
-        if (poRcvDuringArr.length > 0) {
-            poRcvDuringFrom = poRcvDuringArr[0].format(dateFormat);
+        let receivedDuringArr = this.props.form.getFieldValue("receivedDuring") || [];
+        let receivedTimeStart, receivedTimeEnd;
+        if (receivedDuringArr.length > 0) {
+            receivedTimeStart = Date.parse(receivedDuringArr[0].format(dateFormat));
         }
-        if (poRcvDuringArr.length > 1) {
-            poRcvDuringTo = poRcvDuringArr[1].format(dateFormat);
+        if (receivedDuringArr.length > 1) {
+            receivedTimeEnd = Date.parse(receivedDuringArr[1].format(dateFormat));
         }
 
         //获取采购单审批日期区间
         let auditDuringArr = this.props.form.getFieldValue("auditDuring") || [];
         let auditDuringFrom, auditDuringTo;
         if (auditDuringArr.length > 0) {
-            auditDuringFrom = auditDuringArr[0].format(dateFormat);
+            auditDuringFrom = Date.parse(auditDuringArr[0].format(dateFormat));
         }
         if (auditDuringArr.length > 1) {
-            auditDuringTo = auditDuringArr[1].format(dateFormat);
+            auditDuringTo = Date.parse(auditDuringArr[1].format(dateFormat));
         }
 
+        // 供应商编号
+        let spNo = this.state.spNo;
 
-        //地点
-        let addressCd;
-        let selectedAddressRawData = this.poAddress.state.selectedRawData;
-        if (selectedAddressRawData) {
-            addressCd = selectedAddressRawData.code;
-        }
-        //供应商
-        let supplierCd;
-        let selectedSupplierRawData = this.supplier.state.selectedRawData;
-        if (selectedSupplierRawData) {
-            supplierCd = selectedSupplierRawData.code;
-        }
+        // 供应商地点编号
+        let spAdrNo = this.state.spAdrNo;
 
-        //供应商地点
-        let supplierLocCd;
-        let selectedSupplierLocRawData = this.supplierLoc.state.selectedRawData;
-        if (selectedSupplierLocRawData) {
-            supplierLocCd = selectedSupplierLocRawData.code;
-        }
+        // 地点
+        let adrTypeCode = this.state.adrTypeCode;
+
+        // 收货单状态编码
+        let receivedTypeCode = this.state.receivedTypeCode;
 
         const searchParams = {
-            poRcvNo,
-            poNo,
-            locTypeCd,
-            addressCd,
-            poTypeCd,
-            supplierCd,
-            supplierLocCd,
-            poRcvDuringFrom,
-            poRcvDuringTo,
+            purchaseReceiptNo,
+            purchaseOrderNo,
+            adrType,
+            adrTypeCode,
+            purchaseOrderType,
+            status,
+            receivedTypeCode,
+            spNo,
+            spAdrNo,
+            receivedTimeStart,
+            receivedTimeEnd,
             auditDuringFrom,
             auditDuringTo
         };
-
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
     }
@@ -248,7 +263,7 @@ class PoRcvMngList extends PureComponent {
     handleSearch() {
         //编辑查询条件
         this.editSearchParams();
-        //查询收获单列表
+        //查询收货单单列表
         this.queryRcvMngPoList();
     }
 
@@ -260,7 +275,7 @@ class PoRcvMngList extends PureComponent {
         let tmp = params || {};
         let allParams = Object.assign({
             pageSize: PAGE_SIZE,
-            pageNum: this.current,
+            pageNum: this.current
         }, allParams, this.searchParams, tmp);
         this.props.fetchPoRcvMngList(allParams);
     }
@@ -273,10 +288,47 @@ class PoRcvMngList extends PureComponent {
         this.searchParams = {};
         //重置form
         this.props.form.resetFields();
-        //重置值清单
-        this.supplier.reset();
-        this.supplierLoc.reset();
-        this.poAddress.reset();
+        this.supplySearchMind.handleClear(); // 供应商查询清空
+        this.addressSearchMind.reset(); // 供应商地址清空
+        this.searchMind.reset(); // 收货地址清空
+    }
+
+    // 获取供应商编号
+    handleSupplyChoose = ({ record }) => {
+        this.setState({ spNo: record.spAdrid })
+    }
+
+    // 供应商值清单-清除
+    handleSupplyClear = () => {
+        this.setState({ spNo: '' });
+    }
+
+    /**
+     * 获取供应商地点编号
+     */
+    handleAdressChoose = ({ record }) => {
+        this.setState({ spAdrNo: record.spAdrid });
+    }
+
+    /**
+     * 清空供应商地点编号
+     */
+    handleAdressClear = ({ record }) => {
+        this.setState({ spAdrNo: '' });
+    }
+
+    /**
+     * 获取收货地点编号
+     */
+    handleReceiveAdressChoose = ({ record }) => {
+        this.setState({ adrTypeCode: record.warehouseCode });
+    }
+
+    /**
+     * 清空收货地点编号
+     */
+    handleReceiveAdressClear = ({ record }) => {
+        this.setState({ adrTypeCode: '' });
     }
 
     /**
@@ -287,70 +339,8 @@ class PoRcvMngList extends PureComponent {
         history.push('/porcvlist');
     }
 
-    handleGetAddressMap = ({ value, pagination }) => {
-        //地点类型
-        let { locTypeCd } = this.props.form.getFieldsValue(["locTypeCd"])
-        let companyId = null;//TODO 从session获取？
-        let pageNum = pagination.current || 1;
-        //根据选择的地点类型获取对应地点的值清单
-        if (locTypeCd === locTypeCodes.warehouse) {
-            //地点类型为仓库
-            return this.props.getWarehouseAddressMap({
-                value, companyId, pageNum
-            });
-        } else if (locTypeCd === locTypeCodes.shop) {
-            //地点类型为门店
-            return this.props.getShopAddressMap({
-                value, companyId, pageNum
-            });
-        } else {
-            //如果地点类型为空，返回空promise
-            return new Promise(function (resolve, reject) {
-                resolve({ total: 0, data: [] });
-            });
-        }
-    }
-
-    /**
-     * 查询供应商值清单
-     */
-    handleGetSupplierMap = ({ value, pagination }) => {
-        let companyId = null;//TODO 从session获取？
-        let pageNum = pagination.current || 1;
-        return this.props.getSupplierMap({
-            value, companyId, pageNum
-        });
-
-    }
-
-    /**
-     * 查询供应商地点值清单
-     */
-    handleGetSupplierLocMap = ({ value, pagination }) => {
-        let supplierCd;
-        let selectedSupplierRawData = this.supplier.state.selectedRawData;
-        if (selectedSupplierRawData) {
-            supplierCd = selectedSupplierRawData.code;
-        }
-        let companyId = null;//TODO 从session获取？
-        let pageNum = pagination.current || 1;
-        //如果供应商地点为空，返回空promise
-        if (!supplierCd) {
-            return new Promise(function (resolve, reject) {
-                resolve({ total: 0, data: [] });
-            });
-        }
-        //根据供应商编码、输入查询内容获取供应商地点信息
-        return this.props.getSupplierLocMap({
-            value,
-            supplierCd,
-            companyId, pageNum
-        });
-
-    }
-
     renderActions(text, record, index) {
-        const { statusCd, id } = record;
+        const { status, id } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.onActionMenuSelect(record, index, item)}>
@@ -359,12 +349,11 @@ class PoRcvMngList extends PureComponent {
                 </Menu.Item>
             </Menu>
         );
-
         return (
             <Dropdown overlay={menu} placement="bottomCenter">
                 <a className="ant-dropdown-link">
                     表单操作
-          <Icon type="down" />
+                    <Icon type="down" />
                 </a>
             </Dropdown>
         )
@@ -393,158 +382,232 @@ class PoRcvMngList extends PureComponent {
                 <Form layout="inline">
                     <div className="">
                         <Row gutter={40}>
-                            <Col span={8}>
+                            <Col span={5}>
                                 {/* 采购单号 */}
                                 <FormItem label="采购单号" formItemLayout>
-                                    {getFieldDecorator('poNo', {
-                                    })(
-                                        <Input
-                                        />
-                                        )}
-
+                                    {getFieldDecorator('purchaseOrderNo', {})(<Input size="default" />)}
                                 </FormItem>
                             </Col>
-
-                            <Col span={8}>
+                            <Col span={6}>
                                 {/* 收货单号 */}
                                 <FormItem label="收货单号" formItemLayout>
-                                    {getFieldDecorator('poRcvNo', {
-                                    })(
-                                        <Input
-                                        />
-                                        )}
-
+                                    {getFieldDecorator('purchaseReceiptNo', {})(<Input size="default" />)}
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
+                            <Col span={12}>
                                 {/* 收货日期 */}
                                 <FormItem >
-                                    <div>
-                                        <span className="ant-form-item-label"><label>收货日期</label> </span>
-                                        {getFieldDecorator('poRcvDuring', {
-                                            initialValue: [moment(new Date(), dateFormat), moment(new Date(), dateFormat)]
+                                    <div className="row middle">
+                                        <span className="ant-form-item-label">
+                                            <label>收货日期</label>
+                                        </span>
+                                        {getFieldDecorator('receivedDuring', {
+                                            initialValue: [
+                                                moment(new Date(), dateFormat),
+                                                moment(new Date(), dateFormat)
+                                            ]
                                         })(
                                             <RangePicker
-                                                style={{ width: '200px' }}
+                                                className="date-range-picker"
                                                 format={dateFormat}
-                                                placeholder={['开始日期', '结束日期']}
-                                            />)}
+                                                placeholder={['开始日期', '结束日期']} />
+                                            )
+                                        }
                                     </div>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row gutter={40}>
-                            <Col span={8}>
-                                {/* 供应商 */}
-                                <FormItem formItemLayout >
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label"><label>供应商</label> </span>
-                                        <SearchMind
-                                            compKey="comSupplier"
-                                            ref={ref => { this.supplier = ref }}
-                                            fetch={(value, pager) => this.handleGetSupplierMap(value, pager)}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.code} - {data.name}</div>
-                                            )}
-                                            pageSize={2}
-                                            columns={[
-                                                {
-                                                    title: '编码',
-                                                    dataIndex: 'code',
-                                                    width: 150,
-                                                }, {
-                                                    title: '名称',
-                                                    dataIndex: 'name',
-                                                    width: 200,
-                                                }
-                                            ]}
-                                        />
-                                    </div>
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 供应商地点 */}
-                                <FormItem formItemLayout >
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label"><label>供应商地点</label> </span>
-                                        <SearchMind
-                                            compKey="comSupplierLoc"
-                                            ref={ref => { this.supplierLoc = ref }}
-                                            fetch={(value, pager) => this.handleGetSupplierLocMap(value, pager)}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.code} - {data.name}</div>
-                                            )}
-                                            pageSize={2}
-                                            columns={[
-                                                {
-                                                    title: '编码',
-                                                    dataIndex: 'code',
-                                                    width: 150,
-                                                }, {
-                                                    title: '名称',
-                                                    dataIndex: 'name',
-                                                    width: 200,
-                                                }
-                                            ]}
-                                        />
-                                    </div>
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
+                            <Col span={5}>
                                 {/* 采购单类型 */}
                                 <FormItem label="采购单类型">
-                                    {getFieldDecorator('poTypeCd', {
-                                        initialValue: poType.defaultValue
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
+                                    {getFieldDecorator('purchaseOrderType', { initialValue: poType.defaultValue })(
+                                        <Select
+                                            style={{
+                                                width: '153px'
+                                            }}
+                                            size="default">
+                                            {poType.data.map((item) => {
+                                                return <Option key={item.key} value={item.key}>{item.value}</Option>
+                                            })
+                                            }
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={6}>
+                                {/* 供应商 */}
+                                <FormItem formItemLayout>
+                                    <div className="row middle">
+                                        <span className="ant-form-item-label">
+                                            <label>供应商</label>
+                                        </span>
+                                        <SearchMind
+                                            style={{
+                                                zIndex: 101
+                                            }}
+                                            compKey="search-mind-supply"
+                                            ref={ref => {
+                                                this.supplySearchMind = ref
+                                            }}
+                                            fetch={(params) => this.props.pubFetchValueList({
+                                                condition: params.value
+                                            }, 'querySuppliersList')}
+                                            addonBefore=""
+                                            onChoosed={this.handleSupplyChoose}
+                                            onClear={this.handleSupplyClear}
+                                            renderChoosedInputRaw={(companyList) => (
+                                                <div
+                                                    ref={supplier => {
+                                                        this.supplier = supplier
+                                                    }}>{companyList.spId}-{companyList.companyName}</div>
+                                            )}
+                                            rowKey="spAdrid"
+                                            pageSize={5}
+                                            columns={[
+                                                {
+                                                    title: '供应商ID',
+                                                    dataIndex: 'spId',
+                                                    width: 150
+                                                }, {
+                                                    title: '供应商名称',
+                                                    dataIndex: 'companyName',
+                                                    width: 200
+                                                }
+                                            ]}
+                                        />
+                                    </div>
+                                </FormItem>
+                            </Col>
+                            {/* 供应商地点 */}
+                            <Col span={6}>
+                                <FormItem className="">
+                                    <div className="row middle">
+                                        <span className="ant-form-item-label">
+                                            <label>供应商地点</label>
+                                        </span>
+                                        <SearchMind
+                                            rowKey="spAdrid"
+                                            compKey="search-mind-supply"
+                                            ref={ref => {
+                                                this.addressSearchMind = ref
+                                            }}
+                                            fetch={(params) => this.props.pubFetchValueList({
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
+                                            }, 'supplierAdrSearchBox')}
+                                            onChoosed={this.handleAdressChoose}
+                                            onClear={this.handleAdressClear}
+                                            renderChoosedInputRaw={(data) => (
+                                                <div>{data.providerNo} - {data.providerName}</div>
+                                            )}
+                                            pageSize={6}
+                                            columns={[
+                                                {
+                                                    title: '供应商编码',
+                                                    dataIndex: 'spNo',
+                                                    width: 150
+                                                }, {
+                                                    title: '供应商ID',
+                                                    dataIndex: 'spId',
+                                                    width: 200
+                                                }, {
+                                                    title: '供应商地点ID',
+                                                    dataIndex: 'spAdrid',
+                                                    width: 200
+                                                }, {
+                                                    title: '供应商名称',
+                                                    dataIndex: 'companyName',
+                                                    width: 200
+                                                }, {
+                                                    title: '供应商地点编码',
+                                                    dataIndex: 'providerNo',
+                                                    width: 200
+                                                }, {
+                                                    title: '供应商地点名称',
+                                                    dataIndex: 'providerName',
+                                                    width: 200
+                                                }
+                                            ]}
+                                        />
+                                    </div>
+                                </FormItem>
+                            </Col>
+                            <Col span={6}>
+                                {/* 收货单状态 */}
+                                <FormItem label="收货单状态">
+                                    {getFieldDecorator('status', { initialValue: status.defaultValue })(
+                                        <Select
+                                            style={{
+                                                width: '153px'
+                                            }}
+                                            size="default">
                                             {
-                                                poType.data.map((item) => {
+                                                status.data.map((item) => {
                                                     return <Option key={item.key} value={item.key}>{item.value}</Option>
                                                 })
                                             }
                                         </Select>
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row gutter={40}>
-                            <Col span={8}>
+                            <Col span={5}>
                                 {/* 地点类型 */}
                                 <FormItem label="地点类型">
-                                    {getFieldDecorator('locTypeCd', {
-                                        initialValue: locType.defaultValue
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default" onChange={this.onLocTypeChange}>
+                                    {getFieldDecorator('adrType', { initialValue: adrType.defaultValue })(
+                                        <Select
+                                            style={{
+                                                width: '153px'
+                                            }}
+                                            size="default"
+                                        >
                                             {
-                                                locType.data.map((item) => {
+                                                adrType.data.map((item) => {
                                                     return <Option key={item.key} value={item.key}>{item.value}</Option>
                                                 })
                                             }
                                         </Select>
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
+                            <Col span={6}>
                                 {/* 地点 */}
-                                <FormItem formItemLayout >
-                                    <div className="row small">
-                                        <span className="ant-form-item-label"><label>地点</label> </span>
+                                <FormItem formItemLayout>
+                                    <div className="row middle">
+                                        <span className="ant-form-item-label">
+                                            <label>地点</label>
+                                        </span>
                                         <SearchMind
-                                            compKey="comPoAddress"
-                                            ref={ref => { this.poAddress = ref }}
-                                            fetch={(value, pager) => this.handleGetAddressMap(value, pager)}
+                                            style={{ zIndex: 7 }}
+                                            compKey="search-mind-key1"
+                                            rowKey="id"
+                                            ref={ref => { this.searchMind = ref }}
+                                            fetch={(params) => this.props.pubFetchValueList({
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
+                                            }, 'getWarehouseInfo1')}
+                                            onChoosed={this.handleReceiveAdressChoose}
+                                            onClear={this.handleReceiveAdressClear}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.code} - {data.name}</div>
+                                                <div>{data.warehouseCode} - {data.warehouseName}</div>
                                             )}
-                                            pageSize={2}
+                                            pageSize={3}
                                             columns={[
                                                 {
-                                                    title: '编码',
-                                                    dataIndex: 'code',
+                                                    title: '仓库ID',
+                                                    dataIndex: 'id',
                                                     width: 150,
                                                 }, {
-                                                    title: '名称',
-                                                    dataIndex: 'name',
+                                                    title: '仓库编码',
+                                                    dataIndex: 'warehouseCode',
+                                                    width: 200,
+                                                }, {
+                                                    title: '仓库名称',
+                                                    dataIndex: 'warehouseName',
                                                     width: 200,
                                                 }
                                             ]}
@@ -552,25 +615,27 @@ class PoRcvMngList extends PureComponent {
                                     </div>
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
-                                {/* 采购单审批日期 */}
-                                <FormItem >
-                                    <div>
-                                        <span className="ant-form-item-label"><label>采购单审批日期</label> </span>
-                                        {getFieldDecorator('auditDuring', {
-
-                                        })(
-                                            <RangePicker
-                                                style={{ width: '180px' }}
-                                                format={dateFormat}
-                                                placeholder={['开始日期', '结束日期']}
-                                            />)}
+                            <Col span={12}>
+                                {/* 审批日期 */}
+                                <FormItem>
+                                    <div className="row middle">
+                                        <span className="ant-form-item-label">
+                                            <label>审批日期</label>
+                                        </span>
+                                        {
+                                            getFieldDecorator('auditDuring', {})(
+                                                <RangePicker
+                                                    className="date-range-picker"
+                                                    format={dateFormat}
+                                                    placeholder={['开始日期', '结束日期']}
+                                                />
+                                            )
+                                        }
                                     </div>
                                 </FormItem>
 
                             </Col>
                         </Row>
-
 
                         <Row gutter={40} type="flex" justify="end">
                             <Col>
@@ -582,26 +647,31 @@ class PoRcvMngList extends PureComponent {
                                 <FormItem>
                                     <Button size="default" onClick={this.handleResetValue}>
                                         重置
-                                        </Button>
+                                    </Button>
                                 </FormItem>
                                 <FormItem>
                                     <Button type="primary" onClick={this.handleSearch} size="default">
                                         搜索
-                                        </Button>
+                                    </Button>
                                 </FormItem>
                             </Col>
                         </Row>
                     </div>
                     <div >
-                        <Table dataSource={data} columns={this.columns} rowKey="id" scroll={{
-                            x: 1400
-                        }} pagination={{
-                            current: pageNum,
-                            total,
-                            pageSize,
-                            showQuickJumper: true,
-                            onChange: this.onPaginate
-                        }} />
+                        <Table
+                            dataSource={data}
+                            columns={this.columns}
+                            rowKey="id"
+                            scroll={{
+                                x: 1400
+                            }}
+                            pagination={{
+                                current: pageNum,
+                                total,
+                                pageSize,
+                                showQuickJumper: true,
+                                onChange: this.onPaginate
+                            }} />
                     </div>
                 </Form>
             </div >
@@ -612,9 +682,8 @@ class PoRcvMngList extends PureComponent {
 PoRcvMngList.propTypes = {
     doSearch: PropTypes.func,
     onReset: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any)
+    form: PropTypes.objectOf(PropTypes.any),
+    pubFetchValueList: PropTypes.func
 };
-
-
 
 export default withRouter(Form.create()(PoRcvMngList));

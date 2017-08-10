@@ -155,7 +155,13 @@ class ProcurementMaintenance extends PureComponent {
         this.props.UpdateProdPurchase({isVisible: true, record});
     }
 
+    /**
+     * 搜索
+     *
+     * @param {Object} data 搜索条件
+     */
     handleFormSearch = (data) => {
+        console.log(data)
         this.searchForm = data;
         this.getCardData();
     }
@@ -179,6 +185,7 @@ class ProcurementMaintenance extends PureComponent {
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
                     handleAdd={this.handleAdd}
+                    getData={this.getData}
                 />
                 <div>
                     <Cardline

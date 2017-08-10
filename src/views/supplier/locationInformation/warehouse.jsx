@@ -18,12 +18,11 @@ class Warehouse extends Component {
         this.handleDelete = ::this.handleDelete;
         this.getValue = ::this.getValue;
         this.warehouseIds = props.defaultValue.map((item) => {
-            return item.id;
+            return item.warehouseId;
         });
         const defaultDatas = props.defaultValue.map((item) => {
-            const { warehouse } = item;
-            const { warehousePhysicalInfo = {} } = warehouse || {};
-            return warehousePhysicalInfo;
+            const { warehouse = {} } = item;
+            return {...warehouse};
         });
         this.state = {
             data: defaultDatas || []
@@ -34,12 +33,11 @@ class Warehouse extends Component {
         const { data, defaultValue } = this.props;
         if (defaultValue.length !== nextProps.defaultValue.length) {
             this.warehouseIds = nextProps.defaultValue.map((item) => {
-                return item.id;
+                return item.warehouseId;
             });
             const defaultDatas = nextProps.defaultValue.map((item) => {
-                const { warehouse } = item;
-                const { warehousePhysicalInfo = {} } = warehouse || {};
-                return warehousePhysicalInfo;
+                const { warehouse = {} } = item;
+                return {...warehouse};
             });
             this.setState({
                 data: defaultDatas
@@ -56,7 +54,7 @@ class Warehouse extends Component {
         }
         this.props.handleChoose({warehouseLogicId: record.id}).then((res) => {
             data.push(res.data)
-            this.warehouseIds.push(res.data.id)
+            this.warehouseIds.push(res.data.warehouseLogicId)
             this.setState({
                 data
             })
@@ -98,7 +96,9 @@ class Warehouse extends Component {
                 <Row>
                     <Col span={8}>
                         <span>仓库编号和名字：</span>
-                        <span>{`${item.warehouseLogicCode} - ${item.warehouseLogicName}`}</span>
+                        <span>
+                            {`${item.warehouseLogicCode || item.warehouseCode} - ${item.warehouseLogicName || item.warehouseName}`}
+                        </span>
                     </Col>
                 </Row>
                 <Row>

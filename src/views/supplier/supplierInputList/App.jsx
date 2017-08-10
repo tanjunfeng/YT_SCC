@@ -32,7 +32,7 @@ import SearchForm from '../searchFormInput';
 import { PAGE_SIZE } from '../../../constant';
 import { supplierInputList } from '../../../constant/formColumns';
 import Utils from '../../../util/util';
-import { exportSupplierList } from '../../../service';
+import { exportManageList } from '../../../service';
 import ChangeMessage from './changeMessage';
 import ChangeAudit from './changeAudit';
 import ChangeAuditAdr from './changeAuditAdr';
@@ -70,7 +70,7 @@ class SupplierInputList extends PureComponent {
 
         this.handleSelect = this.handleSelect.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
-        this.renderOperation = this.renderOperation.bind(this);
+        this.renderOperationInput = this.renderOperationInput.bind(this);
         this.handleFormSearch = this.handleFormSearch.bind(this);
         this.handleFormReset = this.handleFormReset.bind(this);
         this.handleDownLoad = this.handleDownLoad.bind(this);
@@ -159,6 +159,7 @@ class SupplierInputList extends PureComponent {
             this.props.fetchQueryManageList({
                 pageNum: 1,
                 pageSize: PAGE_SIZE,
+                ...this.searchForm
             });
         } else {
             // SCM数据
@@ -166,6 +167,7 @@ class SupplierInputList extends PureComponent {
             this.props.fetchQueryManageList({
                 pageNum: 1,
                 pageSize: PAGE_SIZE,
+                ...this.searchForm
             });
         }
     }
@@ -194,7 +196,7 @@ class SupplierInputList extends PureComponent {
      * @param {string} data 'addSupplier':供应商类型为供应商；否则为供应商地点，data为供应商编码
      */
     handleDownLoad(data) {
-        Utils.exportExcel(exportSupplierList, data);
+        Utils.exportExcel(exportManageList, data);
     }
 
     /**
@@ -231,8 +233,8 @@ class SupplierInputList extends PureComponent {
      *
      * return 列表页操作下拉菜单
      */
-    renderOperation(text, record, index) {
-        const { status, id, providerType, auditType } = record;
+    renderOperationInput(text, record, index) {
+        const { status, id, providerType, auditType, spStatus } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
@@ -241,7 +243,7 @@ class SupplierInputList extends PureComponent {
                 </Menu.Item>
                 {
                     // 1： 已提交状态
-                    status === 1 && auditType === 1 &&
+                    (status === 1 || spStatus === 1) && auditType === 1 &&
                     <Menu.Item key="ChangeAudit">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商审核
@@ -250,7 +252,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     // 1： 已提交状态
-                    status === 1 && auditType === 2 &&
+                    (status === 1 || spStatus === 1) && auditType === 2 &&
                     <Menu.Item key="CheckReson">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商审核
@@ -259,7 +261,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     // 3:已拒绝
-                    status === 3 &&
+                    (status === 3 || spStatus === 3) &&
                     <Menu.Item key="ChangeMessage">
                         <a target="_blank" rel="noopener noreferrer">
                             查看审核已拒绝原因
@@ -287,7 +289,7 @@ class SupplierInputList extends PureComponent {
                     // 模拟地点弹出框
                     /* status === 2 && */
                     // 2:已审核,3、已拒绝
-                    (status === 2 || status === 3) && auditType === 1 &&
+                    (spStatus === 2 || spStatus === 3) && status === 1 && auditType === 1 &&
                     <Menu.Item key="ChangeAuditAdr">
                         <a target="_blank" rel="noopener noreferrer">
                             供应商地点审核
@@ -296,7 +298,7 @@ class SupplierInputList extends PureComponent {
                 }
                 {
                     // 1： 已提交
-                    status === 1 && auditType === 2 &&
+                    status === 1 && (spStatus === 2 || spStatus === 3) && auditType === 2 &&
                     <Menu.Item key="CheckReasonAdr">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商地点审核
@@ -321,7 +323,7 @@ class SupplierInputList extends PureComponent {
     render() {
         const { total, pageNum } = this.props.queryManageList;
         const { queryManageList } = this.props;
-        columns[columns.length - 1].render = this.renderOperation;
+        columns[columns.length - 1].render = this.renderOperationInput;
         return (
             <div className="manage">
                 <SearchForm

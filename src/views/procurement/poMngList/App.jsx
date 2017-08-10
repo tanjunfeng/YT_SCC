@@ -159,6 +159,7 @@ class PoMngList extends PureComponent {
             <Menu>
                 <Menu.Item key="detail">
                     <Link to={detailLink}>详情</Link>
+                    <Link to={`${pathname}/${purchaseOrderNo}`}>采购单详情</Link>
                 </Menu.Item>
 
                 {status === deleteCode && <Menu.Item key="delete">
@@ -209,7 +210,6 @@ class PoMngList extends PureComponent {
                 // });
             },
         };
-
         return (
             <div className="po-mng-list">
                 <SearchForm
@@ -221,7 +221,7 @@ class PoMngList extends PureComponent {
                 <div>
                     <Table
                         rowSelection={rowSelection}
-                        dataSource={data}
+                        dataSource={data01}
                         columns={columns}
                         rowKey="purchaseOrderNo"
                         scroll={{

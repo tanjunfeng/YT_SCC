@@ -61,7 +61,7 @@ class SupplierSpace extends Component {
      * @param {number} grade 供应商地点等级
      */
     renderPrGrade(grade) {
-         switch(grade) {
+        switch (grade) {
             case 1:
                 return '生产厂家'
             case 2:
@@ -79,7 +79,7 @@ class SupplierSpace extends Component {
     }
 
     renderPeriod(period) {
-        switch(period) {
+        switch (period) {
             case 0:
                 return '周结'
             case 1:
@@ -88,6 +88,22 @@ class SupplierSpace extends Component {
                 return '月结'
             case 3:
                 return '票到付款'
+            default:
+                break;
+        }
+        return null;
+    }
+
+    renderPayType(type) {
+        switch (type) {
+            case 0:
+                return '网银'
+            case 1:
+                return '银行转账'
+            case 2:
+                return '现金'
+            case 3:
+                return '支票'
             default:
                 break;
         }
@@ -104,6 +120,7 @@ class SupplierSpace extends Component {
             spAdrContact = {},
             spAdrDeliverys = [],
         } = detailSp
+
         return (
             <div className="supplier-detail">
                 <div className="supplier-detail-item">
@@ -179,11 +196,28 @@ class SupplierSpace extends Component {
                                     <span>{spAdrBasic.belongAreaName}</span>
                                 </Col>
                             </Row>
-                             <Row>
+                            <Row>
+                                <Col span={8}><span>供应商付款方式：</span>
+                                    <span>{this.renderPayType(spAdrBasic.payType)}</span>
+                                </Col>
                                 <Col span={8}><span>供应商地点所属子公司：</span>
                                     <span>{spAdrBasic.orgName}</span>
                                 </Col>
-                            </Row> 
+                            </Row>
+                            <Row>
+                                {
+                                    spAdrBasic.auditPerson &&
+                                    <Col span={8}><span>供应商审核人：</span>
+                                        <span>{spAdrBasic.auditPerson}</span>
+                                    </Col>
+                                }
+                                {
+                                    spAdrBasic.auditDate &&
+                                    <Col span={8}><span>供应商审核时间：</span>
+                                        <span>{moment(spAdrBasic.auditDate).format('YYYY-MM-DD')}</span>
+                                    </Col>
+                                }
+                            </Row>
                         </div>
                     </div>
                 </div>

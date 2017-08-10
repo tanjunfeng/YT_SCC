@@ -46,13 +46,7 @@ const initState = fromJS({
     //采购单收货列表  列表内容为 已审核且未收货采购单
     poRcvList: {},
     //采购收货单详情信息
-    poRcv: {
-        //收货单基本信息
-        basicInfo: {
-        },
-        //收货单商品明细列表
-        poLines: [],
-    },
+    poRcv: {},
 
 });
 
@@ -78,7 +72,8 @@ export default function (state = initState, action) {
         case ActionType.GET_WAREHOUSE_ADDRESS_MAP:
             //不改变state
             return state;
-        case ActionType.RECEIVE_PO_DETAIL://采购单详情
+        // 采购单详情
+        case ActionType.RECEIVE_PO_DETAIL:
             return state.set('po', fromJS(action.payload));
 
         case ActionType.INIT_PO_DETAIL://初始采购单详情

@@ -12,9 +12,6 @@ import { connect } from 'react-redux';
 import SearchMind from '../../../components/searchMind';
 import { PAGE_SIZE } from '../../../constant';
 import {
-    fetchTest,
-} from '../../../actions/classifiedList';
-import {
     fetchAddProdPurchase,
     fetchCheckMainSupplier,
 } from '../../../actions';
@@ -25,7 +22,8 @@ import {
 import {
     productAddPriceVisible,
     AddProdPurchase,
-    QueryProdPurchaseExtByCondition
+    QueryProdPurchaseExtByCondition,
+    GetWarehouseInfo1
 } from '../../../actions/producthome';
 
 const FormItem = Form.Item;
@@ -37,6 +35,7 @@ const FormItem = Form.Item;
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
         getProductByIds: state.toJS().commodity.getProductById,
         checkMainSupplier: state.toJS().commodity.checkMainSupplier,
+        getWarehouseLogicInfos: state.toJS().commodity.getWarehouseLogicInfo,
     }),
     dispatch => bindActionCreators({
         fetchAddProdPurchase,
@@ -45,6 +44,7 @@ const FormItem = Form.Item;
         AddProdPurchase,
         QueryProdPurchaseExtByCondition,
         fetchCheckMainSupplier,
+        GetWarehouseInfo1
     }, dispatch)
 )
 
@@ -55,11 +55,58 @@ class ProdPurchaseModal extends Component {
         this.handleCancel = ::this.handleCancel;
         this.handlePriceChange = ::this.handlePriceChange;
 
+        this.ids = {
+            // 供应商id
+            spId: props.getProductByIds.spId,
+            spNo: props.getProductByIds.spNo,
+            // 供应商地点id
+            supplierAddressId: props.getProductByIds.spAdrId,
+            // 仓库id
+            warehouseId: props.getProductByIds.id,
+            // 分公司id
+            childCompanyId: props.getProductByIds.branchCompanyId,
+            distributeWarehouseId: props.getProductByIds.distributeWarehouseId,
+        }
         this.state = {
-            distributeWarehouseId: null,
+            isDisabled: true,
+            distributeWarehouseId: '',
             supplyChoose: {},
             supplyChoose1: {},
             supplyChoose2: {},
+
+            // 回显值赋值
+            spId: '',
+            spAdrId: '',
+            branchCompanyId: '',
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { getProductByIds = {} } = nextProps;
+        if (this.props.getProductByIds.spId !== getProductByIds.spId) {
+            this.setState({
+                //
+                spId: nextProps.getProductByIds.spId,
+                //
+                spAdrId: nextProps.getProductByIds.spAdrId,
+                //
+                branchCompanyId: nextProps.getProductByIds.branchCompanyId,
+                // 仓库ID
+                distributeWarehouseId: nextProps.getProductByIds.id,
+            });
+            console.log(nextProps.getProductByIds.spAdrId)
+            this.ids = {
+                // 供应商id
+                spId: nextProps.getProductByIds.spId,
+                // 供应商地点id
+                supplierAddressId: nextProps.getProductByIds.spAdrId,
+                // 仓库id
+                warehouseId: nextProps.getProductByIds.id,
+                // 分公司id
+                childCompanyId: nextProps.getProductByIds.branchCompanyId,
+                distributeWarehouseId: nextProps.getProductByIds.distributeWarehouseId,
+                spNo: null
+            }
         }
     }
 
@@ -70,24 +117,66 @@ class ProdPurchaseModal extends Component {
         this.setState({
             supplyChoose: record,
         });
+        this.ids.warehouseId = record.id;
     }
 
     /**
      * 供应商-值清单
      */
     handleSupplyChoose = ({ record }) => {
+        // console.log(record)
         this.setState({
             supplyChoose1: record,
+            supplyChoose2: {},
+            supplyChoose3: {},
         });
+        this.ids = {
+            spId: record.id,
+            spNo: record.spNo,
+            supplierAddressId: null,
+            warehouseId: null,
+            childCompanyId: null
+        }
+        this.searchMind2.reset();
+        this.searchMind3.reset();
+    }
+
+    handleSupplierClear = () => {
+        this.ids.spId = null;
     }
 
     /**
      * 地点-值清单
      */
     handleAdressChoose = ({ record }) => {
+        const { getWarehouseLogicInfos } = this.props;
         this.setState({
             supplyChoose2: record,
+            supplyChoose3: {},
+            isDisabled: false
         });
+        this.searchMind3.reset();
+        this.ids.supplierAddressId = record.spAdrid;
+        this.ids.warehouseId = null;
+        this.ids.childCompanyId = record.branchCompanyId;
+
+        const { spId, spNo } = this.ids;
+
+        if (!spId) {
+            this.props.pubFetchValueList({
+                condition: record.spNo,
+                pageSize: 1,
+                pageNum: 1
+            }, 'supplierSearchBox').then((res) => {
+                const { spNo, companyName, spId } = res.data.data;
+                this.ids.spNo = spNo;
+                this.ids.spId = spId;
+                this.setState({
+                    spNo,
+                    companyName
+                })
+            })
+        }
     }
 
 
@@ -104,17 +193,23 @@ class ProdPurchaseModal extends Component {
             // console.log(values);
             // TODO post data
             this.props.AddProdPurchase({
-                spId: this.state.supplyChoose1.spId,
-                spAdrId: this.state.supplyChoose2.spAdrid,
-                productId: this.props.getProductByIds.id,
-                branchCompanyId: this.state.supplyChoose2.branchCompanyId,
-                supplierType: values.mainSupplier ? 1 : 0,
-                purchaseInsideNumber: this.props.getProductByIds.purchaseInsideNumber,
-                purchasePrice: values.purchasePrice.toFixed(2),
-                // 条码
+                id: getProductByIds.id,
+                //
+                spId: this.ids.spId,
+                //
+                // spAdrId: getProductByIds.spAdrId,
+                spAdrId: this.ids.supplierAddressId,
+                productId: getProductByIds.productId,
+                //
+                // branchCompanyId: getProductByIds.branchCompanyId,
+                branchCompanyId: this.ids.childCompanyId,
+                supplierType: getProductByIds.supplierType,
+                purchaseInsideNumber: values.purchaseInsideNumber,
+                purchasePrice: parseFloat(values.purchasePrice),
                 internationalCode: values.internationalCode,
                 // 仓库ID
-                distributeWarehouseId: this.state.supplyChoose.id
+                // distributeWarehouseId: getProductByIds.id,
+                distributeWarehouseId: this.ids.distributeWarehouseId,
             }).then((res) => {
                 this.props.productAddPriceVisible({isVisible: false});
                 message.success(res.message)
@@ -128,18 +223,6 @@ class ProdPurchaseModal extends Component {
 
     handleCancel(record) {
         this.props.productAddPriceVisible({isVisible: false, record});
-    }
-
-    // handleTestChoose(record) {
-    //     console.log(record);
-    // }
-
-    handleTestFetch = ({ value, pagination }) => {
-        // console.log(value, pagination);
-
-        return fetchTest({
-            value,
-        });
     }
 
     handlePriceChange(result) {
@@ -158,10 +241,11 @@ class ProdPurchaseModal extends Component {
         const { prefixCls, form, getProductByIds, checkMainSupplier } = this.props;
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
+        const { warehouseCode, warehouseName} = this.state.supplyChoose;
         // const formData = this.props.form.getFieldsValue();
         return (
             <Modal
-                title="采购价格"
+                title="新增采购价格"
                 visible={this.props.toAddPriceVisible}
                 className={prefixCls}
                 onOk={this.handleOk}
@@ -169,6 +253,8 @@ class ProdPurchaseModal extends Component {
                 onCancel={this.handleCancel}
                 maskClosable={false}
             >
+                {
+                this.props.toAddPriceVisible &&
                 <div className={`${prefixCls}-body-wrap`}>
                     <Form layout="inline" onSubmit={this.handleSubmit}>
                         <div className={`${prefixCls}-item`}>
@@ -178,7 +264,7 @@ class ProdPurchaseModal extends Component {
                                     <span className={`${prefixCls}-label`}>*采购内装数：</span>
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('purchaseInsideNumber', {
-                                            rules: [{ required: true, message: '采购内装数' }],
+                                            rules: [{ required: true, message: '请输入采购内装数' }],
                                             initialValue: getProductByIds.purchaseInsideNumber
                                         })(
                                             <InputNumber min={0} placeholder="内装数" />
@@ -192,7 +278,7 @@ class ProdPurchaseModal extends Component {
                                             rules: [{ required: true, message: '请输入采购价!' }],
                                             initialValue: getProductByIds.guidePurchasePrice
                                         })(
-                                            <InputNumber min={0} placeholder="采购价" />
+                                            <InputNumber min={0} step={0.01} placeholder="采购价" />
                                         )}
                                     </span>
                                 </FormItem>
@@ -216,7 +302,8 @@ class ProdPurchaseModal extends Component {
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
                                             style={{ zIndex: 9 }}
-                                            compKey="search-mind-key2"
+                                            compKey="spNo"
+                                            onClear={this.handleSupplierClear}
                                             ref={ref => { this.searchMind1 = ref }}
                                             onChoosed={this.handleSupplyChoose}
                                             fetch={(params) => this.props.pubFetchValueList({
@@ -251,7 +338,7 @@ class ProdPurchaseModal extends Component {
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
                                             style={{ zIndex: 8 }}
-                                            compKey="search-mind-key2"
+                                            compKey="spNo"
                                             ref={ref => { this.searchMind2 = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
                                                 supplierAddressId: params.value,
@@ -269,14 +356,6 @@ class ProdPurchaseModal extends Component {
                                                     dataIndex: 'spNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '供应商ID',
-                                                    dataIndex: 'spId',
-                                                    width: 200,
-                                                }, {
-                                                    title: '供应商地点ID',
-                                                    dataIndex: 'spAdrid',
-                                                    width: 200,
-                                                }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
                                                     width: 200,
@@ -288,10 +367,6 @@ class ProdPurchaseModal extends Component {
                                                     title: '供应商地点名称',
                                                     dataIndex: 'providerName',
                                                     width: 200,
-                                                }, {
-                                                    title: '分公司',
-                                                    dataIndex: 'branchCompanyId',
-                                                    width: 200,
                                                 }
                                             ]}
                                         />
@@ -301,8 +376,9 @@ class ProdPurchaseModal extends Component {
                                     <span className={`${prefixCls}-label`}>送货仓：</span>
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
+                                            defaultValue={`${warehouseCode || ''} - ${warehouseName || ''}`}
                                             style={{ zIndex: 7 }}
-                                            compKey="search-mind-key1"
+                                            compKey="id"
                                             ref={ref => { this.searchMind0 = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
                                                 condition: params.value,
@@ -313,6 +389,7 @@ class ProdPurchaseModal extends Component {
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.warehouseCode} - {data.warehouseName}</div>
                                             )}
+                                            disabled={this.state.isDisabled}
                                             pageSize={3}
                                             columns={[
                                                 {
@@ -331,6 +408,10 @@ class ProdPurchaseModal extends Component {
                                             ]}
                                         />
                                     </span>
+                                    {
+                                        this.state.isDisabled &&
+                                        <p style={{color: 'red', textAlign: 'center'}}>*请先选择地点信息</p>
+                                    }
                                 </FormItem>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>主供应商：</span>
@@ -356,6 +437,7 @@ class ProdPurchaseModal extends Component {
                         </div>
                     </Form>
                 </div>
+                }
             </Modal>
         );
     }
