@@ -423,16 +423,16 @@ class ProdModal extends Component {
                                                     dataIndex: 'spNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '供应商ID',
-                                                    dataIndex: 'spId',
-                                                    width: 200,
-                                                }, {
-                                                    title: '供应商地点ID',
-                                                    dataIndex: 'spAdrid',
-                                                    width: 200,
-                                                }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
+                                                    width: 200,
+                                                }, {
+                                                    title: '供应商地点编码',
+                                                    dataIndex: 'providerNo',
+                                                    width: 200,
+                                                }, {
+                                                    title: '供应商地点名称',
+                                                    dataIndex: 'providerName',
                                                     width: 200,
                                                 }
                                             ]}

@@ -126,7 +126,8 @@ class Cardline extends Component {
     }
 
     /**
-     * 修改启用时弹框
+     * 启用/禁用弹框
+     * @param {*} item 遍历出来的当前项参数object
      */
     confirmUsed(item) {
         Modal.confirm({
@@ -146,6 +147,7 @@ class Cardline extends Component {
                     message.success('修改状态成功');
                     this.props.goto();
                 }).catch(() => {
+                    // message.error(ERRORTEXT)
                     message.error('修改状态失败')
                 })
             }
@@ -255,6 +257,10 @@ class Cardline extends Component {
         this.props.goto();
     }
 
+    /**
+     * 删除当前关系表
+     * @param {*} e:当前操作项event
+     */
     handleDelete(e) {
         e.stopPropagation();
         const { proId } = this.props;
@@ -397,7 +403,6 @@ class Cardline extends Component {
 
 Cardline.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
-    fetchCheckMainSupplier: PropTypes.func,
     fetchDeleteProdPurchaseById: PropTypes.func,
     ChangeSupplierType: PropTypes.func,
     onCliked: PropTypes.func,
@@ -405,8 +410,6 @@ Cardline.propTypes = {
     prefixCls: PropTypes.string,
     id: PropTypes.string,
     index: PropTypes.number,
-    fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),
-    isSale: PropTypes.bool,
     initData: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,
     proId: PropTypes.string,

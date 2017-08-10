@@ -425,7 +425,6 @@ export const supplierInputList = [
         key: 'grade',
         width: 90,
         render: (text, record) => {
-            console.log(record)
             if (record.providerType === 1) {
                 switch (parseInt(text, 10)) {
                     case 1:

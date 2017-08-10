@@ -62,7 +62,10 @@ class ChangeAudit extends PureComponent {
      * 弹框取消事件
      */
     handleAuditCancel() {
-        this.props.modifyAuditVisible({isVisible: false});
+        this.props.modifyAuditVisible({ isVisible: false });
+        this.setState({
+            selected: -1
+        })
     }
 
     /**
@@ -82,7 +85,7 @@ class ChangeAudit extends PureComponent {
                     pass: parseInt(selected, 10) === 1 ? false : true,
                     ...this.props.form.getFieldsValue()
                 }).then((res) => {
-                    this.props.modifyAuditVisible({isVisible: false});
+                    this.props.modifyAuditVisible({ isVisible: false });
                     message.success(res.message)
                     this.props.fetchQueryManageList({
                         pageNum: this.current,
@@ -91,7 +94,7 @@ class ChangeAudit extends PureComponent {
                     })
                 }).catch(() => {
                     message.error('修改审核失败')
-                    this.props.modifyAuditVisible({isVisible: false});
+                    this.props.modifyAuditVisible({ isVisible: false });
                 })
             }
         })
@@ -126,59 +129,61 @@ class ChangeAudit extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Modal
-                title="供应商入住审核"
-                visible={this.props.auditVisible}
-                onOk={this.handleAuditOk}
-                onCancel={this.handleAuditCancel}
-            >
+            <div>
                 {
                     this.props.auditVisible &&
-                    <div>
-                        <div className="application-modal-tip">注意：审核通过，供应商的所有账号可正常登录商家后台系统。</div>
-                        {
-                            this.props.auditVisible &&
-                            <div className="application-modal-select">
-                                <span className="application-modal-label">审核：</span>
-                                <Select
-                                    style={{ width: '153px', marginLeft: '15px' }}
-                                    size="default"
-                                    placeholder="请选择"
-                                    onChange={this.handleSelectChange}
-                                >
-                                    <Option value="2">通过</Option>
-                                    <Option value="1">不通过</Option>
-                                </Select>
-                            </div>
-                        }
-                        {
-                            this.state.selected === '1' &&
-                            <Form layout="inline">
-                                <FormItem className="application-form-item">
-                                    <span className="application-modal-label"><b className="tjf-css-import">*</b>不通过原因：</span>
-                                    {getFieldDecorator('failedReason', {
-                                        rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
-                                    })(
-                                        <Input
-                                            onChange={this.handleTextChange}
-                                            type="textarea"
-                                            placeholder="请输入不通过原因"
-                                            className="application-modal-textarea"
-                                            autosize={{ minRows: 2, maxRows: 8 }}
-                                        />
-                                        )}
-                                </FormItem>
-                            </Form>
-                        }
-                        {
-                            this.state.selected === '2' &&
-                            <div className="tjf-css-passCheck">
-                                <span>确认通过审核？</span>
-                            </div>
-                        }
-                    </div>
+                    <Modal
+                        title="供应商入住审核"
+                        visible={this.props.auditVisible}
+                        onOk={this.handleAuditOk}
+                        onCancel={this.handleAuditCancel}
+                    >
+                        <div>
+                            <div className="application-modal-tip">注意：审核通过，供应商的所有账号可正常登录商家后台系统。</div>
+                            {
+                                this.props.auditVisible &&
+                                <div className="application-modal-select">
+                                    <span className="application-modal-label">审核：</span>
+                                    <Select
+                                        style={{ width: '153px', marginLeft: '15px' }}
+                                        size="default"
+                                        placeholder="请选择"
+                                        onChange={this.handleSelectChange}
+                                    >
+                                        <Option value="2">通过</Option>
+                                        <Option value="1">不通过</Option>
+                                    </Select>
+                                </div>
+                            }
+                            {
+                                this.state.selected === '1' && this.props.auditVisible &&
+                                <Form layout="inline">
+                                    <FormItem className="application-form-item" style={{ textAlign: 'left' }}>
+                                        <span className="application-modal-label"><b className="gyl-css-import">*</b>不通过原因：</span>
+                                        {getFieldDecorator('failedReason', {
+                                            rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
+                                        })(
+                                            <Input
+                                                onChange={this.handleTextChange}
+                                                type="textarea"
+                                                placeholder="请输入不通过原因"
+                                                className="application-modal-textarea"
+                                                autosize={{ minRows: 2, maxRows: 8 }}
+                                            />
+                                            )}
+                                    </FormItem>
+                                </Form>
+                            }
+                            {
+                                this.state.selected === '2' &&
+                                <div style={{ textAlign: 'left', paddingLeft: 90 }}>
+                                    <span>确认通过审核？</span>
+                                </div>
+                            }
+                        </div>
+                    </Modal>
                 }
-            </Modal>
+            </div>
         );
     }
 }

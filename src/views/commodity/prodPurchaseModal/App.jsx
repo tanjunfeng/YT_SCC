@@ -94,7 +94,7 @@ class ProdPurchaseModal extends Component {
                 // 仓库ID
                 distributeWarehouseId: nextProps.getProductByIds.id,
             });
-            console.log(nextProps.getProductByIds.spAdrId)
+            // console.log(nextProps.getProductByIds.spAdrId)
             this.ids = {
                 // 供应商id
                 spId: nextProps.getProductByIds.spId,
