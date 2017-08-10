@@ -1,3 +1,11 @@
-.dictionary-list .ant-dropdown-menu-item{
-     text-align: center;
- }
+.dictionary-list .ant-dropdown-menu-item {
+    text-align: center;
+}
+
+.dictionary-content .ant-modal-content {
+    height: 420px;
+    overflow-y: scroll;
+    .select-line-select{
+        width: 80px;
+    }
+}

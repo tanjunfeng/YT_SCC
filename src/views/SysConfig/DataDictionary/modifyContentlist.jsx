@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Form, Modal, Button, Input, Table } from 'antd';
+import { Form, Modal, Button, Input, Table, Row, Col } from 'antd';
 import { DicContentListVisible, Dictionarycontentlist, updateContentData, dictionaryContent } from '../../../actions/dictionary';
 
 const InputGroup = Input.Group;
@@ -178,34 +178,34 @@ class modifyContentlist extends PureComponent {
         const { columndata } = this.state;
         return (
             <Modal
+                className="dictionary-content"
                 onCancel={this.handleCancelModify}
                 visible={this.props.maintenanceVisible}
                 footer={null}
                 title="维护字典内容"
             >
                 <div>
-                    <div className="ant-form-item-control">
-                        <span className="manage-form-label change-form-label">字典名称:</span>
-                        <span>{dictionary}</span>
-                    </div>
-                    <div className="ant-form-item-control">
-                        <span className="manage-form-label change-form-label">说明:</span>
-                        <span>{remark}</span>
-                    </div>
-                    <div className="ant-form-item-control">
-                        <span className="manage-form-label change-form-label">字典内容:</span>
-                        <Button onClick={this.handleAdd} type="default" size="default">
-                            添加
+                    <Row>
+                        <Col span={10}>
+                            <span className="select-line-select">字典名称:</span>
+                            <span>{dictionary}</span>
+                        </Col>
+                        <Col span={10}>
+                            <span className="select-line-select">说明:</span>
+                            <span>{remark}</span>
+                        </Col>
+                        <Col span={4}>
+                            <Button onClick={this.handleAdd} type="primary" size="default">
+                                添加
                         </Button>
-                    </div>
+                        </Col>
+                    </Row>
                     <div>
+                        <span className="select-line-select">字典内容:</span>
                         <Table
                             dataSource={columndata}
                             columns={this.modifyContentlistColumns}
                             rowKey="id"
-                            pagination={{
-
-                            }}
                         />
                     </div>
                 </div>
