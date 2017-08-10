@@ -209,6 +209,7 @@ class PoMngList extends PureComponent {
     }
 
     render() {
+        const data01 = [{purchaseOrderNo: 1}, {purchaseOrderNo: 29}, {purchaseOrderNo: 32}]
         // console.log(this.props)
         columns[columns.length - 1].render = this.renderActions;
         const { poList = {} } = this.props;

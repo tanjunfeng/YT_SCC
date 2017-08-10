@@ -23,11 +23,11 @@ export const poStatus = {
 }
 
 export const poStatusCodes = {
-    draft: '0001',
-    submited: '0002',
-    approved: '0003',
-    rejected: '0004',
-    closed: '0005'
+    draft: 0,
+    submited: 1,
+    approved: 2,
+    rejected: 3,
+    closed: 4
 }
 
 // 地点类型值清单
@@ -57,8 +57,17 @@ export const poType = {
         key: '',
         value: '请选择'
     }, {
-        key: '1',
+        key: '0',
         value: '普通采购'
+    }]
+}
+
+// 货币类型
+export const poNo = {
+    defaultValue: 'CNY',
+    data: [{
+        key: 'CNY',
+        value: 'CNY'
     }]
 }
 
@@ -66,8 +75,7 @@ export const poTypeCodes = {
     normal: '0001'
 }
 
-
-//审核值清单
+// 审核值清单
 export const auditType = {
     defaultValue: '',
     data: [{
