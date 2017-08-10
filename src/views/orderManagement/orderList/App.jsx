@@ -90,8 +90,8 @@ const columns = [{
     key: 'branchCompanyName',
 }, {
     title: '加盟商编号',
-    dataIndex: 'franchiseeNo',
-    key: 'franchiseeNo',
+    dataIndex: 'franchiseeId',
+    key: 'franchiseeId',
 }, {
     title: '操作',
     dataIndex: 'operation',
