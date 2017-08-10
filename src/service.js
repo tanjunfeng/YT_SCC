@@ -518,6 +518,14 @@ export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPa
 
 /* **************procurement*********** */
 
+// 删除采购单 参数 1或n个采购单id  [ids]
+// export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
+// 查询采购单打印列表
+// export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
+// 查询采购单详情
+export const queryPoDetail = (params) => http.get('/pmPurchaseOrder/getPurchaseOrderInfoById', params);
+// 创建采购单详情
+export const createPo = (params) => http.post('/pmPurchaseOrder/addPmPurchaseOrder', params);
 // 查询采购单列表
 export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
 
@@ -525,13 +533,7 @@ export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', p
 export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
 
 // 查询采购单打印列表
-export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
-
-// 查询采购单详情
-export const queryPoDetail = (params) => http.get('/pmPurchaseOrder/getPurchaseOrderInfoById', params);
-
-// 创建采购单详情
-export const createPo = (params) => http.post('/provider/createPo', params);
+// export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
 
 // 审批
 export const auditPo = (params) => http.post('/provider/auditPo', params);
@@ -552,6 +554,12 @@ export const querycategories = (params) => http.get('/category/queryCategories',
 export const queryMaterialMap = (params) => http.get('/provider/queryMaterialMap', params);
 // 删除处于草稿状态的订单
 export const deletePurchaseList = (params) => http.get('/pmPurchaseOrder/batchDeletePmPurchaseOrderByIds', params);
+// 查询采购单打印列表
+export const queryPoPrintList = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderListInfo', params);
+// 根据采购订单id下载PDF文件
+export const downloadPDF = '/pmPurchaseOrder/exportPdf';
+// 采购单列表批量下载PDF ZIP压缩文件
+export const downloadBatchPDF = '/pmPurchaseOrder/exportPdfs';
 
 // 采购收货相关
 // 采购收货单管理列表

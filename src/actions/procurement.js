@@ -10,7 +10,7 @@ import {
     fetchPurchaseOrder,
     fetchMaterialByCd as svcFetchMaterialByCd,
     deletePurchaseList,
-    queryPoPrintList as svcQueryPoPrintList,
+    queryPoPrintList,
     createPo as svcCreatePo,
     auditPo as svcAuditPo,
     queryPoDetail,
@@ -49,7 +49,7 @@ export const getMaterialMap = (params) => dispatch => (
 
 /**
  * 查询采购打印详情
- * @param {*} data 
+ * @param {*} data
  */
 const rcvPoPrintList = (data) => ({
     type: ActionType.RECEIVE_PO_PRINT_LIST,
@@ -58,7 +58,7 @@ const rcvPoPrintList = (data) => ({
 
 export const fetchPoPrintList = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        fetchPoMngList(params)
+        queryPoPrintList(params)
             .then(res => {
                 dispatch(rcvPoPrintList(res.data));
                 resolve(res);
@@ -87,7 +87,7 @@ export const getWarehouseAddressMap = (params) => dispatch => (
 
 /**
  * 门店值清单 promise
- * @param {*} data 
+ * @param {*} data
  */
 export const getShopAddressMap = (params) => dispatch => (
     new Promise((resolve, reject) => {
@@ -103,7 +103,7 @@ export const getShopAddressMap = (params) => dispatch => (
 
 /**
  * 供应商值清单 promise
- * @param {*} data 
+ * @param {*} data
  */
 export const getSupplierMap = (params) => dispatch => (
     new Promise((resolve, reject) => {
@@ -119,7 +119,7 @@ export const getSupplierMap = (params) => dispatch => (
 
 /**
  * 供应商地点值清单 promise
- * @param {*} data 
+ * @param {*} data
  */
 export const getSupplierLocMap = (params) => dispatch => (
     new Promise((resolve, reject) => {
@@ -135,7 +135,7 @@ export const getSupplierLocMap = (params) => dispatch => (
 
 /**
  * 大类值清单 promise
- * @param {*} data 
+ * @param {*} data
  */
 export const getBigClassMap = (params) => dispatch => (
     new Promise((resolve, reject) => {
@@ -324,7 +324,7 @@ export const deletePoLine = (data) => ({
 
 /**
  * 查询采购收货单管理列表
- * @param {*} data 
+ * @param {*} data
  */
 const rcvPoRcvMngList = (data) => ({
     type: ActionType.RECEIVE_PO_RCV_MNG_LIST,

@@ -49,7 +49,6 @@ const initState = fromJS({
     poRcv: {},
     // 新增商品信息
     newPcOdData: {},
-
 });
 
 export default function (state = initState, action) {
@@ -61,16 +60,19 @@ export default function (state = initState, action) {
         case ActionType.RECEIVE_PO_MNG_LIST:
             return state.set('poList', fromJS(action.payload));
 
-        case ActionType.CHANGE_PO_MNG_SELECTED_ROWS:// 采购单列表界面 选中采购单
-            return state.set('selectedPoMngRows', fromJS(action.payload));
-        case ActionType.RECEIVE_PO_MATERIAL_BY_CD://商品编码获取商品详情
-            return state.set("poMaterial", fromJS(action.payload));
         // 删除采购单
         case ActionType.DELETE_PO_BY_IDS:
             return state;
 
-        case ActionType.RECEIVE_PO_PRINT_LIST://获取采购单打印列表
-            return state.set("poPrintList", fromJS(action.payload));
+        // 获取采购单打印列表
+        case ActionType.RECEIVE_PO_PRINT_LIST:
+            return state.set('poPrintList', fromJS(action.payload));
+
+        case ActionType.CHANGE_PO_MNG_SELECTED_ROWS:// 采购单列表界面 选中采购单
+            return state.set('selectedPoMngRows', fromJS(action.payload));
+        case ActionType.RECEIVE_PO_MATERIAL_BY_CD://商品编码获取商品详情
+            return state.set("poMaterial", fromJS(action.payload));
+
         case ActionType.GET_WAREHOUSE_ADDRESS_MAP:
             //不改变state
             return state;
