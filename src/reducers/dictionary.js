@@ -1,7 +1,7 @@
 /**
  * @file supplier.js
  * @author shijh, denglingbo
- * 
+ *
  * 商品管理 reducer
  */
 
@@ -14,13 +14,16 @@ const initState = Immutable.fromJS({
 
     // 弹出框数据
     visibleData: {},
-    dictionaryVisible:false,
+    dictionaryVisible: false,
+    maintenanceVisible: false,
+    // 是否是编辑
+    isEdit: false,
 
     // 查询字典分页列表
     dictionaryData: {},
 
-    // 显示字典内容
-    contentlistData: {},
+    // 查询显示字典维护内容列表
+    contentlistData: [],
 });
 
 export default function (state = initState, action) {
@@ -29,9 +32,24 @@ export default function (state = initState, action) {
             return state.set('dictionaryData', action.payload);
         case ActionType.RECEIVE_DICTIONARY_CONTENTLIST:
             return state.set('contentlistData', action.payload);
-        // 新增销售价格弹窗
+        // 新增/修改字典内容弹窗
         case ActionType.MODIFY_DICTIONARY_VISIBLE: {
-            return state.set('dictionaryVisible', action.payload);
+            const { isVisible, isEdit, record } = action.payload;
+            return state
+                .set('dictionaryVisible', isVisible)
+                .set('isEdit', isEdit)
+                .set('record', isEdit ? record : '')
+                ;
+        }
+        // 维护字典内容
+        case ActionType.MAINTENANCE_DICTIONARY_VISIBLE: {
+            const { isVisible, id, dictionary, remark } = action.payload;
+            return state
+                .set('maintenanceVisible', isVisible)
+                .set('id', id)
+                .set('dictionary', dictionary)
+                .set('remark', remark)
+                ;
         }
         default:
             return state;
