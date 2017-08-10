@@ -268,7 +268,7 @@ export const suppliersAppList = [
         width: 90,
     },
     {
-        title: '供应商名称',
+        title: '名称',
         dataIndex: 'providerName',
         key: 'providerName',
     },
@@ -278,7 +278,7 @@ export const suppliersAppList = [
         key: 'registLicenceNumber',
     },
     {
-        title: '供应商类型',
+        title: '类型',
         dataIndex: 'providerType',
         key: 'providerType',
         width: 90,
@@ -294,138 +294,7 @@ export const suppliersAppList = [
         }
     },
     {
-        title: '供应商等级',
-        dataIndex: 'grade',
-        key: 'grade',
-        width: 90,
-        render: (text, record) => {
-            if (record.providerType === 1) {
-                switch (parseInt(text, 10)) {
-                    case 1:
-                        return '战略供应商'
-                    case 2:
-                        return '核心供应商'
-                    case 3:
-                        return '可替代供应商'
-                    default:
-                        break;
-                }
-            }
-            else if (record.providerType === 2) {
-                switch (parseInt(text, 10)) {
-                    case '1':
-                        return '生产厂家'
-                    case '2':
-                        return '批发商'
-                    case '3':
-                        return '经销商'
-                    case '4':
-                        return '代销商'
-                    case '5':
-                        return '其他'
-                    default:
-                        break;
-                }
-            }
-        }
-    },
-    {
-        title: '供应商入驻日期',
-        dataIndex: 'settledDate',
-        key: 'settledDate',
-        width: 100,
-        render: (text) => (
-            text !== null ? moment(parseInt(text, 10)).format('YYYY-MM-DD') : ''
-        )
-    },
-    {
-        title: '供应商状态',
-        dataIndex: 'status',
-        key: 'status',
-        width: 90,
-        render: (text) => {
-            switch (parseInt(text, 10)) {
-                case 0:
-                    return '制单';
-                case 1:
-                    return '已提交';
-                case 2:
-                    return '已审核';
-                case 3:
-                    return '已拒绝';
-                case 4:
-                    return '修改中';
-                default:
-                    return null;
-            }
-        }
-    },
-    {
-        title: '供应商地点状态',
-        dataIndex: 'spStatus',
-        key: 'spStatus',
-        width: 90,
-        render: (text) => {
-            switch (parseInt(text, 10)) {
-                case 0:
-                    return '制单';
-                case 1:
-                    return '已提交';
-                case 2:
-                    return '已审核';
-                case 3:
-                    return '已拒绝';
-                case 4:
-                    return '修改中';
-                default:
-                    return null;
-            }
-        }
-    },
-    {
-        title: '操作',
-        dataIndex: 'operation',
-        key: 'operation',
-        width: 90,
-    }
-]
-
-// 供应商管理列表
-export const supplierInputList = [
-    {
-        title: '供应商编码',
-        dataIndex: 'providerNo',
-        key: 'providerNo',
-        width: 90,
-    },
-    {
-        title: '供应商名称',
-        dataIndex: 'providerName',
-        key: 'providerName',
-    },
-    {
-        title: '供应商营业执照号',
-        dataIndex: 'registLicenceNumber',
-        key: 'registLicenceNumber',
-    },
-    {
-        title: '供应商类型',
-        dataIndex: 'providerType',
-        key: 'providerType',
-        width: 90,
-        render: (text) => {
-            switch (parseInt(text, 10)) {
-                case 1:
-                    return '供应商'
-                case 2:
-                    return '供应商地点'
-                default:
-                    break;
-            }
-        }
-    },
-    {
-        title: '供应商等级',
+        title: '等级',
         dataIndex: 'grade',
         key: 'grade',
         width: 90,
@@ -470,31 +339,135 @@ export const supplierInputList = [
         )
     },
     {
-        title: '供应商状态',
+        title: '状态',
         dataIndex: 'status',
         key: 'status',
         width: 90,
-        render: (text) => {
-            switch (parseInt(text, 10)) {
-                case 0:
-                    return '制单';
-                case 1:
-                    return '已提交';
-                case 2:
-                    return '已审核';
-                case 3:
-                    return '已拒绝';
-                case 4:
-                    return '修改中';
-                default:
-                    return null;
+        render: (text, record) => {
+            if (record.providerType === 1) {
+                switch (parseInt(text, 10)) {
+                    case 0:
+                        return '制单';
+                    case 1:
+                        return '已提交';
+                    case 2:
+                        return '已审核';
+                    case 3:
+                        return '已拒绝';
+                    case 4:
+                        return '修改中';
+                    default:
+                        return null;
+                }
+            } else {
+                switch (parseInt(text, 10)) {
+                    case 0:
+                        return '制单';
+                    case 1:
+                        return '已提交';
+                    case 2:
+                        return '已审核';
+                    case 3:
+                        return '已拒绝';
+                    case 4:
+                        return '修改中';
+                    default:
+                        return null;
+                }
             }
         }
     },
     {
-        title: '供应商地点状态',
-        dataIndex: 'spStatus',
-        key: 'spStatus',
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation',
+        width: 90,
+    }
+]
+
+// 供应商管理列表
+export const supplierInputList = [
+    {
+        title: '供应商编码',
+        dataIndex: 'providerNo',
+        key: 'providerNo',
+        width: 90,
+    },
+    {
+        title: '名称',
+        dataIndex: 'providerName',
+        key: 'providerName',
+    },
+    {
+        title: '供应商营业执照号',
+        dataIndex: 'registLicenceNumber',
+        key: 'registLicenceNumber',
+    },
+    {
+        title: '类型',
+        dataIndex: 'providerType',
+        key: 'providerType',
+        width: 90,
+        render: (text) => {
+            switch (parseInt(text, 10)) {
+                case 1:
+                    return '供应商'
+                case 2:
+                    return '供应商地点'
+                default:
+                    break;
+            }
+        }
+    },
+    {
+        title: '等级',
+        dataIndex: 'grade',
+        key: 'grade',
+        width: 90,
+        render: (text, record) => {
+            if (record.providerType === 1) {
+                switch (parseInt(text, 10)) {
+                    case 1:
+                        return '战略供应商'
+                    case 2:
+                        return '核心供应商'
+                    case 3:
+                        return '可替代供应商'
+                    default:
+                        break;
+                }
+            }
+            if (record.providerType === 2) {
+                switch (parseInt(text, 10)) {
+                    case '1':
+                        return '生产厂家'
+                    case '2':
+                        return '批发商'
+                    case '3':
+                        return '经销商'
+                    case '4':
+                        return '代销商'
+                    case '5':
+                        return '其他'
+                    default:
+                        break;
+                }
+            }
+        }
+    },
+    {
+        title: '供应商入驻日期',
+        dataIndex: 'settledDate',
+        key: 'settledDate',
+        width: 100,
+        render: (text) => (
+            text !== null ? moment(parseInt(text, 10)).format('YYYY-MM-DD') : ''
+        )
+    },
+    {
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
         width: 90,
         render: (text) => {
             switch (parseInt(text, 10)) {

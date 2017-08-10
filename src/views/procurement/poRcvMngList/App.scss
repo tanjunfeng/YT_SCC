@@ -34,12 +34,13 @@
         display: inline-block;
       }
     }
-    // .ant-form-item-label label:after {
-    //   content: "";
-    // }
     .ant-form-item-label label {
       min-width: 80px;
       display: inline-block;
+    }
+    .date-range-picker {
+      width: 320px;
+      padding: 2px 0;
     }
   }
 }

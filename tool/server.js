@@ -22,12 +22,6 @@ if (__TEST__) {
         pattern: /https?:\/\/[-\w\.]*(?::\d+)?\/(.+)/,
         // responder: 'http://172.30.10.157:8080/$1',
         //responder: 'http://sitxcsc.yatang.com.cn/api/$1'
-        //responder: 'http://sitxcsc.yatang.com.cn/$1'
-        // responder: 'http://172.30.40.34:8082/$1',
-        // responder: 'http://172.30.40.61:8084/$1',
-        // responder: 'http://172.30.40.64:8082/$1',
-        // responder: 'http://sitxcsc.yatang.com.cn/$1'
-        //responder: 'http://devxcsc.yatang.com.cn/$1'
         // responder: 'http://172.30.40.20:8082/$1',
         // responder: 'http://172.30.40.34:8082/$1',
         // responder: 'http://172.30.40.61:8084/$1',
@@ -35,6 +29,7 @@ if (__TEST__) {
         // responder: 'http://172.30.40.101:8082/$1',
         responder: 'http://sitxcsc.yatang.com.cn/$1'
         // responder: 'http://devxcsc.yatang.com.cn/$1'
+        // responder: 'http://172.30.40.100:8082/$1',
     }];
 } else {
     host = 'localhost';

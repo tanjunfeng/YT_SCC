@@ -55,6 +55,7 @@ const pubValueList = {
     querycategories,
     // 查询加盟商
     getFranchiseeInfo,
+
     queryCategorysByLevel
 }
 
