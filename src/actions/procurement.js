@@ -9,7 +9,7 @@ import ActionType from './ActionType';
 import {
     fetchPurchaseOrder,
     fetchMaterialByCd as svcFetchMaterialByCd,
-    deletePoByIds as svcDeletePoByIds,
+    deletePurchaseList,
     queryPoPrintList as svcQueryPoPrintList,
     createPo as svcCreatePo,
     auditPo as svcAuditPo,
@@ -249,11 +249,12 @@ const deletePoByIdsAction = (data) => ({
     type: ActionType.DELETE_PO_BY_IDS,
     payload: data,
 });
+
 export const deletePoByIds = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        svcDeletePoByIds(params)
+        deletePurchaseList(params)
             .then(res => {
-                //返回操作结果
+                dispatch(deletePoByIdsAction(res.data));
                 resolve(res);
             })
             .catch(err => {

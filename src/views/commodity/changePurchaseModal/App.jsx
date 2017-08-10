@@ -103,7 +103,6 @@ class ProdModal extends Component {
      * 供应商-值清单
      */
     handleSupplyChoose = ({ record }) => {
-        // console.log(record)
         this.setState({
             supplyChoose1: record,
             supplyChoose2: {},
@@ -122,6 +121,10 @@ class ProdModal extends Component {
 
     handleSupplierClear = () => {
         this.ids.spId = null;
+        this.setState({
+            spNo: null,
+            companyName: null
+        })
     }
 
     /**
@@ -143,7 +146,7 @@ class ProdModal extends Component {
 
         if (!spId) {
             this.props.pubFetchValueList({
-                condition: record.spId,
+                condition: record.spNo,
                 pageSize: 1,
                 pageNum: 1
             }, 'supplierSearchBox').then((res) => {
@@ -360,7 +363,13 @@ class ProdModal extends Component {
                                                 condition: params.value,
                                                 pageSize: params.pagination.pageSize,
                                                 pageNum: params.pagination.current || 1
-                                            }), 'supplierAdrSearchBox')}
+                                            }), 'supplierAdrSearchBox').then((res) => {
+                                                const { data = [] } = res.data;
+                                                if (!data || data.length === 0) {
+                                                    message.warning('没有可用的数据');
+                                                }
+                                                return res;
+                                            })}
                                             onChoosed={this.handleAdressChoose}
                                             onClear={this.handleAdressClear}
                                             renderChoosedInputRaw={(data) => (
@@ -373,17 +382,13 @@ class ProdModal extends Component {
                                                     dataIndex: 'spNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '供应商ID',
-                                                    dataIndex: 'spId',
-                                                    width: 200,
-                                                }, {
-                                                    title: '供应商地点ID',
+                                                    title: '地点编码',
                                                     dataIndex: 'spAdrid',
-                                                    width: 200,
+                                                    width: 150,
                                                 }, {
-                                                    title: '供应商名称',
-                                                    dataIndex: 'companyName',
-                                                    width: 200,
+                                                    title: '地点名称',
+                                                    dataIndex: 'providerName',
+                                                    width: 300,
                                                 }
                                             ]}
                                         />
@@ -405,7 +410,13 @@ class ProdModal extends Component {
                                                 condition: params.value,
                                                 pageSize: params.pagination.pageSize,
                                                 pageNum: params.pagination.current || 1
-                                            }), 'getWarehouseInfo1')}
+                                            }), 'getWarehouseInfo1').then((res) => {
+                                                const { data = [] } = res.data;
+                                                if (!data || data.length === 0) {
+                                                    message.warning('没有可用的数据');
+                                                }
+                                                return res;
+                                            })}
                                             onChoosed={this.handleHouseChoose}
                                             onClear={this.handleHouseClear}
                                             renderChoosedInputRaw={(data) => (

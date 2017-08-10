@@ -113,7 +113,8 @@ class BasicInfo extends PureComponent {
                     purchaseEmail,
                     purchaseName,
                     purchasePhone,
-                    settlementPeriod
+                    settlementPeriod,
+                    payCondition
                 } = values
                 const submit = {
                     spAdrBasic: {
@@ -126,7 +127,8 @@ class BasicInfo extends PureComponent {
                         settlementPeriod,
                         belongArea,
                         payType,
-                        belongAreaName: this.company
+                        belongAreaName: this.company,
+                        payCondition
                     },
                     spAdrContact: {
                         providerName: providerUserName,
@@ -565,7 +567,7 @@ class BasicInfo extends PureComponent {
                             <div className="add-message-body">
                                 <Row>
                                     <Col span={8}>
-                                        <span>供应商姓名：</span>
+                                        <span>*供应商姓名：</span>
                                         <FormItem>
                                             {getFieldDecorator('providerUserName', {
                                                 rules: [
@@ -581,7 +583,7 @@ class BasicInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>供应商电话：</span>
+                                        <span>*供应商电话：</span>
                                         <FormItem>
                                             {getFieldDecorator('providerPhone', {
                                                 rules: [
@@ -606,7 +608,7 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}>
-                                        <span>供应商邮箱：</span>
+                                        <span>*供应商邮箱：</span>
                                         <FormItem>
                                             {getFieldDecorator('providerEmail', {
                                                 rules: [
@@ -624,7 +626,7 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}>
-                                        <span>采购员姓名：</span>
+                                        <span>*采购员姓名：</span>
                                         <FormItem>
                                             {getFieldDecorator('purchaseName', {
                                                 rules: [
@@ -640,7 +642,7 @@ class BasicInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>采购员电话：</span>
+                                        <span>*采购员电话：</span>
                                         <FormItem>
                                             {getFieldDecorator('purchasePhone', {
                                                 rules: [
@@ -665,7 +667,7 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}>
-                                        <span>采购员邮箱：</span>
+                                        <span>*采购员邮箱：</span>
                                         <FormItem>
                                             {getFieldDecorator('purchaseEmail', {
                                                 rules: [

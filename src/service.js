@@ -524,6 +524,8 @@ export const getStoreInfo = (params) => http.get('/store/getStoreInfo', params);
 export const querycategories = (params) => http.get('/category/queryCategories', params);
 // 商品值清单
 export const queryMaterialMap = (params) => http.get('/provider/queryMaterialMap', params);
+// 删除处于草稿状态的订单
+export const deletePurchaseList = (params) => http.get('/pmPurchaseOrder/batchDeletePmPurchaseOrderByIds', params);
 
 // 采购收货相关
 // 采购收货单管理列表

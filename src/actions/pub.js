@@ -62,7 +62,7 @@ const pubValueList = {
     // 差部类 大类 中类
     queryCategorysByLevel,
     // 通过商品id查询子公司
-    queryBranchCompanyInfo
+    queryBranchCompanyInfo,
 }
 
 const receiveCollapsed = (isCollapsed) => ({

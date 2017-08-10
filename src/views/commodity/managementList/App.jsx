@@ -18,7 +18,8 @@ import {
     commodityStatusOptions,
     deliveryStatusOptions,
     subCompanyStatusOptions,
-    commoditySortOptions
+    commoditySortOptions,
+    commodityListOptions
 } from '../../../constant/searchParams';
 
 import LevelTree from '../../../common/levelTree';
@@ -37,75 +38,6 @@ const Option = Select.Option;
 const confirm = Modal.confirm;
 const commodityML = 'commodity-management';
 
-const columns = [{
-    title: '商品信息',
-    dataIndex: 'name',
-    key: 'name',
-    width: 400,
-    render: (text, record) => {
-        const {
-            productCode,
-            saleName,
-            thumbnailImage,
-        } = record;
-        return (
-            <div className="table-commodity">
-                <div className="table-commodity-number">
-                    <span>商品编号：</span>
-                    <span>{productCode}</span>
-                </div>
-                <div className="table-commodity-description">
-                    <img alt="未上传" className="table-commodity-description-img" src={'http://sit.image.com/' + thumbnailImage} />
-                    <span className="table-commodity-description-name">{saleName}</span>
-                </div>
-            </div>
-        )
-    }
-}, {
-    title: '部门',
-    dataIndex: 'firstLevelCategoryName',
-    key: 'firstLevelCategoryName',
-}, {
-    title: '大类',
-    dataIndex: 'secondLevelCategoryName',
-    key: 'secondLevelCategoryName',
-}, {
-    title: '中类',
-    dataIndex: 'thirdLevelCategoryName',
-    key: 'thirdLevelCategoryName',
-}, {
-    title: '小类',
-    dataIndex: 'fourthLevelCategoryName',
-    key: 'fourthLevelCategoryName',
-}, {
-    title: '品牌',
-    dataIndex: 'brand',
-    key: 'brand',
-}, {
-    title: '状态',
-    dataIndex: 'supplyChainStatus',
-    key: 'supplyChainStatus',
-    render: (text) => {
-        switch (text) {
-            case '1':
-                return '草稿';
-            case '2':
-                return '生效';
-            case '3':
-                return '暂停使用';
-            case '4':
-                return '停止使用';
-            default:
-                return text;
-        }
-    }
-}, {
-    title: '操作',
-    dataIndex: 'operation',
-    key: 'operation',
-}];
-
-
 @connect(
     state => ({
         goods: state.toJS().commodity.goods,
@@ -119,18 +51,18 @@ const columns = [{
 class ManagementList extends PureComponent {
     constructor(props) {
         super(props);
-        this.searchMind1 = null;
         this.state = {
             stopBuyDisabled: true,
             supplierId: '',
             chooseGoodsList: [],
             brandName: '',
             childCompanyMeg: {},
-            supplyChoose: '',
             subsidiaryChoose: '',
             areaShelvesDisabled: true,
+            errorGoodsCode: '',
             classify: {},
-            sortType: ''
+            sortType: '',
+            selectedDate: [],
         };
     }
     componentDidMount() {
@@ -139,40 +71,47 @@ class ManagementList extends PureComponent {
         });
     }
 
-    /**
-     * 复制链接
-     */
+    shouldComponentUpdate() {
+        if (Object.values(this.props.CommodityListData).length === 0) {
+            return false;
+        }
+        return true;
+    }
+
+    // 复制链接
     onCopy = () => {
         message.success('复制成功')
     }
 
-    /**
-     * 三级下拉菜单
-     * @param {Object} data 各级
-     * @param {string} that 回显信息1
+     /**
+     * 获取所有有效的表单值
+     *
+     * @return {object}  返回所有填写了有效的表单值
      */
-    handleSelectChange = (selectData, that) => {
-        this.slect = that;
-        const { first, second, third, fourth } = selectData;
-        const NOT_SELECT = -1;
-        this.setState({
-            classify: {
-                firstLevelCategoryId: first.categoryId !== NOT_SELECT ? first.categoryId : '',
-                secondLevelCategoryId: second.categoryId !== NOT_SELECT ? second.categoryId : '',
-                thirdLevelCategoryId: third.categoryId !== NOT_SELECT ? third.categoryId : '',
-                fourthLevelCategoryId: fourth.categoryId !== NOT_SELECT ? fourth.categoryId : '',
-            }
-        })
-    }
+    getFormAllVulue = () => {
+        const { supplierId, classify, childCompanyMeg, brandName, sortType } = this.state;
+        const {
+            supplyChainStatus,
+            internationalCode,
+            productName,
+            productCode,
+            supplierInfo,
+            salesInfo
+        } = this.props.form.getFieldsValue();
 
-    /**
-     * 品牌-值清单
-     */
-    handleBrandChoose = ({ record }) => {
-        this.setState({
-            brandName: record.name
+        return Util.removeInvalid({
+            supplyChainStatus: supplyChainStatus + 1 > 0 ? supplyChainStatus : '',
+            internationalCode,
+            productName,
+            productCode,
+            brand: brandName,
+            supplierInfo: this.hasSpecifyValue(supplierId, supplierInfo),
+            salesInfo: this.hasSpecifyValue(childCompanyMeg.id, salesInfo),
+            sort: sortType,
+            ...classify
         });
     }
+
 
     /* *************** 供货供应商 ************************* */
 
@@ -187,7 +126,6 @@ class ManagementList extends PureComponent {
     // 供货供应商值清单-清除
     handleSupplyClear = () => {
         this.setState({
-            supplyChoose: '',
             stopBuyDisabled: true
         });
     }
@@ -201,40 +139,77 @@ class ManagementList extends PureComponent {
     handleSuspendPurchase = (purchasedata, callback) => {
         // 列表是否有正确的值
         const hasChildCompany = !!purchasedata.hasSelectValue;
+
+        // 没有可处理的id，错误状态吗
+        const availbleGoodsId = 10027;
+
         const goodsListLengh = this.state.chooseGoodsList.length > 0;
         const hasCompanyTxt = purchasedata.hasCompanyTxt;
         const notCompanyTxt = '请先选择经营子公司';
         const notSelectGoods = `请选择一件商品，再进行${purchasedata.tipsTitleTxt}操作`;
         let confirmTitle = '';
+
         if (!hasChildCompany) {
             confirmTitle = notCompanyTxt;
-        } else if (!goodsListLengh) {
-            confirmTitle = notSelectGoods;
-        } else {
+        } else if (goodsListLengh) {
             confirmTitle = hasCompanyTxt;
+        } else {
+            confirmTitle = notSelectGoods;
         }
+
+        // this.selectedDataStateIsTrue(purchasedata.availableState);
+
         confirm({
             title: purchasedata.tipsTitleTxt,
             content: confirmTitle,
             onOk: () => {
                 if (goodsListLengh) {
                     callback(purchasedata.goodsStatus);
+
+                    if (this.state.errorGoodsCode === availbleGoodsId) {
+                        message.error('请选择有效状态的商品，请重新选择！')
+                    } else {
+                        message.success(purchasedata.tipsMessageTxt);
+                    }
+
                     this.handleFormSearch();
-                    message.success(purchasedata.tipsMessageTxt);
                 }
             },
             onCancel() {},
         })
     }
 
+    // 判断商品状态是否正确，不正确则把商品编号存起来，用于提示用户取消选中
+    // selectedDataStateIsTrue = (status) => {
+    //     console.log(this.state.selectedListData);
+    //     let goodsNumber = [];
+    //     this.state.selectedListData.forEach((item) => {
+    //         if (item.supplyChainStatus !== status) {
+    //             goodsNumber.push(item.productCode)
+    //         }
+    //     });
+    //     this.setState({
+    //         errorGoodsCode: goodsNumber
+    //     })
+    // }
+
     // 商品的暂停购进和恢复采购接口回调
     goodstatusChange = (status) => {
+        const availbleGoodsId = 10027;
         this.props.pubFetchValueList({
             productIdList: this.state.chooseGoodsList,
             spAdrId: this.state.supplierId,
             status
-        }, 'goodsChangeStatus');
+        }, 'goodsChangeStatus')
+            .catch(err => {
+                if (err.code === availbleGoodsId) {
+                    this.setState({
+                        errorGoodsCode: err.code
+                    })
+                }
+            });
     }
+
 
     // 暂停购进
     handleStopPurchaseClick = () => {
@@ -242,6 +217,7 @@ class ManagementList extends PureComponent {
             tipsTitleTxt: '暂停购进',
             tipsMessageTxt: '暂停购进，操作成功',
             goodsStatus: 0,
+            availableState: 2,
             hasCompanyTxt: '请确认对选中商品进行暂停购进操作，商品将不可进行采购下单',
             hasSelectValue: this.supplier
         };
@@ -254,11 +230,14 @@ class ManagementList extends PureComponent {
             tipsTitleTxt: '恢复采购',
             tipsMessageTxt: '恢复采购，操作成功',
             goodsStatus: 1,
+            availableState: 2,
             hasCompanyTxt: '请确认对选中商品进行恢复采购操作',
             hasSelectValue: this.supplier
         };
+
         this.handleSuspendPurchase({...stopMsg}, this.goodstatusChange);
     }
+
 
     /* **************** 区域上下架 ****************** */
 
@@ -396,32 +375,22 @@ class ManagementList extends PureComponent {
     };
 
     /**
-     * 获取所有有效的表单值
-     *
-     * @return {object}  返回所有填写了有效的表单值
+     * 三级下拉菜单
+     * @param {Object} data 各级
+     * @param {string} that 回显信息1
      */
-    getFormAllVulue = () => {
-        const { supplierId, classify, childCompanyMeg, brandName, sortType } = this.state;
-        const {
-            supplyChainStatus,
-            internationalCode,
-            productName,
-            productCode,
-            supplierInfo,
-            salesInfo
-        } = this.props.form.getFieldsValue();
-
-        return Util.removeInvalid({
-            supplyChainStatus: supplyChainStatus + 1 > 0 ? supplyChainStatus : '',
-            internationalCode,
-            productName,
-            productCode,
-            brand: brandName,
-            supplierInfo: this.hasSpecifyValue(supplierId, supplierInfo),
-            salesInfo: this.hasSpecifyValue(childCompanyMeg.id, salesInfo),
-            sort: sortType,
-            ...classify
-        });
+    handleSelectChange = (selectData, that) => {
+        this.slect = that;
+        const { first, second, third, fourth } = selectData;
+        const NOT_SELECT = -1;
+        this.setState({
+            classify: {
+                firstLevelCategoryId: first.categoryId !== NOT_SELECT ? first.categoryId : '',
+                secondLevelCategoryId: second.categoryId !== NOT_SELECT ? second.categoryId : '',
+                thirdLevelCategoryId: third.categoryId !== NOT_SELECT ? third.categoryId : '',
+                fourthLevelCategoryId: fourth.categoryId !== NOT_SELECT ? fourth.categoryId : '',
+            }
+        })
     }
 
     /**
@@ -481,7 +450,7 @@ class ManagementList extends PureComponent {
                     <Link to={`/commodifyList/${productId}`}>商品详情</Link>
                 </Menu.Item>
                 <Menu.Item key={1}>
-                    <CopyToClipboard text={`${origin}${pathname}/commodifyList/${productId}`} onCopy={this.onCopy}>
+                    <CopyToClipboard text={`${origin}${pathname}/${productId}`} onCopy={this.onCopy}>
                         <span>复制链接</span>
                     </CopyToClipboard>
                 </Menu.Item>
@@ -501,18 +470,48 @@ class ManagementList extends PureComponent {
             </Dropdown>
         )
     }
+
+    /**
+     * 商品信息,编号,以及图片
+     *
+     */
+    renderGoodsOpations = (text, record) => {
+        const {
+            productCode,
+            saleName,
+            thumbnailImage,
+        } = record;
+
+        return (
+            <div className="table-commodity">
+                <div className="table-commodity-number">
+                    <span>商品编号：</span>
+                    <span>{productCode}</span>
+                </div>
+                <div className="table-commodity-description">
+                    <img alt="未上传" className="table-commodity-description-img" src={`${this.props.CommodityListData.imgDomain}/${thumbnailImage}`} />
+                    <span className="table-commodity-description-name">{saleName}</span>
+                </div>
+            </div>
+        )
+    }
+
+
     render() {
         const { getFieldDecorator } = this.props.form;
-        columns[columns.length - 1].render = this.renderOperation;
         const { data = [], total = 0, pageNum = 1 } = this.props.CommodityListData;
+        commodityListOptions[commodityListOptions.length - 1].render = this.renderOperation;
+        commodityListOptions[0].render = this.renderGoodsOpations;
         const COUNTRY_OFF_THE_SHELF = this.state.chooseGoodsList.length === 0;
         const { chooseGoodsList } = this.state;
         const rowSelection = {
             selectedRowKeys: chooseGoodsList,
-            onChange: (selectedRowKeys) => {
+            onChange: (selectedRowKeys, selectedRows) => {
                 this.setState({
-                    chooseGoodsList: selectedRowKeys
+                    chooseGoodsList: selectedRowKeys,
+                    selectedListData: selectedRows
                 })
+                // console.log(this.state.selectedListData)
             },
         }
         return (
@@ -529,7 +528,9 @@ class ManagementList extends PureComponent {
                                             {getFieldDecorator('productName')(
                                                 <Input
                                                     className="input"
+                                                    style={{paddingLeft: '10px', paddingRight: '10px'}}
                                                     placeholder="商品名称"
+
                                                 />
                                             )}
                                         </div>
@@ -543,6 +544,7 @@ class ManagementList extends PureComponent {
                                             {getFieldDecorator('productCode')(
                                                 <Input
                                                     className="input"
+                                                    style={{paddingLeft: '10px', paddingRight: '10px'}}
                                                     placeholder="商品编号"
                                                 />
                                             )}
@@ -556,7 +558,7 @@ class ManagementList extends PureComponent {
                                         <LevelTree className="levelTree-wrap" />
                                         <ClassifiedSelect onChange={this.handleSelectChange} />
                                     </FormItem>
-                                    
+
                                 </Col>
                             </Row>
                             <Row gutter={16}>
@@ -568,6 +570,7 @@ class ManagementList extends PureComponent {
                                             {getFieldDecorator('internationalCode')(
                                                 <Input
                                                     className="input"
+                                                    style={{paddingLeft: '10px', paddingRight: '10px'}}
                                                     placeholder="商品条码"
                                                 />
                                             )}
@@ -651,7 +654,6 @@ class ManagementList extends PureComponent {
                                                             condition: params.value
                                                         }, 'querySuppliersList')
                                                     }
-                                                    addonBefore=""
                                                     onChoosed={this.handleSupplyChoose}
                                                     onClear={this.handleSupplyClear}
                                                     renderChoosedInputRaw={(companyList) => (
@@ -859,7 +861,7 @@ class ManagementList extends PureComponent {
                 <div className="area-list">
                     <Table
                         dataSource={data}
-                        columns={columns}
+                        columns={commodityListOptions}
                         pagination={{
                             total,
                             pageSize: PAGE_SIZE,

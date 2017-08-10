@@ -179,7 +179,6 @@ class ProcurementMaintenance extends PureComponent {
      * @param {Object} data 搜索条件
      */
     handleFormSearch = (data) => {
-        console.log(data)
         this.searchForm = data;
         this.getCardData();
     }
@@ -190,9 +189,7 @@ class ProcurementMaintenance extends PureComponent {
 
     render() {
         const { prefixCls, getProductByIds, match } = this.props;
-        // console.log(purchaseCardData.data)
         const innitalvalue = getProductByIds;
-        console.log(this.state.showModal)
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm innitalvalue={innitalvalue} />
