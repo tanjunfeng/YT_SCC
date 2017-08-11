@@ -7,6 +7,7 @@
 import React from 'react';
 import { locType, poStatus } from '../../constant/procurement';
 
+ const purchase = ['普通采购单'];
 // 供应商列表
 export const poMngListColumns = [
     {
@@ -16,8 +17,9 @@ export const poMngListColumns = [
     },
     {
         title: '采购单类型',
-        dataIndex: 'poTypeName',
-        key: 'poTypeName',
+        dataIndex: 'purchaseOrderType',
+        key: 'purchaseOrderType',
+        render: text => (purchase[text])
     },
     {
         title: '供应商编号',
@@ -48,7 +50,7 @@ export const poMngListColumns = [
         dataIndex: 'adrType',
         key: 'adrType',
         render: (text) => {
-            if (!text) {
+            if (text === null) {
                 return null;
             }
             return (locType.data[text + 1].value);
@@ -75,7 +77,7 @@ export const poMngListColumns = [
         dataIndex: 'status',
         key: 'status',
         render: (text) => {
-            if (!text) {
+            if (text === null) {
                 return null;
             }
             return (poStatus.data[text + 1].value);
