@@ -6,7 +6,6 @@ import Common from './common';
 @Common
 class CarouselItem extends Component {
     render() {
-        console.log(this.props)
         const { data = {}, isEnabled } = this.props;
         const { itemAds = [] } = data;
         return (

@@ -23,7 +23,10 @@ import {
     getStoreInfo,
     querycategories,
     getFranchiseeInfo,
+    findCanUseCompanyInfo,
     queryCategorysByLevel,
+    queryBranchCompanyInfo,
+    queryProductForSelect,
 } from '../service';
 
 const pubValueList = {
@@ -55,8 +58,14 @@ const pubValueList = {
     querycategories,
     // 查询加盟商
     getFranchiseeInfo,
-
-    queryCategorysByLevel
+    // 查询可用子公司信息
+    findCanUseCompanyInfo,
+    // 差部类 大类 中类
+    queryCategorysByLevel,
+    // 通过商品id查询子公司
+    queryBranchCompanyInfo,
+    // 添加商品
+    queryProductForSelect,
 }
 
 const receiveCollapsed = (isCollapsed) => ({

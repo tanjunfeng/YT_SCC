@@ -4,12 +4,11 @@
  *
  * Des
  */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Icon, Table } from 'antd';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Utils from '../../util/util';
-import NoData from './NoData';
 import './searchMind.scss';
 
 const TYPE = {
@@ -23,7 +22,7 @@ const TYPE = {
     EDIT: 'ellipsis',
 };
 
-class SearchMind extends Component {
+class SearchMind extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -103,20 +102,21 @@ class SearchMind extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        const next = { ...nextProps };
+
         if (nextProps.defaultValue !== this.props.defaultValue) {
-            this.setState({
-                value: nextProps.defaultValue,
-            });
+            next.value = nextProps.defaultValue;
         }
 
         // 单独处理一下 disabled
         if (nextProps.disabled !== this.props.disabled) {
-            this.setState({
-                disabled: nextProps.disabled,
-                dropHide: nextProps.disabled,
-                isFocus: !nextProps.disabled,
-            });
+            next.dropHide = true;
+            next.isFocus = false;
         }
+
+        this.setState({
+            ...next
+        });
     }
 
     componentWillUnmount() {
@@ -304,8 +304,8 @@ class SearchMind extends Component {
                 const pager = { ...pagination };
 
                 // 重新更换数据 total
-                if (res[totalIndex] || res.data[totalIndex]) {
-                    pager.total = res[totalIndex] || res.data[totalIndex];
+                if (res[totalIndex]) {
+                    pager.total = res[totalIndex];
                 }
 
                 this.setState({
@@ -469,18 +469,21 @@ class SearchMind extends Component {
         const {
             type,
             dropHide,
+            data,
             value,
             isFocus,
             selectedRawData,
-            data,
             disabled,
+            pagination,
         } = this.state;
 
         const {
             addonBefore,
             className,
             style,
+            columns,
             renderChoosedInputRaw,
+            rowKey,
             placeholder,
             dropWidth,
         } = this.props;
@@ -506,7 +509,7 @@ class SearchMind extends Component {
         const newStyle = Object.assign({
             zIndex: 100,
             position: 'relative',
-        }, style);
+        }, style)
 
         return (
             <div
@@ -573,7 +576,18 @@ class SearchMind extends Component {
                     }}
                     className="ywc-smind-drop-layout"
                 >
-                    {this.getDrop()}
+                    {data && data.length > 0 &&
+                        <Table
+                            rowKey={rowKey}
+                            columns={columns}
+                            dataSource={data}
+                            pagination={pagination}
+                            loading={type === TYPE.LOADING}
+                            size="middle"
+                            onRowClick={this.handleChoose}
+                            onChange={this.handleTableChange}
+                        />
+                    }
                 </div>
             </div>
         )

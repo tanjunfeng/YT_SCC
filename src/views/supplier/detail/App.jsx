@@ -15,7 +15,8 @@ import { connect } from 'react-redux';
 import {
     getSupplierDetail,
     getProviderDetail,
-    queryPlaceRegion
+    queryPlaceRegion,
+    removeDetailData
 } from '../../../actions/supplier';
 
 import {
@@ -37,7 +38,8 @@ const TabPane = Tabs.TabPane;
     dispatch => bindActionCreators({
         getSupplierDetail,
         getProviderDetail,
-        queryPlaceRegion
+        queryPlaceRegion,
+        removeDetailData
     }, dispatch)
 )
 class SupplierDetail extends PureComponent {
@@ -76,6 +78,10 @@ class SupplierDetail extends PureComponent {
             return;
         }
         this.props.getSupplierDetail({spId: id});
+    }
+
+    componentWillUnmount() {
+        this.props.removeDetailData();
     }
 
     handleClick(goto) {
