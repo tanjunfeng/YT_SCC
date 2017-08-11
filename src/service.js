@@ -64,7 +64,7 @@ export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
 export const exportOrderList = '/sorder/toExcel';
 
 // 下载采购订单PDF
-export const exportProcurementPdf = '/pmPurchaseOrder/exportPdf';
+export const exportProcurementPdf = 'pmPurchaseOrder/exportPdf';
 
 /**
  * 登录 Api
@@ -617,7 +617,7 @@ export const checkSupplierAddOrgId = (params) => http.get('/supplier/checkSuppli
 export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);
 
 // 获取已审批通过供应商地点下拉框数据
-export const querySuppliersList = (params) => http.get('/supplier/supplierAdrSearchBox', params);
+export const querySuppliersList = (params) => http.get('/supplier/supplierSearchBox', params);
 
 // 商品的暂停购进和恢复采购
 export const goodsChangeStatus = (params) => http.post('prodPurchase/batchChangeProPurchaseStatus', params);
@@ -728,4 +728,4 @@ export const updateSellPriceStatus = (params) => http.get('/prodSell/updateSellP
 export const getNewPmPurchaseOrderItem = (params) => http.get('/pmPurchaseOrder/getNewPmPurchaseOrderItem', params);
 
 // 采购订单-审批
-export const auditPurchaseOrderInfo = (params) => http.get('/pmPurchaseOrder/auditPurchaseOrderInfo', params);
+export const auditPurchaseOrderInfo = (params) => http.post('/pmPurchaseOrder/auditPurchaseOrderInfo', params);
