@@ -74,7 +74,7 @@ class DataDictionary extends PureComponent {
             content: '确定删除数据字典？',
             onOk: () => {
                 this.props.DeleteDictionary({ id })
-                    .then(() => {
+                    .then((res) => {
                         this.fetNewData()
                     })
             },

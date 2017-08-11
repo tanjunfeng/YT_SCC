@@ -112,8 +112,9 @@ class modifyContentlist extends PureComponent {
             id,
             contentName,
             state: newState
-        }).then(
+        }).then((res) => {
             this.props.Dictionarycontentlist({ dictionaryId })
+        }
             )
     }
 
@@ -125,8 +126,9 @@ class modifyContentlist extends PureComponent {
             id,
             contentName,
             state
-        }).then(
+        }).then((res) => {
             this.props.Dictionarycontentlist({ dictionaryId })
+        }
             )
     }
 
@@ -200,12 +202,13 @@ class modifyContentlist extends PureComponent {
                         </Button>
                         </Col>
                     </Row>
-                    <div>
+                    <div className="dictionary-content-mid">
                         <span className="select-line-select">字典内容:</span>
                         <Table
                             dataSource={columndata}
                             columns={this.modifyContentlistColumns}
                             rowKey="id"
+                            scroll={{ y: 240 }}
                         />
                     </div>
                 </div>

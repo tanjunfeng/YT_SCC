@@ -39,13 +39,13 @@ class modifyDictionary extends PureComponent {
         this.props.isEdit ?
             this.props.UpdateDictionary({
                 ...result, id
-            }).then(() => {
+            }).then((res) => {
                 this.props.DictionaryVisible({ isVisible: false })
                 this.props.fetchList();
             }) :
             this.props.addDictionary({
                 ...result
-            }).then(() => {
+            }).then((res) => {
                 this.props.DictionaryVisible({ isVisible: false })
                 this.props.fetchList();
             });
