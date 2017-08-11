@@ -148,7 +148,7 @@ class BasicInfo extends PureComponent {
                             <div className="add-message-body">
                                 <Row>
                                     <Col span={8}><span>供应商类型：</span><span>供应商</span></Col>
-                                    <Col span={8}><span>供应商状态：</span><span>{isEdit ? this.renderStatus(supplierBasicInfo.status) : '工作表'}</span></Col>
+                                    <Col span={8}><span>供应商状态：</span><span>{isEdit ? this.renderStatus(supplierBasicInfo.status) : '制单'}</span></Col>
                                 </Row>
                                 <Row>
                                     <Col span={8}>

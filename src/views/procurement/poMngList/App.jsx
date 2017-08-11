@@ -40,8 +40,6 @@ const columns = poMngListColumns;
     changePoMngSelectedRows,
     deletePoByIds
 }, dispatch))
-
-
 class PoMngList extends PureComponent {
     constructor(props) {
         super(props);
@@ -61,12 +59,6 @@ class PoMngList extends PureComponent {
         this.queryPoList();
     }
 
-    shouldComponentUpdate() {
-        if (Object.keys(this.props.poList).length === 0) {
-            return false;
-        }
-        return true;
-    }
     /**
      * 点击翻页
      * @param {pageNumber}    pageNumber
@@ -156,13 +148,12 @@ class PoMngList extends PureComponent {
     renderActions = (text, record) => {
         this.selectedRowData = record;
 
-        const { status, ipurchaseOrderNo, id } = record;
+        const { status, purchaseOrderNo, id } = record;
         const deleteCode = 0;
-        // const submitCode = 1;
         const auditingCode = 2;
         const refuseCOde = 3;
         const { pathname } = this.props.location;
-        const detailLink = `${pathname}/podetail/${ipurchaseOrderNo}`;
+        const detailLink = `${pathname}/${id}`;
         const menu = (
             <Menu>
                 <Menu.Item key="detail">
@@ -183,7 +174,7 @@ class PoMngList extends PureComponent {
                 </Menu.Item>
                 }
                 {status === auditingCode && <Menu.Item key="receive">
-                    <Link to={`${pathname}/podetail/${id}`}>收货</Link>
+                    <Link to={`${pathname}/${id}`}>收货</Link>
                 </Menu.Item>
                 }
             </Menu>
