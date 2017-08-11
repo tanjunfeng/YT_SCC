@@ -26,6 +26,7 @@ import {
     findCanUseCompanyInfo,
     queryCategorysByLevel,
     queryBranchCompanyInfo,
+    queryProductForSelect,
 } from '../service';
 
 const pubValueList = {
@@ -63,6 +64,8 @@ const pubValueList = {
     queryCategorysByLevel,
     // 通过商品id查询子公司
     queryBranchCompanyInfo,
+    // 添加商品
+    queryProductForSelect,
 }
 
 const receiveCollapsed = (isCollapsed) => ({

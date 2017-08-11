@@ -62,8 +62,7 @@ import {
     fetchPoRcvInit,
     updatePoRcvLine,
     updatePoRcvBasicinfo,
-    createPoRcv,
-    deletePoByIdsAction
+    createPoRcv
 } from './procurement';
 
 // IBM
