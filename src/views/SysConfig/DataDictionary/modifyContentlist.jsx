@@ -114,8 +114,7 @@ class modifyContentlist extends PureComponent {
             state: newState
         }).then((res) => {
             this.props.Dictionarycontentlist({ dictionaryId })
-        }
-            )
+        })
     }
 
     handleModify(record) {
@@ -128,8 +127,7 @@ class modifyContentlist extends PureComponent {
             state
         }).then((res) => {
             this.props.Dictionarycontentlist({ dictionaryId })
-        }
-            )
+        })
     }
 
     handleSave(record) {
@@ -174,7 +172,8 @@ class modifyContentlist extends PureComponent {
     }
 
     render() {
-        this.modifyContentlistColumns[this.modifyContentlistColumns.length - 1].render = this.renderOperation;
+        this.modifyContentlistColumns[this.modifyContentlistColumns.length - 1].render
+            = this.renderOperation;
         const { dictionary, remark } = this.props;
         const { getFieldDecorator } = this.props.form;
         const { columndata } = this.state;
