@@ -4,7 +4,6 @@
  *
  * 订单管理详情页
  */
-
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
@@ -15,7 +14,6 @@ import OrderInformation from './orderInfo';
 import PayInformation from './payInfo';
 import DistributionInformation from './distributionInfo';
 import { fetchOrderDetailInfo, fetchPaymentDetailInfo, fetchShippingDetailInfo } from '../../../actions/order';
-
 
 const TabPane = Tabs.TabPane;
 const orderDT = 'order-details';
