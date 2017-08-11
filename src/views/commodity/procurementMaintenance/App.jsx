@@ -71,7 +71,10 @@ class ProcurementMaintenance extends PureComponent {
             // 控制主供应商选项唯一
             disabled: false,
             current: 1,
-            productId: ''
+            productId: '',
+            isEdit: false,
+            initData: {},
+            showModal: false
         }
     }
 
@@ -139,21 +142,36 @@ class ProcurementMaintenance extends PureComponent {
      * @param {Object} record 模态框数据
      */
     handleAdd() {
-        const { match } = this.props;
-        this.props.productAddPriceVisible({isVisible: true});
-        this.props.fetchCheckMainSupplier({
-            supplierType: 1,
-            productId: match.params.id
+        const { match, getProductByIds } = this.props;
+        this.setState({
+            initData: getProductByIds,
+            showModal: true,
+            isEdit: false
         })
+        // this.props.productAddPriceVisible({isVisible: true});
+        // this.props.fetchCheckMainSupplier({
+        //     supplierType: 1,
+        //     productId: match.params.id
+        // })
     }
 
     /**
      * 修改关系
      */
     handleChange(record) {
-        // console.log(record)
-        this.props.UpdateProdPurchase({isVisible: true, record});
+        this.setState({
+            initData: record,
+            showModal: true,
+            isEdit: true
+        })
+        // this.props.UpdateProdPurchase({isVisible: true, record});
     }
+
+    handleCloseModal = () => {
+        this.setState({
+            showModal: false
+        })
+    } 
 
     /**
      * 搜索
@@ -161,7 +179,6 @@ class ProcurementMaintenance extends PureComponent {
      * @param {Object} data 搜索条件
      */
     handleFormSearch = (data) => {
-        console.log(data)
         this.searchForm = data;
         this.getCardData();
     }
@@ -172,9 +189,7 @@ class ProcurementMaintenance extends PureComponent {
 
     render() {
         const { prefixCls, getProductByIds, match } = this.props;
-        // console.log(purchaseCardData.data)
         const innitalvalue = getProductByIds;
-        // console.log(getProductByIds)
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm innitalvalue={innitalvalue} />
@@ -195,13 +210,14 @@ class ProcurementMaintenance extends PureComponent {
                         onCliked={this.handleChange}
                     />
                 </div>
-                <ProdPurchaseModal
-                    goto={this.getCardData}
-                />
                 {
-                    this.props.updateProdPurchase &&
+                    this.state.showModal &&
                     <ProdModal
+                        data={getProductByIds}
+                        initValue={this.state.initData}
+                        isEdit={this.state.isEdit}
                         goto={this.getCardData}
+                        handleClose={this.handleCloseModal}
                     />
                 }
             </div>

@@ -113,7 +113,8 @@ class BasicInfo extends PureComponent {
                     purchaseEmail,
                     purchaseName,
                     purchasePhone,
-                    settlementPeriod
+                    settlementPeriod,
+                    payCondition
                 } = values
                 const submit = {
                     spAdrBasic: {
@@ -126,7 +127,8 @@ class BasicInfo extends PureComponent {
                         settlementPeriod,
                         belongArea,
                         payType,
-                        belongAreaName: this.company
+                        belongAreaName: this.company,
+                        payCondition
                     },
                     spAdrContact: {
                         providerName: providerUserName,
@@ -345,7 +347,7 @@ class BasicInfo extends PureComponent {
                                         <span>{isEdit ? this.renderStatus(detailSp.status) : '草稿'}</span>
                                     </Col>
                                     <Col span={8}>
-                                        <span>供应商地点经营状态：</span>
+                                        <span>*供应商地点经营状态：</span>
                                         <FormItem>
                                             {getFieldDecorator('operaStatus', {
                                                 rules: [{required: true, message: '请选择供应商地点经营状态'}],
@@ -364,7 +366,7 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}>
-                                        <span>供应商地点到货周期：</span>
+                                        <span>*供应商地点到货周期：</span>
                                         <FormItem>
                                             {getFieldDecorator('goodsArrivalCycle', {
                                                 rules: [{ required: true, message: '请输入供应商地点到货周期!' }],
@@ -379,7 +381,7 @@ class BasicInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>账期：</span>
+                                        <span>*账期：</span>
                                         <FormItem>
                                             {getFieldDecorator('settlementPeriod', {
                                                 rules: [{required: true, message: '请选择账期！'}],
@@ -392,7 +394,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="0">周结</Option>
                                                     <Option value="1">半月结</Option>
                                                     <Option value="2">月结</Option>
-                                                    <Option value="3">票到付款</Option>
+                                                    {/* <Option value="3">票到付款</Option> */}
                                                 </Select>
                                             )}
                                         </FormItem>
@@ -400,7 +402,7 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}>
-                                        <span>供应商地点级别：</span>
+                                        <span>*供应商地点级别：</span>
                                         <FormItem>
                                             {getFieldDecorator('grade', {
                                                 rules: [{required: true, message: '请选择供应商地点级别'}],
@@ -420,7 +422,7 @@ class BasicInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>供应商地点所属区域：</span>
+                                        <span>*供应商地点所属区域：</span>
                                         <FormItem>
                                             {getFieldDecorator('belongArea', {
                                                 rules: [{required: true, message: '请选择供应商地点所属区域'}],
@@ -446,7 +448,7 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}>
-                                        <span>供应商付款方式：</span>
+                                        <span>*供应商付款方式：</span>
                                         <FormItem>
                                             {getFieldDecorator('payType', {
                                                 rules: [{required: true, message: '请选择付款方式！'}],
@@ -465,15 +467,17 @@ class BasicInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>供应商地点所属子公司：</span>
+                                        <span>*供应商地点所属子公司：</span>
                                         <FormItem>
                                             <SearchMind
                                                 style={{ marginLeft: 10 }}
                                                 compKey="search-mind-key2"
                                                 fetch={(param) =>
-                                                    this.props.pubFetchValueList({
-                                                        branchCompanyName: param.value
-                                                    }, 'findCompanyBaseInfo')
+                                                    this.props.pubFetchValueList(Utils.removeInvalid({
+                                                        branchCompanyName: param.value,
+                                                        id: detailSp.id,
+                                                        parentId: detailData.id,
+                                                    }), 'findCanUseCompanyInfo')
                                                 }
                                                 ref={node => (this.orgCompany = node)}
                                                 onChoosed={this.handleChoose}
@@ -495,6 +499,26 @@ class BasicInfo extends PureComponent {
                                                     }
                                                 ]}
                                             />
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span={8}>
+                                        <span>*付款条件：</span>
+                                        <FormItem>
+                                            {getFieldDecorator('payCondition', {
+                                                rules: [{required: true, message: '请选择付款条件！'}],
+                                                initialValue: isEdit ? `${spAdrBasic.payCondition}` : '1'
+                                            })(
+                                                <Select
+                                                    style={{ width: 140 }}
+                                                    placeholder="付款条件"
+                                                >
+                                                    <Option value="1">票到七天</Option>
+                                                    <Option value="2">票到十五天</Option>
+                                                    <Option value="3">票到三十天</Option>
+                                                </Select>
+                                            )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -543,7 +567,7 @@ class BasicInfo extends PureComponent {
                             <div className="add-message-body">
                                 <Row>
                                     <Col span={8}>
-                                        <span>供应商姓名：</span>
+                                        <span>*供应商姓名：</span>
                                         <FormItem>
                                             {getFieldDecorator('providerUserName', {
                                                 rules: [
@@ -559,7 +583,7 @@ class BasicInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>供应商电话：</span>
+                                        <span>*供应商电话：</span>
                                         <FormItem>
                                             {getFieldDecorator('providerPhone', {
                                                 rules: [
@@ -584,7 +608,7 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}>
-                                        <span>供应商邮箱：</span>
+                                        <span>*供应商邮箱：</span>
                                         <FormItem>
                                             {getFieldDecorator('providerEmail', {
                                                 rules: [
@@ -602,7 +626,7 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}>
-                                        <span>采购员姓名：</span>
+                                        <span>*采购员姓名：</span>
                                         <FormItem>
                                             {getFieldDecorator('purchaseName', {
                                                 rules: [
@@ -618,7 +642,7 @@ class BasicInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>采购员电话：</span>
+                                        <span>*采购员电话：</span>
                                         <FormItem>
                                             {getFieldDecorator('purchasePhone', {
                                                 rules: [
@@ -643,7 +667,7 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}>
-                                        <span>采购员邮箱：</span>
+                                        <span>*采购员邮箱：</span>
                                         <FormItem>
                                             {getFieldDecorator('purchaseEmail', {
                                                 rules: [

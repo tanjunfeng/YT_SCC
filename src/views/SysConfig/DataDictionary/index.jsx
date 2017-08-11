@@ -1,6 +1,6 @@
 /**
- * @file list.jsx
- * @author Tan junfeng
+ * @file index.jsx
+ * @author shixinyuan
  *
  * 分类列表页商品排序管理
  */

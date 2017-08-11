@@ -11,7 +11,7 @@ import { withRouter } from 'react-router';
 import { Tabs } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { getSupplierDetail, fetchSupplierNo } from '../../../actions/supplier';
+import { getSupplierDetail, fetchSupplierNo, removeDetailData } from '../../../actions/supplier';
 
 import BasicInfo from './basicInfo';
 import BankInfo from './bankInfo';
@@ -28,7 +28,8 @@ const TabPane = Tabs.TabPane;
     }),
     dispatch => bindActionCreators({
         getSupplierDetail,
-        fetchSupplierNo
+        fetchSupplierNo,
+        removeDetailData
     }, dispatch)
 )
 class AddSupplier extends PureComponent {
@@ -55,6 +56,10 @@ class AddSupplier extends PureComponent {
         } else {
             this.props.fetchSupplierNo({type: 'SP'})
         }
+    }
+
+    componentWillUnmount() {
+        this.props.removeDetailData()
     }
 
     handleGetDetail(id) {
@@ -117,6 +122,7 @@ AddSupplier.propTypes = {
     match: PropTypes.objectOf(PropTypes.any),
     detailData: PropTypes.objectOf(PropTypes.any),
     getSupplierDetail: PropTypes.func,
+    removeDetailData: PropTypes.func,
 }
 
 AddSupplier.defaultProps = {

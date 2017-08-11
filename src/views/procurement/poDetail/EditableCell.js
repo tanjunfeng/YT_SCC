@@ -3,13 +3,12 @@ import React, { PureComponent } from 'react';
 export default class EditableCell extends PureComponent {
     constructor(props) {
         super(props);
-        console.log(props);
         this.validate =::this.validate;
     }
     state = {
         value: this.props.value,
         step: this.props.step,
-        poInnerAmount: this.props.poInnerAmount,
+        purchaseInsideNumber: this.props.purchaseInsideNumber,
         validateStatus: null,
         editable: this.props.editable
     }
@@ -43,7 +42,7 @@ export default class EditableCell extends PureComponent {
     validate(value) {
         let isValidate;
         //采购数量未输入、不为采购内装数整数倍
-        if (!value || (value > 0 && (value % this.state.poInnerAmount != 0))) {
+        if (!value || (value > 0 && (value % this.state.purchaseInsideNumber != 0))) {
             this.setState({ validateStatus: "error" });
             isValidate = false;
         } else {
@@ -63,7 +62,7 @@ export default class EditableCell extends PureComponent {
                         && <Form.Item validateStatus={this.state.validateStatus}>
                             <InputNumber
                                 value={value}
-                                min={1}
+                                min={0}
                                 step={step}
                                 onChange={e => this.handleChange(e)}
                                 onBlur={e => this.handleBlur(e)}
