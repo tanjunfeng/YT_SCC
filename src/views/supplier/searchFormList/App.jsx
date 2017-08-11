@@ -332,7 +332,7 @@ class SearchForm extends Component {
                         <div>
                             <span className="sc-form-item-label">供应商入驻日期</span>
                             <DatePicker
-                                className="sc-form-item-date-picker"
+                                className="sc-form-item-date-picker gyl-form-item-date-picker"
                                 showToday
                                 onChange={this.onEnterTimeChange}
                                 value={this.state.rengeTime}

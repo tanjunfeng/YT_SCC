@@ -13,7 +13,7 @@ import {
     supplierStore,
     adjustmentType,
     // supplierTypeOptions,
-    // supplierStatusOptions,
+    supplierStatusOptions,
 } from '../../../constant/searchParams';
 
 const FormItem = Form.Item;
@@ -95,7 +95,6 @@ class SearchForm extends Component {
         this.getValue();
         const { onSearch } = this.props;
         onSearch(this.searchData);
-        console.log(this.searchData);
     }
 
     /**
@@ -260,14 +259,14 @@ class SearchForm extends Component {
                         </div>
                         <span className="sc-form-item-label">供应商状态</span>
                         {getFieldDecorator('supplierState', {
-                            initialValue: supplierStatusOptionss.defaultValue
+                            initialValue: supplierStatusOptions.defaultValue
                         })(
                             <Select
                                 className="sc-form-item-select"
                                 size="default"
                             >
                                 {
-                                    supplierStatusOptionss.data.map((item) =>
+                                    supplierStatusOptions.data.map((item) =>
                                         (<Option key={item.key} value={item.key}>
                                             {item.value}
                                         </Option>)

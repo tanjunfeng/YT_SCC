@@ -82,7 +82,10 @@ const initState = Immutable.fromJS({
     updateProdRecord: {},
 
     // 地点关联
-    getWarehouseLogicInfo: {}
+    getWarehouseLogicInfo: {},
+
+    // 删除当前关系
+    deleteProd: {}
 
 });
 
@@ -183,6 +186,9 @@ export default function (state = initState, action) {
 
         case ActionType.QUERY_PRODBY_CONDITION:
             return state.set('purchaseCardData', action.payload);
+
+        case ActionType.DELETE_PROD_PRUCHASE_BYID:
+            return state.set('deleteProd', action.payload);
 
         case ActionType.GER_WARE_HOUSE_LOGIC_INFO:
             return state.set('getWarehouseLogicInfo', action.payload);
