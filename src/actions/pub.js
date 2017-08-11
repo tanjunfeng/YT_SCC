@@ -24,6 +24,7 @@ import {
     querycategories,
     getFranchiseeInfo,
     queryCategorysByLevel,
+    queryProductForSelect,
 } from '../service';
 
 const pubValueList = {
@@ -55,8 +56,10 @@ const pubValueList = {
     querycategories,
     // 查询加盟商
     getFranchiseeInfo,
-
-    queryCategorysByLevel
+    // 查询各级分类列表
+    queryCategorysByLevel,
+    // 添加商品
+    queryProductForSelect,
 }
 
 const receiveCollapsed = (isCollapsed) => ({

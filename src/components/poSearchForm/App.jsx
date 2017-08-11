@@ -19,8 +19,9 @@ import {
 } from '../../actions'
 
 
-import { pubFetchValueList } from '../../actions/pub.js';
+import { pubFetchValueList } from '../../actions/pub';
 import { PAGE_SIZE } from '../../constant';
+
 
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
@@ -163,8 +164,9 @@ class PoSearchForm extends PureComponent {
     // 搜索回调
     handleSearch = () => {
         const { onSearch } = this.props;
+        const seachParams = this.getSearchParams();
         if (onSearch) {
-            onSearch(this.getSearchParams());
+            onSearch(seachParams);
         }
     }
 

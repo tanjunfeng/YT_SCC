@@ -78,3 +78,60 @@ export const poMngListColumns = [
     }
 ]
 
+export const printColumns = [{
+    title: '行号',
+    dataIndex: 'rowNo',
+    key: 'rowNo',
+    render: (text, record, index) => (<span>{index + 1}</span>),
+    width: 60
+}, {
+    title: '商品编码',
+    dataIndex: 'productCode',
+    key: 'productCode',
+    width: 70
+}, {
+    title: '商品名称',
+    dataIndex: 'productName',
+    key: 'productName',
+    className: 'left'
+}, {
+    title: '规格',
+    dataIndex: 'packingSpecifications',
+    key: 'packingSpecifications',
+    width: 70
+}, {
+    title: '产地',
+    dataIndex: 'producePlace',
+    key: 'producePlace',
+    className: 'left'
+}, {
+    title: '采购内装数',
+    dataIndex: 'purchaseInsideNumber',
+    key: 'purchaseInsideNumber',
+    width: 80,
+    className: 'right'
+}, {
+    title: '单位',
+    dataIndex: 'unitExplanation',
+    key: 'unitExplanation',
+    width: 50
+}, {
+    title: '订货数量',
+    dataIndex: 'purchaseNumber',
+    key: 'purchaseNumber',
+    width: 70,
+    className: 'right'
+
+}, {
+    title: '订货价格',
+    dataIndex: 'purchasePrice',
+    key: 'purchasePrice',
+    width: 70,
+    className: 'right'
+}, {
+    title: '订货金额',
+    dataIndex: 'totalAmount',
+    key: 'totalAmount',
+    width: 100,
+    className: 'right'
+}];

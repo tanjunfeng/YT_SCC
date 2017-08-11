@@ -2,7 +2,7 @@
  * @file causeModal.jsx
  * @author caoyanxuan
  *
- * 订单管理-取消原因模态框
+ * 采购订单-审核模态框
  */
 
 import React, { PureComponent } from 'react';
