@@ -62,7 +62,7 @@ class RefundModal extends PureComponent {
                         passed: true,
                         amount: inputNumber
                     }).then(res => {
-                        this.props.fetchPaymentDetailInfo({ orderId: recordData.orderId });
+                        this.props.fetchPaymentDetailInfo({orderId: recordData.orderId});
                         this.props.modifyCauseModalVisible({ isShow: false });
                         this.setState({
                             option: '请选择'
@@ -77,7 +77,7 @@ class RefundModal extends PureComponent {
                         refundNo: recordData.id,
                         passed: true,
                     }).then(res => {
-                        this.props.fetchPaymentDetailInfo({ orderId: recordData.orderId });
+                        this.props.fetchPaymentDetailInfo({orderId: recordData.orderId});
                         this.props.modifyCauseModalVisible({ isShow: false });
                         this.setState({
                             option: '请选择'
@@ -94,12 +94,11 @@ class RefundModal extends PureComponent {
                         if (recordData.state === 'pending_audit') {
                             // 审核退款
                             modifyAuditRefund({
-                                mAmount: recordData.amount,
                                 refundNo: recordData.id,
                                 passed: false,
                                 remark: causeTextArea
                             }).then(res => {
-                                this.props.fetchPaymentDetailInfo({ orderId: recordData.orderId });
+                                this.props.fetchPaymentDetailInfo({orderId: recordData.orderId});
                                 this.props.modifyCauseModalVisible({ isShow: false });
                                 this.setState({
                                     option: '请选择'
@@ -115,7 +114,7 @@ class RefundModal extends PureComponent {
                                 passed: false,
                                 remark: causeTextArea
                             }).then(res => {
-                                this.props.fetchPaymentDetailInfo({ orderId: recordData.orderId });
+                                this.props.fetchPaymentDetailInfo({orderId: recordData.orderId});
                                 this.props.modifyCauseModalVisible({ isShow: false });
                                 this.setState({
                                     option: '请选择'
@@ -162,7 +161,7 @@ class RefundModal extends PureComponent {
                             <FormItem>
                                 <div>
                                     <span className="order-modal-label">
-                                        <span style={{ color: '#f00' }}>*</span>
+                                        <span style={{color: '#f00'}}>*</span>
                                         请选择:
                                     </span>
                                     <Select
@@ -194,7 +193,7 @@ class RefundModal extends PureComponent {
                                                 max={recordData.amount}
                                                 step={0.01}
                                             />
-                                            )}
+                                        )}
                                     </div>
                                 </FormItem>
                             }
@@ -203,7 +202,7 @@ class RefundModal extends PureComponent {
                                 && <FormItem>
                                     <div>
                                         <span className="order-modal-label">
-                                            <span style={{ color: '#f00' }}>*</span>
+                                            <span style={{color: '#f00'}}>*</span>
                                             不通过原因:
                                         </span>
                                         {getFieldDecorator('causeTextArea', {
@@ -215,9 +214,9 @@ class RefundModal extends PureComponent {
                                         })(
                                             <TextArea
                                                 autosize={{ minRows: 5, maxRows: 6 }}
-                                                style={{ resize: 'none' }}
+                                                style={{resize: 'none' }}
                                             />
-                                            )}
+                                        )}
                                     </div>
                                 </FormItem>
                             }

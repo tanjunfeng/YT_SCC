@@ -90,8 +90,8 @@ const columns = [{
     key: 'branchCompanyName',
 }, {
     title: '加盟商编号',
-    dataIndex: 'franchiseeId',
-    key: 'franchiseeId',
+    dataIndex: 'franchiseeNo',
+    key: 'franchiseeNo',
 }, {
     title: '操作',
     dataIndex: 'operation',
@@ -420,6 +420,7 @@ class OrderManagementList extends Component {
                 }
                 {
                     shippingStateDesc !== '待收货'
+                    && shippingStateDesc !== '未传送'
                     && shippingStateDesc !== '已签收'
                     && orderStateDesc !== '已取消'
                     && <Menu.Item key="tableCancel">
@@ -453,7 +454,7 @@ class OrderManagementList extends Component {
         const { orderListData } = this.props;
         columns[columns.length - 1].render = this.renderOperation;
         return (
-            <div className={orderML}>
+            <div className={`${orderML}`}>
                 <div className="manage-form">
                     <Form layout="inline">
                         <div className="gutter-example">
@@ -560,7 +561,6 @@ class OrderManagementList extends Component {
                                         <div>
                                             <span className="sc-form-item-label">加盟商</span>
                                             <SearchMind
-                                                rowKey="franchiseeId"
                                                 compKey="search-mind-joining"
                                                 ref={ref => { this.joiningSearchMind = ref }}
                                                 fetch={(params) =>

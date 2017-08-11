@@ -497,6 +497,9 @@ export const logisticsStatusOptions = {
         key: 'YQS',
         value: '已签收'
     }, {
+        key: 'WCS',
+        value: '未传送'
+    }, {
         key: 'QX',
         value: '取消送货'
     }, {

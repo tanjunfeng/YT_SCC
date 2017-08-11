@@ -4,11 +4,12 @@
  *
  * Des
  */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Icon, Table } from 'antd';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Utils from '../../util/util';
+import NoData from './NoData';
 import './searchMind.scss';
 
 const TYPE = {
@@ -22,7 +23,7 @@ const TYPE = {
     EDIT: 'ellipsis',
 };
 
-class SearchMind extends PureComponent {
+class SearchMind extends Component {
     constructor(props) {
         super(props);
 
@@ -97,21 +98,20 @@ class SearchMind extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        const next = { ...nextProps };
-
         if (nextProps.defaultValue !== this.props.defaultValue) {
-            next.value = nextProps.defaultValue;
+            this.setState({
+                value: nextProps.defaultValue,
+            });
         }
 
         // 单独处理一下 disabled
         if (nextProps.disabled !== this.props.disabled) {
-            next.dropHide = true;
-            next.isFocus = false;
+            this.setState({
+                disabled: nextProps.disabled,
+                dropHide: nextProps.disabled,
+                isFocus: !nextProps.disabled,
+            });
         }
-
-        this.setState({
-            ...next
-        });
     }
 
     componentWillUnmount() {
@@ -299,8 +299,8 @@ class SearchMind extends PureComponent {
                 const pager = { ...pagination };
 
                 // 重新更换数据 total
-                if (res[totalIndex]) {
-                    pager.total = res[totalIndex];
+                if (res[totalIndex] || res.data[totalIndex]) {
+                    pager.total = res[totalIndex] || res.data[totalIndex];
                 }
 
                 this.setState({
@@ -462,21 +462,18 @@ class SearchMind extends PureComponent {
         const {
             type,
             dropHide,
-            data,
             value,
             isFocus,
             selectedRawData,
+            data,
             disabled,
-            pagination,
         } = this.state;
 
         const {
             addonBefore,
             className,
             style,
-            columns,
             renderChoosedInputRaw,
-            rowKey,
             placeholder,
             dropWidth,
         } = this.props;
@@ -489,10 +486,10 @@ class SearchMind extends PureComponent {
 
         const clearCls = classNames('ywc-smind-clear', {
             'ywc-smind-clear-show':
-                // 下拉框显示中，同时输入框内容不为空的情况
-                (!dropHide && !this.isEmpty())
-                // 输入框无焦点，同时有选择内容展示的情况
-                || (!isFocus && selectedRawData)
+            // 下拉框显示中，同时输入框内容不为空的情况
+            (!dropHide && !this.isEmpty())
+            // 输入框无焦点，同时有选择内容展示的情况
+            || (!isFocus && selectedRawData)
         });
 
         const inputProps = {
@@ -502,7 +499,7 @@ class SearchMind extends PureComponent {
         const newStyle = Object.assign({
             zIndex: 100,
             position: 'relative',
-        }, style)
+        }, style);
 
         return (
             <div
@@ -514,7 +511,7 @@ class SearchMind extends PureComponent {
                 {/* 搜索容器 */}
                 <div className="ywc-smind-search-bar">
                     {addonBefore &&
-                        <span className="ywc-smind-title">
+                    <span className="ywc-smind-title">
                             {addonBefore}
                         </span>
                     }
@@ -532,16 +529,16 @@ class SearchMind extends PureComponent {
 
                         {/* 用于被选择的数据展示 */}
                         {(!isFocus && selectedRawData !== null && this.isEmpty()) &&
-                            <div className="ywc-smind-input-view">
-                                {this.inputRawRender()}
-                            </div>
+                        <div className="ywc-smind-input-view">
+                            {this.inputRawRender()}
+                        </div>
                         }
 
                         {/* placeholder */}
                         {(!this.isFocus && this.isEmpty() && selectedRawData === null) &&
-                            <div className="ywc-smind-input-placeholder">
-                                {placeholder}
-                            </div>
+                        <div className="ywc-smind-input-placeholder">
+                            {placeholder}
+                        </div>
                         }
 
                         {/* 清空按钮 */}
@@ -569,18 +566,7 @@ class SearchMind extends PureComponent {
                     }}
                     className="ywc-smind-drop-layout"
                 >
-                    {data && data.length > 0 &&
-                        <Table
-                            rowKey={rowKey}
-                            columns={columns}
-                            dataSource={data}
-                            pagination={pagination}
-                            loading={type === TYPE.LOADING}
-                            size="middle"
-                            onRowClick={this.handleChoose}
-                            onChange={this.handleTableChange}
-                        />
-                    }
+                    {this.getDrop()}
                 </div>
             </div>
         )
