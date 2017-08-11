@@ -313,15 +313,15 @@ export const suppliersAppList = [
             }
             if (record.providerType === 2) {
                 switch (parseInt(text, 10)) {
-                    case '1':
+                    case 1:
                         return '生产厂家'
-                    case '2':
+                    case 2:
                         return '批发商'
-                    case '3':
+                    case 3:
                         return '经销商'
-                    case '4':
+                    case 4:
                         return '代销商'
-                    case '5':
+                    case 5:
                         return '其他'
                     default:
                         break;
@@ -439,15 +439,15 @@ export const supplierInputList = [
             }
             if (record.providerType === 2) {
                 switch (parseInt(text, 10)) {
-                    case '1':
+                    case 1:
                         return '生产厂家'
-                    case '2':
+                    case 2:
                         return '批发商'
-                    case '3':
+                    case 3:
                         return '经销商'
-                    case '4':
+                    case 4:
                         return '代销商'
-                    case '5':
+                    case 5:
                         return '其他'
                     default:
                         break;

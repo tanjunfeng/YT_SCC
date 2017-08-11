@@ -10,7 +10,8 @@ import {
 } from '../../../actions/classifiedList';
 import {
     pubFetchValueList
-} from '../../../actions/pub'
+} from '../../../actions/pub';
+import { MAXGOODS } from '../../../constant'
 import { productAddPriceVisible } from '../../../actions/producthome';
 import { fetchAddProdPurchase } from '../../../actions';
 
@@ -155,7 +156,7 @@ class SellPriceModal extends Component {
                             <div className={`${prefixCls}-item-title`}>
                                 添加阶梯价格
                                 <span className={`${prefixCls}-item-tip`}>
-                                    &nbsp;(请按从小到大的顺序添加)
+                                    &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
                                 </span>
                             </div>
                             <div className={`${prefixCls}-item-content`}>
@@ -191,8 +192,9 @@ class SellPriceModal extends Component {
                                         compKey="search-mind-key1"
                                         ref={ref => { this.searchMind = ref }}
                                         fetch={(param) => this.props.pubFetchValueList({
-                                            branchCompanyName: param.value
-                                        }, 'findCompanyBaseInfo')}
+                                            branchCompanyName: param.value,
+                                            productId: newDates.productId || newDates.id
+                                        }, 'queryBranchCompanyInfo')}
                                         placeholder="请输入公司名"
                                         onChoosed={this.handleChoose}
                                         disabled={isEdit}

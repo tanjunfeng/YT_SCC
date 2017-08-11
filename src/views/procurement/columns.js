@@ -47,7 +47,12 @@ export const poMngListColumns = [
         title: '地点类型',
         dataIndex: 'adrType',
         key: 'adrType',
-        render: (text) => (locType.data[text + 1].value)
+        render: (text) => {
+            if (!text) {
+                return null;
+            }
+            return (locType.data[text + 1].value);
+        }
     },
     {
         title: '地点',
@@ -69,7 +74,12 @@ export const poMngListColumns = [
         title: '状态',
         dataIndex: 'status',
         key: 'status',
-        render: (text) => (poStatus.data[text + 1].value)
+        render: (text) => {
+            if (!text) {
+                return null;
+            }
+            return (poStatus.data[text + 1].value);
+        }
     },
     {
         title: '操作',

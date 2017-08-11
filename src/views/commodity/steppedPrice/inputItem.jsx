@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { InputNumber, Icon } from 'antd';
 import KeyCode from 'rc-util/lib/KeyCode';
+import { MAXGOODS } from '../../../constant'
 
 class InputItem extends Component {
     constructor(props) {
@@ -124,7 +125,7 @@ class InputItem extends Component {
                     <InputNumber
                         size={inputSize}
                         min={parseInt(firstValue + 1, 10)}
-                        max={max}
+                        max={MAXGOODS}
                         value={secondValue}
                         defaultValue={scondDefault}
                         onChange={this.handleSecondChange}

@@ -15,7 +15,7 @@ import {
     auditPo as svcAuditPo,
     queryPoDetail,
     queryShopAddressMap,
-    queryWarehouseAddressMap,
+    // queryWarehouseAddressMap,
     querySupplierMap,
     querySupplierLocMap,
     queryBigClassMap,
@@ -73,17 +73,17 @@ export const fetchPoPrintList = (params) => dispatch => (
  * 仓库值清单 promise
  * @param {*} data
  */
-export const getWarehouseAddressMap = (params) => dispatch => (
-    new Promise((resolve, reject) => {
-        queryWarehouseAddressMap(params)
-            .then(res => {
-                resolve(res);
-            })
-            .catch(err => {
-                reject(err);
-            })
-    })
-)
+// export const getWarehouseAddressMap = (params) => dispatch => (
+//     new Promise((resolve, reject) => {
+//         queryWarehouseAddressMap(params)
+//             .then(res => {
+//                 resolve(res);
+//             })
+//             .catch(err => {
+//                 reject(err);
+//             })
+//     })
+// )
 
 /**
  * 门店值清单 promise

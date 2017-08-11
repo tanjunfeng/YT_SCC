@@ -110,6 +110,20 @@ class SupplierSpace extends Component {
         return null;
     }
 
+    renderPayCondition(type) {
+        switch (type) {
+            case 1:
+                return '票到七天'
+            case 2:
+                return '票到十五天'
+            case 3:
+                return '票到三十天'
+            default:
+                break;
+        }
+        return null;
+    }
+
     render() {
         const { detailSp = {}, detailData = {} } = this.props;
         const {
@@ -202,6 +216,11 @@ class SupplierSpace extends Component {
                                 </Col>
                                 <Col span={8}><span>供应商地点所属子公司：</span>
                                     <span>{spAdrBasic.orgName}</span>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span={8}><span>付款条件：</span>
+                                    <span>{this.renderPayCondition(spAdrBasic.payCondition)}</span>
                                 </Col>
                             </Row>
                             <Row>

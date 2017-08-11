@@ -270,27 +270,6 @@ class SearchForm extends Component {
         })
     }
 
-    /**
-     * TEST
-     */
-    // handleSave(event) {
-    //     this.setState({
-    //         img: this.imageUploader.getImageByBase64(),
-    //     })
-    // }
-
-    // handleTestFetch = ({ value, pagination }) => {
-    //     // console.log(value, pagination);
-
-    //     return fetchTest({
-    //         value,
-    //     });
-    // }
-
-    // handleTestChoose = ({ record, compKey, index, event }) => {
-    //     console.log(compKey, record)
-    // }
-
     render() {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls } = this.props;

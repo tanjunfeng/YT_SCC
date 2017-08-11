@@ -230,3 +230,9 @@ export const UpdateProdPurchase = (params) => dispatch => (
             .catch(err => reject(err))
     })
 )
+
+// 清空详情数据
+export const removeDetailData = (params) =>dispatch => (dispatch({
+    type: ActionType.REMOVE_DETAIL_DATA,
+    payload: {}
+}))
