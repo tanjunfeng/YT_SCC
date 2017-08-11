@@ -4,7 +4,6 @@
  *
  * 订单管理详情页-配送信息
  */
-
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
@@ -163,7 +162,7 @@ class DistributionInformation extends PureComponent {
                                 dataSource={shippingProductDtos}
                                 columns={columns}
                                 pagination={false}
-                                rowKey="commodifyNumber"
+                                rowKey="skuId"
                             />
                         </div>
                     </div>
@@ -174,7 +173,7 @@ class DistributionInformation extends PureComponent {
                             <Button
                                 size="default"
                                 onClick={() => {
-                                    this.props.history.pop();
+                                    this.props.history.goBack();
                                 }}
                             >
                                 返回
