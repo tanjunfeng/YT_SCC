@@ -94,7 +94,6 @@ class PoPrintList extends PureComponent {
     render() {
         // 采购单打印列表
         const { poPrintList = {} } = this.props;
-        // console.log(poPrintList)
         const { data = [], total, pageNum } = poPrintList;
         const that = this;
         const list = (reportsData = []) => {

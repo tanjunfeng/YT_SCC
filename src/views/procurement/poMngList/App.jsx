@@ -219,7 +219,6 @@ class PoMngList extends PureComponent {
                     const currentIndex = this.deleteListData.indexOf(record.id);
                     this.deleteListData.splice(currentIndex, 1);
                 }
-                console.log('单选操作：' + this.deleteListData)
             },
             onSelectAll: (selected, selectedRows) => {
                 if (selected) {
@@ -231,7 +230,6 @@ class PoMngList extends PureComponent {
                 } else {
                     this.deleteListData = [];
                 }
-                console.log('全选操作：' + this.deleteListData)
             }
         }
         return (

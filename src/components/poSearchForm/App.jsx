@@ -268,7 +268,6 @@ class PoSearchForm extends PureComponent {
         const {
             auth
         } = this.props;
-        console.log()
         const formItemLayout = {
             labelCol: {
                 span: 3

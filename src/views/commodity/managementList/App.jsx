@@ -90,7 +90,6 @@ class ManagementList extends PureComponent {
      */
     getFormAllVulue = () => {
         const { supplierId, classify, childCompanyMeg, brandName, sortType } = this.state;
-        console.log(brandName)
         const {
             supplyChainStatus,
             internationalCode,
@@ -344,7 +343,6 @@ class ManagementList extends PureComponent {
         this.setState({
             brandName: record.record.name,
         });
-        console.log(this.state.brandName)
     }
 
     // 品牌值清除
