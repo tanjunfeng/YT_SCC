@@ -216,7 +216,10 @@ class ProdModal extends Component {
         })
     }
 
-    handleCancel(record) {
+    /**
+     * 弹出层取消事件
+     */
+    handleCancel() {
         this.props.handleClose();
         // this.props.UpdateProdPurchase({isVisible: false, record});
     }
@@ -233,7 +236,7 @@ class ProdModal extends Component {
         }
     }
 
-    handleCheckBox = (e) => {
+    handleCheckBox = () => {
         this.setState({
             checked: !this.state.checked
         })
