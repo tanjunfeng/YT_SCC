@@ -5,7 +5,7 @@
  * 弹框显示控制
  */
 
-import Promise from 'bluebird';
+// import Promise from 'bluebird';
 import ActionType from '../ActionType';
 
 const receive = (data) => ({

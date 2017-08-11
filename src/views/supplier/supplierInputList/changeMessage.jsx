@@ -1,3 +1,10 @@
+/**
+ * @file changeMessage.jsx
+ * @author Tan junfeng
+ *
+ * 供应商管理列表
+ */
+
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -30,39 +37,40 @@ class ChangeMessage extends PureComponent {
         this.handleInformationCancel = this.handleInformationCancel.bind(this);
     }
 
+    /**
+     * 模态框取消按钮
+     */
     handleInformationCancel() {
         this.props.modifyInformationVisible({isVisible: false});
     }
 
+    /**
+     * 模态框确认按钮
+     */
     handleInformationOk() {
-        this.props.form.validateFields((err) => {
-            if (!err) {
-                const { supplierCooperationId } = this.props.visibleData;
-                const result = this.props.form.getFieldsValue();
-                this.props.modifySupplierCooperationInfo({
-                    id: supplierCooperationId,
-                    ...result
-                }).then(() => {
-                    this.props.getList()
-                })
-            }
-        })
+        // const { visibleData = {} } = this.props;
+        // const { id } = visibleData;
+        // this.props.history.push(`/suppliersAppList/edit/supplier/${id}`)
     }
 
     render() {
+        const { visibleData = {} } = this.props;
+        const { failedReason = '' } = visibleData;
         return (
             <Modal
                 title="平台已拒绝原因"
                 visible={this.props.informationVisible}
                 onOk={this.handleInformationOk}
                 onCancel={this.handleInformationCancel}
-                okText="再次申请入驻"
                 width="410px"
+                footer={false}
                 maskClosable={false}
             >
                 <Form>
                     <FormItem className="manage-form-item">
-                        <span className="manage-form-label">结算账期</span>
+                        <span className="manage-form-label">
+                            {failedReason}
+                        </span>
                     </FormItem>
                 </Form>
             </Modal>

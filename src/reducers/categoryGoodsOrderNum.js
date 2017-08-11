@@ -21,7 +21,7 @@ const initState = Immutable.fromJS({
     // 新增分类商品排序
     toAddCategory: {},
     // 通过商品编号获取商品名称
-    querygoodsname: {},
+    querygoodsname: '',
     // 模态框title
     toAddCategoryTitle: '',
     // 删除当前行数据

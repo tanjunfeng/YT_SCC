@@ -52,6 +52,7 @@ class ChangeMessage extends PureComponent {
 
         this.state = {
             isDisabled: true,
+            showName: ''
         }
 
         this.classify = {
@@ -64,6 +65,10 @@ class ChangeMessage extends PureComponent {
         }
     }
 
+    /**
+     * 根据商品编号查询商品名称
+     * @return {Object} 返回根据商品编号查询商品名称
+     */
     handleBackShow() {
         const {
             productNo
@@ -81,6 +86,12 @@ class ChangeMessage extends PureComponent {
         })
     }
 
+    /**
+     * 三级下拉菜单
+     * @param {Object} data 三级联动下拉菜单数据
+     * @param {Object} that 三级联动对象
+     * @return {Object} 返回根据商品编号查询商品名称
+     */
     handleSelectChange(data, that) {
         const { first, second, third } = data;
         if (third.id !== -1) {
@@ -107,12 +118,23 @@ class ChangeMessage extends PureComponent {
         this.classifyRef = that;
     }
 
+    /**
+     * 模态框信息
+     * @return {boll} 控制模态框的状态boll值
+     */
     handleInformationCancel() {
         this.props.modifyCategoryVisible({isVisible: false});
     }
 
+    /**
+     * 模态框确定事件
+     * @param {Object} data1 新增方法参数对象
+     * @param {Object} data2 删除方法参数对象
+     * @return {Object} 返回根据商品编号查询商品名称
+     */
     handleInformationOk() {
-        const name1 = this.props.querygoodsname;
+        const { querygoodsname = '' } = this.props;
+        const name1 = querygoodsname === null ? '' : querygoodsname;
         const {
             name,
             productNo,
@@ -211,7 +233,8 @@ class ChangeMessage extends PureComponent {
             isEdit
         } = this.props.visibleData;
         const productNo = id;
-        const name1 = this.props.querygoodsname;
+        const { querygoodsname = '' } = this.props;
+        const name1 = querygoodsname === null ? '' : querygoodsname;
         const { isDisabled } = this.state;
         return (
             <div>

@@ -1,0 +1,52 @@
+.commodity-management {
+    .manage-form {
+        .ant-input,
+        .ant-select {
+            width: 240px;
+        }
+        .ywc-smind {
+            vertical-align: middle;
+        }
+        .ywc-smind {
+            width: 240px;
+        }
+    }
+    .area-list {
+        .table-commodity {
+            &-number {
+                text-align: left;
+            }
+            &-description {
+                text-align: left;
+                margin-top: 10px;
+                &-img {
+                    display: inline-block;
+                    width: 50px;
+                    height: 50px;
+                    margin-right: 10px;
+                    vertical-align: middle;
+                }
+                &-name {
+                    width: 300px;
+                    height: 100%;
+                    display: inline-block;
+                    margin-top: 3px;
+                    vertical-align: top;
+                }
+            }
+        }
+    }
+    .ywc-smind-drop-layout {
+        z-index: 3;
+    }
+}
+.commodityType-wrap {
+    & .commodityType-title {
+        display: inline-block;
+        min-width: 60px;
+        margin-right: 8px;
+        & + div {
+            display: inline-block;
+        }
+    }
+}

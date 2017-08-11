@@ -12,7 +12,10 @@ const initState = Immutable.fromJS({
     // 导航是否收拢
     collapsed: false,
     gegion: [],
-    categorys: []
+    categorys: [],
+    // 值列表数据
+    valueList: [],
+    categorysById: [],
 });
 
 export default (state = initState, action) => {
@@ -29,6 +32,14 @@ export default (state = initState, action) => {
 
         case ActionType.RECEIVE_All_CATEGORYS: {
             return state.set('categorys', action.payload)
+        }
+        
+        case ActionType.RECEIVE_CATEGORYS_BY_ID: {
+            return state.set('categorysById', action.payload)
+        }
+
+        case ActionType.RECEIVE_VALUES_LIST: {
+            return state.set('valueList', Immutable.fromJS(action.payload));
         }
 
         default:

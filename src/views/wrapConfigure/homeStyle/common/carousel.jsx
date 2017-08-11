@@ -6,13 +6,23 @@ import Common from './common';
 @Common
 class CarouselItem extends Component {
     render() {
+        const { data = {}, isEnabled } = this.props;
+        const { itemAds = [] } = data;
         return (
             <div className="home-style-carousel">
-                <Carousel dots={false}>
-                    <div><h3>1</h3></div>
-                    <div><h3>2</h3></div>
-                    <div><h3>3</h3></div>
-                    <div><h3>4</h3></div>
+                <Carousel
+                    autoplay={isEnabled}
+                >
+                    {
+                        itemAds.map((item) => {
+                            return (
+                                <div key={item.id}>
+                                    <img src={item.icon} />
+                                </div>
+                            )
+                        })
+                    }
+                    
                 </Carousel>
             </div>
         );
@@ -20,7 +30,7 @@ class CarouselItem extends Component {
 }
 
 CarouselItem.propTypes = {
-
+    isEnabled: PropTypes.bool,
 };
 
 export default CarouselItem;

@@ -34,7 +34,69 @@ import modifyToAddInsertpage from './modify/modifyToAddInsertpage';
 import modifyUpdatePageBase from './modify/modifyUpdatePageBase';
 import fetchFindStaticPageList from './fetch/fetchStaticPageHome';
 import fectheEditorContent from './fetch/fectheEditorContent';
+import fetchDeleteProdPurchaseById from './fetch/fetchDeleteProdPurchaseById';
 
+/*********************procurement added by twh************************* */
+import {
+    changePoMngSelectedRows,
+    fetchPoMngList,
+    deletePoByIds,
+    fetchPoPrintList,
+    getWarehouseAddressMap,
+    getShopAddressMap,
+    getSupplierMap,
+    getSupplierLocMap,
+    getBigClassMap,
+    getMaterialMap,
+    initPoDetail,
+    createPo,
+    auditPo,
+    fetchPoDetail,
+    updatePoBasicinfo,
+    addPoLines,
+    updatePoLine,
+    deletePoLine,
+    fetchPoRcvMngList,
+    fetchPoRcvList,
+    fetchPoRcvDetail,
+    fetchPoRcvInit,
+    updatePoRcvLine,
+    updatePoRcvBasicinfo,
+    createPoRcv
+} from './procurement';
+
+// IBM
+import fetchCheckMainSupplier from './fetch/fetchCheckMainSupplier';
+import fecthGetProdPurchaseById from './fetch/fetchGetProdPurchaseById';
+import fetchChangeSupType from './fetch/fetchChangeSupType'
+
+import fetchQuerySettledList from './fetch/fetchQuerySettledList';
+import fetchQueryManageList from './fetch/fetchQueryManageList';
+import fetchGetProductById from './fetch/fetchGetProductById';
+import fetchEditBeforeAfter from './fetch/fetchEditBeforeAfter';
+import fetchAddProdPurchase from './fetch/fetchAddProdPurchase';
+import fetchQueryProdByCondition from './fetch/fetchQueryProdByCondition';
+import fetchUpdateProdPurchase from './fetch/fetchUpdateProdPurchase';
+import fetchChangeProPurchaseStatus from './fetch/fetchChangeProPurchaseStatus';
+import suppplierSettledAudit from './fetch/suppplierSettledAudit';
+import supplierAdrSettledAudit from './fetch/supplierAdrSettledAudit';
+import modifyAuditAdrVisible from './modify/modifyAuditAdrVisible';
+import AuditSupplierEditInfo from '../actions/supplier';
+import {
+    UpdateProdPurchase,
+    getProductById,
+    queryProdPurchaseExtByCondition,
+    ChangeProPurchaseStatus,
+    GetWarehouseInfo1
+} from './producthome';
+
+// 库存调整
+import stockAdjust from './stockAdjust';
+import stockListDetail from './stockListDetail';
+
+// 商品管理列表
+// 根据条件分页查询商品清单，并排序
+import queryCommodityList from './queryCommodityList';
 
 export {
     fetchSupplierList,
@@ -57,11 +119,67 @@ export {
     fetchCategory,
     fectheEditorContent,
     modifyUpDateCategory,
-    fetchInsertCategoryGoodsOrder,
     modifyUpdatePageBase,
     modifyToAddCategory,
     modifyMediaAddVisible,
     modifyDeleteOrderNum,
     modifyToAddInsertpage,
-    fetchFindStaticPageList
+    fetchFindStaticPageList,
+    /*********************procurement added by twh************************* */
+    fetchPoMngList,
+    changePoMngSelectedRows,
+    deletePoByIds,
+    fetchPoPrintList,
+    getWarehouseAddressMap,
+    getShopAddressMap,
+    getSupplierMap,
+    getSupplierLocMap,
+    getBigClassMap,
+    getMaterialMap,
+    initPoDetail,
+    createPo,
+    auditPo,
+    fetchPoDetail,
+    updatePoBasicinfo,
+    addPoLines,
+    updatePoLine,
+    deletePoLine,
+    fetchPoRcvMngList,
+    fetchPoRcvList,
+    fetchPoRcvDetail,
+    fetchPoRcvInit,
+    updatePoRcvLine,
+    updatePoRcvBasicinfo,
+    createPoRcv,
+
+    // IBM
+    fetchCheckMainSupplier,
+    fecthGetProdPurchaseById,
+    fetchChangeSupType,
+
+    fetchQuerySettledList,
+    suppplierSettledAudit,
+    supplierAdrSettledAudit,
+    modifyAuditAdrVisible,
+    getProductById,
+    queryProdPurchaseExtByCondition,
+    UpdateProdPurchase,
+    ChangeProPurchaseStatus,
+    GetWarehouseInfo1,
+
+    // 库存调整
+    stockAdjust,
+    stockListDetail,
+    fetchQueryManageList,
+    fetchGetProductById,
+    fetchEditBeforeAfter,
+    AuditSupplierEditInfo,
+
+    // 根据条件分页查询商品清单，并排序
+    queryCommodityList,
+    fetchAddProdPurchase,
+    fetchQueryProdByCondition,
+    fetchUpdateProdPurchase,
+    fetchChangeProPurchaseStatus,
+    fetchDeleteProdPurchaseById
 }

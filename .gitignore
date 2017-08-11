@@ -3,10 +3,12 @@ dist/
 
 # node ignore
 node_modules/
+.vscode/
 
 #ide file
 .DS_Store
 .idea/
+.vscode/
 
 #log file
 ncp-debug.log

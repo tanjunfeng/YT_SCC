@@ -33,7 +33,7 @@ class Utils {
      *
      * @param {string} str 目标字符串
      */
-    static trim(str) {
+    static trim(str = '') {
         return str.toString().replace(/(^\s*)|(\s*$)/g, '');
     }
 
@@ -42,7 +42,7 @@ class Utils {
      *
      * @param {string} str 目标字符串
      */
-    static ltrim(str) {
+    static ltrim(str = '') {
         return str.toString().replace(/(^\s*)/g, '');
     }
 
@@ -51,7 +51,7 @@ class Utils {
      *
      * @param {string} str 目标字符串
      */
-    static rtrim(str) {
+    static rtrim(str = '') {
         return str.toString().replace(/(\s*$)/g, '');
     }
 
@@ -187,6 +187,102 @@ class Utils {
         /* eslint-disable */
         window.open(`${config.apiHost}${url}?${util.parseQuerystring(query)}`)
         /* eslint-enable */
+    }
+
+    /**
+     * 筛选出数组中不通项
+     *
+     * @param {Array[*]} arr 目标数组
+     * @param {Array[*]} arrays 被检测数组
+     * @return {Array[*]} res 新的数组
+     */
+    static diff(arr, arrays) {
+        const argsLen = arguments.length;
+        const len = arr.length;
+        const res = [];
+        let i = -1;
+
+        if (argsLen === 1) {
+            return arr;
+        }
+
+        while (++i < len) {
+            if (arrays.indexOf(arr[i]) === -1) {
+                res.push(arr[i]);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 价格区间是否连续
+     *
+     * @param {Array[number]} arr 价格区间数组
+     * @return {boolean} 是否连续
+     */
+    static isContinuity(arr) {
+        let i = 0;
+        while (arr[i + 1]) {
+            if (arr[i].endNumber + 1 !== arr[i + 1].startNumber) {
+                return false;
+            }
+            i++;
+        }
+        return true;
+    }
+
+    static isWindow(obj) {
+        return obj != null && obj == obj.window;
+    }
+
+    static isObject(obj) {
+        const type = typeof obj;
+        return obj != null && (type === 'object' || type === 'function');
+    }
+
+    static isPlainObject(obj) {
+        return this.isObject(obj)
+            && !this.isWindow(obj)
+            && Object.getPrototypeOf(obj) == Object.prototype;
+    }
+
+    /**
+     * 简易版本 对比两个 Object 是否一样
+     *
+     * @param {Object}
+     * @param {Object}
+     */
+    static isEqual(a, b) {
+        // Of course, we can do it use for in
+        // Create arrays of property names
+        const aProps = Object.getOwnPropertyNames(a);
+        const bProps = Object.getOwnPropertyNames(b);
+
+        // If number of properties is different,
+        // objects are not equivalent
+        if (aProps.length !== bProps.length) {
+            return false;
+        }
+
+        for (let i = 0; i < aProps.length; i++) {
+            const propName = aProps[i];
+            const aChild = a[propName];
+            const bChild = b[propName];
+
+            if (this.isPlainObject(aChild) && !this.isEqual(aChild, bChild)) {
+                return false;
+            }
+
+            if (!this.isObject(aChild) && aChild !== bChild) {
+                // If values of same property are not equal,
+                // objects are not equivalent
+                return false;
+            }
+        }
+
+        // If we made it this far, objects
+        // are considered equivalent
+        return true;
     }
 }
 

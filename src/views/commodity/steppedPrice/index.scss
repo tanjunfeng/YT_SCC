@@ -1,0 +1,34 @@
+.stepped-Price {
+    display: inline-block;
+    width: 100%;
+    &-tip {
+        color: #ccc;
+    }
+    &-title {
+        overflow: hidden;
+    }
+    &-title-left {
+        float: left;
+    }
+    &-title-right {
+        // float: right;
+        margin-left: 174px;
+    }
+    &-item-result {
+        margin-left: 20px;
+    }
+    &-step {
+        margin: 0 6px;
+        color: #d9d9d9;
+    }
+    &-icon-minus, &-icon-plus {
+        cursor: pointer;
+        margin-left: 4px;
+        &:hover {
+            color: #108ee9;
+        }
+    }
+    .ant-input-number {
+        width: 90px;
+    }
+}

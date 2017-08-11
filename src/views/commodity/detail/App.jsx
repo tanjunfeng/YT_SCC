@@ -40,7 +40,6 @@ class SaleDetail extends PureComponent {
             mainImage,
             images
         } = commodity;
-        console.log(childSkus)
         // if (childSkus.length === 0) {
         //     return null
         // }

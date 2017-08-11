@@ -13,8 +13,8 @@ const initState = Immutable.fromJS({
     // 供应商管理列表
     data: {},
 
-    // 弹出框数据 
-    visibleData: {},
+    // 弹出框数据
+    visibleData: false,
 
     informationVisible: false,
 
@@ -26,6 +26,8 @@ const initState = Immutable.fromJS({
 
     // 控制弹出框显示影藏
     toAddPriceVisible: false,
+    // 修改采购关系
+    updateProdPurchase: false,
     // 是否是编辑
     isEdit: false,
     purchasingPiceVisible: false,
@@ -56,6 +58,31 @@ const initState = Immutable.fromJS({
     // 查询供应商
     queryAll: [],
 
+    // IBM 修改
+    // 查看是否存在主供应商
+    checkMainSupplier: false,
+    // 查询商品价格信息
+    getProdPurchaseById: {},
+    // 根据主键查询商品采购关系
+    getProdPurchaseByIds: {},
+
+    // 根据条件查询商品价格信息
+    purchaseCardData: {},
+
+    // 根据条件查询商品价格信息
+    changeSupType: {},
+
+    // 查询商品信息
+    getProductById: {},
+
+    // 阶梯价格列表
+    stepPriceList: [],
+
+    // 更新商品信息
+    updateProdRecord: {},
+
+    // 地点关联
+    getWarehouseLogicInfo: {}
 
 });
 
@@ -91,7 +118,7 @@ export default function (state = initState, action) {
                 .set('visibleData', id)
                 .set('isEdit', isEdit)
                 .set('pricingId', pricingId)
-                .set('id',id)
+                .set('id', id)
                 ;
         }
 
@@ -109,14 +136,20 @@ export default function (state = initState, action) {
                 ;
         }
 
+        // 修改采购价格弹窗
+        case ActionType.UPDATE_PROD_PURCHASE_BYID: {
+            const { isVisible, record } = action.payload;
+            return state.set('updateProdPurchase', isVisible).set('updateProdRecord', record)
+        }
+
         case ActionType.RECEIVE_COMMODITY_DETAIL:
             return state.set('commodityDetail', action.payload);
 
         case ActionType.RECEIVE_GET_PURCHASE_PRICE_DETAIL:
             return state.set('purchasePrice', action.payload);
 
-        case ActionType.REQUEST_ADD_SELL_PRICE:
-            return state.set('toAddPriceVisible', action.payload);
+        // case ActionType.REQUEST_ADD_SELL_PRICE:
+        //     return state.set('toAddPriceVisible', action.payload);
 
         case ActionType.REQUEST_ADD_PURCHASEMENT_PRICE:
             return state.set('toPurchasePriceVisible', action.payload);
@@ -129,6 +162,31 @@ export default function (state = initState, action) {
             // 在售商品列表下架功能
             return state;
         }
+
+        case ActionType.CHECK_MAIN_SUPPLIER:
+            return state.set('checkMainSupplier', action.payload);
+
+        case ActionType.GET_PRODPURCHASE_BYID:
+            return state.set('getProdPurchaseByIds', action.payload);
+
+        case ActionType.QUERY_PRODPURCHASE_BYID:
+            return state.set('getProdPurchaseById', action.payload);
+
+        case ActionType.CHANGE_SUPPLIER_TYPE:
+            return state.set('changeSupType', action.payload);
+
+        case ActionType.GET_PRODUCT_BY_ID:
+            return state.set('getProductById', action.payload);
+
+        case ActionType.RECEIVE_PRICE_INFO:
+            return state.set('stepPriceList', action.payload)
+
+        case ActionType.QUERY_PRODBY_CONDITION:
+            return state.set('purchaseCardData', action.payload);
+
+        case ActionType.GER_WARE_HOUSE_LOGIC_INFO:
+            return state.set('getWarehouseLogicInfo', action.payload);
+
         default:
             return state;
     }

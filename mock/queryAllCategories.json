@@ -1,0 +1,60 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "categoryId": "xcate8",
+            "name": "奶制品",
+            "level": 2,
+            "status": null,
+            "parentCategoryId": "xcate1",
+            "sortOrder": 1,
+            "newSortOrder": null,
+            "displayStatus": 0,
+            "childCategories": []
+        },
+        {
+            "categoryId": "xcate9",
+            "name": "水饮料",
+            "level": 2,
+            "status": null,
+            "parentCategoryId": "xcate1",
+            "sortOrder": 2,
+            "newSortOrder": null,
+            "displayStatus": 0,
+            "childCategories": []
+        },
+        {
+            "categoryId": "xcate10",
+            "name": "烟草",
+            "level": 3,
+            "status": null,
+            "parentCategoryId": "xcate1",
+            "sortOrder": 3,
+            "newSortOrder": null,
+            "displayStatus": 0,
+            "childCategories": []
+        },
+        {
+            "categoryId": "xcate4926",
+            "name": "sdgfs",
+            "level": null,
+            "status": null,
+            "parentCategoryId": "xcate1",
+            "sortOrder": 0,
+            "newSortOrder": null,
+            "displayStatus": 0,
+            "childCategories": []
+        },
+        {
+            "categoryId": "xcat26",
+            "name": "啊啊啊",
+            "level": null,
+            "status": null,
+            "parentCategoryId": "xcate1",
+            "sortOrder": 0,
+            "newSortOrder": null,
+            "displayStatus": 0,
+            "childCategories": []
+        }
+    ]
+}

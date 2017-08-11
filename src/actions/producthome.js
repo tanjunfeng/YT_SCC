@@ -21,7 +21,15 @@ import {
     toUpdateSellPrice,
     updateSellPrice,
     updatePurchasePrice,
-    deletePurchasePriceById
+    deletePurchasePriceById,
+    getProductById,
+    addProdPurchase,
+    getProdPurchaseById,
+    queryProdPurchaseExtByCondition,
+    fetchChangeSupType,
+    updateProdPurchase,
+    changeProPurchaseStatus,
+    getWarehouseInfo1
 } from '../service';
 import ActionType from './ActionType';
 
@@ -65,7 +73,7 @@ const receiveAddPriceVisible = (data) => ({
     payload: data,
 });
 
-export const ProductAddPriceVisible = (isShow) => dispatch =>
+export const productAddPriceVisible = (isShow) => dispatch =>
     dispatch(receiveAddPriceVisible(isShow));
 
 // 跳转采购价格弹窗
@@ -103,7 +111,7 @@ const receivetoUpdate = (data) => ({
 
 export const toUpdateSell = (params) => dispatch => (
     new Promise((resolve, reject) => {
-       toUpdateSellPrice(params)
+        toUpdateSellPrice(params)
             .then(res => {
                 dispatch(receivetoUpdate(res.data));
                 resolve(res.data);
@@ -114,6 +122,7 @@ export const toUpdateSell = (params) => dispatch => (
     })
 )
 
+// 商品管理详情页-commidifyDetail
 const receiveDetail = (data) => ({
     type: ActionType.RECEIVE_COMMODITY_DETAIL,
     payload: data,
@@ -305,3 +314,163 @@ export const QueryAllSupplier = (params) => dispatch => (
     })
 )
 
+// 新增商品采购关系
+const receiveAddProdPurchase = (data) => ({
+    type: ActionType.REQUEST_ADD_SELL_PRICE,
+    payload: data,
+});
+
+export const AddProdPurchase = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        addProdPurchase(params)
+            .then(res => {
+                dispatch(receiveAddProdPurchase(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 查询商品信息
+const receiveGetProductById = (data) => ({
+    type: ActionType.GET_PRODUCT_BY_ID,
+    payload: data,
+});
+
+export const GetProductById = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        getProductById(params)
+            .then(res => {
+                dispatch(receiveGetProductById(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 查询商品信息
+const receiveGetProdPurchaseById = (data) => ({
+    type: ActionType.GET_PRODPURCHASE_BYID,
+    payload: data,
+});
+
+export const GetProdPurchaseById = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        getProdPurchaseById(params)
+            .then(res => {
+                dispatch(receiveGetProdPurchaseById(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 根据条件查询商品价格信息
+const receiveQueryProdPurchaseExtByCondition = (data) => ({
+    type: ActionType.QUERY_PRODBY_CONDITION,
+    payload: data,
+});
+
+export const QueryProdPurchaseExtByCondition = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryProdPurchaseExtByCondition(params)
+            .then(res => {
+                dispatch(receiveQueryProdPurchaseExtByCondition(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 更改供应商类型
+const receiveChangeSupplierType = (data) => ({
+    type: ActionType.QUERY_PRODBY_CONDITION,
+    payload: data,
+});
+
+export const ChangeSupplierType = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        fetchChangeSupType(params)
+            .then(res => {
+                dispatch(receiveChangeSupplierType(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 修改采购关系
+const receiveUpdateProdPurchase = (data) => ({
+    type: ActionType.UPDATE_PROD_PURCHASE_BYID,
+    payload: data,
+});
+
+export const UpdateProdPurchase = (isShow) => dispatch =>
+    dispatch(receiveUpdateProdPurchase(isShow));
+
+// 修改采购关系
+const receiveUpdateProd = (data) => ({
+    type: ActionType.UPDATE_PROD_PURCHASE_BY_ID,
+    payload: data,
+});
+
+export const ChangeUpdateProd = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        updateProdPurchase(params)
+            .then(res => {
+                dispatch(receiveUpdateProd(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 修改采购关系
+const receiveChangeProPurchaseStatus = (data) => ({
+    type: ActionType.CHANGE_PROPURCHASE_STATUS,
+    payload: data,
+});
+
+export const ChangeProPurchaseStatus = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        changeProPurchaseStatus(params)
+            .then(res => {
+                dispatch(receiveChangeProPurchaseStatus(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 查询逻辑仓库列表
+const receiveGetWarehouseInfo1 = (data) => ({
+    type: ActionType.GER_WARE_HOUSE_LOGIC_INFO,
+    payload: data,
+});
+
+export const GetWarehouseInfo1 = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        getWarehouseInfo1(params)
+            .then(res => {
+                dispatch(receiveGetWarehouseInfo1(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)

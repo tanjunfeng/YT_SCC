@@ -1,0 +1,37 @@
+.sell-modal {
+    .ant-modal-body {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    form .ant-input-number {
+        margin-right: 0;
+    }
+    &-item {
+        border: 1px solid #eee;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+    &-item-title {
+        font-size: 14px;
+    }
+    &-item-content {
+        padding: 0 10px;
+    }
+    &-day-input {
+        margin: 0 4px;
+    }
+    &-label {
+        vertical-align: middle;
+    }
+    &-data-pic {
+        vertical-align: middle;
+        display: inline-block;
+        height: 30px;
+    }
+    &.ant-modal {
+        .ant-form-inline .ant-form-explain {
+            left: 30px;
+        }
+    }
+}

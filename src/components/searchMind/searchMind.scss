@@ -1,0 +1,171 @@
+/**
+ * 搜索输入框样式
+ */
+.ywc-smind {
+    position: relative;
+    display: inline-block;
+    width: 300px;
+
+    .ant-table-pagination {
+        margin: 0;
+    }
+
+    &-no-data {
+        padding: 0 8px;
+        text-align: center;
+    }
+
+    &-search-bar {
+        position: relative;
+        display: flex;
+        z-index: 2;
+        border: 1px solid #e1e1e1;
+        border-radius: 4px 4px 0 0;
+
+        .ywc-smind-input-layout,
+        .ywc-smind-icon,
+        .ywc-smind-title {
+            display: inline-block;
+            vertical-align: middle;
+            height: 28px;
+            line-height: 28px;
+        }
+
+        .ywc-smind-title {
+            background: #e1e6ec;
+            padding: 0 10px;
+            max-width: 80px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /**
+         * 输入框容器
+         */
+        .ywc-smind-input-layout {
+            flex: auto;
+            position: relative;
+            //background: #fff;
+            overflow: hidden;
+
+            .ywc-smind-input-view,
+            .ywc-smind-input,
+            .ywc-smind-input-placeholder {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                padding: 0 10px;
+                margin: 0;
+            }
+
+            .ywc-smind-clear {
+                position: absolute;
+                z-index: 10;
+                right: -20px;
+                transition: all .3s;
+                color: #999999;
+
+                &-show {
+                    right: 10px;
+                }
+            }
+
+            .ywc-smind-input {
+                z-index: 2;
+                border: 0;
+                outline: none;
+                background: none;
+                color: #666;
+                text-align: left;
+            }
+
+            .ywc-smind-input-view {
+                position: absolute;
+                z-index: 1;
+                box-sizing: border-box;
+                background: none;
+                color: #888;
+            }
+
+            .ywc-smind-input-placeholder {
+                z-index: 0;
+                box-sizing: border-box;
+                color: #ddd;
+            }
+        }
+
+        .ywc-smind-icon {
+            display: inline-block;
+            padding: 0 10px;
+            background: #e1e6ec;
+        }
+    }
+
+    &-drop-layout {
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        border: 1px solid #e1e1e1;
+        margin-top: -1px;
+        background: #fff;
+        box-shadow: 2px 2px 6px -3px #ccc;
+        border-radius: 0 0 4px 4px;
+        opacity: 1;
+        transition: all .2s;
+        visibility: visible;
+    }
+
+    /**
+     * 下拉状态处理
+     */
+    &.ywc-smind-drop-hide {
+        .ywc-smind-search-bar {
+            border-radius: 4px;
+        }
+
+        .ywc-smind-drop-layout {
+            opacity: 0;
+            visibility: hidden;
+            transition: all .12s;
+        }
+    }
+
+    /**
+     * 组件禁用状态
+     */
+    &.ywc-smind-disabled {
+        color: #bbb;
+
+        .ywc-smind-input-placeholder,
+        .ywc-smind-input {
+            color: #eee;
+        }
+    }
+
+    /**
+     * 容器状态
+     */
+    &.ywc-smind-has-input-view.ywc-smind-drop-hide {}
+
+    /**
+     * Reset Antd style
+     */
+    .ant-table-thead {
+        th {
+            background: none;
+            border-bottom: 1px solid #e9e9e9;
+            padding: 8px !important;
+            text-align: left !important;
+            line-height: 18px !important;
+        }
+    }
+    .ant-table-tbody {
+        td {
+            cursor: pointer;
+            padding: 8px !important;
+            text-align: left !important;
+            line-height: 18px !important;
+        }
+    }
+}

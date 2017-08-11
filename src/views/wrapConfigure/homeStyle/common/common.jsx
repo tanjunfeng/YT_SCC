@@ -1,11 +1,15 @@
 import React, {PureComponent} from 'react';
-import { Icon, Modal, Input, Form, Button, message } from 'antd';
+import { Icon, Modal, Input, Form, Button, message, Select } from 'antd';
 import classnames from 'classnames';
-import { setAreaEnable, moveArea, saveItemAd, uploadImageBase64Data } from '../../../../service';
+import {
+    setAreaEnable, moveArea, saveItemAd,
+    uploadImageBase64Data, batchUpdateQuickNavigation
+} from '../../../../service';
 import ImageUploader from '../../../../common/preImage';
 import FileCut from '../../fileCut';
 
-const  FormItem = Form.Item;
+const FormItem = Form.Item;
+const Option = Select.Option;
 
 function Common(WrappedComponent) {
     @Form.create()
@@ -24,7 +28,8 @@ function Common(WrappedComponent) {
             this.saveItems = ::this.saveItems;
             this.state = {
                 img: '',
-                isEdit: true
+                isEdit: true,
+                select: null
             }
         }
 
@@ -93,7 +98,7 @@ function Common(WrappedComponent) {
                         this.saveItems(values, fileOnServerUrl);
                     })
                 } else if (!isBase64) {
-                    this.saveItems(values);
+                    this.saveItems(values, image);
                 }
             })
         }
@@ -101,7 +106,7 @@ function Common(WrappedComponent) {
         saveItems(values, imgUrl) {
             const { current } = this.state;
             const { areaId, id, adType, name, icon } = current;
-            const { title, subTitle, url, productNo } = values;
+            const { title, subTitle, url, productNo, urlType } = values;
             saveItemAd({
                 id,
                 areaId,
@@ -111,6 +116,7 @@ function Common(WrappedComponent) {
                 url,
                 adType,
                 productNo,
+                urlType,
                 icon: imgUrl ? imgUrl : url
             }).then(() => {
                 this.props.fetchAreaList();
@@ -148,8 +154,38 @@ function Common(WrappedComponent) {
             })
         }
 
+        handleDisableFirst = () => {
+            const { fetchAreaList, data } = this.props;
+            const { itemAds } = data;
+            const status = itemAds[4].status;
+            batchUpdateQuickNavigation({
+                ids: [1, 2, 3, 4, 5],
+                status: status === 1 ? 0 : 1
+            }).then(() => {
+                fetchAreaList()
+            })
+        }
+
+        handleDisablSecond = () => {
+            const { fetchAreaList, data } = this.props;
+            const { itemAds } = data;
+            const status = itemAds[5].status;
+            batchUpdateQuickNavigation({
+                ids: [6, 7, 8, 9, 10],
+                status: status === 1 ? 0 : 1
+            }).then(() => {
+                fetchAreaList()
+            })
+        }
+
+        handleLinkStyleChange = (type) => {
+            this.setState({
+                select: type
+            })
+        }
+
         render() {
-            const { data = {} } = this.props;
+            const { data = {}, type } = this.props;
             const { isEnabled } = data;
             const { getFieldDecorator } = this.props.form;
             const { current } = this.state;
@@ -159,7 +195,8 @@ function Common(WrappedComponent) {
                         'home-style-common',
                         {
                             'home-style-common-disable': !isEnabled,
-                            'home-style-common-enable': isEnabled
+                            'home-style-common-enable': isEnabled,
+                            'home-style-common-quick': type === 'quick'
                         })}
                 >
                     <WrappedComponent
@@ -169,24 +206,63 @@ function Common(WrappedComponent) {
                         saveBase64={this.saveBase64}
                     />
                     <ul className="home-style-common-btns">
-                        <li className="home-style-common-btns1">
-                            <Button
-                                type="primary"
-                                size="large"
-                                onClick={this.handleEnable}
-                            >
-                                启用
-                            </Button>
-                        </li>
-                        <li className="home-style-common-btns2">
-                            <Button
-                                type="primary"
-                                size="large"
-                                onClick={this.handleDisable}
-                            >
-                                停用
-                            </Button>
-                        </li>
+                        {
+                            type !== 'quick' &&
+                            <li className="home-style-common-btns1">
+                                <Button
+                                    type="primary"
+                                    size="large"
+                                    onClick={this.handleEnable}
+                                >
+                                    启用
+                                </Button>
+                            </li>
+                        }
+                        {
+                            type !== 'quick' &&
+                            <li className="home-style-common-btns2">
+                                <Button
+                                    type="primary"
+                                    size="large"
+                                    onClick={this.handleDisable}
+                                >
+                                    停用
+                                </Button>
+                            </li>
+                        }
+                        {
+                            type === 'quick' &&
+                            <li className="home-style-common-btns2">
+                                <Button
+                                    type="primary"
+                                    size="large"
+                                    onClick={this.handleDisableFirst}
+                                >
+                                    {
+                                        data.itemAds[4].status === 0
+                                        ? '启用第一栏'
+                                        : '停用第一栏'
+                                    }
+                                </Button>
+                            </li>
+                            
+                        }
+                        {
+                            type === 'quick' &&
+                            <li className="home-style-common-btns2">
+                                <Button
+                                    type="primary"
+                                    size="large"
+                                    onClick={this.handleDisablSecond}
+                                >
+                                    {
+                                        data.itemAds[5].status === 0
+                                        ? '启用第二栏'
+                                        : '停用第二栏'
+                                    }
+                                </Button>
+                            </li>
+                        }
                         {
                             this.props.index !== 0 &&
                             <li className="home-style-common-btns2">
@@ -213,12 +289,9 @@ function Common(WrappedComponent) {
                         }
                     </ul>
                     {
-                        !isEnabled &&
-                        <div className="home-style-common-isEnabled" />
-                    }
-                    {
                         this.state.uploadVisible &&
                         <Modal
+                            isEnabled
                             title={current.name}
                             visible={this.state.uploadVisible}
                             onOk={this.handleUpOk}
@@ -257,34 +330,60 @@ function Common(WrappedComponent) {
                                     </FormItem>
                                 </div>
                                 <div>
-                                    <span>商品编号(须填写对应商品编号/非必填)：</span>
                                     <FormItem className="home-style-modal-input-item">
-                                        {getFieldDecorator('productNo', {
-                                            rules: [
-                                                {max: 20, message: '最大长度20个汉字'}
-                                            ],
-                                            initialValue: current.productNo
+                                        <span className="modal-form-item-title">
+                                            <span style={{color: '#f00' }}>*</span>
+                                            链接类型：&nbsp;
+                                        </span>
+                                        {getFieldDecorator('urlType', {
+                                            rules: [{
+                                                required: true,
+                                                message: '请选择链接类型'
+                                            }],
+                                            initialValue: current.urlType ? `${current.urlType}` : '0'
                                         })(
-                                            <Input type="text" placeholder="请输入商品编号" />
+                                            <Select
+                                                style={{ width: 240 }}
+                                                onChange={this.handleLinkStyleChange}
+                                            >
+                                                <Option value="1">商品链接</Option>
+                                                <Option value="0">静态活动页面</Option>
+                                            </Select>
                                         )}
                                     </FormItem>
                                 </div>
-                                <div>
-                                    <span>超链接：</span>
-                                    <FormItem className="home-style-modal-input-item">
-                                        {getFieldDecorator('url', {
-                                            rules: [
-                                                {required: true, message: '请输入超链接'},
-                                                /* eslint-disable */
-                                                {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'}
-                                                /* eslint-enable */
-                                            ],
-                                            initialValue: current.url
-                                        })(
-                                            <Input type="textarea" rows={2} placeholder="请输入超链接" />
-                                        )}
-                                    </FormItem>
-                                </div>
+                                {
+                                    this.state.select
+                                    ? <div>
+                                        <FormItem className="home-style-modal-input-item">
+                                            <span>商品编号：</span>
+                                            {getFieldDecorator('productNo', {
+                                                rules: [
+                                                    {max: 20, message: '最大长度20个汉字'}
+                                                ],
+                                                initialValue: current.productNo
+                                            })(
+                                                <Input className="home-style-url" type="text" placeholder="请输入商品编号" />
+                                            )}
+                                        </FormItem>
+                                    </div>
+                                    : <div>
+                                        <FormItem className="home-style-modal-input-item">
+                                            <span>超链接：</span>
+                                            {getFieldDecorator('url', {
+                                                rules: [
+                                                    {required: true, message: '请输入超链接'},
+                                                    /* eslint-disable */
+                                                    {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'}
+                                                    /* eslint-enable */
+                                                ],
+                                                initialValue: current.url
+                                            })(
+                                                <Input className="home-style-url" type="textarea" rows={2} placeholder="请输入超链接" />
+                                            )}
+                                        </FormItem>
+                                    </div>
+                                }
                                 <div>
                                     <span>商品icon(支持PNG，建议大小{`${current.width}x${current.height}`}px，100k以内)：</span>
                                     <FileCut

@@ -1,0 +1,56 @@
+.po-rcv-detail {
+    margin-top: 10px;
+    .basic-box,
+    .materials {
+        margin-bottom: 15px;
+        border: 1px solid #C3C4C7;
+        color: #515151;
+        border-radius: 2px;
+        .header {
+            background-color: #F9f9f9;
+            border-bottom: 1px solid #C3C4C7;
+            padding: 8px 18px;
+            color: #242424;
+            font-size: 14px;
+            &-icon {
+                font-size: 16px;
+                margin-right: 8px;
+            }
+        }
+    }
+    &-body {
+        padding: 0 18px;
+    }
+    .ant-form-item-label label {
+        min-width: 100px;
+        display: inline-block;
+    }
+    .text {
+        min-width: 80px;
+        display: inline-block;
+        line-height: 32px;
+        font-size: 12px;
+    }
+    .small {
+        .ywc-smind {
+            width: 200px;
+        }
+    }
+    .middle {
+        .ywc-smind {
+            width: 250px;
+        }
+    }
+    .row {
+        display: flex;
+        justify-content: space-between;
+        .item-box {
+            display: flex;
+            flex-direction: row;
+        }
+        .label {
+            margin-right: 8px;
+            display: inline-block;
+        }
+    }
+}

@@ -1,0 +1,56 @@
+.prod-modal {
+    .ant-modal-body {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    form .ant-input-number {
+        margin-right: 0;
+    }
+    &-item {
+        border: 1px solid #eee;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+    &-item-title {
+        font-size: 14px;
+    }
+    &-item-content {
+        padding: 0 10px;
+    }
+    &-barcode-input {
+        display: inline-block;
+        .ant-input-number {
+            width: 100%;
+        }
+    }
+    &-warehouse-input {
+        display: inline-block;
+    }
+    &-label {
+        display: inline-block;
+        width: 80px;
+        text-align: right;
+        margin-right: 10px;
+        vertical-align: middle;
+        
+    }
+    .ant-form-item {
+        margin-bottom: 10px;
+    }
+    .has-error .ant-form-explain, .has-error .ant-form-split {
+        margin-left: 92px;
+    }
+    .ant-form-inline .ant-form-item {
+        margin-right: 0px;
+    }
+    &-data-pic {
+        vertical-align: middle;
+        display: inline-block;
+        height: 30px;
+    }
+    &-barcode-input{
+        top: 7px;
+        right: -90px;
+    }
+}

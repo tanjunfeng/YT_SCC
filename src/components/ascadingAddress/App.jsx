@@ -84,13 +84,13 @@ class CasadingAddress extends PureComponent {
             }
             this.setState({...data});
         })
-        for (let i = 0; i < showNum; i++) {
+        for (let i = 0; i < showNum-1; i++) {
             const code = defaultValue[i];
             const index = i + 1;
             if (code && !(gegion[index] && gegion[index][code])) {
                 this.props.fetchRegionByCode({type: index, code}).then(() => {
                     this.setState({
-                        select: index
+                        select: 3
                     });
                 });
             } else if (code) {
@@ -275,11 +275,11 @@ CasadingAddress.propTypes = {
 };
 
 CasadingAddress.defaultProps = {
-    showNum: 3,
+    showNum: '3',
     onChange: () => {},
     hasAll: false,
     defaultValue: [],
-    width: '140px',
+    width: '100px',
     marginRight: '10px'
 }
 

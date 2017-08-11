@@ -6,12 +6,18 @@
 
 import Promise from 'bluebird';
 import ActionType from './ActionType';
-import { queryCategorys } from '../service';
+import {
+    queryAllCategories,
+    queryBrandsByPages,
+    updateSortNum,
+    updateShowStatus,
+    test,
+} from '../service';
 import { ClassifiedList } from '../view-model';
 
-export const addAction = () => {}
-export const putAction = () => {}
-export const delAction = () => {}
+export const addAction = () => {};
+export const putAction = () => {};
+export const delAction = () => {};
 
 export const receiveData = (data) => ({
     type: ActionType.RECEIVE_CLASSIFIED_LIST,
@@ -23,7 +29,7 @@ export const receiveData = (data) => ({
  * @param params
  */
 export const fetchAction = (params) => dispatch => (
-    queryCategorys(params)
+    queryAllCategories(params)
         .then(res => {
             dispatch(
                 receiveData(
@@ -34,5 +40,33 @@ export const fetchAction = (params) => dispatch => (
         .catch(err => Promise.reject(err))
 )
 
+/**
+ * 修改显示状态
+ * @param id
+ * @param displayStatus
+ */
+export const updateShowStatusAction = ({ id, displayStatus }) => updateShowStatus({ id, displayStatus });
 
+/**
+ * 修改排序
+ * @param id
+ * @param sortOrder
+ * @param newSortOrder
+ */
+export const updateSortNumAction = ({ id, sortOrder, newSortOrder }) => updateSortNum({ id, sortOrder, newSortOrder });
 
+/**
+ * 请求品牌列表
+ * @param params
+ */
+export const fetchBrandsByPages = (params) => (
+    new Promise((resolve, reject) => {
+        queryBrandsByPages(params)
+            .then(res => {
+                resolve(res.data);
+            })
+            .catch(err => {
+                reject(err);
+            });
+    })
+);
