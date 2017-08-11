@@ -245,7 +245,7 @@ class SaleCard extends Component {
                             onClick={this.handleDelete}
                         >
                             &times;
-                        </a> 
+                        </a>
                         <div className={`${prefixCls}-card-wrap`}>
                             <p>
                                 <span>子公司 : </span>
@@ -283,7 +283,6 @@ class SaleCard extends Component {
                                         })
                                     }
                                 </ul>
-                                
                             </p>
                             <p>
                                 <span>建议零售价(元) : </span>
@@ -338,13 +337,10 @@ class SaleCard extends Component {
 SaleCard.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
     fecthCheckMainSupplier: PropTypes.func,
-    fetchDeleteProdPurchaseById: PropTypes.func,
     fetchUpdateProdPurchase: PropTypes.func,
     fetchChangeProPurchaseStatus: PropTypes.func,
     prefixCls: PropTypes.string,
     index: PropTypes.number,
-    fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),
-    isSale: PropTypes.bool,
     initalValue: PropTypes.objectOf(PropTypes.any),
     handleDelete: PropTypes.func,
     handleChangeStatus: PropTypes.func,

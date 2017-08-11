@@ -254,6 +254,9 @@ class CheckReason extends PureComponent {
      */
     handleAuditCancel() {
         this.props.modifyCheckReasonVisible({isVisible: false});
+        this.setState({
+            selected: -1
+        })
     }
 
     /**
@@ -297,60 +300,65 @@ class CheckReason extends PureComponent {
         const formData = parse(before, after, TEXT);
 
         return (
-            <Modal
-                title="供应商修改资料审核"
-                visible={this.props.checkResonVisible}
-                onOk={this.handleAuditOk}
-                onCancel={this.handleAuditCancel}
-                maskClosable={false}
-            >
-                <span>修改资料详情</span>
-                <Table
-                    columns={columns}
-                    dataSource={formData}
-                    pagination={false}
-                    size="small"
-                />
-                <div>
-                    <div className="application-modal-tip">
-                        注意：审核通过，供应商的所有账号可正常登录商家后台系统。
-                    </div>
-                    {
-                        this.props.modifyCheckReasonVisible &&
-                        <div className="application-modal-select">
-                            <span className="application-modal-label">审核：</span>
-                            <Select
-                                style={{ width: '153px', marginLeft: '15px' }}
-                                size="default"
-                                placeholder="请选择"
-                                onChange={this.handleSelectChange}
-                            >
-                                <Option value="2">通过</Option>
-                                <Option value="1">不通过</Option>
-                            </Select>
+            <div>
+                {
+                    this.props.checkResonVisible &&
+                    <Modal
+                        title="供应商修改资料审核"
+                        visible={this.props.checkResonVisible}
+                        onOk={this.handleAuditOk}
+                        onCancel={this.handleAuditCancel}
+                        maskClosable={false}
+                    >
+                        <span>修改资料详情</span>
+                        <Table
+                            columns={columns}
+                            dataSource={formData}
+                            pagination={false}
+                            size="small"
+                        />
+                        <div>
+                            <div className="application-modal-tip">
+                                注意：审核通过，供应商的所有账号可正常登录商家后台系统。
+                            </div>
+                            {
+                                this.props.modifyCheckReasonVisible &&
+                                <div className="application-modal-select">
+                                    <span className="application-modal-label">审核：</span>
+                                    <Select
+                                        style={{ width: '153px', marginLeft: '15px' }}
+                                        size="default"
+                                        placeholder="请选择"
+                                        onChange={this.handleSelectChange}
+                                    >
+                                        <Option value="2">通过</Option>
+                                        <Option value="1">不通过</Option>
+                                    </Select>
+                                </div>
+                            }
+                            {
+                                this.props.modifyCheckReasonVisible && this.state.selected === '1' &&
+                                <Form layout="inline">
+                                    <FormItem className="application-form-item">
+                                        <span className="application-modal-label">*不通过原因：</span>
+                                        {getFieldDecorator('failedReason', {
+                                            rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
+                                        })(
+                                            <Input
+                                                onChange={this.handleTextChange}
+                                                type="textarea"
+                                                placeholder="请输入不通过原因"
+                                                className="application-modal-textarea"
+                                                autosize={{ minRows: 2, maxRows: 8 }}
+                                            />
+                                            )}
+                                    </FormItem>
+                                </Form>
+                            }
                         </div>
-                    }
-                    {
-                        this.props.modifyCheckReasonVisible && this.state.selected === '1' &&
-                        <Form layout="inline">
-                            <FormItem className="application-form-item">
-                                <span className="application-modal-label">*不通过原因：</span>
-                                {getFieldDecorator('failedReason', {
-                                    rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
-                                })(
-                                    <Input
-                                        onChange={this.handleTextChange}
-                                        type="textarea"
-                                        placeholder="请输入不通过原因"
-                                        className="application-modal-textarea"
-                                        autosize={{ minRows: 2, maxRows: 8 }}
-                                    />
-                                    )}
-                            </FormItem>
-                        </Form>
-                    }
-                </div>
-            </Modal>
+                    </Modal>
+                }
+            </div>
         );
     }
 }
