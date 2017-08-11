@@ -118,7 +118,7 @@ class PoMngList extends PureComponent {
         }
         // 删除选中项并刷新采购单列表
         Modal.confirm({
-            title: '删除的采购但不能恢复，你确认要删除选中采购单？',
+            title: '删除的采购单不能恢复，你确认要删除选中采购单？',
             onOk: () => {
                 this.props.deletePoByIds({
                     pmPurchaseOrderIds: this.deleteListData.join()
@@ -142,7 +142,6 @@ class PoMngList extends PureComponent {
     singleRowsDelete = (record) => {
         this.deleteListData = [];
         this.deleteListData.push(record.id);
-        console.log(this.deleteListData)
         this.applyDelete();
     }
 
