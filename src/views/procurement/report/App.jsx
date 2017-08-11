@@ -11,13 +11,11 @@ import { connect } from 'react-redux';
 import {
     Row,
     Col,
-    Icon,
     Table,
     Button
 } from 'antd';
 
-import { fetchPoMngList } from '../../../actions';
-import { poMngListColumns } from '../columns';
+import { printColumns } from '../columns';
 
 @connect(state => ({
     ReportPoList: state.toJS().procurement.ReportPoList
@@ -42,9 +40,8 @@ class Report extends PureComponent {
                     <div className="head">
                         <Row type="flex" justify="end" >
                             {/*这里放置根据采购单号生成的条形码 */}
-                            <div >
-                                <img alt='条形码' src={data.barCodeUrl} />
-                                <Icon type="barcode" style={{ fontSize: 30 }} />
+                            <div style={{textAlign: 'center'}}>
+                                <img alt="条形码" src={data.barCodeUrl} />
                             </div>
                         </Row>
                         <Row type="flex" justify="center" >
@@ -100,7 +97,7 @@ class Report extends PureComponent {
                     <div style={{ height: 10 }} />
                     <div className="material">
                         <div className="lines">
-                            <Table dataSource={data.pmPurchaseOrderItems} pagination={false} columns={poMngListColumns} bordered rowKey="id" />
+                            <Table dataSource={data.pmPurchaseOrderItems} pagination={false} columns={printColumns} bordered rowKey="id" />
                         </div>
                         <div className="lines-footer">
                             <Row type="flex" justify="start">
