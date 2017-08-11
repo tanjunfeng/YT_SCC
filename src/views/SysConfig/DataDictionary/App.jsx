@@ -74,7 +74,7 @@ class DataDictionary extends PureComponent {
             content: '确定删除数据字典？',
             onOk: () => {
                 this.props.DeleteDictionary({ id })
-                    .then(() => {
+                    .then((res) => {
                         this.fetNewData()
                     })
             },
@@ -159,13 +159,13 @@ class DataDictionary extends PureComponent {
                                 </div>
                             </FormItem>
                             <FormItem>
-                                <Button onClick={this.handleAddWatch} type="primary" size="default">
-                                    新增
+                                <Button type="primary" size="default" onClick={this.handleQuery}>
+                                    查询
                                 </Button>
                             </FormItem>
                             <FormItem>
-                                <Button size="default" onClick={this.handleQuery}>
-                                    查询
+                                <Button onClick={this.handleAddWatch} size="default">
+                                    新增
                                 </Button>
                             </FormItem>
                         </span>
