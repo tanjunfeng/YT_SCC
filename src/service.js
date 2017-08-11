@@ -65,7 +65,7 @@ export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
 export const exportOrderList = '/sorder/toExcel';
 
 // 下载采购订单PDF
-export const exportProcurementPdf = '/pmPurchaseOrder/exportPdf';
+export const exportProcurementPdf = 'pmPurchaseOrder/exportPdf';
 
 /**
  * 登录 Api
@@ -736,4 +736,4 @@ export const updateSellPriceStatus = (params) => http.get('/prodSell/updateSellP
 export const getNewPmPurchaseOrderItem = (params) => http.get('/pmPurchaseOrder/getNewPmPurchaseOrderItem', params);
 
 // 采购订单-审批
-export const auditPurchaseOrderInfo = (params) => http.get('/pmPurchaseOrder/auditPurchaseOrderInfo', params);
+export const auditPurchaseOrderInfo = (params) => http.post('/pmPurchaseOrder/auditPurchaseOrderInfo', params);

@@ -121,6 +121,7 @@ class PoDetail extends PureComponent {
 		this.renderPeriod = ::this.renderPeriod;
 		this.renderPayType = ::this.renderPayType;
 		this.getAllValue = ::this.getAllValue;
+		this.applySupplierClear = ::this.applySupplierClear;
 		let that = this;
 		// 采购单商品行信息
 		this.columns = [
@@ -230,6 +231,10 @@ class PoDetail extends PureComponent {
 			adrType: '',
 			// 货币类型
 			currencyCode: 'CNY',
+			// 供应商地点禁用
+			isSupplyAdrDisabled: true,
+			// 仓库禁用
+			isWarehouseDisabled: true,
 		}
 	}
 
@@ -285,6 +290,8 @@ class PoDetail extends PureComponent {
 		if (basicInfo.id !== id) {
 			this.setState({
 				locDisabled: adrType === 0 || adrType === 1 ? false : true,
+				isSupplyAdrDisabled: false,
+				isWarehouseDisabled: false,
 				settlementPeriod,
 				payType,
 				pickerDate: estimatedDeliveryDate ? moment(parseInt(estimatedDeliveryDate, 10)) : null,
@@ -293,6 +300,11 @@ class PoDetail extends PureComponent {
 				currencyCode: currencyCode === 'CNY' ? `${currencyCode}` : 'CNY',
 			})
 		}
+
+		if (nextProps.poLines.length !== this.props.poLines.length) {
+		}
+			this.caculate();
+
         
 	}
 
@@ -370,12 +382,12 @@ class PoDetail extends PureComponent {
 				localType: value,
 			});
 			//清空地点值
-			this.props.form.setFieldsValue({ addressCd: "", address: "" });
+			// this.props.form.setFieldsValue({ addressCd: "", address: "" });
 		} else {
 			//地点类型无值时，地点不可编辑
 			this.setState({ locDisabled: true });
 			//地点类型无值时，清空地点值
-			this.props.form.setFieldsValue({ addressCd: "", address: "" });
+			// this.props.form.setFieldsValue({ addressCd: "", address: "" });
 		}
 	}
 
@@ -398,7 +410,7 @@ class PoDetail extends PureComponent {
 				//保存输入数据和校验状态 给submit用
 				record.purchaseNumber = value;
 				//计算采购金额（含税）
-				record.totalAmount = value * record.purchasePrice;
+				record.totalAmount = Math.round(value * record.purchasePrice*100)/100;
 				//校验状态
 				record.isValidate = isValidate;
 				this.props.updatePoLine(record);
@@ -418,6 +430,7 @@ class PoDetail extends PureComponent {
 	 * 计算对象：未删除&&采购数量不为空 
 	 */
 	caculate() {
+		console.log("jisuan")
 		let poLines = this.props.poLines || [];
 		let result = {};
 		//合计采购数量
@@ -432,8 +445,13 @@ class PoDetail extends PureComponent {
 				totalAmounts += item.totalAmount
 			}
 		});
-		totalAmounts = Math.round(totalAmounts*100)/100
-		this.setState({ totalQuantitys, totalAmounts });
+		totalAmounts = Math.round(totalAmounts*100)/100;
+		this.setState({
+			totalQuantitys,
+			totalAmounts:Math.round(totalAmounts*100)/100
+		}),() => {
+			console.log(this.state.totalAmounts)
+		};
 		result.totalQuantitys = totalQuantitys;
 		result.totalAmounts = totalAmounts;
 		return result;
@@ -523,7 +541,7 @@ class PoDetail extends PureComponent {
 
 	/**
 	 * //TODO 请绑定值清单清空事件
-	 * 供应商变更时，需做如下处理
+	 * 供应商变更时，需做如下处理onchoose事件
 	 *   1.清空供应商地点
 	 *   2.删除采购商品行
 	 *   3.清空账期、付款方式
@@ -533,21 +551,43 @@ class PoDetail extends PureComponent {
 		//供应商有值
 		if (value) {
 			//地点类型有值时，供应商地点可编辑
-			//TODO
+			this.setState({
+				isSupplyAdrDisabled: false,
+			})
 		} else {
 			//供应商有值无值时，供应商地点不可编辑
+			this.setState({
+				isSupplyAdrDisabled: true,
+				isWarehouseDisabled: true,
+			})
 		}
-		//1.清空地点值
+		//1.清空供应商地点，仓库值清单
 		this.supplierLoc.reset();
+		if (this.state.localType === '0') {
+			this.poAddress.reset();
+		}
 		//2.删除所有商品行
 		this.deletePoLines();
 		//3.清空账期、付款方式
 		let basicInfo = this.props.basicInfo;
-		basicInfo.accountPeriod = null;
-		basicInfo.payment = null;
+		basicInfo.settlementPeriod = null;
+		basicInfo.payType = null;
 		this.props.updatePoBasicinfo(basicInfo);
 	}
 
+	/**
+	 * 供应商清空
+	 */
+	applySupplierClear() {
+		this.setState({
+			isSupplyAdrDisabled: true,
+			isWarehouseDisabled: true,
+		}, () => {
+			// 清空供应商地点和仓库值清单
+			this.supplierLoc.reset();
+			this.poAddress.reset();
+		})
+	}
 	/**
 	 * 供应商地点变更时，做如下处理
 	 *  1.删除采购商品行
@@ -563,8 +603,8 @@ class PoDetail extends PureComponent {
 				this.deletePoLines();
 				//2.清空账期、付款方式
 				let basicInfo = this.props.basicInfo;
-				basicInfo.accountPeriod = null;
-				basicInfo.payment = null;
+				basicInfo.settlementPeriod = null;
+				basicInfo.payType = null;
 				this.props.updatePoBasicinfo(basicInfo);
 				// 设置预计收货日期为：now + 提前期
 				this.setState({
@@ -712,7 +752,10 @@ class PoDetail extends PureComponent {
 						//计算采购总数量、采购总金额
 						this.caculate();
 					},
-					onCancel() { },
+					onCancel() {
+						//计算采购总数量、采购总金额
+						this.caculate();
+					},
 				});
 				break;
 			default:
@@ -1263,6 +1306,10 @@ class PoDetail extends PureComponent {
 			)
 		} else {
 			// 新增/编辑
+			const isNew = pageMode === PAGE_MODE.NEW;
+			const isUpdate = pageMode === PAGE_MODE.UPDATE;
+			console.log('isNew',isNew)
+			console.log('isUpdate',isUpdate)
 			return (
 				<div className="basic-box">
 					<div className="header">
@@ -1330,6 +1377,7 @@ class PoDetail extends PureComponent {
 											}
 											defaultValue={supplierDefaultValue}
 											onChoosed={this.applySupplierChange}
+											onClear={this.applySupplierClear}
 											renderChoosedInputRaw={(data) => (
 												<div>{data.spId} - {data.companyName}</div>
 											)}
@@ -1370,6 +1418,7 @@ class PoDetail extends PureComponent {
 													pageSize: params.pagination.pageSize
 												}, 'supplierAdrSearchBox')
 											}
+											disabled={this.state.isSupplyAdrDisabled}
 											defaultValue={spAdrDefaultValue}
 											onChoosed={this.applySupplierLocChoosed}
 											renderChoosedInputRaw={(data) => (
@@ -1448,10 +1497,9 @@ class PoDetail extends PureComponent {
 										</span>
 										{
 											// 仓库
-											this.state.localType !== '1'
+											this.state.localType === '0'
 											&& <SearchMind
 												style={{ zIndex: 8000 }}
-												disabled={this.state.locDisabled}
 												compKey="warehouseCode"
 												ref={ref => { this.poAddress = ref }}
 												fetch={(params) =>
@@ -1461,6 +1509,7 @@ class PoDetail extends PureComponent {
 														pageSize: params.pagination.pageSize
 													}, 'getWarehouseInfo1')
 												}
+												disabled={this.state.isWarehouseDisabled}
 												defaultValue={adresssDefaultValue}
 												renderChoosedInputRaw={(data) => (
 													<div>{data.warehouseCode} - {data.warehouseName}</div>
@@ -1481,7 +1530,7 @@ class PoDetail extends PureComponent {
 										}
 										{
 											// 门店
-											this.state.localType === '1'
+											this.state.localType !== '0'
 											&& <SearchMind
 												style={{ zIndex: 8000 }}
 												disabled={this.state.locDisabled}
