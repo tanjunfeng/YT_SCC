@@ -195,7 +195,7 @@ class SearchMind extends Component {
             rowKey,
         } = this.props;
 
-        if (disabled || !isFocus) {
+        if (disabled) {
             return null;
         }
 
