@@ -61,11 +61,10 @@ class BankInfo extends PureComponent {
         const { supplierBasicInfo = {} } = data;
         Tools.checkAddress(this.companyAddress, 'companyAddress', this);
         const upload = this.nodebankFile.getValue();
-        console.log(this.companyAddress)
-        if (!upload.files.length) {
-            Tip(true, '请上传银行开户许可证电子版');
-            return;
-        }
+        // if (!upload.files.length) {
+        //     Tip(true, '请上传银行开户许可证电子版');
+        //     return;
+        // }
         form.validateFields((err, values) => {
             const { firstValue, secondValue, thirdValue } = this.companyAddress;
             if (!err) {
@@ -76,7 +75,7 @@ class BankInfo extends PureComponent {
                     companyName
                 } = values;
 
-                const supplierBankInfo = {
+                const supplierBankInfo = Utils.removeInvalid({
                     bankAccount,
                     invoiceHead,
                     openBank,
@@ -88,7 +87,7 @@ class BankInfo extends PureComponent {
                     bankLocProvinceCode: firstValue.code,
                     bankLocCityCode: secondValue.code,
                     bankLocCountyCode: thirdValue.code,
-                }
+                })
 
                 this.props.addSupplierMessage1({supplierBankInfo});
                 onGoTo(key);
@@ -257,7 +256,7 @@ class BankInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>*银行开户许可证电子版：</span>
+                                        <span>银行开户许可证电子版：</span>
                                         <InlineUpload
                                             datas={isEdit ? [supplierBankInfo.bankAccountLicense] : []}
                                             ref={node => (this.nodebankFile = node)}

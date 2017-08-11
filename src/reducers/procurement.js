@@ -47,7 +47,8 @@ const initState = fromJS({
     poRcvList: {},
     //采购收货单详情信息
     poRcv: {},
-
+    // 新增商品信息
+    newPcOdData: {},
 });
 
 export default function (state = initState, action) {
@@ -59,16 +60,19 @@ export default function (state = initState, action) {
         case ActionType.RECEIVE_PO_MNG_LIST:
             return state.set('poList', fromJS(action.payload));
 
-        case ActionType.CHANGE_PO_MNG_SELECTED_ROWS:// 采购单列表界面 选中采购单
-            return state.set('selectedPoMngRows', fromJS(action.payload));
-        case ActionType.RECEIVE_PO_MATERIAL_BY_CD://商品编码获取商品详情
-            return state.set("poMaterial", fromJS(action.payload));
         // 删除采购单
         case ActionType.DELETE_PO_BY_IDS:
             return state;
 
-        case ActionType.RECEIVE_PO_PRINT_LIST://获取采购单打印列表
-            return state.set("poPrintList", fromJS(action.payload));
+        // 获取采购单打印列表
+        case ActionType.RECEIVE_PO_PRINT_LIST:
+            return state.set('poPrintList', fromJS(action.payload));
+
+        case ActionType.CHANGE_PO_MNG_SELECTED_ROWS:// 采购单列表界面 选中采购单
+            return state.set('selectedPoMngRows', fromJS(action.payload));
+        case ActionType.RECEIVE_PO_MATERIAL_BY_CD://商品编码获取商品详情
+            return state.set("poMaterial", fromJS(action.payload));
+
         case ActionType.GET_WAREHOUSE_ADDRESS_MAP:
             //不改变state
             return state;
@@ -87,7 +91,9 @@ export default function (state = initState, action) {
             basicInfo = Object.assign(basicInfo, action.payload);
             po.basicInfo = basicInfo;
             return state.set("po", po);
-        case ActionType.ADD_PO_LINES://添加采购单商品行(单数或复数)
+
+        // 添加采购单商品行(单数或复数)
+        case ActionType.ADD_PO_LINES:
             po = Object.assign(
                 {},
                 state.toJS().po);
@@ -98,29 +104,32 @@ export default function (state = initState, action) {
                 poLines.push(action.payload);
             }
             po.poLines = poLines;
-            return state.set("po", po);
-        case ActionType.UPDATE_PO_LINE://更新采购单商品行
+            return state.set('po', po);
+
+        // 更新采购单商品行
+        case ActionType.UPDATE_PO_LINE:
             po = Object.assign(
                 {},
                 state.toJS().po);
             poLines = po.poLines || [];
             payload = action.payload || {};
             poLines.forEach(function (element, index, array) {
-                if (element.materialCd == payload.materialCd) {
+                if (element.productCode === payload.productCode) {
                     array[index] = payload;
                 }
-
             });
             po.poLines = poLines;
-            return state.set("po", po);;
-        case ActionType.DELETE_PO_LINE://删除采购单商品行
+            return state.set('po', po);
+
+        // 删除采购单商品行
+        case ActionType.DELETE_PO_LINE:
             po = Object.assign(
                 {},
                 state.toJS().po);
             poLines = po.poLines || [];
             payload = action.payload || {};
             let newPoLines = poLines.filter(function (line) {
-                return line.materialCd != payload.materialCd;
+                return line.productCode != payload.productCode;
             });
             po.poLines = newPoLines;
             return state.set("po", po);
@@ -133,6 +142,10 @@ export default function (state = initState, action) {
 
         case ActionType.RECEIVE_PO_RCV_DETAIL://收货单详情
             return state.set('poRcv', fromJS(action.payload));
+
+        case ActionType.RECEIVE_NEW_PURCHASE_ORDER://收货单详情
+            console.log(action.payload)
+            return state.set('newPcOdData', fromJS(action.payload));
 
         case ActionType.RECEIVE_PO_RCV_INIT://初始收货单详情
             payload = action.payload || {};

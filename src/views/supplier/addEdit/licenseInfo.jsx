@@ -81,6 +81,7 @@ class LicenseInfo extends PureComponent {
 
     getVlaue(callback) {
         const { form, onGoTo, isEdit, detailData = {}, data } = this.props;
+        const { checked } = this.state;
         Tools.checkAddress(this.companyAddress, 'companyLoc', this);
         Tools.checkAddress(this.licenseLoc, 'licenseLocSpace', this);
         const registrationCertificate = this.refs.registrationCertificate.getValue();
@@ -88,6 +89,23 @@ class LicenseInfo extends PureComponent {
         const generalTaxpayerQualifiCerti = this.refs.generalTaxpayerQualifiCerti.getValue();
         const foodBusinessLicense = this.refs.foodBusinessLicense.getValue();
         const legalRepreCardPic = this.refs.legalRepreCardPic.getValue();
+        const registLicencePic = this.refs.registLicencePic.getValue();
+
+        if (generalTaxpayerQualifiCerti) {
+            const { files, time } = generalTaxpayerQualifiCerti;
+            if (files.length === 0 || !time) {
+                message.error('请上传一般纳税人资格证电子版和有限时间！')
+                return null;
+            }
+        }
+
+        if (registLicencePic) {
+            const { files, time } = registLicencePic;
+            if (files.length === 0) {
+                message.error('请上传营业执照副本电子版！')
+                return null;
+            }
+        }
 
         form.validateFields((err, values) => {
             if (!err) {
@@ -105,7 +123,16 @@ class LicenseInfo extends PureComponent {
                     startEndDate
                 } = values;
 
-                const supplierOperTaxInfo = {
+                if (!checked && !startEndDate[0]) {
+                    message.error('请选择营业期限！');
+                    return null;
+                }
+                if (!establishDate) {
+                    message.error('请选择供应商入驻日期！');
+                    return null;
+                }
+
+                const supplierOperTaxInfo = Utils.removeInvalid({
                     companyLocProvince: firstValue.regionName,
                     companyLocCity: secondValue.regionName,
                     companyLocCounty: thirdValue.regionName,
@@ -121,13 +148,13 @@ class LicenseInfo extends PureComponent {
                     taxpayerCertExpiringDate: generalTaxpayerQualifiCerti.time,
                     foodBusinessLicense: foodBusinessLicense.files[0],
                     businessLicenseExpiringDate: foodBusinessLicense.time
-                }
+                })
 
-                const supplierlicenseInfo = {
+                const supplierlicenseInfo = Utils.removeInvalid({
                     companyName: this.props.data.supplierBasicInfo.companyName,
                     registLicenceNumber,
                     legalRepresentative,
-                    legalRepreCardNum,
+                    legalRepreCardNum: legalRepreCardNum === '' ? null : legalRepreCardNum,
                     legalRepreCardPic1: legalRepreCardPic.files[0],
                     legalRepreCardPic2: legalRepreCardPic.files[1],
                     licenseLocProvince: this.licenseLoc.firstValue.regionName,
@@ -143,9 +170,9 @@ class LicenseInfo extends PureComponent {
                     perpetualManagement: this.state.checked ? 1 : 0,
                     registeredCapital,
                     businessScope,
-                    registLicencePic: this.refs['registLicencePic'].getValue().files[0],
+                    registLicencePic: registLicencePic.files[0],
                     guaranteeMoney
-                }
+                })
                 
                 if (isEdit) {
                     Object.assign(supplierOperTaxInfo,
@@ -172,12 +199,17 @@ class LicenseInfo extends PureComponent {
                             status: detailData.saleRegionInfo.status,
                         }
                     );
-                    Object.assign(data.supplierBankInfo,
-                        {
-                            id: detailData.supplierBankInfo.id,
-                            status:  detailData.supplierBankInfo.status
-                        }
-                    );
+
+                    if (!data.supplierBankInfo) {
+                        data.supplierBankInfo = detailData.supplierBankInfo;
+                    } else {
+                        Object.assign(data.supplierBankInfo,
+                            {
+                                id: detailData.supplierBankInfo.id,
+                                status:  detailData.supplierBankInfo.status
+                            }
+                        );
+                    }
                 }
                 Object.assign(
                     this.submitData,
@@ -240,10 +272,34 @@ class LicenseInfo extends PureComponent {
 
     handleCompanyAddressChange(data) {
         this.companyAddress = data;
+        const { getFieldError } = this.props.form;
+        if (
+            getFieldError('companyLoc')
+            && this.companyAddress.thirdValue
+            && this.companyAddress.thirdValue !== '-1'
+        ) {
+            this.props.form.setFields({
+                companyLoc: {
+                    error: null
+                }
+            })
+        }
     }
 
     handleCompanyLicenseLocChange(data) {
         this.licenseLoc = data;
+        const { getFieldError } = this.props.form;
+        if (
+            getFieldError('licenseLocSpace')
+            && this.licenseLoc.thirdValue
+            && this.licenseLoc.thirdValue !== '-1'
+        ) {
+            this.props.form.setFields({
+                licenseLocSpace: {
+                    error: null
+                }
+            })
+        }
     }
  
     handleNextStep() {
@@ -282,19 +338,27 @@ class LicenseInfo extends PureComponent {
                                 <Row>
                                     <Col span={8}>
                                         <span>*公司所在地：</span>
-                                        <CasadingAddress
-                                            id="companyLoc"
-                                            defaultValue={
-                                                isEdit
-                                                ? [
-                                                    supplierOperTaxInfo.companyLocProvinceCode,
-                                                    supplierOperTaxInfo.companyLocCityCode,
-                                                    supplierOperTaxInfo.companyLocCountyCode
-                                                ]
-                                                : []
-                                            }
-                                            onChange={this.handleCompanyAddressChange}
-                                        />
+                                        <FormItem>
+                                            {getFieldDecorator('companyLoc', {
+                                            })(
+                                                <div>
+                                                    <CasadingAddress
+                                                        id="companyLoc"
+                                                        key="companyLoc"
+                                                        defaultValue={
+                                                            isEdit
+                                                            ? [
+                                                                supplierOperTaxInfo.companyLocProvinceCode,
+                                                                supplierOperTaxInfo.companyLocCityCode,
+                                                                supplierOperTaxInfo.companyLocCountyCode
+                                                            ]
+                                                            : []
+                                                        }
+                                                        onChange={this.handleCompanyAddressChange}
+                                                    />
+                                                </div>
+                                            )}
+                                        </FormItem>
                                     </Col>
                                     <Col span={8}>
                                         <span>*公司详细地址：</span>
@@ -325,7 +389,7 @@ class LicenseInfo extends PureComponent {
                                         />
                                     </Col>
                                     <Col span={8}>
-                                        <span>*商标注册证/受理通知书：</span>
+                                        <span>商标注册证/受理通知书：</span>
                                         <InlineUpload
                                             showEndTime
                                             datas={isEdit ? [supplierOperTaxInfo.registrationCertificate] : []}
@@ -415,11 +479,10 @@ class LicenseInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>*法人身份证号：</span>
+                                        <span>法人身份证号：</span>
                                         <FormItem>
                                             {getFieldDecorator('legalRepreCardNum', {
                                                 rules: [
-                                                    {required: true, message: '请输入法人身份证号!'},
                                                     {
                                                         validator: (rule, value, callback) => {
                                                             if (value && !/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(value)) {
@@ -441,36 +504,46 @@ class LicenseInfo extends PureComponent {
                                 <Row>
                                     <Col span={8} id="createTime">
                                         <span>*成立日期：</span>
-                                        {getFieldDecorator('establishDate', {
-                                            rules: [{required: true, message: '请选择供应商入驻日期'}],
-                                            initialValue: isEdit ? moment(supplierlicenseInfo.establishDate) : null
-                                        })(
-                                            <DatePicker
-                                                getCalendarContainer={() => document.getElementById('createTime')}
-                                                disabledDate={(current) => {
-                                                    return (
-                                                        current && current.valueOf() > Date.now()
-                                                    )
-                                                }}
-                                                format={dateFormat}
-                                            />
-                                        )}
+                                        <FormItem>
+                                            {getFieldDecorator('establishDate', {
+                                                rules: [{required: true, message: '请选择供应商入驻日期'}],
+                                                initialValue: isEdit ? moment(supplierlicenseInfo.establishDate) : null
+                                            })(
+                                                <DatePicker
+                                                    getCalendarContainer={() => document.getElementById('createTime')}
+                                                    disabledDate={(current) => {
+                                                        return (
+                                                            current && current.valueOf() > Date.now()
+                                                        )
+                                                    }}
+                                                    format={dateFormat}
+                                                />
+                                            )}
+                                        </FormItem>
                                     </Col>
                                     <Col span={8}>
                                         <span>*营业执照所在地：</span>
-                                        <CasadingAddress
-                                            id="licenseLocSpace"
-                                            defaultValue={
-                                                isEdit
-                                                ? [
-                                                    supplierlicenseInfo.licenseLocProvinceCode,
-                                                    supplierlicenseInfo.licenseLocCityCode,
-                                                    supplierlicenseInfo.licenseLocCountyCode
-                                                ]
-                                                : []
-                                            }
-                                            onChange={this.handleCompanyLicenseLocChange}
-                                        />
+                                        <FormItem>
+                                            {getFieldDecorator('licenseLocSpace', {
+                                            })(
+                                                <div>
+                                                    <CasadingAddress
+                                                        id="licenseLocSpace"
+                                                        key="licenseLocSpace"
+                                                        defaultValue={
+                                                            isEdit
+                                                            ? [
+                                                                supplierlicenseInfo.licenseLocProvinceCode,
+                                                                supplierlicenseInfo.licenseLocCityCode,
+                                                                supplierlicenseInfo.licenseLocCountyCode
+                                                            ]
+                                                            : []
+                                                        }
+                                                        onChange={this.handleCompanyLicenseLocChange}
+                                                    />
+                                                </div>
+                                            )}
+                                        </FormItem>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -574,7 +647,7 @@ class LicenseInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>*法人身份证电子版：</span>
+                                        <span>法人身份证电子版：</span>
                                         <InlineUpload
                                             showEndTime={false}
                                             limit={2}
@@ -617,7 +690,7 @@ class LicenseInfo extends PureComponent {
                             <Button onClick={this.handleSubmit}>提交</Button>
                         }
                         {
-                            (isEdit || this.state.isSubmit) &&
+                            (initData.status === 1 || initData.status === 2 || this.state.isSubmit) &&
                             <Button onClick={this.handleCreatePlace}>创建供应商地点</Button>
                         }
                         {

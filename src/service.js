@@ -64,6 +64,9 @@ export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
 // 下载订单管理列表
 export const exportOrderList = '/sorder/toExcel';
 
+// 下载采购订单PDF
+export const exportProcurementPdf = '/pmPurchaseOrder/exportPdf';
+
 /**
  * 登录 Api
  */
@@ -331,6 +334,9 @@ export const fectheEditorList = (params) => http.get('/staticPage/toUpdateStatic
 // 修改静态页面编辑内容并上传到图片服务器
 export const fectheEditorContent = (params) => http.post('/staticPage/updateStaticPageUpload', params);
 
+// 修改快捷导航状态
+export const batchUpdateQuickNavigation = (params) => http.post('/homeAd/batchUpdateQuickNavigation', params);
+
 /**
  * wrap 端配置相关接口
  */
@@ -515,6 +521,14 @@ export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPa
 
 /* **************procurement*********** */
 
+// 删除采购单 参数 1或n个采购单id  [ids]
+// export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
+// 查询采购单打印列表
+// export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
+// 查询采购单详情
+export const queryPoDetail = (params) => http.get('/pmPurchaseOrder/getPurchaseOrderInfoById', params);
+// 创建采购单详情
+export const createPo = (params) => http.post('/pmPurchaseOrder/addPmPurchaseOrder', params);
 // 查询采购单列表
 export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
 
@@ -522,13 +536,7 @@ export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', p
 export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
 
 // 查询采购单打印列表
-export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
-
-// 查询采购单详情
-export const queryPoDetail = (params) => http.get('/pmPurchaseOrder/getPurchaseOrderInfoById', params);
-
-// 创建采购单详情
-export const createPo = (params) => http.post('/provider/createPo', params);
+// export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
 
 // 审批
 export const auditPo = (params) => http.post('/provider/auditPo', params);
@@ -549,6 +557,12 @@ export const querycategories = (params) => http.get('/category/queryCategories',
 export const queryMaterialMap = (params) => http.get('/provider/queryMaterialMap', params);
 // 删除处于草稿状态的订单
 export const deletePurchaseList = (params) => http.get('/pmPurchaseOrder/batchDeletePmPurchaseOrderByIds', params);
+// 查询采购单打印列表
+export const queryPoPrintList = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderListInfo', params);
+// 根据采购订单id下载PDF文件
+export const downloadPDF = '/pmPurchaseOrder/exportPdf';
+// 采购单列表批量下载PDF ZIP压缩文件
+export const downloadBatchPDF = '/pmPurchaseOrder/exportPdfs';
 
 // 采购收货相关
 // 采购收货单管理列表
@@ -648,10 +662,18 @@ export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySup
 
 // 此接口用于通过code和name（后端id就等于code）查询子公司信息 
 export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBaseInfo', params);
+// 此接口用于通过code和name（后端id就等于code）查询子公司信息(通过商品id过滤可用的)
+export const queryBranchCompanyInfo = (params) => http.get('/prodSell/queryBranchCompanyInfo', params);
 // 此接口用于通过code和name（后端id就等于code）查询子公司信息
 export const getFranchiseeInfo = (params) => http.get('/sorder/getFranchiseeInfo', params);
+// 查询可用子公司信息
+export const findCanUseCompanyInfo = (params) => http.get('/supplier/findCompanyBaseInfo', params);
+
 // 此接口用于查询各级分类（值清单）
 export const queryCategorysByLevel = (params) => http.get('/category/queryCategories', params);
+
+// 此接口用于新增商品（值清单）
+export const queryProductForSelect = (params) => http.get('/product/queryProductForSelect', params);
 
 // 订单管理-查询订单列表
 export const queryOrder = (params) => http.get('/sorder/queryOrder', params);
@@ -709,3 +731,9 @@ export const updateStepSellPrice = (params) => http.post('/prodSell/updateSellPr
 
 // 修改供应商
 export const updateSellPriceStatus = (params) => http.get('/prodSell/updateSellPriceStatus', params);
+
+// 采购订单-查询新增商品信息
+export const getNewPmPurchaseOrderItem = (params) => http.get('/pmPurchaseOrder/getNewPmPurchaseOrderItem', params);
+
+// 采购订单-审批
+export const auditPurchaseOrderInfo = (params) => http.get('/pmPurchaseOrder/auditPurchaseOrderInfo', params);

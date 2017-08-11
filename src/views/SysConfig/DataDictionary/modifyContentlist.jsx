@@ -138,9 +138,9 @@ class modifyContentlist extends PureComponent {
             dictionaryId,
             contentName,
             state
-        }).then(
+        }).then((res) => {
             this.props.Dictionarycontentlist({ dictionaryId })
-            )
+        })
     }
 
     handleAdd = () => {
