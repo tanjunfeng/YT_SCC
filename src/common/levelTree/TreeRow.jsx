@@ -82,14 +82,6 @@ class TreeRow extends PureComponent {
         }
 
         this.props.handleChangeSort(event);
-
-        // 这里在输入确认之后根据 componentWillReceiveProps 的操作重新赋值给输入框
-        // 避免外部请求错误之后造成的输入框内容不刷新
-        if (event.currentTarget.value !== sort) {
-            this.setState({
-                value: sort
-            })
-        }
     }
 
     /**

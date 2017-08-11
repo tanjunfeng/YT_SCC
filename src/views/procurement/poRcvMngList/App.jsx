@@ -1,6 +1,6 @@
 /**
  * 采购管理 - 收货单管理列表
- * 
+ *
  * @author taoqiyu@yatang.cn
  */
 import React, { PureComponent } from 'react';
