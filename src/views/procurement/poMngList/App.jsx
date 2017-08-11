@@ -58,15 +58,11 @@ class PoMngList extends PureComponent {
     }
 
     componentDidMount() {
-        this.queryPoList();
+        this.queryPoList({
+            pageSize: PAGE_SIZE
+        });
     }
 
-    shouldComponentUpdate() {
-        if (Object.keys(this.props.poList).length === 0) {
-            return false;
-        }
-        return true;
-    }
     /**
      * 点击翻页
      * @param {pageNumber}    pageNumber
@@ -82,7 +78,7 @@ class PoMngList extends PureComponent {
 
     /**
      * 查询采购单管理列表
-     * @param {*} params 
+     * @param {*} params
      */
     queryPoList = (params) => {
         this.props.fetchPoMngList({
@@ -124,7 +120,7 @@ class PoMngList extends PureComponent {
         }
         // 删除选中项并刷新采购单列表
         Modal.confirm({
-            title: '你确认要删除选中采购单？',
+            title: '删除的采购但不能恢复，你确认要删除选中采购单？',
             onOk: () => {
                 this.props.deletePoByIds({
                     pmPurchaseOrderIds: this.deleteListData.join()
@@ -133,7 +129,11 @@ class PoMngList extends PureComponent {
                     this.deleteListData = [];
 
                     // 刷新采购单列表
-                    this.queryPoList();
+                    this.current = 1;
+                    this.queryPoList({
+                        pageNum: this.current,
+                        pageSize: PAGE_SIZE
+                    });
                 })
             },
             onCancel() { },
@@ -142,13 +142,16 @@ class PoMngList extends PureComponent {
 
     // 单条制单数据删除
     singleRowsDelete = (record) => {
+        this.deleteListData = [];
         this.deleteListData.push(record.id);
+        console.log(this.deleteListData)
         this.applyDelete();
     }
 
     // 重置回调
     applyReset = () => {
         this.searchParams = {};
+        this.current = 1;
     }
 
 
@@ -168,12 +171,12 @@ class PoMngList extends PureComponent {
                 <Menu.Item key="detail">
                     <Link to={detailLink}>详情</Link>
                 </Menu.Item>
-                {status === deleteCode &&
+                { status === deleteCode &&
                     <Menu.Item key="modify">
                         <Link to={detailLink}>修改</Link>
                     </Menu.Item>
                 }
-                {
+                { status === deleteCode &&
                     <Menu.Item key="delete">
                         <span onClick={() => this.singleRowsDelete(record)}>删除</span>
                     </Menu.Item>
@@ -220,6 +223,7 @@ class PoMngList extends PureComponent {
                     const currentIndex = this.deleteListData.indexOf(record.id);
                     this.deleteListData.splice(currentIndex, 1);
                 }
+                console.log('单选操作：' + this.deleteListData)
             },
             onSelectAll: (selected, selectedRows) => {
                 if (selected) {
@@ -231,6 +235,7 @@ class PoMngList extends PureComponent {
                 } else {
                     this.deleteListData = [];
                 }
+                console.log('全选操作：' + this.deleteListData)
             }
         }
         return (

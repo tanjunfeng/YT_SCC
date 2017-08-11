@@ -1,6 +1,6 @@
 /**
  * @file App.jsx
- * @author zhangbaihua
+ * @author wh/zhangbaihua
  *
  * 采购单打印列表页面
  */
@@ -82,18 +82,19 @@ class PoPrintList extends PureComponent {
      * @param {number} number 采购单号
      */
     applyDownPDF = (number) => {
-        Utils.exportExcel(downloadPDF, number);
+        Utils.exportExcel(downloadPDF, {purchaseOrderNo: number});
     }
 
     // 批量下载PDF回调
-    handleDownBatchPDF = () => {
-        Utils.exportExcel(downloadBatchPDF, this.searchParams);
+    handleDownBatchPDF = (params) => {
+        this.searchParams = params;
+        Utils.exportExcel(downloadBatchPDF, {...this.searchParams});
     }
 
     render() {
         // 采购单打印列表
         const { poPrintList = {} } = this.props;
-        console.log(poPrintList)
+        // console.log(poPrintList)
         const { data = [], total, pageNum } = poPrintList;
         const that = this;
         const list = (reportsData = []) => {

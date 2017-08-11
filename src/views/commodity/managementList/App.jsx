@@ -90,6 +90,7 @@ class ManagementList extends PureComponent {
      */
     getFormAllVulue = () => {
         const { supplierId, classify, childCompanyMeg, brandName, sortType } = this.state;
+        console.log(brandName)
         const {
             supplyChainStatus,
             internationalCode,
@@ -126,7 +127,8 @@ class ManagementList extends PureComponent {
     // 供货供应商值清单-清除
     handleSupplyClear = () => {
         this.setState({
-            stopBuyDisabled: true
+            stopBuyDisabled: true,
+            supplierId: ''
         });
     }
 
@@ -337,9 +339,15 @@ class ManagementList extends PureComponent {
         }, 'availablProducts');
     };
 
-    /**
-     * 品牌值清单-清除
-     */
+    // 选择品牌
+    handleBrandChoose = (record) => {
+        this.setState({
+            brandName: record.record.name,
+        });
+        console.log(this.state.brandName)
+    }
+
+    // 品牌值清除
     handleBrandClear = () => {
         this.setState({
             brandName: '',
@@ -511,7 +519,6 @@ class ManagementList extends PureComponent {
                     chooseGoodsList: selectedRowKeys,
                     selectedListData: selectedRows
                 })
-                // console.log(this.state.selectedListData)
             },
         }
         return (

@@ -109,7 +109,6 @@ export const printColumns = [{
     dataIndex: 'purchaseInsideNumber',
     key: 'purchaseInsideNumber',
     width: 80,
-    className: 'right'
 }, {
     title: '单位',
     dataIndex: 'unitExplanation',
@@ -120,14 +119,11 @@ export const printColumns = [{
     dataIndex: 'purchaseNumber',
     key: 'purchaseNumber',
     width: 70,
-    className: 'right'
-
 }, {
     title: '订货价格',
     dataIndex: 'purchasePrice',
     key: 'purchasePrice',
     width: 70,
-    className: 'right'
 }, {
     title: '订货金额',
     dataIndex: 'totalAmount',
