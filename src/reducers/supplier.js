@@ -159,6 +159,9 @@ export default function (state = initState, action) {
         case ActionType.RECEIVE_PLACE_REGION:
             return state.set('placeRegion', fromJS(action.payload))
 
+        case ActionType.REMOVE_DETAIL_DATA:
+            return state.set('detailData', action.payload);
+
         default:
             return state;
     }

@@ -53,7 +53,7 @@ class ClassifiedList extends Component {
      * @param callback
      */
     locker(callback) {
-        const delay = 2000;
+        const delay = 3000;
         const hide = message.loading(`数据处理大约需要${delay / 1000}秒左右，请耐心等待`, 0);
 
         this.setState({

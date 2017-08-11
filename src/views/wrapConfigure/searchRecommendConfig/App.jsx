@@ -86,7 +86,7 @@ class SearchRecommendConfig extends Component {
         }).then((res) => {
             message.success(res.message);
         }).catch((err) => {
-            message.error(err.message);
+            // message.error(err.message);
         });
     }
 

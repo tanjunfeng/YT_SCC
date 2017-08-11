@@ -15,7 +15,7 @@ import {
     auditPo as svcAuditPo,
     queryPoDetail,
     queryShopAddressMap,
-    queryWarehouseAddressMap,
+    // queryWarehouseAddressMap,
     querySupplierMap,
     querySupplierLocMap,
     queryBigClassMap,
@@ -25,6 +25,8 @@ import {
     queryPoRcvDetail,
     createPoRcv as svcCreatePoRcv,
     findStepPriceInfo,
+    getNewPmPurchaseOrderItem,
+    auditPurchaseOrderInfo,
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -71,17 +73,17 @@ export const fetchPoPrintList = (params) => dispatch => (
  * 仓库值清单 promise
  * @param {*} data
  */
-export const getWarehouseAddressMap = (params) => dispatch => (
-    new Promise((resolve, reject) => {
-        queryWarehouseAddressMap(params)
-            .then(res => {
-                resolve(res);
-            })
-            .catch(err => {
-                reject(err);
-            })
-    })
-)
+// export const getWarehouseAddressMap = (params) => dispatch => (
+//     new Promise((resolve, reject) => {
+//         queryWarehouseAddressMap(params)
+//             .then(res => {
+//                 resolve(res);
+//             })
+//             .catch(err => {
+//                 reject(err);
+//             })
+//     })
+// )
 
 /**
  * 门店值清单 promise
@@ -443,6 +445,20 @@ export const createPoRcv = (params) => dispatch => (
 )
 
 /**
+ * 审批
+ * @param {*} params
+ */
+export const modifyAuditPurchaseOrderInfo = (data) => (
+    new Promise((resolve, reject) => {
+        auditPurchaseOrderInfo(data)
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
+/**
  * 根据条件查询销售价格区间列表
  * @param {*} data 
  */
@@ -455,6 +471,27 @@ export const fetchPriceInfo = (params) => dispatch => (
         findStepPriceInfo(params)
             .then(res => {
                 dispatch(rcvPriceInfo(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+/**
+ * 根据条件查询采购单商品信息（新增时）
+ * @param {*} data
+ */
+const receiveNewPurchaseOrder = (data) => ({
+    type: ActionType.RECEIVE_NEW_PURCHASE_ORDER,
+    payload: data,
+});
+export const fetchNewPmPurchaseOrderItem = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        getNewPmPurchaseOrderItem(params)
+            .then(res => {
+                dispatch(receiveNewPurchaseOrder(res.data));
                 resolve(res);
             })
             .catch(err => {

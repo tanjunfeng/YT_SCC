@@ -458,7 +458,7 @@ class ManagementList extends PureComponent {
                     <Link to={`/commodifyList/${productId}`}>商品详情</Link>
                 </Menu.Item>
                 <Menu.Item key={1}>
-                    <CopyToClipboard text={`${origin}${pathname}/commodifyList/${productId}`} onCopy={this.onCopy}>
+                    <CopyToClipboard text={`${origin}${pathname}/${productId}`} onCopy={this.onCopy}>
                         <span>复制链接</span>
                     </CopyToClipboard>
                 </Menu.Item>

@@ -74,6 +74,11 @@ class SearchMind extends Component {
             data: [],
 
             /**
+             * 是否出现查询错误
+             */
+            fetchError: 0,
+
+            /**
              * 默认值
              */
             defaultValue: props.defaultValue,
@@ -227,7 +232,7 @@ class SearchMind extends Component {
     handleFocus() {
         this.setState({
             isFocus: true,
-        }, () => this.query());
+        });
 
         // if (!this.isEmpty() && this.state.dropHide) {
         //     this.query();
@@ -307,6 +312,7 @@ class SearchMind extends Component {
                     type: TYPE.DEFAULT,
                     data: res.data.data,
                     pagination: pager,
+                    fetchError: 0,
                 });
             })
             .catch(() => {
@@ -314,6 +320,7 @@ class SearchMind extends Component {
                     type: TYPE.DEFAULT,
                     total: 0,
                     data: [],
+                    fetchError: 1,
                 })
             })
     }
@@ -486,10 +493,10 @@ class SearchMind extends Component {
 
         const clearCls = classNames('ywc-smind-clear', {
             'ywc-smind-clear-show':
-                // 下拉框显示中，同时输入框内容不为空的情况
-                (!dropHide && !this.isEmpty())
-                // 输入框无焦点，同时有选择内容展示的情况
-                || (!isFocus && selectedRawData)
+            // 下拉框显示中，同时输入框内容不为空的情况
+            (!dropHide && !this.isEmpty())
+            // 输入框无焦点，同时有选择内容展示的情况
+            || (!isFocus && selectedRawData)
         });
 
         const inputProps = {
@@ -511,7 +518,7 @@ class SearchMind extends Component {
                 {/* 搜索容器 */}
                 <div className="ywc-smind-search-bar">
                     {addonBefore &&
-                        <span className="ywc-smind-title">
+                    <span className="ywc-smind-title">
                             {addonBefore}
                         </span>
                     }
@@ -529,16 +536,16 @@ class SearchMind extends Component {
 
                         {/* 用于被选择的数据展示 */}
                         {(!isFocus && selectedRawData !== null && this.isEmpty()) &&
-                            <div className="ywc-smind-input-view">
-                                {this.inputRawRender()}
-                            </div>
+                        <div className="ywc-smind-input-view">
+                            {this.inputRawRender()}
+                        </div>
                         }
 
                         {/* placeholder */}
                         {(!this.isFocus && this.isEmpty() && selectedRawData === null) &&
-                            <div className="ywc-smind-input-placeholder">
-                                {placeholder}
-                            </div>
+                        <div className="ywc-smind-input-placeholder">
+                            {placeholder}
+                        </div>
                         }
 
                         {/* 清空按钮 */}

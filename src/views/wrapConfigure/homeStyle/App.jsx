@@ -40,7 +40,7 @@ class HomeStyle extends Component {
                             return <CarouselItem {...props} />
                         }
                         if (id.indexOf('quick-nav') > -1) {
-                            return <QuickItem {...props} />
+                            return <QuickItem type="quick" {...props} />
                         }
                         if (id.indexOf('hot') > -1) {
                             return <HotItem {...props} />

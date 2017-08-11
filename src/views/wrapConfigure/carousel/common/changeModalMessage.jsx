@@ -251,14 +251,14 @@ class ChangeMessage extends PureComponent {
                                 required: true,
                                 message: '请选择链接类型'
                             }],
-                            initialValue: linkType
+                            initialValue: `${linkType}`
                         })(
                             <Select
                                 style={{ width: 240 }}
                                 onChange={this.handleLinkStyleChange}
                             >
-                                <Option value="商品链接">商品链接</Option>
-                                <Option value="静态活动页面">静态活动页面</Option>
+                                <Option value="1">商品链接</Option>
+                                <Option value="0">静态活动页面</Option>
                             </Select>
                         )}
                     </FormItem>

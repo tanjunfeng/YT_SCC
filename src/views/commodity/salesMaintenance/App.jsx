@@ -14,7 +14,6 @@ import {
 } from 'antd';
 
 import {
-    fecthCheckMainSupplier,
     modifyAuditVisible,
     modifyCheckReasonVisible,
     fecthGetProdPurchaseById,
@@ -48,7 +47,6 @@ import {
         stepPriceList: state.toJS().commodity.stepPriceList,
     }),
     dispatch => bindActionCreators({
-        fecthCheckMainSupplier,
         modifyAuditVisible,
         modifyCheckReasonVisible,
         fecthGetProdPurchaseById,
