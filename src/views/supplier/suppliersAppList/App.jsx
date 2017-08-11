@@ -137,10 +137,8 @@ class SuppliersAppList extends PureComponent {
 
     /**
      * 创建
-     *
-     * @param {string} data 'addSupplier':供应商类型为供应商；否则为供应商地点，data为供应商编码
      */
-    handleInputSupplier(data) {
+    handleInputSupplier() {
         const { pathname } = this.props.location;
         const { history } = this.props;
         history.push(`${pathname}/add`);

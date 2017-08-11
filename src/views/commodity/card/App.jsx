@@ -273,10 +273,13 @@ class Cardline extends Component {
                     productId: proId,
                     id,
                 })
-                .then(() =>
-                    message.success('删除成功'),
+                .then(() => {
+                    message.success('删除成功')
                     this.props.goto()
-                );
+                }).catch((res) => {
+                    message.error('操作失败')
+                    message.error(res.message)
+                })
             },
             onCancel() { },
         });
