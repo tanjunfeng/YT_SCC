@@ -74,6 +74,11 @@ class SearchMind extends Component {
             data: [],
 
             /**
+             * 是否出现查询错误
+             */
+            fetchError: 0,
+
+            /**
              * 默认值
              */
             defaultValue: props.defaultValue,
@@ -227,7 +232,7 @@ class SearchMind extends Component {
     handleFocus() {
         this.setState({
             isFocus: true,
-        }, () => this.query());
+        });
 
         // if (!this.isEmpty() && this.state.dropHide) {
         //     this.query();
@@ -307,6 +312,7 @@ class SearchMind extends Component {
                     type: TYPE.DEFAULT,
                     data: res.data.data,
                     pagination: pager,
+                    fetchError: 0,
                 });
             })
             .catch(() => {
@@ -314,6 +320,7 @@ class SearchMind extends Component {
                     type: TYPE.DEFAULT,
                     total: 0,
                     data: [],
+                    fetchError: 1,
                 })
             })
     }
