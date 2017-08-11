@@ -1,3 +1,4 @@
+$poRcvMngListColWidth: 250px;
 .search {
   &-box {
     background: #ffffff;
@@ -15,7 +16,7 @@
 
     .middle {
       .ywc-smind {
-        width: 250px;
+        width: $poRcvMngListColWidth;
       }
     }
 
@@ -39,7 +40,7 @@
       display: inline-block;
     }
     .date-range-picker {
-      width: 320px;
+      width: $poRcvMngListColWidth;
       padding: 2px 0;
     }
   }

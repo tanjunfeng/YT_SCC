@@ -480,7 +480,7 @@ class BasicInfo extends PureComponent {
                                                 fetch={(param) =>
                                                     this.props.pubFetchValueList(Utils.removeInvalid({
                                                         branchCompanyName: param.value,
-                                                        id: detailSp.id,
+                                                        id: isEdit ? detailSp.spAdrBasic.id : null,
                                                         parentId: detailData.id,
                                                     }), 'findCanUseCompanyInfo').then((res) => {
                                                         const { data } = res.data;

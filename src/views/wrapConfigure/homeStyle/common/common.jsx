@@ -341,7 +341,7 @@ function Common(WrappedComponent) {
                                                 required: true,
                                                 message: '请选择链接类型'
                                             }],
-                                            initialValue: current.urlType ? `${current.urlType}` : '0'
+                                            initialValue: current.urlType ? `${current.urlType}` : '1'
                                         })(
                                             <Select
                                                 style={{ width: 240 }}

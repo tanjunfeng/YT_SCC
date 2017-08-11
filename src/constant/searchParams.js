@@ -497,14 +497,14 @@ export const logisticsStatusOptions = {
         key: 'YQS',
         value: '已签收'
     }, {
-        key: 'WCS',
-        value: '未传送'
+        key: 'WSD',
+        value: '未送达'
     }, {
         key: 'QX',
         value: '取消送货'
     }, {
         key: 'CGWDH',
-        value: '采购未到货'
+        value: '库存不足'
     }, {
         key: 'WJS',
         value: '仓库拒收'
