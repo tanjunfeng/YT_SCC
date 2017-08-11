@@ -14,7 +14,7 @@ import moment from 'moment';
 import {
     Icon, Input, Form, Button,
     Select, Row, Col, DatePicker,
-    InputNumber
+    InputNumber, message
  } from 'antd';
 
 import Utils from '../../../util/util';
@@ -93,6 +93,11 @@ class BasicInfo extends PureComponent {
         const { form, detailData, detailSp, isEdit } = this.props;
         const { supplierBasicInfo = {} } = detailData;
         const wareHouseIds = this.wareHouse.getValue();
+        if (!this.orgId) {
+            Tip(true, '请选择子公司！');
+            return;
+        }
+        
         // 供应商供应地点没选择
         if (!wareHouseIds.length) {
             Tip(true, '请选择送货信息！');
@@ -118,7 +123,7 @@ class BasicInfo extends PureComponent {
                 } = values
                 const submit = {
                     spAdrBasic: {
-                        providerNo: supplierBasicInfo.spNo,
+                        providerNo: isEdit ? detailSp.id : this.props.supplierId,
                         providerName: this.childName,
                         goodsArrivalCycle,
                         orgId: this.orgId,
@@ -477,7 +482,13 @@ class BasicInfo extends PureComponent {
                                                         branchCompanyName: param.value,
                                                         id: detailSp.id,
                                                         parentId: detailData.id,
-                                                    }), 'findCanUseCompanyInfo')
+                                                    }), 'findCanUseCompanyInfo').then((res) => {
+                                                        const { data } = res.data;
+                                                        if (!data.length) {
+                                                            message.warning('无可用子公司，无法完成后续操作！');
+                                                        } 
+                                                        return res;
+                                                    })
                                                 }
                                                 ref={node => (this.orgCompany = node)}
                                                 onChoosed={this.handleChoose}

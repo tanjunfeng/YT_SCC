@@ -27,8 +27,10 @@ http.response(
             const { code } = res.data;
             const mess = res.data.message;
             const errText = ERRORTEXT[code];
-            const err = mess || (errText || '未知错误')
-            message.error(err);
+            if (typeof mess === 'string' || errText) {
+                const err = errText || (mess || '未知错误')
+                message.error(err);
+            }
         }
         return Promise.resolve(res);
     },

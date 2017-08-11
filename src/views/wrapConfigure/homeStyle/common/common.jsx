@@ -144,7 +144,8 @@ function Common(WrappedComponent) {
             this.setState({
                 uploadVisible: true,
                 image: item.icon,
-                current
+                current,
+                select: item.urlType
             })
         }
 
@@ -347,13 +348,13 @@ function Common(WrappedComponent) {
                                                 onChange={this.handleLinkStyleChange}
                                             >
                                                 <Option value="1">商品链接</Option>
-                                                <Option value="0">静态活动页面</Option>
+                                                <Option value="2">静态活动页面</Option>
                                             </Select>
                                         )}
                                     </FormItem>
                                 </div>
                                 {
-                                    this.state.select
+                                    `${this.state.select}` === '1'
                                     ? <div>
                                         <FormItem className="home-style-modal-input-item">
                                             <span>商品编号：</span>
@@ -377,7 +378,7 @@ function Common(WrappedComponent) {
                                                     {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'}
                                                     /* eslint-enable */
                                                 ],
-                                                initialValue: current.url
+                                                initialValue: current.url ? current.url : ''
                                             })(
                                                 <Input className="home-style-url" type="textarea" rows={2} placeholder="请输入超链接" />
                                             )}
