@@ -189,7 +189,7 @@ class ProdModal extends Component {
         }
         validateFields((err, values) => {
             const subData = Util.removeInvalid({
-                id: isEdit ? initValue.id : null ,
+                id: isEdit ? initValue.id : null,
                 // 供应商id
                 spId: this.ids.spId,
                 // 供应商地点id

@@ -22,8 +22,7 @@ http.response(
         if (res.data.code === 401) {
             LoginLayout();
             return Promise.reject(res);
-        }
-        else if (res.data.code !== 200) {
+        } else if (res.data.code !== 200) {
             const { code } = res.data;
             const mess = res.data.message;
             const errText = ERRORTEXT[code];
