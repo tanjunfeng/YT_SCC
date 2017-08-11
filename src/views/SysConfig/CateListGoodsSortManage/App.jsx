@@ -24,7 +24,8 @@ import {
 import {
     modifyAuditVisible,
     modifyCheckReasonVisible,
-    modifyDeleteOrderNum
+    modifyDeleteOrderNum,
+    modifyCategoryVisible
 } from '../../../actions';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
@@ -32,7 +33,6 @@ import ClassifiedSelect from '../../../components/threeStageClassification';
 import fetchCategoryList from '../../../actions/fetch/fetchCategory';
 import { categoryList } from '../../../constant/formColumns';
 import ChangeMessage from './changeCategoryMessage';
-import { modifyCategoryVisible } from '../../../actions';
 
 const confirm = Modal.confirm;
 const FormItem = Form.Item;
@@ -221,7 +221,7 @@ class CateGory extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { categoryorderlist = {} } = this.props;
+        const { prefixCls, categoryorderlist = {} } = this.props;
         const {
             data,
             pageNum,
@@ -231,15 +231,20 @@ class CateGory extends Component {
         columns[columns.length - 1].render = this.renderOperation;
         return (
             <div className="onsale">
-                <div className="onsale-form">
+                <div className="onsale-form" style={{marginTop: 10, marginBottom: 20}}>
                     <Form layout="inline">
-                        <div className="manage-form-item">
+                        <div className={`${prefixCls}-list`} style={{height: 70}}>
                             <FormItem>
-                                <div className="tjf-css-spfl">
+                                <div
+                                    className={`${prefixCls}-input xtpz-css-spfl`}
+                                    style={{ display: 'flex', marginTop: 20}}
+                                >
                                     <span
                                         className="classify-select-label"
+                                        style={{minWidth: 60, marginLeft: 10}}
                                     >商品分类</span>
                                     <ClassifiedSelect
+                                        style={{marginTop: 6}}
                                         wrapClass="classify-select"
                                         onChange={this.handleSelectChange}
                                     />
@@ -247,8 +252,14 @@ class CateGory extends Component {
                             </FormItem>
                             {/* 商品名称 */}
                             <FormItem className="manage-form-item1">
-                                <div>
-                                    <span className="manage-form-label">商品名称</span>
+                                <div
+                                    className={`${prefixCls}-input xtpz-css-spfl`}
+                                    style={{ display: 'flex', marginTop: 20}}
+                                >
+                                    <span
+                                        className="manage-form-label"
+                                        style={{minWidth: 60, marginLeft: 10}}
+                                    >商品名称</span>
                                     {getFieldDecorator('name', {
                                     })(
                                         <Input
@@ -260,8 +271,14 @@ class CateGory extends Component {
                             </FormItem>
                             {/* 商品编号 */}
                             <FormItem className="manage-form-item1">
-                                <div>
-                                    <span className="manage-form-label">商品编号</span>
+                                <div
+                                    className={`${prefixCls}-input xtpz-css-spfl`}
+                                    style={{ display: 'flex', marginTop: 20}}
+                                >
+                                    <span
+                                        className="manage-form-label"
+                                        style={{minWidth: 60, marginLeft: 10}}
+                                    >商品编号</span>
                                     {getFieldDecorator('id', {
                                     })(
                                         <Input
@@ -277,6 +294,7 @@ class CateGory extends Component {
                                         type="primary"
                                         onClick={this.handleSearch}
                                         size="default"
+                                        style={{marginTop: 21}}
                                     >
                                         查询
                                     </Button>
@@ -285,12 +303,17 @@ class CateGory extends Component {
                                     <Button
                                         size="default"
                                         onClick={this.handleReset}
+                                        style={{marginTop: 21}}
                                     >
                                         重置
                                     </Button>
                                 </FormItem>
                                 <FormItem>
-                                    <Button size="default" onClick={this.handleAdd}>
+                                    <Button
+                                        size="default"
+                                        onClick={this.handleAdd}
+                                        style={{marginTop: 21}}
+                                    >
                                         新增
                                     </Button>
                                 </FormItem>
@@ -331,6 +354,7 @@ CateGory.propTypes = {
 }
 
 CateGory.defaultProps = {
+    prefixCls: 'cateGory-line',
 }
 
 export default withRouter(Form.create()(CateGory));
