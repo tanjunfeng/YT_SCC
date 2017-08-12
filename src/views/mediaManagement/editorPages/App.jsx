@@ -10,7 +10,7 @@ import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Form, Button, message } from 'antd'
+import { Form, Button, message, Input } from 'antd'
 import CKEditor from 'react-ckeditor-component';
 
 import {
@@ -97,6 +97,10 @@ class EditorPages extends Component {
             <div className="editorPages">
                 <div className="editorPages-form">
                     <FormItem label="提示:" className="tjf-css-ts" />
+                    <div style={{paddingTop: 10, paddingBottom: 10, display: 'flex'}}>
+                        <Button type="primary">获取图片链接</Button>
+                        <Input placeholder="图片链接" style={{width: 800, marginLeft: 10}} />
+                    </div>
                     <CKEditor
                         activeClass="p10"
                         content={this.state.content}
