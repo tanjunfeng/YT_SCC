@@ -68,9 +68,7 @@ class CauseModal extends PureComponent {
                         remark: causeTextArea
                     }).then(res => {
                         // 列表页单个取消，刷新列表
-                        if (!causeRecordId) {
-                            this.props.getSearchData();
-                        }
+                        this.props.getSearchData();
                         this.props.modifyCauseModalVisible({ isShow: false });
                         this.props.fetchOrderDetailInfo({id: causeRecordId});
                         message.success(res.message);

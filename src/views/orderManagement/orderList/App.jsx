@@ -169,9 +169,9 @@ class OrderManagementList extends Component {
         }
     }
 
-     /**
-     * 获取表单信息,并查询列表
-     */
+    /**
+    * 获取表单信息,并查询列表
+    */
     getSearchData() {
         const {
             id,
@@ -296,7 +296,7 @@ class OrderManagementList extends Component {
                     this.getSearchData();
                 })
             },
-            onCancel() {},
+            onCancel() { },
         });
     }
 
@@ -305,11 +305,7 @@ class OrderManagementList extends Component {
      */
     handleOrderBatchCancel() {
         const { choose } = this.state;
-        this.props.modifyCauseModalVisible({ isShow: true, choose})
-        .then(() => {
-            message.success('批量取消成功！');
-            this.getSearchData();
-        })
+        this.props.modifyCauseModalVisible({ isShow: true, choose });
     }
 
     /**
@@ -364,11 +360,11 @@ class OrderManagementList extends Component {
                             message.success(err.message);
                         })
                     },
-                    onCancel() {},
+                    onCancel() { }
                 });
                 break;
             case 'tableCancel':
-                this.props.modifyCauseModalVisible({ isShow: true, id })
+                this.props.modifyCauseModalVisible({ isShow: true, id });
                 break;
             case 'tableRetransfer':
                 modifyResendOrder({
@@ -389,11 +385,10 @@ class OrderManagementList extends Component {
                         </div>
                     ),
                     okText: '返回',
-                    onOk() {},
+                    onOk() { }
                 });
                 break;
             default:
-
                 break;
         }
     }
@@ -413,7 +408,7 @@ class OrderManagementList extends Component {
                 </Menu.Item>
                 {
                     (orderStateDesc === '待审核'
-                    || orderStateDesc === '待人工审核')
+                        || orderStateDesc === '待人工审核')
                     && <Menu.Item key="tableAudit">
                         <a target="_blank" rel="noopener noreferrer">审核</a>
                     </Menu.Item>
@@ -495,7 +490,7 @@ class OrderManagementList extends Component {
                                                         )
                                                     }
                                                 </Select>
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -521,7 +516,7 @@ class OrderManagementList extends Component {
                                                         )
                                                     }
                                                 </Select>
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -550,7 +545,7 @@ class OrderManagementList extends Component {
                                                         )
                                                     }
                                                 </Select>
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -665,7 +660,7 @@ class OrderManagementList extends Component {
                                                         )
                                                     }
                                                 </Select>
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -675,7 +670,7 @@ class OrderManagementList extends Component {
                                         <div>
                                             <span className="sc-form-item-label">订单日期</span>
                                             <RangePicker
-                                                style={{width: '240px'}}
+                                                style={{ width: '240px' }}
                                                 className="manage-form-enterTime"
                                                 value={this.state.rengeTime}
                                                 format={DATE_FORMAT}
