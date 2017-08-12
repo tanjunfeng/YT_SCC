@@ -614,7 +614,9 @@ class ManagementList extends PureComponent {
                                                 ref={ref => { this.brandSearchMind = ref }}
                                                 fetch={(param) =>
                                                     this.props.pubFetchValueList({
-                                                        name: param.value
+                                                        name: param.value,
+                                                        pageSize: params.pagination.pageSize,
+                                                        pageNum: params.pagination.current || 1
                                                     }, 'queryBrandsByPages')
                                                 }
                                                 onChoosed={this.handleBrandChoose}

@@ -60,6 +60,7 @@ class SellPriceModal extends Component {
             message.error('请选择子公司');
         }
         validateFields((err, values) => {
+            if (err) return null;
             const result = values;
             result.sellSectionPrices = results;
             result.productId = datas.id || datas.productId;
@@ -104,6 +105,8 @@ class SellPriceModal extends Component {
     handleInsideChange = (num) => {
         this.setState({
             currentInside: num
+        },() => {
+            this.props.form.setFieldsValue({'minNumber': null})
         })
     }
 
@@ -142,7 +145,19 @@ class SellPriceModal extends Component {
                                     <span>*起订量：</span>
                                     <span>
                                         {getFieldDecorator('minNumber', {
-                                            rules: [{ required: true, message: '请输入最小起订量!' }],
+                                            rules: [
+                                                { required: true, message: '请输入最小起订量!' },
+                                                {
+                                                    validator: (rule, value, callback) => {
+                                                        const { getFieldValue } = this.props.form
+                                                        if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0 ) {
+                                                            callback('起订量需为内装数整数倍！')
+                                                        }
+
+                                                        callback()
+                                                    }
+                                                }
+                                            ],
                                             initialValue: newDates.minNumber
                                         })(
                                             <InputNumber min={0} step={currentInside || newDates.salesInsideNumber}/>
