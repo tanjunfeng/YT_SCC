@@ -90,7 +90,7 @@ export default function (state = initState, action) {
             basicInfo = po.basicInfo || {};
             basicInfo = Object.assign(basicInfo, action.payload);
             po.basicInfo = basicInfo;
-            return state.set("po", po);
+            return state.set("po", fromJS(po));
 
         // 添加采购单商品行(单数或复数)
         case ActionType.ADD_PO_LINES:
@@ -104,7 +104,7 @@ export default function (state = initState, action) {
                 poLines.push(action.payload);
             }
             po.poLines = poLines;
-            return state.set('po', po);
+            return state.set('po', fromJS(po));
 
         // 更新采购单商品行
         case ActionType.UPDATE_PO_LINE:
@@ -119,7 +119,7 @@ export default function (state = initState, action) {
                 }
             });
             po.poLines = poLines;
-            return state.set('po', po);
+            return state.set('po', fromJS(po));
 
         // 删除采购单商品行
         case ActionType.DELETE_PO_LINE:
@@ -129,10 +129,10 @@ export default function (state = initState, action) {
             poLines = po.poLines || [];
             payload = action.payload || {};
             let newPoLines = poLines.filter(function (line) {
-                return line.productCode != payload.productCode;
+                return line.productCode !== payload.productCode;
             });
             po.poLines = newPoLines;
-            return state.set("po", po);
+            return state.set("po", fromJS(po));
 
         case ActionType.RECEIVE_PO_RCV_MNG_LIST://采购收货单管理列表
             return state.set('poRcvMngList', fromJS(action.payload));
