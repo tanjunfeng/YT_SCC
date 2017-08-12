@@ -37,6 +37,10 @@ class SellPriceModal extends Component {
             branchCompanyId: props.datas.branchCompanyId,
             branchCompanyName: props.datas.branchCompanyName
         } : null;
+        this.state = {
+            currentInside: null,
+            insideValue: null
+        }
     }
 
     handleOk() {
@@ -97,9 +101,16 @@ class SellPriceModal extends Component {
         this.childCompany = null;
     }
 
+    handleInsideChange = (num) => {
+        this.setState({
+            currentInside: num
+        })
+    }
+
     render() {
         const { prefixCls, form, datas, isEdit } = this.props;
         const { getFieldDecorator } = form;
+        const { currentInside } = this.state;
         const newDates = JSON.parse(JSON.stringify(datas));
         return (
             <Modal
@@ -123,7 +134,7 @@ class SellPriceModal extends Component {
                                             rules: [{ required: true, message: '请输入销售内装数' }],
                                             initialValue: newDates.salesInsideNumber
                                         })(
-                                            <InputNumber min={0} />
+                                            <InputNumber min={0} onChange={this.handleInsideChange} />
                                         )}
                                     </span>
                                 </FormItem>
@@ -134,7 +145,7 @@ class SellPriceModal extends Component {
                                             rules: [{ required: true, message: '请输入最小起订量!' }],
                                             initialValue: newDates.minNumber
                                         })(
-                                            <InputNumber min={0} />
+                                            <InputNumber min={0} step={currentInside || newDates.salesInsideNumber}/>
                                         )}
                                     </span>
                                 </FormItem>
