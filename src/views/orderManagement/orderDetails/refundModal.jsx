@@ -48,7 +48,7 @@ class RefundModal extends PureComponent {
      */
     handleTableCauseOk() {
         const { causeTextArea, inputNumber } = this.props.form.getFieldsValue();
-        const { recordData } = this.props;
+        const { recordData, totalAmount } = this.props;
         const { option } = this.state;
         switch (option) {
             case '请选择':
@@ -187,7 +187,7 @@ class RefundModal extends PureComponent {
                                         <span className="order-modal-label">
                                             订单金额:
                                         </span>
-                                        {getFieldDecorator('inputNumber', {
+                                        {getFieldDecorator('totalAmount', {
                                             initialValue: this.props.totalAmount
                                         })(
                                             <InputNumber

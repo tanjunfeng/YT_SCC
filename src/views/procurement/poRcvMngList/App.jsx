@@ -275,7 +275,7 @@ class PoRcvMngList extends PureComponent {
         let tmp = params || {};
         let allParams = Object.assign({
             pageSize: PAGE_SIZE,
-            pageNum: this.current
+            pageNum: this.current || 1
         }, allParams, this.searchParams, tmp);
         this.props.fetchPoRcvMngList(allParams);
     }
@@ -289,13 +289,13 @@ class PoRcvMngList extends PureComponent {
         //重置form
         this.props.form.resetFields();
         this.supplySearchMind.handleClear(); // 供应商查询清空
-        this.addressSearchMind.reset(); // 供应商地址清空
-        this.searchMind.reset(); // 收货地址清空
+        this.supplyAddressSearchMind.handleClear(); // 供应商地址清空
+        this.receiptAddressSearchMind.handleClear(); // 收货地址清空
     }
 
     // 获取供应商编号
     handleSupplyChoose = ({ record }) => {
-        this.setState({ spNo: record.spAdrid })
+        this.setState({ spNo: record.spNo })
     }
 
     // 供应商值清单-清除
@@ -307,7 +307,7 @@ class PoRcvMngList extends PureComponent {
      * 获取供应商地点编号
      */
     handleAdressChoose = ({ record }) => {
-        this.setState({ spAdrNo: record.spAdrid });
+        this.setState({ spAdrNo: record.providerNo });
     }
 
     /**
@@ -401,12 +401,7 @@ class PoRcvMngList extends PureComponent {
                                         <span className="ant-form-item-label">
                                             <label>收货日期</label>
                                         </span>
-                                        {getFieldDecorator('receivedDuring', {
-                                            initialValue: [
-                                                moment(new Date(), dateFormat),
-                                                moment(new Date(), dateFormat)
-                                            ]
-                                        })(
+                                        {getFieldDecorator('receivedDuring', {})(
                                             <RangePicker
                                                 className="date-range-picker"
                                                 format={dateFormat}
@@ -462,7 +457,7 @@ class PoRcvMngList extends PureComponent {
                                                         this.supplier = supplier
                                                     }}>{companyList.spId}-{companyList.companyName}</div>
                                             )}
-                                            rowKey="spAdrid"
+                                            rowKey="spId"
                                             pageSize={5}
                                             columns={[
                                                 {
@@ -487,15 +482,13 @@ class PoRcvMngList extends PureComponent {
                                             <label>供应商地点</label>
                                         </span>
                                         <SearchMind
-                                            rowKey="spAdrid"
-                                            compKey="search-mind-supply"
+                                            rowKey="providerNo"
+                                            compKey="search-mind-supply-address"
                                             ref={ref => {
-                                                this.addressSearchMind = ref
+                                                this.supplyAddressSearchMind = ref
                                             }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
+                                                condition: params.value
                                             }, 'supplierAdrSearchBox')}
                                             onChoosed={this.handleAdressChoose}
                                             onClear={this.handleAdressClear}
@@ -514,7 +507,7 @@ class PoRcvMngList extends PureComponent {
                                                     width: 200
                                                 }, {
                                                     title: '供应商地点ID',
-                                                    dataIndex: 'spAdrid',
+                                                    dataIndex: 'spAdrNo',
                                                     width: 200
                                                 }, {
                                                     title: '供应商名称',
@@ -584,11 +577,9 @@ class PoRcvMngList extends PureComponent {
                                             style={{ zIndex: 7 }}
                                             compKey="search-mind-key1"
                                             rowKey="id"
-                                            ref={ref => { this.searchMind = ref }}
+                                            ref={ref => { this.receiptAddressSearchMind = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
+                                                condition: params.value
                                             }, 'getWarehouseInfo1')}
                                             onChoosed={this.handleReceiveAdressChoose}
                                             onClear={this.handleReceiveAdressClear}
