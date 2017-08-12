@@ -848,6 +848,8 @@ class PoDetail extends PureComponent {
 	 * 校验输入数据
 	 */
 	validateForm() {
+		console.log()
+		// 新增时数据
 		const basicInfo= this.getFormBasicInfo();
 		const {
 			addressId,
@@ -855,14 +857,49 @@ class PoDetail extends PureComponent {
 			spAdrId,
 		} = basicInfo;
 		const {pickerDate} = this.state;
+
+		// 修改时数据
+		const updateBasicInfo= this.props.basicInfo;
+		// const {
+		// 	adrTypeCode,
+		// 	spId,
+		// 	spAdrId,
+		// } = updateBasicInfo;
+
 		let isOk = true;
 		const { form } = this.props;
 		form.validateFields((err, values) => {
 			if (!err) {
-				if (addressId && spId && spAdrId && pickerDate) {
-					isOk = true;
+				if (updateBasicInfo.status === 0) {
+					// 修改页
+					console.log('修改页');
+					const {
+						adrTypeCode,
+						spId,
+						spAdrId,
+					} = updateBasicInfo;
+					if (
+						updateBasicInfo.adrTypeCode
+						&& updateBasicInfo.spId
+						&& updateBasicInfo.spAdrId
+						&& updateBasicInfo.estimatedDeliveryDate
+					) {
+						isOk = true;
+						return isOk;
+					} else {
+						isOk = false;
+						return isOk;
+					}
 				} else {
-					isOk = false;
+					// 新增页
+					console.log("新增页")
+					if (addressId && spId && spAdrId && pickerDate) {
+						isOk = true;
+						return isOk;
+					} else {
+						isOk = false;
+						return isOk;
+					}
 				}
 			} else {
 				isOk = false;
@@ -1026,6 +1063,7 @@ class PoDetail extends PureComponent {
 				productCode,
 				purchaseNumber
 			} = item;
+			console.log('prodPurchaseId',poData)
 			return {
 				prodPurchaseId,
 				productId,
