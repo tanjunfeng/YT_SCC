@@ -165,11 +165,11 @@ class PoMngList extends PureComponent {
         const menu = (
             <Menu>
                 <Menu.Item key="detail">
-                    <Link to={detailLink}>详情</Link>
+                    <Link to={`${pathname}/detail/${id}`}>详情</Link>
                 </Menu.Item>
                 { status === deleteCode &&
                     <Menu.Item key="modify">
-                        <Link to={detailLink}>修改</Link>
+                        <Link to={`${pathname}/edit/${id}`}>修改</Link>
                     </Menu.Item>
                 }
                 { status === deleteCode &&

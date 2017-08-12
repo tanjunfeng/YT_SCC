@@ -413,13 +413,23 @@ const routes = [
                                 {(App) => <App />}
                             </Bundle>)}
                         />
-                        <Route
-                            path="/po/create"
+                        {/* /po/create */}
+                         <Route
+                            path="/po/:type"
                             exact
                             render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
                         />
-                        <Route
+                        {/* <Route
                             path="/po/:purchaseOrderNo"
+                            exact
+                            render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
+                        />  */}
+                        {/*
+                          *  /po/edit/xxxx
+                          *  /po/detail/xxxx
+                          */}
+                        <Route
+                            path="/po/:type/:purchaseOrderNo"
                             exact
                             render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
                         />
