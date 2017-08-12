@@ -62,6 +62,7 @@ class Audit extends PureComponent {
                         option: '请选择'
                     })
                     message.success(res.message);
+                    this.props.history.goBack();
                 }).catch(err => {
                     message.error(err.message);
                 })
@@ -79,6 +80,7 @@ class Audit extends PureComponent {
                                 option: '请选择'
                             })
                             message.success(res.message);
+                            this.props.history.goBack();
                         }).catch(err => {
                             message.error(err.message);
                         })
@@ -170,6 +172,7 @@ class Audit extends PureComponent {
 Audit.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     fetchPaymentDetailInfo: PropTypes.arrayOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
     causeRecordId: PropTypes.string,
     causeModalVisible: PropTypes.bool,
     modifyCauseModalVisible: PropTypes.func,
