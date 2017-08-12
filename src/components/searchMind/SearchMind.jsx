@@ -113,8 +113,10 @@ class SearchMind extends Component {
         if (nextProps.disabled !== this.props.disabled) {
             this.setState({
                 disabled: nextProps.disabled,
-                dropHide: nextProps.disabled,
-                isFocus: !nextProps.disabled,
+                ...(nextProps.disabled && {
+                    dropHide: true,
+                    isFocus: false,
+                })
             });
         }
     }
@@ -182,6 +184,8 @@ class SearchMind extends Component {
             type,
             data,
             pagination,
+            disabled,
+            isFocus,
         } = this.state;
 
         const {
@@ -190,6 +194,10 @@ class SearchMind extends Component {
             loadingText,
             rowKey,
         } = this.props;
+
+        if (disabled) {
+            return null;
+        }
 
         // 有数据列表
         if (data && data.length > 0) {
@@ -493,10 +501,10 @@ class SearchMind extends Component {
 
         const clearCls = classNames('ywc-smind-clear', {
             'ywc-smind-clear-show':
-            // 下拉框显示中，同时输入框内容不为空的情况
-            (!dropHide && !this.isEmpty())
-            // 输入框无焦点，同时有选择内容展示的情况
-            || (!isFocus && selectedRawData)
+                // 下拉框显示中，同时输入框内容不为空的情况
+                (!dropHide && !this.isEmpty())
+                // 输入框无焦点，同时有选择内容展示的情况
+                || (!isFocus && selectedRawData)
         });
 
         const inputProps = {

@@ -2,7 +2,7 @@
  * @file causeModal.jsx
  * @author caoyanxuan
  *
- * 订单管理-取消原因模态框
+ * 采购订单-审核模态框
  */
 
 import React, { PureComponent } from 'react';
@@ -55,7 +55,7 @@ class Audit extends PureComponent {
             case '通过':
                 modifyAuditPurchaseOrderInfo({
                     id: causeRecordId,
-                    status: 0,
+                    status: 2,
                 }).then(res => {
                     this.props.modifyCauseModalVisible({ isShow: false });
                     this.setState({
@@ -71,7 +71,7 @@ class Audit extends PureComponent {
                     if (!error) {
                         modifyAuditPurchaseOrderInfo({
                             id: causeRecordId,
-                            status: 1,
+                            status: 3,
                             failedReason: causeTextArea
                         }).then(res => {
                             this.props.modifyCauseModalVisible({ isShow: false });
