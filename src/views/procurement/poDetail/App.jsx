@@ -239,7 +239,9 @@ class PoDetail extends PureComponent {
 			// 供应商地点id
 			spAdrId: null,
 			// 当前状态
-			currentType: ''
+			currentType: '',
+			// nextProps里的polings
+			nextPoLines: []
 		}
 	}
 
@@ -295,7 +297,6 @@ class PoDetail extends PureComponent {
 
 	componentWillReceiveProps(nextProps) {
 		const { adrType, settlementPeriod, payType, estimatedDeliveryDate, purchaseOrderType, currencyCode, id, spId, spAdrId } = nextProps.basicInfo;
-		console.log("12131312",spAdrId)
 		const { basicInfo = {}} = this.props;
 		if (basicInfo.id !== id) {
 			this.setState({
@@ -310,14 +311,11 @@ class PoDetail extends PureComponent {
 				purchaseOrderType: purchaseOrderType === 0 ? `${purchaseOrderType}` : '',
 				localType: adrType === 0 || adrType === 1 ? `${adrType}` : '',
 				currencyCode: currencyCode === 'CNY' ? `${currencyCode}` : 'CNY',
+				nextPoLines: nextProps.poLines,
 			}, () => {
-				console.log(this.state.spAdrId)
 			})
 		}
-
-		if (nextProps.poLines.length !== this.props.poLines.length) {
-		}
-			this.caculate();
+		this.caculate();
 	}
 
 	componentWillUnmount(){
@@ -447,7 +445,9 @@ class PoDetail extends PureComponent {
 	 * 计算对象：未删除&&采购数量不为空 
 	 */
 	caculate() {
-		let poLines = this.props.poLines || [];
+				console.log(this.state.nextPoLines)
+		
+		let poLines = this.state.nextPoLines || [];
 		let result = {};
 		//合计采购数量
 		let totalQuantitys = 0;
@@ -1065,8 +1065,9 @@ class PoDetail extends PureComponent {
 			adrType,
 			currencyCode,
 			purchaseOrderType,
-			adrTypeCode
+			addressCd,
 		} = poData.basicInfo;
+		console.log('adrTypeCode',poData.basicInfo.addressCd)
 		// 采购商品信息
 		const pmPurchaseOrderItems = poData.poLines.map((item) => {
 			const {
@@ -1092,7 +1093,7 @@ class PoDetail extends PureComponent {
 				estimatedDeliveryDate,
 				payType,
 				adrType: parseInt(adrType),
-				adrTypeCode,
+				adrTypeCode: addressCd,
 				currencyCode,
 				purchaseOrderType: parseInt(purchaseOrderType),
 				status,
@@ -1759,7 +1760,6 @@ class PoDetail extends PureComponent {
 	}
 	render() {
 		const { totalAmounts, totalQuantitys, applySupplierRecord, spAdrId } = this.state;
-		console.log('s22222',this.props.data)
 		const supplierInfo = spAdrId ? (spAdrId + '-1') : null;
 		const { getFieldDecorator } = this.props.form;
 		const { poLines, basicInfo } = this.props;
@@ -1791,6 +1791,7 @@ class PoDetail extends PureComponent {
 												pageSize: params.pagination.pageSize
 											}, 'queryProductForSelect')
 										}
+										disabled={this.state.isWarehouseDisabled}
 										addonBefore="添加商品"
 										onChoosed={this.handleChoosedMaterialMap}
 										renderChoosedInputRaw={(data) => (
