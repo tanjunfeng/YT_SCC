@@ -568,7 +568,7 @@ class OrderManagementList extends Component {
                                                 onChoosed={this.handleJoiningChoose}
                                                 onClear={this.handleJoiningClear}
                                                 renderChoosedInputRaw={(data) => (
-                                                    <div>{data.franchiseeId}</div>
+                                                    <div>{data.franchiseeId} - {data.franchiseeName}</div>
                                                 )}
                                                 pageSize={6}
                                                 columns={[
