@@ -26,7 +26,7 @@ const columns = [
         key: 'sort',
     },
     {
-        title: '参数内容（10个字节以内）',
+        title: '参数内容（5个字以内）',
         dataIndex: 'content',
         key: 'content',
     },
