@@ -158,7 +158,7 @@ class RefundModal extends PureComponent {
                         onOk={this.handleTableCauseOk}
                         onCancel={this.handleTableCauseCancel}
                     >
-                        <Form layout="inline">
+                        <Form>
                             <FormItem>
                                 <div>
                                     <span className="order-modal-label">
@@ -181,7 +181,28 @@ class RefundModal extends PureComponent {
                             </FormItem>
                             {
                                 option === '通过' && recordData.state === 'pending_audit'
-                                && <FormItem>
+                                &&
+                                <FormItem>
+                                    <div>
+                                        <span className="order-modal-label">
+                                            订单金额:
+                                        </span>
+                                        {getFieldDecorator('inputNumber', {
+                                            initialValue: this.props.totalAmount
+                                        })(
+                                            <InputNumber
+                                                min={0.00}
+                                                disabled={true}
+                                                max={this.props.totalAmount}
+                                                step={0.01}
+                                            />
+                                            )}
+                                    </div>
+                                </FormItem>
+                            }
+                            {option === '通过' && recordData.state === 'pending_audit'
+                                &&
+                                <FormItem>
                                     <div>
                                         <span className="order-modal-label">
                                             退款金额:
@@ -196,8 +217,7 @@ class RefundModal extends PureComponent {
                                             />
                                             )}
                                     </div>
-                                </FormItem>
-                            }
+                                </FormItem>}
                             {
                                 option === '不通过'
                                 && <FormItem>
