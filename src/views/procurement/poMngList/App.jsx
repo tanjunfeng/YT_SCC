@@ -51,7 +51,8 @@ class PoMngList extends PureComponent {
         this.state = {
             auditingVisible: false,
             deleteListData: [],
-            purchaseListRows: []
+            purchaseListRows: [],
+            failedReason: ''
         }
     }
 
@@ -85,9 +86,10 @@ class PoMngList extends PureComponent {
     }
 
     // 审核未通过弹窗
-    showAuditingModal = () => {
+    showAuditingModal = (record) => {
         this.setState({
-            auditingVisible: true
+            auditingVisible: true,
+            failedReason: record.failedReason
         });
     }
 
@@ -154,8 +156,6 @@ class PoMngList extends PureComponent {
 
     // table列表详情操作
     renderActions = (text, record) => {
-        this.selectedRowData = record;
-
         const { status, purchaseOrderNo, id } = record;
         const deleteCode = 0;
         const auditingCode = 2;
@@ -178,7 +178,7 @@ class PoMngList extends PureComponent {
                     </Menu.Item>
                 }
                 {status === refuseCOde && <Menu.Item key="rejected">
-                    <span onClick={this.showAuditingModal}>查看审核未通过</span>
+                    <span onClick={() => this.showAuditingModal(record)}>查看审核未通过</span>
                 </Menu.Item>
                 }
                 {status === auditingCode && <Menu.Item key="receive">
@@ -206,8 +206,6 @@ class PoMngList extends PureComponent {
 
         const { pathname } = this.props.location;
         const { auditingVisible } = this.state;
-        const { failedReason = '', auditTime, auditUserId, ipurchaseOrderNo} = this.selectedRowData;
-
         const rowSelection = {
             getCheckboxProps: record => ({
                 disabled: record.status !== 0
@@ -264,16 +262,10 @@ class PoMngList extends PureComponent {
                         visible={auditingVisible}
                         onCancel={this.handleAuditingCancel}
                         footer={[
-                            <Button type="primary"><Link to={`${pathname}/podetail/${ipurchaseOrderNo}`}>立即修改</Link></Button>
+                            <Button type="primary" onClick={this.handleAuditingCancel}>返回</Button>
                         ]}
                     >
-                        {
-                            <ul>
-                                <li>审核时间: {auditTime}</li>
-                                <li>审核者: {auditUserId}</li>
-                                <li>失败原因: {failedReason}</li>
-                            </ul>
-                        }
+                        { this.state.failedReason }
                     </Modal>
                 }
             </div>

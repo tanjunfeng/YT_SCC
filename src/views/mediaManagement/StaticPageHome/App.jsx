@@ -24,14 +24,14 @@ import {
 import {
     modifyAuditVisible,
     modifyCheckReasonVisible,
-    modifyDeleteOrderNum
+    modifyDeleteOrderNum,
+    modifyMediaAddVisible
 } from '../../../actions';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import fetchStaticPageList from '../../../actions/fetch/fetchStaticPageList';
 import { staticPageHome } from '../../../constant/formColumns';
 import ChangeMessage from './changeCategoryMessage';
-import { modifyMediaAddVisible } from '../../../actions';
 
 const FormItem = Form.Item;
 const columns = staticPageHome;
@@ -163,7 +163,7 @@ class CateGory extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { findstaticpagelist = {} } = this.props;
+        const { findstaticpagelist = {}, prefixCls } = this.props;
         const {
             data,
             pageNum,
@@ -271,11 +271,13 @@ CateGory.propTypes = {
     fetchStaticPageList: PropTypes.func,
     modifyMediaAddVisible: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
+    prefixCls: PropTypes.string,
     findstaticpagelist: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
 }
 
 CateGory.defaultProps = {
-}
+    prefixCls: 'cateGory-line',
+};
 
 export default withRouter(Form.create()(CateGory));

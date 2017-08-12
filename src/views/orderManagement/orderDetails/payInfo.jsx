@@ -51,11 +51,13 @@ class PayInformation extends PureComponent {
             title: '日期',
             dataIndex: 'createTime',
             key: 'createTime',
-            render: (text) => (
-                <span>
-                    {moment(parseInt(text, 10)).format(DATE_FORMAT)}
-                </span>
-            )
+            render: (timestampBack) => {
+                let text = '-'
+                if (timestampBack) {
+                    text = moment(new Date(timestampBack)).format(DATE_FORMAT);
+                }
+                return text;
+            }
         }, {
             title: '金额',
             dataIndex: 'amount',
@@ -87,11 +89,13 @@ class PayInformation extends PureComponent {
             title: '操作日期',
             dataIndex: 'operationTime',
             key: 'operationTime',
-            render: (text) => (
-                <span>
-                    {moment(parseInt(text, 10)).format(TIME_FORMAT)}
-                </span>
-            )
+            render: (timestampBack) => {
+                let text = '-'
+                if (timestampBack) {
+                    text = moment(new Date(timestampBack)).format(DATE_FORMAT);
+                }
+                return text;
+            }
         }, {
             title: '操作',
             dataIndex: 'state',
@@ -131,7 +135,7 @@ class PayInformation extends PureComponent {
      * @param {Object} record 该行数据
      */
     handleAuditRefund(record) {
-        this.props.modifyCauseModalVisible({ isVisible: true, record})
+        this.props.modifyCauseModalVisible({ isVisible: true, record })
     }
 
     /**
@@ -139,7 +143,7 @@ class PayInformation extends PureComponent {
      * @param {Object} record 该行数据
      */
     handleRefundOk(record) {
-        this.props.modifyCauseModalVisible({ isVisible: true, record})
+        this.props.modifyCauseModalVisible({ isVisible: true, record })
     }
 
     render() {
@@ -202,7 +206,7 @@ class PayInformation extends PureComponent {
                     </Row>
                 </div>
                 <div>
-                    <RefundModal />
+                    <RefundModal totalAmount={totalAmount} />
                 </div>
             </div>
         );

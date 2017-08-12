@@ -233,7 +233,7 @@ class ChangeMessage extends PureComponent {
             isEdit
         } = this.props.visibleData;
         const productNo = id;
-        const { querygoodsname = '' } = this.props;
+        const { querygoodsname = '', prefixCls } = this.props;
         const name1 = querygoodsname === null ? '' : querygoodsname;
         const { isDisabled } = this.state;
         return (
@@ -248,10 +248,10 @@ class ChangeMessage extends PureComponent {
                         maskClosable={false}
                         width="500px"
                     >
-                        <Form className="change-form">
-                            <FormItem>
-                                <div className="tjf-css-modal-spfl">
-                                    <div className="classify-select-label">
+                        <Form className="jtgl-change-form">
+                            <FormItem className="manage-form-item1">
+                                <div className={`${prefixCls}-flex`}>
+                                    <div className={`${prefixCls}-spfl classify-select-label`}>
                                         商品分类
                                     </div>
                                     <ClassifiedSelect
@@ -265,9 +265,9 @@ class ChangeMessage extends PureComponent {
                                     />
                                 </div>
                             </FormItem>
-                            <FormItem className="manage-form-item">
+                            <FormItem className="manage-form-item2">
                                 <div>
-                                    <span className="manage-form-label">商品编号</span>
+                                    <span className={`${prefixCls}-label`}>商品编号</span>
                                     {getFieldDecorator('productNo', {
                                         rules: [{
                                             required: true,
@@ -278,7 +278,7 @@ class ChangeMessage extends PureComponent {
                                     })(
                                         <Input
                                             disabled={isDisabled}
-                                            className="nameShow ant-input-lg"
+                                            className={`${prefixCls}-input nameShow ant-input-lg`}
                                             placeholder="请输入商品编号"
                                             onBlur={this.handleBackShow}
                                         />
@@ -286,7 +286,7 @@ class ChangeMessage extends PureComponent {
                                 </div>
                             </FormItem>
                             <FormItem className="manage-form-item">
-                                <span className="manage-form-label">商品名称</span>
+                                <span className={`${prefixCls}-label`}>商品名称</span>
                                 {getFieldDecorator('name1', {
                                     rules: [{
                                         required: true,
@@ -298,12 +298,12 @@ class ChangeMessage extends PureComponent {
                                     <Input
                                         readOnly
                                         disabled={isDisabled}
-                                        className="nameShow"
+                                        className={`${prefixCls}-input nameShow ant-input-lg`}
                                     />
                                     )}
                             </FormItem>
                             <FormItem className="manage-form-item">
-                                <span className="manage-form-label">商品排序</span>
+                                <span className={`${prefixCls}-label`}>商品排序</span>
                                 {getFieldDecorator('newOrderNum', {
                                     rules: [{
                                         required: true,
@@ -315,7 +315,7 @@ class ChangeMessage extends PureComponent {
                                     <Input
                                         disabled={isDisabled}
                                         placeholder="请输入商品序号"
-                                        className="nameShow"
+                                        className={`${prefixCls}-input nameShow ant-input-lg`}
                                     />
                                 )}
                             </FormItem>
@@ -337,7 +337,12 @@ ChangeMessage.propTypes = {
     fetchCategoryList: PropTypes.func,
     modifyQuerygoodsname: PropTypes.func,
     toAddPriceVisible: PropTypes.bool,
+    prefixCls: PropTypes.string,
     modifyUpDateCategory: PropTypes.func,
 }
+
+ChangeMessage.defaultProps = {
+    prefixCls: 'changeMessage-line',
+};
 
 export default withRouter(Form.create()(ChangeMessage));

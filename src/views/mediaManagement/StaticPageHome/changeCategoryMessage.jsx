@@ -121,6 +121,7 @@ class ChangeMessage extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
+        const { prefixCls } = this.props;
         const {
             name,
             description,
@@ -137,11 +138,10 @@ class ChangeMessage extends PureComponent {
                     initialValue={this.props.visibleData}
                     width="450px"
                 >
-                    <Form className="change-form">
+                    <Form className="jtgl-change-form">
                         <FormItem className="manage-form-item1">
                             <div>
-                                <span
-                                    className="manage-form-label tjf-css-mc">
+                                <span className={`${prefixCls}-mc`}>
                                     <b>*</b>
                                     名称
                                 </span>
@@ -152,14 +152,12 @@ class ChangeMessage extends PureComponent {
                                     }],
                                     initialValue: name
                                 })(
-                                    <Input
-                                        className="nameShow ant-input-lg"
-                                    />
+                                    <Input className={`${prefixCls}-input nameShow ant-input-lg`} />
                                 )}
                             </div>
                         </FormItem>
-                        <FormItem className="manage-form-item1">
-                            <span className="manage-form-label tjf-css-ms">描述</span>
+                        <FormItem className="manage-form-item2">
+                            <span className={`${prefixCls}-ms`}>描述</span>
                             {getFieldDecorator('description', {
                                 rules: [{
                                     required: true,
@@ -169,7 +167,7 @@ class ChangeMessage extends PureComponent {
                             })(
                                 <Input
                                     type="textarea"
-                                    className="tjf-css-textarea"
+                                    className={`${prefixCls}-input nameShow ant-input-lg`}
                                     rows={4}
                                 />
                                 )}
@@ -190,6 +188,11 @@ ChangeMessage.propTypes = {
     fetchFindStaticPageList: PropTypes.func,
     modifyUpdatePageBase: PropTypes.func,
     toAddPriceVisible: PropTypes.bool,
+    prefixCls: PropTypes.string,
 }
+
+ChangeMessage.defaultProps = {
+    prefixCls: 'changeMessage-line',
+};
 
 export default withRouter(Form.create()(ChangeMessage));

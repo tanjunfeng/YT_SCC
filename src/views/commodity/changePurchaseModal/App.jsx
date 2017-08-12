@@ -404,7 +404,7 @@ class ProdModal extends Component {
                                             defaultValue={
                                                 (warehouseCode || initValue.distributeWarehouseId)
                                                 && `${warehouseCode || initValue.distributeWarehouseId} - ${warehouseName || initValue.distributeWarehouseName}`}
-                                            style={{ zIndex: 1 }}
+                                            style={{ zIndex: 1, color: '#666' }}
                                             disabled={this.state.isDisabled}
                                             compKey="search-mind-key1"
                                             ref={ref => { this.searchMind3 = ref }}
