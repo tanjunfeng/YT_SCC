@@ -129,10 +129,6 @@ class OrderManagementList extends Component {
         this.subCompanySearchMind = null;
         this.searchData = {};
         this.current = 1;
-        this.time = {
-            submitStartTime: yesterdayDate,
-            submitEndTime: todayDate,
-        }
         this.state = {
             choose: [],
             franchiseeId: null,
@@ -140,7 +136,11 @@ class OrderManagementList extends Component {
             rengeTime: yesterdayrengeDate,
             auditModalVisible: false,
             tableOrderNumber: null,
-            isPayDisabled: false
+            isPayDisabled: false,
+            time: {
+                submitStartTime: yesterdayDate,
+                submitEndTime: todayDate,
+            }
         }
     }
 
@@ -153,20 +153,22 @@ class OrderManagementList extends Component {
      * @param {array} result [moment, moment]
      */
     onEnterTimeChange(result) {
-        this.setState({
-            rengeTime: result
-        });
+        let start = yesterdayDate, end = todayDate;
         if (result.length === 2) {
-            this.time = {
-                submitStartTime: result[0].valueOf().toString(),
-                submitEndTime: result[1].valueOf().toString()
-            }
-        } else {
-            this.time = {
-                submitStartTime: yesterdayDate,
-                submitEndTime: todayDate,
-            }
+            start = result[0].valueOf().toString();
+            end = result[1].valueOf().toString();
         }
+        if (result.length === 0) {
+            start = '';
+            end = '';
+        }
+        this.setState({
+            rengeTime: result,
+            time: {
+                submitStartTime: start,
+                submitEndTime: end
+            }
+        });
     }
 
     /**
@@ -182,8 +184,8 @@ class OrderManagementList extends Component {
             shippingState,
         } = this.props.form.getFieldsValue();
 
-        const { submitStartTime, submitEndTime } = this.time;
         const { franchiseeId, branchCompanyId } = this.state;
+        const { submitStartTime, submitEndTime } = this.state.time;
         this.current = 1;
         this.searchData = {
             id,
@@ -321,12 +323,12 @@ class OrderManagementList extends Component {
     handleOrderReset() {
         this.setState({
             rengeTime: yesterdayrengeDate,
-            isPayDisabled: false
+            isPayDisabled: false,
+            time: {
+                submitStartTime: yesterdayDate,
+                submitEndTime: todayDate,
+            }
         });
-        this.time = {
-            submitStartTime: yesterdayDate,
-            submitEndTime: todayDate,
-        }
         this.joiningSearchMind.handleClear();
         this.subCompanySearchMind.handleClear();
         this.props.form.resetFields();
@@ -676,6 +678,7 @@ class OrderManagementList extends Component {
                                                 format={DATE_FORMAT}
                                                 placeholder={['开始时间', '结束时间']}
                                                 onChange={this.onEnterTimeChange}
+
                                             />
                                         </div>
                                     </FormItem>
