@@ -386,7 +386,7 @@ class PoDetail extends PureComponent {
 	 * 地点类型改变时，做如下处理
 	 * 1.控制地点值清单是否可编辑
 	 * 2.清空地点值
-	 * @param {*} value 
+	 * @param {*} value
 	 */
 	onLocTypeChange(value) {
 		//地点类型有值
@@ -442,11 +442,9 @@ class PoDetail extends PureComponent {
 
 	/**
 	 * 计算采购总数量、采购总金额
-	 * 计算对象：未删除&&采购数量不为空 
+	 * 计算对象：未删除&&采购数量不为空
 	 */
 	caculate() {
-				console.log(this.state.nextPoLines)
-		
 		let poLines = this.state.nextPoLines || [];
 		let result = {};
 		//合计采购数量
@@ -527,7 +525,7 @@ class PoDetail extends PureComponent {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	handleGetSupplierLocMap = ({ value, pagination }) => {
 		let pageNum = pagination.current || 1;
@@ -560,7 +558,7 @@ class PoDetail extends PureComponent {
 	 *   1.清空供应商地点
 	 *   2.删除采购商品行
 	 *   3.清空账期、付款方式
-	 * @param {*} value 
+	 * @param {*} value
 	 */
 	applySupplierChange(value) {
 		//供应商有值
@@ -610,7 +608,7 @@ class PoDetail extends PureComponent {
 	 * 供应商地点变更时，做如下处理
 	 *  1.删除采购商品行
 	 *  2.清空账期、付款方式
-	 * @param {*} res 
+	 * @param {*} res
 	 */
 	applySupplierLocChoosed(res) {
 		if (res) {
@@ -683,7 +681,7 @@ class PoDetail extends PureComponent {
 		// 		that.props.updatePoLine(item);
 		// 		that.props.updatePoLine(item);
 		// 		console.log(2222222)
-				
+
 		// 	}
 		// });
 
@@ -1130,7 +1128,7 @@ class PoDetail extends PureComponent {
 
 	/**
 	 * 审核弹出框点击"确定" 回调函数
-	 * @param {*} values 
+	 * @param {*} values
 	 */
 	applyAuditOk(values) {
 		let that = this;
@@ -1149,7 +1147,7 @@ class PoDetail extends PureComponent {
 
 	/**
 	 * 审核弹出框点击"取消" 回调函数
-	 * @param {*} res 
+	 * @param {*} res
 	 */
 	applyAuditCancel(res) {
 		this.setState({ auditModalVisible: false });
@@ -1168,7 +1166,7 @@ class PoDetail extends PureComponent {
 	}
 	/**
 	 * 渲染账期
-	 * @param {*} key 
+	 * @param {*} key
 	 */
 	renderPeriod(key) {
 		switch (key) {
@@ -1186,7 +1184,7 @@ class PoDetail extends PureComponent {
 	}
 	/**
 	 * 渲染付款方式
-	 * @param {*} key 
+	 * @param {*} key
 	 */
 	renderPayType(key) {
 		switch (key) {
@@ -1250,7 +1248,7 @@ class PoDetail extends PureComponent {
 		const createdAt = basicInfo.createdAt
 		? basicInfo.createdAt
 		: moment().format('YYYY-MM-DD')
-		
+
 		//供应商值清单回显数据
 		const supplierDefaultValue = basicInfo.spId
 		? `${basicInfo.spNo}-${basicInfo.spName}`
@@ -1318,7 +1316,7 @@ class PoDetail extends PureComponent {
 								{/* 预计送货日期 */}
 								<FormItem label="预计送货日期">
 									<span>{estimatedDeliveryDate}</span>
-									
+
 								</FormItem>
 							</Col>
 						</Row>
