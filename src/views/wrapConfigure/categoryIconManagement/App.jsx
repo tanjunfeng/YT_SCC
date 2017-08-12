@@ -61,7 +61,6 @@ class CategoryIconManagement extends Component {
     }
 
     render() {
-        console.log(this.categoryArrs)
         const firstArr = this.categoryArrs[0] ? this.categoryArrs[0] : [];
         const secondArr = this.categoryArrs[1] ? this.categoryArrs[1] : [];
         const thirdArr = this.categoryArrs[2] ? this.categoryArrs[2] : [];
