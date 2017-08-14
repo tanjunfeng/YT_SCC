@@ -188,7 +188,7 @@ class BannerItem extends Component {
                             <FormItem className={
                                 classnames('manage-form-item')
                             }>
-                                <span className="manage-form-label banner-form-label">快捷icon：（说明：支持PNG，建议大小200X200px，100k以内）</span>
+                                <span className="manage-form-label banner-form-label">快捷icon：（说明：支持PNG，建议大小1080X280px）</span>
                                 <FileCut
                                     ref={ref => { this.imgRef = ref }}
                                     width={imgConfig.width}

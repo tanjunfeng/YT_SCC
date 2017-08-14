@@ -386,7 +386,7 @@ function Common(WrappedComponent) {
                                     </div>
                                 }
                                 <div>
-                                    <span>商品icon(支持PNG，建议大小{`${current.width}x${current.height}`}px，100k以内)：</span>
+                                    <span>商品icon(支持PNG，建议大小{`${current.width}x${current.height}`}px)：</span>
                                     <FileCut
                                         ref={ref => { this.imageUploader = ref }}
                                         width={current.width}

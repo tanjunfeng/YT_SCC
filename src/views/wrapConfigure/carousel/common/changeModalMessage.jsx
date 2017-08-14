@@ -45,12 +45,11 @@ class ChangeMessage extends PureComponent {
         this.handleModalCancel = this.handleModalCancel.bind(this);
         this.handleLinkStyleChange = this.handleLinkStyleChange.bind(this);
         this.handleSortBlur = this.handleSortBlur.bind(this);
-        console.log(props.visibleData.linkType)
         this.state = {
             visible: false,
             img: null,
             sortErr: false,
-            selectLinkType: `${props.visibleData.linkType}`,
+            selectLinkType: `${props.visibleData.linkType || 1}` ,
         }
     }
 
@@ -252,7 +251,7 @@ class ChangeMessage extends PureComponent {
                                 required: true,
                                 message: '请选择链接类型'
                             }],
-                            initialValue: `${linkType}`
+                            initialValue: linkType ? `${linkType}` : '1'
                         })(
                             <Select
                                 style={{ width: 240 }}
@@ -318,7 +317,7 @@ class ChangeMessage extends PureComponent {
                             <span style={{color: '#f00' }}>*</span>
                             轮播图片
                         </span>
-                        <span>（说明：支持PNG、JPG，建议大小600X400pix，1M以内）</span>
+                        <span>（说明：支持PNG、JPG，建议大小1080X510pix，1M以内）</span>
                         <FileCut
                             ref={ref => { this.imageUploader = ref }}
                             width={1080}

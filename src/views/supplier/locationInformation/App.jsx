@@ -89,6 +89,18 @@ class BasicInfo extends PureComponent {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.detailSp) {
+            const { detailSp = {} } = this.props;
+            const { spAdrBasic = {} } = detailSp;
+            if (nextProps.detailSp.spAdrBasic
+                && nextProps.detailSp.spAdrBasic.orgId !== spAdrBasic.orgId
+            ) {
+                this.orgId = nextProps.detailSp.spAdrBasic.orgId;
+            }
+        }
+    }
+
     getValue(callback) {
         const { form, detailData, detailSp, isEdit } = this.props;
         const { supplierBasicInfo = {} } = detailData;
@@ -97,7 +109,7 @@ class BasicInfo extends PureComponent {
             Tip(true, '请选择子公司！');
             return;
         }
-        
+  
         // 供应商供应地点没选择
         if (!wareHouseIds.length) {
             Tip(true, '请选择送货信息！');
@@ -205,18 +217,10 @@ class BasicInfo extends PureComponent {
 
     handleChoose(item) {
         this.orgId = item.record.id;
-        // const { detailData, detailSp, isEdit } = this.props;
-        // const { id } = item.record;
-        // let spId = null;
-        // if (isEdit) {
-        //     spId = detailSp.spAdrBasic.id
-        // }
-        // Validator.repeat.orgId(id, detailData.id, spId).then(() => {
-        //     this.orgId = item.record.id;
-        // }).catch((res) => {
-        //     this.orgCompany.reset();
-        //     this.orgId = null;
-        // });
+    }
+
+    handleReset = () => {
+        this.orgId = null;
     }
 
     handleSaveDraft() {
@@ -492,6 +496,7 @@ class BasicInfo extends PureComponent {
                                                 }
                                                 ref={node => (this.orgCompany = node)}
                                                 onChoosed={this.handleChoose}
+                                                onClear={this.handleReset}
                                                 placeholder={'请输入子公司名称'}
                                                 renderChoosedInputRaw={(data) => (
                                                     <div>{data.id} - {data.name}</div>
@@ -699,7 +704,7 @@ class BasicInfo extends PureComponent {
                     </div>
                     <div className="add-message-handle">
                         <Button onClick={this.handleSubmit}>提    交</Button>
-                        <Button onClick={this.handleSaveDraft}>保存草稿 </Button>
+                        <Button onClick={this.handleSaveDraft}>保存制单</Button>
                     </div>
                 </Form>
             </div>
