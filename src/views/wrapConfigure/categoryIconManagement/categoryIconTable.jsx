@@ -88,8 +88,8 @@ class CategoryIconTable extends PureComponent {
             uploadImageBase64Data({
                 base64Content: image
             }).then((res) => {
-                const { fileOnServerUrl } = res.data;
-                this.saveItems(id, fileOnServerUrl);
+                const { imageDomain, suffixUrl } = res.data;
+                this.saveItems(id, `${imageDomain}/${suffixUrl}`);
             })
         } else if (!isBase64) {
             this.setState({

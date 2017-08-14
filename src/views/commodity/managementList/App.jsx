@@ -172,7 +172,6 @@ class ManagementList extends PureComponent {
                     } else {
                         message.success(purchasedata.tipsMessageTxt);
                     }
-
                     this.handleFormSearch();
                 }
             },
@@ -202,13 +201,13 @@ class ManagementList extends PureComponent {
             spAdrId: this.state.supplierId,
             status
         }, 'goodsChangeStatus')
-            .catch(err => {
-                if (err.code === availbleGoodsId) {
-                    this.setState({
-                        errorGoodsCode: err.code
-                    })
-                }
-            });
+        .catch(err => {
+            if (err.code === availbleGoodsId) {
+                this.setState({
+                    errorGoodsCode: err.code
+                })
+            }
+        });
     }
 
 
@@ -301,7 +300,7 @@ class ManagementList extends PureComponent {
             branchCompanyId: id,
             productIds: this.state.chooseGoodsList,
             status
-        }, 'prodBatchUpdate');
+        }, 'prodBatchUpdate')
     }
 
     /* **************** 全国上下架 ****************** */
@@ -614,7 +613,9 @@ class ManagementList extends PureComponent {
                                                 ref={ref => { this.brandSearchMind = ref }}
                                                 fetch={(param) =>
                                                     this.props.pubFetchValueList({
-                                                        name: param.value
+                                                        name: param.value,
+                                                        pageSize: param.pagination.pageSize,
+                                                        pageNum: param.pagination.current || 1
                                                     }, 'queryBrandsByPages')
                                                 }
                                                 onChoosed={this.handleBrandChoose}
@@ -631,10 +632,6 @@ class ManagementList extends PureComponent {
                                                     }, {
                                                         title: '名称',
                                                         dataIndex: 'name',
-                                                        width: 200,
-                                                    }, {
-                                                        title: '标签',
-                                                        dataIndex: 'brandLabel',
                                                         width: 200,
                                                     }
                                                 ]}
@@ -656,7 +653,9 @@ class ManagementList extends PureComponent {
                                                     ref={ref => { this.supplySearchMind = ref }}
                                                     fetch={(params) =>
                                                         this.props.pubFetchValueList({
-                                                            condition: params.value
+                                                            condition: params.value,
+                                                            pageSize: params.pagination.pageSize,
+                                                            pageNum: params.pagination.current || 1
                                                         }, 'querySuppliersList')
                                                     }
                                                     onChoosed={this.handleSupplyChoose}
@@ -669,11 +668,11 @@ class ManagementList extends PureComponent {
                                                     columns={[
                                                         {
                                                             title: '地点编码',
-                                                            dataIndex: 'providerNo',
+                                                            dataIndex: 'spNo',
                                                             width: 150,
                                                         }, {
                                                             title: '地点名称',
-                                                            dataIndex: 'providerName',
+                                                            dataIndex: 'companyName',
                                                             width: 200,
                                                         }
                                                     ]}
@@ -734,7 +733,9 @@ class ManagementList extends PureComponent {
                                                     fetch={(params) =>
                                                         this.props.pubFetchValueList({
                                                             branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-                                                            branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
+                                                            branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : '',
+                                                            pageSize: params.pagination.pageSize,
+                                                            pageNum: params.pagination.current || 1
                                                         }, 'findCompanyBaseInfo')
                                                     }
                                                     onChoosed={this.handleSubsidiaryChoose}

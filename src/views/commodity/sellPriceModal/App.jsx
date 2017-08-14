@@ -37,6 +37,10 @@ class SellPriceModal extends Component {
             branchCompanyId: props.datas.branchCompanyId,
             branchCompanyName: props.datas.branchCompanyName
         } : null;
+        this.state = {
+            currentInside: null,
+            insideValue: null
+        }
     }
 
     handleOk() {
@@ -56,6 +60,7 @@ class SellPriceModal extends Component {
             message.error('请选择子公司');
         }
         validateFields((err, values) => {
+            if (err) return null;
             const result = values;
             result.sellSectionPrices = results;
             result.productId = datas.id || datas.productId;
@@ -97,9 +102,29 @@ class SellPriceModal extends Component {
         this.childCompany = null;
     }
 
+    handleInsideChange = (num) => {
+        this.setState({
+            currentInside: num
+        }, () => {
+            this.props.form.setFieldsValue({'minNumber': null})
+        })
+
+        this.steppedPrice.reset();
+    }
+
+    handleMinChange = (num) => {
+        this.setState({
+            startNumber: num
+        }, () => {
+            this.props.form.setFieldsValue({'minNumber': num});
+            this.steppedPrice.reset();
+        })
+    }
+
     render() {
         const { prefixCls, form, datas, isEdit } = this.props;
         const { getFieldDecorator } = form;
+        const { currentInside, startNumber } = this.state;
         const newDates = JSON.parse(JSON.stringify(datas));
         return (
             <Modal
@@ -123,7 +148,10 @@ class SellPriceModal extends Component {
                                             rules: [{ required: true, message: '请输入销售内装数' }],
                                             initialValue: newDates.salesInsideNumber
                                         })(
-                                            <InputNumber min={0} />
+                                            <InputNumber
+                                                min={0}
+                                                onChange={this.handleInsideChange}
+                                            />
                                         )}
                                     </span>
                                 </FormItem>
@@ -131,10 +159,26 @@ class SellPriceModal extends Component {
                                     <span>*起订量：</span>
                                     <span>
                                         {getFieldDecorator('minNumber', {
-                                            rules: [{ required: true, message: '请输入最小起订量!' }],
+                                            rules: [
+                                                { required: true, message: '请输入最小起订量!' },
+                                                {
+                                                    validator: (rule, value, callback) => {
+                                                        const { getFieldValue } = this.props.form
+                                                        if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0 ) {
+                                                            callback('起订量需为内装数整数倍！')
+                                                        }
+
+                                                        callback()
+                                                    }
+                                                }
+                                            ],
                                             initialValue: newDates.minNumber
                                         })(
-                                            <InputNumber min={0} />
+                                            <InputNumber
+                                                min={0}
+                                                onChange={this.handleMinChange}
+                                                step={currentInside || newDates.salesInsideNumber}
+                                            />
                                         )}
                                     </span>
                                 </FormItem>
@@ -166,6 +210,7 @@ class SellPriceModal extends Component {
                                         <SteppedPrice
                                             ref={node => (this.steppedPrice = node)}
                                             handleChange={this.handlePriceChange}
+                                            startNumber={startNumber}
                                             defaultValue={isEdit ? newDates.sellSectionPrices : []}
                                             inputSize="default"
                                         />

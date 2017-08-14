@@ -15,7 +15,6 @@ import {
 import {
     fetchGetProductById,
     fetchAddProdPurchase,
-    fetchQueryProdByCondition,
     modifyAuditVisible,
     fetchCheckMainSupplier
 } from '../../../actions';
@@ -44,7 +43,6 @@ import {
         QueryProdPurchaseExtByCondition,
         fetchGetProductById,
         fetchAddProdPurchase,
-        fetchQueryProdByCondition,
         productAddPriceVisible,
         modifyAuditVisible,
         UpdateProdPurchase,
@@ -56,7 +54,6 @@ class ProcurementMaintenance extends PureComponent {
         super(props);
 
         this.handleFormReset = this.handleFormReset.bind(this);
-        this.handlePaginationChange = this.handlePaginationChange.bind(this);
         this.onChange = ::this.onChange;
         this.handleAdd = ::this.handleAdd;
         this.handleChange = ::this.handleChange;
@@ -107,20 +104,6 @@ class ProcurementMaintenance extends PureComponent {
         this.props.QueryProdPurchaseExtByCondition({
             productId: match.params.id,
             pageNum: this.current,
-            pageSize: PAGE_SIZE,
-            ...this.searchForm
-        });
-    }
-
-    /**
-     *列表分页
-     *
-     * @param {string} goto 数据列表分页
-     */
-    handlePaginationChange(goto) {
-        this.current = goto;
-        this.props.fetchQueryProdByCondition({
-            pageNum: goto,
             pageSize: PAGE_SIZE,
             ...this.searchForm
         });
@@ -226,7 +209,6 @@ class ProcurementMaintenance extends PureComponent {
 }
 
 ProcurementMaintenance.propTypes = {
-    fetchQueryProdByCondition: PropTypes.func,
     fetchGetProductById: PropTypes.objectOf(PropTypes.any),
     QueryProdPurchaseExtByCondition: PropTypes.func,
     fetchCheckMainSupplier: PropTypes.func,
