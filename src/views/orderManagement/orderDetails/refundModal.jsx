@@ -94,7 +94,7 @@ class RefundModal extends PureComponent {
                         if (recordData.state === 'pending_audit') {
                             // 审核退款
                             modifyAuditRefund({
-                                mAmount: recordData.amount,
+                                amount: recordData.amount,
                                 refundNo: recordData.id,
                                 passed: false,
                                 remark: causeTextArea
