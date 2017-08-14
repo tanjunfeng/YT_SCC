@@ -129,10 +129,6 @@ class OrderManagementList extends Component {
         this.subCompanySearchMind = null;
         this.searchData = {};
         this.current = 1;
-        this.time = {
-            submitStartTime: yesterdayDate,
-            submitEndTime: todayDate,
-        }
         this.state = {
             choose: [],
             franchiseeId: null,
@@ -140,7 +136,11 @@ class OrderManagementList extends Component {
             rengeTime: yesterdayrengeDate,
             auditModalVisible: false,
             tableOrderNumber: null,
-            isPayDisabled: false
+            isPayDisabled: false,
+            time: {
+                submitStartTime: yesterdayDate,
+                submitEndTime: todayDate,
+            }
         }
     }
 
@@ -153,25 +153,27 @@ class OrderManagementList extends Component {
      * @param {array} result [moment, moment]
      */
     onEnterTimeChange(result) {
-        this.setState({
-            rengeTime: result
-        });
+        let start = yesterdayDate, end = todayDate;
         if (result.length === 2) {
-            this.time = {
-                submitStartTime: result[0].valueOf().toString(),
-                submitEndTime: result[1].valueOf().toString()
-            }
-        } else {
-            this.time = {
-                submitStartTime: yesterdayDate,
-                submitEndTime: todayDate,
-            }
+            start = result[0].valueOf().toString();
+            end = result[1].valueOf().toString();
         }
+        if (result.length === 0) {
+            start = '';
+            end = '';
+        }
+        this.setState({
+            rengeTime: result,
+            time: {
+                submitStartTime: start,
+                submitEndTime: end
+            }
+        });
     }
 
-     /**
-     * 获取表单信息,并查询列表
-     */
+    /**
+    * 获取表单信息,并查询列表
+    */
     getSearchData() {
         const {
             id,
@@ -182,8 +184,8 @@ class OrderManagementList extends Component {
             shippingState,
         } = this.props.form.getFieldsValue();
 
-        const { submitStartTime, submitEndTime } = this.time;
         const { franchiseeId, branchCompanyId } = this.state;
+        const { submitStartTime, submitEndTime } = this.state.time;
         this.current = 1;
         this.searchData = {
             id,
@@ -296,7 +298,7 @@ class OrderManagementList extends Component {
                     this.getSearchData();
                 })
             },
-            onCancel() {},
+            onCancel() { },
         });
     }
 
@@ -305,11 +307,7 @@ class OrderManagementList extends Component {
      */
     handleOrderBatchCancel() {
         const { choose } = this.state;
-        this.props.modifyCauseModalVisible({ isShow: true, choose})
-        .then(() => {
-            message.success('批量取消成功！');
-            this.getSearchData();
-        })
+        this.props.modifyCauseModalVisible({ isShow: true, choose });
     }
 
     /**
@@ -325,12 +323,12 @@ class OrderManagementList extends Component {
     handleOrderReset() {
         this.setState({
             rengeTime: yesterdayrengeDate,
-            isPayDisabled: false
+            isPayDisabled: false,
+            time: {
+                submitStartTime: yesterdayDate,
+                submitEndTime: todayDate,
+            }
         });
-        this.time = {
-            submitStartTime: yesterdayDate,
-            submitEndTime: todayDate,
-        }
         this.joiningSearchMind.handleClear();
         this.subCompanySearchMind.handleClear();
         this.props.form.resetFields();
@@ -364,11 +362,11 @@ class OrderManagementList extends Component {
                             message.success(err.message);
                         })
                     },
-                    onCancel() {},
+                    onCancel() { }
                 });
                 break;
             case 'tableCancel':
-                this.props.modifyCauseModalVisible({ isShow: true, id })
+                this.props.modifyCauseModalVisible({ isShow: true, id });
                 break;
             case 'tableRetransfer':
                 modifyResendOrder({
@@ -389,11 +387,10 @@ class OrderManagementList extends Component {
                         </div>
                     ),
                     okText: '返回',
-                    onOk() {},
+                    onOk() { }
                 });
                 break;
             default:
-
                 break;
         }
     }
@@ -413,7 +410,7 @@ class OrderManagementList extends Component {
                 </Menu.Item>
                 {
                     (orderStateDesc === '待审核'
-                    || orderStateDesc === '待人工审核')
+                        || orderStateDesc === '待人工审核')
                     && <Menu.Item key="tableAudit">
                         <a target="_blank" rel="noopener noreferrer">审核</a>
                     </Menu.Item>
@@ -495,7 +492,7 @@ class OrderManagementList extends Component {
                                                         )
                                                     }
                                                 </Select>
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -521,7 +518,7 @@ class OrderManagementList extends Component {
                                                         )
                                                     }
                                                 </Select>
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -550,7 +547,7 @@ class OrderManagementList extends Component {
                                                         )
                                                     }
                                                 </Select>
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -573,7 +570,7 @@ class OrderManagementList extends Component {
                                                 onChoosed={this.handleJoiningChoose}
                                                 onClear={this.handleJoiningClear}
                                                 renderChoosedInputRaw={(data) => (
-                                                    <div>{data.franchiseeId}</div>
+                                                    <div>{data.franchiseeId} - {data.franchiseeName}</div>
                                                 )}
                                                 pageSize={6}
                                                 columns={[
@@ -665,7 +662,7 @@ class OrderManagementList extends Component {
                                                         )
                                                     }
                                                 </Select>
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -675,12 +672,13 @@ class OrderManagementList extends Component {
                                         <div>
                                             <span className="sc-form-item-label">订单日期</span>
                                             <RangePicker
-                                                style={{width: '240px'}}
+                                                style={{ width: '240px' }}
                                                 className="manage-form-enterTime"
                                                 value={this.state.rengeTime}
                                                 format={DATE_FORMAT}
                                                 placeholder={['开始时间', '结束时间']}
                                                 onChange={this.onEnterTimeChange}
+
                                             />
                                         </div>
                                     </FormItem>
