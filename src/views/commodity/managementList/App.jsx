@@ -494,7 +494,7 @@ class ManagementList extends PureComponent {
                     <span>{productCode}</span>
                 </div>
                 <div className="table-commodity-description">
-                    <img alt="未上传" className="table-commodity-description-img" src={`${this.props.CommodityListData.imgDomain}/${thumbnailImage}`} />
+                    <img alt="未上传" className="table-commodity-description-img" src={`${thumbnailImage || require('../../../images/default/100x100.png')}`} />
                     <span className="table-commodity-description-name">{saleName}</span>
                 </div>
             </div>
