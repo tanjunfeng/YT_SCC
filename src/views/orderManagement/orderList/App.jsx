@@ -4,7 +4,6 @@
  *
  * 订单管理列表
  */
-
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
@@ -31,7 +30,6 @@ import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModa
 import { fetchOrderList, modifyBatchApproval, modifyResendOrder, modifyApprovalOrder } from '../../../actions/order';
 import { pubFetchValueList } from '../../../actions/pub';
 import { TIME_FORMAT, DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
-
 
 const FormItem = Form.Item;
 const Option = Select.Option;

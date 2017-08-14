@@ -14,7 +14,8 @@ import {
     Table,
     Button
 } from 'antd';
-
+import { DATE_FORMAT } from '../../../constant/index';
+import moment from 'moment';
 import { printColumns } from '../columns';
 
 @connect(state => ({
@@ -24,7 +25,6 @@ import { printColumns } from '../columns';
 
 
 class Report extends PureComponent {
-
     handleDownPDF = (number) => {
         const { onDownPDF } = this.props;
         if (onDownPDF) {
@@ -38,14 +38,20 @@ class Report extends PureComponent {
             <div className="print-container">
                 <div className="content">
                     <div className="head">
-                        <Row type="flex" justify="end" >
-                            {/*这里放置根据采购单号生成的条形码 */}
-                            <div style={{textAlign: 'center'}}>
-                                <img alt="条形码" src={data.barCodeUrl} />
-                            </div>
-                        </Row>
-                        <Row type="flex" justify="center" >
-                            <div><h1 style={{ marginBottom: 20, marginTop: 20 }}>雅堂小超采购订单</h1></div>
+                        <Row type="flex" justify="center">
+                            <Col span={6}>
+                            </Col>
+                            <Col span={12}>
+                                <div className="tc">
+                                    <h1 style={{ marginBottom: 20, marginTop: 20 }}>雅堂小超采购订单</h1>
+                                </div>
+                            </Col>
+                            <Col span={6}>
+                                {/*这里放置根据采购单号生成的条形码 */}
+                                <div className="bar">
+                                    <img alt="条形码" src={data.barCodeUrl} />
+                                </div>
+                            </Col>
                         </Row>
                         <Row type="flex" justify="start">
                             <Col span={6}>
@@ -90,7 +96,7 @@ class Report extends PureComponent {
                             </Col>
                             <Col span={11}>
                                 <label>收货日期：</label>
-                                <span className="field">{data.estimatedDeliveryDate}</span>
+                                <span className="field">{moment(new Date(data.estimatedDeliveryDate)).format(DATE_FORMAT)}</span>
                             </Col>
                         </Row>
                     </div>
