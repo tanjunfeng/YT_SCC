@@ -27,6 +27,7 @@ import {
     findStepPriceInfo,
     getNewPmPurchaseOrderItem,
     auditPurchaseOrderInfo,
+    updatePmPurchaseOrder
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -193,6 +194,22 @@ export const fetchPoMngList = (params) => dispatch => (
 export const createPo = (params) => dispatch => (
     new Promise((resolve, reject) => {
         svcCreatePo(params)
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+/**
+ * 修改采购单
+ * @param {*} params 
+ */
+export const ModifyPo = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        updatePmPurchaseOrder(params)
             .then(res => {
                 resolve(res);
             })
