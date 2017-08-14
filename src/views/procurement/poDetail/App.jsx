@@ -228,7 +228,7 @@ class PoDetail extends PureComponent {
 			// 供应商地点附带信息
 			applySupplierRecord: {},
 			// 采购单类型
-			purchaseOrderType: '',
+			purchaseOrderType: '0',
 			// 货币类型
 			currencyCode: 'CNY',
 			// 供应商地点禁用
@@ -265,9 +265,9 @@ class PoDetail extends PureComponent {
 				let tmpPageMode = that.getPageMode();
 				that.setState({ pageMode: tmpPageMode });
 				that.setState({ actionAuth: that.getActionAuth() });
-				//计算采购总数量、采购总金额
-				let { totalQuantity, totalAmount } = that.caculate();
-				that.setState({ totalQuantity, totalAmount });
+				// //计算采购总数量、采购总金额
+				// let { totalQuantity, totalAmount } = that.caculate();
+				// that.setState({ totalQuantity, totalAmount });
 				if (tmpPageMode !== PAGE_MODE.READONLY) {
 					that.setState({ editable: true });
 				} else {
@@ -295,13 +295,11 @@ class PoDetail extends PureComponent {
 
 	componentWillReceiveProps(nextProps) {
 		const { adrType, settlementPeriod, payType, estimatedDeliveryDate, purchaseOrderType, currencyCode, id, spId, spAdrId } = nextProps.basicInfo;
-		
+
 		const { basicInfo = {}} = this.props;
 		const newPo = fromJS(nextProps.po.poLines);
 		const oldPo = fromJS(this.props.po.poLines);
-		console.log(nextProps.po.poLines, this.props.po.poLines)
 		if (!Immutable.is(newPo, oldPo)) {
-			console.log('modify')
 			this.caculate(nextProps.po.poLines);
 		}
 		if (basicInfo.id !== id) {
@@ -389,7 +387,7 @@ class PoDetail extends PureComponent {
 	 * 地点类型改变时，做如下处理
 	 * 1.控制地点值清单是否可编辑
 	 * 2.清空地点值
-	 * @param {*} value 
+	 * @param {*} value
 	 */
 	onLocTypeChange(value) {
 		//地点类型有值
@@ -443,10 +441,10 @@ class PoDetail extends PureComponent {
 
 	/**
 	 * 计算采购总数量、采购总金额
-	 * 计算对象：未删除&&采购数量不为空 
+	 * 计算对象：未删除&&采购数量不为空
 	 */
 	caculate(list = []) {
-		
+
 		let poLines = list;
 		let result = {};
 		//合计采购数量
@@ -524,7 +522,7 @@ class PoDetail extends PureComponent {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	handleGetSupplierLocMap = ({ value, pagination }) => {
 		let pageNum = pagination.current || 1;
@@ -557,7 +555,7 @@ class PoDetail extends PureComponent {
 	 *   1.清空供应商地点
 	 *   2.删除采购商品行
 	 *   3.清空账期、付款方式
-	 * @param {*} value 
+	 * @param {*} value
 	 */
 	applySupplierChange(value) {
 		//供应商有值
@@ -607,7 +605,7 @@ class PoDetail extends PureComponent {
 	 * 供应商地点变更时，做如下处理
 	 *  1.删除采购商品行
 	 *  2.清空账期、付款方式
-	 * @param {*} res 
+	 * @param {*} res
 	 */
 	applySupplierLocChoosed(res) {
 		if (res) {
@@ -668,22 +666,6 @@ class PoDetail extends PureComponent {
 		this.props.initPoDetail({
 			poLines: []
 		})
-		// let poLines = this.props.poLines || [];
-		// let that = this;
-		// poLines.forEach(function (item) {
-		// 	if (item.recordStatus == RECORD_STATUS.NEW) {
-		// 		that.props.deletePoLine(item);
-		// 		that.props.updatePoLine(item);
-		// 		console.log(111111)
-		// 	} else {
-		// 		item.deleteFlg = true;
-		// 		that.props.updatePoLine(item);
-		// 		that.props.updatePoLine(item);
-		// 		console.log(2222222)
-				
-		// 	}
-		// });
-
 	}
 
 	/**
@@ -1039,8 +1021,13 @@ class PoDetail extends PureComponent {
 
 		//基本信息，商品行均校验通过
 		//更新store
-		this.props.updatePoBasicinfo(this.getFormBasicInfo());
-		let poData = this.getPoData();
+		const basicInfo = Object.assign({}, this.getPoData().basicInfo, this.getFormBasicInfo());
+		let poData = {
+			basicInfo,
+			poLines: this.getPoData().poLines.filter((item) => {
+				return item.isValid !== 0 
+			})
+		}
 		// 基本信息
 		const {
 			spAdrId,
@@ -1051,6 +1038,9 @@ class PoDetail extends PureComponent {
 			purchaseOrderType,
 			addressCd,
 		} = poData.basicInfo;
+		console.log('poData.basicInfo', poData.basicInfo)
+		console.log('basicInfo', this.props.basicInfo)
+
 		// 采购商品信息
 		const pmPurchaseOrderItems = poData.poLines.map((item) => {
 			const {
@@ -1066,13 +1056,16 @@ class PoDetail extends PureComponent {
 				purchaseNumber
 			}
 		})
+
 		// 预计送货日期
 		const estimatedDeliveryDate = this.state.pickerDate
 		? this.state.pickerDate.valueOf().toString()
 		: null;
+
+		// 保存和提交的请求
 		this.props.createPo({
 			pmPurchaseOrder: {
-				spAdrId: spAdrId + '',
+				spAdrId: `${spAdrId || this.props.basicInfo.spAdrId}`,
 				estimatedDeliveryDate,
 				payType,
 				adrType: parseInt(adrType),
@@ -1111,7 +1104,7 @@ class PoDetail extends PureComponent {
 
 	/**
 	 * 审核弹出框点击"确定" 回调函数
-	 * @param {*} values 
+	 * @param {*} values
 	 */
 	applyAuditOk(values) {
 		let that = this;
@@ -1130,7 +1123,7 @@ class PoDetail extends PureComponent {
 
 	/**
 	 * 审核弹出框点击"取消" 回调函数
-	 * @param {*} res 
+	 * @param {*} res
 	 */
 	applyAuditCancel(res) {
 		this.setState({ auditModalVisible: false });
@@ -1149,7 +1142,7 @@ class PoDetail extends PureComponent {
 	}
 	/**
 	 * 渲染账期
-	 * @param {*} key 
+	 * @param {*} key
 	 */
 	renderPeriod(key) {
 		switch (key) {
@@ -1167,7 +1160,7 @@ class PoDetail extends PureComponent {
 	}
 	/**
 	 * 渲染付款方式
-	 * @param {*} key 
+	 * @param {*} key
 	 */
 	renderPayType(key) {
 		switch (key) {
@@ -1231,7 +1224,7 @@ class PoDetail extends PureComponent {
 		const createdAt = basicInfo.createdAt
 		? basicInfo.createdAt
 		: moment().format('YYYY-MM-DD')
-		
+
 		//供应商值清单回显数据
 		const supplierDefaultValue = basicInfo.spId
 		? `${basicInfo.spNo}-${basicInfo.spName}`
@@ -1299,7 +1292,7 @@ class PoDetail extends PureComponent {
 								{/* 预计送货日期 */}
 								<FormItem label="预计送货日期">
 									<span>{estimatedDeliveryDate}</span>
-									
+
 								</FormItem>
 							</Col>
 						</Row>

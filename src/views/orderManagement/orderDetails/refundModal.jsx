@@ -94,7 +94,7 @@ class RefundModal extends PureComponent {
                         if (recordData.state === 'pending_audit') {
                             // 审核退款
                             modifyAuditRefund({
-                                mAmount: recordData.amount,
+                                amount: recordData.amount,
                                 refundNo: recordData.id,
                                 passed: false,
                                 remark: causeTextArea
@@ -104,7 +104,7 @@ class RefundModal extends PureComponent {
                                 this.setState({
                                     option: '请选择'
                                 })
-                                message.success(res.message);
+                                message.success('退款审核成功');
                             }).catch(err => {
                                 message.error(err.message);
                             })
@@ -120,7 +120,7 @@ class RefundModal extends PureComponent {
                                 this.setState({
                                     option: '请选择'
                                 })
-                                message.success(res.message);
+                                message.success('确认退款成功');
                             }).catch(err => {
                                 message.error(err.message);
                             })

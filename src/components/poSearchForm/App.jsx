@@ -295,7 +295,7 @@ class PoSearchForm extends PureComponent {
                                         initialValue: locType.defaultValue
                                     })(
                                         <Select style={{ width: '153px' }} size="default" onChange={this.onLocTypeChange}>
-                                            { locType.data.map((item) => (
+                                            {locType.data.map((item) => (
                                                 <Option key={item.key} value={item.key}>{item.value}</Option>
                                             ))}
                                         </Select>
@@ -308,7 +308,7 @@ class PoSearchForm extends PureComponent {
                                     <div className="row small">
                                         <span className="ant-form-item-label"><label>地点</label></span>
                                         <SearchMind
-                                            style={{zIndex: 101}}
+                                            style={{ zIndex: 101 }}
                                             compKey="comPoAddress"
                                             ref={ref => { this.poAddress = ref }}
                                             onClear={this.handleClearLocation}
@@ -470,11 +470,11 @@ class PoSearchForm extends PureComponent {
                             <Col span={8}>
                                 {/* 创建日期 */}
                                 <FormItem >
-                                    <div>
+                                    <div className="row middle">
                                         <span className="ant-form-item-label"><label>创建日期</label></span>
                                         {getFieldDecorator('createTime')(
                                             <RangePicker
-                                                style={{ width: '200px' }}
+                                                className="date-range-picker"
                                                 format={dateFormat}
                                                 placeholder={['开始日期', '结束日期']}
                                                 onChange={this.chooseCreateDate}
@@ -486,11 +486,11 @@ class PoSearchForm extends PureComponent {
                             <Col span={8}>
                                 {/* 审批日期 */}
                                 <FormItem >
-                                    <div>
+                                    <div className="row middle">
                                         <span className="ant-form-item-label"><label>审批日期</label> </span>
                                         {getFieldDecorator('auditTime')(
                                             <RangePicker
-                                                style={{ width: '200px' }}
+                                                className="date-range-picker"
                                                 format={dateFormat}
                                                 placeholder={['开始日期', '结束日期']}
                                                 onChange={this.chooseApproval}

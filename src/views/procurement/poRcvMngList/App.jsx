@@ -258,6 +258,19 @@ class PoRcvMngList extends PureComponent {
     }
 
     /**
+     * 分页页码改变的回调
+     */
+    handleChangePage = (page) => {
+        const currentPage = page;
+        const params = this.editSearchParams();
+        let allParams = Object.assign({
+            pageSize: PAGE_SIZE,
+            pageNum: currentPage
+        }, this.params);
+        this.props.fetchPoRcvMngList(allParams);
+    }
+
+    /**
      * 查询收货单管理列表
      */
     handleSearch() {
@@ -406,7 +419,7 @@ class PoRcvMngList extends PureComponent {
                                                 className="date-range-picker"
                                                 format={dateFormat}
                                                 placeholder={['开始日期', '结束日期']} />
-                                            )
+                                        )
                                         }
                                     </div>
                                 </FormItem>
@@ -656,7 +669,7 @@ class PoRcvMngList extends PureComponent {
                                 total,
                                 pageSize,
                                 showQuickJumper: true,
-                                onChange: this.onPaginate
+                                onChange: this.handleChangePage
                             }} />
                     </div>
                 </Form>

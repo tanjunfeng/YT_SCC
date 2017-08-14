@@ -81,6 +81,8 @@ class PoMngList extends PureComponent {
      */
     queryPoList = (params) => {
         this.props.fetchPoMngList({
+            pageSize: PAGE_SIZE,
+            pageNum: this.current,
             ...params
         });
     }
@@ -181,10 +183,6 @@ class PoMngList extends PureComponent {
                     <span onClick={() => this.showAuditingModal(record)}>查看审核未通过</span>
                 </Menu.Item>
                 }
-                {status === auditingCode && <Menu.Item key="receive">
-                    <Link to={`${pathname}/${id}`}>收货</Link>
-                </Menu.Item>
-                }
             </Menu>
         );
 
@@ -243,14 +241,14 @@ class PoMngList extends PureComponent {
                         rowSelection={rowSelection}
                         dataSource={data}
                         columns={columns}
-                        rowKey="purchaseOrderNo"
+                        rowKey="id"
                         scroll={{
                             x: 1300
                         }}
                         pagination={{
                             current: pageNum,
                             total,
-                            PAGE_SIZE,
+                            pageSize: PAGE_SIZE,
                             showQuickJumper: true,
                             onChange: this.onPaginate
                         }}
