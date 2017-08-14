@@ -11,6 +11,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import moment from 'moment';
+import Immutable, { fromJS, is } from 'immutable';
 import EditableCell from './EditableCell';
 import Audit from './auditModal';
 import Utils from '../../../util/util';
@@ -283,9 +284,6 @@ class PoDetail extends PureComponent {
 				let tmpPageMode = that.getPageMode();
 				that.setState({ pageMode: tmpPageMode });
 				that.setState({ actionAuth: that.getActionAuth() });
-				//计算采购总数量、采购总金额
-				let { totalQuantity, totalAmount } = that.caculate();
-				that.setState({ totalQuantity, totalAmount });
 				if (tmpPageMode !== PAGE_MODE.READONLY) {
 					that.setState({ editable: true });
 				} else {
@@ -297,7 +295,15 @@ class PoDetail extends PureComponent {
 
 	componentWillReceiveProps(nextProps) {
 		const { adrType, settlementPeriod, payType, estimatedDeliveryDate, purchaseOrderType, currencyCode, id, spId, spAdrId } = nextProps.basicInfo;
+
 		const { basicInfo = {}} = this.props;
+		const newPo = fromJS(nextProps.po.poLines);
+		const oldPo = fromJS(this.props.po.poLines);
+		console.log(nextProps.po.poLines, this.props.po.poLines)
+		if (!Immutable.is(newPo, oldPo)) {
+			console.log('modify')
+			this.caculate(nextProps.po.poLines);
+		}
 		if (basicInfo.id !== id) {
 			this.setState({
 				locDisabled: adrType === 0 || adrType === 1 ? false : true,
@@ -311,11 +317,8 @@ class PoDetail extends PureComponent {
 				purchaseOrderType: purchaseOrderType === 0 ? `${purchaseOrderType}` : '',
 				localType: adrType === 0 || adrType === 1 ? `${adrType}` : '',
 				currencyCode: currencyCode === 'CNY' ? `${currencyCode}` : 'CNY',
-				nextPoLines: nextProps.poLines,
-			}, () => {
 			})
 		}
-		this.caculate();
 	}
 
 	componentWillUnmount(){
@@ -435,8 +438,6 @@ class PoDetail extends PureComponent {
 					message.error("采购数量必须为采购内装数的整数倍");
 				}
 			}
-			//计算采购总数量、采购总金额
-			this.caculate();
 		}
 	}
 
@@ -444,8 +445,9 @@ class PoDetail extends PureComponent {
 	 * 计算采购总数量、采购总金额
 	 * 计算对象：未删除&&采购数量不为空
 	 */
-	caculate() {
-		let poLines = this.state.nextPoLines || [];
+	caculate(list = []) {
+
+		let poLines = list;
 		let result = {};
 		//合计采购数量
 		let totalQuantitys = 0;
@@ -465,9 +467,6 @@ class PoDetail extends PureComponent {
 			totalAmounts:Math.round(totalAmounts*100)/100
 		}),() => {
 		};
-		result.totalQuantitys = totalQuantitys;
-		result.totalAmounts = totalAmounts;
-		return result;
 	}
 
 	/**
@@ -796,12 +795,8 @@ class PoDetail extends PureComponent {
 							that.props.updatePoLine(record);
 						}
 						message.success('删除成功');
-						//计算采购总数量、采购总金额
-						this.caculate();
 					},
 					onCancel() {
-						//计算采购总数量、采购总金额
-						this.caculate();
 					},
 				});
 				break;
@@ -811,15 +806,6 @@ class PoDetail extends PureComponent {
 	}
 
 	renderActions(text, record, index) {
-		// const { status } = this.props.basicInfo;
-		// if (
-		// 	(status === 1)
-		// 	|| (status === 2)
-		// 	|| (status === 3)
-		// 	|| (status === 4)
-		// ) {
-		// 	return;
-		// }
 		const menu = (
 			<Menu onClick={(item) => this.onActionMenuSelect(record, index, item)}>
 				<Menu.Item key="delete">
@@ -967,7 +953,7 @@ class PoDetail extends PureComponent {
 			let selectedAddressRawData = this.poStore.state.selectedRawData;
 			if (selectedAddressRawData) {
 				addressId = selectedAddressRawData.id;
-				addressCd = selectedAddressRawData.no;
+				addressCd = selectedAddressRawData.id;
 				address = selectedAddressRawData.name;
 			}
 		}
@@ -1065,7 +1051,6 @@ class PoDetail extends PureComponent {
 			purchaseOrderType,
 			addressCd,
 		} = poData.basicInfo;
-		console.log('adrTypeCode',poData.basicInfo.addressCd)
 		// 采购商品信息
 		const pmPurchaseOrderItems = poData.poLines.map((item) => {
 			const {
@@ -1091,7 +1076,7 @@ class PoDetail extends PureComponent {
 				estimatedDeliveryDate,
 				payType,
 				adrType: parseInt(adrType),
-				adrTypeCode: addressCd,
+				adrTypeCode: addressCd || this.props.basicInfo.adrTypeCode,
 				currencyCode,
 				purchaseOrderType: parseInt(purchaseOrderType),
 				status,
@@ -1101,9 +1086,7 @@ class PoDetail extends PureComponent {
 			//如果创建成功，刷新界面数据
 			if (res.success) {
 				message.success("提交成功！");
-				if (isGoBack) {
-					this.props.history.goBack();
-				}
+				that.props.history.goBack();
 				//初始化采购单详情
 				// that.props.initPoDetail(res.data);
 			} else {
@@ -1722,7 +1705,6 @@ class PoDetail extends PureComponent {
 								</FormItem>
 							</Col>
 						</Row>
-
 						<Row >
 							<Col span={8}>
 								{/* 创建者 */}
