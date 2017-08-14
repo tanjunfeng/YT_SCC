@@ -1,14 +1,23 @@
 .editorPages{
     .editorPages-form{
-        .tjf-css-ts{
+        .editorPages-css-ts{
             margin-bottom: 0;
         }
-        .tjf-css-footer{
+        .editorPages-css-footer{
             width: 100%;
-            .tjf-css-submit{
+            .editorPages-css-submit{
                 margin: 0 auto;
                 display: block;
             }
         }
+    }
+}
+.EditorPages{
+    &-lines{
+        display: flex;
+        margin-bottom: 10px;
+    }
+    &-btn{
+        margin-left: 10px;
     }
 }

@@ -72,7 +72,8 @@ class CateGory extends Component {
         this.classify = {
             firstCategoryId: null,
             secondCategoryId: null,
-            thirdCategoryId: null
+            thirdCategoryId: null,
+            fourthCategoryId: null,
         }
     }
 
@@ -100,12 +101,14 @@ class CateGory extends Component {
             name,
             firstCategoryId,
             secondCategoryId,
-            thirdCategoryId
+            thirdCategoryId,
+            fourthCategoryId,
         } = this.props.form.getFieldsValue();
         const data = {
             firstCategoryId,
             secondCategoryId,
             thirdCategoryId,
+            fourthCategoryId,
             name,
             id,
         }
@@ -120,11 +123,12 @@ class CateGory extends Component {
 
     // 表单操作
     handleSelectChange(data, that) {
-        const { first, second, third } = data;
+        const { first, second, third, fourth } = data;
         this.classify = {
             firstCategoryId: first.id === -1 ? null : first.id,
             secondCategoryId: second.id === -1 ? null : second.id,
-            thirdCategoryId: third.id === -1 ? null : third.id
+            thirdCategoryId: third.id === -1 ? null : third.id,
+            onFourthChange: fourth.id === -1 ? null : fourth.id
         }
         this.classifyRef = that;
     }
@@ -251,7 +255,7 @@ class CateGory extends Component {
                                 </div>
                             </FormItem>
                             {/* 商品名称 */}
-                            <FormItem className="manage-form-item1">
+                            <FormItem className="manage-form-item">
                                 <div
                                     className={`${prefixCls}-input xtpz-css-spfl`}
                                     style={{ display: 'flex', marginTop: 20}}
@@ -270,7 +274,7 @@ class CateGory extends Component {
                                 </div>
                             </FormItem>
                             {/* 商品编号 */}
-                            <FormItem className="manage-form-item1">
+                            <FormItem className="manage-form-item">
                                 <div
                                     className={`${prefixCls}-input xtpz-css-spfl`}
                                     style={{ display: 'flex', marginTop: 20}}
@@ -346,6 +350,7 @@ class CateGory extends Component {
 
 CateGory.propTypes = {
     modifyDeleteOrderNum: PropTypes.func,
+    prefixCls: PropTypes.string,
     toAddPriceVisible: PropTypes.func,
     fetchCategoryList: PropTypes.func,
     modifyCategoryVisible: PropTypes.func,
