@@ -90,7 +90,7 @@ export default function (state = initState, action) {
             basicInfo = po.basicInfo || {};
             basicInfo = Object.assign(basicInfo, action.payload);
             po.basicInfo = basicInfo;
-            return state.set("po", fromJS(po));
+            return state.set("po", po);
 
         // 添加采购单商品行(单数或复数)
         case ActionType.ADD_PO_LINES:
