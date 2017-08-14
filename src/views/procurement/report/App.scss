@@ -22,12 +22,19 @@
             .tc {
                 text-align: center;
             }
+            .tr {
+                text-align: right;
+            }
             .bar {
                 text-align: right;
                 padding: 8px 0;
                 img {
                     height: 60px;
                 }
+            }
+            .left label {
+                text-align: left;
+                margin-right: 2em;
             }
             .field {
                 border-bottom: 1px solid #000;

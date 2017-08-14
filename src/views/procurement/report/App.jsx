@@ -107,15 +107,15 @@ class Report extends PureComponent {
                         </div>
                         <div className="lines-footer">
                             <Row type="flex" justify="start">
-                                <Col span={6}>
-                                    <label>合计数量：</label>
-                                    <span className="field">{data.totalNumber}</span>
+                                <Col span={8} className="left">
+                                    <label>合计数量：
+                                        <span className="field">{data.totalNumber}</span>
+                                    </label>
+                                    <label>合计金额：
+                                        <span className="field">{data.totalAmount}</span>
+                                    </label>
                                 </Col>
-                                <Col span={6}>
-                                    <label>合计金额：</label>
-                                    <span className="field">{data.totalAmount}</span>
-                                </Col>
-                                <Col span={12}>
+                                <Col span={16} className="tr">
                                     <label>合计金额（大写）：
                                         <span className="field">{data.numberToCN}</span>
                                     </label>
