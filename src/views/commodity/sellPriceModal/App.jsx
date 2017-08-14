@@ -105,15 +105,26 @@ class SellPriceModal extends Component {
     handleInsideChange = (num) => {
         this.setState({
             currentInside: num
-        },() => {
+        }, () => {
             this.props.form.setFieldsValue({'minNumber': null})
+        })
+
+        this.steppedPrice.reset();
+    }
+
+    handleMinChange = (num) => {
+        this.setState({
+            startNumber: num
+        }, () => {
+            this.props.form.setFieldsValue({'minNumber': num});
+            this.steppedPrice.reset();
         })
     }
 
     render() {
         const { prefixCls, form, datas, isEdit } = this.props;
         const { getFieldDecorator } = form;
-        const { currentInside } = this.state;
+        const { currentInside, startNumber } = this.state;
         const newDates = JSON.parse(JSON.stringify(datas));
         return (
             <Modal
@@ -137,7 +148,10 @@ class SellPriceModal extends Component {
                                             rules: [{ required: true, message: '请输入销售内装数' }],
                                             initialValue: newDates.salesInsideNumber
                                         })(
-                                            <InputNumber min={0} onChange={this.handleInsideChange} />
+                                            <InputNumber
+                                                min={0}
+                                                onChange={this.handleInsideChange}
+                                            />
                                         )}
                                     </span>
                                 </FormItem>
@@ -160,7 +174,11 @@ class SellPriceModal extends Component {
                                             ],
                                             initialValue: newDates.minNumber
                                         })(
-                                            <InputNumber min={0} step={currentInside || newDates.salesInsideNumber}/>
+                                            <InputNumber
+                                                min={0}
+                                                onChange={this.handleMinChange}
+                                                step={currentInside || newDates.salesInsideNumber}
+                                            />
                                         )}
                                     </span>
                                 </FormItem>
@@ -192,6 +210,7 @@ class SellPriceModal extends Component {
                                         <SteppedPrice
                                             ref={node => (this.steppedPrice = node)}
                                             handleChange={this.handlePriceChange}
+                                            startNumber={startNumber}
                                             defaultValue={isEdit ? newDates.sellSectionPrices : []}
                                             inputSize="default"
                                         />

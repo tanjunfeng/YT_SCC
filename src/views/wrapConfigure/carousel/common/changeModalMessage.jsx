@@ -45,11 +45,12 @@ class ChangeMessage extends PureComponent {
         this.handleModalCancel = this.handleModalCancel.bind(this);
         this.handleLinkStyleChange = this.handleLinkStyleChange.bind(this);
         this.handleSortBlur = this.handleSortBlur.bind(this);
+        console.log(props.visibleData.linkType)
         this.state = {
             visible: false,
             img: null,
             sortErr: false,
-            selectLinkType: this.props.visibleData.linkType,
+            selectLinkType: `${props.visibleData.linkType}`,
         }
     }
 
@@ -114,8 +115,8 @@ class ChangeMessage extends PureComponent {
             uploadImageBase64Data({
                 base64Content: image
             }).then((res) => {
-                const { fileOnServerUrl } = res.data;
-                this.saveItems(fileOnServerUrl);
+                const { imageDomain, suffixUrl } = res.data;
+                this.saveItems(`${imageDomain}/${suffixUrl}`);
             })
         } else if (!isBase64) {
             this.saveItems(image);
@@ -263,7 +264,7 @@ class ChangeMessage extends PureComponent {
                         )}
                     </FormItem>
                     {
-                        this.state.selectLinkType === '商品链接' &&
+                        this.state.selectLinkType === '1' &&
                         <FormItem className="modal-form-item">
                             <span className="modal-form-item-title">
                                 <span style={{color: '#f00' }}>*</span>
@@ -286,7 +287,7 @@ class ChangeMessage extends PureComponent {
                         </FormItem>
                     }
                     {
-                        this.state.selectLinkType === '静态活动页面' &&
+                        this.state.selectLinkType === '0' &&
                         <FormItem className="modal-form-item">
                             <span className="modal-form-item-title">
                                 <span style={{color: '#f00' }}>*</span>

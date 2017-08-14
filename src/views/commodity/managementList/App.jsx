@@ -172,7 +172,6 @@ class ManagementList extends PureComponent {
                     } else {
                         message.success(purchasedata.tipsMessageTxt);
                     }
-
                     this.handleFormSearch();
                 }
             },
@@ -202,13 +201,13 @@ class ManagementList extends PureComponent {
             spAdrId: this.state.supplierId,
             status
         }, 'goodsChangeStatus')
-            .catch(err => {
-                if (err.code === availbleGoodsId) {
-                    this.setState({
-                        errorGoodsCode: err.code
-                    })
-                }
-            });
+        .catch(err => {
+            if (err.code === availbleGoodsId) {
+                this.setState({
+                    errorGoodsCode: err.code
+                })
+            }
+        });
     }
 
 
@@ -301,7 +300,7 @@ class ManagementList extends PureComponent {
             branchCompanyId: id,
             productIds: this.state.chooseGoodsList,
             status
-        }, 'prodBatchUpdate');
+        }, 'prodBatchUpdate')
     }
 
     /* **************** 全国上下架 ****************** */

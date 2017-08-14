@@ -57,8 +57,8 @@ class QuickItem extends Component {
                 uploadImageBase64Data({
                     base64Content: image
                 }).then((res) => {
-                    const { fileOnServerUrl } = res.data;
-                    this.saveItems(values, fileOnServerUrl);
+                    const { imageDomain, suffixUrl } = res.data;
+                    this.saveItems(values, `${imageDomain}/${suffixUrl}`);
                 })
             } else if (!isBase64) {
                 this.saveItems(values)
@@ -132,25 +132,6 @@ class QuickItem extends Component {
                                 <span>{current.navigationPosition}</span>
                             </FormItem>
                             <FormItem className="manage-form-item">
-                                <span className="manage-form-label quick-form-label">类型：</span>
-                                {getFieldDecorator('navigationType', {
-                                    rules: [{
-                                        required: true,
-                                        message: '请选择类型'
-                                    }],
-                                    initialValue: `${current.navigationType}`
-                                })(
-                                    <Select
-                                        style={{ width: '153px' }}
-                                        size="default"
-                                        placeholder="请选择"
-                                    >
-                                        <Option value="0">静态活动页面</Option>
-                                        <Option value="1">功能链接</Option>
-                                    </Select>
-                                    )}
-                            </FormItem>
-                            <FormItem className="manage-form-item">
                                 <span className="manage-form-label quick-form-label">名称：</span>
                                 {getFieldDecorator('navigationName', {
                                     rules: [{
@@ -169,24 +150,61 @@ class QuickItem extends Component {
                                     )}
                                 <span className="change-form-tip">（说明：2~4个汉字）</span>
                             </FormItem>
-                            <FormItem className="application-form-item">
-                                <span className="application-modal-label">链接地址：</span>
-                                {getFieldDecorator('linkAddress', {
-                                    rules: [
-                                        { required: true, message: '请输入链接地址', whitespace: true },
-                                        { pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'}
-                                    ],
-                                    initialValue: current.linkAddress
+                            <FormItem className="manage-form-item">
+                                <span className="manage-form-label quick-form-label">类型：</span>
+                                {getFieldDecorator('navigationType', {
+                                    rules: [{
+                                        required: true,
+                                        message: '请选择类型'
+                                    }],
+                                    initialValue: `${current.navigationType}`
                                 })(
-                                    <Input
-                                        onChange={this.handleTextChange}
-                                        type="textarea"
-                                        placeholder="请输入链接地址"
-                                        className="application-modal-textarea"
-                                        autosize={{ minRows: 2, maxRows: 8 }}
-                                    />
-                                    )}
+                                    <Select
+                                        style={{ width: '153px' }}
+                                        size="default"
+                                        placeholder="请选择"
+                                    >
+                                        <Option value="1">商品链接</Option>
+                                        <Option value="2">静态活动页面</Option>
+                                    </Select>
+                                )}
                             </FormItem>
+                            {
+                                `${this.state.select}` === '1'
+                                ? <div>
+                                    <FormItem className="home-style-modal-input-item">
+                                        <span>商品编号：</span>
+                                        {getFieldDecorator('productNo', {
+                                            rules: [
+                                                {max: 20, message: '最大长度20个汉字'}
+                                            ],
+                                            initialValue: current.productNo
+                                        })(
+                                            <Input className="home-style-url" type="text" placeholder="请输入商品编号" />
+                                        )}
+                                    </FormItem>
+                                </div>
+                                : <div>
+                                    <FormItem className="application-form-item">
+                                        <span className="application-modal-label">链接地址：</span>
+                                        {getFieldDecorator('linkAddress', {
+                                            rules: [
+                                                { required: true, message: '请输入链接地址', whitespace: true },
+                                                { pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'}
+                                            ],
+                                            initialValue: current.linkAddress
+                                        })(
+                                            <Input
+                                                onChange={this.handleTextChange}
+                                                type="textarea"
+                                                placeholder="请输入链接地址"
+                                                className="application-modal-textarea"
+                                                autosize={{ minRows: 2, maxRows: 8 }}
+                                            />
+                                        )}
+                                    </FormItem>
+                                </div>
+                            }
                             <FormItem className={
                                 classnames('manage-form-item')
                             }>

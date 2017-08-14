@@ -56,8 +56,8 @@ class BannerItem extends Component {
                 uploadImageBase64Data({
                     base64Content: image
                 }).then((res) => {
-                    const { fileOnServerUrl } = res.data;
-                    this.saveItems(values, fileOnServerUrl);
+                    const { imageDomain, suffixUrl } = res.data;
+                    this.saveItems(values, `${imageDomain}/${suffixUrl}`);
                 })
             } else if (!isBase64) {
                 this.saveItems(values);
