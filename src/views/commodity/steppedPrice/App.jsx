@@ -11,13 +11,7 @@ import { message } from 'antd';
 
 import InputItem from './inputItem';
 
-import { MAXGOODS } from '../../../constant'
-
-const initValue = [{
-    startNumber: 1,
-    endNumber: 2,
-    price: 0
-}]
+import { MAXGOODS } from '../../../constant';
 
 /**
  * 价格区间是否连续
@@ -43,9 +37,25 @@ class SteppedPrice extends PureComponent {
         this.handleDeleteItem = ::this.handleDeleteItem;
         this.handleValueChange = ::this.handleValueChange;
         const { defaultValue } = props;
-        const initState = defaultValue.length === 0 ? initValue : defaultValue;
+        this.initValue = [{
+            startNumber: props.startNumber,
+            endNumber: props.startNumber + 1,
+            price: 0
+        }]
+        const initState = defaultValue.length === 0 ? this.initValue : defaultValue;
         this.state = {
             defaultValue: initState
+        }
+    }
+
+    componentWillReceiveProps (nextProps) {
+        const { startNumber } = this.props;
+        if (nextProps.startNumber !== startNumber) {
+            this.initValue = [{
+                startNumber: nextProps.startNumber,
+                endNumber: nextProps.startNumber + 1,
+                price: 0
+            }]
         }
     }
 
@@ -97,6 +107,10 @@ class SteppedPrice extends PureComponent {
             message.warning('商品数达到最大值，无法再添加！')
             return;
         }
+        if (!endNumber) {
+            message.error('请填写完整该项数据！')
+            return;
+        }
         const newItem = {
             startNumber: endNumber + 1,
             endNumber: endNumber + 2,
@@ -104,6 +118,14 @@ class SteppedPrice extends PureComponent {
         }
         this.setState({
             defaultValue: [...defaultValue, newItem]
+        }, () => {
+            this.handleChange();
+        })
+    }
+
+    reset = () => {
+        this.setState({
+            defaultValue: this.initValue
         }, () => {
             this.handleChange();
         })
@@ -153,14 +175,16 @@ SteppedPrice.propTypes = {
     defaultValue: PropTypes.arrayOf(PropTypes.any),
     handleChange: PropTypes.func,
     maxLength: PropTypes.number,
+    startNumber: PropTypes.number,
 }
 
 SteppedPrice.defaultProps = {
     prefixCls: 'stepped-Price',
     inputSize: 'small',
     min: 0,
-    defaultValue: initValue,
-    handleChange: () => {}
+    defaultValue: [],
+    handleChange: () => {},
+    startNumber: 0
 }
 
 export default SteppedPrice;

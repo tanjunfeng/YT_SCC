@@ -21,11 +21,6 @@ import {
 } from 'antd';
 import {
 	fetchPoMngList,
-	getWarehouseAddressMap,
-	getShopAddressMap,
-	getSupplierMap,
-	getSupplierLocMap,
-	getBigClassMap,
 	getMaterialMap,
 	initPoDetail,
 	createPo,
@@ -70,11 +65,6 @@ const RECORD_STATUS = {
 	poLines: state.toJS().procurement.po.poLines || [],
 	data: state.toJS().user.data || {}
 }), dispatch => bindActionCreators({
-	getWarehouseAddressMap,
-	getShopAddressMap,
-	getSupplierMap,
-	getSupplierLocMap,
-	getBigClassMap,
 	getMaterialMap,
 	initPoDetail,
 	createPo,
@@ -91,10 +81,6 @@ const RECORD_STATUS = {
 class PoDetail extends PureComponent {
 	constructor(props) {
 		super(props);
-		this.handleGetAddressMap = ::this.handleGetAddressMap;
-		this.handleGetBigClassMap = ::this.handleGetBigClassMap;
-		this.handleGetSupplierMap = ::this.handleGetSupplierMap;
-		this.handleGetSupplierLocMap = ::this.handleGetSupplierLocMap;
 		this.onLocTypeChange =::this.onLocTypeChange;
 		this.S4 = ::this.S4;
 		this.guid = ::this.guid;
@@ -465,88 +451,6 @@ class PoDetail extends PureComponent {
 			totalAmounts:Math.round(totalAmounts*100)/100
 		}),() => {
 		};
-	}
-
-	/**
-	 * 根据选择地点类型、子公司，查询地点值清单
-	 */
-	handleGetAddressMap = ({ value, pagination }) => {
-		//地点类型
-		let { locTypeCd } = this.props.form.getFieldsValue(["locTypeCd"])
-		let companyId = null;//TODO 从session获取？
-		let pageNum = pagination.current || 1;
-		//根据选择的地点类型获取对应地点的值清单
-		if (locTypeCd === locTypeCodes.warehouse) {
-			//地点类型为仓库
-			return this.props.getWarehouseAddressMap({
-				value, companyId, pageNum
-			});
-		} else if (locTypeCd === locTypeCodes.shop) {
-			//地点类型为门店
-			return this.props.getShopAddressMap({
-				value, companyId, pageNum
-			});
-		} else {
-			//如果地点类型为空，返回空promise
-			return new Promise(function (resolve, reject) {
-				resolve({ total: 0, data: [] });
-			});
-		}
-	}
-
-	/**
-	 * 大类值清单
-	 */
-	handleGetBigClassMap = ({ value, pagination }) => {
-		let pageNum = pagination.current || 1;
-		return this.props.getBigClassMap({
-			value,
-			pageNum
-		});
-
-	}
-
-	/**
-	 * 供应商值清单
-	 */
-	handleGetSupplierMap = ({ value, pagination }) => {
-		let pageNum = pagination.current || 1;
-		//子公司ID
-		let companyId = null;  //TODO 从session获取子公司ID？
-		return this.props.getSupplierMap({
-			companyId,
-			value,
-			pageNum
-		});
-
-	}
-
-	/**
-	 *
-	 */
-	handleGetSupplierLocMap = ({ value, pagination }) => {
-		let pageNum = pagination.current || 1;
-		let supplierCd;
-		let selectedSupplierRawData = this.supplier.state.selectedRawData;
-		if (selectedSupplierRawData) {
-			supplierCd = selectedSupplierRawData.code;
-		}
-		//子公司ID
-		let companyId = null;  //TODO 从session获取子公司ID？
-		//如果供应商地点为空，返回空promise
-		if (!supplierCd) {
-			return new Promise(function (resolve, reject) {
-				resolve({ total: 0, data: [] });
-			});
-		}
-		//根据供应商编码、输入查询内容获取供应商地点信息
-		return this.props.getSupplierLocMap({
-			value,
-			supplierCd,
-			pageNum,
-			companyId
-		});
-
 	}
 
 	/**

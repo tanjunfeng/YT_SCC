@@ -13,12 +13,14 @@ import {
     supplierStore,
     adjustmentType,
     // supplierTypeOptions,
-    supplierStatusOptions,
+    // supplierStatusOptions,
 } from '../../../constant/searchParams';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
+
+const supplierStatusOptions = {};
 
 class SearchForm extends Component {
     constructor(props) {

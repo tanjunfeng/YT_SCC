@@ -61,8 +61,8 @@ class ChangeMessage extends PureComponent {
             return uploadImageBase64Data({
                 base64Content: img
             }).then((res) => {
-                const { fileOnServerUrl } = res.data;
-                return fileOnServerUrl;
+                const { imageDomain, suffixUrl } = res.data;
+                return `${imageDomain}/${suffixUrl}`;
             })
         }
         return img;
