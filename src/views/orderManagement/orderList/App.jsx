@@ -286,7 +286,7 @@ class OrderManagementList extends Component {
     handleOrderBatchReview() {
         confirm({
             title: '批量审核',
-            content: '确认批量审核？',
+            content: '确认批量审核通过？',
             onOk: () => {
                 // ToDo:带入参数（this.state.choose），调接口
                 modifyBatchApproval(
@@ -349,7 +349,7 @@ class OrderManagementList extends Component {
             case 'tableAudit':
                 confirm({
                     title: '审核',
-                    content: '确认审核？',
+                    content: '确认审核通过？',
                     onOk: () => {
                         modifyApprovalOrder({
                             id
