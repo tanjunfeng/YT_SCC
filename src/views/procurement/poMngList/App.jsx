@@ -51,7 +51,8 @@ class PoMngList extends PureComponent {
         this.state = {
             auditingVisible: false,
             deleteListData: [],
-            purchaseListRows: []
+            purchaseListRows: [],
+            failedReason: ''
         }
     }
 
@@ -80,14 +81,17 @@ class PoMngList extends PureComponent {
      */
     queryPoList = (params) => {
         this.props.fetchPoMngList({
+            pageSize: PAGE_SIZE,
+            pageNum: this.current,
             ...params
         });
     }
 
     // 审核未通过弹窗
-    showAuditingModal = () => {
+    showAuditingModal = (record) => {
         this.setState({
-            auditingVisible: true
+            auditingVisible: true,
+            failedReason: record.failedReason
         });
     }
 
@@ -154,8 +158,6 @@ class PoMngList extends PureComponent {
 
     // table列表详情操作
     renderActions = (text, record) => {
-        this.selectedRowData = record;
-
         const { status, purchaseOrderNo, id } = record;
         const deleteCode = 0;
         const auditingCode = 2;
@@ -165,11 +167,11 @@ class PoMngList extends PureComponent {
         const menu = (
             <Menu>
                 <Menu.Item key="detail">
-                    <Link to={detailLink}>详情</Link>
+                    <Link to={`${pathname}/detail/${id}`}>详情</Link>
                 </Menu.Item>
                 { status === deleteCode &&
                     <Menu.Item key="modify">
-                        <Link to={detailLink}>修改</Link>
+                        <Link to={`${pathname}/edit/${id}`}>修改</Link>
                     </Menu.Item>
                 }
                 { status === deleteCode &&
@@ -178,11 +180,7 @@ class PoMngList extends PureComponent {
                     </Menu.Item>
                 }
                 {status === refuseCOde && <Menu.Item key="rejected">
-                    <span onClick={this.showAuditingModal}>查看审核未通过</span>
-                </Menu.Item>
-                }
-                {status === auditingCode && <Menu.Item key="receive">
-                    <Link to={`${pathname}/${id}`}>收货</Link>
+                    <span onClick={() => this.showAuditingModal(record)}>查看审核未通过</span>
                 </Menu.Item>
                 }
             </Menu>
@@ -206,8 +204,6 @@ class PoMngList extends PureComponent {
 
         const { pathname } = this.props.location;
         const { auditingVisible } = this.state;
-        const { failedReason = '', auditTime, auditUserId, ipurchaseOrderNo} = this.selectedRowData;
-
         const rowSelection = {
             getCheckboxProps: record => ({
                 disabled: record.status !== 0
@@ -245,14 +241,14 @@ class PoMngList extends PureComponent {
                         rowSelection={rowSelection}
                         dataSource={data}
                         columns={columns}
-                        rowKey="purchaseOrderNo"
+                        rowKey="id"
                         scroll={{
                             x: 1300
                         }}
                         pagination={{
                             current: pageNum,
                             total,
-                            PAGE_SIZE,
+                            pageSize: PAGE_SIZE,
                             showQuickJumper: true,
                             onChange: this.onPaginate
                         }}
@@ -264,16 +260,10 @@ class PoMngList extends PureComponent {
                         visible={auditingVisible}
                         onCancel={this.handleAuditingCancel}
                         footer={[
-                            <Button type="primary"><Link to={`${pathname}/podetail/${ipurchaseOrderNo}`}>立即修改</Link></Button>
+                            <Button type="primary" onClick={this.handleAuditingCancel}>返回</Button>
                         ]}
                     >
-                        {
-                            <ul>
-                                <li>审核时间: {auditTime}</li>
-                                <li>审核者: {auditUserId}</li>
-                                <li>失败原因: {failedReason}</li>
-                            </ul>
-                        }
+                        { this.state.failedReason }
                     </Modal>
                 }
             </div>

@@ -48,7 +48,7 @@ class RefundModal extends PureComponent {
      */
     handleTableCauseOk() {
         const { causeTextArea, inputNumber } = this.props.form.getFieldsValue();
-        const { recordData } = this.props;
+        const { recordData, totalAmount } = this.props;
         const { option } = this.state;
         switch (option) {
             case '请选择':
@@ -94,7 +94,7 @@ class RefundModal extends PureComponent {
                         if (recordData.state === 'pending_audit') {
                             // 审核退款
                             modifyAuditRefund({
-                                mAmount: recordData.amount,
+                                amount: recordData.amount,
                                 refundNo: recordData.id,
                                 passed: false,
                                 remark: causeTextArea
@@ -104,7 +104,7 @@ class RefundModal extends PureComponent {
                                 this.setState({
                                     option: '请选择'
                                 })
-                                message.success(res.message);
+                                message.success('退款审核成功');
                             }).catch(err => {
                                 message.error(err.message);
                             })
@@ -120,7 +120,7 @@ class RefundModal extends PureComponent {
                                 this.setState({
                                     option: '请选择'
                                 })
-                                message.success(res.message);
+                                message.success('确认退款成功');
                             }).catch(err => {
                                 message.error(err.message);
                             })
@@ -158,7 +158,7 @@ class RefundModal extends PureComponent {
                         onOk={this.handleTableCauseOk}
                         onCancel={this.handleTableCauseCancel}
                     >
-                        <Form layout="inline">
+                        <Form>
                             <FormItem>
                                 <div>
                                     <span className="order-modal-label">
@@ -181,7 +181,28 @@ class RefundModal extends PureComponent {
                             </FormItem>
                             {
                                 option === '通过' && recordData.state === 'pending_audit'
-                                && <FormItem>
+                                &&
+                                <FormItem>
+                                    <div>
+                                        <span className="order-modal-label">
+                                            订单金额:
+                                        </span>
+                                        {getFieldDecorator('totalAmount', {
+                                            initialValue: this.props.totalAmount
+                                        })(
+                                            <InputNumber
+                                                min={0.00}
+                                                disabled={true}
+                                                max={this.props.totalAmount}
+                                                step={0.01}
+                                            />
+                                            )}
+                                    </div>
+                                </FormItem>
+                            }
+                            {option === '通过' && recordData.state === 'pending_audit'
+                                &&
+                                <FormItem>
                                     <div>
                                         <span className="order-modal-label">
                                             退款金额:
@@ -196,8 +217,7 @@ class RefundModal extends PureComponent {
                                             />
                                             )}
                                     </div>
-                                </FormItem>
-                            }
+                                </FormItem>}
                             {
                                 option === '不通过'
                                 && <FormItem>
