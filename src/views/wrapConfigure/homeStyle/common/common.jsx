@@ -393,7 +393,7 @@ function Common(WrappedComponent) {
                                         height={current.height}
                                         dpr={2}
                                         defaultImge={current.icon}
-                                        accept={['jpg', 'jpeg', 'png']}
+                                        accept={['png']}
                                     />
                                 </div>
                             </Form>

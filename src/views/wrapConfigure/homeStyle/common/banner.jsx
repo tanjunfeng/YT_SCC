@@ -195,7 +195,7 @@ class BannerItem extends Component {
                                     height={imgConfig.height}
                                     dpr={3}
                                     defaultImge={itemAds[0].icon}
-                                    accept={['jpg', 'jpeg', 'png']}
+                                    accept={['png']}
                                 />
                             </FormItem>
                         </Form>

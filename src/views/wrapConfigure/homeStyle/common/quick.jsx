@@ -228,7 +228,7 @@ class QuickItem extends Component {
                                     width={imgConfig.width}
                                     height={imgConfig.height}
                                     defaultImge={current.picAddress}
-                                    accept={['jpg', 'jpeg', 'png']}
+                                    accept={['png']}
                                 />
                             </FormItem>
                         </Form>
