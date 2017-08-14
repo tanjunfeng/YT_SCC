@@ -80,9 +80,9 @@ class EditorPages extends Component {
     /**
      * 复制图片链接（为空时）
      */
-    onCopyErr() {
-        message.error('未检测到上传图片，请先上传！')
-    }
+    // onCopyErr() {
+    //     message.error('未检测到上传图片，请先上传！')
+    // }
 
     handleSubmit() {
         const data = this.props.editorList;
@@ -119,6 +119,7 @@ class EditorPages extends Component {
             }
             return file;
         });
+        if (fileList[])
         this.setState({ fileList });
     }
 
@@ -136,13 +137,40 @@ class EditorPages extends Component {
             ? fileList[0].response
             : null;
         const imgData = responseData
-            ? `${responseData.data.imageDomain}${responseData.data.suffixUrl}`
+            ? `${responseData.data.imageDomain}/${responseData.data.suffixUrl}`
             : '';
         return (
             <div className={`${prefixCls} editorPages`}>
                 <div className={`${prefixCls} editorPages-form`}>
-                    <FormItem label="提示:" className={`${prefixCls} ${prefixCls}-css-ts editorPages-form`} />
-                    <div className={`${prefixCls}-lines`}>
+                    <FormItem
+                        label="提示:"
+                        className={`${prefixCls} ${prefixCls}-css-ts editorPages-form`}
+                    />
+                    <div
+                        className={`${prefixCls}-lines`}
+                        style={{display: 'flex',
+                            lineHeight: '28px'}}
+                    >
+                        <CopyToClipboard
+                            /* onCopy={fileList.length > 0 ? this.onCopy : this.onCopyErr} */
+                            test={imgData}
+                            onCopy={this.onCopy}
+                        >
+                            <Upload
+                                {...names}
+                                fileList={this.state.fileList}
+                            >
+                                <Button type="primary">
+                                    <Icon type="upload" />上传图片
+                                </Button>
+                            </Upload>
+                        </CopyToClipboard>
+                        <Input
+                            value={imgData || ''}
+                            style={{ width: 500, height: 28, marginLeft: 10 }}
+                        />
+                    </div>
+                    {/* <div className={`${prefixCls}-lines`}>
                         <Upload
                             {...names}
                             fileList={this.state.fileList}
@@ -169,15 +197,15 @@ class EditorPages extends Component {
                                 <span>点击复制上传图片链接</span>
                             </CopyToClipboard>
                         </Button>
-                    </div>
-                    <div
+                    </div> */}
+                    {/* <div
                         style={{ paddingTop: 10, paddingBottom: 10, display: 'flex' }}
                     >
-                        <Input 
+                        <Input
                             value={imgData || ''}
                             style={{ width: 500, height: 28 }}
                         />
-                    </div>
+                    </div> */}
                     <CKEditor
                         activeClass="p10"
                         content={this.state.content}
