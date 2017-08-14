@@ -259,12 +259,12 @@ class ChangeMessage extends PureComponent {
                                 onChange={this.handleLinkStyleChange}
                             >
                                 <Option value="1">商品链接</Option>
-                                <Option value="0">静态活动页面</Option>
+                                <Option value="2">静态活动页面</Option>
                             </Select>
                         )}
                     </FormItem>
                     {
-                        this.state.selectLinkType === '1' &&
+                        `${this.state.selectLinkType}` === '1' &&
                         <FormItem className="modal-form-item">
                             <span className="modal-form-item-title">
                                 <span style={{color: '#f00' }}>*</span>
@@ -287,7 +287,7 @@ class ChangeMessage extends PureComponent {
                         </FormItem>
                     }
                     {
-                        this.state.selectLinkType === '0' &&
+                        `${this.state.selectLinkType}` === '2' &&
                         <FormItem className="modal-form-item">
                             <span className="modal-form-item-title">
                                 <span style={{color: '#f00' }}>*</span>

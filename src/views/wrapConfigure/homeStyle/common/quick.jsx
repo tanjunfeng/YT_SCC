@@ -28,15 +28,20 @@ class QuickItem extends Component {
         this.saveItems = ::this.saveItems;
         this.state = {
             isShow: false,
-            index: -1
+            index: -1,
+            select: null
         }
     }
 
     handleUpload(e) {
         const index = e.target.getAttribute('data-index');
+        const { data = {} } = this.props;
+        const { itemAds = [] } = data;
+        const current = itemAds[index];
         this.setState({
             isShow: true,
-            index
+            index,
+            select: current.navigationType
         })
     }
 
@@ -78,6 +83,14 @@ class QuickItem extends Component {
                 isShow: false
             })
             this.props.fetchAreaList();
+        })
+    }
+
+    handleLinkStyleChange = (type) => {
+        this.setState({
+            select: type
+        }, () => {
+            this.props.form.setFieldsValue({navigationType: type});
         })
     }
 
@@ -163,6 +176,7 @@ class QuickItem extends Component {
                                         style={{ width: '153px' }}
                                         size="default"
                                         placeholder="请选择"
+                                        onChange={this.handleLinkStyleChange}
                                     >
                                         <Option value="1">商品链接</Option>
                                         <Option value="2">静态活动页面</Option>
