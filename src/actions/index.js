@@ -67,7 +67,6 @@ import {
 
 // IBM
 import fetchCheckMainSupplier from './fetch/fetchCheckMainSupplier';
-import fecthGetProdPurchaseById from './fetch/fetchGetProdPurchaseById';
 import fetchChangeSupType from './fetch/fetchChangeSupType'
 
 import fetchQuerySettledList from './fetch/fetchQuerySettledList';
@@ -75,7 +74,6 @@ import fetchQueryManageList from './fetch/fetchQueryManageList';
 import fetchGetProductById from './fetch/fetchGetProductById';
 import fetchEditBeforeAfter from './fetch/fetchEditBeforeAfter';
 import fetchAddProdPurchase from './fetch/fetchAddProdPurchase';
-import fetchQueryProdByCondition from './fetch/fetchQueryProdByCondition';
 import fetchUpdateProdPurchase from './fetch/fetchUpdateProdPurchase';
 import fetchChangeProPurchaseStatus from './fetch/fetchChangeProPurchaseStatus';
 import suppplierSettledAudit from './fetch/suppplierSettledAudit';
@@ -154,7 +152,6 @@ export {
 
     // IBM
     fetchCheckMainSupplier,
-    fecthGetProdPurchaseById,
     fetchChangeSupType,
 
     fetchQuerySettledList,
@@ -178,7 +175,6 @@ export {
     // 根据条件分页查询商品清单，并排序
     queryCommodityList,
     fetchAddProdPurchase,
-    fetchQueryProdByCondition,
     fetchUpdateProdPurchase,
     fetchChangeProPurchaseStatus,
     fetchDeleteProdPurchaseById

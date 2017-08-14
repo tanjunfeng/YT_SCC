@@ -14,11 +14,11 @@ import {
     createPo as svcCreatePo,
     auditPo as svcAuditPo,
     queryPoDetail,
-    queryShopAddressMap,
+    // queryShopAddressMap,
     // queryWarehouseAddressMap,
-    querySupplierMap,
-    querySupplierLocMap,
-    queryBigClassMap,
+    // querySupplierMap,
+    // querySupplierLocMap,
+    // queryBigClassMap,
     queryMaterialMap as svcQueryMateriMap,
     queryPoRcvMngList,
     queryPoRcvList,
@@ -90,65 +90,65 @@ export const fetchPoPrintList = (params) => dispatch => (
  * 门店值清单 promise
  * @param {*} data
  */
-export const getShopAddressMap = (params) => dispatch => (
-    new Promise((resolve, reject) => {
-        queryShopAddressMap(params)
-            .then(res => {
-                resolve(res);
-            })
-            .catch(err => {
-                reject(err);
-            })
-    })
-)
+// export const getShopAddressMap = (params) => dispatch => (
+//     new Promise((resolve, reject) => {
+//         queryShopAddressMap(params)
+//             .then(res => {
+//                 resolve(res);
+//             })
+//             .catch(err => {
+//                 reject(err);
+//             })
+//     })
+// )
 
 /**
  * 供应商值清单 promise
  * @param {*} data
  */
-export const getSupplierMap = (params) => dispatch => (
-    new Promise((resolve, reject) => {
-        querySupplierMap(params)
-            .then(res => {
-                resolve(res);
-            })
-            .catch(err => {
-                reject(err);
-            })
-    })
-)
+// export const getSupplierMap = (params) => dispatch => (
+//     new Promise((resolve, reject) => {
+//         querySupplierMap(params)
+//             .then(res => {
+//                 resolve(res);
+//             })
+//             .catch(err => {
+//                 reject(err);
+//             })
+//     })
+// )
 
 /**
  * 供应商地点值清单 promise
  * @param {*} data
  */
-export const getSupplierLocMap = (params) => dispatch => (
-    new Promise((resolve, reject) => {
-        querySupplierLocMap(params)
-            .then(res => {
-                resolve(res);
-            })
-            .catch(err => {
-                reject(err);
-            })
-    })
-)
+// export const getSupplierLocMap = (params) => dispatch => (
+//     new Promise((resolve, reject) => {
+//         querySupplierLocMap(params)
+//             .then(res => {
+//                 resolve(res);
+//             })
+//             .catch(err => {
+//                 reject(err);
+//             })
+//     })
+// )
 
 /**
  * 大类值清单 promise
  * @param {*} data
  */
-export const getBigClassMap = (params) => dispatch => (
-    new Promise((resolve, reject) => {
-        queryBigClassMap(params)
-            .then(res => {
-                resolve(res);
-            })
-            .catch(err => {
-                reject(err);
-            })
-    })
-)
+// export const getBigClassMap = (params) => dispatch => (
+//     new Promise((resolve, reject) => {
+//         queryBigClassMap(params)
+//             .then(res => {
+//                 resolve(res);
+//             })
+//             .catch(err => {
+//                 reject(err);
+//             })
+//     })
+// )
 
 
 /////////////////采购单相关/////////////////////////////

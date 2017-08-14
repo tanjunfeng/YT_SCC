@@ -10,7 +10,8 @@ import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Form, Button, message, Input } from 'antd'
+import { Form, Button, message, Upload, Icon, Input } from 'antd'
+import CopyToClipboard from 'react-copy-to-clipboard';
 import CKEditor from 'react-ckeditor-component';
 
 import {
@@ -36,9 +37,13 @@ class EditorPages extends Component {
 
         this.updateContent = this.updateContent.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.onCopy = this.onCopy.bind(this);
 
         this.state = {
             content: '',
+            fileList: [],
+            defaultFileList: []
         }
     }
 
@@ -51,23 +56,32 @@ class EditorPages extends Component {
             id,
             shelfStatus: 0
         })
-        .then((res) => (
-            this.setState({
-                content: res.description
-            })
-        )).catch(() => {
+            .then((res) => (
+                this.setState({
+                    content: res.description,
+                    defaultFileList: []
+                })
+            )).catch(() => {
 
-        });
+            });
     }
 
     componentWillUnmount() {
         clearTimeout(this.timer);
     }
 
-    updateContent(newContent) {
-        this.setState({
-            content: newContent
-        })
+    /**
+     * 复制图片链接（已经上传一张时）
+     */
+    onCopy() {
+        message.success('已经将图片链接复制到粘贴板!如果粘贴失败，请在显示框里手动粘贴!')
+    }
+
+    /**
+     * 复制图片链接（为空时）
+     */
+    onCopyErr() {
+        message.error('未检测到上传图片，请先上传！')
     }
 
     handleSubmit() {
@@ -89,28 +103,87 @@ class EditorPages extends Component {
         })
     }
 
+    updateContent(newContent) {
+        this.setState({
+            content: newContent
+        })
+    }
+
+    handleChange = (info) => {
+        let fileList = info.fileList;
+        // 2. 读取远程路径并显示链接。
+        fileList = fileList.map((file) => {
+            if (file.response) {
+                // Component will show file.url as link
+                file.url = file.response.url;
+            }
+            return file;
+        });
+        this.setState({ fileList });
+    }
+
     render() {
-        if (this.state.content.length === 0) {
-            return null
-        }
+        const { match = {}, prefixCls } = this.props;
+        const { fileList = [] } = this.state;
+        const { params } = match;
+        const { id } = params;
+        const names = {
+            action: '/api/sc/commonUploadFile/uploadFile',
+            onChange: this.handleChange,
+            multiple: false,
+        };
+        const responseData = fileList[0]
+            ? fileList[0].response
+            : null;
+        const imgData = responseData
+            ? `${responseData.data.imageDomain}${responseData.data.suffixUrl}`
+            : '';
         return (
-            <div className="editorPages">
-                <div className="editorPages-form">
-                    <FormItem label="提示:" className="tjf-css-ts" />
-                    <div style={{paddingTop: 10, paddingBottom: 10, display: 'flex'}}>
-                        <Button type="primary">获取图片链接</Button>
-                        <Input placeholder="图片链接" style={{width: 800, marginLeft: 10}} />
+            <div className={`${prefixCls} editorPages`}>
+                <div className={`${prefixCls} editorPages-form`}>
+                    <FormItem label="提示:" className={`${prefixCls} ${prefixCls}-css-ts editorPages-form`} />
+                    <div className={`${prefixCls}-lines`}>
+                        <Upload
+                            {...names}
+                            fileList={this.state.fileList}
+                            disabled={fileList.length > 0 ? true : false}
+                        >
+                            {
+                                fileList.length > 0
+                                ? <Button type="danger" disabled>
+                                    <Icon />图片已经存在,请清空
+                                  </Button>
+                                : <Button>
+                                    <Icon type="upload" />上传图片
+                                  </Button>
+                            }
+                        </Upload>
+                        <Button
+                            type="primary"
+                            className={`${prefixCls}-btn`}
+                        >
+                            <CopyToClipboard
+                                text={imgData}
+                                onCopy={fileList.length > 0 ? this.onCopy : this.onCopyErr}
+                            >
+                                <span>点击复制上传图片链接</span>
+                            </CopyToClipboard>
+                        </Button>
+                    </div>
+                    <div
+                        style={{ paddingTop: 10, paddingBottom: 10, display: 'flex' }}
+                    >
+                        <Input 
+                            value={imgData || ''}
+                            style={{ width: 500, height: 28 }}
+                        />
                     </div>
                     <CKEditor
                         activeClass="p10"
                         content={this.state.content}
                         onChange={this.updateContent}
-                        config={{
-                            filebrowserImageUploadUrl:
-                            `${config.apiHost}commonUploadFile/uploadFile`
-                        }}
                     />
-                    <div className="classify-select-btn-warp tjf-css-footer">
+                    <div className="classify-select-btn-warp editorPages-css-footer">
                         <FormItem>
                             <div>
                                 提示:
@@ -118,7 +191,7 @@ class EditorPages extends Component {
                                 静态页的url地址可能会改变~请检查确认清楚再发布哟！</div>
                         </FormItem>
                         <Button
-                            className="tjf-css-submit"
+                            className="prefixCls-css-submit"
                             type="primary"
                             size="default"
                             onClick={this.handleSubmit}
@@ -133,6 +206,7 @@ class EditorPages extends Component {
 
 EditorPages.propTypes = {
     fectheEditorList: PropTypes.func,
+    prefixCls: PropTypes.string,
     validateFields: PropTypes.func,
     fectheEditorContent: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
@@ -140,5 +214,9 @@ EditorPages.propTypes = {
     match: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
 }
+
+EditorPages.defaultProps = {
+    prefixCls: 'EditorPages'
+};
 
 export default withRouter(Form.create()(EditorPages));

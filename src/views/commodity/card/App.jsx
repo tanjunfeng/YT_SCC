@@ -11,14 +11,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PAGE_SIZE } from '../../../constant';
 import {
-    fecthCheckMainSupplier,
-    fetchGetProdPurchaseById,
     fetchCheckMainSupplier,
     fetchUpdateProdPurchase,
-    fetchQueryProdByCondition,
     fetchDeleteProdPurchaseById,
     fetchGetProductById,
-    fecthGetProdPurchaseById
 } from '../../../actions';
 import {
     GetProductById,
@@ -34,15 +30,11 @@ import {
         checkMainSupplier: state.toJS().commodity.checkMainSupplier,
     }),
     dispatch => bindActionCreators({
-        fecthCheckMainSupplier,
-        fetchGetProdPurchaseById,
         fetchCheckMainSupplier,
         fetchUpdateProdPurchase,
-        fetchQueryProdByCondition,
         ChangeProPurchaseStatus,
         fetchDeleteProdPurchaseById,
         fetchGetProductById,
-        fecthGetProdPurchaseById,
         GetProductById,
         GetProdPurchaseById,
         ChangeSupplierType,

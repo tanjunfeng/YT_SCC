@@ -49,7 +49,7 @@ class ChangeMessage extends PureComponent {
             visible: false,
             img: null,
             sortErr: false,
-            selectLinkType: this.props.visibleData.linkType,
+            selectLinkType: `${props.visibleData.linkType || 1}` ,
         }
     }
 
@@ -114,8 +114,8 @@ class ChangeMessage extends PureComponent {
             uploadImageBase64Data({
                 base64Content: image
             }).then((res) => {
-                const { fileOnServerUrl } = res.data;
-                this.saveItems(fileOnServerUrl);
+                const { imageDomain, suffixUrl } = res.data;
+                this.saveItems(`${imageDomain}/${suffixUrl}`);
             })
         } else if (!isBase64) {
             this.saveItems(image);
@@ -251,19 +251,19 @@ class ChangeMessage extends PureComponent {
                                 required: true,
                                 message: '请选择链接类型'
                             }],
-                            initialValue: `${linkType}`
+                            initialValue: linkType ? `${linkType}` : '1'
                         })(
                             <Select
                                 style={{ width: 240 }}
                                 onChange={this.handleLinkStyleChange}
                             >
                                 <Option value="1">商品链接</Option>
-                                <Option value="0">静态活动页面</Option>
+                                <Option value="2">静态活动页面</Option>
                             </Select>
                         )}
                     </FormItem>
                     {
-                        this.state.selectLinkType === '商品链接' &&
+                        `${this.state.selectLinkType}` === '1' &&
                         <FormItem className="modal-form-item">
                             <span className="modal-form-item-title">
                                 <span style={{color: '#f00' }}>*</span>
@@ -286,7 +286,7 @@ class ChangeMessage extends PureComponent {
                         </FormItem>
                     }
                     {
-                        this.state.selectLinkType === '静态活动页面' &&
+                        `${this.state.selectLinkType}` === '2' &&
                         <FormItem className="modal-form-item">
                             <span className="modal-form-item-title">
                                 <span style={{color: '#f00' }}>*</span>
@@ -317,7 +317,7 @@ class ChangeMessage extends PureComponent {
                             <span style={{color: '#f00' }}>*</span>
                             轮播图片
                         </span>
-                        <span>（说明：支持PNG、JPG，建议大小600X400pix，1M以内）</span>
+                        <span>（说明：支持PNG、JPG，建议大小1080X510pix，1M以内）</span>
                         <FileCut
                             ref={ref => { this.imageUploader = ref }}
                             width={1080}
