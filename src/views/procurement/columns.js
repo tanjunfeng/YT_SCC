@@ -5,9 +5,10 @@
  * 定义列表数据
  */
 import React from 'react';
+import moment from 'moment';
 import { locType, poStatus } from '../../constant/procurement';
 
- const purchase = ['普通采购单'];
+const purchase = ['普通采购单'];
 // 供应商列表
 export const poMngListColumns = [
     {
@@ -43,7 +44,12 @@ export const poMngListColumns = [
     {
         title: '预计送货日期',
         dataIndex: 'estimatedDeliveryDate',
-        key: 'estimatedDeliveryDate'
+        key: 'estimatedDeliveryDate',
+        render: (text) => (
+            <span>
+                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+            </span>
+        )
     },
     {
         title: '地点类型',

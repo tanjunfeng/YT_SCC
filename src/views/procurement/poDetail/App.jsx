@@ -228,7 +228,7 @@ class PoDetail extends PureComponent {
 			// 供应商地点附带信息
 			applySupplierRecord: {},
 			// 采购单类型
-			purchaseOrderType: '',
+			purchaseOrderType: '0',
 			// 货币类型
 			currencyCode: 'CNY',
 			// 供应商地点禁用
@@ -265,9 +265,9 @@ class PoDetail extends PureComponent {
 				let tmpPageMode = that.getPageMode();
 				that.setState({ pageMode: tmpPageMode });
 				that.setState({ actionAuth: that.getActionAuth() });
-				//计算采购总数量、采购总金额
-				let { totalQuantity, totalAmount } = that.caculate();
-				that.setState({ totalQuantity, totalAmount });
+				// //计算采购总数量、采购总金额
+				// let { totalQuantity, totalAmount } = that.caculate();
+				// that.setState({ totalQuantity, totalAmount });
 				if (tmpPageMode !== PAGE_MODE.READONLY) {
 					that.setState({ editable: true });
 				} else {
@@ -299,9 +299,7 @@ class PoDetail extends PureComponent {
 		const { basicInfo = {}} = this.props;
 		const newPo = fromJS(nextProps.po.poLines);
 		const oldPo = fromJS(this.props.po.poLines);
-		console.log(nextProps.po.poLines, this.props.po.poLines)
 		if (!Immutable.is(newPo, oldPo)) {
-			console.log('modify')
 			this.caculate(nextProps.po.poLines);
 		}
 		if (basicInfo.id !== id) {
@@ -668,22 +666,6 @@ class PoDetail extends PureComponent {
 		this.props.initPoDetail({
 			poLines: []
 		})
-		// let poLines = this.props.poLines || [];
-		// let that = this;
-		// poLines.forEach(function (item) {
-		// 	if (item.recordStatus == RECORD_STATUS.NEW) {
-		// 		that.props.deletePoLine(item);
-		// 		that.props.updatePoLine(item);
-		// 		console.log(111111)
-		// 	} else {
-		// 		item.deleteFlg = true;
-		// 		that.props.updatePoLine(item);
-		// 		that.props.updatePoLine(item);
-		// 		console.log(2222222)
-				
-		// 	}
-		// });
-
 	}
 
 	/**
@@ -1039,8 +1021,13 @@ class PoDetail extends PureComponent {
 
 		//基本信息，商品行均校验通过
 		//更新store
-		this.props.updatePoBasicinfo(this.getFormBasicInfo());
-		let poData = this.getPoData();
+		const basicInfo = Object.assign({}, this.getPoData().basicInfo, this.getFormBasicInfo());
+		let poData = {
+			basicInfo,
+			poLines: this.getPoData().poLines.filter((item) => {
+				return item.isValid !== 0 
+			})
+		}
 		// 基本信息
 		const {
 			spAdrId,
@@ -1051,6 +1038,9 @@ class PoDetail extends PureComponent {
 			purchaseOrderType,
 			addressCd,
 		} = poData.basicInfo;
+		console.log('poData.basicInfo', poData.basicInfo)
+		console.log('basicInfo', this.props.basicInfo)
+
 		// 采购商品信息
 		const pmPurchaseOrderItems = poData.poLines.map((item) => {
 			const {
@@ -1066,13 +1056,16 @@ class PoDetail extends PureComponent {
 				purchaseNumber
 			}
 		})
+
 		// 预计送货日期
 		const estimatedDeliveryDate = this.state.pickerDate
 		? this.state.pickerDate.valueOf().toString()
 		: null;
+
+		// 保存和提交的请求
 		this.props.createPo({
 			pmPurchaseOrder: {
-				spAdrId: spAdrId + '',
+				spAdrId: `${spAdrId || this.props.basicInfo.spAdrId}`,
 				estimatedDeliveryDate,
 				payType,
 				adrType: parseInt(adrType),

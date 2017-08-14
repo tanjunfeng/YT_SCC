@@ -1,5 +1,8 @@
 import { Table, InputNumber, Form } from 'antd';
 import React, { PureComponent } from 'react';
+import { MAXGOODS } from '../../../constant/index';
+
+
 export default class EditableCell extends PureComponent {
     constructor(props) {
         super(props);
@@ -63,6 +66,7 @@ export default class EditableCell extends PureComponent {
                             <InputNumber
                                 value={value}
                                 min={0}
+                                max={MAXGOODS}
                                 step={step}
                                 onChange={e => this.handleChange(e)}
                                 onBlur={e => this.handleBlur(e)}
