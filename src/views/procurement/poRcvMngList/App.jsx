@@ -458,7 +458,9 @@ class PoRcvMngList extends PureComponent {
                                                 this.supplySearchMind = ref
                                             }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
                                             }, 'querySuppliersList')}
                                             addonBefore=""
                                             onChoosed={this.handleSupplyChoose}
