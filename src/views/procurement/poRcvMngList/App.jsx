@@ -1,7 +1,7 @@
 /**
- * 采购管理 - 收货单管理列表
- *
  * @author taoqiyu@yatang.cn
+ *
+ * 采购管理 - 收货单管理列表
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -458,7 +458,9 @@ class PoRcvMngList extends PureComponent {
                                                 this.supplySearchMind = ref
                                             }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
                                             }, 'querySuppliersList')}
                                             addonBefore=""
                                             onChoosed={this.handleSupplyChoose}

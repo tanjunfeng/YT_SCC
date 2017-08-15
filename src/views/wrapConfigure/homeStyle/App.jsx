@@ -43,13 +43,13 @@ class HomeStyle extends Component {
                             return <QuickItem type="quick" {...props} />
                         }
                         if (id.indexOf('hot') > -1) {
-                            return <HotItem {...props} />
+                            return <HotItem type="hot" {...props} />
                         }
                         if (id.indexOf('banner-') > -1) {
-                            return <BannerItem {...props} />
+                            return <BannerItem type="banner" {...props} />
                         }
                         if (id.indexOf('floor-') > -1) {
-                            return <FloorItem {...props} />
+                            return <FloorItem type="floor" {...props} />
                         }
                         return null;
                     })
