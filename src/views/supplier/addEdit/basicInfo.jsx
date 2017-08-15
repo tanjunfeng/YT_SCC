@@ -61,8 +61,9 @@ class BasicInfo extends PureComponent {
             saleRegionInfo.json
             && saleRegionInfo.json !== regions
         ) {
+            const saleRegion = saleRegionInfo && saleRegionInfo.json ? saleRegionInfo.json : null;
             this.state = {
-                regions: Tools.decodeArea(JSON.parse(saleRegionInfo.json))
+                regions: Tools.decodeArea(JSON.parse(saleRegion))
             }
         }
     }
