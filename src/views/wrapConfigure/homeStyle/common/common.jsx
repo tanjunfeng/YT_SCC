@@ -185,11 +185,24 @@ function Common(WrappedComponent) {
             })
         }
 
+        renderModalTile = () => {
+            const { type } = this.props;
+            switch (type) {
+                case 'hot':
+                    return '热门推荐配置';
+                case 'floor':
+                    return '推荐管理配置';
+                default:
+                    break;
+            }
+        } 
+
         render() {
             const { data = {}, type } = this.props;
             const { isEnabled } = data;
             const { getFieldDecorator } = this.props.form;
             const { current } = this.state;
+            console.log(current)
             return (
                 <div
                     className={classnames(
@@ -293,7 +306,7 @@ function Common(WrappedComponent) {
                         this.state.uploadVisible &&
                         <Modal
                             isEnabled
-                            title={current.name}
+                            title={this.renderModalTile()}
                             visible={this.state.uploadVisible}
                             onOk={this.handleUpOk}
                             onCancel={this.handleUpCancel}

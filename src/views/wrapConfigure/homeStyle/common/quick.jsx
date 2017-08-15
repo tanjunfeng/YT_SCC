@@ -188,11 +188,11 @@ class QuickItem extends Component {
                                 ? <div>
                                     <FormItem className="home-style-modal-input-item">
                                         <span>商品编号：</span>
-                                        {getFieldDecorator('productNo', {
+                                        {getFieldDecorator('goodsId', {
                                             rules: [
                                                 {max: 20, message: '最大长度20个汉字'}
                                             ],
-                                            initialValue: current.productNo
+                                            initialValue: current.goodsId
                                         })(
                                             <Input className="home-style-url" type="text" placeholder="请输入商品编号" />
                                         )}
