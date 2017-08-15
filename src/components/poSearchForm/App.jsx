@@ -58,9 +58,11 @@ class PoSearchForm extends PureComponent {
 
     // 地点类型改变时回调
     onLocTypeChange = (value) => {
+        let disabled = locType.defaultValue === value ? true: false;
         this.poAddress.reset();
+        this.adressTypeCode = '';
         this.setState({
-            locDisabled: !value
+            locDisabled: disabled
         })
     }
 
@@ -107,6 +109,7 @@ class PoSearchForm extends PureComponent {
     handleClearSupplier = () => {
         this.supplier.reset();
         this.supplierEncoded = '';
+        this.handleClearSupplierAdress();
     }
 
     // 选择供应商地点回调
@@ -131,6 +134,9 @@ class PoSearchForm extends PureComponent {
     handleClearLocation = () => {
         this.poAddress.reset();
         this.adressTypeCode = '';
+        this.setState({
+            locDisabled: true
+        })
     }
 
     // 选择大类回调
