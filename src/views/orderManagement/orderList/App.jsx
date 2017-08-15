@@ -338,7 +338,7 @@ class OrderManagementList extends Component {
     handleOrderOutput() {
         const searchData = this.searchData;
         searchData.page = this.current;
-        Utils.exportExcel(exportOrderList, ...Utils.removeInvalid(searchData));
+        Utils.exportExcel(exportOrderList, Utils.removeInvalid(searchData));
     }
 
     // 选择操作项
