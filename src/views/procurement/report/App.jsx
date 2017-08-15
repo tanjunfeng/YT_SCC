@@ -16,6 +16,7 @@ import {
 } from 'antd';
 import { DATE_FORMAT } from '../../../constant/index';
 import moment from 'moment';
+import { poType } from '../../../constant/procurement';
 import { printColumns } from '../columns';
 
 @connect(state => ({
@@ -34,6 +35,12 @@ class Report extends PureComponent {
 
     render() {
         const { data = {} } = this.props;
+        let purchaseOrder = '';
+        poType.data.forEach((item) => {
+            if (+item.key === data.purchaseOrderType) {
+                purchaseOrder = item.value;
+            }
+        });
         return (
             <div className="print-container">
                 <div className="content">
@@ -64,7 +71,7 @@ class Report extends PureComponent {
                             </Col>
                             <Col span={4}>
                                 <label>采购单类型：</label>
-                                <span className="field">{data.purchaseOrderType}</span>
+                                <span className="field">{purchaseOrder}</span>
                             </Col>
                             <Col span={3}>
                                 <label>创建人：</label>
