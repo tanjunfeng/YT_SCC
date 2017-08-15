@@ -160,12 +160,12 @@ class FloorItem extends Component {
                     >
                         <Form>
                             <div>
-                                <span>栏目标题(10个字节以内)：</span>
+                                <span>栏目标题(10个字以内)：</span>
                                 <FormItem className="home-style-modal-input-item">
                                     {getFieldDecorator('title', {
                                         rules: [
                                             {required: true, message: '请输入标题'},
-                                            {max: 10, message: '最大长度10个字节'}
+                                            {max: 10, message: '最大长度10个字'}
                                         ],
                                         initialValue: formatData[`${data.id}-title`].title
                                     })(

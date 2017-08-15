@@ -1,23 +1,32 @@
-.editorPages{
-    .editorPages-form{
-        .editorPages-css-ts{
+.editorPages {
+    .editorPages-form {
+        .editorPages-css-ts {
             margin-bottom: 0;
         }
-        .editorPages-css-footer{
+        .editorPages-css-footer {
             width: 100%;
-            .editorPages-css-submit{
+            .editorPages-css-submit {
                 margin: 0 auto;
                 display: block;
             }
         }
     }
 }
-.EditorPages{
-    &-lines{
+.EditorPages {
+    &-lines {
         display: flex;
         margin-bottom: 10px;
     }
-    &-btn{
+    &-btn {
         margin-left: 10px;
     }
 }
+.editorPages-form {
+    .ant-upload-list {
+        display: none;
+    }
+    #cke_1_contents {
+        min-height: 500px;
+    }
+}
+
