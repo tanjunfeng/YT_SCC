@@ -7,7 +7,7 @@ import { format } from './utils';
 const colums = [
     {
         width: 576,
-        height: 572,
+        height: 574,
         prefex: 1,
         imgWidth: 286,
         imgHeight: 286
