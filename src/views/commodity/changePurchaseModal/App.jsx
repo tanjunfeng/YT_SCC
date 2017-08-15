@@ -77,7 +77,7 @@ class ProdModal extends Component {
             supplyChoose2: {},
 
             // 回显值赋值
-            spId: '',
+            spNo: '',
             spAdrId: '',
             branchCompanyId: '',
             checked: props.initValue.supplierType === 1
@@ -332,7 +332,7 @@ class ProdModal extends Component {
                                                 pageNum: params.pagination.current || 1
                                             }, 'supplierSearchBox')}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.spId} - {data.companyName}</div>
+                                                <div>{data.spNo} - {data.companyName}</div>
                                             )}
                                             pageSize={3}
                                             columns={[

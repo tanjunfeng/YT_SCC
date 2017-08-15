@@ -327,7 +327,7 @@ class ProdPurchaseModal extends Component {
                                                 pageNum: params.pagination.current || 1
                                             }, 'supplierSearchBox')}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.spId} - {data.companyName}</div>
+                                                <div>{data.spNo} - {data.companyName}</div>
                                             )}
                                             pageSize={3}
                                             columns={[
