@@ -218,12 +218,12 @@ class PoRcvMngList extends PureComponent {
 
         //获取采购单审批日期区间
         let auditDuringArr = this.props.form.getFieldValue("auditDuring") || [];
-        let auditDuringFrom, auditDuringTo;
+        let startAuditTime, endAuditTime;
         if (auditDuringArr.length > 0) {
-            auditDuringFrom = Date.parse(auditDuringArr[0].format(dateFormat));
+            startAuditTime = Date.parse(auditDuringArr[0].format(dateFormat));
         }
         if (auditDuringArr.length > 1) {
-            auditDuringTo = Date.parse(auditDuringArr[1].format(dateFormat));
+            endAuditTime = Date.parse(auditDuringArr[1].format(dateFormat));
         }
 
         // 供应商编号
@@ -250,8 +250,8 @@ class PoRcvMngList extends PureComponent {
             spAdrNo,
             receivedTimeStart,
             receivedTimeEnd,
-            auditDuringFrom,
-            auditDuringTo
+            startAuditTime,
+            endAuditTime
         };
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
