@@ -260,14 +260,13 @@ class PoRcvMngList extends PureComponent {
     /**
      * 分页页码改变的回调
      */
-    handleChangePage = (page) => {
-        const currentPage = page;
-        const params = this.editSearchParams();
-        let allParams = Object.assign({
+    onPaginate = (pageNumber) => {
+        this.current = pageNumber;
+        this.props.fetchPoRcvMngList({
             pageSize: PAGE_SIZE,
-            pageNum: currentPage
-        }, this.params);
-        this.props.fetchPoRcvMngList(allParams);
+            pageNum: this.current,
+            ...this.searchParams
+        });
     }
 
     /**
@@ -669,7 +668,7 @@ class PoRcvMngList extends PureComponent {
                                 total,
                                 pageSize,
                                 showQuickJumper: true,
-                                onChange: this.handleChangePage
+                                onChange: this.onPaginate
                             }} />
                     </div>
                 </Form>

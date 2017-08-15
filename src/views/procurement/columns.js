@@ -113,6 +113,11 @@ export const printColumns = [{
     key: 'productName',
     className: 'left'
 }, {
+    title: '商品条码',
+    dataIndex: 'internationalCode',
+    key: 'internationalCode',
+    className: 'left'
+}, {
     title: '规格',
     dataIndex: 'packingSpecifications',
     key: 'packingSpecifications',

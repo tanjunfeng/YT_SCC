@@ -253,14 +253,14 @@ class CommodifyDetail extends PureComponent {
                                     {
                                         commodityDetail.mainImage
                                         && <td>
-                                            <img src={`${commodityDetail.imgDomain}/${commodityDetail.mainImage}`} alt="" />
+                                            <img src={`${commodityDetail.mainImage}`} alt="" />
                                         </td>
                                     }
                                     {
                                         commodityDetail.imgUrls
                                         && commodityDetail.imgUrls.map(item => (
                                             <td key={item}>
-                                                <img src={`${commodityDetail.imgDomain}/${item}`} alt="" />
+                                                <img src={`${item}`} alt="" />
                                             </td>
                                         ))
                                     }

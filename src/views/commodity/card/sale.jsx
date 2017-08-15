@@ -17,9 +17,7 @@ import { bindActionCreators } from 'redux';
 import { PAGE_SIZE } from '../../../constant';
 import { MAXGOODS } from '../../../constant'
 import {
-    fecthCheckMainSupplier,
     fetchUpdateProdPurchase,
-    fetchQueryProdByCondition,
     fetchChangeProPurchaseStatus,
     fetchDeleteProdPurchaseById,
 } from '../../../actions';
@@ -31,9 +29,7 @@ import {
         queryProdPurchaseExtByCondition: state.toJS().commodity.queryProdPurchaseExtByCondition,
     }),
     dispatch => bindActionCreators({
-        fecthCheckMainSupplier,
         fetchUpdateProdPurchase,
-        fetchQueryProdByCondition,
         fetchChangeProPurchaseStatus,
         fetchDeleteProdPurchaseById,
     }, dispatch)
@@ -42,11 +38,8 @@ class SaleCard extends Component {
     constructor(props) {
         super(props);
         this.handleOnchange = ::this.handleOnchange;
-        this.confirmMain = ::this.confirmMain;
         this.confirmUsed = ::this.confirmUsed;
-        this.handleCheckCancel = ::this.handleCheckCancel;
         this.handleDelete = ::this.handleDelete;
-        this.handleCheckOk = ::this.handleCheckOk;
         this.handleChangeMain = ::this.handleChangeMain;
         this.handleCheckUse = ::this.handleCheckUse;
 
@@ -86,33 +79,6 @@ class SaleCard extends Component {
     }
 
     /**
-     * 修改主供应商时弹框
-     */
-    confirmMain(bool) {
-        if (bool) {
-            Modal.confirm({
-                title: '提示',
-                content: '主供应商已经存在，请确认变更当前供应商',
-                okText: '确认',
-                cancelText: '取消',
-                maskClosable: false,
-                onCancel: this.handleCheckCancel,
-                onOk: this.handleChangeMain
-            });
-        } else {
-            Modal.confirm({
-                title: '提示',
-                content: '请确认变更当前供应商',
-                okText: '确认',
-                cancelText: '取消',
-                maskClosable: false,
-                onCancel: this.handleCheckCancel,
-                onOk: this.handleChangeMain
-            });
-        }
-    }
-
-    /**
      * 修改启用时弹框
      */
     confirmUsed() {
@@ -122,31 +88,9 @@ class SaleCard extends Component {
             okText: '确认',
             cancelText: '取消',
             maskClosable: false,
-            onCancel: this.handleCheckCancel,
+            onCancel: () => {},
             onOk: this.handleCheckUse
         });
-    }
-
-    /**
-     * 修改主供应商或者修改启用时的取消按钮回调
-     */
-    handleCheckCancel() {
-    }
-
-    /**
-     * 修改主供应商用时的确认按钮回调
-     */
-    handleCheckOk() {
-        const { getProdPurchaseByIds } = this.props;
-        this.props.fecthCheckMainSupplier({
-            productId: getProdPurchaseByIds.productId,
-            supplierType: 1
-        })
-        .then((res) => {
-            this.confirmMain(res.success)
-        }).catch((res) => {
-            message.error(res.message)
-        })
     }
 
     /**
@@ -336,7 +280,6 @@ class SaleCard extends Component {
 
 SaleCard.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
-    fecthCheckMainSupplier: PropTypes.func,
     fetchUpdateProdPurchase: PropTypes.func,
     fetchChangeProPurchaseStatus: PropTypes.func,
     prefixCls: PropTypes.string,

@@ -26,7 +26,7 @@ const columns = [
         key: 'sort',
     },
     {
-        title: '参数内容（10个字节以内）',
+        title: '参数内容（5个字以内）',
         dataIndex: 'content',
         key: 'content',
     },
@@ -172,13 +172,13 @@ class SearchRecommendConfig extends Component {
                             {getFieldDecorator('content', {
                                 rules: [
                                     {
-                                        max: 10,
-                                        message: '不能输入超过10个字'
+                                        max: 5,
+                                        message: '不能输入超过5个字'
                                     }
                                 ],
                                 initialValue: content
                             })(
-                                <Input placeholder="10个字节以内" maxLength={11} name="content" />
+                                <Input placeholder="请输入推荐关键字" maxLength={11} name="content" />
                             )}
                         </FormItem>
                         <Button

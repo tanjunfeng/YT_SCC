@@ -53,6 +53,8 @@ class InlineUpload extends Component {
         if (status === 'done') {
             const { response } = info.file;
             const { result } = this.state;
+            const { imageDomain, suffixUrl } = response.data;
+            response.data.fileOnServerUrl = `${imageDomain}/${suffixUrl}`
             result.push(response.data.fileOnServerUrl);
             this.setState({
                 result
