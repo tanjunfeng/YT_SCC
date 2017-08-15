@@ -372,9 +372,12 @@ function Common(WrappedComponent) {
                                         <FormItem className="home-style-modal-input-item">
                                             <span>商品编号：</span>
                                             {getFieldDecorator('productNo', {
-                                                rules: [
-                                                    {max: 20, message: '最大长度20个汉字'}
-                                                ],
+                                                rules: [{
+                                                    max: 20, message: '最大长度20个汉字'
+                                                }, {
+                                                    pattern: /^[^\u4e00-\u9fa5]+$/,
+                                                    message: '不能包含中文'
+                                                }],
                                                 initialValue: current.productNo
                                             })(
                                                 <Input className="home-style-url" type="text" placeholder="请输入商品编号" />
