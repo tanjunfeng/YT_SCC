@@ -7,7 +7,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, message } from 'antd';
-
 import Utils from '../../../util/util';
 import {
     supplierTypeOptions,
@@ -52,9 +51,10 @@ class SearchForm extends Component {
     * @param {string} dateString 格式化后的日期
     */
     onEnterTimeChange(date) {
+        // console.log(moment.getValue())
         this.setState({
             rengeTime: date,
-            settledDate: date._d*1,
+            settledDate: date ? date._d*1 : null,
         });
     }
 
