@@ -145,7 +145,6 @@ class PoSearchForm extends PureComponent {
         this.GoodsTypeId = '';
     }
 
-
     // 获取用于搜索的所有有效表单值
     getSearchParams = () => {
         const ordinary = '1';
@@ -415,7 +414,7 @@ class PoSearchForm extends PureComponent {
                                                 pageNum: 1
                                             }, 'supplierSearchBox')}
                                             renderChoosedInputRaw={this.chooseSupplier}
-                                            rowKey="dataIndex"
+                                            rowKey="spId"
                                             pageSize={5}
                                             columns={[
                                                 {
@@ -447,15 +446,15 @@ class PoSearchForm extends PureComponent {
                                                 pageNum: 1
                                             }, 'supplierAdrSearchBox')}
                                             renderChoosedInputRaw={this.chooseSupplierAdress}
-                                            rowKey="dataIndex"
+                                            rowKey="providerNo"
                                             pageSize={2}
                                             columns={[
                                                 {
-                                                    title: '编码',
+                                                    title: '供应商地点编码',
                                                     dataIndex: 'providerNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '名称',
+                                                    title: '供应商地点名称',
                                                     dataIndex: 'providerName',
                                                     width: 200,
                                                 }
