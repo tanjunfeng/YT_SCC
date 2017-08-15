@@ -41,8 +41,6 @@ class CommodifyDetail extends PureComponent {
 
     render() {
         const { commodityDetail } = this.props;
-        commodityDetail.html = '<p><strong>21321321321321312</strong></p>↵↵<ol>↵	<li><strong>123213213213</strong></li>↵	<li><strong>43243243243242</strong></li>↵	<li><strong>2342343243243243242</strong></li>↵	<li><strong><img alt="" src="http://pic49.nipic.com/file/20140927/19617624_230415502002_2.jpg" style="height:639px; width:1024px" /></strong></li>↵</ol>↵'
-        // const commodityHtml
         return (
             <div className="commodify-detail-message" style={{ marginTop: '15px' }}>
                 <div className="supplier-detail-item">
