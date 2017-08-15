@@ -146,7 +146,7 @@ class ChangeMessage extends PureComponent {
                             status: parseInt(status, 10),
                             linkType,
                             goodsId,
-                            linkAddress,
+                            linkAddress: encodeURI(linkAddress),
                             picAddress
                         }).then(() => {
                             this.props.fetchCarouselAdList();

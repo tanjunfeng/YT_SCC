@@ -251,7 +251,9 @@ class PoDetail extends PureComponent {
 			// 当前状态
 			currentType: '',
 			// nextProps里的polings
-			nextPoLines: []
+			nextPoLines: [],
+			// 修改页，仓库是否被清空的标志
+			ispoAddressClear: false
 		}
 	}
 
@@ -539,6 +541,9 @@ class PoDetail extends PureComponent {
 			let record = res.record;
 			if (this.state.localType === '0') {
 				this.poAddress.reset();
+				this.setState({
+					ispoAddressClear: true 
+				})
 			}
 			if (res.record) {
 				let code = record.code;
@@ -763,7 +768,7 @@ class PoDetail extends PureComponent {
 			spId,
 			spAdrId,
 		} = basicInfo;
-		const {pickerDate} = this.state;
+		const {pickerDate, ispoAddressClear} = this.state;
 
 		// 修改时数据
 		const updateBasicInfo= this.props.basicInfo;
@@ -779,7 +784,8 @@ class PoDetail extends PureComponent {
 						spAdrId,
 					} = updateBasicInfo;
 					if (
-						updateBasicInfo.adrTypeCode
+						!ispoAddressClear
+						&& updateBasicInfo.adrTypeCode
 						&& updateBasicInfo.spId
 						&& updateBasicInfo.spAdrId
 						&& updateBasicInfo.estimatedDeliveryDate
@@ -1565,6 +1571,11 @@ class PoDetail extends PureComponent {
 														pageSize: params.pagination.pageSize
 													}, 'getWarehouseInfo1')
 												}
+												onChoosed={() => {
+													this.setState({
+														ispoAddressClear: false
+													})
+												}}
 												disabled={this.state.isWarehouseDisabled || this.state.localType !== '0'}
 												defaultValue={adresssDefaultValue}
 												renderChoosedInputRaw={(data) => (

@@ -41,7 +41,8 @@ class CommodifyDetail extends PureComponent {
 
     render() {
         const { commodityDetail } = this.props;
-        
+        commodityDetail.html = '<p><strong>21321321321321312</strong></p>↵↵<ol>↵	<li><strong>123213213213</strong></li>↵	<li><strong>43243243243242</strong></li>↵	<li><strong>2342343243243243242</strong></li>↵	<li><strong><img alt="" src="http://pic49.nipic.com/file/20140927/19617624_230415502002_2.jpg" style="height:639px; width:1024px" /></strong></li>↵</ol>↵'
+        // const commodityHtml
         return (
             <div className="commodify-detail-message" style={{ marginTop: '15px' }}>
                 <div className="supplier-detail-item">
@@ -270,7 +271,21 @@ class CommodifyDetail extends PureComponent {
                     </div>
                 </div>
                 {
-                    commodityDetail.keywords
+                    commodityDetail.html
+                    && <div className="supplier-detail-item">
+                        <div className="detail-message-header">
+                            <Icon type="exception" className="detail-message-header-icon" />
+                            <span>商品详情</span>
+                        </div>
+                        <div className="detail-message-body detail-message-body-html" dangerouslySetInnerHTML={{__html: commodityDetail.html.replace(/(↵)/ig, function($0, $1){
+                            if ($1) {
+                                return '<br/>'
+                            }
+                        })}} />
+                    </div>
+                }
+                {
+                    commodityDetail.keyWords
                     && <div className="supplier-detail-item">
                         <div className="detail-message-header">
                             <Icon type="link" className="detail-message-header-icon" />
@@ -280,7 +295,12 @@ class CommodifyDetail extends PureComponent {
                             <ul className="detail-message-list">
                                 <li className="detail-message-item">
                                     <span>关键字：</span>
-                                    <span>{commodityDetail.keywords}</span>
+                                    {
+                                        commodityDetail.keyWords
+                                        && commodityDetail.keyWords.map(item => (
+                                            <span key={item} style={{marginRight: 15}}>{`${item}`}</span>
+                                        ))
+                                    }
                                 </li>
                             </ul>
                         </div>
