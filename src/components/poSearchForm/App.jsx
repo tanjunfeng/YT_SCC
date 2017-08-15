@@ -18,10 +18,8 @@ import {
     getBigClassMap
 } from '../../actions'
 
-
 import { pubFetchValueList } from '../../actions/pub';
 import { PAGE_SIZE } from '../../constant';
-
 
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
@@ -58,7 +56,7 @@ class PoSearchForm extends PureComponent {
 
     // 地点类型改变时回调
     onLocTypeChange = (value) => {
-        let disabled = locType.defaultValue === value ? true: false;
+        let disabled = locType.defaultValue === value ? true : false;
         this.poAddress.reset();
         this.adressTypeCode = '';
         this.setState({
