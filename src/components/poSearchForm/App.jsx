@@ -58,9 +58,11 @@ class PoSearchForm extends PureComponent {
 
     // 地点类型改变时回调
     onLocTypeChange = (value) => {
+        let disabled = locType.defaultValue === value ? true: false;
         this.poAddress.reset();
+        this.adressTypeCode = '';
         this.setState({
-            locDisabled: !value
+            locDisabled: disabled
         })
     }
 
@@ -107,6 +109,7 @@ class PoSearchForm extends PureComponent {
     handleClearSupplier = () => {
         this.supplier.reset();
         this.supplierEncoded = '';
+        this.handleClearSupplierAdress();
     }
 
     // 选择供应商地点回调
@@ -131,6 +134,9 @@ class PoSearchForm extends PureComponent {
     handleClearLocation = () => {
         this.poAddress.reset();
         this.adressTypeCode = '';
+        this.setState({
+            locDisabled: true
+        })
     }
 
     // 选择大类回调
@@ -144,7 +150,6 @@ class PoSearchForm extends PureComponent {
         this.bigClass.reset();
         this.GoodsTypeId = '';
     }
-
 
     // 获取用于搜索的所有有效表单值
     getSearchParams = () => {
@@ -415,7 +420,7 @@ class PoSearchForm extends PureComponent {
                                                 pageNum: 1
                                             }, 'supplierSearchBox')}
                                             renderChoosedInputRaw={this.chooseSupplier}
-                                            rowKey="dataIndex"
+                                            rowKey="spId"
                                             pageSize={5}
                                             columns={[
                                                 {
@@ -447,15 +452,15 @@ class PoSearchForm extends PureComponent {
                                                 pageNum: 1
                                             }, 'supplierAdrSearchBox')}
                                             renderChoosedInputRaw={this.chooseSupplierAdress}
-                                            rowKey="dataIndex"
+                                            rowKey="providerNo"
                                             pageSize={2}
                                             columns={[
                                                 {
-                                                    title: '编码',
+                                                    title: '供应商地点编码',
                                                     dataIndex: 'providerNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '名称',
+                                                    title: '供应商地点名称',
                                                     dataIndex: 'providerName',
                                                     width: 200,
                                                 }

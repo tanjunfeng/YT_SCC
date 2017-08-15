@@ -7,6 +7,8 @@
 import Tree from 'antd/node_modules/rc-tree/lib/Tree';
 /* eslint-disable */
 
+
+/*
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 Tree.prototype.onDrop = function onDrop(e, treeNode) {
@@ -43,7 +45,7 @@ Tree.prototype.onDrop = function onDrop(e, treeNode) {
 
 Tree.prototype.onDragEnter = function onDragEnter(e, treeNode) {
     const enterGap = this.onDragEnterGap(e, treeNode);
-
+    console.log(1)
     if (this.dragNode.props.eventKey === treeNode.props.eventKey && enterGap === 0) {
         this.setState({
             dragOverNodeKey: ''
@@ -72,3 +74,4 @@ Tree.prototype.onDragEnter = function onDragEnter(e, treeNode) {
         node: treeNode
     });
 };
+*/
