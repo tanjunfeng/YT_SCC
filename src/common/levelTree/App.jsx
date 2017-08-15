@@ -233,10 +233,10 @@ class LevelTree extends PureComponent {
                 <Tree
                     draggable={false}
                     className="draggable-tree"
-                    onDrop={handleDrop}
+                    // onDrop={handleDrop}
                     expandedKeys={expandedKeys}
                     // 如果使用了 expandedKeys，这个设置为 false，否则子节点展开之后，点击父节点无法收拢了
-                    autoExpandParent={false}
+                    // autoExpandParent={false}
                     onExpand={this.handleExpand}
                 >
                     {renderTreeNode(

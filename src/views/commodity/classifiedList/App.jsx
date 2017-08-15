@@ -203,6 +203,10 @@ class ClassifiedList extends Component {
             // message.success('操作成功');
         }).catch(() => {
             message.error('操作失败');
+            message.destroy();
+            this.setState({
+                msgHide: true,
+            });
         })
     }
 
