@@ -320,7 +320,7 @@ class Cardline extends Component {
                             >
                                 <p>
                                     <span>供应商 : </span>
-                                    <span>{item.spId}</span>
+                                    <span>{item.spNo}</span>
                                     <b>-</b>
                                     <span>{item.spName}</span>
                                 </p>

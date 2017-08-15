@@ -82,7 +82,7 @@ ChangeMessage.propTypes = {
     modifyInformationVisible: PropTypes.func,
     visibleData: PropTypes.objectOf(PropTypes.any),
     informationVisible: PropTypes.bool,
-    history: PropTypes.func,
+    history: PropTypes.objectOf(PropTypes.any),
 }
 
 export default withRouter(Form.create()(ChangeMessage));
