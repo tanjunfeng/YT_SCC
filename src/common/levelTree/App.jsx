@@ -231,7 +231,7 @@ class LevelTree extends PureComponent {
                     <Col className="tree-title" span={2}>排序/状态</Col>
                 </Row>
                 <Tree
-                    draggable
+                    draggable={false}
                     className="draggable-tree"
                     onDrop={handleDrop}
                     expandedKeys={expandedKeys}

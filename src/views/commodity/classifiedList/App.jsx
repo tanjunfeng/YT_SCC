@@ -39,7 +39,9 @@ class ClassifiedList extends Component {
 
         this.state = {
             msgHide: true,
-        }
+        };
+
+        this.loading = false;
     }
 
     componentWillMount() {}
@@ -48,23 +50,27 @@ class ClassifiedList extends Component {
         this.props.fetchAction();
     }
 
+    showLocker(delay = 3000) {
+        const second = delay / 1000;
+        message.loading(`数据处理大约需要${second}秒左右，请耐心等待`, 10000);
+
+        this.setState({
+            msgHide: false,
+        });
+    }
+
     /**
      * 临时处理后端问题，后端请求要 N(s) 左右才可能返回正确数据
      * @param callback
      */
     locker(callback) {
         const delay = 3000;
-        const hide = message.loading(`数据处理大约需要${delay / 1000}秒左右，请耐心等待`, 0);
-
-        this.setState({
-            msgHide: false,
-        });
 
         setTimeout(() => {
             this.setState({
                 msgHide: true,
             });
-            hide();
+            message.destroy();
             callback();
         }, delay);
     };
@@ -86,6 +92,8 @@ class ClassifiedList extends Component {
         const fromIndex = sort - 1;
         const toIndex = el.value - 1;
 
+        event.currentTarget.blur();
+
         this.sortData(parentKey, key, fromIndex, toIndex);
     }
 
@@ -96,6 +104,8 @@ class ClassifiedList extends Component {
      */
     handleChangeStatus(value, mkey) {
         const $data = fromJS(this.props.data);
+
+        this.showLocker();
 
         updateShowStatusAction({
             id: mkey,
@@ -144,10 +154,18 @@ class ClassifiedList extends Component {
      * @param toIndex 更到到数据数组的索引值位置
      */
     sortData(parentKey, currentKey, fromIndex, toIndex) {
+        if (this.loading) {
+            return;
+        }
+
+        this.loading = true;
+
         // let $dealData = fromJS([]);
         // 格式化数据
         // const $data = fromJS(this.props.data);
         const toSort = toIndex + 1;
+
+        this.showLocker();
 
         updateSortNumAction({
             id: currentKey,
@@ -179,6 +197,8 @@ class ClassifiedList extends Component {
 
             this.locker(() => {
                 this.props.fetchAction();
+
+                this.loading = false;
             });
             // message.success('操作成功');
         }).catch(() => {
