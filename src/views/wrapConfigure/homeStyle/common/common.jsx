@@ -94,8 +94,8 @@ function Common(WrappedComponent) {
                     uploadImageBase64Data({
                         base64Content: image
                     }).then((res) => {
-                        const { fileOnServerUrl } = res.data;
-                        this.saveItems(values, fileOnServerUrl);
+                        const { imageDomain, suffixUrl } = res.data;
+                        this.saveItems(values, `${imageDomain}/${suffixUrl}`);
                     })
                 } else if (!isBase64) {
                     this.saveItems(values, image);
@@ -144,7 +144,8 @@ function Common(WrappedComponent) {
             this.setState({
                 uploadVisible: true,
                 image: item.icon,
-                current
+                current,
+                select: item.urlType
             })
         }
 
@@ -184,11 +185,24 @@ function Common(WrappedComponent) {
             })
         }
 
+        renderModalTile = () => {
+            const { type } = this.props;
+            switch (type) {
+                case 'hot':
+                    return '热门推荐配置';
+                case 'floor':
+                    return '推荐管理配置';
+                default:
+                    break;
+            }
+        } 
+
         render() {
             const { data = {}, type } = this.props;
             const { isEnabled } = data;
             const { getFieldDecorator } = this.props.form;
             const { current } = this.state;
+            console.log(current)
             return (
                 <div
                     className={classnames(
@@ -292,7 +306,7 @@ function Common(WrappedComponent) {
                         this.state.uploadVisible &&
                         <Modal
                             isEnabled
-                            title={current.name}
+                            title={this.renderModalTile()}
                             visible={this.state.uploadVisible}
                             onOk={this.handleUpOk}
                             onCancel={this.handleUpCancel}
@@ -340,20 +354,20 @@ function Common(WrappedComponent) {
                                                 required: true,
                                                 message: '请选择链接类型'
                                             }],
-                                            initialValue: current.urlType ? `${current.urlType}` : '0'
+                                            initialValue: current.urlType ? `${current.urlType}` : '1'
                                         })(
                                             <Select
                                                 style={{ width: 240 }}
                                                 onChange={this.handleLinkStyleChange}
                                             >
                                                 <Option value="1">商品链接</Option>
-                                                <Option value="0">静态活动页面</Option>
+                                                <Option value="2">静态活动页面</Option>
                                             </Select>
                                         )}
                                     </FormItem>
                                 </div>
                                 {
-                                    this.state.select
+                                    `${this.state.select}` === '1'
                                     ? <div>
                                         <FormItem className="home-style-modal-input-item">
                                             <span>商品编号：</span>
@@ -377,7 +391,7 @@ function Common(WrappedComponent) {
                                                     {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'}
                                                     /* eslint-enable */
                                                 ],
-                                                initialValue: current.url
+                                                initialValue: current.url ? current.url : ''
                                             })(
                                                 <Input className="home-style-url" type="textarea" rows={2} placeholder="请输入超链接" />
                                             )}
@@ -385,14 +399,14 @@ function Common(WrappedComponent) {
                                     </div>
                                 }
                                 <div>
-                                    <span>商品icon(支持PNG，建议大小{`${current.width}x${current.height}`}px，100k以内)：</span>
+                                    <span>商品icon(支持PNG，建议大小{`${current.width}x${current.height}`}px)：</span>
                                     <FileCut
                                         ref={ref => { this.imageUploader = ref }}
                                         width={current.width}
                                         height={current.height}
                                         dpr={2}
                                         defaultImge={current.icon}
-                                        accept={['jpg', 'jpeg', 'png']}
+                                        accept={['png']}
                                     />
                                 </div>
                             </Form>

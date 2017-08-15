@@ -126,7 +126,8 @@ class ManagementList extends PureComponent {
     // 供货供应商值清单-清除
     handleSupplyClear = () => {
         this.setState({
-            stopBuyDisabled: true
+            stopBuyDisabled: true,
+            supplierId: ''
         });
     }
 
@@ -164,15 +165,14 @@ class ManagementList extends PureComponent {
             content: confirmTitle,
             onOk: () => {
                 if (goodsListLengh) {
-                    callback(purchasedata.goodsStatus);
-
-                    if (this.state.errorGoodsCode === availbleGoodsId) {
-                        message.error('请选择有效状态的商品，请重新选择！')
-                    } else {
-                        message.success(purchasedata.tipsMessageTxt);
-                    }
-
-                    this.handleFormSearch();
+                    callback(purchasedata.goodsStatus).then((res) => {
+                        if (this.state.errorGoodsCode === availbleGoodsId) {
+                            message.error('请选择有效状态的商品，请重新选择！')
+                        } else {
+                            message.success(purchasedata.tipsMessageTxt);
+                        }
+                        this.handleFormSearch();
+                    });
                 }
             },
             onCancel() {},
@@ -196,20 +196,19 @@ class ManagementList extends PureComponent {
     // 商品的暂停购进和恢复采购接口回调
     goodstatusChange = (status) => {
         const availbleGoodsId = 10027;
-        this.props.pubFetchValueList({
+        return this.props.pubFetchValueList({
             productIdList: this.state.chooseGoodsList,
             spAdrId: this.state.supplierId,
             status
         }, 'goodsChangeStatus')
-            .catch(err => {
-                if (err.code === availbleGoodsId) {
-                    this.setState({
-                        errorGoodsCode: err.code
-                    })
-                }
-            });
+        .catch(err => {
+            if (err.code === availbleGoodsId) {
+                this.setState({
+                    errorGoodsCode: err.code
+                })
+            }
+        });
     }
-
 
     // 暂停购进
     handleStopPurchaseClick = () => {
@@ -284,7 +283,7 @@ class ManagementList extends PureComponent {
     // 区域上架回调接口
     prodBatchPutaway = (status) => {
         const { name, id } = this.state.childCompanyMeg;
-        this.props.pubFetchValueList({
+        return this.props.pubFetchValueList({
             branchCompanyName: name,
             branchCompanyId: id,
             productIds: this.state.chooseGoodsList,
@@ -295,12 +294,12 @@ class ManagementList extends PureComponent {
     // 区域下架回调接口
     prodBatchUpdate = (status) => {
         const { name, id } = this.state.childCompanyMeg;
-        this.props.pubFetchValueList({
+        return this.props.pubFetchValueList({
             branchCompanyName: name,
             branchCompanyId: id,
             productIds: this.state.chooseGoodsList,
             status
-        }, 'prodBatchUpdate');
+        }, 'prodBatchUpdate')
     }
 
     /* **************** 全国上下架 ****************** */
@@ -331,15 +330,20 @@ class ManagementList extends PureComponent {
 
     // 全国性上/下架接口回调
     availablProducts = (status) => {
-        this.props.pubFetchValueList({
+        return this.props.pubFetchValueList({
             supplyChainStatus: status,
             ids: this.state.chooseGoodsList
         }, 'availablProducts');
     };
 
-    /**
-     * 品牌值清单-清除
-     */
+    // 选择品牌
+    handleBrandChoose = (record) => {
+        this.setState({
+            brandName: record.record.name,
+        });
+    }
+
+    // 品牌值清除
     handleBrandClear = () => {
         this.setState({
             brandName: '',
@@ -489,7 +493,7 @@ class ManagementList extends PureComponent {
                     <span>{productCode}</span>
                 </div>
                 <div className="table-commodity-description">
-                    <img alt="未上传" className="table-commodity-description-img" src={`${this.props.CommodityListData.imgDomain}/${thumbnailImage}`} />
+                    <img alt="未上传" className="table-commodity-description-img" src={`${thumbnailImage || require('../../../images/default/100x100.png')}`} />
                     <span className="table-commodity-description-name">{saleName}</span>
                 </div>
             </div>
@@ -511,7 +515,6 @@ class ManagementList extends PureComponent {
                     chooseGoodsList: selectedRowKeys,
                     selectedListData: selectedRows
                 })
-                // console.log(this.state.selectedListData)
             },
         }
         return (
@@ -609,7 +612,9 @@ class ManagementList extends PureComponent {
                                                 ref={ref => { this.brandSearchMind = ref }}
                                                 fetch={(param) =>
                                                     this.props.pubFetchValueList({
-                                                        name: param.value
+                                                        name: param.value,
+                                                        pageSize: param.pagination.pageSize,
+                                                        pageNum: param.pagination.current || 1
                                                     }, 'queryBrandsByPages')
                                                 }
                                                 onChoosed={this.handleBrandChoose}
@@ -626,10 +631,6 @@ class ManagementList extends PureComponent {
                                                     }, {
                                                         title: '名称',
                                                         dataIndex: 'name',
-                                                        width: 200,
-                                                    }, {
-                                                        title: '标签',
-                                                        dataIndex: 'brandLabel',
                                                         width: 200,
                                                     }
                                                 ]}
@@ -651,7 +652,9 @@ class ManagementList extends PureComponent {
                                                     ref={ref => { this.supplySearchMind = ref }}
                                                     fetch={(params) =>
                                                         this.props.pubFetchValueList({
-                                                            condition: params.value
+                                                            condition: params.value,
+                                                            pageSize: params.pagination.pageSize,
+                                                            pageNum: params.pagination.current || 1
                                                         }, 'querySuppliersList')
                                                     }
                                                     onChoosed={this.handleSupplyChoose}
@@ -664,11 +667,11 @@ class ManagementList extends PureComponent {
                                                     columns={[
                                                         {
                                                             title: '地点编码',
-                                                            dataIndex: 'providerNo',
+                                                            dataIndex: 'spNo',
                                                             width: 150,
                                                         }, {
                                                             title: '地点名称',
-                                                            dataIndex: 'providerName',
+                                                            dataIndex: 'companyName',
                                                             width: 200,
                                                         }
                                                     ]}
@@ -729,7 +732,9 @@ class ManagementList extends PureComponent {
                                                     fetch={(params) =>
                                                         this.props.pubFetchValueList({
                                                             branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-                                                            branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
+                                                            branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : '',
+                                                            pageSize: params.pagination.pageSize,
+                                                            pageNum: params.pagination.current || 1
                                                         }, 'findCompanyBaseInfo')
                                                     }
                                                     onChoosed={this.handleSubsidiaryChoose}

@@ -16,7 +16,6 @@ import {
 import {
     modifyAuditVisible,
     modifyCheckReasonVisible,
-    fecthGetProdPurchaseById,
     fetchGetProductById
 } from '../../../actions';
 import {
@@ -49,7 +48,6 @@ import {
     dispatch => bindActionCreators({
         modifyAuditVisible,
         modifyCheckReasonVisible,
-        fecthGetProdPurchaseById,
         fetchGetProductById,
         fetchPriceInfo,
         postSellPrice,
@@ -254,7 +252,6 @@ class ProcurementMaintenance extends PureComponent {
 ProcurementMaintenance.propTypes = {
     fetchGetProductById: PropTypes.objectOf(PropTypes.any),
     fetchProviderEnterList: PropTypes.objectOf(PropTypes.any),
-    fecthGetProdPurchaseById: PropTypes.func,
     modifyAuditVisible: PropTypes.bool,
     modifyCheckReasonVisible: PropTypes.bool,
     prefixCls: PropTypes.string,

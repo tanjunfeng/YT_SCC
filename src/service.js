@@ -22,13 +22,14 @@ http.response(
         if (res.data.code === 401) {
             LoginLayout();
             return Promise.reject(res);
-        }
-        else if (res.data.code !== 200) {
+        } else if (res.data.code !== 200) {
             const { code } = res.data;
             const mess = res.data.message;
             const errText = ERRORTEXT[code];
-            const err = mess || (errText || '未知错误')
-            message.error(err);
+            if (typeof mess === 'string' || errText) {
+                const err = errText || (mess || '未知错误')
+                message.error(err);
+            }
         }
         return Promise.resolve(res);
     },
@@ -65,7 +66,7 @@ export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
 export const exportOrderList = '/sorder/toExcel';
 
 // 下载采购订单PDF
-export const exportProcurementPdf = '/pmPurchaseOrder/exportPdf';
+export const exportProcurementPdf = 'pmPurchaseOrder/exportPdf';
 
 /**
  * 登录 Api
@@ -521,22 +522,17 @@ export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPa
 
 /* **************procurement*********** */
 
-// 删除采购单 参数 1或n个采购单id  [ids]
-// export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
-// 查询采购单打印列表
-// export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
 // 查询采购单详情
 export const queryPoDetail = (params) => http.get('/pmPurchaseOrder/getPurchaseOrderInfoById', params);
 // 创建采购单详情
 export const createPo = (params) => http.post('/pmPurchaseOrder/addPmPurchaseOrder', params);
+// 修改采购单详情
+export const updatePmPurchaseOrder = (params) => http.post('/pmPurchaseOrder/updatePmPurchaseOrder', params);
 // 查询采购单列表
 export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
-
-// 删除采购单 参数 1或n个采购单id  [ids] 
+// 删除采购单 参数 1或n个采购单id  [ids]
 export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
 
-// 查询采购单打印列表
-// export const queryPoPrintList = (params) => http.get('/provider/queryPoPrintList', params);
 
 // 审批
 export const auditPo = (params) => http.post('/provider/auditPo', params);
@@ -560,9 +556,9 @@ export const deletePurchaseList = (params) => http.get('/pmPurchaseOrder/batchDe
 // 查询采购单打印列表
 export const queryPoPrintList = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderListInfo', params);
 // 根据采购订单id下载PDF文件
-export const downloadPDF = '/pmPurchaseOrder/exportPdf';
+export const downloadPDF = 'pmPurchaseOrder/exportPdf';
 // 采购单列表批量下载PDF ZIP压缩文件
-export const downloadBatchPDF = '/pmPurchaseOrder/exportPdfs';
+export const downloadBatchPDF = 'pmPurchaseOrder/exportPdfs';
 
 // 采购收货相关
 // 采购收货单管理列表
@@ -625,7 +621,7 @@ export const checkSupplierAddOrgId = (params) => http.get('/supplier/checkSuppli
 export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);
 
 // 获取已审批通过供应商地点下拉框数据
-export const querySuppliersList = (params) => http.get('/supplier/supplierAdrSearchBox', params);
+export const querySuppliersList = (params) => http.get('/supplier/supplierSearchBox', params);
 
 // 商品的暂停购进和恢复采购
 export const goodsChangeStatus = (params) => http.post('prodPurchase/batchChangeProPurchaseStatus', params);
@@ -736,4 +732,4 @@ export const updateSellPriceStatus = (params) => http.get('/prodSell/updateSellP
 export const getNewPmPurchaseOrderItem = (params) => http.get('/pmPurchaseOrder/getNewPmPurchaseOrderItem', params);
 
 // 采购订单-审批
-export const auditPurchaseOrderInfo = (params) => http.get('/pmPurchaseOrder/auditPurchaseOrderInfo', params);
+export const auditPurchaseOrderInfo = (params) => http.post('/pmPurchaseOrder/auditPurchaseOrderInfo', params);

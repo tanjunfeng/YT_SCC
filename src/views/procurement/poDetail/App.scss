@@ -15,10 +15,25 @@
         margin-right: 8px;
       }
     } 
-}
+  }
 
   &-body {
     padding: 0 18px;
+    background-color: #f00;
+
+  }
+  .ywc-smind.ywc-smind-disabled {
+    .ywc-smind-input-placeholder, {
+      .ywc-smind.ywc-smind-disabled {
+        .ywc-smind-input {
+            color: #bbb;
+        }
+      }
+    }
+  }
+  form .ant-select,
+  form .ant-cascader-picker {
+    width: 250px;
   }
 
   .ant-form-item-label label {
@@ -35,7 +50,7 @@
 
   .small {
     .ywc-smind {
-      width: 200px;
+      width: 250px;
     }
   }
 

@@ -11,14 +11,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PAGE_SIZE } from '../../../constant';
 import {
-    fecthCheckMainSupplier,
-    fetchGetProdPurchaseById,
     fetchCheckMainSupplier,
     fetchUpdateProdPurchase,
-    fetchQueryProdByCondition,
     fetchDeleteProdPurchaseById,
     fetchGetProductById,
-    fecthGetProdPurchaseById
 } from '../../../actions';
 import {
     GetProductById,
@@ -34,15 +30,11 @@ import {
         checkMainSupplier: state.toJS().commodity.checkMainSupplier,
     }),
     dispatch => bindActionCreators({
-        fecthCheckMainSupplier,
-        fetchGetProdPurchaseById,
         fetchCheckMainSupplier,
         fetchUpdateProdPurchase,
-        fetchQueryProdByCondition,
         ChangeProPurchaseStatus,
         fetchDeleteProdPurchaseById,
         fetchGetProductById,
-        fecthGetProdPurchaseById,
         GetProductById,
         GetProdPurchaseById,
         ChangeSupplierType,
@@ -126,7 +118,8 @@ class Cardline extends Component {
     }
 
     /**
-     * 修改启用时弹框
+     * 启用/禁用弹框
+     * @param {*} item 遍历出来的当前项参数object
      */
     confirmUsed(item) {
         Modal.confirm({
@@ -146,6 +139,7 @@ class Cardline extends Component {
                     message.success('修改状态成功');
                     this.props.goto();
                 }).catch(() => {
+                    // message.error(ERRORTEXT)
                     message.error('修改状态失败')
                 })
             }
@@ -162,11 +156,6 @@ class Cardline extends Component {
      * 修改主供应商用时的确认按钮回调
      */
     handleCheckOk(item, bool) {
-        this.props.fetchCheckMainSupplier({
-            branchCompanyId: item.branchCompanyId,
-            supplierType: 1,
-            productId: item.productId
-        })
         if (bool) {
             Modal.confirm({
                 title: '提示',
@@ -260,6 +249,10 @@ class Cardline extends Component {
         this.props.goto();
     }
 
+    /**
+     * 删除当前关系表
+     * @param {*} e:当前操作项event
+     */
     handleDelete(e) {
         e.stopPropagation();
         const { proId } = this.props;
@@ -272,10 +265,13 @@ class Cardline extends Component {
                     productId: proId,
                     id,
                 })
-                .then(() =>
-                    message.success('删除成功'),
+                .then(() => {
+                    message.success('删除成功')
                     this.props.goto()
-                );
+                }).catch((res) => {
+                    message.error('操作失败')
+                    message.error(res.message)
+                })
             },
             onCancel() { },
         });
@@ -402,7 +398,6 @@ class Cardline extends Component {
 
 Cardline.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
-    fetchCheckMainSupplier: PropTypes.func,
     fetchDeleteProdPurchaseById: PropTypes.func,
     ChangeSupplierType: PropTypes.func,
     onCliked: PropTypes.func,
@@ -410,8 +405,6 @@ Cardline.propTypes = {
     prefixCls: PropTypes.string,
     id: PropTypes.string,
     index: PropTypes.number,
-    fetchQueryProdByCondition: PropTypes.objectOf(PropTypes.any),
-    isSale: PropTypes.bool,
     initData: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,
     proId: PropTypes.string,

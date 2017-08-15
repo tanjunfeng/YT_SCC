@@ -5,8 +5,10 @@
  * 定义列表数据
  */
 import React from 'react';
+import moment from 'moment';
 import { locType, poStatus } from '../../constant/procurement';
 
+const purchase = ['普通采购单'];
 // 供应商列表
 export const poMngListColumns = [
     {
@@ -16,8 +18,9 @@ export const poMngListColumns = [
     },
     {
         title: '采购单类型',
-        dataIndex: 'poTypeName',
-        key: 'poTypeName',
+        dataIndex: 'purchaseOrderType',
+        key: 'purchaseOrderType',
+        render: text => (purchase[text])
     },
     {
         title: '供应商编号',
@@ -41,14 +44,19 @@ export const poMngListColumns = [
     {
         title: '预计送货日期',
         dataIndex: 'estimatedDeliveryDate',
-        key: 'estimatedDeliveryDate'
+        key: 'estimatedDeliveryDate',
+        render: (text) => (
+            <span>
+                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+            </span>
+        )
     },
     {
         title: '地点类型',
         dataIndex: 'adrType',
         key: 'adrType',
         render: (text) => {
-            if (!text) {
+            if (text === null) {
                 return null;
             }
             return (locType.data[text + 1].value);
@@ -75,7 +83,7 @@ export const poMngListColumns = [
         dataIndex: 'status',
         key: 'status',
         render: (text) => {
-            if (!text) {
+            if (text === null) {
                 return null;
             }
             return (poStatus.data[text + 1].value);
@@ -103,7 +111,13 @@ export const printColumns = [{
     title: '商品名称',
     dataIndex: 'productName',
     key: 'productName',
-    className: 'left'
+    className: 'left',
+    width: 200
+}, {
+    title: '商品条码',
+    dataIndex: 'internationalCode',
+    key: 'internationalCode',
+    width: 110
 }, {
     title: '规格',
     dataIndex: 'packingSpecifications',
@@ -113,13 +127,12 @@ export const printColumns = [{
     title: '产地',
     dataIndex: 'producePlace',
     key: 'producePlace',
-    className: 'left'
+    width: 80
 }, {
     title: '采购内装数',
     dataIndex: 'purchaseInsideNumber',
     key: 'purchaseInsideNumber',
-    width: 80,
-    className: 'right'
+    width: 80
 }, {
     title: '单位',
     dataIndex: 'unitExplanation',
@@ -129,19 +142,15 @@ export const printColumns = [{
     title: '订货数量',
     dataIndex: 'purchaseNumber',
     key: 'purchaseNumber',
-    width: 70,
-    className: 'right'
-
+    width: 70
 }, {
     title: '订货价格',
     dataIndex: 'purchasePrice',
     key: 'purchasePrice',
     width: 70,
-    className: 'right'
 }, {
     title: '订货金额',
     dataIndex: 'totalAmount',
     key: 'totalAmount',
-    width: 100,
-    className: 'right'
+    width: 100
 }];

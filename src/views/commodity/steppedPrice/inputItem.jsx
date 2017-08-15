@@ -44,7 +44,7 @@ class InputItem extends Component {
 
     handleKeyDown(event) {
         const { keyCode } = event;
-         const  {
+        const  {
             firstValue,
             secondValue,
          } = this.state;

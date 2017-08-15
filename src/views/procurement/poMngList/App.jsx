@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author zhangbaihua
  *
- * 采购单列表页面
+ * 采购管理 - 采购单管理列表
  */
 
 import React, { PureComponent } from 'react';
@@ -51,12 +51,15 @@ class PoMngList extends PureComponent {
         this.state = {
             auditingVisible: false,
             deleteListData: [],
-            purchaseListRows: []
+            purchaseListRows: [],
+            failedReason: ''
         }
     }
 
     componentDidMount() {
-        this.queryPoList();
+        this.queryPoList({
+            pageSize: PAGE_SIZE
+        });
     }
 
     /**
@@ -74,18 +77,21 @@ class PoMngList extends PureComponent {
 
     /**
      * 查询采购单管理列表
-     * @param {*} params 
+     * @param {*} params
      */
     queryPoList = (params) => {
         this.props.fetchPoMngList({
+            pageSize: PAGE_SIZE,
+            pageNum: this.current,
             ...params
         });
     }
 
     // 审核未通过弹窗
-    showAuditingModal = () => {
+    showAuditingModal = (record) => {
         this.setState({
-            auditingVisible: true
+            auditingVisible: true,
+            failedReason: record.failedReason
         });
     }
 
@@ -116,7 +122,7 @@ class PoMngList extends PureComponent {
         }
         // 删除选中项并刷新采购单列表
         Modal.confirm({
-            title: '你确认要删除选中采购单？',
+            title: '删除的采购单不能恢复，你确认要删除选中采购单？',
             onOk: () => {
                 this.props.deletePoByIds({
                     pmPurchaseOrderIds: this.deleteListData.join()
@@ -125,7 +131,11 @@ class PoMngList extends PureComponent {
                     this.deleteListData = [];
 
                     // 刷新采购单列表
-                    this.queryPoList();
+                    this.current = 1;
+                    this.queryPoList({
+                        pageNum: this.current,
+                        pageSize: PAGE_SIZE
+                    });
                 })
             },
             onCancel() { },
@@ -134,6 +144,7 @@ class PoMngList extends PureComponent {
 
     // 单条制单数据删除
     singleRowsDelete = (record) => {
+        this.deleteListData = [];
         this.deleteListData.push(record.id);
         this.applyDelete();
     }
@@ -141,13 +152,12 @@ class PoMngList extends PureComponent {
     // 重置回调
     applyReset = () => {
         this.searchParams = {};
+        this.current = 1;
     }
 
 
     // table列表详情操作
     renderActions = (text, record) => {
-        this.selectedRowData = record;
-
         const { status, purchaseOrderNo, id } = record;
         const deleteCode = 0;
         const auditingCode = 2;
@@ -157,24 +167,20 @@ class PoMngList extends PureComponent {
         const menu = (
             <Menu>
                 <Menu.Item key="detail">
-                    <Link to={detailLink}>详情</Link>
+                    <Link to={`${pathname}/detail/${id}`}>详情</Link>
                 </Menu.Item>
-                {status === deleteCode &&
+                { status === deleteCode &&
                     <Menu.Item key="modify">
-                        <Link to={detailLink}>修改</Link>
+                        <Link to={`${pathname}/edit/${id}`}>修改</Link>
                     </Menu.Item>
                 }
-                {
+                { status === deleteCode &&
                     <Menu.Item key="delete">
                         <span onClick={() => this.singleRowsDelete(record)}>删除</span>
                     </Menu.Item>
                 }
                 {status === refuseCOde && <Menu.Item key="rejected">
-                    <span onClick={this.showAuditingModal}>查看审核未通过</span>
-                </Menu.Item>
-                }
-                {status === auditingCode && <Menu.Item key="receive">
-                    <Link to={`${pathname}/${id}`}>收货</Link>
+                    <span onClick={() => this.showAuditingModal(record)}>查看审核未通过</span>
                 </Menu.Item>
                 }
             </Menu>
@@ -198,8 +204,6 @@ class PoMngList extends PureComponent {
 
         const { pathname } = this.props.location;
         const { auditingVisible } = this.state;
-        const { failedReason = '', auditTime, auditUserId, ipurchaseOrderNo} = this.selectedRowData;
-
         const rowSelection = {
             getCheckboxProps: record => ({
                 disabled: record.status !== 0
@@ -237,14 +241,14 @@ class PoMngList extends PureComponent {
                         rowSelection={rowSelection}
                         dataSource={data}
                         columns={columns}
-                        rowKey="purchaseOrderNo"
+                        rowKey="id"
                         scroll={{
                             x: 1300
                         }}
                         pagination={{
                             current: pageNum,
                             total,
-                            PAGE_SIZE,
+                            pageSize: PAGE_SIZE,
                             showQuickJumper: true,
                             onChange: this.onPaginate
                         }}
@@ -256,16 +260,10 @@ class PoMngList extends PureComponent {
                         visible={auditingVisible}
                         onCancel={this.handleAuditingCancel}
                         footer={[
-                            <Button type="primary"><Link to={`${pathname}/podetail/${ipurchaseOrderNo}`}>立即修改</Link></Button>
+                            <Button type="primary" onClick={this.handleAuditingCancel}>返回</Button>
                         ]}
                     >
-                        {
-                            <ul>
-                                <li>审核时间: {auditTime}</li>
-                                <li>审核者: {auditUserId}</li>
-                                <li>失败原因: {failedReason}</li>
-                            </ul>
-                        }
+                        { this.state.failedReason }
                     </Modal>
                 }
             </div>

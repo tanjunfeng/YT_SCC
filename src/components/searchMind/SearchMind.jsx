@@ -4,11 +4,12 @@
  *
  * Des
  */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Icon, Table } from 'antd';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Utils from '../../util/util';
+import NoData from './NoData';
 import './searchMind.scss';
 
 const TYPE = {
@@ -22,7 +23,7 @@ const TYPE = {
     EDIT: 'ellipsis',
 };
 
-class SearchMind extends PureComponent {
+class SearchMind extends Component {
     constructor(props) {
         super(props);
 
@@ -73,6 +74,11 @@ class SearchMind extends PureComponent {
             data: [],
 
             /**
+             * 是否出现查询错误
+             */
+            fetchError: 0,
+
+            /**
              * 默认值
              */
             defaultValue: props.defaultValue,
@@ -97,21 +103,22 @@ class SearchMind extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        const next = { ...nextProps };
-
         if (nextProps.defaultValue !== this.props.defaultValue) {
-            next.value = nextProps.defaultValue;
+            this.setState({
+                value: nextProps.defaultValue,
+            });
         }
 
         // 单独处理一下 disabled
         if (nextProps.disabled !== this.props.disabled) {
-            next.dropHide = true;
-            next.isFocus = false;
+            this.setState({
+                disabled: nextProps.disabled,
+                ...(nextProps.disabled && {
+                    dropHide: true,
+                    isFocus: false,
+                })
+            });
         }
-
-        this.setState({
-            ...next
-        });
     }
 
     componentWillUnmount() {
@@ -177,6 +184,8 @@ class SearchMind extends PureComponent {
             type,
             data,
             pagination,
+            disabled,
+            isFocus,
         } = this.state;
 
         const {
@@ -185,6 +194,10 @@ class SearchMind extends PureComponent {
             loadingText,
             rowKey,
         } = this.props;
+
+        if (disabled) {
+            return null;
+        }
 
         // 有数据列表
         if (data && data.length > 0) {
@@ -227,7 +240,7 @@ class SearchMind extends PureComponent {
     handleFocus() {
         this.setState({
             isFocus: true,
-        }, () => this.query());
+        });
 
         // if (!this.isEmpty() && this.state.dropHide) {
         //     this.query();
@@ -299,14 +312,15 @@ class SearchMind extends PureComponent {
                 const pager = { ...pagination };
 
                 // 重新更换数据 total
-                if (res[totalIndex]) {
-                    pager.total = res[totalIndex];
+                if (res[totalIndex] || res.data[totalIndex]) {
+                    pager.total = res[totalIndex] || res.data[totalIndex];
                 }
 
                 this.setState({
                     type: TYPE.DEFAULT,
                     data: res.data.data,
                     pagination: pager,
+                    fetchError: 0,
                 });
             })
             .catch(() => {
@@ -314,6 +328,7 @@ class SearchMind extends PureComponent {
                     type: TYPE.DEFAULT,
                     total: 0,
                     data: [],
+                    fetchError: 1,
                 })
             })
     }
@@ -462,21 +477,18 @@ class SearchMind extends PureComponent {
         const {
             type,
             dropHide,
-            data,
             value,
             isFocus,
             selectedRawData,
+            data,
             disabled,
-            pagination,
         } = this.state;
 
         const {
             addonBefore,
             className,
             style,
-            columns,
             renderChoosedInputRaw,
-            rowKey,
             placeholder,
             dropWidth,
         } = this.props;
@@ -502,7 +514,7 @@ class SearchMind extends PureComponent {
         const newStyle = Object.assign({
             zIndex: 100,
             position: 'relative',
-        }, style)
+        }, style);
 
         return (
             <div
@@ -514,7 +526,7 @@ class SearchMind extends PureComponent {
                 {/* 搜索容器 */}
                 <div className="ywc-smind-search-bar">
                     {addonBefore &&
-                        <span className="ywc-smind-title">
+                    <span className="ywc-smind-title">
                             {addonBefore}
                         </span>
                     }
@@ -532,16 +544,16 @@ class SearchMind extends PureComponent {
 
                         {/* 用于被选择的数据展示 */}
                         {(!isFocus && selectedRawData !== null && this.isEmpty()) &&
-                            <div className="ywc-smind-input-view">
-                                {this.inputRawRender()}
-                            </div>
+                        <div className="ywc-smind-input-view">
+                            {this.inputRawRender()}
+                        </div>
                         }
 
                         {/* placeholder */}
                         {(!this.isFocus && this.isEmpty() && selectedRawData === null) &&
-                            <div className="ywc-smind-input-placeholder">
-                                {placeholder}
-                            </div>
+                        <div className="ywc-smind-input-placeholder">
+                            {placeholder}
+                        </div>
                         }
 
                         {/* 清空按钮 */}
@@ -569,18 +581,7 @@ class SearchMind extends PureComponent {
                     }}
                     className="ywc-smind-drop-layout"
                 >
-                    {data && data.length > 0 &&
-                        <Table
-                            rowKey={rowKey}
-                            columns={columns}
-                            dataSource={data}
-                            pagination={pagination}
-                            loading={type === TYPE.LOADING}
-                            size="middle"
-                            onRowClick={this.handleChoose}
-                            onChange={this.handleTableChange}
-                        />
-                    }
+                    {this.getDrop()}
                 </div>
             </div>
         )

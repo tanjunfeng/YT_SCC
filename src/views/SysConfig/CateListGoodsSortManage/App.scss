@@ -1,35 +1,25 @@
-.ant-table-pagination {
-    margin-right: 15px;
+.nameShow{
+    width: 338px;
 }
-.change-form {
-    padding-left: 30px;
-    .ant-form-item {
-        margin-bottom: 15px
-    }
-    .manage-form-item .nameShow{
-        width: 300px;
-        resize: none;
-    }
-    .ant-form-explain {
-        padding-left: 73px;
-    }
-    &-label {
-        min-width: 66px;
-    }
-
-    &-tip {
-        margin-left: 10px;
+.changeMessage-line-spfl{
+    padding-right: 10px;
+    line-height: 31px;
+}
+.changeMessage-line-flex{
+    display: flex;
+}
+.changeMessage-line-label{
+    padding-right: 10px;
+}
+.jtgl-change-form{
+    .manage-form-item{
+        margin-top: 10px;
+        margin-bottom: 24px;
     }
 }
-.ant-spin-container{
-    .ant-table-thead th,td{
-        text-align: center;
-    }
+.changeMessage-line-input{
+    width: 338px;
 }
-.manage-form-item .tjf-css-spfl{
-    line-height: 0;
-}
-.tjf-css-modal-spfl .classify-select-label{
-    display: inline-block;
-    width: 60px;
+.cateGory-line-input{
+    margin-bottom: 24px;
 }

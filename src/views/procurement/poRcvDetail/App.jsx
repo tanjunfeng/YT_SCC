@@ -208,19 +208,12 @@ class PoRcvDetail extends PureComponent {
                                 <Col span={6}>
                                     {/* 地点类型 */}
                                     <FormItem >
-                                        <span className="ant-form-item-label"><label>仓库编码</label> </span>
-                                        <span className="text">{pmPurchaseReceipt.adrTypeCode}</span>
+                                        <span className="ant-form-item-label"><label>地点</label> </span>
+                                        <span className="text">{pmPurchaseReceipt.adrTypeCode}-{pmPurchaseReceipt.adrTypeName}</span>
                                     </FormItem>
                                 </Col>
                             </Row>
                             <Row >
-                                <Col span={6}>
-                                    {/* 地点类型 */}
-                                    <FormItem >
-                                        <span className="ant-form-item-label"><label>仓库名称</label> </span>
-                                        <span className="text">{pmPurchaseReceipt.adrTypeName}</span>
-                                    </FormItem>
-                                </Col>
                                 <Col span={6}>
                                     {/* 预计收货日期 */}
                                     <span className="ant-form-item-label"><label>预计到货日期</label> </span>

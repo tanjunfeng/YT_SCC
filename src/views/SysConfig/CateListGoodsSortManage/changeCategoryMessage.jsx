@@ -59,9 +59,11 @@ class ChangeMessage extends PureComponent {
             firstCategoryId: -1,
             secondCategoryId: -1,
             thirdCategoryId: -1,
+            fourthCategoryId: -1,
             firstCategoryName: '',
             secondCategoryName: '',
             thirdCategoryName: '',
+            fourthCategoryName: '',
         }
     }
 
@@ -77,11 +79,13 @@ class ChangeMessage extends PureComponent {
             firstCategoryId,
             secondCategoryId,
             thirdCategoryId,
+            fourthCategoryId,
         } = this.classify;
         this.props.modifyQuerygoodsname({
             firstCategoryId,
             secondCategoryId,
             thirdCategoryId,
+            fourthCategoryId,
             productNo,
         })
     }
@@ -93,14 +97,14 @@ class ChangeMessage extends PureComponent {
      * @return {Object} 返回根据商品编号查询商品名称
      */
     handleSelectChange(data, that) {
-        const { first, second, third } = data;
-        if (third.id !== -1) {
+        const { first, second, third, fourth } = data;
+        if (fourth.id !== -1) {
             this.setState({
                 isDisabled: false
             })
         } else if (
-            this.classify.thirdCategoryId !== third.id
-            && third.id === -1
+            this.classify.fourthCategoryId !== fourth.id
+            && fourth.id === -1
         ) {
             this.props.form.resetFields(['id']);
             this.setState({
@@ -111,9 +115,11 @@ class ChangeMessage extends PureComponent {
             firstCategoryId: first.id,
             secondCategoryId: second.id,
             thirdCategoryId: third.id,
+            fourthCategoryId: fourth.id,
             firstCategoryName: first.categoryName,
             secondCategoryName: second.categoryName,
-            thirdCategoryName: third.categoryName
+            thirdCategoryName: third.categoryName,
+            fourthCategoryName: fourth.categoryName,
         }
         this.classifyRef = that;
     }
@@ -149,6 +155,7 @@ class ChangeMessage extends PureComponent {
             firstCategoryId,
             secondCategoryId,
             thirdCategoryId,
+            fourthCategoryId,
         } = this.classify;
         const data1 = {
             id,
@@ -157,6 +164,7 @@ class ChangeMessage extends PureComponent {
             firstCategoryId,
             secondCategoryId,
             thirdCategoryId,
+            fourthCategoryId,
         }
         const data2 = {
             id,
@@ -166,6 +174,7 @@ class ChangeMessage extends PureComponent {
             firstCategoryId,
             secondCategoryId,
             thirdCategoryId,
+            fourthCategoryId,
         }
         if (isEdit) {
             this.props.form.validateFields((err) => {
@@ -179,6 +188,7 @@ class ChangeMessage extends PureComponent {
                             && (firstCategoryId !== '')
                             && (secondCategoryId !== '')
                             && (thirdCategoryId !== '')
+                            && (fourthCategoryId !== '')
                         ) {
                             this.props.fetchCategoryList({
                                 pageSize: PAGE_SIZE,
@@ -205,6 +215,7 @@ class ChangeMessage extends PureComponent {
                             && (firstCategoryId !== '')
                             && (secondCategoryId !== '')
                             && (thirdCategoryId !== '')
+                            && (fourthCategoryId !== '')
                         ) {
                             this.props.fetchCategoryList({
                                 pageSize: PAGE_SIZE,
@@ -229,11 +240,12 @@ class ChangeMessage extends PureComponent {
             firstCategoryName,
             secondCategoryName,
             thirdCategoryName,
+            fourthCategoryName,
             toAddCategoryTitle,
             isEdit
         } = this.props.visibleData;
         const productNo = id;
-        const { querygoodsname = '' } = this.props;
+        const { querygoodsname = '', prefixCls } = this.props;
         const name1 = querygoodsname === null ? '' : querygoodsname;
         const { isDisabled } = this.state;
         return (
@@ -248,10 +260,10 @@ class ChangeMessage extends PureComponent {
                         maskClosable={false}
                         width="500px"
                     >
-                        <Form className="change-form">
-                            <FormItem>
-                                <div className="tjf-css-modal-spfl">
-                                    <div className="classify-select-label">
+                        <Form className="jtgl-change-form">
+                            <FormItem className="manage-form-item">
+                                <div className={`${prefixCls}-flex`}>
+                                    <div className={`${prefixCls}-spfl classify-select-label`}>
                                         商品分类
                                     </div>
                                     <ClassifiedSelect
@@ -260,14 +272,15 @@ class ChangeMessage extends PureComponent {
                                         defaultValue={isEdit ? [
                                             firstCategoryName,
                                             secondCategoryName,
-                                            thirdCategoryName
+                                            thirdCategoryName,
+                                            fourthCategoryName
                                         ] : null}
                                     />
                                 </div>
                             </FormItem>
                             <FormItem className="manage-form-item">
                                 <div>
-                                    <span className="manage-form-label">商品编号</span>
+                                    <span className={`${prefixCls}-label`}>商品编号</span>
                                     {getFieldDecorator('productNo', {
                                         rules: [{
                                             required: true,
@@ -278,7 +291,7 @@ class ChangeMessage extends PureComponent {
                                     })(
                                         <Input
                                             disabled={isDisabled}
-                                            className="nameShow ant-input-lg"
+                                            className={`${prefixCls}-input ant-input-lg`}
                                             placeholder="请输入商品编号"
                                             onBlur={this.handleBackShow}
                                         />
@@ -286,11 +299,11 @@ class ChangeMessage extends PureComponent {
                                 </div>
                             </FormItem>
                             <FormItem className="manage-form-item">
-                                <span className="manage-form-label">商品名称</span>
+                                <span className={`${prefixCls}-label`}>商品名称</span>
                                 {getFieldDecorator('name1', {
                                     rules: [{
                                         required: true,
-                                        message: '未找到商品名称'
+                                        message: '未找到关联商品名称'
                                     }],
                                     initialValue: !isEdit
                                         ? name1 : name
@@ -298,12 +311,12 @@ class ChangeMessage extends PureComponent {
                                     <Input
                                         readOnly
                                         disabled={isDisabled}
-                                        className="nameShow"
+                                        className={`${prefixCls}-input ant-input-lg`}
                                     />
                                     )}
                             </FormItem>
                             <FormItem className="manage-form-item">
-                                <span className="manage-form-label">商品排序</span>
+                                <span className={`${prefixCls}-label`}>商品排序</span>
                                 {getFieldDecorator('newOrderNum', {
                                     rules: [{
                                         required: true,
@@ -315,7 +328,7 @@ class ChangeMessage extends PureComponent {
                                     <Input
                                         disabled={isDisabled}
                                         placeholder="请输入商品序号"
-                                        className="nameShow"
+                                        className={`${prefixCls}-input ant-input-lg`}
                                     />
                                 )}
                             </FormItem>
@@ -337,7 +350,12 @@ ChangeMessage.propTypes = {
     fetchCategoryList: PropTypes.func,
     modifyQuerygoodsname: PropTypes.func,
     toAddPriceVisible: PropTypes.bool,
+    prefixCls: PropTypes.string,
     modifyUpDateCategory: PropTypes.func,
 }
+
+ChangeMessage.defaultProps = {
+    prefixCls: 'changeMessage-line',
+};
 
 export default withRouter(Form.create()(ChangeMessage));

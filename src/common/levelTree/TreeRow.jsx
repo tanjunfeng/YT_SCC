@@ -49,15 +49,15 @@ class TreeRow extends PureComponent {
             return '';
         }
 
-        // 本身未排序的处理方式，可输入有效数据的最大值 + 1
-        if (sort === null && v > max + 1) {
-            v = max + 1;
-        }
-
-        // 有排序数据的，进行输入只能输入有效数据的最大值
-        if (sort !== null && v > max) {
-            v = max;
-        }
+        // // 本身未排序的处理方式，可输入有效数据的最大值 + 1
+        // if (sort === null && v > max + 1) {
+        //     v = max + 1;
+        // }
+        //
+        // // 有排序数据的，进行输入只能输入有效数据的最大值
+        // if (sort !== null && v > max) {
+        //     v = max;
+        // }
 
         return Utils.trim(v);
     }
@@ -82,14 +82,6 @@ class TreeRow extends PureComponent {
         }
 
         this.props.handleChangeSort(event);
-
-        // 这里在输入确认之后根据 componentWillReceiveProps 的操作重新赋值给输入框
-        // 避免外部请求错误之后造成的输入框内容不刷新
-        if (event.currentTarget.value !== sort) {
-            this.setState({
-                value: sort
-            })
-        }
     }
 
     /**

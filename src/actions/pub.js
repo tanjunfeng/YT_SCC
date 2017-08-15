@@ -15,7 +15,6 @@ import {
     prodBatchPutAway,
     prodBatchUpdate,
     availablProducts,
-    fetchAddProdPurchase,
     supplierSearchBox,
     supplierAdrSearchBox,
     getWarehouseInfo1,
@@ -44,8 +43,6 @@ const pubValueList = {
     prodBatchUpdate,
     // 批量全国上下架
     availablProducts,
-    // 新增商品关系
-    fetchAddProdPurchase,
     // 供应商选择组件
     supplierSearchBox,
     // 供应商地点选择组件

@@ -46,8 +46,10 @@ class CategoryIconManagement extends Component {
      */
     componentWillReceiveProps(nextProps) {
         const { categorysById } = nextProps;
-        if (categorysById !== this.props.categorysById) {
-            this.categoryArrs.splice(categorysById[0].level - 1)
+        if (categorysById !== this.props.categorysById
+        ) {
+            const levelIndex = categorysById[0] ? categorysById[0].level - 1 : null;
+            this.categoryArrs.splice(levelIndex)
             this.categoryArrs.push(categorysById);
         }
     }
@@ -61,7 +63,6 @@ class CategoryIconManagement extends Component {
     }
 
     render() {
-        console.log(this.categoryArrs)
         const firstArr = this.categoryArrs[0] ? this.categoryArrs[0] : [];
         const secondArr = this.categoryArrs[1] ? this.categoryArrs[1] : [];
         const thirdArr = this.categoryArrs[2] ? this.categoryArrs[2] : [];

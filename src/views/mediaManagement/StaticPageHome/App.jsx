@@ -24,14 +24,14 @@ import {
 import {
     modifyAuditVisible,
     modifyCheckReasonVisible,
-    modifyDeleteOrderNum
+    modifyDeleteOrderNum,
+    modifyMediaAddVisible
 } from '../../../actions';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import fetchStaticPageList from '../../../actions/fetch/fetchStaticPageList';
 import { staticPageHome } from '../../../constant/formColumns';
 import ChangeMessage from './changeCategoryMessage';
-import { modifyMediaAddVisible } from '../../../actions';
 
 const FormItem = Form.Item;
 const columns = staticPageHome;
@@ -163,7 +163,7 @@ class CateGory extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { findstaticpagelist = {} } = this.props;
+        const { findstaticpagelist = {}, prefixCls } = this.props;
         const {
             data,
             pageNum,
@@ -173,18 +173,20 @@ class CateGory extends Component {
         columns[columns.length - 1].render = this.renderOperation;
         return (
             <div className="onsale">
-                <div className="onsale-form">
+                <div className="onsale-form" style={{marginTop: 10, marginBottom: 20}}>
                     <Form layout="inline">
-                        <div className="manage-form-item">
+                        <div className="manage-form-item" style={{height: 70}}>
                             {/* 商品名称 */}
                             <FormItem className="manage-form-item1">
-                                <div>
+                                <div style={{ display: 'flex', marginTop: 20}}>
                                     <span
                                         className="manage-form-label"
+                                        style={{minWidth: 60, marginRight: 8, marginLeft: 10}}
                                     >静态页名称</span>
                                     {getFieldDecorator('name', {
                                     })(
                                         <Input
+                                            style={{marginTop: 3}}
                                             className="manage-form-companyName"
                                             placeholder="静态页名称"
                                         />
@@ -193,13 +195,15 @@ class CateGory extends Component {
                             </FormItem>
                             {/* 商品编号 */}
                             <FormItem className="manage-form-item1">
-                                <div>
+                                <div style={{ display: 'flex', marginTop: 20}}>
                                     <span
                                         className="manage-form-label"
+                                        style={{minWidth: 60, marginRight: 8, marginLeft: 10}}
                                     >链接地址</span>
                                     {getFieldDecorator('linkUrl', {
                                     })(
                                         <Input
+                                            style={{marginTop: 3}}
                                             className="manage-form-companyName"
                                             placeholder="链接地址"
                                         />
@@ -209,6 +213,7 @@ class CateGory extends Component {
                             <span className="classify-select-btn-warp">
                                 <FormItem>
                                     <Button
+                                        style={{marginTop: 23}}
                                         type="primary"
                                         onClick={this.handleSearch}
                                         size="default"
@@ -218,6 +223,7 @@ class CateGory extends Component {
                                 </FormItem>
                                 <FormItem>
                                     <Button
+                                        style={{marginTop: 23}}
                                         size="default"
                                         onClick={this.handleReset}
                                     >
@@ -226,6 +232,7 @@ class CateGory extends Component {
                                 </FormItem>
                                 <FormItem>
                                     <Button
+                                        style={{marginTop: 23}}
                                         size="default"
                                         onClick={this.handleAdd}
                                     >
@@ -264,11 +271,13 @@ CateGory.propTypes = {
     fetchStaticPageList: PropTypes.func,
     modifyMediaAddVisible: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
+    prefixCls: PropTypes.string,
     findstaticpagelist: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
 }
 
 CateGory.defaultProps = {
-}
+    prefixCls: 'cateGory-line',
+};
 
 export default withRouter(Form.create()(CateGory));

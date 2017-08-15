@@ -203,6 +203,9 @@ class CheckReason extends PureComponent {
      */
     handleCheckCancel() {
         this.props.modifyAdrVisible({isVisible: false});
+        this.setState({
+            selected: -1
+        })
     }
 
     /**

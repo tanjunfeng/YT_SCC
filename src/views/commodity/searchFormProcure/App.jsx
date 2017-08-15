@@ -24,8 +24,6 @@ import {
 } from '../../../actions/producthome';
 import {
     fetchAddProdPurchase,
-    fetchQueryProdByCondition,
-    fecthGetProdPurchaseById
 } from '../../../actions';
 import {
     initiateModeOptions,
@@ -50,9 +48,7 @@ const Option = Select.Option;
         fetchAction,
         receiveData,
         fetchAddProdPurchase,
-        fetchQueryProdByCondition,
         pubFetchValueList,
-        fecthGetProdPurchaseById,
         QueryProdPurchaseExtByCondition
     }, dispatch)
 )

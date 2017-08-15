@@ -12,9 +12,9 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const imgConfig = {
     width: 1080,
-    height: 280,
+    height: 240,
     imgWidth: 540,
-    imgHeight: 140
+    imgHeight: 120
 }
 
 @Common
@@ -25,8 +25,11 @@ class BannerItem extends Component {
         this.handleOk = ::this.handleOk;
         this.handleCancel = ::this.handleCancel;
         this.saveItems = ::this.saveItems;
+        const { data = {} } = props;
+        const { itemAds = [] } = data;
         this.state = {
-            isShow: false
+            isShow: false,
+            select: itemAds[0].urlType
         }
     }
 
@@ -53,8 +56,8 @@ class BannerItem extends Component {
                 uploadImageBase64Data({
                     base64Content: image
                 }).then((res) => {
-                    const { fileOnServerUrl } = res.data;
-                    this.saveItems(values, fileOnServerUrl);
+                    const { imageDomain, suffixUrl } = res.data;
+                    this.saveItems(values, `${imageDomain}/${suffixUrl}`);
                 })
             } else if (!isBase64) {
                 this.saveItems(values);
@@ -79,6 +82,12 @@ class BannerItem extends Component {
         })
     }
 
+    handleLinkStyleChange = (type) => {
+        this.setState({
+            select: type
+        })
+    } 
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const { data = {} } = this.props;
@@ -97,7 +106,7 @@ class BannerItem extends Component {
                 {
                     this.state.isShow &&
                     <Modal
-                        title="修改快捷功能设置"
+                        title="横幅广告配置"
                         visible
                         onOk={this.handleOk}
                         onCancel={this.handleCancel}
@@ -107,25 +116,6 @@ class BannerItem extends Component {
                             <FormItem className="manage-form-item">
                                 <span className="manage-form-label banner-form-label">序号：</span>
                                 <span>{itemAds[0].areaId}</span>
-                            </FormItem>
-                            <FormItem className="manage-form-item">
-                                <span className="manage-form-label banner-form-label">类型：</span>
-                                {getFieldDecorator('urlType', {
-                                    rules: [{
-                                        required: true,
-                                        message: '请选择类型'
-                                    }],
-                                    initialValue: itemAds[0].urlType.toString()
-                                })(
-                                    <Select
-                                        style={{ width: '153px' }}
-                                        size="default"
-                                        placeholder="请选择"
-                                    >
-                                        <Option value="2">静态页面</Option>
-                                        <Option value="1">商品链接</Option>
-                                    </Select>
-                                    )}
                             </FormItem>
                             <FormItem className="manage-form-item">
                                 <span className="manage-form-label banner-form-label">名称：</span>
@@ -143,32 +133,69 @@ class BannerItem extends Component {
                                     )}
                                 <span className="change-form-tip">（说明：2~4个汉字）</span>
                             </FormItem>
-                            <FormItem className="application-form-item">
-                                <span className="application-modal-label">链接地址：</span>
-                                {getFieldDecorator('url', {
-                                    rules: [{ required: true, message: '请输入链接地址', whitespace: true }],
-                                    initialValue: itemAds[0].url
+                            <FormItem className="manage-form-item">
+                                <span className="manage-form-label banner-form-label">类型：</span>
+                                {getFieldDecorator('urlType', {
+                                    rules: [{
+                                        required: true,
+                                        message: '请选择类型'
+                                    }],
+                                    initialValue: itemAds[0].urlType.toString()
                                 })(
-                                    <Input
-                                        onChange={this.handleTextChange}
-                                        type="textarea"
-                                        placeholder="请输入链接地址"
-                                        className="application-modal-textarea"
-                                        autosize={{ minRows: 2, maxRows: 8 }}
-                                    />
+                                    <Select
+                                        style={{ width: '153px' }}
+                                        size="default"
+                                        placeholder="请选择"
+                                        onChange={this.handleLinkStyleChange}
+                                    >
+                                        <Option value="1">商品链接</Option>
+                                        <Option value="2">静态活动页面</Option>
+                                    </Select>
                                     )}
                             </FormItem>
+                            {
+                                `${this.state.select}` === '1'
+                                ? <div>
+                                    <FormItem className="home-style-modal-input-item">
+                                        <span>商品编号：</span>
+                                        {getFieldDecorator('productNo', {
+                                            rules: [
+                                                {max: 20, message: '最大长度20个汉字'}
+                                            ],
+                                            initialValue: itemAds[0].productNo
+                                        })(
+                                            <Input className="home-style-url" type="text" placeholder="请输入商品编号" />
+                                        )}
+                                    </FormItem>
+                                </div>
+                                : <div>
+                                    <FormItem className="home-style-modal-input-item">
+                                        <span>超链接：</span>
+                                        {getFieldDecorator('url', {
+                                            rules: [
+                                                {required: true, message: '请输入链接地址'},
+                                                /* eslint-disable */
+                                                {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'}
+                                                /* eslint-enable */
+                                            ],
+                                            initialValue: itemAds[0].url ? itemAds[0].url : ''
+                                        })(
+                                            <Input className="home-style-url" type="textarea" rows={2} placeholder="请输入链接地址" />
+                                        )}
+                                    </FormItem>
+                                </div>
+                            }
                             <FormItem className={
                                 classnames('manage-form-item')
                             }>
-                                <span className="manage-form-label banner-form-label">快捷icon：（说明：支持PNG，建议大小200X200px，100k以内）</span>
+                                <span className="manage-form-label banner-form-label">快捷icon：（说明：支持PNG，建议大小1080X240px）</span>
                                 <FileCut
                                     ref={ref => { this.imgRef = ref }}
                                     width={imgConfig.width}
                                     height={imgConfig.height}
                                     dpr={3}
                                     defaultImge={itemAds[0].icon}
-                                    accept={['jpg', 'jpeg', 'png']}
+                                    accept={['png']}
                                 />
                             </FormItem>
                         </Form>

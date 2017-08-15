@@ -11,13 +11,13 @@ import { connect } from 'react-redux';
 import {
     Row,
     Col,
-    Icon,
     Table,
     Button
 } from 'antd';
-
-import { fetchPoMngList } from '../../../actions';
-import { poMngListColumns } from '../columns';
+import { DATE_FORMAT } from '../../../constant/index';
+import moment from 'moment';
+import { poType } from '../../../constant/procurement';
+import { printColumns } from '../columns';
 
 @connect(state => ({
     ReportPoList: state.toJS().procurement.ReportPoList
@@ -26,7 +26,6 @@ import { poMngListColumns } from '../columns';
 
 
 class Report extends PureComponent {
-
     handleDownPDF = (number) => {
         const { onDownPDF } = this.props;
         if (onDownPDF) {
@@ -36,19 +35,30 @@ class Report extends PureComponent {
 
     render() {
         const { data = {} } = this.props;
+        let purchaseOrder = '';
+        poType.data.forEach((item) => {
+            if (+item.key === data.purchaseOrderType) {
+                purchaseOrder = item.value;
+            }
+        });
         return (
             <div className="print-container">
                 <div className="content">
                     <div className="head">
-                        <Row type="flex" justify="end" >
-                            {/*这里放置根据采购单号生成的条形码 */}
-                            <div >
-                                <img alt='条形码' src={data.barCodeUrl} />
-                                <Icon type="barcode" style={{ fontSize: 30 }} />
-                            </div>
-                        </Row>
-                        <Row type="flex" justify="center" >
-                            <div><h1 style={{ marginBottom: 20, marginTop: 20 }}>雅堂小超采购订单</h1></div>
+                        <Row type="flex" justify="center">
+                            <Col span={6}>
+                            </Col>
+                            <Col span={12}>
+                                <div className="tc">
+                                    <h1 style={{ marginBottom: 20, marginTop: 20 }}>雅堂小超采购订单</h1>
+                                </div>
+                            </Col>
+                            <Col span={6}>
+                                {/*这里放置根据采购单号生成的条形码 */}
+                                <div className="bar">
+                                    <img alt="条形码" src={data.barCodeUrl} />
+                                </div>
+                            </Col>
                         </Row>
                         <Row type="flex" justify="start">
                             <Col span={6}>
@@ -61,7 +71,7 @@ class Report extends PureComponent {
                             </Col>
                             <Col span={4}>
                                 <label>采购单类型：</label>
-                                <span className="field">{data.purchaseOrderType}</span>
+                                <span className="field">{purchaseOrder}</span>
                             </Col>
                             <Col span={3}>
                                 <label>创建人：</label>
@@ -93,26 +103,26 @@ class Report extends PureComponent {
                             </Col>
                             <Col span={11}>
                                 <label>收货日期：</label>
-                                <span className="field">{data.estimatedDeliveryDate}</span>
+                                <span className="field">{moment(new Date(data.estimatedDeliveryDate)).format(DATE_FORMAT)}</span>
                             </Col>
                         </Row>
                     </div>
                     <div style={{ height: 10 }} />
                     <div className="material">
                         <div className="lines">
-                            <Table dataSource={data.pmPurchaseOrderItems} pagination={false} columns={poMngListColumns} bordered rowKey="id" />
+                            <Table dataSource={data.pmPurchaseOrderItems} pagination={false} columns={printColumns} bordered rowKey="id" />
                         </div>
                         <div className="lines-footer">
                             <Row type="flex" justify="start">
-                                <Col span={6}>
-                                    <label>合计数量：</label>
-                                    <span className="field">{data.totalNumber}</span>
+                                <Col span={8} className="left">
+                                    <label>合计数量：
+                                        <span className="field">{data.totalNumber}</span>
+                                    </label>
+                                    <label>合计金额：
+                                        <span className="field">{data.totalAmount}</span>
+                                    </label>
                                 </Col>
-                                <Col span={6}>
-                                    <label>合计金额：</label>
-                                    <span className="field">{data.totalAmount}</span>
-                                </Col>
-                                <Col span={12}>
+                                <Col span={16} className="tr">
                                     <label>合计金额（大写）：
                                         <span className="field">{data.numberToCN}</span>
                                     </label>
