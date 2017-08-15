@@ -146,7 +146,7 @@ class ChangeMessage extends PureComponent {
                             status: parseInt(status, 10),
                             linkType,
                             goodsId,
-                            linkAddress: encodeURI(linkAddress),
+                            linkAddress: linkAddress ? encodeURI(linkAddress) : null,
                             picAddress
                         }).then(() => {
                             this.props.fetchCarouselAdList();
@@ -167,7 +167,7 @@ class ChangeMessage extends PureComponent {
                             status: parseInt(status, 10),
                             linkType,
                             goodsId,
-                            linkAddress: encodeURI(linkAddress),
+                            linkAddress: linkAddress ? encodeURI(linkAddress) : null,
                             picAddress
                         }).then(() => {
                             this.props.fetchCarouselAdList();
