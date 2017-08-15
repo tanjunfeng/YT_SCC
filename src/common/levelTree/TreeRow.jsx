@@ -49,15 +49,15 @@ class TreeRow extends PureComponent {
             return '';
         }
 
-        // 本身未排序的处理方式，可输入有效数据的最大值 + 1
-        if (sort === null && v > max + 1) {
-            v = max + 1;
-        }
-
-        // 有排序数据的，进行输入只能输入有效数据的最大值
-        if (sort !== null && v > max) {
-            v = max;
-        }
+        // // 本身未排序的处理方式，可输入有效数据的最大值 + 1
+        // if (sort === null && v > max + 1) {
+        //     v = max + 1;
+        // }
+        //
+        // // 有排序数据的，进行输入只能输入有效数据的最大值
+        // if (sort !== null && v > max) {
+        //     v = max;
+        // }
 
         return Utils.trim(v);
     }

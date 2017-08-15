@@ -526,6 +526,8 @@ export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPa
 export const queryPoDetail = (params) => http.get('/pmPurchaseOrder/getPurchaseOrderInfoById', params);
 // 创建采购单详情
 export const createPo = (params) => http.post('/pmPurchaseOrder/addPmPurchaseOrder', params);
+// 修改采购单详情
+export const updatePmPurchaseOrder = (params) => http.post('/pmPurchaseOrder/updatePmPurchaseOrder', params);
 // 查询采购单列表
 export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
 // 删除采购单 参数 1或n个采购单id  [ids]

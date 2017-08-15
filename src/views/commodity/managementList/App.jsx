@@ -165,14 +165,14 @@ class ManagementList extends PureComponent {
             content: confirmTitle,
             onOk: () => {
                 if (goodsListLengh) {
-                    callback(purchasedata.goodsStatus);
-
-                    if (this.state.errorGoodsCode === availbleGoodsId) {
-                        message.error('请选择有效状态的商品，请重新选择！')
-                    } else {
-                        message.success(purchasedata.tipsMessageTxt);
-                    }
-                    this.handleFormSearch();
+                    callback(purchasedata.goodsStatus).then((res) => {
+                        if (this.state.errorGoodsCode === availbleGoodsId) {
+                            message.error('请选择有效状态的商品，请重新选择！')
+                        } else {
+                            message.success(purchasedata.tipsMessageTxt);
+                        }
+                        this.handleFormSearch();
+                    });
                 }
             },
             onCancel() {},
@@ -196,7 +196,7 @@ class ManagementList extends PureComponent {
     // 商品的暂停购进和恢复采购接口回调
     goodstatusChange = (status) => {
         const availbleGoodsId = 10027;
-        this.props.pubFetchValueList({
+        return this.props.pubFetchValueList({
             productIdList: this.state.chooseGoodsList,
             spAdrId: this.state.supplierId,
             status
@@ -209,7 +209,6 @@ class ManagementList extends PureComponent {
             }
         });
     }
-
 
     // 暂停购进
     handleStopPurchaseClick = () => {
@@ -284,7 +283,7 @@ class ManagementList extends PureComponent {
     // 区域上架回调接口
     prodBatchPutaway = (status) => {
         const { name, id } = this.state.childCompanyMeg;
-        this.props.pubFetchValueList({
+        return this.props.pubFetchValueList({
             branchCompanyName: name,
             branchCompanyId: id,
             productIds: this.state.chooseGoodsList,
@@ -295,7 +294,7 @@ class ManagementList extends PureComponent {
     // 区域下架回调接口
     prodBatchUpdate = (status) => {
         const { name, id } = this.state.childCompanyMeg;
-        this.props.pubFetchValueList({
+        return this.props.pubFetchValueList({
             branchCompanyName: name,
             branchCompanyId: id,
             productIds: this.state.chooseGoodsList,
@@ -331,7 +330,7 @@ class ManagementList extends PureComponent {
 
     // 全国性上/下架接口回调
     availablProducts = (status) => {
-        this.props.pubFetchValueList({
+        return this.props.pubFetchValueList({
             supplyChainStatus: status,
             ids: this.state.chooseGoodsList
         }, 'availablProducts');
@@ -494,7 +493,7 @@ class ManagementList extends PureComponent {
                     <span>{productCode}</span>
                 </div>
                 <div className="table-commodity-description">
-                    <img alt="未上传" className="table-commodity-description-img" src={`${this.props.CommodityListData.imgDomain}/${thumbnailImage}`} />
+                    <img alt="未上传" className="table-commodity-description-img" src={`${thumbnailImage || require('../../../images/default/100x100.png')}`} />
                     <span className="table-commodity-description-name">{saleName}</span>
                 </div>
             </div>

@@ -12,9 +12,9 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const imgConfig = {
     width: 1080,
-    height: 280,
+    height: 240,
     imgWidth: 540,
-    imgHeight: 140
+    imgHeight: 120
 }
 
 @Common
@@ -106,7 +106,7 @@ class BannerItem extends Component {
                 {
                     this.state.isShow &&
                     <Modal
-                        title="banner设置"
+                        title="横幅广告配置"
                         visible
                         onOk={this.handleOk}
                         onCancel={this.handleCancel}
@@ -116,6 +116,22 @@ class BannerItem extends Component {
                             <FormItem className="manage-form-item">
                                 <span className="manage-form-label banner-form-label">序号：</span>
                                 <span>{itemAds[0].areaId}</span>
+                            </FormItem>
+                            <FormItem className="manage-form-item">
+                                <span className="manage-form-label banner-form-label">名称：</span>
+                                {getFieldDecorator('name', {
+                                    rules: [{
+                                        required: true,
+                                        message: '请输入名称'
+                                    }],
+                                    initialValue: itemAds[0].name
+                                })(
+                                    <Input
+                                        className="manage-form-input"
+                                        placeholder="名称"
+                                    />
+                                    )}
+                                <span className="change-form-tip">（说明：2~4个汉字）</span>
                             </FormItem>
                             <FormItem className="manage-form-item">
                                 <span className="manage-form-label banner-form-label">类型：</span>
@@ -136,22 +152,6 @@ class BannerItem extends Component {
                                         <Option value="2">静态活动页面</Option>
                                     </Select>
                                     )}
-                            </FormItem>
-                            <FormItem className="manage-form-item">
-                                <span className="manage-form-label banner-form-label">名称：</span>
-                                {getFieldDecorator('name', {
-                                    rules: [{
-                                        required: true,
-                                        message: '请输入名称'
-                                    }],
-                                    initialValue: itemAds[0].name
-                                })(
-                                    <Input
-                                        className="manage-form-input"
-                                        placeholder="名称"
-                                    />
-                                    )}
-                                <span className="change-form-tip">（说明：2~4个汉字）</span>
                             </FormItem>
                             {
                                 `${this.state.select}` === '1'
@@ -188,14 +188,14 @@ class BannerItem extends Component {
                             <FormItem className={
                                 classnames('manage-form-item')
                             }>
-                                <span className="manage-form-label banner-form-label">快捷icon：（说明：支持PNG，建议大小1080X280px）</span>
+                                <span className="manage-form-label banner-form-label">快捷icon：（说明：支持PNG，建议大小1080X240px）</span>
                                 <FileCut
                                     ref={ref => { this.imgRef = ref }}
                                     width={imgConfig.width}
                                     height={imgConfig.height}
                                     dpr={3}
                                     defaultImge={itemAds[0].icon}
-                                    accept={['jpg', 'jpeg', 'png']}
+                                    accept={['png']}
                                 />
                             </FormItem>
                         </Form>

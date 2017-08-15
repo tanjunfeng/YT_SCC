@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author zhangbaihua
  *
- * 采购单列表页面
+ * 采购管理 - 采购单管理列表
  */
 
 import React, { PureComponent } from 'react';
