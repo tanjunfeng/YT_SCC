@@ -142,12 +142,14 @@ class ChangeMessage extends PureComponent {
                 this.props.form.validateFields((err) => {
                     if (!err) {
                         addCarouselAd({
-                            sorting,
-                            status: parseInt(status, 10),
-                            linkType,
-                            goodsId,
-                            linkAddress: linkAddress ? encodeURI(linkAddress) : null,
-                            picAddress
+                            ...Utils.removeInvalid({
+                                sorting,
+                                status: parseInt(status, 10),
+                                linkType,
+                                goodsId,
+                                linkAddress: linkAddress ? encodeURI(linkAddress) : null,
+                                picAddress,
+                            })
                         }).then(() => {
                             this.props.fetchCarouselAdList();
                             this.props.modifyModalVisible({
@@ -162,13 +164,15 @@ class ChangeMessage extends PureComponent {
                 this.props.form.validateFields((err) => {
                     if (!err) {
                         modifyCarouselAd({
-                            id,
-                            sorting,
-                            status: parseInt(status, 10),
-                            linkType,
-                            goodsId,
-                            linkAddress: linkAddress ? encodeURI(linkAddress) : null,
-                            picAddress
+                            ...Utils.removeInvalid({
+                                id,
+                                sorting,
+                                status: parseInt(status, 10),
+                                linkType,
+                                goodsId,
+                                linkAddress: linkAddress ? encodeURI(linkAddress) : null,
+                                picAddress
+                            })
                         }).then(() => {
                             this.props.fetchCarouselAdList();
                             this.props.modifyModalVisible({
