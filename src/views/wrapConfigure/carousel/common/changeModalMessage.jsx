@@ -317,7 +317,7 @@ class ChangeMessage extends PureComponent {
                             <span style={{color: '#f00' }}>*</span>
                             轮播图片
                         </span>
-                        <span>（说明：支持PNG、JPG，建议大小1080X510pix，1M以内）</span>
+                        <span>（说明：支持PNG、JPG，建议大小1080X510px，1M以内）</span>
                         <FileCut
                             ref={ref => { this.imageUploader = ref }}
                             width={1080}
