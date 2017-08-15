@@ -47,7 +47,8 @@ const { RangePicker } = DatePicker;
 const dateFormat = "YYYY-MM-DD";
 
 @connect(state => ({
-    poRcvMngList: state.toJS().procurement.poRcvMngList
+    poRcvMngList: state.toJS().procurement.poRcvMngList,
+    data: state.toJS().user.data || {}
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -70,7 +71,10 @@ class PoRcvMngList extends PureComponent {
         this.state = {
             locDisabled: true,  //地点是否可编辑
             spNo: '',   // 供应商编码
+            spId: '',   // 供应商ID
             spAdrNo: '',    // 供应商地点编码
+            isSupplyAdrDisabled: true, // 供应商地点禁用
+            locDisabled: true,  // 地点禁用
             adrTypeCode: '',    // 地点编码
             receivedTypeCode: ''  // 收货单状态编码
         };
@@ -188,15 +192,13 @@ class PoRcvMngList extends PureComponent {
      *
      * @param {*} value
      */
-    onLocTypeChange(value) {
-        //地点类型有值
-        if (value) {
-            //地点类型有值时，地点可编辑
-            //TODO SearchMind 需实现是否可编辑功能
-        } else {
-            //地点类型无值时，地点不可编辑
-            //TODO SearchMind 需实现是否可编辑功能
-        }
+    onLocTypeChange = (value) => {
+        let disabled = adrType.defaultValue === value ? true : false;
+        this.poAddress.reset();
+        this.adressTypeCode = '';
+        this.setState({
+            locDisabled: disabled
+        })
     }
     /**
      *
@@ -218,12 +220,12 @@ class PoRcvMngList extends PureComponent {
 
         //获取采购单审批日期区间
         let auditDuringArr = this.props.form.getFieldValue("auditDuring") || [];
-        let auditDuringFrom, auditDuringTo;
+        let startAuditTime, endAuditTime;
         if (auditDuringArr.length > 0) {
-            auditDuringFrom = Date.parse(auditDuringArr[0].format(dateFormat));
+            startAuditTime = Date.parse(auditDuringArr[0].format(dateFormat));
         }
         if (auditDuringArr.length > 1) {
-            auditDuringTo = Date.parse(auditDuringArr[1].format(dateFormat));
+            endAuditTime = Date.parse(auditDuringArr[1].format(dateFormat));
         }
 
         // 供应商编号
@@ -250,8 +252,8 @@ class PoRcvMngList extends PureComponent {
             spAdrNo,
             receivedTimeStart,
             receivedTimeEnd,
-            auditDuringFrom,
-            auditDuringTo
+            startAuditTime,
+            endAuditTime
         };
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
@@ -300,19 +302,28 @@ class PoRcvMngList extends PureComponent {
         this.searchParams = {};
         //重置form
         this.props.form.resetFields();
-        this.supplySearchMind.handleClear(); // 供应商查询清空
-        this.supplyAddressSearchMind.handleClear(); // 供应商地址清空
-        this.receiptAddressSearchMind.handleClear(); // 收货地址清空
+        this.handleSupplyClear();
+        this.handleAdressClear();
+        this.handleReceiveAdressClear();
     }
 
     // 获取供应商编号
     handleSupplyChoose = ({ record }) => {
-        this.setState({ spNo: record.spNo })
+        this.setState({
+            spNo: record.spNo,
+            spId: record.spId,
+            isSupplyAdrDisabled: false
+        })
     }
 
     // 供应商值清单-清除
     handleSupplyClear = () => {
-        this.setState({ spNo: '' });
+        this.handleAdressClear();
+        this.setState({
+            spNo: '',
+            spId: '',
+            isSupplyAdrDisabled: true
+        });
     }
 
     /**
@@ -325,7 +336,7 @@ class PoRcvMngList extends PureComponent {
     /**
      * 清空供应商地点编号
      */
-    handleAdressClear = ({ record }) => {
+    handleAdressClear = () => {
         this.setState({ spAdrNo: '' });
     }
 
@@ -339,8 +350,12 @@ class PoRcvMngList extends PureComponent {
     /**
      * 清空收货地点编号
      */
-    handleReceiveAdressClear = ({ record }) => {
-        this.setState({ adrTypeCode: '' });
+    handleReceiveAdressClear = () => {
+        this.setState({
+            adrTypeCode: '',
+            locDisabled: true
+        });
+        this.poAddress.reset();
     }
 
     /**
@@ -389,6 +404,8 @@ class PoRcvMngList extends PureComponent {
         };
 
         const { data, total, pageNum, pageSize } = this.props.poRcvMngList;
+        let ecId = this.props.data.user.employeeCompanyId;
+        let spId = this.state.spId;
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -502,40 +519,28 @@ class PoRcvMngList extends PureComponent {
                                                 this.supplyAddressSearchMind = ref
                                             }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value
+                                                orgId: ecId,
+                                                pId: this.state.spId,
+                                                condition: params.value,
+                                                pageNum: params.pagination.current || 1,
+                                                pageSize: params.pagination.pageSize
                                             }, 'supplierAdrSearchBox')}
                                             onChoosed={this.handleAdressChoose}
                                             onClear={this.handleAdressClear}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.providerNo} - {data.providerName}</div>
                                             )}
+                                            disabled={this.state.isSupplyAdrDisabled}
                                             pageSize={6}
-                                            columns={[
-                                                {
-                                                    title: '供应商编码',
-                                                    dataIndex: 'spNo',
-                                                    width: 150
-                                                }, {
-                                                    title: '供应商ID',
-                                                    dataIndex: 'spId',
-                                                    width: 200
-                                                }, {
-                                                    title: '供应商地点ID',
-                                                    dataIndex: 'spAdrNo',
-                                                    width: 200
-                                                }, {
-                                                    title: '供应商名称',
-                                                    dataIndex: 'companyName',
-                                                    width: 200
-                                                }, {
-                                                    title: '供应商地点编码',
-                                                    dataIndex: 'providerNo',
-                                                    width: 200
-                                                }, {
-                                                    title: '供应商地点名称',
-                                                    dataIndex: 'providerName',
-                                                    width: 200
-                                                }
+                                            columns={[{
+                                                title: '供应商地点编码',
+                                                dataIndex: 'providerNo',
+                                                width: 200
+                                            }, {
+                                                title: '供应商地点名称',
+                                                dataIndex: 'providerName',
+                                                width: 200
+                                            }
                                             ]}
                                         />
                                     </div>
@@ -564,20 +569,15 @@ class PoRcvMngList extends PureComponent {
                             <Col span={8}>
                                 {/* 地点类型 */}
                                 <FormItem label="地点类型">
-                                    {getFieldDecorator('adrType', { initialValue: adrType.defaultValue })(
-                                        <Select
-                                            style={{
-                                                width: '153px'
-                                            }}
-                                            size="default"
-                                        >
-                                            {
-                                                adrType.data.map((item) => {
-                                                    return <Option key={item.key} value={item.key}>{item.value}</Option>
-                                                })
-                                            }
+                                    {getFieldDecorator('locTypeCode', {
+                                        initialValue: adrType.defaultValue
+                                    })(
+                                        <Select style={{ width: '153px' }} size="default" onChange={this.onLocTypeChange}>
+                                            {adrType.data.map((item) => (
+                                                <Option key={item.key} value={item.key}>{item.value}</Option>
+                                            ))}
                                         </Select>
-                                    )}
+                                        )}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -591,12 +591,13 @@ class PoRcvMngList extends PureComponent {
                                             style={{ zIndex: 7 }}
                                             compKey="search-mind-key1"
                                             rowKey="id"
-                                            ref={ref => { this.receiptAddressSearchMind = ref }}
+                                            ref={ref => { this.poAddress = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
                                                 condition: params.value
                                             }, 'getWarehouseInfo1')}
                                             onChoosed={this.handleReceiveAdressChoose}
                                             onClear={this.handleReceiveAdressClear}
+                                            disabled={this.state.locDisabled}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.warehouseCode} - {data.warehouseName}</div>
                                             )}

@@ -59,51 +59,44 @@ class PoRcvDetail extends PureComponent {
                 dataIndex: 'rowNo',
                 key: 'rowNo',
                 render: (text, record, index) => { return (<span>{index + 1}</span>) }
-            },
-            {
+            }, {
                 title: '商品编码',
                 dataIndex: 'productCode',
-                key: 'productCode',
-
-            },
-            {
+                key: 'productCode'
+            }, {
                 title: '商品名称',
                 dataIndex: 'productName',
-                key: 'productName',
-            },
-            {
+                key: 'productName'
+            }, {
+                title: '商品条码',
+                dataIndex: 'internationalCode',
+                key: 'internationalCode'
+            }, {
                 title: '规格',
                 dataIndex: 'packingSpecifications',
-                key: 'packingSpecifications',
-            },
-            {
+                key: 'packingSpecifications'
+            }, {
                 title: '产地',
                 dataIndex: 'producePlace',
-                key: 'producePlace',
+                key: 'producePlace'
             }, {
                 title: '采购内装数',
                 dataIndex: 'purchaseInsideNumber',
-                key: 'purchaseInsideNumber',
+                key: 'purchaseInsideNumber'
             },
             {
                 title: '单位',
                 dataIndex: 'unitExplanation',
                 key: 'unitExplanation'
-            },
-
-            {
+            }, {
                 title: '采购数量',
                 dataIndex: 'purchaseNumber',
                 key: 'purchaseNumber'
-
-            },
-            {
+            }, {
                 title: '供应商出库数量',
                 dataIndex: 'deliveryNumber',
                 key: 'deliveryNumber'
-            }
-            ,
-            {
+            }, {
                 title: '收货数量',
                 dataIndex: 'receivedNumber',
                 key: 'receivedNumber'
@@ -127,7 +120,7 @@ class PoRcvDetail extends PureComponent {
 
     /**
      * 渲染订单状态
-     * @param {number} status 订单状态 
+     * @param {number} status 订单状态
      */
     renderStatus(status) {
         switch (status) {

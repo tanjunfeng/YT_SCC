@@ -4,7 +4,7 @@
  *
  */
 window.config = {
-    apiHost: 'http://sitxcsc.yatang.com.cn/api/sc/',
-    topMenusLink: 'http://sitxcoc.yatang.com.cn:81/system/tomain/',
-    loginLink: 'http://sitxcoc.yatang.com.cn:81/login.htm'
+    apiHost: 'http://xcscm.yatang.com.cn/api/sc/',
+    topMenusLink: 'http://xcoc.yatang.com.cn/',
+    loginLink: 'http://xcoc.yatang.com.cn/login.htm'
 };

@@ -111,12 +111,13 @@ export const printColumns = [{
     title: '商品名称',
     dataIndex: 'productName',
     key: 'productName',
-    className: 'left'
+    className: 'left',
+    width: 200
 }, {
     title: '商品条码',
     dataIndex: 'internationalCode',
     key: 'internationalCode',
-    className: 'left'
+    width: 110
 }, {
     title: '规格',
     dataIndex: 'packingSpecifications',
@@ -126,12 +127,12 @@ export const printColumns = [{
     title: '产地',
     dataIndex: 'producePlace',
     key: 'producePlace',
-    className: 'left'
+    width: 80
 }, {
     title: '采购内装数',
     dataIndex: 'purchaseInsideNumber',
     key: 'purchaseInsideNumber',
-    width: 80,
+    width: 80
 }, {
     title: '单位',
     dataIndex: 'unitExplanation',
@@ -141,7 +142,7 @@ export const printColumns = [{
     title: '订货数量',
     dataIndex: 'purchaseNumber',
     key: 'purchaseNumber',
-    width: 70,
+    width: 70
 }, {
     title: '订货价格',
     dataIndex: 'purchasePrice',
@@ -151,6 +152,5 @@ export const printColumns = [{
     title: '订货金额',
     dataIndex: 'totalAmount',
     key: 'totalAmount',
-    width: 100,
-    className: 'right'
+    width: 100
 }];
