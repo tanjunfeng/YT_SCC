@@ -319,8 +319,8 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
                                             defaultValue={
-                                                (spNo || initValue.spId)
-                                                && `${spNo || initValue.spId} - ${companyName || initValue.spName}`}
+                                                (spNo || initValue.spNo)
+                                                && `${spNo || initValue.spNo} - ${companyName || initValue.spName}`}
                                             style={{ zIndex: 9 }}
                                             compKey="search-mind-key"
                                             ref={ref => { this.searchMind1 = ref }}
