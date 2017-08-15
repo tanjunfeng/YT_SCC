@@ -1,18 +1,24 @@
-.carousel-management{
-    .ant-btn{
+.carousel-management {
+    .ant-btn {
         margin: 0px 10px 10px 0;
     }
-    &-select{
+    &-select {
         margin-right: 15px;
     }
 }
-.modal-carousel-interval{
+.modal-carousel-interval {
     display: inline-block;
     margin: 0 10px 0 0px;
 }
-.add-carousel-modal{
-    .form-description{
-        margin-left:77px; 
+.add-carousel-modal {
+    .form-description {
+        margin: 5px 0 10px 104px; 
         color: rgba(0,0,0,.5)
+    }
+    .ant-form-explain {
+        margin-left: 80px;
+    }
+    .modal-form-item-num {
+        margin-bottom: 0;
     }
 }
