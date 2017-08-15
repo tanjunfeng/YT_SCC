@@ -264,26 +264,31 @@ class ChangeMessage extends PureComponent {
                     </FormItem>
                     {
                         `${this.state.selectLinkType}` === '1' &&
-                        <FormItem className="modal-form-item">
-                            <span className="modal-form-item-title">
-                                <span style={{color: '#f00' }}>*</span>
-                                商品编号
-                            </span>
-                            {getFieldDecorator('goodsId', {
-                                rules: [{
-                                    required: true,
-                                    message: '请输入商品编号'
-                                }],
-                                initialValue: isShowValue ? goodsId : ''
-                            })(
-                                <Input
-                                    placeholder="商品编号"
-                                />
-                            )}
+                        <div>
+                            <FormItem className="modal-form-item modal-form-item-num">
+                                <span className="modal-form-item-title">
+                                    <span style={{color: '#f00' }}>*</span>
+                                    商品编号
+                                </span>
+                                {getFieldDecorator('goodsId', {
+                                    rules: [{
+                                        required: true,
+                                        message: '请输入商品编号'
+                                    }, {
+                                        pattern: /^[^\u4e00-\u9fa5]+$/,
+                                        message: '不能包含中文'
+                                    }],
+                                    initialValue: isShowValue ? goodsId : ''
+                                })(
+                                    <Input
+                                        placeholder="商品编号"
+                                    />
+                                )}
+                            </FormItem>
                             <div className="form-description">
                                 （在商品管理中查看商品编号）
                             </div>
-                        </FormItem>
+                        </div>
                     }
                     {
                         `${this.state.selectLinkType}` === '2' &&

@@ -1430,13 +1430,13 @@ class PoDetail extends PureComponent {
 											onChoosed={this.applySupplierChange}
 											onClear={this.applySupplierClear}
 											renderChoosedInputRaw={(data) => (
-												<div>{data.spId} - {data.companyName}</div>
+												<div>{data.spNo} - {data.companyName}</div>
 											)}
 											pageSize={6}
 											columns={[
 												{
-													title: '供应商ID',
-													dataIndex: 'spId',
+													title: '供应商编号',
+													dataIndex: 'spNo',
 													width: 150,
 												}, {
 													title: '供应商名称',
