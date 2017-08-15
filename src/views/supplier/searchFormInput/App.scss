@@ -1,35 +1,35 @@
 .ant-form {
-    .sc-form{
-        &-item{
+    .sc-form {
+        &-item {
             min-width: 340px;
             margin-right: 16px;
             display: inline-block;
-            &-label{
+            &-label {
                 min-width: 60px;
                 margin-right: 8px;
                 display: inline-block;
             }
-            &-input{
+            &-input {
                 width: 270px;
                 display: inline-block;
             }
-            &-select{
+            &-select {
                 width: 270px;
                 display: inline-block;
             }
-            &-input-license{
+            &-input-license {
                 width: 234px;
             }
-            &-date-picker{
+            &-date-picker {
                 width: 246px;
             }
         }
-        &-button-group{
+        &-button-group {
             display: inline-block;
         }
     }
 }
-.gyl-form-item-date-picker{
+.gyl-form-item-date-picker {
     margin-left: 13px;
     width: 234px!important;
 }

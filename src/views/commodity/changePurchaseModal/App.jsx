@@ -401,6 +401,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-label`}>送货仓：</span>
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
+                                            className={`${prefixCls}-data-disable`}
                                             defaultValue={
                                                 (warehouseCode || initValue.distributeWarehouseId)
                                                 && `${warehouseCode || initValue.distributeWarehouseId} - ${warehouseName || initValue.distributeWarehouseName}`}

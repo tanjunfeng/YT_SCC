@@ -56,14 +56,14 @@ class EditorPages extends Component {
             id,
             shelfStatus: 0
         })
-            .then((res) => (
-                this.setState({
-                    content: res.description,
-                    defaultFileList: []
-                })
-            )).catch(() => {
+        .then((res) => (
+            this.setState({
+                content: res.description,
+                defaultFileList: []
+            })
+        )).catch(() => {
 
-            });
+        });
     }
 
     componentWillUnmount() {
@@ -80,9 +80,9 @@ class EditorPages extends Component {
     /**
      * 复制图片链接（为空时）
      */
-    onCopyErr() {
-        message.error('未检测到上传图片，请先上传！')
-    }
+    // onCopyErr() {
+    //     message.error('未检测到上传图片，请先上传！')
+    // }
 
     handleSubmit() {
         const data = this.props.editorList;
@@ -119,7 +119,15 @@ class EditorPages extends Component {
             }
             return file;
         });
-        this.setState({ fileList });
+        // if (fileList.length > 0) {
+        //     console.log(fileList[fileList.length - 1])
+        //     this.setState({ fileList: fileList[fileList.length - 1] });
+        // } else {
+        //     this.setState({ fileList });
+        // }
+        this.setState({
+            fileList: fileList ? fileList.splice(-1) : []
+        });
     }
 
     render() {
@@ -136,47 +144,44 @@ class EditorPages extends Component {
             ? fileList[0].response
             : null;
         const imgData = responseData
-            ? `${responseData.data.imageDomain}${responseData.data.suffixUrl}`
+            ? `${responseData.data.imageDomain}/${responseData.data.suffixUrl}`
             : '';
         return (
             <div className={`${prefixCls} editorPages`}>
                 <div className={`${prefixCls} editorPages-form`}>
-                    <FormItem label="提示:" className={`${prefixCls} ${prefixCls}-css-ts editorPages-form`} />
-                    <div className={`${prefixCls}-lines`}>
+                    <FormItem
+                        label="提示:"
+                        className={`${prefixCls} ${prefixCls}-css-ts editorPages-form`}
+                    />
+                    <div
+                        className={`${prefixCls}-lines`}
+                        style={{display: 'flex',
+                            lineHeight: '28px'}}
+                    >
                         <Upload
                             {...names}
                             fileList={this.state.fileList}
-                            disabled={fileList.length > 0 ? true : false}
                         >
-                            {
-                                fileList.length > 0
-                                ? <Button type="danger" disabled>
-                                    <Icon />图片已经存在,请清空
-                                  </Button>
-                                : <Button>
-                                    <Icon type="upload" />上传图片
-                                  </Button>
-                            }
+                            <Button type="primary">
+                                <Icon type="upload" />上传图片
+                            </Button>
                         </Upload>
+                        <Input
+                            value={imgData || ''}
+                            style={{ width: 500, height: 28, marginLeft: 10 }}
+                        />
                         <Button
                             type="primary"
                             className={`${prefixCls}-btn`}
                         >
                             <CopyToClipboard
+                                /* onCopy={fileList.length > 0 ? this.onCopy : this.onCopyErr} */
                                 text={imgData}
-                                onCopy={fileList.length > 0 ? this.onCopy : this.onCopyErr}
+                                onCopy={this.onCopy}
                             >
                                 <span>点击复制上传图片链接</span>
                             </CopyToClipboard>
                         </Button>
-                    </div>
-                    <div
-                        style={{ paddingTop: 10, paddingBottom: 10, display: 'flex' }}
-                    >
-                        <Input 
-                            value={imgData || ''}
-                            style={{ width: 500, height: 28 }}
-                        />
                     </div>
                     <CKEditor
                         activeClass="p10"
