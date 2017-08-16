@@ -160,7 +160,10 @@ class BannerItem extends Component {
                                         <span>商品编号：</span>
                                         {getFieldDecorator('productNo', {
                                             rules: [{
-                                                max: 20, message: '最大长度20个汉字'
+                                                required: true,
+                                                message: '请输入商品编号'
+                                            }, {
+                                                max: 20, message: '最大长度20位'
                                             }, {
                                                 pattern: /^[^\u4e00-\u9fa5]+$/,
                                                 message: '不能包含中文'

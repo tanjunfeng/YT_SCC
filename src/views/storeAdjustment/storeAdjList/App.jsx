@@ -88,7 +88,6 @@ class StoreAdjList extends Component {
      * 按条件搜索
      */
     handleSearch = (data) => {
-        console.log(data);
         this.props.stockAdjust({
             pageSize: PAGE_SIZE,
             pageNum: this.current,
@@ -114,7 +113,6 @@ class StoreAdjList extends Component {
         if (this.props.stockAdjStore.length === 0) {
             return null;
         }
-        console.log(this.props.stockAdjStore);
         return (
             <div className="onsale">
                 <div className="manage-form">

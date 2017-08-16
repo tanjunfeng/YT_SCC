@@ -16,7 +16,6 @@ class ReactCkeditor extends Component {
 
     
     componentDidMount() {
-        console.log(CKEDITOR.replace);
         CKEDITOR.replace("editor");
         // let configuration = {
         //     toolbar: "Basic"

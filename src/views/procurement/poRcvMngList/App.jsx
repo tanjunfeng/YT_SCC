@@ -69,12 +69,12 @@ class PoRcvMngList extends PureComponent {
         this.queryRcvMngPoList =:: this.queryRcvMngPoList;
         this.searchParams = {};
         this.state = {
-            locDisabled: true,  //地点是否可编辑
             spNo: '',   // 供应商编码
             spId: '',   // 供应商ID
             spAdrNo: '',    // 供应商地点编码
             isSupplyAdrDisabled: true, // 供应商地点禁用
             locDisabled: true,  // 地点禁用
+            locationData: {},
             adrTypeCode: '',    // 地点编码
             receivedTypeCode: ''  // 收货单状态编码
         };
@@ -303,8 +303,7 @@ class PoRcvMngList extends PureComponent {
         //重置form
         this.props.form.resetFields();
         this.handleSupplyClear();
-        this.handleAdressClear();
-        this.handleReceiveAdressClear();
+        this.handleAddressClear();
     }
 
     // 获取供应商编号
@@ -313,44 +312,81 @@ class PoRcvMngList extends PureComponent {
             spNo: record.spNo,
             spId: record.spId,
             isSupplyAdrDisabled: false
-        })
+        });
+        this.handleSupplierAddressClear();
     }
 
     // 供应商值清单-清除
     handleSupplyClear = () => {
-        this.handleAdressClear();
         this.setState({
             spNo: '',
             spId: '',
             isSupplyAdrDisabled: true
         });
+        this.supplySearchMind.reset();
+        this.handleSupplierAddressClear();
     }
 
     /**
      * 获取供应商地点编号
      */
-    handleAdressChoose = ({ record }) => {
+    handleSupplierAddressChoose = ({ record }) => {
         this.setState({ spAdrNo: record.providerNo });
     }
 
     /**
      * 清空供应商地点编号
      */
-    handleAdressClear = () => {
+    handleSupplierAddressClear = () => {
         this.setState({ spAdrNo: '' });
+        this.supplyAddressSearchMind.reset();
     }
 
     /**
-     * 获取收货地点编号
+     * 地点选择
+     * @return {Promise}
      */
-    handleReceiveAdressChoose = ({ record }) => {
-        this.setState({ adrTypeCode: record.warehouseCode });
+    handleGetAddressMap = (param) => {
+        const { locTypeCode } = this.props.form.getFieldsValue(['locTypeCode'])
+        const libraryCode = '0';
+        const storeCode = '1';
+        let locationTypeParam = '';
+        if (locTypeCode === libraryCode) {
+            locationTypeParam = 'getWarehouseInfo1';
+            this.setState({
+                locationData: {
+                    code: 'warehouseCode',
+                    name: 'warehouseName'
+                }
+            })
+        }
+        if (locTypeCode === storeCode) {
+            locationTypeParam = 'getStoreInfo';
+            this.setState({
+                locationData: {
+                    code: 'id',
+                    name: 'name'
+                }
+            })
+        }
+        return this.props.pubFetchValueList({
+            pageSize: PAGE_SIZE,
+            param: param.value
+        }, locationTypeParam);
     }
 
     /**
-     * 清空收货地点编号
+     * 获取地点编号
      */
-    handleReceiveAdressClear = () => {
+    handleAddressChoose = ({ record }) => {
+        const encoded = record[this.state.locationData.code];
+        this.setState({ adrTypeCode: encoded });
+    }
+
+    /**
+     * 清空地点编号
+     */
+    handleAddressClear = () => {
         this.setState({
             adrTypeCode: '',
             locDisabled: true
@@ -405,7 +441,6 @@ class PoRcvMngList extends PureComponent {
 
         const { data, total, pageNum, pageSize } = this.props.poRcvMngList;
         let ecId = this.props.data.user.employeeCompanyId;
-        let spId = this.state.spId;
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -522,10 +557,10 @@ class PoRcvMngList extends PureComponent {
                                                 pageNum: params.pagination.current || 1,
                                                 pageSize: params.pagination.pageSize
                                             }, 'supplierAdrSearchBox')}
-                                            onChoosed={this.handleAdressChoose}
-                                            onClear={this.handleAdressClear}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.providerNo} - {data.providerName}</div>
+                                            onChoosed={this.handleSupplierAddressChoose}
+                                            onClear={this.handleSupplierAddressClear}
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row.providerNo} - {row.providerName}</div>
                                             )}
                                             disabled={this.state.isSupplyAdrDisabled}
                                             pageSize={6}
@@ -589,31 +624,22 @@ class PoRcvMngList extends PureComponent {
                                             compKey="search-mind-key1"
                                             rowKey="id"
                                             ref={ref => { this.poAddress = ref }}
-                                            fetch={(params) => this.props.pubFetchValueList({
-                                                supplierAddressId: this.state.spAdrNo,
-                                                param: params.value,
-                                                pageNum: params.pagination.current || 1,
-                                                pageSize: params.pagination.pageSize
-                                            }, 'getWarehouseInfo1')}
-                                            onChoosed={this.handleReceiveAdressChoose}
-                                            onClear={this.handleReceiveAdressClear}
+                                            fetch={this.handleGetAddressMap}
+                                            onChoosed={this.handleAddressChoose}
+                                            onClear={this.handleAddressClear}
                                             disabled={this.state.locDisabled}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.warehouseCode} - {data.warehouseName}</div>
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row[this.state.locationData.code]} - {row[this.state.locationData.name]}</div>
                                             )}
                                             pageSize={3}
                                             columns={[
                                                 {
-                                                    title: '仓库ID',
-                                                    dataIndex: 'id',
+                                                    title: '编码',
+                                                    dataIndex: this.state.locationData.code,
                                                     width: 150,
                                                 }, {
-                                                    title: '仓库编码',
-                                                    dataIndex: 'warehouseCode',
-                                                    width: 200,
-                                                }, {
-                                                    title: '仓库名称',
-                                                    dataIndex: 'warehouseName',
+                                                    title: '名称',
+                                                    dataIndex: this.state.locationData.name,
                                                     width: 200,
                                                 }
                                             ]}

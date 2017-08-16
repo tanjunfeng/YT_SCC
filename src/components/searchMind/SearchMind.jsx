@@ -357,7 +357,6 @@ class SearchMind extends Component {
     }
 
     /**
-     * Todo
      * @param event
      */
     handleKeyUp(event) {
