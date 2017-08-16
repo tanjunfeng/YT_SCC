@@ -7,7 +7,7 @@
 import { login, fetchRights, user, queryLeftMenus, logout } from '../service';
 import ActionType from './ActionType';
 import { Sider } from '../view-model';
-import { ID } from '../constant';
+import { CODE } from '../constant';
 
 export const receiveUser = (data) => ({
     type: ActionType.RECEIVE_USER,
@@ -31,14 +31,23 @@ const receiveRights = (data) => ({
  */
 export const checkUser = () => (
     new Promise((resolve, reject) => {
-        Promise.all([user(), queryLeftMenus({menuId: ID})]).then(function (result) {
-            const { topMenus, ...datas } = result[0].data;
-            const { data } = result[1];
-            resolve({
-                topMenus: Sider(topMenus),
-                menus: Sider(data),
-                user: datas
-            });
+        user().then((res) => {
+            const { topMenus, ...datas } = res.data;
+            const currentItem = topMenus.find((item) => {
+                return item.authorityCode === CODE;
+            })
+            queryLeftMenus({menuId: currentItem.authorityId}).then((result) => {
+                const { data } = result;
+                resolve({
+                    topMenus: Sider(topMenus),
+                    menus: Sider(data),
+                    user: datas
+                });
+            }).catch((err) => {
+                if (err.data && err.data.code === 401) {
+                    reject(err);
+                }
+            })
         }).catch((err) => {
             if (err.data && err.data.code === 401) {
                 reject(err);
