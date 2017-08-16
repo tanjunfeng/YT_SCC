@@ -49,6 +49,7 @@ class PoSearchForm extends PureComponent {
         this.handleGetSupplierMap =::this.handleGetSupplierMap;
         this.handleGetSupplierLocMap =::this.handleGetSupplierLocMap;
         this.state = {
+            isSupplyAdrDisabled: true, // 供应商地点禁用
             locDisabled: true,
             locationData: {},
         }
@@ -98,35 +99,43 @@ class PoSearchForm extends PureComponent {
     }
 
     // 选择供应商回调
-    chooseSupplier = (dataList) => {
-        this.supplierEncoded = dataList.spNo;
-        return <div>{dataList.spNo} - {dataList.companyName}</div>
+    handleSupplyChoose = (record) => {
+        this.setState({
+            isSupplyAdrDisabled: false
+        });
+        this.supplierEncoded = record.spNo;
+        return <div>{record.spNo} - {record.companyName}</div>
     }
 
     // 清除供应商值
-    handleClearSupplier = () => {
+    handleSupplyClear = () => {
         this.supplier.reset();
         this.supplierEncoded = '';
+        this.setState({
+            isSupplyAdrDisabled: true
+        });
         this.handleClearSupplierAdress();
     }
 
     // 选择供应商地点回调
-    chooseSupplierAdress = (dataList) => {
-        this.supplierAdressId = dataList.spAdrid;
-        return <div>{dataList.providerNo} - {dataList.providerName}</div>
+    handleAdressChoose = (record) => {
+        this.supplierAdressId = record.spAdrid;
+        return <div>{record.providerNo} - {record.providerName}</div>
     }
 
-    // 清除供应商地点值
-    handleClearSupplierAdress = () => {
+    /**
+     * 清空供应商地点编号
+     */
+    handleAdressClear = () => {
         this.supplierLoc.reset();
         this.supplierAdressId = '';
     }
 
     // 选择地点回调
-    chooseAdress = (dataList) => {
-        const encoded = dataList[this.state.locationData.code];
+    chooseAdress = (record) => {
+        const encoded = record[this.state.locationData.code];
         this.adressTypeCode = encoded;
-        return <div>{encoded} - {dataList[this.state.locationData.name]}</div>;
+        return <div>{encoded} - {record[this.state.locationData.name]}</div>;
     }
     // 清除地点值
     handleClearLocation = () => {
@@ -138,9 +147,9 @@ class PoSearchForm extends PureComponent {
     }
 
     // 选择大类回调
-    chooseGoodsType = (dataList) => {
-        this.GoodsTypeId = dataList.id;
-        return <div>{dataList.id} - {dataList.categoryName}</div>;
+    chooseGoodsType = (record) => {
+        this.GoodsTypeId = record.id;
+        return <div>{record.id} - {record.categoryName}</div>;
     }
 
     // 清除大类值
@@ -199,7 +208,7 @@ class PoSearchForm extends PureComponent {
         const { onReset } = this.props;
 
         this.props.form.resetFields();
-        this.handleClearSupplier();
+        this.handleSupplyClear();
         this.handleClearSupplierAdress();
         this.handleClearLocation();
         this.hanldeClearType();
@@ -336,7 +345,6 @@ class PoSearchForm extends PureComponent {
 
                             </Col>
                         </Row>
-
                         <Row gutter={40}>
                             <Col span={8}>
                                 {/* 采购单类型 */}
@@ -401,7 +409,6 @@ class PoSearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                         </Row>
-
                         <Row gutter={40}>
                             <Col span={8}>
                                 {/* 供应商 */}
@@ -411,24 +418,27 @@ class PoSearchForm extends PureComponent {
                                         <SearchMind
                                             compKey="comSupplier"
                                             ref={ref => { this.supplier = ref }}
-                                            onClear={this.handleClearSupplier}
                                             fetch={(param) => this.props.pubFetchValueList({
                                                 condition: param.value,
                                                 pageSize: 5,
                                                 pageNum: 1
                                             }, 'supplierSearchBox')}
-                                            renderChoosedInputRaw={this.chooseSupplier}
+                                            onChoosed={this.handleSupplyChoose}
+                                            onClear={this.handleSupplyClear}
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row.spNo}-{row.companyName}</div>
+                                            )}
                                             rowKey="spId"
                                             pageSize={5}
                                             columns={[
                                                 {
-                                                    title: '编码',
+                                                    title: '供应商编号',
                                                     dataIndex: 'spNo',
-                                                    width: 150,
+                                                    width: 150
                                                 }, {
-                                                    title: '名称',
+                                                    title: '供应商名称',
                                                     dataIndex: 'companyName',
-                                                    width: 200,
+                                                    width: 200
                                                 }
                                             ]}
                                         />
@@ -443,13 +453,17 @@ class PoSearchForm extends PureComponent {
                                         <SearchMind
                                             compKey="comSupplierLoc"
                                             ref={ref => { this.supplierLoc = ref }}
-                                            onClear={this.handleClearSupplierAdress}
                                             fetch={(param) => this.props.pubFetchValueList({
                                                 condition: param.value,
                                                 pageSize: 5,
                                                 pageNum: 1
                                             }, 'supplierAdrSearchBox')}
-                                            renderChoosedInputRaw={this.chooseSupplierAdress}
+                                            onChoosed={this.handleAdressChoose}
+                                            onClear={this.handleAdressClear}
+                                            renderChoosedInputRaw={(data) => (
+                                                <div>{data.providerNo} - {data.providerName}</div>
+                                            )}
+                                            disabled={this.state.isSupplyAdrDisabled}
                                             rowKey="providerNo"
                                             pageSize={2}
                                             columns={[
