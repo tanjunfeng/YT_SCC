@@ -28,7 +28,7 @@ const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 @connect(
     state => ({
-
+        data: state.toJS().user.data || {}
     }),
     dispatch => bindActionCreators({
         getWarehouseAddressMap,
@@ -49,9 +49,10 @@ class PoSearchForm extends PureComponent {
         this.handleGetSupplierMap =::this.handleGetSupplierMap;
         this.handleGetSupplierLocMap =::this.handleGetSupplierLocMap;
         this.state = {
+            spId: '',   // 供应商ID
             isSupplyAdrDisabled: true, // 供应商地点禁用
             locDisabled: true,
-            locationData: {},
+            locationData: {}
         }
     }
 
@@ -99,12 +100,13 @@ class PoSearchForm extends PureComponent {
     }
 
     // 选择供应商回调
-    handleSupplyChoose = (record) => {
+    handleSupplyChoose = ({ record }) => {
         this.setState({
+            spId: record.spId,
             isSupplyAdrDisabled: false
         });
         this.supplierEncoded = record.spNo;
-        return <div>{record.spNo} - {record.companyName}</div>
+        this.handleSupplierAddressClear();
     }
 
     // 清除供应商值
@@ -112,33 +114,33 @@ class PoSearchForm extends PureComponent {
         this.supplier.reset();
         this.supplierEncoded = '';
         this.setState({
+            spId: '',
             isSupplyAdrDisabled: true
         });
-        this.handleClearSupplierAdress();
+        this.handleSupplierAddressClear();
     }
 
     // 选择供应商地点回调
-    handleAdressChoose = (record) => {
+    handleSupplierAdressChoose = (record) => {
         this.supplierAdressId = record.spAdrid;
-        return <div>{record.providerNo} - {record.providerName}</div>
     }
 
     /**
      * 清空供应商地点编号
      */
-    handleAdressClear = () => {
+    handleSupplierAddressClear = () => {
         this.supplierLoc.reset();
         this.supplierAdressId = '';
     }
 
     // 选择地点回调
-    chooseAdress = (record) => {
+    handleAddressChoose = (record) => {
         const encoded = record[this.state.locationData.code];
         this.adressTypeCode = encoded;
-        return <div>{encoded} - {record[this.state.locationData.name]}</div>;
     }
+
     // 清除地点值
-    handleClearLocation = () => {
+    handleAddressClear = () => {
         this.poAddress.reset();
         this.adressTypeCode = '';
         this.setState({
@@ -147,13 +149,12 @@ class PoSearchForm extends PureComponent {
     }
 
     // 选择大类回调
-    chooseGoodsType = (record) => {
+    handleGoodsTypeChoose = (record) => {
         this.GoodsTypeId = record.id;
-        return <div>{record.id} - {record.categoryName}</div>;
     }
 
     // 清除大类值
-    hanldeClearType = () => {
+    hanldeTypeClear = () => {
         this.bigClass.reset();
         this.GoodsTypeId = '';
     }
@@ -209,9 +210,8 @@ class PoSearchForm extends PureComponent {
 
         this.props.form.resetFields();
         this.handleSupplyClear();
-        this.handleClearSupplierAdress();
-        this.handleClearLocation();
-        this.hanldeClearType();
+        this.handleAddressClear();
+        this.hanldeTypeClear();
 
         if (onReset) {
             onReset();
@@ -288,6 +288,7 @@ class PoSearchForm extends PureComponent {
                 span: 21
             }
         };
+        let ecId = this.props.data.user.employeeCompanyId;
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -323,9 +324,12 @@ class PoSearchForm extends PureComponent {
                                             style={{ zIndex: 101 }}
                                             compKey="comPoAddress"
                                             ref={ref => { this.poAddress = ref }}
-                                            onClear={this.handleClearLocation}
-                                            fetch={(param) => this.handleGetAddressMap(param)}
-                                            renderChoosedInputRaw={this.chooseAdress}
+                                            onClear={this.handleAddressClear}
+                                            fetch={this.handleGetAddressMap}
+                                            onChoosed={this.handleAddressChoose}
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row[this.state.locationData.code]} - {row[this.state.locationData.name]}</div>
+                                            )}
                                             disabled={this.state.locDisabled}
                                             pageSize={5}
                                             columns={[
@@ -342,7 +346,6 @@ class PoSearchForm extends PureComponent {
                                         />
                                     </div>
                                 </FormItem>
-
                             </Col>
                         </Row>
                         <Row gutter={40}>
@@ -386,12 +389,15 @@ class PoSearchForm extends PureComponent {
                                         <SearchMind
                                             compKey="comBigClass"
                                             ref={ref => { this.bigClass = ref }}
-                                            onClear={this.hanldeClearType}
                                             fetch={(param) => this.props.pubFetchValueList({
                                                 param: param.value,
                                                 level: 2
                                             }, 'querycategories')}
-                                            renderChoosedInputRaw={this.chooseGoodsType}
+                                            onChoosed={this.handleGoodsTypeChoose}
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row.id} - {row.categoryName}</div>
+                                            )}
+                                            onClear={this.hanldeTypeClear}
                                             pageSize={5}
                                             columns={[
                                                 {
@@ -454,14 +460,16 @@ class PoSearchForm extends PureComponent {
                                             compKey="comSupplierLoc"
                                             ref={ref => { this.supplierLoc = ref }}
                                             fetch={(param) => this.props.pubFetchValueList({
+                                                orgId: ecId,
+                                                pId: this.state.spId,
                                                 condition: param.value,
                                                 pageSize: 5,
                                                 pageNum: 1
                                             }, 'supplierAdrSearchBox')}
-                                            onChoosed={this.handleAdressChoose}
-                                            onClear={this.handleAdressClear}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.providerNo} - {data.providerName}</div>
+                                            onChoosed={this.handleSupplierAdressChoose}
+                                            onClear={this.handleSupplierAddressClear}
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row.providerNo} - {row.providerName}</div>
                                             )}
                                             disabled={this.state.isSupplyAdrDisabled}
                                             rowKey="providerNo"

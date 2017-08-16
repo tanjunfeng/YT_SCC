@@ -330,10 +330,6 @@ class ProdPurchaseModal extends Component {
                                                     dataIndex: 'spNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '供应商ID',
-                                                    dataIndex: 'spId',
-                                                    width: 200,
-                                                }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
                                                     width: 200,
