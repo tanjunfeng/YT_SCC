@@ -202,7 +202,6 @@ function Common(WrappedComponent) {
             const { isEnabled } = data;
             const { getFieldDecorator } = this.props.form;
             const { current } = this.state;
-            console.log(current)
             return (
                 <div
                     className={classnames(

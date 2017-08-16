@@ -33,7 +33,6 @@ export default class EditableCell extends PureComponent {
         }
     }
     onPressEnter() {
-        console.log("on press enter");
         let { onChange } = this.props;
         let validateResult = this.validate(this.state.value);
         // call 回调函数

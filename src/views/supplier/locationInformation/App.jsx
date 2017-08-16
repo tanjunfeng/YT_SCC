@@ -135,7 +135,7 @@ class BasicInfo extends PureComponent {
                 } = values
                 const submit = {
                     spAdrBasic: {
-                        providerNo: isEdit ? detailSp.id : this.props.supplierId,
+                        providerNo: isEdit ? detailSp.spAdrBasic.providerNo : this.props.supplierId,
                         providerName: this.childName,
                         goodsArrivalCycle,
                         orgId: this.orgId,

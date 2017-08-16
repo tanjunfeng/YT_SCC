@@ -24,14 +24,12 @@ export default class MaterialChooser extends PureComponent {
         let value = e.target.value;
         this.setState({ value });
     }
-    handlePressEnter = (e) => {
-        console.log("pressEnter", e, this.state)
+    handlePressEnter = () => {
     }
     // edit = () => {
     //     this.setState({ editable: true });
     // }
     handleBlur = (e) => {
-        console.log("onblur", e, this.state)
         let materialCd = this.state.value;
         this.props.fetchMaterialByCd({
             materialCd: materialCd
