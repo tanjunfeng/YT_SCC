@@ -12,7 +12,7 @@ let index = 0;
 const LoginLayout = () => {
     if (!index) {
         index++;
-        return (confirm({
+        confirm({
             title: '登录过期',
             content: '您的登录已过期，是否重新登录?',
             okText: '是',
@@ -29,7 +29,8 @@ const LoginLayout = () => {
             afterClose() {
                 index = 0;
             }
-        }))
+        })
+        return null;
     }
     return null;
 }
