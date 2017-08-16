@@ -68,9 +68,9 @@ class CauseModal extends PureComponent {
                         remark: causeTextArea
                     }).then(res => {
                         // 列表页单个取消，刷新列表
-                        this.props.getSearchData();
+                        if (this.props.getSearchData) this.props.getSearchData();
                         this.props.modifyCauseModalVisible({ isShow: false });
-                        this.props.fetchOrderDetailInfo({id: causeRecordId});
+                        this.props.fetchOrderDetailInfo({ id: causeRecordId });
                         message.success(res.message);
                     }).catch(err => {
                         message.error(err.message);
@@ -105,7 +105,7 @@ class CauseModal extends PureComponent {
                             <FormItem>
                                 <div>
                                     <span className="order-modal-label">
-                                        <span style={{color: '#f00'}}>*</span>
+                                        <span style={{ color: '#f00' }}>*</span>
                                         取消原因:
                                     </span>
                                     {getFieldDecorator('causeTextArea', {
@@ -117,9 +117,9 @@ class CauseModal extends PureComponent {
                                     })(
                                         <TextArea
                                             autosize={{ minRows: 5, maxRows: 6 }}
-                                            style={{resize: 'none' }}
+                                            style={{ resize: 'none' }}
                                         />
-                                    )}
+                                        )}
                                 </div>
                             </FormItem>
                         </Form>

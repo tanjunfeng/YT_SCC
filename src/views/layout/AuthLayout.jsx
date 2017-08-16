@@ -11,7 +11,7 @@ import { Menu, Dropdown, Layout, Icon } from 'antd';
 import SiderMenu from '../../common/siderMenu/SiderMenu';
 import Breadcrumb from '../../common/breadcrumb/Breadcrumb';
 import AuthRoute from '../../Route';
-import { ID } from '../../constant';
+import { CODE } from '../../constant';
 import { logout } from '../../service';
 import './layout.scss';
 
@@ -37,10 +37,16 @@ class AuthLayout extends PureComponent {
                 </Menu.Item>
             </Menu>
         );
+
+        const { initData} = props;
+        const { topMenus } = initData;
+        this.defaultSelect = topMenus.menu.find((item) => {
+            return item.code === CODE;
+        })
     }
 
     handleClick(e) {
-        if (parseInt(e.key, 10) === ID) {
+        if (parseInt(e.key, 10) === this.defaultSelect.id) {
             return;
         }
         /* eslint-disable */
@@ -78,7 +84,7 @@ class AuthLayout extends PureComponent {
                         <div className="ant-layout-sider-logo">Logo</div>
                         <Menu
                             onClick={this.handleClick}
-                            selectedKeys={[`${ID}`]}
+                            selectedKeys={[`${this.defaultSelect.id}`]}
                             mode="horizontal"
                         >
                             {
