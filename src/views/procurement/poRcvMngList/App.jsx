@@ -559,8 +559,8 @@ class PoRcvMngList extends PureComponent {
                                             }, 'supplierAdrSearchBox')}
                                             onChoosed={this.handleSupplierAddressChoose}
                                             onClear={this.handleSupplierAddressClear}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.providerNo} - {data.providerName}</div>
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row.providerNo} - {row.providerName}</div>
                                             )}
                                             disabled={this.state.isSupplyAdrDisabled}
                                             pageSize={6}
@@ -628,8 +628,8 @@ class PoRcvMngList extends PureComponent {
                                             onChoosed={this.handleAddressChoose}
                                             onClear={this.handleAddressClear}
                                             disabled={this.state.locDisabled}
-                                            renderChoosedInputRaw={(record) => (
-                                                <div>{record[this.state.locationData.code]} - {record[this.state.locationData.name]}</div>
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row[this.state.locationData.code]} - {row[this.state.locationData.name]}</div>
                                             )}
                                             pageSize={3}
                                             columns={[
