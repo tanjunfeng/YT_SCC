@@ -327,8 +327,8 @@ class PoSearchForm extends PureComponent {
                                             onClear={this.handleAddressClear}
                                             fetch={this.handleGetAddressMap}
                                             onChoosed={this.handleAddressChoose}
-                                            renderChoosedInputRaw={(record) => (
-                                                <div>{record[this.state.locationData.code]} - {record[this.state.locationData.name]}</div>
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row[this.state.locationData.code]} - {row[this.state.locationData.name]}</div>
                                             )}
                                             disabled={this.state.locDisabled}
                                             pageSize={5}
@@ -394,8 +394,8 @@ class PoSearchForm extends PureComponent {
                                                 level: 2
                                             }, 'querycategories')}
                                             onChoosed={this.handleGoodsTypeChoose}
-                                            renderChoosedInputRaw={(record) => (
-                                                <div>{record.id} - {record.categoryName}</div>
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row.id} - {row.categoryName}</div>
                                             )}
                                             onClear={this.hanldeTypeClear}
                                             pageSize={5}
@@ -468,8 +468,8 @@ class PoSearchForm extends PureComponent {
                                             }, 'supplierAdrSearchBox')}
                                             onChoosed={this.handleSupplierAdressChoose}
                                             onClear={this.handleSupplierAddressClear}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.providerNo} - {data.providerName}</div>
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row.providerNo} - {row.providerName}</div>
                                             )}
                                             disabled={this.state.isSupplyAdrDisabled}
                                             rowKey="providerNo"
