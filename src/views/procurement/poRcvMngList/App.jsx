@@ -482,18 +482,15 @@ class PoRcvMngList extends PureComponent {
                                             addonBefore=""
                                             onChoosed={this.handleSupplyChoose}
                                             onClear={this.handleSupplyClear}
-                                            renderChoosedInputRaw={(companyList) => (
-                                                <div
-                                                    ref={supplier => {
-                                                        this.supplier = supplier
-                                                    }}>{companyList.spId}-{companyList.companyName}</div>
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row.spNo}-{row.companyName}</div>
                                             )}
                                             rowKey="spId"
                                             pageSize={5}
                                             columns={[
                                                 {
-                                                    title: '供应商ID',
-                                                    dataIndex: 'spId',
+                                                    title: '供应商编号',
+                                                    dataIndex: 'spNo',
                                                     width: 150
                                                 }, {
                                                     title: '供应商名称',
@@ -593,7 +590,10 @@ class PoRcvMngList extends PureComponent {
                                             rowKey="id"
                                             ref={ref => { this.poAddress = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value
+                                                supplierAddressId: this.state.spAdrNo,
+                                                param: params.value,
+                                                pageNum: params.pagination.current || 1,
+                                                pageSize: params.pagination.pageSize
                                             }, 'getWarehouseInfo1')}
                                             onChoosed={this.handleReceiveAdressChoose}
                                             onClear={this.handleReceiveAdressClear}
