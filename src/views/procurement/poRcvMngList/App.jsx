@@ -303,8 +303,7 @@ class PoRcvMngList extends PureComponent {
         //重置form
         this.props.form.resetFields();
         this.handleSupplyClear();
-        this.handleAdressClear();
-        this.handleReceiveAdressClear();
+        this.handleAddressClear();
     }
 
     // 获取供应商编号
@@ -313,31 +312,34 @@ class PoRcvMngList extends PureComponent {
             spNo: record.spNo,
             spId: record.spId,
             isSupplyAdrDisabled: false
-        })
+        });
+        this.handleSupplierAddressClear();
     }
 
     // 供应商值清单-清除
     handleSupplyClear = () => {
-        this.handleAdressClear();
         this.setState({
             spNo: '',
             spId: '',
             isSupplyAdrDisabled: true
         });
+        this.supplySearchMind.reset();
+        this.handleSupplierAddressClear();
     }
 
     /**
      * 获取供应商地点编号
      */
-    handleAdressChoose = ({ record }) => {
+    handleSupplierAddressChoose = ({ record }) => {
         this.setState({ spAdrNo: record.providerNo });
     }
 
     /**
      * 清空供应商地点编号
      */
-    handleAdressClear = () => {
+    handleSupplierAddressClear = () => {
         this.setState({ spAdrNo: '' });
+        this.supplyAddressSearchMind.reset();
     }
 
     /**
@@ -374,16 +376,17 @@ class PoRcvMngList extends PureComponent {
     }
 
     /**
-     * 获取收货地点编号
+     * 获取地点编号
      */
-    handleReceiveAdressChoose = ({ record }) => {
-        this.setState({ adrTypeCode: record.warehouseCode });
+    handleAddressChoose = ({ record }) => {
+        const encoded = record[this.state.locationData.code];
+        this.setState({ adrTypeCode: encoded });
     }
 
     /**
-     * 清空收货地点编号
+     * 清空地点编号
      */
-    handleReceiveAdressClear = () => {
+    handleAddressClear = () => {
         this.setState({
             adrTypeCode: '',
             locDisabled: true
@@ -554,8 +557,8 @@ class PoRcvMngList extends PureComponent {
                                                 pageNum: params.pagination.current || 1,
                                                 pageSize: params.pagination.pageSize
                                             }, 'supplierAdrSearchBox')}
-                                            onChoosed={this.handleAdressChoose}
-                                            onClear={this.handleAdressClear}
+                                            onChoosed={this.handleSupplierAddressChoose}
+                                            onClear={this.handleSupplierAddressClear}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.providerNo} - {data.providerName}</div>
                                             )}
@@ -622,25 +625,21 @@ class PoRcvMngList extends PureComponent {
                                             rowKey="id"
                                             ref={ref => { this.poAddress = ref }}
                                             fetch={this.handleGetAddressMap}
-                                            onChoosed={this.handleReceiveAdressChoose}
-                                            onClear={this.handleReceiveAdressClear}
+                                            onChoosed={this.handleAddressChoose}
+                                            onClear={this.handleAddressClear}
                                             disabled={this.state.locDisabled}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.warehouseCode} - {data.warehouseName}</div>
+                                            renderChoosedInputRaw={(record) => (
+                                                <div>{record[this.state.locationData.code]} - {record[this.state.locationData.name]}</div>
                                             )}
                                             pageSize={3}
                                             columns={[
                                                 {
-                                                    title: '仓库ID',
-                                                    dataIndex: 'id',
+                                                    title: '编码',
+                                                    dataIndex: this.state.locationData.code,
                                                     width: 150,
                                                 }, {
-                                                    title: '仓库编码',
-                                                    dataIndex: 'warehouseCode',
-                                                    width: 200,
-                                                }, {
-                                                    title: '仓库名称',
-                                                    dataIndex: 'warehouseName',
+                                                    title: '名称',
+                                                    dataIndex: this.state.locationData.name,
                                                     width: 200,
                                                 }
                                             ]}
