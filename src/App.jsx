@@ -103,8 +103,8 @@ class App extends PureComponent {
         const { pathname } = this.props.location;
         const { initData } = this.props;
         const code = findCodeByPath(`/${pathname.split('/')[1]}`);
-        const id = findIdByCode(code, initData.menus.menu);
-        if (code && id) {
+        if (code && initData && initData.menus && initData.menus.menu) {
+            const id = findIdByCode(code, initData.menus.menu);
             this.props.fetchRightsAction(id);
         }
     }

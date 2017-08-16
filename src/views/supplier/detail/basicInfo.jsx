@@ -98,7 +98,8 @@ class BasicInfo extends Component {
             saleRegionInfo = {},
             status = 0
         } = detailData;
-        const list = parseString(saleRegionInfo.json);
+        const saleRegion = saleRegionInfo && saleRegionInfo.json ? saleRegionInfo.json : null;
+        const list = parseString(saleRegion);
         return (
             <div className="supplier-detail">
                 <div className="supplier-detail-item">

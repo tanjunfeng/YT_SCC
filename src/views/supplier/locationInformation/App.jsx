@@ -341,7 +341,7 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}><span>供应商地点编号：</span>
-                                        <span>{isEdit ? detailSp.id : this.props.supplierId}</span>
+                                        <span>{isEdit ? spAdrBasic.providerNo : this.props.supplierId}</span>
                                     </Col>
                                     <Col span={8}><span>供应商地点名称：</span>
                                         <span>
