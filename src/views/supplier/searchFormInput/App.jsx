@@ -51,7 +51,6 @@ class SearchForm extends Component {
     * @param {string} dateString 格式化后的日期
     */
     onEnterTimeChange(date) {
-        // console.log(moment.getValue())
         this.setState({
             rengeTime: date,
             settledDate: date ? date._d*1 : null,

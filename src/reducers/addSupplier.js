@@ -8,8 +8,6 @@ import Immutable, { fromJS } from 'immutable';
 import ActionType from '../actions/ActionType';
 
 const findIndex = (arr, id) => {
-    console.log(arr);
-    console.log(id);
     for (let i = 0; i < arr.length; i++) {
         if (parseInt(arr[i].id, 10) === parseInt(id, 10)) {
             return i;

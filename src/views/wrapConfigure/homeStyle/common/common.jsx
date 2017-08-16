@@ -159,8 +159,15 @@ function Common(WrappedComponent) {
             const { fetchAreaList, data } = this.props;
             const { itemAds } = data;
             const status = itemAds[4].status;
+            const ids = [];
+            itemAds.map((itemAds, index) => {
+                if (index < 5) {
+                    ids.push(itemAds.id)
+                }
+                return null;
+            })
             batchUpdateQuickNavigation({
-                ids: [1, 2, 3, 4, 5],
+                ids,
                 status: status === 1 ? 0 : 1
             }).then(() => {
                 fetchAreaList()
@@ -171,8 +178,15 @@ function Common(WrappedComponent) {
             const { fetchAreaList, data } = this.props;
             const { itemAds } = data;
             const status = itemAds[5].status;
+            const ids = [];
+            itemAds.map((itemAds, index) => {
+                if (index >= 5) {
+                    ids.push(itemAds.id)
+                }
+                return null;
+            })
             batchUpdateQuickNavigation({
-                ids: [6, 7, 8, 9, 10],
+                ids,
                 status: status === 1 ? 0 : 1
             }).then(() => {
                 fetchAreaList()
@@ -202,7 +216,6 @@ function Common(WrappedComponent) {
             const { isEnabled } = data;
             const { getFieldDecorator } = this.props.form;
             const { current } = this.state;
-            console.log(current)
             return (
                 <div
                     className={classnames(
@@ -373,7 +386,10 @@ function Common(WrappedComponent) {
                                             <span>商品编号：</span>
                                             {getFieldDecorator('productNo', {
                                                 rules: [{
-                                                    max: 20, message: '最大长度20个汉字'
+                                                    required: true,
+                                                    message: '请输入商品编号'
+                                                }, {
+                                                    max: 20, message: '最大长度20位'
                                                 }, {
                                                     pattern: /^[^\u4e00-\u9fa5]+$/,
                                                     message: '不能包含中文'

@@ -21,7 +21,6 @@ class ViewModel {
     }
 
     toJson() {
-        console.log(this.Result);
         return this.Result;
     }
 }
