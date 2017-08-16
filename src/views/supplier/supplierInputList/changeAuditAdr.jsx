@@ -77,6 +77,7 @@ class ChangeAudit extends PureComponent {
     handleAuditOk() {
         const { selected } = this.state;
         const { visibleData } = this.props;
+        console.log(visibleData.spStatus)
         if (selected === -1) {
             message.error('请选择审核结果');
             return;
@@ -139,6 +140,7 @@ class ChangeAudit extends PureComponent {
                         visible={this.props.auditVisible}
                         onOk={this.handleAuditOk}
                         onCancel={this.handleAuditCancel}
+                        maskClosable={false}
                     >
                         <div>
                             <div className="application-modal-tip">注意：审核通过，供应商的所有账号可正常登录商家后台系统。</div>
