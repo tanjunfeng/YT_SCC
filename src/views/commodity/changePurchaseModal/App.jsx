@@ -77,7 +77,7 @@ class ProdModal extends Component {
             supplyChoose2: {},
 
             // 回显值赋值
-            spId: '',
+            spNo: '',
             spAdrId: '',
             branchCompanyId: '',
             checked: props.initValue.supplierType === 1
@@ -319,8 +319,8 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
                                             defaultValue={
-                                                (spNo || initValue.spId)
-                                                && `${spNo || initValue.spId} - ${companyName || initValue.spName}`}
+                                                (spNo || initValue.spNo)
+                                                && `${spNo || initValue.spNo} - ${companyName || initValue.spName}`}
                                             style={{ zIndex: 9 }}
                                             compKey="search-mind-key"
                                             ref={ref => { this.searchMind1 = ref }}
@@ -332,7 +332,7 @@ class ProdModal extends Component {
                                                 pageNum: params.pagination.current || 1
                                             }, 'supplierSearchBox')}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.spId} - {data.companyName}</div>
+                                                <div>{data.spNo} - {data.companyName}</div>
                                             )}
                                             pageSize={3}
                                             columns={[
@@ -401,6 +401,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-label`}>送货仓：</span>
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
+                                            className={`${prefixCls}-data-disable`}
                                             defaultValue={
                                                 (warehouseCode || initValue.distributeWarehouseId)
                                                 && `${warehouseCode || initValue.distributeWarehouseId} - ${warehouseName || initValue.distributeWarehouseName}`}

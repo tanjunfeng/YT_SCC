@@ -41,7 +41,6 @@ class CommodifyDetail extends PureComponent {
 
     render() {
         const { commodityDetail } = this.props;
-        
         return (
             <div className="commodify-detail-message" style={{ marginTop: '15px' }}>
                 <div className="supplier-detail-item">
@@ -251,16 +250,10 @@ class CommodifyDetail extends PureComponent {
                                 <tr>
                                     <td>商品图片:</td>
                                     {
-                                        commodityDetail.mainImage
-                                        && <td>
-                                            <img src={`${commodityDetail.mainImage}`} alt="" />
-                                        </td>
-                                    }
-                                    {
                                         commodityDetail.imgUrls
                                         && commodityDetail.imgUrls.map(item => (
                                             <td key={item}>
-                                                <img src={`${item}`} alt="" />
+                                                <img src={`${item}`} alt="" style={{width: 80, height: 80}} />
                                             </td>
                                         ))
                                     }
@@ -270,7 +263,21 @@ class CommodifyDetail extends PureComponent {
                     </div>
                 </div>
                 {
-                    commodityDetail.keywords
+                    commodityDetail.html
+                    && <div className="supplier-detail-item">
+                        <div className="detail-message-header">
+                            <Icon type="exception" className="detail-message-header-icon" />
+                            <span>商品详情</span>
+                        </div>
+                        <div className="detail-message-body detail-message-body-html" dangerouslySetInnerHTML={{__html: commodityDetail.html.replace(/(↵)/ig, function($0, $1){
+                            if ($1) {
+                                return '<br/>'
+                            }
+                        })}} />
+                    </div>
+                }
+                {
+                    commodityDetail.keyWords
                     && <div className="supplier-detail-item">
                         <div className="detail-message-header">
                             <Icon type="link" className="detail-message-header-icon" />
@@ -280,7 +287,12 @@ class CommodifyDetail extends PureComponent {
                             <ul className="detail-message-list">
                                 <li className="detail-message-item">
                                     <span>关键字：</span>
-                                    <span>{commodityDetail.keywords}</span>
+                                    {
+                                        commodityDetail.keyWords
+                                        && commodityDetail.keyWords.map(item => (
+                                            <span key={item} style={{marginRight: 15}}>{`${item}`}</span>
+                                        ))
+                                    }
                                 </li>
                             </ul>
                         </div>

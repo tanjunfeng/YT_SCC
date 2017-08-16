@@ -61,10 +61,6 @@ class BankInfo extends PureComponent {
         const { supplierBasicInfo = {} } = data;
         Tools.checkAddress(this.companyAddress, 'companyAddress', this);
         const upload = this.nodebankFile.getValue();
-        // if (!upload.files.length) {
-        //     Tip(true, '请上传银行开户许可证电子版');
-        //     return;
-        // }
         form.validateFields((err, values) => {
             const { firstValue, secondValue, thirdValue } = this.companyAddress;
             if (!err) {
