@@ -96,7 +96,6 @@ export const fetchAreaList = (data) => dispatch => (
     new Promise((resolve, reject) => {
         Promise.all([areaList(data), queryQuickNavigationList()])
         .then((result) => {
-            // TODO接口会调整，暂时在这里处理
             const all = result[0].data;
             const quick = result[1].data;
             all.map((item, index) => {
