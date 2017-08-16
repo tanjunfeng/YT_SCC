@@ -151,8 +151,6 @@ class DistributionInformation extends PureComponent {
                         // ToDo：带数据发请求，提交表单
 
                         // 日期（时间戳）
-                        // console.log( this.state.deliveryDate)
-                        // console.log( this.state.willArrivalDate)
                         message.success('保存成功！');
                     }
                 })

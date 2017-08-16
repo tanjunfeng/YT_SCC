@@ -117,7 +117,6 @@ class SearchForm extends Component {
     handleGetValue() {
         const { validateFields } = this.props.form;
         const { match } = this.props;
-        // console.log(this.state.supplyChoose2)
         validateFields((err, values) => {
             const status = values.initiateModeOptions === '-1'
                 ? null
@@ -125,9 +124,6 @@ class SearchForm extends Component {
             const supplierType = values.mainSupplierOptions === '-1'
                 ? null
                 : values.mainSupplierOptions;
-            // console.log(this.state.supplyChoose)
-            // console.log(this.state.supplyChoose1)
-            // console.log(this.state.supplyChoose2)
             this.props.onSearch(Utils.removeInvalid({
                 spId: this.state.supplyChoose.spId,
                 spAdrId: this.state.supplyChoose1.spAdrid,

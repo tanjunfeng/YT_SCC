@@ -64,8 +64,7 @@ class AuthLayout extends PureComponent {
                         location.href = config.loginLink;
                         /* eslint-enable */
                     })
-                    .catch(err => {
-                        console.log(err);
+                    .catch(() => {
                     })
                 break;
             default:

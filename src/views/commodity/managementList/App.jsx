@@ -71,12 +71,12 @@ class ManagementList extends PureComponent {
         });
     }
 
-    shouldComponentUpdate() {
-        if (Object.values(this.props.CommodityListData).length === 0) {
-            return false;
-        }
-        return true;
-    }
+    // shouldComponentUpdate() {
+    //     if (Object.values(this.props.CommodityListData).length === 0) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
 
     // 复制链接
     onCopy = () => {
@@ -181,7 +181,6 @@ class ManagementList extends PureComponent {
 
     // 判断商品状态是否正确，不正确则把商品编号存起来，用于提示用户取消选中
     // selectedDataStateIsTrue = (status) => {
-    //     console.log(this.state.selectedListData);
     //     let goodsNumber = [];
     //     this.state.selectedListData.forEach((item) => {
     //         if (item.supplyChainStatus !== status) {

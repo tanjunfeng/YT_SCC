@@ -1,6 +1,6 @@
 /**
  * @file App.jsx
- * @author shijh
+ * @author shijh, denglb
  *
  * 在售商品列表
  */

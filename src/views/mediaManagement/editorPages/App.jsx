@@ -120,7 +120,6 @@ class EditorPages extends Component {
             return file;
         });
         // if (fileList.length > 0) {
-        //     console.log(fileList[fileList.length - 1])
         //     this.setState({ fileList: fileList[fileList.length - 1] });
         // } else {
         //     this.setState({ fileList });

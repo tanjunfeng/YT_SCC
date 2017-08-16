@@ -15,7 +15,6 @@ class Btn extends Component {
         super(props);
     }
     render() {
-        console.log(123123);
         return (
             <Button {...this.props} />
         );

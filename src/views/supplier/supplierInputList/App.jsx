@@ -89,7 +89,6 @@ class SupplierInputList extends PureComponent {
      * 加载刷新列表
      */
     componentDidMount() {
-        // console.log(this.props.queryManageList)
         // TODO 默认加条件
         this.props.fetchQueryManageList({
             pageNum: this.current,
@@ -155,7 +154,6 @@ class SupplierInputList extends PureComponent {
         this.searchForm = data;
         if (bool) {
             // 主数据
-            // console.log('主数据')
             this.props.fetchQueryManageList({
                 pageNum: 1,
                 pageSize: PAGE_SIZE,
@@ -163,7 +161,6 @@ class SupplierInputList extends PureComponent {
             });
         } else {
             // SCM数据
-            // console.log('SCM数据')
             this.props.fetchQueryManageList({
                 pageNum: 1,
                 pageSize: PAGE_SIZE,

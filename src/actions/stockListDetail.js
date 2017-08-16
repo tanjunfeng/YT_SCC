@@ -17,7 +17,6 @@ export default () => dispatch => (
     new Promise((resolve, reject) => {
         queryAdjustDetail()
             .then(res => {
-                console.log(res);
                 dispatch(adjustDetail(res));
             })
             .catch(err => {

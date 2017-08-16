@@ -247,7 +247,6 @@ class PoSearchForm extends PureComponent {
 
     handleGetSupplierMap = ({ value, pagination }) => {
         // //子公司ID
-        // let companyId = null;  //TODO 从session获取子公司ID？
         let pageNum = pagination.current || 1;
         return this.props.getSupplierMap({
             value, companyId, pageNum
@@ -261,8 +260,6 @@ class PoSearchForm extends PureComponent {
             supplierCd = selectedSupplierRawData.code;
         }
         // // 子公司ID
-        // let companyId = null;  //TODO 从session获取子公司ID？
-        // let pageNum = pagination.current || 1;
         // // 如果供应商地点为空，返回空promise
         if (!supplierCd) {
             return new Promise(function (resolve, reject) {
