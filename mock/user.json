@@ -1,105 +1,17 @@
 {
-    "timestamp": 1497419526000,
+    "timestamp": 1502865291179,
     "code": 200,
-    "message": null,
+    "message": {},
+    "exception": null,
     "data": {
-        "id": 5,
-        "userName": "zhaoliu",
-        "locked": false,
-        "fullName": "赵六2",
-        "position": null,
-        "mobile": "18523152553",
-        "email": null,
-        "createTime": null,
-        "updateTime": null,
-        "roleIds": [
-            2,
-            3,
-            4
-        ],
-        "menus": [
-            {
-                "id": 6,
-                "permission": "sysconfig:*",
-                "name": "系统配置",
-                "type": "menu",
-                "parentId": 0,
-                "parentIds": null,
-                "available": false,
-                "createTime": 1497017958000,
-                "updateTime": 1497017960000,
-                "subMenus": [
-                    {
-                        "id": 1,
-                        "permission": "user:*",
-                        "name": "用户管理",
-                        "type": "menu",
-                        "parentId": 6,
-                        "parentIds": null,
-                        "available": false,
-                        "createTime": 1496991501000,
-                        "updateTime": 1496991505000,
-                        "subMenus": null
-                    },
-                    {
-                        "id": 7,
-                        "permission": "imageconfig:*",
-                        "name": "图片配置",
-                        "type": "menu",
-                        "parentId": 6,
-                        "parentIds": null,
-                        "available": false,
-                        "createTime": 1497018053000,
-                        "updateTime": 1497018055000,
-                        "subMenus": null
-                    }
-                ]
-            },
-            {
-                "permission": "spgl",
-                "name": "商品管理",
-                "subMenus": [
-                    {
-                        "permission": "onSaleGoodsList",
-                        "name": "在售商品列表"
-                    },
-                    {
-                        "permission": "forSaleGoodsList",
-                        "name": "待售商品管理"
-                    },
-                    {
-                        "permission": "goodsParameterManagement",
-                        "name": "商品参数管理"
-                    },
-                    {
-                        "permission": "goodsClassification",
-                        "name": "商品分类列表"
-                    }
-                ]
-            },
-            {
-                "permission": "gysgl",
-                "name": "供应商管理",
-                "subMenus": [
-                    {
-                        "permission": "supplierManagementList",
-                        "name": "供应商管理列表"
-                    },
-                    {
-                        "permission": "suppliersApplicationList",
-                        "name": "供应商入驻申请列表"
-                    },
-                    {
-                        "permission": "supplierModifyApplication",
-                        "name": "供应商修改资料申请"
-                    },
-                    {
-                        "permission": "supplierAreaManagement",
-                        "name": "供应商配送区域管理"
-                    }
-                ]
-            }
-        ]
+        "userId": 12222,
+        "employeeLogin": "gyltest",
+        "employeeName": "供应链",
+        "employeePhonenumber": "18380591859",
+        "employeeCompanyId": 100028,
+        "companyName": "",
+        "companyType": 1,
+        "topMenus": []
     },
     "success": true
 }
