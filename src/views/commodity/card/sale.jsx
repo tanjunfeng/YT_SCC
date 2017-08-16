@@ -69,12 +69,9 @@ class SaleCard extends Component {
      * @param {*} checkedValues 复选框选中项的值
      */
     handleOnchange(checkedValues) {
-        // console.log('checked = ', checkedValues);
-        // console.log(this.props.index)
         this.setState({ index: this.props.index });
         this.setState({ value: checkedValues });
         // checkedValues.map(value => {
-        //     console.log(value);
         // });
     }
 

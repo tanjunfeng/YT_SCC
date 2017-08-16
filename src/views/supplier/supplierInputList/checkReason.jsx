@@ -178,7 +178,6 @@ class CheckReason extends PureComponent {
         super(props);
 
         this.handleSelectChange = ::this.handleSelectChange;
-        this.handleTextChange = ::this.handleTextChange;
         this.handleAuditOk = ::this.handleAuditOk;
         this.handleAuditCancel = ::this.handleAuditCancel;
 
@@ -269,19 +268,6 @@ class CheckReason extends PureComponent {
         })
     }
 
-    /**
-     * 表单改变事件
-     *
-     * @param {*} 值数据
-     */
-    handleTextChange() {
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-            }
-        });
-    }
-
     render() {
         const columns = [{
             title: '项目',
@@ -345,7 +331,6 @@ class CheckReason extends PureComponent {
                                             rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
                                         })(
                                             <Input
-                                                onChange={this.handleTextChange}
                                                 type="textarea"
                                                 placeholder="请输入不通过原因"
                                                 className="application-modal-textarea"

@@ -52,6 +52,4 @@ var webpackConfig = makeWebpack({
     }
 });
 
-console.log(webpackConfig);
-
 module.exports = webpackConfig;

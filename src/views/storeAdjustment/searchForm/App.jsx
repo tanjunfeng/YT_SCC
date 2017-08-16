@@ -113,7 +113,6 @@ class SearchForm extends Component {
             inTime: null
 
         });
-        console.log(this.state);
     }
 
 

@@ -40,12 +40,10 @@ class ShowForm extends Component {
             inTime: this.state.inTime
         };
         this.searchData = Utils.removeInvalid(searchData);
-        // console.log(searchData)
     }
 
     render() {
         const state = this.state;
-        // console.log(this.props.innitalvalue)
         const {
             brandName,
             firstLevelCategoryName,

@@ -295,7 +295,6 @@ class PoRcvList extends PureComponent {
     handleGetAddressMap = ({ value, pagination }) => {
         // 地点类型
         let { locTypeCd } = this.props.form.getFieldsValue(["locTypeCd"])
-        console.log("selectedLocTypeCd", locTypeCd);
         // 根据选择的地点类型获取对应地点的值清单
         if (locTypeCd === locTypeCodes.warehouse) {
             // 地点类型为仓库

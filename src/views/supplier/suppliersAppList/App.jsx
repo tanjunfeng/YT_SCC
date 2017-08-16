@@ -105,12 +105,9 @@ class SuppliersAppList extends PureComponent {
      * 搜索
      */
     handleFormSearch(data, bool) {
-        // console.log(data)
         this.searchForm = data;
         if (bool) {
             // 主数据
-            // console.log('主数据')
-            // console.log(this.current)
             this.props.getSupplierSettledList({
                 pageNum: 1,
                 pageSize: PAGE_SIZE,
@@ -118,8 +115,6 @@ class SuppliersAppList extends PureComponent {
             });
         } else {
             // SCM数据
-            // console.log('SCM数据')
-            // console.log(this.current)
             this.props.getSupplierSettledList({
                 pageNum: 1,
                 pageSize: PAGE_SIZE,

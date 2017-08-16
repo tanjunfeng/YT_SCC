@@ -80,7 +80,6 @@ class ProcurementMaintenance extends PureComponent {
      */
     componentDidMount() {
         const { match } = this.props;
-        // console.log(match)
         this.props.fetchGetProductById({
             productId: match.params.id
         });
@@ -89,7 +88,6 @@ class ProcurementMaintenance extends PureComponent {
 
 
     onChange = (page) => {
-        // console.log(page);
         this.setState({
             current: page,
         });
