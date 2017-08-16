@@ -50,6 +50,7 @@ class ChangeMessage extends PureComponent {
     handleInformationOk() {
         const { visibleData = {} } = this.props;
         const { providerNo } = visibleData;
+        this.handleInformationCancel();
         this.props.history.push(`/suppliersAppList/edit/supplier/${providerNo}`)
     }
 
@@ -57,23 +58,28 @@ class ChangeMessage extends PureComponent {
         const { visibleData = {} } = this.props;
         const { failedReason = '' } = visibleData;
         return (
-            <Modal
-                title="平台已拒绝原因"
-                visible={this.props.informationVisible}
-                onOk={this.handleInformationOk}
-                onCancel={this.handleInformationCancel}
-                okText="再次申请入驻"
-                width="410px"
-                maskClosable={false}
-            >
-                <Form>
-                    <FormItem className="manage-form-item">
-                        <span className="manage-form-label">
-                            {failedReason}
-                        </span>
-                    </FormItem>
-                </Form>
-            </Modal>
+            <div>
+                {
+                    this.props.informationVisible
+                    && <Modal
+                        title="平台已拒绝原因"
+                        visible={this.props.informationVisible}
+                        onOk={this.handleInformationOk}
+                        onCancel={this.handleInformationCancel}
+                        okText="再次申请入驻"
+                        width="410px"
+                        maskClosable={false}
+                    >
+                        <Form>
+                            <FormItem className="manage-form-item">
+                                <span className="manage-form-label">
+                                    {failedReason}
+                                </span>
+                            </FormItem>
+                        </Form>
+                    </Modal>
+                }
+            </div>
         )
     }
 }
