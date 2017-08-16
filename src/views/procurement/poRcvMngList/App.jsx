@@ -69,12 +69,12 @@ class PoRcvMngList extends PureComponent {
         this.queryRcvMngPoList =:: this.queryRcvMngPoList;
         this.searchParams = {};
         this.state = {
-            locDisabled: true,  //地点是否可编辑
             spNo: '',   // 供应商编码
             spId: '',   // 供应商ID
             spAdrNo: '',    // 供应商地点编码
             isSupplyAdrDisabled: true, // 供应商地点禁用
             locDisabled: true,  // 地点禁用
+            locationData: {},
             adrTypeCode: '',    // 地点编码
             receivedTypeCode: ''  // 收货单状态编码
         };
@@ -341,6 +341,39 @@ class PoRcvMngList extends PureComponent {
     }
 
     /**
+     * 地点选择
+     * @return {Promise}
+     */
+    handleGetAddressMap = (param) => {
+        const { locTypeCode } = this.props.form.getFieldsValue(['locTypeCode'])
+        const libraryCode = '0';
+        const storeCode = '1';
+        let locationTypeParam = '';
+        if (locTypeCode === libraryCode) {
+            locationTypeParam = 'getWarehouseInfo1';
+            this.setState({
+                locationData: {
+                    code: 'warehouseCode',
+                    name: 'warehouseName'
+                }
+            })
+        }
+        if (locTypeCode === storeCode) {
+            locationTypeParam = 'getStoreInfo';
+            this.setState({
+                locationData: {
+                    code: 'id',
+                    name: 'name'
+                }
+            })
+        }
+        return this.props.pubFetchValueList({
+            pageSize: PAGE_SIZE,
+            param: param.value
+        }, locationTypeParam);
+    }
+
+    /**
      * 获取收货地点编号
      */
     handleReceiveAdressChoose = ({ record }) => {
@@ -405,7 +438,6 @@ class PoRcvMngList extends PureComponent {
 
         const { data, total, pageNum, pageSize } = this.props.poRcvMngList;
         let ecId = this.props.data.user.employeeCompanyId;
-        let spId = this.state.spId;
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -589,12 +621,7 @@ class PoRcvMngList extends PureComponent {
                                             compKey="search-mind-key1"
                                             rowKey="id"
                                             ref={ref => { this.poAddress = ref }}
-                                            fetch={(params) => this.props.pubFetchValueList({
-                                                supplierAddressId: this.state.spAdrNo,
-                                                param: params.value,
-                                                pageNum: params.pagination.current || 1,
-                                                pageSize: params.pagination.pageSize
-                                            }, 'getWarehouseInfo1')}
+                                            fetch={this.handleGetAddressMap}
                                             onChoosed={this.handleReceiveAdressChoose}
                                             onClear={this.handleReceiveAdressClear}
                                             disabled={this.state.locDisabled}
