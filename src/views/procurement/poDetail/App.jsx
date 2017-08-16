@@ -16,7 +16,7 @@ import EditableCell from './EditableCell';
 import Audit from './auditModal';
 import Utils from '../../../util/util';
 import {
-	Table, Form, Input, Select, Icon, Dropdown, Modal, Row,
+	Table, Form, Input, Select, Icon, Dropdown, Modal, Row, Tooltip,
 	Col, DatePicker, InputNumber, Button, message, Menu, Affix
 } from 'antd';
 import {
@@ -1366,7 +1366,16 @@ class PoDetail extends PureComponent {
 				</div>
 			)
 		} else {
-			// 新增/编辑
+			// 新增/编辑页
+			/**
+			 * 供应商/供应商地点tooltip组件
+			 * @param {string} title 提示的文本
+			 */
+			const tooltipItem = (title) =>(
+				<Tooltip title={title}>
+					<Icon type="question-circle-o"  className="detail-tooltip-icon" />	
+				</Tooltip>
+			) 
 			return (
 				<div className="basic-box">
 					<div className="header">
@@ -1451,6 +1460,7 @@ class PoDetail extends PureComponent {
 												}
 											]}
 										/>
+										{tooltipItem('修改供应商会清空仓库地点和采购商品')}
 									</div>
 								</FormItem>
 							</Col>
@@ -1497,6 +1507,7 @@ class PoDetail extends PureComponent {
 												}
 											]}
 										/>
+										{tooltipItem('修改供应商地点会清空仓库地点和采购商品')}
 									</div>
 								</FormItem>
 							</Col>
