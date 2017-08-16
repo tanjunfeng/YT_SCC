@@ -57,12 +57,13 @@ class BasicInfo extends PureComponent {
         const { detailData = {} } = nextProps;
         const { saleRegionInfo = {} } = detailData;
         const { regions } = this.state;
+        const saleRegion = saleRegionInfo && saleRegionInfo.json ? saleRegionInfo.json : null;
         if (
-            saleRegionInfo.json
-            && saleRegionInfo.json !== regions
+            saleRegion
+            && saleRegion !== regions
         ) {
             this.state = {
-                regions: Tools.decodeArea(JSON.parse(saleRegionInfo.json))
+                regions: Tools.decodeArea(JSON.parse(saleRegion))
             }
         }
     }

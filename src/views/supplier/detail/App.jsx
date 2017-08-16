@@ -100,8 +100,8 @@ class SupplierDetail extends PureComponent {
         const { detailData } = this.props;
         const detailSp = {};
         if (type === 'place' || type === 'edit') {
-            Object.assign(detailData, detailData.supplierInfoDto);
-            Object.assign(detailSp, detailData.supplierAdrInfoDto);
+            Object.assign(detailData, detailData.supplierInfo);
+            Object.assign(detailSp, detailData.supplierAdrInfo);
         }
         const props = {
             data: this.props.detailData,
