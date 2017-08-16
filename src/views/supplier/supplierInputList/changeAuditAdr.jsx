@@ -76,29 +76,35 @@ class ChangeAudit extends PureComponent {
     handleAuditOk() {
         const { selected } = this.state;
         const { visibleData } = this.props;
+        if (selected === '2' && visibleData.spStatus === 3) {
+            message.error('供应商为已拒绝，供应商地点不能审核通过！');
+            return;
+        }
         if (selected === -1) {
             message.error('请选择审核结果');
             return;
         }
-        this.props.form.validateFields((err) => {
-            if (!err) {
-                this.props.supplierAdrSettledAudit({
-                    id: parseInt(visibleData.id),
-                    pass: parseInt(selected, 10) === 1 ? false : true,
-                    ...this.props.form.getFieldsValue()
-                }).then((res) => {
-                    this.props.modifyAuditAdrVisible({isVisible: false});
-                    message.success(res.message)
-                    this.props.fetchQueryManageList({
-                        pageNum: this.current,
-                        pageSize: PAGE_SIZE,
+        if (!(selected === 1 && visibleData.spStatus === 3)) {
+            this.props.form.validateFields((err) => {
+                if (!err) {
+                    this.props.supplierAdrSettledAudit({
+                        id: parseInt(visibleData.id),
+                        pass: parseInt(selected, 10) === 1 ? false : true,
+                        ...this.props.form.getFieldsValue()
+                    }).then((res) => {
+                        this.props.modifyAuditAdrVisible({isVisible: false});
+                        message.success(res.message)
+                        this.props.fetchQueryManageList({
+                            pageNum: this.current,
+                            pageSize: PAGE_SIZE,
+                        })
+                    }).catch(() => {
+                        this.props.modifyAuditAdrVisible({isVisible: false});
+                        message.success('修改审核失败')
                     })
-                }).catch(() => {
-                    this.props.modifyAuditAdrVisible({isVisible: false});
-                    message.success('修改审核失败')
-                })
-            }
-        })
+                }
+            })
+        }
     }
 
     /**
@@ -126,10 +132,11 @@ class ChangeAudit extends PureComponent {
                 {
                     this.props.auditVisible &&
                     <Modal
-                        title="商家地点审核"
+                        title="供应商地点审核"
                         visible={this.props.auditVisible}
                         onOk={this.handleAuditOk}
                         onCancel={this.handleAuditCancel}
+                        maskClosable={false}
                     >
                         <div>
                             <div className="application-modal-tip">注意：审核通过，供应商的所有账号可正常登录商家后台系统。</div>
@@ -152,7 +159,7 @@ class ChangeAudit extends PureComponent {
                                 this.props.auditVisible && this.state.selected === '1' &&
                                 <Form layout="inline">
                                     <FormItem className="application-form-item">
-                                        <span className="application-modal-label"><b className="tjf-css-import">*</b>不通过原因：</span>
+                                        <span className="application-modal-label"><b className="gyssh-css-import">*</b>不通过原因：</span>
                                         {getFieldDecorator('failedReason', {
                                             rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
                                         })(
@@ -168,7 +175,7 @@ class ChangeAudit extends PureComponent {
                             }
                             {
                                 this.props.auditVisible && this.state.selected === '2' &&
-                                <div className="tjf-css-passCheck">
+                                <div className="gyssh-css-passCheck">
                                     <span>确认通过审核？</span>
                                 </div>
                             }

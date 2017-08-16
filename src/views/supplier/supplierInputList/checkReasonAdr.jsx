@@ -211,11 +211,14 @@ class CheckReason extends PureComponent {
      * 弹框确认事件
      */
     handleAuditOk() {
-        const { id } = this.props.visibleReasonDatas;
+        const { id, spStatus } = this.props.visibleReasonDatas;
         const { selected } = this.state;
-        const { visibleData } = this.props;
         const { editBeforeAfters } = this.props;
         const { before = {} } = editBeforeAfters;
+        if (selected === '2' && spStatus === 3) {
+            message.error('供应商为已拒绝，供应商地点不能审核通过！');
+            return;
+        }
         if (selected === -1) {
             message.error('请选择审核结果');
             return;
@@ -283,7 +286,6 @@ class CheckReason extends PureComponent {
             title: '修改后',
             dataIndex: 'after',
         }];
-
         const { getFieldDecorator } = this.props.form;
         const { editBeforeAfters } = this.props;
         const { before = {}, after = {} } = editBeforeAfters;
