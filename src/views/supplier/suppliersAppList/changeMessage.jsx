@@ -51,7 +51,7 @@ class ChangeMessage extends PureComponent {
         const { visibleData = {} } = this.props;
         const { id, providerType } = visibleData;
         this.handleInformationCancel();
-        const editUrl = providerType === '1'
+        const editUrl = parseInt(providerType, 10) === 1
             ? `/suppliersAppList/edit/supplier/${id}`
             : `/suppliersAppList/edit/${id}`
         this.props.history.push(editUrl)
