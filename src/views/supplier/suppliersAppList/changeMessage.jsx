@@ -49,9 +49,12 @@ class ChangeMessage extends PureComponent {
      */
     handleInformationOk() {
         const { visibleData = {} } = this.props;
-        const { id } = visibleData;
+        const { id, providerType } = visibleData;
         this.handleInformationCancel();
-        this.props.history.push(`/suppliersAppList/edit/supplier/${id}`)
+        const editUrl = providerType === '1'
+            ? `/suppliersAppList/edit/supplier/${id}`
+            : `/suppliersAppList/edit/${id}`
+        this.props.history.push(editUrl)
     }
 
     render() {

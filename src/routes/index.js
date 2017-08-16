@@ -267,7 +267,7 @@ const routes = [
                             render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
                         />
                         {/*
-                         * /supplierInputList/edit/supplier/xprov334 编辑供应商地点
+                         * /supplierInputList/edit/supplier/xprov334 编辑供应商
                         */}
                         <Route
                             path="/supplierInputList/edit/:type/:id"
