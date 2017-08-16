@@ -144,7 +144,6 @@ export default function (state = initState, action) {
             return state.set('poRcv', fromJS(action.payload));
 
         case ActionType.RECEIVE_NEW_PURCHASE_ORDER://收货单详情
-            console.log(action.payload)
             return state.set('newPcOdData', fromJS(action.payload));
 
         case ActionType.RECEIVE_PO_RCV_INIT://初始收货单详情

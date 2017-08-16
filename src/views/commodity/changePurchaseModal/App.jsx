@@ -88,7 +88,6 @@ class ProdModal extends Component {
      * 仓库-值清单
      */
     handleHouseChoose = ({ record }) => {
-        // console.log(record)
         this.setState({
             supplyChoose: record,
         });

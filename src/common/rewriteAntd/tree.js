@@ -45,7 +45,6 @@ Tree.prototype.onDrop = function onDrop(e, treeNode) {
 
 Tree.prototype.onDragEnter = function onDragEnter(e, treeNode) {
     const enterGap = this.onDragEnterGap(e, treeNode);
-    console.log(1)
     if (this.dragNode.props.eventKey === treeNode.props.eventKey && enterGap === 0) {
         this.setState({
             dragOverNodeKey: ''

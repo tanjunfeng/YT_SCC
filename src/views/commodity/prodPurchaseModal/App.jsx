@@ -95,7 +95,6 @@ class ProdPurchaseModal extends Component {
                 // 仓库ID
                 distributeWarehouseId: nextProps.getProductByIds.id,
             });
-            // console.log(nextProps.getProductByIds.spAdrId)
             this.ids = {
                 // 供应商id
                 spId: nextProps.getProductByIds.spId,
@@ -125,7 +124,6 @@ class ProdPurchaseModal extends Component {
      * 供应商-值清单
      */
     handleSupplyChoose = ({ record }) => {
-        // console.log(record)
         this.setState({
             supplyChoose1: record,
             supplyChoose2: {},
@@ -187,11 +185,7 @@ class ProdPurchaseModal extends Component {
     handleOk() {
         const { validateFields } = this.props.form;
         const { getProductByIds } = this.props;
-        // console.log(this.state.supplyChoose)
-        // console.log(this.state.supplyChoose1)
-        // console.log(this.state.supplyChoose2)
         validateFields((err, values) => {
-            // console.log(values);
             // TODO post data
             this.props.AddProdPurchase({
                 id: getProductByIds.id,
