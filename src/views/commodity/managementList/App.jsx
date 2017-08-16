@@ -71,12 +71,12 @@ class ManagementList extends PureComponent {
         });
     }
 
-    shouldComponentUpdate() {
-        if (Object.values(this.props.CommodityListData).length === 0) {
-            return false;
-        }
-        return true;
-    }
+    // shouldComponentUpdate() {
+    //     if (Object.values(this.props.CommodityListData).length === 0) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
 
     // 复制链接
     onCopy = () => {
