@@ -441,13 +441,21 @@ class LicenseInfo extends PureComponent {
                                             {getFieldDecorator('registLicenceNumber', {
                                                 rules: [
                                                     { required: true, message: '请输入注册号(营业执照号)!' },
+                                                    { max: 25, message: '营业执照号最长25位' },
+                                                    {
+                                                        validator: (rule, value, callback) => {
+                                                            if (value && !/^[0-9a-zA-Z]+$/.test(value)) {
+                                                                callback('营业执照号只能包含数字和字母！')
+                                                            }
+                                                            callback()
+                                                        }
+                                                    }
                                                 ],
                                                 initialValue: supplierlicenseInfo.registLicenceNumber
                                             })(
-                                                <InputNumber
+                                                <Input
                                                     style={{width: '200px'}}
                                                     placeholder="注册号(营业执照号)"
-                                                    max={999999999999999}
                                                     onBlur={(e) => { Validator.repeat.licenseNo(e, this, supplierlicenseInfo.id, supplierlicenseInfo.status) }}
                                                 />
                                             )}
