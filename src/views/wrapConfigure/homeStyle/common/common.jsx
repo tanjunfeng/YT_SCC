@@ -159,8 +159,15 @@ function Common(WrappedComponent) {
             const { fetchAreaList, data } = this.props;
             const { itemAds } = data;
             const status = itemAds[4].status;
+            const ids = [];
+            itemAds.map((itemAds, index) => {
+                if (index < 5) {
+                    ids.push(itemAds.id)
+                }
+                return null;
+            })
             batchUpdateQuickNavigation({
-                ids: [1, 2, 3, 4, 5],
+                ids,
                 status: status === 1 ? 0 : 1
             }).then(() => {
                 fetchAreaList()
@@ -171,8 +178,15 @@ function Common(WrappedComponent) {
             const { fetchAreaList, data } = this.props;
             const { itemAds } = data;
             const status = itemAds[5].status;
+            const ids = [];
+            itemAds.map((itemAds, index) => {
+                if (index >= 5) {
+                    ids.push(itemAds.id)
+                }
+                return null;
+            })
             batchUpdateQuickNavigation({
-                ids: [6, 7, 8, 9, 10],
+                ids,
                 status: status === 1 ? 0 : 1
             }).then(() => {
                 fetchAreaList()
