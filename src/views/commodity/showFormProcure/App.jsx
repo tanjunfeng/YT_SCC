@@ -48,7 +48,7 @@ class ShowForm extends Component {
             brandName,
             firstLevelCategoryName,
             fourthLevelCategoryName,
-            name,
+            saleName,
             productCode,
             secondLevelCategoryName,
             thirdLevelCategoryName,
@@ -65,7 +65,7 @@ class ShowForm extends Component {
                             <span>商品名称:</span>
                             <Breadcrumb className="css-breadcrumb">
                                 <Breadcrumb.Item>
-                                    {name}
+                                    {saleName}
                                 </Breadcrumb.Item>
                             </Breadcrumb>
                         </Col>
