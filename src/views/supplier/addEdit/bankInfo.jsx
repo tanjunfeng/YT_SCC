@@ -204,7 +204,7 @@ class BankInfo extends PureComponent {
                                             {getFieldDecorator('openBank', {
                                                 rules: [
                                                     { required: true, message: '请输入开户行!' },
-                                                    { max: 20, message: '长度超限' },
+                                                    { max: 50, message: '长度超限' },
                                                     {
                                                         validator: (rule, value, callback) => {
                                                             if (value && !/^[\u4e00-\u9fa5]+$/.test(value)) {
