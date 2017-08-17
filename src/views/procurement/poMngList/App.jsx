@@ -58,6 +58,7 @@ class PoMngList extends PureComponent {
 
     componentDidMount() {
         this.queryPoList({
+            pageNum: this.current,
             pageSize: PAGE_SIZE
         });
     }
@@ -248,6 +249,7 @@ class PoMngList extends PureComponent {
                         pagination={{
                             current: pageNum,
                             total,
+                            pageNum: this.current,
                             pageSize: PAGE_SIZE,
                             showQuickJumper: true,
                             onChange: this.onPaginate
