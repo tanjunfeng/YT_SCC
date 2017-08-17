@@ -424,10 +424,6 @@ class ProdModal extends Component {
                                             pageSize={3}
                                             columns={[
                                                 {
-                                                    title: '仓库ID',
-                                                    dataIndex: 'id',
-                                                    width: 150,
-                                                }, {
                                                     title: '仓库编码',
                                                     dataIndex: 'warehouseCode',
                                                     width: 200,
