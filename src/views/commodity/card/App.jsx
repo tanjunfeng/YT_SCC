@@ -43,13 +43,13 @@ import {
 class Cardline extends Component {
     constructor(props) {
         super(props);
-        this.handleOnchange = ::this.handleOnchange;
-        this.confirmMain = ::this.confirmMain;
-        this.confirmUsed = ::this.confirmUsed;
-        this.handleCheckCancel = ::this.handleCheckCancel;
-        this.handleDelete = ::this.handleDelete;
-        this.handleCheckOk = ::this.handleCheckOk;
-        this.handleChangeMain = ::this.handleChangeMain;
+        this.handleOnchange = this.handleOnchange.bind(this);
+        this.confirmMain = this.confirmMain.bind(this);
+        this.confirmUsed = this.confirmUsed.bind(this);
+        this.handleCheckCancel = this.handleCheckCancel.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleCheckOk = this.handleCheckOk.bind(this);
+        this.handleChangeMain = this.handleChangeMain.bind(this);
 
         this.state = {
             checked: true,
@@ -90,7 +90,7 @@ class Cardline extends Component {
     /**
      * 修改主供应商时弹框
      */
-    confirmMain(bool, item) {
+    confirmMain(bool) {
         if (bool) {
             Modal.confirm({
                 title: '提示',
@@ -278,7 +278,7 @@ class Cardline extends Component {
         this.props.goto(go)
     }
 
-    handleAddPrice = (item) => {
+    handleAddPrice = () => {
     }
 
 
