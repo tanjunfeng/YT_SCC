@@ -44,10 +44,10 @@ class PoSearchForm extends PureComponent {
     constructor(props) {
         super(props);
         this.handleCreate = ::this.handleCreate;
-        this.handleDelete =::this.handleDelete;
-        this.handleGetBigClassMap =::this.handleGetBigClassMap;
-        this.handleGetSupplierMap =::this.handleGetSupplierMap;
-        this.handleGetSupplierLocMap =::this.handleGetSupplierLocMap;
+        this.handleDelete = ::this.handleDelete;
+        this.handleGetBigClassMap = ::this.handleGetBigClassMap;
+        this.handleGetSupplierMap = ::this.handleGetSupplierMap;
+        this.handleGetSupplierLocMap = ::this.handleGetSupplierLocMap;
         this.state = {
             spId: '',   // 供应商ID
             isSupplyAdrDisabled: true, // 供应商地点禁用
