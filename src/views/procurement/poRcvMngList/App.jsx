@@ -63,10 +63,10 @@ class PoRcvMngList extends PureComponent {
         this.handleSearch = ::this.handleSearch;
         this.handleResetValue = ::this.handleResetValue;
         this.handleCreate = ::this.handleCreate;
-        this.onLocTypeChange =:: this.onLocTypeChange;
+        this.onLocTypeChange = ::this.onLocTypeChange;
         this.onActionMenuSelect = ::this.onActionMenuSelect;
         this.renderActions = ::this.renderActions;
-        this.queryRcvMngPoList =:: this.queryRcvMngPoList;
+        this.queryRcvMngPoList = ::this.queryRcvMngPoList;
         this.searchParams = {};
         this.state = {
             spNo: '',   // 供应商编码
