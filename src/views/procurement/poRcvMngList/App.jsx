@@ -601,7 +601,7 @@ class PoRcvMngList extends PureComponent {
                             <Col span={8}>
                                 {/* 地点类型 */}
                                 <FormItem label="地点类型">
-                                    {getFieldDecorator('locTypeCode', {
+                                    {getFieldDecorator('adrType', {
                                         initialValue: adrType.defaultValue
                                     })(
                                         <Select style={{ width: '153px' }} size="default" onChange={this.onLocTypeChange}>
