@@ -347,11 +347,11 @@ class PoRcvMngList extends PureComponent {
      * @return {Promise}
      */
     handleGetAddressMap = (param) => {
-        const { locTypeCode } = this.props.form.getFieldsValue(['locTypeCode'])
+        const { adrType } = this.props.form.getFieldsValue(['adrType'])
         const libraryCode = '0';
         const storeCode = '1';
         let locationTypeParam = '';
-        if (locTypeCode === libraryCode) {
+        if (adrType === libraryCode) {
             locationTypeParam = 'getWarehouseInfo1';
             this.setState({
                 locationData: {
@@ -360,7 +360,7 @@ class PoRcvMngList extends PureComponent {
                 }
             })
         }
-        if (locTypeCode === storeCode) {
+        if (adrType === storeCode) {
             locationTypeParam = 'getStoreInfo';
             this.setState({
                 locationData: {
@@ -370,8 +370,9 @@ class PoRcvMngList extends PureComponent {
             })
         }
         return this.props.pubFetchValueList({
-            pageSize: PAGE_SIZE,
-            param: param.value
+            param: param.value,
+            pageNum: param.pagination.current || 1,
+            pageSize: param.pagination.pageSize
         }, locationTypeParam);
     }
 
