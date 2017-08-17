@@ -463,8 +463,8 @@ class PoSearchForm extends PureComponent {
                                                 orgId: ecId,
                                                 pId: this.state.spId,
                                                 condition: param.value,
-                                                pageSize: 5,
-                                                pageNum: 1
+                                                pageNum: param.pagination.current || 1,
+                                                pageSize: param.pagination.pageSize
                                             }, 'supplierAdrSearchBox')}
                                             onChoosed={this.handleSupplierAdressChoose}
                                             onClear={this.handleSupplierAddressClear}
@@ -473,7 +473,7 @@ class PoSearchForm extends PureComponent {
                                             )}
                                             disabled={this.state.isSupplyAdrDisabled}
                                             rowKey="providerNo"
-                                            pageSize={2}
+                                            pageSize={5}
                                             columns={[
                                                 {
                                                     title: '供应商地点编码',
