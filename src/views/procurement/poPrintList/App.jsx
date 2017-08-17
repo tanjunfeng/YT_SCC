@@ -11,10 +11,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {
-  Form,
-  Row,
-  Col,
-  Pagination
+    Form,
+    Row,
+    Col,
+    Pagination
 } from 'antd';
 import { PAGE_SIZE } from '../../../constant';
 import { fetchPoPrintList } from '../../../actions';
@@ -33,12 +33,12 @@ class PoPrintList extends PureComponent {
     constructor(props) {
         super(props);
         this.searchParams = {};
+        this.current = 1;
     }
 
     componentDidMount() {
         this.queryPoPrintList();
     }
-
 
     /**
      * 点击翻页
@@ -57,13 +57,18 @@ class PoPrintList extends PureComponent {
      * 查询采购单打印列表
      * @param {*} params
      */
-    queryPoPrintList = (params = {}) => {
-        this.props.fetchPoPrintList(params);
+    queryPoPrintList(params) {
+        let tmp = params || {};
+        let allParams = Object.assign({
+            pageSize: PAGE_SIZE,
+            pageNum: this.current || 1
+        }, allParams, this.searchParams, tmp);
+        this.props.fetchPoPrintList(allParams);
     }
 
     /**
      * 点击查询按钮回调
-     * @param {*} res 
+     * @param {*} res
      */
     applySearch = (res) => {
         this.searchParams = res;
@@ -82,13 +87,13 @@ class PoPrintList extends PureComponent {
      * @param {number} number 采购单号
      */
     applyDownPDF = (number) => {
-        Utils.exportExcel(downloadPDF, {purchaseOrderNo: number});
+        Utils.exportExcel(downloadPDF, { purchaseOrderNo: number });
     }
 
     // 批量下载PDF回调
     handleDownBatchPDF = (params) => {
         this.searchParams = params;
-        Utils.exportExcel(downloadBatchPDF, {...this.searchParams});
+        Utils.exportExcel(downloadBatchPDF, { ...this.searchParams });
     }
 
     render() {
@@ -112,7 +117,7 @@ class PoPrintList extends PureComponent {
                     onDownPDF={this.handleDownBatchPDF}
                 />
                 <div className="reports">
-                    { list(data) }
+                    {list(data)}
                     <div className="actions" style={{ marginTop: 20 }}>
                         <Row type="flex" justify="end">
                             <Col>
