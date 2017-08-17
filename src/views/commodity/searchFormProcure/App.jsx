@@ -299,10 +299,6 @@ class SearchForm extends Component {
                                                     dataIndex: 'spNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '供应商ID',
-                                                    dataIndex: 'spId',
-                                                    width: 200,
-                                                }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
                                                     width: 200,
@@ -339,7 +335,7 @@ class SearchForm extends Component {
                                                     dataIndex: 'spNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '供应商名称',
+                                                    title: '地点名称',
                                                     dataIndex: 'companyName',
                                                     width: 200,
                                                 }
