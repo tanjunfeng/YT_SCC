@@ -94,8 +94,9 @@ class PoSearchForm extends PureComponent {
             })
         }
         return this.props.pubFetchValueList({
-            pageSize: PAGE_SIZE,
-            param: param.value
+            param: param.value,
+            pageNum: param.pagination.current || 1,
+            pageSize: param.pagination.pageSize
         }, locationTypeParam);
     }
 
@@ -328,7 +329,7 @@ class PoSearchForm extends PureComponent {
                                                 <div>{row[this.state.locationData.code]} - {row[this.state.locationData.name]}</div>
                                             )}
                                             disabled={this.state.locDisabled}
-                                            pageSize={5}
+                                            pageSize={6}
                                             columns={[
                                                 {
                                                     title: '编码',
@@ -388,14 +389,16 @@ class PoSearchForm extends PureComponent {
                                             ref={ref => { this.bigClass = ref }}
                                             fetch={(param) => this.props.pubFetchValueList({
                                                 param: param.value,
-                                                level: 2
+                                                level: 2,
+                                                pageNum: param.pagination.current || 1,
+                                                pageSize: param.pagination.pageSize
                                             }, 'querycategories')}
                                             onChoosed={this.handleGoodsTypeChoose}
                                             renderChoosedInputRaw={(row) => (
                                                 <div>{row.id} - {row.categoryName}</div>
                                             )}
                                             onClear={this.hanldeTypeClear}
-                                            pageSize={5}
+                                            pageSize={6}
                                             columns={[
                                                 {
                                                     title: '编码',
@@ -423,8 +426,8 @@ class PoSearchForm extends PureComponent {
                                             ref={ref => { this.supplier = ref }}
                                             fetch={(param) => this.props.pubFetchValueList({
                                                 condition: param.value,
-                                                pageSize: 5,
-                                                pageNum: 1
+                                                pageNum: param.pagination.current || 1,
+                                                pageSize: param.pagination.pageSize
                                             }, 'supplierSearchBox')}
                                             onChoosed={this.handleSupplyChoose}
                                             onClear={this.handleSupplyClear}
@@ -432,7 +435,7 @@ class PoSearchForm extends PureComponent {
                                                 <div>{row.spNo}-{row.companyName}</div>
                                             )}
                                             rowKey="spId"
-                                            pageSize={5}
+                                            pageSize={6}
                                             columns={[
                                                 {
                                                     title: '供应商编号',
@@ -460,8 +463,8 @@ class PoSearchForm extends PureComponent {
                                                 orgId: ecId,
                                                 pId: this.state.spId,
                                                 condition: param.value,
-                                                pageSize: 5,
-                                                pageNum: 1
+                                                pageNum: param.pagination.current || 1,
+                                                pageSize: param.pagination.pageSize
                                             }, 'supplierAdrSearchBox')}
                                             onChoosed={this.handleSupplierAdressChoose}
                                             onClear={this.handleSupplierAddressClear}
@@ -470,7 +473,7 @@ class PoSearchForm extends PureComponent {
                                             )}
                                             disabled={this.state.isSupplyAdrDisabled}
                                             rowKey="providerNo"
-                                            pageSize={2}
+                                            pageSize={5}
                                             columns={[
                                                 {
                                                     title: '供应商地点编码',
