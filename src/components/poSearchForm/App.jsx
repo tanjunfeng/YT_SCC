@@ -122,7 +122,7 @@ class PoSearchForm extends PureComponent {
     }
 
     // 选择供应商地点回调
-    handleSupplierAdressChoose = (record) => {
+    handleSupplierAdressChoose = ({ record }) => {
         this.supplierAdressId = record.spAdrid;
     }
 
@@ -135,7 +135,7 @@ class PoSearchForm extends PureComponent {
     }
 
     // 选择地点回调
-    handleAddressChoose = (record) => {
+    handleAddressChoose = ({ record }) => {
         const encoded = record[this.state.locationData.code];
         this.adressTypeCode = encoded;
     }
@@ -150,7 +150,7 @@ class PoSearchForm extends PureComponent {
     }
 
     // 选择大类回调
-    handleGoodsTypeChoose = (record) => {
+    handleGoodsTypeChoose = ({ record }) => {
         this.GoodsTypeId = record.id;
     }
 
@@ -162,8 +162,6 @@ class PoSearchForm extends PureComponent {
 
     // 获取用于搜索的所有有效表单值
     getSearchParams = () => {
-        const ordinary = '1';
-        const ordinaryCode = 0;
         const {
             purchaseNumber,
             locTypeCode,
@@ -177,7 +175,6 @@ class PoSearchForm extends PureComponent {
         const endCreateTime = createTime ? createTime[1].valueOf() : '';
         const startAuditTime = auditTime ? auditTime[0].valueOf() : '';
         const endAuditTime = auditTime ? auditTime[1].valueOf() : '';
-
         const searchParams = {
             purchaseOrderNo: purchaseNumber,
             spNo: this.supplierEncoded,
@@ -185,7 +182,7 @@ class PoSearchForm extends PureComponent {
             adrType: locTypeCode,
             adrTypeCode: this.adressTypeCode,
             secondCategoryId: this.GoodsTypeId,
-            purchaseOrderType: purchaseTypeCode === ordinary ? ordinaryCode : '',
+            purchaseOrderType: purchaseTypeCode,
             status: statusCode,
             startCreateTime,
             endCreateTime,
