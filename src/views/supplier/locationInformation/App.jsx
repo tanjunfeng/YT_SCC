@@ -502,7 +502,7 @@ class BasicInfo extends PureComponent {
                                                     <div>{data.id} - {data.name}</div>
                                                 )}
                                                 defaultValue={isEdit ? `${spAdrBasic.orgId} - ${spAdrBasic.orgName}` : ''}
-                                                pageSize={100}
+                                                pageSize={10}
                                                 columns={[
                                                     {
                                                         title: '子公司编码',
