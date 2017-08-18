@@ -220,7 +220,7 @@ class PoSearchForm extends PureComponent {
 
     // 点击新建跳转到新建采购单
     handleCreate() {
-        history.push('/po/create');
+        this.props.history.push('/po/create');
     }
 
     render() {
@@ -523,7 +523,8 @@ PoSearchForm.propTypes = {
     onDownPDF: PropTypes.func,
     onReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    auth: PropTypes.objectOf(PropTypes.any)
+    auth: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any)
 };
 
 PoSearchForm.defaultProps = {
