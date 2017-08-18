@@ -354,9 +354,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
                                             defaultValue={
-                                                initValue.spAdrId &&
-                                                `${initValue.spAdrId} -
-                                                ${initValue.spAdrName}`}
+                                            initValue.spAdrId && `${initValue.spAdrId} - ${initValue.spAdrName}`}
                                             style={{ zIndex: 8 }}
                                             compKey="search-mind-key2"
                                             ref={ref => { this.searchMind2 = ref }}
@@ -381,15 +379,11 @@ class ProdModal extends Component {
                                             pageSize={3}
                                             columns={[
                                                 {
-                                                    title: '供应商编码',
-                                                    dataIndex: 'spNo',
+                                                    title: '供应商地点编码',
+                                                    dataIndex: 'providerNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '地点编码',
-                                                    dataIndex: 'spAdrid',
-                                                    width: 150,
-                                                }, {
-                                                    title: '地点名称',
+                                                    title: '供应商地点名称',
                                                     dataIndex: 'providerName',
                                                     width: 300,
                                                 }

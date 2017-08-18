@@ -38,7 +38,7 @@ const Option = Select.Option;
 const TEXT = {
     supplierBasicInfo: {
         // id: '主键ID',
-        companyName: '公司名称',
+        companyName: '供应商名称',
         spNo: '供应商编号',
         grade: '供应商等级',
         settledTime: {text: '供应商入驻日期', type: 'time'},
@@ -119,7 +119,7 @@ const TEXT = {
         providerNo: '供应商地点编码',
         providerName: '供应商地点名称',
         goodsArrivalCycle: '到货周期',
-        // orgId: '分公司ID',
+        orgId: '分公司名称',
         settlementPeriod: '账期',
         belongArea: '所属区域',
     },
