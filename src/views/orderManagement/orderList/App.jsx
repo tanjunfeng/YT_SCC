@@ -151,7 +151,8 @@ class OrderManagementList extends Component {
      * @param {array} result [moment, moment]
      */
     onEnterTimeChange(result) {
-        let start = yesterdayDate, end = todayDate;
+        let start = yesterdayDate;
+        let end = todayDate;
         if (result.length === 2) {
             start = result[0].valueOf().toString();
             end = result[1].valueOf().toString();
@@ -568,7 +569,9 @@ class OrderManagementList extends Component {
                                                 onChoosed={this.handleJoiningChoose}
                                                 onClear={this.handleJoiningClear}
                                                 renderChoosedInputRaw={(row) => (
-                                                    <div>{row.franchiseeId} - {row.franchiseeName}</div>
+                                                    <div>
+                                                        {row.franchiseeId} - {row.franchiseeName}
+                                                    </div>
                                                 )}
                                                 pageSize={6}
                                                 columns={[
