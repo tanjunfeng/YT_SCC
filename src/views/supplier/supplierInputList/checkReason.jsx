@@ -38,7 +38,7 @@ const Option = Select.Option;
 const TEXT = {
     supplierBasicInfo: {
         // id: '主键ID',
-        companyName: '公司名称',
+        companyName: '供应商名称',
         spNo: '供应商编号',
         grade: '供应商等级',
         settledTime: {text: '供应商入驻日期', type: 'time'},
