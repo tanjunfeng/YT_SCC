@@ -14,6 +14,7 @@ import { receiveUser, fetchRightsAction } from './actions/user';
 import AuthLayout from './views/layout/AuthLayout';
 import LoginLayout from './views/login/LoginLayout';
 import { findCodeByPath } from './routes/util';
+import Routes from './constant/route';
 import './style/common.scss';
 
 /**
@@ -76,7 +77,17 @@ class App extends PureComponent {
 
         // 如果当前 pathname 为 login，则跳转到到 index
         if (initData && location.pathname === '/') {
-            history.replace('/suppliersAppList');
+            const { menus = {} } = initData;
+            const { menu = [] } = menus;
+            if (menu.length) {
+                const { submenu } = menu[0];
+                if (!submenu.length) {
+                    return;
+                }
+                const { code } = submenu[0];
+                console.log(Routes[code])
+                history.replace(Routes[code]);
+            }
         }
     }
 
