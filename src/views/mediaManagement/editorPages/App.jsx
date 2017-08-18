@@ -56,12 +56,15 @@ class EditorPages extends Component {
             id,
             shelfStatus: 0
         })
-        .then((res) => (
+        .then((res) => {
+            this.editRef.setState({
+                content: res.pageContent,
+            })
             this.setState({
-                content: res.description,
+                content: res.pageContent,
                 defaultFileList: []
             })
-        )).catch(() => {
+        }).catch(() => {
 
         });
     }
@@ -184,6 +187,7 @@ class EditorPages extends Component {
                     </div>
                     <CKEditor
                         activeClass="p10"
+                        ref={node => (this.editRef = node)}
                         content={this.state.content}
                         onChange={this.updateContent}
                     />

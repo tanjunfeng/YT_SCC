@@ -22,7 +22,6 @@ import SearchForm from '../searchFormProcure';
 import ShowForm from '../showFormProcure';
 import Cardline from '../card';
 import { PAGE_SIZE } from '../../../constant';
-import ProdPurchaseModal from '../prodPurchaseModal';
 import ProdModal from '../changePurchaseModal';
 import {
     productAddPriceVisible,
