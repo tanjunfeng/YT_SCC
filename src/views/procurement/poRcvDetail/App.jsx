@@ -161,7 +161,7 @@ class PoRcvDetail extends PureComponent {
                                 <Col span={6}>
                                     {/* 采购单号 */}
                                     <span className="ant-form-item-label"><label>采购单号</label> </span>
-                                    <span className="text">{pmPurchaseReceipt.purchaseOrderId}</span>
+                                    <span className="text">{pmPurchaseReceipt.purchaseOrderNo}</span>
                                 </Col>
                                 <Col span={6}>
                                     {/* 收货单状态 */}
@@ -173,7 +173,7 @@ class PoRcvDetail extends PureComponent {
                                 <Col span={6}>
                                     {/* ASN */}
                                     <span className="ant-form-item-label"><label>ASN</label> </span>
-                                    <span className="text">{pmPurchaseReceipt.asn}</span>
+                                    <span className="text">{pmPurchaseReceipt.asn || '-'}</span>
                                 </Col>
                             </Row>
                             <Row >
