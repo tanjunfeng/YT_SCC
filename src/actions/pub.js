@@ -136,11 +136,12 @@ const receiveValuesList = (data) => ({
 });
 
 const checkResult = (res) => {
-    let result = res;
+    const result = res;
     if (res.data instanceof Array) {
         result.data = {
             data: res.data
         }
+        result.total = res.data.length
     }
     return result;
 }

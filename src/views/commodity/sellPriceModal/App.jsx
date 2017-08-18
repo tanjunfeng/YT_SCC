@@ -129,7 +129,7 @@ class SellPriceModal extends Component {
         return (
             <Modal
                 title={isEdit ? '编辑销售价格' : '新增销售价格'}
-                visible={true}
+                visible
                 className={prefixCls}
                 onOk={this.handleOk}
                 width={'447px'}
@@ -246,9 +246,9 @@ class SellPriceModal extends Component {
                                         defaultValue={newDates.branchCompanyId ? `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` : undefined}
                                         onClear={this.handleClear}
                                         renderChoosedInputRaw={(data) => (
-                                           <div>{data.id} - {data.name}</div>
+                                            <div>{data.id} - {data.name}</div>
                                         )}
-                                        pageSize={4}
+                                        pageSize={6}
                                         columns={[
                                             {
                                                 title: '公司编号',
