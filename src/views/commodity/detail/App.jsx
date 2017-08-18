@@ -21,7 +21,7 @@ class SaleDetail extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.componentDidMount = ::this.componentDidMount;
+        this.componentDidMount = this.componentDidMount.bind(this);
     }
 
     componentDidMount() {
