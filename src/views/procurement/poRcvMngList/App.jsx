@@ -22,16 +22,15 @@ import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import {
-    poStatus,
     locType as adrType,
     status,
     poType
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
-import moment from 'moment';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
     getWarehouseAddressMap,
@@ -44,7 +43,7 @@ import {
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
-const dateFormat = "YYYY-MM-DD";
+const dateFormat = 'YYYY-MM-DD';
 
 @connect(state => ({
     poRcvMngList: state.toJS().procurement.poRcvMngList,
@@ -78,7 +77,7 @@ class PoRcvMngList extends PureComponent {
             adrTypeCode: '',    // 地点编码
             receivedTypeCode: ''  // 收货单状态编码
         };
-        //初始页号
+        // 初始页号
         this.current = 1;
         this.columns = [
             {
@@ -90,8 +89,11 @@ class PoRcvMngList extends PureComponent {
                 dataIndex: 'asn',
                 key: 'asn',
                 render: text => {
-                    if (null === text || undefined === text || '' === text) text = '-';
-                    return text;
+                    let res = text;
+                    if (text === null || undefined === text || text === '') {
+                        res = '-';
+                    }
+                    return res;
                 }
             }, {
                 title: '采购单号',
@@ -102,13 +104,14 @@ class PoRcvMngList extends PureComponent {
                 dataIndex: 'purchaseOrderType',
                 key: 'purchaseOrderType',
                 render: poTypeCode => {
-                    let text = '';
                     poType.data.forEach(item => {
+                        let text = '';
                         if (poTypeCode === +(item.key)) {
-                            return text = item.value;
+                            text = item.value;
+                            return text;
                         }
+                        return text;
                     });
-                    return text;
                 }
             }, {
                 title: '供应商编号',
@@ -130,21 +133,20 @@ class PoRcvMngList extends PureComponent {
                 title: '预计送货日期',
                 dataIndex: 'estimatedDeliveryDate',
                 key: 'estimatedDeliveryDate',
-                render: text => {
-                    return moment(new Date(text)).format(dateFormat);
-                }
+                render: text => (moment(new Date(text)).format(dateFormat))
             }, {
                 title: '地点类型',
                 dataIndex: 'adrType',
                 key: 'adrType',
                 render: adrTypeCode => {
-                    let text = '';
                     adrType.data.forEach(item => {
+                        let text = '';
                         if (adrTypeCode === +(item.key)) {
-                            return text = item.value;
+                            text = item.value;
+                            return text;
                         }
+                        return text;
                     });
-                    return text;
                 }
             }, {
                 title: '地点',
@@ -154,28 +156,25 @@ class PoRcvMngList extends PureComponent {
                 title: '预计到货日期',
                 dataIndex: 'estimatedReceivedDate',
                 key: 'estimatedReceivedDate',
-                render: text => {
-                    return moment(new Date(text)).format(dateFormat);
-                }
+                render: text => (moment(new Date(text)).format(dateFormat))
             }, {
                 title: '收货日期',
                 dataIndex: 'receivedTime',
                 key: 'receivedTime',
-                render: text => {
-                    return moment(new Date(text)).format(dateFormat);
-                }
+                render: text => (moment(new Date(text)).format(dateFormat))
             }, {
                 title: '收货单状态',
                 dataIndex: 'status',
                 key: 'status',
                 render: statusCode => {
-                    let text = '';
                     status.data.forEach(item => {
+                        let text = '';
                         if (statusCode === +(item.key)) {
-                            return text = item.value;
+                            text = item.value;
+                            return text;
                         }
+                        return text;
                     });
-                    return text;
                 }
             }, {
                 title: '操作',
@@ -185,6 +184,11 @@ class PoRcvMngList extends PureComponent {
             }
         ]
     }
+
+    componentDidMount() {
+        this.queryRcvMngPoList();
+    }
+
     /**
      * 根据地点类型值控制地点值清单是否可编辑
      * 地点类型有值时：地点值清单可编辑
@@ -193,11 +197,10 @@ class PoRcvMngList extends PureComponent {
      * @param {*} value
      */
     onLocTypeChange = (value) => {
-        let disabled = adrType.defaultValue === value ? true : false;
         this.poAddress.reset();
         this.adressTypeCode = '';
         this.setState({
-            locDisabled: disabled
+            locDisabled: adrType.defaultValue === value
         })
     }
     /**
@@ -206,7 +209,13 @@ class PoRcvMngList extends PureComponent {
      *
      */
     editSearchParams() {
-        const { purchaseReceiptNo, purchaseOrderNo, adrType, purchaseOrderType, status } = this.props.form.getFieldsValue();
+        const {
+            purchaseReceiptNo,
+            purchaseOrderNo,
+            adrType,
+            purchaseOrderType,
+            status
+        } = this.props.form.getFieldsValue();
 
         //收货日期区间
         let receivedDuringArr = this.props.form.getFieldValue("receivedDuring") || [];
@@ -278,10 +287,6 @@ class PoRcvMngList extends PureComponent {
         //编辑查询条件
         this.editSearchParams();
         //查询收货单单列表
-        this.queryRcvMngPoList();
-    }
-
-    componentDidMount() {
         this.queryRcvMngPoList();
     }
 

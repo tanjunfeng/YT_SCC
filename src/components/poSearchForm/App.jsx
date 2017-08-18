@@ -439,7 +439,6 @@ class PoSearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                         </Row>
-
                         <Row gutter={40}>
                             <Col span={8}>
                                 {/* 创建日期 */}
@@ -461,8 +460,7 @@ class PoSearchForm extends PureComponent {
                                 {/* 审批日期 */}
                                 <FormItem >
                                     <div className="row middle">
-                                        <span className="ant-form-item-label">
-                                            审批日期</span>
+                                        <span className="ant-form-item-label search-mind-label">审批日期</span>
                                         {getFieldDecorator('auditTime')(
                                             <RangePicker
                                                 className="date-range-picker"
