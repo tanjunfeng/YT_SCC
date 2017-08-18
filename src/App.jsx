@@ -85,7 +85,6 @@ class App extends PureComponent {
                     return;
                 }
                 const { code } = submenu[0];
-                console.log(Routes[code])
                 history.replace(Routes[code]);
             }
         }
