@@ -33,9 +33,9 @@ class ClassifiedList extends Component {
     constructor(props) {
         super(props);
 
-        this.handleDrop = ::this.handleDrop;
-        this.handleChangeSort = ::this.handleChangeSort;
-        this.handleChangeStatus = ::this.handleChangeStatus;
+        this.handleDrop = this.handleDrop.bind(this);
+        this.handleChangeSort = this.handleChangeSort.bind(this);
+        this.handleChangeStatus = this.handleChangeStatus.bind(this);
 
         this.state = {
             msgHide: true,

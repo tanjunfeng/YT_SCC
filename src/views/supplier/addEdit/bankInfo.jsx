@@ -241,7 +241,7 @@ class BankInfo extends PureComponent {
                                                         }
                                                     }
                                                 ],
-                                                initialValue: supplierBankInfo.bankAccount
+                                                initialValue: Utils.trimAll(supplierBankInfo.bankAccount)
                                             })(
                                                 <Input
                                                     style={{width: '200px'}}
