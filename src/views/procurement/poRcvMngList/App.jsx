@@ -104,14 +104,15 @@ class PoRcvMngList extends PureComponent {
                 dataIndex: 'purchaseOrderType',
                 key: 'purchaseOrderType',
                 render: poTypeCode => {
+                    let text = '';
                     poType.data.forEach(item => {
-                        let text = '';
                         if (poTypeCode === +(item.key)) {
                             text = item.value;
                             return text;
                         }
                         return text;
-                    });
+                    })
+                    return text;
                 }
             }, {
                 title: '供应商编号',
@@ -139,14 +140,15 @@ class PoRcvMngList extends PureComponent {
                 dataIndex: 'adrType',
                 key: 'adrType',
                 render: adrTypeCode => {
+                    let text = '';
                     adrType.data.forEach(item => {
-                        let text = '';
                         if (adrTypeCode === +(item.key)) {
                             text = item.value;
                             return text;
                         }
                         return text;
                     });
+                    return text;
                 }
             }, {
                 title: '地点',
@@ -167,14 +169,15 @@ class PoRcvMngList extends PureComponent {
                 dataIndex: 'status',
                 key: 'status',
                 render: statusCode => {
+                    let text = '';
                     status.data.forEach(item => {
-                        let text = '';
                         if (statusCode === +(item.key)) {
                             text = item.value;
                             return text;
                         }
                         return text;
                     });
+                    return text;
                 }
             }, {
                 title: '操作',
