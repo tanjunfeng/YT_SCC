@@ -37,10 +37,10 @@ class SaleCard extends Component {
     constructor(props) {
         super(props);
         this.handleOnchange = this.handleOnchange.bind(this);
-        this.confirmUsed = this.confirmUsed(this);
-        this.handleDelete = this.handleDelete(this);
-        this.handleChangeMain = this.handleChangeMain(this);
-        this.handleCheckUse = this.handleCheckUse(this);
+        this.confirmUsed = this.confirmUsed.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleChangeMain = this.handleChangeMain.bind(this);
+        this.handleCheckUse = this.handleCheckUse.bind(this);
 
         this.state = {
             checked: true,
