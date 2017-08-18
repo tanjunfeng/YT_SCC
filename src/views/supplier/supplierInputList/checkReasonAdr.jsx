@@ -120,6 +120,8 @@ const TEXT = {
         // orgId: '分公司ID',
         settlementPeriod: '账期',
         belongArea: '所属区域',
+        // auditDate: '审核时间',
+        // auditPerson: '审核人',
     },
     spAdrContact: {
         // id: '供应商主表ID',
