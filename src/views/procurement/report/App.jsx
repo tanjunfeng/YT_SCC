@@ -67,7 +67,7 @@ class Report extends PureComponent {
                             </Col>
                             <Col span={11}>
                                 <label>供应商：</label>
-                                <span className="field">{data.spNo}-{data.spName}</span>
+                                <span className="field">{data.spAdrNo}-{data.spAdrName}</span>
                             </Col>
                             <Col span={4}>
                                 <label>采购单类型：</label>

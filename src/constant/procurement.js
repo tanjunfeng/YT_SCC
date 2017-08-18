@@ -78,6 +78,9 @@ export const locTypeCodes = {
 export const poType = {
     defaultValue: '',
     data: [{
+        key: '',
+        value: '请选择'
+    }, {
         key: '0',
         value: '普通采购'
     }]

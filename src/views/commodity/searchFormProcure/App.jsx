@@ -116,7 +116,6 @@ class SearchForm extends Component {
      */
     handleGetValue() {
         const { validateFields } = this.props.form;
-        const { match } = this.props;
         validateFields((err, values) => {
             const status = values.initiateModeOptions === '-1'
                 ? null
@@ -265,11 +264,10 @@ class SearchForm extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls } = this.props;
-        const { warehouseCode, warehouseName} = this.state.supplyChoose;
         return (
             <div className={`${prefixCls}-content manage-form`}>
                 <div style={{fontSize: 16, fontWeight: 900}}>
-                    <Icon type="desktop" className="css-appstore" />&nbsp;商品信息
+                    <Icon type="desktop" className="css-appstore" />&nbsp;价格明细
                 </div>
                 <Form layout="inline" className={`${prefixCls}-content`}>
                     <Row type="flex" justify="start" className={`${prefixCls}-flex`}>
@@ -279,7 +277,7 @@ class SearchForm extends Component {
                                 <div>
                                     <span className="value-list-input">
                                         <SearchMind
-                                            compKey="search-mind-supply"
+                                            compKey="search-mind-supply1"
                                             ref={ref => { this.supplySearchMind = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
                                                 condition: params.value,
@@ -299,10 +297,6 @@ class SearchForm extends Component {
                                                     dataIndex: 'spNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '供应商ID',
-                                                    dataIndex: 'spId',
-                                                    width: 200,
-                                                }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
                                                     width: 200,
@@ -319,7 +313,7 @@ class SearchForm extends Component {
                                 <div>
                                     <span className="value-list-input">
                                         <SearchMind
-                                            compKey="search-mind-supply"
+                                            compKey="search-mind-supply2"
                                             ref={ref => { this.addressSearchMind = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
                                                 condition: params.value,
@@ -335,12 +329,12 @@ class SearchForm extends Component {
                                             pageSize={6}
                                             columns={[
                                                 {
-                                                    title: '供应商编码',
-                                                    dataIndex: 'spNo',
+                                                    title: '供应商地点编码',
+                                                    dataIndex: 'providerNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '供应商名称',
-                                                    dataIndex: 'companyName',
+                                                    title: '供应商地点名称',
+                                                    dataIndex: 'providerName',
                                                     width: 200,
                                                 }
                                             ]}
@@ -355,7 +349,7 @@ class SearchForm extends Component {
                                 <div>
                                     <span className="value-list-input">
                                         <SearchMind
-                                            compKey="search-mind-supply"
+                                            compKey="search-mind-supply3"
                                             ref={ref => { this.supplyCompSearchMind = ref }}
                                             fetch={(params) => this.props.pubFetchValueList({
                                                 branchCompanyName: params.value,
@@ -465,8 +459,9 @@ SearchForm.propTypes = {
     pubFetchValueList: PropTypes.objectOf(PropTypes.any),
     handleAdd: PropTypes.func,
     prefixCls: PropTypes.string,
-    user: PropTypes.objectOf(PropTypes.string),
     form: PropTypes.objectOf(PropTypes.any),
+    data: PropTypes.objectOf(PropTypes.any),
+    receiveData: PropTypes.objectOf(PropTypes.any),
     onSearch: PropTypes.func,
     onReset: PropTypes.func,
 }

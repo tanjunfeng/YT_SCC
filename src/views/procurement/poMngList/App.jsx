@@ -57,9 +57,7 @@ class PoMngList extends PureComponent {
     }
 
     componentDidMount() {
-        this.queryPoList({
-            pageSize: PAGE_SIZE
-        });
+        this.queryPoList();
     }
 
     /**
@@ -132,10 +130,7 @@ class PoMngList extends PureComponent {
 
                     // 刷新采购单列表
                     this.current = 1;
-                    this.queryPoList({
-                        pageNum: this.current,
-                        pageSize: PAGE_SIZE
-                    });
+                    this.queryPoList();
                 })
             },
             onCancel() { },
@@ -248,6 +243,7 @@ class PoMngList extends PureComponent {
                         pagination={{
                             current: pageNum,
                             total,
+                            pageNum: this.current,
                             pageSize: PAGE_SIZE,
                             showQuickJumper: true,
                             onChange: this.onPaginate

@@ -10,12 +10,11 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {
     Form, Card, Checkbox, Modal,
-    message, Pagination, Row, Col, Icon
+    message, Pagination,
 } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { PAGE_SIZE } from '../../../constant';
-import { MAXGOODS } from '../../../constant'
+import { PAGE_SIZE, MAXGOODS } from '../../../constant';
 import {
     fetchUpdateProdPurchase,
     fetchChangeProPurchaseStatus,
@@ -37,11 +36,11 @@ import {
 class SaleCard extends Component {
     constructor(props) {
         super(props);
-        this.handleOnchange = ::this.handleOnchange;
-        this.confirmUsed = ::this.confirmUsed;
-        this.handleDelete = ::this.handleDelete;
-        this.handleChangeMain = ::this.handleChangeMain;
-        this.handleCheckUse = ::this.handleCheckUse;
+        this.handleOnchange = this.handleOnchange.bind(this);
+        this.confirmUsed = this.confirmUsed.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleChangeMain = this.handleChangeMain.bind(this);
+        this.handleCheckUse = this.handleCheckUse.bind(this);
 
         this.state = {
             checked: true,
@@ -248,7 +247,7 @@ class SaleCard extends Component {
     }
 
     render() {
-        const { prefixCls, getProdPurchaseByIds, initalValue = {} } = this.props;
+        const { prefixCls, initalValue = {} } = this.props;
         return (
             <div className={classNames(`${prefixCls}`, `${prefixCls}-sale`)}>
                 <div>
@@ -278,6 +277,7 @@ class SaleCard extends Component {
 SaleCard.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
     fetchUpdateProdPurchase: PropTypes.func,
+    handleCardClick: PropTypes.func,
     fetchChangeProPurchaseStatus: PropTypes.func,
     prefixCls: PropTypes.string,
     index: PropTypes.number,

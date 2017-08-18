@@ -159,8 +159,15 @@ function Common(WrappedComponent) {
             const { fetchAreaList, data } = this.props;
             const { itemAds } = data;
             const status = itemAds[4].status;
+            const ids = [];
+            itemAds.map((itemAds, index) => {
+                if (index < 5) {
+                    ids.push(itemAds.id)
+                }
+                return null;
+            })
             batchUpdateQuickNavigation({
-                ids: [1, 2, 3, 4, 5],
+                ids,
                 status: status === 1 ? 0 : 1
             }).then(() => {
                 fetchAreaList()
@@ -171,8 +178,15 @@ function Common(WrappedComponent) {
             const { fetchAreaList, data } = this.props;
             const { itemAds } = data;
             const status = itemAds[5].status;
+            const ids = [];
+            itemAds.map((itemAds, index) => {
+                if (index >= 5) {
+                    ids.push(itemAds.id)
+                }
+                return null;
+            })
             batchUpdateQuickNavigation({
-                ids: [6, 7, 8, 9, 10],
+                ids,
                 status: status === 1 ? 0 : 1
             }).then(() => {
                 fetchAreaList()
@@ -366,8 +380,24 @@ function Common(WrappedComponent) {
                                     </FormItem>
                                 </div>
                                 {
-                                    `${this.state.select}` === '1'
+                                    `${this.state.select}` === '2'
                                     ? <div>
+                                        <FormItem className="home-style-modal-input-item">
+                                            <span>超链接：</span>
+                                            {getFieldDecorator('url', {
+                                                rules: [
+                                                    {required: true, message: '请输入超链接'},
+                                                    /* eslint-disable */
+                                                    {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'}
+                                                    /* eslint-enable */
+                                                ],
+                                                initialValue: current.url ? current.url : ''
+                                            })(
+                                                <Input className="home-style-url" type="textarea" rows={2} placeholder="请输入超链接" />
+                                            )}
+                                        </FormItem>
+                                    </div>
+                                    : <div>
                                         <FormItem className="home-style-modal-input-item">
                                             <span>商品编号：</span>
                                             {getFieldDecorator('productNo', {
@@ -383,22 +413,6 @@ function Common(WrappedComponent) {
                                                 initialValue: current.productNo
                                             })(
                                                 <Input className="home-style-url" type="text" placeholder="请输入商品编号" />
-                                            )}
-                                        </FormItem>
-                                    </div>
-                                    : <div>
-                                        <FormItem className="home-style-modal-input-item">
-                                            <span>超链接：</span>
-                                            {getFieldDecorator('url', {
-                                                rules: [
-                                                    {required: true, message: '请输入超链接'},
-                                                    /* eslint-disable */
-                                                    {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'}
-                                                    /* eslint-enable */
-                                                ],
-                                                initialValue: current.url ? current.url : ''
-                                            })(
-                                                <Input className="home-style-url" type="textarea" rows={2} placeholder="请输入超链接" />
                                             )}
                                         </FormItem>
                                     </div>

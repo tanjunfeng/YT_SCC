@@ -11,10 +11,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Util from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
-import { PAGE_SIZE } from '../../../constant';
-import {
-    fetchTest,
-} from '../../../actions/classifiedList';
 import {
     fetchAddProdPurchase,
 } from '../../../actions';
@@ -41,6 +37,7 @@ const { Option } = Select;
         updateProdPurchase: state.toJS().commodity.updateProdPurchase,
         purchaseCardData: state.toJS().commodity.purchaseCardData,
         getWarehouseLogicInfos: state.toJS().commodity.getWarehouseLogicInfo,
+        checkMainSupplier: state.toJS().commodity.checkMainSupplier,
     }),
     dispatch => bindActionCreators({
         fetchAddProdPurchase,
@@ -55,9 +52,9 @@ const { Option } = Select;
 class ProdModal extends Component {
     constructor(props) {
         super(props);
-        this.handleOk = ::this.handleOk;
-        this.handleCancel = ::this.handleCancel;
-        this.handlePriceChange = ::this.handlePriceChange;
+        this.handleOk = this.handleOk.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
+        this.handlePriceChange = this.handlePriceChange.bind(this);
         this.ids = {
             // 供应商id
             spId: props.initValue.spId,
@@ -130,7 +127,6 @@ class ProdModal extends Component {
      * 地点-值清单
      */
     handleAdressChoose = ({ record }) => {
-        const { getWarehouseLogicInfos } = this.props;
         this.setState({
             supplyChoose2: record,
             supplyChoose3: {},
@@ -149,7 +145,7 @@ class ProdModal extends Component {
                 pageSize: 1,
                 pageNum: 1
             }, 'supplierSearchBox').then((res) => {
-                const { spNo, companyName, spId } = res.data.data[0];
+                const { companyName } = res.data.data[0];
                 this.ids.spNo = spNo;
                 this.ids.spId = spId;
                 this.setState({
@@ -173,7 +169,7 @@ class ProdModal extends Component {
         const { validateFields } = this.props.form;
         const { initValue, isEdit } = this.props;
         const subPost = isEdit ? this.props.ChangeUpdateProd : this.props.AddProdPurchase;
-        const { spId, supplierAddressId, childCompanyId, warehouseId } = this.ids;
+        const { spId, supplierAddressId, warehouseId } = this.ids;
         if (!spId) {
             message.error('请选择供应商');
             return;
@@ -242,7 +238,8 @@ class ProdModal extends Component {
     }
 
     render() {
-        const { prefixCls, form, initValue = {}, isEdit, data } = this.props;
+        const { prefixCls, form, initValue = {}, isEdit, data, checkMainSupplier } = this.props;
+        console.log(checkMainSupplier)
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
         const { warehouseCode, warehouseName} = this.state.supplyChoose;
@@ -290,7 +287,9 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('internationalCode', {
                                             rules: [{ required: true, message: '输入商品条码!' }],
-                                            initialValue: isEdit ? initValue.internationalCode : internationalCodes[0].internationalCode
+                                            initialValue: isEdit ?
+                                            initValue.internationalCode :
+                                            internationalCodes[0].internationalCode
                                         })(
                                             <Select
                                                 placeholder="请选择商品条码"
@@ -299,7 +298,10 @@ class ProdModal extends Component {
                                                 {
                                                     internationalCodes.map((item) => {
                                                         return (
-                                                            <Option value={item.internationalCode}>
+                                                            <Option
+                                                                key={item.id}
+                                                                value={item.internationalCode}
+                                                            >
                                                                 {item.internationalCode}
                                                             </Option>
                                                         )
@@ -318,10 +320,9 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
                                             defaultValue={
-                                                (spNo || initValue.spNo)
-                                                && `${spNo || initValue.spNo} - ${companyName || initValue.spName}`}
+                                                (spNo || initValue.spNo) && `${spNo || initValue.spNo} - ${companyName || initValue.spName}`}
                                             style={{ zIndex: 9 }}
-                                            compKey="search-mind-key"
+                                            compKey="search-mind-key1"
                                             ref={ref => { this.searchMind1 = ref }}
                                             onChoosed={this.handleSupplyChoose}
                                             onClear={this.handleSupplierClear}
@@ -352,11 +353,13 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-label`}>*供应商地点：</span>
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
-                                            defaultValue={initValue.spAdrId && `${initValue.spAdrId} - ${initValue.spAdrName}`}
+                                            defaultValue={
+                                            initValue.spAdrId && `${initValue.spAdrId} - ${initValue.spAdrName}`}
                                             style={{ zIndex: 8 }}
-                                            compKey="search-mind-key1"
+                                            compKey="search-mind-key2"
                                             ref={ref => { this.searchMind2 = ref }}
-                                            fetch={(params) => this.props.pubFetchValueList(Util.removeInvalid({
+                                            fetch={(params) =>
+                                            this.props.pubFetchValueList(Util.removeInvalid({
                                                 pId: this.ids.spId,
                                                 condition: params.value,
                                                 pageSize: params.pagination.pageSize,
@@ -376,15 +379,11 @@ class ProdModal extends Component {
                                             pageSize={3}
                                             columns={[
                                                 {
-                                                    title: '供应商编码',
-                                                    dataIndex: 'spNo',
+                                                    title: '供应商地点编码',
+                                                    dataIndex: 'providerNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '地点编码',
-                                                    dataIndex: 'spAdrid',
-                                                    width: 150,
-                                                }, {
-                                                    title: '地点名称',
+                                                    title: '供应商地点名称',
                                                     dataIndex: 'providerName',
                                                     width: 300,
                                                 }
@@ -398,13 +397,13 @@ class ProdModal extends Component {
                                         <SearchMind
                                             className={`${prefixCls}-data-disable`}
                                             defaultValue={
-                                                (warehouseCode || initValue.distributeWarehouseId)
-                                                && `${warehouseCode || initValue.distributeWarehouseId} - ${warehouseName || initValue.distributeWarehouseName}`}
+                                                (warehouseCode || initValue.distributeWarehouseId) && `${warehouseCode || initValue.distributeWarehouseId} - ${warehouseName || initValue.distributeWarehouseName}`}
                                             style={{ zIndex: 1, color: '#666' }}
                                             disabled={this.state.isDisabled}
-                                            compKey="search-mind-key1"
+                                            compKey="search-mind-key3"
                                             ref={ref => { this.searchMind3 = ref }}
-                                            fetch={(params) => this.props.pubFetchValueList(Util.removeInvalid({
+                                            fetch={(params) =>
+                                            this.props.pubFetchValueList(Util.removeInvalid({
                                                 supplierAddressId: this.ids.supplierAddressId,
                                                 condition: params.value,
                                                 pageSize: params.pagination.pageSize,
@@ -419,15 +418,13 @@ class ProdModal extends Component {
                                             onChoosed={this.handleHouseChoose}
                                             onClear={this.handleHouseClear}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.warehouseCode} - {data.warehouseName}</div>
+                                                <div>
+                                                    {data.warehouseCode} - {data.warehouseName}
+                                                </div>
                                             )}
                                             pageSize={3}
                                             columns={[
                                                 {
-                                                    title: '仓库ID',
-                                                    dataIndex: 'id',
-                                                    width: 150,
-                                                }, {
                                                     title: '仓库编码',
                                                     dataIndex: 'warehouseCode',
                                                     width: 200,
@@ -453,6 +450,16 @@ class ProdModal extends Component {
                                         )}
                                     </span>
                                 </FormItem>
+                                {
+                                    checkMainSupplier &&
+                                    <p style={{
+                                        textAlign: 'center',
+                                        width: '100%',
+                                        color: 'red',
+                                        fontSize: 14
+                                    }}
+                                    >*主供应商已经存在,是否设置当前新增供应商为只供应商</p>
+                                }
                             </div>
                         </div>
                     </Form>
@@ -464,9 +471,8 @@ class ProdModal extends Component {
 
 ProdModal.propTypes = {
     prefixCls: PropTypes.string,
-    updateProdPurchase: PropTypes.func,
+    AddProdPurchase: PropTypes.func,
     pubFetchValueList: PropTypes.func,
-    UpdateProdPurchase: PropTypes.func,
     ChangeUpdateProd: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     prodPurchase: PropTypes.objectOf(PropTypes.any),

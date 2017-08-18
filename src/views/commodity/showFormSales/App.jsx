@@ -67,14 +67,14 @@ class ShowForm extends Component {
             <div className="manage-form">
                 <div>
                     <div style={{fontSize: 16, fontWeight: 900}}>
-                        <Icon type="desktop" className="css-appstore" />&nbsp;商品信息
+                        <Icon type="desktop" className="css-appstore" />&nbsp;商品信息(销售关系)
                     </div>
                     <Row className="css-row-padding" style={{paddingLeft: 22}}>
                         <Col span={8} className="css-col">
                             <span>商品名称:</span>
                             <Breadcrumb className="css-breadcrumb">
                                 <Breadcrumb.Item>
-                                    {name}
+                                    {saleName}
                                 </Breadcrumb.Item>
                             </Breadcrumb>
                         </Col>
