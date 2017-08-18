@@ -33,12 +33,12 @@ const columns = [{
     )
 }, {
     title: '商品编码',
-    dataIndex: 'skuId',
-    key: 'skuId',
-}, {
-    title: '商品条码',
     dataIndex: 'productCode',
     key: 'productCode',
+}, {
+    title: '商品条码',
+    dataIndex: 'skuId',
+    key: 'skuId',
 }, {
     title: '商品名称',
     dataIndex: 'productName',
