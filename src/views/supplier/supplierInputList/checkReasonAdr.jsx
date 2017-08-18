@@ -44,7 +44,7 @@ const TEXT = {
     supplierOperTaxInfo: {
         spId: '供应商主表ID',
         // id: '主键ID2',
-        companyName: '公司名称',
+        companyName: '纳税单位名称',
         companyLocProvince: '省份名',
         companyLocCity: '城市名',
         companyLocCounty: '地区名',

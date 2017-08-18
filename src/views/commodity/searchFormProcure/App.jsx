@@ -329,12 +329,12 @@ class SearchForm extends Component {
                                             pageSize={6}
                                             columns={[
                                                 {
-                                                    title: '供应商编码',
-                                                    dataIndex: 'spNo',
+                                                    title: '供应商地点编码',
+                                                    dataIndex: 'providerNo',
                                                     width: 150,
                                                 }, {
-                                                    title: '地点名称',
-                                                    dataIndex: 'companyName',
+                                                    title: '供应商地点名称',
+                                                    dataIndex: 'providerName',
                                                     width: 200,
                                                 }
                                             ]}
