@@ -258,7 +258,8 @@ class PoSearchForm extends PureComponent {
                                 {/* 地点 */}
                                 <FormItem>
                                     <div className="row small">
-                                        <span className="ant-form-item-label"><label>地点</label></span>                                        <SearchMind
+                                        <span className="ant-form-item-label search-mind-label">地点</span>
+                                        <SearchMind
                                             style={{ zIndex: 101 }}
                                             compKey="comPoAddress"
                                             ref={ref => { this.poAddress = ref }}
@@ -331,7 +332,7 @@ class PoSearchForm extends PureComponent {
                                 {/* 大类 */}
                                 <FormItem>
                                     <div className="row small">
-                                        <span className="ant-form-item-label"><label>大类</label></span>
+                                        <span className="ant-form-item-label search-mind-label">大类</span>
                                         <SearchMind
                                             compKey="comBigClass"
                                             ref={ref => { this.bigClass = ref }}
@@ -368,7 +369,7 @@ class PoSearchForm extends PureComponent {
                                 {/* 供应商 */}
                                 <FormItem>
                                     <div className="row middle">
-                                        <span className="ant-form-item-label"><label>供应商</label></span>
+                                        <span className="ant-form-item-label search-mind-label">供应商</span>
                                         <SearchMind
                                             compKey="comSupplier"
                                             ref={ref => { this.supplier = ref }}
@@ -403,7 +404,7 @@ class PoSearchForm extends PureComponent {
                                 {/* 供应商地点 */}
                                 <FormItem>
                                     <div className="row middle">
-                                        <span className="ant-form-item-label"><label>供应商地点</label></span>
+                                        <span className="ant-form-item-label search-mind-label">供应商地点</span>
                                         <SearchMind
                                             compKey="comSupplierLoc"
                                             ref={ref => { this.supplierLoc = ref }}
@@ -444,7 +445,7 @@ class PoSearchForm extends PureComponent {
                                 {/* 创建日期 */}
                                 <FormItem >
                                     <div className="row middle">
-                                        <span className="ant-form-item-label"><label>创建日期</label></span>
+                                        <span className="ant-form-item-label search-mind-label">创建日期</span>
                                         {getFieldDecorator('createTime')(
                                             <RangePicker
                                                 className="date-range-picker"
@@ -460,7 +461,8 @@ class PoSearchForm extends PureComponent {
                                 {/* 审批日期 */}
                                 <FormItem >
                                     <div className="row middle">
-                                        <span className="ant-form-item-label"><label>审批日期</label> </span>
+                                        <span className="ant-form-item-label">
+                                            审批日期</span>
                                         {getFieldDecorator('auditTime')(
                                             <RangePicker
                                                 className="date-range-picker"
