@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import {
     Form,
     Input,
@@ -40,6 +41,7 @@ const TEXT = {
         companyName: '公司名称',
         spNo: '供应商编号',
         grade: '供应商等级',
+        settledTime: {text: '供应商入驻日期', type: 'time'},
     },
     supplierOperTaxInfo: {
         spId: '供应商主表ID',
@@ -53,13 +55,13 @@ const TEXT = {
         companyLocCountyCode: '地区code',
         companyDetailAddress: '公司详细地址',
         registrationCertificate: '商标注册证/受理通知书',
-        regCerExpiringDate: '商标注册证/受理通知书到期日',
+        regCerExpiringDate: {text: '商标注册证/受理通知书到期日', type: 'time'},
         qualityIdentification: '食品安全认证',
-        quaIdeExpiringDate: '食品安全认证到期日',
+        quaIdeExpiringDate: {text: '食品安全认证到期日', type: 'time'},
         foodBusinessLicense: '食品经营许可证',
-        businessLicenseExpiringDate: '食品经营许可证到期日期',
+        businessLicenseExpiringDate: {text: '食品经营许可证到期日期', type: 'time'},
         generalTaxpayerQualifiCerti: '一般纳税人资格证电子版',
-        taxpayerCertExpiringDate: '一般纳税人资格证到期日'
+        taxpayerCertExpiringDate: {text: '一般纳税人资格证到期日', type: 'time'}
     },
     supplierBankInfo: {
         // spId: '供应商主表ID',
@@ -91,9 +93,9 @@ const TEXT = {
         bankLocCityCode: '城市code',
         bankLocCountyCode: '地区code',
         licenseAddress: '营业执照详细地址',
-        establishDate: '创建时间',
-        startDate: '营业开始日期',
-        endDate: '营业结束日期',
+        establishDate: {text: '创建时间', type: 'time'},
+        startDate: {text: '营业开始日期', type: 'time'},
+        endDate: {text: '营业结束日期', type: 'time'},
         registeredCapital: '注册资本(单位万元)',
         businessScope: '经营范围',
         registLicencePic: '营业执照副本电子版url',
@@ -141,9 +143,17 @@ const parse = (before, after, TEXT) => {
         const t = TEXT[i];
         const childKeys = Object.keys(b);
         for (let j of childKeys) {
-            const cb = b[j];
-            const ca = a[j];
-            const ct = t[j];
+            let cb = b[j];
+            let ca = a[j];
+            let ct = t[j];
+            if (ct instanceof Object) {
+                const { text, type } = ct;
+                ct = text;
+                if (type === 'time') {
+                    cb = moment(parseInt(cb, 10)).format('YYYY-MM-DD');
+                    ca = moment(parseInt(ca, 10)).format('YYYY-MM-DD');
+                }
+            }
             if (ct) {
                 data.push({
                     before: cb,
@@ -151,7 +161,7 @@ const parse = (before, after, TEXT) => {
                     name: ct
                 })
             }
-        } 
+        }
     }
     return data;
 }
@@ -274,10 +284,10 @@ class CheckReason extends PureComponent {
             dataIndex: 'name',
         }, {
             title: '修改前',
-            dataIndex: 'before',
+            dataIndex: 'before'
         }, {
             title: '修改后',
-            dataIndex: 'after',
+            dataIndex: 'after'
         }];
 
         const { getFieldDecorator } = this.props.form;
@@ -302,6 +312,7 @@ class CheckReason extends PureComponent {
                             dataSource={formData}
                             pagination={false}
                             size="small"
+                            locale={{emptyText: '无修改前后对比数据'}}
                         />
                         <div>
                             <div className="application-modal-tip">
