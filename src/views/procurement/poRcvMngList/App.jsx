@@ -61,7 +61,6 @@ class PoRcvMngList extends PureComponent {
         super(props);
         this.handleSearch = ::this.handleSearch;
         this.handleResetValue = ::this.handleResetValue;
-        this.handleCreate = ::this.handleCreate;
         this.onLocTypeChange = ::this.onLocTypeChange;
         this.renderActions = ::this.renderActions;
         this.queryRcvMngPoList = ::this.queryRcvMngPoList;
@@ -403,13 +402,6 @@ class PoRcvMngList extends PureComponent {
         };
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
-    }
-
-    /**
-     * 点击新建按钮跳转到采购单收货列表
-     */
-    handleCreate() {
-        history.push('/porcvlist');
     }
 
     renderActions(text, record) {
