@@ -586,7 +586,10 @@ class LicenseInfo extends PureComponent {
                                         <span>*营业执照详细地址：</span>
                                         <FormItem>
                                             {getFieldDecorator('licenseAddress', {
-                                                rules: [{ required: true, message: '请输入营业执照详细地址!' }],
+                                                rules: [
+                                                    { required: true, message: '请输入营业执照详细地址!' },
+                                                    { max: 30, message: '详细地址最长30位' }
+                                                ],
                                                 initialValue: supplierlicenseInfo.licenseAddress
                                             })(
                                                 <Input
