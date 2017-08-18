@@ -29,6 +29,15 @@ const array2string = function (reg) {
 class Utils {
 
     /**
+     * 清除所有空格
+     *
+     * @param {string | number} 目标值
+     */
+    static trimAll(str = '') {
+        return str.toString().replace(/\s/g, '');
+    }
+
+    /**
      * 清除左右空格
      *
      * @param {string} str 目标字符串

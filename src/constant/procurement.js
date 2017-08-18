@@ -31,7 +31,7 @@ export const poStatusCodes = {
 }
 
 // 收货单状态清单
-export const status = {
+export const receivedStatus = {
     defaultValue: '',
     data: [{
         key: '',

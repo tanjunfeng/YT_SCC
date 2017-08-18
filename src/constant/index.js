@@ -13,6 +13,6 @@ export const DATE_FORMAT = 'YYYY-MM-DD';
 // 时间格式
 export const TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 // 新建编辑tab
-export  const TABCONTENT = {}
+export const TABCONTENT = {}
 // 阶梯价格后端最大的商品数
 export const MAXGOODS = 2147483647;

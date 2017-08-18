@@ -58,11 +58,11 @@ class PoPrintList extends PureComponent {
      * @param {*} params
      */
     queryPoPrintList(params) {
-        let tmp = params || {};
-        let allParams = Object.assign({
+        const tmp = params || {};
+        const allParams = Object.assign({
             pageSize: PAGE_SIZE,
             pageNum: this.current || 1
-        }, allParams, this.searchParams, tmp);
+        }, this.searchParams, tmp);
         this.props.fetchPoPrintList(allParams);
     }
 
@@ -102,7 +102,7 @@ class PoPrintList extends PureComponent {
         const { data = [], total, pageNum } = poPrintList;
         const that = this;
         const list = (reportsData = []) => {
-            let res = [];
+            const res = [];
             reportsData.forEach((item) => {
                 res.push(<Report data={item} key={item.id} onDownPDF={that.applyDownPDF} />)
             })
