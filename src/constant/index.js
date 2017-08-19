@@ -16,3 +16,5 @@ export const TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 export const TABCONTENT = {}
 // 阶梯价格后端最大的商品数
 export const MAXGOODS = 2147483647;
+// ckeditor cdn
+export const ckeditorUrl = 'https://cdn.bootcss.com/ckeditor/4.7.1/ckeditor.js';
