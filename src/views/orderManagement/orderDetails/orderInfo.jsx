@@ -37,8 +37,8 @@ const columns = [{
     key: 'productCode',
 }, {
     title: '商品条码',
-    dataIndex: 'skuId',
-    key: 'skuId',
+    dataIndex: 'innerInternationalCode',
+    key: 'innerInternationalCode',
 }, {
     title: '商品名称',
     dataIndex: 'productName',
