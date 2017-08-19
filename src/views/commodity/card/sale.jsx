@@ -216,7 +216,7 @@ class SaleCard extends Component {
                                                         {`${i.startNumber} - ${i.endNumber === MAXGOODS ? '最大值' : i.endNumber} (${minUnit})`}
                                                     </span>
                                                     <span className={`${prefixCls}-step-item-right`}>
-                                                        {i.price}元
+                                                        {`${i.price}元/${minUnit}`}
                                                     </span>
                                                 </li>
                                             )
