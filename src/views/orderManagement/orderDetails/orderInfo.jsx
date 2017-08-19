@@ -37,8 +37,14 @@ const columns = [{
     key: 'productCode',
 }, {
     title: '商品条码',
-    dataIndex: 'innerInternationalCode',
-    key: 'innerInternationalCode',
+    dataIndex: 'internationalCodes',
+    key: 'internationalCodes',
+    render: (item) => {
+        if (item instanceof Array && item.length) {
+            return item[0].internationalCode;
+        }
+        return null;
+    }
 }, {
     title: '商品名称',
     dataIndex: 'productName',
