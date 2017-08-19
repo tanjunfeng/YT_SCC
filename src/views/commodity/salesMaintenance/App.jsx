@@ -228,6 +228,7 @@ class ProcurementMaintenance extends PureComponent {
                 <div>
                     <Cardline.SaleCard
                         initalValue={stepPriceList.sellPriceInfoVos || []}
+                        minUnit={getProductById.minUnit}
                         handleDelete={this.handleDelete}
                         handleCardClick={this.handleCardClick}
                         handleChangeStatus={this.handleChangeStatus}

@@ -163,7 +163,7 @@ class SaleCard extends Component {
     }
 
     renderCard = (datas) => {
-        const { prefixCls } = this.props;
+        const { prefixCls, minUnit } = this.props;
         return datas.map((item) => {
             return (
                 <div
@@ -213,7 +213,7 @@ class SaleCard extends Component {
                                             return (
                                                 <li className={`${prefixCls}-step-item`}>
                                                     <span className={`${prefixCls}-step-item-left`}>
-                                                        {`${i.startNumber} - ${i.endNumber === MAXGOODS ? '最大值' : i.endNumber}`}
+                                                        {`${i.startNumber} - ${i.endNumber === MAXGOODS ? '最大值' : i.endNumber}(${minUnit})`}
                                                     </span>
                                                     <span className={`${prefixCls}-step-item-right`}>
                                                         {i.price}元
