@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Carousel, Icon } from 'antd';
+import { Carousel } from 'antd';
 import Common from './common';
 
 @Common
@@ -14,15 +14,14 @@ class CarouselItem extends Component {
                     autoplay={isEnabled}
                 >
                     {
-                        itemAds.map((item) => {
-                            return (
+                        itemAds.map((item) =>
+                            (
                                 <div key={item.id} style={{height: '250px'}}>
                                     <img alt="" src={item.icon} height={'250px'} />
                                 </div>
                             )
-                        })
+                        )
                     }
-                    
                 </Carousel>
             </div>
         );

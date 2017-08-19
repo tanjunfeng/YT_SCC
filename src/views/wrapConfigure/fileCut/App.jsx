@@ -85,9 +85,9 @@ class FileCut extends Component {
 FileCut.propTypes = {
     width: PropTypes.number,
     height: PropTypes.number,
+    dpr: PropTypes.number,
     defaultImge: PropTypes.string,
     handleChange: PropTypes.func,
-    accept: PropTypes.array,
 };
 
 FileCut.defaultTypes = {

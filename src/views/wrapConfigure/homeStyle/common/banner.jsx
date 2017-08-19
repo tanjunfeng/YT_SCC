@@ -62,6 +62,7 @@ class BannerItem extends Component {
             } else if (!isBase64) {
                 this.saveItems(values);
             }
+            return null;
         })
     }
 
@@ -86,12 +87,12 @@ class BannerItem extends Component {
         this.setState({
             select: type
         })
-    } 
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         const { data = {} } = this.props;
-        const { itemAds = [] } = data; 
+        const { itemAds = [] } = data;
         return (
             <div
                 className="home-style-banner"
@@ -191,9 +192,7 @@ class BannerItem extends Component {
                                     </FormItem>
                                 </div>
                             }
-                            <FormItem className={
-                                classnames('manage-form-item')
-                            }>
+                            <FormItem className={classnames('manage-form-item')} >
                                 <span className="manage-form-label banner-form-label">快捷icon：（说明：支持PNG，建议大小1080X240px）</span>
                                 <FileCut
                                     ref={ref => { this.imgRef = ref }}
