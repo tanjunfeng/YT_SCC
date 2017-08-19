@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
 import { Modal, Form, Input, message, InputNumber, Radio, Select } from 'antd';
 import Utils from '../../../../util/util';
 import { uploadImageBase64Data } from '../../../../service';
