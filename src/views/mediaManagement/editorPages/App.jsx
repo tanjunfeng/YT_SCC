@@ -12,7 +12,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Form, Button, message, Upload, Icon, Input } from 'antd'
 import CopyToClipboard from 'react-copy-to-clipboard';
-import CKEditor from 'react-ckeditor-component';
+import loadScript from 'load-script';
+import { ckeditorUrl } from '../../../constant';
 
 import {
     fectheEditorContent,
@@ -48,29 +49,38 @@ class EditorPages extends Component {
     }
 
     componentDidMount() {
+        if (!window.CKEDITOR) {
+            loadScript(`${ckeditorUrl}`, this.onLoad);
+        }
+    }
+
+    componentWillUnmount() {
+        window.CKEDITOR = null;
+        clearTimeout(this.timer);
+    }
+
+    onLoad = () => {
         const { match } = this.props;
         const { params } = match;
         const { ckEditor } = params;
         const id = ckEditor;
+        this.editorInstance = window.CKEDITOR.appendTo(document.querySelector('#editor-wrap'))
+        this.editorInstance.on('change', () => {
+            this.updateContent(this.editorInstance.getData());
+        })
         this.props.fectheEditorList({
             id,
             shelfStatus: 0
         })
         .then((res) => {
-            this.editRef.setState({
-                content: res.pageContent,
-            })
             this.setState({
                 content: res.pageContent,
                 defaultFileList: []
+            }, () => {
+                this.editorInstance.setData(res.pageContent);
             })
-        }).catch(() => {
-
-        });
-    }
-
-    componentWillUnmount() {
-        clearTimeout(this.timer);
+        })
+        
     }
 
     /**
@@ -185,12 +195,13 @@ class EditorPages extends Component {
                             </CopyToClipboard>
                         </Button>
                     </div>
-                    <CKEditor
+                    <div id="editor-wrap"></div>
+                    {/* <CKEditor
                         activeClass="p10"
                         ref={node => (this.editRef = node)}
                         content={this.state.content}
                         onChange={this.updateContent}
-                    />
+                    /> */}
                     <div className="classify-select-btn-warp editorPages-css-footer">
                         <FormItem>
                             <div>
