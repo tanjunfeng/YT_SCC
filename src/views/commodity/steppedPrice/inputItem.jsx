@@ -114,6 +114,7 @@ class InputItem extends Component {
                         size={inputSize}
                         min={min}
                         max={max}
+                        disabled={index === 0}
                         value={firstValue}
                         defaultValue={firstDefault}
                         onChange={this.handleFirstChange}
