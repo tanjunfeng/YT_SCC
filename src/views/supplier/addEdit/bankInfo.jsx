@@ -60,6 +60,10 @@ class BankInfo extends PureComponent {
         const { form, onGoTo, isEdit, detailData = {}, data = {} } = this.props;
         const { supplierBasicInfo = {} } = data;
         Tools.checkAddress(this.companyAddress, 'companyAddress', this);
+        const {firstValue, secondValue, thirdValue} = this.companyAddress;
+        if (firstValue === '-1' || secondValue === '-1' || thirdValue === '-1') {
+            return null;
+        }
         const upload = this.nodebankFile.getValue();
         form.validateFields((err, values) => {
             const { firstValue, secondValue, thirdValue } = this.companyAddress;

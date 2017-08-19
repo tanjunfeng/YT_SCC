@@ -84,6 +84,17 @@ class LicenseInfo extends PureComponent {
         const { checked } = this.state;
         Tools.checkAddress(this.companyAddress, 'companyLoc', this);
         Tools.checkAddress(this.licenseLoc, 'licenseLocSpace', this);
+        const {firstValue, secondValue, thirdValue} = this.companyAddress;
+        if (
+            firstValue === '-1'
+            || secondValue === '-1'
+            || thirdValue === '-1'
+            || this.licenseLoc.firstValue === '-1'
+            || this.licenseLoc.secondValue === '-1'
+            || this.licenseLoc.thirdValue === '-1'
+        ) {
+            return null;
+        }
         const registrationCertificate = this.refs.registrationCertificate.getValue();
         const qualityIdentification = this.refs.qualityIdentification.getValue();
         const generalTaxpayerQualifiCerti = this.refs.generalTaxpayerQualifiCerti.getValue();
@@ -366,7 +377,7 @@ class LicenseInfo extends PureComponent {
                                             {getFieldDecorator('companyDetailAddress', {
                                                 rules: [
                                                     { required: true, message: '请输入公司详细地址!' },
-                                                    { max: 39, message: '输入超限' }
+                                                    { max: 30, message: '详细地址最长30位' }
                                                 ],
                                                 initialValue: supplierOperTaxInfo.companyDetailAddress
                                             })(
