@@ -89,8 +89,9 @@ class FloorItem extends Component {
                     areaId,
                     name,
                     title,
-                    url,
-                    adType
+                    url: encodeURI(url),
+                    adType,
+                    urlType: 2
                 }).then(() => {
                     this.setState({
                         titleVisible: false
@@ -174,16 +175,16 @@ class FloorItem extends Component {
                                 </FormItem>
                             </div>
                             <div>
-                                <span>超链接：</span>
+                                <span>链接：</span>
                                 <FormItem className="home-style-modal-input-item">
                                     {getFieldDecorator('url', {
                                         rules: [
-                                            {required: true, message: '请输入超链接'},
-                                            {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'}
+                                            {required: true, message: '请输入链接'},
+                                            {/* {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'} */}
                                         ],
-                                        initialValue: formatData[`${data.id}-title`].url
+                                        initialValue: decodeURI(formatData[`${data.id}-title`].url)
                                     })(
-                                        <Input type="textarea" rows={2} placeholder="请输入超链接" />
+                                        <Input type="textarea" rows={2} placeholder="请输入链接" />
                                     )}
                                 </FormItem>
                             </div>

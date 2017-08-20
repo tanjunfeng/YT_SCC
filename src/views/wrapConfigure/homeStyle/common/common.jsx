@@ -113,7 +113,7 @@ function Common(WrappedComponent) {
                 name,
                 title,
                 subTitle,
-                url,
+                url: encodeURI(url),
                 adType,
                 productNo,
                 urlType,
@@ -374,7 +374,7 @@ function Common(WrappedComponent) {
                                                 onChange={this.handleLinkStyleChange}
                                             >
                                                 <Option value="1">商品链接</Option>
-                                                <Option value="2">静态活动页面</Option>
+                                                <Option value="2">页面链接</Option>
                                             </Select>
                                         )}
                                     </FormItem>
@@ -383,17 +383,17 @@ function Common(WrappedComponent) {
                                     `${this.state.select}` === '2'
                                     ? <div>
                                         <FormItem className="home-style-modal-input-item">
-                                            <span>超链接：</span>
+                                            <span>页面链接：</span>
                                             {getFieldDecorator('url', {
                                                 rules: [
-                                                    {required: true, message: '请输入超链接'},
+                                                    {required: true, message: '请输入页面链接'},
                                                     /* eslint-disable */
-                                                    {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'}
+                                                    {/* {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'} */}
                                                     /* eslint-enable */
                                                 ],
-                                                initialValue: current.url ? current.url : ''
+                                                initialValue: decodeURI(current.url ? current.url : '')
                                             })(
-                                                <Input className="home-style-url" type="textarea" rows={2} placeholder="请输入超链接" />
+                                                <Input className="home-style-url" type="textarea" rows={2} placeholder="请输入页面链接" />
                                             )}
                                         </FormItem>
                                     </div>

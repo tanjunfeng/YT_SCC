@@ -16,8 +16,8 @@ class CarouselItem extends Component {
                     {
                         itemAds.map((item) =>
                             (
-                                <div key={item.id} style={{height: '250px'}}>
-                                    <img alt="" src={item.icon} height={'250px'} />
+                                <div key={item.id} style={{height: '255px'}}>
+                                    <img alt="" src={item.icon} height={'255px'} />
                                 </div>
                             )
                         )
