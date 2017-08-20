@@ -36,7 +36,7 @@ const columns = [
         key: 'linkType',
         render: (text) => {
             if (text === 2) {
-                return '静态活动页'
+                return '页面链接'
             } else if (text === 1) {
                 return '商品链接'
             }

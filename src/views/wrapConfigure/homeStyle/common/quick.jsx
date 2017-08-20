@@ -73,11 +73,13 @@ class QuickItem extends Component {
 
     saveItems(values, url) {
         const { id, navigationPosition, picAddress } = this.current;
+        const { linkAddress, ...params } = values;
         updateQuickNavigation({
             id,
             navigationPosition,
             picAddress: url ? url : picAddress,
-            ...values
+            linkAddress: encodeURI(linkAddress),
+            ...params
         }).then(() => {
             this.setState({
                 isShow: false
@@ -179,7 +181,7 @@ class QuickItem extends Component {
                                         onChange={this.handleLinkStyleChange}
                                     >
                                         <Option value="1">商品链接</Option>
-                                        <Option value="2">静态活动页面</Option>
+                                        <Option value="2">页面链接</Option>
                                     </Select>
                                 )}
                             </FormItem>
@@ -206,18 +208,18 @@ class QuickItem extends Component {
                                 </div>
                                 : <div>
                                     <FormItem className="application-form-item">
-                                        <span className="application-modal-label">链接地址：</span>
+                                        <span className="application-modal-label">页面链接：</span>
                                         {getFieldDecorator('linkAddress', {
                                             rules: [
-                                                { required: true, message: '请输入链接地址', whitespace: true },
-                                                { pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'}
+                                                { required: true, message: '请输入页面链接', whitespace: true },
+                                                {/* { pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'} */}
                                             ],
-                                            initialValue: current.linkAddress
+                                            initialValue: current.linkAddress ? decodeURI(current.linkAddress) : ''
                                         })(
                                             <Input
                                                 onChange={this.handleTextChange}
                                                 type="textarea"
-                                                placeholder="请输入链接地址"
+                                                placeholder="请输入页面链接"
                                                 className="application-modal-textarea"
                                                 autosize={{ minRows: 2, maxRows: 8 }}
                                             />
