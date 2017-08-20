@@ -307,7 +307,7 @@ class ChangeMessage extends PureComponent {
                                     required: true,
                                     message: '请输入页面链接'
                                 }],
-                                initialValue: isShowValue ? decodeURI(linkAddress) : ''
+                                initialValue: isShowValue && linkAddress ? decodeURI(linkAddress) : ''
                             })(
                                 <Input
                                     type="textarea"
