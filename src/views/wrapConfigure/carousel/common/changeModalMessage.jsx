@@ -261,7 +261,7 @@ class ChangeMessage extends PureComponent {
                                 onChange={this.handleLinkStyleChange}
                             >
                                 <Option value="1">商品链接</Option>
-                                <Option value="2">静态活动页面</Option>
+                                <Option value="2">页面链接</Option>
                             </Select>
                         )}
                     </FormItem>
@@ -300,20 +300,20 @@ class ChangeMessage extends PureComponent {
                         <FormItem className="modal-form-item">
                             <span className="modal-form-item-title">
                                 <span style={{color: '#f00' }}>*</span>
-                                链接地址
+                                页面链接
                             </span>
                             {getFieldDecorator('linkAddress', {
                                 rules: [{
                                     required: true,
-                                    message: '请输入链接地址'
+                                    message: '请输入页面链接'
                                 }],
-                                initialValue: isShowValue ? linkAddress : ''
+                                initialValue: isShowValue ? decodeURI(linkAddress) : ''
                             })(
                                 <Input
                                     type="textarea"
-                                    disabled={this.state.selectLinkType === '商品链接'}
+                                    disabled={this.state.selectLinkType === '1'}
                                     rows={2}
-                                    placeholder="链接地址"
+                                    placeholder="页面链接"
                                 />
 
                             )}

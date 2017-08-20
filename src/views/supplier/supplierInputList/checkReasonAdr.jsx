@@ -117,7 +117,7 @@ const TEXT = {
         providerNo: '供应商地点编码',
         providerName: '供应商地点名称',
         goodsArrivalCycle: '到货周期',
-        // orgId: '分公司ID',
+        orgId: '分公司',
         settlementPeriod: '账期',
         belongArea: '所属区域',
         // auditDate: '审核时间',
