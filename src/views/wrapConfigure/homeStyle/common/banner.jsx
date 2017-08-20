@@ -66,15 +66,17 @@ class BannerItem extends Component {
         })
     }
 
-    saveItems(values, url) {
+    saveItems(values, ImageUrl) {
         const { data = {} } = this.props;
         const { id, itemAds = [] } = data;
+        const { url, ...params } = values;
         saveItemAd({
             id,
             areaId: itemAds[0].areaId,
             adType: itemAds[0].adType,
-            icon: url ? url : itemAds[0].icon,
-            ...values
+            icon: ImageUrl ? ImageUrl : itemAds[0].icon,
+            url: encodeURI(url),
+            ...params
         }).then(() => {
             this.setState({
                 isShow: false
@@ -150,7 +152,7 @@ class BannerItem extends Component {
                                         onChange={this.handleLinkStyleChange}
                                     >
                                         <Option value="1">商品链接</Option>
-                                        <Option value="2">静态活动页面</Option>
+                                        <Option value="2">页面链接</Option>
                                     </Select>
                                     )}
                             </FormItem>
@@ -177,17 +179,17 @@ class BannerItem extends Component {
                                 </div>
                                 : <div>
                                     <FormItem className="home-style-modal-input-item">
-                                        <span>超链接：</span>
+                                        <span>页面链接：</span>
                                         {getFieldDecorator('url', {
                                             rules: [
-                                                {required: true, message: '请输入链接地址'},
+                                                {required: true, message: '请输入页面链接'},
                                                 /* eslint-disable */
-                                                {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'}
+                                                {/* {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'} */}
                                                 /* eslint-enable */
                                             ],
-                                            initialValue: itemAds[0].url ? itemAds[0].url : ''
+                                            initialValue: itemAds[0].url ? decodeURI(itemAds[0].url) : ''
                                         })(
-                                            <Input className="home-style-url" type="textarea" rows={2} placeholder="请输入链接地址" />
+                                            <Input className="home-style-url" type="textarea" rows={2} placeholder="请输入页面链接" />
                                         )}
                                     </FormItem>
                                 </div>
