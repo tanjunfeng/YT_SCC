@@ -16,6 +16,7 @@ import {
     DeleteDictionary,
     DicContentListVisible
 } from '../../../actions/dictionary';
+import Utils from '../../../util/util';
 import { PAGE_SIZE } from '../../../constant';
 import ModifyDictionary from './modifyDictionary';
 import ModifyContentlist from './modifyContentlist';
@@ -99,9 +100,9 @@ class DataDictionary extends PureComponent {
     handleQuery() {
         const { productName } = this.props.form.getFieldsValue();
         this.props.dictionarylist({
-            keyword: productName,
             pageNum: 1,
-            pageSize: 20
+            pageSize: 20,
+            ...Utils.removeInvalid({keyword: productName})
         })
     }
 

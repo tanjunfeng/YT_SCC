@@ -15,7 +15,7 @@
     "pre-commit"
   ],
   "dependencies": {
-    "antd": "^2.10.2",
+    "antd": "2.10.2",
     "bluebird": "^3.5.0",
     "deepmerge": "^1.5.0",
     "freed-spa": "https://github.com/freed-framework/freed-spa.git",
