@@ -3,6 +3,14 @@
  * @author denglingbo
  */
 
+.gyl-root .ant-layout-content {
+    overflow: auto;
+}
+
+.gyl-root .ant-input {
+    line-height: 1.5;
+}
+
 .gys-layout {
     margin: 15px 0;
     padding: 15px;
