@@ -80,7 +80,6 @@ class EditorPages extends Component {
                 this.editorInstance.setData(res.pageContent);
             })
         })
-        
     }
 
     /**
