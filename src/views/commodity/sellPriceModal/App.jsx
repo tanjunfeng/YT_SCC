@@ -36,7 +36,7 @@ class SellPriceModal extends Component {
         this.childCompany = props.datas.branchCompanyId ? {
             branchCompanyId: props.datas.branchCompanyId,
             branchCompanyName: props.datas.branchCompanyName
-        } : null;
+        } : {};
         this.state = {
             currentInside: null,
             insideValue: null
@@ -64,6 +64,11 @@ class SellPriceModal extends Component {
             const result = values;
             result.sellSectionPrices = results;
             result.productId = datas.id || datas.productId;
+            const { branchCompanyId, branchCompanyName } = this.childCompany;
+            if (!isEdit && (!branchCompanyId || !branchCompanyName)) {
+                message.error('请选择子公司！');
+                return null;
+            }
             Object.assign(result, this.childCompany);
             if (isEdit) {
                 Object.assign(result, {
