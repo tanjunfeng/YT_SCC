@@ -15,7 +15,6 @@ import {
     updateSupplierInfo,
     insertSupplierAddressInfo,
     updateSupplierAddressInfo,
-    insertOrUpdateSupplierInfo,
     querySettledList,
     fetchQueryManageList,
     querySupplierPlaceRegion,
@@ -197,7 +196,7 @@ const receiveAuditSupplierEditInfo = (data) => ({
     payload: data,
 })
 
-export const AuditSupplierEditInfo = (params) => dispatch => (
+export const auditSupplierEditInfoAction = (params) => dispatch => (
     new Promise((resolve, reject) => {
         auditSupplierEditInfo(params)
             .then(res => {
