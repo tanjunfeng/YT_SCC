@@ -5,18 +5,15 @@ import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { PAGE_SIZE } from '../../../constant';
+import { PAGE_SIZE, DATE_FORMAT } from '../../../constant';
 import Utils from '../../../util/util';
 import {
-    poStatus,
     locType,
     poType,
     locTypeCodes,
-    poStatusCodes,
-    poTypeCodes
+    poStatusCodes
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
-import moment from 'moment';
 import {
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -24,15 +21,15 @@ import {
     getSupplierLocMap,
     getBigClassMap,
     fetchPoRcvList
-} from '../../../actions'
+} from '../../../actions';
+
 const FormItem = Form.Item;
-const InputGroup = Input.Group;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
-const dateFormat = "YYYY-MM-DD";
+
 @connect(
     state => ({
-        poRcvList: state.toJS().procurement.poRcvList
+        poRcvListAction: state.toJS().procurement.poRcvList
     }),
     dispatch => bindActionCreators({
         getWarehouseAddressMap,
@@ -48,20 +45,19 @@ class PoRcvList extends PureComponent {
         super(props);
         this.handleSearch = ::this.handleSearch;
         this.handleResetValue = ::this.handleResetValue;
-        this.onLocTypeChange =::this.onLocTypeChange;
-        this.handleGetAddressMap =::this.handleGetAddressMap;
-        this.handleGetBigClassMap =::this.handleGetBigClassMap;
-        this.handleGetSupplierMap =::this.handleGetSupplierMap;
-        this.handleGetSupplierLocMap =::this.handleGetSupplierLocMap;
-        this.onActionMenuSelect = ::this.onActionMenuSelect;
+        this.onLocTypeChange = ::this.onLocTypeChange;
+        this.handleGetAddressMap = ::this.handleGetAddressMap;
+        this.handleGetBigClassMap = ::this.handleGetBigClassMap;
+        this.handleGetSupplierMap = ::this.handleGetSupplierMap;
+        this.handleGetSupplierLocMap = ::this.handleGetSupplierLocMap;
         this.renderActions = ::this.renderActions;
-        this.queryPoRcvPoList =::this.queryPoRcvPoList;
+        this.queryPoRcvPoList = ::this.queryPoRcvPoList;
         this.searchParams = {};
         this.state = {
-            //地点是否可编辑
+            // 地点是否可编辑
             locDisabled: true
         };
-        //初始页号
+        // 初始页号
         this.current = 1;
         this.columns = [
 
@@ -134,12 +130,16 @@ class PoRcvList extends PureComponent {
         ]
     }
 
+    componentDidMount() {
+        this.queryPoRcvPoList();
+    }
+
     /**
       * 根据地点类型值控制地点值清单是否可编辑
       * 地点类型有值时：地点值清单可编辑
       * 地点类型无值时：地点值清单不可编辑、清空地点值清单
-      * 
-      * @param {*} value 
+      *
+      * @param {*} value
       */
     onLocTypeChange(value) {
         // 地点类型有值
@@ -153,6 +153,7 @@ class PoRcvList extends PureComponent {
         // 清空地点值
         this.poAddress.reset();
     }
+
     /**
      * 根据供应商值控制供应商地点值清单是否可编辑
      * 供应商有值时：供应商地点值清单可编辑
@@ -162,77 +163,78 @@ class PoRcvList extends PureComponent {
      */
     onSupplierChange(value) {
         if (value) {
-            //供应商有值时，供应商地点可编辑
-            //TODO SearchMind 需实现是否可编辑功能
+            // 供应商有值时，供应商地点可编辑
+            // TODO SearchMind 需实现是否可编辑功能
         } else {
-            //供应商无值时，供应商地点不可编辑
-            //TODO SearchMind 需实现是否可编辑功能
+            // 供应商无值时，供应商地点不可编辑
+            // TODO SearchMind 需实现是否可编辑功能
         }
-        //清空供应商地点值
+        // 清空供应商地点值
         this.supplierLoc.reset();
     }
     /**
-    * 
+    *
     * 返回查询条件
     * 界面可见查询条件+采购单状态编码（已审核）
-    * 
+    *
     */
     editSearchParams() {
         const {
-            rcvNo,
             poNo,
             locTypeCd,
             poTypeCd,
         } = this.props.form.getFieldsValue();
 
-        //创建日期区间
-        let createdDuringArr = this.props.form.getFieldValue("createdDuring") || [];
-        let createdDuringFrom, createdDuringTo;
+        // 创建日期区间
+        const createdDuringArr = this.props.form.getFieldValue('createdDuring') || [];
+        let createdDuringFrom;
+        let createdDuringTo;
         if (createdDuringArr.length > 0) {
-            createdDuringFrom = createdDuringArr[0].format(dateFormat);
+            createdDuringFrom = createdDuringArr[0].format(DATE_FORMAT);
         }
         if (createdDuringArr.length > 1) {
-            createdDuringTo = createdDuringArr[1].format(dateFormat);
+            createdDuringTo = createdDuringArr[1].format(DATE_FORMAT);
         }
 
-        //获取采购单审批日期区间
-        let auditDuringArr = this.props.form.getFieldValue("auditDuring") || [];
-        let auditDuringFrom, auditDuringTo;
+        // 获取采购单审批日期区间
+        const auditDuringArr = this.props.form.getFieldValue('auditDuring') || [];
+        let auditDuringFrom;
+        let auditDuringTo;
         if (auditDuringArr.length > 0) {
-            auditDuringFrom = auditDuringArr[0].format(dateFormat);
+            auditDuringFrom = auditDuringArr[0].format(DATE_FORMAT);
         }
         if (auditDuringArr.length > 1) {
-            auditDuringTo = auditDuringArr[1].format(dateFormat);
+            auditDuringTo = auditDuringArr[1].format(DATE_FORMAT);
         }
-        //大类
+        // 大类
         let bigClassCd = null;
-        let selectedBigClassRawData = this.bigClass.state.selectedRawData;
+        const selectedBigClassRawData = this.bigClass.state.selectedRawData;
         if (selectedBigClassRawData) {
             bigClassCd = selectedBigClassRawData.code;
         }
 
-        //地点
+        // 地点
         let addressCd;
-        let selectedAddressRawData = this.poAddress.state.selectedRawData;
+        const selectedAddressRawData = this.poAddress.state.selectedRawData;
         if (selectedAddressRawData) {
             addressCd = selectedAddressRawData.code;
         }
-        //供应商
+        // 供应商
         let supplierCd;
-        let selectedSupplierRawData = this.supplier.state.selectedRawData;
+        const selectedSupplierRawData = this.supplier.state.selectedRawData;
         if (selectedSupplierRawData) {
             supplierCd = selectedSupplierRawData.code;
         }
 
-        //供应商地点
+        // 供应商地点
         let supplierLocCd;
-        let selectedSupplierLocRawData = this.supplierLoc.state.selectedRawData;
+        const selectedSupplierLocRawData = this.supplierLoc.state.selectedRawData;
         if (selectedSupplierRawData) {
             supplierLocCd = selectedSupplierLocRawData.code;
         }
 
-        //采购单状态：已审核
-        let statusCd = poStatusCodes.approved;
+        // 采购单状态：已审核
+        const statusCd = poStatusCodes.approved;
         const searchParams = {
             poNo,
             locTypeCd,
@@ -256,21 +258,18 @@ class PoRcvList extends PureComponent {
      * 查询待收货采购单列表（已审批 && 未收货）
      */
     handleSearch() {
-        //编辑查询条件
+        // 编辑查询条件
         this.editSearchParams();
-        //查询待收货采购单
+        // 查询待收货采购单
         this.queryPoRcvPoList();
     }
 
-    componentDidMount() {
-        this.queryPoRcvPoList();
-    }
     queryPoRcvPoList(params) {
-        let tmp = params || {};
-        let allParams = Object.assign({
+        const tmp = params || {};
+        const allParams = Object.assign({
             pageSize: PAGE_SIZE,
             pageNum: this.current,
-        }, allParams, this.searchParams, tmp);
+        }, this.searchParams, tmp);
         this.props.fetchPoRcvList(allParams);
     }
 
@@ -292,9 +291,9 @@ class PoRcvList extends PureComponent {
     /**
      * 根据地点类型查询地点值清单
      */
-    handleGetAddressMap = ({ value, pagination }) => {
+    handleGetAddressMap = ({ value }) => {
         // 地点类型
-        let { locTypeCd } = this.props.form.getFieldsValue(["locTypeCd"])
+        const { locTypeCd } = this.props.form.getFieldsValue(['locTypeCd'])
         // 根据选择的地点类型获取对应地点的值清单
         if (locTypeCd === locTypeCodes.warehouse) {
             // 地点类型为仓库
@@ -306,46 +305,40 @@ class PoRcvList extends PureComponent {
             return this.props.getShopAddressMap({
                 value,
             });
-        } else {
-            // 如果地点类型为空，返回空promise
-            return new Promise(function (resolve, reject) {
-                resolve({ total: 0, data: [] });
-            });
         }
+        // 如果地点类型为空，返回空promise
+        return new Promise((resolve) => {
+            resolve({ total: 0, data: [] });
+        });
     }
 
     /**
      * 查询大类值清单
      */
-    handleGetBigClassMap = ({ value, pagination }) => {
-        return this.props.getBigClassMap({
-            value,
-        });
-
+    handleGetBigClassMap = ({ value }) => {
+        this.props.getBigClassMap({ value });
     }
 
     /**
      * 查询供应商值清单
      */
-    handleGetSupplierMap = ({ value, pagination }) => {
-        return this.props.getSupplierMap({
-            value,
-        });
+    handleGetSupplierMap = ({ value }) => {
+        this.props.getSupplierMap({ value });
     }
 
     /**
      * 根据供应商编码，查询供应商地点值清单
      */
-    handleGetSupplierLocMap = ({ value, pagination }) => {
+    handleGetSupplierLocMap = ({ value }) => {
         let supplierCd;
-        let selectedSupplierRawData = this.supplier.state.selectedRawData;
+        const selectedSupplierRawData = this.supplier.state.selectedRawData;
         if (selectedSupplierRawData) {
             supplierCd = selectedSupplierRawData.code;
         }
 
         // 如果供应商地点为空，返回空promise
         if (!supplierCd) {
-            return new Promise(function (resolve, reject) {
+            return new Promise((resolve) => {
                 resolve({ total: 0, data: [] });
             });
         }
@@ -354,19 +347,18 @@ class PoRcvList extends PureComponent {
             value,
             supplierCd
         });
-
     }
 
-    renderActions(text, record, index) {
-        const { statusCd, id } = record;
+    renderActions(text, record) {
+        const { id } = record;
         const { pathname } = this.props.location;
         const menu = (
-            <Menu onClick={(item) => this.onActionMenuSelect(record, index, item)}>
+            <Menu>
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/${id}`}>采购单详情</Link>
                 </Menu.Item>
                 <Menu.Item key="rcv">
-                    <Link to={'/porcvlist/create/' + id} >收货</Link>
+                    <Link to={`/porcvlist/create/${id}`} >收货</Link>
                 </Menu.Item>
             </Menu>
         );
@@ -381,23 +373,9 @@ class PoRcvList extends PureComponent {
         )
     }
 
-    onActionMenuSelect(record, index, items) {
-        const { id } = record;
-        const { key } = items;
-        // do nothing
-    }
     render() {
         const { getFieldDecorator } = this.props.form;
-        const formItemLayout = {
-            labelCol: {
-                span: 3
-            },
-            wrapperCol: {
-                span: 21
-            }
-        };
-
-        const { data, total, pageNum, pageSize } = this.props.poRcvList;
+        const { data, total, pageNum, pageSize } = this.props.poRcvListAction;
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -405,8 +383,8 @@ class PoRcvList extends PureComponent {
                         <Row gutter={40}>
                             <Col span={8}>
                                 {/* 采购单号 */}
-                                <FormItem label="采购单号" formItemLayout>
-                                    { getFieldDecorator('poNo', {})(<Input />) }
+                                <FormItem label="采购单号" >
+                                    {getFieldDecorator('poNo', {})(<Input />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -417,9 +395,10 @@ class PoRcvList extends PureComponent {
                                     })(
                                         <Select style={{ width: '153px' }} size="default" onChange={this.onLocTypeChange}>
                                             {
-                                                locType.data.map((item) => {
-                                                    return <Option key={item.key} value={item.key}>{item.value}</Option>
-                                                })
+                                                locType.data.map((item) => (
+                                                    <Option key={item.key} value={item.key}>
+                                                        {item.value}</Option>
+                                                ))
                                             }
                                         </Select>
                                         )}
@@ -427,16 +406,20 @@ class PoRcvList extends PureComponent {
                             </Col>
                             <Col span={8}>
                                 {/* 地点 */}
-                                <FormItem formItemLayout >
+                                <FormItem >
                                     <div className="row small">
-                                        <span className="ant-form-item-label"><label>地点</label> </span>
+                                        <span className="ant-form-item-label search-mind-label">地点</span>
                                         <SearchMind
                                             compKey="comPoAddress"
                                             ref={ref => { this.poAddress = ref }}
-                                            fetch={(value, pager) => this.handleGetAddressMap(value, pager)}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.code} - {data.name}</div>
-                                            )}
+                                            fetch={
+                                                (value, pager) => (
+                                                    this.handleGetAddressMap(value, pager))
+                                            }
+                                            renderChoosedInputRaw={
+                                                (row) => (
+                                                    <div>{row.code} - {row.name}</div>
+                                                )}
                                             pageSize={2}
                                             columns={[
                                                 {
@@ -465,9 +448,10 @@ class PoRcvList extends PureComponent {
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
                                             {
-                                                poType.data.map((item) => {
-                                                    return <Option key={item.key} value={item.key}>{item.value}</Option>
-                                                })
+                                                poType.data.map((item) => (
+                                                    <Option key={item.key} value={item.key}>
+                                                        {item.value}</Option>
+                                                ))
                                             }
                                         </Select>
                                         )}
@@ -475,15 +459,18 @@ class PoRcvList extends PureComponent {
                             </Col>
                             <Col span={8}>
                                 {/* 大类 */}
-                                <FormItem formItemLayout >
+                                <FormItem >
                                     <div className="row small">
-                                        <span className="ant-form-item-label"><label>大类</label> </span>
+                                        <span className="ant-form-item-label search-mind-label">大类</span>
                                         <SearchMind
                                             compKey="comBigClass"
                                             ref={ref => { this.bigClass = ref }}
-                                            fetch={(value, pager) => this.handleGetBigClassMap(value, pager)}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.code} - {data.name}</div>
+                                            fetch={
+                                                (value, pager) => (
+                                                    this.handleGetBigClassMap(value, pager))
+                                            }
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row.code} - {row.name}</div>
                                             )}
                                             pageSize={2}
                                             columns={[
@@ -507,15 +494,18 @@ class PoRcvList extends PureComponent {
 
                             <Col span={8}>
                                 {/* 供应商 */}
-                                <FormItem formItemLayout >
+                                <FormItem >
                                     <div className="row middle">
-                                        <span className="ant-form-item-label"><label>供应商</label> </span>
+                                        <span className="ant-form-item-label search-mind-label">供应商</span>
                                         <SearchMind
                                             compKey="comSupplier"
                                             ref={ref => { this.supplier = ref }}
-                                            fetch={(value, pager) => this.handleGetSupplierMap(value, pager)}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.code} - {data.name}</div>
+                                            fetch={
+                                                (value, pager) => (
+                                                    this.handleGetSupplierMap(value, pager))
+                                            }
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row.code} - {row.name}</div>
                                             )}
                                             pageSize={2}
                                             columns={[
@@ -535,15 +525,19 @@ class PoRcvList extends PureComponent {
                             </Col>
                             <Col span={8}>
                                 {/* 供应商地点 */}
-                                <FormItem formItemLayout >
+                                <FormItem >
                                     <div className="row middle">
-                                        <span className="ant-form-item-label"><label>供应商地点</label> </span>
+                                        <span className="ant-form-item-label search-mind-label">供应商地点</span>
                                         <SearchMind
                                             compKey="comSupplierLoc"
                                             ref={ref => { this.supplierLoc = ref }}
-                                            fetch={(value, pager) => this.handleGetSupplierLocMap(value, pager)}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.code} - {data.name}</div>
+                                            fetch={
+                                                (value, pager) => (
+                                                    this.handleGetSupplierLocMap(value, pager)
+                                                )
+                                            }
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row.code} - {row.name}</div>
                                             )}
                                             pageSize={2}
                                             columns={[
@@ -569,12 +563,12 @@ class PoRcvList extends PureComponent {
                                 {/* 创建日期 */}
                                 <FormItem >
                                     <div>
-                                        <span className="ant-form-item-label"><label>创建日期</label> </span>
+                                        <span className="ant-form-item-label search-mind-label">创建日期</span>
                                         {getFieldDecorator('createdDuring', {
                                         })(
                                             <RangePicker
                                                 style={{ width: '200px' }}
-                                                format={dateFormat}
+                                                format={DATE_FORMAT}
                                                 placeholder={['开始日期', '结束日期']}
                                             />)}
                                     </div>
@@ -584,13 +578,13 @@ class PoRcvList extends PureComponent {
                                 {/* 审批日期 */}
                                 <FormItem >
                                     <div>
-                                        <span className="ant-form-item-label"><label>审批日期</label> </span>
+                                        <span className="ant-form-item-label search-mind-label">审批日期</span>
                                         {getFieldDecorator('auditDuring', {
 
                                         })(
                                             <RangePicker
                                                 style={{ width: '200px' }}
-                                                format={dateFormat}
+                                                format={DATE_FORMAT}
                                                 placeholder={['开始日期', '结束日期']}
                                             />)}
                                     </div>
@@ -638,9 +632,15 @@ class PoRcvList extends PureComponent {
 }
 
 PoRcvList.propTypes = {
-    doSearch: PropTypes.func,
-    onReset: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any)
+    fetchPoRcvList: PropTypes.func,
+    getWarehouseAddressMap: PropTypes.func,
+    getShopAddressMap: PropTypes.func,
+    getBigClassMap: PropTypes.func,
+    getSupplierMap: PropTypes.func,
+    getSupplierLocMap: PropTypes.func,
+    form: PropTypes.objectOf(PropTypes.any),
+    poRcvListAction: PropTypes.objectOf(PropTypes.any),
+    location: PropTypes.objectOf(PropTypes.any)
 };
 
 export default withRouter(Form.create()(PoRcvList));
