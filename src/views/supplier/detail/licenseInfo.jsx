@@ -5,16 +5,12 @@
  * 营业执照信息
  */
 
-import React, { Component } from 'react';
+import React, { pureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Icon } from 'antd';
 import moment from 'moment';
 
-class LicenseInfo extends Component {
-    constructor(props) {
-        super(props);
-    }
-
+class LicenseInfo extends pureComponent {
     render() {
         const { detailData = {} } = this.props;
         const {
@@ -46,7 +42,7 @@ class LicenseInfo extends Component {
                                     &nbsp;
                                     {
                                         supplierOperTaxInfo.regCerExpiringDate &&
-                                        <span className="detail-message-endTime">证件到期日: 
+                                        <span className="detail-message-endTime">证件到期日:
                                             {moment(supplierOperTaxInfo.regCerExpiringDate).format('YYYY-MM-DD')}
                                         </span>
                                     }
@@ -56,7 +52,7 @@ class LicenseInfo extends Component {
                                     &nbsp;
                                     {
                                         supplierOperTaxInfo.quaIdeExpiringDate &&
-                                        <span className="detail-message-endTime">证件到期日: 
+                                        <span className="detail-message-endTime">证件到期日:
                                             {moment(supplierOperTaxInfo.quaIdeExpiringDate).format('YYYY-MM-DD')}
                                         </span>
                                     }
@@ -68,7 +64,7 @@ class LicenseInfo extends Component {
                                     &nbsp;
                                     {
                                         supplierOperTaxInfo.quaIdeExpiringDate &&
-                                        <span className="detail-message-endTime">证件到期日: 
+                                        <span className="detail-message-endTime">证件到期日:
                                             {moment(supplierOperTaxInfo.quaIdeExpiringDate).format('YYYY-MM-DD')}
                                         </span>
                                     }
@@ -78,7 +74,7 @@ class LicenseInfo extends Component {
                                     &nbsp;
                                     {
                                         supplierOperTaxInfo.taxpayerCertExpiringDate &&
-                                        <span className="detail-message-endTime">证件到期日: 
+                                        <span className="detail-message-endTime">证件到期日:
                                             {moment(supplierOperTaxInfo.taxpayerCertExpiringDate).format('YYYY-MM-DD')}
                                         </span>
                                     }
