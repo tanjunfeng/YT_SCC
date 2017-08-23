@@ -79,15 +79,12 @@ class SearchRecommendConfig extends Component {
 
     // 输入框-保存
     handleSaveInput() {
-        const { content } = this.props.form.getFieldsValue();
-        const data = { content }
+        const { content = '' } = this.props.form.getFieldsValue();
         this.props.addSaveInput({
-            ...Utils.removeInvalid(data)
+            content
         }).then((res) => {
             message.success(res.message);
-        }).catch((err) => {
-            // message.error(err.message);
-        });
+        })
     }
 
     // “添加”模态框
