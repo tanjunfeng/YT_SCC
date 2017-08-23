@@ -24,8 +24,7 @@ import {
 } from '../../../actions';
 import {
     modifyAuthVisible,
-    modifyAdrVisible,
-    AuditSupplierEditInfo
+    modifyAdrVisible
 } from '../../../actions/supplier';
 
 import SearchForm from '../searchFormInput';
@@ -60,8 +59,7 @@ const columns = supplierInputList;
         fetchGetProductById,
         fetchEditBeforeAfter,
         modifyAuthVisible,
-        modifyAdrVisible,
-        AuditSupplierEditInfo
+        modifyAdrVisible
     }, dispatch)
 )
 class SupplierInputList extends PureComponent {

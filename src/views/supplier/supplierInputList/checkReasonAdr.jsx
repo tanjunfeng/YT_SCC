@@ -28,7 +28,7 @@ import {
 } from '../../../actions';
 import {
     modifyAdrVisible,
-    AuditSupplierEditInfo
+    auditSupplierEditInfoAction
 } from '../../../actions/supplier';
 
 const FormItem = Form.Item;
@@ -134,13 +134,13 @@ const TEXT = {
     }
 }
 
-const parse = (before, after, TEXT) => {
+const parse = (before, after, rawText) => {
     const  data = [];
     const keys = Object.keys(before);
     for (let i of keys) {
         const b = before[i];
         const a = after[i];
-        const t = TEXT[i];
+        const t = rawText[i];
         const childKeys = Object.keys(b);
         for (let j of childKeys) {
             const cb = b[j];
@@ -172,7 +172,7 @@ const parse = (before, after, TEXT) => {
         suppplierSettledAudit,
         fetchQueryManageList,
         modifyAdrVisible,
-        AuditSupplierEditInfo
+        auditSupplierEditInfoAction
     }, dispatch)
 )
 class CheckReason extends PureComponent {
@@ -227,7 +227,7 @@ class CheckReason extends PureComponent {
         }
         this.props.form.validateFields((err) => {
             if (!err) {
-                this.props.AuditSupplierEditInfo({
+                this.props.auditSupplierEditInfoAction({
                     id: Number(id),
                     pass: parseInt(selected, 10) === 1 ? false : true,
                     adrBasicId: before.spAdrBasic.id,
@@ -359,8 +359,8 @@ CheckReason.propTypes = {
     editBeforeAfters: PropTypes.objectOf(PropTypes.any),
     visibleReasonDatas: PropTypes.objectOf(PropTypes.any),
     fetchEditBeforeAfter: PropTypes.func,
+    auditSupplierEditInfoAction: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    visibleData: PropTypes.objectOf(PropTypes.any),
     modifyAdrVisible: PropTypes.objectOf(PropTypes.any),
     checkResonVisibled: PropTypes.bool,
 }
