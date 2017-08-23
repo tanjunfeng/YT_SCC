@@ -53,4 +53,14 @@
             display: inline-block;
         }
     }
+    .search-mind-label {
+        min-width: 80px;
+        display: inline-block;
+        &::after {
+            content: ":";
+            margin: 0 8px 0 2px;
+            position: relative;
+            top: -0.5px;
+        }
+    }
 }
