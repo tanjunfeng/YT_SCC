@@ -53,9 +53,9 @@ class ProcurementMaintenance extends PureComponent {
         super(props);
 
         this.handleFormReset = this.handleFormReset.bind(this);
-        this.onChange = ::this.onChange;
-        this.handleAdd = ::this.handleAdd;
-        this.handleChange = ::this.handleChange;
+        this.onChange = this.onChange.bind(this);
+        this.handleAdd = this.handleAdd.bind(this);
+        this.handleChange = this.handleChange.bind(this);
 
         this.searchForm = {};
         this.current = 1;
@@ -97,7 +97,7 @@ class ProcurementMaintenance extends PureComponent {
      */
     getCardData = (go) => {
         const { match } = this.props;
-        this.current = go ? go : this.current;
+        this.current = !go ? this.current : go;
         this.props.QueryProdPurchaseExtByCondition({
             productId: match.params.id,
             pageNum: this.current,
@@ -122,7 +122,7 @@ class ProcurementMaintenance extends PureComponent {
      * @param {Object} record 模态框数据
      */
     handleAdd() {
-        const { match, getProductByIds } = this.props;
+        const { getProductByIds } = this.props;
         this.setState({
             initData: getProductByIds,
             showModal: true,
@@ -151,7 +151,7 @@ class ProcurementMaintenance extends PureComponent {
         this.setState({
             showModal: false
         })
-    } 
+    }
 
     /**
      * 搜索
@@ -208,10 +208,6 @@ class ProcurementMaintenance extends PureComponent {
 ProcurementMaintenance.propTypes = {
     fetchGetProductById: PropTypes.objectOf(PropTypes.any),
     QueryProdPurchaseExtByCondition: PropTypes.func,
-    fetchCheckMainSupplier: PropTypes.func,
-    productAddPriceVisible: PropTypes.func,
-    UpdateProdPurchase: PropTypes.bool,
-    updateProdPurchase: PropTypes.bool,
     prefixCls: PropTypes.string,
     getProductByIds: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any),
