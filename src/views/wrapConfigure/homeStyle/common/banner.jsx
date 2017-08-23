@@ -74,7 +74,7 @@ class BannerItem extends Component {
             id,
             areaId: itemAds[0].areaId,
             adType: itemAds[0].adType,
-            icon: ImageUrl ? ImageUrl : itemAds[0].icon,
+            icon: ImageUrl || itemAds[0].icon,
             url: encodeURI(url),
             ...params
         }).then(() => {
