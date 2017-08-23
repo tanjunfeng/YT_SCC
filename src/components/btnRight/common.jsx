@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 function getDisplayName(component) {
     return component.displayName || component.name || 'Component';
 }
-
 
 function Common(WrappedComponent) {
     @connect(
@@ -28,8 +28,11 @@ function Common(WrappedComponent) {
             );
         }
     }
+    HOC.propTypes = {
+        right: PropTypes.string,
+        RIGHTS: PropTypes.arrayOf(PropTypes.string)
+    }
     return HOC;
 }
-
 
 export default Common;
