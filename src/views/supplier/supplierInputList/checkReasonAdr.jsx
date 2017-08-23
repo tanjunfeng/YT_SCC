@@ -135,14 +135,14 @@ const TEXT = {
 }
 
 const parse = (before, after, rawText) => {
-    const  data = [];
+    const data = [];
     const keys = Object.keys(before);
-    for (let i of keys) {
+    keys.forEach((item, i) => {
         const b = before[i];
         const a = after[i];
         const t = rawText[i];
         const childKeys = Object.keys(b);
-        for (let j of childKeys) {
+        childKeys.forEach((keyItem, j) => {
             const cb = b[j];
             const ca = a[j];
             const ct = t[j];
@@ -153,8 +153,8 @@ const parse = (before, after, rawText) => {
                     name: ct,
                 })
             }
-        }
-    }
+        });
+    });
     return data;
 }
 
@@ -203,7 +203,7 @@ class CheckReason extends PureComponent {
      * 弹框取消事件
      */
     handleCheckCancel() {
-        this.props.modifyAdrVisible({isVisible: false});
+        this.props.modifyAdrVisible({ isVisible: false });
         this.setState({
             selected: -1
         })
@@ -229,13 +229,13 @@ class CheckReason extends PureComponent {
             if (!err) {
                 this.props.auditSupplierEditInfoAction({
                     id: Number(id),
-                    pass: parseInt(selected, 10) === 1 ? false : true,
+                    pass: !parseInt(selected, 10) === 1,
                     adrBasicId: before.spAdrBasic.id,
                     contId: before.spAdrContact.id,
                     ...this.props.form.getFieldsValue()
                 }).then((res) => {
                     message.success(res.message)
-                    this.props.modifyAdrVisible({isVisible: false});
+                    this.props.modifyAdrVisible({ isVisible: false });
                     this.props.fetchQueryManageList({
                         pageNum: this.current,
                         pageSize: PAGE_SIZE,
@@ -264,7 +264,7 @@ class CheckReason extends PureComponent {
      * 弹框取消事件
      */
     handleAuditCancel() {
-        this.props.modifyAdrVisible({isVisible: false});
+        this.props.modifyAdrVisible({ isVisible: false });
     }
 
     /**
@@ -360,6 +360,7 @@ CheckReason.propTypes = {
     visibleReasonDatas: PropTypes.objectOf(PropTypes.any),
     fetchEditBeforeAfter: PropTypes.func,
     auditSupplierEditInfoAction: PropTypes.func,
+    fetchQueryManageList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     modifyAdrVisible: PropTypes.objectOf(PropTypes.any),
     checkResonVisibled: PropTypes.bool,
