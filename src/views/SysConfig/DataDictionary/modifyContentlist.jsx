@@ -10,7 +10,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Modal, Button, Input, Table, Row, Col } from 'antd';
-import { DicContentListVisible, Dictionarycontentlist, updateContentData, dictionaryContent } from '../../../actions/dictionary';
+import { DicContentListVisible, Dictionarycontentlist,
+    updateContentData, dictionaryContent } from '../../../actions/dictionary';
 
 const InputGroup = Input.Group;
 
@@ -32,12 +33,12 @@ const InputGroup = Input.Group;
 class modifyContentlist extends PureComponent {
     constructor(props) {
         super(props);
-        this.handleCancelModify = ::this.handleCancelModify;
-        this.handleOk = ::this.handleOk;
-        this.handleModify = ::this.handleModify;
-        this.renderOperation = ::this.renderOperation;
-        this.handleAdd = ::this.handleAdd;
-        this.onContentChange = ::this.onContentChange;
+        this.handleCancelModify = this.handleCancelModify.bind(this);
+        this.handleOk = this.handleOk.bind(this);
+        this.handleModify = this.handleModify.bind(this);
+        this.renderOperation = this.renderOperation.bind(this);
+        this.handleAdd = this.handleAdd.bind(this);
+        this.onContentChange = this.onContentChange.bind(this);
         this.modifyContentlistColumns = [{
             title: '序号',
             dataIndex: 'id',
@@ -61,7 +62,7 @@ class modifyContentlist extends PureComponent {
             title: '状态',
             dataIndex: 'state',
             key: 'state',
-            render: (text, record, index) => {
+            render: (text, record) => {
                 const { state } = record;
                 return (
                     state === 0 ? '停用' : '启用'
@@ -97,7 +98,6 @@ class modifyContentlist extends PureComponent {
     }
 
     handleOk() {
-        const id = this.props.id;
     }
 
     handleCancelModify() {
@@ -112,7 +112,7 @@ class modifyContentlist extends PureComponent {
             id,
             contentName,
             state: newState
-        }).then((res) => {
+        }).then(() => {
             this.props.Dictionarycontentlist({ dictionaryId })
         })
     }
@@ -125,7 +125,7 @@ class modifyContentlist extends PureComponent {
             id,
             contentName,
             state
-        }).then((res) => {
+        }).then(() => {
             this.props.Dictionarycontentlist({ dictionaryId })
         })
     }
@@ -138,7 +138,7 @@ class modifyContentlist extends PureComponent {
             dictionaryId,
             contentName,
             state
-        }).then((res) => {
+        }).then(() => {
             this.props.Dictionarycontentlist({ dictionaryId })
         })
     }
@@ -163,10 +163,19 @@ class modifyContentlist extends PureComponent {
             <span>
                 {
                     record.flag
-                        ? <a rel="noopener noreferrer" onClick={() => this.handleSave(record)}>保存</a>
-                        : <a rel="noopener noreferrer" onClick={() => this.handleModify(record)}>修改</a>
+                        ? <a
+                            rel="noopener noreferrer"
+                            onClick={() => this.handleSave(record)}
+                        >保存</a>
+                        : <a
+                            rel="noopener noreferrer"
+                            onClick={() => this.handleModify(record)}
+                        >修改</a>
                 }
-                <a rel="noopener noreferrer" onClick={() => this.handleDisable(record)}> {state === 0 ? '启用' : '停用'}</a>
+                <a
+                    rel="noopener noreferrer"
+                    onClick={() => this.handleDisable(record)}
+                > {state === 0 ? '启用' : '停用'}</a>
             </span>
         )
     }
@@ -175,7 +184,6 @@ class modifyContentlist extends PureComponent {
         this.modifyContentlistColumns[this.modifyContentlistColumns.length - 1].render
             = this.renderOperation;
         const { dictionary, remark } = this.props;
-        const { getFieldDecorator } = this.props.form;
         const { columndata } = this.state;
         return (
             <Modal
@@ -215,4 +223,17 @@ class modifyContentlist extends PureComponent {
         );
     }
 }
+
+modifyContentlist.propTypes = {
+    maintenanceVisible: PropTypes.objectOf(PropTypes.any),
+    id: PropTypes.objectOf(PropTypes.any),
+    Dictionarycontentlist: PropTypes.objectOf(PropTypes.any),
+    contentlistData: PropTypes.objectOf(PropTypes.any),
+    DicContentListVisible: PropTypes.objectOf(PropTypes.any),
+    updateContentData: PropTypes.objectOf(PropTypes.any),
+    dictionaryContent: PropTypes.objectOf(PropTypes.any),
+    dictionary: PropTypes.objectOf(PropTypes.any),
+    remark: PropTypes.objectOf(PropTypes.any),
+}
+
 export default withRouter(Form.create()(modifyContentlist));

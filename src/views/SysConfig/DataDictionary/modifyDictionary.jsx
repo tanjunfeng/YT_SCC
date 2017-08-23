@@ -10,7 +10,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Modal, Input } from 'antd';
-import { dictionarylist, DictionaryVisible, addDictionary, UpdateDictionary } from '../../../actions/dictionary';
+import { dictionarylist, DictionaryVisible,
+    addDictionary, UpdateDictionary } from '../../../actions/dictionary';
+
 const FormItem = Form.Item;
 
 @connect(
@@ -29,26 +31,28 @@ const FormItem = Form.Item;
 class modifyDictionary extends PureComponent {
     constructor(props) {
         super(props);
-        this.handleCancelModify = ::this.handleCancelModify;
-        this.handleOk = ::this.handleOk;
+        this.handleCancelModify = this.handleCancelModify.bind(this);
+        this.handleOk = this.handleOk.bind(this);
     }
 
     handleOk() {
         const result = this.props.form.getFieldsValue();
         const { id } = this.props.record;
-        this.props.isEdit ?
+        if (this.props.isEdit) {
             this.props.UpdateDictionary({
                 ...result, id
-            }).then((res) => {
+            }).then(() => {
                 this.props.DictionaryVisible({ isVisible: false })
                 this.props.fetchList();
-            }) :
+            })
+        } else {
             this.props.addDictionary({
                 ...result
-            }).then((res) => {
+            }).then(() => {
                 this.props.DictionaryVisible({ isVisible: false })
                 this.props.fetchList();
             });
+        }
     }
 
     handleCancelModify() {
@@ -106,4 +110,17 @@ class modifyDictionary extends PureComponent {
         );
     }
 }
+
+modifyDictionary.propTypes = {
+    form: PropTypes.objectOf(PropTypes.any),
+    id: PropTypes.objectOf(PropTypes.any),
+    record: PropTypes.objectOf(PropTypes.any),
+    isEdit: PropTypes.bool,
+    UpdateDictionary: PropTypes.objectOf(PropTypes.any),
+    DictionaryVisible: PropTypes.objectOf(PropTypes.any),
+    fetchList: PropTypes.objectOf(PropTypes.any),
+    addDictionary: PropTypes.objectOf(PropTypes.any),
+    dictionaryVisible: PropTypes.objectOf(PropTypes.any),
+}
+
 export default withRouter(Form.create()(modifyDictionary));
