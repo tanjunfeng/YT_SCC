@@ -4,12 +4,11 @@
  *
  * 库存管理详情页
  */
-
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Row, Col, Table, Button } from 'antd';
+import { Row, Col, Table } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { stockListDetail } from '../../../actions';
