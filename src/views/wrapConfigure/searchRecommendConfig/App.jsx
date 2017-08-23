@@ -77,24 +77,32 @@ class SearchRecommendConfig extends Component {
         this.props.fetchAllHot({pageSize: PAGE_SIZE, pageNum: goto});
     }
 
-    // 输入框-保存
+    /**
+     * 输入框-保存
+     */
     handleSaveInput() {
-        const { content } = this.props.form.getFieldsValue();
-        const data = { content }
+        const { content = '' } = this.props.form.getFieldsValue();
         this.props.addSaveInput({
-            ...Utils.removeInvalid(data)
+            content
         }).then((res) => {
             message.success(res.message);
         }).catch((err) => {
-            // message.error(err.message);
+            message.error(err.message);
         });
     }
 
-    // “添加”模态框
+    /**
+     * “添加”模态框
+     */
     showAddModal() {
         this.props.modifyModalVisible({isVisible: true, mTitle: '新增'});
     }
-    // 选择操作项
+
+    /**
+     * 选择操作项
+     * @param {*} record 行值
+     * @param {*} items 行项
+     */
     handleSelect(record, items) {
         const { id } = record;
         const { key } = items;

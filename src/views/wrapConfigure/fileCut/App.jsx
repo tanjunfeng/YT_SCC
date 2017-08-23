@@ -88,6 +88,7 @@ FileCut.propTypes = {
     dpr: PropTypes.number,
     defaultImge: PropTypes.string,
     handleChange: PropTypes.func,
+    accept: PropTypes.arrayOf(PropTypes.any)
 };
 
 FileCut.defaultTypes = {
