@@ -36,7 +36,9 @@ import fetchFindStaticPageList from './fetch/fetchStaticPageHome';
 import fectheEditorContent from './fetch/fectheEditorContent';
 import fetchDeleteProdPurchaseById from './fetch/fetchDeleteProdPurchaseById';
 
-/*********************procurement added by twh************************* */
+/*
+ * procurement added by twh
+ */
 import {
     changePoMngSelectedRows,
     fetchPoMngList,
@@ -123,7 +125,7 @@ export {
     modifyDeleteOrderNum,
     modifyToAddInsertpage,
     fetchFindStaticPageList,
-    /*********************procurement added by twh************************* */
+    // procurement added by twh
     fetchPoMngList,
     changePoMngSelectedRows,
     deletePoByIds,
