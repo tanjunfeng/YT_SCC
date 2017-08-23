@@ -73,7 +73,7 @@ class SupplierInputList extends PureComponent {
         this.handleFormReset = this.handleFormReset.bind(this);
         this.handleDownLoad = this.handleDownLoad.bind(this);
         this.handleGetList = this.handleGetList.bind(this);
-        this.handleInputSupplier = ::this.handleInputSupplier;
+        this.handleInputSupplier = this.handleInputSupplier.bind(this);
 
         this.searchForm = {};
         this.current = 1;

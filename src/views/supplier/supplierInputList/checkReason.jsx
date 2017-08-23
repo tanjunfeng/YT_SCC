@@ -294,7 +294,6 @@ class CheckReason extends PureComponent {
         const { editBeforeAfters } = this.props;
         const { before = {}, after = {} } = editBeforeAfters;
         const formData = parse(before, after, TEXT);
-
         return (
             <div>
                 {

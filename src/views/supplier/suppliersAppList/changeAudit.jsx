@@ -99,9 +99,7 @@ class ChangeAudit extends PureComponent {
         })
     }
 
-    handleTextChange(value) {
-
-    }
+    handleTextChange() {}
 
     render() {
         const { getFieldDecorator } = this.props.form;

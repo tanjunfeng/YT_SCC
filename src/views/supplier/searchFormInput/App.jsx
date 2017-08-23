@@ -53,7 +53,7 @@ class SearchForm extends Component {
     onEnterTimeChange(date) {
         this.setState({
             rengeTime: date,
-            settledDate: date ? date._d*1 : null,
+            settledDate: date ? date._d * 1 : null,
         });
     }
 
@@ -367,7 +367,6 @@ SearchForm.propTypes = {
     onReset: PropTypes.func,
     onExcel: PropTypes.func,
     onInput: PropTypes.func,
-    isSuplierAddMenu: PropTypes.bool,
     isSuplierInputList: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
 };
