@@ -5,18 +5,17 @@
  * 采购管理相关reducer
  */
 
-import Immutable, { fromJS } from 'immutable';
+import { fromJS } from 'immutable';
 import ActionType from '../actions/ActionType';
-import { poTypeCodes } from '../constant/procurement';
 
 const initState = fromJS({
     // 采购单管理列表
     poList: {},
-    //采购单管理列表选中行
+    // 采购单管理列表选中行
     selectedPoMngRows: {},
-    //采购单详情信息
+    // 采购单详情信息
     po: {
-        //采购单基本信息
+        // 采购单基本信息
         basicInfo: {
             // id: null,//pk
             // poNo: null,//采购单号
@@ -34,26 +33,28 @@ const initState = fromJS({
             // bigCLassCd: null,
             // bigCLassName: null
         },
-        //采购单详情商品明细列表
+        // 采购单详情商品明细列表
         poLines: [],
     },
 
     poMaterial: {},
-    //采购单打印列表
+    // 采购单打印列表
     poPrintList: {},
-    //采购收货单管理列表
+    // 采购收货单管理列表
     poRcvMngList: {},
-    //采购单收货列表  列表内容为 已审核且未收货采购单
+    // 采购单收货列表  列表内容为 已审核且未收货采购单
     poRcvList: {},
-    //采购收货单详情信息
+    // 采购收货单详情信息
     poRcv: {},
     // 新增商品信息
     newPcOdData: {},
 });
 
 export default function (state = initState, action) {
-    let po, poRcv;
-    let poLines, basicInfo;
+    let po;
+    let poRcv;
+    let poLines;
+    let basicInfo;
     let payload;
     switch (action.type) {
         // 查询采购单管理列表

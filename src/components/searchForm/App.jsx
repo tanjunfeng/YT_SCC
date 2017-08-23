@@ -31,7 +31,7 @@ class SearchForm extends Component {
     }
 
     onEnterTimeChange(result) {
-        this.setState({rengeTime: result});
+        this.setState({ rengeTime: result });
         if (result.length === 2) {
             this.time = {
                 minSettledDate: result[0].valueOf(),
@@ -54,7 +54,8 @@ class SearchForm extends Component {
             status
         } = this.props.form.getFieldsValue();
 
-        const searchData = {companyName,
+        const searchData = {
+            companyName,
             minSettlementPeriod: this.balanceDateRef && this.balanceDateRef.getFieldsValue().first,
             maxSettlementPeriod: this.balanceDateRef && this.balanceDateRef.getFieldsValue().second,
             minRebateRate: this.rebateRef && this.rebateRef.getFieldsValue().first,
@@ -87,7 +88,7 @@ class SearchForm extends Component {
         const { onReset } = this.props;
         this.searchData = {};
         this.props.form.resetFields();
-        this.setState({rengeTime: []});
+        this.setState({ rengeTime: [] });
         this.balanceDateRef.resetFields();
         this.rebateRef.resetFields();
         onReset(this.searchData);
@@ -120,7 +121,7 @@ class SearchForm extends Component {
                                         className="manage-form-companyName"
                                         placeholder="公司名称"
                                     />
-                                )}
+                                    )}
                             </div>
                         </FormItem>
                         {/* 供应商编号 */}
@@ -147,7 +148,7 @@ class SearchForm extends Component {
                                     }]
                                 })(
                                     <Input style={{ width: '190px' }} />
-                                )}
+                                    )}
                             </InputGroup>
                         </FormItem>
                         {/* 供应商状态 */}
@@ -166,7 +167,7 @@ class SearchForm extends Component {
                                         ))
                                     }
                                 </Select>
-                            )}
+                                )}
                         </FormItem>
                     </div>
                     <div className="manage-form-item">
@@ -175,7 +176,7 @@ class SearchForm extends Component {
                             <div>
                                 <span className="manage-form-label">入驻时间</span>
                                 <RangePicker
-                                    style={{width: '270px'}}
+                                    style={{ width: '270px' }}
                                     className="manage-form-enterTime"
                                     showTime
                                     value={this.state.rengeTime}
@@ -190,7 +191,11 @@ class SearchForm extends Component {
                             type !== 'Application' &&
                             <FormItem className="manage-form-item2">
                                 <span className="manage-form-label">结算账期（天）</span>
+<<<<<<< HEAD
                                 <AscadeChoice ref={ref => (this.balanceDateRef = ref)} />
+=======
+                                <AscadeChoice ref={ref => { this.balanceDateRef = ref }} />
+>>>>>>> b244d301baa62ded41896a4e48ca3cc4f0c7a6b4
                             </FormItem>
                         }
                         {/* 结算账户 */}
@@ -211,7 +216,7 @@ class SearchForm extends Component {
                                             ))
                                         }
                                     </Select>
-                                )}
+                                    )}
                             </FormItem>
                         }
                         {
@@ -252,11 +257,16 @@ class SearchForm extends Component {
                             {/* 返利（%） */}
                             <FormItem className="manage-form-item1">
                                 <span className="manage-form-label">返利（%）</span>
+<<<<<<< HEAD
                                 <AscadeChoice ref={ref => (this.rebateRef = ref)} />
+=======
+                                <AscadeChoice ref={ref => { this.rebateRef = ref }} />
+>>>>>>> b244d301baa62ded41896a4e48ca3cc4f0c7a6b4
                             </FormItem>
                             <FormItem className="manage-form-item2">
                                 <Button size="default" onClick={this.handleDownload}>
                                     导出供应商列表
+<<<<<<< HEAD
                                 </Button>
                             </FormItem>
                             <span className="manage-form-item3">
@@ -273,6 +283,20 @@ class SearchForm extends Component {
                                     <Button size="default" onClick={this.handleResetValue}>
                                         重置
                                     </Button>
+=======
+                                    </Button>
+                            </FormItem>
+                            <span className="manage-form-item3">
+                                <FormItem>
+                                    <Button type="primary" onClick={this.handleGetValue} size="default">
+                                        搜索
+                                        </Button>
+                                </FormItem>
+                                <FormItem>
+                                    <Button size="default" onClick={this.handleResetValue}>
+                                        重置
+                                        </Button>
+>>>>>>> b244d301baa62ded41896a4e48ca3cc4f0c7a6b4
                                 </FormItem>
                             </span>
                         </div>

@@ -10,9 +10,6 @@ import Common from './common';
 
 @Common
 class Right extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { children, props } = this.props;
         return React.cloneElement(

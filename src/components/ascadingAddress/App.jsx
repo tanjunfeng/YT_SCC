@@ -15,7 +15,7 @@ import Utils from './util';
 
 const Option = Select.Option;
 
-const defaultItem = [{regionType: '-1', code: '-1', regionName: '全部'}]
+const defaultItem = [{ regionType: '-1', code: '-1', regionName: '全部' }]
 
 @connect(
     state => ({
@@ -82,13 +82,13 @@ class CasadingAddress extends PureComponent {
             if (defaultValue[2]) {
                 data.thirdValue = defaultValue[2];
             }
-            this.setState({...data});
+            this.setState({ ...data });
         })
         for (let i = 0; i < showNum - 1; i++) {
             const code = defaultValue[i];
             const index = i + 1;
             if (code && !(gegion[index] && gegion[index][code])) {
-                this.props.fetchRegionByCode({type: index, code}).then(() => {
+                this.props.fetchRegionByCode({ type: index, code }).then(() => {
                     this.setState({
                         select: 3
                     });
@@ -109,7 +109,7 @@ class CasadingAddress extends PureComponent {
         let select = 1;
         if (!(gegion[1] && gegion[1][code])) {
             select = 0;
-            this.props.fetchRegionByCode({type: 1, code}).then(() => {
+            this.props.fetchRegionByCode({ type: 1, code }).then(() => {
                 this.setState({
                     select: 1
                 })
@@ -135,7 +135,7 @@ class CasadingAddress extends PureComponent {
         let select = 2;
         if (!(gegion[2] && gegion[2][code])) {
             select = 1;
-            this.props.fetchRegionByCode({type: 2, code}).then(() => {
+            this.props.fetchRegionByCode({ type: 2, code }).then(() => {
                 this.setState({
                     select: 2
                 })
@@ -209,7 +209,7 @@ class CasadingAddress extends PureComponent {
                     className="classify-selete-item classify-selete-item1"
                     placeholder="请选择"
                     value={this.resultData.firstValue}
-                    style={{width, marginRight}}
+                    style={{ width, marginRight }}
                     getPopupContainer={() => document.getElementById(`${id}`)}
                     onSelect={this.onfirstChange}
                 >
@@ -227,7 +227,7 @@ class CasadingAddress extends PureComponent {
                     <Select
                         className="classify-selete-item classify-selete-item1"
                         placeholder="请选择"
-                        style={{width, marginRight}}
+                        style={{ width, marginRight }}
                         value={this.resultData.secondValue}
                         getPopupContainer={() => document.getElementById(`${id}`)}
                         onSelect={this.onsecondChange}
@@ -247,7 +247,7 @@ class CasadingAddress extends PureComponent {
                     <Select
                         className="classify-selete-item classify-selete-item1"
                         placeholder="请选择"
-                        style={{width, marginRight}}
+                        style={{ width, marginRight }}
                         value={this.resultData.thirdValue}
                         getPopupContainer={() => document.getElementById(`${id}`)}
                         onSelect={this.onthirdChange}
@@ -281,7 +281,7 @@ CasadingAddress.propTypes = {
 
 CasadingAddress.defaultProps = {
     showNum: '3',
-    onChange: () => {},
+    onChange: () => { },
     hasAll: false,
     defaultValue: [],
     width: '100px',

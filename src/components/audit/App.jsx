@@ -7,20 +7,19 @@ import {
     Select,
     Modal,
     Row,
-    Col,
+    Col
 } from 'antd';
 import { auditType, auditTypeCodes } from '../../constant/procurement';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-
 class Audit extends PureComponent {
     constructor(props) {
         super(props);
-        this.handleCancel = this.handleCancel.bind(this);
-        this.handleOk = this.handleOk.bind(this);
-        this.onAuditTypeChange = this.onAuditTypeChange.bind(this);
+        this.handleCancel = ::this.handleCancel;
+        this.handleOk = ::this.handleOk;
+        this.onAuditTypeChange = ::this.onAuditTypeChange;
         this.state = {
             visible: false,
             rejectReasonVisible: false
@@ -46,8 +45,8 @@ class Audit extends PureComponent {
             if (!err) {
                 const auditTypeCd = this.props.form.getFieldValue('auditTypeCd');
                 if (auditTypeCd === auditTypeCodes.reject) {
-                    this.props.form.validateFields(['rejectReason'], () => {
-                        if (!err) {
+                    this.props.form.validateFields(['rejectReason'], (error) => {
+                        if (!error) {
                             isOk = true;
                         }
                     });
@@ -81,7 +80,6 @@ class Audit extends PureComponent {
                 onCancel={this.handleCancel}
             >
                 <div>
-
                     <Form layout="vertical">
                         <Row>
                             <Col>
@@ -137,8 +135,8 @@ class Audit extends PureComponent {
 Audit.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     visible: PropTypes.bool,
-    onOk: PropTypes.objectOf(PropTypes.any),
-    onCancel: PropTypes.objectOf(PropTypes.any),
+    onOk: PropTypes.bool,
+    onCancel: PropTypes.bool
 }
 
 export default withRouter(Form.create()(Audit));

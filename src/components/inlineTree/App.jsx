@@ -141,7 +141,7 @@ InlineTree.propTypes = {
 InlineTree.defaultProps = {
     defaultOpen: defaultData,
     selects: [],
-    handleCheck: () => {},
+    handleCheck: () => { },
     checkedKeys: []
 }
 
