@@ -5,12 +5,12 @@
  * 营业执照信息
  */
 
-import React, { pureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Icon } from 'antd';
 import moment from 'moment';
 
-class LicenseInfo extends pureComponent {
+class LicenseInfo extends PureComponent {
     render() {
         const { detailData = {} } = this.props;
         const {
@@ -164,7 +164,7 @@ class LicenseInfo extends pureComponent {
 }
 
 LicenseInfo.propTypes = {
-    initValue: PropTypes.objectOf(PropTypes.any),
+    detailData: PropTypes.objectOf(PropTypes.any)
 };
 
 export default LicenseInfo;
