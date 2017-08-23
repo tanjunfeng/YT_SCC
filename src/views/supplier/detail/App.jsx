@@ -19,10 +19,6 @@ import {
     removeDetailData
 } from '../../../actions/supplier';
 
-import {
-    pubFetchValueList
-} from '../../../actions/pub';
-
 import BasicInfo from './basicInfo';
 import BankInfo from './bankInfo';
 import LicenseInfo from './licenseInfo';
@@ -62,22 +58,20 @@ class SupplierDetail extends PureComponent {
     componentDidMount() {
         const { id, type } = this.props.match.params;
         if (type === 'place') {
-            this.props.getProviderDetail({adrInfoId: id});
-            return ;
-        }
-        else if (type === 'edit') {
-            this.props.getProviderDetail({adrInfoId: id}).then(() => {
-                this.props.queryPlaceRegion({spId: this.props.detailData.id});
+            this.props.getProviderDetail({ adrInfoId: id });
+            return;
+        } else if (type === 'edit') {
+            this.props.getProviderDetail({ adrInfoId: id }).then(() => {
+                this.props.queryPlaceRegion({ spId: this.props.detailData.id });
+            })
+            return;
+        } else if (type === 'add') {
+            this.props.getSupplierDetail({ spId: id }).then(() => {
+                this.props.queryPlaceRegion({ spId: this.props.detailData.id });
             })
             return;
         }
-        else if (type === 'add') {
-            this.props.getSupplierDetail({spId: id}).then(() => {
-                this.props.queryPlaceRegion({spId: this.props.detailData.id});
-            })
-            return;
-        }
-        this.props.getSupplierDetail({spId: id});
+        this.props.getSupplierDetail({ spId: id });
     }
 
     componentWillUnmount() {
@@ -92,7 +86,7 @@ class SupplierDetail extends PureComponent {
 
     handleGetDetail() {
         const { id } = this.props.match.params;
-        return this.props.getSupplierDetail({spId: id});
+        return this.props.getSupplierDetail({ spId: id });
     }
 
     render() {
@@ -119,7 +113,7 @@ class SupplierDetail extends PureComponent {
                 onChange={this.handleClick}
                 activeKey={this.state.current}
                 className="suppplier-add"
-                style={{marginTop: '16px'}}
+                style={{ marginTop: '16px' }}
             >
                 <TabPane tab="基本信息" key="1">
                     <BasicInfo {...props} />
@@ -153,6 +147,9 @@ class SupplierDetail extends PureComponent {
 SupplierDetail.propTypes = {
     match: PropTypes.objectOf(PropTypes.any),
     getSupplierDetail: PropTypes.func,
+    getProviderDetail: PropTypes.func,
+    queryPlaceRegion: PropTypes.func,
+    removeDetailData: PropTypes.func,
     detailData: PropTypes.objectOf(PropTypes.any),
 }
 
