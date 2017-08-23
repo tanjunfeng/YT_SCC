@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, Form, InputNumber } from 'antd';
+import { Form, InputNumber } from 'antd';
 import { Validator } from '../../util/validator'
 
 const FormItem = Form.Item;
