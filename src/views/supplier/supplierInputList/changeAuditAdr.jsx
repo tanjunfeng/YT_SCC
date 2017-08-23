@@ -88,8 +88,8 @@ class ChangeAudit extends PureComponent {
             this.props.form.validateFields((err) => {
                 if (!err) {
                     this.props.supplierAdrSettledAudit({
-                        id: parseInt(visibleData.id),
-                        pass: parseInt(selected, 10) === 1 ? false : true,
+                        id: +(visibleData.id),
+                        pass: !parseInt(selected, 10) === 1,
                         ...this.props.form.getFieldsValue()
                     }).then((res) => {
                         this.props.modifyAuditAdrVisible({isVisible: false});
@@ -193,8 +193,7 @@ ChangeAudit.propTypes = {
     supplierAdrSettledAudit: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     auditVisible: PropTypes.bool,
-    visibleData: PropTypes.objectOf(PropTypes.any),
-    getList: PropTypes.objectOf(PropTypes.any),
+    visibleData: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(ChangeAudit));
