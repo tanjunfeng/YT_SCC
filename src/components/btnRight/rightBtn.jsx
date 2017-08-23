@@ -22,7 +22,6 @@ class Btn extends Component {
 }
 
 Btn.propTypes = {
-    children: PropTypes.node
 };
 
 export default Btn;

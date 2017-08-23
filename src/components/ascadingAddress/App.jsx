@@ -29,9 +29,9 @@ class CasadingAddress extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.onfirstChange = ::this.onfirstChange;
-        this.onsecondChange = ::this.onsecondChange;
-        this.onthirdChange = ::this.onthirdChange;
+        this.onfirstChange = this.onfirstChange.bind(this);
+        this.onsecondChange = this.onsecondChange.bind(this);
+        this.onthirdChange = this.onthirdChange.bind(this);
 
         this.selectDate = {
             first: [],
@@ -84,7 +84,7 @@ class CasadingAddress extends PureComponent {
             }
             this.setState({...data});
         })
-        for (let i = 0; i < showNum-1; i++) {
+        for (let i = 0; i < showNum - 1; i++) {
             const code = defaultValue[i];
             const index = i + 1;
             if (code && !(gegion[index] && gegion[index][code])) {
@@ -102,9 +102,8 @@ class CasadingAddress extends PureComponent {
     }
 
     onfirstChange(key) {
-        const { firstValue, secondValue, thirdValue } = this.state;
         const { gegion } = this.props;
-        const { first, second, Third } = this.selectDate;
+        const { first } = this.selectDate;
         const curr = first.filter(item => item.code === key)
         const { code } = curr[0];
         let select = 1;
@@ -130,8 +129,7 @@ class CasadingAddress extends PureComponent {
 
     onsecondChange(key) {
         const { gegion } = this.props;
-        const { firstValue, secondValue, thirdValue } = this.state;
-        const { first, second, Third } = this.selectDate;
+        const { second } = this.selectDate;
         const curr = second.filter((item) => item.code === key)
         const { code } = curr[0];
         let select = 2;
@@ -155,8 +153,6 @@ class CasadingAddress extends PureComponent {
     }
 
     onthirdChange(key) {
-        const { firstValue, secondValue, thirdValue } = this.state;
-        const { first, second, Third } = this.selectDate;
         this.setState({
             thirdValue: key,
             select: 3
@@ -218,9 +214,12 @@ class CasadingAddress extends PureComponent {
                     onSelect={this.onfirstChange}
                 >
                     {
-                        first.map((item2, index) => {
-                            return <Option key={`${item2.regionType}-${item2.code}`} value={String(item2.code)}>{item2.regionName}</Option>;
-                        })
+                        first.map((item2) => (
+                            <Option
+                                key={`${item2.regionType}-${item2.code}`}
+                                value={String(item2.code)}
+                            >{item2.regionName}</Option>
+                        ))
                     }
                 </Select>
                 {
@@ -234,9 +233,12 @@ class CasadingAddress extends PureComponent {
                         onSelect={this.onsecondChange}
                     >
                         {
-                            second.map((item2, index) => {
-                                return <Option key={`${item2.regionType}-${item2.code}`} value={String(item2.code)}>{item2.regionName}</Option>;
-                            })
+                            second.map((item2) => (
+                                <Option
+                                    key={`${item2.regionType}-${item2.code}`}
+                                    value={String(item2.code)}
+                                >{item2.regionName}</Option>
+                            ))
                         }
                     </Select>
                 }
@@ -251,9 +253,12 @@ class CasadingAddress extends PureComponent {
                         onSelect={this.onthirdChange}
                     >
                         {
-                            Third.map((item2, index) => {
-                                return <Option key={`${item2.regionType}-${item2.code}`} value={String(item2.code)}>{item2.regionName}</Option>;
-                            })
+                            Third.map((item2) => (
+                                <Option
+                                    key={`${item2.regionType}-${item2.code}`}
+                                    value={String(item2.code)}
+                                >{item2.regionName}</Option>
+                            ))
                         }
                     </Select>
                 }

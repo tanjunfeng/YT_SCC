@@ -131,9 +131,12 @@ class SearchForm extends Component {
                                 })(
                                     <Select className="manage-form-supplierNumber">
                                         {
-                                            suplierSelect.data.map((item) => {
-                                                return <Option key={item.key} value={item.key}>{item.value}</Option>
-                                            })
+                                            suplierSelect.data.map((item) => (
+                                                <Option
+                                                    key={item.key}
+                                                    value={item.key}
+                                                >{item.value}</Option>
+                                            ))
                                         }
                                     </Select>
                                     )}
@@ -155,9 +158,12 @@ class SearchForm extends Component {
                             })(
                                 <Select style={{ width: '153px' }} size="default">
                                     {
-                                        suplierStatusSelect.data.map((item) => {
-                                            return <Option key={item.key} value={item.key}>{item.value}</Option>
-                                        })
+                                        suplierStatusSelect.data.map((item) => (
+                                            <Option
+                                                key={item.key}
+                                                value={item.key}
+                                            >{item.value}</Option>
+                                        ))
                                     }
                                 </Select>
                             )}
@@ -184,7 +190,7 @@ class SearchForm extends Component {
                             type !== 'Application' &&
                             <FormItem className="manage-form-item2">
                                 <span className="manage-form-label">结算账期（天）</span>
-                                <AscadeChoice ref={ref => this.balanceDateRef = ref} />
+                                <AscadeChoice ref={ref => (this.balanceDateRef = ref)} />
                             </FormItem>
                         }
                         {/* 结算账户 */}
@@ -197,9 +203,12 @@ class SearchForm extends Component {
                                 })(
                                     <Select style={{ width: '153px' }} size="default">
                                         {
-                                            settlementAccount.data.map(item => {
-                                                return <Option key={item.key} value={item.key}>{item.value}</Option>
-                                            })
+                                            settlementAccount.data.map(item => (
+                                                <Option
+                                                    key={item.key}
+                                                    value={item.key}
+                                                >{item.value}</Option>
+                                            ))
                                         }
                                     </Select>
                                 )}
@@ -215,7 +224,11 @@ class SearchForm extends Component {
                                 </FormItem>
                                 <span className="manage-form-item3">
                                     <FormItem>
-                                        <Button type="primary" onClick={this.handleGetValue} size="default">
+                                        <Button
+                                            type="primary"
+                                            onClick={this.handleGetValue}
+                                            size="default"
+                                        >
                                             搜索
                                         </Button>
                                     </FormItem>
@@ -237,27 +250,31 @@ class SearchForm extends Component {
                         type !== 'Application' &&
                         <div className="manage-form-item">
                             {/* 返利（%） */}
-                                <FormItem className="manage-form-item1">
-                                    <span className="manage-form-label">返利（%）</span>
-                                    <AscadeChoice ref={ref => this.rebateRef = ref} />
-                                </FormItem>
-                                <FormItem className="manage-form-item2">
-                                    <Button size="default" onClick={this.handleDownload}>
-                                        导出供应商列表
+                            <FormItem className="manage-form-item1">
+                                <span className="manage-form-label">返利（%）</span>
+                                <AscadeChoice ref={ref => (this.rebateRef = ref)} />
+                            </FormItem>
+                            <FormItem className="manage-form-item2">
+                                <Button size="default" onClick={this.handleDownload}>
+                                    导出供应商列表
+                                </Button>
+                            </FormItem>
+                            <span className="manage-form-item3">
+                                <FormItem>
+                                    <Button
+                                        type="primary"
+                                        onClick={this.handleGetValue}
+                                        size="default"
+                                    >
+                                        搜索
                                     </Button>
                                 </FormItem>
-                                <span className="manage-form-item3">
-                                    <FormItem>
-                                        <Button type="primary" onClick={this.handleGetValue} size="default">
-                                            搜索
-                                        </Button>
-                                    </FormItem>
-                                    <FormItem>
-                                        <Button size="default" onClick={this.handleResetValue}>
-                                            重置
-                                        </Button>
-                                    </FormItem>
-                                </span>
+                                <FormItem>
+                                    <Button size="default" onClick={this.handleResetValue}>
+                                        重置
+                                    </Button>
+                                </FormItem>
+                            </span>
                         </div>
                     }
                 </Form>
