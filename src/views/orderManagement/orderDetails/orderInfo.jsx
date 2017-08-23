@@ -364,7 +364,7 @@ class OrderInformation extends PureComponent {
                     </Row>
                 </div>
                 <div>
-                    <CauseModal/>
+                    <CauseModal />
                 </div>
             </div>
         );
