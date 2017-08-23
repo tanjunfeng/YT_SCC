@@ -81,7 +81,7 @@ class ChangeAudit extends PureComponent {
             if (!err) {
                 this.props.suppplierSettledAudit({
                     id: visibleData.id,
-                    pass: parseInt(selected, 10) === 1 ? 'false' : true,
+                    pass: !parseInt(selected, 10) === 1,
                     ...this.props.form.getFieldsValue()
                 }).then((res) => {
                     this.props.modifyAuditVisible({ isVisible: false });
@@ -181,10 +181,10 @@ class ChangeAudit extends PureComponent {
 ChangeAudit.propTypes = {
     modifyAuditVisible: PropTypes.func,
     fetchQueryManageList: PropTypes.func,
+    suppplierSettledAudit: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     auditVisible: PropTypes.bool,
-    visibleData: PropTypes.objectOf(PropTypes.any),
-    suppplierSettledAudit: PropTypes.objectOf(PropTypes.any),
+    visibleData: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(ChangeAudit));

@@ -19,6 +19,9 @@ import {
 } from 'antd';
 import { PAGE_SIZE } from '../../../constant';
 import { modifyAuditVisible, insertSupplierSettlementInfo } from '../../../actions';
+import {
+    getSupplierSettledList
+} from '../../../actions/supplier';
 // import { validatorRebate } from '../../../util/validator';
 
 const FormItem = Form.Item;
@@ -31,6 +34,7 @@ const Option = Select.Option;
     }),
     dispatch => bindActionCreators({
         modifyAuditVisible,
+        getSupplierSettledList,
         insertSupplierSettlementInfo
     }, dispatch)
 )
@@ -164,8 +168,8 @@ ChangeAudit.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     auditVisible: PropTypes.bool,
     insertSupplierSettlementInfo: PropTypes.func,
+    getSupplierSettledList: PropTypes.func,
     visibleData: PropTypes.objectOf(PropTypes.any),
-    getSupplierSettledList: PropTypes.objectOf(PropTypes.any),
 }
 
 export default withRouter(Form.create()(ChangeAudit));

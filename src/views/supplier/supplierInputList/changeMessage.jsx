@@ -86,7 +86,7 @@ class ChangeMessage extends PureComponent {
 ChangeMessage.propTypes = {
     modifyInformationVisible: PropTypes.func,
     visibleData: PropTypes.objectOf(PropTypes.any),
-    informationVisible: PropTypes.bool,
+    informationVisible: PropTypes.bool
 }
 
 export default withRouter(Form.create()(ChangeMessage));

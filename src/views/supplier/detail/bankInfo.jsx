@@ -5,15 +5,11 @@
  * 银行信息
  */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Icon } from 'antd';
 
-class BankInfo extends Component {
-    constructor(props) {
-        super(props);
-    }
-
+class BankInfo extends PureComponent {
     render() {
         const { detailData = {} } = this.props;
         const {
@@ -76,7 +72,7 @@ class BankInfo extends Component {
 }
 
 BankInfo.propTypes = {
-    initValue: PropTypes.objectOf(PropTypes.any),
+    detailData: PropTypes.objectOf(PropTypes.any)
 };
 
 export default BankInfo;

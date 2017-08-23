@@ -138,14 +138,15 @@ class ProcurementMaintenance extends PureComponent {
      */
     handleDelete = (id) => {
         const { getProductById = {} } = this.props;
+        const pid = getProductById.id;
         deleteSellPriceById({
             id,
-            productId: getProductById.id,
+            productId: pid,
         }).then(() => {
             this.props.fetchPriceInfo({
                 pageNum: this.current,
                 pageSize: PAGE_SIZE,
-                productId: getProductById.id,
+                productId: pid,
                 ...this.data
             });
         })
@@ -251,9 +252,6 @@ class ProcurementMaintenance extends PureComponent {
 
 ProcurementMaintenance.propTypes = {
     fetchGetProductById: PropTypes.objectOf(PropTypes.any),
-    updateSellPrice: PropTypes.objectOf(PropTypes.any),
-    updatePriceStatus: PropTypes.objectOf(PropTypes.any),
-    stepPriceList: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any),
     modifyAuditVisible: PropTypes.bool,
     modifyCheckReasonVisible: PropTypes.bool,
@@ -261,6 +259,9 @@ ProcurementMaintenance.propTypes = {
     getProductById: PropTypes.objectOf(PropTypes.any),
     fetchPriceInfo: PropTypes.func,
     postSellPrice: PropTypes.func,
+    updatePriceStatus: PropTypes.func,
+    stepPriceList: PropTypes.func,
+    updateSellPrice: PropTypes.func
 }
 
 ProcurementMaintenance.defaultProps = {

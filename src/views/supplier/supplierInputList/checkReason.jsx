@@ -29,7 +29,7 @@ import {
     fetchQueryManageList
 } from '../../../actions';
 import {
-    AuditSupplierEditInfo
+    auditSupplierEditInfoAction
 } from '../../../actions/supplier';
 
 const FormItem = Form.Item;
@@ -41,7 +41,7 @@ const TEXT = {
         companyName: '供应商名称',
         spNo: '供应商编号',
         grade: '供应商等级',
-        settledTime: {text: '供应商入驻日期', type: 'time'},
+        settledTime: { text: '供应商入驻日期', type: 'time' },
     },
     supplierOperTaxInfo: {
         spId: '供应商主表ID',
@@ -55,13 +55,13 @@ const TEXT = {
         companyLocCountyCode: '地区code',
         companyDetailAddress: '公司详细地址',
         registrationCertificate: '商标注册证/受理通知书',
-        regCerExpiringDate: {text: '商标注册证/受理通知书到期日', type: 'time'},
+        regCerExpiringDate: { text: '商标注册证/受理通知书到期日', type: 'time' },
         qualityIdentification: '食品安全认证',
-        quaIdeExpiringDate: {text: '食品安全认证到期日', type: 'time'},
+        quaIdeExpiringDate: { text: '食品安全认证到期日', type: 'time' },
         foodBusinessLicense: '食品经营许可证',
-        businessLicenseExpiringDate: {text: '食品经营许可证到期日期', type: 'time'},
+        businessLicenseExpiringDate: { text: '食品经营许可证到期日期', type: 'time' },
         generalTaxpayerQualifiCerti: '一般纳税人资格证电子版',
-        taxpayerCertExpiringDate: {text: '一般纳税人资格证到期日', type: 'time'}
+        taxpayerCertExpiringDate: { text: '一般纳税人资格证到期日', type: 'time' }
     },
     supplierBankInfo: {
         // spId: '供应商主表ID',
@@ -93,9 +93,9 @@ const TEXT = {
         bankLocCityCode: '城市code',
         bankLocCountyCode: '地区code',
         licenseAddress: '营业执照详细地址',
-        establishDate: {text: '创建时间', type: 'time'},
-        startDate: {text: '营业开始日期', type: 'time'},
-        endDate: {text: '营业结束日期', type: 'time'},
+        establishDate: { text: '创建时间', type: 'time' },
+        startDate: { text: '营业开始日期', type: 'time' },
+        endDate: { text: '营业结束日期', type: 'time' },
         registeredCapital: '注册资本(单位万元)',
         businessScope: '经营范围',
         registLicencePic: '营业执照副本电子版url',
@@ -134,21 +134,16 @@ const TEXT = {
     }
 }
 
-/**
- * 循环遍历修改前后数据
- *
- * @param {*} before 修改前数据
- * @param {*} after 修改后数据
- */
-const parse = (before, after) => {
+const parse = (before, after, rawText) => {
     const data = [];
     const keys = Object.keys(before);
-    for (const i of keys) {
+    // for (const i of keys) {
+    keys.forEach((item, i) => {
         const b = before[i];
         const a = after[i];
-        const t = TEXT[i];
+        const t = rawText[i];
         const childKeys = Object.keys(b);
-        for (const j of childKeys) {
+        childKeys.forEach((keyItem, j) => {
             let cb = b[j];
             let ca = a[j];
             let ct = t[j];
@@ -167,8 +162,8 @@ const parse = (before, after) => {
                     name: ct
                 })
             }
-        }
-    }
+        });
+    });
     return data;
 }
 
@@ -186,7 +181,7 @@ const parse = (before, after) => {
         fetchEditBeforeAfter,
         suppplierSettledAudit,
         fetchQueryManageList,
-        AuditSupplierEditInfo
+        auditSupplierEditInfoAction
     }, dispatch)
 )
 class CheckReason extends PureComponent {
@@ -220,23 +215,23 @@ class CheckReason extends PureComponent {
         const { id } = this.props.visibleReasonDatas;
         const { selected } = this.state;
         const { editBeforeAfters } = this.props;
-        const { before = {} } = editBeforeAfters;
+        const { before = {}} = editBeforeAfters;
         if (selected === -1) {
             message.error('请选择审核结果');
             return;
         }
         this.props.form.validateFields((err) => {
             if (!err) {
-                this.props.AuditSupplierEditInfo({
+                this.props.auditSupplierEditInfoAction({
                     id,
-                    pass: parseInt(selected, 10) === 1 ? 'false' : true,
+                    pass: !parseInt(selected, 10) === 1,
                     basicId: before.supplierBasicInfo.id,
                     bankId: before.supplierBankInfo.id,
                     operatTaxatId: before.supplierOperTaxInfo.id,
                     licenseId: before.supplierlicenseInfo.id,
                     ...this.props.form.getFieldsValue()
                 }).then((res) => {
-                    this.props.modifyCheckReasonVisible({isVisible: false});
+                    this.props.modifyCheckReasonVisible({ isVisible: false });
                     message.success(res.message)
                     this.props.fetchQueryManageList({
                         pageNum: this.current,
@@ -244,7 +239,7 @@ class CheckReason extends PureComponent {
                         ...this.searchForm
                     })
                 }).catch(() => {
-                    this.props.modifyCheckReasonVisible({isVisible: false});
+                    this.props.modifyCheckReasonVisible({ isVisible: false });
                     message.success('修改审核失败')
                 })
             }
@@ -267,7 +262,7 @@ class CheckReason extends PureComponent {
      * 弹框取消事件
      */
     handleAuditCancel() {
-        this.props.modifyCheckReasonVisible({isVisible: false});
+        this.props.modifyCheckReasonVisible({ isVisible: false });
         this.setState({
             selected: -1
         })
@@ -316,7 +311,7 @@ class CheckReason extends PureComponent {
                             dataSource={formData}
                             pagination={false}
                             size="small"
-                            locale={{emptyText: '无修改前后对比数据'}}
+                            locale={{ emptyText: '无修改前后对比数据' }}
                         />
                         <div>
                             <div className="application-modal-tip">
@@ -365,13 +360,13 @@ class CheckReason extends PureComponent {
 
 CheckReason.propTypes = {
     editBeforeAfters: PropTypes.objectOf(PropTypes.any),
-    fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
-    fetchEditBeforeAfter: PropTypes.objectOf(PropTypes.any),
-    AuditSupplierEditInfo: PropTypes.objectOf(PropTypes.any),
+    visibleReasonDatas: PropTypes.objectOf(PropTypes.any),
     modifyCheckReasonVisible: PropTypes.bool,
     checkResonVisible: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
-    visibleReasonDatas: PropTypes.objectOf(PropTypes.any),
+    fetchEditBeforeAfter: PropTypes.func,
+    fetchQueryManageList: PropTypes.func,
+    auditSupplierEditInfoAction: PropTypes.func
 }
 
 export default withRouter(Form.create()(CheckReason));

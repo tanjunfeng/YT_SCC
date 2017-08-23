@@ -24,8 +24,7 @@ import {
 } from '../../../actions';
 import {
     modifyAuthVisible,
-    modifyAdrVisible,
-    AuditSupplierEditInfo
+    modifyAdrVisible
 } from '../../../actions/supplier';
 
 import SearchForm from '../searchFormInput';
@@ -60,8 +59,7 @@ const columns = supplierInputList;
         fetchGetProductById,
         fetchEditBeforeAfter,
         modifyAuthVisible,
-        modifyAdrVisible,
-        AuditSupplierEditInfo
+        modifyAdrVisible
     }, dispatch)
 )
 class SupplierInputList extends PureComponent {
@@ -107,13 +105,13 @@ class SupplierInputList extends PureComponent {
         const { key } = items;
         switch (key) {
             case 'ChangeAudit':
-                this.props.modifyAuditVisible({isVisible: true, record});
+                this.props.modifyAuditVisible({ isVisible: true, record });
                 break;
             case 'CheckReson':
-                this.props.modifyAuthVisible({isVisible: true, record});
+                this.props.modifyAuthVisible({ isVisible: true, record });
                 break;
             case 'ChangeMessage':
-                this.props.modifyInformationVisible({isVisible: true, record});
+                this.props.modifyInformationVisible({ isVisible: true, record });
                 break;
             default:
                 break;
@@ -131,13 +129,13 @@ class SupplierInputList extends PureComponent {
         const { key } = items;
         switch (key) {
             case 'ChangeAuditAdr':
-                this.props.modifyAuditAdrVisible({isVisible: true, record});
+                this.props.modifyAuditAdrVisible({ isVisible: true, record });
                 break;
             case 'CheckReasonAdr':
-                this.props.modifyAdrVisible({isVisible: true, record});
+                this.props.modifyAdrVisible({ isVisible: true, record });
                 break;
             case 'ChangeMessage':
-                this.props.modifyInformationVisible({isVisible: true, record});
+                this.props.modifyInformationVisible({ isVisible: true, record });
                 break;
             default:
                 break;
@@ -183,8 +181,7 @@ class SupplierInputList extends PureComponent {
      */
     handleInputSupplier() {
         const { pathname } = this.props.location;
-        const { history } = this.props;
-        history.push(`${pathname}/add`);
+        this.props.history.push(`${pathname}/add`);
     }
 
     /**
