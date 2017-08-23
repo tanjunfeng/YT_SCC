@@ -10,10 +10,10 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, Icon, Table, Row, Col, Button, message } from 'antd';
+import { Form, Icon, Table, Row, Col, Button } from 'antd';
 import moment from 'moment';
 import RefundModal from './refundModal';
-import { TIME_FORMAT, DATE_FORMAT } from '../../../constant/index';
+import { DATE_FORMAT } from '../../../constant/index';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 
 @connect(
