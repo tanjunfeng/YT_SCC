@@ -29,6 +29,7 @@ class CarouselItem extends Component {
 }
 
 CarouselItem.propTypes = {
+    data: PropTypes.objectOf(PropTypes.any),
     isEnabled: PropTypes.bool,
 };
 
