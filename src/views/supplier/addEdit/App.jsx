@@ -16,7 +16,6 @@ import { getSupplierDetail, fetchSupplierNo, removeDetailData } from '../../../a
 import BasicInfo from './basicInfo';
 import BankInfo from './bankInfo';
 import LicenseInfo from './licenseInfo';
-import LocationInformation from '../locationInformation';
 import { TABCONTENT } from '../../../constant';
 
 const TabPane = Tabs.TabPane;
@@ -46,15 +45,15 @@ class AddSupplier extends PureComponent {
     }
 
     componentDidMount() {
-        const { detailData, match } = this.props;
+        const { match } = this.props;
         if (match.params.type === 'supplier') {
-            this.props.getSupplierDetail({spId: match.params.id}).then(() => {
+            this.props.getSupplierDetail({ spId: match.params.id }).then(() => {
                 this.setState({
                     edit: true
                 })
             });
         } else {
-            this.props.fetchSupplierNo({type: 'SP'})
+            this.props.fetchSupplierNo({ type: 'SP' })
         }
     }
 
@@ -63,7 +62,7 @@ class AddSupplier extends PureComponent {
     }
 
     handleGetDetail(id) {
-        this.props.getSupplierDetail({spId: id}).then(() => {
+        this.props.getSupplierDetail({ spId: id }).then(() => {
             this.setState({
                 edit: true
             })
@@ -77,9 +76,9 @@ class AddSupplier extends PureComponent {
     }
 
     handleTabClick(item) {
-            const tabs = ['BasicInfo', 'BankInfo', 'LicenseInfo'];
-            const { activeKey } = this.state;
-            TABCONTENT[tabs[activeKey - 1]].handleGoTo(item);
+        const tabs = ['BasicInfo', 'BankInfo', 'LicenseInfo'];
+        const { activeKey } = this.state;
+        TABCONTENT[tabs[activeKey - 1]].handleGoTo(item);
     }
 
     render() {
@@ -96,7 +95,7 @@ class AddSupplier extends PureComponent {
                 activeKey={activeKey}
                 onTabClick={this.handleTabClick}
                 className="suppplier-add"
-                style={{marginTop: '16px'}}
+                style={{ marginTop: '16px' }}
             >
                 <TabPane tab="基本信息" key="1">
                     <BasicInfo
@@ -123,6 +122,7 @@ AddSupplier.propTypes = {
     detailData: PropTypes.objectOf(PropTypes.any),
     getSupplierDetail: PropTypes.func,
     removeDetailData: PropTypes.func,
+    fetchSupplierNo: PropTypes.func
 }
 
 AddSupplier.defaultProps = {
