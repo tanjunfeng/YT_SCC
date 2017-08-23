@@ -78,6 +78,7 @@ const RECORD_STATUS = {
     fetchNewPmPurchaseOrderItem,
     modifyCauseModalVisible
 }, dispatch))
+
 class PoDetail extends PureComponent {
     constructor(props) {
         super(props);

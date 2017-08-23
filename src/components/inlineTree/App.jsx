@@ -73,16 +73,16 @@ class InlineTree extends PureComponent {
         });
     }
 
-    getValue() {
-        return this.checkedNodes;
-    }
-
     onSelect = (selectedKeys) => {
         const keys = this.defaultOpen.concat(selectedKeys);
         this.setState({
             selectedKeys,
             expandedKeys: keys
         });
+    }
+
+    getValue() {
+        return this.checkedNodes;
     }
 
     render() {
@@ -141,7 +141,7 @@ InlineTree.propTypes = {
 InlineTree.defaultProps = {
     defaultOpen: defaultData,
     selects: [],
-    handleCheck: () => {},
+    handleCheck: () => { },
     checkedKeys: []
 }
 

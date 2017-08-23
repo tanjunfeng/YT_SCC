@@ -21,9 +21,9 @@ import commodity from './commodity'
 
 import addSupplier from './addSupplier';
 
-import categoryGoodsOrderNum from './categoryGoodsOrderNum';
+import {categoryGoodsOrderNum, querygoodsname} from './categoryGoodsOrderNum';
+
 import category from './category';
-import querygoodsname from './categoryGoodsOrderNum';
 
 import mediaManage from './mediaManage';
 
