@@ -134,15 +134,15 @@ const TEXT = {
     }
 }
 
-const parse = (before, after, TEXT) => {
-    const  data = [];
+const parse = (before, after) => {
+    const data = [];
     const keys = Object.keys(before);
-    for (let i of keys) {
+    for (const i of keys) {
         const b = before[i];
         const a = after[i];
         const t = TEXT[i];
         const childKeys = Object.keys(b);
-        for (let j of childKeys) {
+        for (const j of childKeys) {
             const cb = b[j];
             const ca = a[j];
             const ct = t[j];
@@ -229,7 +229,7 @@ class CheckReason extends PureComponent {
             if (!err) {
                 this.props.AuditSupplierEditInfo({
                     id: Number(id),
-                    pass: parseInt(selected, 10) === 1 ? false : true,
+                    pass: parseInt(selected, 10) === 1 ? 'false' : true,
                     adrBasicId: before.spAdrBasic.id,
                     contId: before.spAdrContact.id,
                     ...this.props.form.getFieldsValue()
@@ -360,7 +360,8 @@ CheckReason.propTypes = {
     visibleReasonDatas: PropTypes.objectOf(PropTypes.any),
     fetchEditBeforeAfter: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    visibleData: PropTypes.objectOf(PropTypes.any),
+    AuditSupplierEditInfo: PropTypes.objectOf(PropTypes.any),
+    fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
     modifyAdrVisible: PropTypes.objectOf(PropTypes.any),
     checkResonVisibled: PropTypes.bool,
 }

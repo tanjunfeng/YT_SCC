@@ -75,7 +75,7 @@ class SupplierInputList extends PureComponent {
         this.handleFormReset = this.handleFormReset.bind(this);
         this.handleDownLoad = this.handleDownLoad.bind(this);
         this.handleGetList = this.handleGetList.bind(this);
-        this.handleInputSupplier = ::this.handleInputSupplier;
+        this.handleInputSupplier = this.handleInputSupplier.bind(this);
 
         this.searchForm = {};
         this.current = 1;
@@ -181,7 +181,7 @@ class SupplierInputList extends PureComponent {
      *
      * @param {string} data 'addSupplier':供应商类型为供应商；否则为供应商地点，data为供应商编码
      */
-    handleInputSupplier(data) {
+    handleInputSupplier() {
         const { pathname } = this.props.location;
         const { history } = this.props;
         history.push(`${pathname}/add`);

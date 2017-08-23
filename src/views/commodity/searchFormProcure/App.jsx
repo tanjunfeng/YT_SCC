@@ -12,7 +12,6 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { message, Form, Col, Row, Select, Button, Icon } from 'antd';
-import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
 import {
@@ -65,7 +64,6 @@ class SearchForm extends Component {
         this.handleCompChoose = ::this.handleCompChoose;
         this.handleAdressClear = ::this.handleAdressClear;
         this.handleCompClear = ::this.handleCompClear;
-
         // Test
         // this.handleSave = ::this.handleSave;
         this.state = {

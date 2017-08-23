@@ -142,7 +142,6 @@ class ProcurementMaintenance extends PureComponent {
             id,
             productId: getProductById.id,
         }).then(() => {
-            const { getProductById = {} } = this.props;
             this.props.fetchPriceInfo({
                 pageNum: this.current,
                 pageSize: PAGE_SIZE,
@@ -252,7 +251,10 @@ class ProcurementMaintenance extends PureComponent {
 
 ProcurementMaintenance.propTypes = {
     fetchGetProductById: PropTypes.objectOf(PropTypes.any),
-    fetchProviderEnterList: PropTypes.objectOf(PropTypes.any),
+    updateSellPrice: PropTypes.objectOf(PropTypes.any),
+    updatePriceStatus: PropTypes.objectOf(PropTypes.any),
+    stepPriceList: PropTypes.objectOf(PropTypes.any),
+    match: PropTypes.objectOf(PropTypes.any),
     modifyAuditVisible: PropTypes.bool,
     modifyCheckReasonVisible: PropTypes.bool,
     prefixCls: PropTypes.string,

@@ -58,7 +58,7 @@ class SearchForm extends Component {
     onEnterTimeChange(date) {
         this.setState({
             rengeTime: date,
-            settledDate: date ? date._d*1 : null,
+            settledDate: date ? date._d * 1 : null,
         });
     }
 

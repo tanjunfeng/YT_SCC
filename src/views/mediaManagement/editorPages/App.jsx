@@ -142,10 +142,8 @@ class EditorPages extends Component {
     }
 
     render() {
-        const { match = {}, prefixCls } = this.props;
+        const { prefixCls } = this.props;
         const { fileList = [] } = this.state;
-        const { params } = match;
-        const { id } = params;
         const names = {
             action: '/api/sc/commonUploadFile/uploadFile',
             onChange: this.handleChange,
@@ -194,7 +192,7 @@ class EditorPages extends Component {
                             </CopyToClipboard>
                         </Button>
                     </div>
-                    <div id="editor-wrap"></div>
+                    <div id="editor-wrap" />
                     {/* <CKEditor
                         activeClass="p10"
                         ref={node => (this.editRef = node)}

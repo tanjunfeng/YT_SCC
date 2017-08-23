@@ -46,7 +46,7 @@ class AddSupplier extends PureComponent {
     }
 
     componentDidMount() {
-        const { detailData, match } = this.props;
+        const { match } = this.props;
         if (match.params.type === 'supplier') {
             this.props.getSupplierDetail({spId: match.params.id}).then(() => {
                 this.setState({
@@ -77,9 +77,9 @@ class AddSupplier extends PureComponent {
     }
 
     handleTabClick(item) {
-            const tabs = ['BasicInfo', 'BankInfo', 'LicenseInfo'];
-            const { activeKey } = this.state;
-            TABCONTENT[tabs[activeKey - 1]].handleGoTo(item);
+        const tabs = ['BasicInfo', 'BankInfo', 'LicenseInfo'];
+        const { activeKey } = this.state;
+        TABCONTENT[tabs[activeKey - 1]].handleGoTo(item);
     }
 
     render() {
@@ -120,7 +120,7 @@ class AddSupplier extends PureComponent {
 
 AddSupplier.propTypes = {
     match: PropTypes.objectOf(PropTypes.any),
-    detailData: PropTypes.objectOf(PropTypes.any),
+    fetchSupplierNo: PropTypes.objectOf(PropTypes.any),
     getSupplierDetail: PropTypes.func,
     removeDetailData: PropTypes.func,
 }

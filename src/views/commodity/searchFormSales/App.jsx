@@ -10,13 +10,12 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { message, Form, Col, Row, Select, Button, Icon } from 'antd';
+import { message, Form, Select, Button, Icon } from 'antd';
 import Utils from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
 import {
     fetchAction,
     receiveData,
-    fetchTest,
 } from '../../../actions/classifiedList';
 import {
     fetchGetProductById
@@ -26,7 +25,6 @@ import {
 } from '../../../actions/pub'
 import {
     initiateModeOptions,
-    mainSupplierOptions,
 } from '../../../constant/searchParams';
 
 const FormItem = Form.Item;
@@ -175,7 +173,7 @@ class SearchForm extends Component {
         this.props.onReset();
     }
 
-    handleCanpanyChoose = ({ record, compKey, index, event }) => {
+    handleCanpanyChoose = ({ record }) => {
         this.name = record.name;
     }
 
@@ -280,10 +278,11 @@ class SearchForm extends Component {
 }
 
 SearchForm.propTypes = {
-    fetchGetProductById: PropTypes.objectOf(PropTypes.any),
+    data: PropTypes.objectOf(PropTypes.any),
+    receiveData: PropTypes.objectOf(PropTypes.any),
     fetchAction: PropTypes.objectOf(PropTypes.any),
+    pubFetchValueList: PropTypes.objectOf(PropTypes.any),
     prefixCls: PropTypes.string,
-    user: PropTypes.objectOf(PropTypes.string),
     form: PropTypes.objectOf(PropTypes.any),
     onSearch: PropTypes.func,
     onReset: PropTypes.func,

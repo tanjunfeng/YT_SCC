@@ -134,15 +134,21 @@ const TEXT = {
     }
 }
 
-const parse = (before, after, TEXT) => {
-    const  data = [];
+/**
+ * 循环遍历修改前后数据
+ *
+ * @param {*} before 修改前数据
+ * @param {*} after 修改后数据
+ */
+const parse = (before, after) => {
+    const data = [];
     const keys = Object.keys(before);
-    for (let i of keys) {
+    for (const i of keys) {
         const b = before[i];
         const a = after[i];
         const t = TEXT[i];
         const childKeys = Object.keys(b);
-        for (let j of childKeys) {
+        for (const j of childKeys) {
             let cb = b[j];
             let ca = a[j];
             let ct = t[j];
@@ -213,9 +219,8 @@ class CheckReason extends PureComponent {
     handleAuditOk() {
         const { id } = this.props.visibleReasonDatas;
         const { selected } = this.state;
-        const { visibleData } = this.props;
         const { editBeforeAfters } = this.props;
-        const { before = {}, after = {} } = editBeforeAfters;
+        const { before = {} } = editBeforeAfters;
         if (selected === -1) {
             message.error('请选择审核结果');
             return;
@@ -224,7 +229,7 @@ class CheckReason extends PureComponent {
             if (!err) {
                 this.props.AuditSupplierEditInfo({
                     id,
-                    pass: parseInt(selected, 10) === 1 ? false : true,
+                    pass: parseInt(selected, 10) === 1 ? 'false' : true,
                     basicId: before.supplierBasicInfo.id,
                     bankId: before.supplierBankInfo.id,
                     operatTaxatId: before.supplierOperTaxInfo.id,
@@ -294,7 +299,6 @@ class CheckReason extends PureComponent {
         const { editBeforeAfters } = this.props;
         const { before = {}, after = {} } = editBeforeAfters;
         const formData = parse(before, after, TEXT);
-
         return (
             <div>
                 {
@@ -361,12 +365,13 @@ class CheckReason extends PureComponent {
 
 CheckReason.propTypes = {
     editBeforeAfters: PropTypes.objectOf(PropTypes.any),
+    fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
+    fetchEditBeforeAfter: PropTypes.objectOf(PropTypes.any),
+    AuditSupplierEditInfo: PropTypes.objectOf(PropTypes.any),
     modifyCheckReasonVisible: PropTypes.bool,
     checkResonVisible: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
-    visibleData: PropTypes.objectOf(PropTypes.any),
-    insertSupplierSettlementInfo: PropTypes.objectOf(PropTypes.any),
-    getList: PropTypes.objectOf(PropTypes.any),
+    visibleReasonDatas: PropTypes.objectOf(PropTypes.any),
 }
 
 export default withRouter(Form.create()(CheckReason));

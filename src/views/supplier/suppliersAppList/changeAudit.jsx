@@ -95,9 +95,7 @@ class ChangeAudit extends PureComponent {
         })
     }
 
-    handleTextChange(value) {
-
-    }
+    handleTextChange() {}
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -167,7 +165,7 @@ ChangeAudit.propTypes = {
     auditVisible: PropTypes.bool,
     insertSupplierSettlementInfo: PropTypes.func,
     visibleData: PropTypes.objectOf(PropTypes.any),
-    getList: PropTypes.objectOf(PropTypes.any),
+    getSupplierSettledList: PropTypes.objectOf(PropTypes.any),
 }
 
 export default withRouter(Form.create()(ChangeAudit));
