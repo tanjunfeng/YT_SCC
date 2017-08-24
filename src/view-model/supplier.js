@@ -1,7 +1,7 @@
 // /**
 //  * @file supplier.js
 //  * @author Tanjf
-//  * 
+//  *
 //  * 供应商修改前修改后的信息
 //  */
 // class ViewModel {
