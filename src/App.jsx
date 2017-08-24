@@ -39,29 +39,26 @@ const pathListener = (location, history) => {
 
 /**
  * 通过code找id
- * @param {string} code
- * @param {Object} data
+ * @param {string} code 
+ * @param {Object} data 
  */
 const findIdByCode = (code, data) => {
     if (!data || !code) {
         return;
     }
-    const values = Object.values(data);
-    values.forEach((value) => {
-        if (value.submenu.length > 0) {
-            const subMenus = Object.values(value.submenu);
-            subMenus.forEach((subMenu) => {
-                if (subMenu.code === code) {
-                    return subMenu.id;
+    for (let i of data) {
+        if (i.submenu.length > 0) {
+            for (let j of i.submenu) {
+                if (j.code === code) {
+                    return j.id;
                 }
-                return '';
-            });
+            }
         }
-        return '';
-    });
+    }
 }
 
 @connect(
+    state => ({}),
     dispatch => bindActionCreators({
         receiveUser, fetchRightsAction
     }, dispatch)
@@ -99,7 +96,7 @@ class App extends PureComponent {
     componentDidMount() {
         const { history } = this.props;
 
-        this.unrights = history.listen(() => this.getRights());
+        this.unrights = history.listen(loc => this.getRights());
 
         this.getRights();
     }

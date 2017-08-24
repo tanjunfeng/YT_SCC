@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import { Table, Menu, Dropdown, Icon } from 'antd';
 
 import { fetchQuickNavigationList, showEditModal } from '../../../actions/wap';
-import EditModal from './editModal';
-
 
 const columns = [
     {
@@ -33,9 +31,7 @@ const columns = [
         title: '图片',
         dataIndex: 'picAddress',
         key: 'picAddress',
-        render: (text) => {
-            return <img src={text} width="30px" height="30px" />
-        }
+        render: (text) => (<img src={text} title="" alt="" width="30px" height="30px" />)
     },
     {
         title: '操作',
@@ -65,6 +61,18 @@ class QuickNavigation extends Component {
         this.props.fetchQuickNavigationList()
     }
 
+    handleSelect(record, index, item) {
+        const { key } = item;
+        switch (key) {
+            case 'modify':
+                this.props.showEditModal({modalShow: true, record})
+                break;
+            default :
+
+                break;
+        }
+    }
+
     renderHandle(text, record, index) {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
@@ -80,18 +88,6 @@ class QuickNavigation extends Component {
                 </a>
             </Dropdown>
         )
-    }
-
-    handleSelect(record, index, item) {
-        const { key } = item;
-        switch (key) {
-            case 'modify':
-                this.props.showEditModal({modalShow: true, record})
-                break;
-            default :
-
-                break;
-        }
     }
 
     render() {
