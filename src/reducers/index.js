@@ -21,7 +21,7 @@ import commodity from './commodity'
 
 import addSupplier from './addSupplier';
 
-import {categoryGoodsOrderNum, querygoodsname} from './categoryGoodsOrderNum';
+import categoryGoodsOrderNum from './categoryGoodsOrderNum';
 
 import category from './category';
 
@@ -44,7 +44,7 @@ import queryCommodityList from './queryCommodityList';
 export default Immutable.fromJS({
     pub,
     user,
-
+//
     /**
      * Others Reducers
      */
@@ -57,7 +57,7 @@ export default Immutable.fromJS({
     commodity,
     addSupplier,
     mediaManage,
-    querygoodsname,
+    categoryGoodsOrderNum,
     categoryGoodsOrderNum,
     dictionary,
     /* ********************procurement************************* */
