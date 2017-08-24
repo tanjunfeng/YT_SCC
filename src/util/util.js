@@ -9,7 +9,7 @@ import * as util from 'freed-spa/src/util/util';
 /**
  * 格式化地区字符串
  */
-const array2string = function (reg) {
+const array2string = (reg) => {
     const re = reg;
     let str = '';
     for (let i = 0; i < re.length; i++) {
@@ -159,12 +159,13 @@ class Utils {
      */
     static removeInvalid(obj) {
         const result = {};
-        for (const i in obj) {
-            const value = obj[i];
+        const keys = Object.keys(obj);
+        keys.forEach((key) => {
+            const value = obj[key];
             if (value || value === 0) {
-                result[i] = value;
+                result[key] = value;
             }
-        }
+        });
         return result;
     }
 

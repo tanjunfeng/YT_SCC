@@ -114,7 +114,8 @@ export default function (state = initState, action) {
                 state.toJS().po);
             poLines = po.poLines || [];
             payload = action.payload || {};
-            poLines.forEach((element, index, array) => {
+            poLines.forEach((element, index, arr) => {
+                const array = arr;
                 if (element.productCode === payload.productCode) {
                     array[index] = payload;
                 }
@@ -127,12 +128,10 @@ export default function (state = initState, action) {
             po = Object.assign(
                 {},
                 state.toJS().po);
-            poLines = po.poLines || [];
             payload = action.payload || {};
-            const newPoLines = poLines.filter(function (line) {
-                return line.productCode !== payload.productCode;
-            });
-            po.poLines = newPoLines;
+            po.poLines = po.poLines.filter((line) =>
+                line.productCode !== payload.productCode
+            );
             return state.set('po', fromJS(po));
 
         case ActionType.RECEIVE_PO_RCV_MNG_LIST:// 采购收货单管理列表
@@ -157,8 +156,9 @@ export default function (state = initState, action) {
                 state.toJS().poRcv);
             poLines = poRcv.poLines || [];
             payload = action.payload || {};
-            poLines.forEach(function (element, index, array) {
-                if (element.materialCd == payload.materialCd) {
+            poLines.forEach((element, index, arr) => {
+                const array = arr;
+                if (element.materialCd === payload.materialCd) {
                     array[index] = payload;
                 }
             });
