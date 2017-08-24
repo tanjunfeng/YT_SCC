@@ -51,7 +51,7 @@ class ViewModel {
         this.sort = data.sortOrder === 0 ? null : data.sortOrder;
         this.children = data.childCategories;
 
-        const status = parseInt(data.displayStatus);
+        const status = parseInt(data.displayStatus, 10);
         this.status = isNaN(status) ? 1 : status;
     }
 
@@ -62,7 +62,7 @@ class ViewModel {
             name: this.name,
             sort: this.sort,
             status: this.status,
-            ...(this.children && this.children.length > 0) && { children : this.children },
+            ...(this.children && this.children.length > 0) && { children: this.children }
         }
     }
 }
