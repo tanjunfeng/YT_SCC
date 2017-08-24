@@ -209,18 +209,24 @@ class SaleCard extends Component {
                                 <span>销售价格 : </span>
                                 <ul className={`${prefixCls}-step-price`}>
                                     {
-                                        item.sellSectionPrices.map((i) => {
-                                            return (
+                                        item.sellSectionPrices.map((i) =>
+                                            (
                                                 <li className={`${prefixCls}-step-item`}>
-                                                    <span className={`${prefixCls}-step-item-left`}>
-                                                        {`${i.startNumber} - ${i.endNumber === MAXGOODS ? '最大值' : i.endNumber} (${minUnit})`}
+                                                    <span
+                                                        className={`${prefixCls}-step-item-left`}
+                                                    >
+                                                        {`${i.startNumber} - ${i.endNumber ===
+                                                        MAXGOODS ? '最大值' :
+                                                        i.endNumber} (${minUnit})`}
                                                     </span>
-                                                    <span className={`${prefixCls}-step-item-right`}>
+                                                    <span
+                                                        className={`${prefixCls}-step-item-right`}
+                                                    >
                                                         {`${i.price}元/${minUnit}`}
                                                     </span>
                                                 </li>
                                             )
-                                        })
+                                        )
                                     }
                                 </ul>
                             </p>
@@ -276,6 +282,7 @@ class SaleCard extends Component {
 
 SaleCard.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
+    minUnit: PropTypes.objectOf(PropTypes.any),
     fetchUpdateProdPurchase: PropTypes.func,
     handleCardClick: PropTypes.func,
     fetchChangeProPurchaseStatus: PropTypes.func,

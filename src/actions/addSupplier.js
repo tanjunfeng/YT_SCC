@@ -130,7 +130,7 @@ export const deleteWarehouseInfo = (params) => dispatch => (
 /**
  * 新增供应商地点
  */
- const receiveSupplierAddress = (data) => ({
+const receiveSupplierAddress = (data) => ({
     type: ActionType.RECEIVE_INSERT_SUPPLIER_ADDRESS,
     payload: data,
 })

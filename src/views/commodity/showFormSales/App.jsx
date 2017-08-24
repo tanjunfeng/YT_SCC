@@ -43,23 +43,14 @@ class ShowForm extends Component {
     }
 
     render() {
-        const state = this.state;
         const {
             brandName,
-            deductibleTaxRate,
             firstLevelCategoryName,
             fourthLevelCategoryName,
-            guidePurchasePrice,
-            guideShipmentPrice,
-            id,
             inputTaxRate,
-            invoiceLimit,
-            name,
             productCode,
-            purchaseInsideNumber,
             saleName,
             secondLevelCategoryName,
-            supplyChainStatus,
             thirdLevelCategoryName,
             deliveryDay
         } = this.props.innitalvalue;

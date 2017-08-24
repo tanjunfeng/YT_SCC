@@ -79,7 +79,7 @@ import fetchChangeProPurchaseStatus from './fetch/fetchChangeProPurchaseStatus';
 import suppplierSettledAudit from './fetch/suppplierSettledAudit';
 import supplierAdrSettledAudit from './fetch/supplierAdrSettledAudit';
 import modifyAuditAdrVisible from './modify/modifyAuditAdrVisible';
-import AuditSupplierEditInfo from '../actions/supplier';
+import auditSupplierEditInfoAction from '../actions/supplier';
 import {
     UpdateProdPurchase,
     getProductById,
@@ -170,7 +170,7 @@ export {
     fetchQueryManageList,
     fetchGetProductById,
     fetchEditBeforeAfter,
-    AuditSupplierEditInfo,
+    auditSupplierEditInfoAction,
 
     // 根据条件分页查询商品清单，并排序
     queryCommodityList,

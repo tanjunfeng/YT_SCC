@@ -37,10 +37,16 @@ class ChangeMessage extends PureComponent {
         this.handleModalCancel = this.handleModalCancel.bind(this);
     }
 
+    /**
+     * 关闭模态框
+     */
     handleModalCancel() {
         this.props.modifyModalVisible({isVisible: false});
     }
 
+    /**
+     * 确认模态框，提交表单
+     */
     handleModalOk() {
         const { content, sort } = this.props.form.getFieldsValue();
         const { modalTitle, visibleData } = this.props;

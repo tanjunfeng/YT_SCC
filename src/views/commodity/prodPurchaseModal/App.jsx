@@ -10,7 +10,6 @@ import { Modal, Form, InputNumber, Checkbox, message, Select } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import SearchMind from '../../../components/searchMind';
-import { PAGE_SIZE } from '../../../constant';
 import {
     fetchAddProdPurchase,
     fetchCheckMainSupplier,
@@ -148,7 +147,6 @@ class ProdPurchaseModal extends Component {
      * 地点-值清单
      */
     handleAdressChoose = ({ record }) => {
-        const { getWarehouseLogicInfos } = this.props;
         this.setState({
             supplyChoose2: record,
             supplyChoose3: {},
@@ -159,7 +157,7 @@ class ProdPurchaseModal extends Component {
         this.ids.warehouseId = null;
         this.ids.childCompanyId = record.branchCompanyId;
 
-        const { spId, spNo } = this.ids;
+        const { spId } = this.ids;
 
         if (!spId) {
             this.props.pubFetchValueList({
@@ -167,7 +165,7 @@ class ProdPurchaseModal extends Component {
                 pageSize: 1,
                 pageNum: 1
             }, 'supplierSearchBox').then((res) => {
-                const { spNo, companyName, spId } = res.data.data;
+                const { spNo, companyName } = res.data.data;
                 this.ids.spNo = spNo;
                 this.ids.spId = spId;
                 this.setState({
@@ -290,13 +288,13 @@ class ProdPurchaseModal extends Component {
                                                 placeholder="请选择商品条码"
                                             >
                                                 {
-                                                    internationalCodes.map((item) => {
-                                                        return (
+                                                    internationalCodes.map((item) =>
+                                                        (
                                                             <Option value={item.internationalCode}>
                                                                 {item.internationalCode}
                                                             </Option>
                                                         )
-                                                    })
+                                                    )
                                                 }
                                             </Select>
                                         )}
@@ -381,7 +379,9 @@ class ProdPurchaseModal extends Component {
                                     <span className={`${prefixCls}-label`}>送货仓：</span>
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
-                                            defaultValue={`${warehouseCode || ''} - ${warehouseName || ''}`}
+                                            defaultValue={
+                                                `${warehouseCode || ''} - ${warehouseName || ''}`
+                                                }
                                             style={{ zIndex: 7 }}
                                             compKey="id"
                                             ref={ref => { this.searchMind0 = ref }}
@@ -392,7 +392,9 @@ class ProdPurchaseModal extends Component {
                                             }, 'getWarehouseInfo1')}
                                             onChoosed={this.handleHouseChoose}
                                             renderChoosedInputRaw={(data) => (
-                                                <div>{data.warehouseCode} - {data.warehouseName}</div>
+                                                <div>
+                                                    {data.warehouseCode} - {data.warehouseName}
+                                                </div>
                                             )}
                                             disabled={this.state.isDisabled}
                                             pageSize={3}
@@ -415,7 +417,10 @@ class ProdPurchaseModal extends Component {
                                     </span>
                                     {
                                         this.state.isDisabled &&
-                                        <p style={{color: 'red', textAlign: 'center'}}>*请先选择地点信息</p>
+                                        <p style={{
+                                            color: 'red',
+                                            textAlign: 'center'}}
+                                        >*请先选择地点信息</p>
                                     }
                                 </FormItem>
                                 <FormItem>
@@ -455,8 +460,9 @@ ProdPurchaseModal.propTypes = {
     productAddPriceVisible: PropTypes.func,
     pubFetchValueList: PropTypes.func,
     getProductByIds: PropTypes.func,
-    fetchCheckMainSupplier: PropTypes.func,
+    AddProdPurchase: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
+    checkMainSupplier: PropTypes.objectOf(PropTypes.any),
     prodPurchase: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,
 };

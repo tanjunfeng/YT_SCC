@@ -29,34 +29,32 @@ const parseString = (data) => {
     }
     const area = JSON.parse(data);
     const region = [];
-    area.map((item) => {
-        let itemData = {};
+    area.forEach((item) => {
+        const itemData = {};
         const childItem = item.regions;
         let province = '';
-        itemData.regionName = item.regionName;
-        childItem.map((i) => {
+        Object.assign(itemData, {
+            regionName: item.regionName
+        });
+        childItem.forEach((i) => {
             province += `${i.regionName}(${i.regions.length}) : `;
-            i.regions.map((k) => {
+            i.regions.forEach((k) => {
                 province += `${k.regionName}、`;
             })
         })
-        itemData.province = province;
+        Object.assign(itemData, { province });
         region.push(itemData);
     })
     return region;
 }
 
 class BasicInfo extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     /**
      * 供应商状态转换
      * @param {string} status 供应商状态
      */
     renderStatus(status) {
-        switch(status) {
+        switch (status) {
             case 0:
                 return '制表'
             case 1:
@@ -78,7 +76,7 @@ class BasicInfo extends Component {
      * @param {number} grade 供应商等级
      */
     renderGrade(grade) {
-        switch(grade) {
+        switch (grade) {
             case 1:
                 return '战略供应商'
             case 2:
@@ -173,8 +171,7 @@ class BasicInfo extends Component {
 }
 
 BasicInfo.propTypes = {
-    match: PropTypes.objectOf(PropTypes.any),
-    initValue: PropTypes.objectOf(PropTypes.any),
+    detailData: PropTypes.objectOf(PropTypes.any)
 };
 
 export default BasicInfo;
