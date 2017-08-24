@@ -7,7 +7,7 @@
 const RIGHTS = {
     SUPPLIER: {
         // 创建供应商权限
-        'CREATE_SUPPLIER': 'create_supplier',
+        CREATE_SUPPLIER: 'create_supplier',
     }
 }
 

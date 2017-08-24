@@ -253,6 +253,7 @@ class ClassifiedSelect extends Component {
 
 ClassifiedSelect.propTypes = {
     onChange: PropTypes.func,
+    fetchCategorys: PropTypes.func,
     width: PropTypes.number,
     categorys: PropTypes.arrayOf(PropTypes.any),
     defaultValue: PropTypes.arrayOf(PropTypes.any),

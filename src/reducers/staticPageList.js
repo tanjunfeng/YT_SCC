@@ -9,33 +9,29 @@ import ActionType from '../actions/ActionType';
 
 const data = {};
 const initState = Immutable.fromJS({
-    //修改分类商品排序号
+    // 修改分类商品排序号
     data: {},
 
-    //静态页面列表查询
+    // 静态页面列表查询
     findStaticPageLists: {},
 
     // 控制弹出框显示影藏
     toAddPriceVisible: false,
 
-    // 弹出框数据 
+    // 弹出框数据
     visibleData: {},
 
 });
 
 export default function (state = initState, action) {
     switch (action.type) {
-        case ActionType.UPDATE_CATEGORY:
+        case ActionType.UPDATE_CATEGORYz: {
             Object.assign(data, action.payload)
-            const { isVisible, id } = action.payload;
             return state.set('data', Immutable.fromJS(data));
-
-        case ActionType.UPDATE_CATEGORY:
-            Object.assign(data, action.payload)
-            return state.set('querygoodsname', Immutable.fromJS(data));
+        }
 
         case ActionType.MODIFY_MEDIAADD_VISIBLE: {
-            const { isVisible, record } = action.payload;
+            const { record, isVisible } = action.payload;
             return state.set('toAddPriceVisible', isVisible).set('visibleData', record);
         }
 
