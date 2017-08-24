@@ -71,27 +71,27 @@ export default function (state = initState, action) {
 
         case ActionType.CHANGE_PO_MNG_SELECTED_ROWS:// 采购单列表界面 选中采购单
             return state.set('selectedPoMngRows', fromJS(action.payload));
-        case ActionType.RECEIVE_PO_MATERIAL_BY_CD://商品编码获取商品详情
-            return state.set("poMaterial", fromJS(action.payload));
+        case ActionType.RECEIVE_PO_MATERIAL_BY_CD:// 商品编码获取商品详情
+            return state.set('poMaterial', fromJS(action.payload));
 
         case ActionType.GET_WAREHOUSE_ADDRESS_MAP:
-            //不改变state
+            // 不改变state
             return state;
         // 采购单详情
         case ActionType.RECEIVE_PO_DETAIL:
             return state.set('po', fromJS(action.payload));
 
-        case ActionType.INIT_PO_DETAIL://初始采购单详情
+        case ActionType.INIT_PO_DETAIL:// 初始采购单详情
             return state.set('po', fromJS(action.payload));
 
-        case ActionType.UPDATE_PO_BASICINFO://更新采购单基本信息
+        case ActionType.UPDATE_PO_BASICINFO:// 更新采购单基本信息
             po = Object.assign(
                 {},
                 state.toJS().po);
             basicInfo = po.basicInfo || {};
             basicInfo = Object.assign(basicInfo, action.payload);
             po.basicInfo = basicInfo;
-            return state.set("po", po);
+            return state.set('po', po);
 
         // 添加采购单商品行(单数或复数)
         case ActionType.ADD_PO_LINES:
@@ -114,7 +114,7 @@ export default function (state = initState, action) {
                 state.toJS().po);
             poLines = po.poLines || [];
             payload = action.payload || {};
-            poLines.forEach(function (element, index, array) {
+            poLines.forEach((element, index, array) => {
                 if (element.productCode === payload.productCode) {
                     array[index] = payload;
                 }
@@ -129,29 +129,29 @@ export default function (state = initState, action) {
                 state.toJS().po);
             poLines = po.poLines || [];
             payload = action.payload || {};
-            let newPoLines = poLines.filter(function (line) {
+            const newPoLines = poLines.filter(function (line) {
                 return line.productCode !== payload.productCode;
             });
             po.poLines = newPoLines;
-            return state.set("po", fromJS(po));
+            return state.set('po', fromJS(po));
 
-        case ActionType.RECEIVE_PO_RCV_MNG_LIST://采购收货单管理列表
+        case ActionType.RECEIVE_PO_RCV_MNG_LIST:// 采购收货单管理列表
             return state.set('poRcvMngList', fromJS(action.payload));
 
-        case ActionType.RECEIVE_PO_RCV_LIST://采购单收货列表
+        case ActionType.RECEIVE_PO_RCV_LIST:// 采购单收货列表
             return state.set('poRcvList', fromJS(action.payload));
 
-        case ActionType.RECEIVE_PO_RCV_DETAIL://收货单详情
+        case ActionType.RECEIVE_PO_RCV_DETAIL:// 收货单详情
             return state.set('poRcv', fromJS(action.payload));
 
-        case ActionType.RECEIVE_NEW_PURCHASE_ORDER://收货单详情
+        case ActionType.RECEIVE_NEW_PURCHASE_ORDER:// 收货单详情
             return state.set('newPcOdData', fromJS(action.payload));
 
-        case ActionType.RECEIVE_PO_RCV_INIT://初始收货单详情
+        case ActionType.RECEIVE_PO_RCV_INIT:// 初始收货单详情
             payload = action.payload || {};
             return state.set('poRcv', fromJS(action.payload));
 
-        case ActionType.UPDATE_PO_RCV_LINE://更新收货单商品行
+        case ActionType.UPDATE_PO_RCV_LINE:// 更新收货单商品行
             poRcv = Object.assign(
                 {},
                 state.toJS().poRcv);
@@ -163,9 +163,9 @@ export default function (state = initState, action) {
                 }
             });
             poRcv.poLines = poLines;
-            return state.set("poRcv", poRcv);
+            return state.set('poRcv', poRcv);
 
-        case ActionType.UPDATE_PO_RCV_BASICINFO://更新收货单基本信息
+        case ActionType.UPDATE_PO_RCV_BASICINFO:// 更新收货单基本信息
             poRcv = Object.assign(
                 {},
                 state.toJS().poRcv);
@@ -173,7 +173,7 @@ export default function (state = initState, action) {
             payload = action.payload || {};
             basicInfo = Object.assign(basicInfo, payload);
             poRcv.basicInfo = basicInfo;
-            return state.set("poRcv", poRcv);
+            return state.set('poRcv', poRcv);
         default:
             return state;
     }
