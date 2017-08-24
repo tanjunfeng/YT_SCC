@@ -441,7 +441,9 @@ function Common(WrappedComponent) {
         data: PropTypes.objectOf(PropTypes.any),
         form: PropTypes.objectOf(PropTypes.any),
         fetchAreaList: PropTypes.func,
-        type: PropTypes.string
+        type: PropTypes.string,
+        index: PropTypes.number,
+        allLength: PropTypes.number
     }
     return HOC;
 }
