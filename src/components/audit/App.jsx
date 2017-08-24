@@ -88,7 +88,11 @@ class Audit extends PureComponent {
                                         initialValue: '',
                                         rules: [{ required: true, message: '请审核' }],
                                     })(
-                                        <Select style={{ width: '153px' }} size="default" onChange={this.onAuditTypeChange}>
+                                        <Select
+                                            style={{ width: '153px' }}
+                                            size="default"
+                                            onChange={this.onAuditTypeChange}
+                                        >
                                             {
                                                 auditType.data.map((item) => (
                                                     <Option
@@ -106,7 +110,12 @@ class Audit extends PureComponent {
                             <Col>
                                 {this.state.rejectReasonVisible && <FormItem label="拒绝原因">
                                     {getFieldDecorator('rejectReason', {
-                                        rules: [{ required: true, message: '请输入拒绝原因', whitespace: true }]
+                                        rules:
+                                        [{
+                                            required: true,
+                                            message: '请输入拒绝原因',
+                                            whitespace: true
+                                        }]
                                     })(
                                         <Input.TextArea
                                             placeholder="请输入拒绝原因"
