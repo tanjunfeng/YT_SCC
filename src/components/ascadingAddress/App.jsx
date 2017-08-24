@@ -29,9 +29,9 @@ class CasadingAddress extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.onfirstChange = ::this.onfirstChange;
-        this.onsecondChange = ::this.onsecondChange;
-        this.onthirdChange = ::this.onthirdChange;
+        this.onfirstChange = this.onfirstChange.bind(this);
+        this.onsecondChange = this.onsecondChange.bind(this);
+        this.onthirdChange = this.onthirdChange.bind(this);
 
         this.selectDate = {
             first: [],

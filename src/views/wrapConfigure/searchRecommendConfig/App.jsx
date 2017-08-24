@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Table, Input, Form, Button, Dropdown, Menu, Icon, Modal, message } from 'antd';
-import Utils from '../../../util/util';
 import HotLableItem from './common/hotLableItem';
 import ChangeModalMessage from './common/changeModalMessage';
 import { PAGE_SIZE } from '../../../constant';
@@ -86,9 +85,7 @@ class SearchRecommendConfig extends Component {
             content
         }).then((res) => {
             message.success(res.message);
-        }).catch((err) => {
-            message.error(err.message);
-        });
+        })
     }
 
     /**
