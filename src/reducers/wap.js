@@ -5,7 +5,7 @@
  * 供应商管理相关reducer
  */
 
-import Immutable, { fromJS } from 'immutable';
+import { fromJS } from 'immutable';
 import ActionType from '../actions/ActionType';
 
 const initState = fromJS({
@@ -27,8 +27,6 @@ const initState = fromJS({
     ikData: [],
     // 模态框是否显示（cyx）
     informationVisible: false,
-    // 弹出框数据（cyx）
-    visibleData: {},
     // 模态框数据（cyx）
     modalTitle: '',
     // 删除table行数据回调数据（cyx）

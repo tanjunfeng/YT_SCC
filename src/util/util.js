@@ -130,12 +130,8 @@ class Utils {
             }
 
             if (item.get(opts.findBy) === val) {
-                // 储存匹配到的深度
-                findDeep = findDeep.concat(i);
-                itemsDeep = itemsDeep.concat(v);
-
-                // 返回匹配值
-                return callback(item, findDeep, $child, itemsDeep);
+                // 储存匹配到的深度, 返回匹配值
+                return callback(item, findDeep.concat(i), $child, itemsDeep.concat(v));
             }
 
             // 如果存在子节点则继续查找
@@ -241,7 +237,7 @@ class Utils {
     }
 
     static isWindow(obj) {
-        return obj != null && obj == obj.window;
+        return obj != null && obj === obj.window;
     }
 
     static isObject(obj) {
@@ -252,7 +248,7 @@ class Utils {
     static isPlainObject(obj) {
         return this.isObject(obj)
             && !this.isWindow(obj)
-            && Object.getPrototypeOf(obj) == Object.prototype;
+            && Object.getPrototypeOf(obj) === Object.prototype;
     }
 
     /**
