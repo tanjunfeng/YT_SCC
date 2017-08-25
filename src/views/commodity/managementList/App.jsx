@@ -21,16 +21,11 @@ import {
     commoditySortOptions,
     commodityListOptions
 } from '../../../constant/searchParams';
-
 import LevelTree from '../../../common/levelTree';
 import ClassifiedSelect from '../../../components/threeStageClassification'
-
-
 import { pubFetchValueList } from '../../../actions/pub';
-
 import { queryCommodityList } from '../../../actions';
 import { PAGE_SIZE } from '../../../constant';
-
 import Util from '../../../util/util';
 
 const defaultImg = require('../../../images/default/100x100.png');
@@ -141,7 +136,7 @@ class ManagementList extends PureComponent {
      */
     handleSuspendPurchase = (purchasedata, callback) => {
         // 列表是否有正确的值
-        const hasChildCompany = !!purchasedata.hasSelectValue;
+        const hasChildCompany = purchasedata.hasSelectValue !== undefined;
 
         // 没有可处理的id，错误状态吗
         const availbleGoodsId = 10027;
@@ -330,12 +325,12 @@ class ManagementList extends PureComponent {
     }
 
     // 全国性上/下架接口回调
-    availablProducts = (status) => {
+    availablProducts = (status) => (
         this.props.pubFetchValueList({
             supplyChainStatus: status,
             ids: this.state.chooseGoodsList
-        }, 'availablProducts');
-    };
+        }, 'availablProducts')
+    );
 
     // 选择品牌
     handleBrandChoose = (record) => {

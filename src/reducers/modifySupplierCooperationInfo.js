@@ -4,7 +4,6 @@
  *
  * 修改供应商合作信息
  */
-
 import Promise from 'bluebird';
 import { modifySupplierCooperationInfo } from '../service';
 import ActionType from '../actions/ActionType';
