@@ -165,7 +165,7 @@ class ManagementList extends PureComponent {
             content: confirmTitle,
             onOk: () => {
                 if (goodsListLengh) {
-                    callback(purchasedata.goodsStatus).then((res) => {
+                    callback(purchasedata.goodsStatus).then(() => {
                         if (this.state.errorGoodsCode === availbleGoodsId) {
                             message.error('请选择有效状态的商品，请重新选择！')
                         } else {
@@ -328,12 +328,12 @@ class ManagementList extends PureComponent {
     }
 
     // 全国性上/下架接口回调
-    availablProducts = (status) => {
-        return this.props.pubFetchValueList({
+    availablProducts = (status) => (
+        this.props.pubFetchValueList({
             supplyChainStatus: status,
             ids: this.state.chooseGoodsList
-        }, 'availablProducts');
-    };
+        }, 'availablProducts')
+    );
 
     // 选择品牌
     handleBrandChoose = (record) => {
@@ -448,7 +448,7 @@ class ManagementList extends PureComponent {
      * @param {object} record 单行数据
      */
     renderOperation = (text, record) => {
-        const { id, productId } = record;
+        const { productId } = record;
         const { pathname } = this.props.location;
         const origin = window.location.origin;
         const menu = (
