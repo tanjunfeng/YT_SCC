@@ -28,7 +28,7 @@ import { queryCommodityList } from '../../../actions';
 import { PAGE_SIZE } from '../../../constant';
 import Util from '../../../util/util';
 
-const defautImg = require('../../../images/default/100x100.png');
+const defaultImg = require('../../../images/default/100x100.png');
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -493,7 +493,7 @@ class ManagementList extends PureComponent {
                     <span>{productCode}</span>
                 </div>
                 <div className="table-commodity-description">
-                    <img alt="未上传" className="table-commodity-description-img" src={`${thumbnailImage || defautImg}`} />
+                    <img alt="未上传" className="table-commodity-description-img" src={`${thumbnailImage || defaultImg}`} />
                     <span className="table-commodity-description-name">{saleName}</span>
                 </div>
             </div>
@@ -660,8 +660,7 @@ class ManagementList extends PureComponent {
                                                     onChoosed={this.handleSupplyChoose}
                                                     onClear={this.handleSupplyClear}
                                                     renderChoosedInputRaw={(datas) => (
-                                                        <div>
-                                                            {datas.providerNo} -
+                                                        <div>{datas.providerNo} -
                                                             {datas.providerName}</div>
                                                     )}
                                                     rowKey="spAdrid"
@@ -745,9 +744,10 @@ class ManagementList extends PureComponent {
                                                         <div ref={
                                                             childCompany => {
                                                                 this.childCompany = childCompany
-                                                            }}
-                                                        >{companyList.id}-{companyList.name}
-                                                        </div>
+                                                            }
+                                                        }
+                                                        >{companyList.id} -
+                                                            {companyList.name}</div>
                                                     )}
                                                     pageSize={2}
                                                     columns={[

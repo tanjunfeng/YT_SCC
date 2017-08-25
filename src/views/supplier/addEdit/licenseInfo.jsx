@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import {
     Icon, Input, Form, Button,
-    Select, Row, Col, DatePicker,
+    Row, Col, DatePicker,
     Checkbox, message,
     InputNumber
 } from 'antd';
@@ -28,14 +28,12 @@ import {
 import {
     hanldeSupplier
 } from '../../../actions/supplier';
-import InlineTree from '../../../components/inlineTree';
 import Tools from './utils';
 import { TABCONTENT } from '../../../constant';
 
 const dateFormat = 'YYYY-MM-DD';
 const { RangePicker } = DatePicker
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 @connect(
     state => ({
@@ -62,7 +60,7 @@ class LicenseInfo extends PureComponent {
         this.companyAddress = {};
         this.licenseLoc = {}
         const { detailData = {} } = props;
-        const { supplierlicenseInfo = {} } = detailData; 
+        const { supplierlicenseInfo = {} } = detailData;
         this.state = {
             checked: !!supplierlicenseInfo.perpetualManagement,
             isSubmit: false
@@ -75,16 +73,12 @@ class LicenseInfo extends PureComponent {
         TABCONTENT.LicenseInfo = this;
     }
 
-    handleGoTo = (key) => {
-        this.props.onGoTo(key);
-    }
-
     getVlaue(callback) {
-        const { form, onGoTo, isEdit, detailData = {}, data } = this.props;
+        const { form, isEdit, detailData = {}, data } = this.props;
         const { checked } = this.state;
         Tools.checkAddress(this.companyAddress, 'companyLoc', this);
         Tools.checkAddress(this.licenseLoc, 'licenseLocSpace', this);
-        const {firstValue, secondValue, thirdValue} = this.companyAddress;
+        const { firstValue, secondValue, thirdValue } = this.companyAddress;
         if (
             firstValue === '-1'
             || secondValue === '-1'
@@ -93,7 +87,7 @@ class LicenseInfo extends PureComponent {
             || this.licenseLoc.secondValue === '-1'
             || this.licenseLoc.thirdValue === '-1'
         ) {
-            return null;
+            return;
         }
         const registrationCertificate = this.refs.registrationCertificate.getValue();
         const qualityIdentification = this.refs.qualityIdentification.getValue();
@@ -184,7 +178,7 @@ class LicenseInfo extends PureComponent {
                     registLicencePic: registLicencePic.files[0],
                     guaranteeMoney
                 })
-                
+
                 if (isEdit) {
                     Object.assign(supplierOperTaxInfo,
                         {
@@ -217,7 +211,7 @@ class LicenseInfo extends PureComponent {
                         Object.assign(data.supplierBankInfo,
                             {
                                 id: detailData.supplierBankInfo.id,
-                                status:  detailData.supplierBankInfo.status
+                                status: detailData.supplierBankInfo.status
                             }
                         );
                     }
@@ -236,6 +230,10 @@ class LicenseInfo extends PureComponent {
                 callback && callback()
             }
         })
+    }
+
+    handleGoTo = (key) => {
+        this.props.onGoTo(key);
     }
 
     handleSaveDraft() {
@@ -312,9 +310,9 @@ class LicenseInfo extends PureComponent {
             })
         }
     }
- 
+
     handleNextStep() {
-        
+
     }
 
     handleOperatingPeriod() {
@@ -358,17 +356,17 @@ class LicenseInfo extends PureComponent {
                                                         key="companyLoc"
                                                         defaultValue={
                                                             isEdit
-                                                            ? [
-                                                                supplierOperTaxInfo.companyLocProvinceCode,
-                                                                supplierOperTaxInfo.companyLocCityCode,
-                                                                supplierOperTaxInfo.companyLocCountyCode
-                                                            ]
-                                                            : []
+                                                                ? [
+                                                                    supplierOperTaxInfo.companyLocProvinceCode,
+                                                                    supplierOperTaxInfo.companyLocCityCode,
+                                                                    supplierOperTaxInfo.companyLocCountyCode
+                                                                ]
+                                                                : []
                                                         }
                                                         onChange={this.handleCompanyAddressChange}
                                                     />
                                                 </div>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -384,7 +382,7 @@ class LicenseInfo extends PureComponent {
                                                 <Input
                                                     placeholder="公司详细地址"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -465,11 +463,11 @@ class LicenseInfo extends PureComponent {
                                                 initialValue: supplierlicenseInfo.registLicenceNumber
                                             })(
                                                 <Input
-                                                    style={{width: '200px'}}
+                                                    style={{ width: '200px' }}
                                                     placeholder="注册号(营业执照号)"
                                                     onBlur={(e) => { Validator.repeat.licenseNo(e, this, supplierlicenseInfo.id, supplierlicenseInfo.status) }}
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -494,7 +492,7 @@ class LicenseInfo extends PureComponent {
                                                 <Input
                                                     placeholder="法定代表"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -516,7 +514,7 @@ class LicenseInfo extends PureComponent {
                                                 <Input
                                                     placeholder="法人身份证号"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -525,7 +523,7 @@ class LicenseInfo extends PureComponent {
                                         <span>*成立日期：</span>
                                         <FormItem>
                                             {getFieldDecorator('establishDate', {
-                                                rules: [{required: true, message: '请选择供应商入驻日期'}],
+                                                rules: [{ required: true, message: '请选择供应商入驻日期' }],
                                                 initialValue: isEdit ? moment(supplierlicenseInfo.establishDate) : null
                                             })(
                                                 <DatePicker
@@ -537,7 +535,7 @@ class LicenseInfo extends PureComponent {
                                                     }}
                                                     format={dateFormat}
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -551,17 +549,17 @@ class LicenseInfo extends PureComponent {
                                                         key="licenseLocSpace"
                                                         defaultValue={
                                                             isEdit
-                                                            ? [
-                                                                supplierlicenseInfo.licenseLocProvinceCode,
-                                                                supplierlicenseInfo.licenseLocCityCode,
-                                                                supplierlicenseInfo.licenseLocCountyCode
-                                                            ]
-                                                            : []
+                                                                ? [
+                                                                    supplierlicenseInfo.licenseLocProvinceCode,
+                                                                    supplierlicenseInfo.licenseLocCityCode,
+                                                                    supplierlicenseInfo.licenseLocCountyCode
+                                                                ]
+                                                                : []
                                                         }
                                                         onChange={this.handleCompanyLicenseLocChange}
                                                     />
                                                 </div>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -569,22 +567,22 @@ class LicenseInfo extends PureComponent {
                                     <Col span={8} id="useDate">
                                         <span>*营业期限：</span>
                                         {getFieldDecorator('startEndDate', {
-                                            rules: [{required: true, message: '请选择供应商入驻日期'}],
+                                            rules: [{ required: true, message: '请选择供应商入驻日期' }],
                                             initialValue: [
                                                 (isEdit && supplierlicenseInfo.startDate)
-                                                ? moment(supplierlicenseInfo.startDate)
-                                                : null,
+                                                    ? moment(supplierlicenseInfo.startDate)
+                                                    : null,
                                                 (isEdit && supplierlicenseInfo.endDate)
-                                                ? moment(supplierlicenseInfo.endDate)
-                                                : null
+                                                    ? moment(supplierlicenseInfo.endDate)
+                                                    : null
                                             ]
                                         })(
                                             <RangePicker
                                                 disabled={this.state.checked}
                                                 getCalendarContainer={() => document.getElementById('useDate')}
                                             />
-                                        )}
-                                        <span style={{marginLeft: '10px'}}>
+                                            )}
+                                        <span style={{ marginLeft: '10px' }}>
                                             <Checkbox
                                                 checked={this.state.checked}
                                                 onChange={this.handleOperatingPeriod}
@@ -606,7 +604,7 @@ class LicenseInfo extends PureComponent {
                                                 <Input
                                                     placeholder="营业执照详细地址"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -619,13 +617,13 @@ class LicenseInfo extends PureComponent {
                                                 initialValue: supplierlicenseInfo.registeredCapital
                                             })(
                                                 <InputNumber
-                                                    style={{width: '200px'}}
+                                                    style={{ width: '200px' }}
                                                     min={0}
                                                     max={99999999}
                                                     precision={2}
                                                     placeholder="注册资本"
                                                 />
-                                            )}
+                                                )}
                                             &nbsp;万元
                                         </FormItem>
                                     </Col>
@@ -637,13 +635,13 @@ class LicenseInfo extends PureComponent {
                                                 initialValue: supplierlicenseInfo.guaranteeMoney
                                             })(
                                                 <InputNumber
-                                                    style={{width: '200px'}}
+                                                    style={{ width: '200px' }}
                                                     min={0}
                                                     max={99999999}
                                                     precision={2}
                                                     placeholder="供应商质保金收取金额"
                                                 />
-                                            )}
+                                                )}
                                             &nbsp;元
                                         </FormItem>
                                     </Col>
@@ -655,17 +653,17 @@ class LicenseInfo extends PureComponent {
                                             {getFieldDecorator('businessScope', {
                                                 rules: [
                                                     { required: true, message: '请输入经营范围!' },
-                                                    {max: 300, message: '字符长度超限'}
+                                                    { max: 300, message: '字符长度超限' }
                                                 ],
                                                 initialValue: supplierlicenseInfo.businessScope
                                             })(
                                                 <Input
                                                     type="textarea"
                                                     autosize={{ minRows: 2, maxRows: 6 }}
-                                                    style={{maxWidth: '200px'}}
+                                                    style={{ maxWidth: '200px' }}
                                                     placeholder="经营范围"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -676,11 +674,11 @@ class LicenseInfo extends PureComponent {
                                             tilte='请上传身份证正反面'
                                             datas={
                                                 isEdit
-                                                ? [
-                                                    supplierlicenseInfo.legalRepreCardPic1,
-                                                    supplierlicenseInfo.legalRepreCardPic2
-                                                ]
-                                                : []
+                                                    ? [
+                                                        supplierlicenseInfo.legalRepreCardPic1,
+                                                        supplierlicenseInfo.legalRepreCardPic2
+                                                    ]
+                                                    : []
                                             }
                                             ref="legalRepreCardPic"
                                             key="legalRepreCardPic"

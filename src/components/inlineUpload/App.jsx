@@ -1,8 +1,8 @@
-import React, { PureComponent, Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
     Upload, Button, Icon, Tooltip,
-    DatePicker, Popconfirm, message
+    DatePicker, Popconfirm
 } from 'antd';
 import classnames from 'classnames';
 import moment from 'moment';
@@ -20,9 +20,9 @@ class InlineUpload extends Component {
 
     state = {
         fileList: [],
-        result: this.props.datas.filter((item) => {
-            return !!item
-        })
+        result: this.props.datas.filter((item) => (
+            !!item
+        ))
     }
 
     componentWillReceiveProps(nextProps) {
@@ -31,9 +31,9 @@ class InlineUpload extends Component {
             && nextProps.datas.length > 0
             && nextProps.datas.length !== this.props.datas.length
         ) {
-            const newResut = nextProps.datas.filter((item) => {
-                return !!item
-            })
+            const newResut = nextProps.datas.filter((item) => (
+                !!item
+            ))
             this.time = nextProps.defaultTime;
             this.setState({
                 fileList: newResut,
@@ -42,6 +42,13 @@ class InlineUpload extends Component {
                 this.props.onChange(this.state.result);
             })
         }
+    }
+
+    getValue() {
+        return {
+            files: this.state.result,
+            time: this.time
+        };
     }
 
     handleTimeChange(date) {
@@ -62,7 +69,7 @@ class InlineUpload extends Component {
                 this.props.onChange({ files: result, time: this.time });
             })
         }
-        let fileList = info.fileList;
+        const fileList = info.fileList;
         this.setState({ fileList });
     }
 
@@ -78,24 +85,17 @@ class InlineUpload extends Component {
         })
     }
 
-    getValue() {
-        return {
-            files: this.state.result,
-            time: this.time
-        };
-    }
-
     render() {
-        const { fileList, result } = this.state;
+        const { result } = this.state;
         const { limit = 1, id } = this.props;
-        const { apiHost } = config;
+        const { apiHost } = window.config;
         const props = {
             action: `${apiHost}commonUploadFile/uploadFile`,
             onChange: this.handleChange,
             showUploadList: false
         };
         return (
-            <div key={id} className={classnames('inline-upload', {'inline-upload-limit': result.length >= limit})}>
+            <div key={id} className={classnames('inline-upload', { 'inline-upload-limit': result.length >= limit })}>
                 {
                     <Upload {...props} fileList={this.state.fileList}>
                         <Tooltip placement="top" title={this.props.title}>
@@ -103,50 +103,49 @@ class InlineUpload extends Component {
                                 上传
                             </Button>
                         </Tooltip>
-                        
+
                     </Upload>
                 }
                 <div className="inline-upload-file">
                     {
-                        result.map((item, index) => {
-                            return (
-                                <div
-                                    key={item}
-                                    style={{display: 'inline-block', marginRight: '6px'}}
+                        result.map((item, index) => (
+                            <div
+                                key={item}
+                                style={{ display: 'inline-block', marginRight: '6px' }}
+                            >
+                                <a
+                                    href={item}
+                                    target="_blank"
+                                    title="点击查看"
+                                    className="inline-upload-file-link"
                                 >
-                                    <a
-                                        href={item}
-                                        target="_blank"
-                                        title="点击查看"
-                                        className="inline-upload-file-link">
-                                        <Icon type="picture" className="inline-upload-file-icon" />
+                                    <Icon type="picture" className="inline-upload-file-icon" />
+                                </a>
+                                <a
+                                    href={item}
+                                    target="_blank"
+                                    title="点击查看"
+                                    className="inline-upload-file-link"
+                                >
+                                    查看
                                     </a>
-                                    <a
-                                        href={item}
-                                        target="_blank"
-                                        title="点击查看"
-                                        className="inline-upload-file-link"
-                                    >
-                                        查看
-                                    </a>
-                                    <Popconfirm
-                                        title="确定删除该文件?"
+                                <Popconfirm
+                                    title="确定删除该文件?"
+                                    data-index={index}
+                                    onConfirm={this.handleDelete}
+                                    okText="确定"
+                                    cancelText="取消"
+                                >
+                                    <span
+                                        title="点击删除"
+                                        className="inline-upload-file-delete"
                                         data-index={index}
-                                        onConfirm={this.handleDelete}
-                                        okText="确定"
-                                        cancelText="取消"
                                     >
-                                        <span
-                                            title="点击删除"
-                                            className="inline-upload-file-delete"
-                                            data-index={index}
-                                        >
-                                            删除
+                                        删除
                                         </span>
-                                    </Popconfirm>
-                                </div>
-                            )
-                        })
+                                </Popconfirm>
+                            </div>
+                        ))
                     }
                     {
                         this.props.showEndTime &&
@@ -177,8 +176,8 @@ InlineUpload.propTypes = {
 };
 
 InlineUpload.defaultProps = {
-    handleChange: () => {},
-    onChange: () => {},
+    handleChange: () => { },
+    onChange: () => { },
     showEndTime: false,
     defaultTime: null,
     title: '图片仅支持JPG、GIF、PNG格式的图片，大小不超过1M。',
