@@ -45,7 +45,7 @@ class Audit extends PureComponent {
      * 模态框确认
      */
     handleTableCauseOk() {
-        const { causeTextArea, inputNumber } = this.props.form.getFieldsValue();
+        const { causeTextArea } = this.props.form.getFieldsValue();
         const { causeRecordId } = this.props;
         const { option } = this.state;
         switch (option) {
@@ -171,11 +171,10 @@ class Audit extends PureComponent {
 
 Audit.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    fetchPaymentDetailInfo: PropTypes.arrayOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     causeRecordId: PropTypes.string,
     causeModalVisible: PropTypes.bool,
-    modifyCauseModalVisible: PropTypes.func,
+    modifyCauseModalVisible: PropTypes.func
 }
 
 Audit.defaultProps = {

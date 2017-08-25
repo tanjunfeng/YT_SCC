@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Table, Input, Form, Button, Dropdown, Menu, Icon, Modal, message } from 'antd';
-import Utils from '../../../util/util';
 import HotLableItem from './common/hotLableItem';
 import ChangeModalMessage from './common/changeModalMessage';
 import { PAGE_SIZE } from '../../../constant';
@@ -77,7 +76,9 @@ class SearchRecommendConfig extends Component {
         this.props.fetchAllHot({pageSize: PAGE_SIZE, pageNum: goto});
     }
 
-    // 输入框-保存
+    /**
+     * 输入框-保存
+     */
     handleSaveInput() {
         const { content = '' } = this.props.form.getFieldsValue();
         this.props.addSaveInput({
@@ -87,11 +88,18 @@ class SearchRecommendConfig extends Component {
         })
     }
 
-    // “添加”模态框
+    /**
+     * “添加”模态框
+     */
     showAddModal() {
         this.props.modifyModalVisible({isVisible: true, mTitle: '新增'});
     }
-    // 选择操作项
+
+    /**
+     * 选择操作项
+     * @param {*} record 行值
+     * @param {*} items 行项
+     */
     handleSelect(record, items) {
         const { id } = record;
         const { key } = items;

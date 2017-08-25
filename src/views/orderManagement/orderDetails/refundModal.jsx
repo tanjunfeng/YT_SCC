@@ -48,7 +48,7 @@ class RefundModal extends PureComponent {
      */
     handleTableCauseOk() {
         const { causeTextArea, inputNumber } = this.props.form.getFieldsValue();
-        const { recordData, totalAmount } = this.props;
+        const { recordData } = this.props
         const { option } = this.state;
         switch (option) {
             case '请选择':
@@ -98,7 +98,7 @@ class RefundModal extends PureComponent {
                                 refundNo: recordData.id,
                                 passed: false,
                                 remark: causeTextArea
-                            }).then(res => {
+                            }).then(() => {
                                 this.props.fetchPaymentDetailInfo({ orderId: recordData.orderId });
                                 this.props.modifyCauseModalVisible({ isShow: false });
                                 this.setState({
@@ -114,7 +114,7 @@ class RefundModal extends PureComponent {
                                 refundNo: recordData.id,
                                 passed: false,
                                 remark: causeTextArea
-                            }).then(res => {
+                            }).then(() => {
                                 this.props.fetchPaymentDetailInfo({ orderId: recordData.orderId });
                                 this.props.modifyCauseModalVisible({ isShow: false });
                                 this.setState({
@@ -192,7 +192,7 @@ class RefundModal extends PureComponent {
                                         })(
                                             <InputNumber
                                                 min={0.00}
-                                                disabled={true}
+                                                disabled
                                                 max={this.props.totalAmount}
                                                 step={0.01}
                                             />
@@ -255,6 +255,7 @@ RefundModal.propTypes = {
     recordData: PropTypes.arrayOf(PropTypes.any),
     payAuditModalVisible: PropTypes.bool,
     modifyCauseModalVisible: PropTypes.func,
+    totalAmount: PropTypes.number
 }
 
 RefundModal.defaultProps = {

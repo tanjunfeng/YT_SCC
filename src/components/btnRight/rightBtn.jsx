@@ -11,9 +11,6 @@ import Common from './common';
 
 @Common
 class Btn extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         return (
             <Button {...this.props} />
@@ -22,7 +19,6 @@ class Btn extends Component {
 }
 
 Btn.propTypes = {
-    children: PropTypes.node
 };
 
 export default Btn;

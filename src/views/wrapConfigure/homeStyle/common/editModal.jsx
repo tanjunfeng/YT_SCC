@@ -1,19 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import classnames from 'classnames';
+import { Form, Input, Select, Modal } from 'antd';
 import { updateQuickNavigation } from '../../../../service';
-import {
-    Form,
-    Input,
-    Select,
-    Modal,
-    message,
-    Button
-} from 'antd';
-
-import { fetchQuickNavigationList, showEditModal } from '../../../../actions/wap';
 import FileCut from '../../fileCut';
 
 const FormItem = Form.Item;
@@ -33,7 +22,7 @@ class EditModal extends Component {
     }
 
     handleCancel() {
-        this.props.hideEditModal()
+        this.props.hideEditModal();
     }
 
     handleCut() {
@@ -57,7 +46,7 @@ class EditModal extends Component {
                 navigationPosition,
                 picAddress: 'https://fd.yatang.cn/group1/M00/01/A6/wKgCZVlQdrCAF26_AAAcP4buFxQ212.png',
                 ...values
-            }).then((res) => {
+            }).then(() => {
                 this.handleCancel();
             })
         })
@@ -65,11 +54,11 @@ class EditModal extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { visibleData, initialValue = {} } = this.props;
+        const { initialValue = {} } = this.props;
         return (
             <Modal
                 title="修改快捷功能设置"
-                visible={true}
+                visible
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 okText="保存"
@@ -96,7 +85,7 @@ class EditModal extends Component {
                                 <Option value="静态页面">静态页面</Option>
                                 <Option value="功能链接">功能链接</Option>
                             </Select>
-                        )}
+                            )}
                     </FormItem>
                     <FormItem className="manage-form-item">
                         <span className="manage-form-label change-form-label">名称：</span>
@@ -111,13 +100,13 @@ class EditModal extends Component {
                                 className="manage-form-input"
                                 placeholder="名称"
                             />
-                        )}
+                            )}
                         <span className="change-form-tip">（说明：2~4个汉字）</span>
                     </FormItem>
                     <FormItem className="application-form-item">
                         <span className="application-modal-label">链接地址：</span>
                         {getFieldDecorator('linkAddress', {
-                            rules: [{required: true, message: '请输入链接地址', whitespace: true}],
+                            rules: [{ required: true, message: '请输入链接地址', whitespace: true }],
                             initialValue: initialValue.linkAddress
                         })(
                             <Input
@@ -127,11 +116,9 @@ class EditModal extends Component {
                                 className="application-modal-textarea"
                                 autosize={{ minRows: 2, maxRows: 8 }}
                             />
-                        )}
+                            )}
                     </FormItem>
-                    <FormItem className={
-                        classnames('manage-form-item')
-                    }>
+                    <FormItem className={classnames('manage-form-item')}>
                         <span className="manage-form-label change-form-label">快捷icon：（说明：支持PNG，建议大小200X200px，100k以内）</span>
                         <FileCut
                             ref={ref => { this.imageUploader = ref }}
@@ -147,11 +134,10 @@ class EditModal extends Component {
 }
 
 EditModal.propTypes = {
-    modalVisible: PropTypes.bool,
-    showEditModal: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    fetchQuickNavigationList: PropTypes.func,
+    hideEditModal: PropTypes.func,
     visibleData: PropTypes.objectOf(PropTypes.any),
+    initialValue: PropTypes.objectOf(PropTypes.any)
 };
 
 export default Form.create()(EditModal);

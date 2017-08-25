@@ -20,6 +20,7 @@ import { commodityDetails } from '../../../actions/producthome';
         commodityDetails
     }, dispatch)
 )
+
 class CommodifyDetail extends PureComponent {
     componentDidMount() {
         const { id } = this.props.match.params;

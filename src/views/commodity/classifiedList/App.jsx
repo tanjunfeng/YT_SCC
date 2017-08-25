@@ -11,7 +11,8 @@ import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { message, Modal } from 'antd';
+import PropTypes from 'prop-types';
+import { message } from 'antd';
 import Utils from '../../../util/util';
 import LevelTree from '../../../common/levelTree';
 import {
@@ -25,10 +26,11 @@ import {
     state => ({
         user: state.toJS().user.data,
         rights: state.toJS().user.rights,
-        data: state.toJS().commodity.classifiedList,
+        classifiedList: state.toJS().commodity.classifiedList
     }),
     dispatch => bindActionCreators({ fetchAction, receiveData }, dispatch)
 )
+
 class ClassifiedList extends Component {
     constructor(props) {
         super(props);
@@ -43,8 +45,6 @@ class ClassifiedList extends Component {
 
         this.loading = false;
     }
-
-    componentWillMount() {}
 
     componentDidMount() {
         this.props.fetchAction();
@@ -73,7 +73,7 @@ class ClassifiedList extends Component {
             message.destroy();
             callback();
         }, delay);
-    };
+    }
 
     /**
      * 通过输入框排序
@@ -103,7 +103,7 @@ class ClassifiedList extends Component {
      * @param mkey, categoryId
      */
     handleChangeStatus(value, mkey) {
-        const $data = fromJS(this.props.data);
+        const $data = fromJS(this.props.classifiedList);
 
         this.showLocker();
 
@@ -194,7 +194,6 @@ class ClassifiedList extends Component {
             // if ($dealData) {
             //     message.success('操作成功');
             // }
-
             this.locker(() => {
                 this.props.fetchAction();
 
@@ -218,7 +217,7 @@ class ClassifiedList extends Component {
         return (
             <div>
                 <LevelTree
-                    data={this.props.data}
+                    data={this.props.classifiedList}
                     handleDrop={this.handleDrop}
                     handleChangeSort={this.handleChangeSort}
                     handleChangeStatus={this.handleChangeStatus}
@@ -227,6 +226,12 @@ class ClassifiedList extends Component {
             </div>
         )
     }
+}
+
+ClassifiedList.propTypes = {
+    fetchAction: PropTypes.func,
+    receiveData: PropTypes.func,
+    classifiedList: PropTypes.arrayOf(PropTypes.any)
 }
 
 export default withRouter(ClassifiedList);

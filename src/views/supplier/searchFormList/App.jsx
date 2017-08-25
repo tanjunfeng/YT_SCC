@@ -58,7 +58,7 @@ class SearchForm extends Component {
     onEnterTimeChange(date) {
         this.setState({
             rengeTime: date,
-            settledDate: date ? date._d*1 : null,
+            settledDate: date ? date._d * 1 : null,
         });
     }
 
@@ -168,7 +168,7 @@ class SearchForm extends Component {
         this.setState({
             supplierType: 0,
         });
-        this.setState({rengeTime: null});
+        this.setState({ rengeTime: null });
         onReset(this.searchData);
     }
 
@@ -197,8 +197,8 @@ class SearchForm extends Component {
         const { getFieldDecorator } = this.props.form;
         const { supplierType } = this.state;
         const supplierStatusOptionss =
-        this.props.isSuplierInputList ? secondSupplierStatusOptions
-        : firstSupplierStatusOptions;
+            this.props.isSuplierInputList ? secondSupplierStatusOptions
+                : firstSupplierStatusOptions;
         return (
             <div className="manage-form">
                 <Form layout="inline">
@@ -258,7 +258,7 @@ class SearchForm extends Component {
                                         )
                                     }
                                 </Select>
-                            )}
+                                )}
                         </div>
                     </FormItem>
                     {/* 供应商状态 */}
@@ -279,7 +279,7 @@ class SearchForm extends Component {
                                     )
                                 }
                             </Select>
-                        )}
+                            )}
                     </FormItem>
                     {
                         supplierType === '1' &&
@@ -301,7 +301,7 @@ class SearchForm extends Component {
                                         )
                                     }
                                 </Select>
-                            )}
+                                )}
                         </FormItem>
                     }
                     {
@@ -324,7 +324,7 @@ class SearchForm extends Component {
                                         )
                                     }
                                 </Select>
-                            )}
+                                )}
                         </FormItem>
                     }
                     {/* 供应商入驻日期 */}

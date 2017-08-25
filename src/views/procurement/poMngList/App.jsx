@@ -25,11 +25,8 @@ import {
 import { fetchPoMngList, changePoMngSelectedRows, deletePoByIds } from '../../../actions';
 import SearchForm from '../../../components/poSearchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { poStatusCodes } from '../../../constant/procurement';
 import { poMngListColumns } from '../columns';
-import Utils from '../../../util/util';
 
-const confirm = Modal.confirm;
 const columns = poMngListColumns;
 
 @connect(state => ({
@@ -153,12 +150,10 @@ class PoMngList extends PureComponent {
 
     // table列表详情操作
     renderActions = (text, record) => {
-        const { status, purchaseOrderNo, id } = record;
+        const { status, id } = record;
         const deleteCode = 0;
-        const auditingCode = 2;
         const refuseCOde = 3;
         const { pathname } = this.props.location;
-        const detailLink = `${pathname}/${id}`;
         const menu = (
             <Menu>
                 <Menu.Item key="detail">
@@ -193,11 +188,8 @@ class PoMngList extends PureComponent {
 
     render() {
         columns[columns.length - 1].render = this.renderActions;
-
         const { poList = {} } = this.props;
         const { data = [], total, pageNum } = poList;
-
-        const { pathname } = this.props.location;
         const { auditingVisible } = this.state;
         const rowSelection = {
             getCheckboxProps: record => ({

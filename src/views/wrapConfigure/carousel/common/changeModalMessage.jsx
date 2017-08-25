@@ -48,7 +48,7 @@ class ChangeMessage extends PureComponent {
             visible: false,
             img: null,
             sortErr: false,
-            selectLinkType: `${props.visibleData.linkType || 1}` ,
+            selectLinkType: `${props.visibleData.linkType || 1}`
         }
     }
 

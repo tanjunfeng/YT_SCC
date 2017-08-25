@@ -31,9 +31,9 @@ export default (state = initState, action) => {
         }
 
         case ActionType.RECEIVE_All_CATEGORYS: {
-            return state.set('categorys', action.payload)
+            return state.set('categorys', action.payload);
         }
-        
+
         case ActionType.RECEIVE_CATEGORYS_BY_ID: {
             return state.set('categorysById', action.payload)
         }
