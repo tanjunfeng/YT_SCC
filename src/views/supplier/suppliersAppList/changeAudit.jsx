@@ -45,7 +45,6 @@ class ChangeAudit extends PureComponent {
         this.handleAuditCancel = ::this.handleAuditCancel;
         this.handleAuditOk = ::this.handleAuditOk;
         this.handleSelectChange = ::this.handleSelectChange;
-        this.handleTextChange = ::this.handleTextChange;
 
         this.searchForm = {};
         this.current = 1;
@@ -99,10 +98,6 @@ class ChangeAudit extends PureComponent {
         })
     }
 
-    handleTextChange(value) {
-
-    }
-
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
@@ -141,7 +136,6 @@ class ChangeAudit extends PureComponent {
                                             rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
                                         })(
                                             <Input
-                                                onChange={this.handleTextChange}
                                                 type="textarea"
                                                 placeholder="请输入不通过原因"
                                                 className="application-modal-textarea"
