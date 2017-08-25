@@ -9,7 +9,7 @@ import * as util from 'freed-spa/src/util/util';
 /**
  * 格式化地区字符串
  */
-const array2string = function (reg) {
+const array2string = (reg) => {
     const re = reg;
     let str = '';
     for (let i = 0; i < re.length; i++) {
@@ -130,12 +130,8 @@ class Utils {
             }
 
             if (item.get(opts.findBy) === val) {
-                // 储存匹配到的深度
-                findDeep = findDeep.concat(i);
-                itemsDeep = itemsDeep.concat(v);
-
-                // 返回匹配值
-                return callback(item, findDeep, $child, itemsDeep);
+                // 储存匹配到的深度, 返回匹配值
+                return callback(item, findDeep.concat(i), $child, itemsDeep.concat(v));
             }
 
             // 如果存在子节点则继续查找
@@ -163,12 +159,13 @@ class Utils {
      */
     static removeInvalid(obj) {
         const result = {};
-        for (const i in obj) {
-            const value = obj[i];
+        const keys = Object.keys(obj);
+        keys.forEach((key) => {
+            const value = obj[key];
             if (value || value === 0) {
-                result[i] = value;
+                result[key] = value;
             }
-        }
+        });
         return result;
     }
 
@@ -241,7 +238,7 @@ class Utils {
     }
 
     static isWindow(obj) {
-        return obj != null && obj == obj.window;
+        return obj != null && obj === obj.window;
     }
 
     static isObject(obj) {
@@ -252,7 +249,7 @@ class Utils {
     static isPlainObject(obj) {
         return this.isObject(obj)
             && !this.isWindow(obj)
-            && Object.getPrototypeOf(obj) == Object.prototype;
+            && Object.getPrototypeOf(obj) === Object.prototype;
     }
 
     /**

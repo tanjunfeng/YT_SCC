@@ -44,7 +44,7 @@ import queryCommodityList from './queryCommodityList';
 export default Immutable.fromJS({
     pub,
     user,
-
+//
     /**
      * Others Reducers
      */

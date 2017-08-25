@@ -289,7 +289,7 @@ export const suppliersAppList = [
                 case 2:
                     return '供应商地点'
                 default:
-                    break;
+                    return '';
             }
         }
     },
@@ -327,6 +327,7 @@ export const suppliersAppList = [
                         break;
                 }
             }
+            return '';
         }
     },
     {
@@ -415,7 +416,7 @@ export const supplierInputList = [
                 case 2:
                     return '供应商地点'
                 default:
-                    break;
+                    return '';
             }
         }
     },
@@ -453,6 +454,7 @@ export const supplierInputList = [
                         break;
                 }
             }
+            return '';
         }
     },
     {

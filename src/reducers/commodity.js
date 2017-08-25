@@ -4,7 +4,6 @@
  *
  * 商品管理 reducer
  */
-
 import Immutable from 'immutable';
 import ActionType from '../actions/ActionType';
 

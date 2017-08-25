@@ -317,7 +317,10 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
                                             defaultValue={
-                                                (spNo || initValue.spNo) && `${spNo || initValue.spNo} - ${companyName || initValue.spName}`}
+                                                (spNo || initValue.spNo) &&
+                                                `${spNo || initValue.spNo} - ${companyName ||
+                                                initValue.spName}`
+                                            }
                                             style={{ zIndex: 9 }}
                                             compKey="search-mind-key1"
                                             ref={ref => { this.searchMind1 = ref }}
@@ -351,27 +354,29 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
                                             defaultValue={
-                                                initValue.spAdrId && `${initValue.spAdrId} - ${initValue.spAdrName}`}
+                                            initValue.spAdrId &&
+                                            `${initValue.spAdrId} - ${initValue.spAdrName}`
+                                            }
                                             style={{ zIndex: 8 }}
                                             compKey="search-mind-key2"
                                             ref={ref => { this.searchMind2 = ref }}
                                             fetch={(params) =>
-                                                this.props.pubFetchValueList(Util.removeInvalid({
-                                                    pId: this.ids.spId,
-                                                    condition: params.value,
-                                                    pageSize: params.pagination.pageSize,
-                                                    pageNum: params.pagination.current || 1
-                                                }), 'supplierAdrSearchBox').then((res) => {
-                                                    const { row = [] } = res.data;
-                                                    if (!row || row.length === 0) {
-                                                        message.warning('没有可用的数据');
-                                                    }
-                                                    return res;
-                                                })}
+                                            this.props.pubFetchValueList(Util.removeInvalid({
+                                                pId: this.ids.spId,
+                                                condition: params.value,
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
+                                            }), 'supplierAdrSearchBox').then((res) => {
+                                                const dataArr = res.data.data || [];
+                                                if (!dataArr || dataArr.length === 0) {
+                                                    message.warning('没有可用的数据');
+                                                }
+                                                return res;
+                                            })}
                                             onChoosed={this.handleAdressChoose}
                                             onClear={this.handleAdressClear}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>{row.providerNo} - {row.providerName}</div>
+                                            renderChoosedInputRaw={(res) => (
+                                                <div>{res.providerNo} - {res.providerName}</div>
                                             )}
                                             pageSize={3}
                                             columns={[
@@ -394,7 +399,11 @@ class ProdModal extends Component {
                                         <SearchMind
                                             className={`${prefixCls}-data-disable`}
                                             defaultValue={
-                                                (warehouseCode || initValue.distributeWarehouseId) && `${warehouseCode || initValue.distributeWarehouseId} - ${warehouseName || initValue.distributeWarehouseName}`}
+                                                (warehouseCode ||
+                                                initValue.distributeWarehouseId) &&
+                                                `${warehouseCode ||
+                                                initValue.distributeWarehouseId} - ${warehouseName ||
+                                                initValue.distributeWarehouseName}`}
                                             style={{ zIndex: 1, color: '#666' }}
                                             disabled={this.state.isDisabled}
                                             compKey="search-mind-key3"
@@ -472,10 +481,10 @@ ProdModal.propTypes = {
     pubFetchValueList: PropTypes.func,
     ChangeUpdateProd: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
+    handleClose: PropTypes.objectOf(PropTypes.any),
     prodPurchase: PropTypes.objectOf(PropTypes.any),
     initValue: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,
-    handleClose: PropTypes.func,
     isEdit: PropTypes.bool,
     hasMainSupplier: PropTypes.bool,
     data: PropTypes.objectOf(PropTypes.any)

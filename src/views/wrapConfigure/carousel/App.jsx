@@ -35,10 +35,13 @@ const columns = [
         dataIndex: 'linkType',
         key: 'linkType',
         render: (text) => {
-            if (text === 2) {
-                return '页面链接'
-            } else if (text === 1) {
-                return '商品链接'
+            switch (text) {
+                case 1:
+                    return '商品链接';
+                case 2:
+                    return '页面链接';
+                default:
+                    return '';
             }
         }
     },
@@ -58,11 +61,11 @@ const columns = [
         dataIndex: 'picAddress',
         key: 'picAddress',
         render: (text) =>
-        (<img
-            alt="轮播图片"
-            src={text}
-            style={{width: 216, height: 102 }}
-        />)
+            (<img
+                alt="轮播图片"
+                src={text}
+                style={{ width: 216, height: 102 }}
+            />)
     },
     {
         title: '状态',
@@ -165,14 +168,15 @@ class CarouselManagement extends Component {
                 confirm({
                     title: '你确认要删除此方案吗？',
                     onOk: () => {
-                        removeCarouselAd({ carouselAdId: id
+                        removeCarouselAd({
+                            carouselAdId: id
                         }).then(() => {
                             this.props.fetchCarouselAdList();
-                            this.props.modifyModalVisible({isVisible: false });
+                            this.props.modifyModalVisible({ isVisible: false });
                             message.success('删除成功！');
                         })
                     },
-                    onCancel() {},
+                    onCancel() { },
                 });
                 break;
             case 'enable':
@@ -184,11 +188,11 @@ class CarouselManagement extends Component {
                             status: 1
                         }).then(() => {
                             this.props.fetchCarouselAdList();
-                            this.props.modifyModalVisible({isVisible: false });
+                            this.props.modifyModalVisible({ isVisible: false });
                             message.success('启用成功！');
                         })
                     },
-                    onCancel() {},
+                    onCancel() { },
                 });
                 break;
             case 'disable':
@@ -200,11 +204,11 @@ class CarouselManagement extends Component {
                             status: 0
                         }).then(() => {
                             this.props.fetchCarouselAdList();
-                            this.props.modifyModalVisible({isVisible: false });
+                            this.props.modifyModalVisible({ isVisible: false });
                             message.success('停用成功！');
                         })
                     },
-                    onCancel() {},
+                    onCancel() { },
                 });
                 break;
             default:
@@ -268,8 +272,8 @@ class CarouselManagement extends Component {
                 </div>
                 <span>
                     <span className="modal-carousel-interval">
-                        <span style={{color: '#f00' }}>*</span>
-                            轮播间隔
+                        <span style={{ color: '#f00' }}>*</span>
+                        轮播间隔
                     </span>
                     <Select
                         className="carousel-management-select"

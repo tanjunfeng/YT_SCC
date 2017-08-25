@@ -1,4 +1,5 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { Icon, Modal, Input, Form, Button, message, Select } from 'antd';
 import classnames from 'classnames';
 import {
@@ -75,7 +76,7 @@ function Common(WrappedComponent) {
 
         handleSaveItem(data) {
             const { fetchAreaList } = this.props;
-            return saveItemAd({...data}).then(() => fetchAreaList());
+            return saveItemAd({ ...data }).then(() => fetchAreaList());
         }
 
         saveBase64(data) {
@@ -83,7 +84,7 @@ function Common(WrappedComponent) {
         }
 
         handleUpOk() {
-            const { validateFields, getFieldError } = this.props.form;
+            const { validateFields } = this.props.form;
             const { isBase64, image } = this.imageUploader.getValue();
             validateFields((err, values) => {
                 if (err) return null;
@@ -100,12 +101,13 @@ function Common(WrappedComponent) {
                 } else if (!isBase64) {
                     this.saveItems(values, image);
                 }
+                return null;
             })
         }
 
         saveItems(values, imgUrl) {
             const { current } = this.state;
-            const { areaId, id, adType, name, icon } = current;
+            const { areaId, id, adType, name } = current;
             const { title, subTitle, url, productNo, urlType } = values;
             saveItemAd({
                 id,
@@ -117,7 +119,7 @@ function Common(WrappedComponent) {
                 adType,
                 productNo,
                 urlType,
-                icon: imgUrl ? imgUrl : url
+                icon: imgUrl || url
             }).then(() => {
                 this.props.fetchAreaList();
                 this.setState({
@@ -160,9 +162,9 @@ function Common(WrappedComponent) {
             const { itemAds } = data;
             const status = itemAds[4].status;
             const ids = [];
-            itemAds.map((itemAds, index) => {
+            itemAds.map((ads, index) => {
                 if (index < 5) {
-                    ids.push(itemAds.id)
+                    ids.push(ads.id)
                 }
                 return null;
             })
@@ -179,9 +181,9 @@ function Common(WrappedComponent) {
             const { itemAds } = data;
             const status = itemAds[5].status;
             const ids = [];
-            itemAds.map((itemAds, index) => {
+            itemAds.map((ads, index) => {
                 if (index >= 5) {
-                    ids.push(itemAds.id)
+                    ids.push(ads.id)
                 }
                 return null;
             })
@@ -207,9 +209,9 @@ function Common(WrappedComponent) {
                 case 'floor':
                     return '推荐管理配置';
                 default:
-                    break;
+                    return '';
             }
-        } 
+        }
 
         render() {
             const { data = {}, type } = this.props;
@@ -267,12 +269,12 @@ function Common(WrappedComponent) {
                                 >
                                     {
                                         data.itemAds[4].status === 0
-                                        ? '启用第一栏'
-                                        : '停用第一栏'
+                                            ? '启用第一栏'
+                                            : '停用第一栏'
                                     }
                                 </Button>
                             </li>
-                            
+
                         }
                         {
                             type === 'quick' &&
@@ -284,8 +286,8 @@ function Common(WrappedComponent) {
                                 >
                                     {
                                         data.itemAds[5].status === 0
-                                        ? '启用第二栏'
-                                        : '停用第二栏'
+                                            ? '启用第二栏'
+                                            : '停用第二栏'
                                     }
                                 </Button>
                             </li>
@@ -333,13 +335,13 @@ function Common(WrappedComponent) {
                                     <FormItem className="home-style-modal-input-item">
                                         {getFieldDecorator('title', {
                                             rules: [
-                                                {required: true, message: '请输入标题'},
-                                                {max: 20, message: '最大长度20个汉字'}
+                                                { required: true, message: '请输入标题' },
+                                                { max: 20, message: '最大长度20个汉字' }
                                             ],
                                             initialValue: current.title
                                         })(
                                             <Input type="text" placeholder="请输入主标题" />
-                                        )}
+                                            )}
                                     </FormItem>
                                 </div>
                                 <div>
@@ -347,19 +349,19 @@ function Common(WrappedComponent) {
                                     <FormItem className="home-style-modal-input-item">
                                         {getFieldDecorator('subTitle', {
                                             rules: [
-                                                {required: true, message: '请输入标题'},
-                                                {max: 20, message: '最大长度20个汉字'}
+                                                { required: true, message: '请输入标题' },
+                                                { max: 20, message: '最大长度20个汉字' }
                                             ],
                                             initialValue: current.subTitle
                                         })(
                                             <Input type="text" placeholder="请输入副标题" />
-                                        )}
+                                            )}
                                     </FormItem>
                                 </div>
                                 <div>
                                     <FormItem className="home-style-modal-input-item">
                                         <span className="modal-form-item-title">
-                                            <span style={{color: '#f00' }}>*</span>
+                                            <span style={{ color: '#f00' }}>*</span>
                                             链接类型：&nbsp;
                                         </span>
                                         {getFieldDecorator('urlType', {
@@ -376,46 +378,46 @@ function Common(WrappedComponent) {
                                                 <Option value="1">商品链接</Option>
                                                 <Option value="2">页面链接</Option>
                                             </Select>
-                                        )}
+                                            )}
                                     </FormItem>
                                 </div>
                                 {
                                     `${this.state.select}` === '2'
-                                    ? <div>
-                                        <FormItem className="home-style-modal-input-item">
-                                            <span>页面链接：</span>
-                                            {getFieldDecorator('url', {
-                                                rules: [
-                                                    {required: true, message: '请输入页面链接'},
-                                                    /* eslint-disable */
-                                                    {/* {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'} */}
-                                                    /* eslint-enable */
-                                                ],
-                                                initialValue: decodeURI(current.url ? current.url : '')
-                                            })(
-                                                <Input className="home-style-url" type="textarea" rows={2} placeholder="请输入页面链接" />
-                                            )}
-                                        </FormItem>
-                                    </div>
-                                    : <div>
-                                        <FormItem className="home-style-modal-input-item">
-                                            <span>商品编号：</span>
-                                            {getFieldDecorator('productNo', {
-                                                rules: [{
-                                                    required: true,
-                                                    message: '请输入商品编号'
-                                                }, {
-                                                    max: 20, message: '最大长度20位'
-                                                }, {
-                                                    pattern: /^[^\u4e00-\u9fa5]+$/,
-                                                    message: '不能包含中文'
-                                                }],
-                                                initialValue: current.productNo
-                                            })(
-                                                <Input className="home-style-url" type="text" placeholder="请输入商品编号" />
-                                            )}
-                                        </FormItem>
-                                    </div>
+                                        ? <div>
+                                            <FormItem className="home-style-modal-input-item">
+                                                <span>页面链接：</span>
+                                                {getFieldDecorator('url', {
+                                                    rules: [
+                                                        { required: true, message: '请输入页面链接' },
+                                                        /* eslint-disable */
+                                                        {/* {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'} */ }
+                                                        /* eslint-enable */
+                                                    ],
+                                                    initialValue: decodeURI(current.url ? current.url : '')
+                                                })(
+                                                    <Input className="home-style-url" type="textarea" rows={2} placeholder="请输入页面链接" />
+                                                    )}
+                                            </FormItem>
+                                        </div>
+                                        : <div>
+                                            <FormItem className="home-style-modal-input-item">
+                                                <span>商品编号：</span>
+                                                {getFieldDecorator('productNo', {
+                                                    rules: [{
+                                                        required: true,
+                                                        message: '请输入商品编号'
+                                                    }, {
+                                                        max: 20, message: '最大长度20位'
+                                                    }, {
+                                                        pattern: /^[^\u4e00-\u9fa5]+$/,
+                                                        message: '不能包含中文'
+                                                    }],
+                                                    initialValue: current.productNo
+                                                })(
+                                                    <Input className="home-style-url" type="text" placeholder="请输入商品编号" />
+                                                    )}
+                                            </FormItem>
+                                        </div>
                                 }
                                 <div>
                                     <span>商品icon(支持PNG，建议大小{`${current.width}x${current.height}`}px)：</span>
@@ -435,7 +437,15 @@ function Common(WrappedComponent) {
             )
         }
     }
-    return HOC
+    HOC.propTypes = {
+        data: PropTypes.objectOf(PropTypes.any),
+        form: PropTypes.objectOf(PropTypes.any),
+        fetchAreaList: PropTypes.func,
+        type: PropTypes.string,
+        index: PropTypes.number,
+        allLength: PropTypes.number
+    }
+    return HOC;
 }
 
 export default Common;

@@ -39,30 +39,35 @@ const pathListener = (location, history) => {
 
 /**
  * 通过code找id
- * @param {string} code 
- * @param {Object} data 
+ * @param {string} code
+ * @param {Object} data
+ *
+ * @return {Number} id > 0
  */
 const findIdByCode = (code, data) => {
     if (!data || !code) {
         return;
     }
-    for (let i of data) {
-        if (i.submenu.length > 0) {
-            for (let j of i.submenu) {
-                if (j.code === code) {
-                    return j.id;
+    data.forEach((value) => {
+        if (value.submenu.length > 0) {
+            value.submenu.forEach((subMenu) => {
+                if (subMenu.code === code) {
+                    return subMenu.id;
                 }
-            }
+                return -1;
+            });
         }
-    }
+        return -1;
+    });
 }
 
 @connect(
-    state => ({}),
+    () => ({}),
     dispatch => bindActionCreators({
         receiveUser, fetchRightsAction
     }, dispatch)
 )
+
 class App extends PureComponent {
     componentWillMount() {
         // 此处 user 从后端数据返回, 此处进行 dispatch
@@ -95,9 +100,7 @@ class App extends PureComponent {
      */
     componentDidMount() {
         const { history } = this.props;
-
-        this.unrights = history.listen(loc => this.getRights());
-
+        this.unrights = history.listen(() => this.getRights());
         this.getRights();
     }
 
@@ -115,7 +118,7 @@ class App extends PureComponent {
         const code = findCodeByPath(`/${pathname.split('/')[1]}`);
         if (code && initData && initData.menus && initData.menus.menu) {
             const id = findIdByCode(code, initData.menus.menu);
-            this.props.fetchRightsAction(id);
+            if (id > 0) this.props.fetchRightsAction(id);
         }
     }
 
@@ -125,8 +128,8 @@ class App extends PureComponent {
             <Layout>
                 {
                     initData
-                    ? <AuthLayout />
-                    : <LoginLayout />
+                        ? <AuthLayout />
+                        : <LoginLayout />
                 }
             </Layout>
         );

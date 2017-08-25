@@ -37,9 +37,16 @@
     width: 250px;
   }
 
-  .ant-form-item-label label {
-    min-width: 80px;
-    display: inline-block;
+  .ant-form-item-label {
+    label {
+      min-width: 80px;
+      display: inline-block;
+    }
+    .label-wrap {
+      min-width: 80px;
+      display: inline-block;
+      padding-right: 12px;
+    }
   }
 
   .text {

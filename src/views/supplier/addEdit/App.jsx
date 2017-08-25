@@ -119,7 +119,6 @@ class AddSupplier extends PureComponent {
 
 AddSupplier.propTypes = {
     match: PropTypes.objectOf(PropTypes.any),
-    detailData: PropTypes.objectOf(PropTypes.any),
     getSupplierDetail: PropTypes.func,
     removeDetailData: PropTypes.func,
     fetchSupplierNo: PropTypes.func

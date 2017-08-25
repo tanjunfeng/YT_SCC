@@ -145,7 +145,6 @@ export default {
 
     /*
      * procurement
-     *
      */
     // 查询采购单管理列表
     RECEIVE_PO_MNG_LIST: 'RECEIVE_PO_MNG_LIST',

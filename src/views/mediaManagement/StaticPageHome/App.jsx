@@ -57,7 +57,6 @@ class CateGory extends Component {
         this.renderOperation = this.renderOperation.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
         this.handleReset = this.handleReset.bind(this);
-        this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
 
         this.state = {
@@ -98,23 +97,12 @@ class CateGory extends Component {
         })
     }
 
-    handleSelectChange(data, that) {
-        const { first, second, third } = data;
-        this.classify = {
-            firstCategoryId: first.id === -1 ? null : first.id,
-            secondCategoryId: second.id === -1 ? null : second.id,
-            thirdCategoryId: third.id === -1 ? null : third.id
-        }
-        this.classifyRef = that;
-    }
-
     handleReset() {
         this.props.form.resetFields();
         this.setState({
             times: null
         })
         this.times = [null, null];
-        this.classifyRef && this.classifyRef.resetValue()
     }
 
     handleAdd() {
@@ -163,7 +151,7 @@ class CateGory extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { findstaticpagelist = {}, prefixCls } = this.props;
+        const { findstaticpagelist = {} } = this.props;
         const {
             data,
             pageNum,
@@ -271,7 +259,6 @@ CateGory.propTypes = {
     fetchStaticPageList: PropTypes.func,
     modifyMediaAddVisible: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    prefixCls: PropTypes.string,
     findstaticpagelist: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
 }
