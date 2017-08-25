@@ -58,7 +58,6 @@ export default Immutable.fromJS({
     addSupplier,
     mediaManage,
     categoryGoodsOrderNum,
-    categoryGoodsOrderNum,
     dictionary,
     /* ********************procurement************************* */
     procurement,
