@@ -1,7 +1,7 @@
 /**
  * @file supplier.js
  * @author shijh, denglingbo
- * 
+ *
  * 商品管理 reducer
  */
 

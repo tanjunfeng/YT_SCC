@@ -26,7 +26,7 @@ import {
     state => ({
         user: state.toJS().user.data,
         rights: state.toJS().user.rights,
-        data: state.toJS().commodity.classifiedList,
+        classifiedList: state.toJS().commodity.classifiedList
     }),
     dispatch => bindActionCreators({ fetchAction, receiveData }, dispatch)
 )
@@ -103,7 +103,7 @@ class ClassifiedList extends Component {
      * @param mkey, categoryId
      */
     handleChangeStatus(value, mkey) {
-        const $data = fromJS(this.props.data);
+        const $data = fromJS(this.props.classifiedList);
 
         this.showLocker();
 
@@ -217,7 +217,7 @@ class ClassifiedList extends Component {
         return (
             <div>
                 <LevelTree
-                    data={this.props.data}
+                    data={this.props.classifiedList}
                     handleDrop={this.handleDrop}
                     handleChangeSort={this.handleChangeSort}
                     handleChangeStatus={this.handleChangeStatus}
@@ -230,7 +230,8 @@ class ClassifiedList extends Component {
 
 ClassifiedList.propTypes = {
     fetchAction: PropTypes.func,
-    receiveData: PropTypes.func
+    receiveData: PropTypes.func,
+    classifiedList: PropTypes.arrayOf(PropTypes.any)
 }
 
 export default withRouter(ClassifiedList);
