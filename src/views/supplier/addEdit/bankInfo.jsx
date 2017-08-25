@@ -221,10 +221,6 @@ class BankInfo extends PureComponent {
                                                 )}
                                         </FormItem>
                                     </Col>
-<<<<<<< HEAD
-=======
-
->>>>>>> 2f61a5ff9f133100b3ca713b7adbe739e848ed72
                                 </Row>
                                 <Row>
                                     <Col span={8}>
