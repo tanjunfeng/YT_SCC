@@ -11,7 +11,8 @@ import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { message, Modal } from 'antd';
+import PropTypes from 'prop-types';
+import { message } from 'antd';
 import Utils from '../../../util/util';
 import LevelTree from '../../../common/levelTree';
 import {
@@ -29,6 +30,7 @@ import {
     }),
     dispatch => bindActionCreators({ fetchAction, receiveData }, dispatch)
 )
+
 class ClassifiedList extends Component {
     constructor(props) {
         super(props);
@@ -43,8 +45,6 @@ class ClassifiedList extends Component {
 
         this.loading = false;
     }
-
-    componentWillMount() {}
 
     componentDidMount() {
         this.props.fetchAction();
@@ -73,7 +73,7 @@ class ClassifiedList extends Component {
             message.destroy();
             callback();
         }, delay);
-    };
+    }
 
     /**
      * 通过输入框排序
@@ -194,7 +194,6 @@ class ClassifiedList extends Component {
             // if ($dealData) {
             //     message.success('操作成功');
             // }
-
             this.locker(() => {
                 this.props.fetchAction();
 
@@ -227,6 +226,11 @@ class ClassifiedList extends Component {
             </div>
         )
     }
+}
+
+ClassifiedList.propTypes = {
+    fetchAction: PropTypes.func,
+    receiveData: PropTypes.func
 }
 
 export default withRouter(ClassifiedList);
