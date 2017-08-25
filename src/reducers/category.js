@@ -71,9 +71,6 @@ export default function (state = initState, action) {
             return state.set('areaDetailData', action.payload);
         }
 
-        case ActionType.MODIFY_CATEGORY_VISIBLE: {
-            return state.set('informationVisible', false);
-        }
         case ActionType.RECEIVE_INSERT_SETTLEMENT_INFO: {
             return state.set('insertSettlementResult', true).set('auditVisible', false);
         }
