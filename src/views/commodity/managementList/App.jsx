@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Form, Input, Button, Row, Col, Select, Icon, Table, Menu, Dropdown, message, Modal} from 'antd';
+import { Form, Input, Button, Row, Col, Select, Icon, Table, Menu, Dropdown, message, Modal } from 'antd';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import SearchMind from '../../../components/searchMind';
 import {
@@ -21,17 +21,14 @@ import {
     commoditySortOptions,
     commodityListOptions
 } from '../../../constant/searchParams';
-
 import LevelTree from '../../../common/levelTree';
 import ClassifiedSelect from '../../../components/threeStageClassification'
-
-
 import { pubFetchValueList } from '../../../actions/pub';
-
 import { queryCommodityList } from '../../../actions';
 import { PAGE_SIZE } from '../../../constant';
-
 import Util from '../../../util/util';
+
+const defautImg = require('../../../images/default/100x100.png');
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -83,11 +80,11 @@ class ManagementList extends PureComponent {
         message.success('复制成功')
     }
 
-     /**
-     * 获取所有有效的表单值
-     *
-     * @return {object}  返回所有填写了有效的表单值
-     */
+    /**
+    * 获取所有有效的表单值
+    *
+    * @return {object}  返回所有填写了有效的表单值
+    */
     getFormAllVulue = () => {
         const { supplierId, classify, childCompanyMeg, brandName, sortType } = this.state;
         const {
@@ -139,7 +136,7 @@ class ManagementList extends PureComponent {
      */
     handleSuspendPurchase = (purchasedata, callback) => {
         // 列表是否有正确的值
-        const hasChildCompany = !!purchasedata.hasSelectValue;
+        const hasChildCompany = purchasedata.hasSelectValue !== undefined;
 
         // 没有可处理的id，错误状态吗
         const availbleGoodsId = 10027;
@@ -175,7 +172,7 @@ class ManagementList extends PureComponent {
                     });
                 }
             },
-            onCancel() {},
+            onCancel() { },
         })
     }
 
@@ -200,13 +197,13 @@ class ManagementList extends PureComponent {
             spAdrId: this.state.supplierId,
             status
         }, 'goodsChangeStatus')
-        .catch(err => {
-            if (err.code === availbleGoodsId) {
-                this.setState({
-                    errorGoodsCode: err.code
-                })
-            }
-        });
+            .catch(err => {
+                if (err.code === availbleGoodsId) {
+                    this.setState({
+                        errorGoodsCode: err.code
+                    })
+                }
+            });
     }
 
     // 暂停购进
@@ -219,7 +216,7 @@ class ManagementList extends PureComponent {
             hasCompanyTxt: '请确认对选中商品进行暂停购进操作，商品将不可进行采购下单',
             hasSelectValue: this.supplier
         };
-        this.handleSuspendPurchase({...stopMsg}, this.goodstatusChange);
+        this.handleSuspendPurchase({ ...stopMsg }, this.goodstatusChange);
     }
 
     // 恢复采购
@@ -233,7 +230,7 @@ class ManagementList extends PureComponent {
             hasSelectValue: this.supplier
         };
 
-        this.handleSuspendPurchase({...stopMsg}, this.goodstatusChange);
+        this.handleSuspendPurchase({ ...stopMsg }, this.goodstatusChange);
     }
 
 
@@ -264,7 +261,7 @@ class ManagementList extends PureComponent {
             hasCompanyTxt: '请确认对选中商品进行区域下架操作，商品将在该区域停止销售',
             hasSelectValue: this.childCompany
         };
-        this.handleSuspendPurchase({...areaMessage}, this.prodBatchUpdate);
+        this.handleSuspendPurchase({ ...areaMessage }, this.prodBatchUpdate);
     }
 
     // 区域上架
@@ -276,7 +273,7 @@ class ManagementList extends PureComponent {
             hasCompanyTxt: '请确认对选中商品进行区域上架操作，商品将在该区域恢复销售',
             hasSelectValue: this.childCompany
         };
-        this.handleSuspendPurchase({...areaMessage}, this.prodBatchPutaway);
+        this.handleSuspendPurchase({ ...areaMessage }, this.prodBatchPutaway);
     }
 
     // 区域上架回调接口
@@ -312,7 +309,7 @@ class ManagementList extends PureComponent {
             hasCompanyTxt: '请确认对选中商品进行全国性下架操作',
             hasSelectValue: true
         };
-        this.handleSuspendPurchase({...areaMessage}, this.availablProducts);
+        this.handleSuspendPurchase({ ...areaMessage }, this.availablProducts);
     }
 
     // 全国性上架
@@ -324,7 +321,7 @@ class ManagementList extends PureComponent {
             hasCompanyTxt: '请确认对选中商品进行全国性上架操作',
             hasSelectValue: true
         };
-        this.handleSuspendPurchase({...areaMessage}, this.availablProducts);
+        this.handleSuspendPurchase({ ...areaMessage }, this.availablProducts);
     }
 
     // 全国性上/下架接口回调
@@ -496,7 +493,7 @@ class ManagementList extends PureComponent {
                     <span>{productCode}</span>
                 </div>
                 <div className="table-commodity-description">
-                    <img alt="未上传" className="table-commodity-description-img" src={`${thumbnailImage || require('../../../images/default/100x100.png')}`} />
+                    <img alt="未上传" className="table-commodity-description-img" src={`${thumbnailImage || defautImg}`} />
                     <span className="table-commodity-description-name">{saleName}</span>
                 </div>
             </div>
@@ -534,7 +531,7 @@ class ManagementList extends PureComponent {
                                             {getFieldDecorator('productName')(
                                                 <Input
                                                     className="input"
-                                                    style={{paddingLeft: '10px', paddingRight: '10px'}}
+                                                    style={{ paddingLeft: '10px', paddingRight: '10px' }}
                                                     placeholder="商品名称"
 
                                                 />
@@ -550,7 +547,7 @@ class ManagementList extends PureComponent {
                                             {getFieldDecorator('productCode')(
                                                 <Input
                                                     className="input"
-                                                    style={{paddingLeft: '10px', paddingRight: '10px'}}
+                                                    style={{ paddingLeft: '10px', paddingRight: '10px' }}
                                                     placeholder="商品编号"
                                                 />
                                             )}
@@ -576,7 +573,7 @@ class ManagementList extends PureComponent {
                                             {getFieldDecorator('internationalCode')(
                                                 <Input
                                                     className="input"
-                                                    style={{paddingLeft: '10px', paddingRight: '10px'}}
+                                                    style={{ paddingLeft: '10px', paddingRight: '10px' }}
                                                     placeholder="商品条码"
                                                 />
                                             )}
@@ -592,7 +589,7 @@ class ManagementList extends PureComponent {
                                                 initialValue: commodityStatusOptions.defaultValue
                                             })(
                                                 <Select size="default" >
-                                                    { commodityStatusOptions.data.map((item) => (
+                                                    {commodityStatusOptions.data.map((item) => (
                                                         <Option
                                                             key={item.key}
                                                             value={item.key}
@@ -601,7 +598,7 @@ class ManagementList extends PureComponent {
                                                         </Option>
                                                     ))}
                                                 </Select>
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -650,7 +647,7 @@ class ManagementList extends PureComponent {
                                             <span className="sc-form-item-label">供货供应商</span>
                                             <span className="value-list-input">
                                                 <SearchMind
-                                                    style={{zIndex: 101}}
+                                                    style={{ zIndex: 101 }}
                                                     compKey="search-mind-supply"
                                                     ref={ref => { this.supplySearchMind = ref }}
                                                     fetch={(params) =>
@@ -663,7 +660,9 @@ class ManagementList extends PureComponent {
                                                     onChoosed={this.handleSupplyChoose}
                                                     onClear={this.handleSupplyClear}
                                                     renderChoosedInputRaw={(datas) => (
-                                                        <div>{datas.providerNo} - {datas.providerName}</div>
+                                                        <div>
+                                                            {datas.providerNo} -
+                                                            {datas.providerName}</div>
                                                     )}
                                                     rowKey="spAdrid"
                                                     pageSize={5}
@@ -692,7 +691,7 @@ class ManagementList extends PureComponent {
                                                 initialValue: deliveryStatusOptions.defaultValue
                                             })(
                                                 <Select size="default">
-                                                    { deliveryStatusOptions.data.map((item) => (
+                                                    {deliveryStatusOptions.data.map((item) => (
                                                         <Option
                                                             key={item.key}
                                                             value={item.key}
@@ -701,7 +700,7 @@ class ManagementList extends PureComponent {
                                                         </Option>)
                                                     )}
                                                 </Select>
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -743,7 +742,12 @@ class ManagementList extends PureComponent {
                                                     onChoosed={this.handleSubsidiaryChoose}
                                                     onClear={this.handleSubsidiaryClear}
                                                     renderChoosedInputRaw={(companyList = []) => (
-                                                        <div ref={childCompany => { this.childCompany = childCompany }}>{companyList.id}-{companyList.name}</div>
+                                                        <div ref={
+                                                            childCompany => {
+                                                                this.childCompany = childCompany
+                                                            }}
+                                                        >{companyList.id}-{companyList.name}
+                                                        </div>
                                                     )}
                                                     pageSize={2}
                                                     columns={[
@@ -771,16 +775,16 @@ class ManagementList extends PureComponent {
                                                 initialValue: subCompanyStatusOptions.defaultValue
                                             })(
                                                 <Select size="default" >
-                                                    { subCompanyStatusOptions.data.map((item) => (
+                                                    {subCompanyStatusOptions.data.map((item) => (
                                                         <Option
                                                             key={item.key}
                                                             value={item.key}
                                                         >
                                                             {item.value}
                                                         </Option>)
-                                                    ) }
+                                                    )}
                                                 </Select>
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -843,7 +847,7 @@ class ManagementList extends PureComponent {
                                                         )
                                                     }
                                                 </Select>
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
