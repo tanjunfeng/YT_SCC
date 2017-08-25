@@ -328,8 +328,8 @@ class ProdModal extends Component {
                                                 pageSize: params.pagination.pageSize,
                                                 pageNum: params.pagination.current || 1
                                             }, 'supplierSearchBox')}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.spNo} - {data.companyName}</div>
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row.spNo} - {row.companyName}</div>
                                             )}
                                             pageSize={3}
                                             columns={[
@@ -362,16 +362,16 @@ class ProdModal extends Component {
                                                     pageSize: params.pagination.pageSize,
                                                     pageNum: params.pagination.current || 1
                                                 }), 'supplierAdrSearchBox').then((res) => {
-                                                    const { data = [] } = res.data;
-                                                    if (!data || data.length === 0) {
+                                                    const { row = [] } = res.data;
+                                                    if (!row || row.length === 0) {
                                                         message.warning('没有可用的数据');
                                                     }
                                                     return res;
                                                 })}
                                             onChoosed={this.handleAdressChoose}
                                             onClear={this.handleAdressClear}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.providerNo} - {data.providerName}</div>
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row.providerNo} - {row.providerName}</div>
                                             )}
                                             pageSize={3}
                                             columns={[
@@ -406,17 +406,17 @@ class ProdModal extends Component {
                                                     pageSize: params.pagination.pageSize,
                                                     pageNum: params.pagination.current || 1
                                                 }), 'getWarehouseInfo1').then((res) => {
-                                                    const { data = [] } = res.data;
-                                                    if (!data || data.length === 0) {
+                                                    const { row = [] } = res.data;
+                                                    if (!row || row.length === 0) {
                                                         message.warning('没有可用的数据');
                                                     }
                                                     return res;
                                                 })}
                                             onChoosed={this.handleHouseChoose}
                                             onClear={this.handleHouseClear}
-                                            renderChoosedInputRaw={(data) => (
+                                            renderChoosedInputRaw={(row) => (
                                                 <div>
-                                                    {data.warehouseCode} - {data.warehouseName}
+                                                    {row.warehouseCode} - {row.warehouseName}
                                                 </div>
                                             )}
                                             pageSize={3}
