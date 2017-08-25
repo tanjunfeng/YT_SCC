@@ -40,6 +40,7 @@ const columns = [
             } else if (text === 1) {
                 return '商品链接'
             }
+            return '';
         }
     },
     {
@@ -81,8 +82,7 @@ const columns = [
     state => ({
         adData: state.toJS().wap.adData,
         intervalData: state.toJS().wap.intervalData,
-        modalVisible: state.toJS().wap.modalVisible,
-
+        modalVisible: state.toJS().wap.modalVisible
     }),
     dispatch => bindActionCreators({
         fetchCarouselAdList,
@@ -102,7 +102,7 @@ class CarouselManagement extends Component {
             inputValue: '',
             setModalVisible: false,
             parameterModalVisible: false,
-            interval: this.props.intervalData,
+            intervalData: this.props.intervalData
         }
     }
 
@@ -113,9 +113,12 @@ class CarouselManagement extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { intervalData } = nextProps;
-        if (intervalData !== this.props.intervalData) {
+        if (intervalData.carouselInterval !== this.props.intervalData.carouselInterval) {
             this.setState({
-                interval: intervalData,
+                intervalData: {
+                    id: intervalData.id,
+                    carouselInterval: intervalData.carouselInterval
+                }
             })
         }
     }
@@ -126,10 +129,13 @@ class CarouselManagement extends Component {
      */
     handleIntervalChange(value) {
         modifyCarouselInterval({
+            id: this.state.intervalData.id,
             carouselInterval: value
         }).then(() => {
             this.setState({
-                interval: value,
+                intervalData: {
+                    carouselInterval: value
+                }
             })
             message.success('修改成功！');
         })
@@ -274,7 +280,7 @@ class CarouselManagement extends Component {
                     <Select
                         className="carousel-management-select"
                         style={{ width: 70 }}
-                        value={`${this.state.interval}`}
+                        value={`${this.state.intervalData.carouselInterval}`}
                         onChange={this.handleIntervalChange}
                     >
                         {lists}
