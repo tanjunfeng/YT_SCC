@@ -4,10 +4,9 @@
  *
  * 修改供应商合作信息
  */
-
 import Promise from 'bluebird';
-import { modifySupplierCooperationInfo } from '../../service';
-import ActionType from '../ActionType';
+import { modifySupplierCooperationInfo } from '../service';
+import ActionType from '../actions/ActionType';
 
 const receive = (data) => ({
     type: ActionType.RECEIVE_CHANGE_COOPERATION_INFO,
