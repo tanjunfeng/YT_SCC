@@ -135,8 +135,7 @@ class SuppliersAppList extends PureComponent {
      */
     handleInputSupplier() {
         const { pathname } = this.props.location;
-        const { history } = this.props;
-        history.push(`${pathname}/add`);
+        this.props.history.push(`${pathname}/add`);
     }
 
     /**
