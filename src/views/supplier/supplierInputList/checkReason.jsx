@@ -150,7 +150,7 @@ const parse = (before, after, rawText) => {
     const keys = Object.keys(before);
     // for (const i of keys) {
     keys.forEach((item, i) => {
-        const b = before[i];
+        const b = before[i] || [];
         const a = after[i];
         const t = rawText[i];
         const childKeys = Object.keys(b);
