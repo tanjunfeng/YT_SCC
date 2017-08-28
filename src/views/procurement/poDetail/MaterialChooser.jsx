@@ -28,7 +28,7 @@ export default class MaterialChooser extends PureComponent {
     // edit = () => {
     //     this.setState({ editable: true });
     // }
-    handleBlur = (e) => {
+    handleBlur = () => {
         let materialCd = this.state.value;
         this.props.fetchMaterialByCd({
             materialCd: materialCd
