@@ -23,8 +23,7 @@ class InputItem extends Component {
         const {
             firstDefault = 1,
             scondDefault = 2,
-            resultDefault = 0,
-            isLast
+            resultDefault = 0
         } = props;
         this.state = {
             firstValue: firstDefault,
@@ -44,7 +43,7 @@ class InputItem extends Component {
 
     handleKeyDown(event) {
         const { keyCode } = event;
-        const  {
+        const {
             firstValue,
             secondValue,
          } = this.state;
@@ -175,12 +174,11 @@ InputItem.propTypes = {
     firstDefault: PropTypes.number,
     scondDefault: PropTypes.number,
     resultDefault: PropTypes.number,
-    isLast: PropTypes.bool,
     index: PropTypes.number,
     handleValueChange: PropTypes.func,
     allLength: PropTypes.number,
     handleAddItem: PropTypes.func,
-    handleDeleteItem: PropTypes.func,
+    handleDeleteItem: PropTypes.func
 }
 
 InputItem.defaultProps = {

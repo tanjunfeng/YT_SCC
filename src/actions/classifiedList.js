@@ -10,14 +10,13 @@ import {
     queryAllCategories,
     queryBrandsByPages,
     updateSortNum,
-    updateShowStatus,
-    test,
+    updateShowStatus
 } from '../service';
 import { ClassifiedList } from '../view-model';
 
-export const addAction = () => {};
-export const putAction = () => {};
-export const delAction = () => {};
+export const addAction = () => { };
+export const putAction = () => { };
+export const delAction = () => { };
 
 export const receiveData = (data) => ({
     type: ActionType.RECEIVE_CLASSIFIED_LIST,
@@ -45,7 +44,8 @@ export const fetchAction = (params) => dispatch => (
  * @param id
  * @param displayStatus
  */
-export const updateShowStatusAction = ({ id, displayStatus }) => updateShowStatus({ id, displayStatus });
+export const updateShowStatusAction = (
+    { id, displayStatus }) => updateShowStatus({ id, displayStatus });
 
 /**
  * 修改排序
@@ -53,7 +53,8 @@ export const updateShowStatusAction = ({ id, displayStatus }) => updateShowStatu
  * @param sortOrder
  * @param newSortOrder
  */
-export const updateSortNumAction = ({ id, sortOrder, newSortOrder }) => updateSortNum({ id, sortOrder, newSortOrder });
+export const updateSortNumAction = (
+    { id, sortOrder, newSortOrder }) => updateSortNum({ id, sortOrder, newSortOrder });
 
 /**
  * 请求品牌列表

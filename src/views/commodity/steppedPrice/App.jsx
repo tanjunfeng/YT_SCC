@@ -48,7 +48,7 @@ class SteppedPrice extends PureComponent {
         }
     }
 
-    componentWillReceiveProps (nextProps) {
+    componentWillReceiveProps(nextProps) {
         const { startNumber } = this.props;
         if (nextProps.startNumber !== startNumber) {
             this.initValue = [{
@@ -82,7 +82,7 @@ class SteppedPrice extends PureComponent {
             endNumber: obj.secondValue,
             price: obj.defaultValue
         }
-        this.setState({defaultValue}, () => {
+        this.setState({ defaultValue }, () => {
             this.handleChange();
         })
     }
@@ -90,7 +90,7 @@ class SteppedPrice extends PureComponent {
     handleDeleteItem(index) {
         const { defaultValue } = this.state;
         defaultValue.splice(index, 1);
-        this.setState({defaultValue}, () => {
+        this.setState({ defaultValue }, () => {
             this.forceUpdate();
             this.handleChange();
         })
@@ -183,7 +183,7 @@ SteppedPrice.defaultProps = {
     inputSize: 'small',
     min: 0,
     defaultValue: [],
-    handleChange: () => {},
+    handleChange: () => { },
     startNumber: 0
 }
 

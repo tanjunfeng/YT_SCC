@@ -10,7 +10,7 @@ import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Form, Input, Modal, message, Select, InputNumber } from 'antd';
+import { Form, Input, Modal, message, Select } from 'antd';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { modifyAuditPurchaseOrderInfo } from '../../../actions/procurement';
 
