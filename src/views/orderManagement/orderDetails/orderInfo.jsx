@@ -61,6 +61,11 @@ const columns = [{
     dataIndex: 'quantity',
     key: 'quantity',
 }, {
+}, {
+    title: '状态',
+    dataIndex: 'stateDetail',
+    key: 'stateDetail',
+}, {
     title: '单价',
     dataIndex: 'price',
     key: 'price',
