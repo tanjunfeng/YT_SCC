@@ -122,7 +122,7 @@ const TEXT = {
         orgId: '分公司',
         // ogradergId: '供应地点级别',
         ogradergId: { text: '供应地点级别', type: 'gysddjb' },
-        settlementPeriod: '账期',
+        settlementPeriod: { text: '账期', type: 'zq' },
         // operaStatus: '供应商地点经营状态',
         operaStatus: { text: '供应商地点经营状态', type: 'gysddjyzt' },
         // payType: '供应商付款方式',
@@ -180,6 +180,22 @@ const parse = (before, after, rawText) => {
                         case 3: return '经销商';
                         case 4: return '代销商';
                         case 5: return '其他';
+                        default: break;
+                    }
+                }
+                if (type === 'zq') {
+                    switch (cb) {
+                        case 1: return '周结';
+                        case 2: return '半月结';
+                        case 3: return '月结';
+                        case 4: return '票到付款';
+                        default: break;
+                    }
+                    switch (ca) {
+                        case 1: return '周结';
+                        case 2: return '半月结';
+                        case 3: return '月结';
+                        case 4: return '票到付款';
                         default: break;
                     }
                 }
