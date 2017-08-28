@@ -361,10 +361,10 @@ export const queryCarouselAdBySorting = (params) => http.get('/homeAd/queryCarou
 export const queryCarouselAdListById = (params) => http.get('/homeAd/queryCarouselAdListById', params);
 
 // 查询轮播间隔时间
-export const queryCarouselInterval = (params) => http.get('/homeAd/queryCarouselInterval', params);
+export const queryCarouselInterval = (params) => http.get('/homeAd/queryFirstCarouselInterval', params);
 
 // 修改轮播间隔时间
-export const updateCarouselInterval = (params) => http.post('/homeAd/updateCarouselInterval', params);
+export const updateCarouselInterval = (params) => http.post('/homeAd/updateCarouselIntervalById', params);
 
 // 查询快捷导航列表
 export const queryQuickNavigationList = (params) => http.get('/homeAd/queryQuickNavigationList', params);

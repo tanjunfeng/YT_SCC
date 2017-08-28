@@ -143,9 +143,7 @@ export default {
     FETCH_ALL_AD_PLAN_LIST: 'FETCH_ALL_AD_PLAN_LIST', // cyx
     FETCH_CAROUSEL_INTERVAL: 'FETCH_CAROUSEL_INTERVAL', // cyx
 
-    /*
-     * procurement
-     */
+    /* ********************procurement************************* */
     // 查询采购单管理列表
     RECEIVE_PO_MNG_LIST: 'RECEIVE_PO_MNG_LIST',
     // 更新采购单选中行
