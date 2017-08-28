@@ -7,19 +7,14 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { Icon, Input, Form, Button, Select, Row, Col, DatePicker, message } from 'antd';
 
-import Utils from '../../../util/util';
 import { Validator } from '../../../util/validator';
-import InlineUpload from '../../../components/inlineUpload';
-import CasadingAddress from '../../../components/ascadingAddress';
-import { addSupplierMessage1 } from '../../../actions/addSupplier';
+import { addSupplierMessage1, getLargerRegion } from '../../../actions/addSupplier';
 import InlineTree from '../../../components/inlineTree';
-import { getLargerRegion } from '../../../actions/addSupplier';
 import Tools from './utils';
 import { TABCONTENT } from '../../../constant';
 
@@ -48,7 +43,7 @@ class BasicInfo extends PureComponent {
     }
 
     componentDidMount() {
-        !this.props.isEdit && this.props.getLargerRegion();
+        if (!this.props.isEdit) this.props.getLargerRegion();
         this.props.form.handleNextStep = this.handleNextStep;
         TABCONTENT.BasicInfo = this;
     }
@@ -81,13 +76,11 @@ class BasicInfo extends PureComponent {
                 let saleRegionInfo = {};
                 if (isEdit && region.length === 0) {
                     saleRegionInfo = detailData.saleRegionInfo;
-                }
-                else if (region.length === 0) {
+                } else if (region.length === 0) {
                     message.error('请选择供应地区')
                     return;
-                }
-                else {
-                    saleRegionInfo = {json: JSON.stringify(region)}
+                } else {
+                    saleRegionInfo = { json: JSON.stringify(region) }
                 }
                 const supplierBasicInfo = {
                     companyName,
@@ -95,7 +88,7 @@ class BasicInfo extends PureComponent {
                     settledTime: settledTime._d * 1,
                     spNo: isEdit ? detailData.supplierBasicInfo.spNo : this.props.supplierId
                 };
-                this.props.addSupplierMessage1({supplierBasicInfo, saleRegionInfo})
+                this.props.addSupplierMessage1({ supplierBasicInfo, saleRegionInfo })
                 onGoTo(key);
             }
         })
@@ -110,7 +103,7 @@ class BasicInfo extends PureComponent {
      * @param {string} status 供应商状态
      */
     renderStatus(status) {
-        switch(status) {
+        switch (status) {
             case 0:
                 return '制表'
             case 1:
@@ -135,8 +128,7 @@ class BasicInfo extends PureComponent {
             initData = {};
         }
         const {
-            supplierBasicInfo = {},
-            saleRegionInfo = {}
+            supplierBasicInfo = {}
         } = initData;
         return (
             <div className="supplier-add-message">
@@ -154,7 +146,10 @@ class BasicInfo extends PureComponent {
                                 <Row>
                                     <Col span={8}>
                                         <span>供应商编号：</span>
-                                        <span>{isEdit ? supplierBasicInfo.spNo : this.props.supplierId}</span>
+                                        <span>
+                                            {isEdit ? supplierBasicInfo.spNo
+                                                : this.props.supplierId}
+                                        </span>
                                     </Col>
                                     <Col span={8}>
                                         <span>*供应商名称：</span>
@@ -162,15 +157,24 @@ class BasicInfo extends PureComponent {
                                             {getFieldDecorator('companyName', {
                                                 rules: [
                                                     { required: true, message: '请输入供应商名称!' },
-                                                    {max: 150, message: '字符长度超限'}
+                                                    { max: 150, message: '字符长度超限' }
                                                 ],
                                                 initialValue: supplierBasicInfo.companyName,
                                             })(
                                                 <Input
                                                     placeholder="供应商名称"
-                                                    onBlur={(e) => { Validator.repeat.companyName(e, this, supplierBasicInfo.id, supplierBasicInfo.status) }}
+                                                    onBlur={
+                                                        (e) => {
+                                                            Validator.repeat.companyName(
+                                                                e,
+                                                                this,
+                                                                supplierBasicInfo.id,
+                                                                supplierBasicInfo.status
+                                                            )
+                                                        }
+                                                    }
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -179,7 +183,7 @@ class BasicInfo extends PureComponent {
                                         <span>*供应商等级：</span>
                                         <FormItem>
                                             {getFieldDecorator('grade', {
-                                                rules: [{required: true, message: '请选择等级'}],
+                                                rules: [{ required: true, message: '请选择等级' }],
                                                 initialValue: String(supplierBasicInfo.grade || 1)
                                             })(
                                                 <Select
@@ -190,21 +194,24 @@ class BasicInfo extends PureComponent {
                                                     <Option value="2">核心供应商</Option>
                                                     <Option value="3">可替代供应商</Option>
                                                 </Select>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8} id="in-time">
                                         <span>*供应商入驻日期：</span>
                                         <FormItem>
                                             {getFieldDecorator('settledTime', {
-                                                rules: [{required: true, message: '请选择供应商入驻日期'}],
-                                                initialValue: isEdit ? moment(supplierBasicInfo.settledTime) : null
+                                                rules: [{
+                                                    required: true, message: '请选择供应商入驻日期'
+                                                }],
+                                                initialValue: isEdit ?
+                                                    moment(supplierBasicInfo.settledTime) : null
                                             })(
                                                 <DatePicker
                                                     getCalendarContainer={() => document.getElementById('in-time')}
                                                     format={dateFormat}
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -242,24 +249,15 @@ class BasicInfo extends PureComponent {
     }
 }
 
-function encodeArea(data = []) {
-    const a = [];
-    for (let i of data) {
-        const key = i.key;
-        const hideTitle = i.props.hideTitle;
-        const keys = key.split('-');
-        const titles = hideTitle.split('-');
-        const len = keys.length;
-    }
-}
-
 BasicInfo.propTypes = {
     onGoTo: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     isEdit: PropTypes.bool,
     detailData: PropTypes.objectOf(PropTypes.any),
     getLargerRegion: PropTypes.func,
-    supplierId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    addSupplierMessage1: PropTypes.func,
+    largeRegin: PropTypes.arrayOf(PropTypes.any),
+    supplierId: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 }
 
 export default Form.create()(BasicInfo);

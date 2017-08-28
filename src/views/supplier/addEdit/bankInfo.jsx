@@ -10,24 +10,19 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
-    Icon, Input, Form, Button,
-    Select, Row, Col, InputNumber
+    Icon, Input, Form,
+    Button, Row, Col
 } from 'antd';
 
 import Utils from '../../../util/util';
 import { Validator } from '../../../util/validator';
-import Tip from '../../../util/tip';
 import InlineUpload from '../../../components/inlineUpload';
 import CasadingAddress from '../../../components/ascadingAddress';
 import { addSupplierMessage1 } from '../../../actions/addSupplier';
-import InlineTree from '../../../components/inlineTree';
 import Tools from './utils';
 import { TABCONTENT } from '../../../constant';
 
-const dateFormat = 'YYYY-MM-DD';
 const FormItem = Form.Item;
-const Option = Select.Option;
-
 
 @connect(
     state => ({
@@ -57,16 +52,15 @@ class BankInfo extends PureComponent {
     }
 
     handleGoTo = (key) => {
-        const { form, onGoTo, isEdit, detailData = {}, data = {} } = this.props;
-        const { supplierBasicInfo = {} } = data;
+        const { form, onGoTo } = this.props;
         Tools.checkAddress(this.companyAddress, 'companyAddress', this);
-        const {firstValue, secondValue, thirdValue} = this.companyAddress;
+        const { firstValue, secondValue, thirdValue } = this.companyAddress;
         if (firstValue === '-1' || secondValue === '-1' || thirdValue === '-1') {
-            return null;
+            return;
         }
         const upload = this.nodebankFile.getValue();
         form.validateFields((err, values) => {
-            const { firstValue, secondValue, thirdValue } = this.companyAddress;
+            const { firstV, secondV, thirdV } = this.companyAddress;
             if (!err) {
                 const {
                     bankAccount,
@@ -81,18 +75,18 @@ class BankInfo extends PureComponent {
                     openBank,
                     accountName: companyName,
                     bankAccountLicense: upload.files[0],
-                    bankLocProvince: firstValue.regionName,
-                    bankLocCity: secondValue.regionName,
-                    bankLocCounty: thirdValue.regionName,
-                    bankLocProvinceCode: firstValue.code,
-                    bankLocCityCode: secondValue.code,
-                    bankLocCountyCode: thirdValue.code,
+                    bankLocProvince: firstV.regionName,
+                    bankLocCity: secondV.regionName,
+                    bankLocCounty: thirdV.regionName,
+                    bankLocProvinceCode: firstV.code,
+                    bankLocCityCode: secondV.code,
+                    bankLocCountyCode: thirdV.code,
                 })
 
-                this.props.addSupplierMessage1({supplierBankInfo});
+                this.props.addSupplierMessage1({ supplierBankInfo });
                 onGoTo(key);
             }
-        })
+        });
     }
 
     handleNextStep = () => {
@@ -135,7 +129,7 @@ class BankInfo extends PureComponent {
             initData = {};
         }
         const {
-            supplierBankInfo = {}
+            supplierBI = {}
         } = initData;
         return (
             <div className="supplier-add-message">
@@ -151,16 +145,17 @@ class BankInfo extends PureComponent {
                                         <FormItem>
                                             {getFieldDecorator('companyName', {
                                                 rules: [
-                                                    {required: true, message: '请输入开户名'},
-                                                    {max: 150, message: '字符长度超限'}
+                                                    { required: true, message: '请输入开户名' },
+                                                    { max: 150, message: '字符长度超限' }
                                                 ],
-                                                initialValue: this.state.companyName ? this.state.companyName : companyName
+                                                initialValue: this.state.companyName ?
+                                                    this.state.companyName : companyName
                                             })(
                                                 <Input
                                                     onChange={this.handleCompanyNameChange}
                                                     placeholder="开户名"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -168,15 +163,15 @@ class BankInfo extends PureComponent {
                                         <FormItem>
                                             {getFieldDecorator('invoiceHead', {
                                                 rules: [
-                                                    {required: true, message: '请选择供应商发票抬头'},
-                                                    {max: 250, message: '字符长度超限'}
+                                                    { required: true, message: '请选择供应商发票抬头' },
+                                                    { max: 250, message: '字符长度超限' }
                                                 ],
-                                                initialValue: supplierBankInfo.invoiceHead
+                                                initialValue: supplierBI.invoiceHead
                                             })(
                                                 <Input
                                                     placeholder="供应商发票抬头"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -191,15 +186,15 @@ class BankInfo extends PureComponent {
                                                         id="companyAddress"
                                                         defaultValue={
                                                             isEdit && [
-                                                                supplierBankInfo.bankLocProvinceCode,
-                                                                supplierBankInfo.bankLocCityCode,
-                                                                supplierBankInfo.bankLocCountyCode
+                                                                supplierBI.bankLocProvinceCode,
+                                                                supplierBI.bankLocCityCode,
+                                                                supplierBI.bankLocCountyCode
                                                             ]
                                                         }
                                                         onChange={this.handleCompanyAddressChange}
                                                     />
                                                 </div>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -218,15 +213,14 @@ class BankInfo extends PureComponent {
                                                         }
                                                     }
                                                 ],
-                                                initialValue: supplierBankInfo.openBank
+                                                initialValue: supplierBI.openBank
                                             })(
                                                 <Input
                                                     placeholder="供应商开户行"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
-
                                 </Row>
                                 <Row>
                                     <Col span={8}>
@@ -245,21 +239,30 @@ class BankInfo extends PureComponent {
                                                         }
                                                     }
                                                 ],
-                                                initialValue: Utils.trimAll(supplierBankInfo.bankAccount)
+                                                initialValue: Utils.trimAll(supplierBI.bankAccount)
                                             })(
                                                 <Input
-                                                    style={{width: '200px'}}
+                                                    style={{ width: '200px' }}
                                                     placeholder="银行账号"
-                                                    onBlur={(e) => { Validator.repeat.bankAccount(e, this, supplierBankInfo.id, supplierBankInfo.status) }}
+                                                    onBlur={
+                                                        (e) => {
+                                                            Validator.repeat.bankAccount(
+                                                                e,
+                                                                this,
+                                                                supplierBI.id,
+                                                                supplierBI.status
+                                                            )
+                                                        }
+                                                    }
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
                                         <span>银行开户许可证电子版：</span>
                                         <InlineUpload
-                                            datas={isEdit ? [supplierBankInfo.bankAccountLicense] : []}
-                                            ref={node => (this.nodebankFile = node)}
+                                            datas={isEdit ? [supplierBI.bankAccountLicense] : []}
+                                            ref={node => { this.nodebankFile = node }}
                                         />
                                     </Col>
                                 </Row>
@@ -281,6 +284,7 @@ BankInfo.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     isEdit: PropTypes.bool,
     detailData: PropTypes.objectOf(PropTypes.any),
-    addSupplierMessage1: PropTypes.func,
+    data: PropTypes.objectOf(PropTypes.any),
+    addSupplierMessage1: PropTypes.func
 }
 export default Form.create()(BankInfo);

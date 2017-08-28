@@ -24,14 +24,14 @@ class SearchForm extends Component {
     constructor(props) {
         super(props);
 
-        this.handleGetValue = ::this.handleGetValue;
-        this.onEnterTimeChange = ::this.onEnterTimeChange;
-        this.isPlaceTypeForSearch = ::this.isPlaceTypeForSearch;
-        this.isPlaceTypeForAdd = ::this.isPlaceTypeForAdd;
-        this.handleAddValue = ::this.handleAddValue;
-        this.handleResetValue = ::this.handleResetValue;
-        this.handleDownload = ::this.handleDownload;
-        this.handleSupplierTypeChange = ::this.handleSupplierTypeChange;
+        this.handleGetValue = this.handleGetValue.bind(this);
+        this.onEnterTimeChange = this.onEnterTimeChange.bind(this);
+        this.isPlaceTypeForSearch = this.isPlaceTypeForSearch.bind(this);
+        this.isPlaceTypeForAdd = this.isPlaceTypeForAdd.bind(this);
+        this.handleAddValue = this.handleAddValue.bind(this);
+        this.handleResetValue = this.handleResetValue.bind(this);
+        this.handleDownload = this.handleDownload.bind(this);
+        this.handleSupplierTypeChange = this.handleSupplierTypeChange.bind(this);
 
         // 存储form中取到的值
         this.searchData = {};
@@ -54,7 +54,7 @@ class SearchForm extends Component {
     onEnterTimeChange(date) {
         this.setState({
             rengeTime: date,
-            settledDate: date._d*1,
+            settledDate: date._d * 1,
         });
     }
 
@@ -368,7 +368,6 @@ SearchForm.propTypes = {
     onReset: PropTypes.func,
     onExcel: PropTypes.func,
     onInput: PropTypes.func,
-    isSuplierAddMenu: PropTypes.bool,
     isSuplierInputList: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
 };

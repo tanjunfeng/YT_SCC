@@ -15,7 +15,6 @@ import {
     updateSupplierInfo,
     insertSupplierAddressInfo,
     updateSupplierAddressInfo,
-    insertOrUpdateSupplierInfo,
     querySettledList,
     fetchQueryManageList,
     querySupplierPlaceRegion,

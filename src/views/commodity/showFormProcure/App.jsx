@@ -43,7 +43,6 @@ class ShowForm extends Component {
     }
 
     render() {
-        const state = this.state;
         const {
             brandName,
             firstLevelCategoryName,
