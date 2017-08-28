@@ -29,7 +29,7 @@ import {
     fetchQueryManageList
 } from '../../../actions';
 import {
-    AuditSupplierEditInfo
+    auditSupplierEditInfoAction
 } from '../../../actions/supplier';
 
 const FormItem = Form.Item;
@@ -41,7 +41,7 @@ const TEXT = {
         companyName: '供应商名称',
         spNo: '供应商编号',
         grade: '供应商等级',
-        settledTime: {text: '供应商入驻日期', type: 'time'},
+        settledTime: { text: '供应商入驻日期', type: 'time' },
     },
     supplierOperTaxInfo: {
         spId: '供应商主表ID',
@@ -55,13 +55,13 @@ const TEXT = {
         companyLocCountyCode: '地区code',
         companyDetailAddress: '公司详细地址',
         registrationCertificate: '商标注册证/受理通知书',
-        regCerExpiringDate: {text: '商标注册证/受理通知书到期日', type: 'time'},
+        regCerExpiringDate: { text: '商标注册证/受理通知书到期日', type: 'time' },
         qualityIdentification: '食品安全认证',
-        quaIdeExpiringDate: {text: '食品安全认证到期日', type: 'time'},
+        quaIdeExpiringDate: { text: '食品安全认证到期日', type: 'time' },
         foodBusinessLicense: '食品经营许可证',
-        businessLicenseExpiringDate: {text: '食品经营许可证到期日期', type: 'time'},
+        businessLicenseExpiringDate: { text: '食品经营许可证到期日期', type: 'time' },
         generalTaxpayerQualifiCerti: '一般纳税人资格证电子版',
-        taxpayerCertExpiringDate: {text: '一般纳税人资格证到期日', type: 'time'}
+        taxpayerCertExpiringDate: { text: '一般纳税人资格证到期日', type: 'time' }
     },
     supplierBankInfo: {
         // spId: '供应商主表ID',
@@ -93,9 +93,9 @@ const TEXT = {
         bankLocCityCode: '城市code',
         bankLocCountyCode: '地区code',
         licenseAddress: '营业执照详细地址',
-        establishDate: {text: '创建时间', type: 'time'},
-        startDate: {text: '营业开始日期', type: 'time'},
-        endDate: {text: '营业结束日期', type: 'time'},
+        establishDate: { text: '创建时间', type: 'time' },
+        startDate: { text: '营业开始日期', type: 'time' },
+        endDate: { text: '营业结束日期', type: 'time' },
         registeredCapital: '注册资本(单位万元)',
         businessScope: '经营范围',
         registLicencePic: '营业执照副本电子版url',
@@ -119,9 +119,20 @@ const TEXT = {
         providerNo: '供应商地点编码',
         providerName: '供应商地点名称',
         goodsArrivalCycle: '到货周期',
-        orgId: '分公司名称',
+        orgId: '分公司',
+        // ogradergId: '供应地点级别',
+        ogradergId: { text: '供应地点级别', type: 'gysddjb' },
         settlementPeriod: '账期',
+        // operaStatus: '供应商地点经营状态',
+        operaStatus: { text: '供应商地点经营状态', type: 'gysddjyzt' },
+        // payType: '供应商付款方式',
+        payType: { text: '供应商付款方式', type: 'gysfkfs' },
+        // payCondition: '付款条件',
+        payCondition: { text: '付款条件', type: 'gysfktj' },
         belongArea: '所属区域',
+        grade: '供应地点级别',
+        // auditDate: '审核时间',
+        // auditPerson: '审核人',
     },
     spAdrContact: {
         // id: '供应商主表ID',
@@ -134,15 +145,16 @@ const TEXT = {
     }
 }
 
-const parse = (before, after, TEXT) => {
-    const  data = [];
+const parse = (before, after, rawText) => {
+    const data = [];
     const keys = Object.keys(before);
-    for (let i of keys) {
-        const b = before[i];
+    // for (const i of keys) {
+    keys.forEach((item, i) => {
+        const b = before[i] || [];
         const a = after[i];
-        const t = TEXT[i];
+        const t = rawText[i];
         const childKeys = Object.keys(b);
-        for (let j of childKeys) {
+        childKeys.forEach((keyItem, j) => {
             let cb = b[j];
             let ca = a[j];
             let ct = t[j];
@@ -153,6 +165,66 @@ const parse = (before, after, TEXT) => {
                     cb = moment(parseInt(cb, 10)).format('YYYY-MM-DD');
                     ca = moment(parseInt(ca, 10)).format('YYYY-MM-DD');
                 }
+                if (type === 'gysddjb') {
+                    switch (cb) {
+                        case 1: return '生产厂家';
+                        case 2: return '批发商';
+                        case 3: return '经销商';
+                        case 4: return '代销商';
+                        case 5: return '其他';
+                        default: break;
+                    }
+                    switch (ca) {
+                        case 1: return '生产厂家';
+                        case 2: return '批发商';
+                        case 3: return '经销商';
+                        case 4: return '代销商';
+                        case 5: return '其他';
+                        default: break;
+                    }
+                }
+                if (type === 'gysddjyzt') {
+                    switch (cb) {
+                        case 0: return '禁用';
+                        case 1: return '启用';
+                        default: break;
+                    }
+                    switch (ca) {
+                        case 0: return '禁用';
+                        case 1: return '启用';
+                        default: break;
+                    }
+                }
+                if (type === 'gysfkfs') {
+                    switch (cb) {
+                        case 0: return '网银';
+                        case 1: return '银行转账';
+                        case 2: return '现金';
+                        case 3: return '支票';
+                        default: break;
+                    }
+                    switch (ca) {
+                        case 0: return '网银';
+                        case 1: return '银行转账';
+                        case 2: return '现金';
+                        case 3: return '支票';
+                        default: break;
+                    }
+                }
+                if (type === 'gysfktj') {
+                    switch (cb) {
+                        case 1: return '票到七天';
+                        case 2: return '票到十五天';
+                        case 3: return '票到三十天';
+                        default: break;
+                    }
+                    switch (ca) {
+                        case 1: return '票到七天';
+                        case 2: return '票到十五天';
+                        case 3: return '票到三十天';
+                        default: break;
+                    }
+                }
             }
             if (ct) {
                 data.push({
@@ -161,9 +233,9 @@ const parse = (before, after, TEXT) => {
                     name: ct
                 })
             }
-        }
-    }
-    return data;
+            return data;
+        });
+    });
 }
 
 @connect(
@@ -180,7 +252,7 @@ const parse = (before, after, TEXT) => {
         fetchEditBeforeAfter,
         suppplierSettledAudit,
         fetchQueryManageList,
-        AuditSupplierEditInfo
+        auditSupplierEditInfoAction
     }, dispatch)
 )
 class CheckReason extends PureComponent {
@@ -213,25 +285,24 @@ class CheckReason extends PureComponent {
     handleAuditOk() {
         const { id } = this.props.visibleReasonDatas;
         const { selected } = this.state;
-        const { visibleData } = this.props;
         const { editBeforeAfters } = this.props;
-        const { before = {}, after = {} } = editBeforeAfters;
+        const { before = {}} = editBeforeAfters;
         if (selected === -1) {
             message.error('请选择审核结果');
             return;
         }
         this.props.form.validateFields((err) => {
             if (!err) {
-                this.props.AuditSupplierEditInfo({
+                this.props.auditSupplierEditInfoAction({
                     id,
-                    pass: parseInt(selected, 10) === 1 ? false : true,
+                    pass: !parseInt(selected, 10) === 1,
                     basicId: before.supplierBasicInfo.id,
                     bankId: before.supplierBankInfo.id,
                     operatTaxatId: before.supplierOperTaxInfo.id,
                     licenseId: before.supplierlicenseInfo.id,
                     ...this.props.form.getFieldsValue()
                 }).then((res) => {
-                    this.props.modifyCheckReasonVisible({isVisible: false});
+                    this.props.modifyCheckReasonVisible({ isVisible: false });
                     message.success(res.message)
                     this.props.fetchQueryManageList({
                         pageNum: this.current,
@@ -239,7 +310,7 @@ class CheckReason extends PureComponent {
                         ...this.searchForm
                     })
                 }).catch(() => {
-                    this.props.modifyCheckReasonVisible({isVisible: false});
+                    this.props.modifyCheckReasonVisible({ isVisible: false });
                     message.success('修改审核失败')
                 })
             }
@@ -262,7 +333,7 @@ class CheckReason extends PureComponent {
      * 弹框取消事件
      */
     handleAuditCancel() {
-        this.props.modifyCheckReasonVisible({isVisible: false});
+        this.props.modifyCheckReasonVisible({ isVisible: false });
         this.setState({
             selected: -1
         })
@@ -294,7 +365,6 @@ class CheckReason extends PureComponent {
         const { editBeforeAfters } = this.props;
         const { before = {}, after = {} } = editBeforeAfters;
         const formData = parse(before, after, TEXT);
-
         return (
             <div>
                 {
@@ -312,7 +382,7 @@ class CheckReason extends PureComponent {
                             dataSource={formData}
                             pagination={false}
                             size="small"
-                            locale={{emptyText: '无修改前后对比数据'}}
+                            locale={{ emptyText: '无修改前后对比数据' }}
                         />
                         <div>
                             <div className="application-modal-tip">
@@ -361,12 +431,13 @@ class CheckReason extends PureComponent {
 
 CheckReason.propTypes = {
     editBeforeAfters: PropTypes.objectOf(PropTypes.any),
+    visibleReasonDatas: PropTypes.objectOf(PropTypes.any),
     modifyCheckReasonVisible: PropTypes.bool,
     checkResonVisible: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
-    visibleData: PropTypes.objectOf(PropTypes.any),
-    insertSupplierSettlementInfo: PropTypes.objectOf(PropTypes.any),
-    getList: PropTypes.objectOf(PropTypes.any),
+    fetchEditBeforeAfter: PropTypes.func,
+    fetchQueryManageList: PropTypes.func,
+    auditSupplierEditInfoAction: PropTypes.func
 }
 
 export default withRouter(Form.create()(CheckReason));
