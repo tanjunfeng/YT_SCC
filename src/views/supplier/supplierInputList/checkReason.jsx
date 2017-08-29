@@ -311,7 +311,8 @@ class CheckReason extends PureComponent {
             if (!err) {
                 this.props.auditSupplierEditInfoAction({
                     id,
-                    pass: !parseInt(selected, 10) === 1,
+                    // pass: !parseInt(selected, 10) === 1,
+                    pass: parseInt(selected, 10) === 1 ? 'false' : true,
                     basicId: before.supplierBasicInfo.id,
                     bankId: before.supplierBankInfo.id,
                     operatTaxatId: before.supplierOperTaxInfo.id,
@@ -327,7 +328,7 @@ class CheckReason extends PureComponent {
                     })
                 }).catch(() => {
                     this.props.modifyCheckReasonVisible({ isVisible: false });
-                    message.success('修改审核失败')
+                    message.error('修改审核失败')
                 })
             }
         })

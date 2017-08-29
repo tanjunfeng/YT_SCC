@@ -325,7 +325,8 @@ class CheckReason extends PureComponent {
             if (!err) {
                 this.props.auditSupplierEditInfoAction({
                     id: Number(id),
-                    pass: !parseInt(selected, 10) === 1,
+                    // pass: !parseInt(selected, 10) === 1,
+                    pass: parseInt(selected, 10) === 1 ? 'false' : true,
                     adrBasicId: before.spAdrBasic.id,
                     contId: before.spAdrContact.id,
                     ...this.props.form.getFieldsValue()
@@ -338,7 +339,7 @@ class CheckReason extends PureComponent {
                         ...this.searchForm
                     })
                 }).catch(() => {
-                    message.success('修改审核失败')
+                    message.error('修改审核失败')
                 })
             }
         })
