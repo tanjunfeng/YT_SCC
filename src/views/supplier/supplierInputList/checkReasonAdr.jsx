@@ -183,6 +183,22 @@ const parse = (before, after, rawText) => {
                         default: break;
                     }
                 }
+                if (type === 'zq') {
+                    switch (cb) {
+                        case 1: return '周结';
+                        case 2: return '半月结';
+                        case 3: return '月结';
+                        case 4: return '票到付款';
+                        default: break;
+                    }
+                    switch (ca) {
+                        case 1: return '周结';
+                        case 2: return '半月结';
+                        case 3: return '月结';
+                        case 4: return '票到付款';
+                        default: break;
+                    }
+                }
                 if (type === 'gysddjyzt') {
                     switch (cb) {
                         case 0: return '禁用';
@@ -325,7 +341,8 @@ class CheckReason extends PureComponent {
             if (!err) {
                 this.props.auditSupplierEditInfoAction({
                     id: Number(id),
-                    pass: !parseInt(selected, 10) === 1,
+                    // pass: !parseInt(selected, 10) === 1,
+                    pass: parseInt(selected, 10) === 1 ? 'false' : true,
                     adrBasicId: before.spAdrBasic.id,
                     contId: before.spAdrContact.id,
                     ...this.props.form.getFieldsValue()
@@ -338,7 +355,7 @@ class CheckReason extends PureComponent {
                         ...this.searchForm
                     })
                 }).catch(() => {
-                    message.success('修改审核失败')
+                    message.error('修改审核失败')
                 })
             }
         })

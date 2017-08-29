@@ -88,8 +88,9 @@ class ChangeAudit extends PureComponent {
             this.props.form.validateFields((err) => {
                 if (!err) {
                     this.props.supplierAdrSettledAudit({
+                        pass: parseInt(selected, 10) === 1 ? 'false' : true,
                         id: +(visibleData.id),
-                        pass: !parseInt(selected, 10) === 1,
+                        // pass: !parseInt(selected, 10) === 1,
                         ...this.props.form.getFieldsValue()
                     }).then((res) => {
                         this.props.modifyAuditAdrVisible({isVisible: false});
@@ -100,7 +101,7 @@ class ChangeAudit extends PureComponent {
                         })
                     }).catch(() => {
                         this.props.modifyAuditAdrVisible({isVisible: false});
-                        message.success('修改审核失败')
+                        message.error('修改审核失败')
                     })
                 }
             })
