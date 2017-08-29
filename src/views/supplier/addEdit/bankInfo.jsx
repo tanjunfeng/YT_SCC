@@ -67,7 +67,6 @@ class BankInfo extends PureComponent {
                     openBank,
                     companyName
                 } = values;
-
                 const supplierBankInfo = Utils.removeInvalid({
                     bankAccount,
                     invoiceHead,
@@ -191,8 +190,7 @@ class BankInfo extends PureComponent {
                                                                     .bankLocCityCode,
                                                                 supplierBankInfo
                                                                     .bankLocCountyCode
-                                                            ]
-                                                                : []
+                                                            ] : []
                                                         }
                                                         onChange={this.handleCompanyAddressChange}
                                                     />
