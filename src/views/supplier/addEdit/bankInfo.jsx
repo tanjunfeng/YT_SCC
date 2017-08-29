@@ -61,8 +61,6 @@ class BankInfo extends PureComponent {
         }
         const upload = this.nodebankFile.getValue();
         form.validateFields((err, values) => {
-            const { firstV, secondV, thirdV } = this.companyAddress;
-            console.log(firstV.regionName)
             if (!err) {
                 const {
                     bankAccount,
@@ -76,12 +74,12 @@ class BankInfo extends PureComponent {
                     openBank,
                     accountName: companyName,
                     bankAccountLicense: upload.files[0],
-                    bankLocProvince: firstV.regionName,
-                    bankLocCity: secondV.regionName,
-                    bankLocCounty: thirdV.regionName,
-                    bankLocProvinceCode: firstV.code,
-                    bankLocCityCode: secondV.code,
-                    bankLocCountyCode: thirdV.code,
+                    bankLocProvince: firstValue.regionName,
+                    bankLocCity: secondValue.regionName,
+                    bankLocCounty: thirdValue.regionName,
+                    bankLocProvinceCode: firstValue.code,
+                    bankLocCityCode: secondValue.code,
+                    bankLocCountyCode: thirdValue.code,
                 })
 
                 this.props.addSupplierMessage1({ supplierBankInfo });
@@ -130,7 +128,7 @@ class BankInfo extends PureComponent {
             initData = {};
         }
         const {
-            supplierBI = {}
+            supplierBankInfo = {}
         } = initData;
         return (
             <div className="supplier-add-message">
@@ -167,7 +165,7 @@ class BankInfo extends PureComponent {
                                                     { required: true, message: '请选择供应商发票抬头' },
                                                     { max: 250, message: '字符长度超限' }
                                                 ],
-                                                initialValue: supplierBI.invoiceHead
+                                                initialValue: supplierBankInfo.invoiceHead
                                             })(
                                                 <Input
                                                     placeholder="供应商发票抬头"
@@ -187,9 +185,12 @@ class BankInfo extends PureComponent {
                                                         id="companyAddress"
                                                         defaultValue={
                                                             isEdit && [
-                                                                supplierBI.bankLocProvinceCode,
-                                                                supplierBI.bankLocCityCode,
-                                                                supplierBI.bankLocCountyCode
+                                                                supplierBankInfo
+                                                                    .bankLocProvinceCode,
+                                                                supplierBankInfo
+                                                                    .bankLocCityCode,
+                                                                supplierBankInfo
+                                                                    .bankLocCountyCode
                                                             ]
                                                         }
                                                         onChange={this.handleCompanyAddressChange}
@@ -214,7 +215,7 @@ class BankInfo extends PureComponent {
                                                         }
                                                     }
                                                 ],
-                                                initialValue: supplierBI.openBank
+                                                initialValue: supplierBankInfo.openBank
                                             })(
                                                 <Input
                                                     placeholder="供应商开户行"
@@ -240,7 +241,8 @@ class BankInfo extends PureComponent {
                                                         }
                                                     }
                                                 ],
-                                                initialValue: Utils.trimAll(supplierBI.bankAccount)
+                                                initialValue: Utils.trimAll(
+                                                    supplierBankInfo.bankAccount)
                                             })(
                                                 <Input
                                                     style={{ width: '200px' }}
@@ -250,8 +252,8 @@ class BankInfo extends PureComponent {
                                                             Validator.repeat.bankAccount(
                                                                 e,
                                                                 this,
-                                                                supplierBI.id,
-                                                                supplierBI.status
+                                                                supplierBankInfo.id,
+                                                                supplierBankInfo.status
                                                             )
                                                         }
                                                     }
@@ -262,7 +264,8 @@ class BankInfo extends PureComponent {
                                     <Col span={8}>
                                         <span>银行开户许可证电子版：</span>
                                         <InlineUpload
-                                            datas={isEdit ? [supplierBI.bankAccountLicense] : []}
+                                            datas={
+                                                isEdit ? [supplierBankInfo.bankAccountLicense] : []}
                                             ref={node => { this.nodebankFile = node }}
                                         />
                                     </Col>
