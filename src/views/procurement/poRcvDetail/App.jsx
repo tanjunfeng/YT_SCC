@@ -196,17 +196,17 @@ class PoRcvDetail extends PureComponent {
                                 <Col span={6}>
                                     {/* 预计收货日期 */}
                                     <span className="ant-form-item-label search-mind-label">预计到货日期</span>
-                                    <span className="text">{moment(pmPurchaseReceipt.estimatedReceivedDate).format(dateFormat)}</span>
+                                    <span className="text">{pmPurchaseReceipt.estimatedReceivedDate ? moment(pmPurchaseReceipt.estimatedReceivedDate).format(dateFormat) : '-'}</span>
                                 </Col>
                                 <Col span={6}>
                                     {/* 预计到货日期 */}
                                     <span className="ant-form-item-label search-mind-label">预计收货日期</span>
-                                    <span className="text">{moment(pmPurchaseReceipt.estimatedReceivedDate).format(dateFormat)}</span>
+                                    <span className="text">{pmPurchaseReceipt.estimatedReceivedDate ? moment(pmPurchaseReceipt.estimatedReceivedDate).format(dateFormat) : '-'}</span>
                                 </Col>
                                 <Col span={6}>
                                     {/* 收货日期 */}
                                     <span className="ant-form-item-label search-mind-label">收货日期</span>
-                                    <span className="text">{moment(pmPurchaseReceipt.receivedTime).format(dateFormat)}</span>
+                                    <span className="text">{pmPurchaseReceipt.receivedTime ? moment(pmPurchaseReceipt.receivedTime).format(dateFormat) : '-'}</span>
                                 </Col>
                             </Row>
                         </div>
