@@ -1552,7 +1552,7 @@ class PoDetail extends PureComponent {
      */
     hasInvalidateMaterial() {
         return this.props.poLines.some((element) => {
-            if (element.isValidate || element.isValidate === null) {
+            if (!element.isValidate) {
                 return false;
             }
             return (!element.isValidate);
