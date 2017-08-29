@@ -134,7 +134,7 @@ class PoRcvMngList extends PureComponent {
                 key: 'estimatedDeliveryDate',
                 render: text => {
                     let res = text;
-                    if (text === null || undefined === text || text === '') {
+                    if (!text) {
                         res = '-';
                     } else {
                         res = (moment(new Date(text)).format(dateFormat))
@@ -164,12 +164,28 @@ class PoRcvMngList extends PureComponent {
                 title: '预计到货日期',
                 dataIndex: 'estimatedReceivedDate',
                 key: 'estimatedReceivedDate',
-                render: text => (moment(new Date(text)).format(dateFormat))
+                render: text => {
+                    let res = text;
+                    if (!text) {
+                        res = '-';
+                    } else {
+                        res = (moment(new Date(text)).format(dateFormat))
+                    }
+                    return res;
+                }
             }, {
                 title: '收货日期',
                 dataIndex: 'receivedTime',
                 key: 'receivedTime',
-                render: text => (moment(new Date(text)).format(dateFormat))
+                render: text => {
+                    let res = text;
+                    if (!text) {
+                        res = '-';
+                    } else {
+                        res = (moment(new Date(text)).format(dateFormat))
+                    }
+                    return res;
+                }
             }, {
                 title: '收货单状态',
                 dataIndex: 'status',
