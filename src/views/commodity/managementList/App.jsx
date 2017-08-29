@@ -357,7 +357,7 @@ class ManagementList extends PureComponent {
         this.supplySearchMind.handleClear();
         this.subsidiarySearchMind.handleClear();
         this.props.form.resetFields();
-        this.slect.resetValue();
+        if (this.slect) this.slect.resetValue();
         this.setState({
             classify: {},
             chooseGoodsList: []
