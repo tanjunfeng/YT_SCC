@@ -55,6 +55,7 @@ class BankInfo extends PureComponent {
         const { form, onGoTo } = this.props;
         Tools.checkAddress(this.companyAddress, 'companyAddress', this);
         const { firstValue, secondValue, thirdValue } = this.companyAddress;
+        console.log(firstValue, secondValue, thirdValue)
         if (firstValue === '-1' || secondValue === '-1' || thirdValue === '-1') {
             return;
         }
@@ -67,7 +68,6 @@ class BankInfo extends PureComponent {
                     openBank,
                     companyName
                 } = values;
-
                 const supplierBankInfo = Utils.removeInvalid({
                     bankAccount,
                     invoiceHead,
