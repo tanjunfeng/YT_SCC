@@ -119,9 +119,20 @@ const TEXT = {
         providerNo: '供应商地点编码',
         providerName: '供应商地点名称',
         goodsArrivalCycle: '到货周期',
-        orgId: '分公司名称',
-        settlementPeriod: '账期',
+        orgId: '分公司',
+        // ogradergId: '供应地点级别',
+        ogradergId: { text: '供应地点级别', type: 'gysddjb' },
+        settlementPeriod: { text: '账期', type: 'zq' },
+        // operaStatus: '供应商地点经营状态',
+        operaStatus: { text: '供应商地点经营状态', type: 'gysddjyzt' },
+        // payType: '供应商付款方式',
+        payType: { text: '供应商付款方式', type: 'gysfkfs' },
+        // payCondition: '付款条件',
+        payCondition: { text: '付款条件', type: 'gysfktj' },
         belongArea: '所属区域',
+        grade: '供应地点级别',
+        // auditDate: '审核时间',
+        // auditPerson: '审核人',
     },
     spAdrContact: {
         // id: '供应商主表ID',
@@ -139,7 +150,7 @@ const parse = (before, after, rawText) => {
     const keys = Object.keys(before);
     // for (const i of keys) {
     keys.forEach((item, i) => {
-        const b = before[i];
+        const b = before[i] || [];
         const a = after[i];
         const t = rawText[i];
         const childKeys = Object.keys(b);
@@ -154,6 +165,82 @@ const parse = (before, after, rawText) => {
                     cb = moment(parseInt(cb, 10)).format('YYYY-MM-DD');
                     ca = moment(parseInt(ca, 10)).format('YYYY-MM-DD');
                 }
+                if (type === 'gysddjb') {
+                    switch (cb) {
+                        case 1: return '生产厂家';
+                        case 2: return '批发商';
+                        case 3: return '经销商';
+                        case 4: return '代销商';
+                        case 5: return '其他';
+                        default: break;
+                    }
+                    switch (ca) {
+                        case 1: return '生产厂家';
+                        case 2: return '批发商';
+                        case 3: return '经销商';
+                        case 4: return '代销商';
+                        case 5: return '其他';
+                        default: break;
+                    }
+                }
+                if (type === 'gysddjyzt') {
+                    switch (cb) {
+                        case 0: return '禁用';
+                        case 1: return '启用';
+                        default: break;
+                    }
+                    switch (ca) {
+                        case 0: return '禁用';
+                        case 1: return '启用';
+                        default: break;
+                    }
+                }
+                if (type === 'gysfkfs') {
+                    switch (cb) {
+                        case 0: return '网银';
+                        case 1: return '银行转账';
+                        case 2: return '现金';
+                        case 3: return '支票';
+                        default: break;
+                    }
+                    switch (ca) {
+                        case 0: return '网银';
+                        case 1: return '银行转账';
+                        case 2: return '现金';
+                        case 3: return '支票';
+                        default: break;
+                    }
+                }
+                if (type === 'zq') {
+                    switch (cb) {
+                        case 0: return '周结';
+                        case 1: return '半月结';
+                        case 2: return '月结';
+                        case 3: return '票到付款';
+                        default: break;
+                    }
+                    switch (ca) {
+                        case 0: return '周结';
+                        case 1: return '半月结';
+                        case 2: return '月结';
+                        case 3: return '票到付款';
+                        default: break;
+                    }
+                }
+                if (type === 'gysfktj') {
+                    switch (cb) {
+                        case 1: return '票到七天';
+                        case 2: return '票到十五天';
+                        case 3: return '票到三十天';
+                        default: break;
+                    }
+                    switch (ca) {
+                        case 1: return '票到七天';
+                        case 2: return '票到十五天';
+                        case 3: return '票到三十天';
+                        default: break;
+                    }
+                }
             }
             if (ct) {
                 data.push({
@@ -162,9 +249,9 @@ const parse = (before, after, rawText) => {
                     name: ct
                 })
             }
+            return data;
         });
     });
-    return data;
 }
 
 @connect(

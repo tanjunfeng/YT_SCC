@@ -64,10 +64,10 @@ class CategoryIconTable extends PureComponent {
             }
         ];
 
-        this.uploadIconModal = ::this.uploadIconModal;
-        this.handleUploadIconOk = ::this.handleUploadIconOk;
-        this.handleUploadIconCancel = ::this.handleUploadIconCancel;
-        this.saveItems = ::this.saveItems;
+        this.uploadIconModal = this.uploadIconModal.bind(this);
+        this.handleUploadIconOk = this.handleUploadIconOk.bind(this);
+        this.handleUploadIconCancel = this.handleUploadIconCancel.bind(this);
+        this.saveItems = this.saveItems.bind(this);
         this.state = {
             visible: false,
             iconRecord: {},
