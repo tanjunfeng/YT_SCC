@@ -81,7 +81,8 @@ class ChangeAudit extends PureComponent {
             if (!err) {
                 this.props.suppplierSettledAudit({
                     id: visibleData.id,
-                    pass: !parseInt(selected, 10) === 1,
+                    pass: parseInt(selected, 10) === 1 ? 'false' : true,
+                    // pass: !parseInt(selected, 10) === 1,
                     ...this.props.form.getFieldsValue()
                 }).then((res) => {
                     this.props.modifyAuditVisible({ isVisible: false });
