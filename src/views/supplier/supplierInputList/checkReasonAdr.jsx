@@ -211,6 +211,22 @@ const parse = (before, after, rawText) => {
                         default: break;
                     }
                 }
+                if (type === 'zq') {
+                    switch (cb) {
+                        case 0: return '周结';
+                        case 1: return '半月结';
+                        case 2: return '月结';
+                        case 3: return '票到付款';
+                        default: break;
+                    }
+                    switch (ca) {
+                        case 0: return '周结';
+                        case 1: return '半月结';
+                        case 2: return '月结';
+                        case 3: return '票到付款';
+                        default: break;
+                    }
+                }
                 if (type === 'gysfkfs') {
                     switch (cb) {
                         case 0: return '网银';

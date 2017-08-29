@@ -158,7 +158,6 @@ class CategoryIconManagement extends Component {
                                 && <Card title="二级分类" >
                                     <ul className="category-card-ul">{secondLists}</ul>
                                 </Card>
-
                             }
                         </Col>
                         <Col span={5}>
@@ -199,6 +198,8 @@ CategoryIconManagement.propTypes = {
     categorysById: PropTypes.arrayOf(PropTypes.any),
     fetchCategorysById: PropTypes.func,
 };
+
 CategoryIconManagement.defaultProps = {
 }
+
 export default CategoryIconManagement;
