@@ -132,7 +132,15 @@ class PoRcvMngList extends PureComponent {
                 title: '预计送货日期',
                 dataIndex: 'estimatedDeliveryDate',
                 key: 'estimatedDeliveryDate',
-                render: text => (moment(new Date(text)).format(dateFormat))
+                render: text => {
+                    let res = text;
+                    if (text === null || undefined === text || text === '') {
+                        res = '-';
+                    } else {
+                        res = (moment(new Date(text)).format(dateFormat))
+                    }
+                    return res;
+                }
             }, {
                 title: '地点类型',
                 dataIndex: 'adrType',
