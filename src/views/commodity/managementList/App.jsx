@@ -21,11 +21,16 @@ import {
     commoditySortOptions,
     commodityListOptions
 } from '../../../constant/searchParams';
+
 import LevelTree from '../../../common/levelTree';
 import ClassifiedSelect from '../../../components/threeStageClassification'
-import { pubFetchValueList } from '../../../actions/pub';
+
+
+import { pubFetchValueList, getAvailablProducts } from '../../../actions/pub';
+
 import { queryCommodityList } from '../../../actions';
 import { PAGE_SIZE } from '../../../constant';
+
 import Util from '../../../util/util';
 
 const defaultImg = require('../../../images/default/100x100.png');
@@ -42,7 +47,8 @@ const commodityML = 'commodity-management';
     }),
     dispatch => bindActionCreators({
         queryCommodityList,
-        pubFetchValueList
+        pubFetchValueList,
+        getAvailablProducts
     }, dispatch)
 )
 class ManagementList extends PureComponent {
@@ -136,11 +142,10 @@ class ManagementList extends PureComponent {
      */
     handleSuspendPurchase = (purchasedata, callback) => {
         // 列表是否有正确的值
-        const hasChildCompany = purchasedata.hasSelectValue !== undefined;
+        const hasChildCompany = !!purchasedata.hasSelectValue;
 
         // 没有可处理的id，错误状态吗
         const availbleGoodsId = 10027;
-
         const goodsListLengh = this.state.chooseGoodsList.length > 0;
         const hasCompanyTxt = purchasedata.hasCompanyTxt;
         const notCompanyTxt = '请先选择经营子公司';
@@ -162,14 +167,13 @@ class ManagementList extends PureComponent {
             content: confirmTitle,
             onOk: () => {
                 if (goodsListLengh) {
-                    callback(purchasedata.goodsStatus).then(() => {
-                        if (this.state.errorGoodsCode === availbleGoodsId) {
-                            message.error('请选择有效状态的商品，请重新选择！')
-                        } else {
-                            message.success(purchasedata.tipsMessageTxt);
-                        }
-                        this.handleFormSearch();
-                    });
+                    callback(purchasedata.goodsStatus);
+                    if (this.state.errorGoodsCode === availbleGoodsId) {
+                        message.error('请选择有效状态的商品，请重新选择！')
+                    } else {
+                        message.success(purchasedata.tipsMessageTxt);
+                    }
+                    this.handleFormSearch();
                 }
             },
             onCancel() { },
@@ -325,12 +329,12 @@ class ManagementList extends PureComponent {
     }
 
     // 全国性上/下架接口回调
-    availablProducts = (status) => (
-        this.props.pubFetchValueList({
+    availablProducts = (status) => {
+        this.props.getAvailablProducts({
             supplyChainStatus: status,
             ids: this.state.chooseGoodsList
-        }, 'availablProducts')
-    );
+        }, 'availablProducts');
+    };
 
     // 选择品牌
     handleBrandChoose = (record) => {
@@ -895,7 +899,8 @@ ManagementList.propTypes = {
     location: PropTypes.objectOf(PropTypes.any),
     CommodityListData: PropTypes.objectOf(PropTypes.any),
     queryCommodityList: PropTypes.func,
-    pubFetchValueList: PropTypes.func
+    pubFetchValueList: PropTypes.func,
+    getAvailablProducts: PropTypes.func,
 }
 
 ManagementList.defaultProps = {
