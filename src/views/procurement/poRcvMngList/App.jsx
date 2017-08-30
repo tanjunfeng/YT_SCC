@@ -202,22 +202,6 @@ class PoRcvMngList extends PureComponent {
                     return text;
                 }
             }, {
-                title: '采购价格(含税)',
-                dataIndex:'purchasePrice',
-                key:'purchasePrice'
-            }, {
-                title: '收货金额(含税)',
-                dataIndex:'receiptPrice',
-                key:'receiptPrice'
-            }, {
-                title: '合计收货数量',
-                dataIndex:'receiveTotalNumber',
-                key:'receiveTotalNumber'
-            }, {
-                title: '合计收货金额',
-                dataIndex:'receiveTotalPrice',
-                key:'receiveTotalPrice'
-            }, {
                 title: '操作',
                 dataIndex: 'operation',
                 key: 'operation',
