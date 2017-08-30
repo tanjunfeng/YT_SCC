@@ -1,0 +1,24 @@
+{
+    "timestamp": 1504075450160,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": [
+        {
+            "id": 3,
+            "planName": "达到",
+            "picName1": "的",
+            "picUrl1": "http://sit.image.com/group1/M00/01/45/rB4KPlmk11yAFgvaAABFqHASalY402.png",
+            "linkUrl1": "http://sitxcsc.yatang.com.cn/",
+            "picName2": "的",
+            "linkUrl2": "http://sitxcsc.yatang.com.cn/",
+            "picUrl2": "http://sit.image.com/group1/M00/01/45/rB4KPlmk11yAdQXDAAALVE4-wl0993.png",
+            "createTime": 1503975234000,
+            "status": 1,
+            "modifyTime": null,
+            "modifyUserId": null,
+            "createUserId": null
+        }
+    ],
+    "success": true
+}
