@@ -43,14 +43,14 @@ class DataDictionary extends PureComponent {
     constructor(props) {
         super(props);
         this.searchForm = {};
-        this.handleAddWatch =::this.handleAddWatch;
-        this.handleMaintain =::this.handleMaintain;
-        this.handleSelect =::this.handleSelect;
-        this.renderOperation = ::this.renderOperation;
-        this.fetNewData = ::this.fetNewData;
-        this.handleEdit = ::this.handleEdit;
-        this.handleQuery = ::this.handleQuery;
-        this.handlePaginationChange =::this.handlePaginationChange;
+        this.handleAddWatch = this.handleAddWatch.bind(this);
+        this.handleMaintain = this.handleMaintain.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
+        this.renderOperation = this.renderOperation.bind(this);
+        this.fetNewData = this.fetNewData.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
+        this.handleQuery = this.handleQuery.bind(this);
+        this.handlePaginationChange = this.handlePaginationChange.bind(this);
 
         this.current = 1;
     }
@@ -75,7 +75,7 @@ class DataDictionary extends PureComponent {
             content: '确定删除数据字典？',
             onOk: () => {
                 this.props.DeleteDictionary({ id })
-                    .then((res) => {
+                    .then(() => {
                         this.fetNewData()
                     })
             },
@@ -114,18 +114,27 @@ class DataDictionary extends PureComponent {
         })
     }
 
-    renderOperation(text, record, index) {
+    renderOperation(text, record) {
         const { id, dictionary, remark } = record;
         const menu = (
             <Menu onClick={this.handleSelect}>
                 <Menu.Item key="modify">
-                    <a rel="noopener noreferrer" onClick={() => this.handleEdit(record)}>修改</a>
+                    <a
+                        rel="noopener noreferrer"
+                        onClick={() => this.handleEdit(record)}
+                    >修改</a>
                 </Menu.Item>
                 <Menu.Item key="delete">
-                    <a rel="noopener noreferrer" onClick={() => this.handleDelete(id)}>删除</a>
+                    <a
+                        rel="noopener noreferrer"
+                        onClick={() => this.handleDelete(id)}
+                    >删除</a>
                 </Menu.Item>
                 <Menu.Item key={id}>
-                    <a rel="noopener noreferrer" onClick={() => this.handleMaintain(id, dictionary, remark)}>维护字典内容</a>
+                    <a
+                        rel="noopener noreferrer"
+                        onClick={() => this.handleMaintain(id, dictionary, remark)}
+                    >维护字典内容</a>
                 </Menu.Item>
             </Menu>
         );
@@ -155,12 +164,19 @@ class DataDictionary extends PureComponent {
                                 <div>
                                     {getFieldDecorator('productName', {
                                     })(
-                                        <Input className="manage-form-companyName" placeholder="字典名称/字典编码" />
+                                        <Input
+                                            className="manage-form-companyName"
+                                            placeholder="字典名称/字典编码"
+                                        />
                                         )}
                                 </div>
                             </FormItem>
                             <FormItem>
-                                <Button type="primary" size="default" onClick={this.handleQuery}>
+                                <Button
+                                    type="primary"
+                                    size="default"
+                                    onClick={this.handleQuery}
+                                >
                                     查询
                                 </Button>
                             </FormItem>
@@ -200,4 +216,18 @@ class DataDictionary extends PureComponent {
         );
     }
 }
+
+DataDictionary.propTypes = {
+    maintenanceVisible: PropTypes.objectOf(PropTypes.any),
+    dictionaryVisible: PropTypes.objectOf(PropTypes.any),
+    dictionarylist: PropTypes.objectOf(PropTypes.any),
+    DeleteDictionary: PropTypes.objectOf(PropTypes.any),
+    DicContentListVisible: PropTypes.objectOf(PropTypes.any),
+    DictionaryVisible: PropTypes.objectOf(PropTypes.any),
+    getFieldsValue: PropTypes.objectOf(PropTypes.any),
+    form: PropTypes.objectOf(PropTypes.any),
+    fetNewData: PropTypes.objectOf(PropTypes.any),
+    dictionaryData: PropTypes.objectOf(PropTypes.any),
+}
+
 export default withRouter(Form.create({})(DataDictionary));

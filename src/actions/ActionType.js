@@ -85,6 +85,7 @@ export default {
     RECEIVE_All_CATEGORYS: 'RECEIVE_All_CATEGORYS',
     RECEIVE_CATEGORYS_BY_ID: 'RECEIVE_CATEGORYS_BY_ID',
     PRODUCT_ADD_PURCHASEMENT_PRICE: 'PRODUCT_ADD_PURCHASEMENT_PRICE',
+    RECEIVE_AVAILAB_PRODUCTS: 'RECEIVE_AVAILAB_PRODUCTS',
     // 删除采购价格
     PRODUCT_DELETE_PURCHASE_PRICE_BY_ID: 'PRODUCT_DELETE_PURCHASE_PRICE_BY_ID',
     // 数据字典相关配置
@@ -143,7 +144,7 @@ export default {
     FETCH_ALL_AD_PLAN_LIST: 'FETCH_ALL_AD_PLAN_LIST', // cyx
     FETCH_CAROUSEL_INTERVAL: 'FETCH_CAROUSEL_INTERVAL', // cyx
 
-    /*********************procurement************************* */
+    /* ********************procurement************************* */
     // 查询采购单管理列表
     RECEIVE_PO_MNG_LIST: 'RECEIVE_PO_MNG_LIST',
     // 更新采购单选中行
@@ -176,7 +177,7 @@ export default {
     GET_SUPPLIER_LOC_MAP: 'GET_SUPPLIER_LOC_MAP',
     // 大类值清单
     GET_BIG_CLASS_MAP: 'GET_BIG_CLASS_MAP',
-    /**值清单获取action，请根据实际情况拆分到单独action文件 end */
+    /** 值清单获取action，请根据实际情况拆分到单独action文件 end */
 
     // 以下和采购收货相关
     // 查询采购收货单管理列表

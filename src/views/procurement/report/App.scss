@@ -39,6 +39,11 @@
             .field {
                 border-bottom: 1px solid #000;
             }
+            .label {
+                position: relative;
+                display: inline;
+                font-size: 12px;
+            }
         }
     }
 }

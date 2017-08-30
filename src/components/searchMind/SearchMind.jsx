@@ -184,8 +184,7 @@ class SearchMind extends Component {
             type,
             data,
             pagination,
-            disabled,
-            isFocus,
+            disabled
         } = this.state;
 
         const {
@@ -659,7 +658,7 @@ SearchMind.propTypes = {
 
     defaultValue: PropTypes.string,
 
-    defaultRaw: PropTypes.object,
+    defaultRaw: PropTypes.objectOf(PropTypes.any),
 
     disabled: PropTypes.bool,
 

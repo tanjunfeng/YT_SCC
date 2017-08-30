@@ -80,7 +80,6 @@ class EditorPages extends Component {
                 this.editorInstance.setData(res.pageContent);
             })
         })
-        
     }
 
     /**
@@ -126,27 +125,21 @@ class EditorPages extends Component {
         let fileList = info.fileList;
         // 2. 读取远程路径并显示链接。
         fileList = fileList.map((file) => {
+            const f = file;
             if (file.response) {
                 // Component will show file.url as link
-                file.url = file.response.url;
+                f.url = file.response.url;
             }
-            return file;
+            return f;
         });
-        // if (fileList.length > 0) {
-        //     this.setState({ fileList: fileList[fileList.length - 1] });
-        // } else {
-        //     this.setState({ fileList });
-        // }
         this.setState({
             fileList: fileList ? fileList.splice(-1) : []
         });
     }
 
     render() {
-        const { match = {}, prefixCls } = this.props;
+        const { prefixCls } = this.props;
         const { fileList = [] } = this.state;
-        const { params } = match;
-        const { id } = params;
         const names = {
             action: '/api/sc/commonUploadFile/uploadFile',
             onChange: this.handleChange,
@@ -195,7 +188,7 @@ class EditorPages extends Component {
                             </CopyToClipboard>
                         </Button>
                     </div>
-                    <div id="editor-wrap"></div>
+                    <div id="editor-wrap" />
                     {/* <CKEditor
                         activeClass="p10"
                         ref={node => (this.editRef = node)}

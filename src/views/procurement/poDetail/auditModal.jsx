@@ -10,7 +10,7 @@ import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Form, Input, Modal, message, Select, InputNumber } from 'antd';
+import { Form, Input, Modal, message, Select } from 'antd';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { modifyAuditPurchaseOrderInfo } from '../../../actions/procurement';
 
@@ -45,7 +45,7 @@ class Audit extends PureComponent {
      * 模态框确认
      */
     handleTableCauseOk() {
-        const { causeTextArea, inputNumber } = this.props.form.getFieldsValue();
+        const { causeTextArea } = this.props.form.getFieldsValue();
         const { causeRecordId } = this.props;
         const { option } = this.state;
         switch (option) {
@@ -171,11 +171,10 @@ class Audit extends PureComponent {
 
 Audit.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    fetchPaymentDetailInfo: PropTypes.arrayOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     causeRecordId: PropTypes.string,
     causeModalVisible: PropTypes.bool,
-    modifyCauseModalVisible: PropTypes.func,
+    modifyCauseModalVisible: PropTypes.func
 }
 
 Audit.defaultProps = {

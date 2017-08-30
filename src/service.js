@@ -7,8 +7,6 @@
 
 import Http from 'freed-spa/lib/util/http';
 import { message } from 'antd';
-import store from 'freed-spa/src/store';
-import { receiveLogout } from './actions/user';
 import LoginLayout from './views/login/LoginLayout';
 import ERRORTEXT from './constant/errorText';
 
@@ -363,10 +361,10 @@ export const queryCarouselAdBySorting = (params) => http.get('/homeAd/queryCarou
 export const queryCarouselAdListById = (params) => http.get('/homeAd/queryCarouselAdListById', params);
 
 // 查询轮播间隔时间
-export const queryCarouselInterval = (params) => http.get('/homeAd/queryCarouselInterval', params);
+export const queryCarouselInterval = (params) => http.get('/homeAd/queryFirstCarouselInterval', params);
 
 // 修改轮播间隔时间
-export const updateCarouselInterval = (params) => http.post('/homeAd/updateCarouselInterval', params);
+export const updateCarouselInterval = (params) => http.post('/homeAd/updateCarouselIntervalById', params);
 
 // 查询快捷导航列表
 export const queryQuickNavigationList = (params) => http.get('/homeAd/queryQuickNavigationList', params);
@@ -656,7 +654,7 @@ export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehousePhy
 // 查询供应商地点所属区域列表
 export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySupplierPlaceRegion', params);
 
-// 此接口用于通过code和name（后端id就等于code）查询子公司信息 
+// 此接口用于通过code和name（后端id就等于code）查询子公司信息
 export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBaseInfo', params);
 // 此接口用于通过code和name（后端id就等于code）查询子公司信息(通过商品id过滤可用的)
 export const queryBranchCompanyInfo = (params) => http.get('/prodSell/queryBranchCompanyInfo', params);

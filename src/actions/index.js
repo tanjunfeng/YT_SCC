@@ -36,7 +36,9 @@ import fetchFindStaticPageList from './fetch/fetchStaticPageHome';
 import fectheEditorContent from './fetch/fectheEditorContent';
 import fetchDeleteProdPurchaseById from './fetch/fetchDeleteProdPurchaseById';
 
-/*********************procurement added by twh************************* */
+/*
+ * procurement added by twh
+ */
 import {
     changePoMngSelectedRows,
     fetchPoMngList,
@@ -79,7 +81,7 @@ import fetchChangeProPurchaseStatus from './fetch/fetchChangeProPurchaseStatus';
 import suppplierSettledAudit from './fetch/suppplierSettledAudit';
 import supplierAdrSettledAudit from './fetch/supplierAdrSettledAudit';
 import modifyAuditAdrVisible from './modify/modifyAuditAdrVisible';
-import AuditSupplierEditInfo from '../actions/supplier';
+import auditSupplierEditInfoAction from '../actions/supplier';
 import {
     UpdateProdPurchase,
     getProductById,
@@ -123,7 +125,7 @@ export {
     modifyDeleteOrderNum,
     modifyToAddInsertpage,
     fetchFindStaticPageList,
-    /*********************procurement added by twh************************* */
+    // procurement added by twh
     fetchPoMngList,
     changePoMngSelectedRows,
     deletePoByIds,
@@ -170,7 +172,7 @@ export {
     fetchQueryManageList,
     fetchGetProductById,
     fetchEditBeforeAfter,
-    AuditSupplierEditInfo,
+    auditSupplierEditInfoAction,
 
     // 根据条件分页查询商品清单，并排序
     queryCommodityList,

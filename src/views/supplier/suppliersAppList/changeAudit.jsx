@@ -19,6 +19,9 @@ import {
 } from 'antd';
 import { PAGE_SIZE } from '../../../constant';
 import { modifyAuditVisible, insertSupplierSettlementInfo } from '../../../actions';
+import {
+    getSupplierSettledList
+} from '../../../actions/supplier';
 // import { validatorRebate } from '../../../util/validator';
 
 const FormItem = Form.Item;
@@ -31,6 +34,7 @@ const Option = Select.Option;
     }),
     dispatch => bindActionCreators({
         modifyAuditVisible,
+        getSupplierSettledList,
         insertSupplierSettlementInfo
     }, dispatch)
 )
@@ -41,7 +45,6 @@ class ChangeAudit extends PureComponent {
         this.handleAuditCancel = ::this.handleAuditCancel;
         this.handleAuditOk = ::this.handleAuditOk;
         this.handleSelectChange = ::this.handleSelectChange;
-        this.handleTextChange = ::this.handleTextChange;
 
         this.searchForm = {};
         this.current = 1;
@@ -95,10 +98,6 @@ class ChangeAudit extends PureComponent {
         })
     }
 
-    handleTextChange(value) {
-
-    }
-
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
@@ -137,7 +136,6 @@ class ChangeAudit extends PureComponent {
                                             rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
                                         })(
                                             <Input
-                                                onChange={this.handleTextChange}
                                                 type="textarea"
                                                 placeholder="请输入不通过原因"
                                                 className="application-modal-textarea"
@@ -166,8 +164,8 @@ ChangeAudit.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     auditVisible: PropTypes.bool,
     insertSupplierSettlementInfo: PropTypes.func,
+    getSupplierSettledList: PropTypes.func,
     visibleData: PropTypes.objectOf(PropTypes.any),
-    getList: PropTypes.objectOf(PropTypes.any),
 }
 
 export default withRouter(Form.create()(ChangeAudit));

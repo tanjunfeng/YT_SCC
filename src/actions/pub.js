@@ -110,6 +110,24 @@ export const fetchCategorys = (params) => dispatch => (
     })
 )
 
+// 全国上下架
+const receiveAvailablProducts = (data) => ({
+    type: ActionType.RECEIVE_AVAILAB_PRODUCTS,
+    payload: data,
+});
+
+export const getAvailablProducts = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        availablProducts(params)
+        .then(res => {
+            dispatch(receiveAvailablProducts(res.data));
+        })
+        .catch(err => {
+            reject(err);
+        })
+    })
+)
+
 const receiveCategorysById = (data) => ({
     type: ActionType.RECEIVE_CATEGORYS_BY_ID,
     payload: data,

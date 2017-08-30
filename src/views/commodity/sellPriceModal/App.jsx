@@ -6,9 +6,6 @@ import { connect } from 'react-redux';
 import SteppedPrice from '../steppedPrice';
 import SearchMind from '../../../components/searchMind';
 import {
-    fetchTest,
-} from '../../../actions/classifiedList';
-import {
     pubFetchValueList
 } from '../../../actions/pub';
 import { MAXGOODS } from '../../../constant'
@@ -47,7 +44,6 @@ class SellPriceModal extends Component {
         const { datas, handlePostAdd, isEdit } = this.props;
         const { validateFields, setFields } = this.props.form;
         const { isContinuity, results } = this.steppedPrice.getValue();
-        const formData = this.props.form.getFieldsValue();
         if (!isContinuity) {
             setFields({
                 sellSectionPrices: {
@@ -77,6 +73,7 @@ class SellPriceModal extends Component {
                 })
             }
             handlePostAdd(result, isEdit);
+            return null;
         })
     }
 
@@ -96,7 +93,7 @@ class SellPriceModal extends Component {
         }
     }
 
-    handleChoose = ({ record, compKey, index, event }) => {
+    handleChoose = ({ record }) => {
         this.childCompany = {
             branchCompanyId: record.id,
             branchCompanyName: record.name
@@ -111,7 +108,7 @@ class SellPriceModal extends Component {
         this.setState({
             currentInside: num
         }, () => {
-            this.props.form.setFieldsValue({'minNumber': null})
+            this.props.form.setFieldsValue({ minNumber: null })
         })
 
         this.steppedPrice.reset();
@@ -121,7 +118,7 @@ class SellPriceModal extends Component {
         this.setState({
             startNumber: num
         }, () => {
-            this.props.form.setFieldsValue({'minNumber': num});
+            this.props.form.setFieldsValue({ minNumber: num });
             this.steppedPrice.reset();
         })
     }
@@ -157,7 +154,7 @@ class SellPriceModal extends Component {
                                                 min={0}
                                                 onChange={this.handleInsideChange}
                                             />
-                                        )}
+                                            )}
                                     </span>
                                 </FormItem>
                                 <FormItem>
@@ -169,7 +166,7 @@ class SellPriceModal extends Component {
                                                 {
                                                     validator: (rule, value, callback) => {
                                                         const { getFieldValue } = this.props.form
-                                                        if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0 ) {
+                                                        if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0) {
                                                             callback('起订量需为内装数整数倍！')
                                                         }
 
@@ -184,7 +181,7 @@ class SellPriceModal extends Component {
                                                 onChange={this.handleMinChange}
                                                 step={currentInside || newDates.salesInsideNumber}
                                             />
-                                        )}
+                                            )}
                                     </span>
                                 </FormItem>
                                 <FormItem>
@@ -195,7 +192,7 @@ class SellPriceModal extends Component {
                                             initialValue: newDates.deliveryDay
                                         })(
                                             <InputNumber min={0} />
-                                        )}
+                                            )}
                                     </span>
                                     天内发货
                                 </FormItem>
@@ -213,13 +210,13 @@ class SellPriceModal extends Component {
                                     {getFieldDecorator('sellSectionPrices', {
                                     })(
                                         <SteppedPrice
-                                            ref={node => (this.steppedPrice = node)}
+                                            ref={node => { this.steppedPrice = node }}
                                             handleChange={this.handlePriceChange}
                                             startNumber={startNumber}
                                             defaultValue={isEdit ? newDates.sellSectionPrices : []}
                                             inputSize="default"
                                         />
-                                    )}
+                                        )}
                                 </FormItem>
                                 <FormItem>
                                     <span>* 建议零售价(元)：</span>
@@ -229,7 +226,7 @@ class SellPriceModal extends Component {
                                             initialValue: newDates.suggestPrice
                                         })(
                                             <InputNumber min={0} />
-                                        )}
+                                            )}
                                     </span>
                                 </FormItem>
                             </div>
@@ -279,9 +276,7 @@ class SellPriceModal extends Component {
 SellPriceModal.propTypes = {
     prefixCls: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
-    sellPriceInfoVo: PropTypes.objectOf(PropTypes.any),
-    toAddPriceVisible: PropTypes.bool,
-    productAddPriceVisible: PropTypes.func,
+    pubFetchValueList: PropTypes.func,
     handleClose: PropTypes.func,
     datas: PropTypes.objectOf(PropTypes.any),
     isEdit: PropTypes.bool,
@@ -289,7 +284,7 @@ SellPriceModal.propTypes = {
 
 SellPriceModal.defaultProps = {
     prefixCls: 'sell-modal',
-    handleClose: () => {},
+    handleClose: () => { },
     datas: {},
     isEdit: false
 }

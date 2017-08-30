@@ -88,8 +88,9 @@ class ChangeAudit extends PureComponent {
             this.props.form.validateFields((err) => {
                 if (!err) {
                     this.props.supplierAdrSettledAudit({
-                        id: parseInt(visibleData.id),
-                        pass: parseInt(selected, 10) === 1 ? false : true,
+                        pass: parseInt(selected, 10) === 1 ? 'false' : true,
+                        id: +(visibleData.id),
+                        // pass: !parseInt(selected, 10) === 1,
                         ...this.props.form.getFieldsValue()
                     }).then((res) => {
                         this.props.modifyAuditAdrVisible({isVisible: false});
@@ -100,7 +101,7 @@ class ChangeAudit extends PureComponent {
                         })
                     }).catch(() => {
                         this.props.modifyAuditAdrVisible({isVisible: false});
-                        message.success('修改审核失败')
+                        message.error('修改审核失败')
                     })
                 }
             })
@@ -139,7 +140,9 @@ class ChangeAudit extends PureComponent {
                         maskClosable={false}
                     >
                         <div>
-                            <div className="application-modal-tip">注意：审核通过，供应商的所有账号可正常登录商家后台系统。</div>
+                            <div className="application-modal-tip">
+                                注意：审核通过，供应商的所有账号可正常登录商家后台系统。
+                            </div>
                             {
                                 this.props.auditVisible &&
                                 <div className="application-modal-select">
@@ -159,9 +162,17 @@ class ChangeAudit extends PureComponent {
                                 this.props.auditVisible && this.state.selected === '1' &&
                                 <Form layout="inline">
                                     <FormItem className="application-form-item">
-                                        <span className="application-modal-label"><b className="gyssh-css-import">*</b>不通过原因：</span>
+                                        <span className="application-modal-label">
+                                            <b className="gyssh-css-import">*</b>
+                                            不通过原因：
+                                        </span>
                                         {getFieldDecorator('failedReason', {
-                                            rules: [{ required: true, message: '请输入不通过原因', whitespace: true }]
+                                            rules:
+                                            [{
+                                                required: true,
+                                                message: '请输入不通过原因',
+                                                whitespace: true
+                                            }]
                                         })(
                                             <Input
                                                 type="textarea"
@@ -193,8 +204,7 @@ ChangeAudit.propTypes = {
     supplierAdrSettledAudit: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     auditVisible: PropTypes.bool,
-    visibleData: PropTypes.objectOf(PropTypes.any),
-    getList: PropTypes.objectOf(PropTypes.any),
+    visibleData: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(ChangeAudit));

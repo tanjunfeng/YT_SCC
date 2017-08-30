@@ -34,6 +34,7 @@ class ClassifiedSelect extends Component {
         this.onSecondChange = ::this.onSecondChange;
         this.onThirdChange = ::this.onThirdChange;
         this.onFourthChange = ::this.onFourthChange;
+        this.resetValue = ::this.resetValue;
 
         this.state = {
             secondDate: All,
@@ -253,10 +254,11 @@ class ClassifiedSelect extends Component {
 
 ClassifiedSelect.propTypes = {
     onChange: PropTypes.func,
+    fetchCategorys: PropTypes.func,
     width: PropTypes.number,
     categorys: PropTypes.arrayOf(PropTypes.any),
     defaultValue: PropTypes.arrayOf(PropTypes.any),
-    wrapClass: PropTypes.string,
+    wrapClass: PropTypes.string
 }
 
 ClassifiedSelect.defaultProps = {

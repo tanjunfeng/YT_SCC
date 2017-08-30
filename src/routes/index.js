@@ -148,22 +148,27 @@ const routes = [
                         <Route
                             path="/commodifyList"
                             exact
-                            render={() => <Bundle load={ManagementList}>{(App) => <App />}</Bundle>}
+                            render={() => (<Bundle load={ManagementList}>
+                                {(App) => <App />}</Bundle>)
+                            }
                         />
                         <Route
                             path="/commodifyList/:id"
                             exact
-                            render={() => <Bundle load={CommodifyDetail}>{(App) => <App />}</Bundle>}
+                            render={() => (<Bundle load={CommodifyDetail}>
+                                {(App) => <App />}</Bundle>)}
                         />
                         <Route
                             path="/commodifyList/procurementMaintenance/:id"
                             exact
-                            render={() => <Bundle load={ProcurementMaintenance}>{(App) => <App />}</Bundle>}
+                            render={() => (<Bundle load={ProcurementMaintenance}>
+                                {(App) => <App />}</Bundle>)}
                         />
                         <Route
                             path="/commodifyList/salesMaintenance/:id"
                             exact
-                            render={() => <Bundle load={SalesMaintenance}>{(App) => <App />}</Bundle>}
+                            render={() => (<Bundle load={SalesMaintenance}>
+                                {(App) => <App />}</Bundle>)}
                         />
                     </Switch>
                 )
@@ -207,7 +212,7 @@ const routes = [
                                 {(App) => <App />}
                             </Bundle>)}
                         />
-                        {/* 
+                        {/*
                           * /suppliersAppList/supplier/xprov334#/  供应商详情
                           * /suppliersAppList/place/14#/ 供应商地点详情
                           * /suppliersAppList/add/14#/ 新增供应商地点
@@ -249,7 +254,7 @@ const routes = [
                                 {(App) => <App />}
                             </Bundle>)}
                         />
-                        {/* 
+                        {/*
                           * /supplierInputList/supplier/xprov334#/  供应商详情
                           * /supplierInputList/place/14#/ 供应商地点详情
                           * /supplierInputList/add/14#/ 新增供应商地点
@@ -414,7 +419,7 @@ const routes = [
                             </Bundle>)}
                         />
                         {/* /po/create */}
-                         <Route
+                        <Route
                             path="/po/:type"
                             exact
                             render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
@@ -465,7 +470,7 @@ const routes = [
                                 {(App) => <App />}
                             </Bundle>)}
                         />
-                         <Route
+                        <Route
                             path="/porcvmnglist/:porcvid"
                             exact
                             render={() => <Bundle load={PoRcvDetail}>{(App) => <App />}</Bundle>}
@@ -517,7 +522,8 @@ const routes = [
                         />
                         <Route
                             path="/orderList/orderDetails/:id"
-                            render={() => <Bundle load={OrderManagementDetails}>{(App) => <App />}</Bundle>}
+                            render={() => (<Bundle load={OrderManagementDetails}>
+                                {(App) => <App />}</Bundle>)}
                         />
                     </Switch>
                 )

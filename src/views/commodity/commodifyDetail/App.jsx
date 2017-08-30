@@ -20,6 +20,7 @@ import { commodityDetails } from '../../../actions/producthome';
         commodityDetails
     }, dispatch)
 )
+
 class CommodifyDetail extends PureComponent {
     componentDidMount() {
         const { id } = this.props.match.params;
@@ -199,8 +200,8 @@ class CommodifyDetail extends PureComponent {
                                 && <li className="detail-message-item">
                                     <span>体积：</span>
                                     <span>
-                                        {`长${commodityDetail.length}mm * 
-                                        宽${commodityDetail.width}mm * 
+                                        {`长${commodityDetail.length}mm *
+                                        宽${commodityDetail.width}mm *
                                         高${commodityDetail.height}mm`}
                                     </span>
                                 </li>
@@ -212,8 +213,8 @@ class CommodifyDetail extends PureComponent {
                                 && <li className="detail-message-item">
                                     <span>箱规：</span>
                                     <span>
-                                        {`${commodityDetail.horizontalProductNum} * 
-                                        ${commodityDetail.verticalProductNum} * 
+                                        {`${commodityDetail.horizontalProductNum} *
+                                        ${commodityDetail.verticalProductNum} *
                                         ${commodityDetail.heightProductNum}`}
                                     </span>
                                 </li>
@@ -253,7 +254,7 @@ class CommodifyDetail extends PureComponent {
                                         commodityDetail.imgUrls
                                         && commodityDetail.imgUrls.map(item => (
                                             <td key={item}>
-                                                <img src={`${item}`} alt="" style={{width: 80, height: 80}} />
+                                                <img src={`${item}`} alt="" style={{ width: 80, height: 80 }} />
                                             </td>
                                         ))
                                     }
@@ -269,11 +270,17 @@ class CommodifyDetail extends PureComponent {
                             <Icon type="exception" className="detail-message-header-icon" />
                             <span>商品详情</span>
                         </div>
-                        <div className="detail-message-body detail-message-body-html" dangerouslySetInnerHTML={{__html: commodityDetail.html.replace(/(↵)/ig, function($0, $1){
-                            if ($1) {
-                                return '<br/>'
-                            }
-                        })}} />
+                        <div
+                            className="detail-message-body detail-message-body-html"
+                            dangerouslySetInnerHTML={{
+                                __html: commodityDetail.html.replace(/(↵)/ig, ($0, $1) => {
+                                    if ($1) {
+                                        return '<br/>'
+                                    }
+                                    return $1;
+                                })
+                            }}
+                        />
                     </div>
                 }
                 {
@@ -290,7 +297,7 @@ class CommodifyDetail extends PureComponent {
                                     {
                                         commodityDetail.keyWords
                                         && commodityDetail.keyWords.map(item => (
-                                            <span key={item} style={{marginRight: 15}}>{`${item}`}</span>
+                                            <span key={item} style={{ marginRight: 15 }}>{`${item}`}</span>
                                         ))
                                     }
                                 </li>

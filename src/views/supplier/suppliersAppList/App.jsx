@@ -135,8 +135,7 @@ class SuppliersAppList extends PureComponent {
      */
     handleInputSupplier() {
         const { pathname } = this.props.location;
-        const { history } = this.props;
-        history.push(`${pathname}/add`);
+        this.props.history.push(`${pathname}/add`);
     }
 
     /**
@@ -270,13 +269,11 @@ class SuppliersAppList extends PureComponent {
 }
 
 SuppliersAppList.propTypes = {
-    fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
     querySettledList: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     getSupplierSettledList: PropTypes.bool,
     location: PropTypes.objectOf(PropTypes.any),
     modifyAuditVisible: PropTypes.bool,
-    applicationData: PropTypes.objectOf(PropTypes.any),
     modifyInformationVisible: PropTypes.bool,
 }
 

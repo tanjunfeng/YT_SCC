@@ -10,18 +10,9 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import EditableCell from './EditableCell';
 import moment from 'moment';
 import {
-    Table,
-    Form,
-    Input,
-    Icon,
-    Modal,
-    Row,
-    Col,
-    Button,
-    message
+    Table, Form, Icon, Row, Col
 } from 'antd';
 import {
     fetchPoRcvInit,
@@ -32,7 +23,6 @@ import {
 } from '../../../actions';
 import Utils from '../../../util/util';
 
-const confirm = Modal.confirm;
 const FormItem = Form.Item;
 const dateFormat = 'YYYY-MM-DD';
 
@@ -46,19 +36,18 @@ const dateFormat = 'YYYY-MM-DD';
     createPoRcv
 }, dispatch))
 class PoRcvDetail extends PureComponent {
-    state = {
-        editable: false
-    }
     constructor(props) {
         super(props);
-        let that = this;
+        this.state = {
+            editable: false
+        }
         // 收货单商品行信息
         this.columns = [
             {
                 title: '行号',
                 dataIndex: 'rowNo',
                 key: 'rowNo',
-                render: (text, record, index) => { return (<span>{index + 1}</span>) }
+                render: (text, record, index) => (<span>{index + 1}</span>)
             }, {
                 title: '商品编码',
                 dataIndex: 'productCode',
@@ -105,10 +94,9 @@ class PoRcvDetail extends PureComponent {
     }
 
     componentDidMount() {
-        let that = this;
         const { match } = this.props;
         // 收货单id
-        let poRcvId = match.params.porcvid;
+        const poRcvId = match.params.porcvid;
 
         // step 1：校验采购单id 收货单id
         if (!poRcvId) {
@@ -135,13 +123,11 @@ class PoRcvDetail extends PureComponent {
             case 4:
                 return '异常';
             default:
-                break;
+                return '';
         }
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
-        const { poLines } = this.props;
         const { poRcvDetail } = this.props;
         const { pmPurchaseReceipt = {}, receiptPruducts = [] } = poRcvDetail;
         return (
@@ -155,53 +141,53 @@ class PoRcvDetail extends PureComponent {
                             <Row >
                                 <Col span={6}>
                                     {/* 收货单号 */}
-                                    <span className="ant-form-item-label"><label>收货单号</label> </span>
+                                    <span className="ant-form-item-label search-mind-label">收货单号</span>
                                     <span className="text">{pmPurchaseReceipt.purchaseReceiptNo}</span>
                                 </Col>
                                 <Col span={6}>
                                     {/* 采购单号 */}
-                                    <span className="ant-form-item-label"><label>采购单号</label> </span>
+                                    <span className="ant-form-item-label search-mind-label">采购单号</span>
                                     <span className="text">{pmPurchaseReceipt.purchaseOrderNo}</span>
                                 </Col>
                                 <Col span={6}>
                                     {/* 收货单状态 */}
-                                    <span className="ant-form-item-label"><label>收货单状态</label> </span>
+                                    <span className="ant-form-item-label search-mind-label">收货单状态</span>
                                     <span className="text">
                                         {this.renderStatus(pmPurchaseReceipt.status)}
                                     </span>
                                 </Col>
                                 <Col span={6}>
                                     {/* ASN */}
-                                    <span className="ant-form-item-label"><label>ASN</label> </span>
+                                    <span className="ant-form-item-label search-mind-label">ASN</span>
                                     <span className="text">{pmPurchaseReceipt.asn || '-'}</span>
                                 </Col>
                             </Row>
                             <Row >
                                 <Col span={6}>
                                     {/* 供应商 */}
-                                    <FormItem  >
-                                        <span className="ant-form-item-label"><label>供应商编号</label> </span>
+                                    <FormItem >
+                                        <span className="ant-form-item-label search-mind-label">供应商编号</span>
                                         <span className="text">{pmPurchaseReceipt.spNo}-{pmPurchaseReceipt.spName}</span>
                                     </FormItem>
                                 </Col>
                                 <Col span={6}>
                                     {/* 供应商地点 */}
                                     <FormItem formItemLayout >
-                                        <span className="ant-form-item-label"><label>供应商地点</label> </span>
+                                        <span className="ant-form-item-label search-mind-label">供应商地点</span>
                                         <span className="text">{pmPurchaseReceipt.spAdrNo}-{pmPurchaseReceipt.spAdrName}</span>
                                     </FormItem>
                                 </Col>
                                 <Col span={6}>
                                     {/* 地点类型 */}
                                     <FormItem >
-                                        <span className="ant-form-item-label"><label>地点类型</label> </span>
+                                        <span className="ant-form-item-label search-mind-label">地点类型</span>
                                         <span className="text">{pmPurchaseReceipt.adrType === 0 ? '仓库' : '门店'}</span>
                                     </FormItem>
                                 </Col>
                                 <Col span={6}>
                                     {/* 地点类型 */}
                                     <FormItem >
-                                        <span className="ant-form-item-label"><label>地点</label> </span>
+                                        <span className="ant-form-item-label search-mind-label">地点</span>
                                         <span className="text">{pmPurchaseReceipt.adrTypeCode}-{pmPurchaseReceipt.adrTypeName}</span>
                                     </FormItem>
                                 </Col>
@@ -209,18 +195,18 @@ class PoRcvDetail extends PureComponent {
                             <Row >
                                 <Col span={6}>
                                     {/* 预计收货日期 */}
-                                    <span className="ant-form-item-label"><label>预计到货日期</label> </span>
-                                    <span className="text">{moment(pmPurchaseReceipt.estimatedReceivedDate).format(dateFormat)}</span>
+                                    <span className="ant-form-item-label search-mind-label">预计到货日期</span>
+                                    <span className="text">{pmPurchaseReceipt.estimatedReceivedDate ? moment(pmPurchaseReceipt.estimatedReceivedDate).format(dateFormat) : '-'}</span>
                                 </Col>
                                 <Col span={6}>
                                     {/* 预计到货日期 */}
-                                    <span className="ant-form-item-label"><label>预计收货日期</label> </span>
-                                    <span className="text">{moment(pmPurchaseReceipt.estimatedReceivedDate).format(dateFormat)}</span>
+                                    <span className="ant-form-item-label search-mind-label">预计收货日期</span>
+                                    <span className="text">{pmPurchaseReceipt.estimatedReceivedDate ? moment(pmPurchaseReceipt.estimatedReceivedDate).format(dateFormat) : '-'}</span>
                                 </Col>
                                 <Col span={6}>
                                     {/* 收货日期 */}
-                                    <span className="ant-form-item-label"><label>收货日期</label> </span>
-                                    <span className="text">{moment(pmPurchaseReceipt.receivedTime).format(dateFormat)}</span>
+                                    <span className="ant-form-item-label search-mind-label">收货日期</span>
+                                    <span className="text">{pmPurchaseReceipt.receivedTime ? moment(pmPurchaseReceipt.receivedTime).format(dateFormat) : '-'}</span>
                                 </Col>
                             </Row>
                         </div>
@@ -244,6 +230,8 @@ class PoRcvDetail extends PureComponent {
 
 PoRcvDetail.propTypes = {
     fetchPoRcvDetail: PropTypes.func,
+    match: PropTypes.objectOf(PropTypes.any),
+    poRcvDetail: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(PoRcvDetail));

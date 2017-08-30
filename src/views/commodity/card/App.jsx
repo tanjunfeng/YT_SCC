@@ -64,11 +64,11 @@ class Cardline extends Component {
         // });
     }
 
-     /**
-     * 将刷新后的getProdPurchaseByIds值赋值给getProdPurchaseByIds
-     *
-     * @param {Object} nextProps 刷新后的属性
-     */
+    /**
+    * 将刷新后的getProdPurchaseByIds值赋值给getProdPurchaseByIds
+    *
+    * @param {Object} nextProps 刷新后的属性
+    */
     componentWillReceiveProps(nextProps) {
         const { getProdPurchaseByIds } = nextProps;
         if (getProdPurchaseByIds !== this.props.getProdPurchaseByIds) {
@@ -132,13 +132,13 @@ class Cardline extends Component {
                     productId: item.productId,
                     status: item.status === 0 ? 1 : 0
                 })
-                .then(() => {
-                    message.success('修改状态成功');
-                    this.props.goto();
-                }).catch(() => {
-                    // message.error(ERRORTEXT)
-                    message.error('修改状态失败')
-                })
+                    .then(() => {
+                        message.success('修改状态成功');
+                        this.props.goto();
+                    }).catch(() => {
+                        // message.error(ERRORTEXT)
+                        message.error('修改状态失败')
+                    })
             }
         });
     }
@@ -169,12 +169,12 @@ class Cardline extends Component {
                         supplierType: item.supplierType === 1 ? 0 : 1,
                         // supplierType: 1,
                     })
-                    .then(() => {
-                        message.success('修改状态成功');
-                        this.props.goto();
-                    }).catch(() => {
-                        message.error('修改状态失败')
-                    })
+                        .then(() => {
+                            message.success('修改状态成功');
+                            this.props.goto();
+                        }).catch(() => {
+                            message.error('修改状态失败')
+                        })
                 }
             });
         } else {
@@ -193,12 +193,12 @@ class Cardline extends Component {
                         supplierType: item.supplierType === 1 ? 0 : 1,
                         // supplierType: 1,
                     })
-                    .then(() => {
-                        message.success('修改状态成功');
-                        this.props.goto();
-                    }).catch(() => {
-                        message.error('修改状态失败')
-                    })
+                        .then(() => {
+                            message.success('修改状态成功');
+                            this.props.goto();
+                        }).catch(() => {
+                            message.error('修改状态失败')
+                        })
                 }
             });
         }
@@ -262,13 +262,13 @@ class Cardline extends Component {
                     productId: proId,
                     id,
                 })
-                .then(() => {
-                    message.success('删除成功')
-                    this.props.goto()
-                }).catch((res) => {
-                    message.error('操作失败')
-                    message.error(res.message)
-                })
+                    .then(() => {
+                        message.success('删除成功')
+                        this.props.goto()
+                    }).catch((res) => {
+                        message.error('操作失败')
+                        message.error(res.message)
+                    })
             },
             onCancel() { },
         });
@@ -287,81 +287,80 @@ class Cardline extends Component {
             prefixCls,
         } = this.props;
         return (
-            datas.map((item) => {
-                return (
-                    <div
-                        key={item.id}
-                        className={`${prefixCls}-card-list`}
-                    >
-                        <Card
-                            style={{ width: 350 }}
-                            className={
-                                `${prefixCls}-card-${item.supplierType}-${item.status}
+            datas.map((item) => (
+                <div
+                    key={item.id}
+                    className={`${prefixCls}-card-list`}
+                >
+                    <Card
+                        style={{ width: 350 }}
+                        className={
+                            `${prefixCls}-card-${item.supplierType}-${item.status}
                             ${prefixCls}-supplierType-img`
-                            }
+                        }
+                    >
+                        {
+                            item.supplierType === 1 &&
+                            <p className={`${prefixCls}-supplierType-img`}><span>主</span></p>
+                        }
+                        <a
+                            data-id={item.id}
+                            className={`${prefixCls}-close`}
+                            style={{ float: 'right' }}
+                            onClick={this.handleDelete}
                         >
-                            {
-                                item.supplierType === 1 &&
-                                <p className={`${prefixCls}-supplierType-img`}><span>主</span></p>
-                            }
-                            <a
-                                data-id={item.id}
-                                className={`${prefixCls}-close`}
-                                style={{ float: 'right' }}
-                                onClick={this.handleDelete}
-                            >
-                                &times;
+                            &times;
                             </a>
-                            <div
-                                onClick={() => this.props.onCliked(item)}
+                        <div
+                            onClick={() => this.props.onCliked(item)}
+                        >
+                            <p>
+                                <span>供应商 : </span>
+                                <span>{item.spNo}</span>
+                                <b>-</b>
+                                <span>{item.spName}</span>
+                            </p>
+                            <p>
+                                <span>地点 : </span>
+                                <span>{item.spAdrId}</span>
+                                <b>-</b>
+                                <span>{item.spAdrName}</span>
+                            </p>
+                            <p>
+                                <span>条码 : </span>
+                                <span>{item.internationalCode}</span>
+                            </p>
+                            <p>
+                                <span>采购内装数 : </span>
+                                <span>{item.purchaseInsideNumber}</span>
+                            </p>
+                            <p>
+                                <span>送货仓库 : </span>
+                                <span>{item.distributeWarehouseName}</span>
+                            </p>
+                            <p>
+                                <span>采购价格 / 元 : </span>
+                                <span>{item.purchasePrice}</span>
+                            </p>
+                        </div>
+                        <div className={`${prefixCls}-checkboxGroup`} >
+                            <Checkbox
+                                checked={!!item.supplierType}
+                                onChange={() => this.handleCheckOk(item)}
                             >
-                                <p>
-                                    <span>供应商 : </span>
-                                    <span>{item.spNo}</span>
-                                    <b>-</b>
-                                    <span>{item.spName}</span>
-                                </p>
-                                <p>
-                                    <span>地点 : </span>
-                                    <span>{item.spAdrId}</span>
-                                    <b>-</b>
-                                    <span>{item.spAdrName}</span>
-                                </p>
-                                <p>
-                                    <span>条码 : </span>
-                                    <span>{item.internationalCode}</span>
-                                </p>
-                                <p>
-                                    <span>采购内装数 : </span>
-                                    <span>{item.purchaseInsideNumber}</span>
-                                </p>
-                                <p>
-                                    <span>送货仓库 : </span>
-                                    <span>{item.distributeWarehouseName}</span>
-                                </p>
-                                <p>
-                                    <span>采购价格 / 元 : </span>
-                                    <span>{item.purchasePrice}</span>
-                                </p>
-                            </div>
-                            <div className={`${prefixCls}-checkboxGroup`} >
-                                <Checkbox
-                                    checked={!!item.supplierType}
-                                    onChange={() => this.handleCheckOk(item)}
-                                >
-                                    主供应商
+                                主供应商
                                 </Checkbox>
-                                <Checkbox
-                                    checked={!!item.status}
-                                    onChange={() => this.confirmUsed(item)}
-                                >
-                                    启用
+                            <Checkbox
+                                checked={!!item.status}
+                                onChange={() => this.confirmUsed(item)}
+                            >
+                                启用
                                 </Checkbox>
-                            </div>
-                        </Card>
-                    </div>
-                )
-            })
+                        </div>
+                    </Card>
+                </div>
+            )
+            )
         )
     }
 
@@ -410,7 +409,7 @@ Cardline.propTypes = {
 Cardline.defaultProps = {
     prefixCls: 'card-line',
     isSale: false,
-    goto: () => {},
+    goto: () => { },
 };
 
 export default Form.create()(Cardline);

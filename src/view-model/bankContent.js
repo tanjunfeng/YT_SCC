@@ -18,7 +18,7 @@ class ViewModel {
         this.Result.push(this.getObject(data.oldOpenBank, data.newOpenBank, '开户行'));
         this.Result.push(this.getObject(data.oldBankAccount, data.newBankAccount, '银行账号'));
         this.Result.push(this.getObject(data.oldProvinceCityCounty, data.newProvinceCityCounty, '开户行所在地'));
-        this.Result.push(this.getObject(data.oldBankAccountLicense, data.newBankAccountLicense, '银行开户许可证电子版url'));        
+        this.Result.push(this.getObject(data.oldBankAccountLicense, data.newBankAccountLicense, '银行开户许可证电子版url'));
     }
 
     toJson() {
