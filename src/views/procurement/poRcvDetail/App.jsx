@@ -89,7 +89,15 @@ class PoRcvDetail extends PureComponent {
                 title: '收货数量',
                 dataIndex: 'receivedNumber',
                 key: 'receivedNumber'
-            }
+            }, {
+                title: '采购价格(含税)',
+                dataIndex:'purchasePrice',
+                key:'purchasePrice'
+            }, {
+                title: '收货金额(含税)',
+                dataIndex:'receiptPrice',
+                key:'receiptPrice'
+            }, 
         ];
     }
 
@@ -221,6 +229,18 @@ class PoRcvDetail extends PureComponent {
                                 x: 1300
                             }}
                         />
+                    </div>
+                    <div className="total-row">
+                        <Row >
+                            <Col span={6}>
+                                <span className="ant-form-item-label search-mind-label">合计收货数量</span>
+                                <span className="text">{pmPurchaseReceipt.receiveTotalNumber}</span>
+                            </Col>
+                            <Col span={6}>
+                                <span className="ant-form-item-label search-mind-label">合计收货金额</span>
+                                <span className="text">{pmPurchaseReceipt.receiveTotalPrice}</span>
+                            </Col>
+                        </Row >
                     </div>
                 </Form>
             </div>
