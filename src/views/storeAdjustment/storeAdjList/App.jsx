@@ -1,8 +1,9 @@
-/**
- * @file app.jsx
- * @author zhangbaihua
- *
- * 库存调整搜索列表
+/*
+ * @Author: tanjf
+ * @Description: 库存调整搜索列表
+ * @CreateDate: 2017-08-30 14:43:38
+ * @Last Modified by: tanjf
+ * @Last Modified time: 2017-08-30 14:57:41
  */
 
 import React, { Component } from 'react';
@@ -91,9 +92,9 @@ class StoreAdjList extends Component {
 
     render() {
         // columns[columns.length - 1].render = this.renderOperation;
-        if (this.props.stockAdjStore.length === 0) {
-            return null;
-        }
+        // if (this.props.stockAdjStore.length === 0) {
+        //     return null;
+        // }
         return (
             <div className="onsale">
                 <div className="manage-form">
@@ -101,8 +102,8 @@ class StoreAdjList extends Component {
                         isSuplierAddMenu
                         onSearch={this.handleSearch}
                         onReset={this.handleFormReset}
-                    // onInput={this.handleInputSupplier}
-                    // onExcel={this.handleDownLoad}
+                        onInput={this.handleInputSupplier}
+                        onExcel={this.handleDownLoad}
                     />
                 </div>
                 <StoreAdjItem
