@@ -120,5 +120,4 @@ StoreAdjList.propTypes = {
     stockAdjust: PropTypes.func
 }
 
-
 export default withRouter(Form.create()(StoreAdjList));
