@@ -1,12 +1,12 @@
 {
-    "timestamp": 1504075080881,
+    "timestamp": 1504075200818,
     "code": 200,
     "message": {},
     "exception": null,
     "data": {
         "pageNum": 1,
         "pageSize": 20,
-        "total": 62,
+        "total": 139,
         "data": [
             {
                 "id": "xprov547",
@@ -18,6 +18,45 @@
                 "spStatus": 1,
                 "status": 1,
                 "failedReason": "adas",
+                "settledDate": 1502985600000,
+                "auditType": 2
+            },
+            {
+                "id": "67",
+                "providerNo": "100100",
+                "providerName": "天津 - DDDDD",
+                "registLicenceNumber": "dsds657",
+                "providerType": 2,
+                "grade": 1,
+                "spStatus": 1,
+                "status": 4,
+                "failedReason": "中长线操作",
+                "settledDate": 1502985600000,
+                "auditType": 2
+            },
+            {
+                "id": "79",
+                "providerNo": "100125",
+                "providerName": "山西 - BBBBBBBBB",
+                "registLicenceNumber": "dsds657",
+                "providerType": 2,
+                "grade": 1,
+                "spStatus": 1,
+                "status": 4,
+                "failedReason": null,
+                "settledDate": 1502985600000,
+                "auditType": 2
+            },
+            {
+                "id": "71",
+                "providerNo": "100106",
+                "providerName": "天津 - DDDDD",
+                "registLicenceNumber": "dsds657",
+                "providerType": 2,
+                "grade": 1,
+                "spStatus": 1,
+                "status": 4,
+                "failedReason": null,
                 "settledDate": 1502985600000,
                 "auditType": 2
             },
@@ -61,6 +100,19 @@
                 "auditType": 2
             },
             {
+                "id": "xprov001",
+                "providerNo": "10000",
+                "providerName": "成都海王星商贸有限公司",
+                "registLicenceNumber": "915133212121000897",
+                "providerType": 1,
+                "grade": 2,
+                "spStatus": 0,
+                "status": 0,
+                "failedReason": null,
+                "settledDate": 1502726400000,
+                "auditType": 1
+            },
+            {
                 "id": "1",
                 "providerNo": "1000001",
                 "providerName": "四川-康定民族贸易有限责任公司",
@@ -71,6 +123,19 @@
                 "status": 1,
                 "failedReason": null,
                 "settledDate": 1502726400000,
+                "auditType": 1
+            },
+            {
+                "id": "xprov016",
+                "providerNo": "10015",
+                "providerName": "宜宾丰源盐业有限公司",
+                "registLicenceNumber": "91511524680423786Y",
+                "providerType": 1,
+                "grade": 2,
+                "spStatus": 0,
+                "status": 0,
+                "failedReason": null,
+                "settledDate": 1503158400000,
                 "auditType": 1
             },
             {
@@ -191,82 +256,17 @@
                 "auditType": 2
             },
             {
-                "id": "13",
-                "providerNo": "1000013",
-                "providerName": "四川-成都张飞调味品有限公司",
-                "registLicenceNumber": "91510108395771415C",
-                "providerType": 2,
-                "grade": 1,
+                "id": "xprov019",
+                "providerNo": "10018",
+                "providerName": "成都宸晨丰汇商贸有限公司 ",
+                "registLicenceNumber": "91510112075385902B",
+                "providerType": 1,
+                "grade": 2,
                 "spStatus": 0,
-                "status": 1,
+                "status": 0,
                 "failedReason": null,
                 "settledDate": 1503158400000,
                 "auditType": 1
-            },
-            {
-                "id": "xprov022",
-                "providerNo": "10021",
-                "providerName": "四川鑫恒创贸易有限公司",
-                "registLicenceNumber": "91510107MA61WHP76E",
-                "providerType": 1,
-                "grade": 2,
-                "spStatus": 2,
-                "status": 2,
-                "failedReason": null,
-                "settledDate": 1503158400000,
-                "auditType": 2
-            },
-            {
-                "id": "22",
-                "providerNo": "1000022",
-                "providerName": "四川-四川鑫恒创贸易有限公司",
-                "registLicenceNumber": "91510107MA61WHP76E",
-                "providerType": 2,
-                "grade": 4,
-                "spStatus": 2,
-                "status": 2,
-                "failedReason": null,
-                "settledDate": 1503158400000,
-                "auditType": 2
-            },
-            {
-                "id": "xprov542",
-                "providerNo": "10133",
-                "providerName": "adminnew",
-                "registLicenceNumber": "55555555555555",
-                "providerType": 1,
-                "grade": 1,
-                "spStatus": 3,
-                "status": 3,
-                "failedReason": "dmidn",
-                "settledDate": 1499184000000,
-                "auditType": 2
-            },
-            {
-                "id": "59",
-                "providerNo": "59",
-                "providerName": "四川 - admin",
-                "registLicenceNumber": "55555555555555",
-                "providerType": 2,
-                "grade": 1,
-                "spStatus": 3,
-                "status": 1,
-                "failedReason": null,
-                "settledDate": 1499184000000,
-                "auditType": 2
-            },
-            {
-                "id": "xprov546",
-                "providerNo": "10140",
-                "providerName": "尚可喜",
-                "registLicenceNumber": "5145",
-                "providerType": 1,
-                "grade": 2,
-                "spStatus": 3,
-                "status": 3,
-                "failedReason": "123",
-                "settledDate": 1502812800000,
-                "auditType": 2
             }
         ]
     },
