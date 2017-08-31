@@ -229,7 +229,7 @@ export const supplierPlaceLevelOptions = {
         key: '4',
         value: '代销商'
     }, {
-        key: '6',
+        key: '5',
         value: '其他'
     }]
 }
