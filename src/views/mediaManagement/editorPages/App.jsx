@@ -125,17 +125,13 @@ class EditorPages extends Component {
         let fileList = info.fileList;
         // 2. 读取远程路径并显示链接。
         fileList = fileList.map((file) => {
+            const f = file;
             if (file.response) {
                 // Component will show file.url as link
-                file.url = file.response.url;
+                f.url = file.response.url;
             }
-            return file;
+            return f;
         });
-        // if (fileList.length > 0) {
-        //     this.setState({ fileList: fileList[fileList.length - 1] });
-        // } else {
-        //     this.setState({ fileList });
-        // }
         this.setState({
             fileList: fileList ? fileList.splice(-1) : []
         });

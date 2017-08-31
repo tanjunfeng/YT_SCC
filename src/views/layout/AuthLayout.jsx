@@ -40,9 +40,7 @@ class AuthLayout extends PureComponent {
 
         const { initData} = props;
         const { topMenus } = initData;
-        this.defaultSelect = topMenus.menu.find((item) => {
-            return item.code === CODE;
-        })
+        this.defaultSelect = topMenus.menu.find((item) => item.code === CODE)
     }
 
     handleClick(e) {

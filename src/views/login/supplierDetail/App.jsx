@@ -5,7 +5,7 @@ import { Tabs } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { getSupplierDetail } from '../../actions/supplier';
+import { getSupplierDetail } from '../../../actions/supplier';
 // 商家信息
 import SupplierMessage from './SupplierMessage';
 // 公司资质

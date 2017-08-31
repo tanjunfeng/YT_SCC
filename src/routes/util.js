@@ -11,13 +11,6 @@ import routes from './index';
 import Utils from '../util/util';
 
 /**
- * 此处把 routes 对应的每项所有的配置都返回
- * @param key, 此处的 key 是后端返回的数据的 key or Others
- * @returns {*}
- */
-export const getMatchRoute = (key, type = 'key') => findItem(routes, key, type);
-
-/**
  * 遍历查询
  * @param arr 要查询的 数组
  * @param key 要查询的 key
@@ -45,6 +38,13 @@ export const findItem = (arr = [], key, findKey = 'path', subArrKey = 'routes') 
 
     return match;
 }
+
+/**
+ * 此处把 routes 对应的每项所有的配置都返回
+ * @param key, 此处的 key 是后端返回的数据的 key or Others
+ * @returns {*}
+ */
+export const getMatchRoute = (key, type = 'key') => findItem(routes, key, type);
 
 /**
  * Breadcrumb List
@@ -136,9 +136,7 @@ export const WidthRoutes = (route) => (
     <Route
         exact={route.exact}
         path={route.path}
-        render={props => {
-            return <route.component {...props} routes={route.routes} />
-        }}
+        render={props => (<route.component {...props} routes={route.routes} />)}
     />
 )
 
@@ -153,7 +151,7 @@ const getUsableRoutes = (menu) => {
 
     let list = [];
 
-    menu.map(route => {
+    menu.forEach(route => {
         const findRoute = routes.find(item => (
             item.key === route.code
         ));
@@ -186,11 +184,9 @@ const getStaticRoutes = () => {
  * @param menu
  * @returns {Array.<*>|Iterable<K, V>}
  */
-export const getRoutes = (menu) => {
-    return []
-        .concat(getStaticRoutes())
-        .concat(getUsableRoutes(menu));
-}
+export const getRoutes = (menu) => (
+    [].concat(getStaticRoutes()).concat(getUsableRoutes(menu))
+);
 
 /**
  * 通过 pathname 获取 当前的 code

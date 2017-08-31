@@ -36,7 +36,7 @@ class BankInfo extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.handleCompanyAddressChange = ::this.handleCompanyAddressChange;
+        this.handleCompanyAddressChange = this.handleCompanyAddressChange.bind(this);
         this.companyAddress = {};
         this.submitData = {};
         const { detailData = {} } = this.props;

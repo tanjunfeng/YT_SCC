@@ -7,29 +7,28 @@
 import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Input, Button } from 'antd';
 import { fetchMaterialByCd } from '../../../actions';
-import {
-    Input,
-    Button
-} from 'antd';
+
 const InputGroup = Input.Group;
+
 @connect(state => ({ poLines: state.toJS().procurement.data }), dispatch => bindActionCreators({
     fetchMaterialByCd
 }, dispatch))
+
 export default class MaterialChooser extends PureComponent {
     state = {
         value: this.props.value
     }
     handleChange = (e) => {
-        let value = e.target.value;
-        this.setState({ value });
+        this.setState({ value: e.target.value });
     }
     handlePressEnter = () => {
     }
     // edit = () => {
     //     this.setState({ editable: true });
     // }
-    handleBlur = (e) => {
+    handleBlur = () => {
         let materialCd = this.state.value;
         this.props.fetchMaterialByCd({
             materialCd: materialCd

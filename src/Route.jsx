@@ -7,7 +7,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { getRoutes, WidthRoutes } from './routes/util';
 
@@ -21,10 +21,10 @@ const App = (props) => {
     return (
         <Switch>
             {getRoutes(menu).map((route, index) => {
-                const cc = <WidthRoutes
+                const cc = (<WidthRoutes
                     key={index}
                     {...route}
-                />;
+                />);
                 return cc;
             })}
         </Switch>

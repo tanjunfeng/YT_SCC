@@ -6,7 +6,6 @@
 
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 @connect(
@@ -30,8 +29,6 @@ class App extends Component {
     }
 
     render() {
-        const { user } = this.props;
-
         return (
             <div>
 
@@ -39,10 +36,6 @@ class App extends Component {
             </div>
         )
     }
-}
-
-App.propTypes = {
-    user: PropTypes.objectOf(PropTypes.string),
 }
 
 App.defaultProps = {

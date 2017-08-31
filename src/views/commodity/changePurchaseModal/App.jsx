@@ -37,7 +37,7 @@ const { Option } = Select;
         updateProdPurchase: state.toJS().commodity.updateProdPurchase,
         purchaseCardData: state.toJS().commodity.purchaseCardData,
         getWarehouseLogicInfos: state.toJS().commodity.getWarehouseLogicInfo,
-        checkMainSupplier: state.toJS().commodity.checkMainSupplier,
+        hasMainSupplier: state.toJS().commodity.checkMainSupplier
     }),
     dispatch => bindActionCreators({
         fetchAddProdPurchase,
@@ -216,7 +216,6 @@ class ProdModal extends Component {
      */
     handleCancel() {
         this.props.handleClose();
-        // this.props.UpdateProdPurchase({isVisible: false, record});
     }
 
     handlePriceChange(result) {
@@ -238,10 +237,10 @@ class ProdModal extends Component {
     }
 
     render() {
-        const { prefixCls, form, initValue = {}, isEdit, data, checkMainSupplier } = this.props;
+        const { prefixCls, form, initValue = {}, isEdit, data, hasMainSupplier } = this.props;
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
-        const { warehouseCode, warehouseName} = this.state.supplyChoose;
+        const { warehouseCode, warehouseName } = this.state.supplyChoose;
         const { spNo, companyName } = this.state;
         const { internationalCodes = [] } = data;
         return (
@@ -267,7 +266,7 @@ class ProdModal extends Component {
                                             initialValue: initValue.purchaseInsideNumber
                                         })(
                                             <InputNumber min={0} placeholder="内装数" />
-                                        )}
+                                            )}
                                     </span>
                                 </FormItem>
                                 <FormItem>
@@ -278,7 +277,7 @@ class ProdModal extends Component {
                                             initialValue: initValue.purchasePrice
                                         })(
                                             <InputNumber min={0} step={0.01} placeholder="采购价" />
-                                        )}
+                                            )}
                                     </span>
                                 </FormItem>
                                 <FormItem>
@@ -287,27 +286,26 @@ class ProdModal extends Component {
                                         {getFieldDecorator('internationalCode', {
                                             rules: [{ required: true, message: '输入商品条码!' }],
                                             initialValue: isEdit ?
-                                            initValue.internationalCode :
-                                            internationalCodes[0].internationalCode
+                                                initValue.internationalCode :
+                                                internationalCodes[0].internationalCode
                                         })(
                                             <Select
                                                 placeholder="请选择商品条码"
-                                                style={{width: '150px'}}
+                                                style={{ width: '150px' }}
                                             >
                                                 {
-                                                    internationalCodes.map((item) =>
-                                                        (
-                                                            <Option
-                                                                key={item.id}
-                                                                value={item.internationalCode}
-                                                            >
-                                                                {item.internationalCode}
-                                                            </Option>
-                                                        )
+                                                    internationalCodes.map((item) => (
+                                                        <Option
+                                                            key={item.id}
+                                                            value={item.internationalCode}
+                                                        >
+                                                            {item.internationalCode}
+                                                        </Option>
+                                                    )
                                                     )
                                                 }
                                             </Select>
-                                        )}
+                                            )}
                                     </span>
                                 </FormItem>
                             </div>
@@ -333,8 +331,8 @@ class ProdModal extends Component {
                                                 pageSize: params.pagination.pageSize,
                                                 pageNum: params.pagination.current || 1
                                             }, 'supplierSearchBox')}
-                                            renderChoosedInputRaw={(res) => (
-                                                <div>{res.spNo} - {res.companyName}</div>
+                                            renderChoosedInputRaw={(row) => (
+                                                <div>{row.spNo} - {row.companyName}</div>
                                             )}
                                             pageSize={3}
                                             columns={[
@@ -411,23 +409,23 @@ class ProdModal extends Component {
                                             compKey="search-mind-key3"
                                             ref={ref => { this.searchMind3 = ref }}
                                             fetch={(params) =>
-                                            this.props.pubFetchValueList(Util.removeInvalid({
-                                                supplierAddressId: this.ids.supplierAddressId,
-                                                condition: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
-                                            }), 'getWarehouseInfo1').then((res) => {
-                                                const dataArr = res.data.data || [];
-                                                if (!dataArr || dataArr.length === 0) {
-                                                    message.warning('没有可用的数据');
-                                                }
-                                                return res;
-                                            })}
+                                                this.props.pubFetchValueList(Util.removeInvalid({
+                                                    supplierAddressId: this.ids.supplierAddressId,
+                                                    condition: params.value,
+                                                    pageSize: params.pagination.pageSize,
+                                                    pageNum: params.pagination.current || 1
+                                                }), 'getWarehouseInfo1').then((res) => {
+                                                    const { row = [] } = res.data;
+                                                    if (!row || row.length === 0) {
+                                                        message.warning('没有可用的数据');
+                                                    }
+                                                    return res;
+                                                })}
                                             onChoosed={this.handleHouseChoose}
                                             onClear={this.handleHouseClear}
-                                            renderChoosedInputRaw={(res) => (
+                                            renderChoosedInputRaw={(row) => (
                                                 <div>
-                                                    {res.warehouseCode} - {res.warehouseName}
+                                                    {row.warehouseCode} - {row.warehouseName}
                                                 </div>
                                             )}
                                             pageSize={3}
@@ -455,11 +453,11 @@ class ProdModal extends Component {
                                                 checked={this.state.checked}
                                                 onChange={this.handleCheckBox}
                                             />
-                                        )}
+                                            )}
                                     </span>
                                 </FormItem>
                                 {
-                                    checkMainSupplier &&
+                                    hasMainSupplier &&
                                     <p style={{
                                         textAlign: 'center',
                                         width: '100%',
@@ -483,18 +481,18 @@ ProdModal.propTypes = {
     pubFetchValueList: PropTypes.func,
     ChangeUpdateProd: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    checkMainSupplier: PropTypes.objectOf(PropTypes.any),
     handleClose: PropTypes.objectOf(PropTypes.any),
     prodPurchase: PropTypes.objectOf(PropTypes.any),
     initValue: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,
     isEdit: PropTypes.bool,
-    data: PropTypes.objectOf(PropTypes.any),
+    hasMainSupplier: PropTypes.bool,
+    data: PropTypes.objectOf(PropTypes.any)
 };
 
 ProdModal.defaultProps = {
     prefixCls: 'prod-modal',
-    goto: () => {},
+    goto: () => { },
     data: {}
 }
 
