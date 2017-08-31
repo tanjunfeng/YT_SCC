@@ -118,6 +118,8 @@ class SupplierSpace extends Component {
                 return '票到十五天'
             case 3:
                 return '票到三十天'
+            case 4:
+                return '票到付款'
             default:
                 break;
         }
