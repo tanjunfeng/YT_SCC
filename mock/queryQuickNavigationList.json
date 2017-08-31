@@ -1,0 +1,129 @@
+{
+    "timestamp": 1504075540570,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": [
+        {
+            "id": 1,
+            "navigationPosition": "1号位",
+            "navigationType": 2,
+            "goodsId": null,
+            "navigationName": "饮料烟酒",
+            "linkAddress": "list/index.html?text=%E9%A5%AE%E6%96%99",
+            "picAddress": "http://sit.image.com/group1/M00/01/39/rB4KPlmY80iAAfilAAATtUAZkLg456.png",
+            "createPerson": "1",
+            "updatePerson": "admin",
+            "status": 1
+        },
+        {
+            "id": 2,
+            "navigationPosition": "2号位",
+            "navigationType": 2,
+            "goodsId": null,
+            "navigationName": "粮油副食",
+            "linkAddress": "list/index.html?classID=6483",
+            "picAddress": "http://sit.image.com/group1/M00/01/3A/rB4KPFmY81eAW231AAAUYboXkcM380.png",
+            "createPerson": "1",
+            "updatePerson": "admin",
+            "status": 1
+        },
+        {
+            "id": 3,
+            "navigationPosition": "3号位",
+            "navigationType": 1,
+            "goodsId": "1000847",
+            "navigationName": "休闲食品",
+            "linkAddress": null,
+            "picAddress": "http://sit.image.com/group1/M00/01/3A/rB4KPFmY82OAF6AOAAAdtlmVrAk305.png",
+            "createPerson": "2",
+            "updatePerson": "admin",
+            "status": 1
+        },
+        {
+            "id": 4,
+            "navigationPosition": "4号位",
+            "navigationType": 2,
+            "goodsId": null,
+            "navigationName": "洗化针纺",
+            "linkAddress": "https://m.yatang.cn/?utm_source=baidu&utm_medium=cpc&utm_campaign=brandlink&utm_term=title",
+            "picAddress": "http://sit.image.com/group1/M00/01/3A/rB4KPVmY826AODKLAAARxEA0N2o722.png",
+            "createPerson": "2",
+            "updatePerson": "admin",
+            "status": 1
+        },
+        {
+            "id": 5,
+            "navigationPosition": "5号位",
+            "navigationType": 1,
+            "goodsId": "12345698765",
+            "navigationName": "日杂五金",
+            "linkAddress": null,
+            "picAddress": "http://sit.image.com/group1/M00/01/3A/rB4KPVmY83qAQyU5AAAXG0ZaQXc739.png",
+            "createPerson": "1",
+            "updatePerson": "admin",
+            "status": 1
+        },
+        {
+            "id": 6,
+            "navigationPosition": "6号位",
+            "navigationType": 2,
+            "goodsId": null,
+            "navigationName": "零元购",
+            "linkAddress": "http://jr.yatang.cn",
+            "picAddress": "http://sit.image.com/group1/M00/01/36/rB4KPlmUB7yAO8RZAACMkKCHOMc122.png",
+            "createPerson": "2",
+            "updatePerson": "admin",
+            "status": 0
+        },
+        {
+            "id": 7,
+            "navigationPosition": "7号位",
+            "navigationType": 1,
+            "goodsId": "1001059",
+            "navigationName": "雅堂金融",
+            "linkAddress": null,
+            "picAddress": "http://sit.image.com/group1/M00/00/EC/rB4KPFlfdm2AE73nAAAfHalkyn8718.jpg",
+            "createPerson": "1",
+            "updatePerson": "admin",
+            "status": 0
+        },
+        {
+            "id": 8,
+            "navigationPosition": "8号位",
+            "navigationType": 1,
+            "goodsId": "1001385",
+            "navigationName": "雅堂汇",
+            "linkAddress": "undefined",
+            "picAddress": "http://sit.image.com/group1/M00/01/47/rB4KPFmlEPiASq31AAAok4LlpQU671.png",
+            "createPerson": "2",
+            "updatePerson": "admin",
+            "status": 0
+        },
+        {
+            "id": 9,
+            "navigationPosition": "9号位",
+            "navigationType": 2,
+            "goodsId": null,
+            "navigationName": "雅堂汇",
+            "linkAddress": "list/index.html?text=%E9%A5%AE%E6%96%99",
+            "picAddress": "http://sit.image.com/group1/M00/01/38/rB4KPlmW1mSAKTLpAACJaESTGeo757.png",
+            "createPerson": "1",
+            "updatePerson": "admin",
+            "status": 0
+        },
+        {
+            "id": 10,
+            "navigationPosition": "10号位",
+            "navigationType": 2,
+            "goodsId": null,
+            "navigationName": "雅堂汇",
+            "linkAddress": "gfdgfdg",
+            "picAddress": "http://sit.image.com/group1/M00/01/3A/rB4KPVmZG0aAB_zOAACMmUvX_nc782.png",
+            "createPerson": "2",
+            "updatePerson": "admin",
+            "status": 0
+        }
+    ],
+    "success": true
+}

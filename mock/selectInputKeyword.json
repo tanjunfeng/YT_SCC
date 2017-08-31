@@ -1,0 +1,13 @@
+{
+    "timestamp": 1504075644332,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "id": 25,
+        "sort": null,
+        "content": "",
+        "inputKey": 1
+    },
+    "success": true
+}
