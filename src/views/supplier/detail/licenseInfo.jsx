@@ -71,13 +71,6 @@ class LicenseInfo extends PureComponent {
                                 </Col>
                                 <Col span={8}><span>一般纳税人资格证电子版：</span>
                                     <span><a href={supplierOperTaxInfo.generalTaxpayerQualifiCerti} target="_blank">点击查看</a></span>
-                                    &nbsp;
-                                    {
-                                        supplierOperTaxInfo.taxpayerCertExpiringDate &&
-                                        <span className="detail-message-endTime">证件到期日:
-                                            {moment(supplierOperTaxInfo.taxpayerCertExpiringDate).format('YYYY-MM-DD')}
-                                        </span>
-                                    }
                                 </Col>
                             </Row>
                         </div>

@@ -223,44 +223,46 @@ class CasadingAddress extends PureComponent {
                     }
                 </Select>
                 {
-                    select >= 1 && showNum > 1 &&
-                    <Select
-                        className="classify-selete-item classify-selete-item1"
-                        placeholder="请选择"
-                        style={{ width, marginRight }}
-                        value={this.resultData.secondValue}
-                        getPopupContainer={() => document.getElementById(`${id}`)}
-                        onSelect={this.onsecondChange}
-                    >
-                        {
-                            second.map((item2) => (
-                                <Option
-                                    key={`${item2.regionType}-${item2.code}`}
-                                    value={String(item2.code)}
-                                >{item2.regionName}</Option>
-                            ))
-                        }
-                    </Select>
+                    select >= 1 && showNum > 1 ?
+                        <Select
+                            className="classify-selete-item classify-selete-item1"
+                            placeholder="请选择"
+                            style={{ width, marginRight }}
+                            value={this.resultData.secondValue}
+                            getPopupContainer={() => document.getElementById(`${id}`)}
+                            onSelect={this.onsecondChange}
+                        >
+                            {
+                                second.map((item2) => (
+                                    <Option
+                                        key={`${item2.regionType}-${item2.code}`}
+                                        value={String(item2.code)}
+                                    >{item2.regionName}</Option>
+                                ))
+                            }
+                        </Select>
+                        : null
                 }
                 {
-                    select >= 2 && showNum > 2 &&
-                    <Select
-                        className="classify-selete-item classify-selete-item1"
-                        placeholder="请选择"
-                        style={{ width, marginRight }}
-                        value={this.resultData.thirdValue}
-                        getPopupContainer={() => document.getElementById(`${id}`)}
-                        onSelect={this.onthirdChange}
-                    >
-                        {
-                            Third.map((item2) => (
-                                <Option
-                                    key={`${item2.regionType}-${item2.code}`}
-                                    value={String(item2.code)}
-                                >{item2.regionName}</Option>
-                            ))
-                        }
-                    </Select>
+                    select >= 2 && showNum > 2 ?
+                        <Select
+                            className="classify-selete-item classify-selete-item1"
+                            placeholder="请选择"
+                            style={{ width, marginRight }}
+                            value={this.resultData.thirdValue}
+                            getPopupContainer={() => document.getElementById(`${id}`)}
+                            onSelect={this.onthirdChange}
+                        >
+                            {
+                                Third.map((item2) => (
+                                    <Option
+                                        key={`${item2.regionType}-${item2.code}`}
+                                        value={String(item2.code)}
+                                    >{item2.regionName}</Option>
+                                ))
+                            }
+                        </Select>
+                        : null
                 }
             </div>
         );
