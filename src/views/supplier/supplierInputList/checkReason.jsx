@@ -121,14 +121,14 @@ const TEXT = {
         goodsArrivalCycle: '到货周期',
         orgId: '分公司',
         // ogradergId: '供应地点级别',
-        ogradergId: { text: '供应地点级别', type: 'gysddjb' },
-        settlementPeriod: { text: '账期', type: 'zq' },
+        ogradergId: { text: '供应地点级别', type: 'string' },
+        settlementPeriod: { text: '账期', type: 'string' },
         // operaStatus: '供应商地点经营状态',
-        operaStatus: { text: '供应商地点经营状态', type: 'gysddjyzt' },
+        operaStatus: { text: '供应商地点经营状态', type: 'array', data: ['', ''] },
         // payType: '供应商付款方式',
-        payType: { text: '供应商付款方式', type: 'gysfkfs' },
+        payType: { text: '供应商付款方式', type: 'arrray' },
         // payCondition: '付款条件',
-        payCondition: { text: '付款条件', type: 'gysfktj' },
+        payCondition: { text: '付款条件', type: 'string' },
         belongArea: '所属区域',
         grade: '供应地点级别',
         // auditDate: '审核时间',
@@ -145,114 +145,149 @@ const TEXT = {
     }
 }
 
-const parse = (before, after, rawText) => {
+
+const baObjs = (editBeforeAfters) => {
     const data = [];
-    const keys = Object.keys(before);
-    // for (const i of keys) {
-    keys.forEach((item, i) => {
-        const b = before[i] || [];
-        const a = after[i];
-        const t = rawText[i];
-        const childKeys = Object.keys(b);
-        childKeys.forEach((keyItem, j) => {
-            let cb = b[j];
-            let ca = a[j];
-            let ct = t[j];
-            if (ct instanceof Object) {
-                const { text, type } = ct;
-                ct = text;
-                if (type === 'time') {
-                    cb = moment(parseInt(cb, 10)).format('YYYY-MM-DD');
-                    ca = moment(parseInt(ca, 10)).format('YYYY-MM-DD');
-                }
-                if (type === 'gysddjb') {
-                    switch (cb) {
-                        case 1: return '生产厂家';
-                        case 2: return '批发商';
-                        case 3: return '经销商';
-                        case 4: return '代销商';
-                        case 5: return '其他';
-                        default: break;
-                    }
-                    switch (ca) {
-                        case 1: return '生产厂家';
-                        case 2: return '批发商';
-                        case 3: return '经销商';
-                        case 4: return '代销商';
-                        case 5: return '其他';
-                        default: break;
-                    }
-                }
-                if (type === 'gysddjyzt') {
-                    switch (cb) {
-                        case 0: return '禁用';
-                        case 1: return '启用';
-                        default: break;
-                    }
-                    switch (ca) {
-                        case 0: return '禁用';
-                        case 1: return '启用';
-                        default: break;
-                    }
-                }
-                if (type === 'gysfkfs') {
-                    switch (cb) {
-                        case 0: return '网银';
-                        case 1: return '银行转账';
-                        case 2: return '现金';
-                        case 3: return '支票';
-                        default: break;
-                    }
-                    switch (ca) {
-                        case 0: return '网银';
-                        case 1: return '银行转账';
-                        case 2: return '现金';
-                        case 3: return '支票';
-                        default: break;
-                    }
-                }
-                if (type === 'zq') {
-                    switch (cb) {
-                        case 1: return '周结';
-                        case 2: return '半月结';
-                        case 3: return '月结';
-                        case 4: return '票到付款';
-                        default: break;
-                    }
-                    switch (ca) {
-                        case 1: return '周结';
-                        case 2: return '半月结';
-                        case 3: return '月结';
-                        case 4: return '票到付款';
-                        default: break;
-                    }
-                }
-                if (type === 'gysfktj') {
-                    switch (cb) {
-                        case 1: return '票到七天';
-                        case 2: return '票到十五天';
-                        case 3: return '票到三十天';
-                        default: break;
-                    }
-                    switch (ca) {
-                        case 1: return '票到七天';
-                        case 2: return '票到十五天';
-                        case 3: return '票到三十天';
-                        default: break;
-                    }
-                }
-            }
-            if (ct) {
-                data.push({
-                    before: cb,
-                    after: ca,
-                    name: ct
-                })
-            }
-            return data;
-        });
+    editBeforeAfters.forEach((item, index) => {
+        const { before, after, categoryIndex } = editBeforeAfters[index];
+        // const listBefore = .before;
+        // const listAfter = editBeforeAfters[index].after;
+        // const listText = editBeforeAfters[index].categoryIndex;
+        const arrs = categoryIndex.split('.');
+        const first = TEXT[arrs[0]];
+        if (arrs.length === 2 && first && first[arrs[1]]) {
+            const { type } = first[arrs[1]];
+        }
+        // for (const key in TEXT) {
+        //     if (key === arrs[0]) {
+        //         for (const k in TEXT[key]) {
+        //             if (k === arrs[1]) {
+        //                 console.log(TEXT[key][k].text);
+        //             }
+        //         }
+        //         const currentObj = {key: key};
+        //     }
+        // }
+        // if (inclus) {
+        //     console.log(true)
+        //     // data.push({
+        //     //     before: listBefore,
+        //     //     after: listAfter,
+        //     //     name: listText,
+        //     // })
+        // }
+        // return data;
     });
 }
+
+// const parse = (before, after, rawText) => {
+//     const data = [];
+//     const keys = Object.keys(before);
+//     // for (const i of keys) {
+//     keys.forEach((item, i) => {
+//         const b = before[i] || [];
+//         const a = after[i];
+//         const t = rawText[i];
+//         const childKeys = Object.keys(b);
+//         childKeys.forEach((keyItem, j) => {
+//             let cb = b[j];
+//             let ca = a[j];
+//             let ct = t[j];
+//             if (ct instanceof Object) {
+//                 const { text, type } = ct;
+//                 ct = text;
+//                 if (type === 'time') {
+//                     cb = moment(parseInt(cb, 10)).format('YYYY-MM-DD');
+//                     ca = moment(parseInt(ca, 10)).format('YYYY-MM-DD');
+//                 }
+//                 if (type === 'gysddjb') {
+//                     switch (cb) {
+//                         case 1: return '生产厂家';
+//                         case 2: return '批发商';
+//                         case 3: return '经销商';
+//                         case 4: return '代销商';
+//                         case 5: return '其他';
+//                         default: break;
+//                     }
+//                     switch (ca) {
+//                         case 1: return '生产厂家';
+//                         case 2: return '批发商';
+//                         case 3: return '经销商';
+//                         case 4: return '代销商';
+//                         case 5: return '其他';
+//                         default: break;
+//                     }
+//                 }
+//                 if (type === 'gysddjyzt') {
+//                     switch (cb) {
+//                         case 0: return '禁用';
+//                         case 1: return '启用';
+//                         default: break;
+//                     }
+//                     switch (ca) {
+//                         case 0: return '禁用';
+//                         case 1: return '启用';
+//                         default: break;
+//                     }
+//                 }
+//                 if (type === 'gysfkfs') {
+//                     switch (cb) {
+//                         case 0: return '网银';
+//                         case 1: return '银行转账';
+//                         case 2: return '现金';
+//                         case 3: return '支票';
+//                         default: break;
+//                     }
+//                     switch (ca) {
+//                         case 0: return '网银';
+//                         case 1: return '银行转账';
+//                         case 2: return '现金';
+//                         case 3: return '支票';
+//                         default: break;
+//                     }
+//                 }
+//                 if (type === 'zq') {
+//                     switch (cb) {
+//                         case 1: return '周结';
+//                         case 2: return '半月结';
+//                         case 3: return '月结';
+//                         case 4: return '票到付款';
+//                         default: break;
+//                     }
+//                     switch (ca) {
+//                         case 1: return '周结';
+//                         case 2: return '半月结';
+//                         case 3: return '月结';
+//                         case 4: return '票到付款';
+//                         default: break;
+//                     }
+//                 }
+//                 if (type === 'gysfktj') {
+//                     switch (cb) {
+//                         case 1: return '票到七天';
+//                         case 2: return '票到十五天';
+//                         case 3: return '票到三十天';
+//                         default: break;
+//                     }
+//                     switch (ca) {
+//                         case 1: return '票到七天';
+//                         case 2: return '票到十五天';
+//                         case 3: return '票到三十天';
+//                         default: break;
+//                     }
+//                 }
+//             }
+//             if (ct) {
+//                 data.push({
+//                     before: cb,
+//                     after: ca,
+//                     name: ct
+//                 })
+//             }
+//             return data;
+//         });
+//     });
+// }
 
 @connect(
     state => ({
@@ -381,7 +416,8 @@ class CheckReason extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { editBeforeAfters } = this.props;
         const { before = {}, after = {} } = editBeforeAfters;
-        const formData = parse(before, after, TEXT);
+        // const formData = parse(before, after, TEXT);
+        const listData = baObjs(editBeforeAfters, TEXT);
         return (
             <div>
                 {
@@ -396,7 +432,7 @@ class CheckReason extends PureComponent {
                         <span>修改资料详情</span>
                         <Table
                             columns={columns}
-                            dataSource={formData}
+                            //dataSource={formData}
                             pagination={false}
                             size="small"
                             locale={{ emptyText: '无修改前后对比数据' }}

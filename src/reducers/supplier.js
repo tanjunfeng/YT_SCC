@@ -49,7 +49,7 @@ const initState = fromJS({
     // 供应商入驻列表
     queryManageList: {},
     // 查询供应商修改前修改后的信息
-    editBeforeAfter: {},
+    editBeforeAfter: [],
     // 新增商品采购关系
     fetchAddProdPurchase: {},
     // 采购关系ID
