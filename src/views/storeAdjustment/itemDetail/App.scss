@@ -1,35 +1,35 @@
-.itemDetail-wrap {
+.manage-form{
   padding-top: 20px;
-  @at-root {
-    .detail-item {
+  & .item-detail-form{
+    text-align: center;
+    & .back-storeAdjust-page {
+      & .ant-btn {
+        line-height: 28px;
+      }
+    }
+  }
+  @at-root{
+    .detail-item{
       text-align-last: justify;
-      & .justify-text {
+      & .justify-text{
         display: inline-block;
         width: 60px;
         margin-right: 10px;
-        & + strong {
+        & + strong{
           font-weight: 600;
         }
       }
-      &::after {
+      &::after{
         display: inline-block;
         width: 100%;
         content: '';
       }
     }
-    .adjustmentList-wrap {
-      text-align: center;
-      & .back-storeAdjust-page {
-        & .ant-btn {
-          line-height: 28px;
-        }
-      }
-    }
-    .total-wrap {
-      & .totalTxt {
+    .total-wrap{
+      & .totalTxt{
         color: red;
       }
-      & span {
+      & span{
         display: inline-block;
         width: 50%;
       }

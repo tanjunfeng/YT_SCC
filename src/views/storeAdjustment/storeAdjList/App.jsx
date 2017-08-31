@@ -3,7 +3,7 @@
  * @Description: 库存调整搜索列表
  * @CreateDate: 2017-08-30 14:43:38
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-08-30 14:57:41
+ * @Last Modified time: 2017-08-30 15:31:15
  */
 
 import React, { Component } from 'react';
