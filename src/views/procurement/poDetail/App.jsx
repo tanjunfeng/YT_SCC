@@ -109,6 +109,7 @@ class PoDetail extends PureComponent {
         this.getFormBasicInfo = ::this.getFormBasicInfo;
         this.renderPeriod = ::this.renderPeriod;
         this.renderPayType = ::this.renderPayType;
+        this.renderPayCondition = ::this.renderPayCondition;
         this.getAllValue = ::this.getAllValue;
         this.applySupplierClear = ::this.applySupplierClear;
         this.createPoRequest = ::this.createPoRequest;
@@ -225,6 +226,8 @@ class PoDetail extends PureComponent {
             settlementPeriod: null,
             // 付款方式
             payType: null,
+            // 付款条件
+            payCondition: null,
             // 子公司id
             branchCompanyId: null,
             // 详细收货地点
@@ -299,7 +302,7 @@ class PoDetail extends PureComponent {
 
     componentWillReceiveProps(nextProps) {
         const {
-            adrType, settlementPeriod, payType, estimatedDeliveryDate,
+            adrType, settlementPeriod, payType, payCondition, estimatedDeliveryDate,
             purchaseOrderType, currencyCode, id, spId, spAdrId
         } = nextProps.basicInfo;
         const { basicInfo = {}} = this.props;
@@ -315,6 +318,7 @@ class PoDetail extends PureComponent {
                 isWarehouseDisabled: false,
                 settlementPeriod,
                 payType,
+                payCondition,
                 spId,
                 spAdrId,
                 pickerDate: estimatedDeliveryDate
@@ -553,6 +557,16 @@ class PoDetail extends PureComponent {
                                 {/* 货币类型 */}
                                 <FormItem label="货币类型">
                                     <span>{this.props.basicInfo.currencyCode}</span>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row >
+                            <Col span={8}>
+                                {/* 付款条件 */}
+                                <FormItem label="付款条件">
+                                    <span>
+                                        {this.renderPayCondition(this.props.basicInfo.payCondition)}
+                                    </span>
                                 </FormItem>
                             </Col>
                         </Row>
@@ -943,6 +957,16 @@ class PoDetail extends PureComponent {
                     </Row>
                     <Row >
                         <Col span={8}>
+                            {/* 付款条件 */}
+                            <FormItem label="付款条件">
+                                <span>
+                                    {this.renderPayCondition(this.state.payCondition)}
+                                </span>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row >
+                        <Col span={8}>
                             {/* 创建者 */}
                             <FormItem label="创建者">
                                 <span>{createdByName}</span>
@@ -1220,6 +1244,7 @@ class PoDetail extends PureComponent {
         const {
             spAdrId,
             payType,
+            payCondition,
             adrType,
             currencyCode,
             purchaseOrderType,
@@ -1257,6 +1282,7 @@ class PoDetail extends PureComponent {
                     spAdrId: `${spAdrId || this.props.basicInfo.spAdrId}`,
                     estimatedDeliveryDate,
                     payType,
+                    payCondition,
                     adrType: parseInt(adrType, 10),
                     adrTypeCode: addressCd || this.props.basicInfo.adrTypeCode,
                     currencyCode,
@@ -1280,6 +1306,7 @@ class PoDetail extends PureComponent {
                     spAdrId: `${spAdrId || this.props.basicInfo.spAdrId}`,
                     estimatedDeliveryDate,
                     payType,
+                    payCondition,
                     adrType: parseInt(adrType, 10),
                     adrTypeCode: addressCd || this.props.basicInfo.adrTypeCode,
                     currencyCode,
@@ -1388,10 +1415,11 @@ class PoDetail extends PureComponent {
         }
         // 2.删除所有商品行
         this.deletePoLines();
-        // 3.清空账期、付款方式
+        // 3.清空账期、付款方式、付款条件
         const basicInfo = this.props.basicInfo;
         basicInfo.settlementPeriod = null;
         basicInfo.payType = null;
+        basicInfo.payCondition = null;
         this.props.updatePoBasicinfo(basicInfo);
     }
 
@@ -1414,7 +1442,7 @@ class PoDetail extends PureComponent {
     /**
      * 供应商地点变更时，做如下处理
      *  1.删除采购商品行
-     *  2.清空账期、付款方式
+     *  2.清空账期、付款方式、付款条件
      * @param {*} res
      */
     applySupplierLocChoosed(res) {
@@ -1429,10 +1457,11 @@ class PoDetail extends PureComponent {
             if (res.record) {
                 // 1.删除所有商品行
                 this.deletePoLines();
-                // 2.清空账期、付款方式
+                // 2.清空账期、付款方式、付款条件
                 const basicInfo = this.props.basicInfo;
                 basicInfo.settlementPeriod = null;
                 basicInfo.payType = null;
+                basicInfo.payCondition = null;
                 this.props.updatePoBasicinfo(basicInfo);
                 // 设置预计收货日期为：now + 提前期
                 this.setState({
@@ -1441,12 +1470,14 @@ class PoDetail extends PureComponent {
                     settlementPeriod: record.settlementPeriod,
                     // 付款方式
                     payType: record.payType,
+                    // 付款条件
+                    payCondition: record.payCondition,
                     // 子公司id
                     branchCompanyId: record.branchCompanyId,
                     applySupplierRecord: record,
                     isWarehouseDisabled: false,
                     spAdrId: record.spAdrid
-                })
+                });
             }
         }
     }
@@ -1463,6 +1494,8 @@ class PoDetail extends PureComponent {
             settlementPeriod: null,
             // 付款方式
             payType: null,
+            // 付款条件
+            payCondition: null,
             // 子公司id
             branchCompanyId: null,
             isWarehouseDisabled: true,
@@ -1735,6 +1768,25 @@ class PoDetail extends PureComponent {
                 return '现金';
             case 3:
                 return '支票';
+            default:
+                return '';
+        }
+    }
+
+    /**
+     * 渲染付款条件
+     * @param {*} key
+     */
+    renderPayCondition(key) {
+        switch (key) {
+            case 1:
+                return '票到七天';
+            case 2:
+                return '票到十五天';
+            case 3:
+                return '票到三十天';
+            case 4:
+                return '票到付款';
             default:
                 return '';
         }

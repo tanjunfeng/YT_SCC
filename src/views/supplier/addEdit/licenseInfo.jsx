@@ -650,15 +650,15 @@ class LicenseInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>*供应商质保金收取金额：</span>
+                                        <span>供应商质保金收取金额：</span>
                                         <FormItem>
                                             {getFieldDecorator('guaranteeMoney', {
-                                                rules: [{ required: true, message: '请输入供应商质保金收取金额!' }],
+                                                rules: [{ required: false, message: '请输入供应商质保金收取金额!' }],
                                                 initialValue: supplierlicenseInfo.guaranteeMoney
                                             })(
                                                 <InputNumber
                                                     style={{ width: '200px' }}
-                                                    min={0}
+                                                    min={1}
                                                     max={99999999}
                                                     precision={2}
                                                     placeholder="供应商质保金收取金额"
