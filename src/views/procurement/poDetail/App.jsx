@@ -226,8 +226,8 @@ class PoDetail extends PureComponent {
             settlementPeriod: null,
             // 付款方式
             payType: null,
-            //付款条件
-            payCondition:null,
+            // 付款条件
+            payCondition: null,
             // 子公司id
             branchCompanyId: null,
             // 详细收货地点
@@ -538,7 +538,6 @@ class PoDetail extends PureComponent {
                                 </FormItem>
                             </Col>
                         </Row>
-                        
                         <Row >
                             <Col span={8}>
                                 {/* 账期 */}
@@ -563,8 +562,8 @@ class PoDetail extends PureComponent {
                         </Row>
                         <Row >
                             <Col span={8}>
-                                 {/* 付款条件 */}
-                                 <FormItem label="付款条件">
+                                {/* 付款条件 */}
+                                <FormItem label="付款条件">
                                     <span>
                                         {this.renderPayCondition(this.props.basicInfo.payCondition)}
                                     </span>
@@ -958,8 +957,8 @@ class PoDetail extends PureComponent {
                     </Row>
                     <Row >
                         <Col span={8}>
-                                {/* 付款条件 */}
-                                <FormItem label="付款条件">
+                            {/* 付款条件 */}
+                            <FormItem label="付款条件">
                                 <span>
                                     {this.renderPayCondition(this.state.payCondition)}
                                 </span>
@@ -1471,8 +1470,8 @@ class PoDetail extends PureComponent {
                     settlementPeriod: record.settlementPeriod,
                     // 付款方式
                     payType: record.payType,
-                    //付款条件
-                    payCondition:record.payCondition,
+                    // 付款条件
+                    payCondition: record.payCondition,
                     // 子公司id
                     branchCompanyId: record.branchCompanyId,
                     applySupplierRecord: record,
@@ -1495,7 +1494,7 @@ class PoDetail extends PureComponent {
             settlementPeriod: null,
             // 付款方式
             payType: null,
-            //付款条件
+            // 付款条件
             payCondition: null,
             // 子公司id
             branchCompanyId: null,
@@ -1778,7 +1777,7 @@ class PoDetail extends PureComponent {
      * 渲染付款条件
      * @param {*} key
      */
-    renderPayCondition(key){
+    renderPayCondition(key) {
         switch (key) {
             case 1:
                 return '票到七天';
