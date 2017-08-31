@@ -66,6 +66,10 @@ export const exportOrderList = '/sorder/toExcel';
 // 下载采购订单PDF
 export const exportProcurementPdf = 'pmPurchaseOrder/exportPdf';
 
+// 下载库存调整列表
+export const exportStoreAdList = '';
+
+
 /**
  * 登录 Api
  */
@@ -731,3 +735,7 @@ export const getNewPmPurchaseOrderItem = (params) => http.get('/pmPurchaseOrder/
 
 // 采购订单-审批
 export const auditPurchaseOrderInfo = (params) => http.post('/pmPurchaseOrder/auditPurchaseOrderInfo', params);
+
+// 库存调整-库存调整列表
+export const queryStoreAdList = (params) => http.get('', params);
+
