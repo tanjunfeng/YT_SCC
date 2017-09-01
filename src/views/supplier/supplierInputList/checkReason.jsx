@@ -31,8 +31,7 @@ import {
 import {
     auditSupplierEditInfoAction
 } from '../../../actions/supplier';
-import { INFO_TYPE_TABLE } from './infoType';
-import { getListOfChanges } from './helper';
+import { getListOfChanges, getAuditObject } from './helper';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -84,7 +83,6 @@ class CheckReason extends PureComponent {
         const { id } = this.props.visibleReasonDatas;
         const { selected } = this.state;
         const { editBeforeAfters } = this.props;
-        const { before = {} } = editBeforeAfters;
         if (selected === -1) {
             message.error('请选择审核结果');
             return;
@@ -95,10 +93,7 @@ class CheckReason extends PureComponent {
                     id,
                     // pass: !parseInt(selected, 10) === 1,
                     pass: parseInt(selected, 10) === 1 ? 'false' : true,
-                    basicId: before.supplierBasicInfo.id,
-                    bankId: before.supplierBankInfo.id,
-                    operatTaxatId: before.supplierOperTaxInfo.id,
-                    licenseId: before.supplierlicenseInfo.id,
+                    ...getAuditObject(editBeforeAfters),
                     ...this.props.form.getFieldsValue()
                 }).then((res) => {
                     this.props.modifyCheckReasonVisible({ isVisible: false });
@@ -162,7 +157,7 @@ class CheckReason extends PureComponent {
 
         const { getFieldDecorator } = this.props.form;
         const { editBeforeAfters } = this.props;
-        const changes = getListOfChanges(editBeforeAfters, INFO_TYPE_TABLE);
+        const changes = getListOfChanges(editBeforeAfters);
         return (
             <div>
                 {

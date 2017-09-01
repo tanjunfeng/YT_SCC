@@ -15,6 +15,11 @@
             "categoryIndex": "supplierBasicInfo.status"
         },
         {
+            "before": 0,
+            "after": 1,
+            "categoryIndex": "supplierBasicInfo.grade"
+        },
+        {
             "before": 131,
             "after": null,
             "categoryIndex": "supplierBasicInfo.modifyId"
