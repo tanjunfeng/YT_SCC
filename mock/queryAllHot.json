@@ -1,0 +1,44 @@
+{
+    "timestamp": 1504075644286,
+    "code": 200,
+    "message": "查询成功",
+    "exception": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 20,
+        "total": 5,
+        "data": [
+            {
+                "id": 27,
+                "sort": 0,
+                "content": "友臣肉松饼",
+                "inputKey": 2
+            },
+            {
+                "id": 26,
+                "sort": 1,
+                "content": "雪花啤酒",
+                "inputKey": 2
+            },
+            {
+                "id": 28,
+                "sort": 2,
+                "content": "红双喜",
+                "inputKey": 2
+            },
+            {
+                "id": 29,
+                "sort": 3,
+                "content": "33",
+                "inputKey": 2
+            },
+            {
+                "id": 30,
+                "sort": 4,
+                "content": "李锦记",
+                "inputKey": 2
+            }
+        ]
+    },
+    "success": true
+}

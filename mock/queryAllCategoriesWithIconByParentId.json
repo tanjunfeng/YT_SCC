@@ -1,0 +1,229 @@
+{
+    "timestamp": 1504075793896,
+    "code": 200,
+    "message": {},
+    "exception": null,
+    "data": [
+        {
+            "id": "xcate1",
+            "categoryName": "饮料烟酒000000",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 1,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2",
+            "categoryName": "休闲食品",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate3",
+            "categoryName": "粮油副食",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate4",
+            "categoryName": "生鲜日配",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate5",
+            "categoryName": "洗化针纺",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate6",
+            "categoryName": "日杂",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2105",
+            "categoryName": "testedgrthy",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2106",
+            "categoryName": "test-qqqq",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2107",
+            "categoryName": "tetsttttttt",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2108",
+            "categoryName": "fasdg",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2109",
+            "categoryName": "sfagdfgtr",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2110",
+            "categoryName": "ergtwry",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2111",
+            "categoryName": "tyfuerty",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2112",
+            "categoryName": "tyutyty",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2113",
+            "categoryName": "thty",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2114",
+            "categoryName": "sgaergsd",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2115",
+            "categoryName": "etwergt",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2116",
+            "categoryName": "fhd",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2117",
+            "categoryName": "rthfhh",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        },
+        {
+            "id": "xcate2118",
+            "categoryName": "sdafasdfgtsrdhstrg",
+            "level": 1,
+            "status": null,
+            "parentCategoryId": "",
+            "sortOrder": 0,
+            "displayStatus": 0,
+            "iconImg": null,
+            "childCategories": []
+        }
+    ],
+    "success": true
+}
