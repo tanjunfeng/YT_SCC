@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import moment from 'moment';
+// import moment from 'moment';
 import {
     Form,
     Input,
@@ -31,263 +31,11 @@ import {
 import {
     auditSupplierEditInfoAction
 } from '../../../actions/supplier';
+import { INFO_TYPE_TABLE } from '../infoType';
+import { getListOfChanges } from '../helper';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-
-const TEXT = {
-    supplierBasicInfo: {
-        // id: '主键ID',
-        companyName: '供应商名称',
-        spNo: '供应商编号',
-        grade: '供应商等级',
-        settledTime: { text: '供应商入驻日期', type: 'time' },
-    },
-    supplierOperTaxInfo: {
-        spId: '供应商主表ID',
-        // id: '主键ID2',
-        companyName: '供应商名称',
-        companyLocProvince: '省份名',
-        companyLocCity: '城市名',
-        companyLocCounty: '地区名',
-        companyLocProvinceCode: '省份code',
-        companyLocCityCode: '城市code',
-        companyLocCountyCode: '地区code',
-        companyDetailAddress: '公司详细地址',
-        registrationCertificate: '商标注册证/受理通知书',
-        regCerExpiringDate: { text: '商标注册证/受理通知书到期日', type: 'time' },
-        qualityIdentification: '食品安全认证',
-        quaIdeExpiringDate: { text: '食品安全认证到期日', type: 'time' },
-        foodBusinessLicense: '食品经营许可证',
-        businessLicenseExpiringDate: { text: '食品经营许可证到期日期', type: 'time' },
-        generalTaxpayerQualifiCerti: '一般纳税人资格证电子版',
-        taxpayerCertExpiringDate: { text: '一般纳税人资格证到期日', type: 'time' }
-    },
-    supplierBankInfo: {
-        // spId: '供应商主表ID',
-        // id: '主键ID',
-        accountName: '开户名',
-        openBank: '开户行',
-        bankAccount: '银行账户',
-        bankAccountLicense: '银行开户许可证电子版url',
-        bankLocProvince: '省份名',
-        bankLocCity: '城市名',
-        bankLocCounty: '地区名',
-        bankLocProvinceCode: '省份code',
-        bankLocCityCode: '城市code',
-        bankLocCountyCode: '地区code',
-        invoiceHead: '供应商发票抬头'
-    },
-    supplierlicenseInfo: {
-        // id: '主键ID',
-        companyName: '公司名称',
-        registLicenceNumber: '注册号(营业执照号)',
-        legalRepresentative: '法定代表人',
-        legalRepreCardNum: '法人身份证号',
-        legalRepreCardPic1: '法人身份证电子版1 ',
-        legalRepreCardPic2: '法人身份证电子版2',
-        bankLocClicenseLocProvinceounty: '省份名',
-        licenseLocCity: '城市名',
-        licenseLocCounty: '地区名',
-        bankLocProvinceCode: '省份code',
-        bankLocCityCode: '城市code',
-        bankLocCountyCode: '地区code',
-        licenseAddress: '营业执照详细地址',
-        establishDate: { text: '创建时间', type: 'time' },
-        startDate: { text: '营业开始日期', type: 'time' },
-        endDate: { text: '营业结束日期', type: 'time' },
-        registeredCapital: '注册资本(单位万元)',
-        businessScope: '经营范围',
-        registLicencePic: '营业执照副本电子版url',
-        guaranteeMoney: '供应商质保金收取金额（保证金）'
-    },
-    saleRegionInfo: {
-        // id: '主键ID',
-        bigArea: '大区',
-        province: '省份',
-        city: '城市'
-    },
-    supplierAdrInfoDto: {
-        // id: '供应商地点主表ID',
-        // parentId: '供应商主表ID',
-        basicId: '基本信息ID',
-        contId: '联系信息ID',
-        spAdrBasic: '地点基础信息表'
-    },
-    spAdrBasic: {
-        // id: '主键ID',
-        providerNo: '供应商地点编码',
-        providerName: '供应商地点名称',
-        goodsArrivalCycle: '到货周期',
-        orgId: '分公司',
-        // ogradergId: '供应地点级别',
-        ogradergId: { text: '供应地点级别', type: 'string' },
-        settlementPeriod: { text: '账期', type: 'string' },
-        // operaStatus: '供应商地点经营状态',
-        operaStatus: { text: '供应商地点经营状态', type: 'array', data: ['', ''] },
-        // payType: '供应商付款方式',
-        payType: { text: '供应商付款方式', type: 'arrray' },
-        // payCondition: '付款条件',
-        payCondition: { text: '付款条件', type: 'string' },
-        belongArea: '所属区域',
-        grade: '供应地点级别',
-        // auditDate: '审核时间',
-        // auditPerson: '审核人',
-    },
-    spAdrContact: {
-        // id: '供应商主表ID',
-        providerName: '供应商姓名',
-        providerPhone: '供应商手机',
-        providerEmail: '供应商邮箱',
-        purchaseName: '采购员姓名',
-        purchasePhone: '采购员电话',
-        purchaseEmail: '采购员邮箱',
-    }
-}
-
-
-const baObjs = (editBeforeAfters) => {
-    const data = [];
-    editBeforeAfters.forEach((item, index) => {
-        const { before, after, categoryIndex } = editBeforeAfters[index];
-        // const listBefore = .before;
-        // const listAfter = editBeforeAfters[index].after;
-        // const listText = editBeforeAfters[index].categoryIndex;
-        const arrs = categoryIndex.split('.');
-        const first = TEXT[arrs[0]];
-        if (arrs.length === 2 && first && first[arrs[1]]) {
-            const { type } = first[arrs[1]];
-        }
-        // for (const key in TEXT) {
-        //     if (key === arrs[0]) {
-        //         for (const k in TEXT[key]) {
-        //             if (k === arrs[1]) {
-        //                 console.log(TEXT[key][k].text);
-        //             }
-        //         }
-        //         const currentObj = {key: key};
-        //     }
-        // }
-        // if (inclus) {
-        //     console.log(true)
-        //     // data.push({
-        //     //     before: listBefore,
-        //     //     after: listAfter,
-        //     //     name: listText,
-        //     // })
-        // }
-        // return data;
-    });
-}
-
-// const parse = (before, after, rawText) => {
-//     const data = [];
-//     const keys = Object.keys(before);
-//     // for (const i of keys) {
-//     keys.forEach((item, i) => {
-//         const b = before[i] || [];
-//         const a = after[i];
-//         const t = rawText[i];
-//         const childKeys = Object.keys(b);
-//         childKeys.forEach((keyItem, j) => {
-//             let cb = b[j];
-//             let ca = a[j];
-//             let ct = t[j];
-//             if (ct instanceof Object) {
-//                 const { text, type } = ct;
-//                 ct = text;
-//                 if (type === 'time') {
-//                     cb = moment(parseInt(cb, 10)).format('YYYY-MM-DD');
-//                     ca = moment(parseInt(ca, 10)).format('YYYY-MM-DD');
-//                 }
-//                 if (type === 'gysddjb') {
-//                     switch (cb) {
-//                         case 1: return '生产厂家';
-//                         case 2: return '批发商';
-//                         case 3: return '经销商';
-//                         case 4: return '代销商';
-//                         case 5: return '其他';
-//                         default: break;
-//                     }
-//                     switch (ca) {
-//                         case 1: return '生产厂家';
-//                         case 2: return '批发商';
-//                         case 3: return '经销商';
-//                         case 4: return '代销商';
-//                         case 5: return '其他';
-//                         default: break;
-//                     }
-//                 }
-//                 if (type === 'gysddjyzt') {
-//                     switch (cb) {
-//                         case 0: return '禁用';
-//                         case 1: return '启用';
-//                         default: break;
-//                     }
-//                     switch (ca) {
-//                         case 0: return '禁用';
-//                         case 1: return '启用';
-//                         default: break;
-//                     }
-//                 }
-//                 if (type === 'gysfkfs') {
-//                     switch (cb) {
-//                         case 0: return '网银';
-//                         case 1: return '银行转账';
-//                         case 2: return '现金';
-//                         case 3: return '支票';
-//                         default: break;
-//                     }
-//                     switch (ca) {
-//                         case 0: return '网银';
-//                         case 1: return '银行转账';
-//                         case 2: return '现金';
-//                         case 3: return '支票';
-//                         default: break;
-//                     }
-//                 }
-//                 if (type === 'zq') {
-//                     switch (cb) {
-//                         case 1: return '周结';
-//                         case 2: return '半月结';
-//                         case 3: return '月结';
-//                         case 4: return '票到付款';
-//                         default: break;
-//                     }
-//                     switch (ca) {
-//                         case 1: return '周结';
-//                         case 2: return '半月结';
-//                         case 3: return '月结';
-//                         case 4: return '票到付款';
-//                         default: break;
-//                     }
-//                 }
-//                 if (type === 'gysfktj') {
-//                     switch (cb) {
-//                         case 1: return '票到七天';
-//                         case 2: return '票到十五天';
-//                         case 3: return '票到三十天';
-//                         default: break;
-//                     }
-//                     switch (ca) {
-//                         case 1: return '票到七天';
-//                         case 2: return '票到十五天';
-//                         case 3: return '票到三十天';
-//                         default: break;
-//                     }
-//                 }
-//             }
-//             if (ct) {
-//                 data.push({
-//                     before: cb,
-//                     after: ca,
-//                     name: ct
-//                 })
-//             }
-//             return data;
-//         });
-//     });
-// }
 
 @connect(
     state => ({
@@ -322,7 +70,6 @@ class CheckReason extends PureComponent {
         selected: -1
     }
 
-
     componentDidMount() {
         const { id } = this.props.visibleReasonDatas;
         this.props.fetchEditBeforeAfter({
@@ -337,7 +84,7 @@ class CheckReason extends PureComponent {
         const { id } = this.props.visibleReasonDatas;
         const { selected } = this.state;
         const { editBeforeAfters } = this.props;
-        const { before = {}} = editBeforeAfters;
+        const { before = {} } = editBeforeAfters;
         if (selected === -1) {
             message.error('请选择审核结果');
             return;
@@ -415,9 +162,7 @@ class CheckReason extends PureComponent {
 
         const { getFieldDecorator } = this.props.form;
         const { editBeforeAfters } = this.props;
-        const { before = {}, after = {} } = editBeforeAfters;
-        // const formData = parse(before, after, TEXT);
-        const listData = baObjs(editBeforeAfters, TEXT);
+        const changes = getListOfChanges(editBeforeAfters, INFO_TYPE_TABLE);
         return (
             <div>
                 {
@@ -432,7 +177,7 @@ class CheckReason extends PureComponent {
                         <span>修改资料详情</span>
                         <Table
                             columns={columns}
-                            //dataSource={formData}
+                            dataSource={changes}
                             pagination={false}
                             size="small"
                             locale={{ emptyText: '无修改前后对比数据' }}
