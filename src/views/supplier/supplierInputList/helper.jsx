@@ -11,9 +11,9 @@ import { DATE_FORMAT, TIME_FORMAT } from '../../../constant';
 const getValue = ({ rawTextItem, code }) => {
     switch (rawTextItem.type) {
         case 'date':
-            return moment(new Date(code)).format(DATE_FORMAT);
+            return code ? moment(new Date(code)).format(DATE_FORMAT) : '-';
         case 'time':
-            return moment(new Date(code)).format(TIME_FORMAT);
+            return code ? moment(new Date(code)).format(TIME_FORMAT) : '-';
         case 'map':
             return rawTextItem.map[code] || '未知修改项';
         default:

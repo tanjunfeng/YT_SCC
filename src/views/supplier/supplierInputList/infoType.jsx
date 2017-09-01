@@ -22,7 +22,7 @@ const INFO_TYPE_TABLE = {
                 0: '待审核', 1: '审核失败'
             }
         },
-        modifyId: '修改信息编号'
+        // modifyId: '修改信息编号'
     },
     supplierOperTaxInfo: {
         spId: '供应商主表ID',
@@ -159,7 +159,7 @@ const INFO_TYPE_TABLE = {
         },
         auditPerson: '审核人姓名',
         auditDate: { text: '审核日期', type: 'date' },
-        modifyId: '修改信息编号',
+        // modifyId: '修改信息编号',
         status: {
             text: '供应商地点基础信息状态',
             type: 'map',
@@ -176,7 +176,7 @@ const INFO_TYPE_TABLE = {
         purchaseName: '采购员姓名',
         purchasePhone: '采购员电话',
         purchaseEmail: '采购员邮箱',
-        modifyId: '修改信息编号',
+        // modifyId: '修改信息编号',
         status: {
             text: '联系信息状态',
             type: 'map',
