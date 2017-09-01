@@ -15,7 +15,7 @@ const getValue = ({ rawTextItem, code }) => {
         case 'time':
             return moment(new Date(code)).format(TIME_FORMAT);
         case 'map':
-            return rawTextItem.map[code];
+            return rawTextItem.map[code] || '未知修改项';
         default:
             return '未知修改项';
     }
