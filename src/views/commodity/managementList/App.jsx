@@ -408,7 +408,7 @@ class ManagementList extends PureComponent {
         if (!id && status) {
             str = `-${status}`;
         } else if (id && !status) {
-            str = `${id}-`;
+            str = `${id}-*`;
         } else if (id && status) {
             str = `${id}-${status}`;
         }
