@@ -1,17 +1,60 @@
 {
-    "timestamp": 1502865291179,
+    "timestamp": 1504074844168,
     "code": 200,
     "message": {},
     "exception": null,
     "data": {
-        "userId": 12222,
-        "employeeLogin": "gyltest",
-        "employeeName": "供应链",
-        "employeePhonenumber": "18380591859",
+        "userId": 10027,
+        "employeeLogin": "admin",
+        "employeeName": "管理员",
+        "employeePhonenumber": "15645678901",
         "employeeCompanyId": 100028,
         "companyName": "",
         "companyType": 1,
-        "topMenus": []
+        "topMenus": [
+            {
+                "authorityId": 39,
+                "authorityCode": "1,65,78",
+                "displayName": "系统管理",
+                "menuList": []
+            },
+            {
+                "authorityId": 40,
+                "authorityCode": "6,12,14,75,59,60,61",
+                "displayName": "小超商家管理",
+                "menuList": []
+            },
+            {
+                "authorityId": 42,
+                "authorityCode": "134",
+                "displayName": "雅堂小超商家版管理",
+                "menuList": []
+            },
+            {
+                "authorityId": 57,
+                "authorityCode": "43,45",
+                "displayName": "主数据管理",
+                "menuList": []
+            },
+            {
+                "authorityId": 155,
+                "authorityCode": "gyl",
+                "displayName": "供应链管理",
+                "menuList": []
+            },
+            {
+                "authorityId": 169,
+                "authorityCode": "dsjzx",
+                "displayName": "大数据中心",
+                "menuList": []
+            },
+            {
+                "authorityId": 190,
+                "authorityCode": "cdyy",
+                "displayName": "雅堂小超管理",
+                "menuList": []
+            }
+        ]
     },
     "success": true
 }

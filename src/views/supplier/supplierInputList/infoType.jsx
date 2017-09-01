@@ -113,4 +113,4 @@ const INFO_TYPE_TABLE = {
     }
 }
 
-export default { INFO_TYPE_TABLE };
+export { INFO_TYPE_TABLE };

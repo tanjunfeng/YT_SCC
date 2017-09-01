@@ -31,8 +31,8 @@ import {
 import {
     auditSupplierEditInfoAction
 } from '../../../actions/supplier';
-import { INFO_TYPE_TABLE } from '../infoType';
-import { getListOfChanges } from '../helper';
+import { INFO_TYPE_TABLE } from './infoType';
+import { getListOfChanges } from './helper';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
