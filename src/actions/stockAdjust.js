@@ -4,9 +4,9 @@
  *
  */
 
+import Promise from 'bluebird';
 import { queryAdjustLibList } from '../service';
 import ActionType from './ActionType';
-import Promise from 'bluebird';
 
 const stockAdjust = (data) => ({
     type: ActionType.STOCK_ADJUST_LIST,
