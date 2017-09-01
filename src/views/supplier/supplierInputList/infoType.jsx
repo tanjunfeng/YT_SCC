@@ -1,5 +1,7 @@
 /**
  * 供应商信息类别索引表
+ *
+ * @author taoqiyu
  */
 const INFO_TYPE_TABLE = {
     supplierBasicInfo: {

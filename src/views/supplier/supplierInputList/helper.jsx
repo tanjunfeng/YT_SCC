@@ -1,10 +1,19 @@
 import { INFO_TYPE_TABLE as rawText } from './infoType';
 
-const getItemName = (rawTextItem) => {
+/**
+ * 取出审核对象
+ *
+ * @param {*审核对象} rawTextItem
+ */
+const getAuditItem = (rawTextItem) => {
     if (rawTextItem instanceof Object) {
-        return rawTextItem.text;
+        return {
+            name: rawTextItem.text,
+            type: rawTextItem.type,
+            data: rawTextItem.data
+        };
     }
-    return rawTextItem;
+    return { name: rawTextItem, type: 'string' };
 };
 
 /**
@@ -16,6 +25,8 @@ const isExists = (changeArr) => {
     if (changeArr.length < 2) return false;
     return Object.keys(rawText[changeArr[0]]).indexOf(changeArr[1]) !== -1;
 };
+
+const get
 
 /**
  * 获取供应商修改项目列表
@@ -29,9 +40,10 @@ const getListOfChanges = (list) => {
         const changeArr = change.categoryIndex.split('.');
         if (isExists(changeArr)) {
             const rawTextItem = rawText[changeArr[0]][changeArr[1]];
+            const auditItem = getAuditItem(rawTextItem);
             const d = {
                 key: change.categoryIndex,
-                name: getItemName(rawTextItem),
+                name: auditItem.name,
                 before: change.before,
                 after: change.after
             };
@@ -47,23 +59,19 @@ const getListOfChanges = (list) => {
  * @param {*回传数据列表} list
  */
 const getAuditObject = (list) => {
-    // basicId: before.supplierBasicInfo.id,
-    // bankId: before.supplierBankInfo.id,
-    // operatTaxatId: before.supplierOperTaxInfo.id,
-    // licenseId: before.supplierlicenseInfo.id
     const audit = {};
     list.forEach((change) => {
         const changeArr = change.categoryIndex.split('.');
-        if (changeArr[0] === 'supplierBasicInfo') {
+        if (changeArr[0] === 'supplierBasicInfo' && changeArr[1] === 'id') {
             audit.basicId = change.before;
         }
-        if (changeArr[0] === 'supplierBankInfo') {
+        if (changeArr[0] === 'supplierBankInfo' && changeArr[1] === 'id') {
             audit.bankId = change.before;
         }
-        if (changeArr[0] === 'supplierOperTaxInfo') {
+        if (changeArr[0] === 'supplierOperTaxInfo' && changeArr[1] === 'id') {
             audit.operatTaxatId = change.before;
         }
-        if (changeArr[0] === 'supplierlicenseInfo') {
+        if (changeArr[0] === 'supplierlicenseInfo' && changeArr[1] === 'id') {
             audit.licenseId = change.before;
         }
     });
