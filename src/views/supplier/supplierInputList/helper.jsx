@@ -1,19 +1,53 @@
+import moment from 'moment';
 import { INFO_TYPE_TABLE as rawText } from './infoType';
+import { DATE_FORMAT, TIME_FORMAT } from '../../../constant';
 
 /**
- * 取出审核对象
+ * 通过类别获取页面显示值
  *
- * @param {*审核对象} rawTextItem
+ * @param {*数据类型，key值} params
+ * @return {value}
  */
-const getAuditItem = (rawTextItem) => {
+const getValue = ({ rawTextItem, code }) => {
+    switch (rawTextItem.type) {
+        case 'date':
+            return moment(new Date(code)).format(DATE_FORMAT);
+        case 'time':
+            return moment(new Date(code)).format(TIME_FORMAT);
+        case 'map':
+            return rawTextItem.map[code];
+        default:
+            return '未知修改项';
+    }
+};
+
+/**
+ * 取出修改审核对象
+ *
+ * @param {*修改对象类别树} changeArr
+ */
+const getAuditItem = (changeArr, change) => {
+    const rawTextItem = rawText[changeArr[0]][changeArr[1]];
     if (rawTextItem instanceof Object) {
         return {
+            key: change.categoryIndex,
             name: rawTextItem.text,
-            type: rawTextItem.type,
-            data: rawTextItem.data
-        };
+            before: getValue({
+                rawTextItem,
+                code: change.before
+            }),
+            after: getValue({
+                rawTextItem,
+                code: change.after
+            })
+        }
     }
-    return { name: rawTextItem, type: 'string' };
+    return {
+        key: change.categoryIndex,
+        name: rawTextItem || '未知修改项',
+        before: change.before || '-',
+        after: change.after || '-'
+    };
 };
 
 /**
@@ -26,8 +60,6 @@ const isExists = (changeArr) => {
     return Object.keys(rawText[changeArr[0]]).indexOf(changeArr[1]) !== -1;
 };
 
-const get
-
 /**
  * 获取供应商修改项目列表
  *
@@ -39,15 +71,7 @@ const getListOfChanges = (list) => {
     list.forEach((change) => {
         const changeArr = change.categoryIndex.split('.');
         if (isExists(changeArr)) {
-            const rawTextItem = rawText[changeArr[0]][changeArr[1]];
-            const auditItem = getAuditItem(rawTextItem);
-            const d = {
-                key: change.categoryIndex,
-                name: auditItem.name,
-                before: change.before,
-                after: change.after
-            };
-            res.push(d);
+            res.push(getAuditItem(changeArr, change));
         }
     });
     return res;
@@ -76,6 +100,6 @@ const getAuditObject = (list) => {
         }
     });
     return audit;
-}
+};
 
 export { getListOfChanges, getAuditObject };

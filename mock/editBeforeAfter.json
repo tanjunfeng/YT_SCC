@@ -15,8 +15,8 @@
             "categoryIndex": "supplierBasicInfo.status"
         },
         {
-            "before": 0,
-            "after": 1,
+            "before": 1,
+            "after": 2,
             "categoryIndex": "supplierBasicInfo.grade"
         },
         {
@@ -38,6 +38,11 @@
             "before": 0,
             "after": 1,
             "categoryIndex": "supplierOperTaxInfo.status"
+        },
+        {
+            "before": 1504693011315,
+            "after": 1505693011315,
+            "categoryIndex": "supplierOperTaxInfo.quaIdeExpiringDate"
         },
         {
             "before": 123,

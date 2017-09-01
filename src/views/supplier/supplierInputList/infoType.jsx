@@ -8,8 +8,22 @@ const INFO_TYPE_TABLE = {
         // id: '主键ID',
         companyName: '供应商名称',
         spNo: '供应商编号',
-        grade: '供应商等级',
-        settledTime: { text: '供应商入驻日期', type: 'time' },
+        grade: {
+            text: '供应商等级',
+            type: 'map',
+            map: {
+                1: '战略供应商', 2: '核心供应商', 3: '可替代供应商'
+            }
+        },
+        settledTime: { text: '供应商入驻日期', type: 'date' },
+        status: {
+            text: '供应商状态',
+            type: 'map',
+            map: {
+                0: '待审批', 1: '审核失败'
+            }
+        },
+        modifyId: '修改信息编号'
     },
     supplierOperTaxInfo: {
         spId: '供应商主表ID',
@@ -23,13 +37,20 @@ const INFO_TYPE_TABLE = {
         companyLocCountyCode: '地区code',
         companyDetailAddress: '公司详细地址',
         registrationCertificate: '商标注册证/受理通知书',
-        regCerExpiringDate: { text: '商标注册证/受理通知书到期日', type: 'time' },
+        regCerExpiringDate: { text: '商标注册证/受理通知书到期日', type: 'date' },
         qualityIdentification: '食品安全认证',
-        quaIdeExpiringDate: { text: '食品安全认证到期日', type: 'time' },
+        quaIdeExpiringDate: { text: '食品安全认证到期日', type: 'date' },
         foodBusinessLicense: '食品经营许可证',
-        businessLicenseExpiringDate: { text: '食品经营许可证到期日期', type: 'time' },
+        businessLicenseExpiringDate: { text: '食品经营许可证到期日期', type: 'date' },
         generalTaxpayerQualifiCerti: '一般纳税人资格证电子版',
-        taxpayerCertExpiringDate: { text: '一般纳税人资格证到期日', type: 'time' }
+        taxpayerCertExpiringDate: { text: '一般纳税人资格证到期日', type: 'date' },
+        status: {
+            text: '公司经营及税务信息状态',
+            type: 'map',
+            map: {
+                0: '待审批', 1: '审核失败'
+            }
+        }
     },
     supplierBankInfo: {
         // spId: '供应商主表ID',
@@ -61,9 +82,9 @@ const INFO_TYPE_TABLE = {
         bankLocCityCode: '城市code',
         bankLocCountyCode: '地区code',
         licenseAddress: '营业执照详细地址',
-        establishDate: { text: '创建时间', type: 'time' },
-        startDate: { text: '营业开始日期', type: 'time' },
-        endDate: { text: '营业结束日期', type: 'time' },
+        establishDate: { text: '创建日期', type: 'date' },
+        startDate: { text: '营业开始日期', type: 'date' },
+        endDate: { text: '营业结束日期', type: 'date' },
         registeredCapital: '注册资本(单位万元)',
         businessScope: '经营范围',
         registLicencePic: '营业执照副本电子版url',
