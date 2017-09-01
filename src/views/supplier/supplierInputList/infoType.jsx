@@ -158,7 +158,7 @@ const INFO_TYPE_TABLE = {
             }
         },
         auditPerson: '审核人姓名',
-        auditDate: { text: '审核时间', type: 'date' },
+        auditDate: { text: '审核日期', type: 'date' },
         modifyId: '修改信息编号',
         status: {
             text: '供应商地点基础信息状态',
