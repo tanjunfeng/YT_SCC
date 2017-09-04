@@ -54,8 +54,7 @@ class BasicInfo extends PureComponent {
         const { regions } = this.state;
         const saleRegion = saleRegionInfo && saleRegionInfo.json ? saleRegionInfo.json : null;
         if (
-            saleRegion
-            && saleRegion !== regions
+            saleRegion && saleRegion !== regions
         ) {
             this.state = {
                 regions: Tools.decodeArea(JSON.parse(saleRegion))
@@ -227,16 +226,16 @@ class BasicInfo extends PureComponent {
                                 <Icon type="solution" className="add-message-header-icon" />供应商辐射城市(必选)
                             </div>
                             {
-                                largeRegin.length > 0 &&
-                                <div className="add-message-body">
-                                    <InlineTree
-                                        checkedKeys={this.state.regions}
-                                        handleCheck={this.handleCheck}
-                                        initValue={largeRegin}
-                                        ref={node => { this.areaCheck = node }}
-                                    />
-                                </div>
-
+                                largeRegin.length > 0 ?
+                                    <div className="add-message-body">
+                                        <InlineTree
+                                            checkedKeys={this.state.regions}
+                                            handleCheck={this.handleCheck}
+                                            initValue={largeRegin}
+                                            ref={node => { this.areaCheck = node }}
+                                        />
+                                    </div>
+                                    : null
                             }
                         </div>
                     </div>
