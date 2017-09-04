@@ -112,7 +112,7 @@ const INFO_TYPE_TABLE = {
                 0: '周结', 1: '半月结', 2: '月结'
             }
         },
-        belongArea: '所属区域',
+        belongAreaName: '所属区域',
         payType: {
             text: '供应商付款方式',
             type: 'map',
