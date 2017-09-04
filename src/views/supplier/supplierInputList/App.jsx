@@ -24,8 +24,7 @@ import {
 } from '../../../actions';
 import {
     modifyAuthVisible,
-    modifyAdrVisible,
-    auditSupplierEditInfoAction
+    modifyAdrVisible
 } from '../../../actions/supplier';
 
 import SearchForm from '../searchFormInput';
@@ -37,7 +36,7 @@ import ChangeMessage from './changeMessage';
 import ChangeAudit from './changeAudit';
 import ChangeAuditAdr from './changeAuditAdr';
 import CheckReasonAdr from './checkReasonAdr';
-import CheckReson from './checkReason';
+import CheckReason from './checkReason';
 
 const columns = supplierInputList;
 
@@ -46,8 +45,8 @@ const columns = supplierInputList;
         supplier: state.toJS().supplier.data,
         informationVisible: state.toJS().supplier.informationVisible,
         queryManageList: state.toJS().supplier.queryManageList,
-        checkResonVisible: state.toJS().supplier.checkResonVisible,
-        checkResonVisibled: state.toJS().supplier.checkResonVisibled,
+        checkReasonVisible: state.toJS().supplier.checkReasonVisible,
+        checkReasonVisibled: state.toJS().supplier.checkReasonVisibled,
         editBeforeAfters: state.toJS().supplier.editBeforeAfter,
     }),
     dispatch => bindActionCreators({
@@ -60,8 +59,7 @@ const columns = supplierInputList;
         fetchGetProductById,
         fetchEditBeforeAfter,
         modifyAuthVisible,
-        modifyAdrVisible,
-        auditSupplierEditInfoAction
+        modifyAdrVisible
     }, dispatch)
 )
 class SupplierInputList extends PureComponent {
@@ -109,7 +107,7 @@ class SupplierInputList extends PureComponent {
             case 'ChangeAudit':
                 this.props.modifyAuditVisible({ isVisible: true, record });
                 break;
-            case 'CheckReson':
+            case 'CheckReason':
                 this.props.modifyAuthVisible({ isVisible: true, record });
                 break;
             case 'ChangeMessage':
@@ -249,7 +247,7 @@ class SupplierInputList extends PureComponent {
                 {
                     // 1： 已提交状态
                     (status === 1 || spStatus === 1) && auditType === 2 &&
-                    <Menu.Item key="CheckReson">
+                    <Menu.Item key="CheckReason">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商审核
                         </a>
@@ -354,11 +352,11 @@ class SupplierInputList extends PureComponent {
                 <ChangeAudit />
                 <ChangeAuditAdr />
                 {
-                    this.props.checkResonVisible &&
-                    <CheckReson />
+                    this.props.checkReasonVisible &&
+                    <CheckReason />
                 }
                 {
-                    this.props.checkResonVisibled &&
+                    this.props.checkReasonVisibled &&
                     <CheckReasonAdr />
                 }
             </div>
@@ -367,8 +365,8 @@ class SupplierInputList extends PureComponent {
 }
 
 SupplierInputList.propTypes = {
-    checkResonVisible: PropTypes.func,
-    checkResonVisibled: PropTypes.func,
+    checkReasonVisible: PropTypes.func,
+    checkReasonVisibled: PropTypes.func,
     modifyAuthVisible: PropTypes.func,
     queryManageList: PropTypes.objectOf(PropTypes.any),
     fetchQueryManageList: PropTypes.objectOf(PropTypes.any),

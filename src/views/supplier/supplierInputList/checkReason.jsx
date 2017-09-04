@@ -10,7 +10,6 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-// import moment from 'moment';
 import {
     Form,
     Input,
@@ -31,14 +30,14 @@ import {
 import {
     auditSupplierEditInfoAction
 } from '../../../actions/supplier';
-import { getListOfChanges, getAuditObject } from './helper';
+import { getListOfChanges, getSupplierAudit } from './helper';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 @connect(
     state => ({
-        checkResonVisible: state.toJS().supplier.checkResonVisible,
+        checkReasonVisible: state.toJS().supplier.checkReasonVisible,
         visibleData: state.toJS().supplier.visibleData,
         editBeforeAfters: state.toJS().supplier.editBeforeAfter,
         visibleReasonDatas: state.toJS().supplier.visibleReasonData,
@@ -93,7 +92,7 @@ class CheckReason extends PureComponent {
                     id,
                     // pass: !parseInt(selected, 10) === 1,
                     pass: parseInt(selected, 10) === 1 ? 'false' : true,
-                    ...getAuditObject(editBeforeAfters),
+                    ...getSupplierAudit(editBeforeAfters),
                     ...this.props.form.getFieldsValue()
                 }).then((res) => {
                     this.props.modifyCheckReasonVisible({ isVisible: false });
@@ -161,10 +160,10 @@ class CheckReason extends PureComponent {
         return (
             <div>
                 {
-                    this.props.checkResonVisible &&
+                    this.props.checkReasonVisible &&
                     <Modal
                         title="供应商修改资料审核"
-                        visible={this.props.checkResonVisible}
+                        visible={this.props.checkReasonVisible}
                         onOk={this.handleAuditOk}
                         onCancel={this.handleAuditCancel}
                         maskClosable={false}
@@ -226,7 +225,7 @@ CheckReason.propTypes = {
     editBeforeAfters: PropTypes.objectOf(PropTypes.any),
     visibleReasonDatas: PropTypes.objectOf(PropTypes.any),
     modifyCheckReasonVisible: PropTypes.bool,
-    checkResonVisible: PropTypes.bool,
+    checkReasonVisible: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
     fetchEditBeforeAfter: PropTypes.func,
     fetchQueryManageList: PropTypes.func,

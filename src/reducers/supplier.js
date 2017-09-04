@@ -22,7 +22,7 @@ const initState = fromJS({
     // 地区详情
     areaDetailData: [],
     // 查看不通过原因
-    resonData: {},
+    reasonData: {},
     // 插入数据入驻审核结果
     insertSettlementResult: false,
     // 控制弹出框显示影藏
@@ -40,8 +40,8 @@ const initState = fromJS({
     // 供应商供应省市信息
     placeRegion: [],
     informationVisible: false,
-    checkResonVisible: false,
-    checkResonVisibled: false,
+    checkReasonVisible: false,
+    checkReasonVisibled: false,
     areaVisible: false,
 
     // 供应商入驻列表
@@ -103,12 +103,12 @@ export default function (state = initState, action) {
 
         case ActionType.MODIFY_CHECK_REASON_ADR_VISIBLE: {
             const { isVisible, record } = action.payload;
-            return state.set('checkResonVisibled', isVisible).set('visibleReasonData', record);
+            return state.set('checkReasonVisibled', isVisible).set('visibleReasonData', record);
         }
 
         case ActionType.MODIFY_CHECK_REASON_VISIBLE: {
             const { isVisible, record } = action.payload;
-            return state.set('checkResonVisible', isVisible).set('visibleReasonData', record);
+            return state.set('checkReasonVisible', isVisible).set('visibleReasonData', record);
         }
 
         case ActionType.MODIFY_AREA_VISIBLE: {
@@ -128,7 +128,7 @@ export default function (state = initState, action) {
         }
 
         case ActionType.FIND_AUTH_FAILED_REASON: {
-            return state.set('resonData', action.payload);
+            return state.set('reasonData', action.payload);
         }
 
         case ActionType.RECEIVE_SUPPLIER_DETAIL: {
