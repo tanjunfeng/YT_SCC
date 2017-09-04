@@ -21,12 +21,6 @@ const getValue = ({ rawTextItem, code }) => {
     }
 };
 
-const getDisplayResult = (obj) => {
-    if (obj === null || obj === undefined || isNaN(obj)) return '-';
-    if (obj === '' || obj === {} || obj === []) return '-';
-    return obj;
-}
-
 /**
  * 取出修改审核对象
  *
@@ -51,8 +45,8 @@ const getAuditItem = (changeArr, change) => {
     return {
         key: change.categoryIndex,
         name: rawTextItem || '未知修改项',
-        before: getDisplayResult(change.before),
-        after: getDisplayResult(change.after)
+        before: change.before === null ? '-' : change.before,
+        after: change.after === null ? '-' : change.after
     };
 };
 
