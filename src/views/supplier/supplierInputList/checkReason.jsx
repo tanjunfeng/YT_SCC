@@ -30,7 +30,7 @@ import {
 import {
     auditSupplierEditInfoAction
 } from '../../../actions/supplier';
-import { getListOfChanges, getAuditObject } from './helper';
+import { getListOfChanges, getSupplierAudit } from './helper';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -92,7 +92,7 @@ class CheckReason extends PureComponent {
                     id,
                     // pass: !parseInt(selected, 10) === 1,
                     pass: parseInt(selected, 10) === 1 ? 'false' : true,
-                    ...getAuditObject(editBeforeAfters),
+                    ...getSupplierAudit(editBeforeAfters),
                     ...this.props.form.getFieldsValue()
                 }).then((res) => {
                     this.props.modifyCheckReasonVisible({ isVisible: false });

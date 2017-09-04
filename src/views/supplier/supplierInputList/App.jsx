@@ -247,7 +247,7 @@ class SupplierInputList extends PureComponent {
                 {
                     // 1： 已提交状态
                     (status === 1 || spStatus === 1) && auditType === 2 &&
-                    <Menu.Item key="CheckReson">
+                    <Menu.Item key="CheckReason">
                         <a target="_blank" rel="noopener noreferrer">
                             修改供应商审核
                         </a>
