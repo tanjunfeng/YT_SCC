@@ -14,7 +14,7 @@ const initState = fromJS({
     // 控制弹出框显示影藏
     auditVisible: false,
     informationVisible: false,
-    checkResonVisible: false,
+    checkReasonVisible: false,
     areaVisible: false
 });
 
@@ -59,7 +59,7 @@ export default function (state = initState, action) {
 
         case ActionType.MODIFY_CHECK_REASON_VISIBLE: {
             const { isVisible, record } = action.payload;
-            return state.set('checkResonVisible', isVisible).set('visibleData', record);
+            return state.set('checkReasonVisible', isVisible).set('visibleData', record);
         }
 
         case ActionType.MODIFY_AREA_VISIBLE: {

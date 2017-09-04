@@ -40,7 +40,7 @@ const initState = fromJS({
     // 供应商供应省市信息
     placeRegion: [],
     informationVisible: false,
-    checkResonVisible: false,
+    checkReasonVisible: false,
     checkReasonVisibled: false,
     areaVisible: false,
 
@@ -108,7 +108,7 @@ export default function (state = initState, action) {
 
         case ActionType.MODIFY_CHECK_REASON_VISIBLE: {
             const { isVisible, record } = action.payload;
-            return state.set('checkResonVisible', isVisible).set('visibleReasonData', record);
+            return state.set('checkReasonVisible', isVisible).set('visibleReasonData', record);
         }
 
         case ActionType.MODIFY_AREA_VISIBLE: {

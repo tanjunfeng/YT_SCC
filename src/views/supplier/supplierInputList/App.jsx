@@ -45,7 +45,7 @@ const columns = supplierInputList;
         supplier: state.toJS().supplier.data,
         informationVisible: state.toJS().supplier.informationVisible,
         queryManageList: state.toJS().supplier.queryManageList,
-        checkResonVisible: state.toJS().supplier.checkResonVisible,
+        checkReasonVisible: state.toJS().supplier.checkReasonVisible,
         checkReasonVisibled: state.toJS().supplier.checkReasonVisibled,
         editBeforeAfters: state.toJS().supplier.editBeforeAfter,
     }),
@@ -352,7 +352,7 @@ class SupplierInputList extends PureComponent {
                 <ChangeAudit />
                 <ChangeAuditAdr />
                 {
-                    this.props.checkResonVisible &&
+                    this.props.checkReasonVisible &&
                     <CheckReason />
                 }
                 {
@@ -365,7 +365,7 @@ class SupplierInputList extends PureComponent {
 }
 
 SupplierInputList.propTypes = {
-    checkResonVisible: PropTypes.func,
+    checkReasonVisible: PropTypes.func,
     checkReasonVisibled: PropTypes.func,
     modifyAuthVisible: PropTypes.func,
     queryManageList: PropTypes.objectOf(PropTypes.any),

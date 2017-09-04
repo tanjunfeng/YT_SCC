@@ -37,7 +37,7 @@ const Option = Select.Option;
 
 @connect(
     state => ({
-        checkResonVisible: state.toJS().supplier.checkResonVisible,
+        checkReasonVisible: state.toJS().supplier.checkReasonVisible,
         visibleData: state.toJS().supplier.visibleData,
         editBeforeAfters: state.toJS().supplier.editBeforeAfter,
         visibleReasonDatas: state.toJS().supplier.visibleReasonData,
@@ -160,10 +160,10 @@ class CheckReason extends PureComponent {
         return (
             <div>
                 {
-                    this.props.checkResonVisible &&
+                    this.props.checkReasonVisible &&
                     <Modal
                         title="供应商修改资料审核"
-                        visible={this.props.checkResonVisible}
+                        visible={this.props.checkReasonVisible}
                         onOk={this.handleAuditOk}
                         onCancel={this.handleAuditCancel}
                         maskClosable={false}
@@ -225,7 +225,7 @@ CheckReason.propTypes = {
     editBeforeAfters: PropTypes.objectOf(PropTypes.any),
     visibleReasonDatas: PropTypes.objectOf(PropTypes.any),
     modifyCheckReasonVisible: PropTypes.bool,
-    checkResonVisible: PropTypes.bool,
+    checkReasonVisible: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
     fetchEditBeforeAfter: PropTypes.func,
     fetchQueryManageList: PropTypes.func,
