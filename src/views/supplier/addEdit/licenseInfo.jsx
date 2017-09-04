@@ -178,7 +178,7 @@ class LicenseInfo extends PureComponent {
                     registeredCapital,
                     businessScope,
                     registLicencePic: registLicencePic.files[0],
-                    guaranteeMoney: guaranteeMoney <= 0 ? '' : guaranteeMoney
+                    guaranteeMoney: guaranteeMoney < 0 ? '' : guaranteeMoney
                 })
 
                 if (isEdit) {
