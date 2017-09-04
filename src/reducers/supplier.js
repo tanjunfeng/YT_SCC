@@ -22,7 +22,7 @@ const initState = fromJS({
     // 地区详情
     areaDetailData: [],
     // 查看不通过原因
-    resonData: {},
+    reasonData: {},
     // 插入数据入驻审核结果
     insertSettlementResult: false,
     // 控制弹出框显示影藏
@@ -128,7 +128,7 @@ export default function (state = initState, action) {
         }
 
         case ActionType.FIND_AUTH_FAILED_REASON: {
-            return state.set('resonData', action.payload);
+            return state.set('reasonData', action.payload);
         }
 
         case ActionType.RECEIVE_SUPPLIER_DETAIL: {

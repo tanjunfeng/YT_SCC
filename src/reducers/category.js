@@ -76,7 +76,7 @@ export default function (state = initState, action) {
         }
 
         case ActionType.FIND_AUTH_FAILED_REASON: {
-            return state.set('resonData', action.payload);
+            return state.set('reasonData', action.payload);
         }
 
         case ActionType.RECEIVE_SUPPLIER_DETAIL: {
