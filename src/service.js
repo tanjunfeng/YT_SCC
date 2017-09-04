@@ -582,6 +582,9 @@ export const queryAdjustLibList = (params) => http.post('/provider/queryAdjustLi
 
 // 查询库存调整单详情{mock}
 export const queryAdjustDetail = (params) => http.post('/provider/queryAdjustDetail', params);
+
+// 库存调整-库存调整列表{mock}
+export const queryStoreAdList = (params) => http.get('/dictionary/dictionaryList', params);
 /**
  * 供应商相关
  */
@@ -735,7 +738,4 @@ export const getNewPmPurchaseOrderItem = (params) => http.get('/pmPurchaseOrder/
 
 // 采购订单-审批
 export const auditPurchaseOrderInfo = (params) => http.post('/pmPurchaseOrder/auditPurchaseOrderInfo', params);
-
-// 库存调整-库存调整列表
-export const queryStoreAdList = (params) => http.get('', params);
 

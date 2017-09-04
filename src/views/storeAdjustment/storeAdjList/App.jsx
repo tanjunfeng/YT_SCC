@@ -24,6 +24,7 @@ import {
 import { exportStoreAdList } from '../../../service';
 import { fetchOrderList } from '../../../actions/order';
 import { pubFetchValueList } from '../../../actions/pub';
+import { storeAdList } from '../../../actions/storeAdjustList'
 import { DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
 
 const FormItem = Form.Item;
@@ -70,9 +71,11 @@ const columns = [{
 
 @connect(
     state => ({
+        storeAdjustData: state.toJS().storeAdjustList.storeAdjustData,
         orderListData: state.toJS().order.orderListData,
     }),
     dispatch => bindActionCreators({
+        storeAdList,
         fetchOrderList,
         pubFetchValueList,
     }, dispatch)
@@ -156,7 +159,7 @@ class StoreAdjList extends Component {
         const {
             adjustmentNo,
             status,
-            type,
+            Type,
             createUser,
             externalBillNo,
         } = this.props.form.getFieldsValue();
@@ -166,8 +169,8 @@ class StoreAdjList extends Component {
         this.current = 1;
         this.searchData = {
             adjustmentNo,
-            statustype: status === -1 ? null : status,
-            type: type === 'ALL' ? null : type,
+            statustype: status,
+            type: Type,
             createUser,
             externalBillNo,
             submitStartTime,
@@ -178,10 +181,16 @@ class StoreAdjList extends Component {
             settledDate: this.state.settledDate
         }
         const searchData = this.searchData;
+        const params = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+        }
+        console.log(searchData)
         searchData.page = 1;
         this.props.fetchOrderList({
             ...Utils.removeInvalid(searchData)
         })
+        this.props.storeAdList(params)
     }
 
     /**
@@ -281,6 +290,8 @@ class StoreAdjList extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { orderListData } = this.props;
+        const { storeAdjustData } = this.props;
+        console.log(storeAdjustData)
         columns[columns.length - 1].render = this.renderOperation;
         return (
             <div className={orderML}>
@@ -348,7 +359,7 @@ class StoreAdjList extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">调整类型</span>
-                                            {getFieldDecorator('type', {
+                                            {getFieldDecorator('Type', {
                                                 initialValue: adjustmentType.defaultValue
                                             })(
                                                 <Select
@@ -540,7 +551,9 @@ class StoreAdjList extends Component {
 StoreAdjList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     orderListData: PropTypes.objectOf(PropTypes.any),
+    storeAdjustData: PropTypes.objectOf(PropTypes.any),
     fetchOrderList: PropTypes.func,
+    storeAdList: PropTypes.func,
     pubFetchValueList: PropTypes.func,
 }
 

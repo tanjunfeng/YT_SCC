@@ -93,6 +93,7 @@ import {
 // 库存调整
 import stockAdjust from './stockAdjust';
 import stockListDetail from './stockListDetail';
+import storeAdList from './storeAdjustList';
 
 // 商品管理列表
 // 根据条件分页查询商品清单，并排序
@@ -173,6 +174,7 @@ export {
     fetchGetProductById,
     fetchEditBeforeAfter,
     auditSupplierEditInfoAction,
+    storeAdList,
 
     // 根据条件分页查询商品清单，并排序
     queryCommodityList,
