@@ -89,6 +89,38 @@ class BankInfo extends PureComponent {
 
     handleNextStep = () => {
         this.handleGoTo('3');
+        const { form, onGoTo } = this.props;
+        Tools.checkAddress(this.companyAddress, 'companyAddress', this);
+        const { firstValue, secondValue, thirdValue } = this.companyAddress;
+        if (firstValue === '-1' || secondValue === '-1' || thirdValue === '-1') {
+            return;
+        }
+        const upload = this.nodebankFile.getValue();
+        form.validateFields((err, values) => {
+            if (!err) {
+                const {
+                    bankAccount,
+                    invoiceHead,
+                    openBank,
+                    companyName
+                } = values;
+                const supplierBankInfo = Utils.removeInvalid({
+                    bankAccount,
+                    invoiceHead,
+                    openBank,
+                    accountName: companyName,
+                    bankAccountLicense: upload.files[0],
+                    bankLocProvince: firstValue.regionName,
+                    bankLocCity: secondValue.regionName,
+                    bankLocCounty: thirdValue.regionName,
+                    bankLocProvinceCode: firstValue.code,
+                    bankLocCityCode: secondValue.code,
+                    bankLocCountyCode: thirdValue.code,
+                })
+
+                this.props.addSupplierMessage1({ supplierBankInfo });
+            }
+        });
     }
 
     handlePreStep = () => {
