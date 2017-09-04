@@ -36,7 +36,7 @@ import ChangeMessage from './changeMessage';
 import ChangeAudit from './changeAudit';
 import ChangeAuditAdr from './changeAuditAdr';
 import CheckReasonAdr from './checkReasonAdr';
-import CheckReson from './checkReason';
+import CheckReason from './checkReason';
 
 const columns = supplierInputList;
 
@@ -107,7 +107,7 @@ class SupplierInputList extends PureComponent {
             case 'ChangeAudit':
                 this.props.modifyAuditVisible({ isVisible: true, record });
                 break;
-            case 'CheckReson':
+            case 'CheckReason':
                 this.props.modifyAuthVisible({ isVisible: true, record });
                 break;
             case 'ChangeMessage':
@@ -353,7 +353,7 @@ class SupplierInputList extends PureComponent {
                 <ChangeAuditAdr />
                 {
                     this.props.checkResonVisible &&
-                    <CheckReson />
+                    <CheckReason />
                 }
                 {
                     this.props.checkResonVisibled &&
