@@ -161,7 +161,6 @@ class BankInfo extends PureComponent {
         const {
             supplierBankInfo = {}
         } = initData;
-        console.log(supplierBankInfo)
         return (
             <div className="supplier-add-message">
                 <Form>
