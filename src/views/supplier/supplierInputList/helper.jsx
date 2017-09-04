@@ -23,6 +23,7 @@ const getValue = ({ rawTextItem, code }) => {
 
 const getDisplayResult = (obj) => {
     if (obj === null || obj === undefined || isNaN(obj)) return '-';
+    if (obj === '' || obj === {} || obj === []) return '-';
     return obj;
 }
 
