@@ -207,15 +207,15 @@ class LicenseInfo extends PureComponent {
                         }
                     );
 
-                    if (!data.supplierBankInfo) {
-                        data.supplierBankInfo = detailData.supplierBankInfo;
-                    } else {
+                    if (data.supplierBankInfo) {
                         Object.assign(data.supplierBankInfo,
                             {
                                 id: detailData.supplierBankInfo.id,
                                 status: detailData.supplierBankInfo.status
                             }
                         );
+                    } else {
+                        data.supplierBankInfo = detailData.supplierBankInfo;
                     }
                 }
                 Object.assign(
@@ -236,6 +236,7 @@ class LicenseInfo extends PureComponent {
 
     handleGoTo = (key) => {
         this.props.onGoTo(key);
+        this.getVlaue();
     }
 
     handleSaveDraft() {
