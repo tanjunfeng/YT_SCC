@@ -105,7 +105,13 @@ const INFO_TYPE_TABLE = {
                 0: '禁用', 1: '启用'
             }
         },
-        settlementPeriod: '账期',
+        settlementPeriod: {
+            text: '账期',
+            type: 'map',
+            map: {
+                0: '周结', 1: '半月结', 2: '月结'
+            }
+        },
         belongArea: '所属区域',
         payType: {
             text: '供应商付款方式',
@@ -118,7 +124,7 @@ const INFO_TYPE_TABLE = {
             text: '付款条件',
             type: 'map',
             map: {
-                1: '票到七天', 2: '票到十五天', 3: '票到三十天'
+                1: '票到七天', 2: '票到十五天', 3: '票到三十天', 4: '票到付款'
             }
         },
         subsidiaryName: '子公司名称'
