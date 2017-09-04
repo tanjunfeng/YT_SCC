@@ -14,15 +14,7 @@ const INFO_TYPE_TABLE = {
                 1: '战略供应商', 2: '核心供应商', 3: '可替代供应商'
             }
         },
-        settledTime: { text: '供应商入驻日期', type: 'date' },
-        status: {
-            text: '供应商状态',
-            type: 'map',
-            map: {
-                0: '待审核', 1: '审核失败'
-            }
-        },
-        // modifyId: '修改信息编号'
+        settledTime: { text: '供应商入驻日期', type: 'date' }
     },
     supplierOperTaxInfo: {
         spId: '供应商主表ID',
@@ -38,14 +30,7 @@ const INFO_TYPE_TABLE = {
         foodBusinessLicense: '食品经营许可证',
         businessLicenseExpiringDate: { text: '食品经营许可证到期日期', type: 'date' },
         generalTaxpayerQualifiCerti: '一般纳税人资格证电子版',
-        taxpayerCertExpiringDate: { text: '一般纳税人资格证到期日', type: 'date' },
-        status: {
-            text: '公司经营及税务信息状态',
-            type: 'map',
-            map: {
-                0: '待审核', 1: '审核失败'
-            }
-        }
+        taxpayerCertExpiringDate: { text: '一般纳税人资格证到期日', type: 'date' }
     },
     supplierBankInfo: {
         accountName: '开户名',
@@ -55,14 +40,7 @@ const INFO_TYPE_TABLE = {
         bankLocProvince: '省份名',
         bankLocCity: '城市名',
         bankLocCounty: '地区名',
-        invoiceHead: '供应商发票抬头',
-        status: {
-            text: '银行信息状态',
-            type: 'map',
-            map: {
-                0: '待审核', 1: '审核失败'
-            }
-        }
+        invoiceHead: '供应商发票抬头'
     },
     supplierlicenseInfo: {
         companyName: '公司名称',
@@ -89,13 +67,6 @@ const INFO_TYPE_TABLE = {
                 0: '否',
                 1: '是'
             }
-        },
-        status: {
-            text: '公司营业执照信息(副本)状态',
-            type: 'map',
-            map: {
-                0: '待审核', 1: '审核失败'
-            }
         }
     },
     saleRegionInfo: {
@@ -107,13 +78,6 @@ const INFO_TYPE_TABLE = {
         basicId: '基本信息ID',
         contId: '联系信息ID',
         spAdrBasic: '地点基础信息表',
-        status: {
-            text: '供应商地点信息',
-            type: 'map',
-            map: {
-                0: '草稿', 1: '待审核', 2: '已审核', 3: '已拒绝', 4: '修改中'
-            }
-        },
         commitType: {
             text: '供应商地点信息提交类型',
             type: 'map',
@@ -126,7 +90,7 @@ const INFO_TYPE_TABLE = {
         providerNo: '供应商地点编码',
         providerName: '供应商地点名称',
         goodsArrivalCycle: '到货周期',
-        orgId: '分公司',
+        orgId: '分公司id',
         grade: {
             text: '供应地点级别',
             type: 'map',
@@ -159,14 +123,6 @@ const INFO_TYPE_TABLE = {
         },
         auditPerson: '审核人姓名',
         auditDate: { text: '审核日期', type: 'date' },
-        // modifyId: '修改信息编号',
-        status: {
-            text: '供应商地点基础信息状态',
-            type: 'map',
-            map: {
-                0: '待审核', 1: '审核失败'
-            }
-        },
         subsidiaryName: '子公司名称'
     },
     spAdrContact: {
@@ -175,15 +131,7 @@ const INFO_TYPE_TABLE = {
         providerEmail: '供应商邮箱',
         purchaseName: '采购员姓名',
         purchasePhone: '采购员电话',
-        purchaseEmail: '采购员邮箱',
-        // modifyId: '修改信息编号',
-        status: {
-            text: '联系信息状态',
-            type: 'map',
-            map: {
-                0: '待审核', 1: '审核失败'
-            }
-        }
+        purchaseEmail: '采购员邮箱'
     }
 }
 

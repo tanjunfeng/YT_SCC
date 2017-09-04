@@ -82,7 +82,7 @@ const getListOfChanges = (list) => {
  *
  * @param {*回传数据列表} list
  */
-const getAuditObject = (list) => {
+const getSupplierAudit = (list) => {
     const audit = {};
     list.forEach((change) => {
         const changeArr = change.categoryIndex.split('.');
@@ -102,4 +102,23 @@ const getAuditObject = (list) => {
     return audit;
 };
 
-export { getListOfChanges, getAuditObject };
+/**
+ * 根据回传数据取出审核地点对象参数
+ *
+ * @param {*回传数据列表} list
+ */
+const getSupplierAdressAudit = (list) => {
+    const audit = {};
+    list.forEach((change) => {
+        const changeArr = change.categoryIndex.split('.');
+        if (changeArr[0] === 'spAdrBasic' && changeArr[1] === 'id') {
+            audit.adrBasicId = change.before;
+        }
+        if (changeArr[0] === 'spAdrContact' && changeArr[1] === 'id') {
+            audit.contId = change.before;
+        }
+    });
+    return audit;
+};
+
+export { getListOfChanges, getSupplierAudit, getSupplierAdressAudit };
