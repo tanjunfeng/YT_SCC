@@ -275,7 +275,7 @@ const parse = (before, after, rawText) => {
         visibleData: state.toJS().supplier.visibleData,
         editBeforeAfters: state.toJS().supplier.editBeforeAfter,
         visibleReasonDatas: state.toJS().supplier.visibleReasonData,
-        checkResonVisibled: state.toJS().supplier.checkResonVisibled,
+        checkReasonVisibled: state.toJS().supplier.checkReasonVisibled,
     }),
     dispatch => bindActionCreators({
         insertSupplierSettlementInfo,
@@ -408,10 +408,10 @@ class CheckReason extends PureComponent {
         return (
             <div>
                 {
-                    this.props.checkResonVisibled
+                    this.props.checkReasonVisibled
                     && <Modal
                         title="供应商修改地点审核"
-                        visible={this.props.checkResonVisibled}
+                        visible={this.props.checkReasonVisibled}
                         onOk={this.handleAuditOk}
                         onCancel={this.handleAuditCancel}
                         maskClosable={false}
@@ -428,7 +428,7 @@ class CheckReason extends PureComponent {
                                 注意：审核通过，供应商的所有账号可正常登录商家后台系统。
                             </div>
                             {
-                                this.props.checkResonVisibled &&
+                                this.props.checkReasonVisibled &&
                                 <div className="application-modal-select">
                                     <span className="application-modal-label">审核：</span>
                                     <Select
@@ -443,7 +443,7 @@ class CheckReason extends PureComponent {
                                 </div>
                             }
                             {
-                                this.props.checkResonVisibled && this.state.selected === '1' &&
+                                this.props.checkReasonVisibled && this.state.selected === '1' &&
                                 <Form layout="inline">
                                     <FormItem className="application-form-item">
                                         <span className="application-modal-label">*不通过原因：</span>
@@ -476,7 +476,7 @@ CheckReason.propTypes = {
     fetchQueryManageList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     modifyAdrVisible: PropTypes.objectOf(PropTypes.any),
-    checkResonVisibled: PropTypes.bool,
+    checkReasonVisibled: PropTypes.bool,
 }
 
 export default withRouter(Form.create()(CheckReason));

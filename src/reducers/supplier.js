@@ -41,7 +41,7 @@ const initState = fromJS({
     placeRegion: [],
     informationVisible: false,
     checkResonVisible: false,
-    checkResonVisibled: false,
+    checkReasonVisibled: false,
     areaVisible: false,
 
     // 供应商入驻列表
@@ -103,7 +103,7 @@ export default function (state = initState, action) {
 
         case ActionType.MODIFY_CHECK_REASON_ADR_VISIBLE: {
             const { isVisible, record } = action.payload;
-            return state.set('checkResonVisibled', isVisible).set('visibleReasonData', record);
+            return state.set('checkReasonVisibled', isVisible).set('visibleReasonData', record);
         }
 
         case ActionType.MODIFY_CHECK_REASON_VISIBLE: {

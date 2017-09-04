@@ -46,7 +46,7 @@ const columns = supplierInputList;
         informationVisible: state.toJS().supplier.informationVisible,
         queryManageList: state.toJS().supplier.queryManageList,
         checkResonVisible: state.toJS().supplier.checkResonVisible,
-        checkResonVisibled: state.toJS().supplier.checkResonVisibled,
+        checkReasonVisibled: state.toJS().supplier.checkReasonVisibled,
         editBeforeAfters: state.toJS().supplier.editBeforeAfter,
     }),
     dispatch => bindActionCreators({
@@ -356,7 +356,7 @@ class SupplierInputList extends PureComponent {
                     <CheckReason />
                 }
                 {
-                    this.props.checkResonVisibled &&
+                    this.props.checkReasonVisibled &&
                     <CheckReasonAdr />
                 }
             </div>
@@ -366,7 +366,7 @@ class SupplierInputList extends PureComponent {
 
 SupplierInputList.propTypes = {
     checkResonVisible: PropTypes.func,
-    checkResonVisibled: PropTypes.func,
+    checkReasonVisibled: PropTypes.func,
     modifyAuthVisible: PropTypes.func,
     queryManageList: PropTypes.objectOf(PropTypes.any),
     fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
