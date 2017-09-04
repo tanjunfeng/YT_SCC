@@ -121,8 +121,6 @@ const INFO_TYPE_TABLE = {
                 1: '票到七天', 2: '票到十五天', 3: '票到三十天'
             }
         },
-        auditPerson: '审核人姓名',
-        auditDate: { text: '审核日期', type: 'date' },
         subsidiaryName: '子公司名称'
     },
     spAdrContact: {
