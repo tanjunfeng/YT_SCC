@@ -106,7 +106,7 @@ const INFO_TYPE_TABLE = {
             }
         },
         settlementPeriod: '账期',
-        belongArea: '所属区域',
+        belongAreaName: '所属区域',
         payType: {
             text: '供应商付款方式',
             type: 'map',
