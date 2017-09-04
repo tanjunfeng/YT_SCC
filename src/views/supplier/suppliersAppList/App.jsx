@@ -41,7 +41,7 @@ const columns = suppliersAppList;
     state => ({
         applicationData: state.toJS().supplier.data,
         auditVisible: state.toJS().supplier.auditVisible,
-        checkResonVisible: state.toJS().supplier.checkResonVisible,
+        checkReasonVisible: state.toJS().supplier.checkReasonVisible,
         insertSettlementResult: state.toJS().supplier.insertSettlementResult,
         querySettledList: state.toJS().supplier.querySettledList,
     }),
