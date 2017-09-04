@@ -89,7 +89,7 @@ class BankInfo extends PureComponent {
 
     handleNextStep = () => {
         this.handleGoTo('3');
-        const { form, onGoTo } = this.props;
+        const { form } = this.props;
         Tools.checkAddress(this.companyAddress, 'companyAddress', this);
         const { firstValue, secondValue, thirdValue } = this.companyAddress;
         if (firstValue === '-1' || secondValue === '-1' || thirdValue === '-1') {
