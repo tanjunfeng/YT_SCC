@@ -61,6 +61,9 @@ import OrderManagementList from 'bundle-loader?lazy!../views/orderManagement/ord
 // 订单管理-详情页
 import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/orderDetails';
 
+// 促销管理列表
+import PromotionManagementList from 'bundle-loader?lazy!../views/promotion/mngList';
+
 // 库存调整列表
 import StoreAdjList from 'bundle-loader?lazy!../views/storeAdjustment/storeAdjList';
 import ItemDetail from 'bundle-loader?lazy!../views/storeAdjustment/itemDetail';
@@ -532,27 +535,26 @@ const routes = [
     },
     {
         // 促销管理
-        key: 'ordergl',
+        key: 'promotion',
         iconType: 'pushpin',
         routes: [
-            // 订单管理列表
             {
-                path: '/orderList',
-                parent: 'ordergl',
-                key: 'orderList',
+                path: '/promotion',
+                parent: 'promotion',
+                key: 'promotion',
                 component: () => (
                     <Switch>
                         <Route
-                            path="/orderList"
+                            path="/promotion"
                             exact
                             render={() =>
-                                <Bundle load={OrderManagementList}>{(App) => <App />}</Bundle>}
+                                <Bundle load={PromotionManagementList}>{(App) => <App />}</Bundle>}
                         />
-                        <Route
-                            path="/orderList/orderDetails/:id"
+                        {/* <Route
+                            path="/promotion/orderDetails/:id"
                             render={() => (<Bundle load={OrderManagementDetails}>
                                 {(App) => <App />}</Bundle>)}
-                        />
+                        /> */}
                     </Switch>
                 )
             }

@@ -45,7 +45,7 @@ const Routes = {
     // 订单管理列表
     orderList: '/orderList',
     // 促销管理列表
-    promtnMngList: '/promtnMngList'
+    promotion: '/promotion'
 }
 
 export default Routes;
