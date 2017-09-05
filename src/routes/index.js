@@ -529,6 +529,34 @@ const routes = [
                 )
             }
         ]
+    },
+    {
+        // 促销管理
+        key: 'ordergl',
+        iconType: 'pushpin',
+        routes: [
+            // 订单管理列表
+            {
+                path: '/orderList',
+                parent: 'ordergl',
+                key: 'orderList',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/orderList"
+                            exact
+                            render={() =>
+                                <Bundle load={OrderManagementList}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/orderList/orderDetails/:id"
+                            render={() => (<Bundle load={OrderManagementDetails}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                    </Switch>
+                )
+            }
+        ]
     }
 ];
 

@@ -43,7 +43,9 @@ const Routes = {
     // 收货单列表
     poRcvList: '/porcvlist',
     // 订单管理列表
-    orderList: '/orderList'
+    orderList: '/orderList',
+    // 促销管理列表
+    promtnMngList: '/promtnMngList'
 }
 
 export default Routes;
