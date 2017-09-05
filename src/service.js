@@ -577,7 +577,8 @@ export const createPoRcv = (params) => http.post('/provider/createPoRcv', params
 export const queryAdjustLibList = (params) => http.post('/provider/queryAdjustLibList', params);
 
 // 查询库存调整单详情{mock}
-export const queryAdjustDetail = (params) => http.post('/provider/queryAdjustDetail', params);
+// export const queryAdjustDetail = (params) => http.post('/provider/queryAdjustDetail', params);
+export const queryAdjustDetail = (params) => http.get('/imadjustment/getImAdjustment', params);
 /**
  * 供应商相关
  */

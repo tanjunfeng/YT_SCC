@@ -1,0 +1,39 @@
+.order-management {
+    .manage-form {
+        .ant-input {
+            width: 240px;
+            padding: 0 10px;
+        }
+        .ant-select {
+            width: 240px;
+        }
+        .ywc-smind {
+            vertical-align: middle;
+        }
+        .ywc-smind {
+            width: 240px;
+        }
+    }
+}
+.ant-modal {
+    .order-modal-label {
+        display: inline-block;
+        min-width: 90px;
+        margin-right: 8px;
+    }
+    .ant-select {
+        width: 100px;
+    }
+    textarea.ant-input {
+        width: 300px;
+        vertical-align: text-top;
+    }
+    .audit-pass {
+        display: inline-block;
+        margin: 50px 200px 0;
+        color: #f00;
+    }
+    .ant-form-inline .ant-form-explain {
+        left: 100px;
+    }
+}

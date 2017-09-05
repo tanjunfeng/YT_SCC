@@ -204,6 +204,16 @@ startApp({
                         name: "库存调整列表",
                     }
                 ]
+            },
+            {
+                code: "jyjszc",
+                name: "简易结算支持",
+                submenu: [
+                    {
+                        code: "gysjs",
+                        name: "供应商结算",
+                    }
+                ]
             }
         ]
     }
