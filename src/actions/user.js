@@ -4,7 +4,7 @@
  *
  * 用户信息 Action
  */
-import { login, fetchRights, user, queryLeftMenus, logout } from '../service';
+import { login, fetchRights, user, queryLeftMenus } from '../service';
 import ActionType from './ActionType';
 import { Sider } from '../view-model';
 import { CODE } from '../constant';
@@ -33,10 +33,10 @@ export const checkUser = () => (
     new Promise((resolve, reject) => {
         user().then((res) => {
             const { topMenus, ...datas } = res.data;
-            const currentItem = topMenus.find((item) => {
-                return item.authorityCode === CODE;
-            })
-            queryLeftMenus({menuId: currentItem.authorityId}).then((result) => {
+            const currentItem = topMenus.find((item) => (
+                item.authorityCode === CODE
+            ))
+            queryLeftMenus({ menuId: currentItem.authorityId }).then((result) => {
                 const { data } = result;
                 resolve({
                     topMenus: Sider(topMenus),
