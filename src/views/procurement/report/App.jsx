@@ -53,9 +53,11 @@ class Report extends PureComponent {
                             </Col>
                             <Col span={6}>
                                 {/* 这里放置根据采购单号生成的条形码 */}
-                                <div className="bar">
-                                    <img alt="条形码" src={data.barCodeUrl} />
-                                </div>
+                                { (data.barCodeUrl) &&
+                                    <div className="bar">
+                                        <img alt="条形码" src={data.barCodeUrl} />
+                                    </div>
+                                }
                             </Col>
                         </Row>
                         <Row type="flex" justify="start">

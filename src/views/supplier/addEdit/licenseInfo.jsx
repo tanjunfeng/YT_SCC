@@ -178,7 +178,7 @@ class LicenseInfo extends PureComponent {
                     registeredCapital,
                     businessScope,
                     registLicencePic: registLicencePic.files[0],
-                    guaranteeMoney
+                    guaranteeMoney: guaranteeMoney < 0 ? '' : guaranteeMoney
                 })
 
                 if (isEdit) {
@@ -207,15 +207,15 @@ class LicenseInfo extends PureComponent {
                         }
                     );
 
-                    if (!data.supplierBankInfo) {
-                        data.supplierBankInfo = detailData.supplierBankInfo;
-                    } else {
+                    if (data.supplierBankInfo) {
                         Object.assign(data.supplierBankInfo,
                             {
                                 id: detailData.supplierBankInfo.id,
                                 status: detailData.supplierBankInfo.status
                             }
                         );
+                    } else {
+                        data.supplierBankInfo = detailData.supplierBankInfo;
                     }
                 }
                 Object.assign(
@@ -236,6 +236,7 @@ class LicenseInfo extends PureComponent {
 
     handleGoTo = (key) => {
         this.props.onGoTo(key);
+        this.getVlaue();
     }
 
     handleSaveDraft() {
@@ -658,7 +659,7 @@ class LicenseInfo extends PureComponent {
                                             })(
                                                 <InputNumber
                                                     style={{ width: '200px' }}
-                                                    min={1}
+                                                    min={0}
                                                     max={99999999}
                                                     precision={2}
                                                     placeholder="供应商质保金收取金额"

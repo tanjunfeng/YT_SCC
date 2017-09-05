@@ -1,8 +1,155 @@
 {
-    "timestamp": 1502865291186,
+    "timestamp": 1504074540881,
     "code": 200,
     "message": {},
     "exception": null,
-    "data": [],
+    "data": [
+        {
+            "authorityId": 156,
+            "authorityCode": "gylspgl",
+            "displayName": "商品管理",
+            "menuList": [
+                {
+                    "authorityId": 214,
+                    "authorityCode": "commodifyList",
+                    "displayName": "商品管理列表",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 233,
+                    "authorityCode": "goodsClassification",
+                    "displayName": "商品分类列表",
+                    "menuList": []
+                }
+            ]
+        },
+        {
+            "authorityId": 160,
+            "authorityCode": "gysgl",
+            "displayName": "供应商管理",
+            "menuList": [
+                {
+                    "authorityId": 163,
+                    "authorityCode": "supplierInputList",
+                    "displayName": "供应商管理列表",
+                    "menuList": [
+                        {
+                            "authorityId": 229,
+                            "authorityCode": "queryManageList",
+                            "displayName": "新增供应商",
+                            "menuList": []
+                        }
+                    ]
+                },
+                {
+                    "authorityId": 164,
+                    "authorityCode": "suppliersAppList",
+                    "displayName": "供应商入驻申请列表",
+                    "menuList": []
+                }
+            ]
+        },
+        {
+            "authorityId": 215,
+            "authorityCode": "ordergl",
+            "displayName": "订单管理",
+            "menuList": [
+                {
+                    "authorityId": 216,
+                    "authorityCode": "orderList",
+                    "displayName": "订单管理列表",
+                    "menuList": []
+                }
+            ]
+        },
+        {
+            "authorityId": 222,
+            "authorityCode": "gylxtpz",
+            "displayName": "系统配置",
+            "menuList": [
+                {
+                    "authorityId": 224,
+                    "authorityCode": "dataDictionary",
+                    "displayName": "数据字典",
+                    "menuList": []
+                }
+            ]
+        },
+        {
+            "authorityId": 231,
+            "authorityCode": "dmtgl",
+            "displayName": "多媒体管理",
+            "menuList": [
+                {
+                    "authorityId": 232,
+                    "authorityCode": "jtygl",
+                    "displayName": "静态页管理",
+                    "menuList": []
+                }
+            ]
+        },
+        {
+            "authorityId": 193,
+            "authorityCode": "wappz",
+            "displayName": "移动端页面配置",
+            "menuList": [
+                {
+                    "authorityId": 217,
+                    "authorityCode": "adPlanList404",
+                    "displayName": "404页面广告配置",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 194,
+                    "authorityCode": "carouselManagement",
+                    "displayName": "轮播广告管理",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 219,
+                    "authorityCode": "homeStyle",
+                    "displayName": "首页样式管理",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 220,
+                    "authorityCode": "searchConfig",
+                    "displayName": "搜索推荐配置",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 221,
+                    "authorityCode": "categoryIcon",
+                    "displayName": "分类图标管理",
+                    "menuList": []
+                }
+            ]
+        },
+        {
+            "authorityId": 225,
+            "authorityCode": "procurementMng",
+            "displayName": "采购管理",
+            "menuList": [
+                {
+                    "authorityId": 226,
+                    "authorityCode": "poMngList",
+                    "displayName": "采购单管理列表",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 227,
+                    "authorityCode": "poPrintList",
+                    "displayName": "采购单打印列表",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 228,
+                    "authorityCode": "poRcvMngList",
+                    "displayName": "收货单管理列表",
+                    "menuList": []
+                }
+            ]
+        }
+    ],
     "success": true
 }

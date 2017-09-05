@@ -1,0 +1,79 @@
+{
+    "timestamp": 1504232989551,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": [
+        {
+            "before": 123,
+            "after": 131,
+            "categoryIndex": "supplierBasicInfo.id"
+        },
+        {
+            "before": 0,
+            "after": 1,
+            "categoryIndex": "supplierBasicInfo.status"
+        },
+        {
+            "before": 1,
+            "after": 2,
+            "categoryIndex": "supplierBasicInfo.grade"
+        },
+        {
+            "before": 131,
+            "after": null,
+            "categoryIndex": "supplierBasicInfo.modifyId"
+        },
+        {
+            "before": 123,
+            "after": 131,
+            "categoryIndex": "supplierOperTaxInfo.id"
+        },
+        {
+            "before": 131,
+            "after": null,
+            "categoryIndex": "supplierOperTaxInfo.modifyId"
+        },
+        {
+            "before": 0,
+            "after": 1,
+            "categoryIndex": "supplierOperTaxInfo.status"
+        },
+        {
+            "before": 1504693011315,
+            "after": 1505693011315,
+            "categoryIndex": "supplierOperTaxInfo.quaIdeExpiringDate"
+        },
+        {
+            "before": 123,
+            "after": 131,
+            "categoryIndex": "supplierBankInfo.id"
+        },
+        {
+            "before": 131,
+            "after": null,
+            "categoryIndex": "supplierBankInfo.modifyId"
+        },
+        {
+            "before": 0,
+            "after": 1,
+            "categoryIndex": "supplierBankInfo.status"
+        },
+        {
+            "before": 123,
+            "after": 131,
+            "categoryIndex": "supplierlicenseInfo.id"
+        },
+        {
+            "before": 131,
+            "after": null,
+            "categoryIndex": "supplierlicenseInfo.modifyId"
+        },
+        {
+            "before": 0,
+            "after": 1,
+            "categoryIndex": "supplierlicenseInfo.status"
+        }
+    ],
+    "success": true
+}
