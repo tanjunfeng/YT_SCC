@@ -59,10 +59,10 @@ const columns = [
 
 class ItemDetail extends PureComponent {
     componentDidMount() {
-        // const match = this.props.match.params;
+        const match = this.props.match.params;
         this.props.stockListDetail({
-            // id: match.id
-            id: 1000001
+            id: match.id
+            // id: 1000001
         });
     }
 
@@ -132,6 +132,7 @@ class ItemDetail extends PureComponent {
                         <Table
                             columns={columns}
                             dataSource={imAdjustmentItemVos}
+                            pagination={false}
                             rowKey={(record) => (Object.values(record).join('_'))}
                             footer={() => (
                                 <div className="total-wrap">
