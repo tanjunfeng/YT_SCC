@@ -178,7 +178,7 @@ class LicenseInfo extends PureComponent {
                     registeredCapital,
                     businessScope,
                     registLicencePic: registLicencePic.files[0],
-                    guaranteeMoney
+                    guaranteeMoney: guaranteeMoney < 0 ? '' : guaranteeMoney
                 })
 
                 if (isEdit) {
@@ -207,15 +207,15 @@ class LicenseInfo extends PureComponent {
                         }
                     );
 
-                    if (!data.supplierBankInfo) {
-                        data.supplierBankInfo = detailData.supplierBankInfo;
-                    } else {
+                    if (data.supplierBankInfo) {
                         Object.assign(data.supplierBankInfo,
                             {
                                 id: detailData.supplierBankInfo.id,
                                 status: detailData.supplierBankInfo.status
                             }
                         );
+                    } else {
+                        data.supplierBankInfo = detailData.supplierBankInfo;
                     }
                 }
                 Object.assign(
@@ -236,6 +236,7 @@ class LicenseInfo extends PureComponent {
 
     handleGoTo = (key) => {
         this.props.onGoTo(key);
+        this.getVlaue();
     }
 
     handleSaveDraft() {
@@ -650,10 +651,10 @@ class LicenseInfo extends PureComponent {
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>*供应商质保金收取金额：</span>
+                                        <span>供应商质保金收取金额：</span>
                                         <FormItem>
                                             {getFieldDecorator('guaranteeMoney', {
-                                                rules: [{ required: true, message: '请输入供应商质保金收取金额!' }],
+                                                rules: [{ required: false, message: '请输入供应商质保金收取金额!' }],
                                                 initialValue: supplierlicenseInfo.guaranteeMoney
                                             })(
                                                 <InputNumber
