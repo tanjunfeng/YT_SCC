@@ -9,7 +9,6 @@ import Utils from './util';
 import {
     settlementInfo,
     taxpayerNumber,
-    registLicenceNo,
     orgCodeInfoByCode,
     emerCont,
     settledCont,
@@ -43,7 +42,7 @@ export class Validator {
                 return;
             }
             checkSupplierName(
-                Utils.removeInvalid({companyName: e.target.value, id: _id, status: _status})
+                Utils.removeInvalid({ companyName: e.target.value, id: _id, status: _status })
             ).catch((res) => {
                 if (res.code) {
                     _this.props.form.setFields({
@@ -61,7 +60,7 @@ export class Validator {
                 return;
             }
             settlementInfo(
-                Utils.removeInvalid({spNo: e.target.value, id: _id, status: _status})
+                Utils.removeInvalid({ spNo: e.target.value, id: _id, status: _status })
             ).catch((res) => {
                 if (res.code) {
                     _this.props.form.setFields({
@@ -79,7 +78,7 @@ export class Validator {
                 return;
             }
             settlementInfo(
-                Utils.removeInvalid({spRegNo: e.target.value, id: _id, status: _status})
+                Utils.removeInvalid({ spRegNo: e.target.value, id: _id, status: _status })
             ).catch((res) => {
                 if (res.code) {
                     _this.props.form.setFields({
@@ -97,7 +96,7 @@ export class Validator {
                 return;
             }
             settlementInfo(
-                Utils.removeInvalid({mainAccountNo: e.target.value, id: _id, status: _status})
+                Utils.removeInvalid({ mainAccountNo: e.target.value, id: _id, status: _status })
             ).catch((res) => {
                 if (res.code) {
                     _this.props.form.setFields({
@@ -115,7 +114,7 @@ export class Validator {
                 return;
             }
             taxpayerNumber(
-                Utils.removeInvalid({taxpayerNumber: e.target.value, id: _id, status: _status})
+                Utils.removeInvalid({ taxpayerNumber: e.target.value, id: _id, status: _status })
             ).catch((res) => {
                 if (res.code) {
                     _this.props.form.setFields({
@@ -133,7 +132,7 @@ export class Validator {
                 return;
             }
             checkBankAccount(
-                Utils.removeInvalid({bankAccount: e.target.value, id: _id, status: _status})
+                Utils.removeInvalid({ bankAccount: e.target.value, id: _id, status: _status })
             ).catch((res) => {
                 if (res.code) {
                     _this.props.form.setFields({
@@ -151,7 +150,7 @@ export class Validator {
                 return;
             }
             checkLicenseNo(
-                Utils.removeInvalid({licenseNo: e.target.value, id: _id, status: _status})
+                Utils.removeInvalid({ licenseNo: e.target.value, id: _id, status: _status })
             ).catch((res) => {
                 if (res.code) {
                     _this.props.form.setFields({
@@ -169,7 +168,7 @@ export class Validator {
                 return;
             }
             orgCodeInfoByCode(
-                Utils.removeInvalid({orgCode: e.target.value, id: _id, status: _status})
+                Utils.removeInvalid({ orgCode: e.target.value, id: _id, status: _status })
             ).catch((res) => {
                 if (res.code) {
                     _this.props.form.setFields({
@@ -187,7 +186,7 @@ export class Validator {
                 return;
             }
             emerCont(
-                Utils.removeInvalid({phone: e.target.value, id: _id, status: _status})
+                Utils.removeInvalid({ phone: e.target.value, id: _id, status: _status })
             ).catch((res) => {
                 if (res.code) {
                     _this.props.form.setFields({
@@ -205,7 +204,9 @@ export class Validator {
                 return;
             }
             emerCont(
-                Utils.removeInvalid({companyPhoneNumber: e.target.value, id: _id, status: _status})
+                Utils.removeInvalid({
+                    companyPhoneNumber: e.target.value, id: _id, status: _status
+                })
             ).catch((res) => {
                 if (res.code) {
                     _this.props.form.setFields({
@@ -223,7 +224,7 @@ export class Validator {
                 return;
             }
             settledCont(
-                Utils.removeInvalid({phone: e.target.value, id: _id, status: _status})
+                Utils.removeInvalid({ phone: e.target.value, id: _id, status: _status })
             ).catch((res) => {
                 if (res.code) {
                     _this.props.form.setFields({
@@ -241,7 +242,7 @@ export class Validator {
                 return;
             }
             settledCont(
-                Utils.removeInvalid({email: e.target.value, id: _id, status: _status})
+                Utils.removeInvalid({ email: e.target.value, id: _id, status: _status })
             ).catch((res) => {
                 if (res.code) {
                     _this.props.form.setFields({
@@ -252,18 +253,16 @@ export class Validator {
                 }
             })
         },
-        orgId: (orgId, parentId, id) => {
-            return checkSupplierAddOrgId(
-                Utils.removeInvalid({orgId, parentId, id})
-            )
-        }
+        orgId: (orgId, parentId, id) => checkSupplierAddOrgId(
+            Utils.removeInvalid({ orgId, parentId, id })
+        )
     }
     static REGEX = {
         number: /^\d+(\.\d+)?$/,
     }
     static type = {
-        number: {pattern: /^\d+(\.\d+)?$/, message: '无效的数字!'},
-        phone: {pattern: /^0?(13|14|15|18)[0-9]{9}$/, message: '请输入正确的手机号'},
-        spNo: {pattern: /^XTXC.{4}$/, message: '请输入正确编码格式：YTXC+4位数字 例如（YTXC1001）'}
+        number: { pattern: /^\d+(\.\d+)?$/, message: '无效的数字!' },
+        phone: { pattern: /^0?(13|14|15|18)[0-9]{9}$/, message: '请输入正确的手机号' },
+        spNo: { pattern: /^XTXC.{4}$/, message: '请输入正确编码格式：YTXC+4位数字 例如（YTXC1001）' }
     }
 }

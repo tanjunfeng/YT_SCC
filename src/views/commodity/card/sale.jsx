@@ -51,11 +51,11 @@ class SaleCard extends Component {
     componentDidMount() {
     }
 
-     /**
-     * 将刷新后的getProdPurchaseByIds值赋值给getProdPurchaseByIds
-     *
-     * @param {Object} nextProps 刷新后的属性
-     */
+    /**
+    * 将刷新后的getProdPurchaseByIds值赋值给getProdPurchaseByIds
+    *
+    * @param {Object} nextProps 刷新后的属性
+    */
     componentWillReceiveProps(nextProps) {
         const { getProdPurchaseByIds } = nextProps;
         if (getProdPurchaseByIds !== this.props.getProdPurchaseByIds) {
@@ -84,7 +84,7 @@ class SaleCard extends Component {
             okText: '确认',
             cancelText: '取消',
             maskClosable: false,
-            onCancel: () => {},
+            onCancel: () => { },
             onOk: this.handleCheckUse
         });
     }
@@ -122,11 +122,11 @@ class SaleCard extends Component {
             productId: getProdPurchaseByIds.productId,
             status: getProdPurchaseByIds.status
         })
-        .then((res) => {
-            this.confirmUsed(res.success)
-        }).catch((res) => {
-            message.error(res.message)
-        })
+            .then((res) => {
+                this.confirmUsed(res.success)
+            }).catch((res) => {
+                message.error(res.message)
+            })
     }
 
     handleDelete(e) {
@@ -164,86 +164,91 @@ class SaleCard extends Component {
 
     renderCard = (datas) => {
         const { prefixCls, minUnit } = this.props;
-        return datas.map((item) => {
-            return (
-                <div
-                    key={item.id}
-                    className={`${prefixCls}-card-list`}
-                >
-                    <Card
-                        style={{ width: 350 }}
-                        className={
-                            `${prefixCls}-sale-card-${item.status}
+        return datas.map((item) => (
+            <div
+                key={item.id}
+                className={`${prefixCls}-card-list`}
+            >
+                <Card
+                    style={{ width: 350 }}
+                    className={
+                        `${prefixCls}-sale-card-${item.status}
                                 ${prefixCls}-supplierType-img`
-                        }
-                        onClick={() => this.handleCardClick(item)}
+                    }
+                    onClick={() => this.handleCardClick(item)}
+                >
+                    <a
+                        className={`${prefixCls}-close`}
+                        data-id={item.id}
+                        style={{ float: 'right' }}
+                        onClick={this.handleDelete}
                     >
-                        <a
-                            className={`${prefixCls}-close`}
-                            data-id={item.id}
-                            style={{ float: 'right' }}
-                            onClick={this.handleDelete}
-                        >
-                            &times;
+                        &times;
                         </a>
-                        <div className={`${prefixCls}-card-wrap`}>
-                            <p>
-                                <span>子公司 : </span>
-                                <span>{item.branchCompanyId}</span>
-                                <b>-</b>
-                                <span>{item.branchCompanyName}</span>
-                            </p>
-                            <p>
-                                <span>销售内装数 : </span>
-                                <span>{item.salesInsideNumber}</span>
-                            </p>
-                            <p>
-                                <span>起订量 : </span>
-                                <span>{item.minNumber}</span>
-                            </p>
-                            <p>
-                                <span>承诺发货时间 : </span>
-                                <span>下单后{item.deliveryDay}天内发货</span>
-                            </p>
-                            <p>
-                                <span>销售价格 : </span>
-                                <ul className={`${prefixCls}-step-price`}>
-                                    {
-                                        item.sellSectionPrices.map((i) => {
-                                            return (
-                                                <li className={`${prefixCls}-step-item`}>
-                                                    <span className={`${prefixCls}-step-item-left`}>
-                                                        {`${i.startNumber} - ${i.endNumber === MAXGOODS ? '最大值' : i.endNumber} (${minUnit})`}
-                                                    </span>
-                                                    <span className={`${prefixCls}-step-item-right`}>
-                                                        {`${i.price}元/${minUnit}`}
-                                                    </span>
-                                                </li>
-                                            )
-                                        })
-                                    }
-                                </ul>
-                            </p>
-                            <p>
-                                <span>建议零售价(元) : </span>
-                                <span>{item.suggestPrice}</span>
-                            </p>
-                        </div>
-                        <div
-                            className={`${prefixCls}-checkboxGroup`}
-                            onClick={(e) => e.stopPropagation()}
+                    <div className={`${prefixCls}-card-wrap`}>
+                        <p>
+                            <span>子公司 : </span>
+                            <span>{item.branchCompanyId}</span>
+                            <b>-</b>
+                            <span>{item.branchCompanyName}</span>
+                        </p>
+                        <p>
+                            <span>销售内装数 : </span>
+                            <span>{item.salesInsideNumber}</span>
+                        </p>
+                        <p>
+                            <span>起订量 : </span>
+                            <span>{item.minNumber}</span>
+                        </p>
+                        <p>
+                            <span>承诺发货时间 : </span>
+                            <span>下单后{item.deliveryDay}天内发货</span>
+                        </p>
+                        <p>
+                            <span>销售价格 : </span>
+                            <ul className={`${prefixCls}-step-price`}>
+                                {
+                                    item.sellSectionPrices.map((i) =>
+                                        (
+                                            <li className={`${prefixCls}-step-item`}>
+                                                <span
+                                                    className={`${prefixCls}-step-item-left`}
+                                                >
+                                                    {`${i.startNumber} - ${i.endNumber ===
+                                                        MAXGOODS ? '最大值' :
+                                                        i.endNumber} (${minUnit})`}
+                                                </span>
+                                                <span
+                                                    className={`${prefixCls}-step-item-right`}
+                                                >
+                                                    {`${i.price}元/${minUnit}`}
+                                                </span>
+                                            </li>
+                                        )
+                                    )
+                                }
+                            </ul>
+                        </p>
+                        <p>
+                            <span>建议零售价(元) : </span>
+                            <span>{item.suggestPrice}</span>
+                        </p>
+                    </div>
+                    <div
+                        className={`${prefixCls}-checkboxGroup`}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <Checkbox
+                            onClick={(e) => this.handleChangeStatus(e, item)}
+                            checked={!!item.status}
                         >
-                            <Checkbox
-                                onClick={(e) => this.handleChangeStatus(e, item)}
-                                checked={!!item.status}
-                            >
-                                启用
+                            启用
                             </Checkbox>
-                        </div>
-                    </Card>
-                </div>
-            )
-        })
+                    </div>
+                </Card>
+            </div>
+        )
+        )
     }
 
     render() {
@@ -253,19 +258,19 @@ class SaleCard extends Component {
                 <div>
                     {
                         initalValue.data && initalValue.data.length > 0
-                        ? <Form>
-                            {
-                                this.renderCard(initalValue.data)
-                            }
-                            <Pagination
-                                current={initalValue.pageNumber}
-                                pageSize={PAGE_SIZE}
-                                onChange={this.handlePaginationChange}
-                                total={initalValue.total}
-                            />
-                        </Form>
-                        : <div className={`${prefixCls}-no-data`}>
-                            暂无数据
+                            ? <Form>
+                                {
+                                    this.renderCard(initalValue.data)
+                                }
+                                <Pagination
+                                    current={initalValue.pageNumber}
+                                    pageSize={PAGE_SIZE}
+                                    onChange={this.handlePaginationChange}
+                                    total={initalValue.total}
+                                />
+                            </Form>
+                            : <div className={`${prefixCls}-no-data`}>
+                                暂无数据
                         </div>
                     }
                 </div>
@@ -276,6 +281,7 @@ class SaleCard extends Component {
 
 SaleCard.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
+    minUnit: PropTypes.objectOf(PropTypes.any),
     fetchUpdateProdPurchase: PropTypes.func,
     handleCardClick: PropTypes.func,
     fetchChangeProPurchaseStatus: PropTypes.func,
@@ -290,8 +296,8 @@ SaleCard.defaultProps = {
     prefixCls: 'card-line',
     isSale: false,
     initalValue: {},
-    handleDelete: () => {},
-    handleChangeStatus: () => {}
+    handleDelete: () => { },
+    handleChangeStatus: () => { }
 };
 
 export default Form.create()(SaleCard);

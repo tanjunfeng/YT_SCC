@@ -5,16 +5,12 @@
  * 营业执照信息
  */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Icon } from 'antd';
 import moment from 'moment';
 
-class LicenseInfo extends Component {
-    constructor(props) {
-        super(props);
-    }
-
+class LicenseInfo extends PureComponent {
     render() {
         const { detailData = {} } = this.props;
         const {
@@ -46,7 +42,7 @@ class LicenseInfo extends Component {
                                     &nbsp;
                                     {
                                         supplierOperTaxInfo.regCerExpiringDate &&
-                                        <span className="detail-message-endTime">证件到期日: 
+                                        <span className="detail-message-endTime">证件到期日:
                                             {moment(supplierOperTaxInfo.regCerExpiringDate).format('YYYY-MM-DD')}
                                         </span>
                                     }
@@ -56,7 +52,7 @@ class LicenseInfo extends Component {
                                     &nbsp;
                                     {
                                         supplierOperTaxInfo.quaIdeExpiringDate &&
-                                        <span className="detail-message-endTime">证件到期日: 
+                                        <span className="detail-message-endTime">证件到期日:
                                             {moment(supplierOperTaxInfo.quaIdeExpiringDate).format('YYYY-MM-DD')}
                                         </span>
                                     }
@@ -68,20 +64,13 @@ class LicenseInfo extends Component {
                                     &nbsp;
                                     {
                                         supplierOperTaxInfo.quaIdeExpiringDate &&
-                                        <span className="detail-message-endTime">证件到期日: 
+                                        <span className="detail-message-endTime">证件到期日:
                                             {moment(supplierOperTaxInfo.quaIdeExpiringDate).format('YYYY-MM-DD')}
                                         </span>
                                     }
                                 </Col>
                                 <Col span={8}><span>一般纳税人资格证电子版：</span>
                                     <span><a href={supplierOperTaxInfo.generalTaxpayerQualifiCerti} target="_blank">点击查看</a></span>
-                                    &nbsp;
-                                    {
-                                        supplierOperTaxInfo.taxpayerCertExpiringDate &&
-                                        <span className="detail-message-endTime">证件到期日: 
-                                            {moment(supplierOperTaxInfo.taxpayerCertExpiringDate).format('YYYY-MM-DD')}
-                                        </span>
-                                    }
                                 </Col>
                             </Row>
                         </div>
@@ -168,7 +157,7 @@ class LicenseInfo extends Component {
 }
 
 LicenseInfo.propTypes = {
-    initValue: PropTypes.objectOf(PropTypes.any),
+    detailData: PropTypes.objectOf(PropTypes.any)
 };
 
 export default LicenseInfo;

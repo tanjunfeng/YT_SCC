@@ -41,7 +41,7 @@ const columns = suppliersAppList;
     state => ({
         applicationData: state.toJS().supplier.data,
         auditVisible: state.toJS().supplier.auditVisible,
-        checkResonVisible: state.toJS().supplier.checkResonVisible,
+        checkReasonVisible: state.toJS().supplier.checkReasonVisible,
         insertSettlementResult: state.toJS().supplier.insertSettlementResult,
         querySettledList: state.toJS().supplier.querySettledList,
     }),
@@ -269,13 +269,11 @@ class SuppliersAppList extends PureComponent {
 }
 
 SuppliersAppList.propTypes = {
-    fetchQueryManageList: PropTypes.objectOf(PropTypes.any),
     querySettledList: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     getSupplierSettledList: PropTypes.bool,
     location: PropTypes.objectOf(PropTypes.any),
     modifyAuditVisible: PropTypes.bool,
-    applicationData: PropTypes.objectOf(PropTypes.any),
     modifyInformationVisible: PropTypes.bool,
 }
 

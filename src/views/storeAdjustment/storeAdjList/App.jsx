@@ -10,31 +10,12 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-    Form,
-    Dropdown,
-    Icon,
-    message,
-    Modal,
-    Menu
-} from 'antd';
-import {
-    stockAdjust,
-    // modifyCategoryVisible                                               // 弹框显示控制
-} from '../../../actions';
-
+import { Form } from 'antd';
+import { stockAdjust } from '../../../actions';
 import { PAGE_SIZE } from '../../../constant';                          // 每页分页条数
 import fetchCategoryList from '../../../actions/fetch/fetchCategory';   // 分类列表页商品排序管理
-import { categoryList } from '../../../constant/formColumns';           // 分类列表页商品排序管理列表
 import SearchForm from '../searchForm';
 import StoreAdjItem from '../storeAdjItem';
-
-import Utils from '../../../util/util';
-
-const confirm = Modal.confirm;
-// const FormItem = Form.Item;
-
-const columns = categoryList;
 
 @connect(
     state => ({
@@ -120,8 +101,8 @@ class StoreAdjList extends Component {
                         isSuplierAddMenu
                         onSearch={this.handleSearch}
                         onReset={this.handleFormReset}
-                        // onInput={this.handleInputSupplier}
-                        // onExcel={this.handleDownLoad}
+                    // onInput={this.handleInputSupplier}
+                    // onExcel={this.handleDownLoad}
                     />
                 </div>
                 <StoreAdjItem
@@ -138,6 +119,5 @@ StoreAdjList.propTypes = {
     stockAdjStore: PropTypes.arrayOf(PropTypes.any),
     stockAdjust: PropTypes.func
 }
-
 
 export default withRouter(Form.create()(StoreAdjList));

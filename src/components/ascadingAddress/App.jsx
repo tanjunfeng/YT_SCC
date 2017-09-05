@@ -15,7 +15,7 @@ import Utils from './util';
 
 const Option = Select.Option;
 
-const defaultItem = [{regionType: '-1', code: '-1', regionName: '全部'}]
+const defaultItem = [{ regionType: '-1', code: '-1', regionName: '全部' }]
 
 @connect(
     state => ({
@@ -29,9 +29,9 @@ class CasadingAddress extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.onfirstChange = ::this.onfirstChange;
-        this.onsecondChange = ::this.onsecondChange;
-        this.onthirdChange = ::this.onthirdChange;
+        this.onfirstChange = this.onfirstChange.bind(this);
+        this.onsecondChange = this.onsecondChange.bind(this);
+        this.onthirdChange = this.onthirdChange.bind(this);
 
         this.selectDate = {
             first: [],
@@ -82,13 +82,13 @@ class CasadingAddress extends PureComponent {
             if (defaultValue[2]) {
                 data.thirdValue = defaultValue[2];
             }
-            this.setState({...data});
+            this.setState({ ...data });
         })
-        for (let i = 0; i < showNum-1; i++) {
+        for (let i = 0; i < showNum - 1; i++) {
             const code = defaultValue[i];
             const index = i + 1;
             if (code && !(gegion[index] && gegion[index][code])) {
-                this.props.fetchRegionByCode({type: index, code}).then(() => {
+                this.props.fetchRegionByCode({ type: index, code }).then(() => {
                     this.setState({
                         select: 3
                     });
@@ -102,15 +102,14 @@ class CasadingAddress extends PureComponent {
     }
 
     onfirstChange(key) {
-        const { firstValue, secondValue, thirdValue } = this.state;
         const { gegion } = this.props;
-        const { first, second, Third } = this.selectDate;
+        const { first } = this.selectDate;
         const curr = first.filter(item => item.code === key)
         const { code } = curr[0];
         let select = 1;
         if (!(gegion[1] && gegion[1][code])) {
             select = 0;
-            this.props.fetchRegionByCode({type: 1, code}).then(() => {
+            this.props.fetchRegionByCode({ type: 1, code }).then(() => {
                 this.setState({
                     select: 1
                 })
@@ -130,14 +129,13 @@ class CasadingAddress extends PureComponent {
 
     onsecondChange(key) {
         const { gegion } = this.props;
-        const { firstValue, secondValue, thirdValue } = this.state;
-        const { first, second, Third } = this.selectDate;
+        const { second } = this.selectDate;
         const curr = second.filter((item) => item.code === key)
         const { code } = curr[0];
         let select = 2;
         if (!(gegion[2] && gegion[2][code])) {
             select = 1;
-            this.props.fetchRegionByCode({type: 2, code}).then(() => {
+            this.props.fetchRegionByCode({ type: 2, code }).then(() => {
                 this.setState({
                     select: 2
                 })
@@ -155,8 +153,6 @@ class CasadingAddress extends PureComponent {
     }
 
     onthirdChange(key) {
-        const { firstValue, secondValue, thirdValue } = this.state;
-        const { first, second, Third } = this.selectDate;
         this.setState({
             thirdValue: key,
             select: 3
@@ -213,49 +209,60 @@ class CasadingAddress extends PureComponent {
                     className="classify-selete-item classify-selete-item1"
                     placeholder="请选择"
                     value={this.resultData.firstValue}
-                    style={{width, marginRight}}
+                    style={{ width, marginRight }}
                     getPopupContainer={() => document.getElementById(`${id}`)}
                     onSelect={this.onfirstChange}
                 >
                     {
-                        first.map((item2, index) => {
-                            return <Option key={`${item2.regionType}-${item2.code}`} value={String(item2.code)}>{item2.regionName}</Option>;
-                        })
+                        first.map((item2) => (
+                            <Option
+                                key={`${item2.regionType}-${item2.code}`}
+                                value={String(item2.code)}
+                            >{item2.regionName}</Option>
+                        ))
                     }
                 </Select>
                 {
-                    select >= 1 && showNum > 1 &&
-                    <Select
-                        className="classify-selete-item classify-selete-item1"
-                        placeholder="请选择"
-                        style={{width, marginRight}}
-                        value={this.resultData.secondValue}
-                        getPopupContainer={() => document.getElementById(`${id}`)}
-                        onSelect={this.onsecondChange}
-                    >
-                        {
-                            second.map((item2, index) => {
-                                return <Option key={`${item2.regionType}-${item2.code}`} value={String(item2.code)}>{item2.regionName}</Option>;
-                            })
-                        }
-                    </Select>
+                    select >= 1 && showNum > 1 ?
+                        <Select
+                            className="classify-selete-item classify-selete-item1"
+                            placeholder="请选择"
+                            style={{ width, marginRight }}
+                            value={this.resultData.secondValue}
+                            getPopupContainer={() => document.getElementById(`${id}`)}
+                            onSelect={this.onsecondChange}
+                        >
+                            {
+                                second.map((item2) => (
+                                    <Option
+                                        key={`${item2.regionType}-${item2.code}`}
+                                        value={String(item2.code)}
+                                    >{item2.regionName}</Option>
+                                ))
+                            }
+                        </Select>
+                        : null
                 }
                 {
-                    select >= 2 && showNum > 2 &&
-                    <Select
-                        className="classify-selete-item classify-selete-item1"
-                        placeholder="请选择"
-                        style={{width, marginRight}}
-                        value={this.resultData.thirdValue}
-                        getPopupContainer={() => document.getElementById(`${id}`)}
-                        onSelect={this.onthirdChange}
-                    >
-                        {
-                            Third.map((item2, index) => {
-                                return <Option key={`${item2.regionType}-${item2.code}`} value={String(item2.code)}>{item2.regionName}</Option>;
-                            })
-                        }
-                    </Select>
+                    select >= 2 && showNum > 2 ?
+                        <Select
+                            className="classify-selete-item classify-selete-item1"
+                            placeholder="请选择"
+                            style={{ width, marginRight }}
+                            value={this.resultData.thirdValue}
+                            getPopupContainer={() => document.getElementById(`${id}`)}
+                            onSelect={this.onthirdChange}
+                        >
+                            {
+                                Third.map((item2) => (
+                                    <Option
+                                        key={`${item2.regionType}-${item2.code}`}
+                                        value={String(item2.code)}
+                                    >{item2.regionName}</Option>
+                                ))
+                            }
+                        </Select>
+                        : null
                 }
             </div>
         );
@@ -276,7 +283,7 @@ CasadingAddress.propTypes = {
 
 CasadingAddress.defaultProps = {
     showNum: '3',
-    onChange: () => {},
+    onChange: () => { },
     hasAll: false,
     defaultValue: [],
     width: '100px',

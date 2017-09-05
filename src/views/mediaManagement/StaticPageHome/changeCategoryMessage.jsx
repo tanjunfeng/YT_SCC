@@ -115,10 +115,6 @@ class ChangeMessage extends PureComponent {
         }
     }
 
-    handleInformationCancel() {
-        this.props.modifyMediaAddVisible({isVisible: false});
-    }
-
     render() {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls } = this.props;

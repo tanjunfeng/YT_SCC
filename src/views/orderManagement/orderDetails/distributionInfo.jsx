@@ -9,10 +9,7 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-    Form, Icon, Row, Col, Select, Modal,
-    Input, DatePicker, Button, message, Table
-} from 'antd';
+import { Form, Icon, Row, Col, Button, Table } from 'antd';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../constant/index';
 
@@ -82,9 +79,6 @@ class DistributionInformation extends PureComponent {
         super(props);
         this.state = {
         }
-    }
-
-    componentDidMount() {
     }
 
     render() {

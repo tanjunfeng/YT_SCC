@@ -13,15 +13,11 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import {
     Icon, Input, Form, Button,
-    Select, Row, Col, DatePicker,
-    InputNumber, message
- } from 'antd';
+    Select, Row, Col, InputNumber, message
+} from 'antd';
 
 import Utils from '../../../util/util';
-import { Validator } from '../../../util/validator';
 import Tip from '../../../util/tip';
-import InlineUpload from '../../../components/inlineUpload';
-import CasadingAddress from '../../../components/ascadingAddress';
 import {
     addSupplierMessage1, getWarehouse, fetchWarehouseInfo,
     deleteWarehouseInfo, insertSupplierAddress
@@ -30,17 +26,13 @@ import {
     pubFetchValueList
 } from '../../../actions/pub';
 import {
-    hanldeSupplier
+    hanldeSupplier, fetchSupplierNo
 } from '../../../actions/supplier';
-import InlineTree from '../../../components/inlineTree';
-import { fetchSupplierNo } from '../../../actions/supplier';
 import Warehouse from './warehouse';
 import SearchMind from '../../../components/searchMind';
 
-const dateFormat = 'YYYY-MM-DD';
 const FormItem = Form.Item;
 const Option = Select.Option;
-
 
 @connect(
     state => ({
@@ -83,9 +75,9 @@ class BasicInfo extends PureComponent {
     }
 
     componentDidMount() {
-        const { detailData, isEdit } = this.props;
+        const { isEdit } = this.props;
         if (!isEdit) {
-            this.props.fetchSupplierNo({type: 'SP_ADR'});
+            this.props.fetchSupplierNo({ type: 'SP_ADR' });
         }
     }
 
@@ -109,7 +101,7 @@ class BasicInfo extends PureComponent {
             Tip(true, '请选择子公司！');
             return;
         }
-  
+
         // 供应商供应地点没选择
         if (!wareHouseIds.length) {
             Tip(true, '请选择送货信息！');
@@ -156,7 +148,7 @@ class BasicInfo extends PureComponent {
                         purchaseEmail
                     },
                     spAdrDeliverys: wareHouseIds.map((item) => {
-                        return {warehouseId: item};
+                        return { warehouseId: item };
                     }),
                     parentId: detailData.id
                 }
@@ -197,8 +189,8 @@ class BasicInfo extends PureComponent {
             data.commitType = type;
             this.props.hanldeSupplier(data,
                 isEdit
-                ? 'updateSupplierAddressInfo'
-                : 'insertSupplierAddressInfo'
+                    ? 'updateSupplierAddressInfo'
+                    : 'insertSupplierAddressInfo'
             ).then((res) => {
                 this.props.history.push('/supplierInputList')
             });
@@ -244,7 +236,7 @@ class BasicInfo extends PureComponent {
      * @param {number} grade 供应商等级
      */
     renderGrade(grade) {
-        switch(grade) {
+        switch (grade) {
             case 1:
                 return '战略供应商'
             case 2:
@@ -258,7 +250,7 @@ class BasicInfo extends PureComponent {
     }
 
     renderStatus(status) {
-        switch(status) {
+        switch (status) {
             case 0:
                 return '制表'
             case 1:
@@ -278,8 +270,8 @@ class BasicInfo extends PureComponent {
     renderName(spAdrBasic, supplierBasicInfo) {
         const { isEdit } = this.props;
         const { providerName } = spAdrBasic;
-        const { companyName  } = supplierBasicInfo;
-        {isEdit && !this.company ? spAdrBasic.providerName : `${this.company} - ${supplierBasicInfo.companyName}`}
+        const { companyName } = supplierBasicInfo;
+        { isEdit && !this.company ? spAdrBasic.providerName : `${this.company} - ${supplierBasicInfo.companyName}` }
         if (isEdit && !this.company) {
             this.childName = providerName;
             return providerName;
@@ -359,7 +351,7 @@ class BasicInfo extends PureComponent {
                                         <span>*供应商地点经营状态：</span>
                                         <FormItem>
                                             {getFieldDecorator('operaStatus', {
-                                                rules: [{required: true, message: '请选择供应商地点经营状态'}],
+                                                rules: [{ required: true, message: '请选择供应商地点经营状态' }],
                                                 initialValue: isEdit ? `${spAdrBasic.operaStatus}` : '1'
                                             })(
                                                 <Select
@@ -369,7 +361,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="1">启用</Option>
                                                     <Option value="0">禁用</Option>
                                                 </Select>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -385,7 +377,7 @@ class BasicInfo extends PureComponent {
                                                     min={0}
                                                     placeholder="周期"
                                                 />
-                                            )}
+                                                )}
                                             &nbsp;天
                                         </FormItem>
                                     </Col>
@@ -393,7 +385,7 @@ class BasicInfo extends PureComponent {
                                         <span>*账期：</span>
                                         <FormItem>
                                             {getFieldDecorator('settlementPeriod', {
-                                                rules: [{required: true, message: '请选择账期！'}],
+                                                rules: [{ required: true, message: '请选择账期！' }],
                                                 initialValue: isEdit ? `${spAdrBasic.settlementPeriod}` : '0'
                                             })(
                                                 <Select
@@ -405,7 +397,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="2">月结</Option>
                                                     {/* <Option value="3">票到付款</Option> */}
                                                 </Select>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -414,7 +406,7 @@ class BasicInfo extends PureComponent {
                                         <span>*供应商地点级别：</span>
                                         <FormItem>
                                             {getFieldDecorator('grade', {
-                                                rules: [{required: true, message: '请选择供应商地点级别'}],
+                                                rules: [{ required: true, message: '请选择供应商地点级别' }],
                                                 initialValue: isEdit ? `${spAdrBasic.grade}` : '1'
                                             })(
                                                 <Select
@@ -427,14 +419,14 @@ class BasicInfo extends PureComponent {
                                                     <Option value="4">代销商</Option>
                                                     <Option value="5">其他</Option>
                                                 </Select>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
                                         <span>*供应商地点所属区域：</span>
                                         <FormItem>
                                             {getFieldDecorator('belongArea', {
-                                                rules: [{required: true, message: '请选择供应商地点所属区域'}],
+                                                rules: [{ required: true, message: '请选择供应商地点所属区域' }],
                                                 initialValue: isEdit ? `${spAdrBasic.belongArea}` : undefined
                                             })(
                                                 <Select
@@ -451,7 +443,7 @@ class BasicInfo extends PureComponent {
                                                         </Option>)
                                                     }
                                                 </Select>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -460,7 +452,7 @@ class BasicInfo extends PureComponent {
                                         <span>*供应商付款方式：</span>
                                         <FormItem>
                                             {getFieldDecorator('payType', {
-                                                rules: [{required: true, message: '请选择付款方式！'}],
+                                                rules: [{ required: true, message: '请选择付款方式！' }],
                                                 initialValue: isEdit ? `${spAdrBasic.payType}` : '0'
                                             })(
                                                 <Select
@@ -472,7 +464,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="2">现金</Option>
                                                     <Option value="3">支票</Option>
                                                 </Select>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -490,7 +482,7 @@ class BasicInfo extends PureComponent {
                                                         const { data } = res.data;
                                                         if (!data.length) {
                                                             message.warning('无可用子公司，无法完成后续操作！');
-                                                        } 
+                                                        }
                                                         return res;
                                                     })
                                                 }
@@ -523,7 +515,7 @@ class BasicInfo extends PureComponent {
                                         <span>*付款条件：</span>
                                         <FormItem>
                                             {getFieldDecorator('payCondition', {
-                                                rules: [{required: true, message: '请选择付款条件！'}],
+                                                rules: [{ required: true, message: '请选择付款条件！' }],
                                                 initialValue: isEdit ? `${spAdrBasic.payCondition}` : '1'
                                             })(
                                                 <Select
@@ -533,8 +525,9 @@ class BasicInfo extends PureComponent {
                                                     <Option value="1">票到七天</Option>
                                                     <Option value="2">票到十五天</Option>
                                                     <Option value="3">票到三十天</Option>
+                                                    <Option value="4">票到付款</Option>
                                                 </Select>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -588,14 +581,14 @@ class BasicInfo extends PureComponent {
                                             {getFieldDecorator('providerUserName', {
                                                 rules: [
                                                     { required: true, message: '请输入供应商姓名!' },
-                                                    {max: 6, message: '字符长度超限'}
+                                                    { max: 6, message: '字符长度超限' }
                                                 ],
                                                 initialValue: spAdrContact.providerName
                                             })(
                                                 <Input
                                                     placeholder="供应商姓名"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -618,7 +611,7 @@ class BasicInfo extends PureComponent {
                                                 <Input
                                                     placeholder="供应商电话"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -629,14 +622,14 @@ class BasicInfo extends PureComponent {
                                             {getFieldDecorator('providerEmail', {
                                                 rules: [
                                                     { required: true, message: '请输入供应商邮箱!' },
-                                                    { type: 'email', message: '请输入正确的邮箱!'}
+                                                    { type: 'email', message: '请输入正确的邮箱!' }
                                                 ],
                                                 initialValue: spAdrContact.providerEmail
                                             })(
                                                 <Input
                                                     placeholder="供应商邮箱"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -647,14 +640,14 @@ class BasicInfo extends PureComponent {
                                             {getFieldDecorator('purchaseName', {
                                                 rules: [
                                                     { required: true, message: '请输入采购员姓名!' },
-                                                    {max: 6, message: '字符长度超限'}
+                                                    { max: 6, message: '字符长度超限' }
                                                 ],
                                                 initialValue: spAdrContact.purchaseName
                                             })(
                                                 <Input
                                                     placeholder="采购员姓名"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -677,7 +670,7 @@ class BasicInfo extends PureComponent {
                                                 <Input
                                                     placeholder="采购员电话"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -688,14 +681,14 @@ class BasicInfo extends PureComponent {
                                             {getFieldDecorator('purchaseEmail', {
                                                 rules: [
                                                     { required: true, message: '请输入采购员邮箱!' },
-                                                    { type: 'email', message: '请输入正确的邮箱!'}
+                                                    { type: 'email', message: '请输入正确的邮箱!' }
                                                 ],
                                                 initialValue: spAdrContact.purchaseEmail
                                             })(
                                                 <Input
                                                     placeholder="采购员邮箱"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -713,10 +706,10 @@ class BasicInfo extends PureComponent {
 }
 
 BasicInfo.propTypes = {
-    onGoTo: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     isEdit: PropTypes.bool,
     detailData: PropTypes.objectOf(PropTypes.any),
-    addSupplierMessage1: PropTypes.func,
+    detailSp: PropTypes.objectOf(PropTypes.any),
+    fetchSupplierNo: PropTypes.func
 }
 export default Form.create()(withRouter(BasicInfo));

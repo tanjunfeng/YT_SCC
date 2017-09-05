@@ -15,7 +15,6 @@ import {
     updateSupplierInfo,
     insertSupplierAddressInfo,
     updateSupplierAddressInfo,
-    insertOrUpdateSupplierInfo,
     querySettledList,
     fetchQueryManageList,
     querySupplierPlaceRegion,
@@ -151,10 +150,10 @@ export const hanldeSupplier = (params, type) => dispatch => (
 /**
  * 获取供应商供应省市
  */
- const receiveinPlaceRegion = (data) => ({
+const receiveinPlaceRegion = (data) => ({
     type: ActionType.RECEIVE_PLACE_REGION,
     payload: data,
-})
+});
 
 export const queryPlaceRegion = (params) => dispatch => (
     new Promise((resolve, reject) => {
@@ -197,7 +196,7 @@ const receiveAuditSupplierEditInfo = (data) => ({
     payload: data,
 })
 
-export const AuditSupplierEditInfo = (params) => dispatch => (
+export const auditSupplierEditInfoAction = (params) => dispatch => (
     new Promise((resolve, reject) => {
         auditSupplierEditInfo(params)
             .then(res => {
@@ -232,7 +231,7 @@ export const UpdateProdPurchase = (params) => dispatch => (
 )
 
 // 清空详情数据
-export const removeDetailData = (params) =>dispatch => (dispatch({
+export const removeDetailData = () => dispatch => (dispatch({
     type: ActionType.REMOVE_DETAIL_DATA,
     payload: {}
 }))

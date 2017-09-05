@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import {
     Icon, Input, Form, Button,
-    Select, Row, Col, DatePicker,
+    Row, Col, DatePicker,
     Checkbox, message,
     InputNumber
 } from 'antd';
@@ -28,14 +28,12 @@ import {
 import {
     hanldeSupplier
 } from '../../../actions/supplier';
-import InlineTree from '../../../components/inlineTree';
 import Tools from './utils';
 import { TABCONTENT } from '../../../constant';
 
 const dateFormat = 'YYYY-MM-DD';
 const { RangePicker } = DatePicker
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 @connect(
     state => ({
@@ -62,7 +60,7 @@ class LicenseInfo extends PureComponent {
         this.companyAddress = {};
         this.licenseLoc = {}
         const { detailData = {} } = props;
-        const { supplierlicenseInfo = {} } = detailData; 
+        const { supplierlicenseInfo = {} } = detailData;
         this.state = {
             checked: !!supplierlicenseInfo.perpetualManagement,
             isSubmit: false
@@ -75,16 +73,12 @@ class LicenseInfo extends PureComponent {
         TABCONTENT.LicenseInfo = this;
     }
 
-    handleGoTo = (key) => {
-        this.props.onGoTo(key);
-    }
-
     getVlaue(callback) {
-        const { form, onGoTo, isEdit, detailData = {}, data } = this.props;
+        const { form, isEdit, detailData = {}, data } = this.props;
         const { checked } = this.state;
         Tools.checkAddress(this.companyAddress, 'companyLoc', this);
         Tools.checkAddress(this.licenseLoc, 'licenseLocSpace', this);
-        const {firstValue, secondValue, thirdValue} = this.companyAddress;
+        const { firstValue, secondValue, thirdValue } = this.companyAddress;
         if (
             firstValue === '-1'
             || secondValue === '-1'
@@ -93,34 +87,37 @@ class LicenseInfo extends PureComponent {
             || this.licenseLoc.secondValue === '-1'
             || this.licenseLoc.thirdValue === '-1'
         ) {
-            return null;
+            return;
         }
-        const registrationCertificate = this.refs.registrationCertificate.getValue();
-        const qualityIdentification = this.refs.qualityIdentification.getValue();
-        const generalTaxpayerQualifiCerti = this.refs.generalTaxpayerQualifiCerti.getValue();
-        const foodBusinessLicense = this.refs.foodBusinessLicense.getValue();
-        const legalRepreCardPic = this.refs.legalRepreCardPic.getValue();
-        const registLicencePic = this.refs.registLicencePic.getValue();
+        const registrationCertificate = this.registrationCertificate.getValue();
+        const qualityIdentification = this.qualityIdentification.getValue();
+        const generalTaxpayerQualifiCerti = this.generalTaxpayerQualifiCerti.getValue();
+        const foodBusinessLicense = this.foodBusinessLicense.getValue();
+        const legalRepreCardPic = this.legalRepreCardPic.getValue();
+        const registLicencePic = this.registLicencePic.getValue();
 
         if (generalTaxpayerQualifiCerti) {
-            const { files, time } = generalTaxpayerQualifiCerti;
-            if (files.length === 0 || !time) {
-                message.error('请上传一般纳税人资格证电子版和有限时间！')
-                return null;
+            const { files } = generalTaxpayerQualifiCerti;
+            if (files.length === 0) {
+                message.error('请上传一般纳税人资格证电子版！')
+                return;
             }
         }
 
         if (registLicencePic) {
-            const { files, time } = registLicencePic;
+            const { files } = registLicencePic;
             if (files.length === 0) {
                 message.error('请上传营业执照副本电子版！')
-                return null;
+                return;
             }
         }
 
         form.validateFields((err, values) => {
             if (!err) {
-                const { firstValue, secondValue, thirdValue } = this.companyAddress;
+                // const { firstValue, secondValue, thirdValue } = this.companyAddress;
+                const first = this.companyAddress.firstValue;
+                const second = this.companyAddress.secondValue;
+                const third = this.companyAddress.thirdValue;
                 const {
                     businessScope,
                     companyDetailAddress,
@@ -144,19 +141,18 @@ class LicenseInfo extends PureComponent {
                 }
 
                 const supplierOperTaxInfo = Utils.removeInvalid({
-                    companyLocProvince: firstValue.regionName,
-                    companyLocCity: secondValue.regionName,
-                    companyLocCounty: thirdValue.regionName,
-                    companyLocProvinceCode: firstValue.code,
-                    companyLocCityCode: secondValue.code,
-                    companyLocCountyCode: thirdValue.code,
+                    companyLocProvince: first.regionName,
+                    companyLocCity: second.regionName,
+                    companyLocCounty: third.regionName,
+                    companyLocProvinceCode: first.code,
+                    companyLocCityCode: second.code,
+                    companyLocCountyCode: third.code,
                     companyDetailAddress,
                     registrationCertificate: registrationCertificate.files[0],
                     regCerExpiringDate: registrationCertificate.time,
                     qualityIdentification: qualityIdentification.files[0],
                     quaIdeExpiringDate: qualityIdentification.time,
                     generalTaxpayerQualifiCerti: generalTaxpayerQualifiCerti.files[0],
-                    taxpayerCertExpiringDate: generalTaxpayerQualifiCerti.time,
                     foodBusinessLicense: foodBusinessLicense.files[0],
                     businessLicenseExpiringDate: foodBusinessLicense.time
                 })
@@ -182,9 +178,9 @@ class LicenseInfo extends PureComponent {
                     registeredCapital,
                     businessScope,
                     registLicencePic: registLicencePic.files[0],
-                    guaranteeMoney
+                    guaranteeMoney: guaranteeMoney < 0 ? '' : guaranteeMoney
                 })
-                
+
                 if (isEdit) {
                     Object.assign(supplierOperTaxInfo,
                         {
@@ -211,15 +207,15 @@ class LicenseInfo extends PureComponent {
                         }
                     );
 
-                    if (!data.supplierBankInfo) {
-                        data.supplierBankInfo = detailData.supplierBankInfo;
-                    } else {
+                    if (data.supplierBankInfo) {
                         Object.assign(data.supplierBankInfo,
                             {
                                 id: detailData.supplierBankInfo.id,
-                                status:  detailData.supplierBankInfo.status
+                                status: detailData.supplierBankInfo.status
                             }
                         );
+                    } else {
+                        data.supplierBankInfo = detailData.supplierBankInfo;
                     }
                 }
                 Object.assign(
@@ -232,10 +228,15 @@ class LicenseInfo extends PureComponent {
                         ...data
                     }
                 )
-
-                callback && callback()
+                if (typeof callback === 'function') callback();
             }
+            return '';
         })
+    }
+
+    handleGoTo = (key) => {
+        this.props.onGoTo(key);
+        this.getVlaue();
     }
 
     handleSaveDraft() {
@@ -286,7 +287,7 @@ class LicenseInfo extends PureComponent {
         const { getFieldError } = this.props.form;
         if (
             getFieldError('companyLoc')
-            && this.companyAddress.thirdValue
+            && this.companyAddress.thirdValueValue
             && this.companyAddress.thirdValue !== '-1'
         ) {
             this.props.form.setFields({
@@ -312,9 +313,9 @@ class LicenseInfo extends PureComponent {
             })
         }
     }
- 
+
     handleNextStep() {
-        
+
     }
 
     handleOperatingPeriod() {
@@ -358,17 +359,20 @@ class LicenseInfo extends PureComponent {
                                                         key="companyLoc"
                                                         defaultValue={
                                                             isEdit
-                                                            ? [
-                                                                supplierOperTaxInfo.companyLocProvinceCode,
-                                                                supplierOperTaxInfo.companyLocCityCode,
-                                                                supplierOperTaxInfo.companyLocCountyCode
-                                                            ]
-                                                            : []
+                                                                ? [
+                                                                    supplierOperTaxInfo
+                                                                        .companyLocProvinceCode,
+                                                                    supplierOperTaxInfo
+                                                                        .companyLocCityCode,
+                                                                    supplierOperTaxInfo
+                                                                        .companyLocCountyCode
+                                                                ]
+                                                                : []
                                                         }
                                                         onChange={this.handleCompanyAddressChange}
                                                     />
                                                 </div>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -379,12 +383,13 @@ class LicenseInfo extends PureComponent {
                                                     { required: true, message: '请输入公司详细地址!' },
                                                     { max: 30, message: '详细地址最长30位' }
                                                 ],
-                                                initialValue: supplierOperTaxInfo.companyDetailAddress
+                                                initialValue: supplierOperTaxInfo
+                                                    .companyDetailAddress
                                             })(
                                                 <Input
                                                     placeholder="公司详细地址"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -393,9 +398,11 @@ class LicenseInfo extends PureComponent {
                                         <span>食品安全认证：</span>
                                         <InlineUpload
                                             showEndTime
-                                            datas={isEdit ? [supplierOperTaxInfo.qualityIdentification] : []}
-                                            defaultTime={isEdit ? supplierOperTaxInfo.quaIdeExpiringDate : null}
-                                            ref="qualityIdentification"
+                                            datas={isEdit ?
+                                                [supplierOperTaxInfo.qualityIdentification] : []}
+                                            defaultTime={isEdit ?
+                                                supplierOperTaxInfo.quaIdeExpiringDate : null}
+                                            ref={node => { this.qualityIdentification = node }}
                                             key="qualityIdentification"
                                         />
                                     </Col>
@@ -403,9 +410,11 @@ class LicenseInfo extends PureComponent {
                                         <span>商标注册证/受理通知书：</span>
                                         <InlineUpload
                                             showEndTime
-                                            datas={isEdit ? [supplierOperTaxInfo.registrationCertificate] : []}
-                                            defaultTime={isEdit ? supplierOperTaxInfo.regCerExpiringDate : null}
-                                            ref="registrationCertificate"
+                                            datas={isEdit ?
+                                                [supplierOperTaxInfo.registrationCertificate] : []}
+                                            defaultTime={isEdit ?
+                                                supplierOperTaxInfo.regCerExpiringDate : null}
+                                            ref={node => { this.registrationCertificate = node }}
                                             key="registrationCertificate"
                                         />
                                     </Col>
@@ -415,19 +424,22 @@ class LicenseInfo extends PureComponent {
                                         <span>食品经营许可证：</span>
                                         <InlineUpload
                                             showEndTime
-                                            datas={isEdit ? [supplierOperTaxInfo.foodBusinessLicense] : []}
-                                            defaultTime={isEdit ? supplierOperTaxInfo.businessLicenseExpiringDate : null}
-                                            ref="foodBusinessLicense"
+                                            datas={isEdit ?
+                                                [supplierOperTaxInfo.foodBusinessLicense] : []}
+                                            defaultTime={isEdit ? supplierOperTaxInfo
+                                                .businessLicenseExpiringDate : null}
+                                            ref={node => { this.foodBusinessLicense = node }}
                                             key="foodBusinessLicense"
                                         />
                                     </Col>
                                     <Col span={8}>
                                         <span>*一般纳税人资格证电子版：</span>
                                         <InlineUpload
-                                            showEndTime
-                                            datas={isEdit ? [supplierOperTaxInfo.generalTaxpayerQualifiCerti] : []}
-                                            defaultTime={isEdit ? supplierOperTaxInfo.taxpayerCertExpiringDate : null}
-                                            ref="generalTaxpayerQualifiCerti"
+                                            datas={isEdit ? [supplierOperTaxInfo
+                                                .generalTaxpayerQualifiCerti] : []}
+                                            ref={node => {
+                                                this.generalTaxpayerQualifiCerti = node
+                                            }}
                                             key="generalTaxpayerQualifiCerti"
                                         />
                                     </Col>
@@ -462,14 +474,19 @@ class LicenseInfo extends PureComponent {
                                                         }
                                                     }
                                                 ],
-                                                initialValue: supplierlicenseInfo.registLicenceNumber
+                                                initialValue: supplierlicenseInfo
+                                                    .registLicenceNumber
                                             })(
                                                 <Input
-                                                    style={{width: '200px'}}
+                                                    style={{ width: '200px' }}
                                                     placeholder="注册号(营业执照号)"
-                                                    onBlur={(e) => { Validator.repeat.licenseNo(e, this, supplierlicenseInfo.id, supplierlicenseInfo.status) }}
+                                                    onBlur={(e) => {
+                                                        Validator.repeat.licenseNo(e, this,
+                                                            supplierlicenseInfo.id,
+                                                            supplierlicenseInfo.status)
+                                                    }}
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -489,12 +506,13 @@ class LicenseInfo extends PureComponent {
                                                         }
                                                     }
                                                 ],
-                                                initialValue: supplierlicenseInfo.legalRepresentative
+                                                initialValue: supplierlicenseInfo
+                                                    .legalRepresentative
                                             })(
                                                 <Input
                                                     placeholder="法定代表"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -516,7 +534,7 @@ class LicenseInfo extends PureComponent {
                                                 <Input
                                                     placeholder="法人身份证号"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -525,19 +543,18 @@ class LicenseInfo extends PureComponent {
                                         <span>*成立日期：</span>
                                         <FormItem>
                                             {getFieldDecorator('establishDate', {
-                                                rules: [{required: true, message: '请选择供应商入驻日期'}],
-                                                initialValue: isEdit ? moment(supplierlicenseInfo.establishDate) : null
+                                                rules: [{ required: true, message: '请选择供应商入驻日期' }],
+                                                initialValue: isEdit ?
+                                                    moment(supplierlicenseInfo.establishDate) : null
                                             })(
                                                 <DatePicker
                                                     getCalendarContainer={() => document.getElementById('createTime')}
-                                                    disabledDate={(current) => {
-                                                        return (
-                                                            current && current.valueOf() > Date.now()
-                                                        )
-                                                    }}
+                                                    disabledDate={(current) => (
+                                                        current && current.valueOf() > Date.now()
+                                                    )}
                                                     format={dateFormat}
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -551,17 +568,21 @@ class LicenseInfo extends PureComponent {
                                                         key="licenseLocSpace"
                                                         defaultValue={
                                                             isEdit
-                                                            ? [
-                                                                supplierlicenseInfo.licenseLocProvinceCode,
-                                                                supplierlicenseInfo.licenseLocCityCode,
-                                                                supplierlicenseInfo.licenseLocCountyCode
-                                                            ]
-                                                            : []
+                                                                ? [
+                                                                    supplierlicenseInfo
+                                                                        .licenseLocProvinceCode,
+                                                                    supplierlicenseInfo
+                                                                        .licenseLocCityCode,
+                                                                    supplierlicenseInfo
+                                                                        .licenseLocCountyCode
+                                                                ]
+                                                                : []
                                                         }
-                                                        onChange={this.handleCompanyLicenseLocChange}
+                                                        onChange={
+                                                            this.handleCompanyLicenseLocChange}
                                                     />
                                                 </div>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -569,22 +590,22 @@ class LicenseInfo extends PureComponent {
                                     <Col span={8} id="useDate">
                                         <span>*营业期限：</span>
                                         {getFieldDecorator('startEndDate', {
-                                            rules: [{required: true, message: '请选择供应商入驻日期'}],
+                                            rules: [{ required: true, message: '请选择供应商入驻日期' }],
                                             initialValue: [
                                                 (isEdit && supplierlicenseInfo.startDate)
-                                                ? moment(supplierlicenseInfo.startDate)
-                                                : null,
+                                                    ? moment(supplierlicenseInfo.startDate)
+                                                    : null,
                                                 (isEdit && supplierlicenseInfo.endDate)
-                                                ? moment(supplierlicenseInfo.endDate)
-                                                : null
+                                                    ? moment(supplierlicenseInfo.endDate)
+                                                    : null
                                             ]
                                         })(
                                             <RangePicker
                                                 disabled={this.state.checked}
                                                 getCalendarContainer={() => document.getElementById('useDate')}
                                             />
-                                        )}
-                                        <span style={{marginLeft: '10px'}}>
+                                            )}
+                                        <span style={{ marginLeft: '10px' }}>
                                             <Checkbox
                                                 checked={this.state.checked}
                                                 onChange={this.handleOperatingPeriod}
@@ -606,7 +627,7 @@ class LicenseInfo extends PureComponent {
                                                 <Input
                                                     placeholder="营业执照详细地址"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -619,31 +640,31 @@ class LicenseInfo extends PureComponent {
                                                 initialValue: supplierlicenseInfo.registeredCapital
                                             })(
                                                 <InputNumber
-                                                    style={{width: '200px'}}
+                                                    style={{ width: '200px' }}
                                                     min={0}
                                                     max={99999999}
                                                     precision={2}
                                                     placeholder="注册资本"
                                                 />
-                                            )}
+                                                )}
                                             &nbsp;万元
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
-                                        <span>*供应商质保金收取金额：</span>
+                                        <span>供应商质保金收取金额：</span>
                                         <FormItem>
                                             {getFieldDecorator('guaranteeMoney', {
-                                                rules: [{ required: true, message: '请输入供应商质保金收取金额!' }],
+                                                rules: [{ required: false, message: '请输入供应商质保金收取金额!' }],
                                                 initialValue: supplierlicenseInfo.guaranteeMoney
                                             })(
                                                 <InputNumber
-                                                    style={{width: '200px'}}
+                                                    style={{ width: '200px' }}
                                                     min={0}
                                                     max={99999999}
                                                     precision={2}
                                                     placeholder="供应商质保金收取金额"
                                                 />
-                                            )}
+                                                )}
                                             &nbsp;元
                                         </FormItem>
                                     </Col>
@@ -655,17 +676,17 @@ class LicenseInfo extends PureComponent {
                                             {getFieldDecorator('businessScope', {
                                                 rules: [
                                                     { required: true, message: '请输入经营范围!' },
-                                                    {max: 300, message: '字符长度超限'}
+                                                    { max: 300, message: '字符长度超限' }
                                                 ],
                                                 initialValue: supplierlicenseInfo.businessScope
                                             })(
                                                 <Input
                                                     type="textarea"
                                                     autosize={{ minRows: 2, maxRows: 6 }}
-                                                    style={{maxWidth: '200px'}}
+                                                    style={{ maxWidth: '200px' }}
                                                     placeholder="经营范围"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -673,16 +694,16 @@ class LicenseInfo extends PureComponent {
                                         <InlineUpload
                                             showEndTime={false}
                                             limit={2}
-                                            tilte='请上传身份证正反面'
+                                            tilte={'请上传身份证正反面'}
                                             datas={
                                                 isEdit
-                                                ? [
-                                                    supplierlicenseInfo.legalRepreCardPic1,
-                                                    supplierlicenseInfo.legalRepreCardPic2
-                                                ]
-                                                : []
+                                                    ? [
+                                                        supplierlicenseInfo.legalRepreCardPic1,
+                                                        supplierlicenseInfo.legalRepreCardPic2
+                                                    ]
+                                                    : []
                                             }
-                                            ref="legalRepreCardPic"
+                                            ref={node => { this.legalRepreCardPic = node }}
                                             key="legalRepreCardPic"
                                         />
                                     </Col>
@@ -697,7 +718,7 @@ class LicenseInfo extends PureComponent {
                                                     supplierlicenseInfo.registLicencePic
                                                 ]
                                                 : []}
-                                            ref="registLicencePic"
+                                            ref={node => { this.registLicencePic = node }}
                                             key="registLicencePic"
                                         />
                                     </Col>
@@ -711,9 +732,11 @@ class LicenseInfo extends PureComponent {
                             !this.state.isSubmit &&
                             <Button onClick={this.handleSubmit}>提交</Button>
                         }
-                        {
-                            (initData.status === 1 || initData.status === 2 || this.state.isSubmit) &&
-                            <Button onClick={this.handleCreatePlace}>创建供应商地点</Button>
+                        {(initData.status === 1
+                            || initData.status === 2
+                            || this.state.isSubmit)
+                            ? <Button onClick={this.handleCreatePlace}>创建供应商地点</Button>
+                            : null
                         }
                         {
                             !this.state.isSubmit &&
@@ -728,9 +751,11 @@ class LicenseInfo extends PureComponent {
 
 LicenseInfo.propTypes = {
     onGoTo: PropTypes.func,
+    hanldeSupplier: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     isEdit: PropTypes.bool,
     detailData: PropTypes.objectOf(PropTypes.any),
-    addSupplierMessage1: PropTypes.func,
+    data: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any)
 }
 export default Form.create()(withRouter(LicenseInfo));

@@ -81,7 +81,7 @@ class SaleDetail extends PureComponent {
                                 }
                                 {
                                     commodity.invoiceLimit !== null &&
-                                    <li className="detail-message-item"><span>发票限制：</span><span>{!!commodity.invoiceLimit ? '限制开增值税发票' : '不限制开增值税发票'}</span></li>
+                                    <li className="detail-message-item"><span>发票限制：</span><span>{commodity.invoiceLimit ? '限制开增值税发票' : '不限制开增值税发票'}</span></li>
                                 }
                                 {
                                     commodity.inputTaxRate &&

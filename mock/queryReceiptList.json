@@ -1,0 +1,13 @@
+{
+    "timestamp": 1504075923417,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "pageNum": null,
+        "pageSize": null,
+        "total": null,
+        "data": []
+    },
+    "success": true
+}

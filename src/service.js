@@ -7,8 +7,6 @@
 
 import Http from 'freed-spa/lib/util/http';
 import { message } from 'antd';
-import store from 'freed-spa/src/store';
-import { receiveLogout } from './actions/user';
 import LoginLayout from './views/login/LoginLayout';
 import ERRORTEXT from './constant/errorText';
 
