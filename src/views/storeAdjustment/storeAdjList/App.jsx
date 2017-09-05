@@ -22,7 +22,6 @@ import {
     adjustmentType,
 } from '../../../constant/searchParams';
 import { exportStoreAdList } from '../../../service';
-import { fetchOrderList } from '../../../actions/order';
 import { pubFetchValueList } from '../../../actions/pub';
 import { storeAdList } from '../../../actions/storeAdjustList'
 import { DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
@@ -40,29 +39,25 @@ const columns = [{
     dataIndex: 'adjustmentNo',
     key: 'adjustmentNo',
 }, {
-    title: '调整地点',
-    dataIndex: 'adjustAddr',
-    key: 'adjustAddr',
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+}, {
+    title: '调整仓库',
+    dataIndex: 'warehouseName',
+    key: 'warehouseName',
 }, {
     title: '调整数量合计',
     dataIndex: 'totalQuantity',
     key: 'totalQuantity',
 }, {
-    title: '调整成本合计',
+    title: '调整成本额合计',
     dataIndex: 'totalAdjustmentCost',
     key: 'totalAdjustmentCost',
 }, {
     title: '外部单据号',
     dataIndex: 'externalBillNo',
     key: 'externalBillNo',
-}, {
-    title: '创建人',
-    dataIndex: 'createUser',
-    key: 'createUser',
-}, {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
 }, {
     title: '操作',
     dataIndex: 'operation',
@@ -76,7 +71,6 @@ const columns = [{
     }),
     dispatch => bindActionCreators({
         storeAdList,
-        fetchOrderList,
         pubFetchValueList,
     }, dispatch)
 )
@@ -100,14 +94,15 @@ class StoreAdjList extends Component {
         this.searchData = {};
         this.current = 1;
         this.state = {
-            franchiseeId: null,
-            branchCompanyId: null,
-            rengeTime: yesterdayrengeDate,
+            supplierInfo: null,
+            productId: null,
+            warehouseCode: null,
+            rengeTime: null,
             settledDate: null,
             setTime: null,
-            time: {
-                submitStartTime: yesterdayDate,
-                submitEndTime: todayDate,
+            Time: {
+                adjustmentStartTime: null,
+                adjustmentEndTime: null,
             }
         }
     }
@@ -121,8 +116,8 @@ class StoreAdjList extends Component {
      * @param {array} result [moment, moment]
      */
     onEnterTimeChange(result) {
-        let start = yesterdayDate;
-        let end = todayDate;
+        let start = '';
+        let end = '';
         if (result.length === 2) {
             start = result[0].valueOf().toString();
             end = result[1].valueOf().toString();
@@ -133,14 +128,14 @@ class StoreAdjList extends Component {
         }
         this.setState({
             rengeTime: result,
-            time: {
-                submitStartTime: start,
-                submitEndTime: end
+            Time: {
+                adjustmentStartTime: start,
+                adjustmentEndTime: end
             }
         });
     }
       /**
-    * 创建日期
+    * 调整日期
     *
     * @param {moment} data 日期的moment对象
     * @param {string} dateString 格式化后的日期
@@ -158,39 +153,29 @@ class StoreAdjList extends Component {
     getSearchData() {
         const {
             adjustmentNo,
-            status,
+            Status,
             Type,
-            createUser,
             externalBillNo,
         } = this.props.form.getFieldsValue();
 
-        const { franchiseeId, branchCompanyId } = this.state;
-        const { submitStartTime, submitEndTime } = this.state.time;
+        const { productId, warehouseCode } = this.state;
+        const { adjustmentStartTime, adjustmentEndTime } = this.state.Time;
         this.current = 1;
         this.searchData = {
             adjustmentNo,
-            statustype: status,
+            status: Status,
+            adjustmentTime: this.state.settledDate,
             type: Type,
-            createUser,
+            warehouseCode,
+            productId,
             externalBillNo,
-            submitStartTime,
-            submitEndTime,
-            franchiseeId,
-            branchCompanyId,
-            pageSize: PAGE_SIZE,
-            settledDate: this.state.settledDate
+            adjustmentStartTime,
+            adjustmentEndTime,
         }
         const searchData = this.searchData;
-        const params = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
-        }
-        console.log(searchData)
-        searchData.page = 1;
-        this.props.fetchOrderList({
+        this.props.storeAdList({
             ...Utils.removeInvalid(searchData)
         })
-        this.props.storeAdList(params)
     }
 
     /**
@@ -201,44 +186,44 @@ class StoreAdjList extends Component {
         this.current = goto;
         const searchData = this.searchData;
         searchData.page = goto;
-        this.props.fetchOrderList({
+        this.props.storeAdList({
             ...Utils.removeInvalid(searchData)
         })
     }
 
     /**
-     * 加盟商-值清单
+     * 调整仓库-值清单
      */
     handleJoiningChoose = ({ record }) => {
         this.setState({
-            franchiseeId: record.franchiseeId,
+            warehouseCode: record.warehouseCode,
         });
     }
 
     /**
-     * 子公司-值清单
+     * 商品-值清单
      */
     handleSubCompanyChoose = ({ record }) => {
         this.setState({
-            branchCompanyId: record.id,
+            productId: record.productId,
         });
     }
 
     /**
-     * 加盟商-清除
+     * 调整仓库-清除
      */
     handleJoiningClear() {
         this.setState({
-            franchiseeId: null,
+            warehouseCode: null,
         });
     }
 
     /**
-     * 子公司-清除
+     * 商品-清除
      */
     handleSubCompanyClear() {
         this.setState({
-            branchCompanyId: null,
+            productId: null,
         });
     }
 
@@ -254,11 +239,11 @@ class StoreAdjList extends Component {
      */
     handleOrderReset() {
         this.setState({
-            rengeTime: yesterdayrengeDate,
+            rengeTime: null,
             setTime: null,
-            time: {
-                submitStartTime: yesterdayDate,
-                submitEndTime: todayDate,
+            Time: {
+                submitStartTime: null,
+                submitEndTime: null,
             }
         });
         this.joiningSearchMind.handleClear();
@@ -271,7 +256,6 @@ class StoreAdjList extends Component {
      */
     handleOrderOutput() {
         const searchData = this.searchData;
-        searchData.page = this.current;
         Utils.exportExcel(exportStoreAdList, Utils.removeInvalid(searchData));
     }
 
@@ -281,17 +265,15 @@ class StoreAdjList extends Component {
      * @param {object} record 单行数据
      */
     renderOperation(text, record) {
-        const { adjustmentNo } = record;
+        const { id } = record;
         const pathname = window.location.pathname;
         return (
-            <Link to={`${pathname}/orderDetails/${adjustmentNo}`}>订单详情</Link>
+            <Link to={`${pathname}/itemDetail/${id}`}>查看详情</Link>
         )
     }
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { orderListData } = this.props;
         const { storeAdjustData } = this.props;
-        console.log(storeAdjustData)
         columns[columns.length - 1].render = this.renderOperation;
         return (
             <div className={orderML}>
@@ -318,7 +300,7 @@ class StoreAdjList extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">状态</span>
-                                            {getFieldDecorator('status', {
+                                            {getFieldDecorator('Status', {
                                                 initialValue: StoreStatus.defaultValue
                                             })(
                                                 <Select
@@ -340,13 +322,13 @@ class StoreAdjList extends Component {
                                     </FormItem>
                                 </Col>
                                 <Col className="gutter-row" span={8}>
-                                    {/* 创建日期 */}
+                                    {/* 调整日期 */}
                                     <FormItem>
                                         <div>
-                                            <span className="sc-form-item-label">创建日期</span>
+                                            <span className="sc-form-item-label">调整日期</span>
                                             <DatePicker
                                                 value={this.state.setTime}
-                                                placeholder={'创建日期'}
+                                                placeholder={'调整日期'}
                                                 onChange={this.onEnterTime}
                                             />
                                         </div>
@@ -394,24 +376,24 @@ class StoreAdjList extends Component {
                                                         param: params.value,
                                                         pageNum: params.pagination.current || 1,
                                                         pageSize: params.pagination.pageSize
-                                                    }, 'getFranchiseeInfo')
+                                                    }, 'getWarehouseInfo1')
                                                 }
                                                 onChoosed={this.handleJoiningChoose}
                                                 onClear={this.handleJoiningClear}
                                                 renderChoosedInputRaw={(row) => (
                                                     <div>
-                                                        {row.franchiseeId} - {row.franchiseeName}
+                                                        {row.warehouseCode} - {row.warehouseName}
                                                     </div>
                                                 )}
                                                 pageSize={6}
                                                 columns={[
                                                     {
-                                                        title: '加盟商id',
-                                                        dataIndex: 'franchiseeId',
+                                                        title: '仓库编码',
+                                                        dataIndex: 'warehouseCode',
                                                         width: 150,
                                                     }, {
-                                                        title: '加盟商名字',
-                                                        dataIndex: 'franchiseeName',
+                                                        title: '仓库名称',
+                                                        dataIndex: 'warehouseName',
                                                         width: 200,
                                                     }
                                                 ]}
@@ -419,23 +401,6 @@ class StoreAdjList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 创建人 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">创建人</span>
-                                            {getFieldDecorator('createUser')(
-                                                <Input
-                                                    maxLength={11}
-                                                    className="input"
-                                                    placeholder="创建人"
-                                                />
-                                            )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
                                     {/* 商品 */}
                                     <FormItem>
@@ -446,24 +411,25 @@ class StoreAdjList extends Component {
                                                 ref={ref => { this.subCompanySearchMind = ref }}
                                                 fetch={(params) =>
                                                     this.props.pubFetchValueList({
-                                                        branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-                                                        branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
-                                                    }, 'findCompanyBaseInfo')
+                                                        teamText: params.value,
+                                                        pageNum: params.pagination.current || 1,
+                                                        pageSize: params.pagination.pageSize
+                                                    }, 'queryProductForSelect')
                                                 }
                                                 onChoosed={this.handleSubCompanyChoose}
                                                 onClear={this.handleSubCompanyClear}
                                                 renderChoosedInputRaw={(row) => (
-                                                    <div>{row.id}</div>
+                                                    <div>{row.productId}</div>
                                                 )}
                                                 pageSize={6}
                                                 columns={[
                                                     {
                                                         title: '商品id',
-                                                        dataIndex: 'id',
+                                                        dataIndex: 'productId',
                                                         width: 150,
                                                     }, {
                                                         title: '商品名字',
-                                                        dataIndex: 'name',
+                                                        dataIndex: 'saleName',
                                                         width: 200,
                                                     }
                                                 ]}
@@ -471,6 +437,8 @@ class StoreAdjList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
+                            </Row>
+                            <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
                                     {/* 外部单据号 */}
                                     <FormItem>
@@ -490,7 +458,7 @@ class StoreAdjList extends Component {
                                     {/* 调整日期 */}
                                     <FormItem>
                                         <div>
-                                            <span className="sc-form-item-label">调整日期</span>
+                                            <span className="sc-form-item-label">调整日期起止</span>
                                             <RangePicker
                                                 style={{ width: '240px' }}
                                                 className="manage-form-enterTime"
@@ -531,13 +499,13 @@ class StoreAdjList extends Component {
                 </div>
                 <div className="area-list">
                     <Table
-                        dataSource={orderListData.data}
+                        dataSource={storeAdjustData.data}
                         columns={columns}
                         rowKey="id"
                         pagination={{
-                            current: orderListData.pageNum,
-                            total: orderListData.total,
-                            pageSize: orderListData.pageSize,
+                            current: storeAdjustData.pageNum,
+                            total: storeAdjustData.total,
+                            pageSize: storeAdjustData.pageSize,
                             showQuickJumper: true,
                             onChange: this.handlePaginationChange
                         }}
@@ -552,7 +520,6 @@ StoreAdjList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     orderListData: PropTypes.objectOf(PropTypes.any),
     storeAdjustData: PropTypes.objectOf(PropTypes.any),
-    fetchOrderList: PropTypes.func,
     storeAdList: PropTypes.func,
     pubFetchValueList: PropTypes.func,
 }

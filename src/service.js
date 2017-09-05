@@ -67,7 +67,7 @@ export const exportOrderList = '/sorder/toExcel';
 export const exportProcurementPdf = 'pmPurchaseOrder/exportPdf';
 
 // 下载库存调整列表
-export const exportStoreAdList = '';
+export const exportStoreAdList = 'imAdjustment/exportListImAdjustment';
 
 
 /**
@@ -584,7 +584,7 @@ export const queryAdjustLibList = (params) => http.post('/provider/queryAdjustLi
 export const queryAdjustDetail = (params) => http.post('/provider/queryAdjustDetail', params);
 
 // 库存调整-库存调整列表{mock}
-export const queryStoreAdList = (params) => http.get('/dictionary/dictionaryList', params);
+export const queryStoreAdList = (params) => http.get('/imAdjustment/queryListImAdjustment', params);
 /**
  * 供应商相关
  */

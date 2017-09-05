@@ -462,9 +462,9 @@ export const payStatusOptions = {
 
 // 状态
 export const StoreStatus = {
-    defaultValue: '-1',
+    defaultValue: '',
     data: [{
-        key: '-1',
+        key: '',
         value: '全部'
     }, {
         key: '0',
@@ -513,38 +513,38 @@ export const logisticsStatusOptions = {
 
 // 调整类型
 export const adjustmentType = {
-    defaultValue: 'ALL',
+    defaultValue: '',
     data: [
         {
-            key: 'ALL',
+            key: '' ,
             value: '全部'
         },
         {
-            key: 'WLDS',
+            key: 0,
             value: '物流丢失'
         },
         {
-            key: 'CKBY',
+            key: 1,
             value: '仓库报溢'
         },
         {
-            key: 'CKBS',
+            key: 2,
             value: '仓库报损'
         },
         {
-            key: 'YWTZ',
+            key: 3,
             value: '业务调增'
         },
         {
-            key: 'YWTJ',
+            key: 4,
             value: '业务调减'
         },
         {
-            key: 'CKTBZ',
+            key: 5,
             value: '仓库同步调增'
         },
         {
-            key: 'CKTBJ',
+            key: 6,
             value: '仓库同步调减'
         }
     ]
