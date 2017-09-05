@@ -1,6 +1,6 @@
 /**
  * @file itemDetail.jsx
- * @author zhangbaihua
+ * @author tanjf
  *
  * 库存管理详情页
  */
@@ -17,28 +17,28 @@ import { stockListDetail } from '../../../actions';
 const columns = [
     {
         title: '商品编号',
-        dataIndex: 'commodityNum',
-        key: 'commodityNum'
+        dataIndex: 'productCode',
+        key: 'productCode'
     },
     {
         title: '商品名称',
-        dataIndex: 'commodityName',
-        key: 'commodityName'
+        dataIndex: 'productName',
+        key: 'productName'
     },
     {
         title: '平均成本',
-        dataIndex: 'averageCost',
-        key: 'averageCost'
+        dataIndex: 'avCost',
+        key: 'avCost'
     },
     {
         title: '现有库存',
-        dataIndex: 'existingStock',
-        key: 'existingStock'
+        dataIndex: 'stockOnHand',
+        key: 'stockOnHand'
     },
     {
         title: '调整数量',
-        dataIndex: 'adjustmentNum',
-        key: 'adjustmentNum'
+        dataIndex: 'quantity',
+        key: 'quantity'
     },
     {
         title: '调整成本额',
@@ -49,7 +49,8 @@ const columns = [
 
 @connect(
     state => ({
-        ListDetail: state.toJS().stockListDetail.data
+        ListDetail: state.toJS().stockListDetail.data,
+        total: state.toJS().stockListDetail.sum,
     }),
     dispatch => bindActionCreators({
         stockListDetail,
@@ -57,80 +58,69 @@ const columns = [
 )
 
 class ItemDetail extends PureComponent {
-    componentWillMount() {
-        const match = this.props.match.params;
+    componentDidMount() {
+        // const match = this.props.match.params;
         this.props.stockListDetail({
-            id: match.id
+            // id: match.id
+            id: 1000001
         });
     }
+
     render() {
-        const { supplier = {} } = this.props.ListDetail;
-        const { prefixCls } = this.props;
+        const { data = {} } = this.props.ListDetail;
+        const { prefixCls, total = '' } = this.props;
         const {
-            supplierNumber,
-            stockStatus,
-            remarks,
-            outSupplierNum,
-            creator,
-            createDate,
-            approver,
-            adjustType,
-            adjustLib,
-            adjustDate } = supplier;
-        const { adjustmentList = [], adjustmentNumTotal = '', total } = this.props.ListDetail;
+            adjustmentNo,
+            status,
+            description,
+            externalBillNo,
+            type,
+            warehouseCode,
+            adjustmentTime } = data;
+        const { imAdjustmentItemVos = [] } = data;
         return (
             <div>
-                <div className="manage-form">
+                <div className="itemDetail-manage-form manage-form">
                     <Row>
                         <Col span={6}>
                             <div className="detail-item">
-                                <span className="justify-text">单据编号</span>
-                                <strong>{supplierNumber}</strong>
-                            </div>
-                            <div className="detail-item">
-                                <span className="justify-text">调整日期</span>
-                                <strong>{adjustDate}</strong>
+                                <span className="justify-text">单据编号:</span>
+                                <strong>{adjustmentNo}</strong>
                             </div>
                         </Col>
                         <Col span={6}>
                             <div className="detail-item">
-                                <span className="justify-text">状态</span>
-                                <strong>{stockStatus}</strong>
-                            </div>
-                            <div className="detail-item">
-                                <span className="justify-text">创建人</span>
-                                <strong>{creator}</strong>
+                                <span className="justify-text">调整日期:</span>
+                                <strong>{adjustmentTime}</strong>
                             </div>
                         </Col>
                         <Col span={6}>
                             <div className="detail-item">
-                                <span className="justify-text">创建日期</span>
-                                <strong>{createDate}</strong>
-                            </div>
-                            <div className="detail-item">
-                                <span className="justify-text">批准人</span>
-                                <strong>{approver}</strong>
+                                <span className="justify-text">状态:</span>
+                                <strong>{status}</strong>
                             </div>
                         </Col>
                         <Col span={6}>
                             <div className="detail-item">
-                                <span className="justify-text">调整类型</span>
-                                <strong>{adjustType}</strong>
-                            </div>
-                            <div className="detail-item">
-                                <span className="justify-text">调整仓库</span>
-                                <strong>{adjustLib}</strong>
+                                <span className="justify-text">调整类型:</span>
+                                <strong>{type}</strong>
                             </div>
                         </Col>
                     </Row>
                     <Row>
-                        <Col span={12} className="detail-item">
-                            <span className="justify-text">备注</span>
-                            <strong>{remarks}</strong>
+                        <Col span={6}>
+                            <div className="detail-item">
+                                <span className="justify-text">调整仓库:</span>
+                                <strong>{warehouseCode}</strong>
+                            </div>
                         </Col>
-                        <Col span={12} className="detail-item">
-                            <span className="justify-text">外部单据号</span>
-                            <strong>{outSupplierNum}</strong>
+                        <Col span={6} className="detail-item">
+                            <span className="justify-text">备注:</span>
+                            <strong>{description}</strong>
+                        </Col>
+                        <Col span={6} className="detail-item">
+                            <span className="justify-text">外部单据号:</span>
+                            <strong>{externalBillNo}</strong>
                         </Col>
                     </Row>
                 </div>
@@ -141,18 +131,23 @@ class ItemDetail extends PureComponent {
                     >
                         <Table
                             columns={columns}
-                            dataSource={adjustmentList}
-                            total={total}
+                            dataSource={imAdjustmentItemVos}
                             rowKey={(record) => (Object.values(record).join('_'))}
                             footer={() => (
                                 <div className="total-wrap">
-                                    <span className="totalTxt">总计</span>
-                                    <span className="totalNumber">{adjustmentNumTotal}</span>
+                                    <span
+                                        className="totalTxt"
+                                        style={{textAlign: 'center', marginLeft: -10}}
+                                    >总计:</span>
+                                    <span
+                                        className="totalNumber"
+                                        style={{textAlign: 'center', marginLeft: -10}}
+                                    >{total}</span>
                                 </div>
                                 )
                             }
                         />
-                        <div className="back-storeAdjust-page">
+                        <div className={`${prefixCls}-back`} style={{textAlign: 'center'}}>
                             <Link
                                 className={
                                     `${prefixCls}-btn ${prefixCls}-supplierType-img ant-btn`
@@ -171,6 +166,7 @@ ItemDetail.propTypes = {
     ListDetail: PropTypes.objectOf(PropTypes.any),
     stockListDetail: PropTypes.func,
     prefixCls: PropTypes.string,
+    total: PropTypes.string,
     match: PropTypes.objectOf(PropTypes.any)
 };
 
