@@ -37,7 +37,7 @@ import {
     state => ({
         applicationData: state.toJS().supplier.applicationData,
         auditVisible: state.toJS().supplier.auditVisible,
-        checkResonVisible: state.toJS().supplier.checkResonVisible,
+        checkReasonVisible: state.toJS().supplier.checkReasonVisible,
         insertSettlementResult: state.toJS().supplier.insertSettlementResult,
         prodPurchase: state.toJS().commodity.prodPurchase,
         getProdPurchaseById: state.toJS().commodity.getProdPurchaseById,

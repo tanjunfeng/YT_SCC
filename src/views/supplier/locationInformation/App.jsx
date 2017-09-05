@@ -525,6 +525,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="1">票到七天</Option>
                                                     <Option value="2">票到十五天</Option>
                                                     <Option value="3">票到三十天</Option>
+                                                    <Option value="4">票到付款</Option>
                                                 </Select>
                                                 )}
                                         </FormItem>
