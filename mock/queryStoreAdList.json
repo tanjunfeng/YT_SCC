@@ -1,0 +1,42 @@
+{
+    "code": 401,
+    "message": {},
+    "data": {
+        "pageNum": 1,
+        "pageSize": 10,
+        "total": 4,
+        "data": [
+            {
+                "id": "xprov151",
+                "adjustmentNo": "100003",
+                "adjustAddr": "旺旺食品有限公司",
+                "totalQuantity": "52352346346456",
+                "totalAdjustmentCost": 1,
+                "externalBillNo": 2,
+                "createUser": 0,
+                "status": 0
+            },
+            {
+                "id": "xprov150",
+                "adjustmentNo": "100002",
+                "adjustAddr": "深圳市豪利门业实业有限公司",
+                "totalQuantity": "52352346346456",
+                "totalAdjustmentCost": 1,
+                "externalBillNo": 2,
+                "createUser": 0,
+                "status": 1
+            },
+            {
+                "id": "xprov149",
+                "adjustmentNo": "100001",
+                "adjustAddr": "统一食品有限公司",
+                "totalQuantity": "52352346346436",
+                "totalAdjustmentCost": 1,
+                "externalBillNo": 1,
+                "createUser": 1,
+                "status": 0
+            }
+        ]
+    },
+    "success": true
+}
