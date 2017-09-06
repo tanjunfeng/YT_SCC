@@ -348,15 +348,18 @@ class SimpleOrderList extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">收货日期</span>
-                                            <RangePicker
-                                                style={{ width: '240px' }}
-                                                className="manage-form-enterTime"
-                                                value={this.state.rengeTime}
-                                                format={DATE_FORMAT}
-                                                placeholder={['开始时间', '结束时间']}
-                                                onChange={this.onEnterTimeChange}
-
-                                            />
+                                            {getFieldDecorator('zxxzs', {
+                                                rules: [{ required: true, message: '请选择收货日期' }]
+                                            })(
+                                                <RangePicker
+                                                    style={{ width: '240px' }}
+                                                    className="manage-form-enterTime"
+                                                    value={this.state.rengeTime}
+                                                    format={DATE_FORMAT}
+                                                    placeholder={['开始时间', '结束时间']}
+                                                    onChange={this.onEnterTimeChange}
+                                                />
+                                            )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -439,13 +442,14 @@ class SimpleOrderList extends Component {
                                 </Col>
                             </Row>
                             <Row gutter={24}>
-                                <Col className="gutter-row" span={8}>
+                                <Col className="gutter-row" span={8} style={{paddingRight: 8}}>
                                     {/* 账期 */}
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">账期</span>
                                             {getFieldDecorator('paymentState', {
-                                                initialValue: payStatusOptions.defaultValue
+                                                initialValue: payStatusOptions.defaultValue,
+                                                rules: [{ required: true, message: '请选择账期' }]
                                             })(
                                                 <Select
                                                     size="default"
@@ -462,11 +466,11 @@ class SimpleOrderList extends Component {
                                                         )
                                                     }
                                                 </Select>
-                                                )}
+                                            )}
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8}>
+                                <Col className="gutter-row" span={8} style={{paddingRight: 8, paddingLeft: 8}}>
                                     {/* 子公司 */}
                                     <FormItem>
                                         <div>
@@ -502,7 +506,7 @@ class SimpleOrderList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8}>
+                                <Col className="gutter-row" span={8} style={{paddingRight: 8, paddingLeft: 8}}>
                                     {/* 收货人电话 */}
                                     <FormItem>
                                         <div>

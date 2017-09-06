@@ -59,9 +59,10 @@ const columns = [
 
 class ItemDetail extends PureComponent {
     componentDidMount() {
-        const { match } = this.props;
+        const { pathname } = this.props.location;
+        const id = pathname.split('/');
         this.props.stockListDetail({
-            id: match.params.id
+            id: id[3]
             // id: 1000001
         });
     }
@@ -168,7 +169,7 @@ ItemDetail.propTypes = {
     stockListDetail: PropTypes.func,
     prefixCls: PropTypes.string,
     total: PropTypes.string,
-    match: PropTypes.objectOf(PropTypes.any)
+    location: PropTypes.objectOf(PropTypes.any),
 };
 
 ItemDetail.defaultProps = {
