@@ -1,8 +1,8 @@
 /**
  * @file list.jsx
- * @author Tan junfeng
+ * @author wtt
  *
- * 分类列表页商品排序管理
+ * 库存调整列表
  */
 
 import StoreAdjList from './App';

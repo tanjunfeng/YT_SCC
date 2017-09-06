@@ -66,6 +66,10 @@ export const exportOrderList = '/sorder/toExcel';
 // 下载采购订单PDF
 export const exportProcurementPdf = 'pmPurchaseOrder/exportPdf';
 
+// 下载库存调整列表
+export const exportStoreAdList = 'imAdjustment/exportListImAdjustment';
+
+
 /**
  * 登录 Api
  */
@@ -573,12 +577,12 @@ export const queryPoRcvDetail = (params) => http.get('/pmPurchaseReceipt/queryRe
 // 创建采购收货单
 export const createPoRcv = (params) => http.post('/provider/createPoRcv', params);
 
-// 查询库存调整列表{mock}
-export const queryAdjustLibList = (params) => http.post('/provider/queryAdjustLibList', params);
-
-// 查询库存调整单详情{mock}
-// export const queryAdjustDetail = (params) => http.get('/mock/stockListDetail', params);
+// 查询库存调整单详情
 export const queryAdjustDetail = (params) => http.get('/imAdjustment/getImAdjustment', params);
+
+// 库存调整-库存调整列表
+export const queryStoreAdList = (params) => http.get('/imAdjustment/queryListImAdjustment', params);
+
 /**
  * 供应商相关
  */
@@ -732,3 +736,4 @@ export const getNewPmPurchaseOrderItem = (params) => http.get('/pmPurchaseOrder/
 
 // 采购订单-审批
 export const auditPurchaseOrderInfo = (params) => http.post('/pmPurchaseOrder/auditPurchaseOrderInfo', params);
+

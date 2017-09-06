@@ -191,11 +191,7 @@ class SearchForm extends Component {
                             type !== 'Application' &&
                             <FormItem className="manage-form-item2">
                                 <span className="manage-form-label">结算账期（天）</span>
-<<<<<<< HEAD
-                                <AscadeChoice ref={ref => (this.balanceDateRef = ref)} />
-=======
                                 <AscadeChoice ref={ref => { this.balanceDateRef = ref }} />
->>>>>>> b244d301baa62ded41896a4e48ca3cc4f0c7a6b4
                             </FormItem>
                         }
                         {/* 结算账户 */}
@@ -257,33 +253,11 @@ class SearchForm extends Component {
                             {/* 返利（%） */}
                             <FormItem className="manage-form-item1">
                                 <span className="manage-form-label">返利（%）</span>
-<<<<<<< HEAD
-                                <AscadeChoice ref={ref => (this.rebateRef = ref)} />
-=======
                                 <AscadeChoice ref={ref => { this.rebateRef = ref }} />
->>>>>>> b244d301baa62ded41896a4e48ca3cc4f0c7a6b4
                             </FormItem>
                             <FormItem className="manage-form-item2">
                                 <Button size="default" onClick={this.handleDownload}>
                                     导出供应商列表
-<<<<<<< HEAD
-                                </Button>
-                            </FormItem>
-                            <span className="manage-form-item3">
-                                <FormItem>
-                                    <Button
-                                        type="primary"
-                                        onClick={this.handleGetValue}
-                                        size="default"
-                                    >
-                                        搜索
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleResetValue}>
-                                        重置
-                                    </Button>
-=======
                                     </Button>
                             </FormItem>
                             <span className="manage-form-item3">
@@ -296,7 +270,6 @@ class SearchForm extends Component {
                                     <Button size="default" onClick={this.handleResetValue}>
                                         重置
                                         </Button>
->>>>>>> b244d301baa62ded41896a4e48ca3cc4f0c7a6b4
                                 </FormItem>
                             </span>
                         </div>

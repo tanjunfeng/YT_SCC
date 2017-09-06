@@ -42,138 +42,138 @@ startApp({
         employeeName: 'admin'
     },
     topMenus: {
-        "menu": [
+        menu: [
             {
-                "id": 39,
-                "code": "1,65,78",
-                "name": "系统管理-（系统）",
-                "submenu": []
+                id: 39,
+                code: '1,65,78',
+                name: '系统管理-（系统）',
+                submenu: []
             },
             {
-                "id": 40,
-                "code": "6,12,14,75,59,60,61",
-                "name": "加盟子系统-（系统）",
-                "submenu": []
+                id: 40,
+                code: '6,12,14,75,59,60,61',
+                name: '加盟子系统-（系统）',
+                submenu: []
             },
             {
-                "id": 42,
-                "code": "34",
-                "name": "小超人运营管理-（系统）",
-                "submenu": []
+                id: 42,
+                code: '34',
+                name: '小超人运营管理-（系统）',
+                submenu: []
             },
             {
-                "id": 57,
-                "code": "43,45",
-                "name": "主数据管理-（系统）",
-                "submenu": []
+                id: 57,
+                code: '43,45',
+                name: '主数据管理-（系统）',
+                submenu: []
             },
             {
-                "id": 155,
-                "code": "gyl",
-                "name": "供应链管理",
-                "submenu": []
+                id: 155,
+                code: 'gyl',
+                name: '供应链管理',
+                submenu: []
             }
         ]
     },
     menus: {
-        name: "denglingbo",
-        age: "12",
+        name: 'denglingbo',
+        age: '12',
         level: 5,
-        city: "Chengdu",
+        city: 'Chengdu',
         admin: 1,
         menu: [
             {
-                code: "gylspgl",
-                name: "商品管理",
+                code: 'gylspgl',
+                name: '商品管理',
                 submenu: [
                     {
                         code: 'commodifyList',
                         name: '商品管理列表'
                     },
                     {
-                        code: "goodsClassification",
-                        name: "商品分类列表"
+                        code: 'goodsClassification',
+                        name: '商品分类列表'
                     }
                 ]
             },
             {
-                code: "gysgl",
-                name: "供应商管理",
+                code: 'gysgl',
+                name: '供应商管理',
                 submenu: [
                     {
-                        code: "suppliersAppList",
-                        name: "供应商入驻申请列表"
+                        code: 'suppliersAppList',
+                        name: '供应商入驻申请列表'
                     },
                     {
-                        code: "supplierInputList",
-                        name: "供应商管理列表"
+                        code: 'supplierInputList',
+                        name: '供应商管理列表'
                     },
                 ]
             },
             {
-                code: "procurementMng",
-                name: "采购管理",
+                code: 'procurementMng',
+                name: '采购管理',
                 submenu: [
                     {
-                        code: "poMngList",
-                        name: "采购单管理列表"
+                        code: 'poMngList',
+                        name: '采购单管理列表'
                     },
                     {
-                        code: "poPrintList",
-                        name: "采购单打印列表"
+                        code: 'poPrintList',
+                        name: '采购单打印列表'
                     },
                     // {
-                    //     code: "poRcvList",
-                    //     name: "采购单收货列表"
+                    //     code: 'poRcvList',
+                    //     name: '采购单收货列表'
                     // },
                     {
-                        code: "poRcvMngList",
-                        name: "收货单管理列表"
+                        code: 'poRcvMngList',
+                        name: '收货单管理列表'
                     }
                 ]
             },
             {
                 code: 'gylxtpz',
-                name: "系统配置",
+                name: '系统配置',
                 submenu: [
                     {
-                        code: "goodsManange",
-                        name: "分类列表页商品排序管理",
+                        code: 'goodsManange',
+                        name: '分类列表页商品排序管理',
                     },
                     {
-                        code: "dataDictionary",
-                        name: "数据字典",
+                        code: 'dataDictionary',
+                        name: '数据字典',
                     }
                 ]
             },
             {
-                code: "dmtgl",
-                name: "多媒体管理",
+                code: 'dmtgl',
+                name: '多媒体管理',
                 submenu: [
                     {
-                        code: "jtygl",
-                        name: "静态页管理",
+                        code: 'jtygl',
+                        name: '静态页管理',
                     },
                 ]
             },
             {
-                code: "wappz",
-                name: "wap端页面配置",
+                code: 'wappz',
+                name: 'wap端页面配置',
                 submenu: [{
-                    code: "adPlanList404",
-                    name: "404页面广告配置"
+                    code: 'adPlanList404',
+                    name: '404页面广告配置'
                 },
                 {
-                    code: "carouselManagement",
-                    name: "轮播广告管理"
+                    code: 'carouselManagement',
+                    name: '轮播广告管理'
                 },
                 {
-                    code: "quickNavigation",
-                    name: "快捷导航管理"
+                    code: 'quickNavigation',
+                    name: '快捷导航管理'
                 },
                 {
-                    code: "homeStyle",
-                    name: "首页样式管理"
+                    code: 'homeStyle',
+                    name: '首页样式管理'
                 },
                 {
                     code: 'searchConfig',
@@ -196,22 +196,22 @@ startApp({
                 ]
             },
             {
-                code: "kctz",
-                name: "库存调整",
+                code: 'kctz',
+                name: '库存调整',
                 submenu: [
                     {
-                        code: "kctzlb",
-                        name: "库存调整列表",
+                        code: 'kctzlb',
+                        name: '库存调整列表',
                     }
                 ]
             },
             {
-                code: "jyjszc",
-                name: "简易结算支持",
+                code: 'jyjszc',
+                name: '简易结算支持',
                 submenu: [
                     {
-                        code: "gysjs",
-                        name: "供应商结算",
+                        code: 'gysjs',
+                        name: '供应商结算',
                     }
                 ]
             }
