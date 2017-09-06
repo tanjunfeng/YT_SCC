@@ -41,6 +41,7 @@ class AddSupplier extends PureComponent {
         this.state = {
             activeKey: '1',
             edit: false,
+            licenseInfoDisabled: true // 默认证件信息置灰
         }
     }
 
@@ -70,6 +71,12 @@ class AddSupplier extends PureComponent {
     }
 
     handleGoTo(item) {
+        // 只有跳过第一步，才可点击第三页
+        if (+(item) > 1) {
+            this.setState({
+                licenseInfoDisabled: false
+            })
+        }
         this.setState({
             activeKey: item
         })
@@ -107,11 +114,14 @@ class AddSupplier extends PureComponent {
                         {...props}
                     />
                 </TabPane>
-                <TabPane tab="证照信息" key="3">
-                    <LicenseInfo
-                        {...props}
-                    />
-                </TabPane>
+                {!this.state.licenseInfoDisabled && edit ?
+                    <TabPane tab="证照信息" key="3">
+                        <LicenseInfo
+                            {...props}
+                        />
+                    </TabPane>
+                    : null
+                }
             </Tabs>
         )
     }
