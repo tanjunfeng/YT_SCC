@@ -339,11 +339,11 @@ class ProdModal extends Component {
                                                 {
                                                     title: '供应商编码',
                                                     dataIndex: 'spNo',
-                                                    width: 150,
+                                                    width: 98
                                                 }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
-                                                    width: 200,
+                                                    width: 140
                                                 }
                                             ]}
                                         />
@@ -383,11 +383,11 @@ class ProdModal extends Component {
                                                 {
                                                     title: '供应商地点编码',
                                                     dataIndex: 'providerNo',
-                                                    width: 150,
+                                                    width: 98
                                                 }, {
                                                     title: '供应商地点名称',
                                                     dataIndex: 'providerName',
-                                                    width: 300,
+                                                    width: 140
                                                 }
                                             ]}
                                         />

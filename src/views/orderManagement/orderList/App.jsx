@@ -578,11 +578,11 @@ class OrderManagementList extends Component {
                                                     {
                                                         title: '加盟商id',
                                                         dataIndex: 'franchiseeId',
-                                                        width: 150,
+                                                        width: 98
                                                     }, {
                                                         title: '加盟商名字',
                                                         dataIndex: 'franchiseeName',
-                                                        width: 200,
+                                                        width: 140
                                                     }
                                                 ]}
                                             />
@@ -613,11 +613,11 @@ class OrderManagementList extends Component {
                                                     {
                                                         title: '子公司id',
                                                         dataIndex: 'id',
-                                                        width: 150,
+                                                        width: 98
                                                     }, {
                                                         title: '子公司名字',
                                                         dataIndex: 'name',
-                                                        width: 200,
+                                                        width: 140
                                                     }
                                                 ]}
                                             />

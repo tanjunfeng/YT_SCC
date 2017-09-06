@@ -326,7 +326,7 @@ class ProdPurchaseModal extends Component {
                                                 {
                                                     title: '供应商编码',
                                                     dataIndex: 'spNo',
-                                                    width: 150,
+                                                    width: 98
                                                 }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
@@ -357,7 +357,7 @@ class ProdPurchaseModal extends Component {
                                                 {
                                                     title: '供应商编码',
                                                     dataIndex: 'spNo',
-                                                    width: 150,
+                                                    width: 98
                                                 }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
@@ -402,7 +402,7 @@ class ProdPurchaseModal extends Component {
                                                 {
                                                     title: '仓库ID',
                                                     dataIndex: 'id',
-                                                    width: 150,
+                                                    width: 98
                                                 }, {
                                                     title: '仓库编码',
                                                     dataIndex: 'warehouseCode',

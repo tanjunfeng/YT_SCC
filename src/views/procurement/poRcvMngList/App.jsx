@@ -639,11 +639,11 @@ class PoRcvMngList extends PureComponent {
                                                 {
                                                     title: '编码',
                                                     dataIndex: this.state.locationData.code,
-                                                    width: 150,
+                                                    width: 98
                                                 }, {
                                                     title: '名称',
                                                     dataIndex: this.state.locationData.name,
-                                                    width: 200,
+                                                    width: 140
                                                 }
                                             ]}
                                         />
