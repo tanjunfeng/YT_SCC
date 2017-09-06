@@ -251,8 +251,16 @@ class LicenseInfo extends PureComponent {
                     if (!isEdit) {
                         this.submitId = res.data;
                     }
+                }).catch(() => {
+                    this.handleClear();
                 });
         })
+    }
+
+    handleClear() {
+        this.setState({ isSubmit: false });
+        this.submitData = {};
+        this.submitId = null;
     }
 
     handleCreatePlace() {
@@ -265,6 +273,9 @@ class LicenseInfo extends PureComponent {
             const { isEdit } = this.props;
             this.getVlaue();
             this.submitData.commitType = 1;
+            this.setState({
+                isSubmit: true
+            })
             this.props.hanldeSupplier(Utils.removeInvalid(this.submitData), isEdit ? 'updateSupplierInfo' : 'insertSupplierInfo')
                 .then((res) => {
                     message.success('保存成功');
@@ -272,8 +283,10 @@ class LicenseInfo extends PureComponent {
                         this.submitId = res.data;
                     }
                     this.setState({
-                        isSubmit: true
+                        isSubmit: false
                     })
+                }).catch(() => {
+                    this.handleClear();
                 });
         })
     }
