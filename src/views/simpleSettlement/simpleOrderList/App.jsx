@@ -387,11 +387,11 @@ class SimpleOrderList extends Component {
                                                     {
                                                         title: '供应商编码',
                                                         dataIndex: 'spNo',
-                                                        width: 150,
+                                                        width: 98
                                                     }, {
                                                         title: '供应商名称',
                                                         dataIndex: 'companyName',
-                                                        width: 200,
+                                                        width: 140
                                                     }
                                                 ]}
                                             />
@@ -495,11 +495,11 @@ class SimpleOrderList extends Component {
                                                     {
                                                         title: '子公司id',
                                                         dataIndex: 'id',
-                                                        width: 150,
+                                                        width: 98
                                                     }, {
                                                         title: '子公司名字',
                                                         dataIndex: 'name',
-                                                        width: 200,
+                                                        width: 140
                                                     }
                                                 ]}
                                             />

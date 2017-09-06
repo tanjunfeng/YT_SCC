@@ -330,7 +330,7 @@ class ProdPurchaseModal extends Component {
                                                 }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
-                                                    width: 200,
+                                                    width: 140
                                                 }
                                             ]}
                                         />
@@ -361,15 +361,15 @@ class ProdPurchaseModal extends Component {
                                                 }, {
                                                     title: '供应商名称',
                                                     dataIndex: 'companyName',
-                                                    width: 200,
+                                                    width: 200
                                                 }, {
                                                     title: '供应商地点编码',
                                                     dataIndex: 'providerNo',
-                                                    width: 200,
+                                                    width: 200
                                                 }, {
                                                     title: '供应商地点名称',
                                                     dataIndex: 'providerName',
-                                                    width: 200,
+                                                    width: 200
                                                 }
                                             ]}
                                         />
@@ -406,11 +406,11 @@ class ProdPurchaseModal extends Component {
                                                 }, {
                                                     title: '仓库编码',
                                                     dataIndex: 'warehouseCode',
-                                                    width: 200,
+                                                    width: 200
                                                 }, {
                                                     title: '仓库名称',
                                                     dataIndex: 'warehouseName',
-                                                    width: 200,
+                                                    width: 200
                                                 }
                                             ]}
                                         />
