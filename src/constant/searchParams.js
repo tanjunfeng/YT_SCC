@@ -437,26 +437,14 @@ export const payStatusOptions = {
         key: 'ALL',
         value: '全部'
     }, {
-        key: 'WZF',
-        value: '未支付'
+        key: 'ZJ',
+        value: '周结'
     }, {
-        key: 'YZF',
-        value: '已支付'
+        key: 'BYJ',
+        value: '半月结'
     }, {
-        key: 'QXFK',
-        value: '取消支付'
-    }, {
-        key: 'TKD',
-        value: '退款待审核'
-    }, {
-        key: 'TKQ',
-        value: '退款待确认'
-    }, {
-        key: 'YTK',
-        value: '已退款'
-    }, {
-        key: 'GSN',
-        value: '公司内'
+        key: 'YJ',
+        value: '月结'
     }]
 }
 
