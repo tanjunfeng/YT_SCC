@@ -40,6 +40,7 @@ class AddSupplier extends PureComponent {
         this.handleTabClick = ::this.handleTabClick;
         this.state = {
             activeKey: '1',
+            isLastTabHidden: true,
             edit: false,
         }
     }
@@ -70,6 +71,11 @@ class AddSupplier extends PureComponent {
     }
 
     handleGoTo(item) {
+        if (+(item) === 2) {
+            this.setState({
+                isLastTabHidden: false
+            });
+        }
         this.setState({
             activeKey: item
         })
@@ -107,11 +113,14 @@ class AddSupplier extends PureComponent {
                         {...props}
                     />
                 </TabPane>
-                <TabPane tab="证照信息" key="3">
-                    <LicenseInfo
-                        {...props}
-                    />
-                </TabPane>
+                {!this.state.isLastTabHidden ?
+                    <TabPane tab="证照信息" key="3">
+                        <LicenseInfo
+                            {...props}
+                        />
+                    </TabPane>
+                    : null
+                }
             </Tabs>
         )
     }
