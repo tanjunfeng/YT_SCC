@@ -78,7 +78,7 @@ class AddSupplier extends PureComponent {
     handleTabClick(item) {
         const tabs = ['BasicInfo', 'BankInfo', 'LicenseInfo'];
         const { activeKey } = this.state;
-        TABCONTENT[tabs[activeKey - 1]].handleGoTo(item);
+        TABCONTENT[tabs[+(activeKey) - 1]].handleGoTo(item);
     }
 
     render() {
