@@ -165,11 +165,11 @@ class Warehouse extends Component {
                                         {
                                             title: '仓库编码',
                                             dataIndex: 'warehouseCode',
-                                            width: 150,
+                                            width: 98
                                         }, {
                                             title: '仓库名称',
                                             dataIndex: 'warehouseName',
-                                            width: 200,
+                                            width: 140
                                         }
                                     ]}
                                 />

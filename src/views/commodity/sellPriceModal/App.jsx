@@ -255,11 +255,11 @@ class SellPriceModal extends Component {
                                             {
                                                 title: '公司编号',
                                                 dataIndex: 'id',
-                                                width: 150,
+                                                width: 98
                                             }, {
                                                 title: '公司名',
                                                 dataIndex: 'name',
-                                                width: 200,
+                                                width: 140
                                             }
                                         ]}
                                     />

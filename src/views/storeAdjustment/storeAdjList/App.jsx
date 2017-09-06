@@ -390,11 +390,11 @@ class StoreAdjList extends Component {
                                                     {
                                                         title: '仓库编码',
                                                         dataIndex: 'warehouseCode',
-                                                        width: 150,
+                                                        width: 98
                                                     }, {
                                                         title: '仓库名称',
                                                         dataIndex: 'warehouseName',
-                                                        width: 200,
+                                                        width: 140
                                                     }
                                                 ]}
                                             />
@@ -426,11 +426,11 @@ class StoreAdjList extends Component {
                                                     {
                                                         title: '商品id',
                                                         dataIndex: 'productId',
-                                                        width: 150,
+                                                        width: 98
                                                     }, {
                                                         title: '商品名字',
                                                         dataIndex: 'saleName',
-                                                        width: 200,
+                                                        width: 140
                                                     }
                                                 ]}
                                             />
