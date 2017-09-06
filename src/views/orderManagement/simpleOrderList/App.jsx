@@ -1,29 +1,30 @@
 /**
  * @file App.jsx
- * @author wtt
+ * @author caoyanxuan
  *
- * 库存调整列表
+ * 供应商结算
  */
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import {
     Form, Input, Button, Row, Col,
-    Select, Table, DatePicker
+    Select, DatePicker
 } from 'antd';
 import moment from 'moment';
 import Utils from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
 import {
-    StoreStatus,
-    adjustmentType,
+    orderTypeOptions,
+    orderStatusOptions,
+    payStatusOptions,
+    logisticsStatusOptions
 } from '../../../constant/searchParams';
-import { exportStoreAdList } from '../../../service';
+import { exportOrderList } from '../../../service';
+import { fetchOrderList } from '../../../actions/order';
 import { pubFetchValueList } from '../../../actions/pub';
-import { storeAdList } from '../../../actions/storeAdjustList'
 import { DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
 
 const FormItem = Form.Item;
@@ -34,52 +35,22 @@ const yesterdayDate = moment().subtract(1, 'days').valueOf().toString();
 const todayDate = moment().valueOf().toString();
 const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
 
-const columns = [{
-    title: '单据编号',
-    dataIndex: 'adjustmentNo',
-    key: 'adjustmentNo',
-}, {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
-}, {
-    title: '调整仓库',
-    dataIndex: 'warehouseName',
-    key: 'warehouseName',
-}, {
-    title: '调整数量合计',
-    dataIndex: 'totalQuantity',
-    key: 'totalQuantity',
-}, {
-    title: '调整成本额合计',
-    dataIndex: 'totalAdjustmentCost',
-    key: 'totalAdjustmentCost',
-}, {
-    title: '外部单据号',
-    dataIndex: 'externalBillNo',
-    key: 'externalBillNo',
-}, {
-    title: '操作',
-    dataIndex: 'operation',
-    key: 'operation',
-}];
-
 @connect(
     state => ({
-        storeAdjustData: state.toJS().storeAdjustList.storeAdjustData,
         orderListData: state.toJS().order.orderListData,
     }),
     dispatch => bindActionCreators({
-        storeAdList,
+        fetchOrderList,
         pubFetchValueList,
     }, dispatch)
 )
-class StoreAdjList extends Component {
+class OrderManagementList extends Component {
     constructor(props) {
         super(props);
         this.onEnterTimeChange = ::this.onEnterTimeChange;
-        this.onEnterTime = ::this.onEnterTime;
         this.renderOperation = ::this.renderOperation;
+        this.handleOrderBatchReview = ::this.handleOrderBatchReview;
+        this.handleOrderBatchCancel = ::this.handleOrderBatchCancel;
         this.handleOrderSearch = ::this.handleOrderSearch;
         this.handleOrderReset = ::this.handleOrderReset;
         this.handleOrderOutput = ::this.handleOrderOutput;
@@ -88,21 +59,23 @@ class StoreAdjList extends Component {
         this.handleJoiningClear = ::this.handleJoiningClear;
         this.handleSubCompanyClear = ::this.handleSubCompanyClear;
         this.handlePaginationChange = ::this.handlePaginationChange;
+        this.orderTypeSelect = ::this.orderTypeSelect;
         this.getSearchData = ::this.getSearchData;
         this.joiningSearchMind = null;
         this.subCompanySearchMind = null;
         this.searchData = {};
         this.current = 1;
         this.state = {
-            supplierInfo: null,
-            productId: null,
-            warehouseCode: null,
-            rengeTime: null,
-            settledDate: null,
-            setTime: null,
-            Time: {
-                adjustmentStartTime: null,
-                adjustmentEndTime: null,
+            choose: [],
+            franchiseeId: null,
+            branchCompanyId: null,
+            rengeTime: yesterdayrengeDate,
+            auditModalVisible: false,
+            tableOrderNumber: null,
+            isPayDisabled: false,
+            time: {
+                submitStartTime: yesterdayDate,
+                submitEndTime: todayDate,
             }
         }
     }
@@ -112,12 +85,12 @@ class StoreAdjList extends Component {
     }
 
     /**
-     * 调整日期
+     * 订单日期选择
      * @param {array} result [moment, moment]
      */
     onEnterTimeChange(result) {
-        let start = '';
-        let end = '';
+        let start = yesterdayDate;
+        let end = todayDate;
         if (result.length === 2) {
             start = result[0].valueOf().toString();
             end = result[1].valueOf().toString();
@@ -128,22 +101,10 @@ class StoreAdjList extends Component {
         }
         this.setState({
             rengeTime: result,
-            Time: {
-                adjustmentStartTime: start,
-                adjustmentEndTime: end
+            time: {
+                submitStartTime: start,
+                submitEndTime: end
             }
-        });
-    }
-      /**
-    * 调整日期
-    *
-    * @param {moment} data 日期的moment对象
-    * @param {string} dateString 格式化后的日期
-    */
-    onEnterTime(date) {
-        this.setState({
-            setTime: date,
-            settledDate: date ? date._d * 1 : null,
         });
     }
 
@@ -152,30 +113,50 @@ class StoreAdjList extends Component {
     */
     getSearchData() {
         const {
-            adjustmentNo,
-            Status,
-            Type,
-            externalBillNo,
+            id,
+            orderType,
+            orderState,
+            paymentState,
+            cellphone,
+            shippingState,
         } = this.props.form.getFieldsValue();
 
-        const { productId, warehouseCode } = this.state;
-        const { adjustmentStartTime, adjustmentEndTime } = this.state.Time;
+        const { franchiseeId, branchCompanyId } = this.state;
+        const { submitStartTime, submitEndTime } = this.state.time;
         this.current = 1;
         this.searchData = {
-            adjustmentNo,
-            status: Status,
-            adjustmentTime: this.state.settledDate,
-            type: Type,
-            warehouseCode,
-            productId,
-            externalBillNo,
-            adjustmentStartTime,
-            adjustmentEndTime,
+            id,
+            orderState: orderState === 'ALL' ? null : orderState,
+            orderType: orderType === 'ALL' ? null : orderType,
+            paymentState: paymentState === 'ALL' ? null : paymentState,
+            cellphone,
+            shippingState: shippingState === 'ALL' ? null : shippingState,
+            franchiseeId,
+            branchCompanyId,
+            submitStartTime,
+            submitEndTime,
+            pageSize: PAGE_SIZE,
         }
         const searchData = this.searchData;
-        this.props.storeAdList({
+        searchData.page = 1;
+        this.props.fetchOrderList({
             ...Utils.removeInvalid(searchData)
         })
+    }
+
+    /**
+     * 订单类型
+     */
+    orderTypeSelect(value) {
+        if (value === 'ZYYH') {
+            this.setState({
+                isPayDisabled: true
+            })
+        } else {
+            this.setState({
+                isPayDisabled: false
+            })
+        }
     }
 
     /**
@@ -186,44 +167,55 @@ class StoreAdjList extends Component {
         this.current = goto;
         const searchData = this.searchData;
         searchData.page = goto;
-        this.props.storeAdList({
+        this.props.fetchOrderList({
             ...Utils.removeInvalid(searchData)
         })
     }
 
     /**
-     * 调整仓库-值清单
+     * table复选框
+     */
+    rowSelection = {
+        onChange: (selectedRowKeys) => {
+            this.setState({
+                choose: selectedRowKeys,
+            });
+        }
+    }
+
+    /**
+     * 加盟商-值清单
      */
     handleJoiningChoose = ({ record }) => {
         this.setState({
-            warehouseCode: record.warehouseCode,
+            franchiseeId: record.franchiseeId,
         });
     }
 
     /**
-     * 商品-值清单
+     * 子公司-值清单
      */
     handleSubCompanyChoose = ({ record }) => {
         this.setState({
-            productId: record.productId,
+            branchCompanyId: record.id,
         });
     }
 
     /**
-     * 调整仓库-清除
+     * 加盟商-清除
      */
     handleJoiningClear() {
         this.setState({
-            warehouseCode: null,
+            franchiseeId: null,
         });
     }
 
     /**
-     * 商品-清除
+     * 子公司-清除
      */
     handleSubCompanyClear() {
         this.setState({
-            productId: null,
+            branchCompanyId: null,
         });
     }
 
@@ -239,11 +231,11 @@ class StoreAdjList extends Component {
      */
     handleOrderReset() {
         this.setState({
-            rengeTime: null,
-            setTime: null,
-            Time: {
-                submitStartTime: null,
-                submitEndTime: null,
+            rengeTime: yesterdayrengeDate,
+            isPayDisabled: false,
+            time: {
+                submitStartTime: yesterdayDate,
+                submitEndTime: todayDate,
             }
         });
         this.joiningSearchMind.handleClear();
@@ -256,25 +248,12 @@ class StoreAdjList extends Component {
      */
     handleOrderOutput() {
         const searchData = this.searchData;
-        Utils.exportExcel(exportStoreAdList, Utils.removeInvalid(searchData));
+        searchData.page = this.current;
+        Utils.exportExcel(exportOrderList, Utils.removeInvalid(searchData));
     }
 
-    /**
-     * 表单操作
-     * @param {Object} text 当前行的值
-     * @param {object} record 单行数据
-     */
-    renderOperation(text, record) {
-        const { id } = record;
-        const pathname = window.location.pathname;
-        return (
-            <Link to={`${pathname}/itemDetail/${id}`}>查看详情</Link>
-        )
-    }
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { storeAdjustData } = this.props;
-        columns[columns.length - 1].render = this.renderOperation;
         return (
             <div className={orderML}>
                 <div className="manage-form">
@@ -282,32 +261,33 @@ class StoreAdjList extends Component {
                         <div className="gutter-example">
                             <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
-                                    {/* 单据编号 */}
+                                    {/* 订单编号 */}
                                     <FormItem>
                                         <div>
-                                            <span className="sc-form-item-label">单据编号</span>
-                                            {getFieldDecorator('adjustmentNo')(
+                                            <span className="sc-form-item-label">订单编号</span>
+                                            {getFieldDecorator('id')(
                                                 <Input
                                                     className="input"
-                                                    placeholder="单据编号"
+                                                    placeholder="订单编号"
                                                 />
                                             )}
                                         </div>
                                     </FormItem>
                                 </Col>
                                 <Col className="gutter-row" span={8}>
-                                    {/* 状态 */}
+                                    {/* 订单类型 */}
                                     <FormItem>
                                         <div>
-                                            <span className="sc-form-item-label">状态</span>
-                                            {getFieldDecorator('Status', {
-                                                initialValue: StoreStatus.defaultValue
+                                            <span className="sc-form-item-label">订单类型</span>
+                                            {getFieldDecorator('orderType', {
+                                                initialValue: orderTypeOptions.defaultValue
                                             })(
                                                 <Select
                                                     size="default"
+                                                    onChange={this.orderTypeSelect}
                                                 >
                                                     {
-                                                        StoreStatus.data.map((item) =>
+                                                        orderTypeOptions.data.map((item) =>
                                                             (<Option
                                                                 key={item.key}
                                                                 value={item.key}
@@ -322,33 +302,47 @@ class StoreAdjList extends Component {
                                     </FormItem>
                                 </Col>
                                 <Col className="gutter-row" span={8}>
-                                    {/* 调整日期 */}
+                                    {/* 订单状态 */}
                                     <FormItem>
                                         <div>
-                                            <span className="sc-form-item-label">调整日期</span>
-                                            <DatePicker
-                                                value={this.state.setTime}
-                                                placeholder={'调整日期'}
-                                                onChange={this.onEnterTime}
-                                            />
+                                            <span className="sc-form-item-label">订单状态</span>
+                                            {getFieldDecorator('orderState', {
+                                                initialValue: orderStatusOptions.defaultValue
+                                            })(
+                                                <Select
+                                                    size="default"
+                                                >
+                                                    {
+                                                        orderStatusOptions.data.map((item) =>
+                                                            (<Option
+                                                                key={item.key}
+                                                                value={item.key}
+                                                            >
+                                                                {item.value}
+                                                            </Option>)
+                                                        )
+                                                    }
+                                                </Select>
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
                             </Row>
                             <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
-                                    {/* 调整类型 */}
+                                    {/* 支付状态 */}
                                     <FormItem>
                                         <div>
-                                            <span className="sc-form-item-label">调整类型</span>
-                                            {getFieldDecorator('Type', {
-                                                initialValue: adjustmentType.defaultValue
+                                            <span className="sc-form-item-label">支付状态</span>
+                                            {getFieldDecorator('paymentState', {
+                                                initialValue: payStatusOptions.defaultValue
                                             })(
                                                 <Select
                                                     size="default"
+                                                    disabled={this.state.isPayDisabled}
                                                 >
                                                     {
-                                                        adjustmentType.data.map((item) =>
+                                                        payStatusOptions.data.map((item) =>
                                                             (<Option
                                                                 key={item.key}
                                                                 value={item.key}
@@ -363,10 +357,10 @@ class StoreAdjList extends Component {
                                     </FormItem>
                                 </Col>
                                 <Col className="gutter-row" span={8}>
-                                    {/* 调整仓库 */}
+                                    {/* 加盟商 */}
                                     <FormItem>
                                         <div>
-                                            <span className="sc-form-item-label">调整仓库</span>
+                                            <span className="sc-form-item-label">加盟商</span>
                                             <SearchMind
                                                 rowKey="franchiseeId"
                                                 compKey="search-mind-joining"
@@ -376,24 +370,24 @@ class StoreAdjList extends Component {
                                                         param: params.value,
                                                         pageNum: params.pagination.current || 1,
                                                         pageSize: params.pagination.pageSize
-                                                    }, 'getWarehouseInfo1')
+                                                    }, 'getFranchiseeInfo')
                                                 }
                                                 onChoosed={this.handleJoiningChoose}
                                                 onClear={this.handleJoiningClear}
                                                 renderChoosedInputRaw={(row) => (
                                                     <div>
-                                                        {row.warehouseCode} - {row.warehouseName}
+                                                        {row.franchiseeId} - {row.franchiseeName}
                                                     </div>
                                                 )}
                                                 pageSize={6}
                                                 columns={[
                                                     {
-                                                        title: '仓库编码',
-                                                        dataIndex: 'warehouseCode',
+                                                        title: '加盟商id',
+                                                        dataIndex: 'franchiseeId',
                                                         width: 98
                                                     }, {
-                                                        title: '仓库名称',
-                                                        dataIndex: 'warehouseName',
+                                                        title: '加盟商名字',
+                                                        dataIndex: 'franchiseeName',
                                                         width: 140
                                                     }
                                                 ]}
@@ -402,34 +396,33 @@ class StoreAdjList extends Component {
                                     </FormItem>
                                 </Col>
                                 <Col className="gutter-row" span={8}>
-                                    {/* 商品 */}
+                                    {/* 子公司 */}
                                     <FormItem>
                                         <div>
-                                            <span className="sc-form-item-label">商品</span>
+                                            <span className="sc-form-item-label">子公司</span>
                                             <SearchMind
                                                 compKey="search-mind-sub-company"
                                                 ref={ref => { this.subCompanySearchMind = ref }}
                                                 fetch={(params) =>
                                                     this.props.pubFetchValueList({
-                                                        teamText: params.value,
-                                                        pageNum: params.pagination.current || 1,
-                                                        pageSize: params.pagination.pageSize
-                                                    }, 'queryProductForSelect')
+                                                        branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
+                                                        branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
+                                                    }, 'findCompanyBaseInfo')
                                                 }
                                                 onChoosed={this.handleSubCompanyChoose}
                                                 onClear={this.handleSubCompanyClear}
                                                 renderChoosedInputRaw={(row) => (
-                                                    <div>{row.productId}</div>
+                                                    <div>{row.id}</div>
                                                 )}
                                                 pageSize={6}
                                                 columns={[
                                                     {
-                                                        title: '商品id',
-                                                        dataIndex: 'productId',
+                                                        title: '子公司id',
+                                                        dataIndex: 'id',
                                                         width: 98
                                                     }, {
-                                                        title: '商品名字',
-                                                        dataIndex: 'saleName',
+                                                        title: '子公司名字',
+                                                        dataIndex: 'name',
                                                         width: 140
                                                     }
                                                 ]}
@@ -440,25 +433,51 @@ class StoreAdjList extends Component {
                             </Row>
                             <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
-                                    {/* 外部单据号 */}
+                                    {/* 收货人电话 */}
                                     <FormItem>
                                         <div>
-                                            <span className="sc-form-item-label">外部单据号</span>
-                                            {getFieldDecorator('externalBillNo')(
+                                            <span className="sc-form-item-label">收货人电话</span>
+                                            {getFieldDecorator('cellphone')(
                                                 <Input
                                                     maxLength={11}
                                                     className="input"
-                                                    placeholder="外部单据号"
+                                                    placeholder="收货人电话"
                                                 />
                                             )}
                                         </div>
                                     </FormItem>
                                 </Col>
                                 <Col className="gutter-row" span={8}>
-                                    {/* 调整日期 */}
+                                    {/* 物流状态 */}
                                     <FormItem>
                                         <div>
-                                            <span className="sc-form-item-label">调整日期起止</span>
+                                            <span className="sc-form-item-label">物流状态</span>
+                                            {getFieldDecorator('shippingState', {
+                                                initialValue: logisticsStatusOptions.defaultValue
+                                            })(
+                                                <Select
+                                                    size="default"
+                                                >
+                                                    {
+                                                        logisticsStatusOptions.data.map((item) =>
+                                                            (<Option
+                                                                key={item.key}
+                                                                value={item.key}
+                                                            >
+                                                                {item.value}
+                                                            </Option>)
+                                                        )
+                                                    }
+                                                </Select>
+                                                )}
+                                        </div>
+                                    </FormItem>
+                                </Col>
+                                <Col className="gutter-row" span={8}>
+                                    {/* 订单日期 */}
+                                    <FormItem>
+                                        <div>
+                                            <span className="sc-form-item-label">订单日期</span>
                                             <RangePicker
                                                 style={{ width: '240px' }}
                                                 className="manage-form-enterTime"
@@ -466,13 +485,30 @@ class StoreAdjList extends Component {
                                                 format={DATE_FORMAT}
                                                 placeholder={['开始时间', '结束时间']}
                                                 onChange={this.onEnterTimeChange}
+
                                             />
                                         </div>
                                     </FormItem>
                                 </Col>
                             </Row>
                             <Row gutter={16}>
-                                <Col className="gutter-row" span={8} offset={16}>
+                                <Col className="gutter-row" span={8}>
+                                    <FormItem>
+                                        <Button
+                                            size="default"
+                                            disabled={this.state.choose.length === 0}
+                                            onClick={this.handleOrderBatchReview}
+                                        >批量审核</Button>
+                                    </FormItem>
+                                    <FormItem>
+                                        <Button
+                                            size="default"
+                                            disabled={this.state.choose.length === 0}
+                                            onClick={this.handleOrderBatchCancel}
+                                        >批量取消</Button>
+                                    </FormItem>
+                                </Col>
+                                <Col className="gutter-row" span={8} offset={8}>
                                     <FormItem>
                                         <Button
                                             size="default"
@@ -497,31 +533,18 @@ class StoreAdjList extends Component {
                         </div>
                     </Form>
                 </div>
-                <div className="area-list">
-                    <Table
-                        dataSource={storeAdjustData.data}
-                        columns={columns}
-                        rowKey="id"
-                        pagination={{
-                            current: storeAdjustData.pageNum,
-                            total: storeAdjustData.total,
-                            pageSize: storeAdjustData.pageSize,
-                            showQuickJumper: true,
-                            onChange: this.handlePaginationChange
-                        }}
-                    />
-                </div>
             </div>
         );
     }
 }
 
-StoreAdjList.propTypes = {
+OrderManagementList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    orderListData: PropTypes.objectOf(PropTypes.any),
-    storeAdjustData: PropTypes.objectOf(PropTypes.any),
-    storeAdList: PropTypes.func,
+    fetchOrderList: PropTypes.func,
     pubFetchValueList: PropTypes.func,
 }
 
-export default withRouter(Form.create()(StoreAdjList));
+OrderManagementList.defaultProps = {
+}
+
+export default withRouter(Form.create()(OrderManagementList));

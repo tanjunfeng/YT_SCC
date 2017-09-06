@@ -1,0 +1,33 @@
+{
+    "timestamp": 1504509605285,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+      "pageNum": 1,
+      "pageSize": 15,
+      "total": 1,
+      "data": [
+        {
+          "id": 1000001,
+          "adjustmentNo": "100000003",
+          "status": 1,
+          "totalQuantity": 10,
+          "totalAdjustmentCost": 160.8,
+          "externalBillNo": 11111,
+          "warehouseName": "测试"
+        },
+        {
+          "id": 1000002,
+          "adjustmentNo": "100000003",
+          "status": 1,
+          "totalQuantity": 10,
+          "totalAdjustmentCost": 160.8,
+          "externalBillNo": null,
+          "warehouseName": "测试"
+        }
+      ]
+    },
+    "success": true
+  }
+  

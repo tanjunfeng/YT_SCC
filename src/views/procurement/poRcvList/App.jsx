@@ -425,11 +425,11 @@ class PoRcvList extends PureComponent {
                                                 {
                                                     title: '编码',
                                                     dataIndex: 'code',
-                                                    width: 150,
+                                                    width: 98
                                                 }, {
                                                     title: '名称',
                                                     dataIndex: 'name',
-                                                    width: 200,
+                                                    width: 140
                                                 }
                                             ]}
                                         />
@@ -477,11 +477,11 @@ class PoRcvList extends PureComponent {
                                                 {
                                                     title: '编码',
                                                     dataIndex: 'code',
-                                                    width: 150,
+                                                    width: 98
                                                 }, {
                                                     title: '名称',
                                                     dataIndex: 'name',
-                                                    width: 200,
+                                                    width: 140
                                                 }
                                             ]}
                                         />
@@ -512,11 +512,11 @@ class PoRcvList extends PureComponent {
                                                 {
                                                     title: '编码',
                                                     dataIndex: 'code',
-                                                    width: 150,
+                                                    width: 98
                                                 }, {
                                                     title: '名称',
                                                     dataIndex: 'name',
-                                                    width: 200,
+                                                    width: 140
                                                 }
                                             ]}
                                         />
@@ -544,11 +544,11 @@ class PoRcvList extends PureComponent {
                                                 {
                                                     title: '编码',
                                                     dataIndex: 'code',
-                                                    width: 150,
+                                                    width: 98
                                                 }, {
                                                     title: '名称',
                                                     dataIndex: 'name',
-                                                    width: 200,
+                                                    width: 140
                                                 }
                                             ]}
                                         />

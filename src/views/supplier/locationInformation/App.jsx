@@ -499,11 +499,11 @@ class BasicInfo extends PureComponent {
                                                     {
                                                         title: '子公司编码',
                                                         dataIndex: 'id',
-                                                        width: 150,
+                                                        width: 98
                                                     }, {
                                                         title: '子公司名称',
                                                         dataIndex: 'name',
-                                                        width: 200,
+                                                        width: 140
                                                     }
                                                 ]}
                                             />
