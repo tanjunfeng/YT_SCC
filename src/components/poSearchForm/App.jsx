@@ -279,11 +279,10 @@ class PoSearchForm extends PureComponent {
                                                 {
                                                     title: '编码',
                                                     dataIndex: this.state.locationData.code,
-                                                    width: 98
+                                                    width: 80
                                                 }, {
                                                     title: '名称',
-                                                    dataIndex: this.state.locationData.name,
-                                                    width: 140
+                                                    dataIndex: this.state.locationData.name
                                                 }
                                             ]}
                                         />
@@ -352,11 +351,10 @@ class PoSearchForm extends PureComponent {
                                                 {
                                                     title: '编码',
                                                     dataIndex: 'id',
-                                                    width: 98
+                                                    width: 80
                                                 }, {
                                                     title: '名称',
-                                                    dataIndex: 'categoryName',
-                                                    width: 140
+                                                    dataIndex: 'categoryName'
                                                 }
                                             ]}
                                         />
@@ -389,11 +387,10 @@ class PoSearchForm extends PureComponent {
                                                 {
                                                     title: '供应商编号',
                                                     dataIndex: 'spNo',
-                                                    width: 150
+                                                    width: 80
                                                 }, {
                                                     title: '供应商名称',
-                                                    dataIndex: 'companyName',
-                                                    width: 200
+                                                    dataIndex: 'companyName'
                                                 }
                                             ]}
                                         />
@@ -430,8 +427,7 @@ class PoSearchForm extends PureComponent {
                                                     width: 98
                                                 }, {
                                                     title: '供应商地点名称',
-                                                    dataIndex: 'providerName',
-                                                    width: 140
+                                                    dataIndex: 'providerName'
                                                 }
                                             ]}
                                         />

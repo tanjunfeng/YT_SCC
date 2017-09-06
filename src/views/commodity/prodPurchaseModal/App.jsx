@@ -329,8 +329,7 @@ class ProdPurchaseModal extends Component {
                                                     width: 98
                                                 }, {
                                                     title: '供应商名称',
-                                                    dataIndex: 'companyName',
-                                                    width: 140
+                                                    dataIndex: 'companyName'
                                                 }
                                             ]}
                                         />

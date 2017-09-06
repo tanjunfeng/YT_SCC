@@ -203,7 +203,6 @@ class SearchMind extends Component {
             return (
                 <Table
                     rowKey={rowKey}
-                    scroll={{ x: 238 }}
                     columns={columns}
                     dataSource={data}
                     pagination={pagination}

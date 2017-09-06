@@ -386,8 +386,7 @@ class ProdModal extends Component {
                                                     width: 98
                                                 }, {
                                                     title: '供应商地点名称',
-                                                    dataIndex: 'providerName',
-                                                    width: 140
+                                                    dataIndex: 'providerName'
                                                 }
                                             ]}
                                         />

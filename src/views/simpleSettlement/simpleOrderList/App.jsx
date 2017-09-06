@@ -390,8 +390,7 @@ class SimpleOrderList extends Component {
                                                         width: 98
                                                     }, {
                                                         title: '供应商名称',
-                                                        dataIndex: 'companyName',
-                                                        width: 140
+                                                        dataIndex: 'companyName'
                                                     }
                                                 ]}
                                             />
@@ -429,11 +428,10 @@ class SimpleOrderList extends Component {
                                                     {
                                                         title: '供应商地点编码',
                                                         dataIndex: 'providerNo',
-                                                        width: 150,
+                                                        width: 98
                                                     }, {
                                                         title: '供应商地点名称',
-                                                        dataIndex: 'providerName',
-                                                        width: 300,
+                                                        dataIndex: 'providerName'
                                                     }
                                                 ]}
                                             />
@@ -498,8 +496,7 @@ class SimpleOrderList extends Component {
                                                         width: 98
                                                     }, {
                                                         title: '子公司名字',
-                                                        dataIndex: 'name',
-                                                        width: 140
+                                                        dataIndex: 'name'
                                                     }
                                                 ]}
                                             />

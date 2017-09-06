@@ -332,8 +332,7 @@ class SearchForm extends Component {
                                                     width: 98
                                                 }, {
                                                     title: '供应商地点名称',
-                                                    dataIndex: 'providerName',
-                                                    width: 200
+                                                    dataIndex: 'providerName'
                                                 }
                                             ]}
                                         />
@@ -368,8 +367,7 @@ class SearchForm extends Component {
                                                     width: 98
                                                 }, {
                                                     title: '子公司名称',
-                                                    dataIndex: 'name',
-                                                    width: 200
+                                                    dataIndex: 'name'
                                                 }
                                             ]}
                                         />
