@@ -65,6 +65,9 @@ import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/
 import StoreAdjList from 'bundle-loader?lazy!../views/storeAdjustment/storeAdjList';
 import ItemDetail from 'bundle-loader?lazy!../views/storeAdjustment/itemDetail';
 
+// 简易结算支持
+import SimpleOrderList from 'bundle-loader?lazy!../views/simpleSettlement/simpleOrderList';
+
 /* eslint-enable */
 
 
@@ -393,6 +396,32 @@ const routes = [
                         <Route
                             path="/storeAdjList/:id"
                             render={() => <Bundle load={ItemDetail}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            }
+        ]
+    },
+    {
+        // 简易结算支持
+        key: 'jyjszc',
+        iconType: 'fork',
+        routes: [
+            // 供应商结算
+            {
+                path: '/simpleOrderList',
+                parent: 'jyjszc',
+                key: 'gysjs',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/simpleOrderList"
+                            exact
+                            render={() => <Bundle load={SimpleOrderList}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/simpleOrderList/:id"
+                            render={() => <Bundle load={SimpleOrderList}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )

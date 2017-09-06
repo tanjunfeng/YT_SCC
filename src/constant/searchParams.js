@@ -437,34 +437,22 @@ export const payStatusOptions = {
         key: 'ALL',
         value: '全部'
     }, {
-        key: 'WZF',
-        value: '未支付'
+        key: 'ZJ',
+        value: '周结'
     }, {
-        key: 'YZF',
-        value: '已支付'
+        key: 'BYJ',
+        value: '半月结'
     }, {
-        key: 'QXFK',
-        value: '取消支付'
-    }, {
-        key: 'TKD',
-        value: '退款待审核'
-    }, {
-        key: 'TKQ',
-        value: '退款待确认'
-    }, {
-        key: 'YTK',
-        value: '已退款'
-    }, {
-        key: 'GSN',
-        value: '公司内'
+        key: 'YJ',
+        value: '月结'
     }]
 }
 
 // 状态
-export const supplierStore = {
-    defaultValue: '-1',
+export const StoreStatus = {
+    defaultValue: '',
     data: [{
-        key: '-1',
+        key: '',
         value: '全部'
     }, {
         key: '0',
@@ -513,27 +501,39 @@ export const logisticsStatusOptions = {
 
 // 调整类型
 export const adjustmentType = {
-    defaultValue: '-1',
+    defaultValue: '',
     data: [
         {
-            key: '-1',
+            key: '' ,
             value: '全部'
         },
         {
-            key: '0',
+            key: 0,
             value: '物流丢失'
         },
         {
-            key: '1',
-            value: '库存报损报溢'
+            key: 1,
+            value: '仓库报溢'
         },
         {
-            key: '2',
-            value: '业务发起库存调整'
+            key: 2,
+            value: '仓库报损'
         },
         {
-            key: '3',
-            value: '仓库库存同步'
+            key: 3,
+            value: '业务调增'
+        },
+        {
+            key: 4,
+            value: '业务调减'
+        },
+        {
+            key: 5,
+            value: '仓库同步调增'
+        },
+        {
+            key: 6,
+            value: '仓库同步调减'
         }
     ]
 }
