@@ -41,7 +41,6 @@ class AddSupplier extends PureComponent {
         this.state = {
             activeKey: '1',
             edit: false,
-            licenseInfoDisabled: true // 默认证件信息置灰
         }
     }
 
@@ -71,12 +70,6 @@ class AddSupplier extends PureComponent {
     }
 
     handleGoTo(item) {
-        // 只有跳过第一步，才可点击第三页
-        if (+(item) > 1) {
-            this.setState({
-                licenseInfoDisabled: false
-            })
-        }
         this.setState({
             activeKey: item
         })
@@ -85,7 +78,7 @@ class AddSupplier extends PureComponent {
     handleTabClick(item) {
         const tabs = ['BasicInfo', 'BankInfo', 'LicenseInfo'];
         const { activeKey } = this.state;
-        TABCONTENT[tabs[activeKey - 1]].handleGoTo(item);
+        TABCONTENT[tabs[+(activeKey) - 1]].handleGoTo(item);
     }
 
     render() {
@@ -114,14 +107,11 @@ class AddSupplier extends PureComponent {
                         {...props}
                     />
                 </TabPane>
-                {!this.state.licenseInfoDisabled && edit ?
-                    <TabPane tab="证照信息" key="3">
-                        <LicenseInfo
-                            {...props}
-                        />
-                    </TabPane>
-                    : null
-                }
+                <TabPane tab="证照信息" key="3">
+                    <LicenseInfo
+                        {...props}
+                    />
+                </TabPane>
             </Tabs>
         )
     }
