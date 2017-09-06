@@ -580,11 +580,12 @@ export const createPoRcv = (params) => http.post('/provider/createPoRcv', params
 // 查询库存调整列表{mock}
 export const queryAdjustLibList = (params) => http.post('/provider/queryAdjustLibList', params);
 
-// 查询库存调整单详情{mock}
-export const queryAdjustDetail = (params) => http.post('/provider/queryAdjustDetail', params);
+// 查询库存调整单详情
+export const queryAdjustDetail = (params) => http.get('/imAdjustment/getImAdjustment', params);
 
-// 库存调整-库存调整列表{mock}
+// 库存调整-库存调整列表
 export const queryStoreAdList = (params) => http.get('/imAdjustment/queryListImAdjustment', params);
+
 /**
  * 供应商相关
  */

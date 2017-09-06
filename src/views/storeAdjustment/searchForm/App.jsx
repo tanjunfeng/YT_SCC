@@ -175,7 +175,7 @@ class SearchForm extends Component {
                         </div>
                     </FormItem>
                     {/* 调整类型 */}
-                    <FormItem className="sc-form-item">
+                    {/* <FormItem className="sc-form-item">
                         <div>
                             <span className="sc-form-item-label">调整类型</span>
                             {getFieldDecorator('supplierTy', {
@@ -196,7 +196,7 @@ class SearchForm extends Component {
                                 </Select>
                             )}
                         </div>
-                    </FormItem>
+                    </FormItem> */}
                     {/* 调整仓库 */}
                     <FormItem className="sc-form-item">
                         <div>
@@ -246,7 +246,7 @@ class SearchForm extends Component {
                         </div>
                     </FormItem>
                     {/* 调整日期 */}
-                    <FormItem className="sc-form-item">
+                    {/* <FormItem className="sc-form-item">
                         <div>
                             <span className="sc-form-item-label">调整日期</span>
                             <RangePicker
@@ -275,7 +275,7 @@ class SearchForm extends Component {
                                 }
                             </Select>
                         )}
-                    </FormItem>
+                    </FormItem> */}
                     <div className="sc-form-button-group">
                         <FormItem>
                             <Button
