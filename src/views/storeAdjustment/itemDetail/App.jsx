@@ -59,9 +59,9 @@ const columns = [
 
 class ItemDetail extends PureComponent {
     componentDidMount() {
-        const match = this.props.match.params;
+        const { match } = this.props;
         this.props.stockListDetail({
-            id: match.id
+            id: match.params.id
             // id: 1000001
         });
     }
