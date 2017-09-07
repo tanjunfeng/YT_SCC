@@ -67,6 +67,7 @@ import ItemDetail from 'bundle-loader?lazy!../views/storeAdjustment/itemDetail';
 
 // 简易结算支持
 import SimpleOrderList from 'bundle-loader?lazy!../views/simpleSettlement/simpleOrderList';
+import FranchiseeSettlement from 'bundle-loader?lazy!../views/simpleSettlement/franchiseeSettlement';
 
 /* eslint-enable */
 
@@ -425,13 +426,31 @@ const routes = [
                         />
                     </Switch>
                 )
+            },
+            {
+                path: '/franchiseeSettlement',
+                parent: 'jyjszc',
+                key: 'jmsjs',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/franchiseeSettlement"
+                            exact
+                            render={() => <Bundle load={FranchiseeSettlement}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/franchiseeSettlement/:id"
+                            render={() => <Bundle load={FranchiseeSettlement}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
             }
         ]
     },
     // 采购管理
     {
         key: 'procurementMng',
-        iconType: 'solution',
+        iconType: 'save',
         routes: [
             // 采购单管理列表
             {
