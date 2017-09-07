@@ -280,10 +280,10 @@ class SimpleOrderList extends Component {
                                                     {
                                                         title: '供应商编码',
                                                         dataIndex: 'spNo',
-                                                        width: 100,
+                                                        width: 98
                                                     }, {
                                                         title: '供应商名称',
-                                                        dataIndex: 'companyName',
+                                                        dataIndex: 'companyName'
                                                     }
                                                 ]}
                                             />
@@ -321,10 +321,10 @@ class SimpleOrderList extends Component {
                                                     {
                                                         title: '供应商地点编码',
                                                         dataIndex: 'providerNo',
-                                                        width: 100,
+                                                        width: 98
                                                     }, {
                                                         title: '供应商地点名称',
-                                                        dataIndex: 'providerName',
+                                                        dataIndex: 'providerName'
                                                     }
                                                 ]}
                                             />
@@ -385,10 +385,10 @@ class SimpleOrderList extends Component {
                                                     {
                                                         title: '子公司id',
                                                         dataIndex: 'id',
-                                                        width: 100,
+                                                        width: 98
                                                     }, {
                                                         title: '子公司名字',
-                                                        dataIndex: 'name',
+                                                        dataIndex: 'name'
                                                     }
                                                 ]}
                                             />
@@ -444,4 +444,4 @@ SimpleOrderList.defaultProps = {
     prefixCls: 'SimpleOrderList'
 }
 
-export default withRouter(Form.create()(SimpleOrderList));
+export default withRouter(Form.create()(SimpleOrderList));

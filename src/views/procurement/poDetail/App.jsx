@@ -691,11 +691,11 @@ class PoDetail extends PureComponent {
                                             {
                                                 title: '供应商编号',
                                                 dataIndex: 'spNo',
-                                                width: 150,
+                                                width: 98
                                             }, {
                                                 title: '供应商名称',
                                                 dataIndex: 'companyName',
-                                                width: 200,
+                                                width: 140
                                             }
                                         ]}
                                     />
@@ -738,11 +738,11 @@ class PoDetail extends PureComponent {
                                             {
                                                 title: '供应商编码',
                                                 dataIndex: 'providerNo',
-                                                width: 150,
+                                                width: 98
                                             }, {
                                                 title: '供应商名称',
                                                 dataIndex: 'providerName',
-                                                width: 200,
+                                                width: 140
                                             }
                                         ]}
                                     />
@@ -839,11 +839,11 @@ class PoDetail extends PureComponent {
                                                 {
                                                     title: '仓库编码',
                                                     dataIndex: 'warehouseCode',
-                                                    width: 150,
+                                                    width: 98
                                                 }, {
                                                     title: '仓库名称',
                                                     dataIndex: 'warehouseName',
-                                                    width: 200,
+                                                    width: 140
                                                 }
                                             ]}
                                         />
@@ -872,11 +872,11 @@ class PoDetail extends PureComponent {
                                                 {
                                                     title: '门店id',
                                                     dataIndex: 'id',
-                                                    width: 150,
+                                                    width: 98
                                                 }, {
                                                     title: '门店名称',
                                                     dataIndex: 'name',
-                                                    width: 200,
+                                                    width: 140
                                                 }
                                             ]}
                                         />
@@ -910,11 +910,11 @@ class PoDetail extends PureComponent {
                                             {
                                                 title: '大类id',
                                                 dataIndex: 'id',
-                                                width: 150,
+                                                width: 98
                                             }, {
                                                 title: '大类名称',
                                                 dataIndex: 'categoryName',
-                                                width: 200,
+                                                width: 140
                                             }
                                         ]}
                                     />
@@ -1834,11 +1834,11 @@ class PoDetail extends PureComponent {
                                             {
                                                 title: '商品编码',
                                                 dataIndex: 'productCode',
-                                                width: 150,
+                                                width: 98
                                             }, {
                                                 title: '商品名称',
                                                 dataIndex: 'saleName',
-                                                width: 200,
+                                                width: 140
                                             }
                                         ]}
                                     />
