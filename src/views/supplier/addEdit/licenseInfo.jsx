@@ -26,7 +26,7 @@ import {
     addSupplierMessage1,
 } from '../../../actions/addSupplier';
 import {
-    hanldeSupplier
+    hanldeSupplier, removeDetailData
 } from '../../../actions/supplier';
 import Tools from './utils';
 import { TABCONTENT } from '../../../constant';
@@ -41,7 +41,8 @@ const FormItem = Form.Item;
     }),
     dispatch => bindActionCreators({
         addSupplierMessage1,
-        hanldeSupplier
+        hanldeSupplier,
+        removeDetailData
     }, dispatch)
 )
 class LicenseInfo extends PureComponent {
@@ -232,6 +233,10 @@ class LicenseInfo extends PureComponent {
             }
             return '';
         })
+    }
+
+    componentWillUnMount() {
+        this.props.removeDetailData();
     }
 
     handleGoTo = (key) => {
@@ -764,6 +769,7 @@ class LicenseInfo extends PureComponent {
 
 LicenseInfo.propTypes = {
     onGoTo: PropTypes.func,
+    removeDetailData: PropTypes.func,
     hanldeSupplier: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     isEdit: PropTypes.bool,
