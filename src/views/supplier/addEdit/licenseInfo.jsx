@@ -256,7 +256,7 @@ class LicenseInfo extends PureComponent {
                     if (!isEdit) {
                         this.submitId = res.data;
                     }
-                }).catch(() => {
+                }).finally(() => {
                     this.handleClear();
                 });
         })
@@ -290,7 +290,7 @@ class LicenseInfo extends PureComponent {
                     this.setState({
                         isSubmit: false
                     })
-                }).catch(() => {
+                }).finally(() => {
                     this.handleClear();
                 });
         })
