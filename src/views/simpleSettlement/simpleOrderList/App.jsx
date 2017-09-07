@@ -1,9 +1,11 @@
-/**
- * @file App.jsx
- * @author caoyanxuan
- *
- * 订单管理列表
+/*
+ * @Author: tanjf
+ * @Description: 供应商结算
+ * @CreateDate: 2017-09-06 17:54:20
+ * @Last Modified by: tanjf
+ * @Last Modified time: 2017-09-07 14:23:00
  */
+
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
@@ -22,7 +24,7 @@ import {
 import { exportSimpleList } from '../../../service';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { pubFetchValueList } from '../../../actions/pub';
-import { DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
+import { DATE_FORMAT } from '../../../constant/index';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -217,7 +219,12 @@ class SimpleOrderList extends Component {
         this.getSearchData();
         const searchData = Util.removeInvalid(this.searchData);
         searchData.page = this.current;
-        Util.exportExcel(exportSimpleList, Util.removeInvalid(searchData));
+        // Util.exportExcel(exportSimpleList, Util.removeInvalid(searchData));
+        this.props.form.validateFields((err) => {
+            if (!err) {
+                Util.exportExcel(exportSimpleList, Util.removeInvalid(searchData));
+            }
+        })
     }
 
     render() {
@@ -229,13 +236,13 @@ class SimpleOrderList extends Component {
                     <Form layout="inline">
                         <div className="gutter-example">
                             <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
+                                <Col className="gutter-row simpleOrderList-errPlace" span={8}>
                                     {/* 订单日期 */}
                                     <FormItem>
-                                        <div>
+                                        <div className="simpleOrderList-errPlace">
                                             <span className="sc-form-item-label">收货日期</span>
                                             {getFieldDecorator('receiveDate', {
-                                                initialValue: this.state.rengeTime,
+                                                initialValue: '',
                                                 rules: [{ required: true, message: '请选择收货日期' }]
                                             })(
                                                 <RangePicker
