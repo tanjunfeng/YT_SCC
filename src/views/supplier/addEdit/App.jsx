@@ -59,7 +59,7 @@ class AddSupplier extends PureComponent {
     }
 
     componentWillUnmount() {
-        this.props.removeDetailData()
+        this.props.removeDetailData();
     }
 
     handleGetDetail(id) {
