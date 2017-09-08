@@ -36,14 +36,24 @@ const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
 
 const columns = [{
     title: '单据编号',
-    dataIndex: 'adjustmentNo',
-    key: 'adjustmentNo',
+    dataIndex: 'id',
+    key: 'id',
 }, {
     title: '状态',
     dataIndex: 'status',
     key: 'status',
+    render: (text) => {
+        switch (text) {
+            case 0:
+                return '制单';
+            case 1:
+                return '生效';
+            default:
+                return '';
+        }
+    }
 }, {
-    title: '调整仓库',
+    title: '调整地点',
     dataIndex: 'warehouseName',
     key: 'warehouseName',
 }, {
@@ -67,7 +77,6 @@ const columns = [{
 @connect(
     state => ({
         storeAdjustData: state.toJS().storeAdjustList.storeAdjustData,
-        orderListData: state.toJS().order.orderListData,
     }),
     dispatch => bindActionCreators({
         storeAdList,
@@ -152,7 +161,7 @@ class StoreAdjList extends Component {
     */
     getSearchData() {
         const {
-            adjustmentNo,
+            id,
             Status,
             Type,
             externalBillNo,
@@ -162,7 +171,7 @@ class StoreAdjList extends Component {
         const { adjustmentStartTime, adjustmentEndTime } = this.state.Time;
         this.current = 1;
         this.searchData = {
-            adjustmentNo,
+            id,
             status: Status,
             adjustmentTime: this.state.settledDate,
             type: Type,
@@ -171,8 +180,10 @@ class StoreAdjList extends Component {
             externalBillNo,
             adjustmentStartTime,
             adjustmentEndTime,
+            pageSize: PAGE_SIZE,
         }
         const searchData = this.searchData;
+        searchData.pageNum = 1;
         this.props.storeAdList({
             ...Utils.removeInvalid(searchData)
         })
@@ -185,7 +196,7 @@ class StoreAdjList extends Component {
     handlePaginationChange(goto) {
         this.current = goto;
         const searchData = this.searchData;
-        searchData.page = goto;
+        searchData.pageNum = goto;
         this.props.storeAdList({
             ...Utils.removeInvalid(searchData)
         })
@@ -274,6 +285,7 @@ class StoreAdjList extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { storeAdjustData } = this.props;
+        const { data } = storeAdjustData;
         columns[columns.length - 1].render = this.renderOperation;
         return (
             <div className={orderML}>
@@ -286,7 +298,7 @@ class StoreAdjList extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">单据编号</span>
-                                            {getFieldDecorator('adjustmentNo')(
+                                            {getFieldDecorator('id')(
                                                 <Input
                                                     className="input"
                                                     placeholder="单据编号"
@@ -446,7 +458,6 @@ class StoreAdjList extends Component {
                                             <span className="sc-form-item-label">外部单据号</span>
                                             {getFieldDecorator('externalBillNo')(
                                                 <Input
-                                                    maxLength={11}
                                                     className="input"
                                                     placeholder="外部单据号"
                                                 />
@@ -499,7 +510,7 @@ class StoreAdjList extends Component {
                 </div>
                 <div className="area-list">
                     <Table
-                        dataSource={storeAdjustData.data}
+                        dataSource={data}
                         columns={columns}
                         rowKey="id"
                         pagination={{
@@ -518,7 +529,6 @@ class StoreAdjList extends Component {
 
 StoreAdjList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    orderListData: PropTypes.objectOf(PropTypes.any),
     storeAdjustData: PropTypes.objectOf(PropTypes.any),
     storeAdList: PropTypes.func,
     pubFetchValueList: PropTypes.func,
