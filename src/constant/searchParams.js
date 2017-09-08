@@ -432,18 +432,18 @@ export const orderStatusOptions = {
 
 // 订单管理-支付状态
 export const payStatusOptions = {
-    defaultValue: 'ALL',
+    defaultValue: '-1',
     data: [{
-        key: 'ALL',
+        key: '-1',
         value: '全部'
     }, {
-        key: 'ZJ',
+        key: '0',
         value: '周结'
     }, {
-        key: 'BYJ',
+        key: '1',
         value: '半月结'
     }, {
-        key: 'YJ',
+        key: '2',
         value: '月结'
     }]
 }

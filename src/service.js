@@ -63,6 +63,15 @@ export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
 // 下载订单管理列表
 export const exportOrderList = '/sorder/toExcel';
 
+// 下载供应商结算数据
+export const exportSimpleList = '/settlement/exportSupplierSettlementList';
+
+// 下载加盟商结算数据
+export const exportFranchiseeList = '/settlement/downloadFranchiseeSettlement';
+
+// 下载加盟商支付数据
+export const exportPaymentList = '/settlement/downloadFranchiseePayment';
+
 // 下载采购订单PDF
 export const exportProcurementPdf = 'pmPurchaseOrder/exportPdf';
 
