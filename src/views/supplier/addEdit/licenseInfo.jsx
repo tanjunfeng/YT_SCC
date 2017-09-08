@@ -64,7 +64,8 @@ class LicenseInfo extends PureComponent {
         const { supplierlicenseInfo = {} } = detailData;
         this.state = {
             checked: !!supplierlicenseInfo.perpetualManagement,
-            isSubmit: false
+            isSubmit: false,
+            isSending: false
         }
         this.submitData = {};
         this.submitId = null;
@@ -256,6 +257,8 @@ class LicenseInfo extends PureComponent {
                     if (!isEdit) {
                         this.submitId = res.data;
                     }
+                }).catch(() => {
+                    this.setState({ isSending: false });
                 }).finally(() => {
                     this.handleClear();
                 });
@@ -263,7 +266,6 @@ class LicenseInfo extends PureComponent {
     }
 
     handleClear() {
-        this.setState({ isSubmit: false });
         this.submitData = {};
         this.submitId = null;
     }
@@ -279,7 +281,7 @@ class LicenseInfo extends PureComponent {
             this.getVlaue();
             this.submitData.commitType = 1;
             this.setState({
-                isSubmit: true
+                isSending: true
             })
             this.props.hanldeSupplier(Utils.removeInvalid(this.submitData), isEdit ? 'updateSupplierInfo' : 'insertSupplierInfo')
                 .then((res) => {
@@ -288,7 +290,7 @@ class LicenseInfo extends PureComponent {
                         this.submitId = res.data;
                     }
                     this.setState({
-                        isSubmit: false
+                        isSubmit: true
                     })
                 }).finally(() => {
                     this.handleClear();
@@ -305,7 +307,7 @@ class LicenseInfo extends PureComponent {
         const { getFieldError } = this.props.form;
         if (
             getFieldError('companyLoc')
-            && this.companyAddress.thirdValueValue
+            && this.companyAddress.thirdValue
             && this.companyAddress.thirdValue !== '-1'
         ) {
             this.props.form.setFields({
@@ -747,7 +749,7 @@ class LicenseInfo extends PureComponent {
                     <div className="add-message-handle">
                         <Button onClick={this.handlePreStep}>上一步</Button>
                         {
-                            !this.state.isSubmit &&
+                            (!this.state.isSubmit || !this.state.isSending) &&
                             <Button onClick={this.handleSubmit}>提交</Button>
                         }
                         {(initData.status === 1
@@ -757,7 +759,7 @@ class LicenseInfo extends PureComponent {
                             : null
                         }
                         {
-                            !this.state.isSubmit &&
+                            (!this.state.isSubmit || !this.state.isSending) &&
                             <Button onClick={this.handleSaveDraft}>保存为制单</Button>
                         }
                     </div>
