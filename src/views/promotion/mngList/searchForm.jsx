@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { pubFetchValueList } from '../../../actions/pub';
+import { getPromotionList } from '../../../actions/promotion';
 import SearchMind from '../../../components/searchMind/SearchMind';
 import { DATE_FORMAT } from '../../../constant/index';
 import { promotionStatus } from '../constants';
@@ -23,7 +24,8 @@ const { RangePicker } = DatePicker;
         employeeCompanyId: state.toJS().user.data.user.employeeCompanyId
     }),
     dispatch => bindActionCreators({
-        pubFetchValueList
+        pubFetchValueList,
+        getPromotionList
     }, dispatch)
 )
 
@@ -31,15 +33,24 @@ class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
         this.getStatus = this.getStatus.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.getPromotionList();
     }
 
     getStatus() {
         const keys = Object.keys(promotionStatus);
         return keys.map((key) => (
-            <Option key={key} value={promotionStatus.key}>
-                {promotionStatus.value}
+            <Option key={key} value={promotionStatus[key]}>
+                {promotionStatus[key]}
             </Option>
         ));
+    }
+
+    handleSearch() {
+
     }
 
     render() {
@@ -120,7 +131,7 @@ class SearchForm extends PureComponent {
                                 {/* 状态 */}
                                 <FormItem label="状态">
                                     {getFieldDecorator('statusCode', {
-                                        initialValue: ''
+                                        initialValue: promotionStatus.defaultValue
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
                                             {this.getStatus()}
@@ -157,6 +168,7 @@ class SearchForm extends PureComponent {
 
 SearchForm.propTypes = {
     pubFetchValueList: PropTypes.func,
+    getPromotionList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any)
 };
 

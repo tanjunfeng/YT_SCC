@@ -255,4 +255,7 @@ export default {
 
     // 库存调整列表
     RECEIVE_STORE_ADJUST_LIST: 'RECEIVE_STORE_ADJUST_LIST',
+
+    // 促销活动查询
+    FETCH_PROMOTION_LIST: 'FETCH_PROMOTION_LIST'
 }
