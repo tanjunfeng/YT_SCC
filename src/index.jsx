@@ -216,9 +216,14 @@ startApp({
                     {
                         code: 'gysjs',
                         name: '供应商结算',
+                    },
+                    {
+                        code: 'jmsjs',
+                        name: '加盟商结算',
                     }
                 ]
             }
         ]
     }
 })
+

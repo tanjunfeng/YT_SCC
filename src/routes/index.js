@@ -70,6 +70,7 @@ import StoreRealTime from 'bundle-loader?lazy!../views/storeAdjustment/storeReal
 
 // 简易结算支持
 import SimpleOrderList from 'bundle-loader?lazy!../views/simpleSettlement/simpleOrderList';
+import FranchiseeSettlement from 'bundle-loader?lazy!../views/simpleSettlement/franchiseeSettlement';
 
 /* eslint-enable */
 
@@ -402,7 +403,22 @@ const routes = [
                         />
                     </Switch>
                 )
-            }
+            },
+            // 实时库存查询
+            {
+                path: '/storeRealTime',
+                parent: 'jyjszc',
+                key: 'sskccx',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/storeRealTime"
+                            exact
+                            render={() => <Bundle load={StoreRealTime}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
         ]
     },
     {
@@ -429,17 +445,20 @@ const routes = [
                     </Switch>
                 )
             },
-            // 实时库存查询
             {
-                path: '/storeRealTime',
+                path: '/franchiseeSettlement',
                 parent: 'jyjszc',
-                key: 'sskccx',
+                key: 'jmsjs',
                 component: () => (
                     <Switch>
                         <Route
-                            path="/storeRealTime"
+                            path="/franchiseeSettlement"
                             exact
-                            render={() => <Bundle load={StoreRealTime}>{(App) => <App />}</Bundle>}
+                            render={() => <Bundle load={FranchiseeSettlement}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/franchiseeSettlement/:id"
+                            render={() => <Bundle load={FranchiseeSettlement}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )
@@ -449,7 +468,7 @@ const routes = [
     // 采购管理
     {
         key: 'procurementMng',
-        iconType: 'solution',
+        iconType: 'save',
         routes: [
             // 采购单管理列表
             {

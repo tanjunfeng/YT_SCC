@@ -218,7 +218,7 @@ class ManagementList extends PureComponent {
             goodsStatus: 0,
             availableState: 2,
             hasCompanyTxt: '请确认对选中商品进行暂停购进操作，商品将不可进行采购下单',
-            hasSelectValue: this.supplier
+            hasSelectValue: this.state.supplierId
         };
         this.handleSuspendPurchase({ ...stopMsg }, this.goodstatusChange);
     }
@@ -231,7 +231,7 @@ class ManagementList extends PureComponent {
             goodsStatus: 1,
             availableState: 2,
             hasCompanyTxt: '请确认对选中商品进行恢复采购操作',
-            hasSelectValue: this.supplier
+            hasSelectValue: this.state.supplierId
         };
 
         this.handleSuspendPurchase({ ...stopMsg }, this.goodstatusChange);
