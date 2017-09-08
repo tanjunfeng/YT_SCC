@@ -218,6 +218,20 @@ startApp({
                         name: '加盟商结算',
                     }
                 ]
+            },
+            {
+                code: 'cxgl',
+                name: '促销管理',
+                submenu: [
+                    {
+                        code: 'promotionMngList',
+                        name: '活动列表',
+                    },
+                    {
+                        code: 'xzhd',
+                        name: '新增活动'
+                    }
+                ]
             }
         ]
     }

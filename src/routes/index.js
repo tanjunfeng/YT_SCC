@@ -583,13 +583,13 @@ const routes = [
     },
     {
         // 促销管理
-        key: 'promotion',
+        key: 'cxgl',
         iconType: 'pushpin',
         routes: [
             {
                 path: '/promotion',
-                parent: 'promotion',
-                key: 'promotion',
+                parent: 'cxgl',
+                key: 'promotionMngList',
                 component: () => (
                     <Switch>
                         <Route

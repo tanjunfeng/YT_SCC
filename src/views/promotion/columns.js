@@ -1,14 +1,12 @@
 /**
  * @file columns.js
- * @author shijh
+ * @author taoqiyu
  *
  * 定义列表数据
  */
 import React from 'react';
 import moment from 'moment';
-import { locType, poStatus } from '../../constant/procurement';
 
-const purchase = ['普通采购单'];
 // 供应商列表
 export const promotionMngList = [
     {
@@ -19,8 +17,7 @@ export const promotionMngList = [
     {
         title: '采购单类型',
         dataIndex: 'purchaseOrderType',
-        key: 'purchaseOrderType',
-        render: text => (purchase[text])
+        key: 'purchaseOrderType'
     },
     {
         title: '供应商编号',
@@ -45,9 +42,9 @@ export const promotionMngList = [
         title: '预计送货日期',
         dataIndex: 'estimatedDeliveryDate',
         key: 'estimatedDeliveryDate',
-        render: (text) => (
+        render: (timestamp) => (
             <span>
-                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+                {moment(parseInt(timestamp, 10)).format('YYYY-MM-DD')}
             </span>
         )
     },
