@@ -266,8 +266,8 @@ class LicenseInfo extends PureComponent {
     }
 
     handleClear() {
-        this.submitData = {};
-        this.submitId = null;
+        // this.submitData = {};
+        // this.submitId = null;
     }
 
     handleCreatePlace() {
