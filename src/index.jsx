@@ -202,6 +202,10 @@ startApp({
                     {
                         code: 'kctzlb',
                         name: '库存调整列表',
+                    },
+                    {
+                        code: 'sskccx',
+                        name: '实时库存查询',
                     }
                 ]
             },
