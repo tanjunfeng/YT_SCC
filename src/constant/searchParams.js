@@ -516,7 +516,7 @@ export const adjustmentType = {
     defaultValue: '',
     data: [
         {
-            key: '' ,
+            key: '',
             value: '全部'
         },
         {
