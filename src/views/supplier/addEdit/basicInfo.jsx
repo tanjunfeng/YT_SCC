@@ -17,6 +17,7 @@ import { addSupplierMessage1, getLargerRegion } from '../../../actions/addSuppli
 import InlineTree from '../../../components/inlineTree';
 import Tools from './utils';
 import { TABCONTENT } from '../../../constant';
+import { removeDetailData } from '../../../actions/supplier';
 
 const dateFormat = 'YYYY-MM-DD';
 const FormItem = Form.Item;
@@ -29,7 +30,8 @@ const Option = Select.Option;
     }),
     dispatch => bindActionCreators({
         getLargerRegion,
-        addSupplierMessage1
+        addSupplierMessage1,
+        removeDetailData
     }, dispatch)
 )
 class BasicInfo extends PureComponent {
@@ -60,6 +62,10 @@ class BasicInfo extends PureComponent {
                 regions: Tools.decodeArea(JSON.parse(saleRegion))
             }
         }
+    }
+
+    componentWillUnMount() {
+        this.props.removeDetailData();
     }
 
     handleGoTo = (key) => {
@@ -255,6 +261,7 @@ BasicInfo.propTypes = {
     detailData: PropTypes.objectOf(PropTypes.any),
     getLargerRegion: PropTypes.func,
     addSupplierMessage1: PropTypes.func,
+    removeDetailData: PropTypes.func,
     largeRegin: PropTypes.arrayOf(PropTypes.any),
     supplierId: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 }
