@@ -65,6 +65,9 @@ import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/
 import StoreAdjList from 'bundle-loader?lazy!../views/storeAdjustment/storeAdjList';
 import ItemDetail from 'bundle-loader?lazy!../views/storeAdjustment/itemDetail';
 
+// 实时库存查询
+import StoreRealTime from 'bundle-loader?lazy!../views/storeAdjustment/storeRealTime';
+
 // 简易结算支持
 import SimpleOrderList from 'bundle-loader?lazy!../views/simpleSettlement/simpleOrderList';
 import FranchiseeSettlement from 'bundle-loader?lazy!../views/simpleSettlement/franchiseeSettlement';
@@ -400,7 +403,22 @@ const routes = [
                         />
                     </Switch>
                 )
-            }
+            },
+            // 实时库存查询
+            {
+                path: '/storeRealTime',
+                parent: 'jyjszc',
+                key: 'sskccx',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/storeRealTime"
+                            exact
+                            render={() => <Bundle load={StoreRealTime}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
         ]
     },
     {

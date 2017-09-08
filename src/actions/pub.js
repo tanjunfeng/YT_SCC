@@ -25,7 +25,7 @@ import {
     findCanUseCompanyInfo,
     queryCategorysByLevel,
     queryBranchCompanyInfo,
-    queryProductForSelect,
+    queryProductForSelect
 } from '../service';
 
 const pubValueList = {

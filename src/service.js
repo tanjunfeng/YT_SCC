@@ -78,6 +78,9 @@ export const exportProcurementPdf = 'pmPurchaseOrder/exportPdf';
 // 下载库存调整列表
 export const exportStoreAdList = 'imAdjustment/exportListImAdjustment';
 
+// 实时库存查询 导出
+export const exportQueryStoreRealTime = 'inventory/excelInventoryBIRecords';
+
 
 /**
  * 登录 Api
@@ -594,6 +597,9 @@ export const queryAdjustDetail = (params) => http.get('/imAdjustment/getImAdjust
 
 // 库存调整-库存调整列表
 export const queryStoreAdList = (params) => http.get('/imAdjustment/queryListImAdjustment', params);
+
+// 实时库存查询
+export const queryStoreRealTime = (params) => http.get('/inventory/queryInventoryBIByPageQueryParam', params);
 
 /**
  * 供应商相关
