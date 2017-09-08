@@ -70,7 +70,6 @@ class App extends Component {
             pageSize: PAGE_SIZE,
             ...searchData
         }
-        console.log(params);
         this.props.getListData(params)
             .then(() => (
                 this.setCurrentPage(pageNumber)
