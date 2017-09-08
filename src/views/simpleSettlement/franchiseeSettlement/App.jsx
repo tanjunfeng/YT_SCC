@@ -3,7 +3,7 @@
  * @Description: 加盟商结算
  * @CreateDate: 2017-09-06 17:53:59
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-08 09:46:41
+ * @Last Modified time: 2017-09-08 16:04:19
  */
 
 import React, { Component } from 'react';
@@ -265,7 +265,7 @@ class FranchiseeSettlement extends Component {
     }
 
     /**
-     * 下载供应商结算数据
+     * 下载加盟商结算数据
      */
     handleOrderOutput() {
         this.getSearchData();
@@ -475,7 +475,7 @@ class FranchiseeSettlement extends Component {
                                         <Button
                                             size="default"
                                             onClick={this.handleOrderOutput}
-                                        >下载供应商结算数据</Button>
+                                        >下载加盟商结算数据</Button>
                                     </FormItem>
                                     <FormItem>
                                         <Button
