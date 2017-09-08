@@ -5,7 +5,6 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
@@ -45,7 +44,6 @@ class SearchForm extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { auth } = this.props;
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -159,8 +157,7 @@ class SearchForm extends PureComponent {
 
 SearchForm.propTypes = {
     pubFetchValueList: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any),
-    auth: PropTypes.objectOf(PropTypes.any)
+    form: PropTypes.objectOf(PropTypes.any)
 };
 
 SearchForm.defaultProps = {
