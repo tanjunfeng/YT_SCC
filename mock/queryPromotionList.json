@@ -1,0 +1,38 @@
+{
+    "timestamp": 1504594859384,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 2,
+        "total": 2,
+        "data": [
+            {
+                "id": "HD1700012",
+                "promotionName": "915开仓贺礼",
+                "discount": 90,
+                "categoryName": "啤酒",
+                "scope": "指定区域",
+                "startDate": 1504489995000,
+                "endDate": 1505181202000,
+                "records": 3,
+                "note": "副食多光分店",
+                "status": "released"
+            },
+            {
+                "id": "HD1700013",
+                "promotionName": "aaaa",
+                "discount": 95,
+                "categoryName": "饮料",
+                "scope": "指定区域",
+                "startDate": 1504749317000,
+                "endDate": 1505872523000,
+                "records": 0,
+                "note": "无",
+                "status": "unreleased"
+            }
+        ]
+    },
+    "success": true
+}
