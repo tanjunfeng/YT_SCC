@@ -72,7 +72,7 @@ class ItemDetail extends PureComponent {
         const { data = {} } = this.props.ListDetail;
         const { prefixCls, total = '' } = this.props;
         const {
-            adjustmentNo,
+            id,
             status,
             description,
             externalBillNo,
@@ -106,7 +106,7 @@ class ItemDetail extends PureComponent {
                         <Col span={6}>
                             <div className="detail-item">
                                 <span className="justify-text">单据编号:</span>
-                                <strong>{adjustmentNo}</strong>
+                                <strong>{id}</strong>
                             </div>
                         </Col>
                         <Col span={6}>
