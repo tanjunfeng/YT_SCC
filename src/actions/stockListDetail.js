@@ -4,23 +4,23 @@
  *
  */
 
+import Promise from 'bluebird';
 import { queryAdjustDetail } from '../service';
 import ActionType from './ActionType';
-import Promise from 'bluebird';
 
 const adjustDetail = (data) => ({
     type: ActionType.STOCK_ADJUST_LIST_DETAIL,
     payload: data,
 });
 
-export default () => dispatch => (
+export default (data) => dispatch => (
     new Promise((resolve, reject) => {
-        queryAdjustDetail()
-            .then(res => {
-                dispatch(adjustDetail(res));
-            })
-            .catch(err => {
-                reject(err);
-            })
+        queryAdjustDetail(data)
+        .then(res => {
+            dispatch(adjustDetail(res));
+        })
+        .catch(err => {
+            reject(err);
+        })
     })
 )

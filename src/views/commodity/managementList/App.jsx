@@ -218,7 +218,7 @@ class ManagementList extends PureComponent {
             goodsStatus: 0,
             availableState: 2,
             hasCompanyTxt: '请确认对选中商品进行暂停购进操作，商品将不可进行采购下单',
-            hasSelectValue: this.supplier
+            hasSelectValue: this.state.supplierId
         };
         this.handleSuspendPurchase({ ...stopMsg }, this.goodstatusChange);
     }
@@ -231,7 +231,7 @@ class ManagementList extends PureComponent {
             goodsStatus: 1,
             availableState: 2,
             hasCompanyTxt: '请确认对选中商品进行恢复采购操作',
-            hasSelectValue: this.supplier
+            hasSelectValue: this.state.supplierId
         };
 
         this.handleSuspendPurchase({ ...stopMsg }, this.goodstatusChange);
@@ -631,11 +631,11 @@ class ManagementList extends PureComponent {
                                                     {
                                                         title: 'id',
                                                         dataIndex: 'id',
-                                                        width: 150,
+                                                        width: 98
                                                     }, {
                                                         title: '名称',
                                                         dataIndex: 'name',
-                                                        width: 200,
+                                                        width: 140
                                                     }
                                                 ]}
                                             />
@@ -673,11 +673,11 @@ class ManagementList extends PureComponent {
                                                         {
                                                             title: '地点编码',
                                                             dataIndex: 'providerNo',
-                                                            width: 150,
+                                                            width: 98,
                                                         }, {
                                                             title: '地点名称',
                                                             dataIndex: 'providerName',
-                                                            width: 200,
+                                                            width: 140
                                                         }
                                                     ]}
                                                 />
@@ -758,11 +758,11 @@ class ManagementList extends PureComponent {
                                                         {
                                                             title: '子公司id',
                                                             dataIndex: 'id',
-                                                            width: 150,
+                                                            width: 98
                                                         }, {
                                                             title: '子公司名字',
                                                             dataIndex: 'name',
-                                                            width: 200,
+                                                            width: 140
                                                         }
                                                     ]}
                                                 />

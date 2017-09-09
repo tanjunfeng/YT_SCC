@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, InputNumber, message } from 'antd';
+import { Modal, Form, InputNumber, message, Select } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import SteppedPrice from '../steppedPrice';
@@ -11,8 +11,12 @@ import {
 import { MAXGOODS } from '../../../constant'
 import { productAddPriceVisible } from '../../../actions/producthome';
 import { fetchAddProdPurchase } from '../../../actions';
+import {
+    preHarvestPinStatus,
+} from '../../../constant/searchParams';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 @connect(
     state => ({
@@ -29,6 +33,8 @@ class SellPriceModal extends Component {
         super(props);
         this.handleOk = ::this.handleOk;
         this.handlePriceChange = ::this.handlePriceChange;
+        this.handleMaxChange = ::this.handleMaxChange;
+        this.handleMinChange = ::this.handleMinChange;
         this.handleCancel = ::this.handleCancel;
         this.childCompany = props.datas.branchCompanyId ? {
             branchCompanyId: props.datas.branchCompanyId,
@@ -38,12 +44,14 @@ class SellPriceModal extends Component {
             currentInside: null,
             insideValue: null
         }
+        this.choose = 0;
     }
 
     handleOk() {
         const { datas, handlePostAdd, isEdit } = this.props;
         const { validateFields, setFields } = this.props.form;
         const { isContinuity, results } = this.steppedPrice.getValue();
+        const choose = this.choose;
         if (!isContinuity) {
             setFields({
                 sellSectionPrices: {
@@ -72,7 +80,7 @@ class SellPriceModal extends Component {
                     productId: datas.productId
                 })
             }
-            handlePostAdd(result, isEdit);
+            handlePostAdd(result, isEdit, choose);
             return null;
         })
     }
@@ -104,6 +112,13 @@ class SellPriceModal extends Component {
         this.childCompany = null;
     }
 
+    handleSelectChange = (item) => {
+        this.choose = item === '-1' ? null : item;
+    }
+
+    /**
+     * 最小起订数量
+     */
     handleInsideChange = (num) => {
         this.setState({
             currentInside: num
@@ -119,6 +134,28 @@ class SellPriceModal extends Component {
             startNumber: num
         }, () => {
             this.props.form.setFieldsValue({ minNumber: num });
+            this.steppedPrice.reset();
+        })
+    }
+
+    /**
+     * 最大销售数量
+     */
+    handleInsideChange = (num) => {
+        this.setState({
+            currentInside: num
+        }, () => {
+            this.props.form.setFieldsValue({ maxNumber: null })
+        })
+
+        this.steppedPrice.reset();
+    }
+
+    handleMaxChange = (num) => {
+        this.setState({
+            startNumber: num
+        }, () => {
+            this.props.form.setFieldsValue({ maxNumber: num });
             this.steppedPrice.reset();
         })
     }
@@ -185,6 +222,33 @@ class SellPriceModal extends Component {
                                     </span>
                                 </FormItem>
                                 <FormItem>
+                                    <span>*最大销售数量：</span>
+                                    <span>
+                                        {getFieldDecorator('maxNumber', {
+                                            rules: [
+                                                { required: true, message: '请输入最大销售数量!' },
+                                                {
+                                                    validator: (rule, value, callback) => {
+                                                        const { getFieldValue } = this.props.form
+                                                        if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0) {
+                                                            callback('最大销售数量需为内装数整数倍！')
+                                                        }
+
+                                                        callback()
+                                                    }
+                                                }
+                                            ],
+                                            initialValue: newDates.maxNumber
+                                        })(
+                                            <InputNumber
+                                                min={0}
+                                                onChange={this.handleMaxChange}
+                                                step={currentInside || newDates.salesInsideNumber}
+                                            />
+                                            )}
+                                    </span>
+                                </FormItem>
+                                <FormItem>
                                     <span>*承诺发货时间：下单后</span>
                                     <span className={`${prefixCls}-day-input`}>
                                         {getFieldDecorator('deliveryDay', {
@@ -195,6 +259,28 @@ class SellPriceModal extends Component {
                                             )}
                                     </span>
                                     天内发货
+                                </FormItem>
+                                {/* 采购模式 */}
+                                <FormItem className={`${prefixCls}-qy`}>
+                                    <span className={`${prefixCls}-select`}> 采购模式 : </span>
+                                    {getFieldDecorator('preHarvestPinStatus', {
+                                        initialValue: '0'
+                                    })(
+                                        <Select
+                                            style={{ width: 90 }}
+                                            className="sc-form-item-select"
+                                            size="default"
+                                            onChange={this.handleSelectChange}
+                                        >
+                                            {
+                                                preHarvestPinStatus.data.map((item) =>
+                                                    (<Option key={item.key} value={item.key}>
+                                                        {item.value}
+                                                    </Option>)
+                                                )
+                                            }
+                                        </Select>
+                                        )}
                                 </FormItem>
                             </div>
                         </div>
@@ -255,11 +341,11 @@ class SellPriceModal extends Component {
                                             {
                                                 title: '公司编号',
                                                 dataIndex: 'id',
-                                                width: 150,
+                                                width: 98
                                             }, {
                                                 title: '公司名',
                                                 dataIndex: 'name',
-                                                width: 200,
+                                                width: 140
                                             }
                                         ]}
                                     />
@@ -276,6 +362,7 @@ class SellPriceModal extends Component {
 SellPriceModal.propTypes = {
     prefixCls: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
+    handlePostAdd: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     handleClose: PropTypes.func,
     datas: PropTypes.objectOf(PropTypes.any),

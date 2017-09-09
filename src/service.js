@@ -63,11 +63,23 @@ export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
 // 下载订单管理列表
 export const exportOrderList = '/sorder/toExcel';
 
+// 下载供应商结算数据
+export const exportSimpleList = '/settlement/exportSupplierSettlementList';
+
+// 下载加盟商结算数据
+export const exportFranchiseeList = '/settlement/downloadFranchiseeSettlement';
+
+// 下载加盟商支付数据
+export const exportPaymentList = '/settlement/downloadFranchiseePayment';
+
 // 下载采购订单PDF
 export const exportProcurementPdf = 'pmPurchaseOrder/exportPdf';
 
 // 下载库存调整列表
 export const exportStoreAdList = 'imAdjustment/exportListImAdjustment';
+
+// 实时库存查询 导出
+export const exportQueryStoreRealTime = 'inventory/excelInventoryBIRecords';
 
 
 /**
@@ -580,11 +592,15 @@ export const createPoRcv = (params) => http.post('/provider/createPoRcv', params
 // 查询库存调整列表{mock}
 export const queryAdjustLibList = (params) => http.post('/provider/queryAdjustLibList', params);
 
-// 查询库存调整单详情{mock}
-export const queryAdjustDetail = (params) => http.post('/provider/queryAdjustDetail', params);
+// 查询库存调整单详情
+export const queryAdjustDetail = (params) => http.get('/imAdjustment/getImAdjustment', params);
 
-// 库存调整-库存调整列表{mock}
+// 库存调整-库存调整列表
 export const queryStoreAdList = (params) => http.get('/imAdjustment/queryListImAdjustment', params);
+
+// 实时库存查询
+export const queryStoreRealTime = (params) => http.get('/inventory/queryInventoryBIByPageQueryParam', params);
+
 /**
  * 供应商相关
  */

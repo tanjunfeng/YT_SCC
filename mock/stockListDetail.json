@@ -1,0 +1,64 @@
+{
+    "timestamp": 1504512094814,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+      "id": 1000001,
+      "adjustmentNo": "100000003",
+      "type": 0,
+      "status": 1,
+      "adjustmentTime": null,
+      "warehouseCode": "YT901",
+      "totalQuantity": 10,
+      "totalAdjustmentCost": 160.8,
+      "description": "库存调整主表1234",
+      "externalBillNo": null,
+      "failedReason": null,
+      "auditUserId": null,
+      "auditUserName": null,
+      "auditTime": null,
+      "createTime": null,
+      "modifyTime": null,
+      "createUserId": null,
+      "createUserName": null,
+      "modifyUserId": null,
+      "modifyUserName": null,
+      "branchCompanyId": "10000",
+      "imAdjustmentItemVos": [
+        {
+          "id": 1,
+          "adjustmentId": "1000001",
+          "productId": "61742",
+          "productCode": "1001662",
+          "productName": null,
+          "avCost": 16.08,
+          "stockOnHand": 40955,
+          "quantity": 10,
+          "adjustmentCost": 160.8,
+          "createTime": null,
+          "modifyTime": null,
+          "createUserId": null,
+          "modifyUserId": null
+        },
+        {
+            "id": 2,
+            "adjustmentId": "1000001",
+            "productId": "61742",
+            "productCode": "1001662",
+            "productName": null,
+            "avCost": 16.08,
+            "stockOnHand": 40955,
+            "quantity": 10,
+            "adjustmentCost": 160.8,
+            "createTime": null,
+            "modifyTime": null,
+            "createUserId": null,
+            "modifyUserId": null
+          }
+      ],
+      "warehouseName": "测试"
+    },
+    "success": true
+  }
+  

@@ -2,18 +2,16 @@
  * @file App.jsx
  * @author caoyanxuan
  *
- * 订单管理列表
+ * 供应商结算
  */
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import {
     Form, Input, Button, Row, Col,
-    Select, Icon, Table, Menu, Dropdown,
-    message, Modal, DatePicker
+    Select, DatePicker
 } from 'antd';
 import moment from 'moment';
 import Utils from '../../../util/util';
@@ -25,83 +23,23 @@ import {
     logisticsStatusOptions
 } from '../../../constant/searchParams';
 import { exportOrderList } from '../../../service';
-import CauseModal from './causeModal';
-import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
-import { fetchOrderList, modifyBatchApproval, modifyResendOrder, modifyApprovalOrder } from '../../../actions/order';
+import { fetchOrderList } from '../../../actions/order';
 import { pubFetchValueList } from '../../../actions/pub';
-import { TIME_FORMAT, DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
+import { DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const confirm = Modal.confirm;
 const orderML = 'order-management';
 const { RangePicker } = DatePicker;
 const yesterdayDate = moment().subtract(1, 'days').valueOf().toString();
 const todayDate = moment().valueOf().toString();
 const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
 
-const columns = [{
-    title: '序号',
-    dataIndex: 'sort',
-    key: 'sort',
-    render: (text, record, index) => index + 1
-}, {
-    title: '订单编号',
-    dataIndex: 'id',
-    key: 'id',
-}, {
-    title: '父订单编号',
-    dataIndex: 'createdByOrderId',
-    key: 'createdByOrderId',
-}, {
-    title: '订单日期',
-    dataIndex: 'submitTime',
-    key: 'submitTime',
-    render: (text) => (
-        <span>
-            {moment(parseInt(text, 10)).format(TIME_FORMAT)}
-        </span>
-    )
-}, {
-    title: '订单类型',
-    dataIndex: 'orderTypeDesc',
-    key: 'orderTypeDesc',
-}, {
-    title: '订单金额',
-    dataIndex: 'total',
-    key: 'total',
-}, {
-    title: '订单状态',
-    dataIndex: 'orderStateDesc',
-    key: 'orderStateDesc',
-}, {
-    title: '支付状态',
-    dataIndex: 'paymentStateDesc',
-    key: 'paymentStateDesc',
-}, {
-    title: '物流状态',
-    dataIndex: 'shippingStateDesc',
-    key: 'shippingStateDesc',
-}, {
-    title: '子公司',
-    dataIndex: 'branchCompanyName',
-    key: 'branchCompanyName',
-}, {
-    title: '加盟商编号',
-    dataIndex: 'franchiseeId',
-    key: 'franchiseeId',
-}, {
-    title: '操作',
-    dataIndex: 'operation',
-    key: 'operation',
-}];
-
 @connect(
     state => ({
         orderListData: state.toJS().order.orderListData,
     }),
     dispatch => bindActionCreators({
-        modifyCauseModalVisible,
         fetchOrderList,
         pubFetchValueList,
     }, dispatch)
@@ -282,34 +220,6 @@ class OrderManagementList extends Component {
     }
 
     /**
-     * 批量审核
-     */
-    handleOrderBatchReview() {
-        confirm({
-            title: '批量审核',
-            content: '确认批量审核通过？',
-            onOk: () => {
-                // ToDo:带入参数（this.state.choose），调接口
-                modifyBatchApproval(
-                    this.state.choose
-                ).then(() => {
-                    message.success('批量审批成功！');
-                    this.getSearchData();
-                })
-            },
-            onCancel() { },
-        });
-    }
-
-    /**
-     * 批量取消
-     */
-    handleOrderBatchCancel() {
-        const { choose } = this.state;
-        this.props.modifyCauseModalVisible({ isShow: true, choose });
-    }
-
-    /**
      * 查询
      */
     handleOrderSearch() {
@@ -342,112 +252,8 @@ class OrderManagementList extends Component {
         Utils.exportExcel(exportOrderList, Utils.removeInvalid(searchData));
     }
 
-    // 选择操作项
-    handleSelect(record, items) {
-        const { key } = items;
-        const { cancelReason, id } = record;
-        switch (key) {
-            case 'tableAudit':
-                confirm({
-                    title: '审核',
-                    content: '确认审核通过？',
-                    onOk: () => {
-                        modifyApprovalOrder({
-                            id
-                        }).then(res => {
-                            this.getSearchData();
-                            message.success(res.message);
-                        }).catch(err => {
-                            message.success(err.message);
-                        })
-                    },
-                    onCancel() { }
-                });
-                break;
-            case 'tableCancel':
-                this.props.modifyCauseModalVisible({ isShow: true, id });
-                break;
-            case 'tableRetransfer':
-                modifyResendOrder({
-                    id: record.id
-                }).then(res => {
-                    this.getSearchData();
-                    message.success(res.message);
-                }).catch(err => {
-                    message.success(err.message);
-                })
-                break;
-            case 'tableShowFailure':
-                Modal.info({
-                    title: '取消原因',
-                    content: (
-                        <div>
-                            <p>{cancelReason}</p>
-                        </div>
-                    ),
-                    okText: '返回',
-                    onOk() { }
-                });
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * 表单操作
-     * @param {Object} text 当前行的值
-     * @param {object} record 单行数据
-     */
-    renderOperation(text, record) {
-        const { id, orderStateDesc, shippingStateDesc } = record;
-        const pathname = window.location.pathname;
-        const menu = (
-            <Menu onClick={(item) => this.handleSelect(record, item)}>
-                <Menu.Item key={0}>
-                    <Link to={`${pathname}/orderDetails/${id}`}>查看订单详情</Link>
-                </Menu.Item>
-                {
-                    (orderStateDesc === '待审核'
-                        || orderStateDesc === '待人工审核')
-                    && <Menu.Item key="tableAudit">
-                        <a target="_blank" rel="noopener noreferrer">审核</a>
-                    </Menu.Item>
-                }
-                {
-                    shippingStateDesc !== '待收货'
-                    && shippingStateDesc !== '已签收'
-                    && orderStateDesc !== '已取消'
-                    && <Menu.Item key="tableCancel">
-                        <a target="_blank" rel="noopener noreferrer">取消</a>
-                    </Menu.Item>
-                }
-                {
-                    orderStateDesc === '已取消'
-                    && <Menu.Item key="tableShowFailure">
-                        <a target="_blank" rel="noopener noreferrer">查看取消原因</a>
-                    </Menu.Item>
-                }
-                {
-                    shippingStateDesc === '仓库拒收'
-                    && <Menu.Item key="tableRetransfer">
-                        <a target="_blank" rel="noopener noreferrer">重新传送</a>
-                    </Menu.Item>
-                }
-            </Menu>
-        );
-        return (
-            <Dropdown overlay={menu} placement="bottomCenter">
-                <a className="ant-dropdown-link">
-                    表单操作 <Icon type="down" />
-                </a>
-            </Dropdown>
-        )
-    }
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { orderListData } = this.props;
-        columns[columns.length - 1].render = this.renderOperation;
         return (
             <div className={orderML}>
                 <div className="manage-form">
@@ -727,24 +533,6 @@ class OrderManagementList extends Component {
                         </div>
                     </Form>
                 </div>
-                <div className="area-list">
-                    <Table
-                        dataSource={orderListData.data}
-                        columns={columns}
-                        rowSelection={this.rowSelection}
-                        rowKey="id"
-                        pagination={{
-                            current: orderListData.pageNum,
-                            total: orderListData.total,
-                            pageSize: orderListData.pageSize,
-                            showQuickJumper: true,
-                            onChange: this.handlePaginationChange
-                        }}
-                    />
-                </div>
-                <div>
-                    <CauseModal getSearchData={this.getSearchData} />
-                </div>
             </div>
         );
     }
@@ -752,8 +540,6 @@ class OrderManagementList extends Component {
 
 OrderManagementList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    orderListData: PropTypes.objectOf(PropTypes.any),
-    modifyCauseModalVisible: PropTypes.func,
     fetchOrderList: PropTypes.func,
     pubFetchValueList: PropTypes.func,
 }

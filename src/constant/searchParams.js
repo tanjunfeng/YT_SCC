@@ -249,6 +249,18 @@ export const initiateModeOptions = {
     }]
 }
 
+// 采购模式
+export const preHarvestPinStatus = {
+    defaultValue: '0',
+    data: [{
+        key: '0',
+        value: '先销后采'
+    }, {
+        key: '1',
+        value: '先采后销'
+    }]
+}
+
 // 商品状态
 export const commodityStatusOptions = {
     defaultValue: '-1',
@@ -432,31 +444,19 @@ export const orderStatusOptions = {
 
 // 订单管理-支付状态
 export const payStatusOptions = {
-    defaultValue: 'ALL',
+    defaultValue: '-1',
     data: [{
-        key: 'ALL',
+        key: '-1',
         value: '全部'
     }, {
-        key: 'WZF',
-        value: '未支付'
+        key: '0',
+        value: '周结'
     }, {
-        key: 'YZF',
-        value: '已支付'
+        key: '1',
+        value: '半月结'
     }, {
-        key: 'QXFK',
-        value: '取消支付'
-    }, {
-        key: 'TKD',
-        value: '退款待审核'
-    }, {
-        key: 'TKQ',
-        value: '退款待确认'
-    }, {
-        key: 'YTK',
-        value: '已退款'
-    }, {
-        key: 'GSN',
-        value: '公司内'
+        key: '2',
+        value: '月结'
     }]
 }
 
@@ -516,7 +516,7 @@ export const adjustmentType = {
     defaultValue: '',
     data: [
         {
-            key: '' ,
+            key: '',
             value: '全部'
         },
         {
