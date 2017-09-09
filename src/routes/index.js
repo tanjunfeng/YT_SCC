@@ -596,11 +596,11 @@ const routes = [
                                 {(App) => <App />}</Bundle>
                             )}
                         />
-                        {/* <Route
+                        <Route
                             path="/orderList/orderDetails/:id"
                             render={() => (<Bundle load={OrderManagementDetails}>
                                 {(App) => <App />}</Bundle>)}
-                        /> */}
+                        />
                     </Switch>
                 )
             }
