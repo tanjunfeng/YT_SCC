@@ -4,21 +4,14 @@
  *
  * 采购管理相关action
  */
-
 import ActionType from './ActionType';
 import {
     fetchPurchaseOrder,
-    fetchMaterialByCd as svcFetchMaterialByCd,
     deletePurchaseList,
     queryPoPrintList,
     createPo as svcCreatePo,
     auditPo as svcAuditPo,
     queryPoDetail,
-    // queryShopAddressMap,
-    // queryWarehouseAddressMap,
-    // querySupplierMap,
-    // querySupplierLocMap,
-    // queryBigClassMap,
     queryMaterialMap as svcQueryMateriMap,
     queryPoRcvMngList,
     queryPoRcvList,
@@ -33,9 +26,9 @@ import { ProcurementDt } from '../view-model';
 
 /**
  * 查询商品值清单
- * @param {*} data 
+ * @param {*} data
  */
-export const getMaterialMap = (params) => dispatch => (
+export const getMaterialMap = (params) => () => (
     new Promise((resolve, reject) => {
         svcQueryMateriMap(params)
             .then(res => {
@@ -45,8 +38,7 @@ export const getMaterialMap = (params) => dispatch => (
                 reject(err);
             })
     })
-)
-
+);
 
 /**
  * 查询采购打印详情
@@ -68,94 +60,15 @@ export const fetchPoPrintList = (params) => dispatch => (
                 reject(err);
             })
     })
-)
+);
 
 /**
- * 仓库值清单 promise
- * @param {*} data
+ * 采购单相关
  */
-// export const getWarehouseAddressMap = (params) => dispatch => (
-//     new Promise((resolve, reject) => {
-//         queryWarehouseAddressMap(params)
-//             .then(res => {
-//                 resolve(res);
-//             })
-//             .catch(err => {
-//                 reject(err);
-//             })
-//     })
-// )
-
-/**
- * 门店值清单 promise
- * @param {*} data
- */
-// export const getShopAddressMap = (params) => dispatch => (
-//     new Promise((resolve, reject) => {
-//         queryShopAddressMap(params)
-//             .then(res => {
-//                 resolve(res);
-//             })
-//             .catch(err => {
-//                 reject(err);
-//             })
-//     })
-// )
-
-/**
- * 供应商值清单 promise
- * @param {*} data
- */
-// export const getSupplierMap = (params) => dispatch => (
-//     new Promise((resolve, reject) => {
-//         querySupplierMap(params)
-//             .then(res => {
-//                 resolve(res);
-//             })
-//             .catch(err => {
-//                 reject(err);
-//             })
-//     })
-// )
-
-/**
- * 供应商地点值清单 promise
- * @param {*} data
- */
-// export const getSupplierLocMap = (params) => dispatch => (
-//     new Promise((resolve, reject) => {
-//         querySupplierLocMap(params)
-//             .then(res => {
-//                 resolve(res);
-//             })
-//             .catch(err => {
-//                 reject(err);
-//             })
-//     })
-// )
-
-/**
- * 大类值清单 promise
- * @param {*} data
- */
-// export const getBigClassMap = (params) => dispatch => (
-//     new Promise((resolve, reject) => {
-//         queryBigClassMap(params)
-//             .then(res => {
-//                 resolve(res);
-//             })
-//             .catch(err => {
-//                 reject(err);
-//             })
-//     })
-// )
-
-
-/////////////////采购单相关/////////////////////////////
 
 /**
  * 采购单列表选择list
- * @param {*} data 
+ * @param {*} data
  */
 export const changePoMngSelectedRows = (data) => ({
     type: ActionType.CHANGE_PO_MNG_SELECTED_ROWS,
@@ -189,9 +102,9 @@ export const fetchPoMngList = (params) => dispatch => (
 
 /**
  * 创建采购单
- * @param {*} params 
+ * @param {*} params
  */
-export const createPo = (params) => dispatch => (
+export const createPo = (params) => () => (
     new Promise((resolve, reject) => {
         svcCreatePo(params)
             .then(res => {
@@ -205,9 +118,9 @@ export const createPo = (params) => dispatch => (
 
 /**
  * 修改采购单
- * @param {*} params 
+ * @param {*} params
  */
-export const ModifyPo = (params) => dispatch => (
+export const ModifyPo = (params) => () => (
     new Promise((resolve, reject) => {
         updatePmPurchaseOrder(params)
             .then(res => {
@@ -221,9 +134,9 @@ export const ModifyPo = (params) => dispatch => (
 
 /**
  * 审批采购单
- * @param {*} params 
+ * @param {*} params
  */
-export const auditPo = (params) => dispatch => (
+export const auditPo = (params) => () => (
     new Promise((resolve, reject) => {
         svcAuditPo(params)
             .then(res => {
@@ -238,7 +151,7 @@ export const auditPo = (params) => dispatch => (
 
 /**
  * 查询采购单详情
- * @param {*} data 
+ * @param {*} data
  */
 const rcvPoDetail = (data) => ({
     type: ActionType.RECEIVE_PO_DETAIL,
@@ -285,14 +198,14 @@ export const deletePoByIds = (params) => dispatch => (
 
 /**
  *初始化采购单详情
- * @param {*} data 
+ * @param {*} data
  */
 export const initPoDetailAction = (data) => ({
     type: ActionType.INIT_PO_DETAIL,
     payload: data,
 });
 export const initPoDetail = (params) => dispatch => (
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
         dispatch(initPoDetailAction(params));
         // 返回操作结果
         resolve(params);
@@ -301,7 +214,7 @@ export const initPoDetail = (params) => dispatch => (
 
 /**
  * 更新采购单基本信息
- * @param {*} data 
+ * @param {*} data
  */
 export const updatePoBasicinfo = (data) => ({
     type: ActionType.UPDATE_PO_BASICINFO,
@@ -311,7 +224,7 @@ export const updatePoBasicinfo = (data) => ({
 
 /**
  * 添加采购单商品行
- * @param {*} data 
+ * @param {*} data
  */
 export const addPoLines = (data) => ({
     type: ActionType.ADD_PO_LINES,
@@ -320,7 +233,7 @@ export const addPoLines = (data) => ({
 
 /**
  * 更新采购单商品行
- * @param {*} data 
+ * @param {*} data
  */
 export const updatePoLine = (data) => ({
     type: ActionType.UPDATE_PO_LINE,
@@ -329,7 +242,7 @@ export const updatePoLine = (data) => ({
 
 /**
  * 删除采购单商品行
- * @param {*} data 
+ * @param {*} data
  */
 export const deletePoLine = (data) => ({
     type: ActionType.DELETE_PO_LINE,
@@ -337,7 +250,7 @@ export const deletePoLine = (data) => ({
 });
 
 
-/////////////////////////////////////收货相关
+// 收货相关
 
 /**
  * 查询采购收货单管理列表
@@ -362,7 +275,7 @@ export const fetchPoRcvMngList = (params) => dispatch => (
 
 /**
  * 查询采购单收货列表
- * @param {*} data 
+ * @param {*} data
  */
 const rcvPoRcvList = (data) => ({
     type: ActionType.RECEIVE_PO_RCV_LIST,
@@ -383,7 +296,7 @@ export const fetchPoRcvList = (params) => dispatch => (
 
 /**
  * 查询收货单详情
- * @param {*} data 
+ * @param {*} data
  */
 const rcvPoRcvDetail = (data) => ({
     type: ActionType.RECEIVE_PO_RCV_DETAIL,
@@ -407,7 +320,7 @@ export const fetchPoRcvDetail = (params) => dispatch => (
  * 查询采购单详情并创建收货单初始信息
  * 1.根据采购单id查询采购单相关信息
  * 2.根据查询结果初始显示采购收货单
- * @param {*} data 
+ * @param {*} data
  */
 const rcvPoRcvInit = (data) => ({
     type: ActionType.RECEIVE_PO_RCV_INIT,
@@ -429,7 +342,7 @@ export const fetchPoRcvInit = (params) => dispatch => (
 
 /**
  * 更新采购收货单基本信息
- * @param {*} data 
+ * @param {*} data
  */
 export const updatePoRcvBasicinfo = (data) => ({
     type: ActionType.UPDATE_PO_RCV_BASICINFO,
@@ -438,7 +351,7 @@ export const updatePoRcvBasicinfo = (data) => ({
 
 /**
  * 更新采购收货单商品行
- * @param {*} data 
+ * @param {*} data
  */
 export const updatePoRcvLine = (data) => ({
     type: ActionType.UPDATE_PO_RCV_LINE,
@@ -447,9 +360,9 @@ export const updatePoRcvLine = (data) => ({
 
 /**
  * 创建采购收货单
- * @param {*} params 
+ * @param {*} params
  */
-export const createPoRcv = (params) => dispatch => (
+export const createPoRcv = (params) => () => (
     new Promise((resolve, reject) => {
         svcCreatePoRcv(params)
             .then(res => {
@@ -477,7 +390,7 @@ export const modifyAuditPurchaseOrderInfo = (data) => (
 
 /**
  * 根据条件查询销售价格区间列表
- * @param {*} data 
+ * @param {*} data
  */
 const rcvPriceInfo = (data) => ({
     type: ActionType.RECEIVE_PRICE_INFO,
