@@ -259,15 +259,8 @@ class LicenseInfo extends PureComponent {
                     }
                 }).catch(() => {
                     this.setState({ isSending: false });
-                }).finally(() => {
-                    this.handleClear();
                 });
         })
-    }
-
-    handleClear() {
-        // this.submitData = {};
-        // this.submitId = null;
     }
 
     handleCreatePlace() {
@@ -292,8 +285,6 @@ class LicenseInfo extends PureComponent {
                     this.setState({
                         isSubmit: true
                     })
-                }).finally(() => {
-                    this.handleClear();
                 });
         })
     }
