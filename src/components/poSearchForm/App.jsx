@@ -39,6 +39,7 @@ class PoSearchForm extends PureComponent {
         this.handleDelete = ::this.handleDelete;
         this.state = {
             spId: '',   // 供应商ID
+            orgId: '',   // 分公司ID
             isSupplyAdrDisabled: true, // 供应商地点禁用
             locDisabled: true,
             locationData: {}
@@ -126,6 +127,7 @@ class PoSearchForm extends PureComponent {
     handleSupplyChoose = ({ record }) => {
         this.setState({
             spId: record.spId,
+            orgId: record.branchCompanyId,
             isSupplyAdrDisabled: false
         });
         this.supplierEncoded = record.spNo;
@@ -406,7 +408,7 @@ class PoSearchForm extends PureComponent {
                                             compKey="comSupplierLoc"
                                             ref={ref => { this.supplierLoc = ref }}
                                             fetch={(param) => this.props.pubFetchValueList({
-                                                orgId: this.props.employeeCompanyId,
+                                                orgId: this.state.orgId,
                                                 pId: this.state.spId,
                                                 condition: param.value,
                                                 pageNum: param.pagination.current || 1,

@@ -68,6 +68,7 @@ class PoRcvMngList extends PureComponent {
         this.state = {
             spNo: '',   // 供应商编码
             spId: '',   // 供应商ID
+            orgId: '',   // 分公司ID
             spAdrNo: '',    // 供应商地点编码
             isSupplyAdrDisabled: true, // 供应商地点禁用
             locDisabled: true,  // 地点禁用
@@ -267,6 +268,7 @@ class PoRcvMngList extends PureComponent {
         this.setState({
             spNo: record.spNo,
             spId: record.spId,
+            orgId: record.branchCompanyId,
             isSupplyAdrDisabled: false
         });
         this.handleSupplierAddressClear();
@@ -553,7 +555,7 @@ class PoRcvMngList extends PureComponent {
                                                 this.supplyAddressSearchMind = ref
                                             }}
                                             fetch={(params) => this.props.pubFetchValueList({
-                                                orgId: this.props.employeeCompanyId,
+                                                orgId: this.state.orgId,
                                                 pId: this.state.spId,
                                                 condition: params.value,
                                                 pageNum: params.pagination.current || 1,
