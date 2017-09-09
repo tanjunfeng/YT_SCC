@@ -751,4 +751,3 @@ export const auditPurchaseOrderInfo = (params) => http.post('/pmPurchaseOrder/au
 
 // 促销活动列表
 export const fetchPromotionList = (params) => http.get('/promotion/queryPromotionList', params);
-

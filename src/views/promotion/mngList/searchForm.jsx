@@ -10,10 +10,11 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { pubFetchValueList } from '../../../actions/pub';
-import { getPromotionList } from '../../../actions/promotion';
+import Utils from '../../../util/util';
 import SearchMind from '../../../components/searchMind/SearchMind';
-import { DATE_FORMAT } from '../../../constant/index';
+import { DATE_FORMAT } from '../../../constant';
 import { promotionStatus } from '../constants';
+
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -24,33 +25,65 @@ const { RangePicker } = DatePicker;
         employeeCompanyId: state.toJS().user.data.user.employeeCompanyId
     }),
     dispatch => bindActionCreators({
-        pubFetchValueList,
-        getPromotionList
+        pubFetchValueList
     }, dispatch)
 )
 
 class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
+        this.state = {
+            branchCompanyId: ''
+        }
         this.getStatus = this.getStatus.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
-    }
-
-    componentDidMount() {
-        this.props.getPromotionList();
+        this.getFormData = this.getFormData.bind(this);
     }
 
     getStatus() {
         const keys = Object.keys(promotionStatus);
         return keys.map((key) => (
-            <Option key={key} value={promotionStatus[key]}>
+            <Option key={key} value={key}>
                 {promotionStatus[key]}
             </Option>
         ));
     }
 
-    handleSearch() {
+    getFormData() {
+        const {
+            id,
+            promotionName,
+            promotionDateRange,
+            statusCode
+        } = this.props.form.getFieldsValue();
+        const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
+        const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
+        let status = statusCode;
+        if (statusCode === 'all') {
+            status = '';
+        }
+        return Utils.removeInvalid({
+            id,
+            promotionName,
+            status,
+            startDate,
+            endDate,
+            branchCompanyId: this.state.branchCompanyId
+        });
+    }
 
+    /**
+     * 子公司-值清单
+     */
+    handleSubCompanyChoose = ({ record }) => {
+        this.setState({
+            branchCompanyId: record.id,
+        });
+    }
+
+    handleSearch() {
+        console.log(this.getFormData());
+        this.props.handlePromotionSearch(this.getFormData());
     }
 
     render() {
@@ -131,7 +164,7 @@ class SearchForm extends PureComponent {
                                 {/* 状态 */}
                                 <FormItem label="状态">
                                     {getFieldDecorator('statusCode', {
-                                        initialValue: promotionStatus.defaultValue
+                                        initialValue: 'all'
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
                                             {this.getStatus()}
@@ -168,7 +201,7 @@ class SearchForm extends PureComponent {
 
 SearchForm.propTypes = {
     pubFetchValueList: PropTypes.func,
-    getPromotionList: PropTypes.func,
+    handlePromotionSearch: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any)
 };
 
