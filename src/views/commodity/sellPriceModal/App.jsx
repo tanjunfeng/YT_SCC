@@ -81,6 +81,7 @@ class SellPriceModal extends Component {
                 })
             }
             handlePostAdd(result, isEdit, choose);
+            if (!err)message.success('添加成功!')
             return null;
         })
     }
@@ -148,16 +149,16 @@ class SellPriceModal extends Component {
             this.props.form.setFieldsValue({ maxNumber: null })
         })
 
-        this.steppedPrice.reset();
+        // this.steppedPrice.reset();
     }
 
     handleMaxChange = (num) => {
-        this.setState({
-            startNumber: num
-        }, () => {
-            this.props.form.setFieldsValue({ maxNumber: num });
-            this.steppedPrice.reset();
-        })
+        // this.setState({
+        //     startNumber: num
+        // }, () => {
+        this.props.form.setFieldsValue({ maxNumber: num });
+            // this.steppedPrice.reset();
+        // })
     }
 
     render() {
@@ -362,7 +363,7 @@ class SellPriceModal extends Component {
 SellPriceModal.propTypes = {
     prefixCls: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
-    handlePostAdd: PropTypes.objectOf(PropTypes.any),
+    handlePostAdd: PropTypes.func,
     pubFetchValueList: PropTypes.func,
     handleClose: PropTypes.func,
     datas: PropTypes.objectOf(PropTypes.any),

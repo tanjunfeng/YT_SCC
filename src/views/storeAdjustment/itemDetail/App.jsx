@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import { Row, Col, Table } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import { stockListDetail } from '../../../actions';
 
 // const FormItem = Form.Item;
@@ -79,6 +80,25 @@ class ItemDetail extends PureComponent {
             warehouseCode,
             adjustmentTime } = data;
         const { imAdjustmentItemVos = [] } = data;
+        const adjustmentType = (type1) => {
+            switch (type1) {
+                case 0: return '物流丢失';
+                case 1: return '仓库报溢';
+                case 2: return '仓库报损';
+                case 3: return '业务调增';
+                case 4: return '业务调减';
+                case 5: return '仓库同步调增';
+                case 6: return '物流丢失';
+                default: return null;
+            }
+        }
+        const adjustmentStatus = (status1) => {
+            switch (status1) {
+                case 0: return '制单';
+                case 1: return '已生效';
+                default: return null;
+            }
+        }
         return (
             <div>
                 <div className="itemDetail-manage-form manage-form">
@@ -92,19 +112,19 @@ class ItemDetail extends PureComponent {
                         <Col span={6}>
                             <div className="detail-item">
                                 <span className="justify-text">调整日期:</span>
-                                <strong>{adjustmentTime}</strong>
+                                <strong>{adjustmentTime ? moment(adjustmentTime).format('YYYY-MM-DD') : ''}</strong>
                             </div>
                         </Col>
                         <Col span={6}>
                             <div className="detail-item">
                                 <span className="justify-text">状态:</span>
-                                <strong>{status}</strong>
+                                <strong>{adjustmentStatus(status)}</strong>
                             </div>
                         </Col>
                         <Col span={6}>
                             <div className="detail-item">
                                 <span className="justify-text">调整类型:</span>
-                                <strong>{type}</strong>
+                                <strong>{adjustmentType(type)}</strong>
                             </div>
                         </Col>
                     </Row>
