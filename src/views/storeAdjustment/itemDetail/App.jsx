@@ -88,7 +88,7 @@ class ItemDetail extends PureComponent {
                 case 3: return '业务调增';
                 case 4: return '业务调减';
                 case 5: return '仓库同步调增';
-                case 6: return '物流丢失';
+                case 6: return '仓库同步调减';
                 default: return null;
             }
         }
@@ -137,7 +137,9 @@ class ItemDetail extends PureComponent {
                         </Col>
                         <Col span={6} className="detail-item">
                             <span className="justify-text">备注:</span>
-                            <strong>{description}</strong>
+                            <strong
+                                style={{wordBreak: 'break-all', whiteSpace: 'normal'}}
+                            >{description}</strong>
                         </Col>
                         <Col span={6} className="detail-item">
                             <span className="justify-text">外部单据号:</span>
