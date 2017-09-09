@@ -38,6 +38,7 @@ class SaleCard extends Component {
         super(props);
         this.handleOnchange = this.handleOnchange.bind(this);
         this.confirmUsed = this.confirmUsed.bind(this);
+        this.handleCardClick = this.handleCardClick.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleChangeMain = this.handleChangeMain.bind(this);
         this.handleCheckUse = this.handleCheckUse.bind(this);
