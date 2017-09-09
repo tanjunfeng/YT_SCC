@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Table, Form } from 'antd';
 
-import { getPromotionList } from '../../../actions/promotion';
+import { getPromotionList, clearPromotionList } from '../../../actions/promotion';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { promotionMngList as columns } from '../columns';
@@ -19,7 +19,8 @@ import { promotionMngList as columns } from '../columns';
 @connect(state => ({
     promotionList: state.toJS().promotion.list
 }), dispatch => bindActionCreators({
-    getPromotionList
+    getPromotionList,
+    clearPromotionList
 }, dispatch))
 
 class PromotionManagementList extends PureComponent {
@@ -33,6 +34,10 @@ class PromotionManagementList extends PureComponent {
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
         this.query = this.query.bind(this);
+    }
+
+    componentWillMount() {
+        this.props.clearPromotionList();
     }
 
     componentDidMount() {
@@ -96,6 +101,7 @@ class PromotionManagementList extends PureComponent {
 
 PromotionManagementList.propTypes = {
     getPromotionList: PropTypes.func,
+    clearPromotionList: PropTypes.func,
     promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 

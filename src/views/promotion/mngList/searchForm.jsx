@@ -15,7 +15,6 @@ import SearchMind from '../../../components/searchMind/SearchMind';
 import { DATE_FORMAT } from '../../../constant';
 import { promotionStatus } from '../constants';
 
-
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
