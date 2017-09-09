@@ -201,6 +201,14 @@ class SaleCard extends Component {
                             <span>{item.minNumber}</span>
                         </p>
                         <p>
+                            <span>最大销售 : </span>
+                            <span>{item.maxNumber}</span>
+                        </p>
+                        <p>
+                            <span>采购模式 : </span>
+                            <span>{item.preHarvestPinStatus === 0 ? '先销后采' : '先采后销'}</span>
+                        </p>
+                        <p>
                             <span>承诺发货时间 : </span>
                             <span>下单后{item.deliveryDay}天内发货</span>
                         </p>

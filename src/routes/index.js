@@ -65,13 +65,22 @@ import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/
 import StoreAdjList from 'bundle-loader?lazy!../views/storeAdjustment/storeAdjList';
 import ItemDetail from 'bundle-loader?lazy!../views/storeAdjustment/itemDetail';
 
+<<<<<<< HEAD
+=======
+// 实时库存查询
+import StoreRealTime from 'bundle-loader?lazy!../views/storeAdjustment/storeRealTime';
+
+>>>>>>> 47f78bac43320219ffb9500c8c895ca4c0124c08
 // 简易结算支持
 import SimpleOrderList from 'bundle-loader?lazy!../views/simpleSettlement/simpleOrderList';
 import FranchiseeSettlement from 'bundle-loader?lazy!../views/simpleSettlement/franchiseeSettlement';
 
+<<<<<<< HEAD
 // 促销管理列表
 import PromotionManagementList from 'bundle-loader?lazy!../views/promotion/mngList';
 
+=======
+>>>>>>> 47f78bac43320219ffb9500c8c895ca4c0124c08
 /* eslint-enable */
 
 
@@ -403,7 +412,26 @@ const routes = [
                         />
                     </Switch>
                 )
+<<<<<<< HEAD
             }
+=======
+            },
+            // 实时库存查询
+            {
+                path: '/storeRealTime',
+                parent: 'jyjszc',
+                key: 'sskccx',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/storeRealTime"
+                            exact
+                            render={() => <Bundle load={StoreRealTime}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
+>>>>>>> 47f78bac43320219ffb9500c8c895ca4c0124c08
         ]
     },
     {

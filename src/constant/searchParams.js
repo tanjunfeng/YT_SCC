@@ -249,6 +249,18 @@ export const initiateModeOptions = {
     }]
 }
 
+// 采购模式
+export const preHarvestPinStatus = {
+    defaultValue: '0',
+    data: [{
+        key: '0',
+        value: '先销后采'
+    }, {
+        key: '1',
+        value: '先采后销'
+    }]
+}
+
 // 商品状态
 export const commodityStatusOptions = {
     defaultValue: '-1',
@@ -504,7 +516,7 @@ export const adjustmentType = {
     defaultValue: '',
     data: [
         {
-            key: '' ,
+            key: '',
             value: '全部'
         },
         {
