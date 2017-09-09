@@ -743,7 +743,7 @@ export const deleteSellPriceById = (params) => http.get('/prodSell/deleteSellPri
 // 新增销售价格区间
 export const addStepSellPrice = (params) => http.post('/prodSell/addSellPrice', params);
 
-// 根据id修改价格区间
+// 根据id修改销售价格区间
 export const updateStepSellPrice = (params) => http.post('/prodSell/updateSellPrice', params);
 
 // 修改供应商

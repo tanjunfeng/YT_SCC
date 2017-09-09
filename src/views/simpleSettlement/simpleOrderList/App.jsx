@@ -3,7 +3,7 @@
  * @Description: 供应商结算
  * @CreateDate: 2017-09-06 17:54:20
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-07 14:23:00
+ * @Last Modified time: 2017-09-09 15:04:14
  */
 
 import React, { Component } from 'react';
@@ -19,7 +19,7 @@ import moment from 'moment';
 import Util from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
 import {
-    payStatusOptions,
+    accountPeriod,
 } from '../../../constant/searchParams';
 import { exportSimpleList } from '../../../service';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
@@ -339,14 +339,14 @@ class SimpleOrderList extends Component {
                                         <div>
                                             <span className="sc-form-item-label">账期</span>
                                             {getFieldDecorator('settlementPeriod', {
-                                                initialValue: payStatusOptions.defaultValue,
+                                                initialValue: accountPeriod.defaultValue,
                                                 rules: [{ required: true, message: '请选择账期' }]
                                             })(
                                                 <Select
                                                     size="default"
                                                 >
                                                     {
-                                                        payStatusOptions.data.map((item) =>
+                                                        accountPeriod.data.map((item) =>
                                                             (<Option
                                                                 key={item.key}
                                                                 value={item.key}

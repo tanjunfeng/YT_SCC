@@ -148,16 +148,16 @@ class SellPriceModal extends Component {
             this.props.form.setFieldsValue({ maxNumber: null })
         })
 
-        this.steppedPrice.reset();
+        // this.steppedPrice.reset();
     }
 
     handleMaxChange = (num) => {
-        this.setState({
-            startNumber: num
-        }, () => {
-            this.props.form.setFieldsValue({ maxNumber: num });
-            this.steppedPrice.reset();
-        })
+        // this.setState({
+        //     startNumber: num
+        // }, () => {
+        this.props.form.setFieldsValue({ maxNumber: num });
+            // this.steppedPrice.reset();
+        // })
     }
 
     render() {
@@ -331,7 +331,10 @@ class SellPriceModal extends Component {
                                         placeholder="请输入公司名"
                                         onChoosed={this.handleChoose}
                                         disabled={isEdit}
-                                        defaultValue={newDates.branchCompanyId ? `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` : undefined}
+                                        defaultValue={
+                                            newDates.branchCompanyId ?
+                                            `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` :
+                                            undefined}
                                         onClear={this.handleClear}
                                         renderChoosedInputRaw={(data) => (
                                             <div>{data.id} - {data.name}</div>
@@ -362,7 +365,7 @@ class SellPriceModal extends Component {
 SellPriceModal.propTypes = {
     prefixCls: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
-    handlePostAdd: PropTypes.objectOf(PropTypes.any),
+    handlePostAdd: PropTypes.func,
     pubFetchValueList: PropTypes.func,
     handleClose: PropTypes.func,
     datas: PropTypes.objectOf(PropTypes.any),
