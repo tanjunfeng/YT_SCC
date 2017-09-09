@@ -73,7 +73,6 @@ class PromotionManagementList extends PureComponent {
     }
 
     render() {
-        // this.query();
         return (
             <div>
                 <SearchForm

@@ -15,9 +15,8 @@ const initState = fromJS({
 export default function (state = initState, action) {
     switch (action.type) {
         case ActionType.FETCH_PROMOTION_LIST:
-            return state.set('list', fromJS(action.payload));
         case ActionType.CLEAR_PROMOTION_LIST:
-            return state.set('list', []);
+            return state.set('list', fromJS(action.payload));
         default:
             return state;
     }

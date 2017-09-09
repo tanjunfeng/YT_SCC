@@ -34,10 +34,7 @@ export const getPromotionList = (params) => dispatch => (
 /**
  * 清空促销活动列表
  */
-const clearPromotionListAction = () => ({
+export const clearPromotionList = () => dispatch => (dispatch({
     type: ActionType.CLEAR_PROMOTION_LIST,
-    payload: {}
-});
-
-export const clearPromotionList = () => dispatch =>
-    dispatch(clearPromotionListAction());
+    payload: []
+}));
