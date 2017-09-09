@@ -38,6 +38,11 @@ export const postSellPrice = (params) => dispatch => (
     })
 )
 
+const receiveUpdateSellPrice = (data) => ({
+    type: ActionType.RECEIVE_UPDATE_PRICE,
+    payload: data,
+})
+
 /**
  * 编辑销售价格
  * @param {Object} params 传参
@@ -47,7 +52,7 @@ export const updateSellPrice = (params) => dispatch => (
         updateStepSellPrice(params)
             .then(res => {
                 dispatch(
-                    receiveAddPrice(res.data)
+                    receiveUpdateSellPrice(res.data)
                 );
                 resolve(res);
             })

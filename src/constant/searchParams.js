@@ -442,8 +442,8 @@ export const orderStatusOptions = {
     }]
 }
 
-// 订单管理-支付状态
-export const payStatusOptions = {
+// 结算-账期
+export const accountPeriod = {
     defaultValue: '-1',
     data: [{
         key: '-1',
@@ -457,6 +457,36 @@ export const payStatusOptions = {
     }, {
         key: '2',
         value: '月结'
+    }]
+}
+
+// 订单管理-支付状态
+export const payStatusOptions = {
+    defaultValue: 'ALL',
+    data: [{
+        key: 'ALL',
+        value: '全部'
+    }, {
+        key: 'WZF',
+        value: '未支付'
+    }, {
+        key: 'YZF',
+        value: '已支付'
+    }, {
+        key: 'QXFK',
+        value: '取消支付'
+    }, {
+        key: 'TKD',
+        value: '退款待审核'
+    }, {
+        key: 'TKQ',
+        value: '退款待确认'
+    }, {
+        key: 'YTK',
+        value: '已退款'
+    }, {
+        key: 'GSN',
+        value: '公司内'
     }]
 }
 

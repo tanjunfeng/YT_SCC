@@ -51,6 +51,7 @@ class SellPriceModal extends Component {
         const { datas, handlePostAdd, isEdit } = this.props;
         const { validateFields, setFields } = this.props.form;
         const { isContinuity, results } = this.steppedPrice.getValue();
+        console.log(results)
         const choose = this.choose;
         if (!isContinuity) {
             setFields({
@@ -81,7 +82,6 @@ class SellPriceModal extends Component {
                 })
             }
             handlePostAdd(result, isEdit, choose);
-            if (!err)message.success('添加成功!')
             return null;
         })
     }
@@ -332,7 +332,10 @@ class SellPriceModal extends Component {
                                         placeholder="请输入公司名"
                                         onChoosed={this.handleChoose}
                                         disabled={isEdit}
-                                        defaultValue={newDates.branchCompanyId ? `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` : undefined}
+                                        defaultValue={
+                                            newDates.branchCompanyId ?
+                                            `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` :
+                                            undefined}
                                         onClear={this.handleClear}
                                         renderChoosedInputRaw={(data) => (
                                             <div>{data.id} - {data.name}</div>
