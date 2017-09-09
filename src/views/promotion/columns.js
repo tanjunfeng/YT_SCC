@@ -2,152 +2,61 @@
  * @file columns.js
  * @author taoqiyu
  *
- * 定义列表数据
+ * 促销活动列表
  */
-import React from 'react';
-import moment from 'moment';
+import { promotionStatus } from './constants';
+import Util from '../../util/util';
 
 // 供应商列表
-export const promotionMngList = [
-    {
-        title: '采购单号',
-        dataIndex: 'purchaseOrderNo',
-        key: 'purchaseOrderNo',
-    },
-    {
-        title: '采购单类型',
-        dataIndex: 'purchaseOrderType',
-        key: 'purchaseOrderType'
-    },
-    {
-        title: '供应商编号',
-        dataIndex: 'spNo',
-        key: 'spNo',
-    },
-    {
-        title: '供应商名称',
-        dataIndex: 'spName',
-        key: 'spName',
-    },
-    {
-        title: '供应商地点编号',
-        dataIndex: 'spAdrNo',
-        key: 'spAdrNo',
+export const promotionMngList = [{
+    title: '活动ID',
+    dataIndex: 'id',
+    key: 'id'
+}, {
+    title: '名称',
+    dataIndex: 'promotionName',
+    key: 'promotionName'
+}, {
+    title: '折扣比例',
+    dataIndex: 'discount',
+    key: 'discount'
+}, {
+    title: '品类',
+    dataIndex: 'categoryName',
+    key: 'categoryName'
+},
+{
+    title: '范围',
+    dataIndex: 'scope',
+    key: 'scope'
+}, {
+    title: '活动时间',
+    children: [{
+        title: '开始时间',
+        dataIndex: 'startDate',
+        key: 'startDate',
+        render: timestamp => Util.getTime(timestamp)
     }, {
-        title: '供应商地点名称',
-        dataIndex: 'spAdrName',
-        key: 'spAdrName',
-    },
-    {
-        title: '预计送货日期',
-        dataIndex: 'estimatedDeliveryDate',
-        key: 'estimatedDeliveryDate',
-        render: (timestamp) => (
-            <span>
-                {moment(parseInt(timestamp, 10)).format('YYYY-MM-DD')}
-            </span>
-        )
-    },
-    {
-        title: '地点类型',
-        dataIndex: 'adrType',
-        key: 'adrType',
-        render: (text) => {
-            if (text === null) {
-                return null;
-            }
-            return (locType.data[text + 1].value);
-        }
-    },
-    {
-        title: '地点',
-        dataIndex: 'adrTypeName',
-        key: 'adrTypeName'
-    },
-    {
-        title: '大类编号',
-        dataIndex: 'secondCategoryId',
-        key: 'secondCategoryId'
-
-    },
-    {
-        title: '大类名称',
-        dataIndex: 'secondCategoryName',
-        key: 'secondCategoryName'
-    },
-    {
-        title: '状态',
-        dataIndex: 'status',
-        key: 'status',
-        render: (text) => {
-            if (text === null) {
-                return null;
-            }
-            return (poStatus.data[text + 1].value);
-        }
-    },
-    {
-        title: '操作',
-        dataIndex: 'operation',
-        key: 'operation'
-    }
-]
-
-export const printColumns = [{
-    title: '行号',
-    dataIndex: 'rowNo',
-    key: 'rowNo',
-    render: (text, record, index) => (<span>{index + 1}</span>),
-    width: 60
+        title: '结束时间',
+        dataIndex: 'endDate',
+        key: 'endDate',
+        render: timestamp => Util.getTime(timestamp)
+    }],
 }, {
-    title: '商品编码',
-    dataIndex: 'productCode',
-    key: 'productCode',
-    width: 70
+    title: '参与数据',
+    dataIndex: 'records',
+    key: 'records'
 }, {
-    title: '商品名称',
-    dataIndex: 'productName',
-    key: 'productName',
-    className: 'left',
-    width: 200
+    title: '备注',
+    dataIndex: 'note',
+    key: 'note'
 }, {
-    title: '商品条码',
-    dataIndex: 'internationalCode',
-    key: 'internationalCode',
-    width: 110
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    render: statusCode => promotionStatus[statusCode]
 }, {
-    title: '规格',
-    dataIndex: 'packingSpecifications',
-    key: 'packingSpecifications',
-    width: 70
-}, {
-    title: '产地',
-    dataIndex: 'producePlace',
-    key: 'producePlace',
-    width: 80
-}, {
-    title: '采购内装数',
-    dataIndex: 'purchaseInsideNumber',
-    key: 'purchaseInsideNumber',
-    width: 80
-}, {
-    title: '单位',
-    dataIndex: 'unitExplanation',
-    key: 'unitExplanation',
-    width: 50
-}, {
-    title: '订货数量',
-    dataIndex: 'purchaseNumber',
-    key: 'purchaseNumber',
-    width: 70
-}, {
-    title: '订货价格',
-    dataIndex: 'purchasePrice',
-    key: 'purchasePrice',
-    width: 70,
-}, {
-    title: '订货金额',
-    dataIndex: 'totalAmount',
-    key: 'totalAmount',
-    width: 100
+    title: '操作',
+    dataIndex: 'operation',
+    key: 'operation'
 }];

@@ -36,7 +36,7 @@ const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
 
 @connect(
     state => ({
-        orderListData: state.toJS().order.orderListData,
+        orderListData: state.toJS().order.orderListData
     }),
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
@@ -444,4 +444,4 @@ SimpleOrderList.defaultProps = {
     prefixCls: 'SimpleOrderList'
 }
 
-export default withRouter(Form.create()(SimpleOrderList));
+export default withRouter(Form.create()(SimpleOrderList));

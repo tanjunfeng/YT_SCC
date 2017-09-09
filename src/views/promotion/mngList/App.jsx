@@ -17,8 +17,7 @@ import { PAGE_SIZE } from '../../../constant';
 import { promotionMngList as columns } from '../columns';
 
 @connect(state => ({
-    poList: state.toJS().procurement.poList,
-    selectedPoMngRows: state.toJS().procurement.selectedPoMngRows
+    promotionList: state.toJS().promotion.list
 }), dispatch => bindActionCreators({
     getPromotionList
 }, dispatch))
@@ -31,8 +30,8 @@ class PromotionManagementList extends PureComponent {
             pageSize: PAGE_SIZE,
             total: 0
         };
-        this.result = [];
-        this.handleSearch = this.handleSearch.bind(this);
+        this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
+        this.handlePromotionReset = this.handlePromotionReset.bind(this);
         this.query = this.query.bind(this);
     }
 
@@ -56,28 +55,34 @@ class PromotionManagementList extends PureComponent {
             Object.assign(this.param, {
                 pageNum, pageSize, total
             });
-            Object.assign(this.result, data.data);
         });
     }
 
-    handleSearch(param) {
+    handlePromotionSearch(param) {
         Object.assign(this.param, param);
         this.query();
     }
 
+    handlePromotionReset() {
+
+    }
+
     render() {
+        // this.query();
         return (
             <div>
                 <SearchForm
-                    handlePromotionSearch={this.handleSearch}
+                    handlePromotionSearch={this.handlePromotionSearch}
+                    handlePromotionReset={this.handlePromotionReset}
                 />
                 <Table
-                    dataSource={this.result}
+                    dataSource={this.props.promotionList.data}
                     columns={columns}
                     rowKey="id"
                     scroll={{
                         x: 1400
                     }}
+                    bordered
                     pagination={{
                         ...this.param,
                         showQuickJumper: true,
@@ -91,6 +96,7 @@ class PromotionManagementList extends PureComponent {
 
 PromotionManagementList.propTypes = {
     getPromotionList: PropTypes.func,
+    promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 
 export default withRouter(Form.create()(PromotionManagementList));

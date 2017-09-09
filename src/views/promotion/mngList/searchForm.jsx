@@ -37,6 +37,7 @@ class SearchForm extends PureComponent {
         }
         this.getStatus = this.getStatus.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+        this.handleReset = this.handleReset.bind(this);
         this.getFormData = this.getFormData.bind(this);
     }
 
@@ -73,6 +74,15 @@ class SearchForm extends PureComponent {
     }
 
     /**
+     * 子公司-清除
+     */
+    handleSubCompanyClear() {
+        this.setState({
+            branchCompanyId: '',
+        });
+    }
+
+    /**
      * 子公司-值清单
      */
     handleSubCompanyChoose = ({ record }) => {
@@ -82,8 +92,12 @@ class SearchForm extends PureComponent {
     }
 
     handleSearch() {
-        console.log(this.getFormData());
         this.props.handlePromotionSearch(this.getFormData());
+    }
+
+    handleReset() {
+        this.handleSubCompanyClear();
+        this.props.handlePromotionReset();
     }
 
     render() {
@@ -181,7 +195,7 @@ class SearchForm extends PureComponent {
                                     </Button>
                                 </FormItem>
                                 <FormItem>
-                                    <Button size="default" onClick={this.handleResetValue}>
+                                    <Button size="default" onClick={this.handleReset}>
                                         重置
                                     </Button>
                                 </FormItem>
@@ -202,6 +216,7 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     pubFetchValueList: PropTypes.func,
     handlePromotionSearch: PropTypes.func,
+    handlePromotionReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any)
 };
 

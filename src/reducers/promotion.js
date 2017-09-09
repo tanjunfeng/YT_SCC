@@ -9,7 +9,7 @@ import { fromJS } from 'immutable';
 import ActionType from '../actions/ActionType';
 
 const initState = fromJS({
-    list: {}    // 促销活动管理列表
+    list: []    // 促销活动管理列表
 });
 
 export default function (state = initState, action) {
