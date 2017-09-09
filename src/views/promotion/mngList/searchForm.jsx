@@ -79,6 +79,7 @@ class SearchForm extends PureComponent {
         this.setState({
             branchCompanyId: '',
         });
+        this.subCompanySearchMind.reset();
     }
 
     /**
@@ -96,6 +97,7 @@ class SearchForm extends PureComponent {
 
     handleReset() {
         this.handleSubCompanyClear();
+        this.props.form.resetFields();
         this.props.handlePromotionReset();
     }
 

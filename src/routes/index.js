@@ -72,8 +72,9 @@ import StoreRealTime from 'bundle-loader?lazy!../views/storeAdjustment/storeReal
 import SimpleOrderList from 'bundle-loader?lazy!../views/simpleSettlement/simpleOrderList';
 import FranchiseeSettlement from 'bundle-loader?lazy!../views/simpleSettlement/franchiseeSettlement';
 
-// 促销管理列表
+// 促销活动
 import PromotionManagementList from 'bundle-loader?lazy!../views/promotion/mngList';
+// import PromotionDetail from 'bundle-loader?lazy!../views/promotion/detail';
 
 /* eslint-enable */
 
@@ -439,11 +440,14 @@ const routes = [
                         <Route
                             path="/simpleOrderList"
                             exact
-                            render={() => <Bundle load={SimpleOrderList}>{(App) => <App />}</Bundle>}
+                            render={() => (<Bundle load={SimpleOrderList}>
+                                {(App) => <App />}</Bundle>)}
                         />
                         <Route
                             path="/simpleOrderList/:id"
-                            render={() => <Bundle load={SimpleOrderList}>{(App) => <App />}</Bundle>}
+                            render={() => (<Bundle load={SimpleOrderList}>
+                                {(App) => <App />}</Bundle>)
+                            }
                         />
                     </Switch>
                 )
@@ -457,11 +461,13 @@ const routes = [
                         <Route
                             path="/franchiseeSettlement"
                             exact
-                            render={() => <Bundle load={FranchiseeSettlement}>{(App) => <App />}</Bundle>}
+                            render={() => (<Bundle load={FranchiseeSettlement}>
+                                {(App) => <App />}</Bundle>)}
                         />
                         <Route
                             path="/franchiseeSettlement/:id"
-                            render={() => <Bundle load={FranchiseeSettlement}>{(App) => <App />}</Bundle>}
+                            render={() => (<Bundle load={FranchiseeSettlement}>
+                                {(App) => <App />}</Bundle>)}
                         />
                     </Switch>
                 )
@@ -586,14 +592,15 @@ const routes = [
                         <Route
                             path="/orderList"
                             exact
-                            render={() =>
-                                <Bundle load={OrderManagementList}>{(App) => <App />}</Bundle>}
+                            render={() => (<Bundle load={OrderManagementList}>
+                                {(App) => <App />}</Bundle>
+                            )}
                         />
-                        <Route
+                        {/* <Route
                             path="/orderList/orderDetails/:id"
                             render={() => (<Bundle load={OrderManagementDetails}>
                                 {(App) => <App />}</Bundle>)}
-                        />
+                        /> */}
                     </Switch>
                 )
             }
@@ -613,9 +620,15 @@ const routes = [
                         <Route
                             path="/promotion"
                             exact
-                            render={() =>
-                                <Bundle load={PromotionManagementList}>{(App) => <App />}</Bundle>}
+                            render={() => (<Bundle load={PromotionManagementList}>
+                                {(App) => <App />}</Bundle>)}
                         />
+                        {/* <Route
+                            path="/promotion/:id"
+                            exact
+                            render={() => (<Bundle load={PromotionDetail}>
+                                {(App) => <App />}</Bundle>)}
+                        /> */}
                     </Switch>
                 )
             }

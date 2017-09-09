@@ -9,7 +9,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form } from 'antd';
+import { Table, Form, Icon, Menu, Dropdown } from 'antd';
+import { Link } from 'react-router-dom';
 
 import { getPromotionList, clearPromotionList } from '../../../actions/promotion';
 import SearchForm from './searchForm';
@@ -33,6 +34,7 @@ class PromotionManagementList extends PureComponent {
         };
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
+        this.renderOperations = this.renderOperations.bind(this);
         this.query = this.query.bind(this);
     }
 
@@ -56,7 +58,7 @@ class PromotionManagementList extends PureComponent {
 
     query() {
         this.props.getPromotionList(this.param).then((data) => {
-            const { pageNum, pageSize, total } = data;
+            const { pageNum, pageSize, total } = data.data;
             Object.assign(this.param, {
                 pageNum, pageSize, total
             });
@@ -69,10 +71,48 @@ class PromotionManagementList extends PureComponent {
     }
 
     handlePromotionReset() {
+        // 重置检索条件
+        this.param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            total: 0
+        }
+    }
 
+    /**
+     * 列表页操作下拉菜单
+     *
+     * @param {string} text 文本内容
+     * @param {Object} record 模态框状态
+     * @param {string} index 下标
+     *
+     * return 列表页操作下拉菜单
+     */
+    renderOperations = (text, record) => {
+        const { id } = record;
+        const { pathname } = this.props.location;
+        const menu = (
+            <Menu>
+                <Menu.Item key="detail">
+                    <Link to={`${pathname}/promotion/${id}`}>活动详情</Link>
+                </Menu.Item>
+            </Menu>
+        );
+
+        return (
+            <Dropdown
+                overlay={menu}
+                placement="bottomCenter"
+            >
+                <a className="ant-dropdown-link">
+                    表单操作 <Icon type="down" />
+                </a>
+            </Dropdown>
+        )
     }
 
     render() {
+        // columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
                 <SearchForm
@@ -101,7 +141,8 @@ class PromotionManagementList extends PureComponent {
 PromotionManagementList.propTypes = {
     getPromotionList: PropTypes.func,
     clearPromotionList: PropTypes.func,
-    promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
+    promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+    location: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(PromotionManagementList));
