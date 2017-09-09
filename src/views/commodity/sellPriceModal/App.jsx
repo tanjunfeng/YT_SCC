@@ -51,7 +51,6 @@ class SellPriceModal extends Component {
         const { datas, handlePostAdd, isEdit } = this.props;
         const { validateFields, setFields } = this.props.form;
         const { isContinuity, results } = this.steppedPrice.getValue();
-        console.log(results)
         const choose = this.choose;
         if (!isContinuity) {
             setFields({
