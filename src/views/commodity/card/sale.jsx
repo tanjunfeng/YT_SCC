@@ -24,6 +24,7 @@ import {
 @connect(
     state => ({
         prodPurchase: state.toJS().commodity.prodPurchase,
+        getProductById: state.toJS().commodity.getProductById,
         getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
         queryProdPurchaseExtByCondition: state.toJS().commodity.queryProdPurchaseExtByCondition,
     }),
@@ -164,7 +165,7 @@ class SaleCard extends Component {
     }
 
     renderCard = (datas) => {
-        const { prefixCls, minUnit } = this.props;
+        const { prefixCls, minUnit, getProductById } = this.props;
         return datas.map((item) => (
             <div
                 key={item.id}
@@ -212,6 +213,14 @@ class SaleCard extends Component {
                         <p>
                             <span>承诺发货时间 : </span>
                             <span>下单后{item.deliveryDay}天内发货</span>
+                        </p>
+                        <p>
+                            <span>是否整件销售 : </span>
+                            <span>{getProductById.sellFullCase === 0 ? '否' : '是'}</span>
+                        </p>
+                        <p>
+                            <span>整箱单位 : </span>
+                            <span>{getProductById.fullCaseUnit}</span>
                         </p>
                         <p>
                             <span>销售价格 : </span>
@@ -291,7 +300,12 @@ class SaleCard extends Component {
 
 SaleCard.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
+<<<<<<< HEAD
     minUnit: PropTypes.string,
+=======
+    getProductById: PropTypes.objectOf(PropTypes.any),
+    minUnit: PropTypes.objectOf(PropTypes.any),
+>>>>>>> 5ce6479017c14b781edc0326665fe0f3ee5bb4f5
     fetchUpdateProdPurchase: PropTypes.func,
     handleCardClick: PropTypes.func,
     fetchChangeProPurchaseStatus: PropTypes.func,

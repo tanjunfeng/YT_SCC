@@ -20,7 +20,8 @@ const Option = Select.Option;
 
 @connect(
     state => ({
-        toAddPriceVisible: state.toJS().commodity.toAddPriceVisible
+        toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
+        getProductById: state.toJS().commodity.getProductById,
     }),
     dispatch => bindActionCreators({
         productAddPriceVisible,
@@ -161,7 +162,7 @@ class SellPriceModal extends Component {
     }
 
     render() {
-        const { prefixCls, form, datas, isEdit } = this.props;
+        const { prefixCls, form, datas, isEdit, getProductById } = this.props;
         const { getFieldDecorator } = form;
         const { currentInside, startNumber } = this.state;
         const newDates = JSON.parse(JSON.stringify(datas));
@@ -260,6 +261,18 @@ class SellPriceModal extends Component {
                                     </span>
                                     天内发货
                                 </FormItem>
+                                <FormItem>
+                                    <span>是否整箱销售:</span>
+                                    <span className={`${prefixCls}-day-input`}>
+                                        {newDates.sellFullCase === 0 ? '否' : '是'}
+                                    </span>
+                                </FormItem>
+                                <FormItem>
+                                    <span>整箱销售单位:</span>
+                                    <span className={`${prefixCls}-day-input`}>
+                                        {getProductById.fullCaseUnit}
+                                    </span>
+                                </FormItem>
                                 {/* 采购模式 */}
                                 <FormItem className={`${prefixCls}-qy`}>
                                     <span className={`${prefixCls}-select`}> 采购模式 : </span>
@@ -301,6 +314,7 @@ class SellPriceModal extends Component {
                                             startNumber={startNumber}
                                             defaultValue={isEdit ? newDates.sellSectionPrices : []}
                                             inputSize="default"
+                                            initvalue={getProductById}
                                         />
                                         )}
                                 </FormItem>
