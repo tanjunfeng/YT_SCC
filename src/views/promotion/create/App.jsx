@@ -37,7 +37,8 @@ class PromotionCreate extends PureComponent {
             area: 0
         };
         this.state = {
-            areaSelectorVisible: false
+            areaSelectorVisible: false,
+            companies: []
         }
         this.handleConditionChange = this.handleConditionChange.bind(this);
         this.handleQuanifyAmountChange = this.handleQuanifyAmountChange.bind(this);
@@ -83,7 +84,7 @@ class PromotionCreate extends PureComponent {
         if (nextArea === 0) {
             this.setState({
                 areaSelectorVisible: false
-            })
+            });
         } else {
             this.setState({
                 areaSelectorVisible: true
@@ -91,10 +92,11 @@ class PromotionCreate extends PureComponent {
         }
     }
 
-    handleSelectorOk() {
+    handleSelectorOk(companies) {
         this.setState({
-            areaSelectorVisible: false
-        })
+            areaSelectorVisible: false,
+            companies
+        });
     }
 
     handleSelectorCancel() {
@@ -109,6 +111,10 @@ class PromotionCreate extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
+        const subCompanies = [];
+        this.state.companies.forEach((company) => {
+            subCompanies.push(company.companyName);
+        });
         return (
             <div className="promotion">
                 <Form layout="inline">
@@ -197,6 +203,9 @@ class PromotionCreate extends PureComponent {
                                                 <RadioGroup onChange={this.handleAreaChange}>
                                                     <Radio className="default" value={0}>全部区域</Radio>
                                                     <Radio value={1}>指定区域</Radio>
+                                                    {subCompanies.length > 0 ?
+                                                        subCompanies.join(',')
+                                                        : null}
                                                 </RadioGroup>
                                                 )}
                                             <AreaSelector

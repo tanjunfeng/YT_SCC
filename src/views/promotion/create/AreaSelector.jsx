@@ -13,7 +13,7 @@ import AreaTree from '../../../container/area';
 class AreaSelector extends PureComponent {
     constructor(props) {
         super(props);
-        this.param = {
+        this.state = {
             checkedCompanies: []
         }
         this.handleOk = this.handleOk.bind(this);
@@ -38,11 +38,11 @@ class AreaSelector extends PureComponent {
                 }
             });
         });
-        this.param.checkedCompanies = checkedCompanies;
+        this.setState({ checkedCompanies });
     }
 
     handleOk = () => {
-        this.props.selectorOk();
+        this.props.selectorOk(this.state.checkedCompanies);
     }
 
     handleCancel = () => {
