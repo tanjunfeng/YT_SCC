@@ -85,7 +85,7 @@ export default class EditableCell extends PureComponent {
 }
 
 EditableCell.propTypes = {
-    value: PropTypes.string,
+    value: PropTypes.number,
     step: PropTypes.number,
     purchaseInsideNumber: PropTypes.number,
     editable: PropTypes.bool,
