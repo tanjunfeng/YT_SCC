@@ -51,7 +51,6 @@ class PromotionCreate extends PureComponent {
         this.handleSelectorOk = this.handleSelectorOk.bind(this);
         this.handleSelectorCancel = this.handleSelectorCancel.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
-        this.handleAreaClear = this.handleAreaClear.bind(this);
     }
 
     componentWillMount() {
@@ -111,12 +110,6 @@ class PromotionCreate extends PureComponent {
                 areaSelectorVisible: true
             });
         }
-    }
-
-    handleAreaClear() {
-        this.setState({
-            companies: []
-        });
     }
 
     /**
@@ -263,7 +256,6 @@ class PromotionCreate extends PureComponent {
                                                 getAllCompanies={this.props.getAllCompanies}
                                                 onSelectorOk={this.handleSelectorOk}
                                                 onSelectorCancel={this.handleSelectorCancel}
-                                                onSelectorClear={this.handleAreaClear}
                                             />
                                         </FormItem>
                                     </Col>
