@@ -252,6 +252,7 @@ class StoreAdjList extends Component {
         this.setState({
             rengeTime: null,
             setTime: null,
+            settledDate: null,
             Time: {
                 submitStartTime: null,
                 submitEndTime: null,
@@ -431,7 +432,7 @@ class StoreAdjList extends Component {
                                                 onChoosed={this.handleSubCompanyChoose}
                                                 onClear={this.handleSubCompanyClear}
                                                 renderChoosedInputRaw={(row) => (
-                                                    <div>{row.productId}</div>
+                                                    <div>{row.saleName}</div>
                                                 )}
                                                 pageSize={6}
                                                 columns={[

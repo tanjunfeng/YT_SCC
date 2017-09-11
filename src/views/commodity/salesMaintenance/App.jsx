@@ -75,7 +75,6 @@ class ProcurementMaintenance extends PureComponent {
             isEdit: false
         }
     }
-
     /**
      * 加载刷新列表
      */
@@ -227,7 +226,7 @@ class ProcurementMaintenance extends PureComponent {
                 />
                 <div>
                     <Cardline.SaleCard
-                        initalValue={stepPriceList.sellPriceInfoVos || []}
+                        initalValue={stepPriceList.sellPriceInfoVos || {}}
                         minUnit={getProductById.minUnit}
                         handleDelete={this.handleDelete}
                         handleCardClick={this.handleCardClick}
