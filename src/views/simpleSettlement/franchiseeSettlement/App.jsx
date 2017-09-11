@@ -3,7 +3,7 @@
  * @Description: 加盟商结算
  * @CreateDate: 2017-09-06 17:53:59
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-08 16:04:19
+ * @Last Modified time: 2017-09-11 11:14:01
  */
 
 import React, { Component } from 'react';
@@ -459,12 +459,12 @@ class FranchiseeSettlement extends Component {
                                             <span
                                                 className="sc-form-item-label"
                                                 style={{ marginLeft: 5 }}
-                                            >采购订单</span>
+                                            >订单编号</span>
                                             {getFieldDecorator('orderId')(
                                                 <Input
                                                     maxLength={20}
                                                     className="input"
-                                                    placeholder="采购订单号"
+                                                    placeholder="请输入订单编号"
                                                 />
                                             )}
                                         </div>
