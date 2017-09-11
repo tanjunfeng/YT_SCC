@@ -10,12 +10,11 @@ import PropTypes from 'prop-types';
 import { Form, Tree } from 'antd';
 
 const TreeNode = Tree.TreeNode;
-
-const getNodeTree = (data) => data.map((item) => {
+const getAreaTree = (data) => data.map((item) => {
     if (item.children) {
         return (
             <TreeNode key={item.id} title={item.name} disableCheckbox={false}>
-                {getNodeTree(item.children)}
+                {getAreaTree(item.children)}
             </TreeNode>
         );
     }
@@ -28,31 +27,32 @@ class AreaTree extends PureComponent {
         this.state = {
             checkedKeys: []
         }
-        this.onCheck = this.onCheck.bind(this);
+        this.onAreaCheck = this.onAreaCheck.bind(this);
     }
 
-    onCheck = (checkedKeys) => {
+    onAreaCheck = (checkedKeys) => {
         this.setState({
             checkedKeys
         });
+        this.props.onCheckCompanies(checkedKeys);
     }
 
     render() {
         return (
             <Tree
                 checkable
-                onCheck={this.onCheck}
-                onSelect={this.onCheck}
+                onCheck={this.onAreaCheck}
                 checkedKeys={this.state.checkedKeys}
             >
-                {getNodeTree(this.props.companies)}
+                {getAreaTree(this.props.companies)}
             </Tree>
         );
     }
 }
 
 AreaTree.propTypes = {
-    companies: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+    onCheckCompanies: PropTypes.func,
+    companies: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 
 export default withRouter(Form.create()(AreaTree));

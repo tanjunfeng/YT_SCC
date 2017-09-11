@@ -100,7 +100,7 @@ class PromotionCreate extends PureComponent {
     handleSelectorCancel() {
         this.setState({
             areaSelectorVisible: false
-        })
+        });
     }
 
     handleSubmit() {

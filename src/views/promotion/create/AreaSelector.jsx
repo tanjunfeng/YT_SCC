@@ -13,12 +13,32 @@ import AreaTree from '../../../container/area';
 class AreaSelector extends PureComponent {
     constructor(props) {
         super(props);
+        this.param = {
+            checkedCompanies: []
+        }
         this.handleOk = this.handleOk.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.handleChecked = this.handleChecked.bind(this);
     }
 
     componentWillMount() {
         this.props.getAllCompanies();
+    }
+
+    handleChecked(checkedIds) {
+        // 根据选中的区域编号，拼接所选区域列表
+        const checkedCompanies = [];
+        this.props.companies.forEach((company) => {
+            checkedIds.forEach((id) => {
+                if (company.id === +(id)) {
+                    checkedCompanies.push({
+                        companyId: id,
+                        companyName: company.name
+                    });
+                }
+            });
+        });
+        this.param.checkedCompanies = checkedCompanies;
     }
 
     handleOk = () => {
@@ -40,6 +60,7 @@ class AreaSelector extends PureComponent {
                 >
                     <AreaTree
                         companies={this.props.companies}
+                        onCheckCompanies={this.handleChecked}
                     />
                 </Modal>
             </div>
