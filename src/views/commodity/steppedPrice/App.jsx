@@ -132,7 +132,7 @@ class SteppedPrice extends PureComponent {
     }
 
     render() {
-        const { prefixCls } = this.props;
+        const { prefixCls, initvalue } = this.props;
         const { defaultValue } = this.state;
         const len = defaultValue.length;
         return (
@@ -140,7 +140,9 @@ class SteppedPrice extends PureComponent {
                 <div>
                     <div className={`${prefixCls}-title`}>
                         <span className={`${prefixCls}-title-left`}>数量区间</span>
-                        <span className={`${prefixCls}-title-right`}>售价/元</span>
+                        <span className={`${prefixCls}-title-right`}>
+                            售价 元/{initvalue.fullCaseUnit}
+                        </span>
                     </div>
                     <ul className={`${prefixCls}-content`}>
                         {
@@ -173,6 +175,7 @@ class SteppedPrice extends PureComponent {
 SteppedPrice.propTypes = {
     prefixCls: PropTypes.string,
     defaultValue: PropTypes.arrayOf(PropTypes.any),
+    initvalue: PropTypes.arrayOf(PropTypes.any),
     handleChange: PropTypes.func,
     maxLength: PropTypes.number,
     startNumber: PropTypes.number,
