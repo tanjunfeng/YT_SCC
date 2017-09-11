@@ -625,7 +625,7 @@ const routes = [
                                 {(App) => <App />}</Bundle>)}
                         />
                         <Route
-                            path="/promotion/creat"
+                            path="/promotion/create"
                             exact
                             render={() => (<Bundle load={PromotionCreate}>
                                 {(App) => <App />}</Bundle>)}

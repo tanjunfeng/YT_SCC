@@ -7,7 +7,9 @@
 import ActionType from './ActionType';
 
 import {
-    fetchPromotionList
+    fetchPromotionList as promotionListService,
+    createPromotion as createPromotionService,
+    findCompanyBaseInfo as findCompaniesService
 } from '../service';
 
 /**
@@ -20,7 +22,7 @@ const fetchPromotionListAction = (data) => ({
 
 export const getPromotionList = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        fetchPromotionList(params)
+        promotionListService(params)
             .then(res => {
                 dispatch(
                     fetchPromotionListAction(res.data)
@@ -28,6 +30,42 @@ export const getPromotionList = (params) => dispatch => (
                 resolve(res);
             })
             .catch(err => reject(err))
+    })
+);
+
+const findCompaniesAction = (data) => ({
+    type: ActionType.FIND_ALL_COMPANIES,
+    payload: data
+});
+
+export const getAllCompanies = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        findCompaniesService(params)
+            .then(res => {
+                dispatch(
+                    findCompaniesAction(res.data.BranchCompanyInfoVo)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+const createPromotionAction = (data) => ({
+    type: ActionType.CREATE_PROMOTION,
+    payload: data
+});
+
+export const createPromotion = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        createPromotionService(params)
+            .then(res => {
+                dispatch(
+                    createPromotionAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
     })
 );
 

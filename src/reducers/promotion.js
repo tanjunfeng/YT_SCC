@@ -17,6 +17,8 @@ export default function (state = initState, action) {
         case ActionType.FETCH_PROMOTION_LIST:
         case ActionType.CLEAR_PROMOTION_LIST:
             return state.set('list', fromJS(action.payload));
+        case ActionType.FIND_ALL_COMPANIES:
+            return state.set('companies', fromJS(action.payload));
         default:
             return state;
     }

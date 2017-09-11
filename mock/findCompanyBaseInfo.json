@@ -1,0 +1,18 @@
+{
+    "timestamp": 1496629586173,
+    "code": 200,
+    "message": null,
+    "data": {
+        "BranchCompanyInfoVo": [
+            {
+                "id": 7,
+                "name": "重庆子公司"
+            },
+            {
+                "id": 10000,
+                "name": "成都子公司"
+            }
+        ],
+        "success": true
+    }
+}

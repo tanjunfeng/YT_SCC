@@ -164,7 +164,7 @@ class SearchForm extends PureComponent {
                         <Row gutter={40}>
                             <Col span={8}>
                                 <FormItem>
-                                    <div className="promotionDateRange">
+                                    <div className="promotion-date-range">
                                         <span className="sc-form-item-label">活动时间</span>
                                         {getFieldDecorator('promotionDateRange', {
                                             initialValue: '',
@@ -175,7 +175,6 @@ class SearchForm extends PureComponent {
                                                 className="manage-form-enterTime"
                                                 format={DATE_FORMAT}
                                                 placeholder={['开始时间', '结束时间']}
-                                                onChange={this.onEnterTimeChange}
                                             />
                                             )}
                                     </div>
