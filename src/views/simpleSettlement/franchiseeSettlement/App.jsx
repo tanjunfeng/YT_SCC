@@ -3,7 +3,7 @@
  * @Description: 加盟商结算
  * @CreateDate: 2017-09-06 17:53:59
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-11 11:14:01
+ * @Last Modified time: 2017-09-11 15:36:49
  */
 
 import React, { Component } from 'react';
@@ -80,6 +80,7 @@ class FranchiseeSettlement extends Component {
             checkedList: defaultCheckedList,
             indeterminate: true,
             checkAll: false,
+            mustData: true
         }
     }
 
@@ -268,28 +269,63 @@ class FranchiseeSettlement extends Component {
      * 下载加盟商结算数据
      */
     handleOrderOutput() {
-        this.getSearchData();
-        const searchData = Util.removeInvalid(this.searchData);
-        searchData.page = this.current;
-        this.props.form.validateFields((err) => {
-            if (!err) {
-                Util.exportExcel(exportFranchiseeList, Util.removeInvalid(searchData));
-            }
-        })
+        const {
+            completeDate,
+        } = this.props.form.getFieldsValue();
+        if (!completeDate) {
+            this.props.form.setFields({
+                completeDate: {
+                    errors: [new Error('请选择签收日期')],
+                },
+            });
+        }
+        if (completeDate) {
+            this.getSearchData();
+            const searchData = Util.removeInvalid(this.searchData);
+            searchData.page = this.current;
+            this.props.form.validateFields((err) => {
+                if (!err) {
+                    Util.exportExcel(exportFranchiseeList, Util.removeInvalid(searchData));
+                }
+            })
+            this.props.form.setFields({
+                completeDate: {}
+            });
+        }
     }
 
     /**
      * 下载加盟商支付数据
      */
     handlePaymentOutput() {
-        this.getSearchData();
-        const searchData = Util.removeInvalid(this.searchData);
-        searchData.page = this.current;
-        this.props.form.validateFields((err) => {
-            if (!err) {
-                Util.exportExcel(exportPaymentList, Util.removeInvalid(searchData));
-            }
-        })
+        const {
+            payDate,
+            refundDate
+        } = this.props.form.getFieldsValue();
+        if (!payDate && !refundDate) {
+            this.props.form.setFields({
+                payDate: {
+                    errors: [new Error('请选择付款日期(或)')],
+                },
+                refundDate: {
+                    errors: [new Error('请选择退款日期(或)')],
+                },
+            });
+        }
+        if (payDate || refundDate) {
+            this.getSearchData();
+            const searchData = Util.removeInvalid(this.searchData);
+            searchData.page = this.current;
+            this.props.form.validateFields((err) => {
+                if (!err) {
+                    Util.exportExcel(exportPaymentList, Util.removeInvalid(searchData));
+                }
+            })
+            this.props.form.setFields({
+                payDate: {},
+                refundDate: {},
+            });
+        }
     }
 
     render() {
@@ -305,10 +341,7 @@ class FranchiseeSettlement extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">签收日期</span>
-                                            {getFieldDecorator('completeDate', {
-                                                initialValue: '',
-                                                rules: [{ required: true, message: '请选择签收日期' }]
-                                            })(
+                                            {getFieldDecorator('completeDate')(
                                                 <RangePicker
                                                     style={{ width: '240px' }}
                                                     className="manage-form-enterTime"
@@ -316,11 +349,11 @@ class FranchiseeSettlement extends Component {
                                                     placeholder={['开始时间', '结束时间']}
                                                     onChange={this.onCompleteTimeChange}
                                                 />
-                                                )}
+                                            )}
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8}>
+                                <Col className="gutter-row franchiseeSettlement-errPlace" span={8}>
                                     {/* 付款日期 */}
                                     <FormItem>
                                         <div className="franchiseeSettlement-errPlace">
@@ -339,7 +372,7 @@ class FranchiseeSettlement extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8}>
+                                <Col className="gutter-row franchiseeSettlement-errPlace" span={8}>
                                     {/* 退款日期 */}
                                     <FormItem>
                                         <div className="franchiseeSettlement-errPlace">
