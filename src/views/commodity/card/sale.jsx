@@ -226,6 +226,7 @@ class SaleCard extends Component {
                                                     {`${i.startNumber} - ${i.endNumber ===
                                                         MAXGOODS ? '最大值' :
                                                         i.endNumber} (${minUnit})`}
+
                                                 </span>
                                                 <span
                                                     className={`${prefixCls}-step-item-right`}
@@ -290,7 +291,7 @@ class SaleCard extends Component {
 
 SaleCard.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
-    minUnit: PropTypes.objectOf(PropTypes.any),
+    minUnit: PropTypes.string,
     fetchUpdateProdPurchase: PropTypes.func,
     handleCardClick: PropTypes.func,
     fetchChangeProPurchaseStatus: PropTypes.func,
