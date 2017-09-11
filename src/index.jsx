@@ -230,10 +230,6 @@ startApp({
                     {
                         code: 'promotionMngList',
                         name: '活动列表',
-                    },
-                    {
-                        code: 'xzhd',
-                        name: '新增活动'
                     }
                 ]
             }

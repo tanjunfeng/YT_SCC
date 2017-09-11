@@ -38,6 +38,7 @@ class SearchForm extends PureComponent {
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
         this.getFormData = this.getFormData.bind(this);
+        this.handleCreate = this.handleCreate.bind(this);
     }
 
     getStatus() {
@@ -99,6 +100,11 @@ class SearchForm extends PureComponent {
         this.handleSubCompanyClear();
         this.props.form.resetFields();
         this.props.handlePromotionReset();
+    }
+
+    handleCreate() {
+        const { pathname } = this.props.location;
+        this.props.history.push(`${pathname}/create`);
     }
 
     render() {
@@ -218,7 +224,9 @@ SearchForm.propTypes = {
     pubFetchValueList: PropTypes.func,
     handlePromotionSearch: PropTypes.func,
     handlePromotionReset: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any)
+    form: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
+    location: PropTypes.objectOf(PropTypes.any)
 };
 
 SearchForm.defaultProps = {
