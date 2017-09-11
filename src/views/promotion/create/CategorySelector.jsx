@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author taoqiyu
  *
- * 子公司区域选择模态框
+ * 品类选择级联查询
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -20,7 +20,7 @@ import { getAllCompanies, clearCompaniesList } from '../../../actions/promotion'
     clearCompaniesList
 }, dispatch))
 
-class AreaSelector extends PureComponent {
+class CategorySelector extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -82,7 +82,7 @@ class AreaSelector extends PureComponent {
     }
 }
 
-AreaSelector.propTypes = {
+CategorySelector.propTypes = {
     isSelectorVisible: PropTypes.bool,
     onSelectorOk: PropTypes.func,
     onSelectorCancel: PropTypes.func,
@@ -91,4 +91,4 @@ AreaSelector.propTypes = {
     companies: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 
-export default withRouter(Form.create()(AreaSelector));
+export default withRouter(Form.create()(CategorySelector));

@@ -14,7 +14,7 @@ import {
     Button, DatePicker, Radio
 } from 'antd';
 import Utils from '../../../util/util';
-import { createPromotion, getAllCompanies } from '../../../actions/promotion';
+import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT } from '../../../constant';
 import AreaSelector from './AreaSelector';
 
@@ -25,8 +25,7 @@ const RadioGroup = Radio.Group;
 @connect(state => ({
     companies: state.toJS().promotion.companies
 }), dispatch => bindActionCreators({
-    createPromotion,
-    getAllCompanies
+    createPromotion
 }, dispatch))
 
 class PromotionCreate extends PureComponent {
@@ -51,12 +50,6 @@ class PromotionCreate extends PureComponent {
         this.handleSelectorOk = this.handleSelectorOk.bind(this);
         this.handleSelectorCancel = this.handleSelectorCancel.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
-    }
-
-    componentWillMount() {
-    }
-
-    componentDidMount() {
     }
 
     getFormData() {
@@ -137,6 +130,12 @@ class PromotionCreate extends PureComponent {
         this.setState({
             areaSelectorVisible: false,
             companies
+        });
+    }
+
+    handleSelectorClear() {
+        this.setState({
+            companies: []
         });
     }
 
@@ -252,8 +251,6 @@ class PromotionCreate extends PureComponent {
                                                 )}
                                             <AreaSelector
                                                 isSelectorVisible={this.state.areaSelectorVisible}
-                                                companies={this.props.companies}
-                                                getAllCompanies={this.props.getAllCompanies}
                                                 onSelectorOk={this.handleSelectorOk}
                                                 onSelectorCancel={this.handleSelectorCancel}
                                             />
@@ -298,9 +295,7 @@ class PromotionCreate extends PureComponent {
 
 PromotionCreate.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    createPromotion: PropTypes.func,
-    getAllCompanies: PropTypes.func,
-    companies: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
+    createPromotion: PropTypes.func
 }
 
 export default withRouter(Form.create()(PromotionCreate));

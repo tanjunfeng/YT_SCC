@@ -76,3 +76,8 @@ export const clearPromotionList = () => dispatch => (dispatch({
     type: ActionType.CLEAR_PROMOTION_LIST,
     payload: []
 }));
+
+export const clearCompaniesList = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_ALL_COMPANIES,
+    payload: []
+}));
