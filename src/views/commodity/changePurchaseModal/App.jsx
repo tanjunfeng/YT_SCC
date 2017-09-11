@@ -480,7 +480,7 @@ ProdModal.propTypes = {
     pubFetchValueList: PropTypes.func,
     ChangeUpdateProd: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    handleClose: PropTypes.objectOf(PropTypes.any),
+    handleClose: PropTypes.func,
     prodPurchase: PropTypes.objectOf(PropTypes.any),
     initValue: PropTypes.objectOf(PropTypes.any),
     goto: PropTypes.func,
