@@ -8,7 +8,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { Form, Modal } from 'antd';
-import AreaTree from '../../../container/area';
+import CheckedTree from '../../../container/tree';
 
 class AreaSelector extends PureComponent {
     constructor(props) {
@@ -23,6 +23,12 @@ class AreaSelector extends PureComponent {
 
     componentWillMount() {
         this.props.getAllCompanies();
+    }
+
+    componentWillUnmount() {
+        this.setState({
+            checkedCompanies: []
+        });
     }
 
     handleChecked(checkedIds) {
@@ -41,12 +47,12 @@ class AreaSelector extends PureComponent {
         this.setState({ checkedCompanies });
     }
 
-    handleOk = () => {
-        this.props.selectorOk(this.state.checkedCompanies);
+    handleOk() {
+        this.props.onSelectorOk(this.state.checkedCompanies);
     }
 
-    handleCancel = () => {
-        this.props.selectorCancel();
+    handleCancel() {
+        this.props.onSelectorCancel();
     }
 
     render() {
@@ -54,13 +60,13 @@ class AreaSelector extends PureComponent {
             <div>
                 <Modal
                     title="选择区域"
-                    visible={this.props.selectorVisible}
+                    visible={this.props.isSelectorVisible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                 >
-                    <AreaTree
-                        companies={this.props.companies}
-                        onCheckCompanies={this.handleChecked}
+                    <CheckedTree
+                        list={this.props.companies}
+                        onCheckTreeOk={this.handleChecked}
                     />
                 </Modal>
             </div>
@@ -69,11 +75,11 @@ class AreaSelector extends PureComponent {
 }
 
 AreaSelector.propTypes = {
-    selectorVisible: PropTypes.bool,
-    selectorOk: PropTypes.func,
+    isSelectorVisible: PropTypes.bool,
+    onSelectorOk: PropTypes.func,
+    onSelectorCancel: PropTypes.func,
     getAllCompanies: PropTypes.func,
-    companies: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
-    selectorCancel: PropTypes.func
+    companies: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 
 export default withRouter(Form.create()(AreaSelector));

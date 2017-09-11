@@ -13,6 +13,7 @@ import {
     Form, Row, Col, Input, InputNumber,
     Button, DatePicker, Radio
 } from 'antd';
+import Utils from '../../../util/util';
 import { createPromotion, getAllCompanies } from '../../../actions/promotion';
 import { DATE_FORMAT } from '../../../constant';
 import AreaSelector from './AreaSelector';
@@ -34,23 +35,42 @@ class PromotionCreate extends PureComponent {
         this.param = {
             condition: 0,
             quanifyAmount: '',
-            area: 0
+            area: 0,
+            category: 0
         };
         this.state = {
             areaSelectorVisible: false,
-            companies: []
+            categorySelectorVisible: false,
+            companies: [],
+            categories: []
         }
+        this.getFormData = this.getFormData.bind(this);
         this.handleConditionChange = this.handleConditionChange.bind(this);
         this.handleQuanifyAmountChange = this.handleQuanifyAmountChange.bind(this);
         this.handleAreaChange = this.handleAreaChange.bind(this);
         this.handleSelectorOk = this.handleSelectorOk.bind(this);
         this.handleSelectorCancel = this.handleSelectorCancel.bind(this);
+        this.handleCategoryChange = this.handleCategoryChange.bind(this);
+        this.handleAreaClear = this.handleAreaClear.bind(this);
     }
 
     componentWillMount() {
     }
 
     componentDidMount() {
+    }
+
+    getFormData() {
+        const {
+            id,
+            promotionName,
+        } = this.props.form.getFieldsValue();
+        return Utils.removeInvalid({
+            id,
+            promotionName,
+            status,
+            branchCompanyId: this.state.branchCompanyId
+        });
     }
 
     /**
@@ -74,7 +94,7 @@ class PromotionCreate extends PureComponent {
 
     /**
      * 所选区域选项
-     * @param {*event} e
+     * @param {*object} e
      */
     handleAreaChange(e) {
         const nextArea = e.target.value;
@@ -83,11 +103,39 @@ class PromotionCreate extends PureComponent {
         });
         if (nextArea === 0) {
             this.setState({
-                areaSelectorVisible: false
+                areaSelectorVisible: false,
+                companies: []
             });
         } else {
             this.setState({
                 areaSelectorVisible: true
+            });
+        }
+    }
+
+    handleAreaClear() {
+        this.setState({
+            companies: []
+        });
+    }
+
+    /**
+     * 使用品类选项
+     * @param {*object} e
+     */
+    handleCategoryChange(e) {
+        const nextCategory = e.target.value;
+        this.props.form.setFieldsValue({
+            category: nextCategory
+        });
+        if (nextCategory === 0) {
+            this.setState({
+                categorySelectorVisible: false,
+                categories: []
+            });
+        } else {
+            this.setState({
+                categorySelectorVisible: true
             });
         }
     }
@@ -115,6 +163,7 @@ class PromotionCreate extends PureComponent {
         this.state.companies.forEach((company) => {
             subCompanies.push(company.companyName);
         });
+        const subCategories = [];
         return (
             <div className="promotion">
                 <Form layout="inline">
@@ -209,12 +258,31 @@ class PromotionCreate extends PureComponent {
                                                 </RadioGroup>
                                                 )}
                                             <AreaSelector
-                                                selectorVisible={this.state.areaSelectorVisible}
+                                                isSelectorVisible={this.state.areaSelectorVisible}
                                                 companies={this.props.companies}
                                                 getAllCompanies={this.props.getAllCompanies}
-                                                selectorOk={this.handleSelectorOk}
-                                                selectorCancel={this.handleSelectorCancel}
+                                                onSelectorOk={this.handleSelectorOk}
+                                                onSelectorCancel={this.handleSelectorCancel}
+                                                onSelectorClear={this.handleAreaClear}
                                             />
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span={8}>
+                                        <FormItem label="使用品类">
+                                            {getFieldDecorator('category', {
+                                                initialValue: this.param.category,
+                                                rules: [{ required: true, message: '请选择使用品类' }]
+                                            })(
+                                                <RadioGroup onChange={this.handleCategoryChange}>
+                                                    <Radio className="default" value={0}>全部品类</Radio>
+                                                    <Radio value={1}>指定品类</Radio>
+                                                    {subCategories.length > 0 ?
+                                                        subCategories.join(',')
+                                                        : null}
+                                                </RadioGroup>
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
