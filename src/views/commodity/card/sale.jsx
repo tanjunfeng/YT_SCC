@@ -300,9 +300,8 @@ class SaleCard extends Component {
 
 SaleCard.propTypes = {
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any),
-    minUnit: PropTypes.string,
     getProductById: PropTypes.objectOf(PropTypes.any),
-    minUnit: PropTypes.objectOf(PropTypes.any),
+    minUnit: PropTypes.string,
     fetchUpdateProdPurchase: PropTypes.func,
     handleCardClick: PropTypes.func,
     fetchChangeProPurchaseStatus: PropTypes.func,
