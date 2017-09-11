@@ -755,3 +755,5 @@ export const getNewPmPurchaseOrderItem = (params) => http.get('/pmPurchaseOrder/
 // 采购订单-审批
 export const auditPurchaseOrderInfo = (params) => http.post('/pmPurchaseOrder/auditPurchaseOrderInfo', params);
 
+// 促销活动列表
+export const fetchPromotionList = (params) => http.get('/promotion/queryPromotionList', params);
