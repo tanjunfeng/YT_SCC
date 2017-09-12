@@ -118,7 +118,7 @@ class SellPriceModal extends Component {
     }
 
     /**
-     * 最小起订数量
+     * 销售内装数
      */
     handleInsideChange = (num) => {
         this.setState({
@@ -130,6 +130,9 @@ class SellPriceModal extends Component {
         this.steppedPrice.reset();
     }
 
+    /**
+     * 最小起订数量
+     */
     handleMinChange = (num) => {
         this.setState({
             startNumber: num
@@ -264,8 +267,7 @@ class SellPriceModal extends Component {
                                 <FormItem>
                                     <span>是否整箱销售:</span>
                                     <span className={`${prefixCls}-day-input`}>
-                                        {newDates.sellFullCase === 1 ?
-                                            '是' : '否'}
+                                        {getProductById.sellFullCase === 1 ? '是' : '否'}
                                     </span>
                                 </FormItem>
                                 <FormItem>
@@ -380,6 +382,7 @@ class SellPriceModal extends Component {
 SellPriceModal.propTypes = {
     prefixCls: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
+    getProductById: PropTypes.objectOf(PropTypes.any),
     handlePostAdd: PropTypes.func,
     pubFetchValueList: PropTypes.func,
     handleClose: PropTypes.func,
