@@ -1,18 +1,21 @@
 {
-    "timestamp": 1496629586173,
+    "timestamp": 1505199447214,
     "code": 200,
-    "message": null,
-    "data": {
-        "BranchCompanyInfoVo": [
-            {
-                "id": 7,
-                "name": "重庆子公司"
-            },
-            {
-                "id": 10000,
-                "name": "成都子公司"
-            }
-        ],
-        "success": true
-    }
+    "message": {},
+    "exception": null,
+    "data": [
+        {
+            "id": "10000",
+            "name": "成都子公司"
+        },
+        {
+            "id": "10003",
+            "name": "四川雅堂小超总部"
+        },
+        {
+            "id": "10004",
+            "name": "湖南子公司"
+        }
+    ],
+    "success": true
 }
