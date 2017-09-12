@@ -166,7 +166,7 @@ class PromotionCreate extends PureComponent {
                         <div className="add-message promotion-add-license">
                             <div className="add-message-body">
                                 <Row>
-                                    <Col span={8}>
+                                    <Col span={16}>
                                         <FormItem label="活动名称" >
                                             {getFieldDecorator('promotionName', {
                                                 rules: [
@@ -178,7 +178,7 @@ class PromotionCreate extends PureComponent {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col span={8}>
+                                    <Col span={16}>
                                         <FormItem label="折扣比例" >
                                             {getFieldDecorator('discount', {
                                                 rules: [
@@ -208,7 +208,7 @@ class PromotionCreate extends PureComponent {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col span={8}>
+                                    <Col span={16}>
                                         <FormItem label="使用条件">
                                             {getFieldDecorator('condition', {
                                                 initialValue: this.param.condition,
@@ -238,7 +238,7 @@ class PromotionCreate extends PureComponent {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col span={8}>
+                                    <Col span={16}>
                                         <FormItem label="使用区域">
                                             {getFieldDecorator('area', {
                                                 initialValue: this.param.area,
@@ -261,8 +261,8 @@ class PromotionCreate extends PureComponent {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col span={8}>
-                                        <FormItem label="使用品类">
+                                    <Col span={16}>
+                                        <FormItem className="area" label="使用品类">
                                             {getFieldDecorator('category', {
                                                 initialValue: this.param.category,
                                                 rules: [{ required: true, message: '请选择使用品类' }]
@@ -275,7 +275,8 @@ class PromotionCreate extends PureComponent {
                                                         : null}
                                                 </RadioGroup>
                                                 )}
-                                            <Category />
+                                            {this.state.categorySelectorVisible
+                                                ? <Category /> : null}
                                         </FormItem>
                                     </Col>
                                 </Row>
