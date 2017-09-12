@@ -1,5 +1,7 @@
 /**
  * 级联查询品类
+ *
+ * @author taoqiyu
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -79,6 +81,12 @@ class Category extends PureComponent {
         });
     }
 
+    /**
+     * 拼装 selectOption 对象
+     *
+     * @param {*请求数据} res
+     * @param {*子节点地址} target
+     */
     appendObject(res, target) {
         const id = target.value;
         const arr = [{
@@ -86,7 +94,8 @@ class Category extends PureComponent {
             label: '全部',
             value: 'all',
             isLeaf: true,
-            parent: target  // 当选择全部子节点的时候，保存完整父节点字段待用
+            // 当选择全部子节点的时候，保存完整父节点字段待用
+            parent: target
         }];
         res.data.forEach((treeNode, index) => {
             arr.push({
@@ -100,10 +109,16 @@ class Category extends PureComponent {
         return arr;
     }
 
-    appendOption(children, id) {
+    /**
+     * 拼装 Options 树
+     *
+     * @param {*子节点地址} children
+     * @param {*父节点编号} parentId
+     */
+    appendOption(children, parentId) {
         const dist = this.state.options;
         dist.forEach((obj, index) => {
-            if (obj.value === id) {
+            if (obj.value === parentId) {
                 dist[index].children = children
             }
         });
