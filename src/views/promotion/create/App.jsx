@@ -74,6 +74,7 @@ class PromotionCreate extends PureComponent {
         this.props.form.setFieldsValue({
             condition: e.target.value
         });
+        this.param.condition = e.target.value;
     }
 
     /**
@@ -83,6 +84,7 @@ class PromotionCreate extends PureComponent {
         this.props.form.setFieldsValue({
             quanifyAmount: e.target.value
         });
+        this.param.quanifyAmount = e.target.value;
     }
 
     /**

@@ -43,7 +43,7 @@ export const getAllCompanies = (params) => dispatch => (
         findCompaniesService(params)
             .then(res => {
                 dispatch(
-                    findCompaniesAction(res.data.BranchCompanyInfoVo)
+                    findCompaniesAction(res.data)
                 );
                 resolve(res);
             })

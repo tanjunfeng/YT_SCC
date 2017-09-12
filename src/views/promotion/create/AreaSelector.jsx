@@ -48,7 +48,7 @@ class AreaSelector extends PureComponent {
         const checkedCompanies = [];
         this.props.companies.forEach((company) => {
             checkedIds.forEach((id) => {
-                if (company.id === +(id)) {
+                if (+(company.id) === +(id)) {
                     checkedCompanies.push({
                         companyId: id,
                         companyName: company.name
