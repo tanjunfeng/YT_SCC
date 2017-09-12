@@ -129,9 +129,8 @@ class PromotionCreate extends PureComponent {
         }
     }
 
-    handleCategorySelect(value, labels) {
-        console.log(value);
-        console.log(labels);
+    handleCategorySelect(category) {
+        console.log(category);
     }
 
     handleSelectorOk(companies) {

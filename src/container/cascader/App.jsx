@@ -19,12 +19,13 @@ class Category extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            displayValue: '',
+            category: {},
             options: [],
             isLoading: false
         };
         this.onChange = this.onChange.bind(this);
         this.loadData = this.loadData.bind(this);
+        this.appendObject = this.appendObject.bind(this);
         this.appendOption = this.appendOption.bind(this);
     }
 
@@ -35,17 +36,22 @@ class Category extends PureComponent {
                     key: index,
                     label: treeNode.categoryName,
                     value: treeNode.id,
-                    isLeaf: false
+                    isLeaf: false,
+                    level: treeNode.level
                 }))
             });
         });
     }
 
     onChange = (value, selectedOptions) => {
-        this.setState({
-            displayValue: selectedOptions.map(o => o.label).join(', '),
-        });
-        this.props.onCategorySelect(value, this.state.displayValue);
+        const target = selectedOptions[selectedOptions.length - 1];
+        const category = {
+            categoryId: target.value,
+            categoryName: target.label,
+            categoryLevel: target.level
+        };
+        this.setState({ category });
+        this.props.onCategorySelect(category);
     }
 
     loadData = (selectedOptions) => {
@@ -55,25 +61,31 @@ class Category extends PureComponent {
         });
         const id = target.value;
         this.props.getCategoriesByParentId({ parentId: id }).then(res => {
-            target.children = [{
-                key: `${id}-all`,
-                label: '全部',
-                value: '',
-                isLeaf: true
-            }];
-            res.data.forEach((treeNode, index) => {
-                target.children.push({
-                    key: `${id}-${index}`,
-                    label: treeNode.categoryName,
-                    value: treeNode.id,
-                    isLeaf: treeNode.level === 4
-                })
-            });
+            target.children = this.appendObject(res, id);
             this.appendOption(target.children, id);
             this.setState({
                 isLoading: target.loading = false
             });
         });
+    }
+
+    appendObject(res, id) {
+        const arr = [{
+            key: `${id}-all`,
+            label: '全部',
+            value: 'all',
+            isLeaf: true
+        }];
+        res.data.forEach((treeNode, index) => {
+            arr.push({
+                key: `${id}-${index}`,
+                label: treeNode.categoryName,
+                value: treeNode.id,
+                isLeaf: treeNode.level === 4,
+                level: treeNode.level
+            })
+        });
+        return arr;
     }
 
     appendOption(children, id) {
