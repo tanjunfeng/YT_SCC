@@ -74,6 +74,7 @@ class AreaSelector extends PureComponent {
                 >
                     <CheckedTree
                         list={this.props.companies}
+                        isEmpty={!this.props.isSelectorVisible}
                         onCheckTreeOk={this.handleChecked}
                     />
                 </Modal>

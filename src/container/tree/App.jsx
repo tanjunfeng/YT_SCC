@@ -10,11 +10,16 @@ import PropTypes from 'prop-types';
 import { Form, Tree } from 'antd';
 
 const TreeNode = Tree.TreeNode;
-const getTree = (data) => data.map((item) => {
+/**
+ * 拼接子公司列表
+ *
+ * @param {*子公司列表} companies
+ */
+const getCompaniesTree = (companies) => companies.map((item) => {
     if (item.children) {
         return (
             <TreeNode key={item.id} title={item.name} disableCheckbox={false}>
-                {getTree(item.children)}
+                {getCompaniesTree(item.children)}
             </TreeNode>
         );
     }
@@ -30,14 +35,13 @@ class CheckedTree extends PureComponent {
         this.handleCheck = this.handleCheck.bind(this);
     }
 
-    componentWillMount() {
-        this.setState({ checkedKeys: [] });
-    }
-
-    componentWillUnmount() {
-        this.setState({
-            checkedKeys: []
-        });
+    componentWillReceiveProps(nextProps) {
+        // 当父容器告知本组件
+        if (nextProps.isEmpty) {
+            this.setState({
+                checkedKeys: []
+            });
+        }
     }
 
     handleCheck(checkedKeys) {
@@ -54,7 +58,7 @@ class CheckedTree extends PureComponent {
                 checkedKeys={this.state.checkedKeys}
                 onCheck={this.handleCheck}
             >
-                {getTree(this.props.list)}
+                {getCompaniesTree(this.props.list)}
             </Tree>
         );
     }
@@ -62,6 +66,7 @@ class CheckedTree extends PureComponent {
 
 CheckedTree.propTypes = {
     onCheckTreeOk: PropTypes.func,
+    isEmpty: PropTypes.bool,
     list: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 
