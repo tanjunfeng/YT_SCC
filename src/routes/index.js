@@ -614,7 +614,7 @@ const routes = [
             {
                 path: '/promotion',
                 parent: 'cxgl',
-                key: 'promotionMngList',
+                key: 'hdlb',
                 component: () => (
                     <Switch>
                         <Route
@@ -623,12 +623,6 @@ const routes = [
                             render={() => (<Bundle load={PromotionManagementList}>
                                 {(App) => <App />}</Bundle>)}
                         />
-                        {/* <Route
-                            path="/promotion/:id"
-                            exact
-                            render={() => (<Bundle load={PromotionDetail}>
-                                {(App) => <App />}</Bundle>)}
-                        /> */}
                     </Switch>
                 )
             }
