@@ -43,20 +43,24 @@ class Category extends PureComponent {
         });
     }
 
+    /**
+     * 处理级联菜单点击事件
+     *
+     * @param {*当前label} value
+     * @param {*选中的对象} selectedOptions
+     * http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/promotion/insertPromotion
+     */
     onChange(value, selectedOptions) {
         const target = selectedOptions[selectedOptions.length - 1];
+        // 当用户选择全部子节点时，使用 parent 对象数据回传
+        if (target.value === 'all') {
+            Object.assign(target, {}, target.parent);
+        }
         const category = {
             categoryId: target.value,
             categoryName: target.label,
             categoryLevel: target.level
         };
-        if (target.value === 'all') {
-            Object.assign(category, {}, {
-                categoryId: target.parent.value,
-                categoryName: target.parent.label,
-                categoryLevel: target.parent.level
-            });
-        }
         this.setState({ category });
         this.props.onCategorySelect(category);
     }
@@ -82,7 +86,7 @@ class Category extends PureComponent {
             label: '全部',
             value: 'all',
             isLeaf: true,
-            parent: target
+            parent: target  // 当选择全部子节点的时候，保存完整父节点字段待用
         }];
         res.data.forEach((treeNode, index) => {
             arr.push({
