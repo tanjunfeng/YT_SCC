@@ -23,8 +23,7 @@ const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 const RadioGroup = Radio.Group;
 
-@connect(state => ({
-    companies: state.toJS().promotion.companies
+@connect(() => ({
 }), dispatch => bindActionCreators({
     createPromotion
 }, dispatch))
@@ -51,6 +50,7 @@ class PromotionCreate extends PureComponent {
         this.handleSelectorOk = this.handleSelectorOk.bind(this);
         this.handleSelectorCancel = this.handleSelectorCancel.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
+        this.handleCategorySelect = this.handleCategorySelect.bind(this);
     }
 
     getFormData() {
@@ -127,6 +127,11 @@ class PromotionCreate extends PureComponent {
                 categorySelectorVisible: true
             });
         }
+    }
+
+    handleCategorySelect(value, labels) {
+        console.log(value);
+        console.log(labels);
     }
 
     handleSelectorOk(companies) {
@@ -276,7 +281,9 @@ class PromotionCreate extends PureComponent {
                                                 </RadioGroup>
                                                 )}
                                             {this.state.categorySelectorVisible
-                                                ? <Category /> : null}
+                                                ? <Category
+                                                    onCategorySelect={this.handleCategorySelect}
+                                                /> : null}
                                         </FormItem>
                                     </Col>
                                 </Row>

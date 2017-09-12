@@ -9,7 +9,8 @@ import ActionType from './ActionType';
 import {
     fetchPromotionList as promotionListService,
     createPromotion as createPromotionService,
-    findCompanyBaseInfo as findCompaniesService
+    findCompanyBaseInfo as findCompaniesService,
+    queryCategoriesByParentId as findCategoriesService
 } from '../service';
 
 /**
@@ -44,6 +45,24 @@ export const getAllCompanies = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     findCompaniesAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+const findCategoriedAction = (data) => ({
+    type: ActionType.FETCH_CATEGORY_BY_PARENT,
+    payload: data
+});
+
+export const getCategoriesByParentId = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        findCategoriesService(params)
+            .then(res => {
+                dispatch(
+                    findCategoriedAction(res.data)
                 );
                 resolve(res);
             })

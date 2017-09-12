@@ -2,55 +2,90 @@
  * 级联查询品类
  */
 import React, { PureComponent } from 'react';
-import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Form, Cascader } from 'antd';
+import { getCategoriesByParentId } from '../../actions/promotion';
 
-const options = [{
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    isLeaf: false,
-}, {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    isLeaf: false,
-}];
+@connect(state => ({
+    categories: state.toJS().promotion.categories
+}), dispatch => bindActionCreators({
+    getCategoriesByParentId
+}, dispatch))
 
 class Category extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            inputValue: '',
-            options,
+            displayValue: '',
+            options: [],
+            isLoading: false
         };
         this.onChange = this.onChange.bind(this);
         this.loadData = this.loadData.bind(this);
+        this.appendOption = this.appendOption.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.getCategoriesByParentId({ parentId: '' }).then((res) => {
+            this.setState({
+                options: res.data.map((treeNode, index) => ({
+                    key: index,
+                    label: treeNode.categoryName,
+                    value: treeNode.id,
+                    isLeaf: false
+                }))
+            });
+        });
     }
 
     onChange = (value, selectedOptions) => {
         this.setState({
-            inputValue: selectedOptions.map(o => o.label).join(', '),
+            displayValue: selectedOptions.map(o => o.label).join(', '),
         });
+        this.props.onCategorySelect(value, this.state.displayValue);
     }
 
     loadData = (selectedOptions) => {
-        const targetOption = selectedOptions[selectedOptions.length - 1];
-        targetOption.loading = true;
-
-        // load options lazily
-        setTimeout(() => {
-            targetOption.loading = false;
-            targetOption.children = [{
-                label: `${targetOption.label} Dynamic 1`,
-                value: 'dynamic1',
-            }, {
-                label: `${targetOption.label} Dynamic 2`,
-                value: 'dynamic2',
+        const target = selectedOptions[selectedOptions.length - 1];
+        this.setState({
+            isLoading: target.loading = true
+        });
+        const id = target.value;
+        this.props.getCategoriesByParentId({ parentId: id }).then(res => {
+            target.children = [{
+                key: `${id}-all`,
+                label: '全部',
+                value: '',
+                isLeaf: true
             }];
-            this.setState({
-                options: [...this.state.options],
+            res.data.forEach((treeNode, index) => {
+                target.children.push({
+                    key: `${id}-${index}`,
+                    label: treeNode.categoryName,
+                    value: treeNode.id,
+                    isLeaf: treeNode.level === 4
+                })
             });
-        }, 1000);
+            this.appendOption(target.children, id);
+            this.setState({
+                isLoading: target.loading = false
+            });
+        });
+    }
+
+    appendOption(children, id) {
+        const dist = this.state.options;
+        dist.forEach((obj, index) => {
+            if (obj.value === id) {
+                dist[index].children = children
+            }
+        });
+        this.setState({
+            options: dist
+        });
     }
 
     render() {
@@ -66,9 +101,8 @@ class Category extends PureComponent {
 }
 
 Category.propTypes = {
-    onCheckTreeOk: PropTypes.func,
-    isEmpty: PropTypes.bool,
-    list: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
+    getCategoriesByParentId: PropTypes.func,
+    onCategorySelect: PropTypes.func
 }
 
 export default withRouter(Form.create()(Category));

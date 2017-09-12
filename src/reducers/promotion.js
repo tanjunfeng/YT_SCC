@@ -9,7 +9,8 @@ import { fromJS } from 'immutable';
 import ActionType from '../actions/ActionType';
 
 const initState = fromJS({
-    list: []    // 促销活动管理列表
+    list: [],    // 促销活动管理列表
+    categories: []  // 品类列表
 });
 
 export default function (state = initState, action) {
@@ -20,6 +21,8 @@ export default function (state = initState, action) {
         case ActionType.FIND_ALL_COMPANIES:
         case ActionType.CLEAR_ALL_COMPANIES:
             return state.set('companies', fromJS(action.payload));
+        case ActionType.FETCH_CATEGORY_BY_PARENT:
+            return state.set('categories', fromJS(action.payload));
         default:
             return state;
     }
