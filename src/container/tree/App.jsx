@@ -35,8 +35,8 @@ class CheckedTree extends PureComponent {
         this.handleCheck = this.handleCheck.bind(this);
     }
 
+    // 当父容器需要清空选择框时，通知本组件
     componentWillReceiveProps(nextProps) {
-        // 当父容器告知本组件
         if (nextProps.isEmpty) {
             this.setState({
                 checkedKeys: []
