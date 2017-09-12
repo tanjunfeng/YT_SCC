@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {
     Form, Row, Col, Input, InputNumber,
-    Button, DatePicker, Radio
+    Button, DatePicker, Radio, message
 } from 'antd';
 import Utils from '../../../util/util';
 import { createPromotion } from '../../../actions/promotion';
@@ -34,19 +34,20 @@ class PromotionCreate extends PureComponent {
         super(props);
         this.param = {
             condition: 0,
-            quanifyAmount: 0,
             area: 0,
             category: 0,
-            storeIds: '',
-            note: ''
+            store: 0,
+            storeIds: ''
         };
         this.state = {
             areaSelectorVisible: false,
             categorySelectorVisible: false,
+            storeSelectorVisible: false,
             companies: [],
             categoryObj: {}
         }
         this.getFormData = this.getFormData.bind(this);
+        this.validate = this.validate.bind(this);
         this.handleConditionChange = this.handleConditionChange.bind(this);
         this.handleQuanifyAmountChange = this.handleQuanifyAmountChange.bind(this);
         this.handleAreaChange = this.handleAreaChange.bind(this);
@@ -54,6 +55,8 @@ class PromotionCreate extends PureComponent {
         this.handleSelectorCancel = this.handleSelectorCancel.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this.handleCategorySelect = this.handleCategorySelect.bind(this);
+        this.handleStoreChange = this.handleStoreChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     getFormData() {
@@ -73,6 +76,8 @@ class PromotionCreate extends PureComponent {
             storeId: storeIds
         });
         const promoCategoriesPo = this.state.categoryObj;
+        const companiesPoList = this.state.companies;
+        if (!this.validate()) return {};
         return Utils.removeInvalid({
             promotionName,
             discount,
@@ -83,8 +88,22 @@ class PromotionCreate extends PureComponent {
             note,
             stores,
             promoCategoriesPo,
+            companiesPoList,
             branchCompanyId: this.state.branchCompanyId
         });
+    }
+
+    validate() {
+        let res = true;
+        if (this.param.area > 0 && this.state.companies.length === 0) {
+            message.warning('未选择子公司');
+            res = false;
+        }
+        if (this.param.category > 0 && !this.state.categoryObj.categoryId) {
+            message.warning('未选中品类');
+            res = false;
+        }
+        return res;
     }
 
     /**
@@ -154,6 +173,22 @@ class PromotionCreate extends PureComponent {
         this.setState({ categoryObj });
     }
 
+    handleStoreChange(e) {
+        const nextStore = e.target.value;
+        this.props.form.setFieldsValue({
+            store: nextStore
+        });
+        if (nextStore === 0) {
+            this.setState({
+                storeSelectorVisible: false
+            });
+        } else {
+            this.setState({
+                storeSelectorVisible: true
+            });
+        }
+    }
+
     handleSelectorOk(companies) {
         this.setState({
             areaSelectorVisible: false,
@@ -174,7 +209,8 @@ class PromotionCreate extends PureComponent {
     }
 
     handleSubmit() {
-        this.props.createPromotion(this.param);
+        const data = this.getFormData();
+        this.props.createPromotion(data);
     }
 
     render() {
@@ -183,7 +219,6 @@ class PromotionCreate extends PureComponent {
         this.state.companies.forEach((company) => {
             subCompanies.push(company.companyName);
         });
-        const subCategories = [];
         return (
             <div className="promotion">
                 <Form layout="inline">
@@ -295,9 +330,6 @@ class PromotionCreate extends PureComponent {
                                                 <RadioGroup onChange={this.handleCategoryChange}>
                                                     <Radio className="default" value={0}>全部品类</Radio>
                                                     <Radio value={1}>指定品类</Radio>
-                                                    {subCategories.length > 0 ?
-                                                        subCategories.join(',')
-                                                        : null}
                                                 </RadioGroup>
                                                 )}
                                             {this.state.categorySelectorVisible
@@ -310,12 +342,24 @@ class PromotionCreate extends PureComponent {
                                 <Row>
                                     <Col span={16}>
                                         <FormItem label="指定门店">
-                                            {getFieldDecorator('storeIds', {
-                                                initialValue: this.param.storeIds,
-                                                rules: [{ required: true, message: '请输入指定门店' }]
+                                            {getFieldDecorator('store', {
+                                                initialValue: this.param.store,
+                                                rules: [{ required: true, message: '请指定门店' }]
                                             })(
-                                                <TextArea placeholder="请输入指定门店" autosize={{ minRows: 1, maxRows: 6 }} />
+                                                <RadioGroup onChange={this.handleStoreChange}>
+                                                    <Radio className="default" value={0}>不指定</Radio>
+                                                    <Radio value={1}>指定门店</Radio>
+                                                </RadioGroup>
                                                 )}
+                                            {this.state.storeSelectorVisible ?
+                                                getFieldDecorator('storeIds', {
+                                                    initialValue: this.param.storeIds,
+                                                    rules: [{ required: true, message: '请输入指定门店' }]
+                                                })(
+                                                    <TextArea placeholder="请输入指定门店" autosize={{ minRows: 1, maxRows: 6 }} />
+                                                    )
+                                                : null
+                                            }
                                         </FormItem>
                                     </Col>
                                 </Row>
