@@ -624,6 +624,12 @@ const routes = [
                             render={() => (<Bundle load={PromotionManagementList}>
                                 {(App) => <App />}</Bundle>)}
                         />
+                        <Route
+                            path="/promotion/create"
+                            exact
+                            render={() => (<Bundle load={PromotionCreate}>
+                                {(App) => <App />}</Bundle>)}
+                        />
                     </Switch>
                 )
             }
