@@ -24,7 +24,14 @@
     form .default{
         width: 78px;
     }
-    .area .ant-cascader-picker {
+    .category .ant-cascader-picker {
+        width: 260px;
+    }
+    .ant-form-item-label label {
+        width: 80px;
+        display: inline-block;
+    }
+    .ant-form-item-control textarea {
         width: 260px;
     }
 }

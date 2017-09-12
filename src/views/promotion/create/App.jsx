@@ -22,6 +22,7 @@ import Category from '../../../container/cascader';
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 const RadioGroup = Radio.Group;
+const { TextArea } = Input;
 
 @connect(() => ({
 }), dispatch => bindActionCreators({
@@ -33,15 +34,17 @@ class PromotionCreate extends PureComponent {
         super(props);
         this.param = {
             condition: 0,
-            quanifyAmount: '',
+            quanifyAmount: 0,
             area: 0,
-            category: 0
+            category: 0,
+            storeIds: '',
+            note: ''
         };
         this.state = {
             areaSelectorVisible: false,
             categorySelectorVisible: false,
             companies: [],
-            categories: []
+            categoryObj: {}
         }
         this.getFormData = this.getFormData.bind(this);
         this.handleConditionChange = this.handleConditionChange.bind(this);
@@ -55,13 +58,31 @@ class PromotionCreate extends PureComponent {
 
     getFormData() {
         const {
-            id,
             promotionName,
+            discount,
+            promotionDateRange,
+            condition,
+            quanifyAmount,
+            note,
+            storeIds
         } = this.props.form.getFieldsValue();
+        const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
+        const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
+        const stores = {};
+        Object.assign(stores, {
+            storeId: storeIds
+        });
+        const promoCategoriesPo = this.state.categoryObj;
         return Utils.removeInvalid({
-            id,
             promotionName,
-            status,
+            discount,
+            startDate,
+            endDate,
+            condition,
+            quanifyAmount,
+            note,
+            stores,
+            promoCategoriesPo,
             branchCompanyId: this.state.branchCompanyId
         });
     }
@@ -80,11 +101,11 @@ class PromotionCreate extends PureComponent {
     /**
      * 使用条件金额
      */
-    handleQuanifyAmountChange(e) {
+    handleQuanifyAmountChange(number) {
         this.props.form.setFieldsValue({
-            quanifyAmount: e.target.value
+            quanifyAmount: number
         });
-        this.param.quanifyAmount = e.target.value;
+        this.param.quanifyAmount = number;
     }
 
     /**
@@ -120,7 +141,7 @@ class PromotionCreate extends PureComponent {
         if (nextCategory === 0) {
             this.setState({
                 categorySelectorVisible: false,
-                categories: []
+                categoryObj: {}
             });
         } else {
             this.setState({
@@ -129,8 +150,8 @@ class PromotionCreate extends PureComponent {
         }
     }
 
-    handleCategorySelect(category) {
-        console.log(category);
+    handleCategorySelect(categoryObj) {
+        this.setState({ categoryObj });
     }
 
     handleSelectorOk(companies) {
@@ -266,7 +287,7 @@ class PromotionCreate extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={16}>
-                                        <FormItem className="area" label="使用品类">
+                                        <FormItem className="category" label="使用品类">
                                             {getFieldDecorator('category', {
                                                 initialValue: this.param.category,
                                                 rules: [{ required: true, message: '请选择使用品类' }]
@@ -283,6 +304,29 @@ class PromotionCreate extends PureComponent {
                                                 ? <Category
                                                     onCategorySelect={this.handleCategorySelect}
                                                 /> : null}
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span={16}>
+                                        <FormItem label="指定门店">
+                                            {getFieldDecorator('storeIds', {
+                                                initialValue: this.param.storeIds,
+                                                rules: [{ required: true, message: '请输入指定门店' }]
+                                            })(
+                                                <TextArea placeholder="请输入指定门店" autosize={{ minRows: 1, maxRows: 6 }} />
+                                                )}
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span={16}>
+                                        <FormItem label="备注">
+                                            {getFieldDecorator('note', {
+                                                initialValue: this.param.note
+                                            })(
+                                                <TextArea placeholder="可填写备注" autosize={{ minRows: 1, maxRows: 6 }} />
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
