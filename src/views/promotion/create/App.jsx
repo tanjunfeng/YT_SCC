@@ -250,7 +250,11 @@ class PromotionCreate extends PureComponent {
                                                         : null}
                                                 </RadioGroup>
                                                 )}
-                                            <Category />
+                                            <AreaSelector
+                                                isSelectorVisible={this.state.areaSelectorVisible}
+                                                onSelectorOk={this.handleSelectorOk}
+                                                onSelectorCancel={this.handleSelectorCancel}
+                                            />
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -269,6 +273,7 @@ class PromotionCreate extends PureComponent {
                                                         : null}
                                                 </RadioGroup>
                                                 )}
+                                            <Category />
                                         </FormItem>
                                     </Col>
                                 </Row>
