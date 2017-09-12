@@ -39,6 +39,10 @@ class AreaSelector extends PureComponent {
         this.props.getAllCompanies();
     }
 
+    componentWillUnmount() {
+        this.props.clearCompaniesList();
+    }
+
     handleChecked(checkedIds) {
         // 根据选中的区域编号，拼接所选区域列表
         const checkedCompanies = [];
