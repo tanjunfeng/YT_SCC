@@ -264,7 +264,8 @@ class SellPriceModal extends Component {
                                 <FormItem>
                                     <span>是否整箱销售:</span>
                                     <span className={`${prefixCls}-day-input`}>
-                                        {newDates.sellFullCase === 0 ? '否' : '是'}
+                                        {newDates.sellFullCase === 1 ?
+                                            '是' : '否'}
                                     </span>
                                 </FormItem>
                                 <FormItem>

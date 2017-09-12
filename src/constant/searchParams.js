@@ -550,31 +550,31 @@ export const adjustmentType = {
             value: '全部'
         },
         {
-            key: 0,
+            key: '0',
             value: '物流丢失'
         },
         {
-            key: 1,
+            key: '1',
             value: '仓库报溢'
         },
         {
-            key: 2,
+            key: '2',
             value: '仓库报损'
         },
         {
-            key: 3,
+            key: '3',
             value: '业务调增'
         },
         {
-            key: 4,
+            key: '4',
             value: '业务调减'
         },
         {
-            key: 5,
+            key: '5',
             value: '仓库同步调增'
         },
         {
-            key: 6,
+            key: '6',
             value: '仓库同步调减'
         }
     ]
