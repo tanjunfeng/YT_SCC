@@ -17,6 +17,7 @@ import Utils from '../../../util/util';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT } from '../../../constant';
 import AreaSelector from './AreaSelector';
+import Category from '../../../container/cascader';
 
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
@@ -249,11 +250,7 @@ class PromotionCreate extends PureComponent {
                                                         : null}
                                                 </RadioGroup>
                                                 )}
-                                            <AreaSelector
-                                                isSelectorVisible={this.state.areaSelectorVisible}
-                                                onSelectorOk={this.handleSelectorOk}
-                                                onSelectorCancel={this.handleSelectorCancel}
-                                            />
+                                            <Category />
                                         </FormItem>
                                     </Col>
                                 </Row>

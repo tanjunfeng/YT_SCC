@@ -67,7 +67,7 @@ class CategorySelector extends PureComponent {
         return (
             <div>
                 <Modal
-                    title="选择区域"
+                    title="选择品类"
                     visible={this.props.isSelectorVisible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
