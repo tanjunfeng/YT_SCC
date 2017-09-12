@@ -43,38 +43,46 @@ class Category extends PureComponent {
         });
     }
 
-    onChange = (value, selectedOptions) => {
+    onChange(value, selectedOptions) {
         const target = selectedOptions[selectedOptions.length - 1];
         const category = {
             categoryId: target.value,
             categoryName: target.label,
             categoryLevel: target.level
         };
+        if (target.value === 'all') {
+            Object.assign(category, {}, {
+                categoryId: target.parent.value,
+                categoryName: target.parent.label,
+                categoryLevel: target.parent.level
+            });
+        }
         this.setState({ category });
         this.props.onCategorySelect(category);
     }
 
-    loadData = (selectedOptions) => {
+    loadData(selectedOptions) {
         const target = selectedOptions[selectedOptions.length - 1];
         this.setState({
             isLoading: target.loading = true
         });
-        const id = target.value;
-        this.props.getCategoriesByParentId({ parentId: id }).then(res => {
-            target.children = this.appendObject(res, id);
-            this.appendOption(target.children, id);
+        this.props.getCategoriesByParentId({ parentId: target.value }).then(res => {
+            target.children = this.appendObject(res, target);
+            this.appendOption(target.children, target.value);
             this.setState({
                 isLoading: target.loading = false
             });
         });
     }
 
-    appendObject(res, id) {
+    appendObject(res, target) {
+        const id = target.value;
         const arr = [{
             key: `${id}-all`,
             label: '全部',
             value: 'all',
-            isLeaf: true
+            isLeaf: true,
+            parent: target
         }];
         res.data.forEach((treeNode, index) => {
             arr.push({
