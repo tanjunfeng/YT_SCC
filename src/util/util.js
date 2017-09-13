@@ -5,6 +5,8 @@
  * 工具类
  */
 import * as util from 'freed-spa/src/util/util';
+import moment from 'moment';
+import { DATE_FORMAT, TIME_FORMAT } from '../constant/index';
 
 /**
  * 格式化地区字符串
@@ -289,6 +291,20 @@ class Utils {
         // If we made it this far, objects
         // are considered equivalent
         return true;
+    }
+
+    static getDate(timestamp) {
+        if (!timestamp) {
+            return '-';
+        }
+        return moment(parseInt(timestamp, 10)).format(DATE_FORMAT);
+    }
+
+    static getTime(timestamp) {
+        if (!timestamp) {
+            return '-';
+        }
+        return moment(parseInt(timestamp, 10)).format(TIME_FORMAT);
     }
 }
 

@@ -13,7 +13,7 @@ import Qualification from './Qualification';
 // 联系信息
 import Contact from './Contact';
 // 合作信息
-import Cooperative from './common/Cooperative';
+import Cooperative from './Cooperative';
 
 const TabPane = Tabs.TabPane;
 

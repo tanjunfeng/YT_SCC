@@ -35,8 +35,8 @@ const dateFormat = 'YYYY-MM-DD';
 class PoSearchForm extends PureComponent {
     constructor(props) {
         super(props);
-        this.handleCreate = ::this.handleCreate;
-        this.handleDelete = ::this.handleDelete;
+        this.handleCreate = this.handleCreate.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
         this.state = {
             spId: '',   // 供应商ID
             isSupplyAdrDisabled: true, // 供应商地点禁用
@@ -126,6 +126,7 @@ class PoSearchForm extends PureComponent {
     handleSupplyChoose = ({ record }) => {
         this.setState({
             spId: record.spId,
+            orgId: this.props.employeeCompanyId,
             isSupplyAdrDisabled: false
         });
         this.supplierEncoded = record.spNo;
@@ -279,11 +280,10 @@ class PoSearchForm extends PureComponent {
                                                 {
                                                     title: '编码',
                                                     dataIndex: this.state.locationData.code,
-                                                    width: 150,
+                                                    width: 80
                                                 }, {
                                                     title: '名称',
-                                                    dataIndex: this.state.locationData.name,
-                                                    width: 200,
+                                                    dataIndex: this.state.locationData.name
                                                 }
                                             ]}
                                         />
@@ -352,11 +352,10 @@ class PoSearchForm extends PureComponent {
                                                 {
                                                     title: '编码',
                                                     dataIndex: 'id',
-                                                    width: 150,
+                                                    width: 80
                                                 }, {
                                                     title: '名称',
-                                                    dataIndex: 'categoryName',
-                                                    width: 200,
+                                                    dataIndex: 'categoryName'
                                                 }
                                             ]}
                                         />
@@ -389,11 +388,10 @@ class PoSearchForm extends PureComponent {
                                                 {
                                                     title: '供应商编号',
                                                     dataIndex: 'spNo',
-                                                    width: 150
+                                                    width: 80
                                                 }, {
                                                     title: '供应商名称',
-                                                    dataIndex: 'companyName',
-                                                    width: 200
+                                                    dataIndex: 'companyName'
                                                 }
                                             ]}
                                         />
@@ -427,11 +425,10 @@ class PoSearchForm extends PureComponent {
                                                 {
                                                     title: '供应商地点编码',
                                                     dataIndex: 'providerNo',
-                                                    width: 150,
+                                                    width: 98
                                                 }, {
                                                     title: '供应商地点名称',
-                                                    dataIndex: 'providerName',
-                                                    width: 200,
+                                                    dataIndex: 'providerName'
                                                 }
                                             ]}
                                         />

@@ -65,6 +65,18 @@ import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/
 import StoreAdjList from 'bundle-loader?lazy!../views/storeAdjustment/storeAdjList';
 import ItemDetail from 'bundle-loader?lazy!../views/storeAdjustment/itemDetail';
 
+// 实时库存查询
+import StoreRealTime from 'bundle-loader?lazy!../views/storeAdjustment/storeRealTime';
+
+// 简易结算支持
+import SimpleOrderList from 'bundle-loader?lazy!../views/simpleSettlement/simpleOrderList';
+import FranchiseeSettlement from 'bundle-loader?lazy!../views/simpleSettlement/franchiseeSettlement';
+
+// 促销活动
+import PromotionManagementList from 'bundle-loader?lazy!../views/promotion/mngList';
+import PromotionCreate from 'bundle-loader?lazy!../views/promotion/create';
+// import PromotionDetail from 'bundle-loader?lazy!../views/promotion/detail';
+
 /* eslint-enable */
 
 
@@ -396,13 +408,77 @@ const routes = [
                         />
                     </Switch>
                 )
+            },
+            // 实时库存查询
+            {
+                path: '/storeRealTime',
+                parent: 'jyjszc',
+                key: 'sskccx',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/storeRealTime"
+                            exact
+                            render={() => <Bundle load={StoreRealTime}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
+        ]
+    },
+    {
+        // 简易结算支持
+        key: 'jyjszc',
+        iconType: 'fork',
+        routes: [
+            // 供应商结算
+            {
+                path: '/simpleOrderList',
+                parent: 'jyjszc',
+                key: 'gysjs',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/simpleOrderList"
+                            exact
+                            render={() => (<Bundle load={SimpleOrderList}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                        <Route
+                            path="/simpleOrderList/:id"
+                            render={() => (<Bundle load={SimpleOrderList}>
+                                {(App) => <App />}</Bundle>)
+                            }
+                        />
+                    </Switch>
+                )
+            },
+            {
+                path: '/franchiseeSettlement',
+                parent: 'jyjszc',
+                key: 'jmsjs',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/franchiseeSettlement"
+                            exact
+                            render={() => (<Bundle load={FranchiseeSettlement}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                        <Route
+                            path="/franchiseeSettlement/:id"
+                            render={() => (<Bundle load={FranchiseeSettlement}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                    </Switch>
+                )
             }
         ]
     },
     // 采购管理
     {
         key: 'procurementMng',
-        iconType: 'solution',
+        iconType: 'save',
         routes: [
             // 采购单管理列表
             {
@@ -517,12 +593,41 @@ const routes = [
                         <Route
                             path="/orderList"
                             exact
-                            render={() =>
-                                <Bundle load={OrderManagementList}>{(App) => <App />}</Bundle>}
+                            render={() => (<Bundle load={OrderManagementList}>
+                                {(App) => <App />}</Bundle>
+                            )}
                         />
                         <Route
                             path="/orderList/orderDetails/:id"
                             render={() => (<Bundle load={OrderManagementDetails}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                    </Switch>
+                )
+            }
+        ]
+    },
+    {
+        // 促销管理
+        key: 'cxgl',
+        iconType: 'pushpin',
+        routes: [
+            {
+                path: '/promotion',
+                parent: 'cxgl',
+                key: 'hdlb',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/promotion"
+                            exact
+                            render={() => (<Bundle load={PromotionManagementList}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                        <Route
+                            path="/promotion/create"
+                            exact
+                            render={() => (<Bundle load={PromotionCreate}>
                                 {(App) => <App />}</Bundle>)}
                         />
                     </Switch>
