@@ -1,6 +1,6 @@
 /**
  * @file stockListDetail.js
- * @author zhangbaihua
+ * @author tanJf
  *
  */
 import Immutable from 'immutable';
@@ -8,18 +8,20 @@ import ActionType from '../actions/ActionType';
 
 const initState = Immutable.fromJS({
     data: {},
-    sum: '',
+    sum: {}
 });
 
 export default function (state = initState, action) {
     switch (action.type) {
-        case ActionType.STOCK_ADJUST_LIST_DETAIL:
+        case ActionType.STOCK_ADJUST_LIST_CB_DETAIL:
             const imAdjustmentItemVos = action.payload.data.imAdjustmentItemVos;
-            let sum = 0;
+            let sumSl = 0;
+            let sumCbe = 0;
             imAdjustmentItemVos.map((item) => {
-                sum += item.quantity
+                sumSl += item.quantity;
+                sumCbe += item.adjustmentCost;
             })
-            return state.set('data', action.payload).set('sum', sum);
+            return state.set('data', action.payload).set('sum', {sumSl, sumCbe});
 
         default:
             return state;

@@ -24,7 +24,10 @@ const columns = [
     {
         title: '商品名称',
         dataIndex: 'productName',
-        key: 'productName'
+        key: 'productName',
+        render: (text, record) => (
+            record.isTotal ? <span style={{color: 'red'}}>{text}</span> : text
+          )
     },
     {
         title: '平均成本',
@@ -70,7 +73,7 @@ class ItemDetail extends PureComponent {
 
     render() {
         const { data = {} } = this.props.ListDetail;
-        const { prefixCls, total = '' } = this.props;
+        const { prefixCls, total = {} } = this.props;
         const {
             id,
             status,
@@ -80,6 +83,12 @@ class ItemDetail extends PureComponent {
             warehouseCode,
             adjustmentTime } = data;
         const { imAdjustmentItemVos = [] } = data;
+        imAdjustmentItemVos.push({
+            productName: '总计:',
+            quantity: total.sumSl,
+            adjustmentCost: total.sumCbe,
+            isTotal: true
+        })
         const adjustmentType = (type1) => {
             switch (type1) {
                 case 0: return '物流丢失';
@@ -153,23 +162,11 @@ class ItemDetail extends PureComponent {
                         }
                     >
                         <Table
+                            className="stockList-table"
                             columns={columns}
                             dataSource={imAdjustmentItemVos}
                             pagination={false}
                             rowKey={(record) => (Object.values(record).join('_'))}
-                            footer={() => (
-                                <div className="total-wrap">
-                                    <span
-                                        className="totalTxt"
-                                        style={{textAlign: 'center', marginLeft: -10}}
-                                    >总计:</span>
-                                    <span
-                                        className="totalNumber"
-                                        style={{textAlign: 'center', marginLeft: -10}}
-                                    >{total}</span>
-                                </div>
-                                )
-                            }
                         />
                         <div className={`${prefixCls}-back`} style={{textAlign: 'center'}}>
                             <Link

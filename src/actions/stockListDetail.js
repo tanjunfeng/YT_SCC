@@ -9,7 +9,7 @@ import { queryAdjustDetail } from '../service';
 import ActionType from './ActionType';
 
 const adjustDetail = (data) => ({
-    type: ActionType.STOCK_ADJUST_LIST_DETAIL,
+    type: ActionType.STOCK_ADJUST_LIST_CB_DETAIL,
     payload: data,
 });
 

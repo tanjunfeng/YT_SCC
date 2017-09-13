@@ -10,9 +10,14 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Table, Form, Icon, Menu, Dropdown } from 'antd';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
-import { getPromotionList, clearPromotionList, getPromotionDetail, updatePromotionStatus } from '../../../actions/promotion';
+import {
+    getPromotionList,
+    clearPromotionList,
+    getPromotionDetail,
+    updatePromotionStatus
+} from '../../../actions/promotion';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { promotionMngList as columns } from '../columns';
@@ -97,24 +102,29 @@ class PromotionManagementList extends PureComponent {
         const { key } = items;
         switch (key) {
             case 'detail':
-                this.props.getPromotionDetail({ id: record.id });
+                this.props.getPromotionDetail({ id: record.id }).then(() => {
+                    this.query();
+                });
                 break;
             case 'publish': // 发布
                 this.props.updatePromotionStatus({
                     id: record.id,
                     status: 'released'
+                }).then(() => {
+                    this.query();
                 });
                 break;
             case 'close':   // 关闭
-                this.props.getPromotionDetail({
+                this.props.updatePromotionStatus({
                     id: record.id,
                     status: 'closed'
+                }).then(() => {
+                    this.query();
                 });
                 break;
             default:
                 break;
         }
-        this.query();
     }
 
     /**
@@ -127,13 +137,13 @@ class PromotionManagementList extends PureComponent {
      * return 列表页操作下拉菜单
      */
     renderOperations = (text, record, index) => {
-        const { id, status } = record;
-        const { pathname } = this.props.location;
+        const { status } = record;
+        // const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
-                <Menu.Item key="detail">
-                    <Link to={`${pathname}/promotion/${id}`}>活动详情</Link>
-                </Menu.Item>
+                {/* <Menu.Item key="detail">
+                    <Link to={`${pathname}/promotion/${record.id}`}>活动详情</Link>
+                </Menu.Item> */}
                 {
                     // 未发布的可发布
                     (status === 'unreleased') ?
@@ -202,7 +212,7 @@ PromotionManagementList.propTypes = {
     getPromotionDetail: PropTypes.func,
     updatePromotionStatus: PropTypes.func,
     promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
-    location: PropTypes.objectOf(PropTypes.any)
+    // location: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(PromotionManagementList));

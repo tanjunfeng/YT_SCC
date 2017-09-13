@@ -1,22 +1,22 @@
 {
-    "timestamp": 1504074540881,
+    "timestamp": 1505291711378,
     "code": 200,
     "message": {},
     "exception": null,
     "data": [
         {
-            "authorityId": 156,
+            "authorityId": 115,
             "authorityCode": "gylspgl",
             "displayName": "商品管理",
             "menuList": [
                 {
-                    "authorityId": 214,
+                    "authorityId": 116,
                     "authorityCode": "commodifyList",
                     "displayName": "商品管理列表",
                     "menuList": []
                 },
                 {
-                    "authorityId": 233,
+                    "authorityId": 117,
                     "authorityCode": "goodsClassification",
                     "displayName": "商品分类列表",
                     "menuList": []
@@ -24,25 +24,69 @@
             ]
         },
         {
-            "authorityId": 160,
+            "authorityId": 156,
+            "authorityCode": "jyjszc",
+            "displayName": "简易结算支持",
+            "menuList": [
+                {
+                    "authorityId": 157,
+                    "authorityCode": "gysjs",
+                    "displayName": "供应商结算",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 158,
+                    "authorityCode": "jmsjs",
+                    "displayName": "加盟商结算",
+                    "menuList": []
+                }
+            ]
+        },
+        {
+            "authorityId": 159,
+            "authorityCode": "kctz",
+            "displayName": "库存调整",
+            "menuList": [
+                {
+                    "authorityId": 160,
+                    "authorityCode": "kctzlb",
+                    "displayName": "库存调整列表",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 161,
+                    "authorityCode": "sskccx",
+                    "displayName": "实时库存查询",
+                    "menuList": []
+                }
+            ]
+        },
+        {
+            "authorityId": 162,
+            "authorityCode": "cxgl",
+            "displayName": "促销管理",
+            "menuList": [
+                {
+                    "authorityId": 163,
+                    "authorityCode": "hdlb",
+                    "displayName": "活动列表",
+                    "menuList": []
+                }
+            ]
+        },
+        {
+            "authorityId": 118,
             "authorityCode": "gysgl",
             "displayName": "供应商管理",
             "menuList": [
                 {
-                    "authorityId": 163,
+                    "authorityId": 119,
                     "authorityCode": "supplierInputList",
                     "displayName": "供应商管理列表",
-                    "menuList": [
-                        {
-                            "authorityId": 229,
-                            "authorityCode": "queryManageList",
-                            "displayName": "新增供应商",
-                            "menuList": []
-                        }
-                    ]
+                    "menuList": []
                 },
                 {
-                    "authorityId": 164,
+                    "authorityId": 120,
                     "authorityCode": "suppliersAppList",
                     "displayName": "供应商入驻申请列表",
                     "menuList": []
@@ -50,12 +94,37 @@
             ]
         },
         {
-            "authorityId": 215,
+            "authorityId": 121,
+            "authorityCode": "procurementMng",
+            "displayName": "采购管理",
+            "menuList": [
+                {
+                    "authorityId": 122,
+                    "authorityCode": "poMngList",
+                    "displayName": "采购单管理列表",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 123,
+                    "authorityCode": "poPrintList",
+                    "displayName": "采购单打印列表",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 124,
+                    "authorityCode": "poRcvMngList",
+                    "displayName": "收货单管理列表",
+                    "menuList": []
+                }
+            ]
+        },
+        {
+            "authorityId": 125,
             "authorityCode": "ordergl",
             "displayName": "订单管理",
             "menuList": [
                 {
-                    "authorityId": 216,
+                    "authorityId": 126,
                     "authorityCode": "orderList",
                     "displayName": "订单管理列表",
                     "menuList": []
@@ -63,12 +132,12 @@
             ]
         },
         {
-            "authorityId": 222,
+            "authorityId": 127,
             "authorityCode": "gylxtpz",
             "displayName": "系统配置",
             "menuList": [
                 {
-                    "authorityId": 224,
+                    "authorityId": 128,
                     "authorityCode": "dataDictionary",
                     "displayName": "数据字典",
                     "menuList": []
@@ -76,12 +145,12 @@
             ]
         },
         {
-            "authorityId": 231,
+            "authorityId": 129,
             "authorityCode": "dmtgl",
             "displayName": "多媒体管理",
             "menuList": [
                 {
-                    "authorityId": 232,
+                    "authorityId": 130,
                     "authorityCode": "jtygl",
                     "displayName": "静态页管理",
                     "menuList": []
@@ -89,63 +158,38 @@
             ]
         },
         {
-            "authorityId": 193,
+            "authorityId": 131,
             "authorityCode": "wappz",
             "displayName": "移动端页面配置",
             "menuList": [
                 {
-                    "authorityId": 217,
-                    "authorityCode": "adPlanList404",
-                    "displayName": "404页面广告配置",
-                    "menuList": []
-                },
-                {
-                    "authorityId": 194,
-                    "authorityCode": "carouselManagement",
-                    "displayName": "轮播广告管理",
-                    "menuList": []
-                },
-                {
-                    "authorityId": 219,
+                    "authorityId": 132,
                     "authorityCode": "homeStyle",
                     "displayName": "首页样式管理",
                     "menuList": []
                 },
                 {
-                    "authorityId": 220,
+                    "authorityId": 133,
+                    "authorityCode": "carouselManagement",
+                    "displayName": "轮播广告管理",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 134,
+                    "authorityCode": "adPlanList404",
+                    "displayName": "404页面广告",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 135,
                     "authorityCode": "searchConfig",
                     "displayName": "搜索推荐配置",
                     "menuList": []
                 },
                 {
-                    "authorityId": 221,
+                    "authorityId": 136,
                     "authorityCode": "categoryIcon",
                     "displayName": "分类图标管理",
-                    "menuList": []
-                }
-            ]
-        },
-        {
-            "authorityId": 225,
-            "authorityCode": "procurementMng",
-            "displayName": "采购管理",
-            "menuList": [
-                {
-                    "authorityId": 226,
-                    "authorityCode": "poMngList",
-                    "displayName": "采购单管理列表",
-                    "menuList": []
-                },
-                {
-                    "authorityId": 227,
-                    "authorityCode": "poPrintList",
-                    "displayName": "采购单打印列表",
-                    "menuList": []
-                },
-                {
-                    "authorityId": 228,
-                    "authorityCode": "poRcvMngList",
-                    "displayName": "收货单管理列表",
                     "menuList": []
                 }
             ]
