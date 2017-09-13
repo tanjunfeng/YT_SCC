@@ -97,24 +97,29 @@ class PromotionManagementList extends PureComponent {
         const { key } = items;
         switch (key) {
             case 'detail':
-                this.props.getPromotionDetail({ id: record.id });
+                this.props.getPromotionDetail({ id: record.id }).then(() => {
+                    this.query();
+                });
                 break;
             case 'publish': // 发布
                 this.props.updatePromotionStatus({
                     id: record.id,
                     status: 'released'
+                }).then(() => {
+                    this.query();
                 });
                 break;
             case 'close':   // 关闭
                 this.props.updatePromotionStatus({
                     id: record.id,
                     status: 'closed'
+                }).then(() => {
+                    this.query();
                 });
                 break;
             default:
                 break;
         }
-        this.query();
     }
 
     /**
