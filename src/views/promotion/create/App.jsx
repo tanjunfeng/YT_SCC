@@ -15,7 +15,7 @@ import {
 } from 'antd';
 import Utils from '../../../util/util';
 import { createPromotion } from '../../../actions/promotion';
-import { DATE_FORMAT } from '../../../constant';
+import { TIME_FORMAT } from '../../../constant';
 import AreaSelector from './AreaSelector';
 import Category from '../../../container/cascader';
 
@@ -301,7 +301,7 @@ class PromotionCreate extends PureComponent {
                                                 <RangePicker
                                                     style={{ width: '240px' }}
                                                     className="manage-form-enterTime"
-                                                    format={DATE_FORMAT}
+                                                    format={TIME_FORMAT}
                                                     placeholder={['开始时间', '结束时间']}
                                                 />
                                                 )}
