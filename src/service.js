@@ -757,3 +757,9 @@ export const auditPurchaseOrderInfo = (params) => http.post('/pmPurchaseOrder/au
 
 // 促销活动列表
 export const fetchPromotionList = (params) => http.get('/promotion/queryPromotionList', params);
+export const createPromotion = (params) => http.post('/promotion/insertPromotion', params);
+export const fetchPromotionDetail = (params) => http.get('/promotion/queryPromotionDetail', params);
+export const updatePromotionStatus = (params) => http.post('/promotion/updatePromoStatus', params);
+
+// 查询品类
+export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);

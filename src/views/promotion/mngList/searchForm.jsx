@@ -38,6 +38,7 @@ class SearchForm extends PureComponent {
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
         this.getFormData = this.getFormData.bind(this);
+        this.handleCreate = this.handleCreate.bind(this);
     }
 
     getStatus() {
@@ -101,6 +102,11 @@ class SearchForm extends PureComponent {
         this.props.handlePromotionReset();
     }
 
+    handleCreate() {
+        const { pathname } = this.props.location;
+        this.props.history.push(`${pathname}/create`);
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
@@ -158,7 +164,7 @@ class SearchForm extends PureComponent {
                         <Row gutter={40}>
                             <Col span={8}>
                                 <FormItem>
-                                    <div className="promotionDateRange">
+                                    <div className="promotion-date-range">
                                         <span className="sc-form-item-label">活动时间</span>
                                         {getFieldDecorator('promotionDateRange', {
                                             initialValue: '',
@@ -169,7 +175,6 @@ class SearchForm extends PureComponent {
                                                 className="manage-form-enterTime"
                                                 format={DATE_FORMAT}
                                                 placeholder={['开始时间', '结束时间']}
-                                                onChange={this.onEnterTimeChange}
                                             />
                                             )}
                                     </div>
@@ -218,7 +223,9 @@ SearchForm.propTypes = {
     pubFetchValueList: PropTypes.func,
     handlePromotionSearch: PropTypes.func,
     handlePromotionReset: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any)
+    form: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
+    location: PropTypes.objectOf(PropTypes.any)
 };
 
 SearchForm.defaultProps = {
