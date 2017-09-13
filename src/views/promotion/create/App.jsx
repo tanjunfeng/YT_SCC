@@ -47,7 +47,7 @@ class PromotionCreate extends PureComponent {
             categoryObj: {}
         }
         this.getFormData = this.getFormData.bind(this);
-        this.validate = this.validate.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleConditionChange = this.handleConditionChange.bind(this);
         this.handleQuanifyAmountChange = this.handleQuanifyAmountChange.bind(this);
         this.handleAreaChange = this.handleAreaChange.bind(this);
@@ -56,54 +56,78 @@ class PromotionCreate extends PureComponent {
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this.handleCategorySelect = this.handleCategorySelect.bind(this);
         this.handleStoreChange = this.handleStoreChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    getFormData() {
-        const {
-            promotionName,
-            discount,
-            promotionDateRange,
-            condition,
-            quanifyAmount,
-            note,
-            storeIds
-        } = this.props.form.getFieldsValue();
-        const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
-        const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
-        const stores = {};
-        Object.assign(stores, {
-            storeId: storeIds
+    getFormData(callback) {
+        this.props.form.validateFields((err, values) => {
+            if (err) {
+                message.error('请检查请求参数');
+                return callback(false);
+            }
+            const { promotionName,
+                discount,
+                promotionDateRange,
+                condition,
+                area,
+                store,
+                category,
+                quanifyAmount,
+                note,
+                storeIds
+        } = values;
+            const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
+            const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
+            const stores = {};
+            Object.assign(stores, {
+                storeId: storeIds
+            });
+            const promoCategoriesPo = this.state.categoryObj;
+            const companiesPoList = this.state.companies;
+            const dist = {
+                promotionName,
+                discount,
+                startDate,
+                endDate,
+                note
+            };
+            if (condition === 1) {
+                if (!quanifyAmount) {
+                    message.error('请填写活动金额');
+                    return callback(false);
+                }
+                Object.assign(dist, {
+                    quanifyAmount
+                });
+            }
+            if (area === 1) {
+                if (companiesPoList.length === 0) {
+                    message.error('请选择区域');
+                    return callback(false);
+                }
+                Object.assign(dist, {
+                    companiesPoList
+                });
+            }
+            if (store === 1) {
+                if (stores.storeId === undefined) {
+                    message.error('请填写门店列表');
+                    return callback(false);
+                }
+                Object.assign(dist, {
+                    stores
+                });
+            }
+            if (category === 1) {
+                if (promoCategoriesPo.categoryId === undefined) {
+                    message.error('请选择品类');
+                    return callback(false);
+                }
+                Object.assign(dist, {
+                    promoCategoriesPo
+                });
+            }
+            return callback(Utils.removeInvalid(dist));
         });
-        const promoCategoriesPo = this.state.categoryObj;
-        const companiesPoList = this.state.companies;
-        if (!this.validate()) return {};
-        return Utils.removeInvalid({
-            promotionName,
-            discount,
-            startDate,
-            endDate,
-            condition,
-            quanifyAmount,
-            note,
-            stores,
-            promoCategoriesPo,
-            companiesPoList,
-            branchCompanyId: this.state.branchCompanyId
-        });
-    }
-
-    validate() {
-        let res = true;
-        if (this.param.area > 0 && this.state.companies.length === 0) {
-            message.warning('未选择子公司');
-            res = false;
-        }
-        if (this.param.category > 0 && !this.state.categoryObj.categoryId) {
-            message.warning('未选中品类');
-            res = false;
-        }
-        return res;
     }
 
     /**
@@ -124,7 +148,6 @@ class PromotionCreate extends PureComponent {
         this.props.form.setFieldsValue({
             quanifyAmount: number
         });
-        this.param.quanifyAmount = number;
     }
 
     /**
@@ -209,8 +232,17 @@ class PromotionCreate extends PureComponent {
     }
 
     handleSubmit() {
-        const data = this.getFormData();
-        this.props.createPromotion(data);
+        this.getFormData((response) => {
+            if (!response) return;
+            this.props.createPromotion(response).then((res) => {
+                if (res.code === 200 && res.message === '请求成功') {
+                    message.info('新增促销活动成功，请到列表页发布');
+                    this.props.history.goBack();
+                } else {
+                    message.error(res.message);
+                }
+            });
+        });
     }
 
     render() {
@@ -245,8 +277,12 @@ class PromotionCreate extends PureComponent {
                                                     { required: true, message: '请输入折扣比例!' }
                                                 ]
                                             })(
-                                                <InputNumber size="default" min={1} max={100} />)}
-                                            %
+                                                <InputNumber
+                                                    size="default"
+                                                    min={1}
+                                                    max={100}
+                                                    formatter={value => `${value}%`}
+                                                />)}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -283,7 +319,7 @@ class PromotionCreate extends PureComponent {
                                                 )}
                                             {this.param.condition > 0 ?
                                                 getFieldDecorator('quanifyAmount', {
-                                                    initialValue: this.param.quanifyAmount,
+                                                    initialValue: 0,
                                                     rules: [{ required: true, message: '请填写条件金额' }]
                                                 })(
                                                     <span>
@@ -291,7 +327,6 @@ class PromotionCreate extends PureComponent {
                                                             this.handleQuanifyAmountChange
                                                         }
                                                         />
-                                                        元可使用
                                                     </span>)
                                                 : null}
                                         </FormItem>
@@ -382,6 +417,13 @@ class PromotionCreate extends PureComponent {
                                             </Button>
                                         </FormItem>
                                     </Col>
+                                    <Col>
+                                        <FormItem>
+                                            <Button size="default" onClick={() => { this.props.history.goBack(); }}>
+                                                返回
+                                            </Button>
+                                        </FormItem>
+                                    </Col>
                                 </Row>
                             </div>
                         </div>
@@ -394,7 +436,8 @@ class PromotionCreate extends PureComponent {
 
 PromotionCreate.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    createPromotion: PropTypes.func
+    createPromotion: PropTypes.func,
+    history: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(PromotionCreate));
