@@ -10,7 +10,9 @@ import ActionType from '../actions/ActionType';
 
 const initState = fromJS({
     list: [],    // 促销活动管理列表
-    categories: []  // 品类列表
+    categories: [],  // 品类列表
+    companies: [],   // 所选区域列表
+    promotion: {}   // 促销详情
 });
 
 export default function (state = initState, action) {
@@ -22,7 +24,10 @@ export default function (state = initState, action) {
         case ActionType.CLEAR_ALL_COMPANIES:
             return state.set('companies', fromJS(action.payload));
         case ActionType.FETCH_CATEGORY_BY_PARENT:
+        case ActionType.CLEAR_CATEGORIES:
             return state.set('categories', fromJS(action.payload));
+        case ActionType.FETCH_PROMOTION_DETAIL:
+            return state.set('promotion', fromJS(action.payload));
         default:
             return state;
     }
