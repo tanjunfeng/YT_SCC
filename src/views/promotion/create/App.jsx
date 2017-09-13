@@ -391,28 +391,26 @@ class PromotionCreate extends PureComponent {
                                                     <Radio value={1}>指定门店</Radio>
                                                 </RadioGroup>
                                                 )}
-                                            {this.state.storeSelectorVisible ?
-                                                getFieldDecorator('storeIds', {
-                                                    initialValue: '',
-                                                    rules: [{ required: true, message: '请输入指定门店' }]
-                                                })(
-                                                    <TextArea placeholder="请输入指定门店" autosize={{ minRows: 1, maxRows: 6 }} />
-                                                    )
-                                                : null
-                                            }
                                         </FormItem>
                                     </Col>
                                 </Row>
                                 {this.state.storeSelectorVisible ?
-                                    <Row>
+                                    <Row className="store">
                                         <Col span={16}>
-                                            *请按照数据模板的格式准备导入数据如：A000999，A000900，A000991
+                                            <FormItem label="">
+                                                {getFieldDecorator('storeIds', {
+                                                    initialValue: '',
+                                                    rules: [{ required: true, message: '请输入指定门店' }]
+                                                })(
+                                                    <TextArea placeholder="请输入指定门店" autosize={{ minRows: 4, maxRows: 6 }} />
+                                                    )}
+                                            </FormItem>
                                         </Col>
                                     </Row>
                                     : null
                                 }
                                 {this.state.storeSelectorVisible ?
-                                    <Row>
+                                    <Row className="red">
                                         <Col span={16}>
                                             *请按照数据模板的格式准备导入数据如：A000999，A000900，A000991
                                         </Col>
@@ -425,7 +423,7 @@ class PromotionCreate extends PureComponent {
                                             {getFieldDecorator('note', {
                                                 initialValue: this.param.note
                                             })(
-                                                <TextArea placeholder="可填写备注" autosize={{ minRows: 1, maxRows: 6 }} />
+                                                <TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />
                                                 )}
                                         </FormItem>
                                     </Col>

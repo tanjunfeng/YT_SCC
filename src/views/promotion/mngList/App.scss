@@ -1,3 +1,4 @@
+$promotionColWidth: 250px;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -18,11 +19,44 @@
         margin-left: 10px;
     }
 }
-.hdlb{
-    label[title="活动ID"]{
-        margin-left: -13px;
+
+.promotion {
+    .ant-form-item-label {
+        width: 80px;
+        .sc-form-item-label {
+            text-align: right;
+        }
     }
-    .ant-form-item-label, .sc-form-item-label{
+    .search-mind-label {
+        min-width: 80px;
+        display: inline-block;
         text-align: right;
+        width: 80px;
+        margin-right: 0;
+        &::after {
+            content: ":";
+            margin: 0 8px 0 2px;
+            position: relative;
+            top: -0.5px;
+        }
+    }
+    .row {
+        display: flex;
+        line-height: 46px;
+        justify-content: space-between;
+        .item-box {
+            display: flex;
+            flex-direction: row;
+        }
+        .label {
+            margin-right: 8px;
+            display: inline-block;
+        }
+        .ywc-smind {
+            width: $promotionColWidth;
+        }
+        .ywc-smind-search-bar {
+            margin: 8px 0;
+        }
     }
 }

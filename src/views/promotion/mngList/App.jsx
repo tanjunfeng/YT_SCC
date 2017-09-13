@@ -12,7 +12,12 @@ import { withRouter } from 'react-router';
 import { Table, Form, Icon, Menu, Dropdown } from 'antd';
 import { Link } from 'react-router-dom';
 
-import { getPromotionList, clearPromotionList, getPromotionDetail, updatePromotionStatus } from '../../../actions/promotion';
+import {
+    getPromotionList,
+    clearPromotionList,
+    getPromotionDetail,
+    updatePromotionStatus
+} from '../../../actions/promotion';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { promotionMngList as columns } from '../columns';
