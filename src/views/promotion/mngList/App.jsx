@@ -46,6 +46,10 @@ class PromotionManagementList extends PureComponent {
         this.query();
     }
 
+    componentWillUnmount() {
+        this.props.clearPromotionList();
+    }
+
     /**
      * 分页页码改变的回调
      */

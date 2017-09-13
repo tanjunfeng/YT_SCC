@@ -7,7 +7,10 @@
 import ActionType from './ActionType';
 
 import {
-    fetchPromotionList
+    fetchPromotionList as promotionListService,
+    createPromotion as createPromotionService,
+    findCompanyBaseInfo as findCompaniesService,
+    queryCategoriesByParentId as findCategoriesService
 } from '../service';
 
 /**
@@ -20,7 +23,7 @@ const fetchPromotionListAction = (data) => ({
 
 export const getPromotionList = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        fetchPromotionList(params)
+        promotionListService(params)
             .then(res => {
                 dispatch(
                     fetchPromotionListAction(res.data)
@@ -31,10 +34,69 @@ export const getPromotionList = (params) => dispatch => (
     })
 );
 
+const findCompaniesAction = (data) => ({
+    type: ActionType.FIND_ALL_COMPANIES,
+    payload: data
+});
+
+export const getAllCompanies = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        findCompaniesService(params)
+            .then(res => {
+                dispatch(
+                    findCompaniesAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+const findCategoriedAction = (data) => ({
+    type: ActionType.FETCH_CATEGORY_BY_PARENT,
+    payload: data
+});
+
+export const getCategoriesByParentId = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        findCategoriesService(params)
+            .then(res => {
+                dispatch(
+                    findCategoriedAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+const createPromotionAction = (data) => ({
+    type: ActionType.CREATE_PROMOTION,
+    payload: data
+});
+
+export const createPromotion = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        createPromotionService(params)
+            .then(res => {
+                dispatch(
+                    createPromotionAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
 /**
  * 清空促销活动列表
  */
 export const clearPromotionList = () => dispatch => (dispatch({
     type: ActionType.CLEAR_PROMOTION_LIST,
+    payload: []
+}));
+
+export const clearCompaniesList = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_ALL_COMPANIES,
     payload: []
 }));
