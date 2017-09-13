@@ -62,7 +62,7 @@ class ProdModal extends Component {
             // 供应商地点id
             supplierAddressId: props.initValue.spAdrId,
             // 仓库id
-            warehouseId: props.initValue.id,
+            warehouseId: props.initValue.distributeWarehouseId,
             // 分公司id
             childCompanyId: props.initValue.branchCompanyId,
         }
@@ -163,7 +163,7 @@ class ProdModal extends Component {
     }
 
     /**
-     * 创建弹框OK时间 (当没有改变时)
+     * 创建弹框OK事件 (当没有改变时)
      */
     handleOk() {
         const { validateFields } = this.props.form;
@@ -183,6 +183,14 @@ class ProdModal extends Component {
             return;
         }
         validateFields((err, values) => {
+            if (values.purchaseInsideNumber <= 0) {
+                message.error('采购内装数必须大于0');
+                return;
+            }
+            if (values.purchasePrice <= 0) {
+                message.error('采购价格必须大于0');
+                return;
+            }
             const subData = Util.removeInvalid({
                 id: isEdit ? initValue.id : null,
                 // 供应商id
