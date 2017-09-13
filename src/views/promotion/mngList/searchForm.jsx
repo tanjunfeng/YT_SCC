@@ -104,12 +104,12 @@ class SearchForm extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div className="search-box">
+            <div className="search-box hdlb">
                 <Form layout="inline">
                     <div className="search-conditions">
                         <Row gutter={40}>
                             <Col span={8}>
-                                <FormItem label="活动ID" >
+                                <FormItem label="活动ID" style={{paddingRight: 10}}>
                                     {getFieldDecorator('id', {
                                     })(<Input size="default" />)}
                                 </FormItem>

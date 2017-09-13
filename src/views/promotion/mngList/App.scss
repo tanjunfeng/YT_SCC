@@ -18,3 +18,11 @@
         margin-left: 10px;
     }
 }
+.hdlb{
+    label[title="活动ID"]{
+        margin-left: -13px;
+    }
+    .ant-form-item-label, .sc-form-item-label{
+        text-align: right;
+    }
+}
