@@ -81,11 +81,11 @@ render() {
                 {
                     title: 'Name',
                     dataIndex: 'name',
-                    width: 150,
+                    width: 98
                 }, {
                     title: 'Address',
                     dataIndex: 'address',
-                    width: 200,
+                    width: 140
                 }
             ]}
         />

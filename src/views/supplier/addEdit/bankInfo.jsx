@@ -19,6 +19,7 @@ import { Validator } from '../../../util/validator';
 import InlineUpload from '../../../components/inlineUpload';
 import CasadingAddress from '../../../components/ascadingAddress';
 import { addSupplierMessage1 } from '../../../actions/addSupplier';
+import { removeDetailData } from '../../../actions/supplier';
 import Tools from './utils';
 import { TABCONTENT } from '../../../constant';
 
@@ -29,7 +30,8 @@ const FormItem = Form.Item;
         data: state.toJS().addSupplier.data
     }),
     dispatch => bindActionCreators({
-        addSupplierMessage1
+        addSupplierMessage1,
+        removeDetailData
     }, dispatch)
 )
 class BankInfo extends PureComponent {
@@ -49,6 +51,10 @@ class BankInfo extends PureComponent {
 
     componentDidMount() {
         TABCONTENT.BankInfo = this;
+    }
+
+    componentWillUnMount() {
+        this.props.removeDetailData();
     }
 
     handleGoTo = (key) => {
@@ -284,6 +290,7 @@ class BankInfo extends PureComponent {
 
 BankInfo.propTypes = {
     onGoTo: PropTypes.func,
+    removeDetailData: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     isEdit: PropTypes.bool,
     detailData: PropTypes.objectOf(PropTypes.any),

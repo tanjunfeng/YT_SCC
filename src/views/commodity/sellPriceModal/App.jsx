@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, InputNumber, message } from 'antd';
+import { Modal, Form, InputNumber, message, Select } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import SteppedPrice from '../steppedPrice';
@@ -11,12 +11,17 @@ import {
 import { MAXGOODS } from '../../../constant'
 import { productAddPriceVisible } from '../../../actions/producthome';
 import { fetchAddProdPurchase } from '../../../actions';
+import {
+    preHarvestPinStatus,
+} from '../../../constant/searchParams';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 @connect(
     state => ({
-        toAddPriceVisible: state.toJS().commodity.toAddPriceVisible
+        toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
+        getProductById: state.toJS().commodity.getProductById,
     }),
     dispatch => bindActionCreators({
         productAddPriceVisible,
@@ -27,9 +32,11 @@ const FormItem = Form.Item;
 class SellPriceModal extends Component {
     constructor(props) {
         super(props);
-        this.handleOk = ::this.handleOk;
-        this.handlePriceChange = ::this.handlePriceChange;
-        this.handleCancel = ::this.handleCancel;
+        this.handleOk = this.handleOk.bind(this);
+        this.handlePriceChange = this.handlePriceChange.bind(this);
+        this.handleMaxChange = this.handleMaxChange.bind(this);
+        this.handleMinChange = this.handleMinChange.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
         this.childCompany = props.datas.branchCompanyId ? {
             branchCompanyId: props.datas.branchCompanyId,
             branchCompanyName: props.datas.branchCompanyName
@@ -38,12 +45,14 @@ class SellPriceModal extends Component {
             currentInside: null,
             insideValue: null
         }
+        this.choose = 0;
     }
 
     handleOk() {
         const { datas, handlePostAdd, isEdit } = this.props;
         const { validateFields, setFields } = this.props.form;
         const { isContinuity, results } = this.steppedPrice.getValue();
+        const choose = this.choose;
         if (!isContinuity) {
             setFields({
                 sellSectionPrices: {
@@ -72,7 +81,7 @@ class SellPriceModal extends Component {
                     productId: datas.productId
                 })
             }
-            handlePostAdd(result, isEdit);
+            handlePostAdd(result, isEdit, choose);
             return null;
         })
     }
@@ -104,6 +113,13 @@ class SellPriceModal extends Component {
         this.childCompany = null;
     }
 
+    handleSelectChange = (item) => {
+        this.choose = item === '-1' ? null : item;
+    }
+
+    /**
+     * 销售内装数
+     */
     handleInsideChange = (num) => {
         this.setState({
             currentInside: num
@@ -114,6 +130,9 @@ class SellPriceModal extends Component {
         this.steppedPrice.reset();
     }
 
+    /**
+     * 最小起订数量
+     */
     handleMinChange = (num) => {
         this.setState({
             startNumber: num
@@ -123,8 +142,30 @@ class SellPriceModal extends Component {
         })
     }
 
+    /**
+     * 最大销售数量
+     */
+    handleInsideChange = (num) => {
+        this.setState({
+            currentInside: num
+        }, () => {
+            this.props.form.setFieldsValue({ maxNumber: null })
+        })
+
+        // this.steppedPrice.reset();
+    }
+
+    handleMaxChange = (num) => {
+        // this.setState({
+        //     startNumber: num
+        // }, () => {
+        this.props.form.setFieldsValue({ maxNumber: num });
+            // this.steppedPrice.reset();
+        // })
+    }
+
     render() {
-        const { prefixCls, form, datas, isEdit } = this.props;
+        const { prefixCls, form, datas, isEdit, getProductById } = this.props;
         const { getFieldDecorator } = form;
         const { currentInside, startNumber } = this.state;
         const newDates = JSON.parse(JSON.stringify(datas));
@@ -185,6 +226,33 @@ class SellPriceModal extends Component {
                                     </span>
                                 </FormItem>
                                 <FormItem>
+                                    <span>*最大销售数量：</span>
+                                    <span>
+                                        {getFieldDecorator('maxNumber', {
+                                            rules: [
+                                                { required: true, message: '请输入最大销售数量!' },
+                                                {
+                                                    validator: (rule, value, callback) => {
+                                                        const { getFieldValue } = this.props.form
+                                                        if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0) {
+                                                            callback('最大销售数量需为内装数整数倍！')
+                                                        }
+
+                                                        callback()
+                                                    }
+                                                }
+                                            ],
+                                            initialValue: newDates.maxNumber
+                                        })(
+                                            <InputNumber
+                                                min={0}
+                                                onChange={this.handleMaxChange}
+                                                step={currentInside || newDates.salesInsideNumber}
+                                            />
+                                            )}
+                                    </span>
+                                </FormItem>
+                                <FormItem>
                                     <span>*承诺发货时间：下单后</span>
                                     <span className={`${prefixCls}-day-input`}>
                                         {getFieldDecorator('deliveryDay', {
@@ -195,6 +263,40 @@ class SellPriceModal extends Component {
                                             )}
                                     </span>
                                     天内发货
+                                </FormItem>
+                                <FormItem>
+                                    <span>是否整箱销售:</span>
+                                    <span className={`${prefixCls}-day-input`}>
+                                        {getProductById.sellFullCase === 1 ? '是' : '否'}
+                                    </span>
+                                </FormItem>
+                                <FormItem>
+                                    <span>整箱销售单位:</span>
+                                    <span className={`${prefixCls}-day-input`}>
+                                        {getProductById.fullCaseUnit}
+                                    </span>
+                                </FormItem>
+                                {/* 采购模式 */}
+                                <FormItem className={`${prefixCls}-qy`}>
+                                    <span className={`${prefixCls}-select`}> 采购模式 : </span>
+                                    {getFieldDecorator('preHarvestPinStatus', {
+                                        initialValue: '0'
+                                    })(
+                                        <Select
+                                            style={{ width: 90 }}
+                                            className="sc-form-item-select"
+                                            size="default"
+                                            onChange={this.handleSelectChange}
+                                        >
+                                            {
+                                                preHarvestPinStatus.data.map((item) =>
+                                                    (<Option key={item.key} value={item.key}>
+                                                        {item.value}
+                                                    </Option>)
+                                                )
+                                            }
+                                        </Select>
+                                        )}
                                 </FormItem>
                             </div>
                         </div>
@@ -215,6 +317,7 @@ class SellPriceModal extends Component {
                                             startNumber={startNumber}
                                             defaultValue={isEdit ? newDates.sellSectionPrices : []}
                                             inputSize="default"
+                                            initvalue={getProductById}
                                         />
                                         )}
                                 </FormItem>
@@ -245,7 +348,10 @@ class SellPriceModal extends Component {
                                         placeholder="请输入公司名"
                                         onChoosed={this.handleChoose}
                                         disabled={isEdit}
-                                        defaultValue={newDates.branchCompanyId ? `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` : undefined}
+                                        defaultValue={
+                                            newDates.branchCompanyId ?
+                                            `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` :
+                                            undefined}
                                         onClear={this.handleClear}
                                         renderChoosedInputRaw={(data) => (
                                             <div>{data.id} - {data.name}</div>
@@ -255,11 +361,11 @@ class SellPriceModal extends Component {
                                             {
                                                 title: '公司编号',
                                                 dataIndex: 'id',
-                                                width: 150,
+                                                width: 98
                                             }, {
                                                 title: '公司名',
                                                 dataIndex: 'name',
-                                                width: 200,
+                                                width: 140
                                             }
                                         ]}
                                     />
@@ -276,6 +382,8 @@ class SellPriceModal extends Component {
 SellPriceModal.propTypes = {
     prefixCls: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
+    getProductById: PropTypes.objectOf(PropTypes.any),
+    handlePostAdd: PropTypes.func,
     pubFetchValueList: PropTypes.func,
     handleClose: PropTypes.func,
     datas: PropTypes.objectOf(PropTypes.any),

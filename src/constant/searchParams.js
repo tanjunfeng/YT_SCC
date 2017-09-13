@@ -249,6 +249,18 @@ export const initiateModeOptions = {
     }]
 }
 
+// 采购模式
+export const preHarvestPinStatus = {
+    defaultValue: '0',
+    data: [{
+        key: '0',
+        value: '先销后采'
+    }, {
+        key: '1',
+        value: '先采后销'
+    }]
+}
+
 // 商品状态
 export const commodityStatusOptions = {
     defaultValue: '-1',
@@ -430,6 +442,24 @@ export const orderStatusOptions = {
     }]
 }
 
+// 结算-账期
+export const accountPeriod = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '周结'
+    }, {
+        key: '1',
+        value: '半月结'
+    }, {
+        key: '2',
+        value: '月结'
+    }]
+}
+
 // 订单管理-支付状态
 export const payStatusOptions = {
     defaultValue: 'ALL',
@@ -461,10 +491,10 @@ export const payStatusOptions = {
 }
 
 // 状态
-export const supplierStore = {
-    defaultValue: '-1',
+export const StoreStatus = {
+    defaultValue: '',
     data: [{
-        key: '-1',
+        key: '',
         value: '全部'
     }, {
         key: '0',
@@ -513,10 +543,10 @@ export const logisticsStatusOptions = {
 
 // 调整类型
 export const adjustmentType = {
-    defaultValue: '-1',
+    defaultValue: '',
     data: [
         {
-            key: '-1',
+            key: '',
             value: '全部'
         },
         {
@@ -525,15 +555,27 @@ export const adjustmentType = {
         },
         {
             key: '1',
-            value: '库存报损报溢'
+            value: '仓库报溢'
         },
         {
             key: '2',
-            value: '业务发起库存调整'
+            value: '仓库报损'
         },
         {
             key: '3',
-            value: '仓库库存同步'
+            value: '业务调增'
+        },
+        {
+            key: '4',
+            value: '业务调减'
+        },
+        {
+            key: '5',
+            value: '仓库同步调增'
+        },
+        {
+            key: '6',
+            value: '仓库同步调减'
         }
     ]
 }

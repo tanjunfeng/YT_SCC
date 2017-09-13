@@ -4,19 +4,15 @@
  */
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withRouter } from 'react-router';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import './login.scss';
 
 import { loginAction } from '../../actions/user';
 import Content from './content';
 import Header from './header';
-import Footer from './footer'
+import Footer from './footer';
 
-const FormItem = Form.Item;
 @connect(
     state => ({
         user: state.toJS().user.data,
@@ -24,7 +20,6 @@ const FormItem = Form.Item;
     dispatch => bindActionCreators({ loginAction }, dispatch)
 )
 class App extends Component {
-
     render() {
         return (
             <div className="yt-wrap">
@@ -47,10 +42,6 @@ class App extends Component {
 
         )
     }
-}
-
-App.propTypes = {
-    location: PropTypes.objectOf(PropTypes.any)
 }
 
 export default App;
