@@ -412,7 +412,7 @@ class PromotionCreate extends PureComponent {
                                 {this.state.storeSelectorVisible ?
                                     <Row className="red">
                                         <Col span={16}>
-                                            *请按照数据模板的格式准备导入数据如：A000999，A000900，A000991
+                                            *请按照数据模板的格式准备导入数据如：A000999, A000900, A000991
                                         </Col>
                                     </Row>
                                     : null
