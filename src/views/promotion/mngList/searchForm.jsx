@@ -110,7 +110,7 @@ class SearchForm extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div className="search-box hdlb">
+            <div className="search-box promotion">
                 <Form layout="inline">
                     <div className="search-conditions">
                         <Row gutter={40}>
@@ -128,10 +128,9 @@ class SearchForm extends PureComponent {
                             </Col>
                             <Col span={8}>
                                 <FormItem>
-                                    <div className="scope">
-                                        <span className="sc-form-item-label">使用范围</span>
+                                    <div className="row">
+                                        <span className="sc-form-item-label search-mind-label">使用范围</span>
                                         <SearchMind
-                                            style={{ zIndex: 8 }}
                                             compKey="spId"
                                             ref={ref => { this.subCompanySearchMind = ref }}
                                             fetch={(params) =>
@@ -165,7 +164,7 @@ class SearchForm extends PureComponent {
                             <Col span={8}>
                                 <FormItem>
                                     <div className="promotion-date-range">
-                                        <span className="sc-form-item-label">活动时间</span>
+                                        <span className="sc-form-item-label search-mind-label">活动时间</span>
                                         {getFieldDecorator('promotionDateRange', {
                                             initialValue: '',
                                             rules: [{ required: true, message: '请选择活动日期' }]
