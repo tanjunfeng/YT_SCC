@@ -32,11 +32,11 @@ const Option = Select.Option;
 class SellPriceModal extends Component {
     constructor(props) {
         super(props);
-        this.handleOk = ::this.handleOk;
-        this.handlePriceChange = ::this.handlePriceChange;
-        this.handleMaxChange = ::this.handleMaxChange;
-        this.handleMinChange = ::this.handleMinChange;
-        this.handleCancel = ::this.handleCancel;
+        this.handleOk = this.handleOk.bind(this);
+        this.handlePriceChange = this.handlePriceChange.bind(this);
+        this.handleMaxChange = this.handleMaxChange.bind(this);
+        this.handleMinChange = this.handleMinChange.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
         this.childCompany = props.datas.branchCompanyId ? {
             branchCompanyId: props.datas.branchCompanyId,
             branchCompanyName: props.datas.branchCompanyName

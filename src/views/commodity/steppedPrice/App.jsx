@@ -33,9 +33,9 @@ const isContinuity = (arr) => {
 class SteppedPrice extends PureComponent {
     constructor(props) {
         super(props)
-        this.handleAddItem = ::this.handleAddItem;
-        this.handleDeleteItem = ::this.handleDeleteItem;
-        this.handleValueChange = ::this.handleValueChange;
+        this.handleAddItem = this.handleAddItem.bind(this);
+        this.handleDeleteItem = this.handleDeleteItem.bind(this);
+        this.handleValueChange = this.handleValueChange.bind(this);
         const { defaultValue } = props;
         this.initValue = [{
             startNumber: props.startNumber,
