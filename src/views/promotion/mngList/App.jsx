@@ -106,7 +106,7 @@ class PromotionManagementList extends PureComponent {
                 });
                 break;
             case 'close':   // 关闭
-                this.props.updatePromotionStatus({
+                this.props.getPromotionDetail({
                     id: record.id,
                     status: 'closed'
                 });
