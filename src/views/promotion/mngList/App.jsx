@@ -12,7 +12,7 @@ import { withRouter } from 'react-router';
 import { Table, Form, Icon, Menu, Dropdown } from 'antd';
 import { Link } from 'react-router-dom';
 
-import { getPromotionList, clearPromotionList } from '../../../actions/promotion';
+import { getPromotionList, clearPromotionList, getPromotionDetail, updatePromotionStatus } from '../../../actions/promotion';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { promotionMngList as columns } from '../columns';
@@ -21,7 +21,9 @@ import { promotionMngList as columns } from '../columns';
     promotionList: state.toJS().promotion.list
 }), dispatch => bindActionCreators({
     getPromotionList,
-    clearPromotionList
+    clearPromotionList,
+    getPromotionDetail,
+    updatePromotionStatus
 }, dispatch))
 
 class PromotionManagementList extends PureComponent {
@@ -34,6 +36,7 @@ class PromotionManagementList extends PureComponent {
         };
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
         this.renderOperations = this.renderOperations.bind(this);
         this.query = this.query.bind(this);
     }
@@ -84,6 +87,37 @@ class PromotionManagementList extends PureComponent {
     }
 
     /**
+     * 促销活动表单操作
+    *
+    * @param {Object} record 传值所有数据对象
+    * @param {number} index 下标
+    * @param {Object} items 方法属性
+    */
+    handleSelect(record, index, items) {
+        const { key } = items;
+        switch (key) {
+            case 'detail':
+                this.props.getPromotionDetail({ id: record.id });
+                break;
+            case 'publish': // 发布
+                this.props.updatePromotionStatus({
+                    id: record.id,
+                    status: 'released'
+                });
+                break;
+            case 'close':   // 关闭
+                this.props.getPromotionDetail({
+                    id: record.id,
+                    status: 'closed'
+                });
+                break;
+            default:
+                break;
+        }
+        this.query();
+    }
+
+    /**
      * 列表页操作下拉菜单
      *
      * @param {string} text 文本内容
@@ -92,14 +126,34 @@ class PromotionManagementList extends PureComponent {
      *
      * return 列表页操作下拉菜单
      */
-    renderOperations = (text, record) => {
-        const { id } = record;
+    renderOperations = (text, record, index) => {
+        const { id, status } = record;
         const { pathname } = this.props.location;
         const menu = (
-            <Menu>
+            <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/promotion/${id}`}>活动详情</Link>
                 </Menu.Item>
+                {
+                    // 未发布的可发布
+                    (status === 'unreleased') ?
+                        <Menu.Item key="publish">
+                            <a target="_blank" rel="noopener noreferrer">
+                                发布
+                        </a>
+                        </Menu.Item>
+                        : null
+                }
+                {
+                    // 未发布的可发布，未发布和已发布的可结束
+                    (status === 'unreleased' || status === 'released') ?
+                        <Menu.Item key="close">
+                            <a target="_blank" rel="noopener noreferrer">
+                                关闭
+                        </a>
+                        </Menu.Item>
+                        : null
+                }
             </Menu>
         );
 
@@ -116,7 +170,7 @@ class PromotionManagementList extends PureComponent {
     }
 
     render() {
-        // columns[columns.length - 1].render = this.renderOperations;
+        columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
                 <SearchForm
@@ -145,6 +199,8 @@ class PromotionManagementList extends PureComponent {
 PromotionManagementList.propTypes = {
     getPromotionList: PropTypes.func,
     clearPromotionList: PropTypes.func,
+    getPromotionDetail: PropTypes.func,
+    updatePromotionStatus: PropTypes.func,
     promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
     location: PropTypes.objectOf(PropTypes.any)
 }

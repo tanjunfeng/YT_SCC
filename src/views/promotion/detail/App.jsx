@@ -16,7 +16,6 @@ import {
 import Utils from '../../../util/util';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT } from '../../../constant';
-import AreaSelector from './AreaSelector';
 import Category from '../../../container/cascader';
 
 const FormItem = Form.Item;
@@ -352,11 +351,6 @@ class PromotionCreate extends PureComponent {
                                                         : null}
                                                 </RadioGroup>
                                                 )}
-                                            <AreaSelector
-                                                isSelectorVisible={this.state.areaSelectorVisible}
-                                                onSelectorOk={this.handleSelectorOk}
-                                                onSelectorCancel={this.handleSelectorCancel}
-                                            />
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -403,22 +397,6 @@ class PromotionCreate extends PureComponent {
                                         </FormItem>
                                     </Col>
                                 </Row>
-                                {this.state.storeSelectorVisible ?
-                                    <Row>
-                                        <Col span={16}>
-                                            *请按照数据模板的格式准备导入数据如：A000999，A000900，A000991
-                                        </Col>
-                                    </Row>
-                                    : null
-                                }
-                                {this.state.storeSelectorVisible ?
-                                    <Row>
-                                        <Col span={16}>
-                                            *请按照数据模板的格式准备导入数据如：A000999，A000900，A000991
-                                        </Col>
-                                    </Row>
-                                    : null
-                                }
                                 <Row>
                                     <Col span={16}>
                                         <FormItem label="备注">

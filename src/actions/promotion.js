@@ -9,6 +9,8 @@ import ActionType from './ActionType';
 import {
     fetchPromotionList as promotionListService,
     createPromotion as createPromotionService,
+    fetchPromotionDetail as fetchPromotionDetailService,
+    updatePromotionStatus as updatePromotionStatusService,
     findCompanyBaseInfo as findCompaniesService,
     queryCategoriesByParentId as findCategoriesService
 } from '../service';
@@ -70,6 +72,12 @@ export const getCategoriesByParentId = (params) => dispatch => (
     })
 );
 
+export const clearCategoriesList = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_CATEGORIES,
+    payload: []
+}));
+
+
 const createPromotionAction = (data) => ({
     type: ActionType.CREATE_PROMOTION,
     payload: data
@@ -81,6 +89,42 @@ export const createPromotion = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     createPromotionAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
+const fetchPromotionDetailAction = (data) => ({
+    type: ActionType.FETCH_PROMOTION_DETAIL,
+    payload: data
+});
+
+export const getPromotionDetail = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        fetchPromotionDetailService(params)
+            .then(res => {
+                dispatch(
+                    fetchPromotionDetailAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
+const updatePromotionAction = (data) => ({
+    type: ActionType.UPDATE_PROMOTION_STATUS,
+    payload: data
+});
+
+export const updatePromotionStatus = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        updatePromotionStatusService(params)
+            .then(res => {
+                dispatch(
+                    updatePromotionAction(res.data)
                 );
                 resolve(res);
             })

@@ -9,12 +9,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Cascader } from 'antd';
-import { getCategoriesByParentId } from '../../actions/promotion';
+import { getCategoriesByParentId, clearCategoriesList } from '../../actions/promotion';
 
 @connect(state => ({
     categories: state.toJS().promotion.categories
 }), dispatch => bindActionCreators({
-    getCategoriesByParentId
+    getCategoriesByParentId,
+    clearCategoriesList
 }, dispatch))
 
 class Category extends PureComponent {
@@ -43,6 +44,10 @@ class Category extends PureComponent {
                 }))
             });
         });
+    }
+
+    componentWillUnmount() {
+        this.props.clearCategoriesList();
     }
 
     /**
@@ -141,6 +146,7 @@ class Category extends PureComponent {
 
 Category.propTypes = {
     getCategoriesByParentId: PropTypes.func,
+    clearCategoriesList: PropTypes.func,
     onCategorySelect: PropTypes.func
 }
 
