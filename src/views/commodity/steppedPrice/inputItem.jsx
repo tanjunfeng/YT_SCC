@@ -14,12 +14,12 @@ import { MAXGOODS } from '../../../constant'
 class InputItem extends Component {
     constructor(props) {
         super(props)
-        this.handleFirstChange = ::this.handleFirstChange;
-        this.handleSecondChange = ::this.handleSecondChange;
-        this.handleResultChange = ::this.handleResultChange;
-        this.handleAddClick = ::this.handleAddClick;
-        this.handleDeleteClick = ::this.handleDeleteClick;
-        this.handleKeyDown = ::this.handleKeyDown;
+        this.handleFirstChange = this.handleFirstChange.bind(this);
+        this.handleSecondChange = this.handleSecondChange.bind(this);
+        this.handleResultChange = this.handleResultChange.bind(this);
+        this.handleAddClick = this.handleAddClick.bind(this);
+        this.handleDeleteClick = this.handleDeleteClick.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
         const {
             firstDefault = 1,
             scondDefault = 2,

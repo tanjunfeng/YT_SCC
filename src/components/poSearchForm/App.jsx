@@ -35,8 +35,8 @@ const dateFormat = 'YYYY-MM-DD';
 class PoSearchForm extends PureComponent {
     constructor(props) {
         super(props);
-        this.handleCreate = ::this.handleCreate;
-        this.handleDelete = ::this.handleDelete;
+        this.handleCreate = this.handleCreate.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
         this.state = {
             spId: '',   // 供应商ID
             isSupplyAdrDisabled: true, // 供应商地点禁用
