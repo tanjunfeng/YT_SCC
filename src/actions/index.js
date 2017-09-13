@@ -96,7 +96,7 @@ import stockListDetail from './stockListDetail';
 import storeAdList from './storeAdjustList';
 
 // 促销活动
-import getPromotionList from './promotion';
+import { getPromotionList, createPromotion } from './promotion';
 
 // 商品管理列表
 // 根据条件分页查询商品清单，并排序
@@ -181,6 +181,7 @@ export {
 
     // 促销活动
     getPromotionList,
+    createPromotion,
 
     // 根据条件分页查询商品清单，并排序
     queryCommodityList,

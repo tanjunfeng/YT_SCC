@@ -1,0 +1,37 @@
+.ant-table-pagination {
+    margin-right: 15px;
+}
+
+.change-form {
+    padding-left: 30px;
+    .ant-form-item {
+        margin-bottom: 15px
+    }
+    .ant-form-explain {
+        padding-left: 73px;
+    }
+    &-label {
+        min-width: 61px;
+        text-align: right;
+    }
+    &-tip {
+        margin-left: 10px;
+    }
+}
+
+.promotion {
+    padding-top: 40px;
+    form .default{
+        width: 78px;
+    }
+    .category .ant-cascader-picker {
+        width: 260px;
+    }
+    .ant-form-item-label label {
+        width: 80px;
+        display: inline-block;
+    }
+    .ant-form-item-control textarea {
+        width: 260px;
+    }
+}
