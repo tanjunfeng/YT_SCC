@@ -10,6 +10,7 @@ import {
     fetchPromotionList as promotionListService,
     createPromotion as createPromotionService,
     fetchPromotionDetail as fetchPromotionDetailService,
+    updatePromotionStatus as updatePromotionStatusService,
     findCompanyBaseInfo as findCompaniesService,
     queryCategoriesByParentId as findCategoriesService
 } from '../service';
@@ -106,6 +107,24 @@ export const getPromotionDetail = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     fetchPromotionDetailAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
+const updatePromotionAction = (data) => ({
+    type: ActionType.UPDATE_PROMOTION_STATUS,
+    payload: data
+});
+
+export const updatePromotionStatus = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        updatePromotionStatusService(params)
+            .then(res => {
+                dispatch(
+                    updatePromotionAction(res.data)
                 );
                 resolve(res);
             })
