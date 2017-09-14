@@ -36,12 +36,8 @@ const managementList = [{
     dataIndex: 'companiesPoList',
     key: 'companiesPoList',
     render: list => {
-        if (!list) {
+        if (!list || list.length === 0) {
             return '全部区域';
-        }
-        const res = list.map(company => company.companyName);
-        if (res.length <= 5) {
-            return res;
         }
         return '所选区域';
     }
@@ -117,14 +113,10 @@ const detail = [{
     dataIndex: 'companiesPoList',
     key: 'companiesPoList',
     render: list => {
-        if (!list) {
+        if (!list || list.length) {
             return '全部区域';
         }
-        const res = list.map(company => company.companyName);
-        if (res.length >= 10) {
-            return res.substring(0, 9) + '...';
-        }
-        return res;
+        return list.map(company => company.companyName).join(',');
     }
 }, {
     title: '使用品类',
