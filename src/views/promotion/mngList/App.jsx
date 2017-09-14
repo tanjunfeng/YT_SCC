@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Table, Form, Icon, Menu, Dropdown } from 'antd';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 import {
     getPromotionList,
@@ -137,13 +137,13 @@ class PromotionManagementList extends PureComponent {
      * return 列表页操作下拉菜单
      */
     renderOperations = (text, record, index) => {
-        const { id, status } = record;
-        const { pathname } = this.props.location;
+        const { status } = record;
+        // const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
-                <Menu.Item key="detail">
-                    <Link to={`${pathname}/promotion/${id}`}>活动详情</Link>
-                </Menu.Item>
+                {/* <Menu.Item key="detail">
+                    <Link to={`${pathname}/promotion/${record.id}`}>活动详情</Link>
+                </Menu.Item> */}
                 {
                     // 未发布的可发布
                     (status === 'unreleased') ?
@@ -212,7 +212,7 @@ PromotionManagementList.propTypes = {
     getPromotionDetail: PropTypes.func,
     updatePromotionStatus: PropTypes.func,
     promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
-    location: PropTypes.objectOf(PropTypes.any)
+    // location: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(PromotionManagementList));
