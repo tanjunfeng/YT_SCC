@@ -113,7 +113,7 @@ const detail = [{
     dataIndex: 'companiesPoList',
     key: 'companiesPoList',
     render: list => {
-        if (!list || list.length) {
+        if (!list || list.length === 0) {
             return '全部区域';
         }
         return list.map(company => company.companyName).join(',');
