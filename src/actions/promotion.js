@@ -114,6 +114,12 @@ export const getPromotionDetail = (params) => dispatch => (
     })
 );
 
+export const clearPromotionDetail = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_PROMOTION_DETAIL,
+    payload: []
+}));
+
+
 const updatePromotionAction = (data) => ({
     type: ActionType.UPDATE_PROMOTION_STATUS,
     payload: data

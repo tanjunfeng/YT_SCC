@@ -13,7 +13,7 @@ import {
     Form, Row, Col, Input, InputNumber,
     Button, DatePicker, Radio
 } from 'antd';
-import { createPromotion } from '../../../actions/promotion';
+import { clearPromotionDetail } from '../../../actions/promotion';
 import { TIME_FORMAT } from '../../../constant';
 import Category from '../../../container/cascader';
 
@@ -22,9 +22,10 @@ const RangePicker = DatePicker.RangePicker;
 const RadioGroup = Radio.Group;
 const { TextArea } = Input;
 
-@connect(() => ({
+@connect((state) => ({
+    promotion: state.toJS().promotion.promotion
 }), dispatch => bindActionCreators({
-    createPromotion
+    clearPromotionDetail
 }, dispatch))
 
 class PromotionCreate extends PureComponent {
@@ -40,7 +41,6 @@ class PromotionCreate extends PureComponent {
     }
 
     handleBack() {
-        // const dist = Utils.removeInvalid(this.props.form.getFieldsValue());
         this.props.history.goBack();
     }
 
@@ -223,7 +223,7 @@ class PromotionCreate extends PureComponent {
 }
 
 PromotionCreate.propTypes = {
-    form: PropTypes.objectOf(PropTypes.any),
+    clearPromotionDetail: PropTypes.func,
     history: PropTypes.objectOf(PropTypes.any)
 }
 
