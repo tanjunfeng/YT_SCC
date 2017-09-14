@@ -109,9 +109,7 @@ class EditorPages extends Component {
                 this.timer = setTimeout(() => {
                     this.props.history.goBack();
                 }, 1000)
-            }).catch((error2) => {
-                message.error(error2.message);
-            });
+            })
         })
     }
 

@@ -79,9 +79,7 @@ class ChangeMessage extends PureComponent {
                                 });
                                 this.props.modifyMediaAddVisible({isVisible: false});
                             }
-                        }).catch((error) => {
-                            message.error(error.message);
-                        });
+                        })
                     }
                 })
                 break;
@@ -104,9 +102,7 @@ class ChangeMessage extends PureComponent {
                                     isVisible: false
                                 });
                             }
-                        }).catch((error) => {
-                            message.error(error.message);
-                        });
+                        })
                     }
                 })
                 break;

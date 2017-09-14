@@ -63,8 +63,6 @@ class Audit extends PureComponent {
                     })
                     message.success(res.message);
                     this.props.history.goBack();
-                }).catch(err => {
-                    message.error(err.message);
                 })
                 break;
             case '不通过':
@@ -81,8 +79,6 @@ class Audit extends PureComponent {
                             })
                             message.success(res.message);
                             this.props.history.goBack();
-                        }).catch(err => {
-                            message.error(err.message);
                         })
                     }
                 })
