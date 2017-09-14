@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Form, Row, Col } from 'antd';
+import { Form, Row, Col, Button } from 'antd';
 import { clearPromotionDetail, getPromotionDetail } from '../../../actions/promotion';
 import { detail as columns } from '../columns';
 
@@ -63,6 +63,15 @@ class PromotionDetail extends PureComponent {
                         <div className="add-message promotion-add-license">
                             <div className="add-message-body">
                                 {this.getDetails()}
+                                <Row gutter={40} type="flex">
+                                    <Col>
+                                        <FormItem>
+                                            <Button size="default" onClick={this.handleBack}>
+                                                返回
+                                            </Button>
+                                        </FormItem>
+                                    </Col>
+                                </Row>
                             </div>
                         </div>
                     </div>

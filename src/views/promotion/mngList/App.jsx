@@ -15,7 +15,6 @@ import { Link } from 'react-router-dom';
 import {
     getPromotionList,
     clearPromotionList,
-    getPromotionDetail,
     updatePromotionStatus
 } from '../../../actions/promotion';
 import SearchForm from './searchForm';
@@ -27,7 +26,6 @@ import { managementList as columns } from '../columns';
 }), dispatch => bindActionCreators({
     getPromotionList,
     clearPromotionList,
-    getPromotionDetail,
     updatePromotionStatus
 }, dispatch))
 
@@ -100,9 +98,6 @@ class PromotionManagementList extends PureComponent {
         const { key } = items;
         const id = record.id;
         switch (key) {
-            case 'detail':
-                this.props.getPromotionDetail({ promotionId: id });
-                break;
             case 'publish': // 发布
                 this.props.updatePromotionStatus({
                     id,
@@ -206,7 +201,6 @@ class PromotionManagementList extends PureComponent {
 PromotionManagementList.propTypes = {
     getPromotionList: PropTypes.func,
     clearPromotionList: PropTypes.func,
-    getPromotionDetail: PropTypes.func,
     updatePromotionStatus: PropTypes.func,
     promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
     location: PropTypes.objectOf(PropTypes.any)
