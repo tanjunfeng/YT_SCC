@@ -229,7 +229,7 @@ class SellPriceModal extends Component {
                                     <span>*最大销售数量：</span>
                                     <span>
                                         {getFieldDecorator('maxNumber', {
-                                            rules: [
+                                            /* rules: [
                                                 { required: true, message: '请输入最大销售数量!' },
                                                 {
                                                     validator: (rule, value, callback) => {
@@ -241,7 +241,7 @@ class SellPriceModal extends Component {
                                                         callback()
                                                     }
                                                 }
-                                            ],
+                                            ], */
                                             initialValue: newDates.maxNumber
                                         })(
                                             <InputNumber
