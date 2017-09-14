@@ -20,7 +20,7 @@ import {
 } from '../../../actions/promotion';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { promotionMngList as columns } from '../columns';
+import { managementList as columns } from '../columns';
 
 @connect(state => ({
     promotionList: state.toJS().promotion.list
@@ -101,7 +101,7 @@ class PromotionManagementList extends PureComponent {
         const id = record.id;
         switch (key) {
             case 'detail':
-                this.props.getPromotionDetail({ id });
+                this.props.getPromotionDetail({ promotionId: id });
                 break;
             case 'publish': // 发布
                 this.props.updatePromotionStatus({
@@ -139,7 +139,7 @@ class PromotionManagementList extends PureComponent {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/promotion/${id}`}>活动详情</Link>
+                    <Link to={`${pathname}/detail/${id}`}>活动详情</Link>
                 </Menu.Item>
                 {
                     // 未发布的可发布
