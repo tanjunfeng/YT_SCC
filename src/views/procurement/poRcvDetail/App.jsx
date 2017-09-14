@@ -174,7 +174,7 @@ class PoRcvDetail extends PureComponent {
                                 <Col span={6}>
                                     {/* 供应商 */}
                                     <FormItem >
-                                        <span className="ant-form-item-label search-mind-label">供应商编号</span>
+                                        <span className="ant-form-item-label search-mind-label">供应商</span>
                                         <span className="text">{pmPurchaseReceipt.spNo}-{pmPurchaseReceipt.spName}</span>
                                     </FormItem>
                                 </Col>
