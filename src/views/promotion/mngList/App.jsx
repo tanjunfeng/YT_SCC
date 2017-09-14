@@ -172,6 +172,7 @@ class PromotionManagementList extends PureComponent {
     }
 
     render() {
+        const { data, total } = this.props.promotionList;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
@@ -180,7 +181,7 @@ class PromotionManagementList extends PureComponent {
                     handlePromotionReset={this.handlePromotionReset}
                 />
                 <Table
-                    dataSource={this.props.promotionList.data}
+                    dataSource={data}
                     columns={columns}
                     rowKey="id"
                     scroll={{
@@ -189,6 +190,7 @@ class PromotionManagementList extends PureComponent {
                     bordered
                     pagination={{
                         ...this.param,
+                        total,
                         showQuickJumper: true,
                         onChange: this.onPaginate
                     }}
