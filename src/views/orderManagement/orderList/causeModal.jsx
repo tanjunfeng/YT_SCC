@@ -58,8 +58,6 @@ class CauseModal extends PureComponent {
                         this.props.getSearchData();
                         this.props.modifyCauseModalVisible({ isShow: false });
                         message.success(res.message);
-                    }).catch(err => {
-                        message.error(err.message);
                     })
                 } else {
                     // 单个取消
@@ -72,8 +70,6 @@ class CauseModal extends PureComponent {
                         this.props.modifyCauseModalVisible({ isShow: false });
                         this.props.fetchOrderDetailInfo({ id: causeRecordId });
                         message.success(res.message);
-                    }).catch(err => {
-                        message.error(err.message);
                     })
                 }
             }

@@ -68,8 +68,6 @@ class RefundModal extends PureComponent {
                             option: '请选择'
                         })
                         message.success(res.message);
-                    }).catch(err => {
-                        message.error(err.message);
                     })
                 } else {
                     // 确认退款
@@ -83,8 +81,6 @@ class RefundModal extends PureComponent {
                             option: '请选择'
                         })
                         message.success(res.message);
-                    }).catch(err => {
-                        message.error(err.message);
                     })
                 }
                 break;
@@ -105,8 +101,6 @@ class RefundModal extends PureComponent {
                                     option: '请选择'
                                 })
                                 message.success('退款审核成功');
-                            }).catch(err => {
-                                message.error(err.message);
                             })
                         } else {
                             // 确认退款
@@ -121,8 +115,6 @@ class RefundModal extends PureComponent {
                                     option: '请选择'
                                 })
                                 message.success('确认退款成功');
-                            }).catch(err => {
-                                message.error(err.message);
                             })
                         }
                     }

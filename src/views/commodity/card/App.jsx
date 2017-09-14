@@ -267,7 +267,6 @@ class Cardline extends Component {
                         this.props.goto()
                     }).catch((res) => {
                         message.error('操作失败')
-                        message.error(res.message)
                     })
             },
             onCancel() { },
