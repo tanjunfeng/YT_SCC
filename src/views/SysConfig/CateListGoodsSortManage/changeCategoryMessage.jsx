@@ -198,9 +198,7 @@ class ChangeMessage extends PureComponent {
                                 isVisible: false
                             });
                         }
-                    }).catch((error2) => {
-                        message.error(error2.message);
-                    });
+                    })
                 }
             })
         } else {
@@ -223,9 +221,7 @@ class ChangeMessage extends PureComponent {
                             });
                             this.props.modifyCategoryVisible({isVisible: false});
                         }
-                    }).catch((error) => {
-                        message.error(error.message);
-                    });
+                    })
                 }
             })
         }
