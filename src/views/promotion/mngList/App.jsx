@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Table, Form, Icon, Menu, Dropdown } from 'antd';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import {
     getPromotionList,
@@ -36,8 +36,7 @@ class PromotionManagementList extends PureComponent {
         super(props);
         this.param = {
             pageNum: 1,
-            pageSize: PAGE_SIZE,
-            total: 0
+            pageSize: PAGE_SIZE
         };
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
@@ -70,9 +69,9 @@ class PromotionManagementList extends PureComponent {
 
     query() {
         this.props.getPromotionList(this.param).then((data) => {
-            const { pageNum, pageSize, total } = data.data;
+            const { pageNum, pageSize } = data.data;
             Object.assign(this.param, {
-                pageNum, pageSize, total
+                pageNum, pageSize
             });
         });
     }
@@ -86,8 +85,7 @@ class PromotionManagementList extends PureComponent {
         // 重置检索条件
         this.param = {
             pageNum: 1,
-            pageSize: PAGE_SIZE,
-            total: 0
+            pageSize: PAGE_SIZE
         }
     }
 
@@ -100,15 +98,14 @@ class PromotionManagementList extends PureComponent {
     */
     handleSelect(record, index, items) {
         const { key } = items;
+        const id = record.id;
         switch (key) {
             case 'detail':
-                this.props.getPromotionDetail({ id: record.id }).then(() => {
-                    this.query();
-                });
+                this.props.getPromotionDetail({ id });
                 break;
             case 'publish': // 发布
                 this.props.updatePromotionStatus({
-                    id: record.id,
+                    id,
                     status: 'released'
                 }).then(() => {
                     this.query();
@@ -116,7 +113,7 @@ class PromotionManagementList extends PureComponent {
                 break;
             case 'close':   // 关闭
                 this.props.updatePromotionStatus({
-                    id: record.id,
+                    id,
                     status: 'closed'
                 }).then(() => {
                     this.query();
@@ -137,13 +134,13 @@ class PromotionManagementList extends PureComponent {
      * return 列表页操作下拉菜单
      */
     renderOperations = (text, record, index) => {
-        const { status } = record;
-        // const { pathname } = this.props.location;
+        const { id, status } = record;
+        const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
-                {/* <Menu.Item key="detail">
-                    <Link to={`${pathname}/promotion/${record.id}`}>活动详情</Link>
-                </Menu.Item> */}
+                <Menu.Item key="detail">
+                    <Link to={`${pathname}/promotion/${id}`}>活动详情</Link>
+                </Menu.Item>
                 {
                     // 未发布的可发布
                     (status === 'unreleased') ?
@@ -212,7 +209,7 @@ PromotionManagementList.propTypes = {
     getPromotionDetail: PropTypes.func,
     updatePromotionStatus: PropTypes.func,
     promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
-    // location: PropTypes.objectOf(PropTypes.any)
+    location: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(PromotionManagementList));

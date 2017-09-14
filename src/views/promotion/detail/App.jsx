@@ -11,11 +11,10 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {
     Form, Row, Col, Input, InputNumber,
-    Button, DatePicker, Radio, message
+    Button, DatePicker, Radio
 } from 'antd';
-import Utils from '../../../util/util';
 import { createPromotion } from '../../../actions/promotion';
-import { DATE_FORMAT } from '../../../constant';
+import { TIME_FORMAT } from '../../../constant';
 import Category from '../../../container/cascader';
 
 const FormItem = Form.Item;
@@ -37,211 +36,7 @@ class PromotionCreate extends PureComponent {
             category: 0,
             store: 0
         };
-        this.state = {
-            areaSelectorVisible: false,
-            categorySelectorVisible: false,
-            storeSelectorVisible: false,
-            companies: [],  // 所选区域子公司
-            categoryObj: {} // 所选品类对象
-        }
-        this.getFormData = this.getFormData.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleBack = this.handleBack.bind(this);
-        this.handleConditionChange = this.handleConditionChange.bind(this);
-        this.handleQuanifyAmountChange = this.handleQuanifyAmountChange.bind(this);
-        this.handleAreaChange = this.handleAreaChange.bind(this);
-        this.handleSelectorOk = this.handleSelectorOk.bind(this);
-        this.handleSelectorCancel = this.handleSelectorCancel.bind(this);
-        this.handleCategoryChange = this.handleCategoryChange.bind(this);
-        this.handleCategorySelect = this.handleCategorySelect.bind(this);
-        this.handleStoreChange = this.handleStoreChange.bind(this);
-    }
-
-    getFormData(callback) {
-        this.props.form.validateFields((err, values) => {
-            if (err) {
-                message.error('请检查请求参数');
-                return callback(false);
-            }
-            const { promotionName,
-                discount,
-                promotionDateRange,
-                condition,
-                area,
-                store,
-                category,
-                quanifyAmount,
-                note,
-                storeIds
-        } = values;
-            const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
-            const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
-            const stores = {};
-            Object.assign(stores, {
-                storeId: storeIds
-            });
-            const promoCategoriesPo = this.state.categoryObj;
-            const companiesPoList = this.state.companies;
-            const dist = {
-                promotionName,
-                discount,
-                startDate,
-                endDate,
-                note
-            };
-            if (condition === 1) {
-                if (!quanifyAmount) {
-                    message.error('请填写活动金额');
-                    return callback(false);
-                }
-                Object.assign(dist, {
-                    quanifyAmount
-                });
-            }
-            if (area === 1) {
-                if (companiesPoList.length === 0) {
-                    message.error('请选择区域');
-                    return callback(false);
-                }
-                Object.assign(dist, {
-                    companiesPoList
-                });
-            }
-            if (store === 1) {
-                if (stores.storeId === undefined) {
-                    message.error('请填写门店列表');
-                    return callback(false);
-                }
-                Object.assign(dist, {
-                    stores
-                });
-            }
-            if (category === 1) {
-                if (promoCategoriesPo.categoryId === undefined) {
-                    message.error('请选择品类');
-                    return callback(false);
-                }
-                Object.assign(dist, {
-                    promoCategoriesPo
-                });
-            }
-            return callback(Utils.removeInvalid(dist));
-        });
-    }
-
-    /**
-     * 条件金额选项
-     * @param {*event} e
-     */
-    handleConditionChange(e) {
-        this.props.form.setFieldsValue({
-            condition: e.target.value
-        });
-        this.param.condition = e.target.value;
-    }
-
-    /**
-     * 使用条件金额
-     */
-    handleQuanifyAmountChange(number) {
-        this.props.form.setFieldsValue({
-            quanifyAmount: number
-        });
-    }
-
-    /**
-     * 所选区域选项
-     * @param {*object} e
-     */
-    handleAreaChange(e) {
-        const nextArea = e.target.value;
-        this.props.form.setFieldsValue({
-            area: nextArea
-        });
-        if (nextArea === 0) {
-            this.setState({
-                areaSelectorVisible: false,
-                companies: []
-            });
-        } else {
-            this.setState({
-                areaSelectorVisible: true
-            });
-        }
-    }
-
-    /**
-     * 使用品类选项
-     * @param {*object} e
-     */
-    handleCategoryChange(e) {
-        const nextCategory = e.target.value;
-        this.props.form.setFieldsValue({
-            category: nextCategory
-        });
-        if (nextCategory === 0) {
-            this.setState({
-                categorySelectorVisible: false,
-                categoryObj: {}
-            });
-        } else {
-            this.setState({
-                categorySelectorVisible: true
-            });
-        }
-    }
-
-    handleCategorySelect(categoryObj) {
-        this.setState({ categoryObj });
-    }
-
-    handleStoreChange(e) {
-        const nextStore = e.target.value;
-        this.props.form.setFieldsValue({
-            store: nextStore
-        });
-        if (nextStore === 0) {
-            this.setState({
-                storeSelectorVisible: false
-            });
-        } else {
-            this.setState({
-                storeSelectorVisible: true
-            });
-        }
-    }
-
-    handleSelectorOk(companies) {
-        this.setState({
-            areaSelectorVisible: false,
-            companies
-        });
-    }
-
-    handleSelectorClear() {
-        this.setState({
-            companies: []
-        });
-    }
-
-    handleSelectorCancel() {
-        this.setState({
-            areaSelectorVisible: false
-        });
-    }
-
-    handleSubmit() {
-        this.getFormData((response) => {
-            if (!response) return;
-            this.props.createPromotion(response).then((res) => {
-                if (res.code === 200 && res.message === '请求成功') {
-                    message.info('新增促销活动成功，请到列表页发布');
-                    this.props.history.goBack();
-                } else {
-                    message.error(res.message);
-                }
-            });
-        });
     }
 
     handleBack() {
@@ -250,11 +45,6 @@ class PromotionCreate extends PureComponent {
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
-        const subCompanies = [];
-        this.state.companies.forEach((company) => {
-            subCompanies.push(company.companyName);
-        });
         return (
             <div className="promotion">
                 <Form layout="inline">
@@ -300,7 +90,7 @@ class PromotionCreate extends PureComponent {
                                                 <RangePicker
                                                     style={{ width: '240px' }}
                                                     className="manage-form-enterTime"
-                                                    format={DATE_FORMAT}
+                                                    format={TIME_FORMAT}
                                                     placeholder={['开始时间', '结束时间']}
                                                 />
                                                 )}
@@ -385,37 +175,36 @@ class PromotionCreate extends PureComponent {
                                                     <Radio value={1}>指定门店</Radio>
                                                 </RadioGroup>
                                                 )}
-                                            {this.state.storeSelectorVisible ?
-                                                getFieldDecorator('storeIds', {
-                                                    initialValue: '',
-                                                    rules: [{ required: true, message: '请输入指定门店' }]
-                                                })(
-                                                    <TextArea placeholder="请输入指定门店" autosize={{ minRows: 1, maxRows: 6 }} />
-                                                    )
-                                                : null
-                                            }
                                         </FormItem>
                                     </Col>
                                 </Row>
+                                {this.state.storeSelectorVisible ?
+                                    <Row className="store">
+                                        <Col span={16}>
+                                            <FormItem label="">
+                                                {getFieldDecorator('storeIds', {
+                                                    initialValue: '',
+                                                    rules: [{ required: true, message: '请输入指定门店' }]
+                                                })(
+                                                    <TextArea placeholder="请输入指定门店" autosize={{ minRows: 4, maxRows: 6 }} />
+                                                    )}
+                                            </FormItem>
+                                        </Col>
+                                    </Row>
+                                    : null
+                                }
                                 <Row>
                                     <Col span={16}>
                                         <FormItem label="备注">
                                             {getFieldDecorator('note', {
                                                 initialValue: this.param.note
                                             })(
-                                                <TextArea placeholder="可填写备注" autosize={{ minRows: 1, maxRows: 6 }} />
+                                                <TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />
                                                 )}
                                         </FormItem>
                                     </Col>
                                 </Row>
                                 <Row gutter={40} type="flex">
-                                    <Col>
-                                        <FormItem>
-                                            <Button type="primary" size="default" onClick={this.handleSubmit}>
-                                                提交
-                                            </Button>
-                                        </FormItem>
-                                    </Col>
                                     <Col>
                                         <FormItem>
                                             <Button size="default" onClick={this.handleBack}>
@@ -435,7 +224,6 @@ class PromotionCreate extends PureComponent {
 
 PromotionCreate.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    createPromotion: PropTypes.func,
     history: PropTypes.objectOf(PropTypes.any)
 }
 
