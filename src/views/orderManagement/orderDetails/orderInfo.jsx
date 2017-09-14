@@ -157,8 +157,6 @@ class OrderInformation extends PureComponent {
                 }).then(res => {
                     this.props.fetchOrderDetailInfo({id: this.id});
                     message.success(res.message);
-                }).catch(err => {
-                    message.success(err.message);
                 })
             },
             onCancel() {},

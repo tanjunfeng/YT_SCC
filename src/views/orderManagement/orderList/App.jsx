@@ -357,8 +357,6 @@ class OrderManagementList extends Component {
                         }).then(res => {
                             this.getSearchData();
                             message.success(res.message);
-                        }).catch(err => {
-                            message.success(err.message);
                         })
                     },
                     onCancel() { }
@@ -373,8 +371,6 @@ class OrderManagementList extends Component {
                 }).then(res => {
                     this.getSearchData();
                     message.success(res.message);
-                }).catch(err => {
-                    message.success(err.message);
                 })
                 break;
             case 'tableShowFailure':
