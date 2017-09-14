@@ -3,7 +3,7 @@
  * @Description: 加盟商结算
  * @CreateDate: 2017-09-06 17:53:59
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-11 15:36:49
+ * @Last Modified time: 2017-09-13 21:37:21
  */
 
 import React, { Component } from 'react';
@@ -80,7 +80,9 @@ class FranchiseeSettlement extends Component {
             checkedList: defaultCheckedList,
             indeterminate: true,
             checkAll: false,
-            mustData: true
+            mustData: true,
+            isPay: '1',
+            isRef: '0'
         }
     }
 
@@ -172,10 +174,10 @@ class FranchiseeSettlement extends Component {
             payDateEnd, refundDateStart, refundDateEnd } = this.state;
         this.current = 1;
         this.searchData = {
-            isPayState: checkedList.length > 0 &&
-                checkedList[0] === '已付款' ? 1 : checkedList.length === 1 ? 0 : 1,
-            isRefound: checkedList.length > 0 &&
-                checkedList[0] === '已退款' ? 1 : checkedList.length === 1 ? 0 : 1,
+            isPayState: (checkedList.length === 1 &&
+                checkedList[0] === '已付款') || checkedList.length === 2 ? 1 : 0,
+            isRefound: (checkedList.length === 1 &&
+                checkedList[0] === '已退款') || checkedList.length === 2 ? 1 : 0,
             orderId,
             franchiseeId,
             branchCompanyId,
