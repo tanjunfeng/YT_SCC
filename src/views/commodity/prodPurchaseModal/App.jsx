@@ -210,7 +210,6 @@ class ProdPurchaseModal extends Component {
             }).catch((res) => {
                 this.props.productAddPriceVisible({isVisible: false});
                 message.error('操作失败')
-                message.error(res.message)
             })
         })
     }
