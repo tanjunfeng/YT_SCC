@@ -123,12 +123,9 @@ class SaleCard extends Component {
             id: getProdPurchaseByIds.id,
             productId: getProdPurchaseByIds.productId,
             status: getProdPurchaseByIds.status
+        }).then((res) => {
+            this.confirmUsed(res.success)
         })
-            .then((res) => {
-                this.confirmUsed(res.success)
-            }).catch((res) => {
-                message.error(res.message)
-            })
     }
 
     handleDelete(e) {
