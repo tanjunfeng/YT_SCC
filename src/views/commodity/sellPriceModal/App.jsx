@@ -226,7 +226,7 @@ class SellPriceModal extends Component {
                                     </span>
                                 </FormItem>
                                 <FormItem>
-                                    <span>*最大销售数量：</span>
+                                    <span>最大销售数量：</span>
                                     <span>
                                         {getFieldDecorator('maxNumber', {
                                             /* rules: [
