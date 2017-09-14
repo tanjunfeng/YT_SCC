@@ -3,7 +3,7 @@
  * @Description: 加盟商结算
  * @CreateDate: 2017-09-06 17:53:59
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-13 21:37:21
+ * @Last Modified time: 2017-09-14 10:23:09
  */
 
 import React, { Component } from 'react';
@@ -350,6 +350,7 @@ class FranchiseeSettlement extends Component {
                                                     format={DATE_FORMAT}
                                                     placeholder={['开始时间', '结束时间']}
                                                     onChange={this.onCompleteTimeChange}
+                                                    id="completeDate"
                                                 />
                                             )}
                                         </div>
