@@ -1,5 +1,5 @@
 /**
- * 促销管理查询条件
+ * 促销管理 - 参与数据查询表单
  *
  * @author taoqiyu
  */
@@ -10,10 +10,10 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { pubFetchValueList } from '../../../actions/pub';
-import Utils from '../../../util/util';
-import SearchMind from '../../../components/searchMind/SearchMind';
 import { DATE_FORMAT } from '../../../constant';
 import { promotionStatus } from '../constants';
+import Utils from '../../../util/util';
+import SearchMind from '../../../components/searchMind/SearchMind';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -115,12 +115,12 @@ class SearchForm extends PureComponent {
                     <div className="search-conditions">
                         <Row gutter={40}>
                             <Col span={8}>
-                                <FormItem label="活动ID" style={{ paddingRight: 10 }}>
+                                <FormItem label="订单编号" style={{ paddingRight: 10 }}>
                                     {getFieldDecorator('id')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem label="活动名称">
+                                <FormItem label="订单状态">
                                     {getFieldDecorator('promotionName')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
