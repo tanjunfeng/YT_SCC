@@ -9,11 +9,9 @@ import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { pubFetchValueList } from '../../../actions/pub';
-import { DATE_FORMAT } from '../../../constant';
+import { TIME_FORMAT } from '../../../constant';
 import { promotionStatus } from '../constants';
 import Utils from '../../../util/util';
-import SearchMind from '../../../components/searchMind/SearchMind';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -24,7 +22,7 @@ const { RangePicker } = DatePicker;
         employeeCompanyId: state.toJS().user.data.user.employeeCompanyId
     }),
     dispatch => bindActionCreators({
-        pubFetchValueList
+
     }, dispatch)
 )
 
@@ -38,7 +36,7 @@ class SearchForm extends PureComponent {
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
         this.getFormData = this.getFormData.bind(this);
-        this.handleCreate = this.handleCreate.bind(this);
+        this.handleExport = this.handleExport.bind(this);
     }
 
     getStatus() {
@@ -102,7 +100,7 @@ class SearchForm extends PureComponent {
         this.props.handlePromotionReset();
     }
 
-    handleCreate() {
+    handleExport() {
         const { pathname } = this.props.location;
         this.props.history.push(`${pathname}/create`);
     }
@@ -125,42 +123,39 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem>
-                                    <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">使用范围</span>
-                                        <SearchMind
-                                            compKey="spId"
-                                            ref={ref => { this.subCompanySearchMind = ref }}
-                                            fetch={(params) =>
-                                                this.props.pubFetchValueList({
-                                                    branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-                                                    branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
-                                                }, 'findCompanyBaseInfo')
-                                            }
-                                            onChoosed={this.handleSubCompanyChoose}
-                                            onClear={this.handleSubCompanyClear}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>{row.id} - {row.name}</div>
-                                            )}
-                                            pageSize={6}
-                                            columns={[
-                                                {
-                                                    title: '子公司id',
-                                                    dataIndex: 'id',
-                                                    width: 98
-                                                }, {
-                                                    title: '子公司名字',
-                                                    dataIndex: 'name'
-                                                }
-                                            ]}
-                                        />
-                                    </div>
+                                <FormItem label="支付状态">
+                                    {getFieldDecorator('promotionName')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row gutter={40}>
                             <Col span={8}>
-                                <FormItem>
+                                <FormItem label="物流状态">
+                                    {getFieldDecorator('promotionName')(<Input size="default" />)}
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
+                                <FormItem label="门店编号">
+                                    {getFieldDecorator('statusCode')(
+                                        <Select style={{ width: '153px' }} size="default">
+                                            {this.getStatus()}
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
+                                <FormItem label="所属公司">
+                                    {getFieldDecorator('statusCode')(
+                                        <Select style={{ width: '153px' }} size="default">
+                                            {this.getStatus()}
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row gutter={40}>
+                            <Col span={8}>
+                                <FormItem label="使用时间">
                                     <div className="promotion-date-range">
                                         <span className="sc-form-item-label search-mind-label">活动时间</span>
                                         {getFieldDecorator('promotionDateRange', {
@@ -170,41 +165,29 @@ class SearchForm extends PureComponent {
                                             <RangePicker
                                                 style={{ width: '240px' }}
                                                 className="manage-form-enterTime"
-                                                format={DATE_FORMAT}
+                                                format={TIME_FORMAT}
                                                 placeholder={['开始时间', '结束时间']}
                                             />
                                             )}
                                     </div>
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
-                                {/* 状态 */}
-                                <FormItem label="状态">
-                                    {getFieldDecorator('statusCode', {
-                                        initialValue: 'all'
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
-                                        </Select>
-                                        )}
-                                </FormItem>
-                            </Col>
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
                             <Col>
                                 <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleSearch}>
+                                    <Button type="primary" size="default" onClick={this.handleExport}>
+                                        导出
+                                    </Button>
+                                </FormItem>
+                                <FormItem>
+                                    <Button size="default" onClick={this.handleSearch}>
                                         查询
                                     </Button>
                                 </FormItem>
                                 <FormItem>
                                     <Button size="default" onClick={this.handleReset}>
                                         重置
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleCreate}>
-                                        新增
                                     </Button>
                                 </FormItem>
                             </Col>
@@ -217,7 +200,6 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    pubFetchValueList: PropTypes.func,
     handlePromotionSearch: PropTypes.func,
     handlePromotionReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),

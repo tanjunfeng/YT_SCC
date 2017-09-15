@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { pubFetchValueList } from '../../../actions/pub';
 import Utils from '../../../util/util';
 import SearchMind from '../../../components/searchMind/SearchMind';
-import { DATE_FORMAT } from '../../../constant';
+import { TIME_FORMAT } from '../../../constant';
 import { promotionStatus } from '../constants';
 
 const FormItem = Form.Item;
@@ -170,7 +170,7 @@ class SearchForm extends PureComponent {
                                             <RangePicker
                                                 style={{ width: '240px' }}
                                                 className="manage-form-enterTime"
-                                                format={DATE_FORMAT}
+                                                format={TIME_FORMAT}
                                                 placeholder={['开始时间', '结束时间']}
                                             />
                                             )}
