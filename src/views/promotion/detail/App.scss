@@ -1,3 +1,4 @@
+$promotionAddLabelWidth: 80px;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -21,20 +22,16 @@
 
 .promotion {
     padding-top: 40px;
-    form .default{
-        width: 78px;
-    }
-    .category .ant-cascader-picker {
-        width: 260px;
-    }
     .ant-form-item-label label {
-        width: 80px;
+        width: $promotionAddLabelWidth;
         display: inline-block;
     }
     .ant-form-item-control textarea {
         width: 260px;
     }
-    .condition .ant-input-number-lg {
-        width: 120px;
+    .ant-col-16 {
+        max-width: 640px;
+        word-wrap: break-word;
+        word-break: break-all;
     }
 }

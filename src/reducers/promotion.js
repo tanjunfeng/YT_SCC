@@ -27,6 +27,7 @@ export default function (state = initState, action) {
         case ActionType.CLEAR_CATEGORIES:
             return state.set('categories', fromJS(action.payload));
         case ActionType.FETCH_PROMOTION_DETAIL:
+        case ActionType.CLEAR_PROMOTION_DETAIL:
             return state.set('promotion', fromJS(action.payload));
         default:
             return state;

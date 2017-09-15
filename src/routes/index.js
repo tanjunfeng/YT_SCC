@@ -75,7 +75,7 @@ import FranchiseeSettlement from 'bundle-loader?lazy!../views/simpleSettlement/f
 // 促销活动
 import PromotionManagementList from 'bundle-loader?lazy!../views/promotion/mngList';
 import PromotionCreate from 'bundle-loader?lazy!../views/promotion/create';
-// import PromotionDetail from 'bundle-loader?lazy!../views/promotion/detail';
+import PromotionDetail from 'bundle-loader?lazy!../views/promotion/detail';
 
 /* eslint-enable */
 
@@ -628,6 +628,12 @@ const routes = [
                             path="/promotion/create"
                             exact
                             render={() => (<Bundle load={PromotionCreate}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                        <Route
+                            path="/promotion/detail/:id"
+                            exact
+                            render={() => (<Bundle load={PromotionDetail}>
                                 {(App) => <App />}</Bundle>)}
                         />
                     </Switch>

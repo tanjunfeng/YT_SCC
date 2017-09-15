@@ -39,6 +39,15 @@ class AreaSelector extends PureComponent {
         this.props.getAllCompanies();
     }
 
+    // 当弹框隐藏时，通知本组件
+    componentWillReceiveProps(nextProps) {
+        if (!nextProps.isSelectorVisible) {
+            this.setState({
+                checkedCompanies: []
+            });
+        }
+    }
+
     componentWillUnmount() {
         this.props.clearCompaniesList();
     }

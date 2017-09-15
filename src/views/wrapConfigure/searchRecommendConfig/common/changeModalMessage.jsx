@@ -64,9 +64,7 @@ class ChangeMessage extends PureComponent {
                                 this.props.fetchAllHot({pageSize: PAGE_SIZE, pageNum: 1});
                                 this.props.modifyModalVisible({isVisible: false});
                             }
-                        }).catch((error) => {
-                            message.error(error.message);
-                        });
+                        })
                     }
                 })
                 break;
@@ -81,9 +79,7 @@ class ChangeMessage extends PureComponent {
                                 this.props.modifyModalVisible({isVisible: false});
                                 this.props.fetchAllHot({pageSize: PAGE_SIZE, pageNum: 1});
                             }
-                        }).catch((error) => {
-                            message.error(error.message);
-                        });
+                        })
                     }
                 })
                 break;

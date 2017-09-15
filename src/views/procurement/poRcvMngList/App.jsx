@@ -113,7 +113,7 @@ class PoRcvMngList extends PureComponent {
                     return text;
                 }
             }, {
-                title: '供应商编号',
+                title: '供应商',
                 dataIndex: 'spNo',
                 key: 'spNo'
             }, {
@@ -530,7 +530,7 @@ class PoRcvMngList extends PureComponent {
                                             pageSize={5}
                                             columns={[
                                                 {
-                                                    title: '供应商编号',
+                                                    title: '供应商',
                                                     dataIndex: 'spNo',
                                                     width: 80
                                                 }, {
