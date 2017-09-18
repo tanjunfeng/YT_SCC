@@ -32,7 +32,6 @@ class SubCompanies extends PureComponent {
      */
     handleSubCompanyClear() {
         this.searchMind.reset();
-        // this.props.onSubCompaniesChooesd('');
         this.props.onSubCompaniesClear();
     }
 

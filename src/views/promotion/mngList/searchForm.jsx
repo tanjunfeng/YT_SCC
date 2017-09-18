@@ -73,13 +73,14 @@ class SearchForm extends PureComponent {
     }
 
     handleSearch() {
+        // 将查询条件回传给调用页
         this.props.onPromotionSearch(this.getFormData());
     }
 
     handleReset() {
-        this.hanldeSubCompaniesClear();
-        this.props.form.resetFields();
-        this.props.onPromotionReset();
+        this.hanldeSubCompaniesClear(); // 清除子公司值清单
+        this.props.form.resetFields();  // 清除当前查询条件
+        this.props.onPromotionReset();  // 通知父页面已清空
     }
 
     handleCreate() {
