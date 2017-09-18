@@ -2,15 +2,14 @@
  * @file App.jsx
  * @author taoqiyu
  *
- * 促销管理 - 促销管理列表
+ * 促销管理 - 查询参与数据
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Icon, Menu, Dropdown } from 'antd';
-import { Link } from 'react-router-dom';
+import { Table, Form } from 'antd';
 
 import {
     getPromotionList,
@@ -29,7 +28,7 @@ import { managementList as columns } from '../columns';
     updatePromotionStatus
 }, dispatch))
 
-class PromotionManagementList extends PureComponent {
+class PromotionParticipate extends PureComponent {
     constructor(props) {
         super(props);
         this.param = {
@@ -75,11 +74,7 @@ class PromotionManagementList extends PureComponent {
     }
 
     handlePromotionSearch(param) {
-        this.param = {
-            pageNum: this.param.pageNum,
-            pageSize: this.param.pageSize,
-            ...param
-        };
+        Object.assign(this.param, param);
         this.query();
     }
 
@@ -123,66 +118,13 @@ class PromotionManagementList extends PureComponent {
         }
     }
 
-    /**
-     * 列表页操作下拉菜单
-     *
-     * @param {string} text 文本内容
-     * @param {Object} record 模态框状态
-     * @param {string} index 下标
-     *
-     * return 列表页操作下拉菜单
-     */
-    renderOperations = (text, record, index) => {
-        const { id, status } = record;
-        const { pathname } = this.props.location;
-        const menu = (
-            <Menu onClick={(item) => this.handleSelect(record, index, item)}>
-                <Menu.Item key="detail">
-                    <Link to={`${pathname}/detail/${id}`}>活动详情</Link>
-                </Menu.Item>
-                {
-                    // 未发布的可发布
-                    (status === 'unreleased') ?
-                        <Menu.Item key="publish">
-                            <a target="_blank" rel="noopener noreferrer">
-                                发布
-                        </a>
-                        </Menu.Item>
-                        : null
-                }
-                {
-                    // 未发布的可发布，未发布和已发布的可结束
-                    (status === 'unreleased' || status === 'released') ?
-                        <Menu.Item key="close">
-                            <a target="_blank" rel="noopener noreferrer">
-                                关闭
-                        </a>
-                        </Menu.Item>
-                        : null
-                }
-            </Menu>
-        );
-
-        return (
-            <Dropdown
-                overlay={menu}
-                placement="bottomCenter"
-            >
-                <a className="ant-dropdown-link">
-                    表单操作 <Icon type="down" />
-                </a>
-            </Dropdown>
-        )
-    }
-
     render() {
         const { data, total } = this.props.promotionList;
-        columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
                 <SearchForm
-                    onPromotionSearch={this.handlePromotionSearch}
-                    onPromotionReset={this.handlePromotionReset}
+                    handlePromotionSearch={this.handlePromotionSearch}
+                    handlePromotionReset={this.handlePromotionReset}
                 />
                 <Table
                     dataSource={data}
@@ -204,12 +146,11 @@ class PromotionManagementList extends PureComponent {
     }
 }
 
-PromotionManagementList.propTypes = {
+PromotionParticipate.propTypes = {
     getPromotionList: PropTypes.func,
     clearPromotionList: PropTypes.func,
     updatePromotionStatus: PropTypes.func,
-    promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
-    location: PropTypes.objectOf(PropTypes.any)
+    promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 
-export default withRouter(Form.create()(PromotionManagementList));
+export default withRouter(Form.create()(PromotionParticipate));

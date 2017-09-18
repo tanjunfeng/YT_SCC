@@ -14,7 +14,6 @@ import {
     Form, Input, Button, Row, Col,
     Select, Table, DatePicker
 } from 'antd';
-import moment from 'moment';
 import Utils from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
 import {
@@ -30,9 +29,6 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const orderML = 'order-management';
 const { RangePicker } = DatePicker;
-const yesterdayDate = moment().subtract(1, 'days').valueOf().toString();
-const todayDate = moment().valueOf().toString();
-const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
 
 const columns = [{
     title: '单据编号',
