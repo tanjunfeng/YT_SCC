@@ -7,12 +7,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
-import { Form } from 'antd';
 import { pubFetchValueList } from '../../actions/pub';
 import SearchMind from '../../components/searchMind';
-
-const FormItem = Form.Item;
 
 @connect(() => ({}), dispatch => bindActionCreators({
     pubFetchValueList,
@@ -23,12 +19,11 @@ class SubCompanies extends PureComponent {
         super(props);
         this.handleSubCompanyClear = this.handleSubCompanyClear.bind(this);
         this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-        this.searchMind = null;
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.branchCompanyId === '') {
-            this.searchMind = null;
+        if (nextProps.value === '') {
+            this.searchMind.reset();
         }
     }
 
@@ -37,6 +32,7 @@ class SubCompanies extends PureComponent {
      */
     handleSubCompanyClear() {
         this.searchMind.reset();
+        // this.props.onSubCompaniesChooesd('');
         this.props.onSubCompaniesClear();
     }
 
@@ -49,38 +45,33 @@ class SubCompanies extends PureComponent {
 
     render() {
         return (
-            <FormItem>
-                <div className="row">
-                    <span className="sc-form-item-label search-mind-label">所属公司</span>
-                    <SearchMind
-                        compKey="spId"
-                        ref={ref => { this.searchMind = ref }}
-                        fetch={(params) =>
-                            // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodSell/findCompanyBaseInfo
-                            this.props.pubFetchValueList({
-                                branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-                                branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
-                            }, 'findCompanyBaseInfo')
-                        }
-                        onChoosed={this.handleSubCompanyChoose}
-                        onClear={this.handleSubCompanyClear}
-                        renderChoosedInputRaw={(row) => (
-                            <div>{row.id} - {row.name}</div>
-                        )}
-                        pageSize={6}
-                        columns={[
-                            {
-                                title: '子公司id',
-                                dataIndex: 'id',
-                                width: 98
-                            }, {
-                                title: '子公司名字',
-                                dataIndex: 'name'
-                            }
-                        ]}
-                    />
-                </div>
-            </FormItem>
+            <SearchMind
+                compKey="spId"
+                ref={ref => { this.searchMind = ref }}
+                fetch={(params) =>
+                    // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodSell/findCompanyBaseInfo
+                    this.props.pubFetchValueList({
+                        branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
+                        branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
+                    }, 'findCompanyBaseInfo')
+                }
+                onChoosed={this.handleSubCompanyChoose}
+                onClear={this.handleSubCompanyClear}
+                renderChoosedInputRaw={(row) => (
+                    <div>{row.id} - {row.name}</div>
+                )}
+                pageSize={6}
+                columns={[
+                    {
+                        title: '子公司id',
+                        dataIndex: 'id',
+                        width: 98
+                    }, {
+                        title: '子公司名字',
+                        dataIndex: 'name'
+                    }
+                ]}
+            />
         );
     }
 }
@@ -89,7 +80,7 @@ SubCompanies.propTypes = {
     pubFetchValueList: PropTypes.func,
     onSubCompaniesChooesd: PropTypes.func,
     onSubCompaniesClear: PropTypes.func,
-    branchCompanyId: PropTypes.string
+    value: PropTypes.string
 }
 
-export default withRouter(Form.create()(SubCompanies));
+export default SubCompanies;

@@ -75,7 +75,11 @@ class PromotionManagementList extends PureComponent {
     }
 
     handlePromotionSearch(param) {
-        Object.assign(this.param, param);
+        this.param = {
+            pageNum: this.param.pageNum,
+            pageSize: this.param.pageSize,
+            ...param
+        };
         this.query();
     }
 
@@ -177,8 +181,8 @@ class PromotionManagementList extends PureComponent {
         return (
             <div>
                 <SearchForm
-                    handlePromotionSearch={this.handlePromotionSearch}
-                    handlePromotionReset={this.handlePromotionReset}
+                    onPromotionSearch={this.handlePromotionSearch}
+                    onPromotionReset={this.handlePromotionReset}
                 />
                 <Table
                     dataSource={data}

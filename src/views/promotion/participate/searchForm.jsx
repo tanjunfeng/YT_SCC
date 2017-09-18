@@ -68,7 +68,6 @@ class SearchForm extends PureComponent {
         this.setState({
             branchCompanyId: '',
         });
-        this.subCompanySearchMind.reset();
     }
 
     /**

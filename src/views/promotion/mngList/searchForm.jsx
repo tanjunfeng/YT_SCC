@@ -49,6 +49,7 @@ class SearchForm extends PureComponent {
         } = this.props.form.getFieldsValue();
         const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
         const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
+        const branchCompanyId = this.state.branchCompanyId;
         let status = statusCode;
         if (statusCode === 'all') {
             status = '';
@@ -59,7 +60,7 @@ class SearchForm extends PureComponent {
             status,
             startDate,
             endDate,
-            branchCompanyId: this.state.branchCompanyId
+            branchCompanyId
         });
     }
 
@@ -72,14 +73,13 @@ class SearchForm extends PureComponent {
     }
 
     handleSearch() {
-        this.props.handlePromotionSearch(this.getFormData());
+        this.props.onPromotionSearch(this.getFormData());
     }
 
     handleReset() {
-        this.setState({ branchCompanyId: '' });
         this.hanldeSubCompaniesClear();
         this.props.form.resetFields();
-        this.props.handlePromotionReset();
+        this.props.onPromotionReset();
     }
 
     handleCreate() {
@@ -105,11 +105,16 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <SubCompanies
-                                    branchCompanyId={this.state.branchCompanyId}
-                                    onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                    onSubCompaniesClear={this.hanldeSubCompaniesClear}
-                                />
+                                <FormItem>
+                                    <div className="row">
+                                        <span className="sc-form-item-label search-mind-label">所属公司</span>
+                                        <SubCompanies
+                                            value={this.state.branchCompanyId}
+                                            onSubCompaniesChooesd={this.handleSubCompanyChoose}
+                                            onSubCompaniesClear={this.hanldeSubCompaniesClear}
+                                        />
+                                    </div>
+                                </FormItem>
                             </Col>
                         </Row>
                         <Row gutter={40}>
@@ -171,8 +176,8 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    handlePromotionSearch: PropTypes.func,
-    handlePromotionReset: PropTypes.func,
+    onPromotionSearch: PropTypes.func,
+    onPromotionReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any)
