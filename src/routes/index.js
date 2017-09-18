@@ -636,6 +636,12 @@ const routes = [
                             render={() => (<Bundle load={PromotionDetail}>
                                 {(App) => <App />}</Bundle>)}
                         />
+                        <Route
+                            path="/promotion/participate/:id"
+                            exact
+                            render={() => (<Bundle load={PromotionDetail}>
+                                {(App) => <App />}</Bundle>)}
+                        />
                     </Switch>
                 )
             }

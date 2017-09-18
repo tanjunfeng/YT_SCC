@@ -6,27 +6,15 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
-import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
-import { pubFetchValueList } from '../../../actions/pub';
 import Utils from '../../../util/util';
-import SearchMind from '../../../components/searchMind/SearchMind';
 import { TIME_FORMAT } from '../../../constant';
 import { promotionStatus } from '../constants';
+import { SubCompanies } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
-
-@connect(
-    state => ({
-        employeeCompanyId: state.toJS().user.data.user.employeeCompanyId
-    }),
-    dispatch => bindActionCreators({
-        pubFetchValueList
-    }, dispatch)
-)
 
 class SearchForm extends PureComponent {
     constructor(props) {
@@ -39,6 +27,8 @@ class SearchForm extends PureComponent {
         this.handleReset = this.handleReset.bind(this);
         this.getFormData = this.getFormData.bind(this);
         this.handleCreate = this.handleCreate.bind(this);
+        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
+        this.hanldeSubCompaniesClear = this.hanldeSubCompaniesClear.bind(this);
     }
 
     getStatus() {
@@ -73,23 +63,12 @@ class SearchForm extends PureComponent {
         });
     }
 
-    /**
-     * 子公司-清除
-     */
-    handleSubCompanyClear() {
-        this.setState({
-            branchCompanyId: '',
-        });
-        this.subCompanySearchMind.reset();
+    handleSubCompanyChoose(branchCompanyId) {
+        this.setState({ branchCompanyId });
     }
 
-    /**
-     * 子公司-值清单
-     */
-    handleSubCompanyChoose = ({ record }) => {
-        this.setState({
-            branchCompanyId: record.id,
-        });
+    hanldeSubCompaniesClear() {
+        this.setState({ branchCompanyId: '' });
     }
 
     handleSearch() {
@@ -97,7 +76,8 @@ class SearchForm extends PureComponent {
     }
 
     handleReset() {
-        this.handleSubCompanyClear();
+        this.setState({ branchCompanyId: '' });
+        this.hanldeSubCompaniesClear();
         this.props.form.resetFields();
         this.props.handlePromotionReset();
     }
@@ -125,37 +105,11 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem>
-                                    <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">使用范围</span>
-                                        <SearchMind
-                                            compKey="spId"
-                                            ref={ref => { this.subCompanySearchMind = ref }}
-                                            fetch={(params) =>
-                                                this.props.pubFetchValueList({
-                                                    branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-                                                    branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
-                                                }, 'findCompanyBaseInfo')
-                                            }
-                                            onChoosed={this.handleSubCompanyChoose}
-                                            onClear={this.handleSubCompanyClear}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>{row.id} - {row.name}</div>
-                                            )}
-                                            pageSize={6}
-                                            columns={[
-                                                {
-                                                    title: '子公司id',
-                                                    dataIndex: 'id',
-                                                    width: 98
-                                                }, {
-                                                    title: '子公司名字',
-                                                    dataIndex: 'name'
-                                                }
-                                            ]}
-                                        />
-                                    </div>
-                                </FormItem>
+                                <SubCompanies
+                                    branchCompanyId={this.state.branchCompanyId}
+                                    onSubCompaniesChooesd={this.handleSubCompanyChoose}
+                                    onSubCompaniesClear={this.hanldeSubCompaniesClear}
+                                />
                             </Col>
                         </Row>
                         <Row gutter={40}>
@@ -165,7 +119,7 @@ class SearchForm extends PureComponent {
                                         <span className="sc-form-item-label search-mind-label">活动时间</span>
                                         {getFieldDecorator('promotionDateRange', {
                                             initialValue: '',
-                                            rules: [{ required: true, message: '请选择活动日期' }]
+                                            rules: [{ required: true, message: '请选择活动时间' }]
                                         })(
                                             <RangePicker
                                                 style={{ width: '240px' }}
@@ -217,7 +171,6 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    pubFetchValueList: PropTypes.func,
     handlePromotionSearch: PropTypes.func,
     handlePromotionReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),

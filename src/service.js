@@ -678,7 +678,6 @@ export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehousePhy
 export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySupplierPlaceRegion', params);
 
 // 此接口用于通过code和name（后端id就等于code）查询子公司信息
-// http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodSell/findCompanyBaseInfo
 export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBaseInfo', params);
 // 此接口用于通过code和name（后端id就等于code）查询子公司信息(通过商品id过滤可用的)
 export const queryBranchCompanyInfo = (params) => http.get('/prodSell/queryBranchCompanyInfo', params);

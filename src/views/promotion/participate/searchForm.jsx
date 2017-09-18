@@ -6,27 +6,15 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
-import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
 import Utils from '../../../util/util';
-import SearchMind from '../../../components/searchMind/SearchMind';
+import { SubCompanies } from '../../../container/search';
 import { TIME_FORMAT } from '../../../constant';
 import { promotionStatus } from '../constants';
-import { pubFetchValueList } from '../../../actions/pub';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
-
-@connect(
-    state => ({
-        employeeCompanyId: state.toJS().user.data.user.employeeCompanyId
-    }),
-    dispatch => bindActionCreators({
-        pubFetchValueList
-    }, dispatch)
-)
 
 class SearchForm extends PureComponent {
     constructor(props) {
@@ -146,37 +134,7 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem>
-                                    <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">所属公司</span>
-                                        <SearchMind
-                                            compKey="spId"
-                                            ref={ref => { this.subCompanySearchMind = ref }}
-                                            fetch={(params) =>
-                                                this.props.pubFetchValueList({
-                                                    branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-                                                    branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
-                                                }, 'findCompanyBaseInfo')
-                                            }
-                                            onChoosed={this.handleSubCompanyChoose}
-                                            onClear={this.handleSubCompanyClear}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>{row.id} - {row.name}</div>
-                                            )}
-                                            pageSize={6}
-                                            columns={[
-                                                {
-                                                    title: '子公司id',
-                                                    dataIndex: 'id',
-                                                    width: 98
-                                                }, {
-                                                    title: '子公司名字',
-                                                    dataIndex: 'name'
-                                                }
-                                            ]}
-                                        />
-                                    </div>
-                                </FormItem>
+                                <SubCompanies />
                             </Col>
                         </Row>
                         <Row gutter={40}>
@@ -226,7 +184,6 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    pubFetchValueList: PropTypes.func,
     handlePromotionSearch: PropTypes.func,
     handlePromotionReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
