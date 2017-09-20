@@ -140,6 +140,9 @@ class PromotionManagementList extends PureComponent {
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/detail/${id}`}>活动详情</Link>
                 </Menu.Item>
+                <Menu.Item key="participate">
+                    <Link to={`${pathname}/participate/${id}`}>参与数据</Link>
+                </Menu.Item>
                 {
                     // 未发布的可发布
                     (status === 'unreleased') ?
