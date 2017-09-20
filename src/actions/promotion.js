@@ -8,6 +8,7 @@ import ActionType from './ActionType';
 
 import {
     fetchPromotionList as promotionListService,
+    fetchParticipateData as participateDataService,
     createPromotion as createPromotionService,
     fetchPromotionDetail as fetchPromotionDetailService,
     updatePromotionStatus as updatePromotionStatusService,
@@ -16,7 +17,7 @@ import {
 } from '../service';
 
 /**
- * 促销活动列表 Action
+ * 促销活动-下单打折 Action
  */
 const fetchPromotionListAction = (data) => ({
     type: ActionType.FETCH_PROMOTION_LIST,
@@ -29,6 +30,27 @@ export const getPromotionList = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     fetchPromotionListAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 促销活动参与数据 Action
+ */
+const fetchParticipateListAction = (data) => ({
+    type: ActionType.FETCH_PATICIPATE_LIST,
+    payload: data
+});
+
+export const getParticipateList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        participateDataService(params)
+            .then(res => {
+                dispatch(
+                    fetchParticipateListAction(res.data)
                 );
                 resolve(res);
             })
@@ -143,6 +165,11 @@ export const updatePromotionStatus = (params) => dispatch => (
  */
 export const clearPromotionList = () => dispatch => (dispatch({
     type: ActionType.CLEAR_PROMOTION_LIST,
+    payload: []
+}));
+
+export const clearParticipateList = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_PATICIPATE_LIST,
     payload: []
 }));
 

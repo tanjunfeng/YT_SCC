@@ -21,7 +21,7 @@ class SearchForm extends PureComponent {
         super(props);
         this.state = {
             branchCompanyId: ''
-        }
+        };
         this.getStatus = this.getStatus.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);

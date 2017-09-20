@@ -75,6 +75,48 @@ const managementList = [{
     key: 'operation'
 }];
 
+const participateList = [{
+    title: '订单号',
+    dataIndex: 'orderId',
+    key: 'orderId'
+}, {
+    title: '订单时间',
+    dataIndex: 'submitTime',
+    key: 'submitTime'
+}, {
+    title: '订单状态',
+    dataIndex: 'orderStateDesc',
+    key: 'orderStateDesc'
+}, {
+    title: '支付状态',
+    dataIndex: 'paymentStateDesc',
+    key: 'paymentStateDesc'
+}, {
+    title: '物流状态',
+    dataIndex: 'shippingStateDesc',
+    key: 'shippingStateDesc'
+}, {
+    title: '订单金额',
+    dataIndex: 'total',
+    key: 'total'
+}, {
+    title: '优惠金额',
+    dataIndex: 'discount',
+    key: 'discount'
+}, {
+    title: '门店编号',
+    dataIndex: 'franchiseeStoreId',
+    key: 'franchiseeStoreId'
+}, {
+    title: '门店名称',
+    dataIndex: 'branchCompanyName',
+    key: 'branchCompanyName'
+}, {
+    title: '所属子公司',
+    dataIndex: 'branchCompanyName',
+    key: 'branchCompanyName'
+}];
+
 const detail = [{
     title: '活动ID',
     dataIndex: 'id',
@@ -145,4 +187,4 @@ const detail = [{
     render: note => note || '无'
 }];
 
-export { managementList, detail };
+export { managementList, participateList, detail };

@@ -12,20 +12,18 @@ import { withRouter } from 'react-router';
 import { Table, Form } from 'antd';
 
 import {
-    getPromotionList,
-    clearPromotionList,
-    updatePromotionStatus
+    getParticipateList,
+    clearParticipateList
 } from '../../../actions/promotion';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { managementList as columns } from '../columns';
+import { participateList as columns } from '../columns';
 
 @connect(state => ({
-    promotionList: state.toJS().promotion.list
+    participates: state.toJS().promotion.participates
 }), dispatch => bindActionCreators({
-    getPromotionList,
-    clearPromotionList,
-    updatePromotionStatus
+    getParticipateList,
+    clearParticipateList
 }, dispatch))
 
 class PromotionParticipate extends PureComponent {
@@ -37,38 +35,32 @@ class PromotionParticipate extends PureComponent {
         };
         this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
         this.handleParticipateReset = this.handleParticipateReset.bind(this);
-        this.handleSelect = this.handleSelect.bind(this);
-        this.renderOperations = this.renderOperations.bind(this);
         this.query = this.query.bind(this);
     }
 
-    componentWillMount() {
-        this.props.clearPromotionList();
-    }
-
     componentDidMount() {
-        this.query();
+        const { id } = this.props.match.params;
+        this.query({ promoId: id });
     }
 
     componentWillUnmount() {
-        this.props.clearPromotionList();
+        this.props.clearParticipateList();
     }
 
     /**
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        this.setState({ pageNum });
-        this.query();
+        this.query({ page: pageNum });
     }
 
     query(condition) {
         const param = {
-            pageNum: this.state.pageNum,
+            page: this.state.pageNum,
             pageSize: this.state.pageSize,
             ...condition
         };
-        this.props.getPromotionList(param).then((data) => {
+        this.props.getParticipateList(param).then((data) => {
             const { pageNum, pageSize } = data.data;
             this.setState({ pageNum, pageSize });
         });
@@ -86,40 +78,8 @@ class PromotionParticipate extends PureComponent {
         });
     }
 
-    /**
-     * 促销活动表单操作
-    *
-    * @param {Object} record 传值所有数据对象
-    * @param {number} index 下标
-    * @param {Object} items 方法属性
-    */
-    handleSelect(record, index, items) {
-        const { key } = items;
-        const id = record.id;
-        switch (key) {
-            case 'publish': // 发布
-                this.props.updatePromotionStatus({
-                    id,
-                    status: 'released'
-                }).then(() => {
-                    this.query();
-                });
-                break;
-            case 'close':   // 关闭
-                this.props.updatePromotionStatus({
-                    id,
-                    status: 'closed'
-                }).then(() => {
-                    this.query();
-                });
-                break;
-            default:
-                break;
-        }
-    }
-
     render() {
-        const { data, total } = this.props.promotionList;
+        const { data, total } = this.props.participates;
         const { pageNum, pageSize } = this.state;
         return (
             <div>
@@ -149,10 +109,10 @@ class PromotionParticipate extends PureComponent {
 }
 
 PromotionParticipate.propTypes = {
-    getPromotionList: PropTypes.func,
-    clearPromotionList: PropTypes.func,
-    updatePromotionStatus: PropTypes.func,
-    promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
+    getParticipateList: PropTypes.func,
+    clearParticipateList: PropTypes.func,
+    match: PropTypes.objectOf(PropTypes.any),
+    participates: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 
 export default withRouter(Form.create()(PromotionParticipate));
