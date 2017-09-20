@@ -1,4 +1,4 @@
-import PromotionManagementList from './App';
+import CouponList from './App';
 import './App.scss';
 
-export default PromotionManagementList;
+export default CouponList;

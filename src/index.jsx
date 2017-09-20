@@ -229,6 +229,10 @@ startApp({
                     {
                         code: 'cxxddz',
                         name: '下单打折',
+                    },
+                    {
+                        code: 'cxyhq',
+                        name: '优惠券',
                     }
                 ]
             }

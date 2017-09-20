@@ -21,7 +21,7 @@ const FormItem = Form.Item;
     getPromotionDetail
 }, dispatch))
 
-class PromotionDetail extends PureComponent {
+class CouponDetail extends PureComponent {
     constructor(props) {
         super(props);
         this.handleBack = this.handleBack.bind(this);
@@ -81,7 +81,7 @@ class PromotionDetail extends PureComponent {
     }
 }
 
-PromotionDetail.propTypes = {
+CouponDetail.propTypes = {
     clearPromotionDetail: PropTypes.func,
     getPromotionDetail: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
@@ -89,4 +89,4 @@ PromotionDetail.propTypes = {
     history: PropTypes.objectOf(PropTypes.any)
 }
 
-export default withRouter(Form.create()(PromotionDetail));
+export default withRouter(Form.create()(CouponDetail));

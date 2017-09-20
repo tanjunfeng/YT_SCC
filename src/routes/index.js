@@ -83,6 +83,11 @@ import OrderDisCountList from 'bundle-loader?lazy!../views/orderDiscount/mngList
 import OrderDiscountCreate from 'bundle-loader?lazy!../views/orderDiscount/create';
 import OrderDisCountDetail from 'bundle-loader?lazy!../views/orderDiscount/detail';
 
+// 优惠券
+import CouponList from 'bundle-loader?lazy!../views/coupon/mngList';
+import CouponCreate from 'bundle-loader?lazy!../views/coupon/create';
+import CouponDetail from 'bundle-loader?lazy!../views/coupon/detail';
+
 /* eslint-enable */
 
 
@@ -662,25 +667,25 @@ const routes = [
                         <Route
                             path="/coupon"
                             exact
-                            render={() => (<Bundle load={PromotionManagementList}>
+                            render={() => (<Bundle load={CouponList}>
                                 {(App) => <App />}</Bundle>)}
                         />
                         <Route
-                            path="/promotion/create"
+                            path="/coupon/create"
                             exact
-                            render={() => (<Bundle load={PromotionCreate}>
+                            render={() => (<Bundle load={CouponCreate}>
                                 {(App) => <App />}</Bundle>)}
                         />
                         <Route
-                            path="/promotion/detail/:id"
+                            path="/coupon/detail/:id"
                             exact
-                            render={() => (<Bundle load={PromotionDetail}>
+                            render={() => (<Bundle load={CouponDetail}>
                                 {(App) => <App />}</Bundle>)}
                         />
                         <Route
-                            path="/promotion/participate/:id"
+                            path="/coupon/participate/:id"
                             exact
-                            render={() => (<Bundle load={PromotionDetail}>
+                            render={() => (<Bundle load={CouponDetail}>
                                 {(App) => <App />}</Bundle>)}
                         />
                     </Switch>

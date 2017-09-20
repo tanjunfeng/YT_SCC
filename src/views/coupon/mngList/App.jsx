@@ -1,8 +1,9 @@
-/**
- * @file App.jsx
- * @author taoqiyu
- *
- * 促销管理 - 促销管理列表
+/*
+ * @Author: tanjf
+ * @Description: 促销管理 - 优惠券列表
+ * @CreateDate: 2017-09-20 14:09:43
+ * @Last Modified by: tanjf
+ * @Last Modified time: 2017-09-20 14:16:35
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -19,7 +20,7 @@ import {
 } from '../../../actions/promotion';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { managementList as columns } from '../columns';
+import { couponList as columns } from '../columns';
 
 @connect(state => ({
     promotionList: state.toJS().promotion.list
@@ -29,7 +30,7 @@ import { managementList as columns } from '../columns';
     updatePromotionStatus
 }, dispatch))
 
-class PromotionManagementList extends PureComponent {
+class CouponList extends PureComponent {
     constructor(props) {
         super(props);
         this.param = {
@@ -204,7 +205,7 @@ class PromotionManagementList extends PureComponent {
     }
 }
 
-PromotionManagementList.propTypes = {
+CouponList.propTypes = {
     getPromotionList: PropTypes.func,
     clearPromotionList: PropTypes.func,
     updatePromotionStatus: PropTypes.func,
@@ -212,4 +213,4 @@ PromotionManagementList.propTypes = {
     location: PropTypes.objectOf(PropTypes.any)
 }
 
-export default withRouter(Form.create()(PromotionManagementList));
+export default withRouter(Form.create()(CouponList));

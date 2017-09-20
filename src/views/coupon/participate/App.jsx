@@ -28,7 +28,7 @@ import { managementList as columns } from '../columns';
     updatePromotionStatus
 }, dispatch))
 
-class PromotionParticipate extends PureComponent {
+class CouponParticipate extends PureComponent {
     constructor(props) {
         super(props);
         this.param = {
@@ -146,11 +146,11 @@ class PromotionParticipate extends PureComponent {
     }
 }
 
-PromotionParticipate.propTypes = {
+CouponParticipate.propTypes = {
     getPromotionList: PropTypes.func,
     clearPromotionList: PropTypes.func,
     updatePromotionStatus: PropTypes.func,
     promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 
-export default withRouter(Form.create()(PromotionParticipate));
+export default withRouter(Form.create()(CouponParticipate));

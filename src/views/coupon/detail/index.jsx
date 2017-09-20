@@ -1,4 +1,4 @@
-import PromotionDetail from './App';
+import CouponDetail from './App';
 import './App.scss';
 
-export default PromotionDetail;
+export default CouponDetail;
