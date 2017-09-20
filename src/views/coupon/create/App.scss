@@ -1,6 +1,6 @@
-$promotionAddLabelWidth: 80px;
-.ant-table-pagination {
-    margin-right: 15px;
+$couponAddLabelWidth: 80px;
+    .ant-table-pagination {
+        margin-right: 15px;
 }
 
 .change-form {
@@ -29,7 +29,7 @@ $promotionAddLabelWidth: 80px;
         width: 260px;
     }
     .ant-form-item-label label {
-        width: $promotionAddLabelWidth;
+        width: $couponAddLabelWidth;
         display: inline-block;
     }
     .ant-form-item-control textarea {
@@ -42,9 +42,14 @@ $promotionAddLabelWidth: 80px;
         color: red;
     }
     .store .ant-form-item-control {
-        margin-left: $promotionAddLabelWidth;
+        margin-left: $couponAddLabelWidth;
     }
     .red .ant-col-16 {
-        margin-left: $promotionAddLabelWidth;
+        margin-left: $couponAddLabelWidth;
+    }
+}
+.mrkl{
+    .ant-form-item-control{
+        margin-left: 0!important;
     }
 }
