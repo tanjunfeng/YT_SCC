@@ -12,18 +12,18 @@ import { withRouter } from 'react-router';
 import { Table, Form } from 'antd';
 
 import {
-    getParticipateList,
-    clearParticipateList
+    getParticipate,
+    clearParticipate
 } from '../../../actions/promotion';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { participateList as columns } from '../columns';
 
 @connect(state => ({
-    participates: state.toJS().promotion.participates
+    participate: state.toJS().promotion.participate
 }), dispatch => bindActionCreators({
-    getParticipateList,
-    clearParticipateList
+    getParticipate,
+    clearParticipate
 }, dispatch))
 
 class PromotionParticipate extends PureComponent {
@@ -35,6 +35,7 @@ class PromotionParticipate extends PureComponent {
         };
         this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
         this.handleParticipateReset = this.handleParticipateReset.bind(this);
+        this.onPaginate = this.onPaginate.bind(this);
         this.query = this.query.bind(this);
     }
 
@@ -44,7 +45,7 @@ class PromotionParticipate extends PureComponent {
     }
 
     componentWillUnmount() {
-        this.props.clearParticipateList();
+        this.props.clearParticipate();
     }
 
     /**
@@ -60,8 +61,8 @@ class PromotionParticipate extends PureComponent {
             pageSize: this.state.pageSize,
             ...condition
         };
-        this.props.getParticipateList(param).then((data) => {
-            const { pageNum, pageSize } = data.data;
+        this.props.getParticipate(param).then((data) => {
+            const { pageNum, pageSize } = data.data.participateDataDtoPageResult;
             this.setState({ pageNum, pageSize });
         });
     }
@@ -79,7 +80,8 @@ class PromotionParticipate extends PureComponent {
     }
 
     render() {
-        const { data, total } = this.props.participates;
+        const { participateDataDtoPageResult = {}, promotionName } = this.props.participate;
+        const { data, total } = participateDataDtoPageResult;
         const { pageNum, pageSize } = this.state;
         return (
             <div>
@@ -87,10 +89,11 @@ class PromotionParticipate extends PureComponent {
                     onParticipateSearch={this.handleParticipateSearch}
                     onParticipateReset={this.handleParticipateReset}
                 />
+                <h4>{promotionName}</h4>
                 <Table
                     dataSource={data}
                     columns={columns}
-                    rowKey="id"
+                    rowKey="orderId"
                     scroll={{
                         x: 1400
                     }}
@@ -109,10 +112,10 @@ class PromotionParticipate extends PureComponent {
 }
 
 PromotionParticipate.propTypes = {
-    getParticipateList: PropTypes.func,
-    clearParticipateList: PropTypes.func,
+    getParticipate: PropTypes.func,
+    clearParticipate: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
-    participates: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
+    participate: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(PromotionParticipate));

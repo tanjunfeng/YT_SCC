@@ -45,7 +45,7 @@ const fetchParticipateListAction = (data) => ({
     payload: data
 });
 
-export const getParticipateList = (params) => dispatch => (
+export const getParticipate = (params) => dispatch => (
     new Promise((resolve, reject) => {
         participateDataService(params)
             .then(res => {
@@ -86,7 +86,7 @@ export const getCategoriesByParentId = (params) => dispatch => (
         findCategoriesService(params)
             .then(res => {
                 dispatch(
-                    findCategoriedAction(res.data)
+                    findCategoriedAction(res)
                 );
                 resolve(res);
             })
@@ -168,9 +168,9 @@ export const clearPromotionList = () => dispatch => (dispatch({
     payload: []
 }));
 
-export const clearParticipateList = () => dispatch => (dispatch({
+export const clearParticipate = () => dispatch => (dispatch({
     type: ActionType.CLEAR_PATICIPATE_LIST,
-    payload: []
+    payload: {}
 }));
 
 export const clearCompaniesList = () => dispatch => (dispatch({

@@ -10,7 +10,7 @@ import ActionType from '../actions/ActionType';
 
 const initState = fromJS({
     list: [],    // 促销活动管理列表
-    participates: [], // 促销活动参与数据列表
+    participate: {}, // 促销活动参与数据列表
     categories: [],  // 品类列表
     companies: [],   // 所选区域列表
     promotion: {}   // 促销详情
@@ -23,7 +23,7 @@ export default function (state = initState, action) {
             return state.set('list', fromJS(action.payload));
         case ActionType.FETCH_PATICIPATE_LIST:
         case ActionType.CLEAR_PATICIPATE_LIST:
-            return state.set('participates');
+            return state.set('participate', fromJS(action.payload));
         case ActionType.FIND_ALL_COMPANIES:
         case ActionType.CLEAR_ALL_COMPANIES:
             return state.set('companies', fromJS(action.payload));

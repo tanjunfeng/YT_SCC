@@ -108,10 +108,6 @@ const participateList = [{
     dataIndex: 'franchiseeStoreId',
     key: 'franchiseeStoreId'
 }, {
-    title: '门店名称',
-    dataIndex: 'branchCompanyName',
-    key: 'branchCompanyName'
-}, {
     title: '所属子公司',
     dataIndex: 'branchCompanyName',
     key: 'branchCompanyName'
