@@ -227,10 +227,6 @@ startApp({
                 name: '促销管理',
                 submenu: [
                     {
-                        code: 'cxhdlb',
-                        name: '活动列表',
-                    },
-                    {
                         code: 'cxxddz',
                         name: '下单打折',
                     }

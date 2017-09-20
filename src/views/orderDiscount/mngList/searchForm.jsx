@@ -10,7 +10,7 @@ import { withRouter } from 'react-router';
 import Utils from '../../../util/util';
 import { TIME_FORMAT } from '../../../constant';
 import { promotionStatus } from '../constants';
-// import { SubCompanies } from '../../../container/search';
+import { SubCompanies } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -27,8 +27,8 @@ class SearchForm extends PureComponent {
         this.handleReset = this.handleReset.bind(this);
         this.getFormData = this.getFormData.bind(this);
         this.handleCreate = this.handleCreate.bind(this);
-        // this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-        // this.hanldeSubCompaniesClear = this.hanldeSubCompaniesClear.bind(this);
+        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
+        this.hanldeSubCompaniesClear = this.hanldeSubCompaniesClear.bind(this);
     }
 
     getStatus() {
@@ -135,8 +135,7 @@ class SearchForm extends PureComponent {
                                         )}
                                 </FormItem>
                             </Col>
-                        </Row>
-                        {/* <Col span={8}>
+                            <Col span={8}>
                                 <FormItem>
                                     <div className="row">
                                         <span className="sc-form-item-label search-mind-label">
@@ -149,7 +148,8 @@ class SearchForm extends PureComponent {
                                         />
                                     </div>
                                 </FormItem>
-                            </Col> */}
+                            </Col>
+                        </Row>
                         <Row gutter={40} type="flex" justify="end">
                             <Col>
                                 <FormItem>

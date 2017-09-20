@@ -618,9 +618,10 @@ const routes = [
         iconType: 'pushpin',
         routes: [
             {
+                // 下单打折
                 path: '/promotion',
                 parent: 'cxgl',
-                key: 'cxhdlb',
+                key: 'cxxddz',
                 component: () => (
                     <Switch>
                         <Route
@@ -651,33 +652,34 @@ const routes = [
                 )
             },
             {
-                path: '/orderDiscount',
+                // 优惠券
+                path: '/coupon',
                 parent: 'cxgl',
-                key: 'cxxddz',
+                key: 'cxyhq',
                 component: () => (
                     <Switch>
                         <Route
-                            path="/orderDiscount"
+                            path="/coupon"
                             exact
-                            render={() => (<Bundle load={OrderDisCountList}>
+                            render={() => (<Bundle load={PromotionManagementList}>
                                 {(App) => <App />}</Bundle>)}
                         />
                         <Route
-                            path="/orderDiscount/create"
+                            path="/promotion/create"
                             exact
-                            render={() => (<Bundle load={OrderDiscountCreate}>
+                            render={() => (<Bundle load={PromotionCreate}>
                                 {(App) => <App />}</Bundle>)}
                         />
                         <Route
-                            path="/orderDiscount/detail/:id"
+                            path="/promotion/detail/:id"
                             exact
-                            render={() => (<Bundle load={OrderDisCountDetail}>
+                            render={() => (<Bundle load={PromotionDetail}>
                                 {(App) => <App />}</Bundle>)}
                         />
                         <Route
-                            path="/orderDiscount/participate/:id"
+                            path="/promotion/participate/:id"
                             exact
-                            render={() => (<Bundle load={OrderDisCountDetail}>
+                            render={() => (<Bundle load={PromotionDetail}>
                                 {(App) => <App />}</Bundle>)}
                         />
                     </Switch>
