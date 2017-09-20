@@ -268,7 +268,7 @@ class PromotionCreate extends PureComponent {
                                             {getFieldDecorator('promotionName', {
                                                 rules: [
                                                     { required: true, message: '请输入优惠券名称!' },
-                                                    { max: 30, message: '活动名称最长30位' }
+                                                    { max: 15, message: '活动名称最长15位' }
                                                 ]
                                             })(<Input size="default" />)}
                                         </FormItem>
@@ -285,7 +285,8 @@ class PromotionCreate extends PureComponent {
                                                 <InputNumber
                                                     size="default"
                                                     min={1}
-                                                    max={100}
+                                                    max={999}
+                                                    step={1}
                                                     formatter={value => `${value}`}
                                                 />)}
                                             <span>元</span>
@@ -326,11 +327,11 @@ class PromotionCreate extends PureComponent {
                                             {this.param.condition > 0 ?
                                                 getFieldDecorator('quanifyAmount', {
                                                     initialValue: 0,
-                                                    rules: [{ required: true, message: '请填写条件金额' }]
+                                                    rules: [{ required: true, message: '“请输入面额”' }]
                                                 })(
                                                     <InputNumber
                                                         min={0}
-                                                        max={65535}
+                                                        max={99999}
                                                         formatter={value => `${value} 元可用`}
                                                         onChange={this.handleQuanifyAmountChange}
                                                     />)
@@ -405,7 +406,9 @@ class PromotionCreate extends PureComponent {
                                                 initialValue: this.param.store
                                             })(
                                                 <RadioGroup onChange={this.handleStoreChange}>
-                                                    <Radio className="default" value={0}>用户领取</Radio>
+                                                    <Radio className="default" value={0}>
+                                                        用户领取
+                                                    </Radio>
                                                     <Radio value={1}>平台发放</Radio>
                                                 </RadioGroup>
                                                 )}
@@ -418,7 +421,9 @@ class PromotionCreate extends PureComponent {
                                             <FormItem label="每人可领" >
                                                 {getFieldDecorator('meirenkl', {
                                                     rules: [
-                                                        { required: true, message: '请输入每人可领数量!' }
+                                                        { required: true,
+                                                            message: '请输入每人可领数量!'
+                                                        }
                                                     ]
                                                 })(
                                                     <InputNumber
@@ -440,8 +445,14 @@ class PromotionCreate extends PureComponent {
                                             {getFieldDecorator('note', {
                                                 initialValue: this.param.note
                                             })(
-                                                <TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />
-                                                )}
+                                                <TextArea
+                                                    placeholder="可填写备注"
+                                                    autosize={{
+                                                        minRows: 4,
+                                                        maxRows: 6
+                                                    }}
+                                                />
+                                            )}
                                         </FormItem>
                                     </Col>
                                 </Row>

@@ -38,7 +38,6 @@ class PromotionParticipate extends PureComponent {
         this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
         this.handleParticipateReset = this.handleParticipateReset.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
-        this.renderOperations = this.renderOperations.bind(this);
         this.query = this.query.bind(this);
     }
 
