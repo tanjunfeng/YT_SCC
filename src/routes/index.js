@@ -649,6 +649,39 @@ const routes = [
                         />
                     </Switch>
                 )
+            },
+            {
+                path: '/orderDiscount',
+                parent: 'cxgl',
+                key: 'cxxddz',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/orderDiscount"
+                            exact
+                            render={() => (<Bundle load={OrderDisCountList}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                        <Route
+                            path="/orderDiscount/create"
+                            exact
+                            render={() => (<Bundle load={OrderDiscountCreate}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                        <Route
+                            path="/orderDiscount/detail/:id"
+                            exact
+                            render={() => (<Bundle load={OrderDisCountDetail}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                        <Route
+                            path="/orderDiscount/participate/:id"
+                            exact
+                            render={() => (<Bundle load={OrderDisCountDetail}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                    </Switch>
+                )
             }
         ]
     }

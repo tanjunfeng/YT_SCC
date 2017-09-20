@@ -1,35 +1,35 @@
 $promotionAddLabelWidth: 80px;
-.ant-table-pagination{
+.ant-table-pagination {
     margin-right: 15px;
 }
 
-.change-form{
+.change-form {
     padding-left: 30px;
-    .ant-form-item{
+    .ant-form-item {
         margin-bottom: 15px
     }
-    .ant-form-explain{
+    .ant-form-explain {
         padding-left: 73px;
     }
-    &-label{
+    &-label {
         min-width: 61px;
         text-align: right;
     }
-    &-tip{
+    &-tip {
         margin-left: 10px;
     }
 }
 
-.promotion{
+.promotion {
     padding-top: 40px;
-    .ant-form-item-label label{
+    .ant-form-item-label label {
         width: $promotionAddLabelWidth;
         display: inline-block;
     }
-    .ant-form-item-control textarea{
+    .ant-form-item-control textarea {
         width: 260px;
     }
-    .ant-col-16{
+    .ant-col-16 {
         max-width: 640px;
         word-wrap: break-word;
         word-break: break-all;
