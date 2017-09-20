@@ -31,12 +31,12 @@ import { managementList as columns } from '../columns';
 class PromotionParticipate extends PureComponent {
     constructor(props) {
         super(props);
-        this.param = {
+        this.state = {
             pageNum: 1,
             pageSize: PAGE_SIZE
         };
-        this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
-        this.handlePromotionReset = this.handlePromotionReset.bind(this);
+        this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
+        this.handleParticipateReset = this.handleParticipateReset.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.renderOperations = this.renderOperations.bind(this);
         this.query = this.query.bind(this);
@@ -58,32 +58,32 @@ class PromotionParticipate extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        Object.assign(this.param, {
-            pageNum
-        });
+        this.setState({ pageNum });
         this.query();
     }
 
-    query() {
-        this.props.getPromotionList(this.param).then((data) => {
+    query(condition) {
+        const param = {
+            pageNum: this.state.pageNum,
+            pageSize: this.state.pageSize,
+            ...condition
+        };
+        this.props.getPromotionList(param).then((data) => {
             const { pageNum, pageSize } = data.data;
-            Object.assign(this.param, {
-                pageNum, pageSize
-            });
+            this.setState({ pageNum, pageSize });
         });
     }
 
-    handlePromotionSearch(param) {
-        Object.assign(this.param, param);
-        this.query();
+    handleParticipateSearch(param) {
+        this.query(param);
     }
 
-    handlePromotionReset() {
+    handleParticipateReset() {
         // 重置检索条件
-        this.param = {
+        this.setState({
             pageNum: 1,
             pageSize: PAGE_SIZE
-        }
+        });
     }
 
     /**
@@ -120,11 +120,12 @@ class PromotionParticipate extends PureComponent {
 
     render() {
         const { data, total } = this.props.promotionList;
+        const { pageNum, pageSize } = this.state;
         return (
             <div>
                 <SearchForm
-                    handlePromotionSearch={this.handlePromotionSearch}
-                    handlePromotionReset={this.handlePromotionReset}
+                    onParticipateSearch={this.handleParticipateSearch}
+                    onParticipateReset={this.handleParticipateReset}
                 />
                 <Table
                     dataSource={data}
@@ -135,7 +136,8 @@ class PromotionParticipate extends PureComponent {
                     }}
                     bordered
                     pagination={{
-                        ...this.param,
+                        pageNum,
+                        pageSize,
                         total,
                         showQuickJumper: true,
                         onChange: this.onPaginate
