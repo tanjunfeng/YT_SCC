@@ -32,9 +32,8 @@ import { managementList as columns } from '../columns';
 class PromotionManagementList extends PureComponent {
     constructor(props) {
         super(props);
-        this.param = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE
+        this.state = {
+            pageNum: 1, pageSize: PAGE_SIZE
         };
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
@@ -59,36 +58,31 @@ class PromotionManagementList extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        Object.assign(this.param, {
-            pageNum
-        });
-        this.query();
+        this.query({ pageNum });
     }
 
-    query() {
-        this.props.getPromotionList(this.param).then((data) => {
+    query(condition) {
+        const param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            ...condition
+        }
+        this.props.getPromotionList(param).then((data) => {
             const { pageNum, pageSize } = data.data;
-            Object.assign(this.param, {
-                pageNum, pageSize
-            });
+            this.setState({ pageNum, pageSize });
         });
     }
 
     handlePromotionSearch(param) {
-        this.param = {
-            pageNum: this.param.pageNum,
-            pageSize: this.param.pageSize,
-            ...param
-        };
-        this.query();
+        this.query(param);
     }
 
     handlePromotionReset() {
         // 重置检索条件
-        this.param = {
+        this.setState({
             pageNum: 1,
             pageSize: PAGE_SIZE
-        }
+        })
     }
 
     /**
@@ -140,6 +134,9 @@ class PromotionManagementList extends PureComponent {
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/detail/${id}`}>活动详情</Link>
                 </Menu.Item>
+                <Menu.Item key="participate">
+                    <Link to={`${pathname}/participate/${id}`}>参与数据</Link>
+                </Menu.Item>
                 {
                     // 未发布的可发布
                     (status === 'unreleased') ?
@@ -177,6 +174,7 @@ class PromotionManagementList extends PureComponent {
 
     render() {
         const { data, total } = this.props.promotionList;
+        const { pageNum, pageSize } = this.state;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
@@ -193,7 +191,8 @@ class PromotionManagementList extends PureComponent {
                     }}
                     bordered
                     pagination={{
-                        ...this.param,
+                        pageNum,
+                        pageSize,
                         total,
                         showQuickJumper: true,
                         onChange: this.onPaginate

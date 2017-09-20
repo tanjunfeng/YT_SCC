@@ -28,15 +28,15 @@ import { managementList as columns } from '../columns';
     updatePromotionStatus
 }, dispatch))
 
-class PromotionParticipate extends PureComponent {
+class CouponParticipate extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
+        this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE
         };
-        this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
-        this.handleParticipateReset = this.handleParticipateReset.bind(this);
+        this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
+        this.handlePromotionReset = this.handlePromotionReset.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.renderOperations = this.renderOperations.bind(this);
         this.query = this.query.bind(this);
@@ -58,32 +58,32 @@ class PromotionParticipate extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        this.setState({ pageNum });
+        Object.assign(this.param, {
+            pageNum
+        });
         this.query();
     }
 
-    query(condition) {
-        const param = {
-            pageNum: this.state.pageNum,
-            pageSize: this.state.pageSize,
-            ...condition
-        };
-        this.props.getPromotionList(param).then((data) => {
+    query() {
+        this.props.getPromotionList(this.param).then((data) => {
             const { pageNum, pageSize } = data.data;
-            this.setState({ pageNum, pageSize });
+            Object.assign(this.param, {
+                pageNum, pageSize
+            });
         });
     }
 
-    handleParticipateSearch(param) {
-        this.query(param);
+    handlePromotionSearch(param) {
+        Object.assign(this.param, param);
+        this.query();
     }
 
-    handleParticipateReset() {
+    handlePromotionReset() {
         // 重置检索条件
-        this.setState({
+        this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE
-        });
+        }
     }
 
     /**
@@ -120,12 +120,11 @@ class PromotionParticipate extends PureComponent {
 
     render() {
         const { data, total } = this.props.promotionList;
-        const { pageNum, pageSize } = this.state;
         return (
             <div>
                 <SearchForm
-                    onParticipateSearch={this.handleParticipateSearch}
-                    onParticipateReset={this.handleParticipateReset}
+                    handlePromotionSearch={this.handlePromotionSearch}
+                    handlePromotionReset={this.handlePromotionReset}
                 />
                 <Table
                     dataSource={data}
@@ -136,8 +135,7 @@ class PromotionParticipate extends PureComponent {
                     }}
                     bordered
                     pagination={{
-                        pageNum,
-                        pageSize,
+                        ...this.param,
                         total,
                         showQuickJumper: true,
                         onChange: this.onPaginate
@@ -148,11 +146,11 @@ class PromotionParticipate extends PureComponent {
     }
 }
 
-PromotionParticipate.propTypes = {
+CouponParticipate.propTypes = {
     getPromotionList: PropTypes.func,
     clearPromotionList: PropTypes.func,
     updatePromotionStatus: PropTypes.func,
     promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 
-export default withRouter(Form.create()(PromotionParticipate));
+export default withRouter(Form.create()(CouponParticipate));

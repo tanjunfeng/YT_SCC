@@ -1,6 +1,6 @@
 /**
  * @file App.jsx
- * @author taoqiyu
+ * @author taoqiyu,tanjf
  *
  * 促销管理 - 促销管理列表
  */
@@ -29,7 +29,7 @@ const { TextArea } = Input;
     createPromotion
 }, dispatch))
 
-class PromotionCreate extends PureComponent {
+class CouponDetail extends PureComponent {
     constructor(props) {
         super(props);
         this.param = {
@@ -453,10 +453,10 @@ class PromotionCreate extends PureComponent {
     }
 }
 
-PromotionCreate.propTypes = {
+CouponDetail.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     createPromotion: PropTypes.func,
     history: PropTypes.objectOf(PropTypes.any)
 }
 
-export default withRouter(Form.create()(PromotionCreate));
+export default withRouter(Form.create()(CouponDetail));

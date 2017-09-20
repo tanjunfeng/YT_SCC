@@ -76,6 +76,12 @@ import FranchiseeSettlement from 'bundle-loader?lazy!../views/simpleSettlement/f
 import PromotionManagementList from 'bundle-loader?lazy!../views/promotion/mngList';
 import PromotionCreate from 'bundle-loader?lazy!../views/promotion/create';
 import PromotionDetail from 'bundle-loader?lazy!../views/promotion/detail';
+import PromotionParticipate from 'bundle-loader?lazy!../views/promotion/participate';
+
+// 优惠券
+import CouponList from 'bundle-loader?lazy!../views/coupon/mngList';
+import CouponCreate from 'bundle-loader?lazy!../views/coupon/create';
+import CouponDetail from 'bundle-loader?lazy!../views/coupon/detail';
 
 /* eslint-enable */
 
@@ -613,9 +619,10 @@ const routes = [
         iconType: 'pushpin',
         routes: [
             {
+                // 下单打折
                 path: '/promotion',
                 parent: 'cxgl',
-                key: 'hdlb',
+                key: 'cxxddz',
                 component: () => (
                     <Switch>
                         <Route
@@ -639,7 +646,41 @@ const routes = [
                         <Route
                             path="/promotion/participate/:id"
                             exact
-                            render={() => (<Bundle load={PromotionDetail}>
+                            render={() => (<Bundle load={PromotionParticipate}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                    </Switch>
+                )
+            },
+            {
+                // 优惠券
+                path: '/coupon',
+                parent: 'cxgl',
+                key: 'cxyhq',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/coupon"
+                            exact
+                            render={() => (<Bundle load={CouponList}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                        <Route
+                            path="/coupon/create"
+                            exact
+                            render={() => (<Bundle load={CouponCreate}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                        <Route
+                            path="/coupon/detail/:id"
+                            exact
+                            render={() => (<Bundle load={CouponDetail}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                        <Route
+                            path="/coupon/participate/:id"
+                            exact
+                            render={() => (<Bundle load={CouponDetail}>
                                 {(App) => <App />}</Bundle>)}
                         />
                     </Switch>
