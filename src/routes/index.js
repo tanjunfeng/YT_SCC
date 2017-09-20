@@ -77,6 +77,11 @@ import PromotionManagementList from 'bundle-loader?lazy!../views/promotion/mngLi
 import PromotionCreate from 'bundle-loader?lazy!../views/promotion/create';
 import PromotionDetail from 'bundle-loader?lazy!../views/promotion/detail';
 
+// 下单打折
+import OrderDisCountList from 'bundle-loader?lazy!../views/orderDiscount/mngList';
+import OrderDiscountCreate from 'bundle-loader?lazy!../views/orderDiscount/create';
+import OrderDisCountDetail from 'bundle-loader?lazy!../views/orderDiscount/detail';
+
 /* eslint-enable */
 
 
@@ -615,7 +620,7 @@ const routes = [
             {
                 path: '/promotion',
                 parent: 'cxgl',
-                key: 'hdlb',
+                key: 'cxhdlb',
                 component: () => (
                     <Switch>
                         <Route
