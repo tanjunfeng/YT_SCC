@@ -78,11 +78,6 @@ import PromotionCreate from 'bundle-loader?lazy!../views/promotion/create';
 import PromotionDetail from 'bundle-loader?lazy!../views/promotion/detail';
 import PromotionParticipate from 'bundle-loader?lazy!../views/promotion/participate';
 
-// 下单打折
-import OrderDisCountList from 'bundle-loader?lazy!../views/orderDiscount/mngList';
-import OrderDiscountCreate from 'bundle-loader?lazy!../views/orderDiscount/create';
-import OrderDisCountDetail from 'bundle-loader?lazy!../views/orderDiscount/detail';
-
 // 优惠券
 import CouponList from 'bundle-loader?lazy!../views/coupon/mngList';
 import CouponCreate from 'bundle-loader?lazy!../views/coupon/create';

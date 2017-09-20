@@ -1,6 +1,6 @@
 /**
  * @file App.jsx
- * @author taoqiyu
+ * @author taoqiyu,tanjf
  *
  * 促销管理 - 促销管理列表
  */

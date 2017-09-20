@@ -1,7 +1,7 @@
 /**
  * 促销管理查询条件
  *
- * @author taoqiyu
+ * @author taoqiyu,tanjf
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
