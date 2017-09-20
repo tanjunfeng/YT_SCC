@@ -27,6 +27,8 @@ class SearchForm extends PureComponent {
         this.handleReset = this.handleReset.bind(this);
         this.getFormData = this.getFormData.bind(this);
         this.handleExport = this.handleExport.bind(this);
+        this.handleSubCompanyClear = this.handleSubCompanyClear.bind(this);
+        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
     }
 
     getStatus() {
@@ -66,27 +68,29 @@ class SearchForm extends PureComponent {
      */
     handleSubCompanyClear() {
         this.setState({
-            branchCompanyId: '',
+            branchCompanyId: ''
         });
     }
 
     /**
      * 子公司-值清单
      */
-    handleSubCompanyChoose = ({ record }) => {
-        this.setState({
-            branchCompanyId: record.id,
-        });
+    handleSubCompanyChoose(branchCompanyId) {
+        this.setState({ branchCompanyId });
+    }
+
+    hanldeSubCompaniesClear() {
+        this.setState({ branchCompanyId: '' });
     }
 
     handleSearch() {
-        this.props.handlePromotionSearch(this.getFormData());
+        this.props.handleParticipateSearch(this.getFormData());
     }
 
     handleReset() {
-        this.handleSubCompanyClear();
-        this.props.form.resetFields();
-        this.props.handlePromotionReset();
+        this.hanldeSubCompaniesClear(); // 清除子公司值清单
+        this.props.form.resetFields();  // 清除当前查询条件
+        this.props.onParticipateReset();  // 通知父页面已清空
     }
 
     handleExport() {
@@ -97,7 +101,7 @@ class SearchForm extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div className="search-box promotion">
+            <div className="search-box participate">
                 <Form layout="inline">
                     <div className="search-conditions">
                         <Row gutter={40}>
@@ -133,7 +137,16 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <SubCompanies />
+                                <FormItem>
+                                    <div className="row">
+                                        <span className="sc-form-item-label search-mind-label">所属公司</span>
+                                        <SubCompanies
+                                            value={this.state.branchCompanyId}
+                                            onSubCompaniesChooesd={this.handleSubCompanyChoose}
+                                            onSubCompaniesClear={this.hanldeSubCompaniesClear}
+                                        />
+                                    </div>
+                                </FormItem>
                             </Col>
                         </Row>
                         <Row gutter={40}>
@@ -183,8 +196,8 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    handlePromotionSearch: PropTypes.func,
-    handlePromotionReset: PropTypes.func,
+    handleParticipateSearch: PropTypes.func,
+    onParticipateReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any)
