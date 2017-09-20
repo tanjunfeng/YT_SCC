@@ -1,4 +1,5 @@
-import CheckedTree from './App';
-import './App.scss';
+import CheckedTree from './CheckedTree';
+import AreaSelector from './AreaSelector';
+import './index.scss';
 
-export default CheckedTree;
+export { CheckedTree, AreaSelector };

@@ -16,7 +16,7 @@ import {
 import Utils from '../../../util/util';
 import { createPromotion } from '../../../actions/promotion';
 import { TIME_FORMAT } from '../../../constant';
-import AreaSelector from './AreaSelector';
+import { AreaSelector } from '../../../container/tree';
 import Category from '../../../container/cascader';
 
 const FormItem = Form.Item;
