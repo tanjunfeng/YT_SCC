@@ -33,7 +33,7 @@ import { couponList as columns } from '../columns';
 class CouponList extends PureComponent {
     constructor(props) {
         super(props);
-        this.param = {
+        this.state = {
             pageNum: 1,
             pageSize: PAGE_SIZE
         };
@@ -60,36 +60,31 @@ class CouponList extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        Object.assign(this.param, {
-            pageNum
-        });
-        this.query();
+        this.query({ pageNum });
     }
 
-    query() {
-        this.props.getPromotionList(this.param).then((data) => {
+    query(condition) {
+        const param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            ...condition
+        }
+        this.props.getPromotionList(param).then((data) => {
             const { pageNum, pageSize } = data.data;
-            Object.assign(this.param, {
-                pageNum, pageSize
-            });
+            this.setState({ pageNum, pageSize });
         });
     }
 
     handlePromotionSearch(param) {
-        this.param = {
-            pageNum: this.param.pageNum,
-            pageSize: this.param.pageSize,
-            ...param
-        };
-        this.query();
+        this.query(param);
     }
 
     handlePromotionReset() {
         // 重置检索条件
-        this.param = {
+        this.setState({
             pageNum: 1,
             pageSize: PAGE_SIZE
-        }
+        });
     }
 
     /**
@@ -178,6 +173,7 @@ class CouponList extends PureComponent {
 
     render() {
         const { data, total } = this.props.promotionList;
+        const { pageNum, pageSize } = this.state;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
@@ -194,7 +190,8 @@ class CouponList extends PureComponent {
                     }}
                     bordered
                     pagination={{
-                        ...this.param,
+                        pageNum,
+                        pageSize,
                         total,
                         showQuickJumper: true,
                         onChange: this.onPaginate

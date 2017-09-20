@@ -10,8 +10,8 @@ import { withRouter } from 'react-router';
 import { Form, Modal } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import CheckedTree from '../../../container/tree';
-import { getAllCompanies, clearCompaniesList } from '../../../actions/promotion';
+import { CheckedTree } from './index';
+import { getAllCompanies, clearCompaniesList } from '../../actions/promotion';
 
 @connect(state => ({
     companies: state.toJS().promotion.companies

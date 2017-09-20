@@ -58,14 +58,13 @@ class PromotionManagementList extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        this.setState({ pageNum });
-        this.query();
+        this.query({ pageNum });
     }
 
     query(condition) {
         const param = {
-            pageNum: this.state.pageNum,
-            pageSize: this.state.pageSize,
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
             ...condition
         }
         this.props.getPromotionList(param).then((data) => {
