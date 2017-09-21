@@ -765,7 +765,7 @@ export const fetchPromotionDetail = (params) => http.get('/promotion/queryPromot
 export const updatePromotionStatus = (params) => http.post('/promotion/updatePromoStatus', params);
 
 // 优惠券
-export const createCouponsAction = (params) => http.post('/coupon/insertCoupons', params);
+export const createCoupons = (params) => http.post('/coupon/insertCoupons', params);
 
 // 查询品类
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);

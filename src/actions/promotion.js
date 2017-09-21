@@ -12,7 +12,8 @@ import {
     fetchPromotionDetail as fetchPromotionDetailService,
     updatePromotionStatus as updatePromotionStatusService,
     findCompanyBaseInfo as findCompaniesService,
-    queryCategoriesByParentId as findCategoriesService
+    queryCategoriesByParentId as findCategoriesService,
+    createCoupons as createCouponsActionService
 } from '../service';
 
 /**
@@ -125,7 +126,7 @@ const createCouponsAction = (data) => ({
 
 export const createCoupons = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        createCouponsAction(params)
+        createCouponsActionService(params)
             .then(res => {
                 dispatch(
                     createCouponsAction(res.data)

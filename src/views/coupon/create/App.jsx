@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-21 16:16:50
+ * @Last Modified time: 2017-09-21 16:29:49
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -15,7 +15,7 @@ import {
     Button, DatePicker, Radio, message
 } from 'antd';
 import Utils from '../../../util/util';
-import { createCouponsAction } from '../../../actions/promotion';
+import { createCoupons } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { AreaSelector } from '../../../container/tree';
 import Category from '../../../container/cascader';
@@ -27,7 +27,7 @@ const { TextArea } = Input;
 
 @connect(() => ({
 }), dispatch => bindActionCreators({
-    createCouponsAction
+    createCoupons
 }, dispatch))
 
 class CouponCreate extends PureComponent {
@@ -256,7 +256,7 @@ class CouponCreate extends PureComponent {
     handleSubmit() {
         this.getFormData((response) => {
             if (!response) return;
-            this.props.createCouponsAction(response).then((res) => {
+            this.props.createCoupons(response).then((res) => {
                 if (res.code === 200 && res.message === '请求成功') {
                     message.info('新增促销活动成功，请到列表页发布');
                     this.props.history.goBack();
@@ -526,7 +526,7 @@ class CouponCreate extends PureComponent {
 
 CouponCreate.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    createCouponsAction: PropTypes.func,
+    createCoupons: PropTypes.func,
     history: PropTypes.objectOf(PropTypes.any)
 }
 

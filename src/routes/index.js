@@ -684,14 +684,14 @@ const routes = [
                         <Route
                             path="/coupon/participate/:id"
                             exact
-                            render={() => (<Bundle load={CouponDetail}>
+                            render={() => (<Bundle load={PromotionParticipate}>
                                 {(App) => <App />}</Bundle>)}
                         />
                     </Switch>
                 )
             },
             {
-                // 优惠券
+                // 发放优惠券
                 path: '/grantCoupons',
                 parent: 'cxgl',
                 key: 'ffyhq',
@@ -705,12 +705,6 @@ const routes = [
                         />
                         <Route
                             path="/grantCoupons/detail/:id"
-                            exact
-                            render={() => (<Bundle load={grantCouponDetail}>
-                                {(App) => <App />}</Bundle>)}
-                        />
-                        <Route
-                            path="/grantCoupons/participate/:id"
                             exact
                             render={() => (<Bundle load={grantCouponDetail}>
                                 {(App) => <App />}</Bundle>)}
