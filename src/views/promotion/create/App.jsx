@@ -61,7 +61,6 @@ class PromotionCreate extends PureComponent {
     getFormData(callback) {
         this.props.form.validateFields((err, values) => {
             if (err) {
-                message.error('请检查请求参数');
                 return callback(false);
             }
             const { promotionName,
@@ -92,7 +91,6 @@ class PromotionCreate extends PureComponent {
             };
             if (condition === 1) {
                 if (!quanifyAmount) {
-                    message.error('请填写活动金额');
                     return callback(false);
                 }
                 Object.assign(dist, {
@@ -101,7 +99,6 @@ class PromotionCreate extends PureComponent {
             }
             if (area === 1) {
                 if (companiesPoList.length === 0) {
-                    message.error('请选择区域');
                     return callback(false);
                 }
                 Object.assign(dist, {
@@ -110,7 +107,6 @@ class PromotionCreate extends PureComponent {
             }
             if (store === 1) {
                 if (stores.storeId === undefined) {
-                    message.error('请填写门店列表');
                     return callback(false);
                 }
                 Object.assign(dist, {
@@ -119,7 +115,6 @@ class PromotionCreate extends PureComponent {
             }
             if (category === 1) {
                 if (promoCategoriesPo.categoryId === undefined) {
-                    message.error('请选择品类');
                     return callback(false);
                 }
                 Object.assign(dist, {
@@ -159,6 +154,7 @@ class PromotionCreate extends PureComponent {
         this.props.form.setFieldsValue({
             area: nextArea
         });
+        this.param.area = nextArea;
         if (nextArea === 0) {
             this.setState({
                 areaSelectorVisible: false,
@@ -180,6 +176,7 @@ class PromotionCreate extends PureComponent {
         this.props.form.setFieldsValue({
             category: nextCategory
         });
+        this.param.category = nextCategory;
         if (nextCategory === 0) {
             this.setState({
                 categorySelectorVisible: false,
@@ -201,6 +198,7 @@ class PromotionCreate extends PureComponent {
         this.props.form.setFieldsValue({
             store: nextStore
         });
+        this.param.store = nextStore;
         if (nextStore === 0) {
             this.setState({
                 storeSelectorVisible: false
@@ -231,7 +229,8 @@ class PromotionCreate extends PureComponent {
         });
     }
 
-    handleSubmit() {
+    handleSubmit(e) {
+        e.preventDefault();
         this.getFormData((response) => {
             if (!response) return;
             this.props.createPromotion(response).then((res) => {
@@ -258,7 +257,7 @@ class PromotionCreate extends PureComponent {
         });
         return (
             <div className="promotion">
-                <Form layout="inline">
+                <Form layout="inline" onSubmit={this.handleSubmit}>
                     <div className="promotion-add-item">
                         <div className="add-message promotion-add-license">
                             <div className="add-message-body">
@@ -431,7 +430,7 @@ class PromotionCreate extends PureComponent {
                                 <Row gutter={40} type="flex">
                                     <Col>
                                         <FormItem>
-                                            <Button type="primary" size="default" onClick={this.handleSubmit}>
+                                            <Button type="primary" size="default" htmlType="submit">
                                                 提交
                                             </Button>
                                         </FormItem>
