@@ -12,38 +12,35 @@ import { withRouter } from 'react-router';
 import { Table, Form } from 'antd';
 
 import {
-    getPromotionList,
-    clearPromotionList,
-    updatePromotionStatus
+    getParticipate,
+    clearParticipate
 } from '../../../actions/promotion';
+import { exportParticipateData } from '../../../service';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { managementList as columns } from '../columns';
+import { participateList as columns } from '../columns';
+import Util from '../../../util/util';
 
 @connect(state => ({
-    promotionList: state.toJS().promotion.list
+    participate: state.toJS().promotion.participate
 }), dispatch => bindActionCreators({
-    getPromotionList,
-    clearPromotionList,
-    updatePromotionStatus
+    getParticipate,
+    clearParticipate
 }, dispatch))
 
-class GrantCouponParticipate extends PureComponent {
+class PromotionParticipate extends PureComponent {
     constructor(props) {
         super(props);
-        this.param = {
+        this.state = {
             pageNum: 1,
             pageSize: PAGE_SIZE
         };
-        this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
-        this.handlePromotionReset = this.handlePromotionReset.bind(this);
-        this.handleSelect = this.handleSelect.bind(this);
-        this.renderOperations = this.renderOperations.bind(this);
+        this.promoId = this.props.match.params.id;
+        this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
+        this.handleParticipateReset = this.handleParticipateReset.bind(this);
+        this.handleParticipateExport = this.handleParticipateExport.bind(this);
+        this.onPaginate = this.onPaginate.bind(this);
         this.query = this.query.bind(this);
-    }
-
-    componentWillMount() {
-        this.props.clearPromotionList();
     }
 
     componentDidMount() {
@@ -51,91 +48,74 @@ class GrantCouponParticipate extends PureComponent {
     }
 
     componentWillUnmount() {
-        this.props.clearPromotionList();
+        this.props.clearParticipate();
     }
 
     /**
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        Object.assign(this.param, {
-            pageNum
+        this.query({ page: pageNum });
+    }
+
+    query(condition) {
+        const param = {
+            page: this.state.pageNum,
+            pageSize: this.state.pageSize,
+            promoId: this.promoId,
+            ...condition
+        };
+        this.props.getParticipate(param).then((data) => {
+            const { pageNum, pageSize } = data.data.participateDataDtoPageResult;
+            this.setState({ pageNum, pageSize });
         });
-        this.query();
     }
 
-    query() {
-        this.props.getPromotionList(this.param).then((data) => {
-            const { pageNum, pageSize } = data.data;
-            Object.assign(this.param, {
-                pageNum, pageSize
-            });
-        });
+    handleParticipateSearch(param) {
+        this.query(param);
     }
 
-    handlePromotionSearch(param) {
-        Object.assign(this.param, param);
-        this.query();
-    }
-
-    handlePromotionReset() {
+    handleParticipateReset() {
         // 重置检索条件
-        this.param = {
+        this.setState({
             pageNum: 1,
             pageSize: PAGE_SIZE
-        }
+        });
     }
 
-    /**
-     * 促销活动表单操作
-    *
-    * @param {Object} record 传值所有数据对象
-    * @param {number} index 下标
-    * @param {Object} items 方法属性
-    */
-    handleSelect(record, index, items) {
-        const { key } = items;
-        const id = record.id;
-        switch (key) {
-            case 'publish': // 发布
-                this.props.updatePromotionStatus({
-                    id,
-                    status: 'released'
-                }).then(() => {
-                    this.query();
-                });
-                break;
-            case 'close':   // 关闭
-                this.props.updatePromotionStatus({
-                    id,
-                    status: 'closed'
-                }).then(() => {
-                    this.query();
-                });
-                break;
-            default:
-                break;
-        }
+    handleParticipateExport(param) {
+        const condition = {
+            page: this.state.pageNum,
+            pageSize: this.state.pageSize,
+            promoId: this.promoId,
+            ...param
+        };
+        Util.exportExcel(exportParticipateData, condition);
     }
 
     render() {
-        const { data, total } = this.props.promotionList;
+        const { participateDataDtoPageResult = {}, promotionName } = this.props.participate;
+        const { data, total } = participateDataDtoPageResult;
+        const { pageNum, pageSize } = this.state;
         return (
             <div>
                 <SearchForm
-                    handlePromotionSearch={this.handlePromotionSearch}
-                    handlePromotionReset={this.handlePromotionReset}
+                    onParticipateSearch={this.handleParticipateSearch}
+                    onParticipateReset={this.handleParticipateReset}
+                    onParticipateExport={this.handleParticipateExport}
                 />
+                <h2>活动ID：{this.props.match.params.id}    活动名称：{promotionName}</h2>
                 <Table
                     dataSource={data}
                     columns={columns}
-                    rowKey="id"
+                    rowKey="orderId"
                     scroll={{
                         x: 1400
                     }}
                     bordered
                     pagination={{
-                        ...this.param,
+                        pageNum,
+                        pageSize,
                         total,
                         showQuickJumper: true,
                         onChange: this.onPaginate
@@ -146,11 +126,11 @@ class GrantCouponParticipate extends PureComponent {
     }
 }
 
-GrantCouponParticipate.propTypes = {
-    getPromotionList: PropTypes.func,
-    clearPromotionList: PropTypes.func,
-    updatePromotionStatus: PropTypes.func,
-    promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
+PromotionParticipate.propTypes = {
+    getParticipate: PropTypes.func,
+    clearParticipate: PropTypes.func,
+    match: PropTypes.objectOf(PropTypes.any),
+    participate: PropTypes.objectOf(PropTypes.any)
 }
 
-export default withRouter(Form.create()(GrantCouponParticipate));
+export default withRouter(Form.create()(PromotionParticipate));

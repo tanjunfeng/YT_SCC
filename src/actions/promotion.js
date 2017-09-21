@@ -12,7 +12,8 @@ import {
     fetchPromotionDetail as fetchPromotionDetailService,
     updatePromotionStatus as updatePromotionStatusService,
     findCompanyBaseInfo as findCompaniesService,
-    queryCategoriesByParentId as findCategoriesService
+    queryCategoriesByParentId as findCategoriesService,
+    createCoupons as createCouponsActionService
 } from '../service';
 
 /**
@@ -110,6 +111,25 @@ export const createPromotion = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     createPromotionAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
+// 优惠券
+const createCouponsAction = (data) => ({
+    type: ActionType.CREATE_COUPONS,
+    payload: data
+});
+
+export const createCoupons = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        createCouponsActionService(params)
+            .then(res => {
+                dispatch(
+                    createCouponsAction(res.data)
                 );
                 resolve(res);
             })

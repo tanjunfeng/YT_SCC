@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-20 14:16:35
+ * @Last Modified time: 2017-09-21 16:41:01
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -135,6 +135,9 @@ class CouponList extends PureComponent {
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/detail/${id}`}>活动详情</Link>
+                </Menu.Item>
+                <Menu.Item key="participate">
+                    <Link to={`${pathname}/participate/${id}`}>参与数据</Link>
                 </Menu.Item>
                 {
                     // 未发布的可发布
