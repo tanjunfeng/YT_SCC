@@ -26,6 +26,8 @@ class SearchForm extends PureComponent {
         this.getFormData = this.getFormData.bind(this);
         this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
         this.hanldeSubCompaniesClear = this.hanldeSubCompaniesClear.bind(this);
+        this.handleQueryResults = this.handleQueryResults.bind(this);
+        this.handleQueryCoupons = this.handleQueryCoupons.bind(this);
     }
 
     getStatus() {
@@ -76,6 +78,12 @@ class SearchForm extends PureComponent {
     handleSearch() {
         // 将查询条件回传给调用页
         this.props.onPromotionSearch(this.getFormData());
+    }
+
+    handleQueryResults() {
+    }
+
+    handleQueryCoupons() {
     }
 
     handleReset() {
@@ -138,6 +146,16 @@ class SearchForm extends PureComponent {
                                 <FormItem>
                                     <Button size="default" onClick={this.handleReset}>
                                         重置
+                                    </Button>
+                                </FormItem>
+                                <FormItem>
+                                    <Button type="primary" size="default" onClick={this.handleQueryResults}>
+                                        查询结果发券
+                                    </Button>
+                                </FormItem>
+                                <FormItem>
+                                    <Button type="primary" size="default" onClick={this.handleQueryCoupons}>
+                                        发券
                                     </Button>
                                 </FormItem>
                             </Col>

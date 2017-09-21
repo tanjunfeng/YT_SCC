@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-20 14:16:35
+ * @Last Modified time: 2017-09-21 15:51:11
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -184,7 +184,7 @@ class CouponList extends PureComponent {
                 <Table
                     dataSource={data}
                     columns={columns}
-                    rowKey="id"
+                    rowKey="franchiseeId"
                     scroll={{
                         x: 1400
                     }}
