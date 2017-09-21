@@ -7,7 +7,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
-import Utils from '../../../util/util';
+import Util from '../../../util/util';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { promotionStatus } from '../constants';
 import { SubCompanies } from '../../../container/search';
@@ -52,7 +52,7 @@ class SearchForm extends PureComponent {
         if (statusCode === 'all') {
             status = '';
         }
-        return Utils.removeInvalid({
+        return Util.removeInvalid({
             id,
             promotionName,
             status,

@@ -1,6 +1,6 @@
 /**
  * @file util.js
- * @author shijh, denglingbo
+ * @author shijh, denglingbo, taoqiyu
  *
  * 工具类
  */

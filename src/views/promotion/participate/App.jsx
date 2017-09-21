@@ -15,9 +15,11 @@ import {
     getParticipate,
     clearParticipate
 } from '../../../actions/promotion';
+import { exportParticipateData } from '../../../service';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { participateList as columns } from '../columns';
+import Util from '../../../util/util';
 
 @connect(state => ({
     participate: state.toJS().promotion.participate
@@ -36,6 +38,7 @@ class PromotionParticipate extends PureComponent {
         this.promoId = this.props.match.params.id;
         this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
         this.handleParticipateReset = this.handleParticipateReset.bind(this);
+        this.handleParticipateExport = this.handleParticipateExport.bind(this);
         this.onPaginate = this.onPaginate.bind(this);
         this.query = this.query.bind(this);
     }
@@ -80,6 +83,16 @@ class PromotionParticipate extends PureComponent {
         });
     }
 
+    handleParticipateExport(param) {
+        const condition = {
+            page: this.state.pageNum,
+            pageSize: this.state.pageSize,
+            promoId: this.promoId,
+            ...param
+        };
+        Util.exportExcel(exportParticipateData, condition);
+    }
+
     render() {
         const { participateDataDtoPageResult = {}, promotionName } = this.props.participate;
         const { data, total } = participateDataDtoPageResult;
@@ -89,6 +102,7 @@ class PromotionParticipate extends PureComponent {
                 <SearchForm
                     onParticipateSearch={this.handleParticipateSearch}
                     onParticipateReset={this.handleParticipateReset}
+                    onParticipateExport={this.handleParticipateExport}
                 />
                 <h2>活动ID：{this.props.match.params.id}    活动名称：{promotionName}</h2>
                 <Table
