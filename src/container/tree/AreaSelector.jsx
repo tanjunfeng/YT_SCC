@@ -7,7 +7,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import { Form, Modal } from 'antd';
+import { Form, Modal, message } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { CheckedTree } from './index';
@@ -69,6 +69,10 @@ class AreaSelector extends PureComponent {
     }
 
     handleOk() {
+        if (this.state.checkedCompanies.length === 0) {
+            message.error('请至少选择一个子公司');
+            return;
+        }
         this.props.onSelectorOk(this.state.checkedCompanies);
     }
 
