@@ -138,6 +138,7 @@ class Category extends PureComponent {
                 options={this.state.options}
                 loadData={this.loadData}
                 onChange={this.onChange}
+                placeholder={'请选择'}
                 changeOnSelect
             />
         );

@@ -1,8 +1,9 @@
-/**
- * @file App.jsx
- * @author taoqiyu,tanjf
- *
- * 促销管理 - 促销管理列表
+/*
+ * @Author: tanjf
+ * @Description: 促销管理-新建
+ * @CreateDate: 2017-09-20 18:34:13
+ * @Last Modified by: tanjf
+ * @Last Modified time: 2017-09-21 10:28:02
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -15,7 +16,7 @@ import {
 } from 'antd';
 import Utils from '../../../util/util';
 import { createPromotion } from '../../../actions/promotion';
-import { TIME_FORMAT } from '../../../constant';
+import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { AreaSelector } from '../../../container/tree';
 import Category from '../../../container/cascader';
 
@@ -29,19 +30,21 @@ const { TextArea } = Input;
     createPromotion
 }, dispatch))
 
-class CouponDetail extends PureComponent {
+class CouponCreate extends PureComponent {
     constructor(props) {
         super(props);
         this.param = {
             condition: 0,
             area: 0,
             category: 0,
-            store: 0
+            store: 0,
+            channel: 0,
         };
         this.state = {
             areaSelectorVisible: false,
             categorySelectorVisible: false,
-            storeSelectorVisible: false,
+            formSelectorVisible: false,
+            storeSelectorVisible: true,
             companies: [],  // 所选区域子公司
             categoryObj: {} // 所选品类对象
         }
@@ -56,6 +59,7 @@ class CouponDetail extends PureComponent {
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this.handleCategorySelect = this.handleCategorySelect.bind(this);
         this.handleStoreChange = this.handleStoreChange.bind(this);
+        this.handleFormChange = this.handleFormChange.bind(this);
     }
 
     getFormData(callback) {
@@ -73,7 +77,7 @@ class CouponDetail extends PureComponent {
                 category,
                 quanifyAmount,
                 note,
-                storeIds
+                storeIds,
         } = values;
             const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
             const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
@@ -201,13 +205,31 @@ class CouponDetail extends PureComponent {
         this.props.form.setFieldsValue({
             store: nextStore
         });
+        this.param.store = e.target.value;
         if (nextStore === 0) {
             this.setState({
-                storeSelectorVisible: false
+                storeSelectorVisible: true
             });
         } else {
             this.setState({
-                storeSelectorVisible: true
+                storeSelectorVisible: false
+            });
+        }
+    }
+
+    handleFormChange(e) {
+        const nextChannel = e.target.value;
+        this.props.form.setFieldsValue({
+            channel: nextChannel
+        });
+        this.param.channel = e.target.value;
+        if (nextChannel === 0) {
+            this.setState({
+                formSelectorVisible: true
+            });
+        } else {
+            this.setState({
+                formSelectorVisible: false
             });
         }
     }
@@ -264,11 +286,11 @@ class CouponDetail extends PureComponent {
                             <div className="add-message-body">
                                 <Row>
                                     <Col span={16}>
-                                        <FormItem label="活动名称" >
+                                        <FormItem label="优惠券名称" >
                                             {getFieldDecorator('promotionName', {
                                                 rules: [
-                                                    { required: true, message: '请输入促销活动名称!' },
-                                                    { max: 30, message: '活动名称最长30位' }
+                                                    { required: true, message: '请输入优惠券名称!' },
+                                                    { max: 15, message: '活动名称最长15位' }
                                                 ]
                                             })(<Input size="default" />)}
                                         </FormItem>
@@ -276,18 +298,20 @@ class CouponDetail extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={16}>
-                                        <FormItem label="折扣比例" >
+                                        <FormItem label="面额" >
                                             {getFieldDecorator('discount', {
                                                 rules: [
-                                                    { required: true, message: '请输入折扣比例!' }
+                                                    { required: true, message: '请输入面额!' }
                                                 ]
                                             })(
                                                 <InputNumber
                                                     size="default"
                                                     min={1}
-                                                    max={100}
-                                                    formatter={value => `${value}%`}
+                                                    max={999}
+                                                    maxlength={99999}
+                                                    formatter={value => `${value}`}
                                                 />)}
+                                            <span>元</span>
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -301,7 +325,8 @@ class CouponDetail extends PureComponent {
                                                 <RangePicker
                                                     style={{ width: '240px' }}
                                                     className="manage-form-enterTime"
-                                                    format={TIME_FORMAT}
+                                                    showTime={{ format: MINUTE_FORMAT }}
+                                                    format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
                                                     placeholder={['开始时间', '结束时间']}
                                                 />
                                                 )}
@@ -325,11 +350,12 @@ class CouponDetail extends PureComponent {
                                             {this.param.condition > 0 ?
                                                 getFieldDecorator('quanifyAmount', {
                                                     initialValue: 0,
-                                                    rules: [{ required: true, message: '请填写条件金额' }]
+                                                    rules: [{ required: true, message: '“请输入面额”' }]
                                                 })(
                                                     <InputNumber
-                                                        min={0}
-                                                        max={65535}
+                                                        min={1}
+                                                        max={99999}
+                                                        maxlength={99999}
                                                         formatter={value => `${value} 元可用`}
                                                         onChange={this.handleQuanifyAmountChange}
                                                     />)
@@ -381,50 +407,95 @@ class CouponDetail extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={16}>
-                                        <FormItem label="指定门店">
+                                        <FormItem label="发放数量" >
+                                            {getFieldDecorator('recordsPoList', {
+                                                rules: [
+                                                    { required: true, message: '请输入发放数量!' }
+                                                ]
+                                            })(
+                                                <InputNumber
+                                                    size="default"
+                                                    min={1}
+                                                    max={999999}
+                                                    formatter={value => `${value}`}
+                                                />)}
+                                            <span>张</span>
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span={16}>
+                                        <FormItem label="发放形式">
                                             {getFieldDecorator('store', {
-                                                initialValue: this.param.store,
-                                                rules: [{ required: true, message: '请指定门店' }]
+                                                initialValue: this.param.store
                                             })(
                                                 <RadioGroup onChange={this.handleStoreChange}>
-                                                    <Radio className="default" value={0}>不指定</Radio>
-                                                    <Radio value={1}>指定门店</Radio>
+                                                    <Radio className="default" value={0}>
+                                                        用户领取
+                                                    </Radio>
+                                                    <Radio value={1}>平台发放</Radio>
                                                 </RadioGroup>
                                                 )}
                                         </FormItem>
                                     </Col>
                                 </Row>
-                                {this.state.storeSelectorVisible ?
-                                    <Row className="store">
-                                        <Col span={16}>
-                                            <FormItem label="">
-                                                {getFieldDecorator('storeIds', {
-                                                    initialValue: '',
-                                                    rules: [{ required: true, message: '请输入指定门店' }]
-                                                })(
-                                                    <TextArea placeholder="请输入指定门店" autosize={{ minRows: 4, maxRows: 6 }} />
+                                <Row>
+                                    {this.state.storeSelectorVisible ?
+                                        <Row className="store">
+                                            <Col className="mrkl">
+                                                <FormItem label="每人可领" >
+                                                    {getFieldDecorator('meirenkl', {
+                                                        rules: [
+                                                            { required: true,
+                                                                message: '请输入每人可领数量!'
+                                                            }
+                                                        ]
+                                                    })(
+                                                        <InputNumber
+                                                            style={{width: 150}}
+                                                            size="default"
+                                                            min={1}
+                                                            max={99}
+                                                            formatter={value => `${value}`}
+                                                        />
                                                     )}
-                                            </FormItem>
-                                        </Col>
-                                    </Row>
-                                    : null
-                                }
-                                {this.state.storeSelectorVisible ?
-                                    <Row className="red">
-                                        <Col span={16}>
-                                            *请按照数据模板的格式准备导入数据如：A000999, A000900, A000991
-                                        </Col>
-                                    </Row>
-                                    : null
-                                }
+                                                    <span>张</span>
+                                                </FormItem>
+                                            </Col>
+                                        </Row>
+                                        : null
+                                    }
+                                </Row>
+                                <Row>
+                                    <Col span={16}>
+                                        <FormItem label="活动叠加">
+                                            {getFieldDecorator('channel', {
+                                                initialValue: this.param.channel
+                                            })(
+                                                <RadioGroup onChange={this.handleFormChange}>
+                                                    <Radio className="default" value={0}>
+                                                        用户领取
+                                                    </Radio>
+                                                    <Radio value={1}>平台发放</Radio>
+                                                </RadioGroup>
+                                                )}
+                                        </FormItem>
+                                    </Col>
+                                </Row>
                                 <Row>
                                     <Col span={16}>
                                         <FormItem label="备注">
                                             {getFieldDecorator('note', {
                                                 initialValue: this.param.note
                                             })(
-                                                <TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />
-                                                )}
+                                                <TextArea
+                                                    placeholder="可填写备注"
+                                                    autosize={{
+                                                        minRows: 4,
+                                                        maxRows: 6
+                                                    }}
+                                                />
+                                            )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -432,7 +503,7 @@ class CouponDetail extends PureComponent {
                                     <Col>
                                         <FormItem>
                                             <Button type="primary" size="default" onClick={this.handleSubmit}>
-                                                提交
+                                                保存
                                             </Button>
                                         </FormItem>
                                     </Col>
@@ -453,10 +524,10 @@ class CouponDetail extends PureComponent {
     }
 }
 
-CouponDetail.propTypes = {
+CouponCreate.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     createPromotion: PropTypes.func,
     history: PropTypes.objectOf(PropTypes.any)
 }
 
-export default withRouter(Form.create()(CouponDetail));
+export default withRouter(Form.create()(CouponCreate));
