@@ -4,6 +4,7 @@
  *
  * 促销活动列表
  */
+import React from 'react';
 import { promotionStatus } from './constants';
 import Util from '../../util/util';
 
@@ -30,8 +31,7 @@ const managementList = [{
         }
         return category.categoryName
     }
-},
-{
+}, {
     title: '范围',
     dataIndex: 'companiesPoList',
     key: 'companiesPoList',
@@ -39,7 +39,10 @@ const managementList = [{
         if (!list || list.length === 0) {
             return '全部区域';
         }
-        return '所选区域';
+        const areas = list.map(company => company.companyName);
+        return (
+            <span title={areas} alt={areas}>所选区域</span>
+        );
     }
 }, {
     title: '活动时间',
