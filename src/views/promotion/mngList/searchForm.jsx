@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 import Utils from '../../../util/util';
-import { TIME_FORMAT } from '../../../constant';
+import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { promotionStatus } from '../constants';
 import { SubCompanies } from '../../../container/search';
 
@@ -130,7 +130,8 @@ class SearchForm extends PureComponent {
                                             <RangePicker
                                                 style={{ width: '240px' }}
                                                 className="manage-form-enterTime"
-                                                format={TIME_FORMAT}
+                                                showTime={{ format: MINUTE_FORMAT }}
+                                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
                                                 placeholder={['开始时间', '结束时间']}
                                             />
                                             )}
