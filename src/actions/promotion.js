@@ -117,6 +117,25 @@ export const createPromotion = (params) => dispatch => (
     })
 );
 
+// 优惠券
+const createCouponsAction = (data) => ({
+    type: ActionType.CREATE_COUPONS,
+    payload: data
+});
+
+export const createCoupons = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        createCouponsAction(params)
+            .then(res => {
+                dispatch(
+                    createCouponsAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
 const fetchPromotionDetailAction = (data) => ({
     type: ActionType.FETCH_PROMOTION_DETAIL,
     payload: data

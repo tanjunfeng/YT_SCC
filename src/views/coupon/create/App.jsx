@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-21 10:28:02
+ * @Last Modified time: 2017-09-21 16:16:50
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -15,7 +15,7 @@ import {
     Button, DatePicker, Radio, message
 } from 'antd';
 import Utils from '../../../util/util';
-import { createPromotion } from '../../../actions/promotion';
+import { createCouponsAction } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { AreaSelector } from '../../../container/tree';
 import Category from '../../../container/cascader';
@@ -27,7 +27,7 @@ const { TextArea } = Input;
 
 @connect(() => ({
 }), dispatch => bindActionCreators({
-    createPromotion
+    createCouponsAction
 }, dispatch))
 
 class CouponCreate extends PureComponent {
@@ -256,7 +256,7 @@ class CouponCreate extends PureComponent {
     handleSubmit() {
         this.getFormData((response) => {
             if (!response) return;
-            this.props.createPromotion(response).then((res) => {
+            this.props.createCouponsAction(response).then((res) => {
                 if (res.code === 200 && res.message === '请求成功') {
                     message.info('新增促销活动成功，请到列表页发布');
                     this.props.history.goBack();
@@ -366,7 +366,7 @@ class CouponCreate extends PureComponent {
                                 <Row>
                                     <Col span={16}>
                                         <FormItem label="使用区域">
-                                            {getFieldDecorator('area', {
+                                            {getFieldDecorator('companiesPoList', {
                                                 initialValue: this.param.area,
                                                 rules: [{ required: true, message: '请选择使用区域' }]
                                             })(
@@ -389,7 +389,7 @@ class CouponCreate extends PureComponent {
                                 <Row>
                                     <Col span={16}>
                                         <FormItem className="category" label="使用品类">
-                                            {getFieldDecorator('category', {
+                                            {getFieldDecorator('promoCategoriesPo', {
                                                 initialValue: this.param.category,
                                                 rules: [{ required: true, message: '请选择使用品类' }]
                                             })(
@@ -408,7 +408,7 @@ class CouponCreate extends PureComponent {
                                 <Row>
                                     <Col span={16}>
                                         <FormItem label="发放数量" >
-                                            {getFieldDecorator('recordsPoList', {
+                                            {getFieldDecorator('totalQuantity', {
                                                 rules: [
                                                     { required: true, message: '请输入发放数量!' }
                                                 ]
@@ -426,14 +426,14 @@ class CouponCreate extends PureComponent {
                                 <Row>
                                     <Col span={16}>
                                         <FormItem label="发放形式">
-                                            {getFieldDecorator('store', {
+                                            {getFieldDecorator('grantChannel', {
                                                 initialValue: this.param.store
                                             })(
                                                 <RadioGroup onChange={this.handleStoreChange}>
-                                                    <Radio className="default" value={0}>
+                                                    <Radio className="default" value={'personal'}>
                                                         用户领取
                                                     </Radio>
-                                                    <Radio value={1}>平台发放</Radio>
+                                                    <Radio value={'platform'}>平台发放</Radio>
                                                 </RadioGroup>
                                                 )}
                                         </FormItem>
@@ -444,7 +444,7 @@ class CouponCreate extends PureComponent {
                                         <Row className="store">
                                             <Col className="mrkl">
                                                 <FormItem label="每人可领" >
-                                                    {getFieldDecorator('meirenkl', {
+                                                    {getFieldDecorator('personQty', {
                                                         rules: [
                                                             { required: true,
                                                                 message: '请输入每人可领数量!'
@@ -526,7 +526,7 @@ class CouponCreate extends PureComponent {
 
 CouponCreate.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    createPromotion: PropTypes.func,
+    createCouponsAction: PropTypes.func,
     history: PropTypes.objectOf(PropTypes.any)
 }
 
