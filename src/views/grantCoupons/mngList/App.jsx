@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-21 14:46:51
+ * @Last Modified time: 2017-09-21 15:34:36
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -110,10 +110,12 @@ class GrantCouponList extends PureComponent {
     }
 
     query(condition) {
+        const choose = [];
+        choose.push(this.state.choose);
         const param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
-            selectedRowKeys: this.state.choose,
+            choose,
             ...condition
         }
         this.props.getPromotionList(param).then((data) => {
