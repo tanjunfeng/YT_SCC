@@ -7,7 +7,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
-import Utils from '../../../util/util';
+import Util from '../../../util/util';
 import { SubCompanies } from '../../../container/search';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { participate } from '../constants';
@@ -58,7 +58,7 @@ class SearchForm extends PureComponent {
             shippingStateCode,
             franchiseeStoreId
         } = this.props.form.getFieldsValue();
-        return Utils.removeInvalid({
+        return Util.removeInvalid({
             orderId,
             promotionName,
             orderState: this.getStatusFromCode(orderStateCode),
@@ -93,8 +93,7 @@ class SearchForm extends PureComponent {
 
     handleSubmit(e) {
         e.preventDefault();
-        const conditions = this.getSearchCondition();
-        this.props.onParticipateSearch(conditions);
+        this.props.onParticipateSearch(this.getSearchCondition());
     }
 
     handleReset() {
@@ -104,8 +103,7 @@ class SearchForm extends PureComponent {
     }
 
     handleExport() {
-        const { pathname } = this.props.location;
-        this.props.history.push(`${pathname}/create`);
+        this.props.onParticipateExport(this.getSearchCondition());   // 通知父组件导出数据
     }
 
     render() {
@@ -219,9 +217,8 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     onParticipateSearch: PropTypes.func,
     onParticipateReset: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any),
-    history: PropTypes.objectOf(PropTypes.any),
-    location: PropTypes.objectOf(PropTypes.any)
+    onParticipateExport: PropTypes.func,
+    form: PropTypes.objectOf(PropTypes.any)
 };
 
 SearchForm.defaultProps = {

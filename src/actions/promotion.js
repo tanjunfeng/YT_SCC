@@ -5,7 +5,6 @@
  * 促销活动action
  */
 import ActionType from './ActionType';
-
 import {
     fetchPromotionList as promotionListService,
     fetchParticipateData as participateDataService,
