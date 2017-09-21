@@ -33,6 +33,7 @@ class PromotionParticipate extends PureComponent {
             pageNum: 1,
             pageSize: PAGE_SIZE
         };
+        this.promoId = this.props.match.params.id;
         this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
         this.handleParticipateReset = this.handleParticipateReset.bind(this);
         this.onPaginate = this.onPaginate.bind(this);
@@ -40,8 +41,7 @@ class PromotionParticipate extends PureComponent {
     }
 
     componentDidMount() {
-        const { id } = this.props.match.params;
-        this.query({ promoId: id });
+        this.query();
     }
 
     componentWillUnmount() {
@@ -59,6 +59,7 @@ class PromotionParticipate extends PureComponent {
         const param = {
             page: this.state.pageNum,
             pageSize: this.state.pageSize,
+            promoId: this.promoId,
             ...condition
         };
         this.props.getParticipate(param).then((data) => {
@@ -89,7 +90,7 @@ class PromotionParticipate extends PureComponent {
                     onParticipateSearch={this.handleParticipateSearch}
                     onParticipateReset={this.handleParticipateReset}
                 />
-                <h4>{promotionName}</h4>
+                <h2>活动ID：{this.props.match.params.id}    活动名称：{promotionName}</h2>
                 <Table
                     dataSource={data}
                     columns={columns}
