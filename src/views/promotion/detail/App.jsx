@@ -14,6 +14,7 @@ import { clearPromotionDetail, getPromotionDetail } from '../../../actions/promo
 import { detail as columns } from '../columns';
 
 const FormItem = Form.Item;
+
 @connect((state) => ({
     promotion: state.toJS().promotion.promotion
 }), dispatch => bindActionCreators({

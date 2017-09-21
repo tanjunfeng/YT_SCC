@@ -1,0 +1,102 @@
+{
+    "timestamp": 1504923583487,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "promotionName": "915开仓贺礼",
+        "participateDataDtoPageResult": {
+            "pageNum": 1,
+            "pageSize": 5,
+            "total": 8,
+            "data": [
+                {
+                    "orderId": "100001708087877",
+                    "submitTime": 1503293880000,
+                    "stateDetail": "已取消",
+                    "orderStateDesc": "已取消",
+                    "paymentStateDesc": "取消付款",
+                    "shippingStateDesc": "取消送货",
+                    "total": 4000,
+                    "discount": 1000,
+                    "franchiseeStoreId": "Z000999",
+                    "storeName": null,
+                    "branchCompanyName": "成都子公司",
+                    "branchCompanyId": "10000",
+                    "orderState": "Q",
+                    "paymentState": "QXFK",
+                    "shippingState": "QX"
+                },
+                {
+                    "orderId": "100001708088030",
+                    "submitTime": 1502188597000,
+                    "stateDetail": "退款中",
+                    "orderStateDesc": "已取消",
+                    "paymentStateDesc": "已支付",
+                    "shippingStateDesc": "未传送",
+                    "total": 605,
+                    "discount": 100,
+                    "franchiseeStoreId": "A900003",
+                    "storeName": null,
+                    "branchCompanyName": "成都子公司",
+                    "branchCompanyId": "10000",
+                    "orderState": "Q",
+                    "paymentState": "YZF",
+                    "shippingState": "WCS"
+                },
+                {
+                    "orderId": "100001708088014",
+                    "submitTime": 1502185961000,
+                    "stateDetail": "已取消",
+                    "orderStateDesc": "已取消",
+                    "paymentStateDesc": "取消付款",
+                    "shippingStateDesc": "取消送货",
+                    "total": 605,
+                    "discount": 200,
+                    "franchiseeStoreId": "A900003",
+                    "storeName": null,
+                    "branchCompanyName": "成都子公司",
+                    "branchCompanyId": "10000",
+                    "orderState": "Q",
+                    "paymentState": "QXFK",
+                    "shippingState": "QX"
+                },
+                {
+                    "orderId": "100001708087998",
+                    "submitTime": 1502184806000,
+                    "stateDetail": "已取消",
+                    "orderStateDesc": "已取消",
+                    "paymentStateDesc": "取消付款",
+                    "shippingStateDesc": "取消送货",
+                    "total": 605,
+                    "discount": 1000,
+                    "franchiseeStoreId": "A900003",
+                    "storeName": null,
+                    "branchCompanyName": "成都子公司",
+                    "branchCompanyId": "10000",
+                    "orderState": "Q",
+                    "paymentState": "QXFK",
+                    "shippingState": "QX"
+                },
+                {
+                    "orderId": "100001708087983",
+                    "submitTime": 1502184638000,
+                    "stateDetail": "已取消",
+                    "orderStateDesc": "已取消",
+                    "paymentStateDesc": "取消付款",
+                    "shippingStateDesc": "取消送货",
+                    "total": 605,
+                    "discount": 500,
+                    "franchiseeStoreId": "A900003",
+                    "storeName": null,
+                    "branchCompanyName": "成都子公司",
+                    "branchCompanyId": "10000",
+                    "orderState": "Q",
+                    "paymentState": "QXFK",
+                    "shippingState": "QX"
+                }
+            ]
+        }
+    },
+    "success": true
+}
