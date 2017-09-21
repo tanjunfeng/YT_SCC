@@ -126,7 +126,7 @@ class SearchForm extends PureComponent {
                                             rules: [{ required: true, message: '请选择活动时间' }]
                                         })(
                                             <RangePicker
-                                                style={{ width: '240px' }}
+                                                size="default"
                                                 className="manage-form-enterTime"
                                                 showTime={{ format: MINUTE_FORMAT }}
                                                 format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
