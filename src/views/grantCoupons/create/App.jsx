@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-21 10:28:02
+ * @Last Modified time: 2017-09-20 18:38:58
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import Utils from '../../../util/util';
 import { createPromotion } from '../../../actions/promotion';
-import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
+import { TIME_FORMAT } from '../../../constant';
 import { AreaSelector } from '../../../container/tree';
 import Category from '../../../container/cascader';
 
@@ -30,7 +30,7 @@ const { TextArea } = Input;
     createPromotion
 }, dispatch))
 
-class CouponCreate extends PureComponent {
+class GrantCouponCreact extends PureComponent {
     constructor(props) {
         super(props);
         this.param = {
@@ -325,8 +325,7 @@ class CouponCreate extends PureComponent {
                                                 <RangePicker
                                                     style={{ width: '240px' }}
                                                     className="manage-form-enterTime"
-                                                    showTime={{ format: MINUTE_FORMAT }}
-                                                    format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
+                                                    format={TIME_FORMAT}
                                                     placeholder={['开始时间', '结束时间']}
                                                 />
                                                 )}
@@ -524,10 +523,10 @@ class CouponCreate extends PureComponent {
     }
 }
 
-CouponCreate.propTypes = {
+GrantCouponCreact.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     createPromotion: PropTypes.func,
     history: PropTypes.objectOf(PropTypes.any)
 }
 
-export default withRouter(Form.create()(CouponCreate));
+export default withRouter(Form.create()(GrantCouponCreact));

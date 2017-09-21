@@ -83,6 +83,11 @@ import CouponList from 'bundle-loader?lazy!../views/coupon/mngList';
 import CouponCreate from 'bundle-loader?lazy!../views/coupon/create';
 import CouponDetail from 'bundle-loader?lazy!../views/coupon/detail';
 
+// 发放优惠券
+import GrantCouponCreact from 'bundle-loader?lazy!../views/coupon/mngList';
+import grantCouponCreate from 'bundle-loader?lazy!../views/coupon/create';
+import grantCouponDetail from 'bundle-loader?lazy!../views/coupon/detail';
+
 /* eslint-enable */
 
 
@@ -679,6 +684,40 @@ const routes = [
                         />
                         <Route
                             path="/coupon/participate/:id"
+                            exact
+                            render={() => (<Bundle load={CouponDetail}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                    </Switch>
+                )
+            },
+            {
+                // 优惠券
+                path: '/grantCoupons',
+                parent: 'cxgl',
+                key: 'ffyhq',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/grantCoupons"
+                            exact
+                            render={() => (<Bundle load={CouponList}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                        <Route
+                            path="/grantCoupons/create"
+                            exact
+                            render={() => (<Bundle load={CouponCreate}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                        <Route
+                            path="/grantCoupons/detail/:id"
+                            exact
+                            render={() => (<Bundle load={CouponDetail}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                        <Route
+                            path="/grantCoupons/participate/:id"
                             exact
                             render={() => (<Bundle load={CouponDetail}>
                                 {(App) => <App />}</Bundle>)}
