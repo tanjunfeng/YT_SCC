@@ -7,10 +7,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
-import Utils from '../../../util/util';
+import Util from '../../../util/util';
 import { SubCompanies } from '../../../container/search';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
-import { promotionStatus } from '../constants';
+import { participate } from '../constants';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -32,17 +32,17 @@ class SearchForm extends PureComponent {
         this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
     }
 
-    getStatus() {
-        const keys = Object.keys(promotionStatus);
+    getStatus(stateName) {
+        const keys = Object.keys(participate[stateName]);
         return keys.map((key) => (
             <Option key={key} value={key}>
-                {promotionStatus[key]}
+                {participate[stateName][key]}
             </Option>
         ));
     }
 
     getStatusFromCode(statusCode) {
-        if (statusCode === 'all') {
+        if (statusCode === 'ALL') {
             return '';
         }
         return statusCode;
@@ -58,7 +58,7 @@ class SearchForm extends PureComponent {
             shippingStateCode,
             franchiseeStoreId
         } = this.props.form.getFieldsValue();
-        return Utils.removeInvalid({
+        return Util.removeInvalid({
             orderId,
             promotionName,
             orderState: this.getStatusFromCode(orderStateCode),
@@ -93,8 +93,7 @@ class SearchForm extends PureComponent {
 
     handleSubmit(e) {
         e.preventDefault();
-        const conditions = this.getSearchCondition();
-        this.props.onParticipateSearch(conditions);
+        this.props.onParticipateSearch(this.getSearchCondition());
     }
 
     handleReset() {
@@ -104,8 +103,7 @@ class SearchForm extends PureComponent {
     }
 
     handleExport() {
-        const { pathname } = this.props.location;
-        this.props.history.push(`${pathname}/create`);
+        this.props.onParticipateExport(this.getSearchCondition());   // 通知父组件导出数据
     }
 
     render() {
@@ -123,10 +121,10 @@ class SearchForm extends PureComponent {
                             <Col span={8}>
                                 <FormItem label="订单状态">
                                     {getFieldDecorator('orderStateCode', {
-                                        initialValue: 'all'
+                                        initialValue: 'ALL'
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
+                                            {this.getStatus('orderState')}
                                         </Select>
                                         )}
                                 </FormItem>
@@ -134,10 +132,10 @@ class SearchForm extends PureComponent {
                             <Col span={8}>
                                 <FormItem label="支付状态">
                                     {getFieldDecorator('paymentStateCode', {
-                                        initialValue: 'all'
+                                        initialValue: 'ALL'
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
+                                            {this.getStatus('paymentState')}
                                         </Select>
                                         )}
                                 </FormItem>
@@ -147,10 +145,10 @@ class SearchForm extends PureComponent {
                             <Col span={8}>
                                 <FormItem label="物流状态">
                                     {getFieldDecorator('shippingStateCode', {
-                                        initialValue: 'all'
+                                        initialValue: 'ALL'
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
+                                            {this.getStatus('shippingState')}
                                         </Select>
                                         )}
                                 </FormItem>
@@ -180,7 +178,7 @@ class SearchForm extends PureComponent {
                                         initialValue: []
                                     })(
                                         <RangePicker
-                                            style={{ width: '240px' }}
+                                            size="default"
                                             className="manage-form-enterTime"
                                             showTime={{ format: MINUTE_FORMAT }}
                                             format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
@@ -219,9 +217,8 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     onParticipateSearch: PropTypes.func,
     onParticipateReset: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any),
-    history: PropTypes.objectOf(PropTypes.any),
-    location: PropTypes.objectOf(PropTypes.any)
+    onParticipateExport: PropTypes.func,
+    form: PropTypes.objectOf(PropTypes.any)
 };
 
 SearchForm.defaultProps = {
