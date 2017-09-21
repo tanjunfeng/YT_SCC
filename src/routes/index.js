@@ -84,9 +84,8 @@ import CouponCreate from 'bundle-loader?lazy!../views/coupon/create';
 import CouponDetail from 'bundle-loader?lazy!../views/coupon/detail';
 
 // 发放优惠券
-import GrantCouponCreact from 'bundle-loader?lazy!../views/coupon/mngList';
-import grantCouponCreate from 'bundle-loader?lazy!../views/coupon/create';
-import grantCouponDetail from 'bundle-loader?lazy!../views/coupon/detail';
+import GrantCouponList from 'bundle-loader?lazy!../views/grantCoupons/mngList';
+import grantCouponDetail from 'bundle-loader?lazy!../views/grantCoupons/detail';
 
 /* eslint-enable */
 
@@ -701,25 +700,19 @@ const routes = [
                         <Route
                             path="/grantCoupons"
                             exact
-                            render={() => (<Bundle load={CouponList}>
-                                {(App) => <App />}</Bundle>)}
-                        />
-                        <Route
-                            path="/grantCoupons/create"
-                            exact
-                            render={() => (<Bundle load={CouponCreate}>
+                            render={() => (<Bundle load={GrantCouponList}>
                                 {(App) => <App />}</Bundle>)}
                         />
                         <Route
                             path="/grantCoupons/detail/:id"
                             exact
-                            render={() => (<Bundle load={CouponDetail}>
+                            render={() => (<Bundle load={grantCouponDetail}>
                                 {(App) => <App />}</Bundle>)}
                         />
                         <Route
                             path="/grantCoupons/participate/:id"
                             exact
-                            render={() => (<Bundle load={CouponDetail}>
+                            render={() => (<Bundle load={grantCouponDetail}>
                                 {(App) => <App />}</Bundle>)}
                         />
                     </Switch>

@@ -3,7 +3,7 @@
  * @Description: 优惠券列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-20 14:20:12
+ * @Last Modified time: 2017-09-21 10:56:54
  */
 /**
  * @file columns.js

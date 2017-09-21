@@ -3,16 +3,14 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-20 14:16:35
+ * @Last Modified time: 2017-09-21 14:46:51
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Icon, Menu, Dropdown } from 'antd';
-import { Link } from 'react-router-dom';
-
+import { Table, Form } from 'antd';
 import {
     getPromotionList,
     clearPromotionList,
@@ -20,7 +18,44 @@ import {
 } from '../../../actions/promotion';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { GrantCouponList as columns } from '../columns';
+
+// 发放优惠券列表
+const columns = [{
+    title: '加盟商编号',
+    dataIndex: 'franchiseeId',
+    key: 'franchiseeId',
+    render: note => note || '无'
+}, {
+    title: '加盟商名称',
+    dataIndex: 'franchinessController',
+    key: 'franchinessController',
+    render: note => note || '无'
+}, {
+    title: '门店编号',
+    dataIndex: 'storeId',
+    key: 'storeId',
+    render: note => note || '无'
+}, {
+    title: '门店名称',
+    dataIndex: 'storeName',
+    key: 'storeName',
+    render: note => note || '无'
+}, {
+    title: '加盟商姓名',
+    dataIndex: 'proName',
+    key: 'proName',
+    render: note => note || '无'
+}, {
+    title: '联系电话',
+    dataIndex: 'phone',
+    key: 'phone',
+    render: note => note || '无'
+}, {
+    title: '所属子公司',
+    dataIndex: 'branchCompanyId',
+    key: 'branchCompanyId',
+    render: note => note || '无'
+}];
 
 @connect(state => ({
     promotionList: state.toJS().promotion.list
@@ -35,12 +70,12 @@ class GrantCouponList extends PureComponent {
         super(props);
         this.state = {
             pageNum: 1,
-            pageSize: PAGE_SIZE
+            pageSize: PAGE_SIZE,
+            choose: [],
         };
+        this.selectedRowKeys = [];
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
-        this.handleSelect = this.handleSelect.bind(this);
-        this.renderOperations = this.renderOperations.bind(this);
         this.query = this.query.bind(this);
     }
 
@@ -63,10 +98,22 @@ class GrantCouponList extends PureComponent {
         this.query({ pageNum });
     }
 
+    /**
+     * table复选框
+     */
+    rowSelection = {
+        onChange: (selectedRowKeys) => {
+            this.setState({
+                choose: selectedRowKeys,
+            });
+        }
+    }
+
     query(condition) {
         const param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
+            selectedRowKeys: this.state.choose,
             ...condition
         }
         this.props.getPromotionList(param).then((data) => {
@@ -87,90 +134,6 @@ class GrantCouponList extends PureComponent {
         });
     }
 
-    /**
-     * 促销活动表单操作
-    *
-    * @param {Object} record 传值所有数据对象
-    * @param {number} index 下标
-    * @param {Object} items 方法属性
-    */
-    handleSelect(record, index, items) {
-        const { key } = items;
-        const id = record.id;
-        switch (key) {
-            case 'publish': // 发布
-                this.props.updatePromotionStatus({
-                    id,
-                    status: 'released'
-                }).then(() => {
-                    this.query();
-                });
-                break;
-            case 'close':   // 关闭
-                this.props.updatePromotionStatus({
-                    id,
-                    status: 'closed'
-                }).then(() => {
-                    this.query();
-                });
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * 列表页操作下拉菜单
-     *
-     * @param {string} text 文本内容
-     * @param {Object} record 模态框状态
-     * @param {string} index 下标
-     *
-     * return 列表页操作下拉菜单
-     */
-    renderOperations = (text, record, index) => {
-        const { id, status } = record;
-        const { pathname } = this.props.location;
-        const menu = (
-            <Menu onClick={(item) => this.handleSelect(record, index, item)}>
-                <Menu.Item key="detail">
-                    <Link to={`${pathname}/detail/${id}`}>活动详情</Link>
-                </Menu.Item>
-                {
-                    // 未发布的可发布
-                    (status === 'unreleased') ?
-                        <Menu.Item key="publish">
-                            <a target="_blank" rel="noopener noreferrer">
-                                发布
-                        </a>
-                        </Menu.Item>
-                        : null
-                }
-                {
-                    // 未发布的可发布，未发布和已发布的可结束
-                    (status === 'unreleased' || status === 'released') ?
-                        <Menu.Item key="close">
-                            <a target="_blank" rel="noopener noreferrer">
-                                关闭
-                        </a>
-                        </Menu.Item>
-                        : null
-                }
-            </Menu>
-        );
-
-        return (
-            <Dropdown
-                overlay={menu}
-                placement="bottomCenter"
-            >
-                <a className="ant-dropdown-link">
-                    表单操作 <Icon type="down" />
-                </a>
-            </Dropdown>
-        )
-    }
-
     render() {
         const { data, total } = this.props.promotionList;
         const { pageNum, pageSize } = this.state;
@@ -182,9 +145,10 @@ class GrantCouponList extends PureComponent {
                     onPromotionReset={this.handlePromotionReset}
                 />
                 <Table
+                    rowSelection={this.rowSelection}
                     dataSource={data}
                     columns={columns}
-                    rowKey="id"
+                    rowKey="franchiseeId"
                     scroll={{
                         x: 1400
                     }}
@@ -205,9 +169,7 @@ class GrantCouponList extends PureComponent {
 GrantCouponList.propTypes = {
     getPromotionList: PropTypes.func,
     clearPromotionList: PropTypes.func,
-    updatePromotionStatus: PropTypes.func,
     promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
-    location: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(GrantCouponList));
