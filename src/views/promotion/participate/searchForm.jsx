@@ -10,7 +10,7 @@ import { withRouter } from 'react-router';
 import Utils from '../../../util/util';
 import { SubCompanies } from '../../../container/search';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
-import { promotionStatus } from '../constants';
+import { participate } from '../constants';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -32,17 +32,17 @@ class SearchForm extends PureComponent {
         this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
     }
 
-    getStatus() {
-        const keys = Object.keys(promotionStatus);
+    getStatus(stateName) {
+        const keys = Object.keys(participate[stateName]);
         return keys.map((key) => (
             <Option key={key} value={key}>
-                {promotionStatus[key]}
+                {participate[stateName][key]}
             </Option>
         ));
     }
 
     getStatusFromCode(statusCode) {
-        if (statusCode === 'all') {
+        if (statusCode === 'ALL') {
             return '';
         }
         return statusCode;
@@ -123,10 +123,10 @@ class SearchForm extends PureComponent {
                             <Col span={8}>
                                 <FormItem label="订单状态">
                                     {getFieldDecorator('orderStateCode', {
-                                        initialValue: 'all'
+                                        initialValue: 'ALL'
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
+                                            {this.getStatus('orderState')}
                                         </Select>
                                         )}
                                 </FormItem>
@@ -134,10 +134,10 @@ class SearchForm extends PureComponent {
                             <Col span={8}>
                                 <FormItem label="支付状态">
                                     {getFieldDecorator('paymentStateCode', {
-                                        initialValue: 'all'
+                                        initialValue: 'ALL'
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
+                                            {this.getStatus('paymentState')}
                                         </Select>
                                         )}
                                 </FormItem>
@@ -147,10 +147,10 @@ class SearchForm extends PureComponent {
                             <Col span={8}>
                                 <FormItem label="物流状态">
                                     {getFieldDecorator('shippingStateCode', {
-                                        initialValue: 'all'
+                                        initialValue: 'ALL'
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
+                                            {this.getStatus('shippingState')}
                                         </Select>
                                         )}
                                 </FormItem>
@@ -180,7 +180,7 @@ class SearchForm extends PureComponent {
                                         initialValue: []
                                     })(
                                         <RangePicker
-                                            style={{ width: '240px' }}
+                                            size="default"
                                             className="manage-form-enterTime"
                                             showTime={{ format: MINUTE_FORMAT }}
                                             format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}

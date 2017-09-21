@@ -47,8 +47,6 @@ class SearchForm extends PureComponent {
             promotionDateRange,
             statusCode
         } = this.props.form.getFieldsValue();
-        const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
-        const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
         const branchCompanyId = this.state.branchCompanyId;
         let status = statusCode;
         if (statusCode === 'all') {
@@ -58,8 +56,8 @@ class SearchForm extends PureComponent {
             id,
             promotionName,
             status,
-            startDate,
-            endDate,
+            startDate: promotionDateRange.length > 1 ? promotionDateRange[0].valueOf() : '',
+            endDate: promotionDateRange.length > 1 ? promotionDateRange[1].valueOf() : '',
             branchCompanyId
         });
     }
@@ -124,11 +122,11 @@ class SearchForm extends PureComponent {
                                     <div className="promotion-date-range">
                                         <span className="sc-form-item-label search-mind-label">活动时间</span>
                                         {getFieldDecorator('promotionDateRange', {
-                                            initialValue: '',
+                                            initialValue: [],
                                             rules: [{ required: true, message: '请选择活动时间' }]
                                         })(
                                             <RangePicker
-                                                style={{ width: '240px' }}
+                                                size="default"
                                                 className="manage-form-enterTime"
                                                 showTime={{ format: MINUTE_FORMAT }}
                                                 format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
