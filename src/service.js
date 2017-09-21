@@ -81,6 +81,8 @@ export const exportStoreAdList = 'imAdjustment/exportListImAdjustment';
 // 实时库存查询 导出
 export const exportQueryStoreRealTime = 'inventory/excelInventoryBIRecords';
 
+// 促销活动 - 下单打折 - 参与数据导出
+export const exportParticipateData = 'promotion/toExcel';
 
 /**
  * 登录 Api

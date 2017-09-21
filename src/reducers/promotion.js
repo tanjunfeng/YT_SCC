@@ -9,8 +9,8 @@ import { fromJS } from 'immutable';
 import ActionType from '../actions/ActionType';
 
 const initState = fromJS({
-    list: [],    // 促销活动管理列表
-    participate: {}, // 促销活动参与数据列表
+    list: [],    // 管理列表
+    participate: {}, // 参与数据显示列表
     categories: [],  // 品类列表
     companies: [],   // 所选区域列表
     promotion: {}   // 促销详情
