@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-21 16:29:49
+ * @Last Modified time: 2017-09-21 17:28:40
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -68,15 +68,19 @@ class CouponCreate extends PureComponent {
                 message.error('请检查请求参数');
                 return callback(false);
             }
-            const { promotionName,
+            const {
+                promotionName,
                 discount,
                 promotionDateRange,
+                quanifyAmount,
                 condition,
+                totalQuantity,
+                grantChannel,
+                personQty,
+                note,
                 area,
                 store,
                 category,
-                quanifyAmount,
-                note,
                 storeIds,
         } = values;
             const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
@@ -92,7 +96,10 @@ class CouponCreate extends PureComponent {
                 discount,
                 startDate,
                 endDate,
-                note
+                note,
+                totalQuantity,
+                grantChannel,
+                personQty,
             };
             if (condition === 1) {
                 if (!quanifyAmount) {
@@ -255,15 +262,16 @@ class CouponCreate extends PureComponent {
 
     handleSubmit() {
         this.getFormData((response) => {
-            if (!response) return;
-            this.props.createCoupons(response).then((res) => {
-                if (res.code === 200 && res.message === '请求成功') {
-                    message.info('新增促销活动成功，请到列表页发布');
-                    this.props.history.goBack();
-                } else {
-                    message.error(res.message);
-                }
-            });
+            console.log(response)
+            // if (!response) return;
+            // this.props.createCoupons(response).then((res) => {
+            //     if (res.code === 200 && res.message === '请求成功') {
+            //         message.info('新增促销活动成功，请到列表页发布');
+            //         this.props.history.goBack();
+            //     } else {
+            //         message.error(res.message);
+            //     }
+            // });
         });
     }
 
@@ -430,10 +438,10 @@ class CouponCreate extends PureComponent {
                                                 initialValue: this.param.store
                                             })(
                                                 <RadioGroup onChange={this.handleStoreChange}>
-                                                    <Radio className="default" value={'personal'}>
+                                                    <Radio className="default" value={0}>
                                                         用户领取
                                                     </Radio>
-                                                    <Radio value={'platform'}>平台发放</Radio>
+                                                    <Radio value={1}>平台发放</Radio>
                                                 </RadioGroup>
                                                 )}
                                         </FormItem>

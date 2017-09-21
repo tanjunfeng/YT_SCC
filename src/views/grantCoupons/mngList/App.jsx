@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-21 15:34:36
+ * @Last Modified time: 2017-09-21 16:58:10
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -18,44 +18,7 @@ import {
 } from '../../../actions/promotion';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
-
-// 发放优惠券列表
-const columns = [{
-    title: '加盟商编号',
-    dataIndex: 'franchiseeId',
-    key: 'franchiseeId',
-    render: note => note || '无'
-}, {
-    title: '加盟商名称',
-    dataIndex: 'franchinessController',
-    key: 'franchinessController',
-    render: note => note || '无'
-}, {
-    title: '门店编号',
-    dataIndex: 'storeId',
-    key: 'storeId',
-    render: note => note || '无'
-}, {
-    title: '门店名称',
-    dataIndex: 'storeName',
-    key: 'storeName',
-    render: note => note || '无'
-}, {
-    title: '加盟商姓名',
-    dataIndex: 'proName',
-    key: 'proName',
-    render: note => note || '无'
-}, {
-    title: '联系电话',
-    dataIndex: 'phone',
-    key: 'phone',
-    render: note => note || '无'
-}, {
-    title: '所属子公司',
-    dataIndex: 'branchCompanyId',
-    key: 'branchCompanyId',
-    render: note => note || '无'
-}];
+import { grantCouponsColumns as columns } from '../columns';
 
 @connect(state => ({
     promotionList: state.toJS().promotion.list
