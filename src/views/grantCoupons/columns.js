@@ -42,9 +42,9 @@ const grantCouponsColumns = [{
     render: note => note || '无'
 }, {
     title: '所属子公司',
-    dataIndex: 'branchCompanyId',
-    key: 'branchCompanyId',
-    render: note => note || '无'
+    dataIndex: 'branchCompanyName',
+    key: 'branchCompanyName',
+    render: name => name || '无'
 }];
 
 const releaseCouponsColumns = [{
@@ -63,12 +63,7 @@ const releaseCouponsColumns = [{
     title: '品类',
     dataIndex: 'promoCategoriesPo',
     key: 'promoCategoriesPo',
-    render: list => {
-        if (!list || list.length === 0) {
-            return '全部品类';
-        }
-        return list.map(category => category.categoryName).join(',');
-    }
+    render: category => category.categoryName
 }, {
     title: '使用区域',
     dataIndex: 'branchCompanyId',

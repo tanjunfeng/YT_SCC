@@ -20,7 +20,8 @@ class SearchForm extends PureComponent {
         super(props);
         this.state = {
             branchCompanyId: '',
-            isReleaseCouponModalVisible: false
+            isReleaseCouponModalVisible: false,
+            promoIds: []
         }
         this.getStatus = this.getStatus.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
@@ -45,32 +46,17 @@ class SearchForm extends PureComponent {
 
     getFormData() {
         const {
-            id,
-            promotionName,
-            promotionDateRange,
-            statusCode,
+            franchiseeId,
+            franchinessController,
             storeId,
             storeName
         } = this.props.form.getFieldsValue();
-        const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
-        const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
-        const branchCompanyId = this.state.branchCompanyId;
-        let status = statusCode;
-        if (statusCode === 'all') {
-            status = '';
-        }
-        if (storeId) {
-            this.setState({ storeId: false });
-        }
         return Utils.removeInvalid({
-            id,
-            promotionName,
-            status,
+            franchiseeId,
+            franchinessController,
             storeId,
             storeName,
-            startDate,
-            endDate,
-            branchCompanyId
+            branchCompanyId: this.state.branchCompanyId
         });
     }
 
@@ -89,15 +75,18 @@ class SearchForm extends PureComponent {
 
     handleQueryResults() {
         this.setState({ isReleaseCouponModalVisible: true });
+        // 通知查询结果发券
+        this.props.onPromotionReleaseAll(this.state.promoIds);
     }
 
     handleQueryCoupons() {
         this.setState({ isReleaseCouponModalVisible: true });
+        // 通知发券
+        this.props.onPromotionReleasChecked(this.state.promoIds);
     }
 
-    handleSelectOk(promotionIds) {
-        console.log(promotionIds);
-        this.setState({ isReleaseCouponModalVisible: false });
+    handleSelectOk(promoIds) {
+        this.setState({ promoIds, isReleaseCouponModalVisible: false });
     }
 
     handleSelectCancel() {
@@ -119,12 +108,12 @@ class SearchForm extends PureComponent {
                         <Row gutter={40}>
                             <Col span={8}>
                                 <FormItem label="加盟商编号" style={{ paddingRight: 10 }}>
-                                    {getFieldDecorator('id')(<Input size="default" />)}
+                                    {getFieldDecorator('franchiseeId')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
                                 <FormItem label="加盟商名称">
-                                    {getFieldDecorator('promotionName')(<Input size="default" />)}
+                                    {getFieldDecorator('franchinessController')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -194,7 +183,9 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     onPromotionSearch: PropTypes.func,
     onPromotionReset: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any),
+    onPromotionReleaseAll: PropTypes.func,
+    onPromotionReleasChecked: PropTypes.func,
+    form: PropTypes.objectOf(PropTypes.any)
 };
 
 SearchForm.defaultProps = {

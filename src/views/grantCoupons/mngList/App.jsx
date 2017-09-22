@@ -37,6 +37,8 @@ class GrantCouponList extends PureComponent {
         this.selectedRowKeys = [];
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
+        this.handleReleaseAll = this.handleReleaseAll.bind(this);
+        this.handleReleaseChecked = this.handleReleaseChecked.bind(this);
         this.query = this.query.bind(this);
     }
 
@@ -60,19 +62,18 @@ class GrantCouponList extends PureComponent {
      */
     rowSelection = {
         onChange: (selectedRowKeys) => {
-            this.setState({
-                choose: selectedRowKeys,
-            });
+            if (selectedRowKeys.length > 0) {
+                this.setState({
+                    choose: selectedRowKeys,
+                });
+            }
         }
     }
 
     query(condition) {
-        const choose = [];
-        choose.push(this.state.choose);
         const param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
-            choose,
             ...condition
         }
         this.props.queryFranchiseeList(param).then((data) => {
@@ -93,6 +94,14 @@ class GrantCouponList extends PureComponent {
         });
     }
 
+    handleReleaseAll(promoIds) {
+
+    }
+
+    handleReleaseChecked(promoIds) {
+
+    }
+
     render() {
         const { data, total } = this.props.franchiseeList;
         const { pageNum, pageSize } = this.state;
@@ -102,12 +111,14 @@ class GrantCouponList extends PureComponent {
                 <SearchForm
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
+                    onPromotionReleaseAll={this.handleReleaseAll}
+                    onPromotionReleasChecked={this.handleReleaseChecked}
                 />
                 <Table
                     rowSelection={this.rowSelection}
                     dataSource={data}
                     columns={columns}
-                    rowKey="id"
+                    rowKey="storeId"
                     scroll={{
                         x: 1400
                     }}
