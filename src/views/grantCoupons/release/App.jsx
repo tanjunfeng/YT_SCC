@@ -11,19 +11,17 @@ import { withRouter } from 'react-router';
 import { Modal, Table, Form } from 'antd';
 import {
     queryCouponsList,
-    clearPromotionList,
-    updatePromotionStatus
+    clearCouponsList
 } from '../../../actions/promotion';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { grantCouponsColumns as columns } from '../columns';
+import { releaseCouponsColumns as columns } from '../columns';
 
 @connect(state => ({
-    promotionList: state.toJS().promotion.list
+    couponsList: state.toJS().promotion.coupons
 }), dispatch => bindActionCreators({
     queryCouponsList,
-    clearPromotionList,
-    updatePromotionStatus
+    clearCouponsList
 }, dispatch))
 
 class ReleaseCouponModal extends PureComponent {
@@ -34,14 +32,11 @@ class ReleaseCouponModal extends PureComponent {
             pageSize: PAGE_SIZE,
             promoIds: [],
         };
-        this.selectedRowKeys = [];
-        this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
-        this.handlePromotionReset = this.handlePromotionReset.bind(this);
+        this.handleCouponSearch = this.handleCouponSearch.bind(this);
+        this.handleCouponReset = this.handleCouponReset.bind(this);
+        this.handleOk = this.handleOk.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
         this.query = this.query.bind(this);
-    }
-
-    componentWillMount() {
-        this.props.clearPromotionList();
     }
 
     componentDidMount() {
@@ -49,7 +44,7 @@ class ReleaseCouponModal extends PureComponent {
     }
 
     componentWillUnmount() {
-        this.props.clearPromotionList();
+        this.props.clearCouponsList();
     }
 
     /**
@@ -71,12 +66,10 @@ class ReleaseCouponModal extends PureComponent {
     }
 
     query(condition) {
-        const promoIds = [];
-        promoIds.push(this.state.promoIds);
         const param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
-            promoIds,
+            promoIds: this.state.promoIds,
             ...condition
         }
         this.props.queryCouponsList(param).then((data) => {
@@ -85,11 +78,11 @@ class ReleaseCouponModal extends PureComponent {
         });
     }
 
-    handlePromotionSearch(param) {
+    handleCouponSearch(param) {
         this.query(param);
     }
 
-    handlePromotionReset() {
+    handleCouponReset() {
         // 重置检索条件
         this.setState({
             pageNum: 1,
@@ -97,20 +90,28 @@ class ReleaseCouponModal extends PureComponent {
         });
     }
 
+    handleOk() {
+
+    }
+
+    handleCancel() {
+
+    }
+
     render() {
-        const { data, total } = this.props.promotionList;
+        const { data, total } = this.props.couponsList;
         const { pageNum, pageSize } = this.state;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <Modal
-                title="选择区域"
-                visible={this.props.isSelectorVisible}
+                title="选择优惠券类型"
+                visible={this.props.visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
             >
                 <SearchForm
-                    onPromotionSearch={this.handlePromotionSearch}
-                    onPromotionReset={this.handlePromotionReset}
+                    onCouponSearch={this.handleCouponSearch}
+                    onCouponReset={this.handleCouponReset}
                 />
                 <Table
                     rowSelection={this.rowSelection}
@@ -135,10 +136,10 @@ class ReleaseCouponModal extends PureComponent {
 }
 
 ReleaseCouponModal.propTypes = {
-    isSelectorVisible: PropTypes.bool,
+    visible: PropTypes.bool,
     queryCouponsList: PropTypes.func,
-    clearPromotionList: PropTypes.func,
-    promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+    clearCouponsList: PropTypes.func,
+    couponsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 }
 
 export default withRouter(Form.create()(ReleaseCouponModal));

@@ -5,12 +5,6 @@
  * @Last Modified by: tanjf
  * @Last Modified time: 2017-09-21 16:57:44
  */
-/**
- * @file columns.js
- * @author taoqiyu
- *
- * 促销活动列表
- */
 
 // 发放优惠券列表
 const grantCouponsColumns = [{
@@ -50,4 +44,51 @@ const grantCouponsColumns = [{
     render: note => note || '无'
 }];
 
-export { grantCouponsColumns };
+const releaseCouponsColumns = [{
+    title: '券ID',
+    dataIndex: 'id',
+    key: 'id'
+}, {
+    title: '券名称',
+    dataIndex: 'promotionName',
+    key: 'promotionName'
+}, {
+    title: '面额',
+    dataIndex: 'discount',
+    key: 'discount'
+}, {
+    title: '品类',
+    dataIndex: 'promoCategoriesPo',
+    key: 'promoCategoriesPo'
+}, {
+    title: '使用区域',
+    dataIndex: 'branchCompanyId',
+    key: 'branchCompanyId'
+}, {
+    title: '使用条件',
+    dataIndex: 'quanifyAmount',
+    key: 'quanifyAmount',
+    render: amount => (`满${amount}可用`)
+}, {
+    title: '有效日期',
+    dataIndex: 'branchCompanyId',
+    key: 'branchCompanyId'
+}, {
+    title: '发放数量',
+    dataIndex: 'branchCompanyId',
+    key: 'branchCompanyId'
+}, {
+    title: '已领取',
+    dataIndex: 'branchCompanyId',
+    key: 'branchCompanyId'
+}, {
+    title: '已使用',
+    dataIndex: 'branchCompanyId',
+    key: 'branchCompanyId'
+}, {
+    title: '备注',
+    dataIndex: 'note',
+    key: 'note'
+}];
+
+export { grantCouponsColumns, releaseCouponsColumns };

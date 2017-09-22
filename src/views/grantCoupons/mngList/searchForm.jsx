@@ -10,6 +10,7 @@ import { withRouter } from 'react-router';
 import Utils from '../../../util/util';
 import { promotionStatus } from '../constants';
 import { SubCompanies } from '../../../container/search';
+import ReleaseCouponModal from '../release';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -18,7 +19,8 @@ class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            branchCompanyId: ''
+            branchCompanyId: '',
+            isReleaseCouponModalVisible: false
         }
         this.getStatus = this.getStatus.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
@@ -81,9 +83,11 @@ class SearchForm extends PureComponent {
     }
 
     handleQueryResults() {
+        this.setState({ isReleaseCouponModalVisible: true });
     }
 
     handleQueryCoupons() {
+        this.setState({ isReleaseCouponModalVisible: true });
     }
 
     handleReset() {
@@ -160,6 +164,9 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                         </Row>
+                        <ReleaseCouponModal
+                            visible={this.state.isReleaseCouponModalVisible}
+                        />
                     </div>
                 </Form>
             </div >
