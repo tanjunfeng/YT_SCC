@@ -13,6 +13,7 @@ import { withRouter } from 'react-router';
 import { Table, Form } from 'antd';
 import {
     queryFranchiseeList,
+    grantCoupon,
     clearFranchiseeList
 } from '../../../actions/promotion';
 import SearchForm from './searchForm';
@@ -23,7 +24,8 @@ import { grantCouponsColumns as columns } from '../columns';
     franchiseeList: state.toJS().promotion.franchiseeList
 }), dispatch => bindActionCreators({
     queryFranchiseeList,
-    clearFranchiseeList
+    clearFranchiseeList,
+    grantCoupon
 }, dispatch))
 
 class GrantCouponList extends PureComponent {
@@ -32,9 +34,8 @@ class GrantCouponList extends PureComponent {
         this.state = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
-            choose: [],
+            storeIds: [],
         };
-        this.selectedRowKeys = [];
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
         this.handleReleaseAll = this.handleReleaseAll.bind(this);
@@ -61,12 +62,8 @@ class GrantCouponList extends PureComponent {
      * table复选框
      */
     rowSelection = {
-        onChange: (selectedRowKeys) => {
-            if (selectedRowKeys.length > 0) {
-                this.setState({
-                    choose: selectedRowKeys,
-                });
-            }
+        onChange: (storeIds) => {
+            this.setState({ storeIds });
         }
     }
 
@@ -95,11 +92,17 @@ class GrantCouponList extends PureComponent {
     }
 
     handleReleaseAll(promoIds) {
-
+        this.props.grantCoupon({
+            promoIds,
+            storeIds: this.props.franchiseeList.data.map(franchisee => franchisee.storeId)
+        });
     }
 
     handleReleaseChecked(promoIds) {
-
+        this.props.grantCoupon({
+            promoIds,
+            storeIds: this.state.storeIds
+        });
     }
 
     render() {
@@ -139,7 +142,8 @@ class GrantCouponList extends PureComponent {
 GrantCouponList.propTypes = {
     queryFranchiseeList: PropTypes.func,
     clearFranchiseeList: PropTypes.func,
-    franchiseeList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+    grantCoupon: PropTypes.func,
+    franchiseeList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 
 export default withRouter(Form.create()(GrantCouponList));
