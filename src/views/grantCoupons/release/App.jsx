@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Modal, Table, Form } from 'antd';
 import {
-    getPromotionList,
+    queryCouponsList,
     clearPromotionList,
     updatePromotionStatus
 } from '../../../actions/promotion';
@@ -21,7 +21,7 @@ import { grantCouponsColumns as columns } from '../columns';
 @connect(state => ({
     promotionList: state.toJS().promotion.list
 }), dispatch => bindActionCreators({
-    getPromotionList,
+    queryCouponsList,
     clearPromotionList,
     updatePromotionStatus
 }, dispatch))
@@ -32,7 +32,7 @@ class ReleaseCouponModal extends PureComponent {
         this.state = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
-            choose: [],
+            promoIds: [],
         };
         this.selectedRowKeys = [];
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
@@ -65,21 +65,21 @@ class ReleaseCouponModal extends PureComponent {
     rowSelection = {
         onChange: (selectedRowKeys) => {
             this.setState({
-                choose: selectedRowKeys,
+                promoIds: selectedRowKeys,
             });
         }
     }
 
     query(condition) {
-        const choose = [];
-        choose.push(this.state.choose);
+        const promoIds = [];
+        promoIds.push(this.state.promoIds);
         const param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
-            choose,
+            promoIds,
             ...condition
         }
-        this.props.getPromotionList(param).then((data) => {
+        this.props.queryCouponsList(param).then((data) => {
             const { pageNum, pageSize } = data.data;
             this.setState({ pageNum, pageSize });
         });
@@ -135,7 +135,8 @@ class ReleaseCouponModal extends PureComponent {
 }
 
 ReleaseCouponModal.propTypes = {
-    getPromotionList: PropTypes.func,
+    isSelectorVisible: PropTypes.bool,
+    queryCouponsList: PropTypes.func,
     clearPromotionList: PropTypes.func,
     promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 }
