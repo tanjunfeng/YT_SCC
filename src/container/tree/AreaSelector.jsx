@@ -11,10 +11,10 @@ import { Form, Modal, message } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { CheckedTree } from './index';
-import { getAllCompanies, clearCompaniesList } from '../../actions/promotion';
+import { getAllCompanies, clearCompaniesList } from '../../actions/pub';
 
 @connect(state => ({
-    companies: state.toJS().promotion.companies
+    companies: state.toJS().pub.companies
 }), dispatch => bindActionCreators({
     getAllCompanies,
     clearCompaniesList

@@ -14,7 +14,7 @@ import { Table, Form, Icon, Menu, Dropdown } from 'antd';
 import { Link } from 'react-router-dom';
 
 import {
-    getCouponsList,
+    queryCouponsList,
     clearCouponsList,
     updatePromotionStatus
 } from '../../../actions/promotion';
@@ -25,7 +25,7 @@ import { couponList as columns } from '../columns';
 @connect(state => ({
     promotionList: state.toJS().promotion.list
 }), dispatch => bindActionCreators({
-    getCouponsList,
+    queryCouponsList,
     clearCouponsList,
     updatePromotionStatus
 }, dispatch))
@@ -69,7 +69,7 @@ class CouponList extends PureComponent {
             pageSize: PAGE_SIZE,
             ...condition
         }
-        this.props.getCouponsList(param).then((data) => {
+        this.props.queryCouponsList(param).then((data) => {
             const { pageNum, pageSize } = data.data;
             this.setState({ pageNum, pageSize });
         });
@@ -206,7 +206,7 @@ class CouponList extends PureComponent {
 }
 
 CouponList.propTypes = {
-    getCouponsList: PropTypes.func,
+    queryCouponsList: PropTypes.func,
     clearCouponsList: PropTypes.func,
     updatePromotionStatus: PropTypes.func,
     promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
