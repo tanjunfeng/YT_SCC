@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-22 10:41:01
+ * @Last Modified time: 2017-09-22 17:27:46
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -25,7 +25,7 @@ const RangePicker = DatePicker.RangePicker;
 const RadioGroup = Radio.Group;
 const { TextArea } = Input;
 const CheckboxGroup = Checkbox.Group;
-const plainOptions = ['下单打折', '会员等级'];
+const plainOptions = ['会员等级'];
 
 @connect(() => ({
 }), dispatch => bindActionCreators({
@@ -106,11 +106,10 @@ class CouponCreate extends PureComponent {
                 promoCategoriesPo,
                 companiesPoList,
                 totalQuantity,
-                isSuperposeUserDiscount,
                 grantChannel: grantChannel === 1 ? 'personal' : 'platform',
-                isPayState: (checkedBoxList.length === 1 &&
-                    checkedBoxList[0] === '下单打折') || checkedBoxList.length === 2 ? 1 : 0,
-                isRefound: (checkedBoxList.length === 1 &&
+                // isPayState: (checkedBoxList.length === 1 &&
+                //     checkedBoxList[0] === '下单打折') || checkedBoxList.length === 2 ? 1 : 0,
+                isSuperposeUserDiscount: (checkedBoxList.length === 1 &&
                     checkedBoxList[0] === '会员等级') || checkedBoxList.length === 2 ? 1 : 0,
                 personQty,
             };

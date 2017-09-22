@@ -15,7 +15,8 @@ import {
     createCoupons as createCouponsActionService,
     queryCouponsList as queryCouponsListService,
     queryFranchiseeList as queryFranchiseeListService,
-    getCouponsDetail as fetchCouponsDetailService
+    getCouponsDetail as fetchCouponsDetailService,
+    getParticipate2 as participateData2Service
 } from '../service';
 
 /**
@@ -40,7 +41,7 @@ export const getPromotionList = (params) => dispatch => (
 );
 
 /**
- * 促销活动参与数据 Action
+ * 促销活动参与数据1 Action
  */
 const fetchParticipateData = (data) => ({
     type: ActionType.FETCH_PATICIPATE_LIST,
@@ -53,6 +54,27 @@ export const getParticipate = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     fetchParticipateData(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 促销活动参与数据2 Action
+ */
+const fetchParticipateData2 = (data) => ({
+    type: ActionType.FETCH_PATICIPATETWO_LIST,
+    payload: data
+});
+
+export const getParticipate2 = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        participateData2Service(params)
+            .then(res => {
+                dispatch(
+                    fetchParticipateData2(res.data)
                 );
                 resolve(res);
             })

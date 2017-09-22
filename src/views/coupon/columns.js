@@ -3,7 +3,7 @@
  * @Description: 优惠券列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-22 11:25:11
+ * @Last Modified time: 2017-09-22 16:28:31
  */
 /**
  * @file columns.js
@@ -171,4 +171,85 @@ const couponsDetail = [{
     render: note => note || '无'
 }];
 
-export { couponList, couponsDetail };
+const participateList = [{
+    title: '所属子公司',
+    dataIndex: 'id',
+    key: 'id'
+}, {
+    title: '加盟商编号',
+    dataIndex: 'franchiseeId',
+    key: 'franchiseeId'
+}, {
+    title: '加盟商名称',
+    dataIndex: 'franchinessController',
+    key: 'franchinessController'
+}, {
+    title: '门店编号',
+    dataIndex: 'storeId',
+    key: 'storeId'
+}, {
+    title: '门店名称',
+    dataIndex: 'storeName',
+    key: 'storeName'
+}, {
+    title: '券ID',
+    dataIndex: 'promoId',
+    key: 'promoId'
+}, {
+    title: '订单号',
+    dataIndex: 'orderId',
+    key: 'orderId'
+}, {
+    title: '使用时间',
+    dataIndex: 'recordTime',
+    key: 'recordTime',
+    render: timestamp => Util.getTime(timestamp)
+}, {
+    title: '订单状态',
+    dataIndex: 'branchCompanyName',
+    key: 'branchCompanyName'
+}, {
+    title: '支付状态',
+    dataIndex: 'paymentState',
+    key: 'paymentState'
+}, {
+    title: '物流状态',
+    dataIndex: 'shippingState',
+    key: 'shippingState'
+}, {
+    title: '订单金额',
+    dataIndex: 'orderPrice',
+    key: 'orderPrice'
+}];
+
+const participateListTab2 = [{
+    title: '所属子公司',
+    dataIndex: 'id',
+    key: 'id'
+}, {
+    title: '加盟商编号',
+    dataIndex: 'franchiseeId',
+    key: 'franchiseeId'
+}, {
+    title: '加盟商名称',
+    dataIndex: 'franchinessController',
+    key: 'franchinessController'
+}, {
+    title: '门店编号',
+    dataIndex: 'storeId',
+    key: 'storeId'
+}, {
+    title: '门店名称',
+    dataIndex: 'storeName',
+    key: 'storeName'
+}, {
+    title: '券ID',
+    dataIndex: 'promoId',
+    key: 'promoId'
+}, {
+    title: '领取时间',
+    dataIndex: 'activityDate',
+    key: 'activityDate'
+}];
+
+export { couponList, couponsDetail, participateList, participateListTab2 };

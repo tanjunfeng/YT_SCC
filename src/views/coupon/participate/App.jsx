@@ -9,37 +9,50 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form } from 'antd';
+import { Table, Form, Tabs } from 'antd';
 
 import {
     getParticipate,
+    getParticipate2,
     clearParticipate
 } from '../../../actions/promotion';
-import { exportParticipateData } from '../../../service';
+import { exportParticipateData1, exportParticipateData2 } from '../../../service';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { participateList as columns } from '../columns';
+import {
+    participateList as columns,
+    participateListTab2 as columns2
+} from '../columns';
 import Util from '../../../util/util';
 
+const TabPane = Tabs.TabPane;
+
 @connect(state => ({
-    participate: state.toJS().promotion.participate
+    participate: state.toJS().promotion.participate,
+    participate2: state.toJS().promotion.participate2
 }), dispatch => bindActionCreators({
     getParticipate,
-    clearParticipate
+    clearParticipate,
+    getParticipate2
 }, dispatch))
 
-class PromotionParticipate extends PureComponent {
+class CouponsParticipate extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
             pageNum: 1,
-            pageSize: PAGE_SIZE
+            pageSize: PAGE_SIZE,
+            pageNum1: 1,
+            pageSize1: PAGE_SIZE,
+            tabPage: '1'
         };
         this.promoId = this.props.match.params.id;
         this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
         this.handleParticipateReset = this.handleParticipateReset.bind(this);
         this.handleParticipateExport = this.handleParticipateExport.bind(this);
         this.onPaginate = this.onPaginate.bind(this);
+        this.onPaginate1 = this.onPaginate1.bind(this);
+        this.handleTabChange = this.handleTabChange.bind(this);
         this.query = this.query.bind(this);
     }
 
@@ -52,10 +65,21 @@ class PromotionParticipate extends PureComponent {
     }
 
     /**
-     * 分页页码改变的回调
+     * Tab1 - 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
         this.query({ page: pageNum });
+    }
+
+    /**
+     *  Tab2 - 分页页码改变的回调
+     */
+    onPaginate1 = (pageNum) => {
+        this.query({ page: pageNum });
+    }
+
+    handleTabChange(key) {
+        this.setState({tabPage: key});
     }
 
     query(condition) {
@@ -68,6 +92,10 @@ class PromotionParticipate extends PureComponent {
         this.props.getParticipate(param).then((data) => {
             const { pageNum, pageSize } = data.data.participateDataDtoPageResult;
             this.setState({ pageNum, pageSize });
+        });
+        this.props.getParticipate2(param).then((data) => {
+            const { pageNum, pageSize } = data.data;
+            this.setState({ pageNum1: pageNum, pageSize1: pageSize });
         });
     }
 
@@ -90,13 +118,20 @@ class PromotionParticipate extends PureComponent {
             promoId: this.promoId,
             ...param
         };
-        Util.exportExcel(exportParticipateData, condition);
+        if (this.state.tabPage === '1') {
+            Util.exportExcel(exportParticipateData1, condition);
+        } else {
+            Util.exportExcel(exportParticipateData2, condition);
+        }
     }
 
     render() {
-        const { participateDataDtoPageResult = {}, promotionName } = this.props.participate;
+        const {
+            participateDataDtoPageResult = {},
+            promotionName
+        } = this.props.participate;
         const { data, total } = participateDataDtoPageResult;
-        const { pageNum, pageSize } = this.state;
+        const { pageNum, pageSize, pageNum1, pageSize1, } = this.state;
         return (
             <div>
                 <SearchForm
@@ -105,32 +140,56 @@ class PromotionParticipate extends PureComponent {
                     onParticipateExport={this.handleParticipateExport}
                 />
                 <h2>活动ID：{this.props.match.params.id}    活动名称：{promotionName}</h2>
-                <Table
-                    dataSource={data}
-                    columns={columns}
-                    rowKey="orderId"
-                    scroll={{
-                        x: 1400
-                    }}
-                    bordered
-                    pagination={{
-                        pageNum,
-                        pageSize,
-                        total,
-                        showQuickJumper: true,
-                        onChange: this.onPaginate
-                    }}
-                />
+                <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
+                    <TabPane tab="已使用" key="1">
+                        <Table
+                            dataSource={data}
+                            columns={columns}
+                            rowKey="orderId"
+                            scroll={{
+                                x: 1400
+                            }}
+                            bordered
+                            pagination={{
+                                pageNum,
+                                pageSize,
+                                total,
+                                showQuickJumper: true,
+                                onChange: this.onPaginate
+                            }}
+                        />
+                    </TabPane>
+                    <TabPane tab="未使用" key="2">
+                        <Table
+                            dataSource={this.props.participate2.data}
+                            columns={columns2}
+                            rowKey="orderId"
+                            scroll={{
+                                x: 1400
+                            }}
+                            bordered
+                            pagination={{
+                                pageNum1,
+                                pageSize1,
+                                total: this.props.participate2.total,
+                                showQuickJumper: true,
+                                onChange: this.onPaginate1
+                            }}
+                        />
+                    </TabPane>
+                </Tabs>
             </div>
         );
     }
 }
 
-PromotionParticipate.propTypes = {
+CouponsParticipate.propTypes = {
     getParticipate: PropTypes.func,
+    getParticipate2: PropTypes.func,
     clearParticipate: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
-    participate: PropTypes.objectOf(PropTypes.any)
+    participate: PropTypes.objectOf(PropTypes.any),
+    participate2: PropTypes.objectOf(PropTypes.any),
 }
 
-export default withRouter(Form.create()(PromotionParticipate));
+export default withRouter(Form.create()(CouponsParticipate));
