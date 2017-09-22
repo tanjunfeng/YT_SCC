@@ -5,6 +5,8 @@
  * @Last Modified by: tanjf
  * @Last Modified time: 2017-09-21 16:57:44
  */
+import React from 'react';
+import Util from '../../util/util';
 
 // 发放优惠券列表
 const grantCouponsColumns = [{
@@ -59,32 +61,56 @@ const releaseCouponsColumns = [{
 }, {
     title: '品类',
     dataIndex: 'promoCategoriesPo',
-    key: 'promoCategoriesPo'
+    key: 'promoCategoriesPo',
+    render: list => {
+        if (!list || list.length === 0) {
+            return '全部品类';
+        }
+        return list.map(category => category.categoryName).join(',');
+    }
 }, {
     title: '使用区域',
     dataIndex: 'branchCompanyId',
-    key: 'branchCompanyId'
+    key: 'branchCompanyId',
+    render: list => {
+        if (!list || list.length === 0) {
+            return '全部区域';
+        }
+        const areas = list.map(company => company.companyName).join(',');
+        return (
+            <span title={areas} alt={areas}>所选区域</span>
+        );
+    }
 }, {
     title: '使用条件',
     dataIndex: 'quanifyAmount',
     key: 'quanifyAmount',
     render: amount => (`满${amount}可用`)
 }, {
-    title: '有效日期',
-    dataIndex: 'branchCompanyId',
-    key: 'branchCompanyId'
+    title: '有效时间',
+    children: [{
+        title: '开始时间',
+        dataIndex: 'startDate',
+        key: 'startDate',
+        render: timestamp => Util.getTime(timestamp)
+    }, {
+        title: '结束时间',
+        dataIndex: 'endDate',
+        key: 'endDate',
+        render: timestamp => Util.getTime(timestamp)
+    }],
 }, {
     title: '发放数量',
-    dataIndex: 'branchCompanyId',
-    key: 'branchCompanyId'
+    dataIndex: 'totalQuantity',
+    key: 'totalQuantity'
 }, {
     title: '已领取',
-    dataIndex: 'branchCompanyId',
-    key: 'branchCompanyId'
+    dataIndex: 'grantQty',
+    key: 'grantQty'
 }, {
     title: '已使用',
-    dataIndex: 'branchCompanyId',
-    key: 'branchCompanyId'
+    dataIndex: 'usedQty',
+    key: 'usedQty'
 }, {
     title: '备注',
     dataIndex: 'note',

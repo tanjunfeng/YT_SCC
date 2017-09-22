@@ -1,0 +1,48 @@
+{
+    "timestamp": 1505985901605,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 15,
+        "total": 1,
+        "data": [
+            {
+                "id": "HD1710110",
+                "status": "unreleased",
+                "promotionType": "order_promo",
+                "promotionName": "123",
+                "promotionDiscription": null,
+                "startDate": 1505893364000,
+                "endDate": 1508485364000,
+                "discountType": "percentage",
+                "quanifyAmount": 100,
+                "discount": 50,
+                "note": "可以的",
+                "type": null,
+                "promoCategoriesPo": {
+                    "promoId": "HD1710110",
+                    "categoryId": "xcate1808",
+                    "categoryName": "学生挎包",
+                    "categoryLevel": 4
+                },
+                "companiesPoList": [
+                    {
+                        "promoId": "HD1710110",
+                        "companyId": "10000",
+                        "companyName": "成都子公司"
+                    }
+                ],
+                "stores": null,
+                "totalQuantity": null,
+                "personQty": null,
+                "grantQty": null,
+                "usedQty": null,
+                "grantChannel": null,
+                "superposeUserDiscount": null
+            }
+        ]
+    },
+    "success": true
+}

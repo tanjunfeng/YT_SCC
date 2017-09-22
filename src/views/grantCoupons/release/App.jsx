@@ -91,11 +91,11 @@ class ReleaseCouponModal extends PureComponent {
     }
 
     handleOk() {
-
+        this.props.onReleaseCouponModalOk(this.state.promoIds);
     }
 
     handleCancel() {
-
+        this.props.onReleaseCouponModalCancel();
     }
 
     render() {
@@ -108,6 +108,7 @@ class ReleaseCouponModal extends PureComponent {
                 visible={this.props.visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
+                width={1200}
             >
                 <SearchForm
                     onCouponSearch={this.handleCouponSearch}
@@ -117,7 +118,7 @@ class ReleaseCouponModal extends PureComponent {
                     rowSelection={this.rowSelection}
                     dataSource={data}
                     columns={columns}
-                    rowKey="franchiseeId"
+                    rowKey="id"
                     scroll={{
                         x: 1400
                     }}
@@ -139,6 +140,8 @@ ReleaseCouponModal.propTypes = {
     visible: PropTypes.bool,
     queryCouponsList: PropTypes.func,
     clearCouponsList: PropTypes.func,
+    onReleaseCouponModalOk: PropTypes.func,
+    onReleaseCouponModalCancel: PropTypes.func,
     couponsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 }
 

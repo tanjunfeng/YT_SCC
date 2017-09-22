@@ -36,8 +36,8 @@ class SearchForm extends PureComponent {
             storeId,
             storeName
         } = this.props.form.getFieldsValue();
-        const startDate = releaseDateRange ? releaseDateRange[0].valueOf() : '';
-        const endDate = releaseDateRange ? releaseDateRange[1].valueOf() : '';
+        const startDate = releaseDateRange.length > 1 ? releaseDateRange[0].valueOf() : '';
+        const endDate = releaseDateRange.length > 1 ? releaseDateRange[1].valueOf() : '';
         const branchCompanyId = this.state.branchCompanyId;
         let status = statusCode;
         if (statusCode === 'all') {
@@ -106,7 +106,7 @@ class SearchForm extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40}>
-                            <Col span={8}>
+                            <Col span={16}>
                                 <FormItem>
                                     <div className="release-date-range">
                                         <span className="sc-form-item-label search-mind-label">活动时间</span>

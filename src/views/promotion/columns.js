@@ -39,7 +39,7 @@ const managementList = [{
         if (!list || list.length === 0) {
             return '全部区域';
         }
-        const areas = list.map(company => company.companyName);
+        const areas = list.map(company => company.companyName).join(',');
         return (
             <span title={areas} alt={areas}>所选区域</span>
         );

@@ -30,6 +30,8 @@ class SearchForm extends PureComponent {
         this.hanldeSubCompaniesClear = this.hanldeSubCompaniesClear.bind(this);
         this.handleQueryResults = this.handleQueryResults.bind(this);
         this.handleQueryCoupons = this.handleQueryCoupons.bind(this);
+        this.handleSelectOk = this.handleSelectOk.bind(this);
+        this.handleSelectCancel = this.handleSelectCancel.bind(this);
     }
 
     getStatus() {
@@ -88,6 +90,15 @@ class SearchForm extends PureComponent {
 
     handleQueryCoupons() {
         this.setState({ isReleaseCouponModalVisible: true });
+    }
+
+    handleSelectOk(promotionIds) {
+        console.log(promotionIds);
+        this.setState({ isReleaseCouponModalVisible: false });
+    }
+
+    handleSelectCancel() {
+        this.setState({ isReleaseCouponModalVisible: false });
     }
 
     handleReset() {
@@ -166,6 +177,8 @@ class SearchForm extends PureComponent {
                         </Row>
                         <ReleaseCouponModal
                             visible={this.state.isReleaseCouponModalVisible}
+                            onReleaseCouponModalOk={this.handleSelectOk}
+                            onReleaseCouponModalCancel={this.handleSelectCancel}
                         />
                     </div>
                 </Form>
