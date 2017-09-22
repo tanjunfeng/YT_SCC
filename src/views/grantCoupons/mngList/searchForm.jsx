@@ -18,7 +18,8 @@ class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            branchCompanyId: ''
+            branchCompanyId: '',
+            isDisabled: true
         }
         this.getStatus = this.getStatus.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
@@ -54,6 +55,9 @@ class SearchForm extends PureComponent {
         let status = statusCode;
         if (statusCode === 'all') {
             status = '';
+        }
+        if (storeId) {
+            this.setState({ storeId: false });
         }
         return Utils.removeInvalid({
             id,
@@ -117,6 +121,7 @@ class SearchForm extends PureComponent {
                                         </span>
                                         <SubCompanies
                                             value={this.state.branchCompanyId}
+                                            Data={this.state.isDisabled}
                                             onSubCompaniesChooesd={this.handleSubCompanyChoose}
                                             onSubCompaniesClear={this.hanldeSubCompaniesClear}
                                         />

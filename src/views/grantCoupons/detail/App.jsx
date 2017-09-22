@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Row, Col, Button } from 'antd';
 import { clearPromotionDetail, getPromotionDetail } from '../../../actions/promotion';
-import { detail as columns } from '../columns';
+import { grantCouponsDetail as columns } from '../columns';
 
 const FormItem = Form.Item;
 @connect((state) => ({

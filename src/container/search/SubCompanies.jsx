@@ -43,9 +43,11 @@ class SubCompanies extends PureComponent {
     }
 
     render() {
+        const { Data } = this.props;
         return (
             <SearchMind
                 compKey="spId"
+                disabled={Data}
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
                     // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodSell/findCompanyBaseInfo
@@ -77,6 +79,7 @@ class SubCompanies extends PureComponent {
 
 SubCompanies.propTypes = {
     pubFetchValueList: PropTypes.func,
+    Data: PropTypes.bool,
     onSubCompaniesChooesd: PropTypes.func,
     onSubCompaniesClear: PropTypes.func,
     value: PropTypes.string
