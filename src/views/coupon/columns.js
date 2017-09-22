@@ -3,7 +3,7 @@
  * @Description: 优惠券列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-22 16:28:31
+ * @Last Modified time: 2017-09-22 20:11:26
  */
 /**
  * @file columns.js
@@ -173,8 +173,8 @@ const couponsDetail = [{
 
 const participateList = [{
     title: '所属子公司',
-    dataIndex: 'id',
-    key: 'id'
+    dataIndex: 'branchCompanyName',
+    key: 'branchCompanyName'
 }, {
     title: '加盟商编号',
     dataIndex: 'franchiseeId',
@@ -206,8 +206,8 @@ const participateList = [{
     render: timestamp => Util.getTime(timestamp)
 }, {
     title: '订单状态',
-    dataIndex: 'branchCompanyName',
-    key: 'branchCompanyName'
+    dataIndex: 'orderState',
+    key: 'orderState'
 }, {
     title: '支付状态',
     dataIndex: 'paymentState',
@@ -224,8 +224,8 @@ const participateList = [{
 
 const participateListTab2 = [{
     title: '所属子公司',
-    dataIndex: 'id',
-    key: 'id'
+    dataIndex: 'branchCompanyName',
+    key: 'branchCompanyName'
 }, {
     title: '加盟商编号',
     dataIndex: 'franchiseeId',
@@ -249,7 +249,8 @@ const participateListTab2 = [{
 }, {
     title: '领取时间',
     dataIndex: 'activityDate',
-    key: 'activityDate'
+    key: 'activityDate',
+    render: timestamp => Util.getTime(timestamp)
 }];
 
 export { couponList, couponsDetail, participateList, participateListTab2 };
