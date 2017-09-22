@@ -5,66 +5,47 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, Form, Select, Row, Col } from 'antd';
+import { Button, Input, Form, Row, Col, DatePicker } from 'antd';
 import { withRouter } from 'react-router';
 import Utils from '../../../util/util';
-import { promotionStatus } from '../constants';
+import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { SubCompanies } from '../../../container/search';
-import ReleaseCouponModal from '../release';
 
 const FormItem = Form.Item;
-const Option = Select.Option;
+const { RangePicker } = DatePicker;
 
 class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            branchCompanyId: '',
-            isReleaseCouponModalVisible: false
+            branchCompanyId: ''
         }
-        this.getStatus = this.getStatus.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
         this.getFormData = this.getFormData.bind(this);
         this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
         this.hanldeSubCompaniesClear = this.hanldeSubCompaniesClear.bind(this);
-        this.handleQueryResults = this.handleQueryResults.bind(this);
-        this.handleQueryCoupons = this.handleQueryCoupons.bind(this);
-        this.handleSelectOk = this.handleSelectOk.bind(this);
-        this.handleSelectCancel = this.handleSelectCancel.bind(this);
-    }
-
-    getStatus() {
-        const keys = Object.keys(promotionStatus);
-        return keys.map((key) => (
-            <Option key={key} value={key}>
-                {promotionStatus[key]}
-            </Option>
-        ));
     }
 
     getFormData() {
         const {
             id,
-            promotionName,
-            promotionDateRange,
+            releaseName,
+            releaseDateRange,
             statusCode,
             storeId,
             storeName
         } = this.props.form.getFieldsValue();
-        const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
-        const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
+        const startDate = releaseDateRange.length > 1 ? releaseDateRange[0].valueOf() : '';
+        const endDate = releaseDateRange.length > 1 ? releaseDateRange[1].valueOf() : '';
         const branchCompanyId = this.state.branchCompanyId;
         let status = statusCode;
         if (statusCode === 'all') {
             status = '';
         }
-        if (storeId) {
-            this.setState({ storeId: false });
-        }
         return Utils.removeInvalid({
             id,
-            promotionName,
+            releaseName,
             status,
             storeId,
             storeName,
@@ -84,58 +65,39 @@ class SearchForm extends PureComponent {
 
     handleSearch() {
         // 将查询条件回传给调用页
-        this.props.onPromotionSearch(this.getFormData());
-    }
-
-    handleQueryResults() {
-        this.setState({ isReleaseCouponModalVisible: true });
-    }
-
-    handleQueryCoupons() {
-        this.setState({ isReleaseCouponModalVisible: true });
-    }
-
-    handleSelectOk(promotionIds) {
-        console.log(promotionIds);
-        this.setState({ isReleaseCouponModalVisible: false });
-    }
-
-    handleSelectCancel() {
-        this.setState({ isReleaseCouponModalVisible: false });
+        this.props.onReleaseSearch(this.getFormData());
     }
 
     handleReset() {
         this.hanldeSubCompaniesClear(); // 清除子公司值清单
         this.props.form.resetFields();  // 清除当前查询条件
-        this.props.onPromotionReset();  // 通知父页面已清空
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div className="search-box promotion">
+            <div className="search-box release">
                 <Form layout="inline">
                     <div className="search-conditions">
                         <Row gutter={40}>
                             <Col span={8}>
-                                <FormItem label="加盟商编号" style={{ paddingRight: 10 }}>
+                                <FormItem label="券ID" style={{ paddingRight: 10 }}>
                                     {getFieldDecorator('id')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem label="加盟商名称">
-                                    {getFieldDecorator('promotionName')(<Input size="default" />)}
+                                <FormItem label="券名称">
+                                    {getFieldDecorator('releaseName')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
                                 <FormItem>
                                     <div className="row">
                                         <span className="sc-form-item-label search-mind-label">
-                                            所属公司
+                                            使用范围
                                         </span>
                                         <SubCompanies
                                             value={this.state.branchCompanyId}
-                                            isDisabled={this.state.isDisabled}
                                             onSubCompaniesChooesd={this.handleSubCompanyChoose}
                                             onSubCompaniesClear={this.hanldeSubCompaniesClear}
                                         />
@@ -144,14 +106,23 @@ class SearchForm extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40}>
-                            <Col span={8}>
-                                <FormItem label="门店编号" style={{ paddingRight: 10 }}>
-                                    {getFieldDecorator('storeId')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="门店名称">
-                                    {getFieldDecorator('storeName')(<Input size="default" />)}
+                            <Col span={16}>
+                                <FormItem>
+                                    <div className="release-date-range">
+                                        <span className="sc-form-item-label search-mind-label">活动时间</span>
+                                        {getFieldDecorator('releaseDateRange', {
+                                            initialValue: [],
+                                            rules: [{ required: true, message: '请选择活动时间' }]
+                                        })(
+                                            <RangePicker
+                                                size="default"
+                                                className="manage-form-enterTime"
+                                                showTime={{ format: MINUTE_FORMAT }}
+                                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
+                                                placeholder={['开始时间', '结束时间']}
+                                            />
+                                            )}
+                                    </div>
                                 </FormItem>
                             </Col>
                         </Row>
@@ -167,23 +138,8 @@ class SearchForm extends PureComponent {
                                         重置
                                     </Button>
                                 </FormItem>
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleQueryResults}>
-                                        查询结果发券
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleQueryCoupons}>
-                                        发券
-                                    </Button>
-                                </FormItem>
                             </Col>
                         </Row>
-                        <ReleaseCouponModal
-                            visible={this.state.isReleaseCouponModalVisible}
-                            onReleaseCouponModalOk={this.handleSelectOk}
-                            onReleaseCouponModalCancel={this.handleSelectCancel}
-                        />
                     </div>
                 </Form>
             </div >
@@ -192,13 +148,12 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    onPromotionSearch: PropTypes.func,
-    onPromotionReset: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any),
+    onReleaseSearch: PropTypes.func,
+    form: PropTypes.objectOf(PropTypes.any)
 };
 
 SearchForm.defaultProps = {
-    prefixCls: 'PromotionList'
+    prefixCls: 'ReleaseList'
 }
 
 export default withRouter(Form.create()(SearchForm));

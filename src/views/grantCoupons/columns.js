@@ -5,15 +5,9 @@
  * @Last Modified by: tanjf
  * @Last Modified time: 2017-09-21 18:21:15
  */
-/**
- * @file columns.js
- * @author taoqiyu
- *
- * 促销活动列表
- */
-
-import { promotionStatus } from './constants';
+import React from 'react';
 import Util from '../../util/util';
+import { promotionStatus } from './constants';
 
 // 发放优惠券列表
 const grantCouponsColumns = [{
@@ -51,6 +45,77 @@ const grantCouponsColumns = [{
     dataIndex: 'branchCompanyId',
     key: 'branchCompanyId',
     render: note => note || '无'
+}];
+
+const releaseCouponsColumns = [{
+    title: '券ID',
+    dataIndex: 'id',
+    key: 'id'
+}, {
+    title: '券名称',
+    dataIndex: 'promotionName',
+    key: 'promotionName'
+}, {
+    title: '面额',
+    dataIndex: 'discount',
+    key: 'discount'
+}, {
+    title: '品类',
+    dataIndex: 'promoCategoriesPo',
+    key: 'promoCategoriesPo',
+    render: list => {
+        if (!list || list.length === 0) {
+            return '全部品类';
+        }
+        return list.map(category => category.categoryName).join(',');
+    }
+}, {
+    title: '使用区域',
+    dataIndex: 'branchCompanyId',
+    key: 'branchCompanyId',
+    render: list => {
+        if (!list || list.length === 0) {
+            return '全部区域';
+        }
+        const areas = list.map(company => company.companyName).join(',');
+        return (
+            <span title={areas} alt={areas}>所选区域</span>
+        );
+    }
+}, {
+    title: '使用条件',
+    dataIndex: 'quanifyAmount',
+    key: 'quanifyAmount',
+    render: amount => (`满${amount}可用`)
+}, {
+    title: '有效时间',
+    children: [{
+        title: '开始时间',
+        dataIndex: 'startDate',
+        key: 'startDate',
+        render: timestamp => Util.getTime(timestamp)
+    }, {
+        title: '结束时间',
+        dataIndex: 'endDate',
+        key: 'endDate',
+        render: timestamp => Util.getTime(timestamp)
+    }],
+}, {
+    title: '发放数量',
+    dataIndex: 'totalQuantity',
+    key: 'totalQuantity'
+}, {
+    title: '已领取',
+    dataIndex: 'grantQty',
+    key: 'grantQty'
+}, {
+    title: '已使用',
+    dataIndex: 'usedQty',
+    key: 'usedQty'
+}, {
+    title: '备注',
+    dataIndex: 'note',
+    key: 'note'
 }];
 
 const grantCouponsDetail = [{
@@ -123,5 +188,4 @@ const grantCouponsDetail = [{
     render: note => note || '无'
 }];
 
-
-export { grantCouponsColumns, grantCouponsDetail };
+export { grantCouponsColumns, releaseCouponsColumns, grantCouponsDetail };
