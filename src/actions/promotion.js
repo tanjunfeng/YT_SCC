@@ -14,6 +14,7 @@ import {
     queryCategoriesByParentId as findCategoriesService,
     createCoupons as createCouponsActionService,
     queryCouponsList as queryCouponsListService,
+    queryAliveCouponsList as queryAliveCouponsListService,
     queryFranchiseeList as queryFranchiseeListService,
     getCouponsDetail as fetchCouponsDetailService,
     getParticipate2 as participateData2Service,
@@ -156,6 +157,25 @@ export const queryCouponsList = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     queryCouponsListAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
+// 查询可发放的优惠券
+const queryAliveCouponsListAction = (data) => ({
+    type: ActionType.FETCHA_ALIVE_COUPONS_LIST,
+    payload: data
+});
+
+export const queryAliveCouponsList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryAliveCouponsListService(params)
+            .then(res => {
+                dispatch(
+                    queryAliveCouponsListAction(res.data)
                 );
                 resolve(res);
             })

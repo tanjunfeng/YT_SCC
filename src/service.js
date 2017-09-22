@@ -775,6 +775,7 @@ export const getParticipate = (params) => http.get('/coupon/queryCouponRecordLis
 export const getParticipate2 = (params) => http.get('/coupon/queryCouponActivityActiveList', params);
 export const createCoupons = (params) => http.post('/coupon/insertCoupons', params);
 export const queryCouponsList = (params) => http.get('/coupon/queryCouponsList', params);
+export const queryAliveCouponsList = (params) => http.get('/coupon/queryAliveCouponsList', params);
 export const getCouponsDetail = (params) => http.get('/coupon/queryCouponsById', params);
 export const queryFranchiseeList = (params) => http.get('/franchisee/grantFranchisee', params);
 export const grantCoupon = (params) => http.post('/coupon/grantCoupon', params);
