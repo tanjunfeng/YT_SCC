@@ -59,6 +59,9 @@ class SearchForm extends PureComponent {
         if (statusCode === 'all') {
             status = '';
         }
+        if (storeId) {
+            this.setState({ storeId: false });
+        }
         return Utils.removeInvalid({
             id,
             promotionName,
@@ -132,6 +135,7 @@ class SearchForm extends PureComponent {
                                         </span>
                                         <SubCompanies
                                             value={this.state.branchCompanyId}
+                                            isDisabled={this.state.isDisabled}
                                             onSubCompaniesChooesd={this.handleSubCompanyChoose}
                                             onSubCompaniesClear={this.hanldeSubCompaniesClear}
                                         />

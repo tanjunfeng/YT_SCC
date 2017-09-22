@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-21 16:41:01
+ * @Last Modified time: 2017-09-22 14:08:02
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -14,8 +14,8 @@ import { Table, Form, Icon, Menu, Dropdown } from 'antd';
 import { Link } from 'react-router-dom';
 
 import {
-    getPromotionList,
-    clearPromotionList,
+    queryCouponsList,
+    clearCouponsList,
     updatePromotionStatus
 } from '../../../actions/promotion';
 import SearchForm from './searchForm';
@@ -25,8 +25,8 @@ import { couponList as columns } from '../columns';
 @connect(state => ({
     promotionList: state.toJS().promotion.list
 }), dispatch => bindActionCreators({
-    getPromotionList,
-    clearPromotionList,
+    queryCouponsList,
+    clearCouponsList,
     updatePromotionStatus
 }, dispatch))
 
@@ -45,7 +45,7 @@ class CouponList extends PureComponent {
     }
 
     componentWillMount() {
-        this.props.clearPromotionList();
+        this.props.clearCouponsList();
     }
 
     componentDidMount() {
@@ -53,7 +53,7 @@ class CouponList extends PureComponent {
     }
 
     componentWillUnmount() {
-        this.props.clearPromotionList();
+        this.props.clearCouponsList();
     }
 
     /**
@@ -69,7 +69,7 @@ class CouponList extends PureComponent {
             pageSize: PAGE_SIZE,
             ...condition
         }
-        this.props.getPromotionList(param).then((data) => {
+        this.props.queryCouponsList(param).then((data) => {
             const { pageNum, pageSize } = data.data;
             this.setState({ pageNum, pageSize });
         });
@@ -206,8 +206,8 @@ class CouponList extends PureComponent {
 }
 
 CouponList.propTypes = {
-    getPromotionList: PropTypes.func,
-    clearPromotionList: PropTypes.func,
+    queryCouponsList: PropTypes.func,
+    clearCouponsList: PropTypes.func,
     updatePromotionStatus: PropTypes.func,
     promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
     location: PropTypes.objectOf(PropTypes.any)

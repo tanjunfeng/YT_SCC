@@ -14,6 +14,7 @@ import {
     queryCategoriesByParentId as findCategoriesService,
     createCoupons as createCouponsActionService,
     queryCouponsList as queryCouponsListService,
+    getCouponsDetail as fetchCouponsDetailService
 } from '../service';
 
 /**
@@ -40,7 +41,7 @@ export const getPromotionList = (params) => dispatch => (
 /**
  * 促销活动参与数据 Action
  */
-const fetchParticipateListAction = (data) => ({
+const fetchParticipateData = (data) => ({
     type: ActionType.FETCH_PATICIPATE_LIST,
     payload: data
 });
@@ -50,7 +51,7 @@ export const getParticipate = (params) => dispatch => (
         participateDataService(params)
             .then(res => {
                 dispatch(
-                    fetchParticipateListAction(res.data)
+                    fetchParticipateData(res.data)
                 );
                 resolve(res);
             })
@@ -156,6 +157,30 @@ export const getPromotionDetail = (params) => dispatch => (
     })
 );
 
+// 新增促销活动 - 优惠券详情
+const fetchCouponsDetailAction = (data) => ({
+    type: ActionType.FETCH_COUPONS_DETAIL,
+    payload: data
+});
+
+export const getCouponsDetail = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        fetchCouponsDetailService(params)
+            .then(res => {
+                dispatch(
+                    fetchCouponsDetailAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
+export const clearCouponsDetail = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_COUPONS_DETAIL,
+    payload: []
+}));
+
 export const clearPromotionDetail = () => dispatch => (dispatch({
     type: ActionType.CLEAR_PROMOTION_DETAIL,
     payload: []
@@ -189,14 +214,24 @@ export const clearPromotionList = () => dispatch => (dispatch({
 }));
 
 /**
- * 清空下单打折 - 参与数据
+ * 清空优惠券列表
  */
+export const clearCouponsList = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_COUPONS_LIST,
+    payload: []
+}));
+
 export const clearParticipate = () => dispatch => (dispatch({
     type: ActionType.CLEAR_PATICIPATE_LIST,
     payload: {}
 }));
 
-export const clearCouponsList = () => dispatch => (dispatch({
-    type: ActionType.CLEAR_COUPONS_LIST,
+export const clearCouParticipate = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_COUPATICIPATE_LIST,
+    payload: {}
+}));
+
+export const clearCompaniesList = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_ALL_COMPANIES,
     payload: []
 }));

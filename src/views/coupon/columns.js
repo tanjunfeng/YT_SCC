@@ -3,7 +3,7 @@
  * @Description: 优惠券列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-21 16:54:59
+ * @Last Modified time: 2017-09-22 11:25:11
  */
 /**
  * @file columns.js
@@ -11,6 +11,7 @@
  *
  * 促销活动列表
  */
+import React from 'react';
 import { promotionStatus } from './constants';
 import Util from '../../util/util';
 
@@ -46,7 +47,10 @@ const couponList = [{
         if (!list || list.length === 0) {
             return '全部区域';
         }
-        return '所选区域';
+        const areas = list.map(company => company.companyName);
+        return (
+            <span title={areas} alt={areas}>所选区域</span>
+        );
     }
 }, {
     title: '使用条件',
@@ -68,19 +72,19 @@ const couponList = [{
     }],
 }, {
     title: '发放数量',
-    dataIndex: 'recordsPoList',
-    key: 'recordsPoList',
-    render: list => (list ? list.length : 0)
+    dataIndex: 'totalQuantity',
+    key: 'totalQuantity',
+    render: note => note || 0
 }, {
     title: '已领取',
-    dataIndex: 'hasLq',
-    key: 'hasLq',
-    render: note => note || '无'
+    dataIndex: 'grantQty',
+    key: 'grantQty',
+    render: note => note || 0
 }, {
     title: '已使用',
-    dataIndex: 'jasUsed',
-    key: 'jasUsed',
-    render: note => note || '无'
+    dataIndex: 'usedQty',
+    key: 'usedQty',
+    render: note => note || 0
 }, {
     title: '备注',
     dataIndex: 'note',
@@ -97,4 +101,74 @@ const couponList = [{
     key: 'operation'
 }];
 
-export { couponList };
+const couponsDetail = [{
+    title: '活动ID',
+    dataIndex: 'id',
+    key: 'id'
+}, {
+    title: '活动名称',
+    dataIndex: 'promotionName',
+    key: 'promotionName'
+}, {
+    title: '活动状态',
+    dataIndex: 'status',
+    key: 'status',
+    render: statusCode => promotionStatus[statusCode]
+}, {
+    title: '折扣比例',
+    dataIndex: 'discount',
+    key: 'discount',
+    render: discount => `${discount}%`
+}, {
+    title: '生效时间',
+    dataIndex: 'startDate',
+    key: 'startDate',
+    render: timestamp => Util.getTime(timestamp)
+}, {
+    title: '过期时间',
+    dataIndex: 'endDate',
+    key: 'endDate',
+    render: timestamp => Util.getTime(timestamp)
+}, {
+    title: '使用条件',
+    dataIndex: 'quanifyAmount',
+    key: 'quanifyAmount',
+    render: amount => (amount ? `满 ${amount} 元可用` : '不限制')
+}, {
+    title: '使用区域',
+    dataIndex: 'companiesPoList',
+    key: 'companiesPoList',
+    render: list => {
+        if (!list || list.length === 0) {
+            return '全部区域';
+        }
+        return list.map(company => company.companyName).join(',');
+    }
+}, {
+    title: '使用品类',
+    dataIndex: 'promoCategoriesPo',
+    key: 'promoCategoriesPo',
+    render: category => {
+        if (!category) {
+            return '全部品类';
+        }
+        return category.categoryName
+    }
+}, {
+    title: '指定门店',
+    dataIndex: 'stores',
+    key: 'stores',
+    render: stores => {
+        if (!stores) {
+            return '未指定';
+        }
+        return stores.storeId;
+    }
+}, {
+    title: '备注',
+    dataIndex: 'note',
+    key: 'note',
+    render: note => note || '无'
+}];
+
+export { couponList, couponsDetail };
