@@ -27,6 +27,7 @@ export default function (state = initState, action) {
             return state.set('list', fromJS(action.payload));
         case ActionType.FETCH_COUPONS_LIST:
         case ActionType.CLEAR_COUPONS_LIST:
+        case ActionType.FETCHA_ALIVE_COUPONS_LIST:
             return state.set('couponsList', fromJS(action.payload));
         case ActionType.FETCH_FRANCHISEE_LIST:
         case ActionType.CLEAR_FRANCHISEE_LIST:

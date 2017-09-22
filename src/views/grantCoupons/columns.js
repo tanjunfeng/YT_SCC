@@ -47,6 +47,7 @@ const grantCouponsColumns = [{
     render: name => name || '无'
 }];
 
+// 选择优惠券类型列表页字段
 const releaseCouponsColumns = [{
     title: '券ID',
     dataIndex: 'id',
@@ -62,8 +63,7 @@ const releaseCouponsColumns = [{
 }, {
     title: '品类',
     dataIndex: 'promoCategoriesPo',
-    key: 'promoCategoriesPo',
-    render: category => category.categoryName
+    key: 'promoCategoriesPo'
 }, {
     title: '使用区域',
     dataIndex: 'branchCompanyId',
