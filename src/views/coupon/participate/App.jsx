@@ -90,7 +90,7 @@ class CouponsParticipate extends PureComponent {
             ...condition
         };
         this.props.getParticipate(param).then((data) => {
-            const { pageNum, pageSize } = data.data.participateDataDtoPageResult;
+            const { pageNum, pageSize } = data.data;
             this.setState({ pageNum, pageSize });
         });
         this.props.getParticipate2(param).then((data) => {
@@ -145,7 +145,7 @@ class CouponsParticipate extends PureComponent {
                         <Table
                             dataSource={data}
                             columns={columns}
-                            rowKey="orderId"
+                            rowKey="franchiseeId"
                             scroll={{
                                 x: 1400
                             }}
@@ -163,7 +163,7 @@ class CouponsParticipate extends PureComponent {
                         <Table
                             dataSource={this.props.participate2.data}
                             columns={columns2}
-                            rowKey="orderId"
+                            rowKey="storeId"
                             scroll={{
                                 x: 1400
                             }}
