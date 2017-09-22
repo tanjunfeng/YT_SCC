@@ -36,15 +36,24 @@ class ReleaseCouponModal extends PureComponent {
         this.handleCouponReset = this.handleCouponReset.bind(this);
         this.handleOk = this.handleOk.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.onSelectChange = this.onSelectChange.bind(this);
         this.query = this.query.bind(this);
     }
 
-    componentDidMount() {
-        this.query();
-    }
-
-    componentWillUnmount() {
-        this.props.clearCouponsList();
+    componentWillReceiveProps(nextProps) {
+        if (!nextProps.visible && this.props.visible) {
+            this.setState({
+                pageNum: 1,
+                pageSize: PAGE_SIZE,
+                promoIds: [],
+            });
+            // 隐藏时清空
+            this.props.clearCouponsList();
+        }
+        if (nextProps.visible && !this.props.visible) {
+            // 显示时按默认条件查询一次
+            this.query();
+        }
     }
 
     /**
@@ -57,18 +66,14 @@ class ReleaseCouponModal extends PureComponent {
     /**
      * table复选框
      */
-    rowSelection = {
-        onChange: (selectedRowKeys) => {
-            this.setState({
-                promoIds: selectedRowKeys,
-            });
-        }
+    onSelectChange(promoIds) {
+        this.setState({ promoIds });
     }
 
     query(condition) {
         const param = {
             pageNum: 1,
-            pageSize: PAGE_SIZE,
+            pageSize: 5,
             ...condition
         }
         this.props.queryCouponsList(param).then((data) => {
@@ -103,7 +108,11 @@ class ReleaseCouponModal extends PureComponent {
 
     render() {
         const { data, total } = this.props.couponsList;
-        const { pageNum, pageSize } = this.state;
+        const { pageNum, pageSize, promoIds } = this.state;
+        const rowSelection = {
+            selectedRowKeys: promoIds,
+            onChange: this.onSelectChange
+        };
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <Modal
@@ -114,11 +123,12 @@ class ReleaseCouponModal extends PureComponent {
                 width={1200}
             >
                 <SearchForm
+                    visible={this.props.visible}
                     onCouponSearch={this.handleCouponSearch}
                     onCouponReset={this.handleCouponReset}
                 />
                 <Table
-                    rowSelection={this.rowSelection}
+                    rowSelection={rowSelection}
                     dataSource={data}
                     columns={columns}
                     rowKey="id"
