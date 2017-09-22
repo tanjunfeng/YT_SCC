@@ -30,7 +30,7 @@ class CouponDetail extends PureComponent {
 
     componentDidMount() {
         const { id } = this.props.match.params;
-        this.props.getCouponsDetail({ promotionId: id });
+        this.props.getCouponsDetail({ promoId: id });
     }
 
     componentWillUnmount() {
