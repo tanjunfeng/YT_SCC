@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Modal, Table, Form } from 'antd';
+import { Modal, Table, Form, message } from 'antd';
 import {
     queryCouponsList,
     clearCouponsList
@@ -69,7 +69,6 @@ class ReleaseCouponModal extends PureComponent {
         const param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
-            promoIds: this.state.promoIds,
             ...condition
         }
         this.props.queryCouponsList(param).then((data) => {
@@ -91,7 +90,11 @@ class ReleaseCouponModal extends PureComponent {
     }
 
     handleOk() {
-        this.props.onReleaseCouponModalOk(this.state.promoIds);
+        if (this.state.promoIds.length === 0) {
+            message.error('请选择至少一张优惠券');
+        } else {
+            this.props.onReleaseCouponModalOk(this.state.promoIds);
+        }
     }
 
     handleCancel() {
