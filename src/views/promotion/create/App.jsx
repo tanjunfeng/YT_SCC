@@ -11,11 +11,11 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {
     Form, Row, Col, Input, InputNumber,
-    Button, DatePicker, Radio, message
+    Button, DatePicker, Radio, message, Checkbox
 } from 'antd';
 import Utils from '../../../util/util';
 import { createPromotion } from '../../../actions/promotion';
-import { TIME_FORMAT } from '../../../constant';
+import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { AreaSelector } from '../../../container/tree';
 import Category from '../../../container/cascader';
 
@@ -56,6 +56,7 @@ class PromotionCreate extends PureComponent {
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this.handleCategorySelect = this.handleCategorySelect.bind(this);
         this.handleStoreChange = this.handleStoreChange.bind(this);
+        this.handleStrategyChange = this.handleStrategyChange.bind(this);
     }
 
     getFormData(callback) {
@@ -63,7 +64,8 @@ class PromotionCreate extends PureComponent {
             if (err) {
                 return callback(false);
             }
-            const { promotionName,
+            const {
+                promotionName,
                 discount,
                 promotionDateRange,
                 condition,
@@ -72,7 +74,8 @@ class PromotionCreate extends PureComponent {
                 category,
                 quanifyAmount,
                 note,
-                storeIds
+                storeIds,
+                isSuperposeUserDiscount
         } = values;
             const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
             const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
@@ -87,7 +90,8 @@ class PromotionCreate extends PureComponent {
                 discount,
                 startDate,
                 endDate,
-                note
+                note,
+                isSuperposeUserDiscount
             };
             if (condition === 1) {
                 if (!quanifyAmount) {
@@ -245,8 +249,13 @@ class PromotionCreate extends PureComponent {
     }
 
     handleBack() {
-        // const dist = Utils.removeInvalid(this.props.form.getFieldsValue());
         this.props.history.goBack();
+    }
+
+    handleStrategyChange(e) {
+        this.props.form.setFieldsValue({
+            isSuperposeUserDiscount: e.target.checked
+        });
     }
 
     render() {
@@ -285,8 +294,9 @@ class PromotionCreate extends PureComponent {
                                                     size="default"
                                                     min={1}
                                                     max={100}
-                                                    formatter={value => `${value}%`}
-                                                />)}
+                                                />)
+                                            }
+                                            %
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -300,7 +310,8 @@ class PromotionCreate extends PureComponent {
                                                 <RangePicker
                                                     style={{ width: '240px' }}
                                                     className="manage-form-enterTime"
-                                                    format={TIME_FORMAT}
+                                                    showTime={{ format: MINUTE_FORMAT }}
+                                                    format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
                                                     placeholder={['开始时间', '结束时间']}
                                                 />
                                                 )}
@@ -327,12 +338,12 @@ class PromotionCreate extends PureComponent {
                                                     rules: [{ required: true, message: '请填写条件金额' }]
                                                 })(
                                                     <InputNumber
-                                                        min={0}
+                                                        min={1}
                                                         max={65535}
-                                                        formatter={value => `${value} 元可用`}
                                                         onChange={this.handleQuanifyAmountChange}
                                                     />)
                                                 : null}
+                                            {this.param.condition > 0 ? '元可用' : null}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -416,6 +427,23 @@ class PromotionCreate extends PureComponent {
                                     </Row>
                                     : null
                                 }
+                                <Row>
+                                    <Col span={16}>
+                                        <FormItem label="活动叠加">
+                                            {getFieldDecorator('isSuperposeUserDiscount', {
+                                                initialValue: false
+                                            })(
+                                                <Checkbox
+                                                    onChange={this.handleStrategyChange}
+                                                >
+                                                    会员等级
+                                                    </Checkbox>
+                                                )
+                                            }
+
+                                        </FormItem>
+                                    </Col>
+                                </Row>
                                 <Row>
                                     <Col span={16}>
                                         <FormItem label="备注">
