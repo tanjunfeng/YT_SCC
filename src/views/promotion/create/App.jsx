@@ -249,7 +249,6 @@ class PromotionCreate extends PureComponent {
     }
 
     handleBack() {
-        // const dist = Utils.removeInvalid(this.props.form.getFieldsValue());
         this.props.history.goBack();
     }
 
