@@ -1,5 +1,5 @@
 /**
- * 促销管理查询条件
+ * 发放优惠券
  *
  * @author taoqiyu,tanjf
  */
@@ -21,7 +21,7 @@ class SearchForm extends PureComponent {
         this.state = {
             branchCompanyId: '',
             isReleaseCouponModalVisible: false,
-            promoIds: []
+            grantMethod: 0
         }
         this.getStatus = this.getStatus.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
@@ -74,19 +74,27 @@ class SearchForm extends PureComponent {
     }
 
     handleQueryResults() {
-        this.setState({ isReleaseCouponModalVisible: true });
-        // 通知查询结果发券
-        this.props.onPromotionReleaseAll(this.state.promoIds);
+        this.setState({ isReleaseCouponModalVisible: true, grantMethod: 0 });
     }
 
     handleQueryCoupons() {
-        this.setState({ isReleaseCouponModalVisible: true });
-        // 通知发券
-        this.props.onPromotionReleasChecked(this.state.promoIds);
+        this.setState({ isReleaseCouponModalVisible: true, grantMethod: 1 });
     }
 
     handleSelectOk(promoIds) {
-        this.setState({ promoIds, isReleaseCouponModalVisible: false });
+        this.setState({ isReleaseCouponModalVisible: false });
+        switch (this.state.grantMethod) {
+            case 0:
+                // 通知查询结果发券
+                this.props.onPromotionReleaseAll(promoIds);
+                break;
+            case 1:
+                // 通知发券
+                this.props.onPromotionReleasChecked(promoIds);
+                break;
+            default:
+                break;
+        }
     }
 
     handleSelectCancel() {
@@ -162,7 +170,7 @@ class SearchForm extends PureComponent {
                                     </Button>
                                 </FormItem>
                                 <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleQueryCoupons}>
+                                    <Button type="primary" size="default" disabled={this.props.isGrantDisabled} onClick={this.handleQueryCoupons}>
                                         发券
                                     </Button>
                                 </FormItem>
@@ -185,6 +193,7 @@ SearchForm.propTypes = {
     onPromotionReset: PropTypes.func,
     onPromotionReleaseAll: PropTypes.func,
     onPromotionReleasChecked: PropTypes.func,
+    isGrantDisabled: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any)
 };
 

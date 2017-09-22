@@ -69,7 +69,6 @@ class ReleaseCouponModal extends PureComponent {
         const param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
-            promoIds: this.state.promoIds,
             ...condition
         }
         this.props.queryCouponsList(param).then((data) => {

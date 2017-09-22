@@ -115,6 +115,7 @@ class GrantCouponList extends PureComponent {
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
                     onPromotionReleaseAll={this.handleReleaseAll}
+                    isGrantDisabled={this.state.storeIds.length === 0}
                     onPromotionReleasChecked={this.handleReleaseChecked}
                 />
                 <Table
