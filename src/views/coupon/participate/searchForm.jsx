@@ -53,20 +53,24 @@ class SearchForm extends PureComponent {
             orderId,
             promotionName,
             participateTimeRange,
-            orderStateCode,
-            paymentStateCode,
+            orderState,
+            paymentState,
             shippingStateCode,
-            franchiseeStoreId
+            franchiseeId,
+            storeId
         } = this.props.form.getFieldsValue();
+        const { match } = this.props;
         return Util.removeInvalid({
+            promoId: match.params.id,
             orderId,
+            storeId,
             promotionName,
-            orderState: this.getStatusFromCode(orderStateCode),
-            paymentState: this.getStatusFromCode(paymentStateCode),
+            orderState: this.getStatusFromCode(orderState),
+            paymentState: this.getStatusFromCode(paymentState),
             shippingState: this.getStatusFromCode(shippingStateCode),
-            startTime: participateTimeRange.length > 1 ? participateTimeRange[0].valueOf() : '',
-            endTime: participateTimeRange.length > 1 ? participateTimeRange[1].valueOf() : '',
-            franchiseeStoreId,
+            recordTimeStart: participateTimeRange.length > 1 ? participateTimeRange[0].valueOf() : '',
+            recordTimeEnd: participateTimeRange.length > 1 ? participateTimeRange[1].valueOf() : '',
+            franchiseeId,
             branchCompanyId: this.state.branchCompanyId
         });
     }
@@ -120,7 +124,7 @@ class SearchForm extends PureComponent {
                             </Col>
                             <Col span={8}>
                                 <FormItem label="订单状态">
-                                    {getFieldDecorator('orderStateCode', {
+                                    {getFieldDecorator('orderState', {
                                         initialValue: 'ALL'
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
@@ -131,7 +135,7 @@ class SearchForm extends PureComponent {
                             </Col>
                             <Col span={8}>
                                 <FormItem label="支付状态">
-                                    {getFieldDecorator('paymentStateCode', {
+                                    {getFieldDecorator('paymentState', {
                                         initialValue: 'ALL'
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
@@ -143,25 +147,21 @@ class SearchForm extends PureComponent {
                         </Row>
                         <Row gutter={40}>
                             <Col span={8}>
-                                <FormItem label="物流状态">
-                                    {getFieldDecorator('shippingStateCode', {
-                                        initialValue: 'ALL'
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus('shippingState')}
-                                        </Select>
-                                        )}
+                                <FormItem label="门店编号">
+                                    {getFieldDecorator('storeId')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem label="门店编号">
-                                    {getFieldDecorator('franchiseeStoreId')(<Input size="default" />)}
+                                <FormItem label="加盟商编号">
+                                    {getFieldDecorator('franchiseeId')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
                                 <FormItem>
                                     <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">所属公司</span>
+                                        <span className="sc-form-item-label search-mind-label">
+                                            所属公司
+                                        </span>
                                         <SubCompanies
                                             value={this.state.branchCompanyId}
                                             onSubCompaniesChooesd={this.handleSubCompanyChoose}
@@ -173,8 +173,23 @@ class SearchForm extends PureComponent {
                         </Row>
                         <Row gutter={40}>
                             <Col span={8}>
-                                <FormItem label="使用时间">
+                                <FormItem label="领取时间">
                                     {getFieldDecorator('participateTimeRange', {
+                                        initialValue: []
+                                    })(
+                                        <RangePicker
+                                            size="default"
+                                            className="manage-form-enterTime"
+                                            showTime={{ format: MINUTE_FORMAT }}
+                                            format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
+                                            placeholder={['开始时间', '结束时间']}
+                                        />
+                                        )}
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
+                                <FormItem label="使用时间">
+                                    {getFieldDecorator('recordTime', {
                                         initialValue: []
                                     })(
                                         <RangePicker
@@ -218,7 +233,8 @@ SearchForm.propTypes = {
     onParticipateSearch: PropTypes.func,
     onParticipateReset: PropTypes.func,
     onParticipateExport: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any)
+    form: PropTypes.objectOf(PropTypes.any),
+    match: PropTypes.objectOf(PropTypes.any)
 };
 
 SearchForm.defaultProps = {

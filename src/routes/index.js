@@ -82,6 +82,7 @@ import PromotionParticipate from 'bundle-loader?lazy!../views/promotion/particip
 import CouponList from 'bundle-loader?lazy!../views/coupon/mngList';
 import CouponCreate from 'bundle-loader?lazy!../views/coupon/create';
 import CouponDetail from 'bundle-loader?lazy!../views/coupon/detail';
+import CouponsParticipate from 'bundle-loader?lazy!../views/coupon/participate';
 
 // 发放优惠券
 import GrantCouponList from 'bundle-loader?lazy!../views/grantCoupons/mngList';
@@ -684,7 +685,7 @@ const routes = [
                         <Route
                             path="/coupon/participate/:id"
                             exact
-                            render={() => (<Bundle load={PromotionParticipate}>
+                            render={() => (<Bundle load={CouponsParticipate}>
                                 {(App) => <App />}</Bundle>)}
                         />
                     </Switch>
