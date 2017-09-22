@@ -25,7 +25,8 @@ import {
     findCanUseCompanyInfo,
     queryCategorysByLevel,
     queryBranchCompanyInfo,
-    queryProductForSelect
+    queryProductForSelect,
+    findCompanyBaseInfo as findCompaniesService
 } from '../service';
 
 const pubValueList = {
@@ -83,12 +84,12 @@ const receiveRegion = (data) => ({
     payload: data
 })
 
-export const fetchRegionByCode = ({type = 0, code = '100000'}) => dispatch => (
-    queryRegionByCode({code})
+export const fetchRegionByCode = ({ type = 0, code = '100000' }) => dispatch => (
+    queryRegionByCode({ code })
         .then(res => {
             const { data } = res;
             dispatch(
-                receiveRegion({type, parentCode: code, data})
+                receiveRegion({ type, parentCode: code, data })
             );
         })
 )
@@ -119,12 +120,12 @@ const receiveAvailablProducts = (data) => ({
 export const getAvailablProducts = (params) => dispatch => (
     new Promise((resolve, reject) => {
         availablProducts(params)
-        .then(res => {
-            dispatch(receiveAvailablProducts(res.data));
-        })
-        .catch(err => {
-            reject(err);
-        })
+            .then(res => {
+                dispatch(receiveAvailablProducts(res.data));
+            })
+            .catch(err => {
+                reject(err);
+            })
     })
 )
 
@@ -176,3 +177,32 @@ export const pubFetchValueList = (params, type) => dispatch => (
             })
     })
 )
+
+const findCompaniesAction = (data) => ({
+    type: ActionType.FIND_ALL_COMPANIES,
+    payload: data
+});
+
+/**
+ * 获取子公司列表
+ */
+export const getAllCompanies = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        findCompaniesService(params)
+            .then(res => {
+                dispatch(
+                    findCompaniesAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 清空子公司列表
+ */
+export const clearCompaniesList = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_ALL_COMPANIES,
+    payload: []
+}));

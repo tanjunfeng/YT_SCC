@@ -22,7 +22,6 @@ class Category extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            category: {},
             options: [],
             isLoading: false
         };
@@ -68,7 +67,6 @@ class Category extends PureComponent {
             categoryName: target.label,
             categoryLevel: target.level
         };
-        this.setState({ category });
         this.props.onCategorySelect(category);
     }
 
@@ -138,6 +136,7 @@ class Category extends PureComponent {
                 options={this.state.options}
                 loadData={this.loadData}
                 onChange={this.onChange}
+                placeholder={'请选择'}
                 changeOnSelect
             />
         );

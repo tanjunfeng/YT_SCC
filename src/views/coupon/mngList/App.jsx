@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-20 14:16:35
+ * @Last Modified time: 2017-09-22 15:18:02
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -14,8 +14,8 @@ import { Table, Form, Icon, Menu, Dropdown } from 'antd';
 import { Link } from 'react-router-dom';
 
 import {
-    getPromotionList,
-    clearPromotionList,
+    queryCouponsList,
+    clearCouponsList,
     updatePromotionStatus
 } from '../../../actions/promotion';
 import SearchForm from './searchForm';
@@ -23,10 +23,10 @@ import { PAGE_SIZE } from '../../../constant';
 import { couponList as columns } from '../columns';
 
 @connect(state => ({
-    promotionList: state.toJS().promotion.list
+    couponsList: state.toJS().promotion.couponsList
 }), dispatch => bindActionCreators({
-    getPromotionList,
-    clearPromotionList,
+    queryCouponsList,
+    clearCouponsList,
     updatePromotionStatus
 }, dispatch))
 
@@ -45,7 +45,7 @@ class CouponList extends PureComponent {
     }
 
     componentWillMount() {
-        this.props.clearPromotionList();
+        this.props.clearCouponsList();
     }
 
     componentDidMount() {
@@ -53,7 +53,7 @@ class CouponList extends PureComponent {
     }
 
     componentWillUnmount() {
-        this.props.clearPromotionList();
+        this.props.clearCouponsList();
     }
 
     /**
@@ -69,7 +69,7 @@ class CouponList extends PureComponent {
             pageSize: PAGE_SIZE,
             ...condition
         }
-        this.props.getPromotionList(param).then((data) => {
+        this.props.queryCouponsList(param).then((data) => {
             const { pageNum, pageSize } = data.data;
             this.setState({ pageNum, pageSize });
         });
@@ -136,6 +136,9 @@ class CouponList extends PureComponent {
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/detail/${id}`}>活动详情</Link>
                 </Menu.Item>
+                <Menu.Item key="participate">
+                    <Link to={`${pathname}/participate/${id}`}>参与数据</Link>
+                </Menu.Item>
                 {
                     // 未发布的可发布
                     (status === 'unreleased') ?
@@ -172,7 +175,7 @@ class CouponList extends PureComponent {
     }
 
     render() {
-        const { data, total } = this.props.promotionList;
+        const { data, total } = this.props.couponsList;
         const { pageNum, pageSize } = this.state;
         columns[columns.length - 1].render = this.renderOperations;
         return (
@@ -203,10 +206,10 @@ class CouponList extends PureComponent {
 }
 
 CouponList.propTypes = {
-    getPromotionList: PropTypes.func,
-    clearPromotionList: PropTypes.func,
+    queryCouponsList: PropTypes.func,
+    clearCouponsList: PropTypes.func,
     updatePromotionStatus: PropTypes.func,
-    promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+    couponsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
     location: PropTypes.objectOf(PropTypes.any)
 }
 

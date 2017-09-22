@@ -10,15 +10,15 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Row, Col, Button } from 'antd';
-import { clearCouponsDetail, getCouponsDetail } from '../../../actions/promotion';
-import { couponsDetail as columns } from '../columns';
+import { clearPromotionDetail, getPromotionDetail } from '../../../actions/promotion';
+import { grantCouponsDetail as columns } from '../columns';
 
 const FormItem = Form.Item;
 @connect((state) => ({
-    coupons: state.toJS().promotion.couponsDetail
+    promotion: state.toJS().promotion.promotion
 }), dispatch => bindActionCreators({
-    clearCouponsDetail,
-    getCouponsDetail
+    clearPromotionDetail,
+    getPromotionDetail
 }, dispatch))
 
 class CouponDetail extends PureComponent {
@@ -30,16 +30,16 @@ class CouponDetail extends PureComponent {
 
     componentDidMount() {
         const { id } = this.props.match.params;
-        this.props.getCouponsDetail({ promoId: id });
+        this.props.getPromotionDetail({ promotionId: id });
     }
 
     componentWillUnmount() {
-        this.props.clearCouponsDetail();
+        this.props.clearPromotionDetail();
     }
 
     getDetails() {
         return columns.map(column => {
-            const item = this.props.coupons[column.dataIndex];
+            const item = this.props.promotion[column.dataIndex];
             return (
                 <Row key={column.key}>
                     <Col span={16}>
@@ -57,10 +57,10 @@ class CouponDetail extends PureComponent {
 
     render() {
         return (
-            <div className="coupons">
+            <div className="promotion">
                 <Form layout="inline">
-                    <div className="coupons-add-item">
-                        <div className="add-message coupons-add-license">
+                    <div className="promotion-add-item">
+                        <div className="add-message promotion-add-license">
                             <div className="add-message-body">
                                 {this.getDetails()}
                                 <Row gutter={40} type="flex">
@@ -82,10 +82,10 @@ class CouponDetail extends PureComponent {
 }
 
 CouponDetail.propTypes = {
-    clearCouponsDetail: PropTypes.func,
-    getCouponsDetail: PropTypes.func,
+    clearPromotionDetail: PropTypes.func,
+    getPromotionDetail: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
-    coupons: PropTypes.objectOf(PropTypes.any),
+    promotion: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any)
 }
 

@@ -9,41 +9,51 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form } from 'antd';
+import { Table, Form, Tabs } from 'antd';
 
 import {
-    getPromotionList,
-    clearPromotionList,
-    updatePromotionStatus
+    getParticipate,
+    getParticipate2,
+    clearParticipate
 } from '../../../actions/promotion';
+import { exportParticipateData1, exportParticipateData2 } from '../../../service';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { managementList as columns } from '../columns';
+import {
+    participateList as columns,
+    participateListTab2 as columns2
+} from '../columns';
+import Util from '../../../util/util';
+
+const TabPane = Tabs.TabPane;
 
 @connect(state => ({
-    promotionList: state.toJS().promotion.list
+    participate: state.toJS().promotion.participate,
+    participate2: state.toJS().promotion.participate2
 }), dispatch => bindActionCreators({
-    getPromotionList,
-    clearPromotionList,
-    updatePromotionStatus
+    getParticipate,
+    clearParticipate,
+    getParticipate2
 }, dispatch))
 
-class CouponParticipate extends PureComponent {
+class CouponsParticipate extends PureComponent {
     constructor(props) {
         super(props);
-        this.param = {
+        this.state = {
             pageNum: 1,
-            pageSize: PAGE_SIZE
+            pageSize: PAGE_SIZE,
+            pageNum1: 1,
+            pageSize1: PAGE_SIZE,
+            tabPage: '1'
         };
-        this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
-        this.handlePromotionReset = this.handlePromotionReset.bind(this);
-        this.handleSelect = this.handleSelect.bind(this);
-        this.renderOperations = this.renderOperations.bind(this);
+        this.promoId = this.props.match.params.id;
+        this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
+        this.handleParticipateReset = this.handleParticipateReset.bind(this);
+        this.handleParticipateExport = this.handleParticipateExport.bind(this);
+        this.onPaginate = this.onPaginate.bind(this);
+        this.onPaginate1 = this.onPaginate1.bind(this);
+        this.handleTabChange = this.handleTabChange.bind(this);
         this.query = this.query.bind(this);
-    }
-
-    componentWillMount() {
-        this.props.clearPromotionList();
     }
 
     componentDidMount() {
@@ -51,106 +61,135 @@ class CouponParticipate extends PureComponent {
     }
 
     componentWillUnmount() {
-        this.props.clearPromotionList();
+        this.props.clearParticipate();
     }
 
     /**
-     * 分页页码改变的回调
+     * Tab1 - 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        Object.assign(this.param, {
-            pageNum
-        });
-        this.query();
-    }
-
-    query() {
-        this.props.getPromotionList(this.param).then((data) => {
-            const { pageNum, pageSize } = data.data;
-            Object.assign(this.param, {
-                pageNum, pageSize
-            });
-        });
-    }
-
-    handlePromotionSearch(param) {
-        Object.assign(this.param, param);
-        this.query();
-    }
-
-    handlePromotionReset() {
-        // 重置检索条件
-        this.param = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE
-        }
+        this.query({ page: pageNum });
     }
 
     /**
-     * 促销活动表单操作
-    *
-    * @param {Object} record 传值所有数据对象
-    * @param {number} index 下标
-    * @param {Object} items 方法属性
-    */
-    handleSelect(record, index, items) {
-        const { key } = items;
-        const id = record.id;
-        switch (key) {
-            case 'publish': // 发布
-                this.props.updatePromotionStatus({
-                    id,
-                    status: 'released'
-                }).then(() => {
-                    this.query();
-                });
-                break;
-            case 'close':   // 关闭
-                this.props.updatePromotionStatus({
-                    id,
-                    status: 'closed'
-                }).then(() => {
-                    this.query();
-                });
-                break;
-            default:
-                break;
+     *  Tab2 - 分页页码改变的回调
+     */
+    onPaginate1 = (pageNum) => {
+        this.query({ page: pageNum });
+    }
+
+    handleTabChange(key) {
+        this.setState({tabPage: key});
+    }
+
+    query(condition) {
+        const param = {
+            page: this.state.pageNum,
+            pageSize: this.state.pageSize,
+            promoId: this.promoId,
+            ...condition
+        };
+        this.props.getParticipate(param).then((data) => {
+            const { pageNum, pageSize } = data.data.participateDataDtoPageResult;
+            this.setState({ pageNum, pageSize });
+        });
+        this.props.getParticipate2(param).then((data) => {
+            const { pageNum, pageSize } = data.data;
+            this.setState({ pageNum1: pageNum, pageSize1: pageSize });
+        });
+    }
+
+    handleParticipateSearch(param) {
+        this.query(param);
+    }
+
+    handleParticipateReset() {
+        // 重置检索条件
+        this.setState({
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        });
+    }
+
+    handleParticipateExport(param) {
+        const condition = {
+            page: this.state.pageNum,
+            pageSize: this.state.pageSize,
+            promoId: this.promoId,
+            ...param
+        };
+        if (this.state.tabPage === '1') {
+            Util.exportExcel(exportParticipateData1, condition);
+        } else {
+            Util.exportExcel(exportParticipateData2, condition);
         }
     }
 
     render() {
-        const { data, total } = this.props.promotionList;
+        const {
+            participateDataDtoPageResult = {},
+            promotionName
+        } = this.props.participate;
+        const { data, total } = participateDataDtoPageResult;
+        const { pageNum, pageSize, pageNum1, pageSize1, } = this.state;
         return (
             <div>
                 <SearchForm
-                    handlePromotionSearch={this.handlePromotionSearch}
-                    handlePromotionReset={this.handlePromotionReset}
+                    onParticipateSearch={this.handleParticipateSearch}
+                    onParticipateReset={this.handleParticipateReset}
+                    onParticipateExport={this.handleParticipateExport}
                 />
-                <Table
-                    dataSource={data}
-                    columns={columns}
-                    rowKey="id"
-                    scroll={{
-                        x: 1400
-                    }}
-                    bordered
-                    pagination={{
-                        ...this.param,
-                        total,
-                        showQuickJumper: true,
-                        onChange: this.onPaginate
-                    }}
-                />
+                <h2>活动ID：{this.props.match.params.id}    活动名称：{promotionName}</h2>
+                <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
+                    <TabPane tab="已使用" key="1">
+                        <Table
+                            dataSource={data}
+                            columns={columns}
+                            rowKey="orderId"
+                            scroll={{
+                                x: 1400
+                            }}
+                            bordered
+                            pagination={{
+                                pageNum,
+                                pageSize,
+                                total,
+                                showQuickJumper: true,
+                                onChange: this.onPaginate
+                            }}
+                        />
+                    </TabPane>
+                    <TabPane tab="未使用" key="2">
+                        <Table
+                            dataSource={this.props.participate2.data}
+                            columns={columns2}
+                            rowKey="orderId"
+                            scroll={{
+                                x: 1400
+                            }}
+                            bordered
+                            pagination={{
+                                pageNum1,
+                                pageSize1,
+                                total: this.props.participate2.total,
+                                showQuickJumper: true,
+                                onChange: this.onPaginate1
+                            }}
+                        />
+                    </TabPane>
+                </Tabs>
             </div>
         );
     }
 }
 
-CouponParticipate.propTypes = {
-    getPromotionList: PropTypes.func,
-    clearPromotionList: PropTypes.func,
-    updatePromotionStatus: PropTypes.func,
-    promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
+CouponsParticipate.propTypes = {
+    getParticipate: PropTypes.func,
+    getParticipate2: PropTypes.func,
+    clearParticipate: PropTypes.func,
+    match: PropTypes.objectOf(PropTypes.any),
+    participate: PropTypes.objectOf(PropTypes.any),
+    participate2: PropTypes.objectOf(PropTypes.any),
 }
 
-export default withRouter(Form.create()(CouponParticipate));
+export default withRouter(Form.create()(CouponsParticipate));

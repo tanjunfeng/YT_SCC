@@ -11,8 +11,13 @@ import {
     createPromotion as createPromotionService,
     fetchPromotionDetail as fetchPromotionDetailService,
     updatePromotionStatus as updatePromotionStatusService,
-    findCompanyBaseInfo as findCompaniesService,
-    queryCategoriesByParentId as findCategoriesService
+    queryCategoriesByParentId as findCategoriesService,
+    createCoupons as createCouponsActionService,
+    queryCouponsList as queryCouponsListService,
+    queryFranchiseeList as queryFranchiseeListService,
+    getCouponsDetail as fetchCouponsDetailService,
+    getParticipate2 as participateData2Service,
+    grantCoupon as grantCouponService
 } from '../service';
 
 /**
@@ -37,9 +42,9 @@ export const getPromotionList = (params) => dispatch => (
 );
 
 /**
- * 促销活动参与数据 Action
+ * 促销活动参与数据1 Action
  */
-const fetchParticipateListAction = (data) => ({
+const fetchParticipateData = (data) => ({
     type: ActionType.FETCH_PATICIPATE_LIST,
     payload: data
 });
@@ -49,7 +54,7 @@ export const getParticipate = (params) => dispatch => (
         participateDataService(params)
             .then(res => {
                 dispatch(
-                    fetchParticipateListAction(res.data)
+                    fetchParticipateData(res.data)
                 );
                 resolve(res);
             })
@@ -57,17 +62,20 @@ export const getParticipate = (params) => dispatch => (
     })
 );
 
-const findCompaniesAction = (data) => ({
-    type: ActionType.FIND_ALL_COMPANIES,
+/**
+ * 促销活动参与数据2 Action
+ */
+const fetchParticipateData2 = (data) => ({
+    type: ActionType.FETCH_PATICIPATETWO_LIST,
     payload: data
 });
 
-export const getAllCompanies = (params) => dispatch => (
+export const getParticipate2 = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        findCompaniesService(params)
+        participateData2Service(params)
             .then(res => {
                 dispatch(
-                    findCompaniesAction(res.data)
+                    fetchParticipateData2(res.data)
                 );
                 resolve(res);
             })
@@ -117,6 +125,63 @@ export const createPromotion = (params) => dispatch => (
     })
 );
 
+// 优惠券
+const createCouponsAction = (data) => ({
+    type: ActionType.CREATE_COUPONS,
+    payload: data
+});
+
+export const createCoupons = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        createCouponsActionService(params)
+            .then(res => {
+                dispatch(
+                    createCouponsAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
+// 优惠券
+const queryCouponsListAction = (data) => ({
+    type: ActionType.FETCH_COUPONS_LIST,
+    payload: data
+});
+
+export const queryCouponsList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryCouponsListService(params)
+            .then(res => {
+                dispatch(
+                    queryCouponsListAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
+// 查询加盟商列表
+const queryFranchiseeListAction = (data) => ({
+    type: ActionType.FETCH_FRANCHISEE_LIST,
+    payload: data
+});
+
+export const queryFranchiseeList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryFranchiseeListService(params)
+            .then(res => {
+                dispatch(
+                    queryFranchiseeListAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
 const fetchPromotionDetailAction = (data) => ({
     type: ActionType.FETCH_PROMOTION_DETAIL,
     payload: data
@@ -134,6 +199,49 @@ export const getPromotionDetail = (params) => dispatch => (
             .catch(err => reject(err));
     })
 );
+
+// 新增促销活动 - 优惠券详情
+const fetchCouponsDetailAction = (data) => ({
+    type: ActionType.FETCH_COUPONS_DETAIL,
+    payload: data
+});
+
+export const getCouponsDetail = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        fetchCouponsDetailService(params)
+            .then(res => {
+                dispatch(
+                    fetchCouponsDetailAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
+// 发放优惠券
+const grantCouponAction = (data) => ({
+    type: ActionType.GRANT_COUPON,
+    payload: data
+});
+
+export const grantCoupon = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        grantCouponService(params)
+            .then(res => {
+                dispatch(
+                    grantCouponAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
+export const clearCouponsDetail = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_COUPONS_DETAIL,
+    payload: []
+}));
 
 export const clearPromotionDetail = () => dispatch => (dispatch({
     type: ActionType.CLEAR_PROMOTION_DETAIL,
@@ -167,12 +275,30 @@ export const clearPromotionList = () => dispatch => (dispatch({
     payload: []
 }));
 
+/**
+ * 清空优惠券列表
+ */
+export const clearCouponsList = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_COUPONS_LIST,
+    payload: []
+}));
+
 export const clearParticipate = () => dispatch => (dispatch({
     type: ActionType.CLEAR_PATICIPATE_LIST,
     payload: {}
 }));
 
+export const clearCouParticipate = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_COUPATICIPATE_LIST,
+    payload: {}
+}));
+
 export const clearCompaniesList = () => dispatch => (dispatch({
     type: ActionType.CLEAR_ALL_COMPANIES,
+    payload: []
+}));
+
+export const clearFranchiseeList = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_FRANCHISEE_LIST,
     payload: []
 }));

@@ -1,4 +1,4 @@
-$promotionColWidth: 250px;
+$releaseColWidth: 250px;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -20,7 +20,7 @@ $promotionColWidth: 250px;
     }
 }
 
-.participate {
+.release {
     .ant-form-item-label {
         width: 80px;
         .sc-form-item-label {
@@ -53,7 +53,7 @@ $promotionColWidth: 250px;
             display: inline-block;
         }
         .ywc-smind {
-            width: $promotionColWidth;
+            width: $releaseColWidth;
         }
         .ywc-smind-search-bar {
             margin: 8px 0;

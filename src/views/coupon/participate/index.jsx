@@ -1,4 +1,4 @@
-import CouponParticipate from './App';
+import CouponsParticipate from './App';
 import './App.scss';
 
-export default CouponParticipate;
+export default CouponsParticipate;
