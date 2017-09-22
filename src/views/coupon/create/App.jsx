@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-22 20:05:37
+ * @Last Modified time: 2017-09-22 22:32:51
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -102,8 +102,6 @@ class CouponCreate extends PureComponent {
                 startDate,
                 endDate,
                 note,
-                promoCategoriesPo,
-                companiesPoList,
                 totalQuantity,
                 grantChannel: grantChannel === 1 ? 'personal' : 'platform',
                 // isPayState: (checkedBoxList.length === 1 &&
@@ -168,7 +166,7 @@ class CouponCreate extends PureComponent {
      */
     handleQuanifyAmountChange(number) {
         this.props.form.setFieldsValue({
-            quanifyAmount: Math.floor(number)
+            quanifyAmount: number
         });
     }
 
@@ -358,18 +356,21 @@ class CouponCreate extends PureComponent {
                                             {
                                                 this.param.condition > 0 ?
                                                 getFieldDecorator('quanifyAmount', {
-                                                    initialValue: 0,
+                                                    initialValue: '',
                                                     rules: [{ required: true, message: '“请输入面额”' }]
                                                 })(
                                                     <InputNumber
                                                         min={1}
                                                         max={99999}
                                                         maxlength={99999}
-                                                        formatter={value => `${value} 元可用`}
+                                                        parser={value => Math.ceil(value)}
                                                         onChange={this.handleQuanifyAmountChange}
                                                     />
                                                 )
                                                 : null
+                                            }
+                                            {
+                                                this.param.condition > 0 ? '元可用' : null
                                             }
                                         </FormItem>
                                     </Col>
