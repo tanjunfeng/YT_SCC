@@ -768,6 +768,7 @@ export const updatePromotionStatus = (params) => http.post('/promotion/updatePro
 export const createCoupons = (params) => http.post('/coupon/insertCoupons', params);
 export const queryCouponsList = (params) => http.get('/coupon/queryCouponsList', params);
 export const getCouponsDetail = (params) => http.post('/coupon/queryCouponsById', params);
+export const queryFranchiseeList = (params) => http.get('/franchisee/grantFranchisee', params);
 
 // 查询品类
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
