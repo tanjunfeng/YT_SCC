@@ -14,6 +14,7 @@ import {
     queryCategoriesByParentId as findCategoriesService,
     createCoupons as createCouponsActionService,
     queryCouponsList as queryCouponsListService,
+    queryFranchiseeList as queryFranchiseeListService,
     getCouponsDetail as fetchCouponsDetailService
 } from '../service';
 
@@ -139,6 +140,25 @@ export const queryCouponsList = (params) => dispatch => (
     })
 );
 
+// 查询加盟商列表
+const queryFranchiseeListAction = (data) => ({
+    type: ActionType.FETCH_FRANCHISEE_LIST,
+    payload: data
+});
+
+export const queryFranchiseeList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryFranchiseeListService(params)
+            .then(res => {
+                dispatch(
+                    queryFranchiseeListAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
 const fetchPromotionDetailAction = (data) => ({
     type: ActionType.FETCH_PROMOTION_DETAIL,
     payload: data
@@ -233,5 +253,10 @@ export const clearCouParticipate = () => dispatch => (dispatch({
 
 export const clearCompaniesList = () => dispatch => (dispatch({
     type: ActionType.CLEAR_ALL_COMPANIES,
+    payload: []
+}));
+
+export const clearFranchiseeList = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_FRANCHISEE_LIST,
     payload: []
 }));
