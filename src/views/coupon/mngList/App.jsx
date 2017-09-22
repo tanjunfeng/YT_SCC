@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-22 14:08:02
+ * @Last Modified time: 2017-09-22 15:18:02
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -23,7 +23,7 @@ import { PAGE_SIZE } from '../../../constant';
 import { couponList as columns } from '../columns';
 
 @connect(state => ({
-    promotionList: state.toJS().promotion.list
+    couponsList: state.toJS().promotion.couponsList
 }), dispatch => bindActionCreators({
     queryCouponsList,
     clearCouponsList,
@@ -175,7 +175,7 @@ class CouponList extends PureComponent {
     }
 
     render() {
-        const { data, total } = this.props.promotionList;
+        const { data, total } = this.props.couponsList;
         const { pageNum, pageSize } = this.state;
         columns[columns.length - 1].render = this.renderOperations;
         return (
@@ -209,7 +209,7 @@ CouponList.propTypes = {
     queryCouponsList: PropTypes.func,
     clearCouponsList: PropTypes.func,
     updatePromotionStatus: PropTypes.func,
-    promotionList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+    couponsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
     location: PropTypes.objectOf(PropTypes.any)
 }
 

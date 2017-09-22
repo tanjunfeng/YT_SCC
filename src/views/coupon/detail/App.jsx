@@ -15,7 +15,7 @@ import { couponsDetail as columns } from '../columns';
 
 const FormItem = Form.Item;
 @connect((state) => ({
-    coupons: state.toJS().promotion.coupons
+    coupons: state.toJS().promotion.couponsDetail
 }), dispatch => bindActionCreators({
     clearCouponsDetail,
     getCouponsDetail
@@ -30,7 +30,7 @@ class CouponDetail extends PureComponent {
 
     componentDidMount() {
         const { id } = this.props.match.params;
-        this.props.getCouponsDetail({ promotionId: id });
+        this.props.getCouponsDetail({ promoId: id });
     }
 
     componentWillUnmount() {

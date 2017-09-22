@@ -12,6 +12,7 @@ const initState = fromJS({
     list: [],    // 管理列表
     couponsList: [],    // 优惠券列表
     participate: {}, // 参与数据显示列表
+    participate2: {}, // 参与数据显示列表
     couParticipate: {}, // 优惠券-参与数据显示列表
     categories: [],  // 品类列表
     promotion: {},   // 促销详情
@@ -33,6 +34,9 @@ export default function (state = initState, action) {
         case ActionType.FETCH_PATICIPATE_LIST:
         case ActionType.CLEAR_PATICIPATE_LIST:
             return state.set('participate', fromJS(action.payload));
+        case ActionType.FETCH_PATICIPATETWO_LIST:
+        case ActionType.CLEAR_PATICIPATETWO_LIST:
+            return state.set('participate2', fromJS(action.payload));
         case ActionType.FETCH_COUPATICIPATE_LIST:
         case ActionType.CLEAR_COUPATICIPATE_LIST:
             return state.set('couParticipate', fromJS(action.payload));
