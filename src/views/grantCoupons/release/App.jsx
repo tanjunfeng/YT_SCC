@@ -18,7 +18,7 @@ import { PAGE_SIZE } from '../../../constant';
 import { releaseCouponsColumns as columns } from '../columns';
 
 @connect(state => ({
-    couponsList: state.toJS().promotion.coupons
+    couponsList: state.toJS().promotion.couponsList
 }), dispatch => bindActionCreators({
     queryCouponsList,
     clearCouponsList
