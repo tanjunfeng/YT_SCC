@@ -27,6 +27,13 @@ class SearchForm extends PureComponent {
         this.hanldeSubCompaniesClear = this.hanldeSubCompaniesClear.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (!nextProps.visible && this.props.visible) {
+            this.handleReset();
+            this.setState({ branchCompanyId: '' });
+        }
+    }
+
     getFormData() {
         const {
             id,
@@ -151,6 +158,7 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     onCouponSearch: PropTypes.func,
     onCouponReset: PropTypes.func,
+    visible: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any)
 };
 
