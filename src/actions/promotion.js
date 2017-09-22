@@ -16,7 +16,8 @@ import {
     queryCouponsList as queryCouponsListService,
     queryFranchiseeList as queryFranchiseeListService,
     getCouponsDetail as fetchCouponsDetailService,
-    getParticipate2 as participateData2Service
+    getParticipate2 as participateData2Service,
+    grantCoupon as grantCouponService
 } from '../service';
 
 /**
@@ -211,6 +212,25 @@ export const getCouponsDetail = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     fetchCouponsDetailAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
+// 发放优惠券
+const grantCouponAction = (data) => ({
+    type: ActionType.GRANT_COUPON,
+    payload: data
+});
+
+export const grantCoupon = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        grantCouponService(params)
+            .then(res => {
+                dispatch(
+                    grantCouponAction(res.data)
                 );
                 resolve(res);
             })

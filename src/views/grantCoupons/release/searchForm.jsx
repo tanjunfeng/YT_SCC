@@ -65,12 +65,13 @@ class SearchForm extends PureComponent {
 
     handleSearch() {
         // 将查询条件回传给调用页
-        this.props.onReleaseSearch(this.getFormData());
+        this.props.onCouponSearch(this.getFormData());
     }
 
     handleReset() {
         this.hanldeSubCompaniesClear(); // 清除子公司值清单
         this.props.form.resetFields();  // 清除当前查询条件
+        this.props.onCouponReset();
     }
 
     render() {
@@ -148,7 +149,8 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    onReleaseSearch: PropTypes.func,
+    onCouponSearch: PropTypes.func,
+    onCouponReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any)
 };
 
