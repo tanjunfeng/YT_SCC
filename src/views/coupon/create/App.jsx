@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-21 17:28:40
+ * @Last Modified time: 2017-09-22 10:41:01
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {
     Form, Row, Col, Input, InputNumber,
-    Button, DatePicker, Radio, message
+    Button, DatePicker, Radio, message, Checkbox
 } from 'antd';
 import Utils from '../../../util/util';
 import { createCoupons } from '../../../actions/promotion';
@@ -24,6 +24,8 @@ const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 const RadioGroup = Radio.Group;
 const { TextArea } = Input;
+const CheckboxGroup = Checkbox.Group;
+const plainOptions = ['下单打折', '会员等级'];
 
 @connect(() => ({
 }), dispatch => bindActionCreators({
@@ -38,7 +40,8 @@ class CouponCreate extends PureComponent {
             area: 0,
             category: 0,
             store: 0,
-            channel: 0,
+            isSuperposeUserDiscount: 0,
+            grantChannel: 0,
         };
         this.state = {
             areaSelectorVisible: false,
@@ -46,7 +49,8 @@ class CouponCreate extends PureComponent {
             formSelectorVisible: false,
             storeSelectorVisible: true,
             companies: [],  // 所选区域子公司
-            categoryObj: {} // 所选品类对象
+            categoryObj: {}, // 所选品类对象
+            checkedList: []
         }
         this.getFormData = this.getFormData.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -76,6 +80,7 @@ class CouponCreate extends PureComponent {
                 condition,
                 totalQuantity,
                 grantChannel,
+                isSuperposeUserDiscount,
                 personQty,
                 note,
                 area,
@@ -91,14 +96,22 @@ class CouponCreate extends PureComponent {
             });
             const promoCategoriesPo = this.state.categoryObj;
             const companiesPoList = this.state.companies;
+            const checkedBoxList = this.state.checkedList;
             const dist = {
                 promotionName,
                 discount,
                 startDate,
                 endDate,
                 note,
+                promoCategoriesPo,
+                companiesPoList,
                 totalQuantity,
-                grantChannel,
+                isSuperposeUserDiscount,
+                grantChannel: grantChannel === 1 ? 'personal' : 'platform',
+                isPayState: (checkedBoxList.length === 1 &&
+                    checkedBoxList[0] === '下单打折') || checkedBoxList.length === 2 ? 1 : 0,
+                isRefound: (checkedBoxList.length === 1 &&
+                    checkedBoxList[0] === '会员等级') || checkedBoxList.length === 2 ? 1 : 0,
                 personQty,
             };
             if (condition === 1) {
@@ -224,21 +237,12 @@ class CouponCreate extends PureComponent {
         }
     }
 
-    handleFormChange(e) {
-        const nextChannel = e.target.value;
-        this.props.form.setFieldsValue({
-            channel: nextChannel
+    handleFormChange = (checkedList) => {
+        this.setState({
+            checkedList,
+            indeterminate: !!checkedList.length && (checkedList.length < plainOptions.length),
+            checkAll: checkedList.length === plainOptions.length,
         });
-        this.param.channel = e.target.value;
-        if (nextChannel === 0) {
-            this.setState({
-                formSelectorVisible: true
-            });
-        } else {
-            this.setState({
-                formSelectorVisible: false
-            });
-        }
     }
 
     handleSelectorOk(companies) {
@@ -262,21 +266,19 @@ class CouponCreate extends PureComponent {
 
     handleSubmit() {
         this.getFormData((response) => {
-            console.log(response)
-            // if (!response) return;
-            // this.props.createCoupons(response).then((res) => {
-            //     if (res.code === 200 && res.message === '请求成功') {
-            //         message.info('新增促销活动成功，请到列表页发布');
-            //         this.props.history.goBack();
-            //     } else {
-            //         message.error(res.message);
-            //     }
-            // });
+            if (!response) return;
+            this.props.createCoupons(response).then((res) => {
+                if (res.code === 200 && res.message === '请求成功') {
+                    message.info('新增促销活动成功，请到列表页发布');
+                    this.props.history.goBack();
+                } else {
+                    message.error(res.message);
+                }
+            });
         });
     }
 
     handleBack() {
-        // const dist = Utils.removeInvalid(this.props.form.getFieldsValue());
         this.props.history.goBack();
     }
 
@@ -477,16 +479,11 @@ class CouponCreate extends PureComponent {
                                 <Row>
                                     <Col span={16}>
                                         <FormItem label="活动叠加">
-                                            {getFieldDecorator('channel', {
-                                                initialValue: this.param.channel
-                                            })(
-                                                <RadioGroup onChange={this.handleFormChange}>
-                                                    <Radio className="default" value={0}>
-                                                        用户领取
-                                                    </Radio>
-                                                    <Radio value={1}>平台发放</Radio>
-                                                </RadioGroup>
-                                                )}
+                                            <CheckboxGroup
+                                                onChange={this.handleFormChange}
+                                                value={this.state.checkedList}
+                                                options={plainOptions}
+                                            />
                                         </FormItem>
                                     </Col>
                                 </Row>
