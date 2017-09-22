@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Modal, Table, Form, message } from 'antd';
 import {
-    queryCouponsList,
+    queryAliveCouponsList,
     clearCouponsList
 } from '../../../actions/promotion';
 import SearchForm from './searchForm';
@@ -20,7 +20,7 @@ import { releaseCouponsColumns as columns } from '../columns';
 @connect(state => ({
     couponsList: state.toJS().promotion.couponsList
 }), dispatch => bindActionCreators({
-    queryCouponsList,
+    queryAliveCouponsList,
     clearCouponsList
 }, dispatch))
 
@@ -76,7 +76,7 @@ class ReleaseCouponModal extends PureComponent {
             pageSize: 5,
             ...condition
         }
-        this.props.queryCouponsList(param).then((data) => {
+        this.props.queryAliveCouponsList(param).then((data) => {
             const { pageNum, pageSize } = data.data;
             this.setState({ pageNum, pageSize });
         });
@@ -151,7 +151,7 @@ class ReleaseCouponModal extends PureComponent {
 
 ReleaseCouponModal.propTypes = {
     visible: PropTypes.bool,
-    queryCouponsList: PropTypes.func,
+    queryAliveCouponsList: PropTypes.func,
     clearCouponsList: PropTypes.func,
     onReleaseCouponModalOk: PropTypes.func,
     onReleaseCouponModalCancel: PropTypes.func,
