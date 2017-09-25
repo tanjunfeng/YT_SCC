@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-22 20:05:37
+ * @Last Modified time: 2017-09-25 14:56:10
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -19,6 +19,7 @@ import { createCoupons } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { AreaSelector } from '../../../container/tree';
 import Category from '../../../container/cascader';
+import HotLableItem from './hotLableItem';
 
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
@@ -102,15 +103,16 @@ class CouponCreate extends PureComponent {
                 startDate,
                 endDate,
                 note,
+                totalQuantity,
+                personQty,
+                quanifyAmount,
                 promoCategoriesPo,
                 companiesPoList,
-                totalQuantity,
                 grantChannel: grantChannel === 1 ? 'personal' : 'platform',
                 // isPayState: (checkedBoxList.length === 1 &&
                 //     checkedBoxList[0] === '下单打折') || checkedBoxList.length === 2 ? 1 : 0,
                 isSuperposeUserDiscount: (checkedBoxList.length === 1 &&
                     checkedBoxList[0] === '会员等级') || checkedBoxList.length === 2 ? 1 : 0,
-                personQty,
             };
             if (condition === 1) {
                 if (!quanifyAmount) {
@@ -148,6 +150,15 @@ class CouponCreate extends PureComponent {
                     promoCategoriesPo
                 });
             }
+            if (personQty && totalQuantity) {
+                if (personQty > totalQuantity) {
+                    message.error('请输入正确发放数量');
+                    return callback(false);
+                }
+                Object.assign(dist, {
+                    totalQuantity
+                });
+            }
             return callback(Utils.removeInvalid(dist));
         });
     }
@@ -168,7 +179,7 @@ class CouponCreate extends PureComponent {
      */
     handleQuanifyAmountChange(number) {
         this.props.form.setFieldsValue({
-            quanifyAmount: Math.floor(number)
+            quanifyAmount: number
         });
     }
 
@@ -286,11 +297,12 @@ class CouponCreate extends PureComponent {
         this.state.companies.forEach((company) => {
             subCompanies.push(company.companyName);
         });
+        const tooltipTitle = '请输入整数';
         return (
-            <div className="promotion">
+            <div className="coupon">
                 <Form layout="inline">
-                    <div className="promotion-add-item">
-                        <div className="add-message promotion-add-license">
+                    <div className="coupon-add-item">
+                        <div className="add-message coupon-add-license">
                             <div className="add-message-body">
                                 <Row>
                                     <Col span={16}>
@@ -351,26 +363,39 @@ class CouponCreate extends PureComponent {
                                                 <RadioGroup
                                                     onChange={this.handleConditionChange}
                                                 >
-                                                    <Radio className="default" value={0}>不限制</Radio>
-                                                    <Radio value={1}>满</Radio>
-                                                </RadioGroup>
-                                                )}
-                                            {
-                                                this.param.condition > 0 ?
+                                                    <Radio value={0}>满</Radio>
+                                                    {
+                                                this.param.condition === 0 ?
                                                 getFieldDecorator('quanifyAmount', {
-                                                    initialValue: 0,
-                                                    rules: [{ required: true, message: '“请输入面额”' }]
+                                                    initialValue: '',
+                                                    rules: [{ required: true, message: '请输入面额' }]
                                                 })(
                                                     <InputNumber
                                                         min={1}
                                                         max={99999}
                                                         maxlength={99999}
-                                                        formatter={value => `${value} 元可用`}
+                                                        parser={value => Math.ceil(value)}
                                                         onChange={this.handleQuanifyAmountChange}
                                                     />
                                                 )
-                                                : null
-                                            }
+                                                    : null
+                                                }
+                                                    {
+                                                        this.param.condition === 0 ? ' 元可用 ' : null
+                                                    }
+                                                    {
+                                                        this.param.condition === 0 &&
+                                                        <HotLableItem
+                                                            tooltipTitle={tooltipTitle}
+                                                        />
+                                                    }
+                                                    <Radio
+                                                        className="default"
+                                                        style={{marginLeft: 10}}
+                                                        value={1}
+                                                    >不限制</Radio>
+                                                </RadioGroup>
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>

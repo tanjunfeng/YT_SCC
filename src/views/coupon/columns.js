@@ -3,7 +3,7 @@
  * @Description: 优惠券列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-22 20:11:26
+ * @Last Modified time: 2017-09-25 14:30:50
  */
 /**
  * @file columns.js
@@ -102,50 +102,19 @@ const couponList = [{
 }];
 
 const couponsDetail = [{
-    title: '活动ID',
+    title: '券ID',
     dataIndex: 'id',
     key: 'id'
 }, {
-    title: '活动名称',
+    title: '券名称',
     dataIndex: 'promotionName',
     key: 'promotionName'
 }, {
-    title: '活动状态',
-    dataIndex: 'status',
-    key: 'status',
-    render: statusCode => promotionStatus[statusCode]
-}, {
-    title: '折扣比例',
+    title: '面额',
     dataIndex: 'discount',
-    key: 'discount',
-    render: discount => `${discount}%`
+    key: 'discount'
 }, {
-    title: '生效时间',
-    dataIndex: 'startDate',
-    key: 'startDate',
-    render: timestamp => Util.getTime(timestamp)
-}, {
-    title: '过期时间',
-    dataIndex: 'endDate',
-    key: 'endDate',
-    render: timestamp => Util.getTime(timestamp)
-}, {
-    title: '使用条件',
-    dataIndex: 'quanifyAmount',
-    key: 'quanifyAmount',
-    render: amount => (amount ? `满 ${amount} 元可用` : '不限制')
-}, {
-    title: '使用区域',
-    dataIndex: 'companiesPoList',
-    key: 'companiesPoList',
-    render: list => {
-        if (!list || list.length === 0) {
-            return '全部区域';
-        }
-        return list.map(company => company.companyName).join(',');
-    }
-}, {
-    title: '使用品类',
+    title: '品类',
     dataIndex: 'promoCategoriesPo',
     key: 'promoCategoriesPo',
     render: category => {
@@ -154,21 +123,63 @@ const couponsDetail = [{
         }
         return category.categoryName
     }
-}, {
-    title: '指定门店',
-    dataIndex: 'stores',
-    key: 'stores',
-    render: stores => {
-        if (!stores) {
-            return '未指定';
+},
+{
+    title: '范围',
+    dataIndex: 'companiesPoList',
+    key: 'companiesPoList',
+    render: list => {
+        if (!list || list.length === 0) {
+            return '全部区域';
         }
-        return stores.storeId;
+        const areas = list.map(company => company.companyName);
+        return (
+            <span title={areas} alt={areas}>所选区域</span>
+        );
     }
+}, {
+    title: '使用条件',
+    dataIndex: 'quanifyAmount',
+    key: 'quanifyAmount',
+    render: amount => (amount ? `满 ${amount} 元可用` : '不限制')
+}, {
+    title: '有效时间',
+    children: [{
+        title: '开始时间',
+        dataIndex: 'startDate',
+        key: 'startDate',
+        render: timestamp => Util.getTime(timestamp)
+    }, {
+        title: '结束时间',
+        dataIndex: 'endDate',
+        key: 'endDate',
+        render: timestamp => Util.getTime(timestamp)
+    }],
+}, {
+    title: '发放数量',
+    dataIndex: 'totalQuantity',
+    key: 'totalQuantity',
+    render: note => note || 0
+}, {
+    title: '已领取',
+    dataIndex: 'grantQty',
+    key: 'grantQty',
+    render: note => note || 0
+}, {
+    title: '已使用',
+    dataIndex: 'usedQty',
+    key: 'usedQty',
+    render: note => note || 0
 }, {
     title: '备注',
     dataIndex: 'note',
     key: 'note',
     render: note => note || '无'
+}, {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    render: statusCode => promotionStatus[statusCode]
 }];
 
 const participateList = [{

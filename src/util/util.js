@@ -306,6 +306,16 @@ class Utils {
         }
         return moment(parseInt(timestamp, 10)).format(TIME_FORMAT);
     }
+
+    /**
+     * 限制输入两位小数校验
+     */
+    static limitTwoDecimalPlaces = (rule, value, callback) => {
+        if (value && !/^\d+(\.\d{1,2})?$/.test(value)) {
+            callback('仅允许两位小数');
+        }
+        callback();
+    }
 }
 
 export default Utils;
