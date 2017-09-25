@@ -3,7 +3,7 @@
  * @Description: 优惠券列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-25 16:59:46
+ * @Last Modified time: 2017-09-25 17:17:33
  */
 /**
  * @file columns.js
@@ -157,6 +157,11 @@ const couponsDetail = [{
     dataIndex: 'totalQuantity',
     key: 'totalQuantity',
     render: note => note || 0
+}, {
+    title: '发放方式',
+    dataIndex: 'grantChannel',
+    key: 'grantChannel',
+    render: note => (note === 'platform' ? '平台发放' : '用户领取')
 }, {
     title: '已领取',
     dataIndex: 'grantQty',

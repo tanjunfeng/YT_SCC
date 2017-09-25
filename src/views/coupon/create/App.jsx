@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-25 17:06:31
+ * @Last Modified time: 2017-09-25 17:19:10
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -104,6 +104,7 @@ class CouponCreate extends PureComponent {
                     endDate,
                     totalQuantity,
                     personQty,
+                    note,
                     grantChannel: grantChannel === 1 ? 'personal' : 'platform',
                     // isPayState: (checkedBoxList.length === 1 &&
                     //     checkedBoxList[0] === '下单打折') || checkedBoxList.length === 2 ? 1 : 0,
@@ -493,10 +494,10 @@ class CouponCreate extends PureComponent {
                                                 initialValue: this.param.store
                                             })(
                                                 <RadioGroup onChange={this.handleStoreChange}>
-                                                    <Radio className="default" value={0}>
+                                                    <Radio className="default" value={1}>
                                                         用户领取
                                                     </Radio>
-                                                    <Radio value={1}>平台发放</Radio>
+                                                    <Radio value={0}>平台发放</Radio>
                                                 </RadioGroup>
                                                 )}
                                         </FormItem>
