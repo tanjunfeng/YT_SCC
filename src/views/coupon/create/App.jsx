@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-22 20:05:37
+ * @Last Modified time: 2017-09-25 09:37:55
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -19,6 +19,7 @@ import { createCoupons } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { AreaSelector } from '../../../container/tree';
 import Category from '../../../container/cascader';
+import HotLableItem from './hotLableItem';
 
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
@@ -102,8 +103,6 @@ class CouponCreate extends PureComponent {
                 startDate,
                 endDate,
                 note,
-                promoCategoriesPo,
-                companiesPoList,
                 totalQuantity,
                 grantChannel: grantChannel === 1 ? 'personal' : 'platform',
                 // isPayState: (checkedBoxList.length === 1 &&
@@ -168,7 +167,7 @@ class CouponCreate extends PureComponent {
      */
     handleQuanifyAmountChange(number) {
         this.props.form.setFieldsValue({
-            quanifyAmount: Math.floor(number)
+            quanifyAmount: number
         });
     }
 
@@ -286,11 +285,12 @@ class CouponCreate extends PureComponent {
         this.state.companies.forEach((company) => {
             subCompanies.push(company.companyName);
         });
+        const tooltipTitle = '请输入整数';
         return (
-            <div className="promotion">
+            <div className="coupon">
                 <Form layout="inline">
-                    <div className="promotion-add-item">
-                        <div className="add-message promotion-add-license">
+                    <div className="coupon-add-item">
+                        <div className="add-message coupon-add-license">
                             <div className="add-message-body">
                                 <Row>
                                     <Col span={16}>
@@ -358,18 +358,28 @@ class CouponCreate extends PureComponent {
                                             {
                                                 this.param.condition > 0 ?
                                                 getFieldDecorator('quanifyAmount', {
-                                                    initialValue: 0,
-                                                    rules: [{ required: true, message: '“请输入面额”' }]
+                                                    initialValue: '',
+                                                    rules: [{ required: true, message: '请输入面额' }]
                                                 })(
                                                     <InputNumber
                                                         min={1}
                                                         max={99999}
                                                         maxlength={99999}
-                                                        formatter={value => `${value} 元可用`}
+                                                        parser={value => Math.ceil(value)}
                                                         onChange={this.handleQuanifyAmountChange}
                                                     />
                                                 )
                                                 : null
+                                            }
+                                            {
+                                                this.param.condition > 0 ? '元可用' : null
+                                            }
+                                            {
+                                                this.param.condition > 0 &&
+                                                <HotLableItem
+                                                    className="coupons-i"
+                                                    tooltipTitle={tooltipTitle}
+                                                />
                                             }
                                         </FormItem>
                                     </Col>
