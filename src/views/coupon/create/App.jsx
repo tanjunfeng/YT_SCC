@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-25 14:56:10
+ * @Last Modified time: 2017-09-25 16:02:34
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -14,7 +14,7 @@ import {
     Form, Row, Col, Input, InputNumber,
     Button, DatePicker, Radio, message, Checkbox
 } from 'antd';
-import Utils from '../../../util/util';
+import Util from '../../../util/util';
 import { createCoupons } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { AreaSelector } from '../../../container/tree';
@@ -67,99 +67,125 @@ class CouponCreate extends PureComponent {
         this.handleFormChange = this.handleFormChange.bind(this);
     }
 
-    getFormData(callback) {
-        this.props.form.validateFields((err, values) => {
-            if (err) {
-                message.error('请检查请求参数');
-                return callback(false);
-            }
-            const {
-                promotionName,
-                discount,
-                promotionDateRange,
-                quanifyAmount,
-                condition,
-                totalQuantity,
-                grantChannel,
-                personQty,
-                note,
-                area,
-                store,
-                category,
-                storeIds,
-        } = values;
-            const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
-            const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
-            const stores = {};
-            Object.assign(stores, {
-                storeId: storeIds
+    getFormData() {
+        return new Promise((resolve, reject) => {
+            this.props.form.validateFields((err, values) => {
+                if (err) {
+                    reject(err);
+                }
+                const {
+                    promotionName,
+                    discount,
+                    promotionDateRange,
+                    quanifyAmount,
+                    condition,
+                    totalQuantity,
+                    grantChannel,
+                    personQty,
+                    note,
+                    area,
+                    store,
+                    category,
+                    storeIds,
+                } = values;
+                const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
+                const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
+                const stores = {};
+                Object.assign(stores, {
+                    storeId: storeIds
+                });
+                const promoCategoriesPo = this.state.categoryObj;
+                const companiesPoList = this.state.companies;
+                const checkedBoxList = this.state.checkedList;
+                const dist = {
+                    promotionName,
+                    discount,
+                    startDate,
+                    endDate,
+                    note,
+                    totalQuantity,
+                    personQty,
+                    quanifyAmount,
+                    promoCategoriesPo,
+                    companiesPoList,
+                    grantChannel: grantChannel === 1 ? 'personal' : 'platform',
+                    // isPayState: (checkedBoxList.length === 1 &&
+                    //     checkedBoxList[0] === '下单打折') || checkedBoxList.length === 2 ? 1 : 0,
+                    isSuperposeUserDiscount: (checkedBoxList.length === 1 &&
+                        checkedBoxList[0] === '会员等级') || checkedBoxList.length === 2 ? 1 : 0,
+                };
+                if (condition === 1) {
+                    if (!quanifyAmount) {
+                        this.props.form.setFields({
+                            condition: {
+                                value: values.condition,
+                                error: [new Error('请填写活动金额!')]
+                            }
+                        })
+                    } else {
+                        Object.assign(dist, {
+                            quanifyAmount
+                        });
+                    }
+                }
+                if (area === 1) {
+                    if (companiesPoList.length === 0) {
+                        this.props.form.setFields({
+                            area: {
+                                value: values.area,
+                                error: [new Error('请选择区域!')]
+                            }
+                        })
+                    } else {
+                        Object.assign(dist, {
+                            companiesPoList
+                        });
+                    }
+                }
+                if (store === 1) {
+                    if (stores.storeId === undefined) {
+                        this.props.form.setFields({
+                            area: {
+                                value: values.store,
+                                error: [new Error('请填写门店列表!')]
+                            }
+                        })
+                    } else {
+                        Object.assign(dist, {
+                            stores
+                        });
+                    }
+                }
+                if (category === 1) {
+                    if (promoCategoriesPo.categoryId === undefined) {
+                        this.props.form.setFields({
+                            area: {
+                                value: values.category,
+                                error: [new Error('请选择品类!')]
+                            }
+                        })
+                    } else {
+                        Object.assign(dist, {
+                            promoCategoriesPo
+                        });
+                    }
+                }
+                if (personQty && totalQuantity) {
+                    if (personQty > totalQuantity) {
+                        this.props.form.setFields({
+                            area: {
+                                value: values.personQty,
+                                error: [new Error('请输入正确发放数量!')]
+                            }
+                        })
+                    } else {
+                        Object.assign(dist, {
+                            totalQuantity
+                        });
+                    }
+                }
+                resolve(Util.removeInvalid(dist));
             });
-            const promoCategoriesPo = this.state.categoryObj;
-            const companiesPoList = this.state.companies;
-            const checkedBoxList = this.state.checkedList;
-            const dist = {
-                promotionName,
-                discount,
-                startDate,
-                endDate,
-                note,
-                totalQuantity,
-                personQty,
-                quanifyAmount,
-                promoCategoriesPo,
-                companiesPoList,
-                grantChannel: grantChannel === 1 ? 'personal' : 'platform',
-                // isPayState: (checkedBoxList.length === 1 &&
-                //     checkedBoxList[0] === '下单打折') || checkedBoxList.length === 2 ? 1 : 0,
-                isSuperposeUserDiscount: (checkedBoxList.length === 1 &&
-                    checkedBoxList[0] === '会员等级') || checkedBoxList.length === 2 ? 1 : 0,
-            };
-            if (condition === 1) {
-                if (!quanifyAmount) {
-                    message.error('请填写活动金额');
-                    return callback(false);
-                }
-                Object.assign(dist, {
-                    quanifyAmount
-                });
-            }
-            if (area === 1) {
-                if (companiesPoList.length === 0) {
-                    message.error('请选择区域');
-                    return callback(false);
-                }
-                Object.assign(dist, {
-                    companiesPoList
-                });
-            }
-            if (store === 1) {
-                if (stores.storeId === undefined) {
-                    message.error('请填写门店列表');
-                    return callback(false);
-                }
-                Object.assign(dist, {
-                    stores
-                });
-            }
-            if (category === 1) {
-                if (promoCategoriesPo.categoryId === undefined) {
-                    message.error('请选择品类');
-                    return callback(false);
-                }
-                Object.assign(dist, {
-                    promoCategoriesPo
-                });
-            }
-            if (personQty && totalQuantity) {
-                if (personQty > totalQuantity) {
-                    message.error('请输入正确发放数量');
-                    return callback(false);
-                }
-                Object.assign(dist, {
-                    totalQuantity
-                });
-            }
-            return callback(Utils.removeInvalid(dist));
         });
     }
 
@@ -273,10 +299,10 @@ class CouponCreate extends PureComponent {
         });
     }
 
-    handleSubmit() {
-        this.getFormData((response) => {
-            if (!response) return;
-            this.props.createCoupons(response).then((res) => {
+    handleSubmit(e) {
+        e.preventDefault();
+        this.getFormData().then((param) => {
+            this.props.createCoupons(param).then((res) => {
                 if (res.code === 200 && res.message === '请求成功') {
                     message.info('新增促销活动成功，请到列表页发布');
                     this.props.history.goBack();
@@ -327,8 +353,8 @@ class CouponCreate extends PureComponent {
                                                 <InputNumber
                                                     size="default"
                                                     min={1}
-                                                    max={999}
-                                                    maxlength={99999}
+                                                    max={9999}
+                                                    maxlength={9999}
                                                     formatter={value => `${value}`}
                                                 />)}
                                             <span>元</span>
@@ -365,21 +391,21 @@ class CouponCreate extends PureComponent {
                                                 >
                                                     <Radio value={0}>满</Radio>
                                                     {
-                                                this.param.condition === 0 ?
-                                                getFieldDecorator('quanifyAmount', {
-                                                    initialValue: '',
-                                                    rules: [{ required: true, message: '请输入面额' }]
-                                                })(
-                                                    <InputNumber
-                                                        min={1}
-                                                        max={99999}
-                                                        maxlength={99999}
-                                                        parser={value => Math.ceil(value)}
-                                                        onChange={this.handleQuanifyAmountChange}
-                                                    />
-                                                )
-                                                    : null
-                                                }
+                                                        this.param.condition === 0 ?
+                                                            getFieldDecorator('quanifyAmount', {
+                                                                initialValue: '',
+                                                                rules: [{ required: true, message: '请输入面额' }]
+                                                            })(
+                                                                <InputNumber
+                                                                    min={1}
+                                                                    max={99999}
+                                                                    maxlength={99999}
+                                                                    parser={value => Math.ceil(value)}
+                                                                    onChange={this.handleQuanifyAmountChange}
+                                                                />
+                                                                )
+                                                            : null
+                                                    }
                                                     {
                                                         this.param.condition === 0 ? ' 元可用 ' : null
                                                     }
@@ -391,7 +417,7 @@ class CouponCreate extends PureComponent {
                                                     }
                                                     <Radio
                                                         className="default"
-                                                        style={{marginLeft: 10}}
+                                                        style={{ marginLeft: 10 }}
                                                         value={1}
                                                     >不限制</Radio>
                                                 </RadioGroup>
@@ -482,19 +508,20 @@ class CouponCreate extends PureComponent {
                                                 <FormItem label="每人可领" >
                                                     {getFieldDecorator('personQty', {
                                                         rules: [
-                                                            { required: true,
+                                                            {
+                                                                required: true,
                                                                 message: '请输入每人可领数量!'
                                                             }
                                                         ]
                                                     })(
                                                         <InputNumber
-                                                            style={{width: 150}}
+                                                            style={{ width: 150 }}
                                                             size="default"
                                                             min={1}
                                                             max={99}
                                                             formatter={value => `${value}`}
                                                         />
-                                                    )}
+                                                        )}
                                                     <span>张</span>
                                                 </FormItem>
                                             </Col>
@@ -526,7 +553,7 @@ class CouponCreate extends PureComponent {
                                                         maxRows: 6
                                                     }}
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
