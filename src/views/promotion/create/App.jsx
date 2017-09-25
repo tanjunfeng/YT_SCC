@@ -103,6 +103,7 @@ class PromotionCreate extends PureComponent {
                                 errors: [new Error('未选择指定区域')],
                             },
                         });
+                        reject();
                     } else {
                         Object.assign(dist, {
                             companiesPoList
@@ -117,6 +118,7 @@ class PromotionCreate extends PureComponent {
                                 errors: [new Error('未选择品类')],
                             },
                         });
+                        reject();
                     } else {
                         Object.assign(dist, {
                             promoCategoriesPo
@@ -248,7 +250,7 @@ class PromotionCreate extends PureComponent {
                     message.error(res.message);
                 }
             });
-        });
+        }).catch(() => {});
     }
 
     handleBack() {
