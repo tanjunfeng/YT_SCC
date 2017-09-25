@@ -104,10 +104,6 @@ class PromotionCreate extends PureComponent {
                             },
                         });
                         reject();
-                    } else {
-                        Object.assign(dist, {
-                            companiesPoList
-                        });
                     }
                 }
                 if (category === 1) {
@@ -119,10 +115,6 @@ class PromotionCreate extends PureComponent {
                             },
                         });
                         reject();
-                    } else {
-                        Object.assign(dist, {
-                            promoCategoriesPo
-                        });
                     }
                 }
                 if (store === 1) {
