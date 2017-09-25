@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-25 10:04:47
+ * @Last Modified time: 2017-09-25 14:56:10
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -104,12 +104,15 @@ class CouponCreate extends PureComponent {
                 endDate,
                 note,
                 totalQuantity,
+                personQty,
+                quanifyAmount,
+                promoCategoriesPo,
+                companiesPoList,
                 grantChannel: grantChannel === 1 ? 'personal' : 'platform',
                 // isPayState: (checkedBoxList.length === 1 &&
                 //     checkedBoxList[0] === '下单打折') || checkedBoxList.length === 2 ? 1 : 0,
                 isSuperposeUserDiscount: (checkedBoxList.length === 1 &&
                     checkedBoxList[0] === '会员等级') || checkedBoxList.length === 2 ? 1 : 0,
-                personQty,
             };
             if (condition === 1) {
                 if (!quanifyAmount) {
@@ -145,6 +148,15 @@ class CouponCreate extends PureComponent {
                 }
                 Object.assign(dist, {
                     promoCategoriesPo
+                });
+            }
+            if (personQty && totalQuantity) {
+                if (personQty > totalQuantity) {
+                    message.error('请输入正确发放数量');
+                    return callback(false);
+                }
+                Object.assign(dist, {
+                    totalQuantity
                 });
             }
             return callback(Utils.removeInvalid(dist));
@@ -351,12 +363,9 @@ class CouponCreate extends PureComponent {
                                                 <RadioGroup
                                                     onChange={this.handleConditionChange}
                                                 >
-                                                    <Radio className="default" value={0}>不限制</Radio>
-                                                    <Radio value={1}>满</Radio>
-                                                </RadioGroup>
-                                                )}
-                                            {
-                                                this.param.condition > 0 ?
+                                                    <Radio value={0}>满</Radio>
+                                                    {
+                                                this.param.condition === 0 ?
                                                 getFieldDecorator('quanifyAmount', {
                                                     initialValue: '',
                                                     rules: [{ required: true, message: '请输入面额' }]
@@ -369,17 +378,24 @@ class CouponCreate extends PureComponent {
                                                         onChange={this.handleQuanifyAmountChange}
                                                     />
                                                 )
-                                                : null
-                                            }
-                                            {
-                                                this.param.condition > 0 ? ' 元可用 ' : null
-                                            }
-                                            {
-                                                this.param.condition > 0 &&
-                                                <HotLableItem
-                                                    tooltipTitle={tooltipTitle}
-                                                />
-                                            }
+                                                    : null
+                                                }
+                                                    {
+                                                        this.param.condition === 0 ? ' 元可用 ' : null
+                                                    }
+                                                    {
+                                                        this.param.condition === 0 &&
+                                                        <HotLableItem
+                                                            tooltipTitle={tooltipTitle}
+                                                        />
+                                                    }
+                                                    <Radio
+                                                        className="default"
+                                                        style={{marginLeft: 10}}
+                                                        value={1}
+                                                    >不限制</Radio>
+                                                </RadioGroup>
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
