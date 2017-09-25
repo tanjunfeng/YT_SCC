@@ -286,6 +286,7 @@ class PromotionCreate extends PureComponent {
                                     <Col span={16}>
                                         <FormItem label="折扣比例" >
                                             {getFieldDecorator('discount', {
+                                                initialValue: '',
                                                 rules: [
                                                     { required: true, message: '请输入折扣比例!' }
                                                 ]
