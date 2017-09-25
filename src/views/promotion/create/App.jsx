@@ -97,19 +97,31 @@ class PromotionCreate extends PureComponent {
                 }
                 if (area === 1) {
                     if (companiesPoList.length === 0) {
-                        reject(new Error('未选择指定区域'));
+                        this.props.form.setFields({
+                            area: {
+                                value: values.area,
+                                errors: [new Error('未选择指定区域')],
+                            },
+                        });
+                    } else {
+                        Object.assign(dist, {
+                            companiesPoList
+                        });
                     }
-                    Object.assign(dist, {
-                        companiesPoList
-                    });
                 }
                 if (category === 1) {
                     if (promoCategoriesPo.categoryId === undefined) {
-                        reject(new Error('未选择品类'));
+                        this.props.form.setFields({
+                            category: {
+                                value: values.category,
+                                errors: [new Error('未选择品类')],
+                            },
+                        });
+                    } else {
+                        Object.assign(dist, {
+                            promoCategoriesPo
+                        });
                     }
-                    Object.assign(dist, {
-                        promoCategoriesPo
-                    });
                 }
                 if (store === 1) {
                     Object.assign(dist, {
@@ -220,7 +232,6 @@ class PromotionCreate extends PureComponent {
     }
 
     handleSelectorCancel() {
-        console.log('你刚刚把我关闭了一次');
         this.setState({
             areaSelectorVisible: false
         });
@@ -237,7 +248,7 @@ class PromotionCreate extends PureComponent {
                     message.error(res.message);
                 }
             });
-        }).catch(error => message.error(error.message));
+        });
     }
 
     handleBack() {
@@ -399,7 +410,7 @@ class PromotionCreate extends PureComponent {
                                         <FormItem label="指定门店">
                                             {getFieldDecorator('store', {
                                                 initialValue: this.param.store,
-                                                rules: [{ required: true, message: '请指定门店' }]
+                                                rules: [{ required: true, message: '请输入指定门店' }]
                                             })(
                                                 <RadioGroup onChange={this.handleStoreChange}>
                                                     <Radio className="default" value={0}>不指定</Radio>
@@ -415,19 +426,11 @@ class PromotionCreate extends PureComponent {
                                             <FormItem label="">
                                                 {getFieldDecorator('storeId', {
                                                     initialValue: '',
-                                                    rules: [{ required: true, message: '请输入指定门店' }]
+                                                    rules: [{ required: true, message: '请按照 A000999, A000900, A000991 数据模板的格式准备导入数据' }]
                                                 })(
                                                     <TextArea placeholder="请输入指定门店" autosize={{ minRows: 4, maxRows: 6 }} />
                                                     )}
                                             </FormItem>
-                                        </Col>
-                                    </Row>
-                                    : null
-                                }
-                                {this.state.storeSelectorVisible ?
-                                    <Row className="red">
-                                        <Col span={16}>
-                                            *请按照数据模板的格式准备导入数据如：A000999, A000900, A000991
                                         </Col>
                                     </Row>
                                     : null
