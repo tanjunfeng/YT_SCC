@@ -20,7 +20,7 @@ $couponAddLabelWidth: 80px;
     }
 }
 
-.promotion {
+.coupon {
     padding-top: 40px;
     form .default {
         width: 78px;
@@ -52,4 +52,7 @@ $couponAddLabelWidth: 80px;
     .ant-form-item-control{
         margin-left: 0!important;
     }
+}
+.coupons-i{
+    margin-left: 10px;
 }
