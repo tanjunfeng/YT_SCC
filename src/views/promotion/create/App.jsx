@@ -91,7 +91,7 @@ class PromotionCreate extends PureComponent {
                 startDate,
                 endDate,
                 note,
-                isSuperposeUserDiscount
+                isSuperposeUserDiscount: isSuperposeUserDiscount ? 1 : 0
             };
             if (condition === 1) {
                 if (!quanifyAmount) {
