@@ -85,8 +85,10 @@ class AreaSelector extends PureComponent {
             <div>
                 <Modal
                     title="选择区域"
+                    maskClosable={false}
                     visible={this.props.isSelectorVisible}
                     onOk={this.handleOk}
+                    maskClosable={false}
                     onCancel={this.handleCancel}
                 >
                     <CheckedTree

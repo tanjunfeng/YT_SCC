@@ -13,7 +13,8 @@ class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            branchCompanyId: ''
+            branchCompanyId: '',
+            isSubCompaniesDisabled: true
         }
         this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
         this.hanldeSubCompaniesClear = this.hanldeSubCompaniesClear.bind(this);
@@ -47,6 +48,7 @@ class SearchForm extends PureComponent {
 
 ```jsx
 <SubCompanies
+    disabled={this.state.isSubCompaniesDisabled}
     value={this.state.branchCompanyId}
     onSubCompaniesChooesd={this.handleSubCompanyChoose}
     onSubCompaniesClear={this.hanldeSubCompaniesClear}

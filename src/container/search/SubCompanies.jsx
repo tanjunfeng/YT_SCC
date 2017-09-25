@@ -54,7 +54,7 @@ class SubCompanies extends PureComponent {
                         branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
                     }, 'findCompanyBaseInfo')
                 }
-                disabled={this.props.isDisabled}
+                disabled={this.props.disabled}
                 onChoosed={this.handleSubCompanyChoose}
                 onClear={this.handleSubCompanyClear}
                 renderChoosedInputRaw={(row) => (
@@ -77,7 +77,7 @@ class SubCompanies extends PureComponent {
 }
 
 SubCompanies.propTypes = {
-    isDisabled: PropTypes.bool,
+    disabled: PropTypes.bool,
     pubFetchValueList: PropTypes.func,
     onSubCompaniesChooesd: PropTypes.func,
     onSubCompaniesClear: PropTypes.func,
