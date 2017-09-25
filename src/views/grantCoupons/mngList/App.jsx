@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form } from 'antd';
+import { Table, Form, message } from 'antd';
 import {
     queryFranchiseeList,
     grantCoupon,
@@ -95,6 +95,8 @@ class GrantCouponList extends PureComponent {
         this.props.grantCoupon({
             promoIds,
             storeIds: this.props.franchiseeList.data.map(franchisee => franchisee.storeId)
+        }).then(() => {
+            message.info('查询结果发券成功');
         });
     }
 
@@ -102,6 +104,8 @@ class GrantCouponList extends PureComponent {
         this.props.grantCoupon({
             promoIds,
             storeIds: this.state.storeIds
+        }).then(() => {
+            message.info('选择加盟商发券成功');
         });
     }
 
