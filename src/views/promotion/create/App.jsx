@@ -240,7 +240,7 @@ class PromotionCreate extends PureComponent {
                     message.error(res.message);
                 }
             });
-        });
+        }).catch(() => {});
     }
 
     handleBack() {
