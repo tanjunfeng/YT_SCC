@@ -59,73 +59,65 @@ class PromotionCreate extends PureComponent {
         this.handleStrategyChange = this.handleStrategyChange.bind(this);
     }
 
-    getFormData(callback) {
-        this.props.form.validateFields((err, values) => {
-            if (err) {
-                return callback(false);
-            }
-            const {
-                promotionName,
-                discount,
-                promotionDateRange,
-                condition,
-                area,
-                store,
-                category,
-                quanifyAmount,
-                note,
-                storeIds,
-                isSuperposeUserDiscount
-        } = values;
-            const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
-            const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
-            const stores = {};
-            Object.assign(stores, {
-                storeId: storeIds
+    getFormData() {
+        return new Promise((resolve, reject) => {
+            this.props.form.validateFields((err, values) => {
+                if (err) {
+                    reject(err);
+                }
+                const {
+                    promotionName,
+                    discount,
+                    promotionDateRange,
+                    condition,
+                    area,
+                    store,
+                    category,
+                    quanifyAmount,
+                    note,
+                    storeId,
+                    isSuperposeUserDiscount
+                } = values;
+                const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
+                const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
+                const promoCategoriesPo = this.state.categoryObj;
+                const companiesPoList = this.state.companies;
+                const dist = {
+                    promotionName,
+                    discount,
+                    startDate,
+                    endDate,
+                    note,
+                    isSuperposeUserDiscount: isSuperposeUserDiscount ? 1 : 0
+                };
+                if (condition === 1) {
+                    Object.assign(dist, {
+                        quanifyAmount
+                    });
+                }
+                if (area === 1) {
+                    if (companiesPoList.length === 0) {
+                        reject(new Error('未选择指定区域'));
+                    }
+                    Object.assign(dist, {
+                        companiesPoList
+                    });
+                }
+                if (category === 1) {
+                    if (promoCategoriesPo.categoryId === undefined) {
+                        reject(new Error('未选择品类'));
+                    }
+                    Object.assign(dist, {
+                        promoCategoriesPo
+                    });
+                }
+                if (store === 1) {
+                    Object.assign(dist, {
+                        stores: { storeId }
+                    });
+                }
+                resolve(Util.removeInvalid(dist));
             });
-            const promoCategoriesPo = this.state.categoryObj;
-            const companiesPoList = this.state.companies;
-            const dist = {
-                promotionName,
-                discount,
-                startDate,
-                endDate,
-                note,
-                isSuperposeUserDiscount: isSuperposeUserDiscount ? 1 : 0
-            };
-            if (condition === 1) {
-                if (!quanifyAmount) {
-                    return callback(false);
-                }
-                Object.assign(dist, {
-                    quanifyAmount
-                });
-            }
-            if (area === 1) {
-                if (companiesPoList.length === 0) {
-                    return callback(false);
-                }
-                Object.assign(dist, {
-                    companiesPoList
-                });
-            }
-            if (store === 1) {
-                if (stores.storeId === undefined) {
-                    return callback(false);
-                }
-                Object.assign(dist, {
-                    stores
-                });
-            }
-            if (category === 1) {
-                if (promoCategoriesPo.categoryId === undefined) {
-                    return callback(false);
-                }
-                Object.assign(dist, {
-                    promoCategoriesPo
-                });
-            }
-            return callback(Util.removeInvalid(dist));
         });
     }
 
@@ -228,6 +220,7 @@ class PromotionCreate extends PureComponent {
     }
 
     handleSelectorCancel() {
+        console.log('你刚刚把我关闭了一次');
         this.setState({
             areaSelectorVisible: false
         });
@@ -235,9 +228,8 @@ class PromotionCreate extends PureComponent {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.getFormData((response) => {
-            if (!response) return;
-            this.props.createPromotion(response).then((res) => {
+        this.getFormData().then((param) => {
+            this.props.createPromotion(param).then((res) => {
                 if (res.code === 200 && res.message === '请求成功') {
                     message.info('新增促销活动成功，请到列表页发布');
                     this.props.history.goBack();
@@ -245,7 +237,7 @@ class PromotionCreate extends PureComponent {
                     message.error(res.message);
                 }
             });
-        });
+        }).catch(error => message.error(error.message));
     }
 
     handleBack() {
@@ -421,7 +413,7 @@ class PromotionCreate extends PureComponent {
                                     <Row className="store">
                                         <Col span={16}>
                                             <FormItem label="">
-                                                {getFieldDecorator('storeIds', {
+                                                {getFieldDecorator('storeId', {
                                                     initialValue: '',
                                                     rules: [{ required: true, message: '请输入指定门店' }]
                                                 })(
