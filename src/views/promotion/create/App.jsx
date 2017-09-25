@@ -294,6 +294,7 @@ class PromotionCreate extends PureComponent {
                                                     size="default"
                                                     min={1}
                                                     max={100}
+                                                    parser={value => Math.ceil(value)}
                                                 />)
                                             }
                                             %
@@ -339,7 +340,14 @@ class PromotionCreate extends PureComponent {
                                                 })(
                                                     <InputNumber
                                                         min={1}
-                                                        max={65535}
+                                                        max={9999999999}
+                                                        /* parser={value => {
+                                                            const f = parseFloat(value);
+                                                            if (isNaN(f)) {
+                                                                return 0;
+                                                            }
+                                                            return Math.round(f * 100) / 100;
+                                                        }} */
                                                         onChange={this.handleQuanifyAmountChange}
                                                     />)
                                                 : null}
