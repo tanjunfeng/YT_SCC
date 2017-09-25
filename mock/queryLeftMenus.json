@@ -1,5 +1,5 @@
 {
-    "timestamp": 1505892421299,
+    "timestamp": 1506325037401,
     "code": 200,
     "message": {},
     "exception": null,
@@ -184,6 +184,12 @@
                     "authorityId": 301,
                     "authorityCode": "cxyhq",
                     "displayName": "优惠券",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 303,
+                    "authorityCode": "ffyhq",
+                    "displayName": "发放优惠券",
                     "menuList": []
                 }
             ]
