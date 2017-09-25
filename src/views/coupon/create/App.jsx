@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-25 16:40:27
+ * @Last Modified time: 2017-09-25 17:06:31
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -356,7 +356,7 @@ class CouponCreate extends PureComponent {
                                                     min={1}
                                                     max={9999}
                                                     maxlength={9999}
-                                                    formatter={value => `${value}`}
+                                                    parser={value => Math.ceil(value)}
                                                 />)}
                                             <span>元</span>
                                         </FormItem>
@@ -480,7 +480,7 @@ class CouponCreate extends PureComponent {
                                                     size="default"
                                                     min={1}
                                                     max={999999}
-                                                    formatter={value => `${value}`}
+                                                    parser={value => Math.ceil(value)}
                                                 />)}
                                             <span>张</span>
                                         </FormItem>
@@ -520,7 +520,7 @@ class CouponCreate extends PureComponent {
                                                             size="default"
                                                             min={1}
                                                             max={99}
-                                                            formatter={value => `${value}`}
+                                                            parser={value => Math.ceil(value)}
                                                         />
                                                         )}
                                                     <span>张</span>
