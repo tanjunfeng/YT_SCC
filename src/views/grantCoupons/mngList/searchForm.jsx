@@ -132,7 +132,7 @@ class SearchForm extends PureComponent {
                                         </span>
                                         <SubCompanies
                                             value={this.state.branchCompanyId}
-                                            isDisabled={this.state.isDisabled}
+                                            disabled={this.state.disabled}
                                             onSubCompaniesChooesd={this.handleSubCompanyChoose}
                                             onSubCompaniesClear={this.hanldeSubCompaniesClear}
                                         />
