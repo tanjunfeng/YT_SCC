@@ -94,6 +94,10 @@ class PromotionCreate extends PureComponent {
                     Object.assign(dist, {
                         quanifyAmount
                     });
+                } else {
+                    Object.assign(dist, {
+                        quanifyAmount: null
+                    });
                 }
                 if (area === 1) {
                     if (companiesPoList.length === 0) {
@@ -108,6 +112,10 @@ class PromotionCreate extends PureComponent {
                             companiesPoList
                         });
                     }
+                } else {
+                    Object.assign(dist, {
+                        companiesPoList: null
+                    });
                 }
                 if (category === 1) {
                     if (promoCategoriesPo.categoryId === undefined) {
@@ -122,10 +130,18 @@ class PromotionCreate extends PureComponent {
                             promoCategoriesPo
                         });
                     }
+                } else {
+                    Object.assign(dist, {
+                        promoCategoriesPo: null
+                    });
                 }
                 if (store === 1) {
                     Object.assign(dist, {
                         stores: { storeId }
+                    });
+                } else {
+                    Object.assign(dist, {
+                        stores: null
                     });
                 }
                 resolve(Util.removeInvalid(dist));
@@ -243,7 +259,7 @@ class PromotionCreate extends PureComponent {
             this.props.createPromotion(param).then((res) => {
                 if (res.code === 200 && res.message === '请求成功') {
                     message.info('新增促销活动成功，请到列表页发布');
-                    this.props.history.goBack();
+                    this.handleBack();
                 } else {
                     message.error(res.message);
                 }
