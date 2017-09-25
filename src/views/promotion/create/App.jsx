@@ -103,6 +103,7 @@ class PromotionCreate extends PureComponent {
                                 errors: [new Error('未选择指定区域')],
                             },
                         });
+                        reject();
                     }
                 }
                 if (category === 1) {
@@ -113,6 +114,7 @@ class PromotionCreate extends PureComponent {
                                 errors: [new Error('未选择品类')],
                             },
                         });
+                        reject();
                     }
                 }
                 if (store === 1) {
