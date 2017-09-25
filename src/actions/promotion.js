@@ -107,7 +107,6 @@ export const clearCategoriesList = () => dispatch => (dispatch({
     payload: []
 }));
 
-
 const createPromotionAction = (data) => ({
     type: ActionType.CREATE_PROMOTION,
     payload: data
