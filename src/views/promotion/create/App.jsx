@@ -13,7 +13,7 @@ import {
     Form, Row, Col, Input, InputNumber,
     Button, DatePicker, Radio, message, Checkbox
 } from 'antd';
-import Utils from '../../../util/util';
+import Util from '../../../util/util';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { AreaSelector } from '../../../container/tree';
@@ -125,7 +125,7 @@ class PromotionCreate extends PureComponent {
                     promoCategoriesPo
                 });
             }
-            return callback(Utils.removeInvalid(dist));
+            return callback(Util.removeInvalid(dist));
         });
     }
 
@@ -333,26 +333,30 @@ class PromotionCreate extends PureComponent {
                                                     <Radio value={1}>满</Radio>
                                                 </RadioGroup>
                                                 )}
-                                            {this.param.condition > 0 ?
-                                                getFieldDecorator('quanifyAmount', {
-                                                    initialValue: 0,
-                                                    rules: [{ required: true, message: '请填写条件金额' }]
-                                                })(
-                                                    <InputNumber
-                                                        min={1}
-                                                        max={9999999999}
-                                                        /* parser={value => {
-                                                            const f = parseFloat(value);
-                                                            if (isNaN(f)) {
-                                                                return 0;
-                                                            }
-                                                            return Math.round(f * 100) / 100;
-                                                        }} */
-                                                        onChange={this.handleQuanifyAmountChange}
-                                                    />)
-                                                : null}
-                                            {this.param.condition > 0 ? '元可用' : null}
                                         </FormItem>
+                                        {this.param.condition > 0 ?
+                                            <span>
+                                                <FormItem className="condition">
+                                                    {getFieldDecorator('quanifyAmount', {
+                                                        initialValue: '',
+                                                        rules: [{
+                                                            required: true, message: '请填写条件金额'
+                                                        }, {
+                                                            validator: Util.limitTwoDecimalPlaces
+                                                        }]
+                                                    })(
+                                                        <InputNumber
+                                                            min={1}
+                                                            max={9999999999}
+                                                            onChange={
+                                                                this.handleQuanifyAmountChange
+                                                            }
+                                                        />)}
+                                                </FormItem>
+                                                <span className="description">元可用</span>
+                                            </span>
+                                            : null
+                                        }
                                     </Col>
                                 </Row>
                                 <Row>
