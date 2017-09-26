@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-26 11:55:26
+ * @Last Modified time: 2017-09-26 14:16:02
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -376,18 +376,17 @@ class CouponCreate extends PureComponent {
                                                 <RadioGroup
                                                     onChange={this.handleConditionChange}
                                                 >
-                                                    <Radio value={0}>满</Radio>
                                                     <Radio
                                                         className="default"
-                                                        style={{ marginLeft: 10 }}
                                                         value={1}
                                                     >不限制</Radio>
+                                                    <Radio value={0}>满</Radio>
                                                 </RadioGroup>
                                                 )}
                                         </FormItem>
                                         {
                                             this.param.condition === 0 ?
-                                                <span>
+                                                <span style={{height: '42px', lineHeight: '42px'}}>
                                                     <FormItem className="condition" label="">
                                                         {getFieldDecorator('quanifyAmount', {
                                                             initialValue: '',
