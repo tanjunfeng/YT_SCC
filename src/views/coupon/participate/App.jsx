@@ -82,7 +82,7 @@ class CouponsParticipate extends PureComponent {
      *  Tab2 - 分页页码改变的回调
      */
     onPaginate1 = (pageNum) => {
-        Object.assign(this.param, { pageNum, current: pageNum });
+        Object.assign(this.param, { pageNum, current: pageNum, current1: pageNum });
         this.query();
     }
 
@@ -166,6 +166,7 @@ class CouponsParticipate extends PureComponent {
                             }}
                             bordered
                             pagination={{
+                                current: this.param.current,
                                 pageNum,
                                 pageSize,
                                 total,
@@ -184,6 +185,7 @@ class CouponsParticipate extends PureComponent {
                             }}
                             bordered
                             pagination={{
+                                current: this.param.current1,
                                 pageNum1,
                                 pageSize1,
                                 total: this.props.unUsedCouponParticipate.total,
