@@ -34,6 +34,7 @@ class GrantCouponList extends PureComponent {
         this.state = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
+            current: 1,
             storeIds: [],
         };
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
@@ -55,7 +56,8 @@ class GrantCouponList extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        this.query({ pageNum, ...this.param });
+        this.query({ pageNum });
+        this.setState({ current: pageNum });
     }
 
     /**
@@ -80,8 +82,8 @@ class GrantCouponList extends PureComponent {
     }
 
     handlePromotionSearch(param) {
-        this.param = param;
         this.query(param);
+        this.setState({ current: 1 });
     }
 
     handlePromotionReset() {
@@ -90,7 +92,6 @@ class GrantCouponList extends PureComponent {
             pageNum: 1,
             pageSize: PAGE_SIZE
         });
-        this.param = {};
     }
 
     handleReleaseAll(promoIds) {
@@ -134,6 +135,7 @@ class GrantCouponList extends PureComponent {
                     }}
                     bordered
                     pagination={{
+                        current: this.state.current,
                         pageNum,
                         pageSize,
                         total,
