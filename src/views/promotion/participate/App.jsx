@@ -31,11 +31,11 @@ import Util from '../../../util/util';
 class PromotionParticipate extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
+        this.param = {
             pageNum: 1,
-            pageSize: PAGE_SIZE
+            pageSize: PAGE_SIZE,
+            promoId: this.PROMOTION_ID,
         };
-        this.param = {};
         this.PROMOTION_ID = this.props.match.params.id;
         this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
         this.handleParticipateReset = this.handleParticipateReset.bind(this);
@@ -56,17 +56,12 @@ class PromotionParticipate extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        this.query({ page: pageNum });
+        Object.assign(this.param, { pageNum });
+        this.query();
     }
 
-    query(condition) {
-        const param = {
-            page: this.state.pageNum,
-            pageSize: this.state.pageSize,
-            promoId: this.PROMOTION_ID,
-            ...condition
-        };
-        this.props.getPromotionParticipate(param).then((data) => {
+    query() {
+        this.props.getPromotionParticipate(this.param).then((data) => {
             const { pageNum, pageSize } = data.data.participateDataDtoPageResult;
             this.setState({ pageNum, pageSize });
         });
@@ -97,8 +92,7 @@ class PromotionParticipate extends PureComponent {
 
     render() {
         const { participateDataDtoPageResult = {}, promotionName } = this.props.participate;
-        const { data, total } = participateDataDtoPageResult;
-        const { pageNum, pageSize } = this.state;
+        const { data, total, pageNum, pageSize } = participateDataDtoPageResult;
         return (
             <div>
                 <SearchForm
