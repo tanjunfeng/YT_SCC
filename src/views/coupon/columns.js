@@ -3,7 +3,7 @@
  * @Description: 优惠券列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-25 14:30:50
+ * @Last Modified time: 2017-09-25 17:17:33
  */
 /**
  * @file columns.js
@@ -143,23 +143,25 @@ const couponsDetail = [{
     key: 'quanifyAmount',
     render: amount => (amount ? `满 ${amount} 元可用` : '不限制')
 }, {
-    title: '有效时间',
-    children: [{
-        title: '开始时间',
-        dataIndex: 'startDate',
-        key: 'startDate',
-        render: timestamp => Util.getTime(timestamp)
-    }, {
-        title: '结束时间',
-        dataIndex: 'endDate',
-        key: 'endDate',
-        render: timestamp => Util.getTime(timestamp)
-    }],
+    title: '生效时间',
+    dataIndex: 'startDate',
+    key: 'startDate',
+    render: timestamp => Util.getTime(timestamp)
+}, {
+    title: '过期时间',
+    dataIndex: 'endDate',
+    key: 'endDate',
+    render: timestamp => Util.getTime(timestamp)
 }, {
     title: '发放数量',
     dataIndex: 'totalQuantity',
     key: 'totalQuantity',
     render: note => note || 0
+}, {
+    title: '发放方式',
+    dataIndex: 'grantChannel',
+    key: 'grantChannel',
+    render: note => (note === 'platform' ? '平台发放' : '用户领取')
 }, {
     title: '已领取',
     dataIndex: 'grantQty',
