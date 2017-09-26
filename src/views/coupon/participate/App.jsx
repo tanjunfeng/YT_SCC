@@ -144,7 +144,10 @@ class CouponsParticipate extends PureComponent {
                     onParticipateReset={this.handleParticipateReset}
                     onParticipateExport={this.handleParticipateExport}
                 />
-                <h2>活动ID：{this.PROMOTION_ID}    活动名称：{this.PROMOTION_NAME}</h2>
+                <h2>
+                    <span>活动ID：{this.PROMOTION_ID}</span>
+                    <span style={{paddingLeft: 10}}>活动名称：{this.PROMOTION_NAME}</span>
+                </h2>
                 <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
                     <TabPane tab="已使用" key="1">
                         <Table

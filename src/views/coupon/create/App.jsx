@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-26 14:36:20
+ * @Last Modified time: 2017-09-26 15:49:14
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -518,6 +518,7 @@ class CouponCreate extends PureComponent {
                                                         size="default"
                                                         min={1}
                                                         max={99}
+                                                        parser={value => Math.ceil(value)}
                                                         formatter={value => `${value}`}
                                                     />
                                                     )}
