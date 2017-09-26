@@ -132,7 +132,7 @@ class CouponsParticipate extends PureComponent {
         const { total } = participateDataDtoPageResult;
         const { pageNum, pageSize, pageNum1, pageSize1, } = this.state;
         const { data } = this.props.participate2;
-        // const { promotionName } = data;
+        console.log(data);
         return (
             <div>
                 <SearchForm
