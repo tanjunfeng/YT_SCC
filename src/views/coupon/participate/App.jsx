@@ -41,13 +41,6 @@ const TabPane = Tabs.TabPane;
 class CouponsParticipate extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
-            tabPage: '1'
-        };
-        this.param = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE
-        };
         this.PROMOTION_ID = this.props.match.params.id;
         this.PROMOTION_NAME = this.props.match.params.promotionName;
         this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
@@ -57,6 +50,14 @@ class CouponsParticipate extends PureComponent {
         this.onPaginate1 = this.onPaginate1.bind(this);
         this.handleTabChange = this.handleTabChange.bind(this);
         this.query = this.query.bind(this);
+        this.state = {
+            tabPage: '1'
+        };
+        this.param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            promoId: this.PROMOTION_ID
+        };
     }
 
     componentDidMount() {
@@ -104,6 +105,7 @@ class CouponsParticipate extends PureComponent {
             pageNum: 1,
             pageSize: PAGE_SIZE,
             current: 1,
+            promoId: this.PROMOTION_ID,
             ...param
         };
         this.query();
@@ -113,7 +115,8 @@ class CouponsParticipate extends PureComponent {
         // 重置检索条件
         this.param = {
             pageNum: 1,
-            pageSize: PAGE_SIZE
+            pageSize: PAGE_SIZE,
+            promoId: this.PROMOTION_ID
         };
     }
 
