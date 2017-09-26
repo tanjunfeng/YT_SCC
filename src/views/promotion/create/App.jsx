@@ -23,6 +23,8 @@ const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 const RadioGroup = Radio.Group;
 const { TextArea } = Input;
+const CheckboxGroup = Checkbox.Group;
+const plainOptions = ['下单打折', '会员等级'];
 
 @connect(() => ({
 }), dispatch => bindActionCreators({
@@ -43,7 +45,8 @@ class PromotionCreate extends PureComponent {
             categorySelectorVisible: false,
             storeSelectorVisible: false,
             companies: [],  // 所选区域子公司
-            categoryObj: {} // 所选品类对象
+            categoryObj: {}, // 所选品类对象
+            checkedList: []
         }
         this.getFormData = this.getFormData.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -76,19 +79,22 @@ class PromotionCreate extends PureComponent {
                     quanifyAmount,
                     note,
                     storeId,
-                    isSuperposeUserDiscount
                 } = values;
                 const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
                 const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
                 const promoCategoriesPo = this.state.categoryObj;
                 const companiesPoList = this.state.companies;
+                const checkedBoxList = this.state.checkedList;
                 const dist = {
                     promotionName,
                     discount,
                     startDate,
                     endDate,
                     note,
-                    isSuperposeUserDiscount: isSuperposeUserDiscount ? 1 : 0
+                    isSuperposeUserDiscount: (checkedBoxList.length === 1 &&
+                        checkedBoxList[0] === '会员等级') || checkedBoxList.length === 2 ? 1 : 0,
+                    isSuperposeProOrCouDiscount: (checkedBoxList.length === 1 &&
+                        checkedBoxList[0] === '下单打折') || checkedBoxList.length === 2 ? 1 : 0,
                 };
                 if (condition === 1) {
                     Object.assign(dist, {
@@ -218,6 +224,14 @@ class PromotionCreate extends PureComponent {
                 storeSelectorVisible: true
             });
         }
+    }
+
+    handleFormChange = (checkedList) => {
+        this.setState({
+            checkedList,
+            indeterminate: !!checkedList.length && (checkedList.length < plainOptions.length),
+            checkAll: checkedList.length === plainOptions.length,
+        });
     }
 
     handleSelectorOk(companies) {
@@ -448,17 +462,11 @@ class PromotionCreate extends PureComponent {
                                 <Row>
                                     <Col span={16}>
                                         <FormItem label="活动叠加">
-                                            {getFieldDecorator('isSuperposeUserDiscount', {
-                                                initialValue: false
-                                            })(
-                                                <Checkbox
-                                                    onChange={this.handleStrategyChange}
-                                                >
-                                                    会员等级
-                                                    </Checkbox>
-                                                )
-                                            }
-
+                                            <CheckboxGroup
+                                                onChange={this.handleFormChange}
+                                                value={this.state.checkedList}
+                                                options={plainOptions}
+                                            />
                                         </FormItem>
                                     </Col>
                                 </Row>
