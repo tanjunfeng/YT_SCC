@@ -32,8 +32,8 @@ export default function (state = initState, action) {
         case ActionType.FETCH_FRANCHISEE_LIST:
         case ActionType.CLEAR_FRANCHISEE_LIST:
             return state.set('franchiseeList', fromJS(action.payload));
-        case ActionType.FETCH_PATICIPATE_LIST:
-        case ActionType.CLEAR_PATICIPATE_LIST:
+        case ActionType.FETCH_PROMOTION_PATICIPATE_LIST:
+        case ActionType.CLEAR_PROMOTION_PATICIPATE_LIST:
             return state.set('participate', fromJS(action.payload));
         case ActionType.FETCH_PATICIPATETWO_LIST:
         case ActionType.CLEAR_PATICIPATETWO_LIST:
