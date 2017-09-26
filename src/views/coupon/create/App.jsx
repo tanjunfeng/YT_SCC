@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-25 17:19:10
+ * @Last Modified time: 2017-09-25 18:35:39
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -116,7 +116,7 @@ class CouponCreate extends PureComponent {
                         this.props.form.setFields({
                             condition: {
                                 value: values.condition,
-                                error: [new Error('请填写活动金额!')]
+                                errors: [new Error('请填写活动金额!')]
                             }
                         });
                         reject();
@@ -131,7 +131,7 @@ class CouponCreate extends PureComponent {
                         this.props.form.setFields({
                             area: {
                                 value: values.area,
-                                error: [new Error('请选择区域!')]
+                                errors: [new Error('请选择区域!')]
                             }
                         });
                         reject();
@@ -146,7 +146,7 @@ class CouponCreate extends PureComponent {
                         this.props.form.setFields({
                             area: {
                                 value: values.store,
-                                error: [new Error('请填写门店列表!')]
+                                errors: [new Error('请填写门店列表!')]
                             }
                         });
                         reject();
@@ -161,7 +161,7 @@ class CouponCreate extends PureComponent {
                         this.props.form.setFields({
                             area: {
                                 value: values.category,
-                                error: [new Error('请选择品类!')]
+                                errors: [new Error('请选择品类!')]
                             }
                         });
                         reject();
@@ -176,7 +176,7 @@ class CouponCreate extends PureComponent {
                         this.props.form.setFields({
                             area: {
                                 value: values.personQty,
-                                error: [new Error('请输入正确发放数量!')]
+                                errors: [new Error('请输入正确发放数量!')]
                             }
                         });
                         reject();
