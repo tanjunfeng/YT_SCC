@@ -63,7 +63,7 @@ class CouponDetail extends PureComponent {
                         <div className="add-message coupons-add-license">
                             <div className="add-message-body">
                                 {this.getDetails()}
-                                <Row gutter={40} type="flex">
+                                <Row gutter={40} type="flex" style={{marginLeft: 45}}>
                                     <Col>
                                         <FormItem>
                                             <Button size="default" onClick={this.handleBack}>

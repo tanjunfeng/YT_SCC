@@ -1,4 +1,4 @@
-$promotionAddLabelWidth: 80px;
+$promotionAddLabelWidth: 100px;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -33,5 +33,8 @@ $promotionAddLabelWidth: 80px;
         max-width: 640px;
         word-wrap: break-word;
         word-break: break-all;
+    }
+    .ant-form-item-label{
+        width: 100px;
     }
 }

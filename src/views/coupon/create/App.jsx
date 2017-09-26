@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-26 17:24:27
+ * @Last Modified time: 2017-09-26 20:37:31
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -342,7 +342,7 @@ class CouponCreate extends PureComponent {
                                             {getFieldDecorator('promotionName', {
                                                 rules: [
                                                     { required: true, message: '请输入优惠券名称!' },
-                                                    { max: 15, message: '活动名称最长15位' }
+                                                    { max: 15, message: '活动名称最长15位' },
                                                 ]
                                             })(<Input size="default" />)}
                                         </FormItem>
