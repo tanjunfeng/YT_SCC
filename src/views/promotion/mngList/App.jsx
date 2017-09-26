@@ -33,9 +33,11 @@ class PromotionManagementList extends PureComponent {
     constructor(props) {
         super(props);
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
+        this.handlePromotionReset = this.handlePromotionReset.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.renderOperations = this.renderOperations.bind(this);
         this.query = this.query.bind(this);
+        this.param = {};
     }
 
     componentWillMount() {
@@ -54,20 +56,28 @@ class PromotionManagementList extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        this.query({ pageNum });
+        Object.assign(this.param, {
+            pageNum
+        })
+        this.query();
     }
 
-    query(condition) {
+    query() {
         const param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
-            ...condition
+            ...this.param
         }
         this.props.getPromotionList(param);
     }
 
     handlePromotionSearch(param) {
-        this.query(param);
+        this.param = param;
+        this.query();
+    }
+
+    handlePromotionReset() {
+        this.param = {};
     }
 
     /**
@@ -164,6 +174,7 @@ class PromotionManagementList extends PureComponent {
             <div>
                 <SearchForm
                     onPromotionSearch={this.handlePromotionSearch}
+                    onPromotionReset={this.handlePromotionReset}
                 />
                 <Table
                     dataSource={data}

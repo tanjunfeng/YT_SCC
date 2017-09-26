@@ -129,7 +129,7 @@ class CouponList extends PureComponent {
      * return 列表页操作下拉菜单
      */
     renderOperations = (text, record, index) => {
-        const { id, status } = record;
+        const { id, promotionName, status } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
@@ -137,7 +137,7 @@ class CouponList extends PureComponent {
                     <Link to={`${pathname}/detail/${id}`}>活动详情</Link>
                 </Menu.Item>
                 <Menu.Item key="participate">
-                    <Link to={`${pathname}/participate/${id}`}>参与数据</Link>
+                    <Link to={`${pathname}/participate/${id}/${promotionName}`}>参与数据</Link>
                 </Menu.Item>
                 {
                     // 未发布的可发布

@@ -48,7 +48,8 @@ class CouponsParticipate extends PureComponent {
             pageSize1: PAGE_SIZE,
             tabPage: '1'
         };
-        this.promoId = this.props.match.params.id;
+        this.PROMOTION_ID = this.props.match.params.id;
+        this.PROMOTION_NAME = this.props.match.params.promotionName;
         this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
         this.handleParticipateReset = this.handleParticipateReset.bind(this);
         this.handleParticipateExport = this.handleParticipateExport.bind(this);
@@ -89,7 +90,7 @@ class CouponsParticipate extends PureComponent {
         const param = {
             page: this.state.pageNum,
             pageSize: this.state.pageSize,
-            promoId: this.promoId,
+            promoId: this.PROMOTION_ID,
             ...condition
         };
         this.props.getUsedCouponParticipate(param).then((data) => {
@@ -120,7 +121,7 @@ class CouponsParticipate extends PureComponent {
         const condition = {
             page: this.state.pageNum,
             pageSize: this.state.pageSize,
-            promoId: this.promoId,
+            promoId: this.PROMOTION_ID,
             ...param
         };
         if (this.state.tabPage === '1') {
@@ -136,7 +137,6 @@ class CouponsParticipate extends PureComponent {
         } = this.props.usedCouponParticipate;
         const { total } = participateDataDtoPageResult;
         const { pageNum, pageSize, pageNum1, pageSize1, } = this.state;
-        const { data = [] } = this.props.usedCouponParticipate;
         return (
             <div>
                 <SearchForm
@@ -144,10 +144,7 @@ class CouponsParticipate extends PureComponent {
                     onParticipateReset={this.handleParticipateReset}
                     onParticipateExport={this.handleParticipateExport}
                 />
-                <h2>
-                    活动ID：{this.props.match.params.id}
-                    活动名称：{data.length > 0 ? data[0].promotionName : ''}
-                </h2>
+                <h2>活动ID：{this.PROMOTION_ID}    活动名称：{this.PROMOTION_NAME}</h2>
                 <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
                     <TabPane tab="已使用" key="1">
                         <Table
