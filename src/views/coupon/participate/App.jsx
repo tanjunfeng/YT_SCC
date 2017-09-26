@@ -128,10 +128,11 @@ class CouponsParticipate extends PureComponent {
     render() {
         const {
             participateDataDtoPageResult = {},
-            promotionName
         } = this.props.participate;
-        const { data, total } = participateDataDtoPageResult;
+        const { total } = participateDataDtoPageResult;
         const { pageNum, pageSize, pageNum1, pageSize1, } = this.state;
+        const { data } = this.props.participate2;
+        console.log(data);
         return (
             <div>
                 <SearchForm
@@ -139,11 +140,14 @@ class CouponsParticipate extends PureComponent {
                     onParticipateReset={this.handleParticipateReset}
                     onParticipateExport={this.handleParticipateExport}
                 />
-                <h2>活动ID：{this.props.match.params.id}    活动名称：{promotionName}</h2>
+                <h2>
+                    活动ID：{this.props.match.params.id}
+                    活动名称：{1}
+                </h2>
                 <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
                     <TabPane tab="已使用" key="1">
                         <Table
-                            dataSource={data}
+                            dataSource={this.props.participate.data}
                             columns={columns}
                             rowKey="franchiseeId"
                             scroll={{
@@ -163,7 +167,7 @@ class CouponsParticipate extends PureComponent {
                         <Table
                             dataSource={this.props.participate2.data}
                             columns={columns2}
-                            rowKey="storeId"
+                            rowKey="id"
                             scroll={{
                                 x: 1400
                             }}
