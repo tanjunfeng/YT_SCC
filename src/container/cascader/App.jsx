@@ -58,10 +58,6 @@ class Category extends PureComponent {
      */
     onChange(value, selectedOptions) {
         const target = selectedOptions[selectedOptions.length - 1];
-        // 当用户选择全部子节点时，使用 parent 对象数据回传
-        if (target.value === 'all') {
-            Object.assign(target, {}, target.parent);
-        }
         const category = {
             categoryId: target.value,
             categoryName: target.label,
@@ -92,14 +88,7 @@ class Category extends PureComponent {
      */
     appendObject(res, target) {
         const id = target.value;
-        const arr = [{
-            key: `${id}-all`,
-            label: '全部',
-            value: 'all',
-            isLeaf: true,
-            // 当选择全部子节点的时候，保存完整父节点字段待用
-            parent: target
-        }];
+        const arr = [];
         res.data.forEach((treeNode, index) => {
             arr.push({
                 key: `${id}-${index}`,
