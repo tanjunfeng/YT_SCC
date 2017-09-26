@@ -3,7 +3,7 @@
  * @Description: 优惠券列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-26 17:25:11
+ * @Last Modified time: 2017-09-26 19:29:48
  */
 /**
  * @file columns.js
@@ -173,12 +173,12 @@ const couponsDetail = [{
     key: 'usedQty',
     render: note => note || 0
 }, {
-    title: '下单打折',
+    title: '与促销活动叠加',
     dataIndex: 'isSuperposeProOrCouDiscount',
     key: 'isSuperposeProOrCouDiscount',
     render: note => (note === 1 ? '是' : '否')
 }, {
-    title: '活动叠加',
+    title: '与会员等级叠加',
     dataIndex: 'isSuperposeUserDiscount',
     key: 'isSuperposeUserDiscount',
     render: note => (note === 1 ? '是' : '否')
