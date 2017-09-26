@@ -42,13 +42,14 @@ class CouponsParticipate extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
+            tabPage: '1'
+        };
+        this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
             pageNum1: 1,
-            pageSize1: PAGE_SIZE,
-            tabPage: '1'
+            pageSize1: PAGE_SIZE
         };
-        this.param = {};
         this.PROMOTION_ID = this.props.match.params.id;
         this.PROMOTION_NAME = this.props.match.params.promotionName;
         this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
@@ -73,51 +74,54 @@ class CouponsParticipate extends PureComponent {
      * Tab1 - 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        this.query({ page: pageNum, ...this.param });
+        Object.assign(this.param, { pageNum, current: pageNum });
+        this.query();
     }
 
     /**
      *  Tab2 - 分页页码改变的回调
      */
     onPaginate1 = (pageNum) => {
-        this.query({ page: pageNum, ...this.param });
+        Object.assign(this.param, { pageNum, current: pageNum, current1: pageNum });
+        this.query();
     }
 
     handleTabChange(key) {
         this.setState({ tabPage: key });
     }
 
-    query(condition) {
-        const param = {
-            page: this.state.pageNum,
-            pageSize: this.state.pageSize,
-            promoId: this.PROMOTION_ID,
-            ...condition
-        };
-        this.props.getUsedCouponParticipate(param).then((data) => {
+    query() {
+        this.props.getUsedCouponParticipate(this.param).then((data) => {
             const { pageNum, pageSize } = data.data;
-            this.setState({ pageNum, pageSize });
+            Object.assign(this.param, { pageNum, pageSize });
         });
-        this.props.getUnUsedCouponParticipate(param).then((data) => {
+        this.props.getUnUsedCouponParticipate(this.param).then((data) => {
             const { pageNum, pageSize } = data.data;
-            this.setState({ pageNum1: pageNum, pageSize1: pageSize });
+            Object.assign(this.param, { pageNum1: pageNum, pageSize1: pageSize });
         });
     }
 
     handleParticipateSearch(param) {
-        this.param = param;
-        this.query(param);
-    }
-
-    handleParticipateReset() {
-        // 重置检索条件
-        this.setState({
+        this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
             pageNum1: 1,
             pageSize1: PAGE_SIZE,
-        });
-        this.param = {};
+            current: 1,
+            current1: 1,
+            ...param
+        };
+        this.query();
+    }
+
+    handleParticipateReset() {
+        // 重置检索条件
+        this.param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            pageNum1: 1,
+            pageSize1: PAGE_SIZE
+        };
     }
 
     handleParticipateExport(param) {
@@ -139,7 +143,7 @@ class CouponsParticipate extends PureComponent {
             participateDataDtoPageResult = {},
         } = this.props.usedCouponParticipate;
         const { total } = participateDataDtoPageResult;
-        const { pageNum, pageSize, pageNum1, pageSize1, } = this.state;
+        const { pageNum, pageSize, pageNum1, pageSize1 } = this.param;
         return (
             <div>
                 <SearchForm
@@ -149,7 +153,7 @@ class CouponsParticipate extends PureComponent {
                 />
                 <h2>
                     <span>活动ID：{this.PROMOTION_ID}</span>
-                    <span style={{paddingLeft: 10}}>活动名称：{this.PROMOTION_NAME}</span>
+                    <span style={{ paddingLeft: 10 }}>活动名称：{this.PROMOTION_NAME}</span>
                 </h2>
                 <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
                     <TabPane tab="已使用" key="1">
@@ -162,6 +166,7 @@ class CouponsParticipate extends PureComponent {
                             }}
                             bordered
                             pagination={{
+                                current: this.param.current,
                                 pageNum,
                                 pageSize,
                                 total,
@@ -180,6 +185,7 @@ class CouponsParticipate extends PureComponent {
                             }}
                             bordered
                             pagination={{
+                                current: this.param.current1,
                                 pageNum1,
                                 pageSize1,
                                 total: this.props.unUsedCouponParticipate.total,

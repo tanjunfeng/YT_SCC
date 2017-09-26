@@ -56,10 +56,11 @@ class PromotionManagementList extends PureComponent {
     /**
      * 分页页码改变的回调
      */
-    onPaginate = (pageNum) => {
+    onPaginate = (pageNum = 1) => {
         Object.assign(this.param, {
-            pageNum
-        })
+            pageNum,
+            current: pageNum
+        });
         this.query();
     }
 
@@ -71,11 +72,12 @@ class PromotionManagementList extends PureComponent {
     }
 
     handlePromotionSearch(param) {
-        this.param = {
+        Object.assign(this.param, {}, {
             pageNum: 1,
             pageSize: PAGE_SIZE,
+            current: 1,
             ...param
-        }
+        });
         this.query();
     }
 
@@ -175,7 +177,6 @@ class PromotionManagementList extends PureComponent {
 
     render() {
         const { data, total, pageNum, pageSize } = this.props.promotionList;
-        Object.assign(this.param, { total, pageNum, pageSize });
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
@@ -192,6 +193,7 @@ class PromotionManagementList extends PureComponent {
                     }}
                     bordered
                     pagination={{
+                        current: this.param.current,
                         pageNum,
                         pageSize,
                         total,
