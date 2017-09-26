@@ -160,7 +160,7 @@ class CouponsParticipate extends PureComponent {
                         <Table
                             dataSource={this.props.usedCouponParticipate.data}
                             columns={usedColumns}
-                            rowKey="franchiseeId"
+                            rowKey="orderId"
                             scroll={{
                                 x: 1400
                             }}
