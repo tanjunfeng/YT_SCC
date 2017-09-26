@@ -242,7 +242,7 @@ class PromotionCreate extends PureComponent {
                     message.error(res.message);
                 }
             });
-        }).catch(() => {});
+        }).catch(() => { });
     }
 
     handleBack() {
@@ -420,11 +420,19 @@ class PromotionCreate extends PureComponent {
                                             <FormItem label="">
                                                 {getFieldDecorator('storeId', {
                                                     initialValue: '',
-                                                    rules: [{ required: true, message: '请按照 A000999, A000900, A000991 数据模板的格式准备导入数据' }]
+                                                    rules: [{ required: true, message: '请输入指定门店' }]
                                                 })(
                                                     <TextArea placeholder="请输入指定门店" autosize={{ minRows: 4, maxRows: 6 }} />
                                                     )}
                                             </FormItem>
+                                        </Col>
+                                    </Row>
+                                    : null
+                                }
+                                {this.state.storeSelectorVisible ?
+                                    <Row>
+                                        <Col span={16}>
+                                            *请按照数据模板的格式准备导入数据如：A000999, A000900, A000991
                                         </Col>
                                     </Row>
                                     : null
