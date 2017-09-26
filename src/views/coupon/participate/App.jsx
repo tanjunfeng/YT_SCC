@@ -48,6 +48,7 @@ class CouponsParticipate extends PureComponent {
             pageSize1: PAGE_SIZE,
             tabPage: '1'
         };
+        this.param = {};
         this.PROMOTION_ID = this.props.match.params.id;
         this.PROMOTION_NAME = this.props.match.params.promotionName;
         this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
@@ -72,18 +73,18 @@ class CouponsParticipate extends PureComponent {
      * Tab1 - 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        this.query({ page: pageNum });
+        this.query({ page: pageNum, ...this.param });
     }
 
     /**
      *  Tab2 - 分页页码改变的回调
      */
     onPaginate1 = (pageNum) => {
-        this.query({ page: pageNum });
+        this.query({ page: pageNum, ...this.param });
     }
 
     handleTabChange(key) {
-        this.setState({tabPage: key});
+        this.setState({ tabPage: key });
     }
 
     query(condition) {
@@ -104,6 +105,7 @@ class CouponsParticipate extends PureComponent {
     }
 
     handleParticipateSearch(param) {
+        this.param = param;
         this.query(param);
     }
 
@@ -115,6 +117,7 @@ class CouponsParticipate extends PureComponent {
             pageNum1: 1,
             pageSize1: PAGE_SIZE,
         });
+        this.param = {};
     }
 
     handleParticipateExport(param) {

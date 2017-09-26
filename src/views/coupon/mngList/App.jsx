@@ -33,10 +33,7 @@ import { couponList as columns } from '../columns';
 class CouponList extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE
-        };
+        this.param = {};
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
@@ -49,6 +46,7 @@ class CouponList extends PureComponent {
     }
 
     componentDidMount() {
+        this.handlePromotionReset();
         this.query();
     }
 
@@ -60,31 +58,31 @@ class CouponList extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        this.query({ pageNum });
+        Object.assign(this.param, { pageNum });
+        this.query();
     }
 
-    query(condition) {
-        const param = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
-            ...condition
-        }
-        this.props.queryCouponsList(param).then((data) => {
+    query() {
+        this.props.queryCouponsList(this.param).then((data) => {
             const { pageNum, pageSize } = data.data;
-            this.setState({ pageNum, pageSize });
+            Object.assign(this.param, { pageNum, pageSize });
         });
     }
 
     handlePromotionSearch(param) {
-        this.query(param);
+        this.param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            ...param
+        };
+        this.query();
     }
 
     handlePromotionReset() {
-        // 重置检索条件
-        this.setState({
+        this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE
-        });
+        };
     }
 
     /**
@@ -175,8 +173,7 @@ class CouponList extends PureComponent {
     }
 
     render() {
-        const { data, total } = this.props.couponsList;
-        const { pageNum, pageSize } = this.state;
+        const { data, total, pageNum, pageSize } = this.props.couponsList;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>

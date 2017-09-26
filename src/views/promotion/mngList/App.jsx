@@ -45,6 +45,7 @@ class PromotionManagementList extends PureComponent {
     }
 
     componentDidMount() {
+        this.handlePromotionReset();
         this.query();
     }
 
@@ -63,21 +64,26 @@ class PromotionManagementList extends PureComponent {
     }
 
     query() {
-        const param = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
-            ...this.param
-        }
-        this.props.getPromotionList(param);
+        this.props.getPromotionList(this.param).then(data => {
+            const { pageNum, pageSize } = data.data;
+            Object.assign(this.param, { pageNum, pageSize });
+        });
     }
 
     handlePromotionSearch(param) {
-        this.param = param;
+        this.param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            ...param
+        }
         this.query();
     }
 
     handlePromotionReset() {
-        this.param = {};
+        this.param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        }
     }
 
     /**
@@ -169,6 +175,7 @@ class PromotionManagementList extends PureComponent {
 
     render() {
         const { data, total, pageNum, pageSize } = this.props.promotionList;
+        Object.assign(this.param, { total, pageNum, pageSize });
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>

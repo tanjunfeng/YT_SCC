@@ -55,7 +55,7 @@ class GrantCouponList extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        this.query({ pageNum });
+        this.query({ pageNum, ...this.param });
     }
 
     /**
@@ -80,6 +80,7 @@ class GrantCouponList extends PureComponent {
     }
 
     handlePromotionSearch(param) {
+        this.param = param;
         this.query(param);
     }
 
@@ -89,6 +90,7 @@ class GrantCouponList extends PureComponent {
             pageNum: 1,
             pageSize: PAGE_SIZE
         });
+        this.param = {};
     }
 
     handleReleaseAll(promoIds) {
