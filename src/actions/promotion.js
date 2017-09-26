@@ -16,7 +16,8 @@ import {
     queryAliveCouponsList as queryAliveCouponsListService,
     queryFranchiseeList as queryFranchiseeListService,
     getCouponsDetail as fetchCouponsDetailService,
-    getParticipate2 as participateData2Service,
+    fetchUsedCouponParticipate as fetchUsedCouponParticipateService,
+    fetchUnUsedCouponParticipate as fetchUnUsedCouponParticipateService,
     fetchPromotionParticipateData as fetchPromotionParticipateDataService,
     grantCoupon as grantCouponService,
 } from '../service';
@@ -43,14 +44,14 @@ export const getPromotionList = (params) => dispatch => (
 );
 
 /**
- * 促销活动参与数据1 Action
+ * 下单打折参与数据 Action
  */
 const fetchParticipateDataAction = (data) => ({
     type: ActionType.FETCH_PROMOTION_PATICIPATE_LIST,
     payload: data
 });
 
-export const getParticipate = (params) => dispatch => (
+export const getPromotionParticipate = (params) => dispatch => (
     new Promise((resolve, reject) => {
         fetchPromotionParticipateDataService(params)
             .then(res => {
@@ -64,19 +65,40 @@ export const getParticipate = (params) => dispatch => (
 );
 
 /**
- * 促销活动参与数据2 Action
+ * 优惠券参与数据-已使用 Action
  */
-const fetchParticipateData2 = (data) => ({
-    type: ActionType.FETCH_PATICIPATETWO_LIST,
+const fetchUsedCouponParticipateAction = (data) => ({
+    type: ActionType.FETCH_USED_COUPON_PATICIPATE_LIST,
     payload: data
 });
 
-export const getParticipate2 = (params) => dispatch => (
+export const getUsedCouponParticipate = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        participateData2Service(params)
+        fetchUsedCouponParticipateService(params)
             .then(res => {
                 dispatch(
-                    fetchParticipateData2(res.data)
+                    fetchUsedCouponParticipateAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 优惠券参与数据-未使用 Action
+ */
+const fetchUnUsedCouponParticipateAction = (data) => ({
+    type: ActionType.FETCH_UN_USED_COUPON_PATICIPATE_LIST,
+    payload: data
+});
+
+export const getUnUsedCouponParticipate = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        fetchUnUsedCouponParticipateService(params)
+            .then(res => {
+                dispatch(
+                    fetchUnUsedCouponParticipateAction(res.data)
                 );
                 resolve(res);
             })
@@ -302,13 +324,18 @@ export const clearCouponsList = () => dispatch => (dispatch({
     payload: []
 }));
 
-export const clearParticipate = () => dispatch => (dispatch({
+export const clearPromotionParticipate = () => dispatch => (dispatch({
     type: ActionType.CLEAR_PROMOTION_PATICIPATE_LIST,
     payload: {}
 }));
 
-export const clearCouParticipate = () => dispatch => (dispatch({
-    type: ActionType.CLEAR_COUPATICIPATE_LIST,
+export const clearUsedCouponPatipate = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_USED_COUPON_PATICIPATE_LIST,
+    payload: {}
+}));
+
+export const clearUnUsedCouponPatipate = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_UN_USED_COUPON_PATICIPATE_LIST,
     payload: {}
 }));
 

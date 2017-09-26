@@ -771,8 +771,8 @@ export const fetchPromotionDetail = (params) => http.get('/promotion/queryPromot
 export const updatePromotionStatus = (params) => http.post('/promotion/updatePromoStatus', params);
 
 // 优惠券
-export const getParticipate = (params) => http.get('/coupon/queryCouponRecordList', params);
-export const getParticipate2 = (params) => http.get('/coupon/queryCouponActivityActiveList', params);
+export const fetchUsedCouponParticipate = (params) => http.get('/coupon/queryCouponRecordList', params);
+export const fetchUnUsedCouponParticipate = (params) => http.get('/coupon/queryCouponActivityActiveList', params);
 export const createCoupons = (params) => http.post('/coupon/insertCoupons', params);
 export const queryCouponsList = (params) => http.get('/coupon/queryCouponsList', params);
 export const queryAliveCouponsList = (params) => http.get('/coupon/queryAliveCouponsList', params);
