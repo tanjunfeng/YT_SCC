@@ -58,7 +58,7 @@ class CouponList extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        Object.assign(this.param, { pageNum });
+        Object.assign(this.param, { pageNum, current: pageNum });
         this.query();
     }
 
@@ -73,6 +73,7 @@ class CouponList extends PureComponent {
         this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
+            current: 1,
             ...param
         };
         this.query();
@@ -190,6 +191,7 @@ class CouponList extends PureComponent {
                     }}
                     bordered
                     pagination={{
+                        current: this.param.current,
                         pageNum,
                         pageSize,
                         total,
