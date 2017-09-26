@@ -46,9 +46,7 @@ class CouponsParticipate extends PureComponent {
         };
         this.param = {
             pageNum: 1,
-            pageSize: PAGE_SIZE,
-            pageNum1: 1,
-            pageSize1: PAGE_SIZE
+            pageSize: PAGE_SIZE
         };
         this.PROMOTION_ID = this.props.match.params.id;
         this.PROMOTION_NAME = this.props.match.params.promotionName;
@@ -105,10 +103,7 @@ class CouponsParticipate extends PureComponent {
         this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
-            pageNum1: 1,
-            pageSize1: PAGE_SIZE,
             current: 1,
-            current1: 1,
             ...param
         };
         this.query();
@@ -118,9 +113,7 @@ class CouponsParticipate extends PureComponent {
         // 重置检索条件
         this.param = {
             pageNum: 1,
-            pageSize: PAGE_SIZE,
-            pageNum1: 1,
-            pageSize1: PAGE_SIZE
+            pageSize: PAGE_SIZE
         };
     }
 
