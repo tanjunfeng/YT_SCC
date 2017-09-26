@@ -34,4 +34,12 @@ $promotionAddLabelWidth: 80px;
         word-wrap: break-word;
         word-break: break-all;
     }
+    .ant-form-item-label{
+        width: 100px;
+    }
+    .promotion-add-license{
+        .ant-form-item-label, .ant-form-item-label label{
+            width: 100px;
+        }
+    }
 }
