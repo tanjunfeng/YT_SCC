@@ -35,7 +35,7 @@ class PromotionParticipate extends PureComponent {
             pageNum: 1,
             pageSize: PAGE_SIZE
         };
-        this.promoId = this.props.match.params.id;
+        this.PROMOTION_ID = this.props.match.params.id;
         this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
         this.handleParticipateReset = this.handleParticipateReset.bind(this);
         this.handleParticipateExport = this.handleParticipateExport.bind(this);
@@ -62,7 +62,7 @@ class PromotionParticipate extends PureComponent {
         const param = {
             page: this.state.pageNum,
             pageSize: this.state.pageSize,
-            promoId: this.promoId,
+            promoId: this.PROMOTION_ID,
             ...condition
         };
         this.props.getParticipate(param).then((data) => {
@@ -87,7 +87,7 @@ class PromotionParticipate extends PureComponent {
         const condition = {
             page: this.state.pageNum,
             pageSize: this.state.pageSize,
-            promoId: this.promoId,
+            promoId: this.PROMOTION_ID,
             ...param
         };
         Util.exportExcel(exportParticipateData, condition);
