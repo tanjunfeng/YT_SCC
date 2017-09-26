@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-26 14:16:02
+ * @Last Modified time: 2017-09-26 14:34:09
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -161,6 +161,21 @@ class CouponCreate extends PureComponent {
                         reject();
                     } else {
                         Object.assign(dist, {
+                            personQty
+                        });
+                    }
+                }
+                if (totalQuantity) {
+                    if (!totalQuantity) {
+                        this.props.form.setFields({
+                            totalQuantity: {
+                                value: totalQuantity,
+                                errors: [new Error('请输入发放数量!')]
+                            }
+                        });
+                        reject();
+                    } else {
+                        Object.assign(dist, {
                             totalQuantity
                         });
                     }
@@ -284,14 +299,15 @@ class CouponCreate extends PureComponent {
     handleSubmit(e) {
         e.preventDefault();
         this.getFormData().then((param) => {
-            this.props.createCoupons(param).then((res) => {
-                if (res.code === 200 && res.message === '请求成功') {
-                    message.info('新增促销活动成功，请到列表页发布');
-                    this.props.history.goBack();
-                } else {
-                    message.error(res.message);
-                }
-            });
+            console.log(param)
+            // this.props.createCoupons(param).then((res) => {
+            //     if (res.code === 200 && res.message === '请求成功') {
+            //         message.info('新增促销活动成功，请到列表页发布');
+            //         this.props.history.goBack();
+            //     } else {
+            //         message.error(res.message);
+            //     }
+            // });
         }).catch(error => {
             console.log(error);
         });
