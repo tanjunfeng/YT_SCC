@@ -32,11 +32,7 @@ import { managementList as columns } from '../columns';
 class PromotionManagementList extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
-            pageNum: 1, pageSize: PAGE_SIZE
-        };
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
-        this.handlePromotionReset = this.handlePromotionReset.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.renderOperations = this.renderOperations.bind(this);
         this.query = this.query.bind(this);
@@ -67,22 +63,11 @@ class PromotionManagementList extends PureComponent {
             pageSize: PAGE_SIZE,
             ...condition
         }
-        this.props.getPromotionList(param).then((data) => {
-            const { pageNum, pageSize } = data.data;
-            this.setState({ pageNum, pageSize });
-        });
+        this.props.getPromotionList(param);
     }
 
     handlePromotionSearch(param) {
         this.query(param);
-    }
-
-    handlePromotionReset() {
-        // 重置检索条件
-        this.setState({
-            pageNum: 1,
-            pageSize: PAGE_SIZE
-        })
     }
 
     /**
@@ -173,14 +158,12 @@ class PromotionManagementList extends PureComponent {
     }
 
     render() {
-        const { data, total } = this.props.promotionList;
-        const { pageNum, pageSize } = this.state;
+        const { data, total, pageNum, pageSize } = this.props.promotionList;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
                 <SearchForm
                     onPromotionSearch={this.handlePromotionSearch}
-                    onPromotionReset={this.handlePromotionReset}
                 />
                 <Table
                     dataSource={data}
