@@ -3,7 +3,7 @@
  * @Description: 优惠券列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-25 17:17:33
+ * @Last Modified time: 2017-09-26 11:41:12
  */
 /**
  * @file columns.js
@@ -187,7 +187,8 @@ const couponsDetail = [{
 const usedParticipateList = [{
     title: '所属子公司',
     dataIndex: 'branchCompanyName',
-    key: 'branchCompanyName'
+    key: 'branchCompanyName',
+    render: note => note || '全部'
 }, {
     title: '加盟商编号',
     dataIndex: 'franchiseeId',
