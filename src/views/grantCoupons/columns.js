@@ -87,7 +87,7 @@ const releaseCouponsColumns = [{
     title: '使用条件',
     dataIndex: 'quanifyAmount',
     key: 'quanifyAmount',
-    render: amount => (`满${amount}可用`)
+    render: amount => (amount ? `满${amount}可用` : '不限制')
 }, {
     title: '有效时间',
     children: [{
