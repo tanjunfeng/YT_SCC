@@ -63,7 +63,13 @@ const releaseCouponsColumns = [{
 }, {
     title: '品类',
     dataIndex: 'promoCategoriesPo',
-    key: 'promoCategoriesPo'
+    key: 'promoCategoriesPo',
+    render: category => {
+        if (!category) {
+            return '全部品类';
+        }
+        return category.categoryName
+    }
 }, {
     title: '使用区域',
     dataIndex: 'branchCompanyId',
