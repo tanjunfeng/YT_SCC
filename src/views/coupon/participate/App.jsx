@@ -131,8 +131,8 @@ class CouponsParticipate extends PureComponent {
         } = this.props.participate;
         const { total } = participateDataDtoPageResult;
         const { pageNum, pageSize, pageNum1, pageSize1, } = this.state;
-        const { data } = this.props.participate2;
-        console.log(data);
+        const { data = [] } = this.props.participate2;
+        console.log(data && data[0])
         return (
             <div>
                 <SearchForm
@@ -142,7 +142,7 @@ class CouponsParticipate extends PureComponent {
                 />
                 <h2>
                     活动ID：{this.props.match.params.id}
-                    活动名称：{1}
+                    活动名称：{(data && data[0]).promotionName || ''}
                 </h2>
                 <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
                     <TabPane tab="已使用" key="1">

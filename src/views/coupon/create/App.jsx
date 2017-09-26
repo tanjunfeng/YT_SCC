@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-26 10:28:02
+ * @Last Modified time: 2017-09-26 10:55:31
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -105,7 +105,7 @@ class CouponCreate extends PureComponent {
                     isSuperposeUserDiscount: (checkedBoxList.length === 1 &&
                         checkedBoxList[0] === '会员等级') || checkedBoxList.length === 2 ? 1 : 0,
                 };
-                if (condition === 1) {
+                if (condition === 0) {
                     if (!quanifyAmount) {
                         this.props.form.setFields({
                             condition: {
@@ -138,7 +138,7 @@ class CouponCreate extends PureComponent {
                 if (category === 1) {
                     if (promoCategoriesPo.categoryId === undefined) {
                         this.props.form.setFields({
-                            area: {
+                            category: {
                                 value: category,
                                 errors: [new Error('请选择品类!')]
                             }
@@ -153,7 +153,7 @@ class CouponCreate extends PureComponent {
                 if (personQty && totalQuantity) {
                     if (personQty > totalQuantity) {
                         this.props.form.setFields({
-                            area: {
+                            personQty: {
                                 value: personQty,
                                 errors: [new Error('请输入正确发放数量!')]
                             }
