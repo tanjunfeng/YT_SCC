@@ -35,6 +35,7 @@ class PromotionParticipate extends PureComponent {
             pageNum: 1,
             pageSize: PAGE_SIZE
         };
+        this.param = {};
         this.PROMOTION_ID = this.props.match.params.id;
         this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
         this.handleParticipateReset = this.handleParticipateReset.bind(this);
@@ -72,7 +73,8 @@ class PromotionParticipate extends PureComponent {
     }
 
     handleParticipateSearch(param) {
-        this.query(param);
+        this.param = param;
+        this.query();
     }
 
     handleParticipateReset() {
