@@ -12,8 +12,8 @@ import { withRouter } from 'react-router';
 import { Table, Form } from 'antd';
 
 import {
-    getParticipate,
-    clearParticipate
+    getPromotionParticipate,
+    clearPromotionParticipate
 } from '../../../actions/promotion';
 import { exportParticipateData } from '../../../service';
 import SearchForm from './searchForm';
@@ -22,10 +22,10 @@ import { participateList as columns } from '../columns';
 import Util from '../../../util/util';
 
 @connect(state => ({
-    participate: state.toJS().promotion.participate
+    participate: state.toJS().promotion.promotionParticipate
 }), dispatch => bindActionCreators({
-    getParticipate,
-    clearParticipate
+    getPromotionParticipate,
+    clearPromotionParticipate
 }, dispatch))
 
 class PromotionParticipate extends PureComponent {
@@ -48,7 +48,7 @@ class PromotionParticipate extends PureComponent {
     }
 
     componentWillUnmount() {
-        this.props.clearParticipate();
+        this.props.clearPromotionParticipate();
     }
 
     /**
@@ -65,7 +65,7 @@ class PromotionParticipate extends PureComponent {
             promoId: this.PROMOTION_ID,
             ...condition
         };
-        this.props.getParticipate(param).then((data) => {
+        this.props.getPromotionParticipate(param).then((data) => {
             const { pageNum, pageSize } = data.data.participateDataDtoPageResult;
             this.setState({ pageNum, pageSize });
         });
@@ -127,8 +127,8 @@ class PromotionParticipate extends PureComponent {
 }
 
 PromotionParticipate.propTypes = {
-    getParticipate: PropTypes.func,
-    clearParticipate: PropTypes.func,
+    getPromotionParticipate: PropTypes.func,
+    clearPromotionParticipate: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
     participate: PropTypes.objectOf(PropTypes.any)
 }
