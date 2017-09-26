@@ -78,7 +78,6 @@ class SearchForm extends PureComponent {
     handleReset() {
         this.hanldeSubCompaniesClear(); // 清除子公司值清单
         this.props.form.resetFields();  // 清除当前查询条件
-        this.props.onPromotionReset();  // 通知父页面已清空
     }
 
     handleCreate() {
@@ -177,7 +176,6 @@ class SearchForm extends PureComponent {
 
 SearchForm.propTypes = {
     onPromotionSearch: PropTypes.func,
-    onPromotionReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any)

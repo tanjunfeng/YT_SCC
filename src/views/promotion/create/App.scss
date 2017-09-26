@@ -41,13 +41,10 @@ $promotionAddLabelWidth: 80px;
             width: 120px;
         }
     }
-    .red {
-        color: red;
-    }
     .store .ant-form-item-control {
         margin-left: $promotionAddLabelWidth;
     }
-    .red .ant-col-16 {
+    .tips .ant-col-16 {
         margin-left: $promotionAddLabelWidth;
     }
     .description {
