@@ -71,7 +71,11 @@ class PromotionManagementList extends PureComponent {
     }
 
     handlePromotionSearch(param) {
-        Object.assign(this.param, param);
+        this.param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            ...param
+        }
         this.query();
     }
 
