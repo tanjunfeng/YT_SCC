@@ -72,8 +72,8 @@ const releaseCouponsColumns = [{
     }
 }, {
     title: '使用区域',
-    dataIndex: 'branchCompanyId',
-    key: 'branchCompanyId',
+    dataIndex: 'companiesPoList',
+    key: 'companiesPoList',
     render: list => {
         if (!list || list.length === 0) {
             return '全部区域';
