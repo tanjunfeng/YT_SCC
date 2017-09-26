@@ -12,28 +12,30 @@ import { withRouter } from 'react-router';
 import { Table, Form, Tabs } from 'antd';
 
 import {
-    getParticipate,
-    getParticipate2,
-    clearParticipate
+    getUsedCouponParticipate,
+    getUnUsedCouponParticipate,
+    clearUsedCouponPatipate,
+    clearUnUsedCouponPatipate
 } from '../../../actions/promotion';
 import { exportParticipateData1, exportParticipateData2 } from '../../../service';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import {
-    participateList as columns,
-    participateListTab2 as columns2
+    usedParticipateList as usedColumns,
+    unUsedParticipateList as unUsedColumns
 } from '../columns';
 import Util from '../../../util/util';
 
 const TabPane = Tabs.TabPane;
 
 @connect(state => ({
-    participate: state.toJS().promotion.participate,
-    participate2: state.toJS().promotion.participate2
+    usedCouponParticipate: state.toJS().promotion.usedCouponParticipate,
+    unUsedCouponParticipate: state.toJS().promotion.unUsedCouponParticipate
 }), dispatch => bindActionCreators({
-    getParticipate,
-    clearParticipate,
-    getParticipate2
+    getUsedCouponParticipate,
+    getUnUsedCouponParticipate,
+    clearUsedCouponPatipate,
+    clearUnUsedCouponPatipate
 }, dispatch))
 
 class CouponsParticipate extends PureComponent {
@@ -61,7 +63,8 @@ class CouponsParticipate extends PureComponent {
     }
 
     componentWillUnmount() {
-        this.props.clearParticipate();
+        this.props.clearUsedCouponPatipate();
+        this.props.clearUnUsedCouponPatipate();
     }
 
     /**
@@ -89,11 +92,11 @@ class CouponsParticipate extends PureComponent {
             promoId: this.promoId,
             ...condition
         };
-        this.props.getParticipate(param).then((data) => {
+        this.props.getUsedCouponParticipate(param).then((data) => {
             const { pageNum, pageSize } = data.data;
             this.setState({ pageNum, pageSize });
         });
-        this.props.getParticipate2(param).then((data) => {
+        this.props.getUnUsedCouponParticipate(param).then((data) => {
             const { pageNum, pageSize } = data.data;
             this.setState({ pageNum1: pageNum, pageSize1: pageSize });
         });
@@ -107,7 +110,9 @@ class CouponsParticipate extends PureComponent {
         // 重置检索条件
         this.setState({
             pageNum: 1,
-            pageSize: PAGE_SIZE
+            pageSize: PAGE_SIZE,
+            pageNum1: 1,
+            pageSize1: PAGE_SIZE,
         });
     }
 
@@ -128,10 +133,10 @@ class CouponsParticipate extends PureComponent {
     render() {
         const {
             participateDataDtoPageResult = {},
-        } = this.props.participate;
+        } = this.props.usedCouponParticipate;
         const { total } = participateDataDtoPageResult;
         const { pageNum, pageSize, pageNum1, pageSize1, } = this.state;
-        const { data = [] } = this.props.participate2;
+        const { data = [] } = this.props.unUsedCouponParticipate;
         console.log(data && data[0])
         return (
             <div>
@@ -147,8 +152,8 @@ class CouponsParticipate extends PureComponent {
                 <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
                     <TabPane tab="已使用" key="1">
                         <Table
-                            dataSource={this.props.participate.data}
-                            columns={columns}
+                            dataSource={this.props.usedCouponParticipate.data}
+                            columns={usedColumns}
                             rowKey="franchiseeId"
                             scroll={{
                                 x: 1400
@@ -165,8 +170,8 @@ class CouponsParticipate extends PureComponent {
                     </TabPane>
                     <TabPane tab="未使用" key="2">
                         <Table
-                            dataSource={this.props.participate2.data}
-                            columns={columns2}
+                            dataSource={this.props.unUsedCouponParticipate.data}
+                            columns={unUsedColumns}
                             rowKey="id"
                             scroll={{
                                 x: 1400
@@ -175,7 +180,7 @@ class CouponsParticipate extends PureComponent {
                             pagination={{
                                 pageNum1,
                                 pageSize1,
-                                total: this.props.participate2.total,
+                                total: this.props.unUsedCouponParticipate.total,
                                 showQuickJumper: true,
                                 onChange: this.onPaginate1
                             }}
@@ -188,12 +193,13 @@ class CouponsParticipate extends PureComponent {
 }
 
 CouponsParticipate.propTypes = {
-    getParticipate: PropTypes.func,
-    getParticipate2: PropTypes.func,
-    clearParticipate: PropTypes.func,
+    getUsedCouponParticipate: PropTypes.func,
+    getUnUsedCouponParticipate: PropTypes.func,
+    clearUsedCouponPatipate: PropTypes.func,
+    clearUnUsedCouponPatipate: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
-    participate: PropTypes.objectOf(PropTypes.any),
-    participate2: PropTypes.objectOf(PropTypes.any),
+    usedCouponParticipate: PropTypes.objectOf(PropTypes.any),
+    unUsedCouponParticipate: PropTypes.objectOf(PropTypes.any),
 }
 
 export default withRouter(Form.create()(CouponsParticipate));

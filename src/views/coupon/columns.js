@@ -184,7 +184,7 @@ const couponsDetail = [{
     render: statusCode => promotionStatus[statusCode]
 }];
 
-const participateList = [{
+const usedParticipateList = [{
     title: '所属子公司',
     dataIndex: 'branchCompanyName',
     key: 'branchCompanyName'
@@ -235,7 +235,7 @@ const participateList = [{
     key: 'orderPrice'
 }];
 
-const participateListTab2 = [{
+const unUsedParticipateList = [{
     title: '所属子公司',
     dataIndex: 'branchCompanyName',
     key: 'branchCompanyName'
@@ -266,4 +266,4 @@ const participateListTab2 = [{
     render: timestamp => Util.getTime(timestamp)
 }];
 
-export { couponList, couponsDetail, participateList, participateListTab2 };
+export { couponList, couponsDetail, usedParticipateList, unUsedParticipateList };
