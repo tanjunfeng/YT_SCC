@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-26 10:55:31
+ * @Last Modified time: 2017-09-26 11:55:26
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -49,7 +49,7 @@ class CouponCreate extends PureComponent {
             storeSelectorVisible: true,
             companies: [],  // 所选区域子公司
             categoryObj: {}, // 所选品类对象
-            checkedList: []
+            checkedList: [],
         }
         this.getFormData = this.getFormData.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -155,7 +155,7 @@ class CouponCreate extends PureComponent {
                         this.props.form.setFields({
                             personQty: {
                                 value: personQty,
-                                errors: [new Error('请输入正确发放数量!')]
+                                errors: [new Error('请输入正确领取数量!')]
                             }
                         });
                         reject();
@@ -295,6 +295,10 @@ class CouponCreate extends PureComponent {
         }).catch(error => {
             console.log(error);
         });
+    }
+    textAreaChange(e) {
+        const getValue = e.target.value;
+        this.setState({rcontent: getValue, rcontentnum: 15});
     }
 
     handleBack() {
@@ -527,6 +531,7 @@ class CouponCreate extends PureComponent {
                                             })(
                                                 <TextArea
                                                     placeholder="可填写备注"
+                                                    maxLength="15"
                                                     autosize={{
                                                         minRows: 4,
                                                         maxRows: 6
