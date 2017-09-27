@@ -1,4 +1,4 @@
-$promotionAddLabelWidth: 80px;
+$promotionAddLabelWidth: 100px;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -20,8 +20,9 @@ $promotionAddLabelWidth: 80px;
     }
 }
 
-.promotion {
-    padding-top: 40px;
+.promotion-create {
+    padding-top: 60px;
+    margin: 0 62px;
     form .default {
         width: 78px;
     }
