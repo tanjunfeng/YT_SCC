@@ -36,6 +36,7 @@ class PromotionManagementList extends PureComponent {
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.renderOperations = this.renderOperations.bind(this);
+        this.handleSearchDataChanged = this.handleSearchDataChanged.bind(this);
         this.query = this.query.bind(this);
         this.param = {};
     }
@@ -64,6 +65,20 @@ class PromotionManagementList extends PureComponent {
         this.query();
     }
 
+    /**
+     * 根据搜索条件重置搜索参数
+     * 搜索条件一旦发生改变，需重置分页参数和页码
+     *
+     * @param {*object} param 搜索条件
+     */
+    handleSearchDataChanged(param) {
+        this.handlePromotionReset();
+        Object.assign(this.param, {
+            current: 1,
+            ...param
+        });
+    }
+
     query() {
         this.props.getPromotionList(this.param).then(data => {
             const { pageNum, pageSize } = data.data;
@@ -71,13 +86,7 @@ class PromotionManagementList extends PureComponent {
         });
     }
 
-    handlePromotionSearch(param) {
-        Object.assign(this.param, {}, {
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
-            current: 1,
-            ...param
-        });
+    handlePromotionSearch() {
         this.query();
     }
 
@@ -183,6 +192,7 @@ class PromotionManagementList extends PureComponent {
                 <SearchForm
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
+                    onSearchDataChanged={this.handleSearchDataChanged}
                 />
                 <Table
                     dataSource={data}
