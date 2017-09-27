@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../util/util';
 import { poStatus, locType, poType } from '../../constant/procurement';
@@ -66,10 +67,10 @@ class PoSearchForm extends PureComponent {
             auditTime
         } = this.props.form.getFieldsValue();
 
-        const startCreateTime = createTime ? createTime[0].valueOf() : '';
-        const endCreateTime = createTime ? createTime[1].valueOf() : '';
-        const startAuditTime = auditTime ? auditTime[0].valueOf() : '';
-        const endAuditTime = auditTime ? auditTime[1].valueOf() : '';
+        const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
+        const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
+        const startAuditTime = auditTime ? Date.parse(auditTime[0].format(dateFormat)) : '';
+        const endAuditTime = auditTime ? Date.parse(auditTime[1].format(dateFormat)) : '';
         const searchParams = {
             purchaseOrderNo: purchaseNumber,
             spNo: this.supplierEncoded,
@@ -445,7 +446,12 @@ class PoSearchForm extends PureComponent {
                                         {getFieldDecorator('createTime')(
                                             <RangePicker
                                                 className="date-range-picker"
+                                                style={{width: 250}}
                                                 format={dateFormat}
+                                                showTime={{
+                                                    hideDisabledOptions: true,
+                                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                                }}
                                                 placeholder={['开始日期', '结束日期']}
                                                 onChange={this.chooseCreateDate}
                                             />
@@ -461,7 +467,12 @@ class PoSearchForm extends PureComponent {
                                         {getFieldDecorator('auditTime')(
                                             <RangePicker
                                                 className="date-range-picker"
+                                                style={{width: 250}}
                                                 format={dateFormat}
+                                                showTime={{
+                                                    hideDisabledOptions: true,
+                                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                                }}
                                                 placeholder={['开始日期', '结束日期']}
                                                 onChange={this.chooseApproval}
                                             />
