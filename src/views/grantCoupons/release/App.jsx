@@ -81,9 +81,8 @@ class ReleaseCouponModal extends PureComponent {
     }
 
     handleCouponSearch(param) {
-        Object.assign(this.param, {}, {
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
+        this.handleCouponReset();
+        Object.assign(this.param, {
             current: 1,
             ...param
         });

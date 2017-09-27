@@ -65,9 +65,8 @@ class PromotionParticipate extends PureComponent {
     }
 
     handleParticipateSearch(param) {
-        Object.assign(this.param, {}, {
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
+        this.handleParticipateReset();
+        Object.assign(this.param, {
             current: 1,
             ...param
         });

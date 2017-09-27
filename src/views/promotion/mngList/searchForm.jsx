@@ -64,19 +64,15 @@ class SearchForm extends PureComponent {
 
     handleSubCompanyChoose(branchCompanyId) {
         this.setState({ branchCompanyId });
-        this.props.onSearchDataChanged(this.getFormData());
     }
 
     hanldeSubCompaniesClear() {
         this.setState({ branchCompanyId: '' });
-        this.props.onSearchDataChanged(this.getFormData());
     }
 
     handleSearch() {
-        // 将查询条件回传给调用页
-        this.props.onSearchDataChanged(this.getFormData());
         // 通知父页面执行搜索
-        this.props.onPromotionSearch();
+        this.props.onPromotionSearch(this.getFormData());
     }
 
     handleReset() {
@@ -126,8 +122,7 @@ class SearchForm extends PureComponent {
                                     <div className="promotion-date-range">
                                         <span className="sc-form-item-label search-mind-label">活动时间</span>
                                         {getFieldDecorator('promotionDateRange', {
-                                            initialValue: [],
-                                            rules: [{ required: true, message: '请选择活动时间' }]
+                                            initialValue: []
                                         })(
                                             <RangePicker
                                                 size="default"
@@ -182,7 +177,6 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     onPromotionSearch: PropTypes.func,
     onPromotionReset: PropTypes.func,
-    onSearchDataChanged: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any)
