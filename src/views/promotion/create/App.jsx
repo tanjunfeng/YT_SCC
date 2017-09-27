@@ -284,7 +284,7 @@ class PromotionCreate extends PureComponent {
             subCompanies.push(company.companyName);
         });
         return (
-            <div className="promotion">
+            <div className="promotion-create">
                 <Form layout="inline" onSubmit={this.handleSubmit}>
                     <div className="promotion-add-item">
                         <div className="add-message promotion-add-license">
@@ -481,15 +481,13 @@ class PromotionCreate extends PureComponent {
                                         </FormItem>
                                     </Col>
                                 </Row>
-                                <Row gutter={40} type="flex">
-                                    <Col>
+                                <Row gutter={40} type="flex" justify="center">
+                                    <Col span={8}>
                                         <FormItem>
                                             <Button type="primary" size="default" htmlType="submit">
                                                 提交
                                             </Button>
                                         </FormItem>
-                                    </Col>
-                                    <Col>
                                         <FormItem>
                                             <Button size="default" onClick={this.handleBack}>
                                                 返回
