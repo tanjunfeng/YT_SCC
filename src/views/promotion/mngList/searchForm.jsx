@@ -64,15 +64,19 @@ class SearchForm extends PureComponent {
 
     handleSubCompanyChoose(branchCompanyId) {
         this.setState({ branchCompanyId });
+        this.props.onSearchDataChanged(this.getFormData());
     }
 
     hanldeSubCompaniesClear() {
         this.setState({ branchCompanyId: '' });
+        this.props.onSearchDataChanged(this.getFormData());
     }
 
     handleSearch() {
         // 将查询条件回传给调用页
-        this.props.onPromotionSearch(this.getFormData());
+        this.props.onSearchDataChanged(this.getFormData());
+        // 通知父页面执行搜索
+        this.props.onPromotionSearch();
     }
 
     handleReset() {
@@ -178,6 +182,7 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     onPromotionSearch: PropTypes.func,
     onPromotionReset: PropTypes.func,
+    onSearchDataChanged: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any)
