@@ -3,7 +3,7 @@
  * @Description: 优惠券列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-26 11:41:12
+ * @Last Modified time: 2017-09-26 19:54:10
  */
 /**
  * @file columns.js
@@ -173,6 +173,16 @@ const couponsDetail = [{
     key: 'usedQty',
     render: note => note || 0
 }, {
+    title: '与促销活动叠加',
+    dataIndex: 'isSuperposeProOrCouDiscount',
+    key: 'isSuperposeProOrCouDiscount',
+    render: note => (note === 1 ? '是' : '否')
+}, {
+    title: '与会员等级叠加',
+    dataIndex: 'isSuperposeUserDiscount',
+    key: 'isSuperposeUserDiscount',
+    render: note => (note === 1 ? '是' : '否')
+}, {
     title: '备注',
     dataIndex: 'note',
     key: 'note',
@@ -221,15 +231,79 @@ const usedParticipateList = [{
 }, {
     title: '订单状态',
     dataIndex: 'orderState',
-    key: 'orderState'
+    key: 'orderState',
+    render: (text) => {
+        switch (text) {
+            case 'W':
+                return '待审核';
+            case 'M':
+                return '待人工审核';
+            case 'A':
+                return '已审核';
+            case 'Q':
+                return '已取消';
+            case 'C':
+                return '已完成';
+            case 'SP':
+                return '已拆单';
+            default:
+                return text;
+        }
+    }
 }, {
     title: '支付状态',
     dataIndex: 'paymentState',
-    key: 'paymentState'
+    key: 'paymentState',
+    render: (text) => {
+        switch (text) {
+            case 'WZF':
+                return '未支付';
+            case 'YZF':
+                return '已支付';
+            case 'TKD':
+                return '退款待审核';
+            case 'TKQ':
+                return '退款待确认 ';
+            case 'YTK':
+                return '已退款';
+            case 'QXFK':
+                return '取消付款';
+            case 'GSN':
+                return '公司内';
+            default:
+                return text;
+        }
+    }
 }, {
     title: '物流状态',
     dataIndex: 'shippingState',
-    key: 'shippingState'
+    key: 'shippingState',
+    render: (text) => {
+        switch (text) {
+            case 'DCL':
+                return '待处理';
+            case 'WCS':
+                return '未传送';
+            case 'DCK':
+                return '待出库';
+            case 'WJS':
+                return '仓库拒收 ';
+            case 'DSH':
+                return '待收货';
+            case 'YQS':
+                return '已签收';
+            case 'WSD':
+                return '未送达';
+            case 'QXZ':
+                return '取消中';
+            case 'QX':
+                return '取消送货';
+            case 'CGWDH':
+                return '库存不足';
+            default:
+                return text;
+        }
+    }
 }, {
     title: '订单金额',
     dataIndex: 'orderPrice',

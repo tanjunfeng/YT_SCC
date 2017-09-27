@@ -32,10 +32,9 @@ class GrantCouponList extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
             storeIds: [],
         };
+        this.param = {};
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
         this.handleReleaseAll = this.handleReleaseAll.bind(this);
@@ -44,6 +43,7 @@ class GrantCouponList extends PureComponent {
     }
 
     componentDidMount() {
+        this.handlePromotionReset();
         this.query();
     }
 
@@ -55,7 +55,11 @@ class GrantCouponList extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        this.query({ pageNum });
+        Object.assign(this.param, {
+            pageNum,
+            current: pageNum
+        });
+        this.query();
     }
 
     /**
@@ -67,28 +71,29 @@ class GrantCouponList extends PureComponent {
         }
     }
 
-    query(condition) {
-        const param = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
-            ...condition
-        }
-        this.props.queryFranchiseeList(param).then((data) => {
+    query() {
+        this.props.queryFranchiseeList(this.param).then((data) => {
             const { pageNum, pageSize } = data.data;
-            this.setState({ pageNum, pageSize });
+            Object.assign(this.param, { pageNum, pageSize });
         });
     }
 
     handlePromotionSearch(param) {
-        this.query(param);
+        Object.assign(this.param, {}, {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            current: 1,
+            ...param
+        });
+        this.query();
     }
 
     handlePromotionReset() {
         // 重置检索条件
-        this.setState({
+        this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE
-        });
+        }
     }
 
     handleReleaseAll(promoIds) {
@@ -132,6 +137,7 @@ class GrantCouponList extends PureComponent {
                     }}
                     bordered
                     pagination={{
+                        current: this.param.current,
                         pageNum,
                         pageSize,
                         total,

@@ -33,9 +33,11 @@ class PromotionManagementList extends PureComponent {
     constructor(props) {
         super(props);
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
+        this.handlePromotionReset = this.handlePromotionReset.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.renderOperations = this.renderOperations.bind(this);
         this.query = this.query.bind(this);
+        this.param = {};
     }
 
     componentWillMount() {
@@ -43,6 +45,7 @@ class PromotionManagementList extends PureComponent {
     }
 
     componentDidMount() {
+        this.handlePromotionReset();
         this.query();
     }
 
@@ -53,21 +56,36 @@ class PromotionManagementList extends PureComponent {
     /**
      * 分页页码改变的回调
      */
-    onPaginate = (pageNum) => {
-        this.query({ pageNum });
+    onPaginate = (pageNum = 1) => {
+        Object.assign(this.param, {
+            pageNum,
+            current: pageNum
+        });
+        this.query();
     }
 
-    query(condition) {
-        const param = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
-            ...condition
-        }
-        this.props.getPromotionList(param);
+    query() {
+        this.props.getPromotionList(this.param).then(data => {
+            const { pageNum, pageSize } = data.data;
+            Object.assign(this.param, { pageNum, pageSize });
+        });
     }
 
     handlePromotionSearch(param) {
-        this.query(param);
+        Object.assign(this.param, {}, {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            current: 1,
+            ...param
+        });
+        this.query();
+    }
+
+    handlePromotionReset() {
+        this.param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        }
     }
 
     /**
@@ -164,6 +182,7 @@ class PromotionManagementList extends PureComponent {
             <div>
                 <SearchForm
                     onPromotionSearch={this.handlePromotionSearch}
+                    onPromotionReset={this.handlePromotionReset}
                 />
                 <Table
                     dataSource={data}
@@ -174,6 +193,7 @@ class PromotionManagementList extends PureComponent {
                     }}
                     bordered
                     pagination={{
+                        current: this.param.current,
                         pageNum,
                         pageSize,
                         total,

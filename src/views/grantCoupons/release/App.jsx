@@ -28,9 +28,12 @@ class ReleaseCouponModal extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
+            promoIds: []
+        };
+        this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
-            promoIds: [],
+            current: 1
         };
         this.handleCouponSearch = this.handleCouponSearch.bind(this);
         this.handleCouponReset = this.handleCouponReset.bind(this);
@@ -42,16 +45,12 @@ class ReleaseCouponModal extends PureComponent {
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.visible && this.props.visible) {
-            this.setState({
-                pageNum: 1,
-                pageSize: PAGE_SIZE,
-                promoIds: [],
-            });
             // 隐藏时清空
             this.props.clearCouponsList();
         }
         if (nextProps.visible && !this.props.visible) {
             // 显示时按默认条件查询一次
+            this.handleCouponReset();
             this.query();
         }
     }
@@ -60,7 +59,11 @@ class ReleaseCouponModal extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        this.query({ pageNum });
+        Object.assign(this.param, {
+            pageNum,
+            current: pageNum
+        });
+        this.query();
     }
 
     /**
@@ -70,28 +73,29 @@ class ReleaseCouponModal extends PureComponent {
         this.setState({ promoIds });
     }
 
-    query(condition) {
-        const param = {
-            pageNum: 1,
-            pageSize: 5,
-            ...condition
-        }
-        this.props.queryAliveCouponsList(param).then((data) => {
+    query() {
+        this.props.queryAliveCouponsList(this.param).then((data) => {
             const { pageNum, pageSize } = data.data;
-            this.setState({ pageNum, pageSize });
+            Object.assign(this.param, { pageNum, pageSize });
         });
     }
 
     handleCouponSearch(param) {
-        this.query(param);
+        Object.assign(this.param, {}, {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            current: 1,
+            ...param
+        });
+        this.query();
     }
 
     handleCouponReset() {
         // 重置检索条件
-        this.setState({
+        this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE
-        });
+        }
     }
 
     handleOk() {
@@ -137,6 +141,7 @@ class ReleaseCouponModal extends PureComponent {
                     }}
                     bordered
                     pagination={{
+                        current: this.param.current,
                         pageNum,
                         pageSize,
                         total,

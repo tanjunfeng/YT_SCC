@@ -31,10 +31,7 @@ import Util from '../../../util/util';
 class PromotionParticipate extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE
-        };
+        this.param = {};
         this.PROMOTION_ID = this.props.match.params.id;
         this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
         this.handleParticipateReset = this.handleParticipateReset.bind(this);
@@ -44,6 +41,7 @@ class PromotionParticipate extends PureComponent {
     }
 
     componentDidMount() {
+        this.handleParticipateReset();
         this.query();
     }
 
@@ -55,48 +53,44 @@ class PromotionParticipate extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        this.query({ page: pageNum });
+        Object.assign(this.param, { pageNum, current: pageNum });
+        this.query();
     }
 
-    query(condition) {
-        const param = {
-            page: this.state.pageNum,
-            pageSize: this.state.pageSize,
-            promoId: this.PROMOTION_ID,
-            ...condition
-        };
-        this.props.getPromotionParticipate(param).then((data) => {
-            const { pageNum, pageSize } = data.data.participateDataDtoPageResult;
-            this.setState({ pageNum, pageSize });
+    query() {
+        this.props.getPromotionParticipate(this.param).then(data => {
+            const { total, pageNum, pageSize } = data.data.participateDataDtoPageResult;
+            Object.assign(this.param, { total, pageNum, pageSize });
         });
     }
 
     handleParticipateSearch(param) {
-        this.query(param);
+        Object.assign(this.param, {}, {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            current: 1,
+            ...param
+        });
+        this.query();
     }
 
     handleParticipateReset() {
         // 重置检索条件
-        this.setState({
+        this.param = {
             pageNum: 1,
-            pageSize: PAGE_SIZE
-        });
+            pageSize: PAGE_SIZE,
+            promoId: this.PROMOTION_ID,
+        }
     }
 
     handleParticipateExport(param) {
-        const condition = {
-            page: this.state.pageNum,
-            pageSize: this.state.pageSize,
-            promoId: this.PROMOTION_ID,
-            ...param
-        };
-        Util.exportExcel(exportParticipateData, condition);
+        Object.assign(this.param, param);
+        Util.exportExcel(exportParticipateData, this.param);
     }
 
     render() {
         const { participateDataDtoPageResult = {}, promotionName } = this.props.participate;
-        const { data, total } = participateDataDtoPageResult;
-        const { pageNum, pageSize } = this.state;
+        const { data, total, pageNum, pageSize } = participateDataDtoPageResult;
         return (
             <div>
                 <SearchForm
@@ -104,7 +98,7 @@ class PromotionParticipate extends PureComponent {
                     onParticipateReset={this.handleParticipateReset}
                     onParticipateExport={this.handleParticipateExport}
                 />
-                <h2>活动ID：{this.props.match.params.id}    活动名称：{promotionName}</h2>
+                <h2>活动ID：{this.PROMOTION_ID}    活动名称：{promotionName}</h2>
                 <Table
                     dataSource={data}
                     columns={columns}
@@ -114,6 +108,7 @@ class PromotionParticipate extends PureComponent {
                     }}
                     bordered
                     pagination={{
+                        current: this.param.current,
                         pageNum,
                         pageSize,
                         total,

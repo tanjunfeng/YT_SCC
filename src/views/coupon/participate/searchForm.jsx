@@ -91,17 +91,13 @@ class SearchForm extends PureComponent {
         this.setState({ branchCompanyId });
     }
 
-    hanldeSubCompaniesClear() {
-        this.setState({ branchCompanyId: '' });
-    }
-
     handleSubmit(e) {
         e.preventDefault();
         this.props.onParticipateSearch(this.getSearchCondition());
     }
 
     handleReset() {
-        this.hanldeSubCompaniesClear(); // 清除子公司值清单
+        this.handleSubCompanyClear(); // 清除子公司值清单
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onParticipateReset();  // 通知父页面已清空
     }
@@ -165,7 +161,7 @@ class SearchForm extends PureComponent {
                                         <SubCompanies
                                             value={this.state.branchCompanyId}
                                             onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                            onSubCompaniesClear={this.hanldeSubCompaniesClear}
+                                            onSubCompaniesClear={this.handleSubCompanyClear}
                                         />
                                     </div>
                                 </FormItem>

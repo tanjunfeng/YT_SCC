@@ -683,7 +683,7 @@ const routes = [
                                 {(App) => <App />}</Bundle>)}
                         />
                         <Route
-                            path="/coupon/participate/:id"
+                            path="/coupon/participate/:id/:promotionName"
                             exact
                             render={() => (<Bundle load={CouponsParticipate}>
                                 {(App) => <App />}</Bundle>)}
