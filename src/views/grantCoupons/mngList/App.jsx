@@ -79,9 +79,8 @@ class GrantCouponList extends PureComponent {
     }
 
     handlePromotionSearch(param) {
-        Object.assign(this.param, {}, {
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
+        this.handlePromotionReset();
+        Object.assign(this.param, {
             current: 1,
             ...param
         });
