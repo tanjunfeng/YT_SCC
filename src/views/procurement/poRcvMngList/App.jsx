@@ -477,7 +477,12 @@ class PoRcvMngList extends PureComponent {
                                         {getFieldDecorator('receivedDuring', {})(
                                             <RangePicker
                                                 className="date-range-picker"
+                                                style={{width: 250}}
                                                 format={dateFormat}
+                                                showTime={{
+                                                    hideDisabledOptions: true,
+                                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                                }}
                                                 placeholder={['开始日期', '结束日期']}
                                             />
                                         )
@@ -659,7 +664,12 @@ class PoRcvMngList extends PureComponent {
                                             getFieldDecorator('auditDuring', {})(
                                                 <RangePicker
                                                     className="date-range-picker"
+                                                    style={{width: 250}}
                                                     format={dateFormat}
+                                                    showTime={{
+                                                        hideDisabledOptions: true,
+                                                        defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                                    }}
                                                     placeholder={['开始日期', '结束日期']}
                                                 />
                                             )
