@@ -187,8 +187,8 @@ class ProdModal extends Component {
                 message.error('采购内装数必须大于0');
                 return;
             }
-            if (values.purchasePrice <= 0) {
-                message.error('采购价格必须大于0');
+            if (values.purchasePrice < 0) {
+                message.error('采购价格必须大于等于0');
                 return;
             }
             const subData = Util.removeInvalid({
