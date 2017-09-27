@@ -37,7 +37,7 @@ class SearchForm extends PureComponent {
     getFormData() {
         const {
             id,
-            releaseName,
+            promotionName,
             releaseDateRange,
             statusCode,
             storeId,
@@ -52,7 +52,7 @@ class SearchForm extends PureComponent {
         }
         return Utils.removeInvalid({
             id,
-            releaseName,
+            promotionName,
             status,
             storeId,
             storeName,
@@ -95,7 +95,7 @@ class SearchForm extends PureComponent {
                             </Col>
                             <Col span={8}>
                                 <FormItem label="券名称">
-                                    {getFieldDecorator('releaseName')(<Input size="default" />)}
+                                    {getFieldDecorator('promotionName')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
