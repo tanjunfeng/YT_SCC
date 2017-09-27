@@ -115,8 +115,7 @@ class GrantCouponList extends PureComponent {
     }
 
     render() {
-        const { data, total } = this.props.franchiseeList;
-        const { pageNum, pageSize } = this.state;
+        const { data = [], total, pageNum, pageSize } = this.props.franchiseeList;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
