@@ -33,6 +33,7 @@ class GrantCouponList extends PureComponent {
         super(props);
         this.state = {
             storeIds: [],
+            current: 1
         };
         this.param = {};
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
@@ -56,9 +57,9 @@ class GrantCouponList extends PureComponent {
      */
     onPaginate = (pageNum) => {
         Object.assign(this.param, {
-            pageNum,
-            current: pageNum
+            pageNum
         });
+        this.setState({ current: pageNum });
         this.query();
     }
 
@@ -72,19 +73,18 @@ class GrantCouponList extends PureComponent {
     }
 
     query() {
-        this.props.queryFranchiseeList(this.param).then((data) => {
-            const { pageNum, pageSize } = data.data;
+        this.props.queryFranchiseeList(this.param).then((res) => {
+            const { pageNum, pageSize } = res.data;
             Object.assign(this.param, { pageNum, pageSize });
         });
     }
 
     handlePromotionSearch(param) {
-        Object.assign(this.param, {}, {
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
-            current: 1,
+        this.handlePromotionReset();
+        Object.assign(this.param, {
             ...param
         });
+        this.setState({ current: 1 });
         this.query();
     }
 
@@ -115,8 +115,7 @@ class GrantCouponList extends PureComponent {
     }
 
     render() {
-        const { data, total } = this.props.franchiseeList;
-        const { pageNum, pageSize } = this.state;
+        const { data = [], total, pageNum, pageSize } = this.props.franchiseeList;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
@@ -137,7 +136,7 @@ class GrantCouponList extends PureComponent {
                     }}
                     bordered
                     pagination={{
-                        current: this.param.current,
+                        current: this.state.current,
                         pageNum,
                         pageSize,
                         total,
@@ -154,7 +153,7 @@ GrantCouponList.propTypes = {
     queryFranchiseeList: PropTypes.func,
     clearFranchiseeList: PropTypes.func,
     grantCoupon: PropTypes.func,
-    franchiseeList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
+    franchiseeList: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(GrantCouponList));

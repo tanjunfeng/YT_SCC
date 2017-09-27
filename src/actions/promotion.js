@@ -219,7 +219,13 @@ export const queryFranchiseeList = (params) => dispatch => (
                 );
                 resolve(res);
             })
-            .catch(err => reject(err));
+            .catch(err => {
+                if (err.code === 10006) {
+                    dispatch(
+                        queryFranchiseeListAction(err.data)
+                    )
+                } else reject(err);
+            });
     })
 );
 

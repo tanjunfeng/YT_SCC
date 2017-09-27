@@ -19,7 +19,7 @@ http.response(
     res => {
         if (res.data.code === 401) {
             LoginLayout();
-            return Promise.reject(res);
+            return Promise.reject(res.data);
         } else if (res.data.code !== 200) {
             const { code } = res.data;
             const mess = res.data.message;
@@ -28,6 +28,7 @@ http.response(
                 const err = errText || (mess || '未知错误')
                 message.error(err);
             }
+            return Promise.reject(res.data);
         }
         return Promise.resolve(res);
     },

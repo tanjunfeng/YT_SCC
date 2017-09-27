@@ -101,11 +101,9 @@ class CouponsParticipate extends PureComponent {
     }
 
     handleParticipateSearch(param) {
+        this.handleParticipateReset();
         this.param = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
             current: 1,
-            promoId: this.PROMOTION_ID,
             ...param
         };
         this.query();

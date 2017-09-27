@@ -70,9 +70,8 @@ class CouponList extends PureComponent {
     }
 
     handlePromotionSearch(param) {
+        this.handlePromotionReset();
         this.param = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
             current: 1,
             ...param
         };
