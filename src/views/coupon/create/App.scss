@@ -1,0 +1,55 @@
+$couponAddLabelWidth: 80px;
+    .ant-table-pagination {
+        margin-right: 15px;
+}
+
+.change-form {
+    padding-left: 30px;
+    .ant-form-item {
+        margin-bottom: 15px
+    }
+    .ant-form-explain {
+        padding-left: 73px;
+    }
+    &-label {
+        min-width: 61px;
+        text-align: right;
+    }
+    &-tip {
+        margin-left: 10px;
+    }
+}
+
+.coupon {
+    padding-top: 40px;
+    form .default {
+        width: 78px;
+    }
+    .category .ant-cascader-picker {
+        width: 260px;
+    }
+    .ant-form-item-label label {
+        width: $couponAddLabelWidth;
+        display: inline-block;
+    }
+    .ant-form-item-control textarea {
+        width: 260px;
+    }
+    .condition .ant-input-number-lg {
+        width: 120px;
+    }
+    .red {
+        color: red;
+    }
+    .store .ant-form-item-control {
+        margin-left: $couponAddLabelWidth;
+    }
+    .red .ant-col-16 {
+        margin-left: $couponAddLabelWidth;
+    }
+}
+.mrkl{
+    .ant-form-item-control{
+        margin-left: 0!important;
+    }
+}

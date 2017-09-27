@@ -13,6 +13,8 @@ const initState = Immutable.fromJS({
     collapsed: false,
     gegion: [],
     categorys: [],
+    // 所选区域列表
+    companies: [],
     // 值列表数据
     valueList: [],
     categorysById: [],
@@ -41,6 +43,10 @@ export default (state = initState, action) => {
         case ActionType.RECEIVE_VALUES_LIST: {
             return state.set('valueList', Immutable.fromJS(action.payload));
         }
+
+        case ActionType.FIND_ALL_COMPANIES:
+        case ActionType.CLEAR_ALL_COMPANIES:
+            return state.set('companies', Immutable.fromJS(action.payload));
 
         default:
             return state;

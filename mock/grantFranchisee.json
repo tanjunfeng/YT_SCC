@@ -1,0 +1,59 @@
+{
+    "timestamp": 1505888368227,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 5,
+        "total": 1900,
+        "data": [
+            {
+                "storeId": "A000346",
+                "storeName": "简阳市好再来超市",
+                "franchiseeId": "000346",
+                "franchinessController": "简阳市好再来超市加盟商ijsisjsi",
+                "franchiseeName": "哈哈3",
+                "franchiseePhone": "13500000000",
+                "branchCompanyName": null
+            },
+            {
+                "storeId": "MDXC004005",
+                "storeName": "卫栖梧二群翁群翁群翁群翁群翁群翁群无水水水水",
+                "franchiseeId": "111004005",
+                "franchinessController": "密码",
+                "franchiseeName": null,
+                "franchiseePhone": null,
+                "branchCompanyName": "成都子公司"
+            },
+            {
+                "storeId": "MDXC004006",
+                "storeName": "还好",
+                "franchiseeId": "111004006",
+                "franchinessController": "还好",
+                "franchiseeName": null,
+                "franchiseePhone": null,
+                "branchCompanyName": "成都子公司"
+            },
+            {
+                "storeId": "MDXC004008",
+                "storeName": "啦啦啦",
+                "franchiseeId": "111004008",
+                "franchinessController": "啦啦啦",
+                "franchiseeName": null,
+                "franchiseePhone": null,
+                "branchCompanyName": "成都子公司"
+            },
+            {
+                "storeId": "A900000",
+                "storeName": "生产验证_小超直营店门店001",
+                "franchiseeId": "900000",
+                "franchinessController": "生产验证_小超直营店加盟商",
+                "franchiseeName": null,
+                "franchiseePhone": null,
+                "branchCompanyName": "成都子公司"
+            }
+        ]
+    },
+    "success": true
+}
