@@ -262,7 +262,7 @@ class SellPriceModal extends Component {
                                 <FormItem>
                                     <span>整箱销售单位:</span>
                                     <span className={`${prefixCls}-day-input`}>
-                                        {getProductById.fullCaseUnit}
+                                        {getProductById.fullCaseUnit || '-'}
                                     </span>
                                 </FormItem>
                                 {/* 采购模式 */}
@@ -306,7 +306,7 @@ class SellPriceModal extends Component {
                                             startNumber={startNumber}
                                             defaultValue={isEdit ? newDates.sellSectionPrices : []}
                                             inputSize="default"
-                                            initvalue={getProductById}
+                                            initvalue={getProductById.minUnit}
                                         />
                                         )}
                                 </FormItem>
