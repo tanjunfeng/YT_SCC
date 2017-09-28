@@ -259,16 +259,16 @@ class PromotionCreate extends PureComponent {
             this.props.createPromotion(param).then((res) => {
                 if (res.code === 200 && res.message === '请求成功') {
                     message.info('新增促销活动成功，请到列表页发布');
-                    this.props.history.goBack();
+                    this.handleBack();
                 } else {
                     message.error(res.message);
                 }
             });
-        }).catch(() => { });
+        });
     }
 
     handleBack() {
-        this.props.history.goBack();
+        this.props.history.replace('/promotion');
     }
 
     handleStrategyChange(e) {

@@ -53,7 +53,7 @@ class PromotionDetail extends PureComponent {
     }
 
     handleBack() {
-        this.props.history.goBack();
+        this.props.history.replace('/promotion');
     }
 
     render() {
