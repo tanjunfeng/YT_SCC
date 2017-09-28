@@ -422,8 +422,8 @@ class ProdModal extends Component {
                                                     pageSize: params.pagination.pageSize,
                                                     pageNum: params.pagination.current || 1
                                                 }), 'getWarehouseInfo1').then((res) => {
-                                                    const { row = [] } = res.data;
-                                                    if (!row || row.length === 0) {
+                                                    const row = res.data.data;
+                                                    if (row.length === 0) {
                                                         message.warning('没有可用的数据');
                                                     }
                                                     return res;
