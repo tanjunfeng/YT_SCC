@@ -42,7 +42,7 @@ class PromotionDetail extends PureComponent {
         return columns.map(column => {
             const item = this.props.promotion[column.dataIndex];
             return (
-                <Row key={column.key}>
+                <Row key={column.key} type="flex" justify="start">
                     <Col span={16}>
                         <FormItem label={column.title} >
                             {column.render ? column.render(item) : item}
@@ -58,13 +58,13 @@ class PromotionDetail extends PureComponent {
 
     render() {
         return (
-            <div className="promotion">
+            <div className="promotion-create">
                 <Form layout="inline">
                     <div className="promotion-add-item">
                         <div className="add-message promotion-add-license">
                             <div className="add-message-body">
                                 {this.getDetails()}
-                                <Row gutter={40} type="flex" style={{marginLeft: 45}}>
+                                <Row gutter={40} type="flex" justify="center">
                                     <Col>
                                         <FormItem>
                                             <Button size="default" onClick={this.handleBack}>
