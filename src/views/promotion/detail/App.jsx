@@ -58,13 +58,13 @@ class PromotionDetail extends PureComponent {
 
     render() {
         return (
-            <div className="promotion">
+            <div className="promotion-create">
                 <Form layout="inline">
                     <div className="promotion-add-item">
                         <div className="add-message promotion-add-license">
                             <div className="add-message-body">
                                 {this.getDetails()}
-                                <Row gutter={40} type="flex" style={{marginLeft: 45}}>
+                                <Row gutter={40} type="flex" justify="center">
                                     <Col>
                                         <FormItem>
                                             <Button size="default" onClick={this.handleBack}>
