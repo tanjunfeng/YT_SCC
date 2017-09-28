@@ -110,10 +110,9 @@ class ReleaseCouponModal extends PureComponent {
     }
 
     render() {
-        const { data, total } = this.props.couponsList;
-        const { pageNum, pageSize, promoIds } = this.state;
+        const { data, total, pageNum, pageSize } = this.props.couponsList;
         const rowSelection = {
-            selectedRowKeys: promoIds,
+            selectedRowKeys: this.state.promoIds,
             onChange: this.onSelectChange
         };
         columns[columns.length - 1].render = this.renderOperations;
