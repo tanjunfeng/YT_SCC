@@ -41,7 +41,7 @@ class CouponDetail extends PureComponent {
         return columns.map(column => {
             const item = this.props.coupons[column.dataIndex];
             return (
-                <Row key={column.key}>
+                <Row key={column.key} type="flex" justify="start">
                     <Col span={16}>
                         <FormItem label={column.title} >
                             {column.render ? column.render(item) : item}
@@ -57,13 +57,13 @@ class CouponDetail extends PureComponent {
 
     render() {
         return (
-            <div className="coupons">
+            <div className="coupons-create">
                 <Form layout="inline">
                     <div className="coupons-add-item">
                         <div className="add-message coupons-add-license">
                             <div className="add-message-body">
                                 {this.getDetails()}
-                                <Row gutter={40} type="flex" style={{marginLeft: 45}}>
+                                <Row gutter={40} type="flex" justify="center">
                                     <Col>
                                         <FormItem>
                                             <Button size="default" onClick={this.handleBack}>
