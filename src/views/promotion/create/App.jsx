@@ -24,7 +24,7 @@ const RangePicker = DatePicker.RangePicker;
 const RadioGroup = Radio.Group;
 const { TextArea } = Input;
 const CheckboxGroup = Checkbox.Group;
-const plainOptions = ['下单打折', '会员等级'];
+const plainOptions = ['优惠劵叠加', '会员等级'];
 
 @connect(() => ({
 }), dispatch => bindActionCreators({
