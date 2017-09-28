@@ -29,12 +29,21 @@ $promotionAddLabelWidth: 100px;
     .category .ant-cascader-picker {
         width: 260px;
     }
-    .ant-form-item-label label {
-        width: $promotionAddLabelWidth;
-        display: inline-block;
+    .store {
+        margin-left: $promotionAddLabelWidth;
     }
-    .ant-form-item-control textarea {
-        width: 260px;
+    .ant-col-16 {
+        word-break: break-all;
+        .ant-form-item-label label {
+            width: $promotionAddLabelWidth;
+            display: inline-block;
+        }
+        .ant-form-item-control textarea {
+            width: 260px;
+        }
+    }
+    .tips .ant-col-16 {
+        margin-left: $promotionAddLabelWidth;
     }
     .condition {
         margin-right: 0;
@@ -42,13 +51,13 @@ $promotionAddLabelWidth: 100px;
             width: 120px;
         }
     }
-    .store .ant-form-item-control {
-        margin-left: $promotionAddLabelWidth;
-    }
-    .tips .ant-col-16 {
-        margin-left: $promotionAddLabelWidth;
-    }
     .description {
         line-height: 42px;
+    }
+    .promotion-add-license {
+        .ant-form-item-label,
+        .ant-form-item-label label {
+            width: 100px;
+        }
     }
 }

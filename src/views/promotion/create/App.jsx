@@ -485,7 +485,7 @@ class PromotionCreate extends PureComponent {
                                     <Col span={8}>
                                         <FormItem>
                                             <Button type="primary" size="default" htmlType="submit">
-                                                提交
+                                                保存
                                             </Button>
                                         </FormItem>
                                         <FormItem>
