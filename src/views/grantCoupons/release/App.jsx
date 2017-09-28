@@ -93,7 +93,7 @@ class ReleaseCouponModal extends PureComponent {
         // 重置检索条件
         this.param = {
             pageNum: 1,
-            pageSize: PAGE_SIZE
+            pageSize: 5
         }
     }
 
