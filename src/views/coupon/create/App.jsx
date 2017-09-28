@@ -310,7 +310,7 @@ class CouponCreate extends PureComponent {
                     message.error(res.message);
                 }
             });
-        }).catch(() => { });
+        });
     }
 
     textAreaChange(e) {
@@ -319,7 +319,7 @@ class CouponCreate extends PureComponent {
     }
 
     handleBack() {
-        this.props.history.goBack();
+        this.props.history.replace('/coupon');
     }
 
     render() {
