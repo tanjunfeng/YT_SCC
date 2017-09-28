@@ -90,7 +90,6 @@ import grantCouponDetail from 'bundle-loader?lazy!../views/grantCoupons/detail';
 
 /* eslint-enable */
 
-
 /**
  * 路由配置
  * @type {[*]}

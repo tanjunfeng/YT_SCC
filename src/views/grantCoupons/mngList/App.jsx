@@ -40,6 +40,7 @@ class GrantCouponList extends PureComponent {
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
         this.handleReleaseAll = this.handleReleaseAll.bind(this);
         this.handleReleaseChecked = this.handleReleaseChecked.bind(this);
+        this.onSelectChange = this.onSelectChange.bind(this);
         this.query = this.query.bind(this);
     }
 
@@ -66,10 +67,8 @@ class GrantCouponList extends PureComponent {
     /**
      * table复选框
      */
-    rowSelection = {
-        onChange: (storeIds) => {
-            this.setState({ storeIds });
-        }
+    onSelectChange(storeIds) {
+        this.setState({ storeIds });
     }
 
     query() {
@@ -94,6 +93,7 @@ class GrantCouponList extends PureComponent {
             pageNum: 1,
             pageSize: PAGE_SIZE
         }
+        this.setState({ storeIds: [] });
     }
 
     handleReleaseAll(promoIds) {
@@ -117,6 +117,10 @@ class GrantCouponList extends PureComponent {
     render() {
         const { data = [], total, pageNum, pageSize } = this.props.franchiseeList;
         columns[columns.length - 1].render = this.renderOperations;
+        const rowSelection = {
+            selectedRowKeys: this.state.storeIds,
+            onChange: this.onSelectChange
+        };
         return (
             <div>
                 <SearchForm
@@ -127,7 +131,7 @@ class GrantCouponList extends PureComponent {
                     onPromotionReleasChecked={this.handleReleaseChecked}
                 />
                 <Table
-                    rowSelection={this.rowSelection}
+                    rowSelection={rowSelection}
                     dataSource={data}
                     columns={columns}
                     rowKey="storeId"
