@@ -228,7 +228,10 @@ class SaleCard extends Component {
                                 {
                                     item.sellSectionPrices.map((i) =>
                                         (
-                                            <li className={`${prefixCls}-step-item`}>
+                                            <li
+                                                className={`${prefixCls}-step-item`}
+                                                key={`${i.startNumber} - ${i.endNumber} - ${i.price}`}
+                                            >
                                                 <span
                                                     className={`${prefixCls}-step-item-left`}
                                                 >
