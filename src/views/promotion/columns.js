@@ -180,7 +180,7 @@ const detail = [{
         return stores.storeId;
     }
 }, {
-    title: '与促销活动叠加',
+    title: '与优惠劵叠加',
     dataIndex: 'isSuperposeProOrCouDiscount',
     key: 'isSuperposeProOrCouDiscount',
     render: note => (note === 1 ? '是' : '否')
