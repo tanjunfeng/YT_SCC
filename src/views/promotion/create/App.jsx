@@ -94,7 +94,7 @@ class PromotionCreate extends PureComponent {
                     isSuperposeUserDiscount: (checkedBoxList.length === 1 &&
                         checkedBoxList[0] === '会员等级') || checkedBoxList.length === 2 ? 1 : 0,
                     isSuperposeProOrCouDiscount: (checkedBoxList.length === 1 &&
-                        checkedBoxList[0] === '下单打折') || checkedBoxList.length === 2 ? 1 : 0,
+                        checkedBoxList[0] === '优惠劵叠加') || checkedBoxList.length === 2 ? 1 : 0,
                 };
                 if (condition === 1) {
                     Object.assign(dist, {
