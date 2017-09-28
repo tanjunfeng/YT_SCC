@@ -52,7 +52,7 @@ class CouponDetail extends PureComponent {
     }
 
     handleBack() {
-        this.props.history.goBack();
+        this.props.history.replace('/coupon');
     }
 
     render() {
