@@ -315,7 +315,7 @@ class CouponCreate extends PureComponent {
 
     textAreaChange(e) {
         const getValue = e.target.value;
-        this.setState({rcontent: getValue, rcontentnum: 15});
+        this.setState({ rcontent: getValue, rcontentnum: 15 });
     }
 
     handleBack() {
@@ -366,7 +366,7 @@ class CouponCreate extends PureComponent {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col span={24}>
+                                    <Col span={16}>
                                         <FormItem label="活动时间">
                                             {getFieldDecorator('promotionDateRange', {
                                                 initialValue: '',
@@ -403,7 +403,7 @@ class CouponCreate extends PureComponent {
                                         </FormItem>
                                         {
                                             this.param.condition === 0 ?
-                                                <span style={{height: '42px', lineHeight: '42px'}}>
+                                                <span style={{ height: '42px', lineHeight: '42px' }}>
                                                     <FormItem className="condition" label="">
                                                         {getFieldDecorator('quanifyAmount', {
                                                             initialValue: '',
@@ -503,8 +503,8 @@ class CouponCreate extends PureComponent {
                                     </Col>
                                 </Row>
                                 {this.state.storeSelectorVisible ?
-                                    <Row className="store">
-                                        <Col className="mrkl">
+                                    <Row>
+                                        <Col span={16} className="personQty">
                                             <FormItem label="每人可领" >
                                                 {getFieldDecorator('personQty', {
                                                     rules: [
