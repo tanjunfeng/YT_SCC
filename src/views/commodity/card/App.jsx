@@ -265,7 +265,7 @@ class Cardline extends Component {
                     .then(() => {
                         message.success('删除成功')
                         this.props.goto()
-                    }).catch((res) => {
+                    }).catch(() => {
                         message.error('操作失败')
                     })
             },

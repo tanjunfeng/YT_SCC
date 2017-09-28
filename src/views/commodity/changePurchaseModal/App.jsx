@@ -187,8 +187,8 @@ class ProdModal extends Component {
                 message.error('采购内装数必须大于0');
                 return;
             }
-            if (values.purchasePrice <= 0) {
-                message.error('采购价格必须大于0');
+            if (values.purchasePrice < 0) {
+                message.error('采购价格必须大于等于0');
                 return;
             }
             const subData = Util.removeInvalid({
@@ -422,8 +422,8 @@ class ProdModal extends Component {
                                                     pageSize: params.pagination.pageSize,
                                                     pageNum: params.pagination.current || 1
                                                 }), 'getWarehouseInfo1').then((res) => {
-                                                    const { row = [] } = res.data;
-                                                    if (!row || row.length === 0) {
+                                                    const row = res.data.data;
+                                                    if (row.length === 0) {
                                                         message.warning('没有可用的数据');
                                                     }
                                                     return res;

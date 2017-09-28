@@ -48,6 +48,7 @@ class SaleCard extends Component {
             checked: true,
             id: this.props.index
         }
+        this.preHarvestPinStatus = '0'
     }
 
     componentDidMount() {
@@ -143,7 +144,8 @@ class SaleCard extends Component {
     }
 
     handleCardClick = (item) => {
-        this.props.handleCardClick(item)
+        this.preHarvestPinStatus = item.preHarvestPinStatus;
+        this.props.handleCardClick(item);
     }
 
     handleChangeStatus(e, item) {
@@ -169,6 +171,7 @@ class SaleCard extends Component {
                 className={`${prefixCls}-card-list`}
             >
                 <Card
+                    initalValue={item}
                     style={{ width: 350 }}
                     className={
                         `${prefixCls}-sale-card-${item.status}
@@ -205,7 +208,7 @@ class SaleCard extends Component {
                         </p>
                         <p>
                             <span>采购模式 : </span>
-                            <span>{item.preHarvestPinStatus === 0 ? '先销后采' : '先采后销'}</span>
+                            <span>{item.preHarvestPinStatus === 1 ? '先采后销' : '先销后采'}</span>
                         </p>
                         <p>
                             <span>承诺发货时间 : </span>
@@ -225,7 +228,10 @@ class SaleCard extends Component {
                                 {
                                     item.sellSectionPrices.map((i) =>
                                         (
-                                            <li className={`${prefixCls}-step-item`}>
+                                            <li
+                                                className={`${prefixCls}-step-item`}
+                                                key={`${i.startNumber} - ${i.endNumber} - ${i.price}`}
+                                            >
                                                 <span
                                                     className={`${prefixCls}-step-item-left`}
                                                 >

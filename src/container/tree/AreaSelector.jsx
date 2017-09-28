@@ -2,25 +2,25 @@
  * @file App.jsx
  * @author taoqiyu
  *
- * 品类选择级联查询
+ * 子公司区域选择模态框
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import { Form, Modal } from 'antd';
+import { Form, Modal, message } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import CheckedTree from '../../../container/tree';
-import { getAllCompanies, clearCompaniesList } from '../../../actions/promotion';
+import { CheckedTree } from './index';
+import { getAllCompanies, clearCompaniesList } from '../../actions/pub';
 
 @connect(state => ({
-    companies: state.toJS().promotion.companies
+    companies: state.toJS().pub.companies
 }), dispatch => bindActionCreators({
     getAllCompanies,
     clearCompaniesList
 }, dispatch))
 
-class CategorySelector extends PureComponent {
+class AreaSelector extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -39,12 +39,25 @@ class CategorySelector extends PureComponent {
         this.props.getAllCompanies();
     }
 
+    // 当弹框隐藏时，通知本组件
+    componentWillReceiveProps(nextProps) {
+        if (!nextProps.isSelectorVisible) {
+            this.setState({
+                checkedCompanies: []
+            });
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.clearCompaniesList();
+    }
+
     handleChecked(checkedIds) {
         // 根据选中的区域编号，拼接所选区域列表
         const checkedCompanies = [];
         this.props.companies.forEach((company) => {
             checkedIds.forEach((id) => {
-                if (company.id === +(id)) {
+                if (+(company.id) === +(id)) {
                     checkedCompanies.push({
                         companyId: id,
                         companyName: company.name
@@ -56,6 +69,10 @@ class CategorySelector extends PureComponent {
     }
 
     handleOk() {
+        if (this.state.checkedCompanies.length === 0) {
+            message.error('请至少选择一个子公司');
+            return;
+        }
         this.props.onSelectorOk(this.state.checkedCompanies);
     }
 
@@ -67,13 +84,15 @@ class CategorySelector extends PureComponent {
         return (
             <div>
                 <Modal
-                    title="选择品类"
+                    title="选择区域"
+                    maskClosable={false}
                     visible={this.props.isSelectorVisible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                 >
                     <CheckedTree
                         list={this.props.companies}
+                        isEmpty={!this.props.isSelectorVisible}
                         onCheckTreeOk={this.handleChecked}
                     />
                 </Modal>
@@ -82,7 +101,7 @@ class CategorySelector extends PureComponent {
     }
 }
 
-CategorySelector.propTypes = {
+AreaSelector.propTypes = {
     isSelectorVisible: PropTypes.bool,
     onSelectorOk: PropTypes.func,
     onSelectorCancel: PropTypes.func,
@@ -91,4 +110,4 @@ CategorySelector.propTypes = {
     companies: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 
-export default withRouter(Form.create()(CategorySelector));
+export default withRouter(Form.create()(AreaSelector));

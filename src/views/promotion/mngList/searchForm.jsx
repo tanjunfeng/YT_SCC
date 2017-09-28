@@ -6,27 +6,15 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
-import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
-import { pubFetchValueList } from '../../../actions/pub';
-import Utils from '../../../util/util';
-import SearchMind from '../../../components/searchMind/SearchMind';
-import { DATE_FORMAT } from '../../../constant';
+import Util from '../../../util/util';
+import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { promotionStatus } from '../constants';
+import { SubCompanies } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
-
-@connect(
-    state => ({
-        employeeCompanyId: state.toJS().user.data.user.employeeCompanyId
-    }),
-    dispatch => bindActionCreators({
-        pubFetchValueList
-    }, dispatch)
-)
 
 class SearchForm extends PureComponent {
     constructor(props) {
@@ -39,6 +27,8 @@ class SearchForm extends PureComponent {
         this.handleReset = this.handleReset.bind(this);
         this.getFormData = this.getFormData.bind(this);
         this.handleCreate = this.handleCreate.bind(this);
+        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
+        this.hanldeSubCompanyClear = this.hanldeSubCompanyClear.bind(this);
     }
 
     getStatus() {
@@ -57,49 +47,38 @@ class SearchForm extends PureComponent {
             promotionDateRange,
             statusCode
         } = this.props.form.getFieldsValue();
-        const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
-        const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
+        const branchCompanyId = this.state.branchCompanyId;
         let status = statusCode;
         if (statusCode === 'all') {
             status = '';
         }
-        return Utils.removeInvalid({
+        return Util.removeInvalid({
             id,
             promotionName,
             status,
-            startDate,
-            endDate,
-            branchCompanyId: this.state.branchCompanyId
+            startDate: promotionDateRange.length > 1 ? promotionDateRange[0].valueOf() : '',
+            endDate: promotionDateRange.length > 1 ? promotionDateRange[1].valueOf() : '',
+            branchCompanyId
         });
     }
 
-    /**
-     * 子公司-清除
-     */
-    handleSubCompanyClear() {
-        this.setState({
-            branchCompanyId: '',
-        });
-        this.subCompanySearchMind.reset();
+    handleSubCompanyChoose(branchCompanyId) {
+        this.setState({ branchCompanyId });
     }
 
-    /**
-     * 子公司-值清单
-     */
-    handleSubCompanyChoose = ({ record }) => {
-        this.setState({
-            branchCompanyId: record.id,
-        });
+    hanldeSubCompanyClear() {
+        this.setState({ branchCompanyId: '' });
     }
 
     handleSearch() {
-        this.props.handlePromotionSearch(this.getFormData());
+        // 通知父页面执行搜索
+        this.props.onPromotionSearch(this.getFormData());
     }
 
     handleReset() {
-        this.handleSubCompanyClear();
-        this.props.form.resetFields();
-        this.props.handlePromotionReset();
+        this.hanldeSubCompanyClear(); // 清除子公司值清单
+        this.props.form.resetFields();  // 清除当前查询条件
+        this.props.onPromotionReset();  // 通知查询条件已清除
     }
 
     handleCreate() {
@@ -115,46 +94,23 @@ class SearchForm extends PureComponent {
                     <div className="search-conditions">
                         <Row gutter={40}>
                             <Col span={8}>
-                                <FormItem label="活动ID" style={{paddingRight: 10}}>
-                                    {getFieldDecorator('id', {
-                                    })(<Input size="default" />)}
+                                <FormItem label="活动ID" style={{ paddingRight: 10 }}>
+                                    {getFieldDecorator('id')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
                                 <FormItem label="活动名称">
-                                    {getFieldDecorator('promotionName', {
-                                    })(<Input size="default" />)}
+                                    {getFieldDecorator('promotionName')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
                                 <FormItem>
                                     <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">使用范围</span>
-                                        <SearchMind
-                                            compKey="spId"
-                                            ref={ref => { this.subCompanySearchMind = ref }}
-                                            fetch={(params) =>
-                                                this.props.pubFetchValueList({
-                                                    branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-                                                    branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
-                                                }, 'findCompanyBaseInfo')
-                                            }
-                                            onChoosed={this.handleSubCompanyChoose}
-                                            onClear={this.handleSubCompanyClear}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>{row.id} - {row.name}</div>
-                                            )}
-                                            pageSize={6}
-                                            columns={[
-                                                {
-                                                    title: '子公司id',
-                                                    dataIndex: 'id',
-                                                    width: 98
-                                                }, {
-                                                    title: '子公司名字',
-                                                    dataIndex: 'name'
-                                                }
-                                            ]}
+                                        <span className="sc-form-item-label search-mind-label">所属公司</span>
+                                        <SubCompanies
+                                            value={this.state.branchCompanyId}
+                                            onSubCompaniesChooesd={this.handleSubCompanyChoose}
+                                            onSubCompaniesClear={this.hanldeSubCompanyClear}
                                         />
                                     </div>
                                 </FormItem>
@@ -166,13 +122,13 @@ class SearchForm extends PureComponent {
                                     <div className="promotion-date-range">
                                         <span className="sc-form-item-label search-mind-label">活动时间</span>
                                         {getFieldDecorator('promotionDateRange', {
-                                            initialValue: '',
-                                            rules: [{ required: true, message: '请选择活动日期' }]
+                                            initialValue: []
                                         })(
                                             <RangePicker
-                                                style={{ width: '240px' }}
+                                                size="default"
                                                 className="manage-form-enterTime"
-                                                format={DATE_FORMAT}
+                                                showTime={{ format: MINUTE_FORMAT }}
+                                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
                                                 placeholder={['开始时间', '结束时间']}
                                             />
                                             )}
@@ -219,9 +175,8 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    pubFetchValueList: PropTypes.func,
-    handlePromotionSearch: PropTypes.func,
-    handlePromotionReset: PropTypes.func,
+    onPromotionSearch: PropTypes.func,
+    onPromotionReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any)

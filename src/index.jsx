@@ -121,10 +121,6 @@ checkUser().then(data => {
 //                         code: 'poPrintList',
 //                         name: '采购单打印列表'
 //                     },
-//                     // {
-//                     //     code: 'poRcvList',
-//                     //     name: '采购单收货列表'
-//                     // },
 //                     {
 //                         code: 'poRcvMngList',
 //                         name: '收货单管理列表'
@@ -227,8 +223,16 @@ checkUser().then(data => {
 //                 name: '促销管理',
 //                 submenu: [
 //                     {
-//                         code: 'hdlb',
-//                         name: '活动列表',
+//                         code: 'cxxddz',
+//                         name: '下单打折',
+//                     },
+//                     {
+//                         code: 'cxyhq',
+//                         name: '优惠券',
+//                     },
+//                     {
+//                         code: 'ffyhq',
+//                         name: '发放优惠券',
 //                     }
 //                 ]
 //             }

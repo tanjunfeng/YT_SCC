@@ -141,7 +141,7 @@ class SteppedPrice extends PureComponent {
                     <div className={`${prefixCls}-title`}>
                         <span className={`${prefixCls}-title-left`}>数量区间</span>
                         <span className={`${prefixCls}-title-right`}>
-                            售价 元/{initvalue.fullCaseUnit}
+                            售价 元/{initvalue}
                         </span>
                     </div>
                     <ul className={`${prefixCls}-content`}>

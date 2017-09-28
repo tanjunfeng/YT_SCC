@@ -21,7 +21,7 @@ const Option = Select.Option;
 @connect(
     state => ({
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
-        getProductById: state.toJS().commodity.getProductById,
+        getProductById: state.toJS().commodity.getProductById
     }),
     dispatch => bindActionCreators({
         productAddPriceVisible,
@@ -169,6 +169,8 @@ class SellPriceModal extends Component {
         const { getFieldDecorator } = form;
         const { currentInside, startNumber } = this.state;
         const newDates = JSON.parse(JSON.stringify(datas));
+        const preHarvestPinStatusChange =
+            (newDates.preHarvestPinStatus === 1 ? '1' : '0')
         return (
             <Modal
                 title={isEdit ? '编辑销售价格' : '新增销售价格'}
@@ -226,22 +228,9 @@ class SellPriceModal extends Component {
                                     </span>
                                 </FormItem>
                                 <FormItem>
-                                    <span>最大销售数量：</span>
+                                    <span>*最大销售数量：</span>
                                     <span>
                                         {getFieldDecorator('maxNumber', {
-                                            /* rules: [
-                                                { required: true, message: '请输入最大销售数量!' },
-                                                {
-                                                    validator: (rule, value, callback) => {
-                                                        const { getFieldValue } = this.props.form
-                                                        if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0) {
-                                                            callback('最大销售数量需为内装数整数倍！')
-                                                        }
-
-                                                        callback()
-                                                    }
-                                                }
-                                            ], */
                                             initialValue: newDates.maxNumber
                                         })(
                                             <InputNumber
@@ -273,14 +262,14 @@ class SellPriceModal extends Component {
                                 <FormItem>
                                     <span>整箱销售单位:</span>
                                     <span className={`${prefixCls}-day-input`}>
-                                        {getProductById.fullCaseUnit}
+                                        {getProductById.fullCaseUnit || '-'}
                                     </span>
                                 </FormItem>
                                 {/* 采购模式 */}
                                 <FormItem className={`${prefixCls}-qy`}>
                                     <span className={`${prefixCls}-select`}> 采购模式 : </span>
                                     {getFieldDecorator('preHarvestPinStatus', {
-                                        initialValue: '0'
+                                        initialValue: isEdit ? preHarvestPinStatusChange : '0'
                                     })(
                                         <Select
                                             style={{ width: 90 }}
@@ -317,7 +306,7 @@ class SellPriceModal extends Component {
                                             startNumber={startNumber}
                                             defaultValue={isEdit ? newDates.sellSectionPrices : []}
                                             inputSize="default"
-                                            initvalue={getProductById}
+                                            initvalue={getProductById.minUnit}
                                         />
                                         )}
                                 </FormItem>

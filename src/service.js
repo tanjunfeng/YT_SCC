@@ -19,7 +19,7 @@ http.response(
     res => {
         if (res.data.code === 401) {
             LoginLayout();
-            return Promise.reject(res);
+            return Promise.reject(res.data);
         } else if (res.data.code !== 200) {
             const { code } = res.data;
             const mess = res.data.message;
@@ -28,6 +28,7 @@ http.response(
                 const err = errText || (mess || '未知错误')
                 message.error(err);
             }
+            return Promise.reject(res.data);
         }
         return Promise.resolve(res);
     },
@@ -81,6 +82,14 @@ export const exportStoreAdList = 'imAdjustment/exportListImAdjustment';
 // 实时库存查询 导出
 export const exportQueryStoreRealTime = 'inventory/excelInventoryBIRecords';
 
+// 促销活动 - 下单打折 - 参与数据导出
+export const exportParticipateData = 'promotion/toExcel';
+
+// 促销活动 - 优惠券 - 已使用参与数据导出
+export const exportParticipateData1 = '/coupon/queryCouponRecordListExcel';
+
+// 促销活动 - 优惠券 - 未使用参与数据导出
+export const exportParticipateData2 = '/coupon/queryCouponActivityActiveListExcel';
 
 /**
  * 登录 Api
@@ -755,11 +764,22 @@ export const getNewPmPurchaseOrderItem = (params) => http.get('/pmPurchaseOrder/
 // 采购订单-审批
 export const auditPurchaseOrderInfo = (params) => http.post('/pmPurchaseOrder/auditPurchaseOrderInfo', params);
 
-// 促销活动列表
+// 促销活动 - 下单打折
 export const fetchPromotionList = (params) => http.get('/promotion/queryPromotionList', params);
+export const fetchPromotionParticipateData = (params) => http.get('/promotion/queryParticipateData', params);
 export const createPromotion = (params) => http.post('/promotion/insertPromotion', params);
 export const fetchPromotionDetail = (params) => http.get('/promotion/queryPromotionDetail', params);
 export const updatePromotionStatus = (params) => http.post('/promotion/updatePromoStatus', params);
+
+// 优惠券
+export const fetchUsedCouponParticipate = (params) => http.get('/coupon/queryCouponRecordList', params);
+export const fetchUnUsedCouponParticipate = (params) => http.get('/coupon/queryCouponActivityActiveList', params);
+export const createCoupons = (params) => http.post('/coupon/insertCoupons', params);
+export const queryCouponsList = (params) => http.get('/coupon/queryCouponsList', params);
+export const queryAliveCouponsList = (params) => http.get('/coupon/queryAliveCouponsList', params);
+export const getCouponsDetail = (params) => http.get('/coupon/queryCouponsById', params);
+export const queryFranchiseeList = (params) => http.get('/franchisee/grantFranchisee', params);
+export const grantCoupon = (params) => http.post('/coupon/grantCoupon', params);
 
 // 查询品类
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);

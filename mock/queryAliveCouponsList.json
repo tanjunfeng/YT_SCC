@@ -1,0 +1,172 @@
+{
+    "timestamp": 1506433932900,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 5,
+        "total": 14,
+        "data": [
+            {
+                "id": "67487",
+                "status": "released",
+                "promotionType": "order_promo",
+                "promotionName": "drg",
+                "promotionDiscription": null,
+                "startDate": 1506433531000,
+                "endDate": 1506519931000,
+                "discountType": "stander",
+                "quanifyAmount": 554.00,
+                "discount": 123.00,
+                "note": null,
+                "type": null,
+                "isSuperposeUserDiscount": 1,
+                "isSuperposeProOrCouDiscount": 1,
+                "promoCategoriesPo": null,
+                "companiesPoList": [
+                    {
+                        "promoId": "67487",
+                        "companyId": "10004",
+                        "companyName": "湖南子公司"
+                    }
+                ],
+                "stores": null,
+                "totalQuantity": 34,
+                "personQty": null,
+                "grantQty": 1,
+                "usedQty": 0,
+                "grantChannel": "platform"
+            },
+            {
+                "id": "67486",
+                "status": "released",
+                "promotionType": "order_promo",
+                "promotionName": "测试12",
+                "promotionDiscription": null,
+                "startDate": 1504273375000,
+                "endDate": 1506692575000,
+                "discountType": "stander",
+                "quanifyAmount": 600.00,
+                "discount": 50.00,
+                "note": null,
+                "type": null,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "stores": null,
+                "totalQuantity": 2,
+                "personQty": null,
+                "grantQty": 1,
+                "usedQty": 0,
+                "grantChannel": "platform"
+            },
+            {
+                "id": "67485",
+                "status": "released",
+                "promotionType": "order_promo",
+                "promotionName": "测试11",
+                "promotionDiscription": null,
+                "startDate": 1504273299000,
+                "endDate": 1506692499000,
+                "discountType": "stander",
+                "quanifyAmount": 600.00,
+                "discount": 50.00,
+                "note": null,
+                "type": null,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "stores": null,
+                "totalQuantity": 2,
+                "personQty": null,
+                "grantQty": 1,
+                "usedQty": 0,
+                "grantChannel": "platform"
+            },
+            {
+                "id": "67217",
+                "status": "released",
+                "promotionType": "order_promo",
+                "promotionName": "alert</script>",
+                "promotionDiscription": null,
+                "startDate": 1506395626000,
+                "endDate": 1506482026000,
+                "discountType": "stander",
+                "quanifyAmount": 5.00,
+                "discount": 11.00,
+                "note": "<script>alert</script>",
+                "type": null,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "promoCategoriesPo": {
+                    "promoId": "67217",
+                    "categoryId": "xcate6",
+                    "categoryName": "日杂",
+                    "categoryLevel": 1
+                },
+                "companiesPoList": [
+                    {
+                        "promoId": "67217",
+                        "companyId": "10000",
+                        "companyName": "成都子公司"
+                    },
+                    {
+                        "promoId": "67217",
+                        "companyId": "10003",
+                        "companyName": "四川雅堂小超总部"
+                    },
+                    {
+                        "promoId": "67217",
+                        "companyId": "10004",
+                        "companyName": "湖南子公司"
+                    }
+                ],
+                "stores": null,
+                "totalQuantity": 999999,
+                "personQty": 99,
+                "grantQty": 27,
+                "usedQty": 1,
+                "grantChannel": "platform"
+            },
+            {
+                "id": "67057",
+                "status": "released",
+                "promotionType": "order_promo",
+                "promotionName": "re",
+                "promotionDiscription": null,
+                "startDate": 1506393410000,
+                "endDate": 1506569761000,
+                "discountType": "stander",
+                "quanifyAmount": 1.00,
+                "discount": 9999.00,
+                "note": null,
+                "type": null,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "promoCategoriesPo": {
+                    "promoId": "67057",
+                    "categoryId": "xcate2",
+                    "categoryName": "休闲食品",
+                    "categoryLevel": 1
+                },
+                "companiesPoList": [
+                    {
+                        "promoId": "67057",
+                        "companyId": "10004",
+                        "companyName": "湖南子公司"
+                    }
+                ],
+                "stores": null,
+                "totalQuantity": 10,
+                "personQty": 12,
+                "grantQty": 10,
+                "usedQty": 0,
+                "grantChannel": "platform"
+            }
+        ]
+    },
+    "success": true
+}

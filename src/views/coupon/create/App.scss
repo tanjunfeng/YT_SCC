@@ -1,0 +1,122 @@
+// $couponAddLabelWidth: 80px;
+//     .ant-table-pagination {
+//         margin-right: 15px;
+// }
+// .change-form {
+//     padding-left: 30px;
+//     .ant-form-item {
+//         margin-bottom: 15px
+//     }
+//     .ant-form-explain {
+//         padding-left: 73px;
+//     }
+//     &-label {
+//         min-width: 61px;
+//         text-align: right;
+//     }
+//     &-tip {
+//         margin-left: 10px;
+//     }
+// }
+// .coupon-create {
+//     padding-top: 60px;
+//     margin: 0 62px;
+//     form .default {
+//         width: 78px;
+//     }
+//     .category .ant-cascader-picker {
+//         width: 260px;
+//     }
+//     .ant-form-item-label label {
+//         width: $couponAddLabelWidth;
+//         display: inline-block;
+//     }
+//     .ant-form-item-control textarea {
+//         width: 260px;
+//     }
+//     .condition .ant-input-number-lg {
+//         width: 120px;
+//     }
+//     .red {
+//         color: red;
+//     }
+//     .store .ant-form-item-control {
+//         margin-left: $couponAddLabelWidth;
+//     }
+//     .red .ant-col-16 {
+//         margin-left: $couponAddLabelWidth;
+//     }
+// }
+// .personQty{
+//     .ant-form-item-control{
+//         margin-left: 0!important;
+//     }
+// }
+$couponAddLabelWidth: 100px;
+.ant-table-pagination {
+    margin-right: 15px;
+}
+
+.change-form {
+    padding-left: 30px;
+    .ant-form-item {
+        margin-bottom: 15px
+    }
+    .ant-form-explain {
+        padding-left: 73px;
+    }
+    &-label {
+        min-width: 61px;
+        text-align: right;
+    }
+    &-tip {
+        margin-left: 10px;
+    }
+}
+
+.coupons-create {
+    padding-top: 60px;
+    margin: 0 62px;
+    form .default {
+        width: 78px;
+    }
+    .category .ant-cascader-picker {
+        width: 260px;
+    }
+    .store {
+        margin-left: $couponAddLabelWidth;
+    }
+    .ant-col-16 {
+        word-break: break-all;
+        .ant-form-item-label label {
+            width: $couponAddLabelWidth;
+            display: inline-block;
+        }
+        .ant-form-item-control textarea {
+            width: 260px;
+        }
+    }
+    .personQty {
+        .ant-form-item-control {
+            margin-left: 0!important;
+        }
+    }
+    .tips .ant-col-16 {
+        margin-left: $couponAddLabelWidth;
+    }
+    .condition {
+        margin-right: 0;
+        .ant-input-number-lg {
+            width: 120px;
+        }
+    }
+    .description {
+        line-height: 42px;
+    }
+    .promotion-add-license {
+        .ant-form-item-label,
+        .ant-form-item-label label {
+            width: 100px;
+        }
+    }
+}
