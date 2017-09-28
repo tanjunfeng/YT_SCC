@@ -13,11 +13,10 @@ class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            branchCompanyId: '',
-            isSubCompaniesDisabled: true
+            branchCompanyId: ''
         }
         this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-        this.hanldeSubCompaniesClear = this.hanldeSubCompaniesClear.bind(this);
+        this.hanldeSubCompanyClear = this.hanldeSubCompanyClear.bind(this);
         this.handleReset = this.handleReset.bind(this);
     }
 
@@ -31,12 +30,12 @@ class SearchForm extends PureComponent {
     /**
      * 清空子公司编号
      */
-    hanldeSubCompaniesClear() {
+    hanldeSubCompanyClear() {
         this.setState({ branchCompanyId: '' });
     }
 
     handleReset() {
-        this.hanldeSubCompaniesClear(); // 清除子公司值清单
+        this.hanldeSubCompanyClear(); // 清除子公司值清单
         ...
     }
 
@@ -48,10 +47,9 @@ class SearchForm extends PureComponent {
 
 ```jsx
 <SubCompanies
-    disabled={this.state.isSubCompaniesDisabled}
     value={this.state.branchCompanyId}
     onSubCompaniesChooesd={this.handleSubCompanyChoose}
-    onSubCompaniesClear={this.hanldeSubCompaniesClear}
+    onSubCompaniesClear={this.hanldeSubCompanyClear}
 />
 ```
 

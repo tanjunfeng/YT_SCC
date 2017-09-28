@@ -24,7 +24,7 @@ class SearchForm extends PureComponent {
         this.handleReset = this.handleReset.bind(this);
         this.getFormData = this.getFormData.bind(this);
         this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-        this.hanldeSubCompaniesClear = this.hanldeSubCompaniesClear.bind(this);
+        this.hanldeSubCompanyClear = this.hanldeSubCompanyClear.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -66,7 +66,7 @@ class SearchForm extends PureComponent {
         this.setState({ branchCompanyId });
     }
 
-    hanldeSubCompaniesClear() {
+    hanldeSubCompanyClear() {
         this.setState({ branchCompanyId: '' });
     }
 
@@ -76,7 +76,7 @@ class SearchForm extends PureComponent {
     }
 
     handleReset() {
-        this.hanldeSubCompaniesClear(); // 清除子公司值清单
+        this.hanldeSubCompanyClear(); // 清除子公司值清单
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onCouponReset();
     }
@@ -107,7 +107,7 @@ class SearchForm extends PureComponent {
                                         <SubCompanies
                                             value={this.state.branchCompanyId}
                                             onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                            onSubCompaniesClear={this.hanldeSubCompaniesClear}
+                                            onSubCompaniesClear={this.hanldeSubCompanyClear}
                                         />
                                     </div>
                                 </FormItem>
