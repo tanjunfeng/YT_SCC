@@ -310,9 +310,7 @@ class CouponCreate extends PureComponent {
                     message.error(res.message);
                 }
             });
-        }).catch(error => {
-            console.log(error);
-        });
+        }).catch(() => { });
     }
 
     textAreaChange(e) {
@@ -331,8 +329,8 @@ class CouponCreate extends PureComponent {
             subCompanies.push(company.companyName);
         });
         return (
-            <div className="coupon">
-                <Form layout="inline">
+            <div className="coupon-create">
+                <Form layout="inline" onSubmit={this.handleSubmit}>
                     <div className="coupon-add-item">
                         <div className="add-message coupon-add-license">
                             <div className="add-message-body">
@@ -560,15 +558,13 @@ class CouponCreate extends PureComponent {
                                         </FormItem>
                                     </Col>
                                 </Row>
-                                <Row gutter={40} type="flex">
-                                    <Col>
+                                <Row gutter={40} type="flex" justify="center">
+                                    <Col span={8}>
                                         <FormItem>
-                                            <Button type="primary" size="default" onClick={this.handleSubmit}>
+                                            <Button type="primary" size="default" htmlType="submit">
                                                 保存
                                             </Button>
                                         </FormItem>
-                                    </Col>
-                                    <Col>
                                         <FormItem>
                                             <Button size="default" onClick={this.handleBack}>
                                                 返回
