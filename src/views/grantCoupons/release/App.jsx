@@ -47,6 +47,8 @@ class ReleaseCouponModal extends PureComponent {
         if (!nextProps.visible && this.props.visible) {
             // 隐藏时清空
             this.props.clearCouponsList();
+            this.handleCouponReset();
+            this.setState({ promoIds: [] });
         }
         if (nextProps.visible && !this.props.visible) {
             // 显示时按默认条件查询一次
