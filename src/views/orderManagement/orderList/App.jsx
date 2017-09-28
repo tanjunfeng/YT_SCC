@@ -18,6 +18,7 @@ import {
 import moment from 'moment';
 import Utils from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
+import { SubCompanies } from '../../../container/search';
 import {
     orderTypeOptions,
     orderStatusOptions,
@@ -257,10 +258,8 @@ class OrderManagementList extends Component {
     /**
      * 子公司-值清单
      */
-    handleSubCompanyChoose = ({ record }) => {
-        this.setState({
-            branchCompanyId: record.id,
-        });
+    handleSubCompanyChoose = (branchCompanyId) => {
+        this.setState({ branchCompanyId });
     }
 
     /**
@@ -276,9 +275,7 @@ class OrderManagementList extends Component {
      * 子公司-清除
      */
     handleSubCompanyClear() {
-        this.setState({
-            branchCompanyId: null,
-        });
+        this.setState({ branchCompanyId: '' });
     }
 
     /**
@@ -590,32 +587,10 @@ class OrderManagementList extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">子公司</span>
-                                            <SearchMind
-                                                compKey="search-mind-sub-company"
-                                                ref={ref => { this.subCompanySearchMind = ref }}
-                                                fetch={(params) =>
-                                                    this.props.pubFetchValueList({
-                                                        branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-                                                        branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
-                                                    }, 'findCompanyBaseInfo')
-                                                }
-                                                onChoosed={this.handleSubCompanyChoose}
-                                                onClear={this.handleSubCompanyClear}
-                                                renderChoosedInputRaw={(row) => (
-                                                    <div>{row.id}</div>
-                                                )}
-                                                pageSize={6}
-                                                columns={[
-                                                    {
-                                                        title: '子公司id',
-                                                        dataIndex: 'id',
-                                                        width: 98
-                                                    }, {
-                                                        title: '子公司名字',
-                                                        dataIndex: 'name',
-                                                        width: 140
-                                                    }
-                                                ]}
+                                            <SubCompanies
+                                                value={this.state.branchCompanyId}
+                                                onSubCompaniesChooesd={this.handleSubCompanyChoose}
+                                                onSubCompaniesClear={this.handleSubCompanyClear}
                                             />
                                         </div>
                                     </FormItem>
