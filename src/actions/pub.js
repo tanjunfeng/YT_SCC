@@ -26,6 +26,7 @@ import {
     queryCategorysByLevel,
     queryBranchCompanyInfo,
     queryProductForSelect,
+    queryDirectStores,
     findCompanyBaseInfo as findCompaniesService
 } from '../service';
 
@@ -63,8 +64,10 @@ const pubValueList = {
     // 通过商品id查询子公司
     queryBranchCompanyInfo,
     // 添加商品
-    queryProductForSelect
-}
+    queryProductForSelect,
+    // 查询直营店
+    queryDirectStores
+};
 
 const receiveCollapsed = (isCollapsed) => ({
     type: ActionType.PUB_COLLAPSED,

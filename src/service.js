@@ -783,3 +783,6 @@ export const grantCoupon = (params) => http.post('/coupon/grantCoupon', params);
 
 // 查询品类
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
+
+// 查询直营店
+export const queryDirectStores = (params) => http.get('/directStore/getAllStores', params);
