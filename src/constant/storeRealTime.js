@@ -84,7 +84,7 @@ export const TableHeader = [{
     title: '上周均销',
     dataIndex: 'lastWeekSaleQty',
     key: 'lastWeekSaleQty',
-},{
+}, {
     title: '安全库存天数',
     dataIndex: 'safeStockDay',
     key: 'safeStockDay',
