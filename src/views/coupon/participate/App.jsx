@@ -120,8 +120,6 @@ class CouponsParticipate extends PureComponent {
 
     handleParticipateExport(param) {
         const condition = {
-            page: this.state.pageNum,
-            pageSize: this.state.pageSize,
             promoId: this.PROMOTION_ID,
             ...param
         };
