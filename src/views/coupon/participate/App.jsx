@@ -58,6 +58,11 @@ class CouponsParticipate extends PureComponent {
             pageSize: PAGE_SIZE,
             promoId: this.PROMOTION_ID
         };
+        this.param1 = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            promoId: this.PROMOTION_ID
+        };
     }
 
     componentDidMount() {
@@ -74,30 +79,46 @@ class CouponsParticipate extends PureComponent {
      */
     onPaginate = (pageNum) => {
         Object.assign(this.param, { pageNum, current: pageNum });
-        this.query();
+        this.query('used');
     }
 
     /**
      *  Tab2 - 分页页码改变的回调
      */
     onPaginate1 = (pageNum) => {
-        Object.assign(this.param, { pageNum, current: pageNum, current1: pageNum });
-        this.query();
+        Object.assign(this.param1, { pageNum, current: pageNum });
+        this.query('unUsed');
     }
 
     handleTabChange(key) {
         this.setState({ tabPage: key });
     }
 
-    query() {
-        this.props.getUsedCouponParticipate(this.param).then((data) => {
-            const { pageNum, pageSize } = data.data;
-            Object.assign(this.param, { pageNum, pageSize });
-        });
-        this.props.getUnUsedCouponParticipate(this.param).then((data) => {
-            const { pageNum, pageSize } = data.data;
-            Object.assign(this.param, { pageNum1: pageNum, pageSize1: pageSize });
-        });
+    query(tab) {
+        const queryUsed = () => {
+            this.props.getUsedCouponParticipate(this.param).then((data) => {
+                const { pageNum, pageSize } = data.data;
+                Object.assign(this.param, { pageNum, pageSize });
+            });
+        };
+        const queryUnUsed = () => {
+            this.props.getUnUsedCouponParticipate(this.param).then((data) => {
+                const { pageNum, pageSize } = data.data;
+                Object.assign(this.param1, { pageNum, pageSize });
+            });
+        };
+        switch (tab) {
+            case 'used':
+                queryUsed();
+                break;
+            case 'unUsed':
+                queryUnUsed();
+                break;
+            default:
+                queryUsed();
+                queryUnUsed();
+                break;
+        }
     }
 
     handleParticipateSearch(param) {
@@ -106,6 +127,7 @@ class CouponsParticipate extends PureComponent {
             current: 1,
             ...param
         };
+        this.param1 = this.param;
         this.query();
     }
 
@@ -116,6 +138,7 @@ class CouponsParticipate extends PureComponent {
             pageSize: PAGE_SIZE,
             promoId: this.PROMOTION_ID
         };
+        this.param1 = this.param;
     }
 
     handleParticipateExport(param) {
@@ -132,10 +155,9 @@ class CouponsParticipate extends PureComponent {
 
     render() {
         const {
-            participateDataDtoPageResult = {},
+            participateDataDtoPageResult = {}
         } = this.props.usedCouponParticipate;
-        const { total } = participateDataDtoPageResult;
-        const { pageNum, pageSize, pageNum1, pageSize1 } = this.param;
+        const { total, pageNum, pageSize } = participateDataDtoPageResult;
         return (
             <div>
                 <SearchForm
@@ -177,9 +199,9 @@ class CouponsParticipate extends PureComponent {
                             }}
                             bordered
                             pagination={{
-                                current: this.param.current1,
-                                pageNum1,
-                                pageSize1,
+                                current: this.param1.current,
+                                pageNum: this.param1.pageNum,
+                                pageSize: this.param1.pageSize,
                                 total: this.props.unUsedCouponParticipate.total,
                                 showQuickJumper: true,
                                 onChange: this.onPaginate1
