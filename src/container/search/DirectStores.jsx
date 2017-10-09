@@ -60,7 +60,7 @@ class DirectStores extends PureComponent {
                 pageSize={6}
                 columns={[
                     {
-                        title: '门店Id',
+                        title: '门店编号',
                         dataIndex: 'storeId',
                         width: 98
                     }, {
