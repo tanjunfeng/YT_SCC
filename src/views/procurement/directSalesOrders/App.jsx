@@ -10,7 +10,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Table, Form } from 'antd';
-import { DirectStores } from '../../../container/search';
 
 import {
     getPromotionList,
@@ -18,6 +17,7 @@ import {
     updatePromotionStatus
 } from '../../../actions/promotion';
 import { managementList as columns } from '../columns';
+import SearchForm from './searchForm';
 
 @connect(state => ({
     promotionList: state.toJS().promotion.list
@@ -28,16 +28,6 @@ import { managementList as columns } from '../columns';
 }, dispatch))
 
 class DirectSalesOrders extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.param = {};
-        this.state = {
-            storeId: ''
-        }
-        this.handleDirectStoresClear = this.handleDirectStoresClear.bind(this);
-        this.handleDirectStoresChoose = this.handleDirectStoresChoose.bind(this);
-    }
-
     componentWillMount() {
         this.props.clearPromotionList();
     }
@@ -46,22 +36,11 @@ class DirectSalesOrders extends PureComponent {
         this.props.clearPromotionList();
     }
 
-    handleDirectStoresChoose(storeId) {
-        this.setState({ storeId });
-    }
-
-    handleDirectStoresClear() {
-        this.setState({ storeId: '' });
-    }
-
     render() {
         const { data } = this.props.promotionList;
         return (
             <div>
-                <DirectStores
-                    onDirectStoresClear={this.handleDirectStoresClear}
-                    onDirectStoresChoose={this.handleDirectStoresChoose}
-                />
+                <SearchForm />
                 <Table
                     dataSource={data}
                     columns={columns}
