@@ -58,7 +58,7 @@ class CouponsParticipate extends PureComponent {
             pageSize: PAGE_SIZE,
             promoId: this.PROMOTION_ID
         };
-        this.param1 = {
+        this.paramUnUsed = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
             promoId: this.PROMOTION_ID
@@ -86,7 +86,7 @@ class CouponsParticipate extends PureComponent {
      *  Tab2 - 分页页码改变的回调
      */
     onPaginate1 = (pageNum) => {
-        Object.assign(this.param1, { pageNum, current: pageNum });
+        Object.assign(this.paramUnUsed, { pageNum, current: pageNum });
         this.query('unUsed');
     }
 
@@ -102,9 +102,9 @@ class CouponsParticipate extends PureComponent {
             });
         };
         const queryUnUsed = () => {
-            this.props.getUnUsedCouponParticipate(this.param).then((data) => {
+            this.props.getUnUsedCouponParticipate(this.paramUnUsed).then((data) => {
                 const { pageNum, pageSize } = data.data;
-                Object.assign(this.param1, { pageNum, pageSize });
+                Object.assign(this.paramUnUsed, { pageNum, pageSize });
             });
         };
         switch (tab) {
@@ -127,7 +127,7 @@ class CouponsParticipate extends PureComponent {
             current: 1,
             ...param
         };
-        this.param1 = this.param;
+        this.paramUnUsed = this.param;
         this.query();
     }
 
@@ -138,7 +138,7 @@ class CouponsParticipate extends PureComponent {
             pageSize: PAGE_SIZE,
             promoId: this.PROMOTION_ID
         };
-        this.param1 = this.param;
+        this.paramUnUsed = this.param;
     }
 
     handleParticipateExport(param) {
@@ -199,9 +199,9 @@ class CouponsParticipate extends PureComponent {
                             }}
                             bordered
                             pagination={{
-                                current: this.param1.current,
-                                pageNum: this.param1.pageNum,
-                                pageSize: this.param1.pageSize,
+                                current: this.paramUnUsed.current,
+                                pageNum: this.paramUnUsed.pageNum,
+                                pageSize: this.paramUnUsed.pageSize,
                                 total: this.props.unUsedCouponParticipate.total,
                                 showQuickJumper: true,
                                 onChange: this.onPaginate1
