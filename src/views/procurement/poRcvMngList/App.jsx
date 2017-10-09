@@ -16,7 +16,8 @@ import {
     Icon,
     Table,
     Menu,
-    Dropdown
+    Dropdown,
+    message
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -32,6 +33,7 @@ import {
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
+import { repushPurchaseReceipt } from '../../../actions/procurement';
 import {
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -54,16 +56,19 @@ const dateFormat = 'YYYY-MM-DD';
     getSupplierMap,
     getSupplierLocMap,
     fetchPoRcvMngList,
-    pubFetchValueList
+    pubFetchValueList,
+    repushPurchaseReceipt
 }, dispatch))
+
 class PoRcvMngList extends PureComponent {
     constructor(props) {
         super(props);
-        this.handleSearch = ::this.handleSearch;
-        this.handleResetValue = ::this.handleResetValue;
-        this.onLocTypeChange = ::this.onLocTypeChange;
-        this.renderActions = ::this.renderActions;
-        this.queryRcvMngPoList = ::this.queryRcvMngPoList;
+        this.handleSearch = this.handleSearch.bind(this);
+        this.handleResetValue = this.handleResetValue.bind(this);
+        this.onLocTypeChange = this.onLocTypeChange.bind(this);
+        this.renderActions = this.renderActions.bind(this);
+        this.queryRcvMngPoList = this.queryRcvMngPoList.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
         this.searchParams = {};
         this.state = {
             spNo: '',   // 供应商编码
@@ -352,6 +357,25 @@ class PoRcvMngList extends PureComponent {
         this.poAddress.reset();
     }
 
+    handleSelect(record, index, items) {
+        const { key } = items;
+        switch (key) {
+            case 'push':    // 重新推送采购收货单失败
+                this.props.repushPurchaseReceipt({
+                    purchaseOrderNo: record.purchaseOrderNo
+                }).then(res => {
+                    if (res.code === 200) {
+                        message.info('重新推送成功');
+                    } else {
+                        message.error('重新推送失败');
+                    }
+                });
+                break;
+            default:
+                break;
+        }
+    }
+
     /**
      * 查询收货单管理列表
      */
@@ -429,14 +453,24 @@ class PoRcvMngList extends PureComponent {
         return this.searchParams;
     }
 
-    renderActions(text, record) {
-        const { id } = record;
+    renderActions(text, record, index) {
+        const { id, status } = record;
         const { pathname } = this.props.location;
         const menu = (
-            <Menu>
+            <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/${id}`}>收货单详情</Link>
                 </Menu.Item>
+                {
+                    // 仅待下发状态时能够点击重新推送采购收货单
+                    (status === 0) ?
+                        <Menu.Item key="push">
+                            <a target="_blank" rel="noopener noreferrer">
+                                重新推送采购收货单
+                            </a>
+                        </Menu.Item>
+                        : null
+                }
             </Menu>
         );
         return (
@@ -477,7 +511,7 @@ class PoRcvMngList extends PureComponent {
                                         {getFieldDecorator('receivedDuring', {})(
                                             <RangePicker
                                                 className="date-range-picker"
-                                                style={{width: 250}}
+                                                style={{ width: 250 }}
                                                 format={dateFormat}
                                                 showTime={{
                                                     hideDisabledOptions: true,
@@ -664,7 +698,7 @@ class PoRcvMngList extends PureComponent {
                                             getFieldDecorator('auditDuring', {})(
                                                 <RangePicker
                                                     className="date-range-picker"
-                                                    style={{width: 250}}
+                                                    style={{ width: 250 }}
                                                     format={dateFormat}
                                                     showTime={{
                                                         hideDisabledOptions: true,
@@ -722,7 +756,8 @@ PoRcvMngList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     poRcvMngList: PropTypes.objectOf(PropTypes.any),
-    pubFetchValueList: PropTypes.func
+    pubFetchValueList: PropTypes.func,
+    repushPurchaseReceipt: PropTypes.func
 };
 
 export default withRouter(Form.create()(PoRcvMngList));
