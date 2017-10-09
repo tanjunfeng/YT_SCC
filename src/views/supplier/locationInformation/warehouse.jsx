@@ -81,7 +81,7 @@ class Warehouse extends Component {
         const { prefixCls, isShow } = this.props;
         return (
             <li
-                key={item.id}
+                key={`${item.warehouseLogicId}-${item.id}`}
                 className={`${prefixCls}-list-item`}
             >
                 { isShow &&

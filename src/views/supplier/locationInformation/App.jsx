@@ -57,14 +57,14 @@ class BasicInfo extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.handleCompanyAddressChange = ::this.handleCompanyAddressChange;
-        this.handleBankLocChange = ::this.handleBankLocChange;
-        this.handleSaveDraft = ::this.handleSaveDraft;
-        this.getValue = ::this.getValue;
-        this.submit = ::this.submit;
-        this.handleSubmit = ::this.handleSubmit;
-        this.handleChoose = ::this.handleChoose;
-        this.handleAreaChange = ::this.handleAreaChange;
+        this.handleCompanyAddressChange = this.handleCompanyAddressChange.bind(this);
+        this.handleBankLocChange = this.handleBankLocChange.bind(this);
+        this.handleSaveDraft = this.handleSaveDraft.bind(this);
+        this.getValue = this.getValue.bind(this);
+        this.submit = this.submit.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChoose = this.handleChoose.bind(this);
+        this.handleAreaChange = this.handleAreaChange.bind(this);
         this.companyAddress = {};
         this.bankLoc = {};
         const { detailSp = {} } = props;
@@ -95,7 +95,6 @@ class BasicInfo extends PureComponent {
 
     getValue(callback) {
         const { form, detailData, detailSp, isEdit } = this.props;
-        const { supplierBasicInfo = {} } = detailData;
         const wareHouseIds = this.wareHouse.getValue();
         if (!this.orgId) {
             Tip(true, '请选择子公司！');
@@ -160,7 +159,8 @@ class BasicInfo extends PureComponent {
                             id: detailSp.spAdrBasic.id,
                             status: detailSp.spAdrBasic.status,
                             orgId: !this.orgId ? detailSp.spAdrBasic.orgId : this.orgId,
-                            belongAreaName: !this.company ? detailSp.spAdrBasic.belongAreaName : this.company
+                            belongAreaName: !this.company ?
+                            detailSp.spAdrBasic.belongAreaName : this.company
                         }
                     )
                     Object.assign(
@@ -175,9 +175,7 @@ class BasicInfo extends PureComponent {
                         parentId: detailData.id,
                         status: detailSp.status,
                     })
-
                 }
-
                 callback(submit)
             }
         })
@@ -191,7 +189,7 @@ class BasicInfo extends PureComponent {
                 isEdit
                     ? 'updateSupplierAddressInfo'
                     : 'insertSupplierAddressInfo'
-            ).then((res) => {
+            ).then(() => {
                 this.props.history.push('/supplierInputList')
             });
         });
@@ -199,12 +197,13 @@ class BasicInfo extends PureComponent {
 
     handleAreaChange(item) {
         const { placeRegion } = this.props;
-        for (let i of placeRegion) {
+        for (const i of placeRegion) {
             if (i.code === item) {
                 this.company = i.name;
                 return null;
             }
         }
+        return null;
     }
 
     handleChoose(item) {
@@ -270,21 +269,17 @@ class BasicInfo extends PureComponent {
     renderName(spAdrBasic, supplierBasicInfo) {
         const { isEdit } = this.props;
         const { providerName } = spAdrBasic;
-        const { companyName } = supplierBasicInfo;
-        { isEdit && !this.company ? spAdrBasic.providerName : `${this.company} - ${supplierBasicInfo.companyName}` }
+        { isEdit && !this.company ? spAdrBasic.providerName : `${this.company} - ${supplierBasicInfo.companyName}` } 
         if (isEdit && !this.company) {
             this.childName = providerName;
             return providerName;
-        }
-        else if (isEdit && this.company) {
+        } else if (isEdit && this.company) {
             this.childName = `${this.company} - ${supplierBasicInfo.companyName}`;
             return `${this.company} - ${supplierBasicInfo.companyName}`;
-        }
-        else if (!isEdit && !this.company) {
+        } else if (!isEdit && !this.company) {
             this.childName = supplierBasicInfo.companyName;
             return supplierBasicInfo.companyName;
-        }
-        else if (!isEdit && this.company) {
+        } else if (!isEdit && this.company) {
             this.childName = `${this.company} - ${supplierBasicInfo.companyName}`;
             return `${this.company} - ${supplierBasicInfo.companyName}`;
         }
@@ -295,8 +290,6 @@ class BasicInfo extends PureComponent {
         const { detailData, detailSp, isEdit, placeRegion = [] } = this.props;
         const {
             supplierBasicInfo = {},
-            supplierOperTaxInfo = {},
-            supplierBankInfo = {}
         } = detailData;
         const {
             spAdrBasic = {},
@@ -333,7 +326,9 @@ class BasicInfo extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={8}><span>供应商地点编号：</span>
-                                        <span>{isEdit ? spAdrBasic.providerNo : this.props.supplierId}</span>
+                                        <span>
+                                            {isEdit ? spAdrBasic.providerNo : this.props.supplierId}
+                                        </span>
                                     </Col>
                                     <Col span={8}><span>供应商地点名称：</span>
                                         <span>
@@ -370,8 +365,11 @@ class BasicInfo extends PureComponent {
                                         <span>*供应商地点到货周期：</span>
                                         <FormItem>
                                             {getFieldDecorator('goodsArrivalCycle', {
-                                                rules: [{ required: true, message: '请输入供应商地点到货周期!' }],
-                                                initialValue: isEdit ? spAdrBasic.goodsArrivalCycle : null
+                                                rules: [{
+                                                    required: true, message: '请输入供应商地点到货周期!'
+                                                }],
+                                                initialValue: isEdit ?
+                                                spAdrBasic.goodsArrivalCycle : null
                                             })(
                                                 <InputNumber
                                                     min={0}
@@ -435,12 +433,14 @@ class BasicInfo extends PureComponent {
                                                     onChange={this.handleAreaChange}
                                                 >
                                                     {
-                                                        placeRegion.map((item) => <Option
-                                                            key={item.code}
-                                                            value={item.code}
-                                                        >
-                                                            {item.name}
-                                                        </Option>)
+                                                        placeRegion.map((item) => (
+                                                            <Option
+                                                                key={item.code}
+                                                                value={item.code}
+                                                            >
+                                                                {item.name}
+                                                            </Option>)
+                                                        )
                                                     }
                                                 </Select>
                                                 )}
@@ -474,7 +474,8 @@ class BasicInfo extends PureComponent {
                                                 style={{ marginLeft: 10 }}
                                                 compKey="search-mind-key2"
                                                 fetch={(param) =>
-                                                    this.props.pubFetchValueList(Utils.removeInvalid({
+                                                    this.props.pubFetchValueList(
+                                                    Utils.removeInvalid({
                                                         branchCompanyName: param.value,
                                                         id: isEdit ? detailSp.spAdrBasic.id : null,
                                                         parentId: detailData.id,
@@ -707,9 +708,17 @@ class BasicInfo extends PureComponent {
 
 BasicInfo.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
+    placeRegion: PropTypes.objectOf(PropTypes.any),
     isEdit: PropTypes.bool,
+    supplierId: PropTypes.string,
     detailData: PropTypes.objectOf(PropTypes.any),
     detailSp: PropTypes.objectOf(PropTypes.any),
-    fetchSupplierNo: PropTypes.func
+    history: PropTypes.objectOf(PropTypes.any),
+    warehouseData: PropTypes.objectOf(PropTypes.any),
+    fetchSupplierNo: PropTypes.func,
+    fetchWarehouseInfo: PropTypes.func,
+    deleteWarehouseInfo: PropTypes.func,
+    pubFetchValueList: PropTypes.func,
+    getWarehouse: PropTypes.func,
 }
 export default Form.create()(withRouter(BasicInfo));

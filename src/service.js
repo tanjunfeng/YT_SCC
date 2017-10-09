@@ -675,7 +675,7 @@ export const insertSupplierAddressInfo = (params) => http.post('/supplier/insert
 export const updateSupplierAddressInfo = (params) => http.post('/supplier/updateSupplierAddressInfo', params);
 
 // 查询供应商地点详情
-export const queryProviderPlaceInfo = (params) => http.get('/supplier/queryProviderPlaceInfo', params);
+export const queryProviderPlaceInfo = (params) => http.get('supplier/queryProviderPlaceInfo', params);
 
 // 此接口用于根据条件查询仓库信息列表,条件查询范围为仓库编码和仓库名称(应该用get)
 export const getWarehouseInfo1 = (params) => http.get('/warehouse/getWarehouseLogicInfo', params);
