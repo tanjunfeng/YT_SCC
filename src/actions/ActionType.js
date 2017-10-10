@@ -165,6 +165,7 @@ export default {
     DELETE_PO_LINE: 'DELETE_PO_LINE',
     // 更新采购单商品
     UPDATE_PO_LINE: 'UPDATE_PO_LINE',
+    FETCH_DIRECT_INFO: 'FETCH_DIRECT_INFO',
 
     /** 值清单获取action，请根据实际情况拆分到单独action文件 Begin */
     // 仓库值清单

@@ -28,6 +28,14 @@ import StoresForm from './storesForm';
 }, dispatch))
 
 class DirectSalesOrders extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.handleStoresChange = this.handleStoresChange.bind(this);
+        this.state = {
+            branchCompanyId: ''
+        }
+    }
+
     componentWillMount() {
         this.props.clearPromotionList();
     }
@@ -36,11 +44,18 @@ class DirectSalesOrders extends PureComponent {
         this.props.clearPromotionList();
     }
 
+    handleStoresChange = (branchCompanyId) => {
+        this.setState({ branchCompanyId });
+    }
+
     render() {
         const { data } = this.props.promotionList;
         return (
             <div>
-                <StoresForm />
+                <StoresForm
+                    value={this.branchCompanyId}
+                    onChange={this.handleStoresChange}
+                />
                 <Table
                     dataSource={data}
                     columns={columns}

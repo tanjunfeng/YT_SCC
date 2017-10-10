@@ -21,7 +21,8 @@ import {
     getNewPmPurchaseOrderItem,
     auditPurchaseOrderInfo,
     updatePmPurchaseOrder,
-    repushPurchaseReceipt as repushPurchaseReceiptService
+    repushPurchaseReceipt as repushPurchaseReceiptService,
+    queryDirectInfo as queryDirectInfoService
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -445,6 +446,29 @@ export const repushPurchaseReceipt = (params) => dispatch => (
         repushPurchaseReceiptService(params)
             .then(res => {
                 dispatch(repushPurchaseReceiptAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 查询根据门店编号直营店信息
+ *
+ * @param {*object} data
+ */
+const queryDirectInfoAction = (data) => ({
+    type: ActionType.FETCH_DIRECT_INFO,
+    payload: data
+});
+
+export const queryDirectInfo = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryDirectInfoService(params)
+            .then(res => {
+                dispatch(queryDirectInfoAction(res.data));
                 resolve(res);
             })
             .catch(err => {

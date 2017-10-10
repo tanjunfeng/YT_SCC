@@ -1,0 +1,14 @@
+{
+    "timestamp": 1505889869070,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "receivingAddress": "枫林三路589号1楼17号门面",
+        "consignee": "李鬼",
+        "phone": "1325423114",
+        "branchCompanyId": "10004",
+        "deliveryWarehouseCode": "YT901"
+    },
+    "success": true
+}
