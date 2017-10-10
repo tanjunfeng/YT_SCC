@@ -555,7 +555,8 @@ export const updatePmPurchaseOrder = (params) => http.post('/pmPurchaseOrder/upd
 export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
 // 删除采购单 参数 1或n个采购单id  [ids]
 export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
-
+// 查询采购单列表
+export const repushPurchaseReceipt = (params) => http.get('/pmPurchaseReceipt/rePushPurchaseReceiptToMQ', params);
 
 // 审批
 export const auditPo = (params) => http.post('/provider/auditPo', params);

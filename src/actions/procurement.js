@@ -20,7 +20,8 @@ import {
     findStepPriceInfo,
     getNewPmPurchaseOrderItem,
     auditPurchaseOrderInfo,
-    updatePmPurchaseOrder
+    updatePmPurchaseOrder,
+    repushPurchaseReceipt as repushPurchaseReceiptService
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -46,7 +47,7 @@ export const getMaterialMap = (params) => () => (
  */
 const rcvPoPrintList = (data) => ({
     type: ActionType.RECEIVE_PO_PRINT_LIST,
-    payload: data,
+    payload: data
 });
 
 export const fetchPoPrintList = (params) => dispatch => (
@@ -72,9 +73,8 @@ export const fetchPoPrintList = (params) => dispatch => (
  */
 export const changePoMngSelectedRows = (data) => ({
     type: ActionType.CHANGE_PO_MNG_SELECTED_ROWS,
-    payload: data,
+    payload: data
 });
-
 
 /**
  * 查询采购单列表
@@ -82,9 +82,8 @@ export const changePoMngSelectedRows = (data) => ({
  */
 const rcvPoMngList = (data) => ({
     type: ActionType.RECEIVE_PO_MNG_LIST,
-    payload: data,
+    payload: data
 });
-
 
 export const fetchPoMngList = (params) => dispatch => (
     new Promise((resolve, reject) => {
@@ -97,8 +96,7 @@ export const fetchPoMngList = (params) => dispatch => (
                 reject(err);
             })
     })
-)
-
+);
 
 /**
  * 创建采购单
@@ -114,7 +112,7 @@ export const createPo = (params) => () => (
                 reject(err);
             })
     })
-)
+);
 
 /**
  * 修改采购单
@@ -130,7 +128,7 @@ export const ModifyPo = (params) => () => (
                 reject(err);
             })
     })
-)
+);
 
 /**
  * 审批采购单
@@ -146,8 +144,7 @@ export const auditPo = (params) => () => (
                 reject(err);
             })
     })
-)
-
+);
 
 /**
  * 查询采购单详情
@@ -155,8 +152,9 @@ export const auditPo = (params) => () => (
  */
 const rcvPoDetail = (data) => ({
     type: ActionType.RECEIVE_PO_DETAIL,
-    payload: data,
+    payload: data
 });
+
 export const fetchPoDetail = (params) => dispatch => (
     new Promise((resolve, reject) => {
         queryPoDetail(params)
@@ -172,14 +170,14 @@ export const fetchPoDetail = (params) => dispatch => (
                 reject(err);
             })
     })
-)
+);
 
 /**
  * 删除采购单
  */
 const deletePoByIdsAction = (data) => ({
     type: ActionType.DELETE_PO_BY_IDS,
-    payload: data,
+    payload: data
 });
 
 export const deletePoByIds = (params) => dispatch => (
@@ -195,22 +193,22 @@ export const deletePoByIds = (params) => dispatch => (
     })
 )
 
-
 /**
  *初始化采购单详情
  * @param {*} data
  */
 export const initPoDetailAction = (data) => ({
     type: ActionType.INIT_PO_DETAIL,
-    payload: data,
+    payload: data
 });
+
 export const initPoDetail = (params) => dispatch => (
     new Promise((resolve) => {
         dispatch(initPoDetailAction(params));
         // 返回操作结果
         resolve(params);
     })
-)
+);
 
 /**
  * 更新采购单基本信息
@@ -218,9 +216,8 @@ export const initPoDetail = (params) => dispatch => (
  */
 export const updatePoBasicinfo = (data) => ({
     type: ActionType.UPDATE_PO_BASICINFO,
-    payload: data,
+    payload: data
 });
-
 
 /**
  * 添加采购单商品行
@@ -228,7 +225,7 @@ export const updatePoBasicinfo = (data) => ({
  */
 export const addPoLines = (data) => ({
     type: ActionType.ADD_PO_LINES,
-    payload: data,
+    payload: data
 });
 
 /**
@@ -237,7 +234,7 @@ export const addPoLines = (data) => ({
  */
 export const updatePoLine = (data) => ({
     type: ActionType.UPDATE_PO_LINE,
-    payload: data,
+    payload: data
 });
 
 /**
@@ -246,9 +243,8 @@ export const updatePoLine = (data) => ({
  */
 export const deletePoLine = (data) => ({
     type: ActionType.DELETE_PO_LINE,
-    payload: data,
+    payload: data
 });
-
 
 // 收货相关
 
@@ -258,8 +254,9 @@ export const deletePoLine = (data) => ({
  */
 const rcvPoRcvMngList = (data) => ({
     type: ActionType.RECEIVE_PO_RCV_MNG_LIST,
-    payload: data,
+    payload: data
 });
+
 export const fetchPoRcvMngList = (params) => dispatch => (
     new Promise((resolve, reject) => {
         queryPoRcvMngList(params)
@@ -271,7 +268,7 @@ export const fetchPoRcvMngList = (params) => dispatch => (
                 reject(err);
             })
     })
-)
+);
 
 /**
  * 查询采购单收货列表
@@ -279,8 +276,9 @@ export const fetchPoRcvMngList = (params) => dispatch => (
  */
 const rcvPoRcvList = (data) => ({
     type: ActionType.RECEIVE_PO_RCV_LIST,
-    payload: data,
+    payload: data
 });
+
 export const fetchPoRcvList = (params) => dispatch => (
     new Promise((resolve, reject) => {
         queryPoRcvList(params)
@@ -292,7 +290,7 @@ export const fetchPoRcvList = (params) => dispatch => (
                 reject(err);
             })
     })
-)
+);
 
 /**
  * 查询收货单详情
@@ -300,8 +298,9 @@ export const fetchPoRcvList = (params) => dispatch => (
  */
 const rcvPoRcvDetail = (data) => ({
     type: ActionType.RECEIVE_PO_RCV_DETAIL,
-    payload: data,
+    payload: data
 });
+
 export const fetchPoRcvDetail = (params) => dispatch => (
     new Promise((resolve, reject) => {
         queryPoRcvDetail(params)
@@ -315,7 +314,6 @@ export const fetchPoRcvDetail = (params) => dispatch => (
     })
 )
 
-
 /**
  * 查询采购单详情并创建收货单初始信息
  * 1.根据采购单id查询采购单相关信息
@@ -324,8 +322,9 @@ export const fetchPoRcvDetail = (params) => dispatch => (
  */
 const rcvPoRcvInit = (data) => ({
     type: ActionType.RECEIVE_PO_RCV_INIT,
-    payload: data,
+    payload: data
 });
+
 export const fetchPoRcvInit = (params) => dispatch => (
     new Promise((resolve, reject) => {
         queryPoDetail(params)
@@ -337,8 +336,7 @@ export const fetchPoRcvInit = (params) => dispatch => (
                 reject(err);
             })
     })
-)
-
+);
 
 /**
  * 更新采购收货单基本信息
@@ -346,7 +344,7 @@ export const fetchPoRcvInit = (params) => dispatch => (
  */
 export const updatePoRcvBasicinfo = (data) => ({
     type: ActionType.UPDATE_PO_RCV_BASICINFO,
-    payload: data,
+    payload: data
 });
 
 /**
@@ -355,7 +353,7 @@ export const updatePoRcvBasicinfo = (data) => ({
  */
 export const updatePoRcvLine = (data) => ({
     type: ActionType.UPDATE_PO_RCV_LINE,
-    payload: data,
+    payload: data
 });
 
 /**
@@ -372,7 +370,7 @@ export const createPoRcv = (params) => () => (
                 reject(err);
             })
     })
-)
+);
 
 /**
  * 审批
@@ -386,7 +384,7 @@ export const modifyAuditPurchaseOrderInfo = (data) => (
             })
             .catch(err => reject(err))
     })
-)
+);
 
 /**
  * 根据条件查询销售价格区间列表
@@ -394,8 +392,9 @@ export const modifyAuditPurchaseOrderInfo = (data) => (
  */
 const rcvPriceInfo = (data) => ({
     type: ActionType.RECEIVE_PRICE_INFO,
-    payload: data,
+    payload: data
 });
+
 export const fetchPriceInfo = (params) => dispatch => (
     new Promise((resolve, reject) => {
         findStepPriceInfo(params)
@@ -415,8 +414,9 @@ export const fetchPriceInfo = (params) => dispatch => (
  */
 const receiveNewPurchaseOrder = (data) => ({
     type: ActionType.RECEIVE_NEW_PURCHASE_ORDER,
-    payload: data,
+    payload: data
 });
+
 export const fetchNewPmPurchaseOrderItem = (params) => dispatch => (
     new Promise((resolve, reject) => {
         getNewPmPurchaseOrderItem(params)
@@ -428,5 +428,27 @@ export const fetchNewPmPurchaseOrderItem = (params) => dispatch => (
                 reject(err);
             })
     })
-)
+);
 
+/**
+ * 重新推送采购收货单
+ *
+ * @param {*object} data
+ */
+const repushPurchaseReceiptAction = (data) => ({
+    type: ActionType.REPUSH_PURCHASE_RECEIPT,
+    payload: data
+});
+
+export const repushPurchaseReceipt = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        repushPurchaseReceiptService(params)
+            .then(res => {
+                dispatch(repushPurchaseReceiptAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
