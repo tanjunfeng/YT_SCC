@@ -16,8 +16,8 @@ import {
     clearPromotionList,
     updatePromotionStatus
 } from '../../../actions/promotion';
-import { managementList as columns } from '../columns';
-import SearchForm from './searchForm';
+import { poMngListColumns as columns } from '../columns';
+import StoresForm from './storesForm';
 
 @connect(state => ({
     promotionList: state.toJS().promotion.list
@@ -40,7 +40,7 @@ class DirectSalesOrders extends PureComponent {
         const { data } = this.props.promotionList;
         return (
             <div>
-                <SearchForm />
+                <StoresForm />
                 <Table
                     dataSource={data}
                     columns={columns}

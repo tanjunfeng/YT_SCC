@@ -45,19 +45,21 @@ class AddingGoodsByStore extends PureComponent {
     render() {
         return (
             <SearchMind
-                /* style={{ zIndex: 6000, marginBottom: 5 }} */
+                style={{ zIndex: 6000, marginBottom: 5 }}
                 compKey="productCode"
-                ref={ref => { this.addPo = ref }}
+                ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
                     this.props.pubFetchValueList({
-                        teamText: params.value,
+                        branchCompanyId: params.value,
+                        searchTerm: params.value,
                         pageNum: params.pagination.current || 1,
                         pageSize: params.pagination.pageSize
-                    }, 'queryProductForSelect')
+                    }, 'queryProductByStore')
                 }
-                disabled={this.state.isWarehouseDisabled}
+                disabled={this.props.disabled}
                 addonBefore="添加商品"
-                onChoosed={this.handleChoosedMaterialMap}
+                onClear={this.handleClear}
+                onChoosed={this.handleChoose}
                 renderChoosedInputRaw={(data) => (
                     <div>{data.productCode} - {data.saleName}</div>
                 )}
@@ -69,8 +71,7 @@ class AddingGoodsByStore extends PureComponent {
                         width: 98
                     }, {
                         title: '商品名称',
-                        dataIndex: 'saleName',
-                        width: 140
+                        dataIndex: 'saleName'
                     }
                 ]}
             />
