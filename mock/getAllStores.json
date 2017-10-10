@@ -6,7 +6,7 @@
     "data": {
         "pageNum": 1,
         "pageSize": 6,
-        "total": 2,
+        "total": 11,
         "data": [
             {
                 "storeId": "A000001",
@@ -19,6 +19,51 @@
             },
             {
                 "storeId": "A000002",
+                "storeName": "长沙市雨花区桃红食品店",
+                "franchiseeId": "jms_000002",
+                "franchinessController": "长沙市雨花区桃红食品店",
+                "franchiseeName": null,
+                "franchiseePhone": null,
+                "branchCompanyName": "湖南子公司"
+            },
+            {
+                "storeId": "A000003",
+                "storeName": "长沙市雨花区桃红食品店",
+                "franchiseeId": "jms_000002",
+                "franchinessController": "长沙市雨花区桃红食品店",
+                "franchiseeName": null,
+                "franchiseePhone": null,
+                "branchCompanyName": "湖南子公司"
+            },
+            {
+                "storeId": "A000004",
+                "storeName": "长沙市雨花区桃红食品店",
+                "franchiseeId": "jms_000002",
+                "franchinessController": "长沙市雨花区桃红食品店",
+                "franchiseeName": null,
+                "franchiseePhone": null,
+                "branchCompanyName": "湖南子公司"
+            },
+            {
+                "storeId": "A000005",
+                "storeName": "长沙市雨花区桃红食品店",
+                "franchiseeId": "jms_000002",
+                "franchinessController": "长沙市雨花区桃红食品店",
+                "franchiseeName": null,
+                "franchiseePhone": null,
+                "branchCompanyName": "湖南子公司"
+            },
+            {
+                "storeId": "A000006",
+                "storeName": "长沙市雨花区桃红食品店",
+                "franchiseeId": "jms_000002",
+                "franchinessController": "长沙市雨花区桃红食品店",
+                "franchiseeName": null,
+                "franchiseePhone": null,
+                "branchCompanyName": "湖南子公司"
+            },
+            {
+                "storeId": "A000007",
                 "storeName": "长沙市雨花区桃红食品店",
                 "franchiseeId": "jms_000002",
                 "franchinessController": "长沙市雨花区桃红食品店",

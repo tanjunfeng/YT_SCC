@@ -1,5 +1,5 @@
 /**
- * 添加商品
+ * 通过门店信息添加商品
  *
  * @author taoqiyu
  */
@@ -14,7 +14,7 @@ import SearchMind from '../../components/searchMind';
     pubFetchValueList
 }, dispatch))
 
-class AddingGoods extends PureComponent {
+class AddingGoodsByStore extends PureComponent {
     constructor(props) {
         super(props);
         this.handleClear = this.handleClear.bind(this);
@@ -28,7 +28,7 @@ class AddingGoods extends PureComponent {
     }
 
     /**
-     * 直营店 - 清除
+     * 添加商品 - 清除
      */
     handleClear() {
         this.searchMind.reset();
@@ -36,7 +36,7 @@ class AddingGoods extends PureComponent {
     }
 
     /**
-     * 直营店 - 值清单
+     * 添加商品 - 值清单
      */
     handleChoose = (v) => {
         this.props.onChange(v);
@@ -78,11 +78,11 @@ class AddingGoods extends PureComponent {
     }
 }
 
-AddingGoods.propTypes = {
+AddingGoodsByStore.propTypes = {
     disabled: PropTypes.bool,
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any)
 }
 
-export default AddingGoods;
+export default AddingGoodsByStore;
