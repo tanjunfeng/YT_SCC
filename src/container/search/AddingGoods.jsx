@@ -1,5 +1,5 @@
 /**
- * 查询直营店清单
+ * 添加商品
  *
  * @author taoqiyu
  */
@@ -14,7 +14,7 @@ import SearchMind from '../../components/searchMind';
     pubFetchValueList
 }, dispatch))
 
-class DirectStores extends PureComponent {
+class AddingGoods extends PureComponent {
     constructor(props) {
         super(props);
         this.handleClear = this.handleClear.bind(this);
@@ -45,28 +45,32 @@ class DirectStores extends PureComponent {
     render() {
         return (
             <SearchMind
-                compKey="storeId"
-                rowKey="storeId"
-                ref={ref => { this.searchMind = ref }}
-                fetch={() =>
-                    // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/getAllStores
-                    this.props.pubFetchValueList({}, 'queryDirectStores')
+                /* style={{ zIndex: 6000, marginBottom: 5 }} */
+                compKey="productCode"
+                ref={ref => { this.addPo = ref }}
+                fetch={(params) =>
+                    this.props.pubFetchValueList({
+                        teamText: params.value,
+                        pageNum: params.pagination.current || 1,
+                        pageSize: params.pagination.pageSize
+                    }, 'queryProductForSelect')
                 }
-                disabled={this.props.disabled}
-                onChoosed={this.handleChoose}
-                onClear={this.handleClear}
-                renderChoosedInputRaw={(row) => (
-                    <div>{row.storeId} - {row.storeName}</div>
+                disabled={this.state.isWarehouseDisabled}
+                addonBefore="添加商品"
+                onChoosed={this.handleChoosedMaterialMap}
+                renderChoosedInputRaw={(data) => (
+                    <div>{data.productCode} - {data.saleName}</div>
                 )}
                 pageSize={6}
                 columns={[
                     {
-                        title: '门店编号',
-                        dataIndex: 'storeId',
+                        title: '商品编码',
+                        dataIndex: 'productCode',
                         width: 98
                     }, {
-                        title: '门店名称',
-                        dataIndex: 'storeName'
+                        title: '商品名称',
+                        dataIndex: 'saleName',
+                        width: 140
                     }
                 ]}
             />
@@ -74,11 +78,11 @@ class DirectStores extends PureComponent {
     }
 }
 
-DirectStores.propTypes = {
+AddingGoods.propTypes = {
     disabled: PropTypes.bool,
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any)
 }
 
-export default DirectStores;
+export default AddingGoods;
