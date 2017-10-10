@@ -20,7 +20,7 @@ $directStoreSalesColWidth: 250px;
     }
 }
 
-.direct-sales-orders-search-form {
+.direct-sales-orders {
     .ant-form-item-label {
         width: 80px;
         .sc-form-item-label {
@@ -40,6 +40,12 @@ $directStoreSalesColWidth: 250px;
             top: -0.5px;
         }
     }
+    .ywc-smind {
+        width: $directStoreSalesColWidth;
+    }
+    .ywc-smind-search-bar {
+        margin: 8px 0;
+    }
     .row {
         display: flex;
         line-height: 46px;
@@ -51,12 +57,6 @@ $directStoreSalesColWidth: 250px;
         .label {
             margin-right: 8px;
             display: inline-block;
-        }
-        .ywc-smind {
-            width: $directStoreSalesColWidth;
-        }
-        .ywc-smind-search-bar {
-            margin: 8px 0;
         }
     }
 }

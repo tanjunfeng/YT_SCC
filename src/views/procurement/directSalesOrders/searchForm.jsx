@@ -5,7 +5,7 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Form, Row, Col } from 'antd';
+import { Input, Form, Row } from 'antd';
 import { withRouter } from 'react-router';
 import { DirectStores } from '../../../container/search';
 
@@ -32,23 +32,25 @@ class SearchForm extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div className="search-box directSalesOrders">
+            <div className="search-box direct-sales-orders">
                 <Form layout="inline">
-                    <div className="search-conditions">
-                        <Row gutter={40}>
-                            <Col span={8}>
-                                <DirectStores
-                                    onDirectStoresClear={this.handleDirectStoresClear}
-                                    onDirectStoresChoose={this.handleDirectStoresChoose}
-                                />
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="活动名称">
-                                    {getFieldDecorator('promotionName')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                        </Row>
-                    </div>
+                    <Row gutter={40}>
+                        <FormItem label="收货地址">
+                            <DirectStores
+                                onDirectStoresClear={this.handleDirectStoresClear}
+                                onDirectStoresChoose={this.handleDirectStoresChoose}
+                            />
+                        </FormItem>
+                        <FormItem label="收货地址">
+                            {getFieldDecorator('promotionName')(<Input size="default" disabled />)}
+                        </FormItem>
+                        <FormItem label="收货人">
+                            {getFieldDecorator('promotionName')(<Input size="default" disabled />)}
+                        </FormItem>
+                        <FormItem label="手机号">
+                            {getFieldDecorator('promotionName')(<Input size="default" disabled />)}
+                        </FormItem>
+                    </Row>
                 </Form>
             </div >
         );
@@ -61,6 +63,6 @@ SearchForm.propTypes = {
 
 SearchForm.defaultProps = {
     prefixCls: 'DirectSalesOrdersList'
-}
+};
 
 export default withRouter(Form.create()(SearchForm));

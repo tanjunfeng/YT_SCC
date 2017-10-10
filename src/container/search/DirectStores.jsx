@@ -46,6 +46,7 @@ class DirectStores extends PureComponent {
         return (
             <SearchMind
                 compKey="storeId"
+                rowKey="storeId"
                 ref={ref => { this.searchMind = ref }}
                 fetch={() =>
                     // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/getAllStores
