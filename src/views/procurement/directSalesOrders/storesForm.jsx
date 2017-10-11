@@ -1,6 +1,7 @@
 /**
- * 直营店查询
+ * 直营店查询表单
  *
+ * @returns 分公司编号
  * @author taoqiyu
  */
 import React, { PureComponent } from 'react';
@@ -30,6 +31,7 @@ class StoresForm extends PureComponent {
 
     handleDirectStoresChange({ record }) {
         this.props.queryDirectInfo({ storeId: record.storeId }).then(res => {
+            // 返回分公司 id 供父页面使用
             this.props.onChange(res.data.branchCompanyId);
         });
     }

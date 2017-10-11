@@ -18,6 +18,7 @@ import {
 } from '../../../actions/promotion';
 import { poMngListColumns as columns } from '../columns';
 import StoresForm from './storesForm';
+import GoodsForm from './goodsForm';
 
 @connect(state => ({
     promotionList: state.toJS().promotion.list
@@ -56,6 +57,7 @@ class DirectSalesOrders extends PureComponent {
                     value={this.branchCompanyId}
                     onChange={this.handleStoresChange}
                 />
+                <GoodsForm />
                 <Table
                     dataSource={data}
                     columns={columns}
