@@ -316,6 +316,13 @@ class Utils {
         }
         callback();
     }
+
+    static validatePhone = (rule, value, callback) => {
+        if (!/^1[34578]\d{9}$/.test(value)) {
+            callback('手机号码有误')
+        }
+        callback()
+    }
 }
 
 export default Utils;
