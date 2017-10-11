@@ -22,7 +22,7 @@ class AddingGoodsByStore extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.value.storeId === '') {
+        if (nextProps.value === '') {
             this.searchMind.reset();
         }
     }
@@ -43,6 +43,7 @@ class AddingGoodsByStore extends PureComponent {
     }
 
     render() {
+        const branchCompanyId = this.props.value;
         return (
             <SearchMind
                 style={{ zIndex: 1, marginBottom: 5 }}
@@ -50,13 +51,13 @@ class AddingGoodsByStore extends PureComponent {
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
                     this.props.pubFetchValueList({
-                        branchCompanyId: params.value,
+                        branchCompanyId,
                         searchTerm: params.value,
                         pageNum: params.pagination.current || 1,
                         pageSize: params.pagination.pageSize
                     }, 'queryProductByStore')
                 }
-                disabled={this.props.disabled}
+                disabled={branchCompanyId === ''}
                 addonBefore="添加商品"
                 onClear={this.handleClear}
                 onChoosed={this.handleChoose}
@@ -80,10 +81,9 @@ class AddingGoodsByStore extends PureComponent {
 }
 
 AddingGoodsByStore.propTypes = {
-    disabled: PropTypes.bool,
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
-    value: PropTypes.objectOf(PropTypes.any)
+    value: PropTypes.string
 }
 
 export default AddingGoodsByStore;

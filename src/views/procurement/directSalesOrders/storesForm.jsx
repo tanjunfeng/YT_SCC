@@ -43,6 +43,7 @@ class StoresForm extends PureComponent {
             });
         } else {
             this.props.clearDirectInfo();
+            this.props.onChange('');    // 通知副页面清空
         }
     }
 

@@ -33,9 +33,7 @@ class GoodsForm extends PureComponent {
     }
 
     handleChange({ record }) {
-        this.props.queryDirectInfo({ storeId: record.storeId }).then(res => {
-            this.props.onChange(res.data.branchCompanyId);
-        });
+
     }
 
     render() {
@@ -48,8 +46,7 @@ class GoodsForm extends PureComponent {
                         <Row gutter={40}>
                             <FormItem>
                                 {getFieldDecorator('goods', {
-                                    initialValue: { storeId: '', storeName: '' },
-                                    rules: [{ required: true, message: '请选择门店' }]
+                                    initialValue: this.props.value
                                 })(<AddingGoodsByStore
                                     onChange={this.handleChange}
                                 />)}
@@ -66,6 +63,7 @@ GoodsForm.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     directInfo: PropTypes.objectOf(PropTypes.any),
     queryDirectInfo: PropTypes.func,
+    value: PropTypes.string,
     onChange: PropTypes.func
 };
 

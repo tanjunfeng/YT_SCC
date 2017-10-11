@@ -54,10 +54,11 @@ class DirectSalesOrders extends PureComponent {
         return (
             <div>
                 <StoresForm
-                    value={this.branchCompanyId}
                     onChange={this.handleStoresChange}
                 />
-                <GoodsForm />
+                <GoodsForm
+                    value={this.state.branchCompanyId}
+                />
                 <Table
                     dataSource={data}
                     columns={columns}
