@@ -165,7 +165,10 @@ export default {
     DELETE_PO_LINE: 'DELETE_PO_LINE',
     // 更新采购单商品
     UPDATE_PO_LINE: 'UPDATE_PO_LINE',
+    // 查询直营店信息
     FETCH_DIRECT_INFO: 'FETCH_DIRECT_INFO',
+    // 清空直营店信息
+    CLEAR_DIRECT_INFO: 'CLEAR_DIRECT_INFO',
 
     /** 值清单获取action，请根据实际情况拆分到单独action文件 Begin */
     // 仓库值清单

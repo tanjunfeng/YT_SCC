@@ -476,3 +476,8 @@ export const queryDirectInfo = (params) => dispatch => (
             })
     })
 );
+
+export const clearDirectInfo = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_DIRECT_INFO,
+    payload: {}
+}));

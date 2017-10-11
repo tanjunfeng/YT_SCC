@@ -44,7 +44,7 @@ class GoodsForm extends PureComponent {
             <div className="direct-sales-orders">
                 <Form layout="inline">
                     <div className="search-box">
-                        <h1>门店信息</h1>
+                        <h1>商品信息</h1>
                         <Row gutter={40}>
                             <FormItem>
                                 {getFieldDecorator('goods', {

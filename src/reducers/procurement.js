@@ -179,6 +179,7 @@ export default function (state = initState, action) {
 
         // 直营店详情
         case ActionType.FETCH_DIRECT_INFO:
+        case ActionType.CLEAR_DIRECT_INFO:
             return state.set('directInfo', fromJS(action.payload));
         default:
             return state;

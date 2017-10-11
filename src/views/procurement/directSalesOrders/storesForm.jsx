@@ -12,7 +12,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { DirectStores } from '../../../container/search';
 import {
-    queryDirectInfo
+    queryDirectInfo,
+    clearDirectInfo
 } from '../../../actions/procurement';
 
 const FormItem = Form.Item;
@@ -20,7 +21,8 @@ const FormItem = Form.Item;
 @connect(state => ({
     directInfo: state.toJS().procurement.directInfo
 }), dispatch => bindActionCreators({
-    queryDirectInfo
+    queryDirectInfo,
+    clearDirectInfo
 }, dispatch))
 
 class StoresForm extends PureComponent {
@@ -29,11 +31,19 @@ class StoresForm extends PureComponent {
         this.handleDirectStoresChange = this.handleDirectStoresChange.bind(this);
     }
 
+    componentWillMount() {
+        this.props.clearDirectInfo();
+    }
+
     handleDirectStoresChange({ record }) {
-        this.props.queryDirectInfo({ storeId: record.storeId }).then(res => {
-            // 返回分公司 id 供父页面使用
-            this.props.onChange(res.data.branchCompanyId);
-        });
+        if (record && record.storeId) {
+            this.props.queryDirectInfo({ storeId: record.storeId }).then(res => {
+                // 返回分公司 id 供父页面使用
+                this.props.onChange(res.data.branchCompanyId);
+            });
+        } else {
+            this.props.clearDirectInfo();
+        }
     }
 
     render() {
@@ -60,12 +70,12 @@ class StoresForm extends PureComponent {
                             </FormItem>
                             <FormItem label="收货人">
                                 {getFieldDecorator('consignee', {
-                                    initialValue: directInfo.consignee || '无'
+                                    initialValue: directInfo.consignee
                                 })(<Input size="default" disabled />)}
                             </FormItem>
                             <FormItem label="手机号">
                                 {getFieldDecorator('phone', {
-                                    initialValue: directInfo.phone || '无'
+                                    initialValue: directInfo.phone
                                 })(<Input size="default" disabled />)}
                             </FormItem>
                         </Row>
@@ -80,6 +90,7 @@ StoresForm.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     directInfo: PropTypes.objectOf(PropTypes.any),
     queryDirectInfo: PropTypes.func,
+    clearDirectInfo: PropTypes.func,
     onChange: PropTypes.func
 };
 

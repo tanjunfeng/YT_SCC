@@ -45,7 +45,7 @@ class AddingGoodsByStore extends PureComponent {
     render() {
         return (
             <SearchMind
-                style={{ zIndex: 6000, marginBottom: 5 }}
+                style={{ zIndex: 1, marginBottom: 5 }}
                 compKey="productCode"
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
