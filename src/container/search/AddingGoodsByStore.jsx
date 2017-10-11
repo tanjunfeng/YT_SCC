@@ -24,7 +24,7 @@ class AddingGoodsByStore extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.value === '') {
+        if (nextProps.value.branchCompanyId === '') {
             this.searchMind.reset();
         }
     }
@@ -59,7 +59,8 @@ class AddingGoodsByStore extends PureComponent {
         return (
             <SearchMind
                 style={{ zIndex: 2, marginBottom: 5 }}
-                compKey="productCode"
+                compKey="productId"
+                rowKey="productCode"
                 ref={ref => { this.searchMind = ref }}
                 fetch={this.query}
                 disabled={branchCompanyId === ''}
@@ -77,7 +78,7 @@ class AddingGoodsByStore extends PureComponent {
                         width: 98
                     }, {
                         title: '商品名称',
-                        dataIndex: 'saleName'
+                        dataIndex: 'productName'
                     }
                 ]}
             />
@@ -88,7 +89,7 @@ class AddingGoodsByStore extends PureComponent {
 AddingGoodsByStore.propTypes = {
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
-    value: PropTypes.string
+    value: PropTypes.objectOf(PropTypes.any)
 }
 
 export default AddingGoodsByStore;

@@ -4,9 +4,9 @@
     "message": "请求成功",
     "exception": null,
     "data": {
-        "totalPage": 3,
+        "pageSize": 20,
         "pageNum": 1,
-        "totalCount": 23,
+        "total": 23,
         "data": [
             {
                 "productId": "xprod324980",

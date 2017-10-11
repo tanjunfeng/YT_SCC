@@ -46,7 +46,11 @@ class GoodsForm extends PureComponent {
                         <Row gutter={40}>
                             <FormItem>
                                 {getFieldDecorator('goods', {
-                                    initialValue: this.props.value
+                                    initialValue: {
+                                        branchCompanyId: this.props.value,
+                                        productCode: '',
+                                        productName: ''
+                                    }
                                 })(<AddingGoodsByStore
                                     onChange={this.handleChange}
                                 />)}
@@ -61,10 +65,7 @@ class GoodsForm extends PureComponent {
 
 GoodsForm.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    directInfo: PropTypes.objectOf(PropTypes.any),
-    queryDirectInfo: PropTypes.func,
-    value: PropTypes.string,
-    onChange: PropTypes.func
+    value: PropTypes.string
 };
 
 export default withRouter(Form.create()(GoodsForm));
