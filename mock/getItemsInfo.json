@@ -4,6 +4,9 @@
     "message": "请求成功",
     "exception": null,
     "data": {
+        "totalPage": 3,
+        "pageNum": 1,
+        "totalCount": 23,
         "data": [
             {
                 "productId": "xprod324980",
@@ -55,10 +58,7 @@
                 "productCode": "1001342",
                 "productName": "李锦记味蚝鲜复合味蚝油235g"
             }
-        ],
-        "totalPage": 3,
-        "pageNum": 1,
-        "totalCount": 23
+        ]
     },
     "success": true
 }

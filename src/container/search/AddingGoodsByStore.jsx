@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { pubFetchValueList } from '../../actions/pub';
 import SearchMind from '../../components/searchMind';
+import Utils from '../../util/util';
 
 @connect(() => ({}), dispatch => bindActionCreators({
     pubFetchValueList
@@ -19,12 +20,23 @@ class AddingGoodsByStore extends PureComponent {
         super(props);
         this.handleClear = this.handleClear.bind(this);
         this.handleChoose = this.handleChoose.bind(this);
+        this.query = this.query.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.value === '') {
             this.searchMind.reset();
         }
+    }
+
+    query(params) {
+        const conditions = {
+            branchCompanyId: this.props.value,
+            searchTerm: params.value,
+            pageNum: params.pagination.current || 1,
+            pageSize: params.pagination.pageSize
+        };
+        return this.props.pubFetchValueList(Utils.removeInvalid(conditions), 'queryProductByStore');
     }
 
     /**
@@ -46,17 +58,10 @@ class AddingGoodsByStore extends PureComponent {
         const branchCompanyId = this.props.value;
         return (
             <SearchMind
-                style={{ zIndex: 1, marginBottom: 5 }}
+                style={{ zIndex: 2, marginBottom: 5 }}
                 compKey="productCode"
                 ref={ref => { this.searchMind = ref }}
-                fetch={params =>
-                    this.props.pubFetchValueList({
-                        branchCompanyId,
-                        searchTerm: params.value,
-                        pageNum: params.pagination.current || 1,
-                        pageSize: params.pagination.pageSize
-                    }, 'queryProductByStore')
-                }
+                fetch={this.query}
                 disabled={branchCompanyId === ''}
                 addonBefore="添加商品"
                 onClear={this.handleClear}
