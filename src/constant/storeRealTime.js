@@ -13,6 +13,10 @@ export const TableHeader = [{
     dataIndex: 'productName',
     key: 'productName',
 }, {
+    title: '国际码',
+    dataIndex: 'internationalCode',
+    key: 'internationalCode',
+}, {
     title: '部类',
     dataIndex: 'groups',
     key: 'groups',
