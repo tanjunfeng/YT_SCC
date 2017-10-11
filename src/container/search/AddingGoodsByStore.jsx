@@ -49,7 +49,7 @@ class AddingGoodsByStore extends PureComponent {
                 style={{ zIndex: 1, marginBottom: 5 }}
                 compKey="productCode"
                 ref={ref => { this.searchMind = ref }}
-                fetch={(params) =>
+                fetch={params =>
                     this.props.pubFetchValueList({
                         branchCompanyId,
                         searchTerm: params.value,

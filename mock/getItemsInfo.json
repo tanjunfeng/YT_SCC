@@ -4,7 +4,7 @@
     "message": "请求成功",
     "exception": null,
     "data": {
-        "simpleProductVos": [
+        "data": [
             {
                 "productId": "xprod324980",
                 "productCode": "1003364",
