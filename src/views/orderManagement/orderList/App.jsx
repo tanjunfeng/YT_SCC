@@ -324,6 +324,7 @@ class OrderManagementList extends Component {
                 submitEndTime: todayDate,
             }
         });
+        this.handleSubCompanyClear();
         this.joiningSearchMind.handleClear();
         this.props.form.resetFields();
     }
