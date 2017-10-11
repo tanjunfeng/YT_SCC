@@ -31,7 +31,7 @@ class AddingGoodsByStore extends PureComponent {
 
     query(params) {
         const conditions = {
-            branchCompanyId: this.props.value,
+            branchCompanyId: this.props.value.branchCompanyId,
             searchTerm: params.value,
             pageNum: params.pagination.current || 1,
             pageSize: params.pagination.pageSize
@@ -44,7 +44,7 @@ class AddingGoodsByStore extends PureComponent {
      */
     handleClear() {
         this.searchMind.reset();
-        this.props.onChange({ storeId: '', storeName: '' });
+        this.props.onChange({ productCode: '', productName: '' });
     }
 
     /**
@@ -55,7 +55,6 @@ class AddingGoodsByStore extends PureComponent {
     }
 
     render() {
-        const branchCompanyId = this.props.value;
         return (
             <SearchMind
                 style={{ zIndex: 2, marginBottom: 5 }}
@@ -63,12 +62,12 @@ class AddingGoodsByStore extends PureComponent {
                 rowKey="productCode"
                 ref={ref => { this.searchMind = ref }}
                 fetch={this.query}
-                disabled={branchCompanyId === ''}
+                disabled={this.props.value.branchCompanyId === ''}
                 addonBefore="添加商品"
                 onClear={this.handleClear}
                 onChoosed={this.handleChoose}
                 renderChoosedInputRaw={(data) => (
-                    <div>{data.productCode} - {data.saleName}</div>
+                    <div>{data.productCode} - {data.productName}</div>
                 )}
                 pageSize={6}
                 columns={[

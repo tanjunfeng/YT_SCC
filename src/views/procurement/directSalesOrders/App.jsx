@@ -33,7 +33,8 @@ class DirectSalesOrders extends PureComponent {
         super(props);
         this.handleStoresChange = this.handleStoresChange.bind(this);
         this.state = {
-            branchCompanyId: ''
+            branchCompanyId: '',
+            deliveryWarehouseCode: ''
         }
     }
 
@@ -45,8 +46,11 @@ class DirectSalesOrders extends PureComponent {
         this.props.clearPromotionList();
     }
 
-    handleStoresChange = (branchCompanyId) => {
-        this.setState({ branchCompanyId });
+    handleStoresChange = (record) => {
+        this.setState({
+            branchCompanyId: record.branchCompanyId,
+            deliveryWarehouseCode: record.deliveryWarehouseCode
+        });
     }
 
     render() {
@@ -57,7 +61,10 @@ class DirectSalesOrders extends PureComponent {
                     onChange={this.handleStoresChange}
                 />
                 <GoodsForm
-                    value={this.state.branchCompanyId}
+                    value={{
+                        branchCompanyId: this.state.branchCompanyId,
+                        deliveryWarehouseCode: this.state.deliveryWarehouseCode
+                    }}
                 />
                 <Table
                     dataSource={data}

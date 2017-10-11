@@ -39,11 +39,18 @@ class StoresForm extends PureComponent {
         if (record && record.storeId) {
             this.props.queryDirectInfo({ storeId: record.storeId }).then(res => {
                 // 返回分公司 id 供父页面使用
-                this.props.onChange(res.data.branchCompanyId);
+                this.props.onChange({
+                    branchCompanyId: res.data.branchCompanyId,
+                    deliveryWarehouseCode: res.data.deliveryWarehouseCode
+                });
             });
         } else {
             this.props.clearDirectInfo();
-            this.props.onChange('');    // 通知副页面清空
+            // 通知副页面清空
+            this.props.onChange({
+                branchCompanyId: '',
+                deliveryWarehouseCode: ''
+            });
         }
     }
 
