@@ -20,7 +20,7 @@ import SearchMind from '../../../components/searchMind';
 import { exportFranchiseeList, exportPaymentList } from '../../../service';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { pubFetchValueList } from '../../../actions/pub';
-import { DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
+import { DATE_FORMAT } from '../../../constant/index';
 
 const FormItem = Form.Item;
 const orderML = 'order-management';
@@ -188,7 +188,7 @@ class FranchiseeSettlement extends Component {
             refundDateStart,
             refundDateEnd,
             page: this.current,
-            pageSize: PAGE_SIZE,
+            pageSize: 2000,
         }
         const searchData = Util.removeInvalid(this.searchData);
         searchData.page = 1;
