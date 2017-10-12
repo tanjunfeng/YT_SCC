@@ -26,6 +26,7 @@ import CommodifyDetail from 'bundle-loader?lazy!../views/commodity/commodifyDeta
 import CateListGoodsSortManage from 'bundle-loader?lazy!../views/SysConfig/CateListGoodsSortManage';
 // 数据字典
 import DataDictionary from 'bundle-loader?lazy!../views/SysConfig/DataDictionary';
+import WhiteListConfiguration from 'bundle-loader?lazy!../views/SysConfig/whiteListConfiguration';
 // 静态页管理
 import StaticPageHome from 'bundle-loader?lazy!../views/mediaManagement/StaticPageHome';
 // ckeditor
@@ -125,6 +126,21 @@ const routes = [
                         path="/DataDictionary"
                         exact
                         render={() => <Bundle load={DataDictionary}>{(App) => <App />}</Bundle>}
+                    />
+                ),
+            },
+            {
+                // 白名单配置
+                path: '/whiteListConfiguration',
+                parent: 'gylxtpz',
+                key: 'whiteListConfiguration',
+                component: () => (
+                    <Route
+                        path="/WhiteListConfiguration"
+                        exact
+                        render={() =>
+                            <Bundle load={WhiteListConfiguration}>{(App) => <App />}</Bundle>
+                        }
                     />
                 ),
             }
