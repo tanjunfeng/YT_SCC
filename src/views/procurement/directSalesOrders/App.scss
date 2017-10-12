@@ -63,4 +63,11 @@ $directStoreSalesColWidth: 260px;
     .fr {
         float: right;
     }
+    .info {
+        display: inline;
+        margin-left: 24px;
+        span {
+            color: red;
+        }
+    }
 }

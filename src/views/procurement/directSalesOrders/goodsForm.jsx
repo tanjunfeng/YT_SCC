@@ -62,14 +62,14 @@ class GoodsForm extends PureComponent {
                                 <a className="download">
                                     下载 Excel 模板
                                 </a>
+                                <div className="info">
+                                    数量：<span>30</span>
+                                </div>
+                                <div className="info">
+                                    金额：<span>2000</span>
+                                </div>
                             </FormItem>
                             <FormItem className="fr">
-                                <div className="info">
-                                    数量<span>30</span>
-                                </div>
-                                <div className="info">
-                                    金额<span>2000</span>
-                                </div>
                                 <Button type="primary" size="default">
                                     提交
                                 </Button>
