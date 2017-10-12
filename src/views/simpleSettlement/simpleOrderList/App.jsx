@@ -116,7 +116,7 @@ class SimpleOrderList extends Component {
 
         const { supplierNo, supplierAddNo, branchCompanyNo } = this.state;
         const { receiveDateMin, receiveDateMax } = this.state.time;
-        // this.current = 1;
+        this.current = 1;
         this.searchData = {
             settlementPeriod: settlementPeriod === '-1' ? null : settlementPeriod,
             purchaseOrderNo,
@@ -125,7 +125,7 @@ class SimpleOrderList extends Component {
             branchCompanyNo,
             receiveDateMin,
             receiveDateMax,
-            // pageSize: PAGE_SIZE,
+            pageSize: 2000,
         }
         const searchData = Util.removeInvalid(this.searchData);
         searchData.page = 1;
