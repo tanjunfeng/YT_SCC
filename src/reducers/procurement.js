@@ -49,7 +49,9 @@ const initState = fromJS({
     // 新增商品信息
     newPcOdData: {},
     // 直营店信息
-    directInfo: {}
+    directInfo: {},
+    // 单个商品详情
+    goodsInfo: {}
 });
 
 export default function (state = initState, action) {
@@ -181,6 +183,8 @@ export default function (state = initState, action) {
         case ActionType.FETCH_DIRECT_INFO:
         case ActionType.CLEAR_DIRECT_INFO:
             return state.set('directInfo', fromJS(action.payload));
+        case ActionType.FETCH_GOODS_INFO:
+            return state.set('goodsInfo', fromJS(action.payload));
         default:
             return state;
     }

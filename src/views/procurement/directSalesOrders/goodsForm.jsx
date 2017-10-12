@@ -15,25 +15,28 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { AddingGoodsByStore } from '../../../container/search';
 import {
-    queryDirectInfo
+    queryGoodsInfo
 } from '../../../actions/procurement';
 
 const FormItem = Form.Item;
 
-@connect(state => ({
-    directInfo: state.toJS().procurement.directInfo
-}), dispatch => bindActionCreators({
-    queryDirectInfo
+@connect(() => ({}), dispatch => bindActionCreators({
+    queryGoodsInfo
 }, dispatch))
 
 class GoodsForm extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.handleGoodsChange = this.handleGoodsChange.bind(this);
-    }
-
-    handleGoodsChange({ record }) {
-        console.log(record);
+    handleGoodsChange = ({ record }) => {
+        if (record === undefined) {
+            this.props.onChange({});
+            return;
+        }
+        const productId = record.productId;
+        const { branchCompanyId, deliveryWarehouseCode } = this.props.value;
+        this.props.queryGoodsInfo({
+            productId, branchCompanyId, deliveryWarehouseCode
+        }).then(res => {
+            this.props.onChange(res.data);
+        });
     }
 
     render() {
@@ -84,7 +87,9 @@ class GoodsForm extends PureComponent {
 
 GoodsForm.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    value: PropTypes.string
+    value: PropTypes.objectOf(PropTypes.any),
+    queryGoodsInfo: PropTypes.func,
+    onChange: PropTypes.func
 };
 
 export default withRouter(Form.create()(GoodsForm));

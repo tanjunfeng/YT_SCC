@@ -794,3 +794,5 @@ export const queryDirectStores = (params) => http.get('/directStore/getAllStores
 export const queryProductByStore = (params) => http.get('/directStore/getItemsInfo', params);
 // 根据门店id查询直营店下单数据
 export const queryDirectInfo = (params) => http.get('/directStore/getDirectInfo', params);
+// 获取单个商品详情
+export const queryGoodsInfo = params => http.get('/directStore/getItemInfo', params);

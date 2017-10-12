@@ -22,7 +22,8 @@ import {
     auditPurchaseOrderInfo,
     updatePmPurchaseOrder,
     repushPurchaseReceipt as repushPurchaseReceiptService,
-    queryDirectInfo as queryDirectInfoService
+    queryDirectInfo as queryDirectInfoService,
+    queryGoodsInfo as queryGoodsInfoService
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -464,7 +465,7 @@ const queryDirectInfoAction = (data) => ({
     payload: data
 });
 
-export const queryDirectInfo = (params) => dispatch => (
+export const queryDirectInfo = params => dispatch => (
     new Promise((resolve, reject) => {
         queryDirectInfoService(params)
             .then(res => {
@@ -477,7 +478,31 @@ export const queryDirectInfo = (params) => dispatch => (
     })
 );
 
+// 清除直营店信息
 export const clearDirectInfo = () => dispatch => (dispatch({
     type: ActionType.CLEAR_DIRECT_INFO,
     payload: {}
 }));
+
+/**
+ * 查询单个商品详情
+ *
+ * @param {*object} data
+ */
+const queryGoodsInfoAction = (data) => ({
+    type: ActionType.FETCH_GOODS_INFO,
+    payload: data
+});
+
+export const queryGoodsInfo = params => dispatch => (
+    new Promise((resolve, reject) => {
+        queryGoodsInfoService(params)
+            .then(res => {
+                dispatch(queryGoodsInfoAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);

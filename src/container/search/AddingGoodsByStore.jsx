@@ -16,20 +16,13 @@ import Utils from '../../util/util';
 }, dispatch))
 
 class AddingGoodsByStore extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.handleClear = this.handleClear.bind(this);
-        this.handleChoose = this.handleChoose.bind(this);
-        this.query = this.query.bind(this);
-    }
-
     componentWillReceiveProps(nextProps) {
         if (nextProps.value.branchCompanyId === '') {
             this.searchMind.reset();
         }
     }
 
-    query(params) {
+    query = (params) => {
         const conditions = {
             branchCompanyId: this.props.value.branchCompanyId,
             searchTerm: params.value,
@@ -42,9 +35,9 @@ class AddingGoodsByStore extends PureComponent {
     /**
      * 添加商品 - 清除
      */
-    handleClear() {
+    handleClear = () => {
         this.searchMind.reset();
-        this.props.onChange({ productCode: '', productName: '' });
+        this.props.onChange({ productId: '', productCode: '', productName: '' });
     }
 
     /**

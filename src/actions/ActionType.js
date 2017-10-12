@@ -170,6 +170,8 @@ export default {
     FETCH_DIRECT_INFO: 'FETCH_DIRECT_INFO',
     // 清空直营店信息
     CLEAR_DIRECT_INFO: 'CLEAR_DIRECT_INFO',
+    // 查询单个商品详情
+    FETCH_GOODS_INFO: 'FETCH_GOODS_INFO',
 
     /** 值清单获取action，请根据实际情况拆分到单独action文件 Begin */
     // 仓库值清单
