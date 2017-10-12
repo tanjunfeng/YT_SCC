@@ -27,7 +27,7 @@ const FormItem = Form.Item;
 class GoodsForm extends PureComponent {
     handleGoodsChange = ({ record }) => {
         if (record === undefined) {
-            this.props.onChange({});
+            this.props.onChange(false);
             return;
         }
         const productId = record.productId;

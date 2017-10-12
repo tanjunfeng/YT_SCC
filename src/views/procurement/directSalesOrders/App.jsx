@@ -19,10 +19,9 @@ class DirectSalesOrders extends PureComponent {
             goodsFormConditions: {
                 branchCompanyId: '',
                 deliveryWarehouseCode: ''
-            },
-            goodsInfo: {},
-            goodsList: []
+            }
         }
+        this.goodsList = [];
     }
 
     handleStoresChange = (record) => {
@@ -32,10 +31,17 @@ class DirectSalesOrders extends PureComponent {
                 deliveryWarehouseCode: record.deliveryWarehouseCode
             }
         });
+        this.handleClear();
     }
 
     handleGoodsFormChange = (goodsInfo) => {
-        this.setState({ goodsInfo });
+        if (typeof goodsInfo === 'object') {
+            this.goodsList.push(goodsInfo);
+        }
+    }
+
+    handleClear = () => {
+        this.goodsList = [];
     }
 
     render() {
