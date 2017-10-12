@@ -20,8 +20,29 @@ class DirectSalesOrders extends PureComponent {
                 branchCompanyId: '',
                 deliveryWarehouseCode: ''
             },
-            goodsList: []
+            goodsList: [],
+            appending: false
         }
+    }
+
+    getRow = (goodsInfo) => {
+        const {
+                productCode,
+            internationalCodes,
+            productName,
+            unitExplanation,
+            salePrice,
+            minNuber
+            } = goodsInfo;
+        return {
+            index: this.state.goodsList.length + 1,
+            productCode,
+            internationalCode: internationalCodes[0].internationalCode,
+            productName,
+            unitExplanation,
+            salePrice,
+            minNuber
+        };
     }
 
     handleStoresChange = (record) => {
@@ -36,16 +57,16 @@ class DirectSalesOrders extends PureComponent {
 
     handleGoodsFormChange = (goodsInfo) => {
         const arr = this.state.goodsList;
+        this.setState({ appending: true });
         if (typeof goodsInfo === 'object' && goodsInfo.productCode) {
             // 判断此商品是否已存在
             const existGoods = arr.find(e => e.productCode === goodsInfo.productCode);
             if (existGoods === undefined) {
-                arr.push({
-                    index: arr.length + 1,
-                    ...goodsInfo
-                });
+                arr.push(this.getRow(goodsInfo));
+                this.setState({ appending: false });
             } else {
                 message.info(`已存在此商品，顺序号${existGoods.index}`);
+                this.setState({ appending: false });
             }
         }
     }

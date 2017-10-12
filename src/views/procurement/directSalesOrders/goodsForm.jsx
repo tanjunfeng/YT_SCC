@@ -26,12 +26,12 @@ const FormItem = Form.Item;
 
 class GoodsForm extends PureComponent {
     handleGoodsChange = ({ record }) => {
+        const { branchCompanyId, deliveryWarehouseCode } = this.props.value;
         if (record === undefined) {
             this.props.onChange(false);
             return;
         }
         const productId = record.productId;
-        const { branchCompanyId, deliveryWarehouseCode } = this.props.value;
         this.props.queryGoodsInfo({
             productId, branchCompanyId, deliveryWarehouseCode
         }).then(res => {

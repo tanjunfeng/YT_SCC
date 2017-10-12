@@ -162,27 +162,27 @@ export const goodsColumns = [{
 }, {
     title: '商品编码',
     dataIndex: 'productCode',
-    width: 100
+    width: 120
 }, {
     title: '商品条码',
-    dataIndex: 'internationalCodes',
-    width: 100
+    dataIndex: 'internationalCode',
+    width: 120
 }, {
     title: '商品名称',
     dataIndex: 'productName',
-    width: 100
+    width: 120
 }, {
     title: '产品规格',
     dataIndex: 'unitExplanation',
     width: 70
 }, {
     title: '箱装价格',
-    dataIndex: '',
-    width: 100
+    dataIndex: 'amount',
+    width: 70
 }, {
     title: '起定量',
     dataIndex: 'minNuber',
-    width: 100
+    width: 50
 }, {
     title: '数量',
     dataIndex: '',
@@ -190,7 +190,7 @@ export const goodsColumns = [{
 }, {
     title: '单价',
     dataIndex: 'salePrice',
-    width: 100
+    width: 70
 }, {
     title: '金额',
     dataIndex: '',
