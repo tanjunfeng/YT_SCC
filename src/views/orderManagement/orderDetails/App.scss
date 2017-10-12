@@ -68,4 +68,22 @@
         width: 60px;
     }
 }
+.ant-modal-wrap {
+    .pay-col{
+        .ant-input {
+            width: 240px;
+            padding: 0 10px;
+        }
+        .ant-select {
+            width: 240px;
+        }
+        .ant-input-number{
+            width: 240px;
+        }
+        .ant-form-explain{
+            left:70px !important;
+        }
+    }
+
+}
 

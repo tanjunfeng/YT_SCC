@@ -18,6 +18,8 @@ import {
     approvalOrder,
     auditRefund,
     confirmRefund,
+    addPaymentInfo,
+    confirmPayment,
 } from '../service';
 import ActionType from './ActionType';
 
@@ -162,6 +164,28 @@ export const modifyAuditRefund = (data) => (
 export const modifyConfirmRefund = (data) => (
     new Promise((resolve, reject) => {
         confirmRefund(data)
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
+// 新增支付信息
+export const modifyAddPaymentInfo = (data) => (
+    new Promise((resolve, reject) => {
+        addPaymentInfo(data)
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
+// 确认支付信息
+export const modifyConfirmPayment = (data) => (
+    new Promise((resolve, reject) => {
+        confirmPayment(data)
             .then(res => {
                 resolve(res);
             })
