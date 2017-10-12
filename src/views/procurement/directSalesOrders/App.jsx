@@ -6,11 +6,12 @@
  */
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
-import { Table, Form, message } from 'antd';
+import { Form, message, Popconfirm, Table } from 'antd';
 
 import { goodsColumns as columns } from '../columns';
 import StoresForm from './storesForm';
 import GoodsForm from './goodsForm';
+import EditableCell from './editableCell';
 
 class DirectSalesOrders extends PureComponent {
     constructor(props) {
@@ -23,24 +24,42 @@ class DirectSalesOrders extends PureComponent {
             goodsList: [],
             appending: false
         }
+        this.columns = columns;
+        this.columns[columns.length - 1].render = this.renderOperations;
+        this.columns[columns.length - 4].render = this.renderNumber;
+    }
+
+    onCellChange = (productCode, dataIndex) => value => {
+        const goodsList = [...this.state.goodsList];
+        const target = goodsList.find(item => item.productCode === productCode);
+        if (target) {
+            target[dataIndex] = value;
+            this.setState({ goodsList });
+        }
+    }
+
+    onDelete = (productCode) => {
+        const goodsList = [...this.state.goodsList];
+        this.setState({ goodsList: goodsList.filter(item => item.productCode !== productCode) });
     }
 
     getRow = (goodsInfo) => {
         const {
-                productCode,
+            productCode,
             internationalCodes,
             productName,
             unitExplanation,
             salePrice,
+            amount,
             minNuber
             } = goodsInfo;
         return {
-            index: this.state.goodsList.length + 1,
             productCode,
             internationalCode: internationalCodes[0].internationalCode,
             productName,
             unitExplanation,
             salePrice,
+            amount,
             minNuber
         };
     }
@@ -62,7 +81,7 @@ class DirectSalesOrders extends PureComponent {
             // 判断此商品是否已存在
             const existGoods = arr.find(e => e.productCode === goodsInfo.productCode);
             if (existGoods === undefined) {
-                arr.push(this.getRow(goodsInfo));
+                arr.unshift(this.getRow(goodsInfo));
                 this.setState({ appending: false });
             } else {
                 message.info(`已存在此商品，顺序号${existGoods.index}`);
@@ -72,12 +91,25 @@ class DirectSalesOrders extends PureComponent {
     }
 
     handleClear = () => {
-        this.setState({ goodsList: [] });
+        this.setState({
+            goodsList: []
+        });
     }
+
+    renderNumber = (text, record) => (
+        <EditableCell
+            value={text}
+            onChange={this.onCellChange(record.productCode, 'acount')}
+        />)
+
+    renderOperations = (text, record) => (this.state.goodsList.length > 1 ?
+        (<Popconfirm title="确定删除商品？" onConfirm={() => this.onDelete(record.productCode)}>
+            <a href="#">删除</a>
+        </Popconfirm>) : null)
 
     render() {
         return (
-            <div>
+            <div className="direct-sales-orders">
                 <StoresForm
                     onChange={this.handleStoresChange}
                 />
@@ -87,12 +119,13 @@ class DirectSalesOrders extends PureComponent {
                 />
                 <Table
                     dataSource={this.state.goodsList}
-                    columns={columns}
+                    columns={this.columns}
                     rowKey="productCode"
                     scroll={{
                         x: 1400,
                         y: 500
                     }}
+                    bordered
                 />
             </div>
         );

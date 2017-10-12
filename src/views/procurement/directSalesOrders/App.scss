@@ -21,53 +21,89 @@ $directStoreSalesColWidth: 260px;
 }
 
 .direct-sales-orders {
-    h1 {
-        font-size: 14px;
-    }
-    .ant-form-item-label {
-        width: 80px;
-        .sc-form-item-label {
+    .direct-sales-orders-form {
+        h1 {
+            font-size: 14px;
+        }
+        .ant-form-item-label {
+            width: 80px;
+            .sc-form-item-label {
+                text-align: right;
+            }
+        }
+        .search-mind-label {
+            min-width: 80px;
+            display: inline-block;
             text-align: right;
+            width: 80px;
+            margin-right: 0;
+            &::after {
+                content: ":";
+                margin: 0 8px 0 2px;
+                position: relative;
+                top: -0.5px;
+            }
+        }
+        .ywc-smind {
+            width: $directStoreSalesColWidth;
+        }
+        .ywc-smind-search-bar {
+            margin: 8px 0;
+        }
+        &.goods-form {
+            .ywc-smind {
+                width: 341px;
+                ;
+            }
+            a.download {
+                line-height: 28px;
+                margin-left: 12px;
+                margin-right: 12px;
+            }
+            .fr {
+                float: right;
+            }
+            .info {
+                display: inline;
+                margin-left: 24px;
+                span {
+                    color: red;
+                }
+            }
         }
     }
-    .search-mind-label {
-        min-width: 80px;
-        display: inline-block;
-        text-align: right;
-        width: 80px;
-        margin-right: 0;
-        &::after {
-            content: ":";
-            margin: 0 8px 0 2px;
-            position: relative;
-            top: -0.5px;
-        }
+    .editable-cell {
+        position: relative;
     }
-    .ywc-smind {
-        width: $directStoreSalesColWidth;
+    .editable-cell-input-wrapper,
+    .editable-cell-text-wrapper {
+        padding-right: 24px;
     }
-    .ywc-smind-search-bar {
-        margin: 8px 0;
+    .editable-cell-text-wrapper {
+        padding: 5px 24px 5px 5px;
     }
-}
-
-.goods-form {
-    .ywc-smind {
-        width: 341px;;
+    .editable-cell-icon,
+    .editable-cell-icon-check {
+        position: absolute;
+        right: 0;
+        width: 20px;
+        cursor: pointer;
     }
-    a.download {
+    .editable-cell-icon {
+        line-height: 18px;
+        display: none;
+    }
+    .editable-cell-icon-check {
         line-height: 28px;
-        margin-left: 12px;
-        margin-right: 12px;
     }
-    .fr {
-        float: right;
+    .editable-cell:hover .editable-cell-icon {
+        display: inline-block;
     }
-    .info {
-        display: inline;
-        margin-left: 24px;
-        span {
-            color: red;
-        }
+    .editable-cell-icon:hover,
+    .editable-cell-icon-check:hover {
+        color: #108ee9;
+    }
+    .editable-add-btn {
+        margin-bottom: 8px;
     }
 }

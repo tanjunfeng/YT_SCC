@@ -42,7 +42,7 @@ class GoodsForm extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div className="direct-sales-orders goods-form">
+            <div className="direct-sales-orders-form goods-form">
                 <Form layout="inline">
                     <div className="search-box">
                         <h1>商品信息</h1>
