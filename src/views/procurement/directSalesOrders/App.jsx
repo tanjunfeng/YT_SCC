@@ -6,7 +6,7 @@
  */
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
-import { Table, Form } from 'antd';
+import { Table, Form, message } from 'antd';
 
 import { goodsColumns as columns } from '../columns';
 import StoresForm from './storesForm';
@@ -19,9 +19,9 @@ class DirectSalesOrders extends PureComponent {
             goodsFormConditions: {
                 branchCompanyId: '',
                 deliveryWarehouseCode: ''
-            }
+            },
+            goodsList: []
         }
-        this.goodsList = [];
     }
 
     handleStoresChange = (record) => {
@@ -35,16 +35,27 @@ class DirectSalesOrders extends PureComponent {
     }
 
     handleGoodsFormChange = (goodsInfo) => {
-        if (typeof goodsInfo === 'object') {
-            this.goodsList.push(goodsInfo);
+        const arr = this.state.goodsList;
+        if (typeof goodsInfo === 'object' && goodsInfo.productCode) {
+            // 判断此商品是否已存在
+            const existGoods = arr.find(e => e.productCode === goodsInfo.productCode);
+            if (existGoods === undefined) {
+                arr.push({
+                    index: arr.length + 1,
+                    ...goodsInfo
+                });
+            } else {
+                message.info(`已存在此商品，顺序号${existGoods.index}`);
+            }
         }
     }
 
     handleClear = () => {
-        this.goodsList = [];
+        this.setState({ goodsList: [] });
     }
 
     render() {
+        console.log(this.state.goodsList);
         return (
             <div>
                 <StoresForm
@@ -57,7 +68,7 @@ class DirectSalesOrders extends PureComponent {
                 <Table
                     dataSource={this.state.goodsList}
                     columns={columns}
-                    rowKey="id"
+                    rowKey="productCode"
                     scroll={{
                         x: 1400
                     }}

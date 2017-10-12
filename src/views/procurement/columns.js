@@ -157,13 +157,13 @@ export const printColumns = [{
 
 export const goodsColumns = [{
     title: '序号',
-    dataIndex: '',
-    key: '',
+    dataIndex: 'index',
+    key: 'index',
     width: 50
 }, {
     title: '商品编码',
-    dataIndex: '',
-    key: '',
+    dataIndex: 'productCode',
+    key: 'productCode',
     width: 100
 }, {
     title: '商品条码',
@@ -177,9 +177,9 @@ export const goodsColumns = [{
     width: 100
 }, {
     title: '产品规格',
-    dataIndex: '',
-    key: '',
-    width: 100
+    dataIndex: 'unitExplanation',
+    key: 'unitExplanation',
+    width: 70
 }, {
     title: '箱装价格',
     dataIndex: '',
@@ -187,8 +187,8 @@ export const goodsColumns = [{
     width: 100
 }, {
     title: '起定量',
-    dataIndex: '',
-    key: '',
+    dataIndex: 'minNuber',
+    key: 'minNuber',
     width: 100
 }, {
     title: '数量',
@@ -197,8 +197,8 @@ export const goodsColumns = [{
     width: 100
 }, {
     title: '单价',
-    dataIndex: '',
-    key: '',
+    dataIndex: 'salePrice',
+    key: 'salePrice',
     width: 100
 }, {
     title: '金额',
