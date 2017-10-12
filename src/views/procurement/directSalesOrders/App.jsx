@@ -55,7 +55,6 @@ class DirectSalesOrders extends PureComponent {
     }
 
     render() {
-        console.log(this.state.goodsList);
         return (
             <div>
                 <StoresForm
@@ -70,7 +69,8 @@ class DirectSalesOrders extends PureComponent {
                     columns={columns}
                     rowKey="productCode"
                     scroll={{
-                        x: 1400
+                        x: 1400,
+                        y: 500
                     }}
                 />
             </div>
