@@ -10,18 +10,23 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, Icon, Table, Row, Col, Button } from 'antd';
+import { Form, Icon, Table, Row, Col, Button, message } from 'antd';
 import moment from 'moment';
 import RefundModal from './refundModal';
+import PayModal from './payModal';
 import { DATE_FORMAT } from '../../../constant/index';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
+import { modifyPayModalVisible } from '../../../actions/modify/modifyPayModalVisible';
+import { modifyConfirmPayment, fetchPaymentDetailInfo } from '../../../actions/order';
 
 @connect(
     state => ({
         paymentDetailData: state.toJS().order.paymentDetailData,
     }),
     dispatch => bindActionCreators({
-        modifyCauseModalVisible
+        modifyCauseModalVisible,
+        modifyPayModalVisible,
+        fetchPaymentDetailInfo,
     }, dispatch)
 )
 class PayInformation extends PureComponent {
@@ -70,6 +75,10 @@ class PayInformation extends PureComponent {
             dataIndex: 'channel',
             key: 'channel',
         }, {
+            title: '支付帐号',
+            dataIndex: 'payAccount',
+            key: 'payAccount',
+        }, {
             title: '凭证号',
             dataIndex: 'transNum',
             key: 'transNum',
@@ -115,16 +124,17 @@ class PayInformation extends PureComponent {
                             }}
                         >确认退款</a>)
                     default:
+                        if (record.shouldConfirm) {
+                            return (<a
+                                onClick={() => {
+                                    this.handlePayOk(record);
+                                }}
+                            >确认支付</a>)
+                        }
                         return null;
                 }
             }
         }];
-
-        this.handleAuditRefund = ::this.handleAuditRefund;
-        this.handleRefundOk = ::this.handleRefundOk;
-
-        this.state = {
-        }
     }
 
     componentDidMount() {
@@ -134,7 +144,7 @@ class PayInformation extends PureComponent {
      * 审核退款
      * @param {Object} record 该行数据
      */
-    handleAuditRefund(record) {
+    handleAuditRefund = (record) => {
         this.props.modifyCauseModalVisible({ isVisible: true, record })
     }
 
@@ -142,8 +152,35 @@ class PayInformation extends PureComponent {
      * 确认退款
      * @param {Object} record 该行数据
      */
-    handleRefundOk(record) {
+    handleRefundOk = (record) => {
         this.props.modifyCauseModalVisible({ isVisible: true, record })
+    }
+
+    /**
+     * 确认支付
+     * @param {Object} record 该行数据
+     */
+    handlePayOk = (record) => {
+        const { id, orderId } = record;
+        modifyConfirmPayment({
+            orderId,
+            paymentId: id
+        })
+            .then((res) => {
+                if (res.code === 200 && res.success) {
+                    this.props.fetchPaymentDetailInfo({ orderId })
+                } else if (!res.success) {
+                    message.error(res.message);
+                }
+            })
+    }
+
+    /**
+     * 新增付款
+     *
+     */
+    handleAddPay = () => {
+        this.props.modifyPayModalVisible({ isVisible: true })
     }
 
     render() {
@@ -163,10 +200,10 @@ class PayInformation extends PureComponent {
                     <span>退款： ￥</span>
                     <span className="red-number">{totalRefundedAmount}</span>
                 </span>
-                <span className="table-footer-item">
+                {/* <span className="table-footer-item">
                     <span>差额： ￥</span>
                     <span className="red-number">{totalPaidAmount - totalRefundedAmount}</span>
-                </span>
+                </span> */}
             </div>)
         return (
             <div>
@@ -175,6 +212,20 @@ class PayInformation extends PureComponent {
                         <div className="detail-message-header">
                             <Icon type="wallet" className="detail-message-header-icon" />
                             支付信息
+                        </div>
+                        <div className="order-details-btns">
+                            <Row>
+                                <Col
+                                    className="gutter-row"
+                                    span={8}
+                                    style={{ marginLeft: 18 }}
+                                >
+                                    <Button
+                                        size="default"
+                                        onClick={this.handleAddPay}
+                                    >新增付款</Button>
+                                </Col>
+                            </Row>
                         </div>
                         <div>
                             <Table
@@ -208,6 +259,9 @@ class PayInformation extends PureComponent {
                 <div>
                     <RefundModal totalAmount={totalAmount} />
                 </div>
+                <div>
+                    <PayModal totalAmount={totalAmount} />
+                </div>
             </div>
         );
     }
@@ -217,6 +271,8 @@ PayInformation.propTypes = {
     paymentDetailData: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
+    modifyPayModalVisible: PropTypes.func,
+    fetchPaymentDetailInfo: PropTypes.func,
 }
 
 PayInformation.defaultProps = {
