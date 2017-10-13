@@ -125,7 +125,6 @@ class OrderManagementList extends Component {
         this.orderTypeSelect = ::this.orderTypeSelect;
         this.getSearchData = ::this.getSearchData;
         this.joiningSearchMind = null;
-        this.subCompanySearchMind = null;
         this.searchData = {};
         this.current = 1;
         this.state = {
@@ -325,8 +324,8 @@ class OrderManagementList extends Component {
                 submitEndTime: todayDate,
             }
         });
+        this.handleSubCompanyClear();
         this.joiningSearchMind.handleClear();
-        this.subCompanySearchMind.handleClear();
         this.props.form.resetFields();
     }
 
@@ -422,7 +421,7 @@ class OrderManagementList extends Component {
                     </Menu.Item>
                 }
                 {
-                    shippingStateDesc === '仓库拒收'
+                    (shippingStateDesc === '仓库拒收')
                     && <Menu.Item key="tableRetransfer">
                         <a target="_blank" rel="noopener noreferrer">重新传送</a>
                     </Menu.Item>
@@ -602,13 +601,14 @@ class OrderManagementList extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">收货人电话</span>
-                                            {getFieldDecorator('cellphone')(
+                                            {getFieldDecorator('cellphone', {
+                                                rules: [{ validator: Utils.validatePhone }]
+                                            })(
                                                 <Input
-                                                    maxLength={11}
                                                     className="input"
                                                     placeholder="收货人电话"
                                                 />
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>

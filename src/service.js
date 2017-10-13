@@ -555,7 +555,8 @@ export const updatePmPurchaseOrder = (params) => http.post('/pmPurchaseOrder/upd
 export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', params);
 // 删除采购单 参数 1或n个采购单id  [ids]
 export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
-
+// 查询采购单列表
+export const repushPurchaseReceipt = (params) => http.get('/pmPurchaseReceipt/rePushPurchaseReceiptToMQ', params);
 
 // 审批
 export const auditPo = (params) => http.post('/provider/auditPo', params);
@@ -734,8 +735,14 @@ export const orderDescription = (params) => http.post('/sorder/orderDescription'
 // 订单管理-审核退款
 export const auditRefund = (params) => http.post('/sorder/auditRefund', params);
 
-// 订单管理-审核退款
+// 订单管理-确认退款
 export const confirmRefund = (params) => http.post('/sorder/confirmRefund', params);
+
+// 订单管理-新增支付
+export const addPaymentInfo = (params) => http.post('/sorder/addPaymentInfo', params);
+
+// 订单管理-确认支付
+export const confirmPayment = (params) => http.post('/sorder/confirmPayment', params);
 
 // 供应商选择组件
 export const supplierSearchBox = (params) => http.get('/supplier/supplierSearchBox', params);
