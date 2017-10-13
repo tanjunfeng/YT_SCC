@@ -39,21 +39,14 @@ const { TextArea } = Input;
 )
 
 class PayModal extends Component {
-    constructor(props) {
-        super(props);
-        this.handleNewPayOk = ::this.handleNewPayOk;
-        this.handleNewPayCancel = ::this.handleNewPayCancel;
-        this.state = {
-            textAreaNote: '',
-        }
-    }
-    componentDidMount() {
+    state = {
+        textAreaNote: '',
     }
 
     /**
      * 模态框确认
      */
-    handleNewPayOk() {
+    handleNewPayOk = () => {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const params = {
@@ -69,6 +62,7 @@ class PayModal extends Component {
                         message.error(res.data);
                     }
                     this.props.modifyPayModalVisible({ isShow: false });
+                    this.props.form.resetFields();
                     this.props.fetchPaymentDetailInfo({orderId: this.props.orderDetailData.id});
                 });
             }
@@ -78,7 +72,7 @@ class PayModal extends Component {
     /**
      * 模态框取消
      */
-    handleNewPayCancel() {
+    handleNewPayCancel = () => {
         this.props.modifyPayModalVisible({ isShow: false });
     }
     render() {
@@ -234,7 +228,6 @@ class PayModal extends Component {
 PayModal.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     modifyPayModalVisible: PropTypes.func,
-    modifyAddPaymentInfo: PropTypes.func,
     fetchPaymentDetailInfo: PropTypes.func,
     payModalVisible: PropTypes.bool,
     orderDetailData: PropTypes.objectOf(PropTypes.any),
