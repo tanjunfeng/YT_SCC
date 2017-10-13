@@ -14,7 +14,6 @@ import { Form, Input, Modal, message, Select, InputNumber } from 'antd';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { modifyAuditRefund, modifyConfirmRefund, fetchPaymentDetailInfo } from '../../../actions/order';
 
-
 const Option = Select.Option;
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -200,11 +199,11 @@ class RefundModal extends PureComponent {
                                             退款金额:
                                         </span>
                                         {getFieldDecorator('inputNumber', {
-                                            initialValue: recordData.amount
+                                            initialValue: this.props.totalPaidAmount
                                         })(
                                             <InputNumber
                                                 min={0.00}
-                                                max={recordData.amount}
+                                                max={this.props.totalPaidAmount}
                                                 step={0.01}
                                             />
                                             )}
@@ -247,7 +246,8 @@ RefundModal.propTypes = {
     recordData: PropTypes.arrayOf(PropTypes.any),
     payAuditModalVisible: PropTypes.bool,
     modifyCauseModalVisible: PropTypes.func,
-    totalAmount: PropTypes.number
+    totalAmount: PropTypes.number,
+    totalPaidAmount: PropTypes.number
 }
 
 RefundModal.defaultProps = {
