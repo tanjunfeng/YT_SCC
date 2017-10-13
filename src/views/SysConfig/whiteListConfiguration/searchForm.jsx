@@ -22,7 +22,7 @@ const Option = Select.Option;
 
 @connect(
     state => ({
-        // whiteListData: state.toJS().whiteListConfiguration.whiteListData,
+        data: state.toJS().queryWhiteList.data,
     }),
     dispatch => bindActionCreators({
         pubFetchValueList,
@@ -41,6 +41,7 @@ class SearchForm extends PureComponent {
             warehouseVisible: false,
             companyVisible: false,
             supplyChoose: {},
+            modalXXXvisible: this.props.modalXXXvisible
         }
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
@@ -148,12 +149,15 @@ class SearchForm extends PureComponent {
     handleOk = () => {
         this.setState({
             warehouseVisible: false,
+            modalXXXvisible: false
         });
+        const params = getFormData();
+        this.props.onChange(params);
     }
     handleCancel = () => {
         this.setState({
             warehouseVisible: false,
-        });
+        })
     }
 
     handleOffline() {
@@ -236,53 +240,49 @@ class SearchForm extends PureComponent {
                                     <Button type="primary" size="default" onClick={this.handleGoOnline}>
                                         上线
                                     </Button>
-                                    {
-                                        this.state.warehouseVisible ?
-                                            <Modal
-                                                title="选择仓"
-                                                visible={this.state.warehouseVisible}
-                                                onOk={this.handleOk}
-                                                onCancel={this.handleCancel}
-                                            >
-                                                <FormItem>
-                                                    <span className={`${prefixCls}-label`}>送货仓：</span>
-                                                    <span className={`${prefixCls}-data-pic`}>
-                                                        <SearchMind
-                                                            rowKey="franchiseeId"
-                                                            compKey="search-mind-joining"
-                                                            ref={ref => { this.joiningSearchMind = ref }}
-                                                            fetch={(params) =>
-                                                                this.props.pubFetchValueList({
-                                                                    param: params.value,
-                                                                    pageNum: params.pagination.current || 1,
-                                                                    pageSize: params.pagination.pageSize
-                                                                }, 'getWarehouseInfo1')
-                                                            }
-                                                            onChoosed={this.handleJoiningChoose}
-                                                            onClear={this.handleJoiningClear}
-                                                            renderChoosedInputRaw={(row) => (
-                                                                <div>
-                                                                    {row.warehouseCode} - {row.warehouseName}
-                                                                </div>
-                                                            )}
-                                                            pageSize={6}
-                                                            columns={[
-                                                                {
-                                                                    title: '仓库编码',
-                                                                    dataIndex: 'warehouseCode',
-                                                                    width: 150,
-                                                                }, {
-                                                                    title: '仓库名称',
-                                                                    dataIndex: 'warehouseName',
-                                                                    width: 200,
-                                                                }
-                                                            ]}
-                                                        />
-                                                    </span>
-                                                </FormItem>
-                                            </Modal>
-                                            : null
-                                    }
+                                    <Modal
+                                        title="选择仓"
+                                        visible={this.state.warehouseVisible || this.props.value.modalXXXvisible}
+                                        onOk={this.handleOk}
+                                        onCancel={this.handleCancel}
+                                    >
+                                        <FormItem>
+                                            <span className={`${prefixCls}-label`}>送货仓：</span>
+                                            <span className={`${prefixCls}-data-pic`}>
+                                                <SearchMind
+                                                    rowKey="franchiseeId"
+                                                    compKey="search-mind-joining"
+                                                    ref={ref => { this.joiningSearchMind = ref }}
+                                                    fetch={(params) =>
+                                                        this.props.pubFetchValueList({
+                                                            param: params.value,
+                                                            pageNum: params.pagination.current || 1,
+                                                            pageSize: params.pagination.pageSize
+                                                        }, 'getWarehouseInfo1')
+                                                    }
+                                                    onChoosed={this.handleJoiningChoose}
+                                                    onClear={this.handleJoiningClear}
+                                                    renderChoosedInputRaw={(row) => (
+                                                        <div>
+                                                            {row.warehouseCode} - {row.warehouseName}
+                                                        </div>
+                                                    )}
+                                                    pageSize={6}
+                                                    columns={[
+                                                        {
+                                                            title: '仓库编码',
+                                                            dataIndex: 'warehouseCode',
+                                                            width: 150,
+                                                        }, {
+                                                            title: '仓库名称',
+                                                            dataIndex: 'warehouseName',
+                                                            width: 200,
+                                                        }
+                                                    ]}
+                                                />
+                                            </span>
+                                        </FormItem>
+                                    </Modal>
                                 </FormItem>
                                 <FormItem>
                                     <Button type="primary" size="default" onClick={this.handleOffline}>
@@ -303,7 +303,9 @@ SearchForm.propTypes = {
     onPromotionReset: PropTypes.func,
     pubFetchValueList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
+    value: PropTypes.objectOf(PropTypes.any),
     prefixCls: PropTypes.string,
+    modalXXXvisible: PropTypes.bool
 };
 
 SearchForm.defaultProps = {

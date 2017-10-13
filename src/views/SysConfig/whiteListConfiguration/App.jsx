@@ -3,15 +3,14 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-13 14:06:27
+ * @Last Modified time: 2017-10-13 16:51:29
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Icon, Menu, Dropdown, Modal, Button } from 'antd';
-
+import { Table, Form, Icon, Menu, Dropdown } from 'antd';
 import {
     clearCouponsList,
     updatePromotionStatus
@@ -35,7 +34,9 @@ class WhiteListConfiguration extends PureComponent {
         this.param = {};
         this.state = {
             storeIds: [],
-            current: 1
+            current: 1,
+            modalXXXvisible: false,
+            modalYYYvisible: false,
         };
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
@@ -107,29 +108,42 @@ class WhiteListConfiguration extends PureComponent {
     }
 
     handleSelect(record, index, item) {
-        console.log(item.key)
+        switch (item.key) {
+            case 'Offline':
+                this.setState({
+                    modalYYYvisible: true
+                });
+                break;
+            case 'Online':
+                this.setState({
+                    modalXXXvisible: true
+                });
+                break;
+            default:
+                break;
+        }
     }
 
     renderOperations = (text, record, index) => {
-        const { status } = record;
+        const { scPurchaseFlag } = record;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 {
                     // 上线
-                    (status === 0) ?
-                        <Menu.Item key="online">
+                    (scPurchaseFlag === 1) ?
+                        <Menu.Item key="Offline">
                             <a target="_blank" rel="noopener noreferrer">
-                                上线
+                                下线
                         </a>
                         </Menu.Item>
                         : null
                 }
                 {
                     // 下线
-                    (status !== 1) ?
-                        <Menu.Item key="Offline">
+                    (scPurchaseFlag !== 1) ?
+                        <Menu.Item key="Online">
                             <a target="_blank" rel="noopener noreferrer">
-                                下线
+                                上线
                         </a>
                         </Menu.Item>
                         : null
@@ -149,8 +163,13 @@ class WhiteListConfiguration extends PureComponent {
         )
     }
 
+    handleModalXXXChange = (params) => {
+
+    }
+
     render() {
         const { data, total, pageNum, pageSize } = this.props.data;
+        const { modalXXXvisible, modalYYYvisible } = this.state;
         const rowSelection = {
             selectedRowKeys: this.state.storeIds,
             onChange: this.onSelectChange
@@ -161,14 +180,16 @@ class WhiteListConfiguration extends PureComponent {
                 <SearchForm
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
+                    value={{modalXXXvisible, modalYYYvisible}}
+                    onModalXXXChange={this.handleModalXXXChange}
                 />
                 <Table
                     rowSelection={rowSelection}
                     dataSource={data}
                     columns={columns}
-                    rowKey="id"
+                    rowKey="franchiseeId"
                     scroll={{
-                        x: 1400
+                        x: 1600
                     }}
                     bordered
                     pagination={{
@@ -188,11 +209,7 @@ class WhiteListConfiguration extends PureComponent {
 WhiteListConfiguration.propTypes = {
     queryWhitelist: PropTypes.func,
     clearCouponsList: PropTypes.func,
-    data: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
-}
-
-WhiteListConfiguration.defaultProps = {
-    prefixCls: 'prod-modal'
-}
+    data: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+};
 
 export default withRouter(Form.create()(WhiteListConfiguration));

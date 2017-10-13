@@ -3,7 +3,7 @@
  * @Description: 白名单配置列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-13 13:52:19
+ * @Last Modified time: 2017-10-13 15:08:32
  */
 const couponList = [{
     title: '所属子公司',
@@ -53,12 +53,12 @@ const couponList = [{
 }, {
     title: '上线状态',
     dataIndex: 'scPurchaseFlag',
-    key: 'scPurchaseFlag'
+    key: 'scPurchaseFlag',
+    render: scPurchaseFlag => (scPurchaseFlag === 1 ? '已上线' : '未上线')
 }, {
     title: '操作',
     dataIndex: 'operation',
-    key: 'operation',
-    render: scPurchaseFlag => (scPurchaseFlag === '已上线' ? '下线' : '上线')
+    key: 'operation'
 }];
 
 export { couponList };

@@ -36,7 +36,7 @@
                 "address": "天心路新136号天心阁东南门对面",
                 "contact": null,
                 "mobilePhone": null,
-                "scPurchaseFlag": 0,
+                "scPurchaseFlag": 1,
                 "deliveryWarehouseCode": null,
                 "deliveryWarehouseName": null
             },
@@ -52,7 +52,7 @@
                 "address": "汉安大道135号",
                 "contact": null,
                 "mobilePhone": null,
-                "scPurchaseFlag": 0,
+                "scPurchaseFlag": 1,
                 "deliveryWarehouseCode": null,
                 "deliveryWarehouseName": null
             },
