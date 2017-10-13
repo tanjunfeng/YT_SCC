@@ -90,7 +90,7 @@ class DirectSalesOrders extends PureComponent {
                 // 不存在时删除这条商品并移动到第一条，需保留已填入的数量
                 const acount = goodsList[existGoodsIndex].acount;
                 goodsList.splice(existGoodsIndex, 1);
-                message.info('已存在此商品');
+                message.info(`已存在此商品，当前数量：${acount}`);
                 goodsList.unshift(this.getRow(goodsInfo, acount));
                 this.setState({ appending: false });
             }
@@ -132,7 +132,6 @@ class DirectSalesOrders extends PureComponent {
                         x: 1400,
                         y: 500
                     }}
-                    bordered
                 />
             </div>
         );
