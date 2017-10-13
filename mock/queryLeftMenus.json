@@ -72,6 +72,12 @@
                     "authorityCode": "dataDictionary",
                     "displayName": "数据字典",
                     "menuList": []
+                },
+                {
+                    "authorityId": 225,
+                    "authorityCode": "dataDictionary",
+                    "displayName": "数据字典",
+                    "menuList": []
                 }
             ]
         },
