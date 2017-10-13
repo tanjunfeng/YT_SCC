@@ -20,14 +20,12 @@ class EditableCell extends PureComponent {
     render() {
         return (
             <div className="editable-cell">
-                <div className="editable-cell-input-wrapper">
-                    <InputNumber
-                        defaultValue={this.props.value || 1}
-                        min={1}
-                        onChange={this.handleChange}
-                        onKeyUp={this.handlePressEnter}
-                    />
-                </div>
+                <InputNumber
+                    defaultValue={this.props.value || 1}
+                    min={1}
+                    onChange={this.handleChange}
+                    onKeyUp={this.handlePressEnter}
+                />
             </div>
         );
     }
