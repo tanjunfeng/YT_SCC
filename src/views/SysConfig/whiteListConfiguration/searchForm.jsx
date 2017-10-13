@@ -5,27 +5,51 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, Form, Select, Row, Col } from 'antd';
+import { Button, Input, Form, Select, Row, Col, Modal } from 'antd';
 import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Utils from '../../../util/util';
 import { promotionStatus } from './constants';
 import { SubCompanies } from '../../../container/search';
+import SearchMind from '../../../components/searchMind';
+import { pubFetchValueList } from '../../../actions/pub';
+import { queryWhitelist } from '../../../actions/whiteListConfiguration';
+import { PAGE_SIZE } from '../../../constant';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
+@connect(
+    state => ({
+        // whiteListData: state.toJS().whiteListConfiguration.whiteListData,
+    }),
+    dispatch => bindActionCreators({
+        pubFetchValueList,
+        queryWhitelist
+    }, dispatch)
+)
+
 class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
+        this.joiningSearchMind = null;
         this.state = {
             branchCompanyId: '',
             isReleaseCouponModalVisible: false,
-            grantMethod: 0
+            grantMethod: 0,
+            warehouseVisible: false,
+            companyVisible: false,
+            supplyChoose: {},
         }
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
         this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
         this.hanldeSubCompanyClear = this.hanldeSubCompanyClear.bind(this);
+        this.handleJoiningChoose = this.handleJoiningChoose.bind(this);
+        this.handleJoiningClear = this.handleJoiningClear.bind(this);
+        this.handleGoOnline = this.handleGoOnline.bind(this);
+        this.handleOffline = this.handleOffline.bind(this);
     }
 
     getStatus() {
@@ -39,24 +63,47 @@ class SearchForm extends PureComponent {
 
     getFormData() {
         const {
-            id,
-            name,
+            franchiseeId,
+            franchinessName,
             storeId,
             storename,
-            statusCode
+            scPurchaseFlag
         } = this.props.form.getFieldsValue();
         const branchCompanyId = this.state.branchCompanyId;
-        let status = statusCode;
-        if (statusCode === 'all') {
+        const { warehouseCode } = this.state;
+        let status = scPurchaseFlag;
+        const pageSize = PAGE_SIZE;
+        if (scPurchaseFlag === 'all') {
             status = '';
         }
         return Utils.removeInvalid({
-            id,
-            name,
+            franchiseeId,
+            franchinessName,
             storeId,
+            warehouseCode,
             storename,
             status,
-            branchCompanyId
+            branchCompanyId,
+            pageSize,
+            pageNum: 1,
+        });
+    }
+
+    /**
+     * 仓库-值清单
+     */
+    handleJoiningChoose = ({ record }) => {
+        this.setState({
+            warehouseCode: record.warehouseCode,
+        });
+    }
+
+    /**
+     * 调整仓库-清除
+     */
+    handleJoiningClear() {
+        this.setState({
+            warehouseCode: '',
         });
     }
 
@@ -70,11 +117,12 @@ class SearchForm extends PureComponent {
 
     handleSearch() {
         // 将查询条件回传给调用页
-        this.props.onPromotionSearch(this.getFormData());
+        this.props.queryWhitelist(this.getFormData());
     }
 
     handleReset() {
         this.hanldeSubCompanyClear(); // 清除子公司值清单
+        this.handleJoiningClear(); // 清除仓库值清单
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onPromotionReset();  // 通知父页面已清空
     }
@@ -91,8 +139,35 @@ class SearchForm extends PureComponent {
         this.setState({ isReleaseCouponModalVisible: false });
     }
 
+    handleGoOnline() {
+        this.setState({
+            warehouseVisible: true,
+        });
+    }
+
+    handleOk = () => {
+        this.setState({
+            warehouseVisible: false,
+        });
+    }
+    handleCancel = () => {
+        this.setState({
+            warehouseVisible: false,
+        });
+    }
+
+    handleOffline() {
+        Modal.confirm({
+            title: '确认',
+            content: '确认下线选择的商家？',
+            okText: '提交',
+            cancelText: '取消',
+        });
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
+        const { prefixCls } = this.props;
         return (
             <div className="search-box promotion">
                 <Form layout="inline">
@@ -100,12 +175,12 @@ class SearchForm extends PureComponent {
                         <Row gutter={40}>
                             <Col span={8}>
                                 <FormItem label="加盟商编号" style={{ paddingRight: 10 }}>
-                                    {getFieldDecorator('id')(<Input size="default" />)}
+                                    {getFieldDecorator('franchiseeId')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
                                 <FormItem label="加盟商名称">
-                                    {getFieldDecorator('name')(<Input size="default" />)}
+                                    {getFieldDecorator('franchinessName')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -135,7 +210,7 @@ class SearchForm extends PureComponent {
                             <Col span={8}>
                                 {/* 状态 */}
                                 <FormItem label="状态">
-                                    {getFieldDecorator('statusCode', {
+                                    {getFieldDecorator('scPurchaseFlag', {
                                         initialValue: 'all'
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
@@ -161,6 +236,53 @@ class SearchForm extends PureComponent {
                                     <Button type="primary" size="default" onClick={this.handleGoOnline}>
                                         上线
                                     </Button>
+                                    {
+                                        this.state.warehouseVisible ?
+                                            <Modal
+                                                title="选择仓"
+                                                visible={this.state.warehouseVisible}
+                                                onOk={this.handleOk}
+                                                onCancel={this.handleCancel}
+                                            >
+                                                <FormItem>
+                                                    <span className={`${prefixCls}-label`}>送货仓：</span>
+                                                    <span className={`${prefixCls}-data-pic`}>
+                                                        <SearchMind
+                                                            rowKey="franchiseeId"
+                                                            compKey="search-mind-joining"
+                                                            ref={ref => { this.joiningSearchMind = ref }}
+                                                            fetch={(params) =>
+                                                                this.props.pubFetchValueList({
+                                                                    param: params.value,
+                                                                    pageNum: params.pagination.current || 1,
+                                                                    pageSize: params.pagination.pageSize
+                                                                }, 'getWarehouseInfo1')
+                                                            }
+                                                            onChoosed={this.handleJoiningChoose}
+                                                            onClear={this.handleJoiningClear}
+                                                            renderChoosedInputRaw={(row) => (
+                                                                <div>
+                                                                    {row.warehouseCode} - {row.warehouseName}
+                                                                </div>
+                                                            )}
+                                                            pageSize={6}
+                                                            columns={[
+                                                                {
+                                                                    title: '仓库编码',
+                                                                    dataIndex: 'warehouseCode',
+                                                                    width: 150,
+                                                                }, {
+                                                                    title: '仓库名称',
+                                                                    dataIndex: 'warehouseName',
+                                                                    width: 200,
+                                                                }
+                                                            ]}
+                                                        />
+                                                    </span>
+                                                </FormItem>
+                                            </Modal>
+                                            : null
+                                    }
                                 </FormItem>
                                 <FormItem>
                                     <Button type="primary" size="default" onClick={this.handleOffline}>
@@ -177,15 +299,15 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    onPromotionSearch: PropTypes.func,
+    queryWhitelist: PropTypes.func,
     onPromotionReset: PropTypes.func,
+    pubFetchValueList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    history: PropTypes.objectOf(PropTypes.any),
-    location: PropTypes.objectOf(PropTypes.any)
+    prefixCls: PropTypes.string,
 };
 
 SearchForm.defaultProps = {
-    prefixCls: 'PromotionList'
+    prefixCls: 'whiteListConfiguration'
 }
 
 export default withRouter(Form.create()(SearchForm));

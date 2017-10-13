@@ -1,4 +1,4 @@
-$promotionColWidth: 250px;
+$whiteListConfigurationColWidth: 250px;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -20,7 +20,7 @@ $promotionColWidth: 250px;
     }
 }
 
-.promotion {
+.whiteListConfiguration {
     .ant-form-item-label {
         width: 80px;
         .sc-form-item-label {
@@ -53,10 +53,15 @@ $promotionColWidth: 250px;
             display: inline-block;
         }
         .ywc-smind {
-            width: $promotionColWidth;
+            width: $whiteListConfigurationColWidth;
         }
         .ywc-smind-search-bar {
             margin: 8px 0;
         }
     }
+}
+.whiteListConfiguration-data-pic{
+    height: 30px;
+    display: inline-block;
+    vertical-align: bottom;
 }

@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-12 16:01:49
+ * @Last Modified time: 2017-10-13 14:06:27
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -13,27 +13,26 @@ import { withRouter } from 'react-router';
 import { Table, Form, Icon, Menu, Dropdown, Modal, Button } from 'antd';
 
 import {
-    queryCouponsList,
     clearCouponsList,
     updatePromotionStatus
 } from '../../../actions/promotion';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { couponList as columns } from './columns';
+import { queryWhitelist } from '../../../actions/whiteListConfiguration';
 
 @connect(state => ({
-    couponsList: state.toJS().promotion.couponsList
+    data: state.toJS().queryWhiteList.data
 }), dispatch => bindActionCreators({
-    queryCouponsList,
+    queryWhitelist,
     clearCouponsList,
-    updatePromotionStatus
+    updatePromotionStatus,
 }, dispatch))
 
 class WhiteListConfiguration extends PureComponent {
     constructor(props) {
         super(props);
         this.param = {};
-        this.isVisible= false;
         this.state = {
             storeIds: [],
             current: 1
@@ -85,7 +84,7 @@ class WhiteListConfiguration extends PureComponent {
      */
 
     query() {
-        this.props.queryCouponsList(this.param).then((data) => {
+        this.props.queryWhitelist(this.param).then((data) => {
             const { pageNum, pageSize } = data.data;
             Object.assign(this.param, { pageNum, pageSize });
         });
@@ -111,21 +110,13 @@ class WhiteListConfiguration extends PureComponent {
         console.log(item.key)
     }
 
-    handleOk() {
-
-    }
-
-    handleCancel() {
-
-    }
-
     renderOperations = (text, record, index) => {
         const { status } = record;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 {
                     // 上线
-                    (status === 'unreleased') ?
+                    (status === 0) ?
                         <Menu.Item key="online">
                             <a target="_blank" rel="noopener noreferrer">
                                 上线
@@ -135,7 +126,7 @@ class WhiteListConfiguration extends PureComponent {
                 }
                 {
                     // 下线
-                    (status !== 'unreleased') ?
+                    (status !== 1) ?
                         <Menu.Item key="Offline">
                             <a target="_blank" rel="noopener noreferrer">
                                 下线
@@ -159,7 +150,7 @@ class WhiteListConfiguration extends PureComponent {
     }
 
     render() {
-        const { data, total, pageNum, pageSize } = this.props.couponsList;
+        const { data, total, pageNum, pageSize } = this.props.data;
         const rowSelection = {
             selectedRowKeys: this.state.storeIds,
             onChange: this.onSelectChange
@@ -189,35 +180,19 @@ class WhiteListConfiguration extends PureComponent {
                         onChange: this.onPaginate
                     }}
                 />
-                <div>
-                    <Modal
-                        visible={this.isVisible}
-                        title="Title"
-                        onOk={this.handleOk}
-                        onCancel={this.handleCancel}
-                        footer={[
-                            <Button key="back" size="large" onClick={this.handleCancel}>取消</Button>,
-                            <Button key="submit" type="primary" size="large" onClick={this.handleOk}>
-                                确认
-                            </Button>
-                        ]}
-                    >
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                    </Modal>
-                </div>
             </div>
         );
     }
 }
 
 WhiteListConfiguration.propTypes = {
-    queryCouponsList: PropTypes.func,
+    queryWhitelist: PropTypes.func,
     clearCouponsList: PropTypes.func,
-    couponsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
+    data: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
+}
+
+WhiteListConfiguration.defaultProps = {
+    prefixCls: 'prod-modal'
 }
 
 export default withRouter(Form.create()(WhiteListConfiguration));

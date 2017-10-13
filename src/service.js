@@ -493,6 +493,9 @@ export const queryAllSupplier = (params) => http.get('/price/queryAllSupplier', 
 // 新增数据字典
 export const insertDictionary = (params) => http.post('/dictionary/insertDictionary', params);
 
+// 根据条件分页查询白名单列表
+// export const querywhitelist = (params) => http.post('/sp/queryWhiteList', params);
+export const queryWhitelist = (params) => http.post('/mock/getWarehouseLogicInfo', params);
 
 // 修改数据字典
 export const updateDictionary = (params) => http.post('/dictionary/updateDictionary', params);

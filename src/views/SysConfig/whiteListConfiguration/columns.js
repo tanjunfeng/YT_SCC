@@ -1,33 +1,22 @@
 /*
  * @Author: tanjf
- * @Description: 优惠券列表
+ * @Description: 白名单配置列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-12 15:12:51
+ * @Last Modified time: 2017-10-13 13:52:19
  */
-/**
- * @file columns.js
- * @author taoqiyu
- *
- * 促销活动列表
- */
-import React from 'react';
-import { promotionStatus } from './constants';
-import Util from '../../../util/util';
-
-// 优惠券列表
 const couponList = [{
     title: '所属子公司',
-    dataIndex: 'company',
-    key: 'company'
+    dataIndex: 'branchCompanyName',
+    key: 'branchCompanyName'
 }, {
     title: '加盟商编号',
-    dataIndex: 'id',
-    key: 'id'
+    dataIndex: 'franchiseeId',
+    key: 'franchiseeId'
 }, {
     title: '加盟商名称',
-    dataIndex: 'name',
-    key: 'name'
+    dataIndex: 'franchinessName',
+    key: 'franchinessName'
 }, {
     title: '门店编号',
     dataIndex: 'storeId',
@@ -39,37 +28,37 @@ const couponList = [{
     key: 'storeName'
 }, {
     title: '省',
-    dataIndex: 'sheng',
-    key: 'sheng',
+    dataIndex: 'provinceName',
+    key: 'provinceName',
 }, {
     title: '市',
-    dataIndex: 'shi',
-    key: 'shi',
+    dataIndex: 'cityName',
+    key: 'cityName',
 }, {
     title: '区',
-    dataIndex: 'qu',
-    key: 'qu',
+    dataIndex: 'districtName',
+    key: 'districtName',
 }, {
     title: '详细地址',
-    dataIndex: 'adress',
-    key: 'adress',
+    dataIndex: 'address',
+    key: 'address',
 }, {
     title: '联系人',
-    dataIndex: 'call',
-    key: 'call',
+    dataIndex: 'contact',
+    key: 'contact',
 }, {
     title: '联系电话',
-    dataIndex: 'phone',
-    key: 'phone'
+    dataIndex: 'mobilePhone',
+    key: 'mobilePhone'
 }, {
     title: '上线状态',
-    dataIndex: 'upLoad',
-    key: 'upLoad'
+    dataIndex: 'scPurchaseFlag',
+    key: 'scPurchaseFlag'
 }, {
     title: '操作',
     dataIndex: 'operation',
     key: 'operation',
-    render: upLoad => (upLoad === '已上线' ? '下线' : '上线')
+    render: scPurchaseFlag => (scPurchaseFlag === '已上线' ? '下线' : '上线')
 }];
 
 export { couponList };

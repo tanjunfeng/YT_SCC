@@ -1,5 +1,5 @@
 export const promotionStatus = {
     all: '全部',
-    released: '已上线',
-    unreleased: '未上线'
+    1: '已上线',
+    0: '未上线'
 };
