@@ -10,14 +10,14 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, Icon, Table, Row, Col, Button } from 'antd';
+import { Form, Icon, Table, Row, Col, Button, message} from 'antd';
 import moment from 'moment';
 import RefundModal from './refundModal';
 import PayModal from './payModal';
 import { DATE_FORMAT } from '../../../constant/index';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { modifyPayModalVisible } from '../../../actions/modify/modifyPayModalVisible';
-import { modifyConfirmPayment } from '../../../actions/order';
+import { modifyConfirmPayment, fetchPaymentDetailInfo} from '../../../actions/order';
 
 @connect(
     state => ({
@@ -26,7 +26,7 @@ import { modifyConfirmPayment } from '../../../actions/order';
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
         modifyPayModalVisible,
-        modifyConfirmPayment,
+        fetchPaymentDetailInfo,
     }, dispatch)
 )
 class PayInformation extends PureComponent {
@@ -168,12 +168,16 @@ class PayInformation extends PureComponent {
      */
     handlePayOk(record) {
         const { id, orderId } = record;
-        this.props.modifyConfirmPayment({
+        modifyConfirmPayment({
             orderId: orderId,
             paymentId: id
         })
         .then((res) => {
-            console.log(res);
+            if (res.code === 200 && res.success) {
+                this.props.fetchPaymentDetailInfo({ orderId: orderId })
+            } else if (!res.success) {
+                message.error(res.message);
+            }
         })
     }
 
@@ -274,7 +278,7 @@ PayInformation.propTypes = {
     history: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
     modifyPayModalVisible: PropTypes.func,
-    modifyConfirmPayment: PropTypes.objectOf(PropTypes.any)
+    fetchPaymentDetailInfo: PropTypes.func,
 }
 
 PayInformation.defaultProps = {

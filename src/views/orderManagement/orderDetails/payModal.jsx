@@ -13,13 +13,14 @@ import PropTypes from 'prop-types';
 import {
     Form, Input, Modal, Select,
     Row, Col, DatePicker, InputNumber,
+    message,
 } from 'antd';
 import moment from 'moment';
 import Util from '../../../util/util';
 import { DATE_FORMAT } from '../../../constant/index';
 import { payChannel } from '../../../constant/searchParams';
 import { modifyPayModalVisible } from '../../../actions/modify/modifyPayModalVisible';
-import { modifyAddPaymentInfo } from '../../../actions/order';
+import { modifyAddPaymentInfo, fetchPaymentDetailInfo } from '../../../actions/order';
 
 
 const FormItem = Form.Item;
@@ -32,8 +33,8 @@ const { TextArea } = Input;
         orderDetailData: state.toJS().order.orderDetailData
     }),
     dispatch => bindActionCreators({
-        modifyAddPaymentInfo,
         modifyPayModalVisible,
+        fetchPaymentDetailInfo,
     }, dispatch)
 )
 
@@ -56,15 +57,20 @@ class PayModal extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const params = {
-                    id: this.props.orderDetailData.id,
+                    orderId: this.props.orderDetailData.id,
                     comment: this.state.textAreaNote
                 }
                 Object.assign(params, values);
                 params.payDate = moment().format(DATE_FORMAT);
-                this.props.modifyAddPaymentInfo(params)
-                    .then((res) => {
-                        console.log(res);
-                    });
+                params.amount = params.amount.toString();
+                modifyAddPaymentInfo(params)
+                .then((res) => {
+                    if (res.code === 200 && res.data) {
+                        message.error(res.data);
+                    }
+                    this.props.modifyPayModalVisible({ isShow: false });
+                    this.props.fetchPaymentDetailInfo({orderId: this.props.orderDetailData.id});
+                });
             }
         });
     }
@@ -228,7 +234,8 @@ class PayModal extends Component {
 PayModal.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     modifyPayModalVisible: PropTypes.func,
-    modifyAddPaymentInfo: PropTypes.arrayOf(PropTypes.any),
+    modifyAddPaymentInfo: PropTypes.func,
+    fetchPaymentDetailInfo: PropTypes.func,
     payModalVisible: PropTypes.bool,
     orderDetailData: PropTypes.objectOf(PropTypes.any),
     totalAmount: PropTypes.number
