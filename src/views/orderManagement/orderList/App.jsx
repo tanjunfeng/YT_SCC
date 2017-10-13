@@ -421,7 +421,7 @@ class OrderManagementList extends Component {
                     </Menu.Item>
                 }
                 {
-                    (shippingStateDesc === '仓库拒收' || shippingStateDesc === '未传送')
+                    (shippingStateDesc === '仓库拒收')
                     && <Menu.Item key="tableRetransfer">
                         <a target="_blank" rel="noopener noreferrer">重新传送</a>
                     </Menu.Item>
