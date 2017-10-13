@@ -21,7 +21,7 @@ class SupplierSpace extends Component {
      * @param {string} status 供应商状态
      */
     renderStatus(status) {
-        switch(status) {
+        switch (status) {
             case 0:
                 return '草稿'
             case 1:
@@ -43,7 +43,7 @@ class SupplierSpace extends Component {
      * @param {number} grade 供应商等级
      */
     renderGrade(grade) {
-        switch(grade) {
+        switch (grade) {
             case 1:
                 return '战略供应商'
             case 2:
@@ -298,7 +298,8 @@ class SupplierSpace extends Component {
 }
 
 SupplierSpace.propTypes = {
-    initValue: PropTypes.objectOf(PropTypes.any),
+    detailSp: PropTypes.objectOf(PropTypes.any),
+    detailData: PropTypes.objectOf(PropTypes.any),
 };
 
 export default SupplierSpace;
