@@ -136,7 +136,7 @@ class RefundModal extends PureComponent {
     }
 
     render() {
-        const { payAuditModalVisible, recordData} = this.props;
+        const { payAuditModalVisible, recordData } = this.props;
         const { getFieldDecorator } = this.props.form;
         const { option } = this.state;
         return (
