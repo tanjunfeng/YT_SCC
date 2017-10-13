@@ -733,7 +733,7 @@ class PoRcvMngList extends PureComponent {
                             columns={this.columns}
                             rowKey="id"
                             scroll={{
-                                x: 1400
+                                x: 1600
                             }}
                             pagination={{
                                 current: pageNum,

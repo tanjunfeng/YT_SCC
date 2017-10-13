@@ -11,6 +11,7 @@ import ActionType from '../actions/ActionType';
 const initState = fromJS({
     causeModalVisible: false,
     payAuditModalVisible: false,
+    payModalVisible: false,
     recordData: {},
     chooseData: [],
     orderListData: {},
@@ -30,7 +31,11 @@ export default function (state = initState, action) {
             .set('causeRecordId', id)
             .set('recordData', record);
         }
-
+        case ActionType.MODIFY_PAY_MODAL_VISIBLE: {
+            const { isVisible, isShow} = action.payload;
+            return state.set('payModalVisible', isVisible)
+            .set('causeModalVisible', isShow);
+        }
         case ActionType.MODIFY_DISTRIBUTION_COLUMNS: {
             const { index, value, witchInput } = action.payload;
             const { initialData } = state.toJS();
