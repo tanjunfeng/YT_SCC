@@ -10,18 +10,23 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, Icon, Table, Row, Col, Button } from 'antd';
+import { Form, Icon, Table, Row, Col, Button, message} from 'antd';
 import moment from 'moment';
 import RefundModal from './refundModal';
+import PayModal from './payModal';
 import { DATE_FORMAT } from '../../../constant/index';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
+import { modifyPayModalVisible } from '../../../actions/modify/modifyPayModalVisible';
+import { modifyConfirmPayment, fetchPaymentDetailInfo} from '../../../actions/order';
 
 @connect(
     state => ({
         paymentDetailData: state.toJS().order.paymentDetailData,
     }),
     dispatch => bindActionCreators({
-        modifyCauseModalVisible
+        modifyCauseModalVisible,
+        modifyPayModalVisible,
+        fetchPaymentDetailInfo,
     }, dispatch)
 )
 class PayInformation extends PureComponent {
@@ -115,13 +120,24 @@ class PayInformation extends PureComponent {
                             }}
                         >确认退款</a>)
                     default:
-                        return null;
+                        if ( record.shouldConfirm ) {
+                            return (<a
+                                onClick={() => {
+                                    this.handlePayOk(record);
+                                }}
+                            >确认支付</a>)
+                        } else {
+                            return  null;
+                        }
+
                 }
             }
         }];
 
         this.handleAuditRefund = ::this.handleAuditRefund;
         this.handleRefundOk = ::this.handleRefundOk;
+        this.handlePayOk = ::this.handlePayOk;
+        this.handleAddPay = ::this.handleAddPay;
 
         this.state = {
         }
@@ -144,6 +160,33 @@ class PayInformation extends PureComponent {
      */
     handleRefundOk(record) {
         this.props.modifyCauseModalVisible({ isVisible: true, record })
+    }
+
+    /**
+     * 确认支付
+     * @param {Object} record 该行数据
+     */
+    handlePayOk(record) {
+        const { id, orderId } = record;
+        modifyConfirmPayment({
+            orderId: orderId,
+            paymentId: id
+        })
+        .then((res) => {
+            if (res.code === 200 && res.success) {
+                this.props.fetchPaymentDetailInfo({ orderId: orderId })
+            } else if (!res.success) {
+                message.error(res.message);
+            }
+        })
+    }
+
+    /**
+     * 新增付款
+     *
+     */
+    handleAddPay() {
+        this.props.modifyPayModalVisible({ isVisible: true })
     }
 
     render() {
@@ -175,6 +218,20 @@ class PayInformation extends PureComponent {
                         <div className="detail-message-header">
                             <Icon type="wallet" className="detail-message-header-icon" />
                             支付信息
+                        </div>
+                        <div className="order-details-btns">
+                            <Row>
+                                <Col
+                                    className="gutter-row"
+                                    span={8}
+                                    style={{ marginLeft: 18}}
+                                >
+                                    <Button
+                                        size="default"
+                                        onClick={this.handleAddPay}
+                                    >新增付款</Button>
+                                </Col>
+                            </Row>
                         </div>
                         <div>
                             <Table
@@ -208,6 +265,9 @@ class PayInformation extends PureComponent {
                 <div>
                     <RefundModal totalAmount={totalAmount} />
                 </div>
+                <div>
+                    <PayModal totalAmount={totalAmount}/>
+                </div>
             </div>
         );
     }
@@ -217,6 +277,8 @@ PayInformation.propTypes = {
     paymentDetailData: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
+    modifyPayModalVisible: PropTypes.func,
+    fetchPaymentDetailInfo: PropTypes.func,
 }
 
 PayInformation.defaultProps = {
