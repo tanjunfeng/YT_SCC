@@ -257,7 +257,7 @@ class PayInformation extends PureComponent {
                     </Row>
                 </div>
                 <div>
-                    <RefundModal totalAmount={totalAmount} />
+                    <RefundModal totalAmount={totalAmount} totalPaidAmount={totalPaidAmount} />
                 </div>
                 <div>
                     <PayModal totalAmount={totalAmount} />
