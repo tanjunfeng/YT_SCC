@@ -160,7 +160,7 @@ class BasicInfo extends PureComponent {
                             status: detailSp.spAdrBasic.status,
                             orgId: !this.orgId ? detailSp.spAdrBasic.orgId : this.orgId,
                             belongAreaName: !this.company ?
-                            detailSp.spAdrBasic.belongAreaName : this.company
+                                detailSp.spAdrBasic.belongAreaName : this.company
                         }
                     )
                     Object.assign(
@@ -269,7 +269,7 @@ class BasicInfo extends PureComponent {
     renderName(spAdrBasic, supplierBasicInfo) {
         const { isEdit } = this.props;
         const { providerName } = spAdrBasic;
-        { isEdit && !this.company ? spAdrBasic.providerName : `${this.company} - ${supplierBasicInfo.companyName}` } 
+        { isEdit && !this.company ? spAdrBasic.providerName : `${this.company} - ${supplierBasicInfo.companyName}` }
         if (isEdit && !this.company) {
             this.childName = providerName;
             return providerName;
@@ -369,7 +369,7 @@ class BasicInfo extends PureComponent {
                                                     required: true, message: '请输入供应商地点到货周期!'
                                                 }],
                                                 initialValue: isEdit ?
-                                                spAdrBasic.goodsArrivalCycle : null
+                                                    spAdrBasic.goodsArrivalCycle : null
                                             })(
                                                 <InputNumber
                                                     min={0}
@@ -475,17 +475,17 @@ class BasicInfo extends PureComponent {
                                                 compKey="search-mind-key2"
                                                 fetch={(param) =>
                                                     this.props.pubFetchValueList(
-                                                    Utils.removeInvalid({
-                                                        branchCompanyName: param.value,
-                                                        id: isEdit ? detailSp.spAdrBasic.id : null,
-                                                        parentId: detailData.id,
-                                                    }), 'findCanUseCompanyInfo').then((res) => {
-                                                        const { data } = res.data;
-                                                        if (!data.length) {
-                                                            message.warning('无可用子公司，无法完成后续操作！');
-                                                        }
-                                                        return res;
-                                                    })
+                                                        Utils.removeInvalid({
+                                                            branchCompanyName: param.value,
+                                                            id: isEdit ? detailSp.spAdrBasic.id : null,
+                                                            parentId: detailData.id,
+                                                        }), 'findCanUseCompanyInfo').then((res) => {
+                                                            const { data } = res.data;
+                                                            if (!data.length) {
+                                                                message.warning('无可用子公司，无法完成后续操作！');
+                                                            }
+                                                            return res;
+                                                        })
                                                 }
                                                 ref={node => (this.orgCompany = node)}
                                                 onChoosed={this.handleChoose}
@@ -599,12 +599,7 @@ class BasicInfo extends PureComponent {
                                                 rules: [
                                                     { required: true, message: '请输入供应商电话!' },
                                                     {
-                                                        validator: (rule, value, callback) => {
-                                                            if (!/^1[34578]\d{9}$/.test(value)) {
-                                                                callback('手机号码有误')
-                                                            }
-                                                            callback()
-                                                        }
+                                                        validator: Utils.validatePhone
                                                     }
                                                 ],
                                                 initialValue: spAdrContact.providerPhone
@@ -657,14 +652,7 @@ class BasicInfo extends PureComponent {
                                             {getFieldDecorator('purchasePhone', {
                                                 rules: [
                                                     { required: true, message: '请输入采购员电话!' },
-                                                    {
-                                                        validator: (rule, value, callback) => {
-                                                            if (!/^1[34578]\d{9}$/.test(value)) {
-                                                                callback('手机号码有误')
-                                                            }
-                                                            callback()
-                                                        }
-                                                    }
+                                                    { validator: Utils.validatePhone }
                                                 ],
                                                 initialValue: spAdrContact.purchasePhone
                                             })(
