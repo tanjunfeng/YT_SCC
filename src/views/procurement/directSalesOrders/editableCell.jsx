@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 class EditableCell extends PureComponent {
     state = {
-        value: this.props.value || 0,
+        value: this.props.value || 1,
         editable: false,
     }
 
@@ -15,9 +15,11 @@ class EditableCell extends PureComponent {
         this.setState({ value });
     }
 
-    check = () => {
-        this.setState({ editable: false });
-        this.props.onChange(this.state.value);
+    check = (event) => {
+        if (event.keyCode === 13) {
+            this.setState({ editable: false });
+            this.props.onChange(this.state.value);
+        }
     }
 
     edit = () => {
@@ -33,8 +35,9 @@ class EditableCell extends PureComponent {
                         <div className="editable-cell-input-wrapper">
                             <InputNumber
                                 defaultValue={value}
+                                min={1}
                                 onChange={this.handleChange}
-                                onPressEnter={this.check}
+                                onKeyUp={this.check}
                             />
                             <Icon
                                 type="check"
@@ -44,7 +47,7 @@ class EditableCell extends PureComponent {
                         </div>
                         :
                         <div className="editable-cell-text-wrapper">
-                            {value}
+                            <span>{value}</span>
                             <Icon
                                 type="edit"
                                 className="editable-cell-icon"

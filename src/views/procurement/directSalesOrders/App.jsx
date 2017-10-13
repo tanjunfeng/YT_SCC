@@ -16,17 +16,17 @@ import EditableCell from './editableCell';
 class DirectSalesOrders extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
-            goodsFormConditions: {
-                branchCompanyId: '',
-                deliveryWarehouseCode: ''
-            },
-            goodsList: [],
-            appending: false
-        }
-        this.columns = columns;
-        this.columns[columns.length - 1].render = this.renderOperations;
-        this.columns[columns.length - 4].render = this.renderNumber;
+        columns[columns.length - 4].render = this.renderNumber;
+        columns[columns.length - 1].render = this.renderOperations;
+    }
+
+    state = {
+        goodsFormConditions: {
+            branchCompanyId: '',
+            deliveryWarehouseCode: ''
+        },
+        goodsList: [],
+        appending: false
     }
 
     onCellChange = (productCode, dataIndex) => value => {
@@ -43,7 +43,7 @@ class DirectSalesOrders extends PureComponent {
         this.setState({ goodsList: goodsList.filter(item => item.productCode !== productCode) });
     }
 
-    getRow = (goodsInfo) => {
+    getRow = (goodsInfo, acount) => {
         const {
             productCode,
             internationalCodes,
@@ -60,6 +60,7 @@ class DirectSalesOrders extends PureComponent {
             unitExplanation,
             salePrice,
             amount,
+            acount: acount || 1,
             minNuber
         };
     }
@@ -75,16 +76,22 @@ class DirectSalesOrders extends PureComponent {
     }
 
     handleGoodsFormChange = (goodsInfo) => {
-        const arr = this.state.goodsList;
+        const goodsList = this.state.goodsList;
         this.setState({ appending: true });
         if (typeof goodsInfo === 'object' && goodsInfo.productCode) {
             // 判断此商品是否已存在
-            const existGoods = arr.find(e => e.productCode === goodsInfo.productCode);
-            if (existGoods === undefined) {
-                arr.unshift(this.getRow(goodsInfo));
+            const existGoodsIndex = goodsList.findIndex(
+                e => e.productCode === goodsInfo.productCode
+            );
+            if (existGoodsIndex === -1) {
+                goodsList.unshift(this.getRow(goodsInfo));
                 this.setState({ appending: false });
             } else {
-                message.info(`已存在此商品，顺序号${existGoods.index}`);
+                // 不存在时删除这条商品并移动到第一条，需保留已填入的数量
+                const acount = goodsList[existGoodsIndex].acount;
+                goodsList.splice(existGoodsIndex, 1);
+                message.info('已存在此商品');
+                goodsList.unshift(this.getRow(goodsInfo, acount));
                 this.setState({ appending: false });
             }
         }
@@ -102,10 +109,10 @@ class DirectSalesOrders extends PureComponent {
             onChange={this.onCellChange(record.productCode, 'acount')}
         />)
 
-    renderOperations = (text, record) => (this.state.goodsList.length > 1 ?
-        (<Popconfirm title="确定删除商品？" onConfirm={() => this.onDelete(record.productCode)}>
+    renderOperations = (text, record) => (
+        <Popconfirm title="确定删除商品？" onConfirm={() => this.onDelete(record.productCode)}>
             <a href="#">删除</a>
-        </Popconfirm>) : null)
+        </Popconfirm>)
 
     render() {
         return (
@@ -119,7 +126,7 @@ class DirectSalesOrders extends PureComponent {
                 />
                 <Table
                     dataSource={this.state.goodsList}
-                    columns={this.columns}
+                    columns={columns}
                     rowKey="productCode"
                     scroll={{
                         x: 1400,
