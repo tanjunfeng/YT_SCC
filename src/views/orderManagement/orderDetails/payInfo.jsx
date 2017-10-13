@@ -206,10 +206,10 @@ class PayInformation extends PureComponent {
                     <span>退款： ￥</span>
                     <span className="red-number">{totalRefundedAmount}</span>
                 </span>
-                <span className="table-footer-item">
+                {/* <span className="table-footer-item">
                     <span>差额： ￥</span>
                     <span className="red-number">{totalPaidAmount - totalRefundedAmount}</span>
-                </span>
+                </span> */}
             </div>)
         return (
             <div>
