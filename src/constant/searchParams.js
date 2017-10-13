@@ -579,3 +579,20 @@ export const adjustmentType = {
         }
     ]
 }
+
+// 订单管理-支付状态
+export const payChannel = {
+    data: [{
+        key: 'weixin',
+        value: '微信'
+    }, {
+        key: 'alipay',
+        value: '支付宝'
+    }, {
+        key: 'unionpay',
+        value: '银联支付'
+    }, {
+        key: 'other',
+        value: '其他'
+    }]
+}
