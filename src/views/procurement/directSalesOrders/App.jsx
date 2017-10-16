@@ -32,26 +32,10 @@ class DirectSalesOrders extends PureComponent {
 
     onCellChange = (productCode, dataIndex) => value => {
         const goodsList = [...this.state.goodsList];
-        const goodsChangedIndex = goodsList.findIndex(item => item.productCode === productCode);
-        const goodsChanged = goodsList[goodsChangedIndex];
-        if (goodsChangedIndex > -1) {
+        const goodsChanged = goodsList.find(item => item.productCode === productCode);
+        if (goodsChanged) {
             goodsChanged[dataIndex] = value;
-            this.setState({ goodsList });
-            this.props.updateGoodsInfo({
-                productId: goodsChanged.productId,
-                quantity: goodsChanged.count,
-                branchCompanyId: this.state.branchCompanyId,
-                deliveryWarehouseCode: this.state.deliveryWarehouseCode
-            }).then(res => {
-                // 库存不足
-                if (!res.data.enough) {
-                    const goodsDeleted = goodsList.splice(goodsChangedIndex, 1);
-                    Object.assign(goodsDeleted, {
-                        enough: false
-                    });
-                    goodsList.unshift(goodsDeleted);
-                }
-            });
+            this.checkStore(goodsChanged);
         }
     }
 
@@ -69,7 +53,7 @@ class DirectSalesOrders extends PureComponent {
             unitExplanation,
             salePrice,
             packingSpecifications,
-            minNuber,
+            minNumber,
             minUnit,    // 最小销售单位
             fullCaseUnit,   // 整箱单位
             salesInsideNumber,  // 销售内装数
@@ -84,9 +68,37 @@ class DirectSalesOrders extends PureComponent {
             salePrice,
             packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber} / ${minUnit} * ${fullCaseUnit}`,
             count: count || salesInsideNumber,
-            minNuber,
+            minNumber,
             enough: true    // 是否库存充足
         };
+    }
+
+    /**
+     * 检查库存
+     *
+     * @param {*object} goods 商品信息
+     */
+    checkStore = (goods) => {
+        const goodsList = [...this.state.goodsList];
+        this.setState({ appending: true });
+        this.props.updateGoodsInfo({
+            productId: goods.productId,
+            quantity: goods.count,
+            branchCompanyId: this.state.branchCompanyId,
+            deliveryWarehouseCode: this.state.deliveryWarehouseCode
+        }).then(res => {
+            // 库存不足
+            if (!res.data.enough) {
+                const index = goodsList.findIndex(
+                    item => item.productCode === goods.productCode);
+                goodsList.splice(index, 1);
+                Object.assign(goods, {
+                    enough: false
+                });
+                goodsList.unshift(goods);
+            }
+            this.setState({ appending: false, goodsList });
+        });
     }
 
     handleStoresChange = (record) => {
@@ -105,15 +117,19 @@ class DirectSalesOrders extends PureComponent {
             );
             if (existGoodsIndex === -1) {
                 // 不存在时添加这条商品
-                goodsList.unshift(this.getRow(goodsInfo));
-                this.setState({ appending: false });
+                const goods = this.getRow(goodsInfo);
+                goodsList.unshift(goods);
+                this.checkStore(goods);
+                this.setState({ appending: false, goodsList });
             } else {
                 // 已存在时删除这条商品并移动到第一条，需保留已填入的数量
                 const count = goodsList[existGoodsIndex].count;
+                const goods = this.getRow(goodsInfo, count);
                 goodsList.splice(existGoodsIndex, 1);
                 message.info(`已存在此商品，当前数量：${count}`);
-                goodsList.unshift(this.getRow(goodsInfo, count));
-                this.setState({ appending: false });
+                goodsList.unshift(goods);
+                this.checkStore(goods);
+                this.setState({ appending: false, goodsList });
             }
         }
     }
@@ -127,7 +143,7 @@ class DirectSalesOrders extends PureComponent {
     renderNumber = (text, record) => (
         <EditableCell
             value={text}
-            row={record}
+            record={record}
             onChange={this.onCellChange(record.productCode, 'count')}
         />)
 
@@ -150,13 +166,14 @@ class DirectSalesOrders extends PureComponent {
                     onChange={this.handleGoodsFormChange}
                 />
                 <Table
+                    rowKey="productCode"
                     dataSource={this.state.goodsList}
                     columns={columns}
-                    rowKey="productCode"
                     scroll={{
                         x: 1400,
                         y: 500
                     }}
+                    loading={this.state.appending}
                     bordered
                 />
             </div>

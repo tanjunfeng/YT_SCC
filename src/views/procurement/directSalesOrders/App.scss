@@ -74,6 +74,11 @@ $directStoreSalesColWidth: 260px;
     }
     .editable-cell {
         position: relative;
+        .not-enouph {
+            display: inline-block;
+            color: red;
+            margin-left: 1em;
+        }
         &:hover {
             display: inline-block;
         }
