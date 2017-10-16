@@ -23,7 +23,8 @@ import {
     updatePmPurchaseOrder,
     repushPurchaseReceipt as repushPurchaseReceiptService,
     queryDirectInfo as queryDirectInfoService,
-    queryGoodsInfo as queryGoodsInfoService
+    queryGoodsInfo as queryGoodsInfoService,
+    updateGoodsInfo as updateGoodsInfoService
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -499,6 +500,29 @@ export const queryGoodsInfo = params => dispatch => (
         queryGoodsInfoService(params)
             .then(res => {
                 dispatch(queryGoodsInfoAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 查询单个商品详情
+ *
+ * @param {*object} data
+ */
+const updateGoodsInfoAction = (data) => ({
+    type: ActionType.UPDATE_GOODS_INFO,
+    payload: data
+});
+
+export const updateGoodsInfo = params => dispatch => (
+    new Promise((resolve, reject) => {
+        updateGoodsInfoService(params)
+            .then(res => {
+                dispatch(updateGoodsInfoAction(res.data));
                 resolve(res);
             })
             .catch(err => {

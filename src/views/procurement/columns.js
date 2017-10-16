@@ -174,19 +174,19 @@ export const goodsColumns = [{
     width: 120
 }, {
     title: '产品规格',
-    dataIndex: 'unitExplanation',
+    dataIndex: 'productSpecifications',
     width: 50
 }, {
-    title: '箱装价格',
-    dataIndex: 'amount',
-    width: 70
+    title: '箱装规格',
+    dataIndex: 'packingSpecifications',
+    width: 80
 }, {
     title: '起定量',
     dataIndex: 'minNuber',
     width: 50
 }, {
     title: '数量',
-    dataIndex: 'acount',
+    dataIndex: 'count',
     width: 100
 }, {
     title: '单价',

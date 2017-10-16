@@ -7,11 +7,20 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import { Form, message, Popconfirm, Table } from 'antd';
-
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { goodsColumns as columns } from '../columns';
 import StoresForm from './storesForm';
 import GoodsForm from './goodsForm';
 import EditableCell from './editableCell';
+import {
+    updateGoodsInfo
+} from '../../../actions/procurement';
+
+@connect(() => ({}), dispatch => bindActionCreators({
+    updateGoodsInfo
+}, dispatch))
 
 class DirectSalesOrders extends PureComponent {
     constructor(props) {
@@ -31,10 +40,15 @@ class DirectSalesOrders extends PureComponent {
 
     onCellChange = (productCode, dataIndex) => value => {
         const goodsList = [...this.state.goodsList];
-        const target = goodsList.find(item => item.productCode === productCode);
-        if (target) {
-            target[dataIndex] = value;
+        const goodsChanged = goodsList.find(item => item.productCode === productCode);
+        if (goodsChanged) {
+            goodsChanged[dataIndex] = value;
             this.setState({ goodsList });
+            this.props.updateGoodsInfo({
+                productId: goodsChanged.productId,
+                quantity: goodsChanged.count,
+                ...this.state.goodsFormConditions
+            });
         }
     }
 
@@ -43,24 +57,30 @@ class DirectSalesOrders extends PureComponent {
         this.setState({ goodsList: goodsList.filter(item => item.productCode !== productCode) });
     }
 
-    getRow = (goodsInfo, acount) => {
+    getRow = (goodsInfo, count) => {
         const {
+            productId,
             productCode,
             internationalCodes,
             productName,
             unitExplanation,
             salePrice,
-            amount,
-            minNuber
-            } = goodsInfo;
+            packingSpecifications,
+            minNuber,
+            minUnit,    // 最小销售单位
+            fullCaseUnit,   // 整箱单位
+            salesInsideNumber,  // 销售内装数
+            sellFullCase    // 是否整箱销售
+        } = goodsInfo;
         return {
+            productId,
             productCode,
             internationalCode: internationalCodes[0].internationalCode,
             productName,
-            unitExplanation,
+            productSpecifications: `${packingSpecifications} / ${unitExplanation}`,
             salePrice,
-            amount,
-            acount: acount || 1,
+            packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber} / ${minUnit} * ${fullCaseUnit}`,
+            count: count || 1,
             minNuber
         };
     }
@@ -88,10 +108,10 @@ class DirectSalesOrders extends PureComponent {
                 this.setState({ appending: false });
             } else {
                 // 不存在时删除这条商品并移动到第一条，需保留已填入的数量
-                const acount = goodsList[existGoodsIndex].acount;
+                const count = goodsList[existGoodsIndex].count;
                 goodsList.splice(existGoodsIndex, 1);
-                message.info(`已存在此商品，当前数量：${acount}`);
-                goodsList.unshift(this.getRow(goodsInfo, acount));
+                message.info(`已存在此商品，当前数量：${count}`);
+                goodsList.unshift(this.getRow(goodsInfo, count));
                 this.setState({ appending: false });
             }
         }
@@ -106,7 +126,7 @@ class DirectSalesOrders extends PureComponent {
     renderNumber = (text, record) => (
         <EditableCell
             value={text}
-            onChange={this.onCellChange(record.productCode, 'acount')}
+            onChange={this.onCellChange(record.productCode, 'count')}
         />)
 
     renderOperations = (text, record) => (
@@ -132,10 +152,15 @@ class DirectSalesOrders extends PureComponent {
                         x: 1400,
                         y: 500
                     }}
+                    bordered
                 />
             </div>
         );
     }
 }
+
+DirectSalesOrders.propTypes = {
+    updateGoodsInfo: PropTypes.func
+};
 
 export default withRouter(Form.create()(DirectSalesOrders));
