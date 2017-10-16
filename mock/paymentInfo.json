@@ -1,0 +1,32 @@
+{
+    "timestamp": 1507882033207,
+    "code": 200,
+    "message": {},
+    "exception": null,
+    "data": {
+        "paymentGroups": [
+            {
+                "id": "9802216",
+                "type": 1,
+                "orderId": "100002017091314216",
+                "amount": 0.0,
+                "currencyCode": null,
+                "transNum": null,
+                "payRecordNo": null,
+                "state": "3",
+                "stateDetail": "公司内",
+                "channel": "未知支付类型",
+                "createTime": null,
+                "operatorName": null,
+                "remark": null,
+                "operationTime": null,
+                "refundReason": null,
+                "shouldConfirm": false
+            }
+        ],
+        "totalAmount": 2167.5,
+        "totalRefundedAmount": 0.0,
+        "totalPaidAmount": 0.0
+    },
+    "success": true
+}
