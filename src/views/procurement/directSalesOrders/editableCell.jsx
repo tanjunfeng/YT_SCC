@@ -22,12 +22,12 @@ class EditableCell extends PureComponent {
             <div className="editable-cell">
                 <InputNumber
                     defaultValue={this.props.value}
-                    min={1}
-                    step={this.props.step}
+                    min={this.props.row.salesInsideNumber}
+                    step={this.props.row.salesInsideNumber}
                     onChange={this.handleChange}
                     onKeyUp={this.handlePressEnter}
                 />
-                {this.props.enough ? null : <div className="not-enouph">库存不足</div>}
+                {this.props.row.enough ? null : <div className="not-enouph">库存不足</div>}
             </div>
         );
     }
@@ -35,7 +35,7 @@ class EditableCell extends PureComponent {
 
 EditableCell.propTypes = {
     value: PropTypes.number,
-    step: PropTypes.number,
+    row: PropTypes.objectOf(PropTypes.any),
     enough: PropTypes.bool,
     onChange: PropTypes.func
 };

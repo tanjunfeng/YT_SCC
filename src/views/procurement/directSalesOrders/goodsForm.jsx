@@ -27,7 +27,7 @@ const FormItem = Form.Item;
 class GoodsForm extends PureComponent {
     handleGoodsChange = ({ record }) => {
         const { branchCompanyId, deliveryWarehouseCode } = this.props.value;
-        if (record === undefined) {
+        if (record === undefined || branchCompanyId === '') {
             this.props.onChange(false);
             return;
         }
@@ -40,8 +40,6 @@ class GoodsForm extends PureComponent {
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
-        const value = this.props.value;
         return (
             <div className="direct-sales-orders-form goods-form">
                 <Form layout="inline">
@@ -49,15 +47,10 @@ class GoodsForm extends PureComponent {
                         <h1>商品信息</h1>
                         <Row gutter={40}>
                             <FormItem>
-                                {getFieldDecorator('goods', {
-                                    initialValue: {
-                                        branchCompanyId: this.props.value.branchCompanyId,
-                                        productCode: '',
-                                        productName: ''
-                                    }
-                                })(<AddingGoodsByStore
+                                <AddingGoodsByStore
+                                    branchCompanyId={this.props.value.branchCompanyId}
                                     onChange={this.handleGoodsChange}
-                                />)}
+                                />
                             </FormItem>
                             <FormItem>
                                 <Button type="primary" size="default">
@@ -87,7 +80,6 @@ class GoodsForm extends PureComponent {
 }
 
 GoodsForm.propTypes = {
-    form: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.objectOf(PropTypes.any),
     queryGoodsInfo: PropTypes.func,
     onChange: PropTypes.func

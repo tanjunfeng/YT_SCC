@@ -47,10 +47,7 @@ class StoresForm extends PureComponent {
         } else {
             this.props.clearDirectInfo();
             // 通知父页面清空
-            this.props.onChange({
-                branchCompanyId: '',
-                deliveryWarehouseCode: ''
-            });
+            this.props.onChange({branchCompanyId: '', deliveryWarehouseCode: ''});
         }
     }
 

@@ -23,16 +23,9 @@ import {
 }, dispatch))
 
 class DirectSalesOrders extends PureComponent {
-    constructor(props) {
-        super(props);
-        columns[columns.length - 1].render = this.renderOperations;
-    }
-
     state = {
-        goodsFormConditions: {
-            branchCompanyId: '',
-            deliveryWarehouseCode: ''
-        },
+        branchCompanyId: '',
+        deliveryWarehouseCode: '',
         goodsList: [],
         appending: false
     }
@@ -47,7 +40,8 @@ class DirectSalesOrders extends PureComponent {
             this.props.updateGoodsInfo({
                 productId: goodsChanged.productId,
                 quantity: goodsChanged.count,
-                ...this.state.goodsFormConditions
+                branchCompanyId: this.state.branchCompanyId,
+                deliveryWarehouseCode: this.state.deliveryWarehouseCode
             }).then(res => {
                 // 库存不足
                 if (!res.data.enough) {
@@ -96,12 +90,8 @@ class DirectSalesOrders extends PureComponent {
     }
 
     handleStoresChange = (record) => {
-        this.setState({
-            goodsFormConditions: {
-                branchCompanyId: record.branchCompanyId,
-                deliveryWarehouseCode: record.deliveryWarehouseCode
-            }
-        });
+        const { branchCompanyId, deliveryWarehouseCode } = record;
+        this.setState({ branchCompanyId, deliveryWarehouseCode });
         this.handleClear();
     }
 
@@ -136,8 +126,8 @@ class DirectSalesOrders extends PureComponent {
 
     renderNumber = (text, record) => (
         <EditableCell
-            step={record.salesInsideNumber}
-            enough={record.enough}
+            value={text}
+            row={record}
             onChange={this.onCellChange(record.productCode, 'count')}
         />)
 
@@ -148,13 +138,15 @@ class DirectSalesOrders extends PureComponent {
 
     render() {
         columns[columns.length - 4].render = this.renderNumber;
+        columns[columns.length - 1].render = this.renderOperations;
+        const { branchCompanyId, deliveryWarehouseCode } = this.state;
         return (
             <div className="direct-sales-orders">
                 <StoresForm
                     onChange={this.handleStoresChange}
                 />
                 <GoodsForm
-                    value={this.state.goodsFormConditions}
+                    value={{ branchCompanyId, deliveryWarehouseCode }}
                     onChange={this.handleGoodsFormChange}
                 />
                 <Table

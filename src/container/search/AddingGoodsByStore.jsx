@@ -17,14 +17,14 @@ import Utils from '../../util/util';
 
 class AddingGoodsByStore extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        if (nextProps.value.branchCompanyId === '') {
+        if (nextProps.branchCompanyId === '') {
             this.handleClear();
         }
     }
 
     query = (params) => {
         const conditions = {
-            branchCompanyId: this.props.value.branchCompanyId,
+            branchCompanyId: this.props.branchCompanyId,
             searchTerm: params.value,
             pageNum: params.pagination.current || 1,
             pageSize: params.pagination.pageSize
@@ -37,7 +37,11 @@ class AddingGoodsByStore extends PureComponent {
      */
     handleClear = () => {
         this.searchMind.reset();
-        this.props.onChange({ productId: '', productCode: '', productName: '' });
+        this.props.onChange({
+            productId: '',
+            productCode: '',
+            productName: ''
+        });
     }
 
     /**
@@ -55,7 +59,7 @@ class AddingGoodsByStore extends PureComponent {
                 rowKey="productCode"
                 ref={ref => { this.searchMind = ref }}
                 fetch={this.query}
-                disabled={this.props.value.branchCompanyId === ''}
+                disabled={this.props.branchCompanyId === ''}
                 addonBefore="添加商品"
                 onClear={this.handleClear}
                 onChoosed={this.handleChoose}
@@ -81,7 +85,7 @@ class AddingGoodsByStore extends PureComponent {
 AddingGoodsByStore.propTypes = {
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
-    value: PropTypes.objectOf(PropTypes.any)
+    branchCompanyId: PropTypes.string
 }
 
 export default AddingGoodsByStore;
