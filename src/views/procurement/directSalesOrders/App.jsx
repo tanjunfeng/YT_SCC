@@ -25,7 +25,6 @@ import {
 class DirectSalesOrders extends PureComponent {
     constructor(props) {
         super(props);
-        columns[columns.length - 4].render = this.renderNumber;
         columns[columns.length - 1].render = this.renderOperations;
     }
 
@@ -40,14 +39,24 @@ class DirectSalesOrders extends PureComponent {
 
     onCellChange = (productCode, dataIndex) => value => {
         const goodsList = [...this.state.goodsList];
-        const goodsChanged = goodsList.find(item => item.productCode === productCode);
-        if (goodsChanged) {
+        const goodsChangedIndex = goodsList.findIndex(item => item.productCode === productCode);
+        const goodsChanged = goodsList[goodsChangedIndex];
+        if (goodsChangedIndex > -1) {
             goodsChanged[dataIndex] = value;
             this.setState({ goodsList });
             this.props.updateGoodsInfo({
                 productId: goodsChanged.productId,
                 quantity: goodsChanged.count,
                 ...this.state.goodsFormConditions
+            }).then(res => {
+                // 库存不足
+                if (!res.data.enough) {
+                    const goodsDeleted = goodsList.splice(goodsChangedIndex, 1);
+                    Object.assign(goodsDeleted, {
+                        enough: false
+                    });
+                    goodsList.unshift(goodsDeleted);
+                }
             });
         }
     }
@@ -80,8 +89,9 @@ class DirectSalesOrders extends PureComponent {
             productSpecifications: `${packingSpecifications} / ${unitExplanation}`,
             salePrice,
             packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber} / ${minUnit} * ${fullCaseUnit}`,
-            count: count || 1,
-            minNuber
+            count: count || salesInsideNumber,
+            minNuber,
+            enough: true    // 是否库存充足
         };
     }
 
@@ -104,10 +114,11 @@ class DirectSalesOrders extends PureComponent {
                 e => e.productCode === goodsInfo.productCode
             );
             if (existGoodsIndex === -1) {
+                // 不存在时添加这条商品
                 goodsList.unshift(this.getRow(goodsInfo));
                 this.setState({ appending: false });
             } else {
-                // 不存在时删除这条商品并移动到第一条，需保留已填入的数量
+                // 已存在时删除这条商品并移动到第一条，需保留已填入的数量
                 const count = goodsList[existGoodsIndex].count;
                 goodsList.splice(existGoodsIndex, 1);
                 message.info(`已存在此商品，当前数量：${count}`);
@@ -125,7 +136,8 @@ class DirectSalesOrders extends PureComponent {
 
     renderNumber = (text, record) => (
         <EditableCell
-            value={text}
+            step={record.salesInsideNumber}
+            enough={record.enough}
             onChange={this.onCellChange(record.productCode, 'count')}
         />)
 
@@ -135,6 +147,7 @@ class DirectSalesOrders extends PureComponent {
         </Popconfirm>)
 
     render() {
+        columns[columns.length - 4].render = this.renderNumber;
         return (
             <div className="direct-sales-orders">
                 <StoresForm

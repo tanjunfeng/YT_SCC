@@ -46,7 +46,7 @@ class StoresForm extends PureComponent {
             });
         } else {
             this.props.clearDirectInfo();
-            // 通知副页面清空
+            // 通知父页面清空
             this.props.onChange({
                 branchCompanyId: '',
                 deliveryWarehouseCode: ''

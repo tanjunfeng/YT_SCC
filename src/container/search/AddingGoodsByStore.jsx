@@ -18,7 +18,7 @@ import Utils from '../../util/util';
 class AddingGoodsByStore extends PureComponent {
     componentWillReceiveProps(nextProps) {
         if (nextProps.value.branchCompanyId === '') {
-            this.searchMind.reset();
+            this.handleClear();
         }
     }
 

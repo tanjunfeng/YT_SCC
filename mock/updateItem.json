@@ -5,7 +5,6 @@
     "exception": null,
     "data": {
         "productCode": "1004055",
-        "isEnough": false,
         "internationalCodes": [
             {
                 "id": "xincode322693",
@@ -30,7 +29,7 @@
         "salesInsideNumber": 12,
         "available": true,
         "message": null,
-        "enough": true
+        "enough": false
     },
     "success": true
 }

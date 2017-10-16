@@ -41,6 +41,7 @@ class GoodsForm extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
+        const value = this.props.value;
         return (
             <div className="direct-sales-orders-form goods-form">
                 <Form layout="inline">
