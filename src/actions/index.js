@@ -105,7 +105,7 @@ import { getPromotionList, createPromotion,
 import queryCommodityList from './queryCommodityList';
 
 // 根据条件分页查询白名单列表, 上线下线
-import { queryWhiteListAction, onlineOfflineAction } from './whiteListConfiguration';
+import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './whiteListConfiguration';
 
 export {
     fetchSupplierList,
@@ -201,5 +201,6 @@ export {
     // 根据条件分页查询白名单列表
     queryWhiteListAction,
     // 上线下线
-    onlineOfflineAction
+    onlineWhitelist,
+    offlineWhitelist,
 }
