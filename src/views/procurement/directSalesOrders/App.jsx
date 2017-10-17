@@ -30,7 +30,7 @@ class DirectSalesOrders extends PureComponent {
         appending: false
     }
 
-    onCellChange = (productCode, dataIndex) => (value) => {
+    onCellChange = (productCode, dataIndex) => value => {
         const goodsList = [...this.state.goodsList];
         const goodsChanged = goodsList.find(item => item.productCode === productCode);
         if (goodsChanged) {
