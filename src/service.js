@@ -62,7 +62,7 @@ export const exportManageList = '/supplier/exportManageList';
 export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
 
 // 下载订单管理列表
-export const exportOrderList = '/sorder/toExcel';
+export const exportOrderList = 'sorder/exportOrderList';
 
 // 下载供应商结算数据
 export const exportSimpleList = '/settlement/exportSupplierSettlementList';
