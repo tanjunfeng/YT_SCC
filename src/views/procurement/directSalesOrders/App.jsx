@@ -27,7 +27,8 @@ class DirectSalesOrders extends PureComponent {
         branchCompanyId: '',
         deliveryWarehouseCode: '',
         goodsList: [],
-        appending: false
+        appending: false,
+        error: false
     }
 
     onCellChange = (productCode, dataIndex) => value => {
@@ -35,7 +36,7 @@ class DirectSalesOrders extends PureComponent {
         const goodsChanged = goodsList.find(item => item.productCode === productCode);
         if (goodsChanged) {
             goodsChanged[dataIndex] = value;
-            this.checkStore(goodsChanged);
+            this.checkStore(this.checkMultiple(goodsChanged));
         }
     }
 
@@ -44,7 +45,7 @@ class DirectSalesOrders extends PureComponent {
         this.setState({ goodsList: goodsList.filter(item => item.productCode !== productCode) });
     }
 
-    getRow = (goodsInfo, count) => {
+    getRow = (goodsInfo) => {
         const {
             productId,
             productCode,
@@ -53,13 +54,13 @@ class DirectSalesOrders extends PureComponent {
             unitExplanation,
             salePrice,
             packingSpecifications,
-            minNumber,
+            minNumber,  // 起订数量
             minUnit,    // 最小销售单位
             fullCaseUnit,   // 整箱单位
             salesInsideNumber,  // 销售内装数
-            sellFullCase    // 是否整箱销售
+            sellFullCase    // 是否整箱销售，１:按整箱销售，0:不按整箱销售
         } = goodsInfo;
-        return {
+        const record = {
             productId,
             productCode,
             internationalCode: internationalCodes[0].internationalCode,
@@ -68,11 +69,14 @@ class DirectSalesOrders extends PureComponent {
             salePrice,
             sellFullCase,
             salesInsideNumber,
-            packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber} / ${minUnit} * ${fullCaseUnit}`,
-            count: count || salesInsideNumber,
+            packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit} / ${minUnit}`,
+            count: minNumber,
             minNumber,
-            enough: true    // 是否库存充足
+            minNumberSpecifications: sellFullCase === 0 ? `${minNumber}${fullCaseUnit}` : `${minNumber}${minUnit}`, // 起订数量显示单位
+            enough: true,    // 是否库存充足，默认充足
+            isMultiple: true    // 是否是销售内装数的整数倍，默认是整数倍
         };
+        return record;
     }
 
     /**
@@ -81,7 +85,6 @@ class DirectSalesOrders extends PureComponent {
      * @param {*object} goods 商品信息
      */
     checkStore = (goods) => {
-        const goodsList = [...this.state.goodsList];
         this.setState({ appending: true });
         this.props.updateGoodsInfo({
             productId: goods.productId,
@@ -91,16 +94,41 @@ class DirectSalesOrders extends PureComponent {
         }).then(res => {
             // 库存不足
             if (!res.data.enough) {
-                const index = goodsList.findIndex(
-                    item => item.productCode === goods.productCode);
-                goodsList.splice(index, 1);
                 Object.assign(goods, {
                     enough: false
                 });
-                goodsList.unshift(goods);
+                this.shouldGoogsMoveToTop(goods);
             }
-            this.setState({ appending: false, goodsList });
+        }).finally(() => {
+            this.setState({ appending: false });
         });
+    }
+
+    shouldGoogsMoveToTop = (goods) => {
+        const goodsList = [...this.state.goodsList];
+        const index = goodsList.findIndex(
+            item => item.productCode === goods.productCode);
+        goodsList.splice(index, 1);
+        goodsList.unshift(goods);
+        message.info('库存不足的商品已被移动到顶部');
+        this.setState({ goodsList });
+    }
+
+    /**
+     * 检查是否整箱销售，若是，则判断当前数量是否是内装数量的整数倍
+     *
+     * @returns {*object}
+     */
+    checkMultiple = (goods) => {
+        const distGoods = { ...goods };
+        const { count, minNumber, sellFullCase } = distGoods;
+        // 整箱销售时，判断当前数量是否是内装数量的整数倍
+        let isMultiple = true;
+        if (sellFullCase === 0 && count % minNumber > 0) {
+            isMultiple = false;
+        }
+        Object.assign(distGoods, { isMultiple });
+        return distGoods;
     }
 
     handleStoresChange = (record) => {
@@ -110,24 +138,24 @@ class DirectSalesOrders extends PureComponent {
     }
 
     handleGoodsFormChange = (goodsInfo) => {
-        const goodsList = this.state.goodsList;
+        const goodsList = [...this.state.goodsList];
         this.setState({ appending: true });
         if (typeof goodsInfo === 'object' && goodsInfo.productCode) {
             // 判断此商品是否已存在
-            const existGoodsIndex = goodsList.findIndex(
+            const existIndex = goodsList.findIndex(
                 e => e.productCode === goodsInfo.productCode
             );
-            if (existGoodsIndex === -1) {
+            if (existIndex === -1) {
                 // 不存在时添加这条商品
                 const goods = this.getRow(goodsInfo);
-                goodsList.unshift(goods);
                 this.checkStore(goods);
+                goodsList.unshift(goods);
                 this.setState({ appending: false, goodsList });
             } else {
                 // 已存在时删除这条商品并移动到第一条，需保留已填入的数量
-                const count = goodsList[existGoodsIndex].count;
-                const goods = this.getRow(goodsInfo, count);
-                goodsList.splice(existGoodsIndex, 1);
+                const count = goodsList[existIndex].count;
+                const goods = goodsList[existIndex];
+                goodsList.splice(existIndex, 1);
                 message.info(`已存在此商品，当前数量：${count}`);
                 goodsList.unshift(goods);
                 this.checkStore(goods);
@@ -143,26 +171,22 @@ class DirectSalesOrders extends PureComponent {
     }
 
     renderNumber = (text, record) => {
-        const { minNumber, sellFullCase, salesInsideNumber, enough } = record;
+        const { minNumber, enough, isMultiple } = record;
         // 填入的数量是否是内装数量的整数倍
-        const isNotMulti = text % salesInsideNumber !== 0;
-        const step = sellFullCase === 0 ? minNumber : salesInsideNumber;
-        // 库存不足 或 非整箱销售数量的整数倍时，通知错误
-        if (!enough || (sellFullCase === 1 && isNotMulti)) {
-            this.setState({
-                error: true
-            });
-        } else {
-            this.setState({
-                error: false
-            });
+        const step = minNumber;
+        const errors = [];
+        if (!enough) {
+            errors.push('库存不足');
+        }
+        if (!isMultiple) {
+            errors.push('不是整数倍');
         }
         return (
             <EditableCell
+                value={text}
                 min={minNumber}
                 step={step}
-                value={text}
-                record={record}
+                error={errors.join(', ')}
                 onChange={this.onCellChange(record.productCode, 'count')}
             />);
     }

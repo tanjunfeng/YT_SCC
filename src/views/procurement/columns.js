@@ -182,7 +182,7 @@ export const goodsColumns = [{
     width: 80
 }, {
     title: '起定量',
-    dataIndex: 'minNumber',
+    dataIndex: 'minNumberSpecifications',
     width: 50
 }, {
     title: '数量',

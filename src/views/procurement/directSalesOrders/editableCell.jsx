@@ -1,19 +1,15 @@
 /**
  * 可编辑单元格
+ *
+ * 受控组件
  */
 import React, { PureComponent } from 'react';
 import { InputNumber } from 'antd';
 import PropTypes from 'prop-types';
 
 class EditableCell extends PureComponent {
-    state = {
-        value: this.props.value,
-        error: false
-    }
-
     handleChange = (value) => {
-        this.setState({ value });
-        this.props.onChange(value, this.state.error);
+        this.props.onChange(value);
     }
 
     handlePressEnter = (event) => {
@@ -24,37 +20,17 @@ class EditableCell extends PureComponent {
     }
 
     render() {
-        const { minNumber, sellFullCase, salesInsideNumber } = this.props.record;
-        // 填入的数量是否是内装数量的整数倍
-        const isNotMulti = this.state.value % salesInsideNumber !== 0;
-        const step = sellFullCase === 0 ? minNumber : salesInsideNumber;
-        // 库存不足 或 非整箱销售数量的整数倍时，通知错误
-        if (!this.props.record.enough || (sellFullCase === 1 && isNotMulti)) {
-            this.setState({
-                error: true
-            });
-        } else {
-            this.setState({
-                error: false
-            });
-        }
+        const { min, step, error, value } = this.props;
         return (
             <div className="editable-cell">
                 <InputNumber
-                    defaultValue={this.state.value}
-                    min={minNumber}
+                    defaultValue={value}
+                    min={min}
                     step={step}
                     onChange={this.handleChange}
                     onKeyUp={this.handlePressEnter}
                 />
-                {
-                    !this.props.record.enough ?
-                        <div className="error-message">库存不足</div> : null
-                }
-                {
-                    sellFullCase === 1 && isNotMulti ?
-                        <div className="error-message">不是整数倍</div> : null
-                }
+                <div className="error-message">{error}</div>
             </div>
         );
     }
@@ -62,7 +38,9 @@ class EditableCell extends PureComponent {
 
 EditableCell.propTypes = {
     value: PropTypes.number,
-    record: PropTypes.objectOf(PropTypes.any),
+    min: PropTypes.number,
+    step: PropTypes.number,
+    error: PropTypes.string,
     onChange: PropTypes.func
 };
 
