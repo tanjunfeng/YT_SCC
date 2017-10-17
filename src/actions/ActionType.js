@@ -103,6 +103,10 @@ export default {
     // 系统配置
     // 分类列表页商品排序管理
     RECEIVE_GET_CATEGORYS: 'RECEIVE_GET_CATEGORYS',
+    // 根据条件分页查询白名单列表
+    QUERY_WHITE_LIST: 'QUERY_WHITE_LIST',
+    // 白名单上线下线
+    ONLINE_OFFLINE: 'ONLINE_OFFLINE',
     // 修改分类商品排序号
     UPDATE_CATEGORY: 'UPDATE_CATEGORY',
     // 新增分类商品排序
