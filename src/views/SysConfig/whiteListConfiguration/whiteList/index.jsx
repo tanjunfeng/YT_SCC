@@ -1,4 +1,4 @@
-import WhiteListConfiguration from './App';
+import WhiteListConfig from './App';
 import './App.scss';
 
-export default WhiteListConfiguration;
+export default WhiteListConfig;

@@ -27,7 +27,7 @@ import CateListGoodsSortManage from 'bundle-loader?lazy!../views/SysConfig/CateL
 // 数据字典
 import DataDictionary from 'bundle-loader?lazy!../views/SysConfig/DataDictionary';
 // 白名单
-import WhiteListConfiguration from 'bundle-loader?lazy!../views/SysConfig/whiteListConfiguration/whiteList';
+import WhiteListConfig from 'bundle-loader?lazy!../views/SysConfig/whiteListConfiguration/whiteList';
 // 静态页管理
 import StaticPageHome from 'bundle-loader?lazy!../views/mediaManagement/StaticPageHome';
 // ckeditor
@@ -137,10 +137,10 @@ const routes = [
                 key: 'whiteListConfig',
                 component: () => (
                     <Route
-                        path="/WhiteListConfiguration"
+                        path="/whiteListConfig"
                         exact
                         render={() =>
-                            <Bundle load={WhiteListConfiguration}>{(App) => <App />}</Bundle>
+                            <Bundle load={WhiteListConfig}>{(App) => <App />}</Bundle>
                         }
                     />
                 ),

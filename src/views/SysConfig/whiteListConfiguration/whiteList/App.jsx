@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-16 20:47:42
+ * @Last Modified time: 2017-10-17 14:53:50
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -30,12 +30,13 @@ import ModalOffline from '../modalOffline';
     onlineOffline
 }, dispatch))
 
-class WhiteListConfiguration extends PureComponent {
+class WhiteListConfig extends PureComponent {
     constructor(props) {
         super(props);
-        this.param = {};
+        this.param = [];
         this.state = {
-            storeIds: [],
+            chooseGoodsList: [],
+            selectedListData: {},
             current: 1,
             ModalOnlineVisible: false,
             ModalOfflineVisible: false,
@@ -46,7 +47,6 @@ class WhiteListConfiguration extends PureComponent {
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
         this.renderOperations = this.renderOperations.bind(this);
         this.query = this.query.bind(this);
-        this.onSelectChange = this.onSelectChange.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.onModalOnline = this.onModalOnline.bind(this);
         this.onModalOnlineOk = this.onModalOnlineOk.bind(this);
@@ -72,13 +72,6 @@ class WhiteListConfiguration extends PureComponent {
         this.query();
     }
 
-    /**
-     * table复选框
-     */
-    onSelectChange(storeIds) {
-        this.setState({ storeIds });
-    }
-
     onModalOnline() {
         this.setState({ModalOnlineVisible: true})
         this.handlePromotionReset();
@@ -89,22 +82,22 @@ class WhiteListConfiguration extends PureComponent {
         this.handlePromotionReset();
     }
 
-    onModalOnlineOk() {
-        const { storeIds } = this.state;
+    onModalOnlineOk(warehouseCode) {
+        console.log(warehouseCode)
+        const { chooseGoodsList } = this.state;
         this.handlePromotionReset();
-        if (storeIds.length === 0) {
-            this.setState({storeId: storeIds[0]});
+        if (chooseGoodsList.length === 0) {
+            this.setState({storeId: chooseGoodsList[0]});
             this.props.onlineOffline(Utils.removeInvalid({
-                storeIds: this.state.storeIds,
+                storeIds: this.state.storeId,
                 scPurchaseFlag: this.state.scPurchaseFlag
             })).then((res) => {
                 if (res.data) {
                     this.setState({ModalOnlineVisible: false, scPurchaseFlag: ''})
                 }
-                this.setState({scPurchaseFlag: ''})
                 this.query();
             }).catch(() => {
-                message.error('失败')
+                message.error('操作失败')
             })
         } else {
             this.props.onlineOffline(Utils.removeInvalid({
@@ -112,12 +105,11 @@ class WhiteListConfiguration extends PureComponent {
                 scPurchaseFlag: this.state.scPurchaseFlag
             })).then((res) => {
                 if (res.data) {
-                    this.setState({ModalOnlineVisible: false})
+                    this.setState({ModalOnlineVisible: false, scPurchaseFlag: ''})
                 }
-                this.setState({scPurchaseFlag: ''})
                 this.query();
             }).catch(() => {
-                message.error('失败')
+                message.error('操作失败')
             })
         }
     }
@@ -136,11 +128,11 @@ class WhiteListConfiguration extends PureComponent {
                 scPurchaseFlag: this.state.scPurchaseFlag
             })).then((res) => {
                 if (res.data) {
-                    this.setState({ModalOfflineVisible: false})
+                    this.setState({ModalOfflineVisible: false, scPurchaseFlag: ''})
                 }
                 this.query();
             }).catch(() => {
-                message.error('失败')
+                message.error('操作失败')
             })
         } else {
             this.props.onlineOffline(Utils.removeInvalid({
@@ -148,11 +140,11 @@ class WhiteListConfiguration extends PureComponent {
                 scPurchaseFlag: this.state.scPurchaseFlag
             })).then((res) => {
                 if (res.data) {
-                    this.setState({ModalOfflineVisible: false})
+                    this.setState({ModalOfflineVisible: false, scPurchaseFlag: ''})
                 }
                 this.query();
             }).catch(() => {
-                message.error('失败')
+                message.error('操作失败')
             })
         }
     }
@@ -256,9 +248,14 @@ class WhiteListConfiguration extends PureComponent {
     render() {
         const { data, total, pageNum, pageSize } = this.props.data;
         const { ModalOnlineVisible, ModalOfflineVisible } = this.state;
+        const COUNTRY_OFF_THE_SHELF = this.state.chooseGoodsList.length === 0;
         const rowSelection = {
-            selectedRowKeys: this.state.storeIds,
-            onChange: this.onSelectChange
+            onChange: (selectedRowKeys, selectedRows) => {
+                this.setState({
+                    chooseGoodsList: selectedRowKeys,
+                    selectedListData: selectedRows
+                })
+            },
         };
         columns[columns.length - 1].render = this.renderOperations;
         return (
@@ -267,7 +264,7 @@ class WhiteListConfiguration extends PureComponent {
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
                     value={{
-                        length: this.state.storeIds.length
+                        COUNTRY_OFF_THE_SHELF
                     }}
                     onModalClick={this.onModalOnline}
                     onModalOfflineClick={this.onModalOffline}
@@ -276,7 +273,7 @@ class WhiteListConfiguration extends PureComponent {
                     rowSelection={rowSelection}
                     dataSource={data}
                     columns={columns}
-                    rowKey="franchiseeId"
+                    rowKey="storeId"
                     scroll={{
                         x: 1600
                     }}
@@ -305,10 +302,10 @@ class WhiteListConfiguration extends PureComponent {
     }
 }
 
-WhiteListConfiguration.propTypes = {
+WhiteListConfig.propTypes = {
     queryWhitelist: PropTypes.func,
     onlineOffline: PropTypes.func,
     data: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 };
 
-export default withRouter(Form.create()(WhiteListConfiguration));
+export default withRouter(Form.create()(WhiteListConfig));

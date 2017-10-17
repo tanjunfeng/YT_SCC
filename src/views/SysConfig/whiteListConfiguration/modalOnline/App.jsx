@@ -3,7 +3,7 @@
  * @Description: 上线弹窗
  * @CreateDate: 2017-10-16 17:32:20
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-16 17:32:20
+ * @Last Modified time: 2017-10-17 14:53:24
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -77,10 +77,12 @@ class ModalOnline extends PureComponent {
      * 送货仓-值清单
      */
     handleJoiningChoose = ({ record }) => {
+        const { warehouseCode } = record;
         this.setState({
             warehouseCode: record.warehouseCode,
             warehouseName: record.warehouseName,
         });
+        this.props.onOk(warehouseCode)
     }
 
     /**

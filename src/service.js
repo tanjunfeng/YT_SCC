@@ -494,7 +494,7 @@ export const queryAllSupplier = (params) => http.get('/price/queryAllSupplier', 
 export const insertDictionary = (params) => http.post('/dictionary/insertDictionary', params);
 
 // 根据条件分页查询白名单列表
-// export const querywhitelist = (params) => http.post('/sp/queryWhiteList', params);
+// export const queryWhitelist = (params) => http.get('/sp/queryWhiteList', params);
 export const queryWhitelist = (params) => http.get('/mock/getWarehouseLogicInfo', params);
 
 // 白名单上线下线
