@@ -3,7 +3,7 @@
  * @Description: 上线弹窗
  * @CreateDate: 2017-10-16 17:32:20
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-17 14:53:24
+ * @Last Modified time: 2017-10-17 17:22:14
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -77,12 +77,9 @@ class ModalOnline extends PureComponent {
      * 送货仓-值清单
      */
     handleJoiningChoose = ({ record }) => {
-        const { warehouseCode } = record;
-        this.setState({
-            warehouseCode: record.warehouseCode,
-            warehouseName: record.warehouseName,
-        });
-        this.props.onOk(warehouseCode)
+        const { warehouseCode, warehouseName } = record;
+        this.setState({ warehouseCode, warehouseName });
+        // this.props.onOk(warehouseCode, warehouseName)
     }
 
     /**
@@ -93,7 +90,7 @@ class ModalOnline extends PureComponent {
             warehouseCode: '',
             warehouseName: '',
         });
-        this.searchMind.reset();
+        this.joiningSearchMind.reset();
         this.props.onSubCompaniesClear();
     }
 
@@ -107,9 +104,9 @@ class ModalOnline extends PureComponent {
             >
                 <FormItem>
                     <span>送货仓：</span>
-                    <span>
+                    <span style={{ display: 'inline-block', verticalAlign: 'top' }}>
                         <SearchMind
-                            rowKey="franchiseeId"
+                            rowKey="warehouseCode"
                             compKey="search-mind-joining"
                             ref={ref => { this.joiningSearchMind = ref }}
                             fetch={(params) =>
