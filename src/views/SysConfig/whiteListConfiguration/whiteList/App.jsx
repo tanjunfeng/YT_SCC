@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-17 17:38:35
+ * @Last Modified time: 2017-10-17 18:12:06
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -85,8 +85,7 @@ class WhiteListConfig extends PureComponent {
         this.props.onlineOffline(Utils.removeInvalid({
             warehouseCode,
             warehouseName,
-            chooseGoodsList,
-            scPurchaseFlag: 1
+            chooseGoodsList
         })).then((res) => {
             if (res.code === 200) {
                 this.setState({ ModalOnlineVisible: false })
@@ -105,8 +104,7 @@ class WhiteListConfig extends PureComponent {
         this.handlePromotionReset();
         const { chooseGoodsList } = this.state;
         this.props.onlineOffline(Utils.removeInvalid({
-            chooseGoodsList,
-            scPurchaseFlag: 0
+            chooseGoodsList
         })).then((res) => {
             if (res.code === 200) {
                 this.setState({ ModalOfflineVisible: false })
