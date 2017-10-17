@@ -9,7 +9,7 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Row, Button } from 'antd';
+import { Form, Row, Button, Upload, Icon, message } from 'antd';
 import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -25,6 +25,30 @@ const FormItem = Form.Item;
 }, dispatch))
 
 class GoodsForm extends PureComponent {
+    uploadProps = {
+        name: 'uploadProps',
+        contentType: 'application/json;charset=UTF-8',
+        action: '/directStore/fileUpload',
+        headers: {
+            authorization: 'authorization-text',
+        },
+        onChange(info) {
+            if (info.file.status !== 'uploading') {
+                console.log(info.file, info.fileList);
+            }
+            if (info.file.status === 'done') {
+                // post data
+                // data: {
+                //     branchCompanyId: this.props.value.branchCompanyId,
+                //         deliveryWarehouseCode: this.props.value.deliveryWarehouseCode,
+                // },
+                message.success(`${info.file.name} file uploaded successfully`);
+            } else if (info.file.status === 'error') {
+                message.error(`${info.file.name} file upload failed.`);
+            }
+        },
+    };
+
     handleGoodsChange = ({ record }) => {
         const { branchCompanyId, deliveryWarehouseCode } = this.props.value;
         if (record === undefined || branchCompanyId === '') {
@@ -52,11 +76,15 @@ class GoodsForm extends PureComponent {
                                     onChange={this.handleGoodsChange}
                                 />
                             </FormItem>
+                            <FormItem className="file-upload">
+                                <Upload {...this.uploadProps}>
+                                    <Button type="primary" size="default">
+                                        <Icon type="upload" /> Excel 导入
+                                        </Button>
+                                </Upload>
+                            </FormItem>
                             <FormItem>
-                                <Button type="primary" size="default">
-                                    Excel 导入
-                                </Button>
-                                <a className="download">
+                                <a className="download" href="/directStore/downloadExcelModel">
                                     下载 Excel 模板
                                 </a>
                                 <div className="info">

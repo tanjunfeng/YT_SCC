@@ -18,7 +18,6 @@ class EditableCell extends PureComponent {
     }
 
     render() {
-        console.log(this.props);
         return (
             <div className="editable-cell">
                 <InputNumber

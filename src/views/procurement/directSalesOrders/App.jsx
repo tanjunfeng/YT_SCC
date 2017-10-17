@@ -173,7 +173,6 @@ class DirectSalesOrders extends PureComponent {
                         x: 1400,
                         y: 500
                     }}
-                    loading={this.state.appending}
                     bordered
                 />
             </div>
