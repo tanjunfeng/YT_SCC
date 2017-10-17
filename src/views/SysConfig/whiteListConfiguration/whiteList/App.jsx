@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-17 18:12:06
+ * @Last Modified time: 2017-10-17 19:05:22
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -18,7 +18,7 @@ import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../../constant';
 import { couponList as columns } from '.././columns';
 import Utils from '../../../../util/util';
-import { queryWhitelist, onlineOffline } from '../../../../actions/whiteListConfiguration';
+import { queryWhitelist, onlineWhitelist, offlineWhitelist } from '../../../../actions/whiteListConfiguration';
 import ModalOnline from '../modalOnline';
 import ModalOffline from '../modalOffline';
 
@@ -27,7 +27,8 @@ import ModalOffline from '../modalOffline';
 }), dispatch => bindActionCreators({
     queryWhitelist,
     updatePromotionStatus,
-    onlineOffline
+    onlineWhitelist,
+    offlineWhitelist
 }, dispatch))
 
 class WhiteListConfig extends PureComponent {
@@ -82,7 +83,7 @@ class WhiteListConfig extends PureComponent {
     onModalOnlineOk({ warehouseCode, warehouseName }) {
         this.handlePromotionReset();
         const { chooseGoodsList } = this.state;
-        this.props.onlineOffline(Utils.removeInvalid({
+        this.props.onlineWhitelist(Utils.removeInvalid({
             warehouseCode,
             warehouseName,
             chooseGoodsList
@@ -103,7 +104,7 @@ class WhiteListConfig extends PureComponent {
     onModalOfflineOk() {
         this.handlePromotionReset();
         const { chooseGoodsList } = this.state;
-        this.props.onlineOffline(Utils.removeInvalid({
+        this.props.offlineWhitelist(Utils.removeInvalid({
             chooseGoodsList
         })).then((res) => {
             if (res.code === 200) {
@@ -266,7 +267,8 @@ class WhiteListConfig extends PureComponent {
 
 WhiteListConfig.propTypes = {
     queryWhitelist: PropTypes.func,
-    onlineOffline: PropTypes.func,
+    onlineWhitelist: PropTypes.func,
+    offlineWhitelist: PropTypes.func,
     data: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 };
 
