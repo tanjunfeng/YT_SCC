@@ -6,10 +6,11 @@
  */
 import ActionType from './ActionType';
 import {
-    queryWhitelist as queryWhiteListService
+    queryWhitelist as queryWhiteListService,
+    onlineOffline as onlineOfflineService,
 } from '../service';
 /**
- * 促销活动-下单打折 Action
+ * 白名单列表 Action
  */
 const queryWhiteListAction = (data) => ({
     type: ActionType.QUERY_WHITE_LIST,
@@ -22,6 +23,27 @@ export const queryWhitelist = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     queryWhiteListAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 上线下线
+ */
+const onlineOfflineAction = (data) => ({
+    type: ActionType.ONLINE_OFFLINE,
+    payload: data
+});
+
+export const onlineOffline = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        onlineOfflineService(params)
+            .then(res => {
+                dispatch(
+                    onlineOfflineAction(res.data)
                 );
                 resolve(res);
             })

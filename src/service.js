@@ -495,7 +495,10 @@ export const insertDictionary = (params) => http.post('/dictionary/insertDiction
 
 // 根据条件分页查询白名单列表
 // export const querywhitelist = (params) => http.post('/sp/queryWhiteList', params);
-export const queryWhitelist = (params) => http.post('/mock/getWarehouseLogicInfo', params);
+export const queryWhitelist = (params) => http.get('/mock/getWarehouseLogicInfo', params);
+
+// 白名单上线下线
+export const onlineOffline = (params) => http.post('/sp/onlineOffline', params);
 
 // 修改数据字典
 export const updateDictionary = (params) => http.post('/dictionary/updateDictionary', params);

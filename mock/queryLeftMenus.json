@@ -74,8 +74,8 @@
                     "menuList": []
                 },
                 {
-                    "authorityId": 225,
-                    "authorityCode": "whiteListConfiguration",
+                    "authorityId": 304,
+                    "authorityCode": "whiteListConfig",
                     "displayName": "白名单配置",
                     "menuList": []
                 }

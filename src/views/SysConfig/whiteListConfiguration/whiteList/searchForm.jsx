@@ -5,17 +5,16 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, Form, Select, Row, Col, Modal } from 'antd';
+import { Button, Input, Form, Select, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Utils from '../../../util/util';
-import { promotionStatus } from './constants';
-import { SubCompanies } from '../../../container/search';
-import SearchMind from '../../../components/searchMind';
-import { pubFetchValueList } from '../../../actions/pub';
-import { queryWhitelist } from '../../../actions/whiteListConfiguration';
-import { PAGE_SIZE } from '../../../constant';
+import Utils from '../../../../util/util';
+import { promotionStatus } from '.././constants';
+import { SubCompanies } from '../../../../container/search';
+import { pubFetchValueList } from '../../../../actions/pub';
+import { queryWhitelist } from '../../../../actions/whiteListConfiguration';
+import { PAGE_SIZE } from '../../../../constant';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -41,7 +40,6 @@ class SearchForm extends PureComponent {
             warehouseVisible: false,
             companyVisible: false,
             supplyChoose: {},
-            modalXXXvisible: this.props.modalXXXvisible
         }
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
@@ -128,50 +126,16 @@ class SearchForm extends PureComponent {
         this.props.onPromotionReset();  // 通知父页面已清空
     }
 
-    handleQueryResults() {
-        this.setState({ isReleaseCouponModalVisible: true, grantMethod: 0 });
+    handleGoOnline = () => {
+        this.props.onModalClick();
     }
 
-    handleQueryCoupons() {
-        this.setState({ isReleaseCouponModalVisible: true, grantMethod: 1 });
-    }
-
-    handleSelectCancel() {
-        this.setState({ isReleaseCouponModalVisible: false });
-    }
-
-    handleGoOnline() {
-        this.setState({
-            warehouseVisible: true,
-        });
-    }
-
-    handleOk = () => {
-        this.setState({
-            warehouseVisible: false,
-            modalXXXvisible: false
-        });
-        const params = getFormData();
-        this.props.onChange(params);
-    }
-    handleCancel = () => {
-        this.setState({
-            warehouseVisible: false,
-        })
-    }
-
-    handleOffline() {
-        Modal.confirm({
-            title: '确认',
-            content: '确认下线选择的商家？',
-            okText: '提交',
-            cancelText: '取消',
-        });
+    handleOffline = () => {
+        this.props.onModalOfflineClick();
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { prefixCls } = this.props;
         return (
             <div className="search-box promotion">
                 <Form layout="inline">
@@ -237,55 +201,22 @@ class SearchForm extends PureComponent {
                                     </Button>
                                 </FormItem>
                                 <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleGoOnline}>
+                                    <Button
+                                        type="primary"
+                                        size="default"
+                                        onClick={this.handleGoOnline}
+                                        disabled={this.props.value.length === 0}
+                                    >
                                         上线
                                     </Button>
-                                    <Modal
-                                        title="选择仓"
-                                        visible={this.state.warehouseVisible || this.props.value.modalXXXvisible}
-                                        onOk={this.handleOk}
-                                        onCancel={this.handleCancel}
-                                    >
-                                        <FormItem>
-                                            <span className={`${prefixCls}-label`}>送货仓：</span>
-                                            <span className={`${prefixCls}-data-pic`}>
-                                                <SearchMind
-                                                    rowKey="franchiseeId"
-                                                    compKey="search-mind-joining"
-                                                    ref={ref => { this.joiningSearchMind = ref }}
-                                                    fetch={(params) =>
-                                                        this.props.pubFetchValueList({
-                                                            param: params.value,
-                                                            pageNum: params.pagination.current || 1,
-                                                            pageSize: params.pagination.pageSize
-                                                        }, 'getWarehouseInfo1')
-                                                    }
-                                                    onChoosed={this.handleJoiningChoose}
-                                                    onClear={this.handleJoiningClear}
-                                                    renderChoosedInputRaw={(row) => (
-                                                        <div>
-                                                            {row.warehouseCode} - {row.warehouseName}
-                                                        </div>
-                                                    )}
-                                                    pageSize={6}
-                                                    columns={[
-                                                        {
-                                                            title: '仓库编码',
-                                                            dataIndex: 'warehouseCode',
-                                                            width: 150,
-                                                        }, {
-                                                            title: '仓库名称',
-                                                            dataIndex: 'warehouseName',
-                                                            width: 200,
-                                                        }
-                                                    ]}
-                                                />
-                                            </span>
-                                        </FormItem>
-                                    </Modal>
                                 </FormItem>
                                 <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleOffline}>
+                                    <Button
+                                        type="primary"
+                                        size="default"
+                                        onClick={this.handleOffline}
+                                        disabled={this.props.value.length === 0}
+                                    >
                                         下线
                                     </Button>
                                 </FormItem>
@@ -301,11 +232,8 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     queryWhitelist: PropTypes.func,
     onPromotionReset: PropTypes.func,
-    pubFetchValueList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.objectOf(PropTypes.any),
-    prefixCls: PropTypes.string,
-    modalXXXvisible: PropTypes.bool
 };
 
 SearchForm.defaultProps = {
