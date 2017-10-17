@@ -76,7 +76,7 @@ $directStoreSalesColWidth: 260px;
     }
     .editable-cell {
         position: relative;
-        .not-enouph {
+        .error-message {
             display: inline-block;
             color: red;
             margin-left: 1em;

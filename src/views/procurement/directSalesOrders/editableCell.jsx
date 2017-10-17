@@ -6,6 +6,10 @@ import { InputNumber } from 'antd';
 import PropTypes from 'prop-types';
 
 class EditableCell extends PureComponent {
+    state = {
+        value: this.props.value
+    }
+
     handleChange = (value) => {
         this.props.onChange(value);
     }
@@ -18,16 +22,21 @@ class EditableCell extends PureComponent {
     }
 
     render() {
+        const { minNumber, sellFullCase, salesInsideNumber } = this.props.record;
+        // 填入的数量是否是内装数量的整数倍
+        const isMulti = this.state.value % salesInsideNumber === 0;
+        const step = sellFullCase === 0 ? minNumber : salesInsideNumber;
         return (
             <div className="editable-cell">
                 <InputNumber
-                    defaultValue={this.props.value}
-                    min={this.props.record.minNumber}
-                    step={this.props.record.minNumber}
+                    defaultValue={this.state.value}
+                    min={minNumber}
+                    step={step}
                     onChange={this.handleChange}
                     onKeyUp={this.handlePressEnter}
                 />
-                {this.props.record.enough ? null : <div className="not-enouph">库存不足</div>}
+                {this.props.record.enough ? null : <div className="error-message">库存不足</div>}
+                {sellFullCase === 0 && isMulti ? null : <div className="error-message">库存不足</div>}
             </div>
         );
     }

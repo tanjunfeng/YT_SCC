@@ -66,6 +66,8 @@ class DirectSalesOrders extends PureComponent {
             productName,
             productSpecifications: `${packingSpecifications} / ${unitExplanation}`,
             salePrice,
+            sellFullCase,
+            salesInsideNumber,
             packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber} / ${minUnit} * ${fullCaseUnit}`,
             count: count || salesInsideNumber,
             minNumber,
