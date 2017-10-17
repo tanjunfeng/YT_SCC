@@ -19,7 +19,7 @@
         "thirdLevelCategoryName": "电热大类",
         "unitExplanation": null,
         "packingSpecifications": "1*15",
-        "sellFullCase": 0,
+        "sellFullCase": 1,
         "fullCaseUnit": null,
         "minNumber": 12,
         "salePrice": 18,

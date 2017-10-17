@@ -7,11 +7,13 @@ import PropTypes from 'prop-types';
 
 class EditableCell extends PureComponent {
     state = {
-        value: this.props.value
+        value: this.props.value,
+        error: false
     }
 
     handleChange = (value) => {
-        this.props.onChange(value);
+        this.setState({ value });
+        this.props.onChange(value, this.state.error);
     }
 
     handlePressEnter = (event) => {
@@ -24,8 +26,18 @@ class EditableCell extends PureComponent {
     render() {
         const { minNumber, sellFullCase, salesInsideNumber } = this.props.record;
         // 填入的数量是否是内装数量的整数倍
-        const isMulti = this.state.value % salesInsideNumber === 0;
+        const isNotMulti = this.state.value % salesInsideNumber !== 0;
         const step = sellFullCase === 0 ? minNumber : salesInsideNumber;
+        // 库存不足 或 非整箱销售数量的整数倍时，通知错误
+        if (!this.props.record.enough || (sellFullCase === 1 && isNotMulti)) {
+            this.setState({
+                error: true
+            });
+        } else {
+            this.setState({
+                error: false
+            });
+        }
         return (
             <div className="editable-cell">
                 <InputNumber
@@ -35,8 +47,14 @@ class EditableCell extends PureComponent {
                     onChange={this.handleChange}
                     onKeyUp={this.handlePressEnter}
                 />
-                {this.props.record.enough ? null : <div className="error-message">库存不足</div>}
-                {sellFullCase === 0 && isMulti ? null : <div className="error-message">库存不足</div>}
+                {
+                    !this.props.record.enough ?
+                        <div className="error-message">库存不足</div> : null
+                }
+                {
+                    sellFullCase === 1 && isNotMulti ?
+                        <div className="error-message">不是整数倍</div> : null
+                }
             </div>
         );
     }

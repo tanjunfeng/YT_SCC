@@ -30,7 +30,7 @@ class DirectSalesOrders extends PureComponent {
         appending: false
     }
 
-    onCellChange = (productCode, dataIndex) => value => {
+    onCellChange = (productCode, dataIndex) => (value) => {
         const goodsList = [...this.state.goodsList];
         const goodsChanged = goodsList.find(item => item.productCode === productCode);
         if (goodsChanged) {
@@ -142,12 +142,30 @@ class DirectSalesOrders extends PureComponent {
         });
     }
 
-    renderNumber = (text, record) => (
-        <EditableCell
-            value={text}
-            record={record}
-            onChange={this.onCellChange(record.productCode, 'count')}
-        />)
+    renderNumber = (text, record) => {
+        const { minNumber, sellFullCase, salesInsideNumber, enough } = record;
+        // 填入的数量是否是内装数量的整数倍
+        const isNotMulti = text % salesInsideNumber !== 0;
+        const step = sellFullCase === 0 ? minNumber : salesInsideNumber;
+        // 库存不足 或 非整箱销售数量的整数倍时，通知错误
+        if (!enough || (sellFullCase === 1 && isNotMulti)) {
+            this.setState({
+                error: true
+            });
+        } else {
+            this.setState({
+                error: false
+            });
+        }
+        return (
+            <EditableCell
+                min={minNumber}
+                step={step}
+                value={text}
+                record={record}
+                onChange={this.onCellChange(record.productCode, 'count')}
+            />);
+    }
 
     renderOperations = (text, record) => (
         <Popconfirm title="确定删除商品？" onConfirm={() => this.onDelete(record.productCode)}>
