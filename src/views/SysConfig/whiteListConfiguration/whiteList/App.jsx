@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-18 16:39:18
+ * @Last Modified time: 2017-10-18 17:22:49
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -103,9 +103,12 @@ class WhiteListConfig extends PureComponent {
                         chooseGoodsList
                     })).then((res) => {
                         if (res.code === 200) {
+                            message.success(res.message)
                             this.setState({ ModalOnlineVisible: false })
                             this.query();
                         }
+                    }).catch((res) => {
+                        message.error(res.message)
                     })
                 }
             })
@@ -124,9 +127,12 @@ class WhiteListConfig extends PureComponent {
                 chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
+                    message.success(res.message)
                     this.setState({ ModalOnlineVisible: false })
                     this.query();
                 }
+            }).catch((res) => {
+                message.error(res.message)
             })
         }
     }
@@ -143,18 +149,24 @@ class WhiteListConfig extends PureComponent {
                 chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
+                    message.success(res.message)
                     this.setState({ ModalOfflineVisible: false })
                     this.query();
                 }
+            }).catch((res) => {
+                message.error(res.message)
             })
         } else {
             this.props.offlineWhitelist(Utils.removeInvalid({
                 chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
+                    message.success(res.message)
                     this.setState({ ModalOfflineVisible: false })
                     this.query();
                 }
+            }).catch((res) => {
+                message.error(res.message)
             })
         }
     }
