@@ -18,8 +18,8 @@
                 "cityName": "长沙市",
                 "districtName": "天心区",
                 "address": "书香路湖光山色小区侧门旁（明德中学对面）",
-                "contact": null,
-                "mobilePhone": null,
+                "contact": "小明",
+                "mobilePhone": 13455567890,
                 "scPurchaseFlag": 0,
                 "deliveryWarehouseCode": null,
                 "deliveryWarehouseName": null
