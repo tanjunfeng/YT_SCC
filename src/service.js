@@ -494,11 +494,13 @@ export const queryAllSupplier = (params) => http.get('/price/queryAllSupplier', 
 export const insertDictionary = (params) => http.post('/dictionary/insertDictionary', params);
 
 // 根据条件分页查询白名单列表
-// export const queryWhitelist = (params) => http.get('/sp/queryWhiteList', params);
-export const queryWhitelist = (params) => http.get('/mock/getWarehouseLogicInfo', params);
+export const queryWhitelist = (params) => http.get('/sp/queryWhiteList', params);
 
-// 白名单上线下线
-export const onlineOffline = (params) => http.post('/sp/onlineOffline', params);
+// 白名单上线
+export const onlineWhitelist = (params) => http.post('/sp/whiteListOnline', params);
+
+// 白名单下线
+export const offlineWhitelist = (params) => http.post('/sp/whiteListOffline', params);
 
 // 修改数据字典
 export const updateDictionary = (params) => http.post('/dictionary/updateDictionary', params);

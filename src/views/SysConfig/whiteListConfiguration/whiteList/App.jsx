@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-17 14:53:50
+ * @Last Modified time: 2017-10-17 19:05:22
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -18,7 +18,7 @@ import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../../constant';
 import { couponList as columns } from '.././columns';
 import Utils from '../../../../util/util';
-import { queryWhitelist, onlineOffline } from '../../../../actions/whiteListConfiguration';
+import { queryWhitelist, onlineWhitelist, offlineWhitelist } from '../../../../actions/whiteListConfiguration';
 import ModalOnline from '../modalOnline';
 import ModalOffline from '../modalOffline';
 
@@ -27,21 +27,21 @@ import ModalOffline from '../modalOffline';
 }), dispatch => bindActionCreators({
     queryWhitelist,
     updatePromotionStatus,
-    onlineOffline
+    onlineWhitelist,
+    offlineWhitelist
 }, dispatch))
 
 class WhiteListConfig extends PureComponent {
     constructor(props) {
         super(props);
-        this.param = [];
+        this.param = {};
         this.state = {
             chooseGoodsList: [],
             selectedListData: {},
             current: 1,
             ModalOnlineVisible: false,
             ModalOfflineVisible: false,
-            storeId: '',
-            scPurchaseFlag : ''
+            storeId: ''
         };
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
@@ -73,84 +73,51 @@ class WhiteListConfig extends PureComponent {
     }
 
     onModalOnline() {
-        this.setState({ModalOnlineVisible: true})
-        this.handlePromotionReset();
+        this.setState({ ModalOnlineVisible: true })
     }
 
     onModalOffline() {
-        this.setState({ModalOfflineVisible: true})
-        this.handlePromotionReset();
+        this.setState({ ModalOfflineVisible: true })
     }
 
-    onModalOnlineOk(warehouseCode) {
-        console.log(warehouseCode)
-        const { chooseGoodsList } = this.state;
+    onModalOnlineOk({ warehouseCode, warehouseName }) {
         this.handlePromotionReset();
-        if (chooseGoodsList.length === 0) {
-            this.setState({storeId: chooseGoodsList[0]});
-            this.props.onlineOffline(Utils.removeInvalid({
-                storeIds: this.state.storeId,
-                scPurchaseFlag: this.state.scPurchaseFlag
-            })).then((res) => {
-                if (res.data) {
-                    this.setState({ModalOnlineVisible: false, scPurchaseFlag: ''})
-                }
+        const { chooseGoodsList } = this.state;
+        this.props.onlineWhitelist(Utils.removeInvalid({
+            warehouseCode,
+            warehouseName,
+            chooseGoodsList
+        })).then((res) => {
+            if (res.code === 200) {
+                this.setState({ ModalOnlineVisible: false })
                 this.query();
-            }).catch(() => {
-                message.error('操作失败')
-            })
-        } else {
-            this.props.onlineOffline(Utils.removeInvalid({
-                storeIds: this.state.storeIds,
-                scPurchaseFlag: this.state.scPurchaseFlag
-            })).then((res) => {
-                if (res.data) {
-                    this.setState({ModalOnlineVisible: false, scPurchaseFlag: ''})
-                }
-                this.query();
-            }).catch(() => {
-                message.error('操作失败')
-            })
-        }
+            }
+        }).catch(() => {
+            message.error('操作失败')
+        })
     }
 
     onModalOnlineCancel() {
-        this.setState({ModalOnlineVisible: false})
+        this.setState({ ModalOnlineVisible: false })
     }
 
     onModalOfflineOk() {
-        const { storeIds } = this.state;
         this.handlePromotionReset();
-        if (storeIds.length === 0) {
-            this.setState({storeId: storeIds[0]});
-            this.props.onlineOffline(Utils.removeInvalid({
-                storeId: this.state.storeId,
-                scPurchaseFlag: this.state.scPurchaseFlag
-            })).then((res) => {
-                if (res.data) {
-                    this.setState({ModalOfflineVisible: false, scPurchaseFlag: ''})
-                }
+        const { chooseGoodsList } = this.state;
+        this.props.offlineWhitelist(Utils.removeInvalid({
+            chooseGoodsList
+        })).then((res) => {
+            if (res.code === 200) {
+                this.setState({ ModalOfflineVisible: false })
                 this.query();
-            }).catch(() => {
-                message.error('操作失败')
-            })
-        } else {
-            this.props.onlineOffline(Utils.removeInvalid({
-                storeIds: this.state.storeIds,
-                scPurchaseFlag: this.state.scPurchaseFlag
-            })).then((res) => {
-                if (res.data) {
-                    this.setState({ModalOfflineVisible: false, scPurchaseFlag: ''})
-                }
-                this.query();
-            }).catch(() => {
-                message.error('操作失败')
-            })
-        }
+            }
+        }).catch(() => {
+            message.error('操作失败')
+        })
     }
 
     onModalOfflineCancel() {
-        this.setState({ModalOfflineVisible: false})
+        this.setState({ ModalOfflineVisible: false })
     }
 
     query() {
@@ -181,15 +148,13 @@ class WhiteListConfig extends PureComponent {
             case 'Offline':
                 this.setState({
                     ModalOfflineVisible: true,
-                    scPurchaseFlag: record.scPurchaseFlag,
                     storeId: record.storeId
                 });
                 break;
             case 'Online':
                 this.setState({
                     ModalOnlineVisible: true,
-                    scPurchaseFlag: record.scPurchaseFlag,
-                    storeId: record.storeId
+                    chooseGoodsList: [record.storeId],
                 });
                 break;
             default:
@@ -263,9 +228,7 @@ class WhiteListConfig extends PureComponent {
                 <SearchForm
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
-                    value={{
-                        COUNTRY_OFF_THE_SHELF
-                    }}
+                    value={{ COUNTRY_OFF_THE_SHELF }}
                     onModalClick={this.onModalOnline}
                     onModalOfflineClick={this.onModalOffline}
                 />
@@ -304,7 +267,8 @@ class WhiteListConfig extends PureComponent {
 
 WhiteListConfig.propTypes = {
     queryWhitelist: PropTypes.func,
-    onlineOffline: PropTypes.func,
+    onlineWhitelist: PropTypes.func,
+    offlineWhitelist: PropTypes.func,
     data: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 };
 

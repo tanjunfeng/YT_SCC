@@ -7,7 +7,8 @@
 import ActionType from './ActionType';
 import {
     queryWhitelist as queryWhiteListService,
-    onlineOffline as onlineOfflineService,
+    onlineWhitelist as onlineService,
+    offlineWhitelist as offlineService,
 } from '../service';
 /**
  * 白名单列表 Action
@@ -31,19 +32,40 @@ export const queryWhitelist = (params) => dispatch => (
 );
 
 /**
- * 上线下线
+ * 上线
  */
-const onlineOfflineAction = (data) => ({
-    type: ActionType.ONLINE_OFFLINE,
+const onlineAction = (data) => ({
+    type: ActionType.ONLINE_WHITE_LIST,
     payload: data
 });
 
-export const onlineOffline = (params) => dispatch => (
+export const onlineWhitelist = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        onlineOfflineService(params)
+        onlineService(params)
             .then(res => {
                 dispatch(
-                    onlineOfflineAction(res.data)
+                    onlineAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 下线
+ */
+const offlineAction = (data) => ({
+    type: ActionType.ONLINE_WHITE_LIST,
+    payload: data
+});
+
+export const offlineWhitelist = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        offlineService(params)
+            .then(res => {
+                dispatch(
+                    offlineAction(res.data)
                 );
                 resolve(res);
             })
