@@ -31,11 +31,23 @@ class DirectSalesOrders extends PureComponent {
         error: false
     }
 
-    onCellChange = (productCode, dataIndex) => value => {
+    onCellChange = (productCode) => value => {
         const goodsList = [...this.state.goodsList];
         const goods = goodsList.find(item => item.productCode === productCode);
         if (goods) {
-            goods[dataIndex] = value;
+            goods.count = value;
+            // 按箱销售，传入数量乘以内装数
+            if (goods.sellFullCase === 1) {
+                Object.assign(goods, {
+                    count: value,
+                    quantity: value * goods.salesInsideNumber
+                });
+            } else {
+                Object.assign(goods, {
+                    count: value,
+                    quantity: value
+                });
+            }
             this.shouldGoogsMoveToTop(goods);
         }
     }
@@ -73,15 +85,13 @@ class DirectSalesOrders extends PureComponent {
             salesInsideNumber,
             packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit} / ${minUnit}`,
             count: minNumber,
+            quantity: sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber,
             minNumber,
             minNumberSpecifications: sellFullCase === 0 ? `${minNumber}${fullCaseUnit}` : `${minNumber}${minUnit}`, // 起订数量显示单位
             enough: true,    // 是否库存充足，默认充足
             isMultiple: true    // 是否是销售内装数的整数倍，默认是整数倍
         };
-        this.checkStore(record).then(goods => {
-            this.checkMultiple(goods);
-            return goods;
-        });
+        return record;
     }
 
     /**
@@ -131,19 +141,19 @@ class DirectSalesOrders extends PureComponent {
      */
     shouldGoogsMoveToTop = (record) => {
         this.setState({ appending: true });
-        this.checkMultiple(record)
         this.checkStore(record).then(goods => {
             const goodsList = [...this.state.goodsList];
             const index = goodsList.findIndex(
                 item => item.productCode === goods.productCode);
-            const isValid = this.checkGoodsStatus(goods);
+            const errors = [];
+            const isValid = this.checkGoodsStatus(goods, errors);
             // 该商品不在列表中，则新增
             if (index === -1) {
                 goodsList.unshift(goods);
             } else if (index > 0 && !isValid) {
                 goodsList.splice(index, 1);
                 goodsList.unshift(goods);
-                message.info('该商品已被移动到顶部');
+                message.info(`${errors.join(',')}该商品已被移动到顶部`);
             }
             this.setState({ appending: false, goodsList });
         });
@@ -157,7 +167,7 @@ class DirectSalesOrders extends PureComponent {
     checkMultiple = (goods) => {
         const distGoods = { ...goods };
         const { count, minNumber, sellFullCase } = distGoods;
-        // 整箱销售时，判断当前数量是否是内装数量的整数倍
+        // 按整箱销售时，判断当前数量是否是内装数量的整数倍
         let isMultiple = true;
         if (sellFullCase === 0 && count % minNumber > 0) {
             isMultiple = false;
@@ -206,7 +216,7 @@ class DirectSalesOrders extends PureComponent {
                 min={minNumber}
                 step={step}
                 error={errors.join(', ')}
-                onChange={this.onCellChange(record.productCode, 'count')}
+                onChange={this.onCellChange(record.productCode)}
             />);
     }
 
