@@ -5,9 +5,9 @@
  * 根据条件分页查询商品清单，并排序
  */
 
+import Promise from 'bluebird';
 import { queryproductsbypages } from '../service';
 import ActionType from './ActionType';
-import Promise from 'bluebird';
 
 const queryCommodityList = (data) => ({
     type: ActionType.QUERY_COMMODITY_DETAILED_LIST,
