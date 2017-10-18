@@ -28,7 +28,7 @@ import ClassifiedSelect from '../../../components/threeStageClassification'
 
 import { pubFetchValueList, getAvailablProducts } from '../../../actions/pub';
 
-import { queryCommodityList } from '../../../actions';
+import { queryCommodityList, syncProductByManualAction } from '../../../actions';
 import { PAGE_SIZE } from '../../../constant';
 
 import Util from '../../../util/util';
@@ -48,7 +48,8 @@ const commodityML = 'commodity-management';
     dispatch => bindActionCreators({
         queryCommodityList,
         pubFetchValueList,
-        getAvailablProducts
+        getAvailablProducts,
+        syncProductByManualAction
     }, dispatch)
 )
 class ManagementList extends PureComponent {
@@ -397,6 +398,19 @@ class ManagementList extends PureComponent {
         })
     }
 
+    handleSelect = (record) => {
+        this.props.syncProductByManualAction({
+            productId: record.productId
+        }).then((res) => {
+            console.log(res)
+            if (res.code === 200) {
+                message.success('商品同步成功');
+            }
+        }).catch(() => {
+            message.error('商品同步失败');
+        })
+    }
+
     /**
      * @param {string} id      供应商id或子公司id
      * @param {string} status  供应商状态或子公司状态
@@ -453,7 +467,7 @@ class ManagementList extends PureComponent {
         const { pathname } = this.props.location;
         const origin = window.location.origin;
         const menu = (
-            <Menu>
+            <Menu onClick={(item) => this.handleSelect(record, item)}>
                 <Menu.Item key={0}>
                     <Link to={`/commodifyList/${productId}`}>商品详情</Link>
                 </Menu.Item>
@@ -467,6 +481,9 @@ class ManagementList extends PureComponent {
                 </Menu.Item>
                 <Menu.Item key={3}>
                     <Link to={`${pathname}/procurementMaintenance/${productId}`}>采购维护</Link>
+                </Menu.Item>
+                <Menu.Item key={4}>
+                    <a>商品同步</a>
                 </Menu.Item>
             </Menu>
         );
@@ -901,6 +918,7 @@ ManagementList.propTypes = {
     queryCommodityList: PropTypes.func,
     pubFetchValueList: PropTypes.func,
     getAvailablProducts: PropTypes.func,
+    syncProductByManualAction: PropTypes.func
 }
 
 ManagementList.defaultProps = {
