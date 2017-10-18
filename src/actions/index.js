@@ -82,6 +82,7 @@ import suppplierSettledAudit from './fetch/suppplierSettledAudit';
 import supplierAdrSettledAudit from './fetch/supplierAdrSettledAudit';
 import modifyAuditAdrVisible from './modify/modifyAuditAdrVisible';
 import auditSupplierEditInfoAction from '../actions/supplier';
+import syncProductByManualAction from '../actions/syncProductByManual';
 import {
     UpdateProdPurchase,
     getProductById,
@@ -193,5 +194,8 @@ export {
     fetchAddProdPurchase,
     fetchUpdateProdPurchase,
     fetchChangeProPurchaseStatus,
-    fetchDeleteProdPurchaseById
+    fetchDeleteProdPurchaseById,
+
+    // 根据商品id同步商品
+    syncProductByManualAction
 }
