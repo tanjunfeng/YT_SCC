@@ -10,14 +10,14 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, Icon, Table, Row, Col, Button, message} from 'antd';
+import { Form, Icon, Table, Row, Col, Button, message } from 'antd';
 import moment from 'moment';
 import RefundModal from './refundModal';
 import PayModal from './payModal';
 import { DATE_FORMAT } from '../../../constant/index';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { modifyPayModalVisible } from '../../../actions/modify/modifyPayModalVisible';
-import { modifyConfirmPayment, fetchPaymentDetailInfo} from '../../../actions/order';
+import { modifyConfirmPayment, fetchPaymentDetailInfo } from '../../../actions/order';
 
 @connect(
     state => ({
@@ -75,6 +75,10 @@ class PayInformation extends PureComponent {
             dataIndex: 'channel',
             key: 'channel',
         }, {
+            title: '支付帐号',
+            dataIndex: 'payAccount',
+            key: 'payAccount',
+        }, {
             title: '凭证号',
             dataIndex: 'transNum',
             key: 'transNum',
@@ -120,27 +124,17 @@ class PayInformation extends PureComponent {
                             }}
                         >确认退款</a>)
                     default:
-                        if ( record.shouldConfirm ) {
+                        if (record.shouldConfirm) {
                             return (<a
                                 onClick={() => {
                                     this.handlePayOk(record);
                                 }}
                             >确认支付</a>)
-                        } else {
-                            return  null;
                         }
-
+                        return null;
                 }
             }
         }];
-
-        this.handleAuditRefund = ::this.handleAuditRefund;
-        this.handleRefundOk = ::this.handleRefundOk;
-        this.handlePayOk = ::this.handlePayOk;
-        this.handleAddPay = ::this.handleAddPay;
-
-        this.state = {
-        }
     }
 
     componentDidMount() {
@@ -150,7 +144,7 @@ class PayInformation extends PureComponent {
      * 审核退款
      * @param {Object} record 该行数据
      */
-    handleAuditRefund(record) {
+    handleAuditRefund = (record) => {
         this.props.modifyCauseModalVisible({ isVisible: true, record })
     }
 
@@ -158,7 +152,7 @@ class PayInformation extends PureComponent {
      * 确认退款
      * @param {Object} record 该行数据
      */
-    handleRefundOk(record) {
+    handleRefundOk = (record) => {
         this.props.modifyCauseModalVisible({ isVisible: true, record })
     }
 
@@ -166,26 +160,26 @@ class PayInformation extends PureComponent {
      * 确认支付
      * @param {Object} record 该行数据
      */
-    handlePayOk(record) {
+    handlePayOk = (record) => {
         const { id, orderId } = record;
         modifyConfirmPayment({
-            orderId: orderId,
+            orderId,
             paymentId: id
         })
-        .then((res) => {
-            if (res.code === 200 && res.success) {
-                this.props.fetchPaymentDetailInfo({ orderId: orderId })
-            } else if (!res.success) {
-                message.error(res.message);
-            }
-        })
+            .then((res) => {
+                if (res.code === 200 && res.success) {
+                    this.props.fetchPaymentDetailInfo({ orderId })
+                } else if (!res.success) {
+                    message.error(res.message);
+                }
+            })
     }
 
     /**
      * 新增付款
      *
      */
-    handleAddPay() {
+    handleAddPay = () => {
         this.props.modifyPayModalVisible({ isVisible: true })
     }
 
@@ -206,10 +200,10 @@ class PayInformation extends PureComponent {
                     <span>退款： ￥</span>
                     <span className="red-number">{totalRefundedAmount}</span>
                 </span>
-                <span className="table-footer-item">
+                {/* <span className="table-footer-item">
                     <span>差额： ￥</span>
                     <span className="red-number">{totalPaidAmount - totalRefundedAmount}</span>
-                </span>
+                </span> */}
             </div>)
         return (
             <div>
@@ -224,7 +218,7 @@ class PayInformation extends PureComponent {
                                 <Col
                                     className="gutter-row"
                                     span={8}
-                                    style={{ marginLeft: 18}}
+                                    style={{ marginLeft: 18 }}
                                 >
                                     <Button
                                         size="default"
@@ -263,10 +257,10 @@ class PayInformation extends PureComponent {
                     </Row>
                 </div>
                 <div>
-                    <RefundModal totalAmount={totalAmount} />
+                    <RefundModal totalAmount={totalAmount} totalPaidAmount={totalPaidAmount} />
                 </div>
                 <div>
-                    <PayModal totalAmount={totalAmount}/>
+                    <PayModal totalAmount={totalAmount} />
                 </div>
             </div>
         );

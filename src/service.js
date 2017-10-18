@@ -62,7 +62,7 @@ export const exportManageList = '/supplier/exportManageList';
 export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
 
 // 下载订单管理列表
-export const exportOrderList = '/sorder/toExcel';
+export const exportOrderList = 'sorder/exportOrderList';
 
 // 下载供应商结算数据
 export const exportSimpleList = '/settlement/exportSupplierSettlementList';
@@ -493,6 +493,14 @@ export const queryAllSupplier = (params) => http.get('/price/queryAllSupplier', 
 // 新增数据字典
 export const insertDictionary = (params) => http.post('/dictionary/insertDictionary', params);
 
+// 根据条件分页查询白名单列表
+export const queryWhitelist = (params) => http.get('/sp/queryWhiteList', params);
+
+// 白名单上线
+export const onlineWhitelist = (params) => http.post('/sp/whiteListOnline', params);
+
+// 白名单下线
+export const offlineWhitelist = (params) => http.post('/sp/whiteListOffline', params);
 
 // 修改数据字典
 export const updateDictionary = (params) => http.post('/dictionary/updateDictionary', params);

@@ -104,6 +104,9 @@ import { getPromotionList, createPromotion,
 // 根据条件分页查询商品清单，并排序
 import queryCommodityList from './queryCommodityList';
 
+// 根据条件分页查询白名单列表, 上线下线
+import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './whiteListConfiguration';
+
 export {
     fetchSupplierList,
     modifyInformationVisible,
@@ -193,5 +196,11 @@ export {
     fetchAddProdPurchase,
     fetchUpdateProdPurchase,
     fetchChangeProPurchaseStatus,
-    fetchDeleteProdPurchaseById
+    fetchDeleteProdPurchaseById,
+
+    // 根据条件分页查询白名单列表
+    queryWhiteListAction,
+    // 上线下线
+    onlineWhitelist,
+    offlineWhitelist,
 }

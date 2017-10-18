@@ -74,9 +74,9 @@
                     "menuList": []
                 },
                 {
-                    "authorityId": 225,
-                    "authorityCode": "dataDictionary",
-                    "displayName": "数据字典",
+                    "authorityId": 304,
+                    "authorityCode": "whiteListConfig",
+                    "displayName": "白名单配置",
                     "menuList": []
                 }
             ]
