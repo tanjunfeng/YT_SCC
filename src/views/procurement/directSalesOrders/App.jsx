@@ -33,10 +33,10 @@ class DirectSalesOrders extends PureComponent {
 
     onCellChange = (productCode, dataIndex) => value => {
         const goodsList = [...this.state.goodsList];
-        const goodsChanged = goodsList.find(item => item.productCode === productCode);
-        if (goodsChanged) {
-            goodsChanged[dataIndex] = value;
-            this.checkStore(this.checkMultiple(goodsChanged));
+        const goods = goodsList.find(item => item.productCode === productCode);
+        if (goods) {
+            goods[dataIndex] = value;
+            this.shouldGoogsMoveToTop(goods);
         }
     }
 
@@ -54,6 +54,7 @@ class DirectSalesOrders extends PureComponent {
             unitExplanation,
             salePrice,
             packingSpecifications,
+            available,  // 是否在本区域销售
             minNumber,  // 起订数量
             minUnit,    // 最小销售单位
             fullCaseUnit,   // 整箱单位
@@ -66,6 +67,7 @@ class DirectSalesOrders extends PureComponent {
             internationalCode: internationalCodes[0].internationalCode,
             productName,
             productSpecifications: `${packingSpecifications} / ${unitExplanation}`,
+            available,
             salePrice,
             sellFullCase,
             salesInsideNumber,
@@ -76,7 +78,10 @@ class DirectSalesOrders extends PureComponent {
             enough: true,    // 是否库存充足，默认充足
             isMultiple: true    // 是否是销售内装数的整数倍，默认是整数倍
         };
-        return record;
+        this.checkStore(record).then(goods => {
+            this.checkMultiple(goods);
+            return goods;
+        });
     }
 
     /**
@@ -84,34 +89,64 @@ class DirectSalesOrders extends PureComponent {
      *
      * @param {*object} goods 商品信息
      */
-    checkStore = (goods) => {
-        this.setState({ appending: true });
-        this.props.updateGoodsInfo({
-            productId: goods.productId,
-            quantity: goods.count,
-            branchCompanyId: this.state.branchCompanyId,
-            deliveryWarehouseCode: this.state.deliveryWarehouseCode
-        }).then(res => {
-            // 库存不足
-            if (!res.data.enough) {
-                Object.assign(goods, {
-                    enough: false
-                });
-                this.shouldGoogsMoveToTop(goods);
-            }
-        }).finally(() => {
-            this.setState({ appending: false });
-        });
+    checkStore = (goods) => (
+        new Promise((resolve, reject) => {
+            this.props.updateGoodsInfo({
+                productId: goods.productId,
+                quantity: goods.count,
+                branchCompanyId: this.state.branchCompanyId,
+                deliveryWarehouseCode: this.state.deliveryWarehouseCode
+            }).then(res => {
+                // 库存不足
+                if (!res.data.enough) {
+                    Object.assign(goods, {
+                        enough: false
+                    });
+                }
+                resolve(goods);
+            }).catch(err => {
+                reject(err);
+            });
+        })
+    )
+
+    checkGoodsStatus = (goods, errors) => {
+        if (!goods.enough) {
+            errors.push('库存不足');
+            return false;
+        }
+        if (!goods.available) {
+            errors.push('不在销售区域');
+            return false;
+        }
+        if (!goods.isMultiple) {
+            errors.push('非起订量整数倍');
+            return false;
+        }
+        return true;
     }
 
-    shouldGoogsMoveToTop = (goods) => {
-        const goodsList = [...this.state.goodsList];
-        const index = goodsList.findIndex(
-            item => item.productCode === goods.productCode);
-        goodsList.splice(index, 1);
-        goodsList.unshift(goods);
-        message.info('库存不足的商品已被移动到顶部');
-        this.setState({ goodsList });
+    /**
+     * 校验商品状态，并判断商品是否应该移动到第一行
+     */
+    shouldGoogsMoveToTop = (record) => {
+        this.setState({ appending: true });
+        this.checkMultiple(record)
+        this.checkStore(record).then(goods => {
+            const goodsList = [...this.state.goodsList];
+            const index = goodsList.findIndex(
+                item => item.productCode === goods.productCode);
+            const isValid = this.checkGoodsStatus(goods);
+            // 该商品不在列表中，则新增
+            if (index === -1) {
+                goodsList.unshift(goods);
+            } else if (index > 0 && !isValid) {
+                goodsList.splice(index, 1);
+                goodsList.unshift(goods);
+                message.info('该商品已被移动到顶部');
+            }
+            this.setState({ appending: false, goodsList });
+        });
     }
 
     /**
@@ -128,7 +163,6 @@ class DirectSalesOrders extends PureComponent {
             isMultiple = false;
         }
         Object.assign(distGoods, { isMultiple });
-        return distGoods;
     }
 
     handleStoresChange = (record) => {
@@ -139,27 +173,17 @@ class DirectSalesOrders extends PureComponent {
 
     handleGoodsFormChange = (goodsInfo) => {
         const goodsList = [...this.state.goodsList];
-        this.setState({ appending: true });
         if (typeof goodsInfo === 'object' && goodsInfo.productCode) {
             // 判断此商品是否已存在
-            const existIndex = goodsList.findIndex(
+            const index = goodsList.findIndex(
                 e => e.productCode === goodsInfo.productCode
             );
-            if (existIndex === -1) {
+            if (index === -1) {
                 // 不存在时添加这条商品
-                const goods = this.getRow(goodsInfo);
-                this.checkStore(goods);
-                goodsList.unshift(goods);
-                this.setState({ appending: false, goodsList });
+                this.shouldGoogsMoveToTop(this.getRow(goodsInfo));
             } else {
-                // 已存在时删除这条商品并移动到第一条，需保留已填入的数量
-                const count = goodsList[existIndex].count;
-                const goods = goodsList[existIndex];
-                goodsList.splice(existIndex, 1);
-                message.info(`已存在此商品，当前数量：${count}`);
-                goodsList.unshift(goods);
-                this.checkStore(goods);
-                this.setState({ appending: false, goodsList });
+                // 已存在时删除这条商品并移动到第一条
+                this.shouldGoogsMoveToTop(goodsList[index]);
             }
         }
     }
@@ -171,16 +195,11 @@ class DirectSalesOrders extends PureComponent {
     }
 
     renderNumber = (text, record) => {
-        const { minNumber, enough, isMultiple } = record;
+        const { minNumber } = record;
         // 填入的数量是否是内装数量的整数倍
         const step = minNumber;
         const errors = [];
-        if (!enough) {
-            errors.push('库存不足');
-        }
-        if (!isMultiple) {
-            errors.push('不是整数倍');
-        }
+        this.checkGoodsStatus(record, errors);
         return (
             <EditableCell
                 value={text}
