@@ -45,8 +45,6 @@ class SearchForm extends PureComponent {
         this.handleReset = this.handleReset.bind(this);
         this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
         this.hanldeSubCompanyClear = this.hanldeSubCompanyClear.bind(this);
-        this.handleJoiningChoose = this.handleJoiningChoose.bind(this);
-        this.handleJoiningClear = this.handleJoiningClear.bind(this);
         this.handleGoOnline = this.handleGoOnline.bind(this);
         this.handleOffline = this.handleOffline.bind(this);
     }
@@ -69,7 +67,6 @@ class SearchForm extends PureComponent {
             scPurchaseFlag
         } = this.props.form.getFieldsValue();
         const branchCompanyId = this.state.branchCompanyId;
-        const { warehouseCode } = this.state;
         let status = scPurchaseFlag;
         const pageSize = PAGE_SIZE;
         if (scPurchaseFlag === 'all') {
@@ -79,30 +76,11 @@ class SearchForm extends PureComponent {
             franchiseeId,
             franchinessName,
             storeId,
-            warehouseCode,
             storename,
             status,
             branchCompanyId,
             pageSize,
             pageNum: 1,
-        });
-    }
-
-    /**
-     * 仓库-值清单
-     */
-    handleJoiningChoose = ({ record }) => {
-        this.setState({
-            warehouseCode: record.warehouseCode,
-        });
-    }
-
-    /**
-     * 调整仓库-清除
-     */
-    handleJoiningClear() {
-        this.setState({
-            warehouseCode: '',
         });
     }
 
@@ -232,6 +210,8 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     queryWhitelist: PropTypes.func,
     onPromotionReset: PropTypes.func,
+    onModalClick: PropTypes.func,
+    onModalOfflineClick: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.objectOf(PropTypes.any),
 };

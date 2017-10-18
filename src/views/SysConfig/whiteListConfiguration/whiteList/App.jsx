@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-17 19:05:22
+ * @Last Modified time: 2017-10-18 16:39:18
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -18,7 +18,10 @@ import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../../constant';
 import { couponList as columns } from '.././columns';
 import Utils from '../../../../util/util';
-import { queryWhitelist, onlineWhitelist, offlineWhitelist } from '../../../../actions/whiteListConfiguration';
+import { queryWhitelist,
+    onlineWhitelist,
+    offlineWhitelist
+} from '../../../../actions/whiteListConfiguration';
 import ModalOnline from '../modalOnline';
 import ModalOffline from '../modalOffline';
 
@@ -41,7 +44,8 @@ class WhiteListConfig extends PureComponent {
             current: 1,
             ModalOnlineVisible: false,
             ModalOfflineVisible: false,
-            storeId: ''
+            storeId: '',
+            onlineObj: {}
         };
         this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
@@ -82,19 +86,49 @@ class WhiteListConfig extends PureComponent {
 
     onModalOnlineOk({ warehouseCode, warehouseName }) {
         this.handlePromotionReset();
-        const { chooseGoodsList } = this.state;
-        this.props.onlineWhitelist(Utils.removeInvalid({
-            warehouseCode,
-            warehouseName,
-            chooseGoodsList
-        })).then((res) => {
-            if (res.code === 200) {
-                this.setState({ ModalOnlineVisible: false })
-                this.query();
-            }
-        }).catch(() => {
-            message.error('操作失败')
-        })
+        const { chooseGoodsList, selectedListData, onlineObj } = this.state;
+        if (chooseGoodsList.length >= 1 && onlineObj === {}) {
+            selectedListData.forEach((item) => {
+                if ((item.provinceName === null ||
+                    item.cityName === null ||
+                    item.districtName === null ||
+                    item.address === null ||
+                    item.contact === null ||
+                    item.mobilePhone === null) && chooseGoodsList.length >= 1) {
+                    message.error('商家信息不完整，请去主数据完善后上线')
+                } else {
+                    this.props.onlineWhitelist(Utils.removeInvalid({
+                        warehouseCode,
+                        warehouseName,
+                        chooseGoodsList
+                    })).then((res) => {
+                        if (res.code === 200) {
+                            this.setState({ ModalOnlineVisible: false })
+                            this.query();
+                        }
+                    })
+                }
+            })
+        }
+        if ((onlineObj.provinceName === null ||
+            onlineObj.cityName === null ||
+            onlineObj.districtName === null ||
+            onlineObj.address === null ||
+            onlineObj.contact === null ||
+            onlineObj.mobilePhone === null) && chooseGoodsList.length === 1) {
+            message.error('商家信息不完整，请去主数据完善后上线')
+        } else {
+            this.props.onlineWhitelist(Utils.removeInvalid({
+                warehouseCode,
+                warehouseName,
+                chooseGoodsList
+            })).then((res) => {
+                if (res.code === 200) {
+                    this.setState({ ModalOnlineVisible: false })
+                    this.query();
+                }
+            })
+        }
     }
 
     onModalOnlineCancel() {
@@ -104,16 +138,25 @@ class WhiteListConfig extends PureComponent {
     onModalOfflineOk() {
         this.handlePromotionReset();
         const { chooseGoodsList } = this.state;
-        this.props.offlineWhitelist(Utils.removeInvalid({
-            chooseGoodsList
-        })).then((res) => {
-            if (res.code === 200) {
-                this.setState({ ModalOfflineVisible: false })
-                this.query();
-            }
-        }).catch(() => {
-            message.error('操作失败')
-        })
+        if (chooseGoodsList <= 1) {
+            this.props.offlineWhitelist(Utils.removeInvalid({
+                chooseGoodsList
+            })).then((res) => {
+                if (res.code === 200) {
+                    this.setState({ ModalOfflineVisible: false })
+                    this.query();
+                }
+            })
+        } else {
+            this.props.offlineWhitelist(Utils.removeInvalid({
+                chooseGoodsList
+            })).then((res) => {
+                if (res.code === 200) {
+                    this.setState({ ModalOfflineVisible: false })
+                    this.query();
+                }
+            })
+        }
     }
 
     onModalOfflineCancel() {
@@ -148,13 +191,14 @@ class WhiteListConfig extends PureComponent {
             case 'Offline':
                 this.setState({
                     ModalOfflineVisible: true,
-                    storeId: record.storeId
+                    chooseGoodsList: [record.storeId],
                 });
                 break;
             case 'Online':
                 this.setState({
                     ModalOnlineVisible: true,
                     chooseGoodsList: [record.storeId],
+                    onlineObj: record
                 });
                 break;
             default:
@@ -250,16 +294,22 @@ class WhiteListConfig extends PureComponent {
                         onChange: this.onPaginate
                     }}
                 />
-                <ModalOnline
-                    visible={ModalOnlineVisible}
-                    onOk={this.onModalOnlineOk}
-                    onCancel={this.onModalOnlineCancel}
-                />
-                <ModalOffline
-                    visible={ModalOfflineVisible}
-                    onOk={this.onModalOfflineOk}
-                    onCancel={this.onModalOfflineCancel}
-                />
+                {
+                    this.state.ModalOnlineVisible &&
+                    <ModalOnline
+                        visible={ModalOnlineVisible}
+                        onOk={this.onModalOnlineOk}
+                        onCancel={this.onModalOnlineCancel}
+                    />
+                }
+                {
+                    this.state.ModalOfflineVisible &&
+                    <ModalOffline
+                        visible={ModalOfflineVisible}
+                        onOk={this.onModalOfflineOk}
+                        onCancel={this.onModalOfflineCancel}
+                    />
+                }
             </div>
         );
     }
