@@ -3,7 +3,7 @@
  * @Description: 上线弹窗
  * @CreateDate: 2017-10-16 17:32:20
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-17 17:22:14
+ * @Last Modified time: 2017-10-19 10:29:13
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -102,7 +102,7 @@ class ModalOnline extends PureComponent {
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
             >
-                <FormItem>
+                <FormItem style={{textAlign: 'center', marginTop: 24}}>
                     <span>送货仓：</span>
                     <span style={{ display: 'inline-block', verticalAlign: 'top' }}>
                         <SearchMind
