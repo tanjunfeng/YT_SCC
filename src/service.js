@@ -660,7 +660,7 @@ export const checkSupplierAddOrgId = (params) => http.get('/supplier/checkSuppli
 export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);
 
  // 根据商品id同步商品
-export const syncProductByManualService = (params) => http.get('/product/syncProductByManual', params);
+export const syncProductByManualAction = (params) => http.get('/product/syncProductByManual', params);
 
 // 获取已审批通过供应商地点下拉框数据
 export const querySuppliersList = (params) => http.get('/supplier/supplierSearchBox', params);

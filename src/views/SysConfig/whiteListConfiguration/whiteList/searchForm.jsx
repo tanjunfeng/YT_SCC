@@ -99,7 +99,6 @@ class SearchForm extends PureComponent {
 
     handleReset() {
         this.hanldeSubCompanyClear(); // 清除子公司值清单
-        this.handleJoiningClear(); // 清除仓库值清单
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onPromotionReset();  // 通知父页面已清空
     }
