@@ -398,17 +398,18 @@ class ManagementList extends PureComponent {
         })
     }
 
-    handleSelect = (record) => {
-        this.props.syncProductByManualAction({
-            productId: record.productId
-        }).then((res) => {
-            console.log(res)
-            if (res.code === 200) {
-                message.success('商品同步成功');
-            }
-        }).catch(() => {
-            message.error('商品同步失败');
-        })
+    handleSelect = (record, index) => {
+        if (index.key === '4') {
+            this.props.syncProductByManualAction({
+                productId: record.productId
+            }).then((res) => {
+                if (res.code === 200) {
+                    message.success('商品同步成功');
+                }
+            }).catch(() => {
+                message.error('商品同步失败');
+            })
+        }
     }
 
     /**

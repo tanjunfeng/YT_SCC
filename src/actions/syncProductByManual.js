@@ -6,7 +6,7 @@
  */
 
 import Promise from 'bluebird';
-import { syncProductByManualService } from '../service';
+import { syncProductByManualAction } from '../service';
 import ActionType from './ActionType';
 
 const syncProductByManual = (data) => ({
@@ -16,7 +16,7 @@ const syncProductByManual = (data) => ({
 
 export default (params) => dispatch => (
     new Promise((resolve, reject) => {
-        syncProductByManualService(params)
+        syncProductByManualAction(params)
         .then(res => {
             dispatch(
                 syncProductByManual(res.data)
