@@ -186,7 +186,7 @@ export const goodsColumns = [{
     width: 50
 }, {
     title: '数量',
-    dataIndex: 'count',
+    dataIndex: 'quantity',
     width: 120
 }, {
     title: '单价',

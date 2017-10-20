@@ -35,19 +35,9 @@ class DirectSalesOrders extends PureComponent {
         const goodsList = [...this.state.goodsList];
         const goods = goodsList.find(item => item.productCode === productCode);
         if (goods) {
-            goods.count = value;
-            // 按箱销售，传入数量乘以内装数
-            if (goods.sellFullCase === 1) {
-                Object.assign(goods, {
-                    count: value,
-                    quantity: value * goods.salesInsideNumber
-                });
-            } else {
-                Object.assign(goods, {
-                    count: value,
-                    quantity: value
-                });
-            }
+            Object.assign(goods, {
+                quantity: value
+            });
             this.shouldGoogsMoveToTop(goods);
         }
     }
@@ -84,7 +74,6 @@ class DirectSalesOrders extends PureComponent {
             sellFullCase,
             salesInsideNumber,
             packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit} / ${minUnit}`,
-            count: minNumber,
             quantity: sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber,
             minNumber,
             minNumberSpecifications: sellFullCase === 0 ? `${minNumber}${fullCaseUnit}` : `${minNumber}${minUnit}`, // 起订数量显示单位
@@ -103,7 +92,7 @@ class DirectSalesOrders extends PureComponent {
         new Promise((resolve, reject) => {
             this.props.updateGoodsInfo({
                 productId: goods.productId,
-                quantity: goods.count,
+                quantity: goods.quantity,
                 branchCompanyId: this.state.branchCompanyId,
                 deliveryWarehouseCode: this.state.deliveryWarehouseCode
             }).then(res => {
@@ -121,19 +110,20 @@ class DirectSalesOrders extends PureComponent {
     )
 
     checkGoodsStatus = (goods, errors) => {
+        let isValid = true;
         if (!goods.enough) {
             errors.push('库存不足');
-            return false;
+            isValid = false;
         }
         if (!goods.available) {
             errors.push('不在销售区域');
-            return false;
+            isValid = false;
         }
         if (!goods.isMultiple) {
             errors.push('非起订量整数倍');
-            return false;
+            isValid = false;
         }
-        return true;
+        return isValid;
     }
 
     /**
@@ -141,6 +131,7 @@ class DirectSalesOrders extends PureComponent {
      */
     shouldGoogsMoveToTop = (record) => {
         this.setState({ appending: true });
+        this.checkMultiple(record);
         this.checkStore(record).then(goods => {
             const goodsList = [...this.state.goodsList];
             const index = goodsList.findIndex(
@@ -165,14 +156,13 @@ class DirectSalesOrders extends PureComponent {
      * @returns {*object}
      */
     checkMultiple = (goods) => {
-        const distGoods = { ...goods };
-        const { count, minNumber, sellFullCase } = distGoods;
-        // 按整箱销售时，判断当前数量是否是内装数量的整数倍
+        const { quantity, salesInsideNumber, sellFullCase } = goods;
         let isMultiple = true;
-        if (sellFullCase === 0 && count % minNumber > 0) {
+        // 不按整箱销售时，判断当前所填数量是否是内装数量的整数倍
+        if (sellFullCase === 0 && quantity % salesInsideNumber > 0) {
             isMultiple = false;
         }
-        Object.assign(distGoods, { isMultiple });
+        Object.assign(goods, { isMultiple });
     }
 
     handleStoresChange = (record) => {
