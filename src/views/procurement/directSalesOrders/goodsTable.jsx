@@ -21,15 +21,11 @@ import {
 }, dispatch))
 
 class GoodsTable extends PureComponent {
-    state = {
-        appending: false
-    }
-
     componentWillReceiveProps(nextProps) {
-        // 当新增商品时，添加到商品列表
         const goodsAddOn = nextProps.goodsAddOn;
-        if (this.props.goodsAddOn === null && goodsAddOn !== null) {
-            this.appendGoods(goodsAddOn);
+        // 当传入商品有变化时，添加到商品列表
+        if (goodsAddOn !== null && this.props.goodsAddOn !== goodsAddOn) {
+            this.appendToList(goodsAddOn);
         }
     }
 
@@ -40,49 +36,13 @@ class GoodsTable extends PureComponent {
             Object.assign(goods, {
                 quantity: value
             });
-            this.shouldGoogsMoveToTop(goods);
+            this.appendToList(goods);
         }
     }
 
     onDelete = (productCode) => {
         const goodsList = [...this.props.goodsList];
-        this.setState({ goodsList: goodsList.filter(item => item.productCode !== productCode) });
-    }
-
-    getRow = (goodsInfo) => {
-        const {
-            productId,
-            productCode,
-            internationalCodes,
-            productName,
-            unitExplanation,
-            salePrice,
-            packingSpecifications,
-            available,  // 是否在本区域销售
-            minNumber,  // 起订数量
-            minUnit,    // 最小销售单位
-            fullCaseUnit,   // 整箱单位
-            salesInsideNumber,  // 销售内装数
-            sellFullCase    // 是否整箱销售，１:按整箱销售，0:不按整箱销售
-        } = goodsInfo;
-        const record = {
-            productId,
-            productCode,
-            internationalCode: internationalCodes[0].internationalCode,
-            productName,
-            productSpecifications: `${packingSpecifications} / ${unitExplanation}`,
-            available,
-            salePrice,
-            sellFullCase,
-            salesInsideNumber,
-            packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit} / ${minUnit}`,
-            quantity: sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber,
-            minNumber,
-            minNumberSpecifications: sellFullCase === 0 ? `${minNumber}${fullCaseUnit}` : `${minNumber}${minUnit}`, // 起订数量显示单位
-            enough: true,    // 是否库存充足，默认充足
-            isMultiple: true    // 是否是销售内装数的整数倍，默认是整数倍
-        };
-        return record;
+        this.props.onChange(goodsList.filter(item => item.productCode !== productCode));
     }
 
     /**
@@ -131,8 +91,7 @@ class GoodsTable extends PureComponent {
     /**
      * 校验商品状态，并判断商品是否应该移动到第一行
      */
-    shouldGoogsMoveToTop = (record) => {
-        this.setState({ appending: true });
+    appendToList = (record) => {
         this.checkMultiple(record);
         this.checkStore(record).then(goods => {
             const goodsList = [...this.props.goodsList];
@@ -147,8 +106,10 @@ class GoodsTable extends PureComponent {
                 goodsList.splice(index, 1);
                 goodsList.unshift(goods);
                 message.info(`${errors.join(',')}该商品已被移动到顶部`);
+            } else {
+                message.info('该商品已添加');
             }
-            this.setState({ appending: false });
+            this.props.onChange(goodsList);
         });
     }
 
@@ -165,23 +126,6 @@ class GoodsTable extends PureComponent {
             isMultiple = false;
         }
         Object.assign(goods, { isMultiple });
-    }
-
-    appendGoods = (goodsInfo) => {
-        const goodsList = [...this.props.goodsList];
-        if (typeof goodsInfo === 'object' && goodsInfo.productCode) {
-            // 判断此商品是否已存在
-            const index = goodsList.findIndex(
-                e => e.productCode === goodsInfo.productCode
-            );
-            if (index === -1) {
-                // 不存在时添加这条商品
-                this.shouldGoogsMoveToTop(this.getRow(goodsInfo));
-            } else {
-                // 已存在时删除这条商品并移动到第一条
-                this.shouldGoogsMoveToTop(goodsList[index]);
-            }
-        }
     }
 
     renderNumber = (text, record) => {
@@ -225,6 +169,7 @@ class GoodsTable extends PureComponent {
 
 GoodsTable.propTypes = {
     updateGoodsInfo: PropTypes.func,
+    onChange: PropTypes.func,
     branchCompanyId: PropTypes.string,
     deliveryWarehouseCode: PropTypes.string,
     goodsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),

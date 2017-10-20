@@ -29,6 +29,10 @@ class DirectSalesOrders extends PureComponent {
         this.setState({ goodsAddOn });
     }
 
+    handleGoodsListChange = (goodsList) => {
+        this.setState({goodsList})
+    }
+
     handleClear = () => {
         this.setState({
             goodsList: []
@@ -51,6 +55,7 @@ class DirectSalesOrders extends PureComponent {
                     goodsAddOn={this.state.goodsAddOn}
                     branchCompanyId={this.state.branchCompanyId}
                     deliveryWarehouseCode={this.state.deliveryWarehouseCode}
+                    onChange={this.handleGoodsListChange}
                 />
             </div>
         );
