@@ -34,7 +34,7 @@ class GoodsForm extends PureComponent {
         },
         onChange(info) {
             if (info.file.status !== 'uploading') {
-                console.log(info.file, info.fileList);
+                // console.log(info.file, info.fileList);
             }
             if (info.file.status === 'done') {
                 // post data
@@ -52,7 +52,7 @@ class GoodsForm extends PureComponent {
     handleGoodsChange = ({ record }) => {
         const { branchCompanyId, deliveryWarehouseCode } = this.props.value;
         if (record === undefined || branchCompanyId === '') {
-            this.props.onChange(false);
+            this.props.onChange(null);
             return;
         }
         const productId = record.productId;

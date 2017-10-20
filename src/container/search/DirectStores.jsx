@@ -15,22 +15,16 @@ import SearchMind from '../../components/searchMind';
 }, dispatch))
 
 class DirectStores extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.handleClear = this.handleClear.bind(this);
-        this.handleChoose = this.handleChoose.bind(this);
-    }
-
     componentWillReceiveProps(nextProps) {
-        if (nextProps.value.storeId === '') {
-            this.searchMind.reset();
+        if (this.props.value.storeId !== '' && nextProps.value.storeId === '') {
+            this.handleClear();
         }
     }
 
     /**
      * 直营店 - 清除
      */
-    handleClear() {
+    handleClear = () => {
         this.searchMind.reset();
         this.props.onChange({ storeId: '', storeName: '' });
     }
@@ -55,7 +49,6 @@ class DirectStores extends PureComponent {
                         pageSize: params.pagination.pageSize
                     }, 'queryDirectStores')
                 }
-                disabled={this.props.disabled}
                 onChoosed={this.handleChoose}
                 onClear={this.handleClear}
                 renderChoosedInputRaw={(row) => (
@@ -78,7 +71,6 @@ class DirectStores extends PureComponent {
 }
 
 DirectStores.propTypes = {
-    disabled: PropTypes.bool,
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any)

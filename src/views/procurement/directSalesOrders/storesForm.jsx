@@ -26,16 +26,11 @@ const FormItem = Form.Item;
 }, dispatch))
 
 class StoresForm extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.handleDirectStoresChange = this.handleDirectStoresChange.bind(this);
-    }
-
     componentWillMount() {
         this.props.clearDirectInfo();
     }
 
-    handleDirectStoresChange({ record }) {
+    handleDirectStoresChange = ({ record }) => {
         if (record && record.storeId) {
             this.props.queryDirectInfo({ storeId: record.storeId }).then(res => {
                 // 返回分公司 id 供父页面使用
