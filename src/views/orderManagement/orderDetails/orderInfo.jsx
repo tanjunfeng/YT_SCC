@@ -238,16 +238,15 @@ class OrderInformation extends PureComponent {
                         <div className="detail-message-header">
                             <Icon type="picture" className="detail-message-header-icon" />
                             商品信息
+                            <Button type="primary" style={{float: 'right'}} onClick={this.addSubOrders}>添加子订单</Button>
                         </div>
-                        <div>
-                            <Table
-                                dataSource={orderDetailData.items}
-                                columns={columns}
-                                pagination={false}
-                                rowKey="id"
-                                footer={tableFooter}
-                            />
-                        </div>
+                        <Table
+                            dataSource={orderDetailData.items}
+                            columns={columns}
+                            pagination={false}
+                            rowKey="id"
+                            footer={tableFooter}
+                        />
                     </div>
                 </div>
                 <div className="order-details-btns">
