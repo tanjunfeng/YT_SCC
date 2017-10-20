@@ -182,7 +182,7 @@ class SearchForm extends PureComponent {
                                         type="primary"
                                         size="default"
                                         onClick={this.handleGoOnline}
-                                        disabled={this.props.value.COUNTRY_OFF_THE_SHELF}
+                                        disabled={this.props.value.selectListlength}
                                     >
                                         上线
                                     </Button>
@@ -192,7 +192,7 @@ class SearchForm extends PureComponent {
                                         type="primary"
                                         size="default"
                                         onClick={this.handleOffline}
-                                        disabled={this.props.value.COUNTRY_OFF_THE_SHELF}
+                                        disabled={this.props.value.selectListlength}
                                     >
                                         下线
                                     </Button>
