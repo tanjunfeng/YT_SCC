@@ -1,0 +1,83 @@
+{
+    "timestamp": 1508492836706,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "id": "100002017091314218",
+        "createdByOrderId": null,
+        "orderType": "ZYYH",
+        "orderTypeDesc": "直营店要货",
+        "state": 40,
+        "stateDetail": "待配送",
+        "branchCompanyId": "10000",
+        "branchCompanyName": "成都子公司",
+        "branchCompanyArehouse": "YT901",
+        "franchiseeId": "zy_000999",
+        "franchiseeName": "科学城1期D区店",
+        "franchiseeStoreId": "Z000999",
+        "profileId": "zy_000999",
+        "description": null,
+        "creationTime": 1505301514000,
+        "paymentState": "GSN",
+        "paymentStateDesc": "公司内",
+        "shippingState": "DSH",
+        "shippingStateDesc": "待收货",
+        "orderState": "A",
+        "orderStateDesc": "已审核",
+        "province": "四川",
+        "city": "成都",
+        "district": null,
+        "detailAddress": "兴隆镇科学城1期D区雅堂电商大厦",
+        "postcode": null,
+        "consigneeName": null,
+        "telephone": null,
+        "cellphone": null,
+        "items": [
+            {
+                "id": "9802241",
+                "productId": "60000129911",
+                "productName": "南方黑芝麻糊(精装)600g",
+                "productImg": null,
+                "properties": {},
+                "skuId": "60000129911",
+                "catalogId": null,
+                "quantity": 10,
+                "state": 20,
+                "stateDetail": "已预留库存",
+                "itemPrice": {
+                    "id": "9802240",
+                    "amount": 1700.0,
+                    "currencyCode": null,
+                    "finalReasonCode": null,
+                    "listPrice": 170.0,
+                    "orderDiscountShare": 0.0,
+                    "quantityAsQualifier": 0,
+                    "quantityDiscounted": 0,
+                    "rawTotalPrice": 1700.0,
+                    "salePrice": 170.0
+                },
+                "returnQuantity": 0,
+                "selected": true,
+                "type": null,
+                "shippedQuantity": 0,
+                "completedQuantity": 0,
+                "creationTime": null,
+                "secondLevelCategoryName": "冲调保健",
+                "thirdLevelCategoryName": "麦片餐糊",
+                "productCode": "1001582",
+                "internationalCodes": [
+                    {
+                        "id": "60000129911",
+                        "productId": "60000129911",
+                        "internationalCode": "6901333110524",
+                        "barcodeType": 1
+                    }
+                ]
+            }
+        ],
+        "amount": 1445.0,
+        "countOfItem": 10
+    },
+    "success": true
+}

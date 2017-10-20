@@ -1,0 +1,30 @@
+{
+    "timestamp": 1508492836725,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "id": "9802236",
+        "shippingNo": "",
+        "shippingMethod": "",
+        "shipOnDate": 1505303082000,
+        "estimatedArrivalDate": null,
+        "deliveryer": null,
+        "deliveryerPhone": null,
+        "shippingProductDtos": [
+            {
+                "id": "9802241",
+                "skuId": "1001582",
+                "productName": "南方黑芝麻糊(精装)600g",
+                "quantity": 10,
+                "shippedQuantity": 0,
+                "unit": "袋",
+                "salePrice": 170.0,
+                "completedQuantity": 0,
+                "completedMulQuantity": 0,
+                "completedMulAmount": 0.0
+            }
+        ]
+    },
+    "success": true
+}
