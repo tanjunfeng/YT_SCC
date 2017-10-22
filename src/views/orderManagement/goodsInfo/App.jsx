@@ -57,13 +57,15 @@ class GoodsInfo extends PureComponent {
         if (value === undefined) {
             value = record.quantity;
         }
-        const value = text || record.quantity;
-        const res = `${value}，￥${text * record.itemPrice.salePrice}`;
+        const res = `${value}，￥${value * record.itemPrice.salePrice}`;
         return res;
     }
 
     renderTableCell = (text, record) => {
-        const value = text || 0;
+        let value = text;
+        if (value === undefined) {
+            value = 0;
+        }
         const res = (<div>
             <EditableCell
                 value={value}
