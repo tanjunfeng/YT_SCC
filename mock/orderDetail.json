@@ -74,6 +74,47 @@
                         "barcodeType": 1
                     }
                 ]
+            },
+            {
+                "id": "9802242",
+                "productId": "60000129912",
+                "productName": "北方红芝麻糊(精装)600g",
+                "productImg": null,
+                "properties": {},
+                "skuId": "60000129912",
+                "catalogId": null,
+                "quantity": 8,
+                "state": 20,
+                "stateDetail": "已预留库存",
+                "itemPrice": {
+                    "id": "9802241",
+                    "amount": 700.0,
+                    "currencyCode": null,
+                    "finalReasonCode": null,
+                    "listPrice": 70.0,
+                    "orderDiscountShare": 0.0,
+                    "quantityAsQualifier": 0,
+                    "quantityDiscounted": 0,
+                    "rawTotalPrice": 700.0,
+                    "salePrice": 70.0
+                },
+                "returnQuantity": 0,
+                "selected": true,
+                "type": null,
+                "shippedQuantity": 0,
+                "completedQuantity": 0,
+                "creationTime": null,
+                "secondLevelCategoryName": "冲调保健",
+                "thirdLevelCategoryName": "麦片餐糊",
+                "productCode": "1001583",
+                "internationalCodes": [
+                    {
+                        "id": "60000129912",
+                        "productId": "60000129912",
+                        "internationalCode": "6901333110525",
+                        "barcodeType": 2
+                    }
+                ]
             }
         ],
         "amount": 1445.0,

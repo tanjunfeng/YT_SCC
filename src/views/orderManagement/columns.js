@@ -48,7 +48,6 @@ const goodsColumns = [{
     dataIndex: 'quantity',
     key: 'quantity',
 }, {
-}, {
     title: '状态',
     dataIndex: 'stateDetail',
     key: 'stateDetail',

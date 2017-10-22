@@ -1,4 +1,9 @@
 // 商品信息列表
-.add-sub-orders .ant-btn-primary {
-    float: right;
+.add-sub-orders {
+    .editable-cell {
+        float: left;
+    }
+    .ant-btn-primary {
+        float: right;
+    }
 }

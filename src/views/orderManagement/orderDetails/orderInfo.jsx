@@ -48,7 +48,7 @@ class OrderInformation extends PureComponent {
         })
     }
 
-    id = this.props.match.params.id;
+    orderId = this.props.match.params.id;
 
     /**
      * 保存备注信息
@@ -63,7 +63,7 @@ class OrderInformation extends PureComponent {
                     message.error('备注未作修改！')
                 } else {
                     savaOrderDescription({
-                        orderId: this.id,
+                        orderId: this.orderId,
                         description: textAreaNote,
                     }).then(() => {
                         message.success('保存成功！')
@@ -85,9 +85,9 @@ class OrderInformation extends PureComponent {
             content: '确认审核？',
             onOk: () => {
                 modifyApprovalOrder({
-                    id: this.id
+                    id: this.orderId
                 }).then(res => {
-                    this.props.fetchOrderDetailInfo({ id: this.id });
+                    this.props.fetchOrderDetailInfo({ id: this.orderId });
                     message.success(res.message);
                 })
             },
@@ -99,7 +99,7 @@ class OrderInformation extends PureComponent {
      * 单个取消
      */
     handleOrderCancel = () => {
-        this.props.modifyCauseModalVisible({ isShow: true, id: this.id });
+        this.props.modifyCauseModalVisible({ isShow: true, id: this.orderId });
     }
 
     render() {
@@ -224,6 +224,7 @@ class OrderInformation extends PureComponent {
                 <div className="order-details-item">
                     <GoodsInfo
                         value={this.props.orderDetailData}
+                        canBeSplit
                     />
                 </div>
                 <div className="order-details-btns">
