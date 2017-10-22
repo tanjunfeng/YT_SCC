@@ -17,6 +17,7 @@ import CauseModal from '../orderList/causeModal';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { savaOrderDescription, modifyApprovalOrder, fetchOrderDetailInfo } from '../../../actions/order';
 import { goodsColumns as columns } from '../columns';
+import GoodsInfo from '../goodsInfo';
 
 const confirm = Modal.confirm;
 const { TextArea } = Input;
@@ -234,20 +235,9 @@ class OrderInformation extends PureComponent {
                     </div>
                 </div>
                 <div className="order-details-item">
-                    <div className="detail-message">
-                        <div className="detail-message-header">
-                            <Icon type="picture" className="detail-message-header-icon" />
-                            商品信息
-                            <Button type="primary" style={{float: 'right'}} onClick={this.addSubOrders}>添加子订单</Button>
-                        </div>
-                        <Table
-                            dataSource={orderDetailData.items}
-                            columns={columns}
-                            pagination={false}
-                            rowKey="id"
-                            footer={tableFooter}
-                        />
-                    </div>
+                    <GoodsInfo
+                        value={this.props.orderDetailData}
+                    />
                 </div>
                 <div className="order-details-btns">
                     <Row>
