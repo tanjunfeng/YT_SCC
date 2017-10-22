@@ -41,24 +41,33 @@ class GoodsInfo extends PureComponent {
         const goodsList = [...this.props.goodsList];
         const index = goodsList.findIndex(goods => goods.id === record.id);
         if (index > -1) {
-            goodsList[index].sub2 = value;
-            goodsList[index].sub1 = record.quantity - value;
+            // 剩余可拆单总数
+            const quantityLeft = record.quantity;
             this.props.onChange(goodsList);
+            goodsList[index][`sub${this.getLastSubNum(1)}`] = value;
+            goodsList[index][`sub${this.getLastSubNum(2)}`] = quantityLeft - value;
         }
     }
 
-    renderColumns = () => {
-        columns[columns.length - 2].render = this.renderSubCell;
-        columns[columns.length - 1].render = this.renderTableCell;
-    }
+    /**
+     * 获取最后 n 列的索引
+     *
+     * 不传值则取最后一列
+     */
+    getLastSubNum = (lastIndexOf = 1) => (
+        +(columns[columns.length - lastIndexOf].dataIndex.substr(3))
+    );
 
-    renderSubCell = (text, record) => {
-        let value = text;
-        if (value === undefined) {
-            value = record.quantity;
-        }
-        const res = `${value}，￥${value * record.itemPrice.salePrice}`;
-        return res;
+    addSubOrders = () => {
+        const subNum = this.getLastSubNum() + 1;
+        columns.push({ title: `子订单${subNum}`, dataIndex: `sub${subNum}` });
+        const goodsList = [...this.props.goodsList];
+        goodsList.forEach(goods => {
+            Object.assign(goods, {
+                [`sub${subNum}`]: 0
+            });
+        });
+        this.props.onChange(goodsList);
     }
 
     renderTableCell = (text, record) => {
@@ -77,6 +86,21 @@ class GoodsInfo extends PureComponent {
             <span className="sub-total">￥{(value) * record.itemPrice.salePrice}</span>
         </div>);
         return res;
+    }
+
+    renderSubCell = (text, record) => {
+        let value = text;
+        if (value === undefined) {
+            // 避免出现 NaN 值
+            value = record.quantity;
+        }
+        const res = `${value}，￥${value * record.itemPrice.salePrice}`;
+        return res;
+    }
+
+    renderColumns = () => {
+        columns[columns.length - 2].render = this.renderSubCell;
+        columns[columns.length - 1].render = this.renderTableCell;
     }
 
     render() {
