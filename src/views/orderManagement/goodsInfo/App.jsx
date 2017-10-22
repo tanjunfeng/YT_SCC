@@ -13,27 +13,28 @@ import { goodsColumns as columns } from '../columns';
 class GoodsInfo extends PureComponent {
     render() {
         const { value } = this.props;
+        const { countOfItem, amount, items } = value;
         const tableFooter = () =>
             (<div>
                 <span className="table-footer-item">
                     <span>共</span>
-                    <span className="red-number">{value.countOfItem}</span>
+                    <span className="red-number">{countOfItem}</span>
                     <span>件商品</span>
                 </span>
                 <span className="table-footer-item">
                     <span>总金额： ￥</span>
-                    <span className="red-number">{value.amount}</span>
+                    <span className="red-number">{amount}</span>
                 </span>
-            </div>)
+            </div>);
         return (
-            <div className="detail-message">
+            <div className="detail-message add-sub-orders">
                 <div className="detail-message-header">
                     <Icon type="picture" className="detail-message-header-icon" />
                     商品信息
-                    <Button type="primary" style={{ float: 'right' }} onClick={this.addSubOrders}>添加子订单</Button>
+                    <Button type="primary" onClick={this.addSubOrders}>添加子订单</Button>
                 </div>
                 <Table
-                    dataSource={value.items}
+                    dataSource={items}
                     columns={columns}
                     pagination={false}
                     rowKey="id"

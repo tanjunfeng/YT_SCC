@@ -10,13 +10,12 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, Icon, Row, Col, Input, Table, Button, Modal, message } from 'antd';
+import { Form, Icon, Row, Col, Input, Button, Modal, message } from 'antd';
 import moment from 'moment';
 import { TIME_FORMAT } from '../../../constant/index';
 import CauseModal from '../orderList/causeModal';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { savaOrderDescription, modifyApprovalOrder, fetchOrderDetailInfo } from '../../../actions/order';
-import { goodsColumns as columns } from '../columns';
 import GoodsInfo from '../goodsInfo';
 
 const confirm = Modal.confirm;
@@ -105,18 +104,6 @@ class OrderInformation extends PureComponent {
 
     render() {
         const { orderDetailData } = this.props;
-        const tableFooter = () =>
-            (<div>
-                <span className="table-footer-item">
-                    <span>共</span>
-                    <span className="red-number">{orderDetailData.countOfItem}</span>
-                    <span>件商品</span>
-                </span>
-                <span className="table-footer-item">
-                    <span>总金额： ￥</span>
-                    <span className="red-number">{orderDetailData.amount}</span>
-                </span>
-            </div>)
         return (
             <div>
                 <div className="order-details-item">
