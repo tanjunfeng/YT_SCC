@@ -41,17 +41,15 @@ class GoodsInfo extends PureComponent {
         const goodsList = [...this.props.goodsList];
         const index = goodsList.findIndex(goods => goods.id === record.id);
         if (index > -1) {
-            // let quantityLeft = record.quantity; // 记录还剩下的可拆数量
-            // for (let i = this.getLastSubNum(3); i > 1; i--) {
-            //     quantityLeft -= goodsList[index][`sub${i}`];
-            // }
-            // 仅改变最后两个子订单的值，之前的值都锁定不允许修改
             goodsList[index][`sub${this.getLastSubNum(1)}`] = value;
             goodsList[index][`sub${this.getLastSubNum(2)}`] = this.getQuantityLeft(record) - value;
             this.props.onChange(goodsList);
         }
     }
 
+    /**
+     * 获取剩余可拆总数
+     */
     getQuantityLeft = (record) => {
         const goodsList = this.props.goodsList;
         const index = goodsList.findIndex(goods => goods.id === record.id);
@@ -79,11 +77,9 @@ class GoodsInfo extends PureComponent {
         columns.push({ title: `子订单${subNum}`, dataIndex: `sub${subNum}` });
         const goodsList = [...this.props.goodsList];
         goodsList.forEach(goods => {
-            if (this.getLastSubNum(3)) {
-                Object.assign(goods, {
-                    [`sub${subNum}`]: 0
-                });
-            }
+            Object.assign(goods, {
+                [`sub${subNum}`]: 0
+            });
         });
         this.props.onChange(goodsList);
     }
