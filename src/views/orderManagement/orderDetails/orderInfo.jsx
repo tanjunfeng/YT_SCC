@@ -33,7 +33,8 @@ const { TextArea } = Input;
 class OrderInformation extends PureComponent {
     state = {
         textAreaNote: this.props.orderDetailData.description,
-        description: this.props.orderDetailData.description
+        description: this.props.orderDetailData.description,
+        goodsList: this.props.orderDetailData.items
     }
 
     /**
@@ -45,6 +46,7 @@ class OrderInformation extends PureComponent {
         this.setState({
             textAreaNote: orderDetailData.description,
             description: orderDetailData.description,
+            goodsList: orderDetailData.items
         })
     }
 
@@ -100,6 +102,13 @@ class OrderInformation extends PureComponent {
      */
     handleOrderCancel = () => {
         this.props.modifyCauseModalVisible({ isShow: true, id: this.orderId });
+    }
+
+    /**
+     * 拆单返回数组
+     */
+    handleGoodsSplit = (goodsList) => {
+        this.setState({ goodsList });
     }
 
     render() {
@@ -224,6 +233,8 @@ class OrderInformation extends PureComponent {
                 <div className="order-details-item">
                     <GoodsInfo
                         value={this.props.orderDetailData}
+                        goodsList={this.state.goodsList}
+                        onChange={this.handleGoodsSplit}
                         canBeSplit
                     />
                 </div>

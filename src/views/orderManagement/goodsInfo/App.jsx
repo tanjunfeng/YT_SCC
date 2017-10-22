@@ -14,54 +14,72 @@ import EditableCell from './editableCell';
 class GoodsInfo extends PureComponent {
     constructor(props) {
         super(props);
-        // 若被通知可拆单，则显示子订单
         if (props.canBeSplit) {
-            columns.push({
-                title: '子订单1',
-                dataIndex: 'sub1',
-                render: (text, record) => (
-                    `${record.quantity}，￥${record.quantity * record.itemPrice.salePrice}`
-                )
-            }, { title: '子订单2', dataIndex: 'sub2' });
+            columns.push({ title: '子订单1', dataIndex: 'sub1' }, { title: '子订单2', dataIndex: 'sub2' });
         }
-    }
-
-    state = {
-        goodsList: []
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.value.items && nextProps.value.items.length > 0) {
-            const goodsList = [];
-            nextProps.value.items.forEach(item => {
-                goodsList.push({ [item.id]: item.quantity }, { [item.id]: 0 });
-            });
-            this.setState({ goodsList });
+        if (nextProps.canBeSplit) {
+            // 数据被初始化的时候，则初始化表格列并通知父组件刷新 state
+            if (!this.props.goodsList && nextProps.goodsList && nextProps.goodsList.length > 0) {
+                const goodsList = [...nextProps.goodsList];
+                goodsList.forEach(goods => {
+                    Object.assign(goods, {
+                        sub1: goods.quantity,
+                        sub2: 0
+                    });
+                });
+                this.props.onChange(goodsList);
+            } else {
+                this.renderColumns();
+            }
         }
     }
 
-    onCellChange = (value) => {
-        const goodsList = { ...this.state.goodsList };
+    onCellChange = record => value => {
+        const goodsList = [...this.props.goodsList];
+        const index = goodsList.findIndex(goods => goods.id === record.id);
+        if (index > -1) {
+            goodsList[index].sub2 = value;
+            goodsList[index].sub1 = record.quantity - value;
+            this.props.onChange(goodsList);
+        }
     }
 
-    renderTableCell = (text = 5, record) => (
-        <div>
+    renderColumns = () => {
+        columns[columns.length - 2].render = this.renderSubCell;
+        columns[columns.length - 1].render = this.renderTableCell;
+    }
+
+    renderSubCell = (text, record) => {
+        let value = text;
+        if (value === undefined) {
+            value = record.quantity;
+        }
+        const value = text || record.quantity;
+        const res = `${value}，￥${text * record.itemPrice.salePrice}`;
+        return res;
+    }
+
+    renderTableCell = (text, record) => {
+        const value = text || 0;
+        const res = (<div>
             <EditableCell
-                value={text}
+                value={value}
                 min={0}
                 step={1}
                 max={record.quantity}
-                onChange={this.onCellChange}
+                onChange={this.onCellChange(record)}
             />
-            <span>￥{text * record.itemPrice.salePrice}</span>
-        </div>
-    );
+            <span className="sub-total">￥{(value) * record.itemPrice.salePrice}</span>
+        </div>);
+        return res;
+    }
 
     render() {
-        const { value } = this.props;
-        const { countOfItem, amount, items } = value;
-        columns[columns.length - 1].render = this.renderTableCell;
-        columns[columns.length - 1].width = 180;
+        const { value, goodsList } = this.props;
+        const { countOfItem, amount } = value;
         const tableFooter = () =>
             (<div>
                 <span className="table-footer-item">
@@ -85,7 +103,7 @@ class GoodsInfo extends PureComponent {
                     }
                 </div>
                 <Table
-                    dataSource={items}
+                    dataSource={goodsList}
                     columns={columns}
                     pagination={false}
                     rowKey="id"
@@ -100,6 +118,8 @@ class GoodsInfo extends PureComponent {
 
 GoodsInfo.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
+    goodsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+    onChange: PropTypes.func,
     canBeSplit: PropTypes.bool
 }
 
