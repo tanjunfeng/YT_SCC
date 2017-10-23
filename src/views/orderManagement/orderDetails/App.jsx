@@ -19,6 +19,9 @@ const TabPane = Tabs.TabPane;
 const orderDT = 'order-details';
 
 @connect(
+    state => ({
+        orderListData: state.toJS().order.orderListData,
+    }),
     dispatch => bindActionCreators({
         fetchOrderDetailInfo,
         fetchPaymentDetailInfo,

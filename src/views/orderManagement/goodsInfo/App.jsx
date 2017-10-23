@@ -15,6 +15,9 @@ import EditableCell from './editableCell';
 import { fetchOrderDetailInfo } from '../../../actions/order';
 
 @connect(
+    state => ({
+        orderListData: state.toJS().order.orderListData,
+    }),
     dispatch => bindActionCreators({
         fetchOrderDetailInfo
     }, dispatch)
@@ -43,7 +46,9 @@ class GoodsInfo extends PureComponent {
                 columns.push(
                     {
                         title: '子订单1',
-                        dataIndex: 'sub1'
+                        dataIndex: 'sub1',
+                        width: 100,
+                        fixed: 'right'
                     },
                     {
                         title: '子订单2',
@@ -137,9 +142,7 @@ class GoodsInfo extends PureComponent {
     renderColumns = () => {
         // columns[columns.length - 2].render = this.renderSubCell;
         Object.assign(columns[columns.length - 2], {
-            render: this.renderSubCell,
-            width: 100,
-            fixed: 'right'
+            render: this.renderSubCell
         });
         Object.assign(columns[columns.length - 1], {
             render: this.renderTableCell,
