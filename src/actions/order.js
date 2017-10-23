@@ -20,6 +20,7 @@ import {
     confirmRefund,
     addPaymentInfo,
     confirmPayment,
+    splitorderByInventoryService,
 } from '../service';
 import ActionType from './ActionType';
 
@@ -197,3 +198,21 @@ export const modifyConfirmPayment = (data) => (
     })
 )
 
+// 根据库存实时拆单
+const splitorderbyinventoryAction = (data) => ({
+    type: ActionType.SPLIT_ORDER_BY_INVENTORY,
+    payload: data
+});
+
+export const splitorderbyinventory = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        splitorderByInventoryService(params)
+            .then(res => {
+                dispatch(
+                    splitorderbyinventoryAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);

@@ -15,7 +15,8 @@ import moment from 'moment';
 import { TIME_FORMAT } from '../../../constant/index';
 import CauseModal from '../orderList/causeModal';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
-import { savaOrderDescription, modifyApprovalOrder, fetchOrderDetailInfo } from '../../../actions/order';
+import { savaOrderDescription, modifyApprovalOrder, fetchOrderDetailInfo,
+    splitorderbyinventory } from '../../../actions/order';
 import GoodsInfo from '../goodsInfo';
 
 const confirm = Modal.confirm;
@@ -23,11 +24,12 @@ const { TextArea } = Input;
 
 @connect(
     state => ({
-        orderDetailData: state.toJS().order.orderDetailData,
+        orderDetailData: state.toJS().order.orderDetailData
     }),
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
         fetchOrderDetailInfo,
+        splitorderbyinventory
     }, dispatch)
 )
 
@@ -113,6 +115,33 @@ class OrderInformation extends PureComponent {
             groups: splitGroups
         }
         this.setState({ manualSplitOrder });
+    }
+
+    /**
+     * 获取实时库存后拆单
+     */
+    realTimeDisassembly = () => {
+        const { orderDetailData } = this.props;
+        this.props.splitorderbyinventory({
+            orderId: orderDetailData.id
+        }).then((res) => {
+            if (res.code === 200) {
+                message.success('实时同步成功!')
+            }
+        }).catch(() => {
+            message.error('实时同步失败!')
+        })
+    }
+
+    /**
+     * 基于界面显示库存拆单
+     */
+    displayInventory = () => {
+        // const { orderDetailData } = this.props;
+        // const orderId = orderDetailData.id;
+        // const { goodsList, groups } = this.state;
+        // console.log(goodsList)
+        // console.log(groups)
     }
 
     render() {
@@ -246,6 +275,34 @@ class OrderInformation extends PureComponent {
                         onChange={this.handleGoodsSplit}
                         canBeSplit
                     />
+                    <div className="order-details-split-btn" style={{textAlign: 'right'}}>
+                        <Button
+                            size="default"
+                            type="primary"
+                            className="details-split-btns"
+                            onClick={this.realTimeDisassembly}
+                        >
+                            获取实时库存后拆单
+                        </Button>
+                        <Button
+                            size="default"
+                            type="primary"
+                            className="details-split-btns"
+                            onClick={this.displayInventory}
+                        >
+                            基于界面显示库存拆单
+                        </Button>
+                        <Button
+                            size="default"
+                            type="default"
+                            className="details-split-btns"
+                            onClick={() => {
+                                this.props.history.replace('/orderList');
+                            }}
+                        >
+                            取消
+                        </Button>
+                    </div>
                 </div>
                 <div className="order-details-btns">
                     <Row>
@@ -309,6 +366,7 @@ OrderInformation.propTypes = {
     match: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
     fetchOrderDetailInfo: PropTypes.func,
+    splitorderbyinventory: PropTypes.func,
 }
 
 OrderInformation.defaultProps = {

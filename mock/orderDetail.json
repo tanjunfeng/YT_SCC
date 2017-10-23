@@ -33,7 +33,13 @@
         "postcode": null,
         "consigneeName": "刘菲",
         "telephone": null,
+<<<<<<< HEAD
+        "cellphone": null,
+        "canSplitByInventory": true,
+        "canSplitManual": true,
+=======
         "cellphone": "13500000000",
+>>>>>>> 7af36ae76f183a305b365738ac91f35dd104914a
         "items": [
             {
                 "id": "9803349",
