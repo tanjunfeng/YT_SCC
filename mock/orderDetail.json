@@ -34,8 +34,8 @@
         "consigneeName": "刘菲",
         "telephone": null,
         "cellphone": null,
-        "canSplitByInventory": true,
-        "canSplitManual": true,
+        "canSplitByInventory": false,
+        "canSplitManual": false,
         "items": [
             {
                 "id": "9803349",
