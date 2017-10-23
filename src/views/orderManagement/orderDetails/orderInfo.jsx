@@ -35,7 +35,7 @@ class OrderInformation extends PureComponent {
     state = {
         textAreaNote: this.props.orderDetailData.description,
         description: this.props.orderDetailData.description,
-        goodsList: this.props.orderDetailData.items
+        goodsList: []
     }
 
     /**
@@ -46,8 +46,7 @@ class OrderInformation extends PureComponent {
         const { orderDetailData } = nextProps;
         this.setState({
             textAreaNote: orderDetailData.description,
-            description: orderDetailData.description,
-            goodsList: orderDetailData.items
+            description: orderDetailData.description
         });
     }
 

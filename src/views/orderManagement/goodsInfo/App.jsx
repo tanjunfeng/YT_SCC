@@ -8,23 +8,24 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { Form, Icon, Table, Button } from 'antd';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { goodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
+import { fetchOrderDetailInfo } from '../../../actions/order';
+
+@connect(
+    dispatch => bindActionCreators({
+        fetchOrderDetailInfo
+    }, dispatch)
+)
 
 class GoodsInfo extends PureComponent {
     componentDidMount() {
-        if (this.props.canBeSplit) {
-            columns.push(
-                {
-                    title: '子订单1',
-                    dataIndex: 'sub1'
-                },
-                {
-                    title: '子订单2',
-                    dataIndex: 'sub2'
-                }
-            );
-        }
+        const { id } = this.props.match.params;
+        this.props.fetchOrderDetailInfo({ id }).then(res => {
+            this.props.onChange([...res.data.items]);
+        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -39,6 +40,16 @@ class GoodsInfo extends PureComponent {
                         quantityLeft: goods.quantity
                     });
                 });
+                columns.push(
+                    {
+                        title: '子订单1',
+                        dataIndex: 'sub1'
+                    },
+                    {
+                        title: '子订单2',
+                        dataIndex: 'sub2'
+                    }
+                );
                 this.props.onChange(goodsList);
             } else {
                 this.renderColumns();
@@ -180,7 +191,9 @@ GoodsInfo.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     goodsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
     onChange: PropTypes.func,
-    canBeSplit: PropTypes.bool
+    canBeSplit: PropTypes.bool,
+    fetchOrderDetailInfo: PropTypes.func,
+    match: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(GoodsInfo));

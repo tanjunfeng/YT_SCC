@@ -19,9 +19,6 @@ const TabPane = Tabs.TabPane;
 const orderDT = 'order-details';
 
 @connect(
-    state => ({
-        initialData: state.toJS().order.initialData,
-    }),
     dispatch => bindActionCreators({
         fetchOrderDetailInfo,
         fetchPaymentDetailInfo,
@@ -32,9 +29,9 @@ const orderDT = 'order-details';
 class OrderManagementDetails extends Component {
     componentWillMount() {
         const { id } = this.props.match.params;
-        this.props.fetchOrderDetailInfo({id});
-        this.props.fetchPaymentDetailInfo({orderId: id});
-        this.props.fetchShippingDetailInfo({id});
+        this.props.fetchOrderDetailInfo({ id });
+        this.props.fetchPaymentDetailInfo({ orderId: id });
+        this.props.fetchShippingDetailInfo({ id });
     }
 
     render() {
@@ -43,7 +40,7 @@ class OrderManagementDetails extends Component {
                 <Tabs
                     defaultActiveKey="1"
                     className={`${orderDT}`}
-                    style={{marginTop: '16px'}}
+                    style={{ marginTop: '16px' }}
                 >
                     <TabPane tab="订单信息" key="1">
                         <OrderInformation />
