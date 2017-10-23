@@ -56,6 +56,15 @@
     .ant-input-number {
         width: 60px;
     }
+    .table-statistics {
+        line-height: 32px;
+        .table-statistics-item {
+            margin-right: 2em;
+            .red {
+                color: red;
+            }
+        }
+    }
 }
 .ant-modal-wrap {
     .pay-col{
