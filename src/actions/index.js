@@ -109,7 +109,7 @@ import queryCommodityList from './queryCommodityList';
 import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './whiteListConfiguration';
 
 // 根据库存实时拆单
-import { splitorderbyinventory } from './order';
+import { splitorderbyinventory, interfaceInventory } from './order';
 
 export {
     fetchSupplierList,
@@ -212,5 +212,6 @@ export {
     syncProductByManualAction,
 
     // 订单
-    splitorderbyinventory
+    splitorderbyinventory,
+    interfaceInventory
 }
