@@ -136,7 +136,7 @@ class GoodsInfo extends PureComponent {
         this.setState({ goodsList });
     }
 
-    renderTableCell = (text, record) => {
+    renderEditableCell = (text, record) => {
         let value = text;
         if (value === undefined) {
             value = 0;
@@ -154,7 +154,7 @@ class GoodsInfo extends PureComponent {
         return res;
     }
 
-    renderSubCell = (text, record) => {
+    renderReadOnlyCell = (text, record) => {
         let value = text;
         if (value === undefined) {
             // 避免出现 NaN 值
@@ -165,8 +165,8 @@ class GoodsInfo extends PureComponent {
     }
 
     renderColumns = () => {
-        columns[columns.length - 2].render = this.renderSubCell;
-        columns[columns.length - 1].render = this.renderTableCell;
+        columns[columns.length - 2].render = this.renderReadOnlyCell;
+        columns[columns.length - 1].render = this.renderEditableCell;
     }
 
     render() {
@@ -177,10 +177,6 @@ class GoodsInfo extends PureComponent {
                 <div className="detail-message-header">
                     <Icon type="picture" className="detail-message-header-icon" />
                     商品信息
-                    {this.props.canBeSplit ?
-                        <Button type="primary" onClick={this.addSubOrders}>添加子订单</Button>
-                        : null
-                    }
                 </div>
                 <div>
                     <Table
