@@ -12,9 +12,8 @@ import { goodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
 
 class GoodsInfo extends PureComponent {
-    constructor(props) {
-        super(props);
-        if (props.canBeSplit) {
+    componentDidMount() {
+        if (this.props.canBeSplit) {
             columns.push(
                 {
                     title: '子订单1',
@@ -52,7 +51,7 @@ class GoodsInfo extends PureComponent {
         const index = goodsList.findIndex(goods => goods.id === record.id);
         if (index > -1) {
             goodsList[index][`sub${this.getLastSubNum(1)}`] = value;
-            goodsList[index][`sub${this.getLastSubNum(2)}`] = this.getQuantityLeft(record) - value;
+            goodsList[index][`sub${this.getLastSubNum(2)}`] = goodsList[index].quantityLeft - value;
             this.props.onChange(goodsList);
         }
     }
@@ -83,12 +82,14 @@ class GoodsInfo extends PureComponent {
     );
 
     addSubOrders = () => {
+        const goodsList = [...this.props.goodsList];
         const subNum = this.getLastSubNum() + 1;
         columns.push({ title: `子订单${subNum}`, dataIndex: `sub${subNum}` });
-        const goodsList = [...this.props.goodsList];
         goodsList.forEach(goods => {
+            const quantityUsed = goods[`sub${subNum - 2}`];  // 倒数第二列的数量应该算作占用库存
             Object.assign(goods, {
                 [`sub${subNum}`]: 0,
+                quantityLeft: goods.quantityLeft - quantityUsed
             });
         });
         this.props.onChange(goodsList);
@@ -104,7 +105,7 @@ class GoodsInfo extends PureComponent {
                 value={value}
                 min={0}
                 step={1}
-                max={this.getQuantityLeft(record)}
+                max={record.quantityLeft}
                 onChange={this.onCellChange(record)}
             />
             <span className="sub-total">￥{(value) * record.itemPrice.salePrice}</span>
@@ -137,20 +138,8 @@ class GoodsInfo extends PureComponent {
     }
 
     render() {
-        const { value, goodsList } = this.props;
+        const { value, goodsList = [] } = this.props;
         const { countOfItem, amount } = value;
-        // const tableFooter = () =>
-        //     (<div>
-        //         <span className="table-footer-item">
-        //             <span>共</span>
-        //             <span className="red-number">{countOfItem}</span>
-        //             <span>件商品</span>
-        //         </span>
-        //         <span className="table-footer-item">
-        //             <span>总金额： ￥</span>
-        //             <span className="red-number">{amount}</span>
-        //         </span>
-        //     </div>);
         return (
             <div className="detail-message add-sub-orders">
                 <div className="detail-message-header">

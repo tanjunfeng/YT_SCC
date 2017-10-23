@@ -28,14 +28,9 @@ const orderDT = 'order-details';
         fetchShippingDetailInfo,
     }, dispatch)
 )
-class OrderManagementDetails extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        }
-    }
 
-    componentDidMount() {
+class OrderManagementDetails extends Component {
+    componentWillMount() {
         const { id } = this.props.match.params;
         this.props.fetchOrderDetailInfo({id});
         this.props.fetchPaymentDetailInfo({orderId: id});

@@ -30,6 +30,7 @@ const { TextArea } = Input;
         fetchOrderDetailInfo,
     }, dispatch)
 )
+
 class OrderInformation extends PureComponent {
     state = {
         textAreaNote: this.props.orderDetailData.description,
@@ -47,7 +48,7 @@ class OrderInformation extends PureComponent {
             textAreaNote: orderDetailData.description,
             description: orderDetailData.description,
             goodsList: orderDetailData.items
-        })
+        });
     }
 
     orderId = this.props.match.params.id;
