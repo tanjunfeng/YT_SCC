@@ -140,7 +140,7 @@ class OrderInformation extends PureComponent {
     displayInventory = () => {
         const { manualSplitOrder } = this.state;
         this.props.interfaceInventory({
-            manualSplitOrder
+            ...manualSplitOrder
         }).then((res) => {
             if (res.code === 200) {
                 message.success('手动分组拆单成功!')
