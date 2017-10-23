@@ -24,51 +24,43 @@ import { fetchOrderDetailInfo } from '../../../actions/order';
 )
 
 class GoodsInfo extends PureComponent {
+    state = {
+        goodsList: []
+    }
+
     componentDidMount() {
         const { id } = this.props.match.params;
         this.props.fetchOrderDetailInfo({ id }).then(res => {
-            this.props.onChange([...res.data.items]);
-        });
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.canBeSplit) {
-            // 数据被初始化的时候，则初始化表格列并通知父组件刷新 state
-            if (!this.props.goodsList && nextProps.goodsList && nextProps.goodsList.length > 0) {
-                const goodsList = [...nextProps.goodsList];
-                goodsList.forEach(goods => {
-                    Object.assign(goods, {
-                        sub1: goods.quantity,
-                        sub2: 0,
-                        quantityLeft: goods.quantity
-                    });
+            const goodsList = [...res.data.items];
+            goodsList.forEach(goods => {
+                Object.assign(goods, {
+                    sub1: goods.quantity,
+                    sub2: 0,
+                    quantityLeft: goods.quantity
                 });
-                columns.push(
-                    {
-                        title: '子订单1',
-                        dataIndex: 'sub1',
-                        width: 100,
-                        fixed: 'right'
-                    },
-                    {
-                        title: '子订单2',
-                        dataIndex: 'sub2'
-                    }
-                );
-                this.props.onChange(goodsList);
-            } else {
-                this.renderColumns();
+            });
+            this.setState({ goodsList });
+        });
+        columns.push(
+            {
+                title: '子订单1',
+                dataIndex: 'sub1'
+            },
+            {
+                title: '子订单2',
+                dataIndex: 'sub2'
             }
-        }
+        );
+        this.renderColumns();
     }
 
     onCellChange = record => value => {
-        const goodsList = [...this.props.goodsList];
+        const goodsList = [...this.state.goodsList];
         const index = goodsList.findIndex(goods => goods.id === record.id);
         if (index > -1) {
             goodsList[index][`sub${this.getLastSubNum(1)}`] = value;
             goodsList[index][`sub${this.getLastSubNum(2)}`] = goodsList[index].quantityLeft - value;
-            this.props.onChange(goodsList);
+            this.setState({ goodsList });
         }
     }
 
@@ -76,7 +68,7 @@ class GoodsInfo extends PureComponent {
      * 获取剩余可拆总数
      */
     getQuantityLeft = (record) => {
-        const goodsList = this.props.goodsList;
+        const goodsList = this.state.goodsList;
         const index = goodsList.findIndex(goods => goods.id === record.id);
         if (index > -1) {
             let quantityLeft = record.quantity; // 记录还剩下的可拆数量
@@ -98,7 +90,7 @@ class GoodsInfo extends PureComponent {
     );
 
     addSubOrders = () => {
-        const goodsList = [...this.props.goodsList];
+        const goodsList = [...this.state.goodsList];
         const subNum = this.getLastSubNum() + 1;
         columns.push({ title: `子订单${subNum}`, dataIndex: `sub${subNum}` });
         goodsList.forEach(goods => {
@@ -108,7 +100,8 @@ class GoodsInfo extends PureComponent {
                 quantityLeft: goods.quantityLeft - quantityUsed
             });
         });
-        this.props.onChange(goodsList);
+        this.renderColumns();
+        this.setState({ goodsList });
     }
 
     renderTableCell = (text, record) => {
@@ -133,26 +126,19 @@ class GoodsInfo extends PureComponent {
         let value = text;
         if (value === undefined) {
             // 避免出现 NaN 值
-            value = record.quantity;
+            value = record.quantityLeft;
         }
         const res = `${value}，￥${value * record.itemPrice.salePrice}`;
         return res;
     }
 
     renderColumns = () => {
-        // columns[columns.length - 2].render = this.renderSubCell;
-        Object.assign(columns[columns.length - 2], {
-            render: this.renderSubCell
-        });
-        Object.assign(columns[columns.length - 1], {
-            render: this.renderTableCell,
-            width: 150,
-            fixed: 'right'
-        });
+        columns[columns.length - 2].render = this.renderSubCell;
+        columns[columns.length - 1].render = this.renderTableCell;
     }
 
     render() {
-        const { value, goodsList = [] } = this.props;
+        const { value } = this.props;
         const { countOfItem, amount } = value;
         return (
             <div className="detail-message add-sub-orders">
@@ -166,7 +152,7 @@ class GoodsInfo extends PureComponent {
                 </div>
                 <div>
                     <Table
-                        dataSource={goodsList}
+                        dataSource={this.state.goodsList}
                         columns={columns}
                         pagination={false}
                         rowKey="id"
@@ -192,8 +178,6 @@ class GoodsInfo extends PureComponent {
 
 GoodsInfo.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
-    goodsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
-    onChange: PropTypes.func,
     canBeSplit: PropTypes.bool,
     fetchOrderDetailInfo: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any)

@@ -233,7 +233,6 @@ class OrderInformation extends PureComponent {
                 <div className="order-details-item">
                     <GoodsInfo
                         value={this.props.orderDetailData}
-                        goodsList={this.state.goodsList}
                         onChange={this.handleGoodsSplit}
                         canBeSplit
                     />
