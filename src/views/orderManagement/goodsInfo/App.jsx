@@ -15,7 +15,16 @@ class GoodsInfo extends PureComponent {
     constructor(props) {
         super(props);
         if (props.canBeSplit) {
-            columns.push({ title: '子订单1', dataIndex: 'sub1' }, { title: '子订单2', dataIndex: 'sub2' });
+            columns.push(
+                {
+                    title: '子订单1',
+                    dataIndex: 'sub1'
+                },
+                {
+                    title: '子订单2',
+                    dataIndex: 'sub2'
+                }
+            );
         }
     }
 
@@ -27,7 +36,8 @@ class GoodsInfo extends PureComponent {
                 goodsList.forEach(goods => {
                     Object.assign(goods, {
                         sub1: goods.quantity,
-                        sub2: 0
+                        sub2: 0,
+                        quantityLeft: goods.quantity
                     });
                 });
                 this.props.onChange(goodsList);
@@ -78,7 +88,7 @@ class GoodsInfo extends PureComponent {
         const goodsList = [...this.props.goodsList];
         goodsList.forEach(goods => {
             Object.assign(goods, {
-                [`sub${subNum}`]: 0
+                [`sub${subNum}`]: 0,
             });
         });
         this.props.onChange(goodsList);
@@ -113,25 +123,34 @@ class GoodsInfo extends PureComponent {
     }
 
     renderColumns = () => {
-        columns[columns.length - 2].render = this.renderSubCell;
-        columns[columns.length - 1].render = this.renderTableCell;
+        // columns[columns.length - 2].render = this.renderSubCell;
+        Object.assign(columns[columns.length - 2], {
+            render: this.renderSubCell,
+            width: 100,
+            fixed: 'right'
+        });
+        Object.assign(columns[columns.length - 1], {
+            render: this.renderTableCell,
+            width: 150,
+            fixed: 'right'
+        });
     }
 
     render() {
         const { value, goodsList } = this.props;
         const { countOfItem, amount } = value;
-        const tableFooter = () =>
-            (<div>
-                <span className="table-footer-item">
-                    <span>共</span>
-                    <span className="red-number">{countOfItem}</span>
-                    <span>件商品</span>
-                </span>
-                <span className="table-footer-item">
-                    <span>总金额： ￥</span>
-                    <span className="red-number">{amount}</span>
-                </span>
-            </div>);
+        // const tableFooter = () =>
+        //     (<div>
+        //         <span className="table-footer-item">
+        //             <span>共</span>
+        //             <span className="red-number">{countOfItem}</span>
+        //             <span>件商品</span>
+        //         </span>
+        //         <span className="table-footer-item">
+        //             <span>总金额： ￥</span>
+        //             <span className="red-number">{amount}</span>
+        //         </span>
+        //     </div>);
         return (
             <div className="detail-message add-sub-orders">
                 <div className="detail-message-header">
@@ -142,15 +161,27 @@ class GoodsInfo extends PureComponent {
                         : null
                     }
                 </div>
-                <Table
-                    dataSource={goodsList}
-                    columns={columns}
-                    pagination={false}
-                    rowKey="id"
-                    footer={tableFooter}
-                    scroll={{ x: 1440 }}
-                    bordered
-                />
+                <div>
+                    <Table
+                        dataSource={goodsList}
+                        columns={columns}
+                        pagination={false}
+                        rowKey="id"
+                        scroll={{ x: 1440 }}
+                        bordered
+                    />
+                </div>
+                <div className="table-statistics">
+                    <span className="table-statistics-item">
+                        <span>共</span>
+                        <span className="red">{countOfItem}</span>
+                        <span>件商品</span>
+                    </span>
+                    <span className="table-statistics-item">
+                        <span>总金额： ￥</span>
+                        <span className="red">{amount}</span>
+                    </span>
+                </div>
             </div>
         );
     }

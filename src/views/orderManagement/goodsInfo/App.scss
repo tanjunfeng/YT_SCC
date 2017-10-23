@@ -9,4 +9,15 @@
     .ant-btn-primary {
         float: right;
     }
+    .table-statistics {
+        clear: both;
+        float: right;
+        line-height: 32px;
+        .table-statistics-item {
+            margin-right: 2em;
+            .red {
+                color: red;
+            }
+        }
+    }
 }
