@@ -308,14 +308,19 @@ class OrderInformation extends PureComponent {
                                 基于界面显示库存拆单
                         </Button>
                             : null}
-                        <Button
-                            size="default"
-                            type="default"
-                            className="details-split-btns"
-                            onClick={() => {
-                                this.props.history.replace('/orderList');
-                            }}
-                        > 取消 </Button>
+                        {this.props.orderDetailData.canSplitByInventory
+                            || this.props.orderDetailData.canSplitManual
+                            ? <Button
+                                size="default"
+                                type="default"
+                                className="details-split-btns"
+                                onClick={() => {
+                                    this.props.history.replace('/orderList');
+                                }}
+                            >
+                                取消
+                            </Button>
+                            : null}
                     </div>
                 </div>
                 <div className="order-details-btns">
@@ -369,7 +374,7 @@ class OrderInformation extends PureComponent {
                 <div>
                     <CauseModal />
                 </div>
-            </div>
+            </div >
         );
     }
 }
