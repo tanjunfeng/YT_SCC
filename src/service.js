@@ -659,6 +659,9 @@ export const checkSupplierAddOrgId = (params) => http.get('/supplier/checkSuppli
  // 根据条件分页查询商品清单，并排序
 export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);
 
+ // 根据商品id同步商品
+export const syncProductByManualAction = (params) => http.get('/product/syncProductByManual', params);
+
 // 获取已审批通过供应商地点下拉框数据
 export const querySuppliersList = (params) => http.get('/supplier/supplierSearchBox', params);
 
@@ -751,6 +754,9 @@ export const addPaymentInfo = (params) => http.post('/sorder/addPaymentInfo', pa
 
 // 订单管理-确认支付
 export const confirmPayment = (params) => http.post('/sorder/confirmPayment', params);
+
+// 根据库存实时拆单
+export const splitorderByInventoryService = (params) => http.post('/sorder/splitOrderByInventory', params);
 
 // 供应商选择组件
 export const supplierSearchBox = (params) => http.get('/supplier/supplierSearchBox', params);

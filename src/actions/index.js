@@ -82,6 +82,7 @@ import suppplierSettledAudit from './fetch/suppplierSettledAudit';
 import supplierAdrSettledAudit from './fetch/supplierAdrSettledAudit';
 import modifyAuditAdrVisible from './modify/modifyAuditAdrVisible';
 import auditSupplierEditInfoAction from '../actions/supplier';
+import syncProductByManualAction from '../actions/syncProductByManual';
 import {
     UpdateProdPurchase,
     getProductById,
@@ -106,6 +107,9 @@ import queryCommodityList from './queryCommodityList';
 
 // 根据条件分页查询白名单列表, 上线下线
 import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './whiteListConfiguration';
+
+// 根据库存实时拆单
+import { splitorderbyinventory } from './order';
 
 export {
     fetchSupplierList,
@@ -203,4 +207,10 @@ export {
     // 上线下线
     onlineWhitelist,
     offlineWhitelist,
+
+    // 商品管理
+    syncProductByManualAction,
+
+    // 订单
+    splitorderbyinventory
 }

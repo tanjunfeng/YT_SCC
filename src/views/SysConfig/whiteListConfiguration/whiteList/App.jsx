@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-18 17:22:49
+ * @Last Modified time: 2017-10-19 17:48:48
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -86,33 +86,7 @@ class WhiteListConfig extends PureComponent {
 
     onModalOnlineOk({ warehouseCode, warehouseName }) {
         this.handlePromotionReset();
-        const { chooseGoodsList, selectedListData, onlineObj } = this.state;
-        if (chooseGoodsList.length >= 1 && onlineObj === {}) {
-            selectedListData.forEach((item) => {
-                if ((item.provinceName === null ||
-                    item.cityName === null ||
-                    item.districtName === null ||
-                    item.address === null ||
-                    item.contact === null ||
-                    item.mobilePhone === null) && chooseGoodsList.length >= 1) {
-                    message.error('商家信息不完整，请去主数据完善后上线')
-                } else {
-                    this.props.onlineWhitelist(Utils.removeInvalid({
-                        warehouseCode,
-                        warehouseName,
-                        chooseGoodsList
-                    })).then((res) => {
-                        if (res.code === 200) {
-                            message.success(res.message)
-                            this.setState({ ModalOnlineVisible: false })
-                            this.query();
-                        }
-                    }).catch((res) => {
-                        message.error(res.message)
-                    })
-                }
-            })
-        }
+        const { chooseGoodsList, onlineObj } = this.state;
         if ((onlineObj.provinceName === null ||
             onlineObj.cityName === null ||
             onlineObj.districtName === null ||
@@ -127,12 +101,12 @@ class WhiteListConfig extends PureComponent {
                 chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
-                    message.success(res.message)
+                    message.success(res.data)
                     this.setState({ ModalOnlineVisible: false })
                     this.query();
                 }
             }).catch((res) => {
-                message.error(res.message)
+                message.error(res.data)
             })
         }
     }
@@ -149,24 +123,24 @@ class WhiteListConfig extends PureComponent {
                 chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
-                    message.success(res.message)
+                    message.success(res.data)
                     this.setState({ ModalOfflineVisible: false })
                     this.query();
                 }
             }).catch((res) => {
-                message.error(res.message)
+                message.error(res.data)
             })
         } else {
             this.props.offlineWhitelist(Utils.removeInvalid({
                 chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
-                    message.success(res.message)
+                    message.success(res.data)
                     this.setState({ ModalOfflineVisible: false })
                     this.query();
                 }
             }).catch((res) => {
-                message.error(res.message)
+                message.error(res.data)
             })
         }
     }
@@ -196,6 +170,7 @@ class WhiteListConfig extends PureComponent {
             pageNum: 1,
             pageSize: PAGE_SIZE
         };
+        this.setState({chooseGoodsList: []})
     }
 
     handleSelect(record, index, item) {
@@ -269,8 +244,9 @@ class WhiteListConfig extends PureComponent {
     render() {
         const { data, total, pageNum, pageSize } = this.props.data;
         const { ModalOnlineVisible, ModalOfflineVisible } = this.state;
-        const COUNTRY_OFF_THE_SHELF = this.state.chooseGoodsList.length === 0;
+        const selectListlength = this.state.chooseGoodsList.length === 0;
         const rowSelection = {
+            selectedRowKeys: this.state.chooseGoodsList,
             onChange: (selectedRowKeys, selectedRows) => {
                 this.setState({
                     chooseGoodsList: selectedRowKeys,
@@ -284,7 +260,7 @@ class WhiteListConfig extends PureComponent {
                 <SearchForm
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
-                    value={{ COUNTRY_OFF_THE_SHELF }}
+                    value={{ selectListlength }}
                     onModalClick={this.onModalOnline}
                     onModalOfflineClick={this.onModalOffline}
                 />
@@ -298,7 +274,7 @@ class WhiteListConfig extends PureComponent {
                     }}
                     bordered
                     pagination={{
-                        current: this.param.current,
+                        current: this.state.current,
                         pageNum,
                         pageSize,
                         total,
