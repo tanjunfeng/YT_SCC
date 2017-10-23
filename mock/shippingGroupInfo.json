@@ -1,0 +1,30 @@
+{
+    "timestamp": 1508728686395,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "id": "9803707",
+        "shippingNo": null,
+        "shippingMethod": "YTS",
+        "shipOnDate": null,
+        "estimatedArrivalDate": null,
+        "deliveryer": null,
+        "deliveryerPhone": null,
+        "shippingProductDtos": [
+            {
+                "id": "9803349",
+                "skuId": "1001586",
+                "productName": "南方黑芝麻糊480!@#*",
+                "quantity": 12,
+                "shippedQuantity": 0,
+                "unit": "袋",
+                "salePrice": 100.0,
+                "completedQuantity": 0,
+                "completedMulQuantity": 0,
+                "completedMulAmount": 0.0
+            }
+        ]
+    },
+    "success": true
+}
