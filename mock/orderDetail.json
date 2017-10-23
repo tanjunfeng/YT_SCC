@@ -33,6 +33,8 @@
         "consigneeName": null,
         "telephone": null,
         "cellphone": null,
+        "canSplitByInventory": true,
+        "canSplitManual": true,
         "items": [
             {
                 "id": "9802241",

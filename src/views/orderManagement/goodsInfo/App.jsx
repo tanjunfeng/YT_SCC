@@ -171,7 +171,7 @@ class GoodsInfo extends PureComponent {
                         bordered
                     />
                 </div>
-                <div className="table-statistics">
+                <div className="table-statistics" style={{textAlign: 'right'}}>
                     <span className="table-statistics-item">
                         <span>共</span>
                         <span className="red">{countOfItem}</span>
