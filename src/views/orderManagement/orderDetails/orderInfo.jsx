@@ -16,7 +16,7 @@ import { TIME_FORMAT } from '../../../constant/index';
 import CauseModal from '../orderList/causeModal';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { savaOrderDescription, modifyApprovalOrder, fetchOrderDetailInfo,
-    splitorderbyinventory } from '../../../actions/order';
+    splitorderbyinventory, interfaceInventory } from '../../../actions/order';
 import GoodsInfo from '../goodsInfo';
 
 const confirm = Modal.confirm;
@@ -29,7 +29,8 @@ const { TextArea } = Input;
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
         fetchOrderDetailInfo,
-        splitorderbyinventory
+        splitorderbyinventory,
+        interfaceInventory
     }, dispatch)
 )
 
@@ -126,10 +127,10 @@ class OrderInformation extends PureComponent {
             orderId: orderDetailData.id
         }).then((res) => {
             if (res.code === 200) {
-                message.success('实时同步成功!')
+                message.success('实时拆单成功!')
             }
         }).catch(() => {
-            message.error('实时同步失败!')
+            message.error('实时拆单失败!')
         })
     }
 
@@ -137,11 +138,16 @@ class OrderInformation extends PureComponent {
      * 基于界面显示库存拆单
      */
     displayInventory = () => {
-        // const { orderDetailData } = this.props;
-        // const orderId = orderDetailData.id;
-        // const { goodsList, groups } = this.state;
-        // console.log(goodsList)
-        // console.log(groups)
+        const { manualSplitOrder } = this.state;
+        this.props.interfaceInventory({
+            manualSplitOrder
+        }).then((res) => {
+            if (res.code === 200) {
+                message.success('手动分组拆单成功!')
+            }
+        }).catch(() => {
+            message.error('手动分组拆单失败!')
+        })
     }
 
     render() {
@@ -367,6 +373,7 @@ OrderInformation.propTypes = {
     modifyCauseModalVisible: PropTypes.func,
     fetchOrderDetailInfo: PropTypes.func,
     splitorderbyinventory: PropTypes.func,
+    interfaceInventory: PropTypes.func
 }
 
 OrderInformation.defaultProps = {

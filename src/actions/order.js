@@ -21,6 +21,7 @@ import {
     addPaymentInfo,
     confirmPayment,
     splitorderByInventoryService,
+    interfaceInventoryService,
 } from '../service';
 import ActionType from './ActionType';
 
@@ -210,6 +211,25 @@ export const splitorderbyinventory = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     splitorderbyinventoryAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+// 根据界面显示库存拆单
+const interfaceInventoryAction = (data) => ({
+    type: ActionType.INTER_FACE_INVENTORY,
+    payload: data
+});
+
+export const interfaceInventory = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        interfaceInventoryService(params)
+            .then(res => {
+                dispatch(
+                    interfaceInventoryAction(res.data)
                 );
                 resolve(res);
             })
