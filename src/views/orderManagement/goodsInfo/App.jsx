@@ -61,6 +61,7 @@ class GoodsInfo extends PureComponent {
             goodsList[index][`sub${this.getLastSubNum(1)}`] = value;
             goodsList[index][`sub${this.getLastSubNum(2)}`] = goodsList[index].quantityLeft - value;
             this.setState({ goodsList });
+            this.noticeParent();
         }
     }
 
@@ -88,6 +89,33 @@ class GoodsInfo extends PureComponent {
     getLastSubNum = (lastIndexOf = 1) => (
         +(columns[columns.length - lastIndexOf].dataIndex.substr(3))
     );
+
+    /**
+     * 获取单个子订单对象
+     */
+    getSubObject = (subIndex) => {
+        // {"563132":12,"45744":2,"563133":100}
+        const goodsList = this.state.goodsList;
+        const dist = {};
+        goodsList.forEach(goods => {
+            Object.assign(dist, {
+                [goods.id]: goods[`sub${subIndex}`]
+            });
+        });
+        return dist;
+    }
+
+    /**
+     * 回传子订单数据给父组件
+     */
+    noticeParent = () => {
+        // [{"563132":12,"45744":2,"563133":100},{"563132":8,"45744":28,"563133":900}]
+        const arr = [];
+        for (let i = 1; i <= this.getLastSubNum(); i++) {
+            arr.push(this.getSubObject(i));
+        }
+        this.props.onChange(arr);
+    }
 
     addSubOrders = () => {
         const goodsList = [...this.state.goodsList];
@@ -180,6 +208,7 @@ GoodsInfo.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     canBeSplit: PropTypes.bool,
     fetchOrderDetailInfo: PropTypes.func,
+    onChange: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any)
 }
 

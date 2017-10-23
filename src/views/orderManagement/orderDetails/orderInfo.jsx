@@ -35,7 +35,7 @@ class OrderInformation extends PureComponent {
     state = {
         textAreaNote: this.props.orderDetailData.description,
         description: this.props.orderDetailData.description,
-        goodsList: []
+        manualSplitOrder: {}
     }
 
     /**
@@ -107,8 +107,12 @@ class OrderInformation extends PureComponent {
     /**
      * 拆单返回数组
      */
-    handleGoodsSplit = (goodsList) => {
-        this.setState({ goodsList });
+    handleGoodsSplit = (splitGroups) => {
+        const manualSplitOrder = {
+            parentOrderId: this.orderId,
+            groups: splitGroups
+        }
+        this.setState({ manualSplitOrder });
     }
 
     render() {

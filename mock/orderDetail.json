@@ -75,6 +75,47 @@
                         "barcodeType": 1
                     }
                 ]
+            },
+            {
+                "id": "9803350",
+                "productId": "49958",
+                "productName": "北方白芝麻糊480!@#*",
+                "productImg": null,
+                "properties": {},
+                "skuId": "49958",
+                "catalogId": null,
+                "quantity": 12,
+                "state": 0,
+                "stateDetail": "初始化",
+                "itemPrice": {
+                    "id": "9803348",
+                    "amount": 1200.0,
+                    "currencyCode": null,
+                    "finalReasonCode": null,
+                    "listPrice": 100.0,
+                    "orderDiscountShare": 0.0,
+                    "quantityAsQualifier": 0,
+                    "quantityDiscounted": 0,
+                    "rawTotalPrice": 1200.0,
+                    "salePrice": 100.0
+                },
+                "returnQuantity": 0,
+                "selected": true,
+                "type": null,
+                "shippedQuantity": 0,
+                "completedQuantity": 0,
+                "creationTime": null,
+                "secondLevelCategoryName": "冲调保健",
+                "thirdLevelCategoryName": "麦片餐糊",
+                "productCode": "1001587",
+                "internationalCodes": [
+                    {
+                        "id": "49958",
+                        "productId": "49958",
+                        "internationalCode": "6901333100519",
+                        "barcodeType": 1
+                    }
+                ]
             }
         ],
         "amount": 950.4,
