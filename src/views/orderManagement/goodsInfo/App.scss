@@ -1,0 +1,21 @@
+// 商品信息列表
+.add-sub-orders {
+    .editable-cell {
+        float: left;
+    }
+    .sub-total {
+        line-height: 26px;
+    }
+    .ant-btn-primary {
+        float: right;
+    }
+    .table-statistics {
+        line-height: 32px;
+        .table-statistics-item {
+            margin-right: 2em;
+            .red {
+                color: red;
+            }
+        }
+    }
+}

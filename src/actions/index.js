@@ -108,6 +108,9 @@ import queryCommodityList from './queryCommodityList';
 // 根据条件分页查询白名单列表, 上线下线
 import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './whiteListConfiguration';
 
+// 根据库存实时拆单
+import { splitorderbyinventory, interfaceInventory } from './order';
+
 export {
     fetchSupplierList,
     modifyInformationVisible,
@@ -206,5 +209,9 @@ export {
     offlineWhitelist,
 
     // 商品管理
-    syncProductByManualAction
+    syncProductByManualAction,
+
+    // 订单
+    splitorderbyinventory,
+    interfaceInventory
 }
