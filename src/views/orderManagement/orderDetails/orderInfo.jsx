@@ -15,15 +15,13 @@ import moment from 'moment';
 import { TIME_FORMAT } from '../../../constant/index';
 import CauseModal from '../orderList/causeModal';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
-<<<<<<< HEAD
 import {
-    savaOrderDescription, modifyApprovalOrder, fetchOrderDetailInfo,
-    splitorderbyinventory
+    savaOrderDescription,
+    modifyApprovalOrder,
+    fetchOrderDetailInfo,
+    splitorderbyinventory,
+    interfaceInventory
 } from '../../../actions/order';
-=======
-import { savaOrderDescription, modifyApprovalOrder, fetchOrderDetailInfo,
-    splitorderbyinventory, interfaceInventory } from '../../../actions/order';
->>>>>>> e3b331fded14367a2b7e149a9f16ccc224c0b833
 import GoodsInfo from '../goodsInfo';
 
 const confirm = Modal.confirm;
@@ -289,39 +287,36 @@ class OrderInformation extends PureComponent {
                         canBeSplit={this.props.orderDetailData.canSplitByInventory
                             || this.props.orderDetailData.canSplitManual}
                     />
-                    {
-                        this.props.orderDetailData.canSplitByInventory
-                            || this.props.orderDetailData.canSplitManual
-                            ? <div className="order-details-split-btn" style={{ textAlign: 'right' }}>
-                                <Button
-                                    size="default"
-                                    type="primary"
-                                    className="details-split-btns"
-                                    onClick={this.realTimeDisassembly}
-                                >
-                                    获取实时库存后拆单
+                    <div className="order-details-split-btn" style={{ textAlign: 'right' }}>
+                        {this.props.orderDetailData.canSplitByInventory
+                            ? <Button
+                                size="default"
+                                type="primary"
+                                className="details-split-btns"
+                                onClick={this.realTimeDisassembly}
+                            >
+                                获取实时库存后拆单
                                 </Button>
-                                <Button
-                                    size="default"
-                                    type="primary"
-                                    className="details-split-btns"
-                                    onClick={this.displayInventory}
-                                >
-                                    基于界面显示库存拆单
-                                </Button>
-                                <Button
-                                    size="default"
-                                    type="default"
-                                    className="details-split-btns"
-                                    onClick={() => {
-                                        this.props.history.replace('/orderList');
-                                    }}
-                                >
-                                    取消
-                                </Button>
-                            </div>
-                            : null
-                    }
+                            : null}
+                        {this.props.orderDetailData.canSplitManual
+                            ? <Button
+                                size="default"
+                                type="primary"
+                                className="details-split-btns"
+                                onClick={this.displayInventory}
+                            >
+                                基于界面显示库存拆单
+                        </Button>
+                            : null}
+                        <Button
+                            size="default"
+                            type="default"
+                            className="details-split-btns"
+                            onClick={() => {
+                                this.props.history.replace('/orderList');
+                            }}
+                        > 取消 </Button>
+                    </div>
                 </div>
                 <div className="order-details-btns">
                     <Row>
