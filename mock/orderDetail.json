@@ -35,7 +35,7 @@
         "telephone": null,
         "cellphone": null,
         "canSplitByInventory": false,
-        "canSplitManual": false,
+        "canSplitManual": true,
         "items": [
             {
                 "id": "9803349",
