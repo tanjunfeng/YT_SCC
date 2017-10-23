@@ -10,76 +10,16 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, Icon, Row, Col, Input, Table, Button, Modal, message } from 'antd';
+import { Form, Icon, Row, Col, Input, Button, Modal, message } from 'antd';
 import moment from 'moment';
 import { TIME_FORMAT } from '../../../constant/index';
 import CauseModal from '../orderList/causeModal';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { savaOrderDescription, modifyApprovalOrder, fetchOrderDetailInfo } from '../../../actions/order';
+import GoodsInfo from '../goodsInfo';
 
 const confirm = Modal.confirm;
 const { TextArea } = Input;
-
-const columns = [{
-    title: '商品图片',
-    dataIndex: 'productImg',
-    key: 'productImg',
-    render: (text) => (
-        <img
-            src={text}
-            alt="未上传"
-            style={{width: 50, height: 50 }}
-        />
-    )
-}, {
-    title: '商品编码',
-    dataIndex: 'productCode',
-    key: 'productCode',
-}, {
-    title: '商品条码',
-    dataIndex: 'internationalCodes',
-    key: 'internationalCodes',
-    render: (item) => {
-        if (item instanceof Array && item.length) {
-            return item[0].internationalCode;
-        }
-        return null;
-    }
-}, {
-    title: '商品名称',
-    dataIndex: 'productName',
-    key: 'productName',
-}, {
-    title: '商品分类',
-    dataIndex: 'commodifyClassify',
-    key: 'commodifyClassify',
-    render: (text, record) => (
-        <span>{record.secondLevelCategoryName}&gt;{record.thirdLevelCategoryName}</span>
-    )
-}, {
-    title: '数量',
-    dataIndex: 'quantity',
-    key: 'quantity',
-}, {
-}, {
-    title: '状态',
-    dataIndex: 'stateDetail',
-    key: 'stateDetail',
-}, {
-    title: '单价',
-    dataIndex: 'price',
-    key: 'price',
-    render: (text, record) => (
-        <span>￥{record.itemPrice.salePrice}</span>
-    )
-}, {
-    title: '金额',
-    dataIndex: 'money',
-    key: 'money',
-    render: (text, record) => (
-        <span>￥{record.itemPrice.amount}</span>
-    )
-}];
 
 @connect(
     state => ({
@@ -91,19 +31,10 @@ const columns = [{
     }, dispatch)
 )
 class OrderInformation extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.handleOrderSave = ::this.handleOrderSave;
-        this.handleOrderAudit = ::this.handleOrderAudit;
-        this.handleOrderCancel = ::this.handleOrderCancel;
-        this.id = this.props.match.params.id;
-        this.state = {
-            textAreaNote: this.props.orderDetailData.description,
-            description: this.props.orderDetailData.description
-        }
-    }
-
-    componentDidMount() {
+    state = {
+        textAreaNote: this.props.orderDetailData.description,
+        description: this.props.orderDetailData.description,
+        goodsList: this.props.orderDetailData.items
     }
 
     /**
@@ -115,13 +46,16 @@ class OrderInformation extends PureComponent {
         this.setState({
             textAreaNote: orderDetailData.description,
             description: orderDetailData.description,
+            goodsList: orderDetailData.items
         })
     }
+
+    orderId = this.props.match.params.id;
 
     /**
      * 保存备注信息
      */
-    handleOrderSave() {
+    handleOrderSave = () => {
         const { textAreaNote, description } = this.state;
         confirm({
             title: '保存',
@@ -131,7 +65,7 @@ class OrderInformation extends PureComponent {
                     message.error('备注未作修改！')
                 } else {
                     savaOrderDescription({
-                        orderId: this.id,
+                        orderId: this.orderId,
                         description: textAreaNote,
                     }).then(() => {
                         message.success('保存成功！')
@@ -140,50 +74,45 @@ class OrderInformation extends PureComponent {
                     })
                 }
             },
-            onCancel() {},
+            onCancel() { },
         });
     }
 
     /**
      * 单个审核
      */
-    handleOrderAudit() {
+    handleOrderAudit = () => {
         confirm({
             title: '审核',
             content: '确认审核？',
             onOk: () => {
                 modifyApprovalOrder({
-                    id: this.id
+                    id: this.orderId
                 }).then(res => {
-                    this.props.fetchOrderDetailInfo({id: this.id});
+                    this.props.fetchOrderDetailInfo({ id: this.orderId });
                     message.success(res.message);
                 })
             },
-            onCancel() {},
+            onCancel() { },
         });
     }
 
     /**
      * 单个取消
      */
-    handleOrderCancel() {
-        this.props.modifyCauseModalVisible({ isShow: true, id: this.id });
+    handleOrderCancel = () => {
+        this.props.modifyCauseModalVisible({ isShow: true, id: this.orderId });
+    }
+
+    /**
+     * 拆单返回数组
+     */
+    handleGoodsSplit = (goodsList) => {
+        this.setState({ goodsList });
     }
 
     render() {
         const { orderDetailData } = this.props;
-        const tableFooter = () =>
-            (<div>
-                <span className="table-footer-item">
-                    <span>共</span>
-                    <span className="red-number">{orderDetailData.countOfItem}</span>
-                    <span>件商品</span>
-                </span>
-                <span className="table-footer-item">
-                    <span>总金额： ￥</span>
-                    <span className="red-number">{orderDetailData.amount}</span>
-                </span>
-            </div>)
         return (
             <div>
                 <div className="order-details-item">
@@ -241,7 +170,7 @@ class OrderInformation extends PureComponent {
                                     <TextArea
                                         autosize={{ minRows: 3, maxRows: 6 }}
                                         value={this.state.textAreaNote}
-                                        style={{resize: 'none' }}
+                                        style={{ resize: 'none' }}
                                         maxLength="250"
                                         onChange={(e) => {
                                             this.setState({
@@ -254,7 +183,7 @@ class OrderInformation extends PureComponent {
                                     <span className="details-info-lable">下单日期:</span>
                                     <span>
                                         {moment(parseInt(orderDetailData.creationTime, 10))
-                                        .format(TIME_FORMAT)}
+                                            .format(TIME_FORMAT)}
                                     </span>
                                 </Col>
                             </Row>
@@ -302,21 +231,12 @@ class OrderInformation extends PureComponent {
                     </div>
                 </div>
                 <div className="order-details-item">
-                    <div className="detail-message">
-                        <div className="detail-message-header">
-                            <Icon type="picture" className="detail-message-header-icon" />
-                            商品信息
-                        </div>
-                        <div>
-                            <Table
-                                dataSource={orderDetailData.items}
-                                columns={columns}
-                                pagination={false}
-                                rowKey="id"
-                                footer={tableFooter}
-                            />
-                        </div>
-                    </div>
+                    <GoodsInfo
+                        value={this.props.orderDetailData}
+                        goodsList={this.state.goodsList}
+                        onChange={this.handleGoodsSplit}
+                        canBeSplit
+                    />
                 </div>
                 <div className="order-details-btns">
                     <Row>
@@ -334,7 +254,7 @@ class OrderInformation extends PureComponent {
                             </Button>
                             {
                                 (orderDetailData.orderStateDesc === '待审核'
-                                || orderDetailData.orderStateDesc === '待人工审核')
+                                    || orderDetailData.orderStateDesc === '待人工审核')
                                 && <Button
                                     size="default"
                                     onClick={this.handleOrderAudit}
