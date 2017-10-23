@@ -181,6 +181,7 @@ class OrderManagementList extends Component {
             paymentState,
             cellphone,
             shippingState,
+            thirdPartOrderNo
         } = this.props.form.getFieldsValue();
 
         const { franchiseeId, branchCompanyId } = this.state;
@@ -196,6 +197,7 @@ class OrderManagementList extends Component {
             franchiseeId,
             branchCompanyId,
             submitStartTime,
+            thirdPartOrderNo,
             submitEndTime,
             pageSize: PAGE_SIZE,
         }
@@ -652,6 +654,22 @@ class OrderManagementList extends Component {
                                                 onChange={this.onEnterTimeChange}
 
                                             />
+                                        </div>
+                                    </FormItem>
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col className="gutter-row" span={8}>
+                                    {/* 电商订单编号 */}
+                                    <FormItem>
+                                        <div>
+                                            <span className="sc-form-item-label">电商订单编号</span>
+                                            {getFieldDecorator('thirdPartOrderNo')(
+                                                <Input
+                                                    className="input"
+                                                    placeholder="请输入电商订单编号"
+                                                />
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>

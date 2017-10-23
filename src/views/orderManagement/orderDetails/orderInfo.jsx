@@ -236,6 +236,12 @@ class OrderInformation extends PureComponent {
                                 </Col>
                             </Row>
                             <Row>
+                                <Col className="gutter-row" span={7}>
+                                    <span className="details-info-lable">电商单据编号:</span>
+                                    <span>{orderDetailData.thirdPartOrderNo}</span>
+                                </Col>
+                            </Row>
+                            <Row>
                                 <Col className="gutter-row" span={14}>
                                     <span className="details-info-lable">备注:</span>
                                     <TextArea
