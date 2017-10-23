@@ -61,9 +61,15 @@ class GoodsInfo extends PureComponent {
     onCellChange = record => value => {
         const goodsList = [...this.state.goodsList];
         const index = goodsList.findIndex(goods => goods.id === record.id);
+        let v = value;
         if (index > -1) {
-            goodsList[index][`sub${this.getLastSubNum(1)}`] = value;
-            goodsList[index][`sub${this.getLastSubNum(2)}`] = goodsList[index].quantityLeft - value;
+            if (v > goodsList[index].quantityLeft) {
+                v = goodsList[index].quantityLeft;
+            } else if (v < 0) {
+                v = 0;
+            }
+            goodsList[index][`sub${this.getLastSubNum(1)}`] = v;
+            goodsList[index][`sub${this.getLastSubNum(2)}`] = goodsList[index].quantityLeft - v;
             this.setState({ goodsList });
             this.noticeParent();
         }
