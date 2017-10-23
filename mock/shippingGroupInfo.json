@@ -23,6 +23,18 @@
                 "completedQuantity": 0,
                 "completedMulQuantity": 0,
                 "completedMulAmount": 0.0
+            },
+            {
+                "id": "9803350",
+                "skuId": "1001587",
+                "productName": "北方红芝麻糊480ml/袋",
+                "quantity": 12,
+                "shippedQuantity": 0,
+                "unit": "袋",
+                "salePrice": 100.0,
+                "completedQuantity": 0,
+                "completedMulQuantity": 0,
+                "completedMulAmount": 0.0
             }
         ]
     },
