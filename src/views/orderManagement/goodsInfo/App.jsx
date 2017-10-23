@@ -41,17 +41,21 @@ class GoodsInfo extends PureComponent {
             });
             this.setState({ goodsList });
         });
-        columns.push(
-            {
-                title: '子订单1',
-                dataIndex: 'sub1'
-            },
-            {
-                title: '子订单2',
-                dataIndex: 'sub2'
-            }
-        );
-        this.renderColumns();
+    }
+
+    componentWillReceiveProps(nextPros) {
+        if (this.props.canBeSplit === undefined && nextPros.canBeSplit) {
+            columns.push(
+                {
+                    title: '子订单1',
+                    dataIndex: 'sub1'
+                },
+                {
+                    title: '子订单2',
+                    dataIndex: 'sub2'
+                });
+            this.renderColumns();
+        }
     }
 
     onCellChange = record => value => {
@@ -188,7 +192,7 @@ class GoodsInfo extends PureComponent {
                         bordered
                     />
                 </div>
-                <div className="table-statistics" style={{textAlign: 'right'}}>
+                <div className="table-statistics" style={{ textAlign: 'right' }}>
                     <span className="table-statistics-item">
                         <span>共</span>
                         <span className="red">{countOfItem}</span>
