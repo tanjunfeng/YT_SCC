@@ -758,6 +758,9 @@ export const confirmPayment = (params) => http.post('/sorder/confirmPayment', pa
 // 根据库存实时拆单
 export const splitorderByInventoryService = (params) => http.post('/sorder/splitOrderByInventory', params);
 
+// 手动分组拆单
+export const interfaceInventoryService = (params) => http.post('/sorder/manualSplitOrder', params);
+
 // 供应商选择组件
 export const supplierSearchBox = (params) => http.get('/supplier/supplierSearchBox', params);
 
