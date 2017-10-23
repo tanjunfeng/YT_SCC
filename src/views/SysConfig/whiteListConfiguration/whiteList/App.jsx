@@ -86,33 +86,7 @@ class WhiteListConfig extends PureComponent {
 
     onModalOnlineOk({ warehouseCode, warehouseName }) {
         this.handlePromotionReset();
-        const { chooseGoodsList, selectedListData = {}, onlineObj } = this.state;
-        // if (chooseGoodsList.length > 0 && !selectedListData) {
-        //     selectedListData.forEach((item) => {
-        //         if (item.provinceName === null ||
-        //             item.cityName === null ||
-        //             item.districtName === null ||
-        //             item.address === null ||
-        //             item.contact === null ||
-        //             item.mobilePhone === null) {
-        //             message.error('商家信息不完整，请去主数据完善后上线')
-        //         } else {
-        //             this.props.onlineWhitelist(Utils.removeInvalid({
-        //                 warehouseCode,
-        //                 warehouseName,
-        //                 chooseGoodsList
-        //             })).then((res) => {
-        //                 if (res.code === 200) {
-        //                     message.success('操作成功')
-        //                     this.setState({ ModalOnlineVisible: false })
-        //                     this.query();
-        //                 }
-        //             }).catch((res) => {
-        //                 message.error(res.message)
-        //             })
-        //         }
-        //     })
-        // }
+        const { chooseGoodsList, onlineObj } = this.state;
         if ((onlineObj.provinceName === null ||
             onlineObj.cityName === null ||
             onlineObj.districtName === null ||
