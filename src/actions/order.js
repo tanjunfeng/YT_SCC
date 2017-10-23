@@ -97,17 +97,21 @@ export const modifyCancelOrder = (data) => (
 // 查询订单详情
 const receiveOrderDetailInfo = (data) => ({
     type: ActionType.FETCH_ORDER_DETAIL,
-    payload: data,
-})
+    payload: data
+});
+
 export const fetchOrderDetailInfo = (data) => dispatch => (
-    queryOrderDetailInfo(data)
-        .then(res => {
-            dispatch(
-                receiveOrderDetailInfo(res.data)
-            );
-        })
-        .catch(err => Promise.reject(err))
-)
+    new Promise((resolve, reject) => {
+        queryOrderDetailInfo(data)
+            .then(res => {
+                dispatch(
+                    receiveOrderDetailInfo(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
 
 // 查询支付详情
 const receivePaymentDetailInfo = (data) => ({
@@ -179,7 +183,7 @@ export const modifyAddPaymentInfo = (data) => (
             .then(res => {
                 resolve(res);
             })
-        .catch(err => reject(err))
+            .catch(err => reject(err))
     })
 )
 

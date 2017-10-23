@@ -32,11 +32,12 @@ const { TextArea } = Input;
         splitorderbyinventory
     }, dispatch)
 )
+
 class OrderInformation extends PureComponent {
     state = {
         textAreaNote: this.props.orderDetailData.description,
         description: this.props.orderDetailData.description,
-        goodsList: this.props.orderDetailData.items
+        manualSplitOrder: {}
     }
 
     /**
@@ -47,9 +48,8 @@ class OrderInformation extends PureComponent {
         const { orderDetailData } = nextProps;
         this.setState({
             textAreaNote: orderDetailData.description,
-            description: orderDetailData.description,
-            goodsList: orderDetailData.items
-        })
+            description: orderDetailData.description
+        });
     }
 
     orderId = this.props.match.params.id;
@@ -109,18 +109,12 @@ class OrderInformation extends PureComponent {
     /**
      * 拆单返回数组
      */
-    handleGoodsSplit = (goodsList) => {
-        goodsList.forEach((item) => {
-            const id = item.id;
-            const key = item.sub1;
-            const groups = {
-                id,
-                key
-            }
-            console.log(groups)
-            this.setState({ groups });
-        });
-        this.setState({ goodsList });
+    handleGoodsSplit = (splitGroups) => {
+        const manualSplitOrder = {
+            parentOrderId: this.orderId,
+            groups: splitGroups
+        }
+        this.setState({ manualSplitOrder });
     }
 
     /**
@@ -143,11 +137,11 @@ class OrderInformation extends PureComponent {
      * 基于界面显示库存拆单
      */
     displayInventory = () => {
-        const { orderDetailData } = this.props;
-        const orderId = orderDetailData.id;
-        const { goodsList, groups } = this.state;
-        console.log(goodsList)
-        console.log(groups)
+        // const { orderDetailData } = this.props;
+        // const orderId = orderDetailData.id;
+        // const { goodsList, groups } = this.state;
+        // console.log(goodsList)
+        // console.log(groups)
     }
 
     render() {
@@ -201,6 +195,12 @@ class OrderInformation extends PureComponent {
                                 <Col className="gutter-row" span={10}>
                                     <span className="details-info-lable">出货仓:</span>
                                     <span>{orderDetailData.branchCompanyArehouse}</span>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col className="gutter-row" span={7}>
+                                    <span className="details-info-lable">电商单据编号:</span>
+                                    <span>{orderDetailData.thirdPartOrderNo}</span>
                                 </Col>
                             </Row>
                             <Row>
@@ -272,7 +272,6 @@ class OrderInformation extends PureComponent {
                 <div className="order-details-item">
                     <GoodsInfo
                         value={this.props.orderDetailData}
-                        goodsList={this.state.goodsList}
                         onChange={this.handleGoodsSplit}
                         canBeSplit
                     />
