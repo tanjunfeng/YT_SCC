@@ -134,8 +134,6 @@ class OrderInformation extends PureComponent {
             if (res.code === 200) {
                 message.success('实时拆单成功!')
             }
-        }).catch(() => {
-            message.error('实时拆单失败!')
         })
     }
 
@@ -143,15 +141,16 @@ class OrderInformation extends PureComponent {
      * 基于界面显示库存拆单
      */
     displayInventory = () => {
-        const { manualSplitOrder } = this.state;
+        const { manualSplitOrder = null } = this.state;
+        if (manualSplitOrder === null) {
+            return;
+        }
         this.props.interfaceInventory({
             ...manualSplitOrder
         }).then((res) => {
             if (res.code === 200) {
                 message.success('手动分组拆单成功!')
             }
-        }).catch(() => {
-            message.error('手动分组拆单失败!')
         })
     }
 
