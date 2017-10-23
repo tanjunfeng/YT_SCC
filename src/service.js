@@ -755,6 +755,9 @@ export const addPaymentInfo = (params) => http.post('/sorder/addPaymentInfo', pa
 // 订单管理-确认支付
 export const confirmPayment = (params) => http.post('/sorder/confirmPayment', params);
 
+// 根据库存实时拆单
+export const splitorderByInventoryService = (params) => http.post('/sorder/splitOrderByInventory', params);
+
 // 供应商选择组件
 export const supplierSearchBox = (params) => http.get('/supplier/supplierSearchBox', params);
 
