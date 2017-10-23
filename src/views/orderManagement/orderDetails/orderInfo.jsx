@@ -15,15 +15,8 @@ import moment from 'moment';
 import { TIME_FORMAT } from '../../../constant/index';
 import CauseModal from '../orderList/causeModal';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
-<<<<<<< HEAD
-import {
-    savaOrderDescription, modifyApprovalOrder, fetchOrderDetailInfo,
-    splitorderbyinventory
-} from '../../../actions/order';
-=======
 import { savaOrderDescription, modifyApprovalOrder, fetchOrderDetailInfo,
     splitorderbyinventory, interfaceInventory } from '../../../actions/order';
->>>>>>> e3b331fded14367a2b7e149a9f16ccc224c0b833
 import GoodsInfo from '../goodsInfo';
 
 const confirm = Modal.confirm;
