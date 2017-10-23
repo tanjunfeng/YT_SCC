@@ -297,7 +297,7 @@ class OrderInformation extends PureComponent {
                                 获取实时库存后拆单
                                 </Button>
                             : null}
-                        {this.props.orderDetailData.canSplitManual && this.state.manualSplitOrder.groups.length > 0
+                        {this.props.orderDetailData.canSplitManual
                             ? <Button
                                 size="default"
                                 type="primary"
