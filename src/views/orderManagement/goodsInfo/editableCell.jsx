@@ -15,7 +15,7 @@ class EditableCell extends PureComponent {
     handlePressEnter = (event) => {
         // 回车操作时保存数量
         if (event.keyCode === 13) {
-            this.handleChange();
+            this.handleChange(+(event.target.value));
         }
     }
 
