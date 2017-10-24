@@ -114,6 +114,11 @@ export const fetchOrderDetailInfo = (data) => dispatch => (
     })
 );
 
+export const clearOrderDetailInfo = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_ORDER_DETAIL,
+    payload: {}
+}));
+
 // 查询支付详情
 const receivePaymentDetailInfo = (data) => ({
     type: ActionType.FETCH_PAYMENT_DETAIL,
