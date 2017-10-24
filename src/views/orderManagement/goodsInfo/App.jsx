@@ -7,7 +7,7 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import { Form, Icon, Table, Button } from 'antd';
+import { Form, Icon, Table } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { goodsColumns as columns } from '../columns';
@@ -163,8 +163,6 @@ class GoodsInfo extends PureComponent {
                 <div className="detail-message-header">
                     <Icon type="picture" className="detail-message-header-icon" />
                     商品信息
-                    {this.props.canBeSplit
-                        ? <Button type="primary" onClick={this.addSubOrders}>添加子订单</Button> : null}
                 </div>
                 <div>
                     <Table
