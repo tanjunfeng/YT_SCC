@@ -416,8 +416,11 @@ export const orderTypeOptions = {
         key: 'ZYYH',
         value: '直营店要货'
     }, {
-        key: 'XNSPXS',
+        key: 'XNSP',
         value: '虚拟商品销售'
+    }, {
+        key: 'DSXS',
+        value: '电商销售'
     }]
 }
 
