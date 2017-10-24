@@ -143,6 +143,7 @@ class OrderInformation extends PureComponent {
     displayInventory = () => {
         const { manualSplitOrder = null } = this.state;
         if (manualSplitOrder.groups === undefined) {
+            message.error('请完整填写拆单数据!')
             return;
         }
         this.props.interfaceInventory({
