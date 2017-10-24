@@ -142,7 +142,7 @@ class OrderInformation extends PureComponent {
      */
     displayInventory = () => {
         const { manualSplitOrder = null } = this.state;
-        if (manualSplitOrder === null) {
+        if (manualSplitOrder.groups === undefined) {
             return;
         }
         this.props.interfaceInventory({
