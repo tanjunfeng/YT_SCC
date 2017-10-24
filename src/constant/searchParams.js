@@ -415,6 +415,9 @@ export const orderTypeOptions = {
     }, {
         key: 'ZYYH',
         value: '直营店要货'
+    }, {
+        key: 'XNSPXS',
+        value: '虚拟商品销售'
     }]
 }
 
