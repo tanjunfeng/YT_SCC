@@ -12,18 +12,22 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { goodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
-import { fetchOrderDetailInfo } from '../../../actions/order';
+import { fetchOrderDetailInfo, clearOrderDetailInfo } from '../../../actions/order';
 
 @connect(
     () => ({}),
     dispatch => bindActionCreators({
-        fetchOrderDetailInfo
+        fetchOrderDetailInfo, clearOrderDetailInfo
     }, dispatch)
 )
 
 class GoodsInfo extends PureComponent {
     state = {
         goodsList: []
+    }
+
+    componentWillMount() {
+        this.props.clearOrderDetailInfo();
     }
 
     componentDidMount() {
@@ -194,6 +198,7 @@ GoodsInfo.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     canBeSplit: PropTypes.bool,
     fetchOrderDetailInfo: PropTypes.func,
+    clearOrderDetailInfo: PropTypes.func,
     onChange: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any)
 }
