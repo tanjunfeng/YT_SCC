@@ -7,7 +7,7 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import { Form, Icon, Table, Button } from 'antd';
+import { Form, Icon, Table } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { goodsColumns as columns } from '../columns';
@@ -15,9 +15,7 @@ import EditableCell from './editableCell';
 import { fetchOrderDetailInfo } from '../../../actions/order';
 
 @connect(
-    state => ({
-        orderListData: state.toJS().order.orderListData,
-    }),
+    () => ({}),
     dispatch => bindActionCreators({
         fetchOrderDetailInfo
     }, dispatch)
@@ -29,8 +27,9 @@ class GoodsInfo extends PureComponent {
     }
 
     componentDidMount() {
-        const { id } = this.props.match.params;
-        this.props.fetchOrderDetailInfo({ id }).then(res => {
+        this.props.fetchOrderDetailInfo({
+            id: this.props.match.params.id
+        }).then(res => {
             const goodsList = [...res.data.items];
             goodsList.forEach(goods => {
                 Object.assign(goods, {
@@ -46,14 +45,9 @@ class GoodsInfo extends PureComponent {
     componentWillReceiveProps(nextPros) {
         if (this.props.canBeSplit === undefined && nextPros.canBeSplit) {
             columns.push(
-                {
-                    title: '子订单1',
-                    dataIndex: 'sub1'
-                },
-                {
-                    title: '子订单2',
-                    dataIndex: 'sub2'
-                });
+                { title: '子订单1', dataIndex: 'sub1' },
+                { title: '子订单2', dataIndex: 'sub2' }
+            );
             this.renderColumns();
         }
     }
@@ -61,28 +55,18 @@ class GoodsInfo extends PureComponent {
     onCellChange = record => value => {
         const goodsList = [...this.state.goodsList];
         const index = goodsList.findIndex(goods => goods.id === record.id);
+        let v = value;
         if (index > -1) {
-            goodsList[index][`sub${this.getLastSubNum(1)}`] = value;
-            goodsList[index][`sub${this.getLastSubNum(2)}`] = goodsList[index].quantityLeft - value;
+            if (v > goodsList[index].quantityLeft) {
+                v = goodsList[index].quantityLeft;
+            } else if (v < 0) {
+                v = 0;
+            }
+            goodsList[index][`sub${this.getLastSubNum(1)}`] = v;
+            goodsList[index][`sub${this.getLastSubNum(2)}`] = goodsList[index].quantityLeft - v;
             this.setState({ goodsList });
             this.noticeParent();
         }
-    }
-
-    /**
-     * 获取剩余可拆总数
-     */
-    getQuantityLeft = (record) => {
-        const goodsList = this.state.goodsList;
-        const index = goodsList.findIndex(goods => goods.id === record.id);
-        if (index > -1) {
-            let quantityLeft = record.quantity; // 记录还剩下的可拆数量
-            for (let i = this.getLastSubNum(3); i > 1; i--) {
-                quantityLeft -= goodsList[index][`sub${i}`];
-            }
-            return quantityLeft;
-        }
-        return 0;
     }
 
     /**
@@ -98,13 +82,10 @@ class GoodsInfo extends PureComponent {
      * 获取单个子订单对象
      */
     getSubObject = (subIndex) => {
-        // {"563132":12,"45744":2,"563133":100}
         const goodsList = this.state.goodsList;
         const dist = {};
         goodsList.forEach(goods => {
-            Object.assign(dist, {
-                [goods.id]: goods[`sub${subIndex}`]
-            });
+            Object.assign(dist, { [goods.id]: goods[`sub${subIndex}`] });
         });
         return dist;
     }
@@ -113,7 +94,6 @@ class GoodsInfo extends PureComponent {
      * 回传子订单数据给父组件
      */
     noticeParent = () => {
-        // [{"563132":12,"45744":2,"563133":100},{"563132":8,"45744":28,"563133":900}]
         const arr = [];
         for (let i = 1; i <= this.getLastSubNum(); i++) {
             arr.push(this.getSubObject(i));
@@ -136,7 +116,10 @@ class GoodsInfo extends PureComponent {
         this.setState({ goodsList });
     }
 
-    renderTableCell = (text, record) => {
+    /**
+     * 渲染可编辑单元格
+     */
+    renderEditableCell = (text, record) => {
         let value = text;
         if (value === undefined) {
             value = 0;
@@ -154,7 +137,10 @@ class GoodsInfo extends PureComponent {
         return res;
     }
 
-    renderSubCell = (text, record) => {
+    /**
+     * 渲染显示单元格，根据数量计算价格
+     */
+    renderReadOnlyCell = (text, record) => {
         let value = text;
         if (value === undefined) {
             // 避免出现 NaN 值
@@ -165,8 +151,8 @@ class GoodsInfo extends PureComponent {
     }
 
     renderColumns = () => {
-        columns[columns.length - 2].render = this.renderSubCell;
-        columns[columns.length - 1].render = this.renderTableCell;
+        columns[columns.length - 2].render = this.renderReadOnlyCell;
+        columns[columns.length - 1].render = this.renderEditableCell;
     }
 
     render() {
@@ -177,10 +163,6 @@ class GoodsInfo extends PureComponent {
                 <div className="detail-message-header">
                     <Icon type="picture" className="detail-message-header-icon" />
                     商品信息
-                    {this.props.canBeSplit ?
-                        <Button type="primary" onClick={this.addSubOrders}>添加子订单</Button>
-                        : null
-                    }
                 </div>
                 <div>
                     <Table
