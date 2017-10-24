@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-19 17:48:48
+ * @Last Modified time: 2017-10-24 10:58:40
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -98,7 +98,7 @@ class WhiteListConfig extends PureComponent {
             this.props.onlineWhitelist(Utils.removeInvalid({
                 warehouseCode,
                 warehouseName,
-                chooseGoodsList
+                storeIds: chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
                     message.success(res.data)
@@ -120,7 +120,7 @@ class WhiteListConfig extends PureComponent {
         const { chooseGoodsList } = this.state;
         if (chooseGoodsList <= 1) {
             this.props.offlineWhitelist(Utils.removeInvalid({
-                chooseGoodsList
+                storeIds: chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
                     message.success(res.data)
@@ -132,7 +132,7 @@ class WhiteListConfig extends PureComponent {
             })
         } else {
             this.props.offlineWhitelist(Utils.removeInvalid({
-                chooseGoodsList
+                storeIds: chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
                     message.success(res.data)
