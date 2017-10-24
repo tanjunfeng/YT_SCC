@@ -255,7 +255,7 @@ class OrderInformation extends PureComponent {
                         <div className="detail-message-body">
                             <Row>
                                 <Col className="gutter-row" span={7}>
-                                    <span className="details-info-lable">收货人</span>
+                                    <span className="details-info-lable">收货人:</span>
                                     <span>{orderDetailData.consigneeName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={7}>
@@ -271,7 +271,7 @@ class OrderInformation extends PureComponent {
                             </Row>
                             <Row>
                                 <Col className="gutter-row" span={7}>
-                                    <span className="details-info-lable">手机</span>
+                                    <span className="details-info-lable">手机:</span>
                                     <span>{orderDetailData.cellphone}</span>
                                 </Col>
                                 <Col className="gutter-row" span={7}>
