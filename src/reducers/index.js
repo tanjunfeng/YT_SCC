@@ -44,6 +44,8 @@ import storeRealTime from './storeRealTime';
 
 import queryCommodityList from './queryCommodityList';
 
+import queryWhiteList from './queryWhiteList';
+
 export default Immutable.fromJS({
     pub,
     user,
@@ -70,5 +72,7 @@ export default Immutable.fromJS({
     promotion,
     storeRealTime,
 
-    queryCommodityList
+    queryCommodityList,
+
+    queryWhiteList
 });

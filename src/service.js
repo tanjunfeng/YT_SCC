@@ -62,7 +62,7 @@ export const exportManageList = '/supplier/exportManageList';
 export const exportEditApplySupplier = 'provider/exportEditApplySupplier';
 
 // 下载订单管理列表
-export const exportOrderList = '/sorder/toExcel';
+export const exportOrderList = 'sorder/exportOrderList';
 
 // 下载供应商结算数据
 export const exportSimpleList = '/settlement/exportSupplierSettlementList';
@@ -493,6 +493,14 @@ export const queryAllSupplier = (params) => http.get('/price/queryAllSupplier', 
 // 新增数据字典
 export const insertDictionary = (params) => http.post('/dictionary/insertDictionary', params);
 
+// 根据条件分页查询白名单列表
+export const queryWhitelist = (params) => http.get('/sp/queryWhiteList', params);
+
+// 白名单上线
+export const onlineWhitelist = (params) => http.post('/sp/whiteListOnline', params);
+
+// 白名单下线
+export const offlineWhitelist = (params) => http.post('/sp/whiteListOffline', params);
 
 // 修改数据字典
 export const updateDictionary = (params) => http.post('/dictionary/updateDictionary', params);
@@ -651,6 +659,9 @@ export const checkSupplierAddOrgId = (params) => http.get('/supplier/checkSuppli
  // 根据条件分页查询商品清单，并排序
 export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);
 
+ // 根据商品id同步商品
+export const syncProductByManualAction = (params) => http.get('/product/syncProductByManual', params);
+
 // 获取已审批通过供应商地点下拉框数据
 export const querySuppliersList = (params) => http.get('/supplier/supplierSearchBox', params);
 
@@ -743,6 +754,12 @@ export const addPaymentInfo = (params) => http.post('/sorder/addPaymentInfo', pa
 
 // 订单管理-确认支付
 export const confirmPayment = (params) => http.post('/sorder/confirmPayment', params);
+
+// 根据库存实时拆单
+export const splitorderByInventoryService = (params) => http.post('/sorder/splitOrderByInventory', params);
+
+// 手动分组拆单
+export const interfaceInventoryService = (params) => http.post('/sorder/manualSplitOrder', params);
 
 // 供应商选择组件
 export const supplierSearchBox = (params) => http.get('/supplier/supplierSearchBox', params);
