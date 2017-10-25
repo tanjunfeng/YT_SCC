@@ -121,7 +121,7 @@ class GoodsForm extends PureComponent {
                                 </Upload>
                             </FormItem>
                             <FormItem>
-                                <a className="download" target="_blank" href="/directStore/downloadExcelModel">
+                                <a className="download" target="_blank" href="/api/sc/directStore/downloadExcelModel">
                                     下载 Excel 模板
                                 </a>
                                 <div className="info">

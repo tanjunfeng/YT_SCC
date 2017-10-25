@@ -24,8 +24,8 @@ class AddingGoodsByStore extends PureComponent {
 
     query = (params) => {
         const conditions = {
-            branchCompanyId: this.props.branchCompanyId,
-            searchTerm: params.value,
+            salesInfo: this.props.branchCompanyId,
+            teamText: params.value,
             pageNum: params.pagination.current || 1,
             pageSize: params.pagination.pageSize
         };

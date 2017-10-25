@@ -36,19 +36,21 @@ class DirectStores extends PureComponent {
         this.props.onChange(v);
     }
 
+    query = (params) => (
+        // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/getAllStores
+        this.props.pubFetchValueList({
+            pageNo: params.pagination.current || 1,
+            pageSize: params.pagination.pageSize
+        }, 'queryDirectStores')
+    )
+
     render() {
         return (
             <SearchMind
                 compKey="storeId"
                 rowKey="storeId"
                 ref={ref => { this.searchMind = ref }}
-                fetch={(params) =>
-                    // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/getAllStores
-                    this.props.pubFetchValueList({
-                        pageNum: params.pagination.current || 1,
-                        pageSize: params.pagination.pageSize
-                    }, 'queryDirectStores')
-                }
+                fetch={this.query}
                 onChoosed={this.handleChoose}
                 onClear={this.handleClear}
                 renderChoosedInputRaw={(row) => (
