@@ -13,7 +13,6 @@ import Utils from '../../../../util/util';
 import { promotionStatus } from '.././constants';
 import { SubCompanies } from '../../../../container/search';
 import { pubFetchValueList } from '../../../../actions/pub';
-import { queryWhitelist } from '../../../../actions/whiteListConfiguration';
 import { PAGE_SIZE } from '../../../../constant';
 
 const FormItem = Form.Item;
@@ -25,7 +24,6 @@ const Option = Select.Option;
     }),
     dispatch => bindActionCreators({
         pubFetchValueList,
-        queryWhitelist
     }, dispatch)
 )
 
@@ -94,7 +92,7 @@ class SearchForm extends PureComponent {
 
     handleSearch() {
         // 将查询条件回传给调用页
-        this.props.queryWhitelist(this.getFormData());
+        this.props.onPromotionSearch(this.getFormData());
     }
 
     handleReset() {
@@ -207,7 +205,7 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    queryWhitelist: PropTypes.func,
+    onPromotionSearch: PropTypes.func,
     onPromotionReset: PropTypes.func,
     onModalClick: PropTypes.func,
     onModalOfflineClick: PropTypes.func,

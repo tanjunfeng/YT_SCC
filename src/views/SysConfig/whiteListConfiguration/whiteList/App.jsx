@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-25 10:41:08
+ * @Last Modified time: 2017-10-25 13:49:07
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -159,7 +159,6 @@ class WhiteListConfig extends PureComponent {
     handlePromotionSearch(param) {
         this.handlePromotionReset();
         this.param = {
-            current: 1,
             ...param
         };
         this.query();
