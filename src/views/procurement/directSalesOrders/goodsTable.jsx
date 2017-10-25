@@ -106,8 +106,6 @@ class GoodsTable extends PureComponent {
                 goodsList.splice(index, 1);
                 goodsList.unshift(goods);
                 message.info(`${errors.join(',')}该商品已被移动到顶部`);
-            } else {
-                message.info('该商品已添加');
             }
             this.props.onChange(goodsList);
         });

@@ -46,15 +46,15 @@ class GoodsForm extends PureComponent {
             productCode,
             internationalCode: internationalCodes[0].internationalCode,
             productName,
-            productSpecifications: `${packingSpecifications} / ${unitExplanation}`,
+            productSpecifications: `${packingSpecifications || '-'} / ${unitExplanation || '-'}`,
             available,
             salePrice,
             sellFullCase,
             salesInsideNumber,
-            packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit} / ${minUnit}`,
+            packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit || ''} / ${minUnit || '-'}`,
             quantity: sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber,
             minNumber,
-            minNumberSpecifications: sellFullCase === 0 ? `${minNumber}${fullCaseUnit}` : `${minNumber}${minUnit}`, // 起订数量显示单位
+            minNumberSpecifications: sellFullCase === 0 ? `${minNumber}${fullCaseUnit || ''}` : `${minNumber}${minUnit || '-'}`, // 起订数量显示单位
             enough: true,    // 是否库存充足，默认充足
             isMultiple: true    // 是否是销售内装数的整数倍，默认是整数倍
         };
