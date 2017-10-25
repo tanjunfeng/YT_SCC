@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-19 15:41:49
+ * @Last Modified time: 2017-10-25 14:18:38
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -18,7 +18,8 @@ import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../../constant';
 import { couponList as columns } from '.././columns';
 import Utils from '../../../../util/util';
-import { queryWhitelist,
+import {
+    queryWhitelist,
     onlineWhitelist,
     offlineWhitelist
 } from '../../../../actions/whiteListConfiguration';
@@ -68,12 +69,13 @@ class WhiteListConfig extends PureComponent {
     /**
      * 分页页码改变的回调
      */
-    onPaginate = (pageNum) => {
+    onPaginate = (pageNo) => {
         Object.assign(this.param, {
-            pageNum
+            pageNo,
         });
-        this.setState({ current: pageNum });
-        this.query();
+        this.setState({ current: pageNo }, () => {
+            this.query();
+        });
     }
 
     onModalOnline() {
@@ -86,33 +88,7 @@ class WhiteListConfig extends PureComponent {
 
     onModalOnlineOk({ warehouseCode, warehouseName }) {
         this.handlePromotionReset();
-        const { chooseGoodsList, selectedListData = {}, onlineObj } = this.state;
-        // if (chooseGoodsList.length > 0 && !selectedListData) {
-        //     selectedListData.forEach((item) => {
-        //         if (item.provinceName === null ||
-        //             item.cityName === null ||
-        //             item.districtName === null ||
-        //             item.address === null ||
-        //             item.contact === null ||
-        //             item.mobilePhone === null) {
-        //             message.error('商家信息不完整，请去主数据完善后上线')
-        //         } else {
-        //             this.props.onlineWhitelist(Utils.removeInvalid({
-        //                 warehouseCode,
-        //                 warehouseName,
-        //                 chooseGoodsList
-        //             })).then((res) => {
-        //                 if (res.code === 200) {
-        //                     message.success('操作成功')
-        //                     this.setState({ ModalOnlineVisible: false })
-        //                     this.query();
-        //                 }
-        //             }).catch((res) => {
-        //                 message.error(res.message)
-        //             })
-        //         }
-        //     })
-        // }
+        const { chooseGoodsList, onlineObj } = this.state;
         if ((onlineObj.provinceName === null ||
             onlineObj.cityName === null ||
             onlineObj.districtName === null ||
@@ -124,7 +100,7 @@ class WhiteListConfig extends PureComponent {
             this.props.onlineWhitelist(Utils.removeInvalid({
                 warehouseCode,
                 warehouseName,
-                chooseGoodsList
+                storeIds: chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
                     message.success(res.data)
@@ -146,7 +122,7 @@ class WhiteListConfig extends PureComponent {
         const { chooseGoodsList } = this.state;
         if (chooseGoodsList <= 1) {
             this.props.offlineWhitelist(Utils.removeInvalid({
-                chooseGoodsList
+                storeIds: chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
                     message.success(res.data)
@@ -158,7 +134,7 @@ class WhiteListConfig extends PureComponent {
             })
         } else {
             this.props.offlineWhitelist(Utils.removeInvalid({
-                chooseGoodsList
+                storeIds: chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
                     message.success(res.data)
@@ -177,26 +153,28 @@ class WhiteListConfig extends PureComponent {
 
     query() {
         this.props.queryWhitelist(this.param).then((data) => {
-            const { pageNum, pageSize } = data.data;
-            Object.assign(this.param, { pageNum, pageSize });
+            const { pageNo, pageSize } = data.data;
+            Object.assign(this.param, { pageNo, pageSize });
         });
     }
 
     handlePromotionSearch(param) {
         this.handlePromotionReset();
         this.param = {
-            current: 1,
+            pageNo: 1,
             ...param
         };
-        this.query();
+        this.setState({ current: 1 }, () => {
+            this.query();
+        });
     }
 
     handlePromotionReset() {
         this.param = {
-            pageNum: 1,
+            pageNo: 1,
             pageSize: PAGE_SIZE
         };
-        this.setState({chooseGoodsList: []})
+        this.setState({ chooseGoodsList: [] })
     }
 
     handleSelect(record, index, item) {
@@ -269,8 +247,8 @@ class WhiteListConfig extends PureComponent {
 
     render() {
         const { data, total, pageNum, pageSize } = this.props.data;
-        const { ModalOnlineVisible, ModalOfflineVisible } = this.state;
-        const COUNTRY_OFF_THE_SHELF = this.state.chooseGoodsList.length === 0;
+        const { ModalOnlineVisible, ModalOfflineVisible, current } = this.state;
+        const selectListlength = this.state.chooseGoodsList.length === 0;
         const rowSelection = {
             selectedRowKeys: this.state.chooseGoodsList,
             onChange: (selectedRowKeys, selectedRows) => {
@@ -286,7 +264,7 @@ class WhiteListConfig extends PureComponent {
                 <SearchForm
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
-                    value={{ COUNTRY_OFF_THE_SHELF }}
+                    value={{ selectListlength }}
                     onModalClick={this.onModalOnline}
                     onModalOfflineClick={this.onModalOffline}
                 />
@@ -300,7 +278,7 @@ class WhiteListConfig extends PureComponent {
                     }}
                     bordered
                     pagination={{
-                        current: this.param.current,
+                        current,
                         pageNum,
                         pageSize,
                         total,
