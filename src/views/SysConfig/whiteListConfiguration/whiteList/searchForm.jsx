@@ -77,7 +77,7 @@ class SearchForm extends PureComponent {
             franchinessName,
             storeId,
             storeName,
-            status,
+            scPurchaseFlag: status,
             branchCompanyId,
             pageSize,
             pageNum: 1,
