@@ -80,7 +80,7 @@ class SearchForm extends PureComponent {
             scPurchaseFlag: status,
             branchCompanyId,
             pageSize,
-            pageNum: 1,
+            pageNo: 1,
         });
     }
 
