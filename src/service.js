@@ -820,4 +820,4 @@ export const queryDirectInfo = (params) => http.get('/directStore/getDirectInfo'
 // 获取单个商品详情
 export const queryGoodsInfo = params => http.get('/directStore/getItemInfo', params);
 // 修改单个商品的信息
-export const updateGoodsInfo = params => http.get('/directStore/updateItem', params);
+export const updateGoodsInfo = params => http.post('/directStore/updateItem', params);

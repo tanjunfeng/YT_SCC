@@ -14,9 +14,8 @@ import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { AddingGoodsByStore } from '../../../container/search';
-import {
-    queryGoodsInfo
-} from '../../../actions/procurement';
+import { queryGoodsInfo } from '../../../actions/procurement';
+import Utils from '../../../util/util';
 
 const FormItem = Form.Item;
 
@@ -93,9 +92,9 @@ class GoodsForm extends PureComponent {
             return;
         }
         const productId = record.productId;
-        this.props.queryGoodsInfo({
-            productId, branchCompanyId, deliveryWarehouseCode
-        }).then(res => {
+        this.props.queryGoodsInfo(Utils.removeInvalid({
+            productId, branchCompanyId, deliveryWarehouseCode, quantity: 0
+        })).then(res => {
             this.props.onChange(this.getRow(res.data));
         });
     }
