@@ -26,10 +26,6 @@ class GoodsInfo extends PureComponent {
         goodsList: []
     }
 
-    componentWillMount() {
-        this.props.clearOrderDetailInfo();
-    }
-
     componentDidMount() {
         this.props.fetchOrderDetailInfo({
             id: this.props.match.params.id
@@ -198,7 +194,6 @@ GoodsInfo.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     canBeSplit: PropTypes.bool,
     fetchOrderDetailInfo: PropTypes.func,
-    clearOrderDetailInfo: PropTypes.func,
     onChange: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any)
 }
