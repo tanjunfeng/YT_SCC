@@ -66,8 +66,6 @@ class GoodsInfo extends PureComponent {
         if (index > -1) {
             if (v > goodsList[index].quantityLeft) {
                 v = goodsList[index].quantityLeft;
-            } else if (v < 0) {
-                v = 0;
             }
             goodsList[index][`sub${this.getLastSubNum(1)}`] = v;
             goodsList[index][`sub${this.getLastSubNum(2)}`] = goodsList[index].quantityLeft - v;
@@ -128,8 +126,8 @@ class GoodsInfo extends PureComponent {
      * 渲染可编辑单元格
      */
     renderEditableCell = (text, record) => {
-        let value = text;
-        if (value === undefined) {
+        let value = +(text);
+        if (isNaN(value)) {
             value = 0;
         }
         const res = (<div>

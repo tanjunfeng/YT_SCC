@@ -9,7 +9,11 @@ import PropTypes from 'prop-types';
 
 class EditableCell extends PureComponent {
     handleChange = (value) => {
-        this.props.onChange(value);
+        let v = value;
+        if (isNaN(v) || v < 0) {
+            v = 0;
+        }
+        this.props.onChange(v);
     }
 
     handlePressEnter = (event) => {
