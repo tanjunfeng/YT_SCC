@@ -19,6 +19,7 @@ import {
     savaOrderDescription,
     modifyApprovalOrder,
     fetchOrderDetailInfo,
+    clearOrderDetailInfo,
     splitorderbyinventory,
     interfaceInventory
 } from '../../../actions/order';
@@ -34,6 +35,7 @@ const { TextArea } = Input;
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
         fetchOrderDetailInfo,
+        clearOrderDetailInfo,
         splitorderbyinventory,
         interfaceInventory
     }, dispatch)
@@ -44,6 +46,10 @@ class OrderInformation extends PureComponent {
         textAreaNote: this.props.orderDetailData.description,
         description: this.props.orderDetailData.description,
         manualSplitOrder: {}
+    }
+
+    componentWillMount() {
+        this.props.clearOrderDetailInfo();
     }
 
     /**
@@ -385,6 +391,7 @@ OrderInformation.propTypes = {
     match: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
     fetchOrderDetailInfo: PropTypes.func,
+    clearOrderDetailInfo: PropTypes.func,
     splitorderbyinventory: PropTypes.func,
     interfaceInventory: PropTypes.func
 }
