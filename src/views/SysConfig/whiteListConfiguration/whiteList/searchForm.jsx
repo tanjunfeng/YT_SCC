@@ -63,7 +63,7 @@ class SearchForm extends PureComponent {
             franchiseeId,
             franchinessName,
             storeId,
-            storename,
+            storeName,
             scPurchaseFlag
         } = this.props.form.getFieldsValue();
         const branchCompanyId = this.state.branchCompanyId;
@@ -76,7 +76,7 @@ class SearchForm extends PureComponent {
             franchiseeId,
             franchinessName,
             storeId,
-            storename,
+            storeName,
             status,
             branchCompanyId,
             pageSize,
