@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-25 10:41:08
+ * @Last Modified time: 2017-10-25 14:18:38
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -18,7 +18,8 @@ import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../../constant';
 import { couponList as columns } from '.././columns';
 import Utils from '../../../../util/util';
-import { queryWhitelist,
+import {
+    queryWhitelist,
     onlineWhitelist,
     offlineWhitelist
 } from '../../../../actions/whiteListConfiguration';
@@ -70,10 +71,11 @@ class WhiteListConfig extends PureComponent {
      */
     onPaginate = (pageNo) => {
         Object.assign(this.param, {
-            pageNo
+            pageNo,
         });
-        this.setState({ current: pageNo });
-        this.query();
+        this.setState({ current: pageNo }, () => {
+            this.query();
+        });
     }
 
     onModalOnline() {
@@ -159,10 +161,12 @@ class WhiteListConfig extends PureComponent {
     handlePromotionSearch(param) {
         this.handlePromotionReset();
         this.param = {
-            current: 1,
+            pageNo: 1,
             ...param
         };
-        this.query();
+        this.setState({ current: 1 }, () => {
+            this.query();
+        });
     }
 
     handlePromotionReset() {
@@ -170,7 +174,7 @@ class WhiteListConfig extends PureComponent {
             pageNo: 1,
             pageSize: PAGE_SIZE
         };
-        this.setState({chooseGoodsList: []})
+        this.setState({ chooseGoodsList: [] })
     }
 
     handleSelect(record, index, item) {
@@ -243,7 +247,7 @@ class WhiteListConfig extends PureComponent {
 
     render() {
         const { data, total, pageNum, pageSize } = this.props.data;
-        const { ModalOnlineVisible, ModalOfflineVisible } = this.state;
+        const { ModalOnlineVisible, ModalOfflineVisible, current } = this.state;
         const selectListlength = this.state.chooseGoodsList.length === 0;
         const rowSelection = {
             selectedRowKeys: this.state.chooseGoodsList,
@@ -274,7 +278,7 @@ class WhiteListConfig extends PureComponent {
                     }}
                     bordered
                     pagination={{
-                        current: this.state.current,
+                        current,
                         pageNum,
                         pageSize,
                         total,
