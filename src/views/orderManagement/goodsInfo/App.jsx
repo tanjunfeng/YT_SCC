@@ -66,6 +66,7 @@ class GoodsInfo extends PureComponent {
             goodsList[index][`sub${this.getLastSubNum(2)}`] = goodsList[index].quantityLeft - v;
             this.setState({ goodsList });
             this.noticeParent();
+            this.forceUpdate();
         }
     }
 
