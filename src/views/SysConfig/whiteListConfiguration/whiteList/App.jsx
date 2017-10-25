@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-25 13:49:07
+ * @Last Modified time: 2017-10-25 14:00:19
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -70,7 +70,7 @@ class WhiteListConfig extends PureComponent {
      */
     onPaginate = (pageNo) => {
         Object.assign(this.param, {
-            pageNo
+            pageNo,
         });
         this.setState({ current: pageNo });
         this.query();
@@ -159,6 +159,8 @@ class WhiteListConfig extends PureComponent {
     handlePromotionSearch(param) {
         this.handlePromotionReset();
         this.param = {
+            current: 1,
+            pageNo: 1,
             ...param
         };
         this.query();
@@ -242,7 +244,7 @@ class WhiteListConfig extends PureComponent {
 
     render() {
         const { data, total, pageNum, pageSize } = this.props.data;
-        const { ModalOnlineVisible, ModalOfflineVisible } = this.state;
+        const { ModalOnlineVisible, ModalOfflineVisible, current } = this.state;
         const selectListlength = this.state.chooseGoodsList.length === 0;
         const rowSelection = {
             selectedRowKeys: this.state.chooseGoodsList,
@@ -273,7 +275,7 @@ class WhiteListConfig extends PureComponent {
                     }}
                     bordered
                     pagination={{
-                        current: this.state.current,
+                        current,
                         pageNum,
                         pageSize,
                         total,
