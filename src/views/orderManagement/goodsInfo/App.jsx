@@ -42,13 +42,20 @@ class GoodsInfo extends PureComponent {
         });
     }
 
-    componentWillReceiveProps(nextPros) {
-        if (this.props.canBeSplit === undefined && nextPros.canBeSplit) {
+    componentWillReceiveProps(nextProps) {
+        if (this.props.canBeSplit === undefined && nextProps.canBeSplit) {
             columns.push(
                 { title: '子订单1', dataIndex: 'sub1' },
                 { title: '子订单2', dataIndex: 'sub2' }
             );
             this.renderColumns();
+        }
+        if (this.props.canBeSplit === false && nextProps.canBeSplit) {
+            this.renderColumns();
+        }
+        if (this.props.canBeSplit && nextProps.canBeSplit === false) {
+            columns[columns.length - 2].render = this.renderReadOnlyCell;
+            columns[columns.length - 1].render = this.renderReadOnlyCell;
         }
     }
 
@@ -59,14 +66,12 @@ class GoodsInfo extends PureComponent {
         if (index > -1) {
             if (v > goodsList[index].quantityLeft) {
                 v = goodsList[index].quantityLeft;
-            } else if (v < 0) {
-                v = 0;
             }
             goodsList[index][`sub${this.getLastSubNum(1)}`] = v;
             goodsList[index][`sub${this.getLastSubNum(2)}`] = goodsList[index].quantityLeft - v;
-            this.setState({ goodsList });
-            this.noticeParent();
-            this.forceUpdate();
+            this.setState({ goodsList }, () => {
+                this.noticeParent();
+            });
         }
     }
 
@@ -120,9 +125,9 @@ class GoodsInfo extends PureComponent {
     /**
      * 渲染可编辑单元格
      */
-    renderEditableCell = (text, record) => {
-        let value = text;
-        if (value === undefined) {
+    renderEditableCell = (text = 0, record) => {
+        let value = +(text);
+        if (isNaN(value)) {
             value = 0;
         }
         const res = (<div>
