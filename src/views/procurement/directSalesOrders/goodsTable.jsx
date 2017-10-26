@@ -98,11 +98,10 @@ class GoodsTable extends PureComponent {
             const index = goodsList.findIndex(
                 item => item.productCode === goods.productCode);
             const errors = [];
-            const isValid = this.checkGoodsStatus(goods, errors);
             // 该商品不在列表中，则新增
             if (index === -1) {
                 goodsList.unshift(goods);
-            } else if (index > 0 && !isValid) {
+            } else if (index > 0) {
                 goodsList.splice(index, 1);
                 goodsList.unshift(goods);
                 message.info(`${errors.join(',')}该商品已被移动到顶部`);
