@@ -54,8 +54,7 @@ class GoodsInfo extends PureComponent {
             this.renderColumns();
         }
         if (this.props.canBeSplit && nextProps.canBeSplit === false) {
-            columns[columns.length - 2].render = this.renderReadOnlyCell;
-            columns[columns.length - 1].render = this.renderReadOnlyCell;
+            columns.splice(columns.length - 2, 2);
         }
     }
 
