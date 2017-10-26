@@ -69,9 +69,9 @@ class GoodsInfo extends PureComponent {
             }
             goodsList[index][`sub${this.getLastSubNum(1)}`] = v;
             goodsList[index][`sub${this.getLastSubNum(2)}`] = goodsList[index].quantityLeft - v;
-            this.setState({ goodsList });
-            this.noticeParent();
-            this.forceUpdate();
+            this.setState({ goodsList }, () => {
+                this.noticeParent();
+            });
         }
     }
 
@@ -125,7 +125,7 @@ class GoodsInfo extends PureComponent {
     /**
      * 渲染可编辑单元格
      */
-    renderEditableCell = (text, record) => {
+    renderEditableCell = (text = 0, record) => {
         let value = +(text);
         if (isNaN(value)) {
             value = 0;
