@@ -9,13 +9,17 @@ import PropTypes from 'prop-types';
 
 class EditableCell extends PureComponent {
     handleChange = (value) => {
-        this.props.onChange(value);
+        let v = value;
+        if (isNaN(v) || v < 0) {
+            v = 0;
+        }
+        this.props.onChange(v);
     }
 
     handlePressEnter = (event) => {
         // 回车操作时保存数量
         if (event.keyCode === 13) {
-            this.handleChange();
+            this.handleChange(+(event.target.value));
         }
     }
 

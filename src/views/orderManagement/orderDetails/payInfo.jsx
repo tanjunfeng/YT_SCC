@@ -233,8 +233,21 @@ class PayInformation extends PureComponent {
                                 columns={this.columns}
                                 pagination={false}
                                 rowKey="id"
-                                footer={tableFooter}
                             />
+                        </div>
+                        <div className="table-statistics" style={{ textAlign: 'right' }}>
+                            <span className="table-statistics-item">
+                                <span>总金额： ￥</span>
+                                <span className="red">{totalAmount}</span>
+                            </span>
+                            <span className="table-statistics-item">
+                                <span>付款： ￥</span>
+                                <span className="red">{totalPaidAmount}</span>
+                            </span>
+                            <span className="table-statistics-item">
+                                <span>退款： ￥</span>
+                                <span className="red">{totalRefundedAmount}</span>
+                            </span>
                         </div>
                     </div>
                 </div>

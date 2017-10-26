@@ -34,7 +34,7 @@
         "consigneeName": "刘菲",
         "telephone": null,
         "cellphone": null,
-        "canSplitByInventory": true,
+        "canSplitByInventory": false,
         "canSplitManual": true,
         "items": [
             {

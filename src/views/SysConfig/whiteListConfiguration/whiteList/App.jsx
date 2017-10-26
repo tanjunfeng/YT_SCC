@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-19 17:48:48
+ * @Last Modified time: 2017-10-25 14:18:38
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -18,7 +18,8 @@ import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../../constant';
 import { couponList as columns } from '.././columns';
 import Utils from '../../../../util/util';
-import { queryWhitelist,
+import {
+    queryWhitelist,
     onlineWhitelist,
     offlineWhitelist
 } from '../../../../actions/whiteListConfiguration';
@@ -68,12 +69,13 @@ class WhiteListConfig extends PureComponent {
     /**
      * 分页页码改变的回调
      */
-    onPaginate = (pageNum) => {
+    onPaginate = (pageNo) => {
         Object.assign(this.param, {
-            pageNum
+            pageNo,
         });
-        this.setState({ current: pageNum });
-        this.query();
+        this.setState({ current: pageNo }, () => {
+            this.query();
+        });
     }
 
     onModalOnline() {
@@ -98,7 +100,7 @@ class WhiteListConfig extends PureComponent {
             this.props.onlineWhitelist(Utils.removeInvalid({
                 warehouseCode,
                 warehouseName,
-                chooseGoodsList
+                storeIds: chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
                     message.success(res.data)
@@ -120,7 +122,7 @@ class WhiteListConfig extends PureComponent {
         const { chooseGoodsList } = this.state;
         if (chooseGoodsList <= 1) {
             this.props.offlineWhitelist(Utils.removeInvalid({
-                chooseGoodsList
+                storeIds: chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
                     message.success(res.data)
@@ -132,7 +134,7 @@ class WhiteListConfig extends PureComponent {
             })
         } else {
             this.props.offlineWhitelist(Utils.removeInvalid({
-                chooseGoodsList
+                storeIds: chooseGoodsList
             })).then((res) => {
                 if (res.code === 200) {
                     message.success(res.data)
@@ -151,26 +153,28 @@ class WhiteListConfig extends PureComponent {
 
     query() {
         this.props.queryWhitelist(this.param).then((data) => {
-            const { pageNum, pageSize } = data.data;
-            Object.assign(this.param, { pageNum, pageSize });
+            const { pageNo, pageSize } = data.data;
+            Object.assign(this.param, { pageNo, pageSize });
         });
     }
 
     handlePromotionSearch(param) {
         this.handlePromotionReset();
         this.param = {
-            current: 1,
+            pageNo: 1,
             ...param
         };
-        this.query();
+        this.setState({ current: 1 }, () => {
+            this.query();
+        });
     }
 
     handlePromotionReset() {
         this.param = {
-            pageNum: 1,
+            pageNo: 1,
             pageSize: PAGE_SIZE
         };
-        this.setState({chooseGoodsList: []})
+        this.setState({ chooseGoodsList: [] })
     }
 
     handleSelect(record, index, item) {
@@ -243,7 +247,7 @@ class WhiteListConfig extends PureComponent {
 
     render() {
         const { data, total, pageNum, pageSize } = this.props.data;
-        const { ModalOnlineVisible, ModalOfflineVisible } = this.state;
+        const { ModalOnlineVisible, ModalOfflineVisible, current } = this.state;
         const selectListlength = this.state.chooseGoodsList.length === 0;
         const rowSelection = {
             selectedRowKeys: this.state.chooseGoodsList,
@@ -274,7 +278,7 @@ class WhiteListConfig extends PureComponent {
                     }}
                     bordered
                     pagination={{
-                        current: this.state.current,
+                        current,
                         pageNum,
                         pageSize,
                         total,

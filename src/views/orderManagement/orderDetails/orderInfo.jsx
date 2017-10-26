@@ -15,8 +15,14 @@ import moment from 'moment';
 import { TIME_FORMAT } from '../../../constant/index';
 import CauseModal from '../orderList/causeModal';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
-import { savaOrderDescription, modifyApprovalOrder, fetchOrderDetailInfo,
-    splitorderbyinventory } from '../../../actions/order';
+import {
+    savaOrderDescription,
+    modifyApprovalOrder,
+    fetchOrderDetailInfo,
+    clearOrderDetailInfo,
+    splitorderbyinventory,
+    interfaceInventory
+} from '../../../actions/order';
 import GoodsInfo from '../goodsInfo';
 
 const confirm = Modal.confirm;
@@ -29,7 +35,9 @@ const { TextArea } = Input;
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
         fetchOrderDetailInfo,
-        splitorderbyinventory
+        clearOrderDetailInfo,
+        splitorderbyinventory,
+        interfaceInventory
     }, dispatch)
 )
 
@@ -38,6 +46,10 @@ class OrderInformation extends PureComponent {
         textAreaNote: this.props.orderDetailData.description,
         description: this.props.orderDetailData.description,
         manualSplitOrder: {}
+    }
+
+    componentWillMount() {
+        this.props.clearOrderDetailInfo();
     }
 
     /**
@@ -126,10 +138,8 @@ class OrderInformation extends PureComponent {
             orderId: orderDetailData.id
         }).then((res) => {
             if (res.code === 200) {
-                message.success('实时同步成功!')
+                message.success('实时拆单成功!')
             }
-        }).catch(() => {
-            message.error('实时同步失败!')
         })
     }
 
@@ -137,11 +147,18 @@ class OrderInformation extends PureComponent {
      * 基于界面显示库存拆单
      */
     displayInventory = () => {
-        // const { orderDetailData } = this.props;
-        // const orderId = orderDetailData.id;
-        // const { goodsList, groups } = this.state;
-        // console.log(goodsList)
-        // console.log(groups)
+        const { manualSplitOrder = null } = this.state;
+        if (manualSplitOrder.groups === undefined) {
+            message.error('请完整填写拆单数据!')
+            return;
+        }
+        this.props.interfaceInventory({
+            ...manualSplitOrder
+        }).then((res) => {
+            if (res.code === 200) {
+                message.success('手动分组拆单成功!')
+            }
+        })
     }
 
     render() {
@@ -238,7 +255,7 @@ class OrderInformation extends PureComponent {
                         <div className="detail-message-body">
                             <Row>
                                 <Col className="gutter-row" span={7}>
-                                    <span className="details-info-lable">收货人</span>
+                                    <span className="details-info-lable">收货人:</span>
                                     <span>{orderDetailData.consigneeName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={7}>
@@ -254,7 +271,7 @@ class OrderInformation extends PureComponent {
                             </Row>
                             <Row>
                                 <Col className="gutter-row" span={7}>
-                                    <span className="details-info-lable">手机</span>
+                                    <span className="details-info-lable">手机:</span>
                                     <span>{orderDetailData.cellphone}</span>
                                 </Col>
                                 <Col className="gutter-row" span={7}>
@@ -273,35 +290,43 @@ class OrderInformation extends PureComponent {
                     <GoodsInfo
                         value={this.props.orderDetailData}
                         onChange={this.handleGoodsSplit}
-                        canBeSplit
+                        canBeSplit={this.props.orderDetailData.canSplitByInventory
+                            || this.props.orderDetailData.canSplitManual}
                     />
-                    <div className="order-details-split-btn" style={{textAlign: 'right'}}>
-                        <Button
-                            size="default"
-                            type="primary"
-                            className="details-split-btns"
-                            onClick={this.realTimeDisassembly}
-                        >
-                            获取实时库存后拆单
+                    <div className="order-details-split-btn" style={{ textAlign: 'right' }}>
+                        {this.props.orderDetailData.canSplitByInventory
+                            ? <Button
+                                size="default"
+                                type="primary"
+                                className="details-split-btns"
+                                onClick={this.realTimeDisassembly}
+                            >
+                                获取实时库存后拆单
+                                </Button>
+                            : null}
+                        {this.props.orderDetailData.canSplitManual
+                            ? <Button
+                                size="default"
+                                type="primary"
+                                className="details-split-btns"
+                                onClick={this.displayInventory}
+                            >
+                                基于界面显示库存拆单
                         </Button>
-                        <Button
-                            size="default"
-                            type="primary"
-                            className="details-split-btns"
-                            onClick={this.displayInventory}
-                        >
-                            基于界面显示库存拆单
-                        </Button>
-                        <Button
-                            size="default"
-                            type="default"
-                            className="details-split-btns"
-                            onClick={() => {
-                                this.props.history.replace('/orderList');
-                            }}
-                        >
-                            取消
-                        </Button>
+                            : null}
+                        {this.props.orderDetailData.canSplitByInventory
+                            || this.props.orderDetailData.canSplitManual
+                            ? <Button
+                                size="default"
+                                type="default"
+                                className="details-split-btns"
+                                onClick={() => {
+                                    this.props.history.replace('/orderList');
+                                }}
+                            >
+                                取消
+                            </Button>
+                            : null}
                     </div>
                 </div>
                 <div className="order-details-btns">
@@ -366,7 +391,9 @@ OrderInformation.propTypes = {
     match: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
     fetchOrderDetailInfo: PropTypes.func,
+    clearOrderDetailInfo: PropTypes.func,
     splitorderbyinventory: PropTypes.func,
+    interfaceInventory: PropTypes.func
 }
 
 OrderInformation.defaultProps = {
