@@ -155,9 +155,7 @@ class PayModal extends Component {
                             <FormItem>
                                 <div>
                                     <span className="sc-form-item-label">支付账号：</span>
-                                    {getFieldDecorator('payAccount', {
-                                        rules: [{ required: true, message: '请填写支付账号' }],
-                                    })(
+                                    {getFieldDecorator('payAccount')(
                                         <Input
                                             className="input"
                                             placeholder="支付账号"
@@ -168,16 +166,16 @@ class PayModal extends Component {
                             </FormItem>
                         </Col>
                         <Col className="pay-col" span={8}>
-                            {/* 凭证号 */}
+                            {/* 交易号 */}
                             <FormItem>
                                 <div>
-                                    <span className="sc-form-item-label">凭证号：</span>
+                                    <span className="sc-form-item-label">交易号：</span>
                                     {getFieldDecorator('tranNum', {
-                                        rules: [{ required: true, message: '请填写凭证号' }],
+                                        rules: [{ required: true, message: '请填写交易号' }],
                                     })(
                                         <Input
                                             className="input"
-                                            placeholder="凭证号"
+                                            placeholder="交易号"
                                             size="default"
                                         />
                                     )}
