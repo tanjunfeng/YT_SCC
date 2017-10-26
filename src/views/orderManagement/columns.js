@@ -50,9 +50,9 @@ const goodsColumns = [{
     dataIndex: 'quantity',
     key: 'quantity',
 }, {
-    title: '状态',
-    dataIndex: 'stateDetail',
-    key: 'stateDetail',
+    title: '可用库存',
+    dataIndex: 'availableStock',
+    key: 'availableStock',
 }, {
     title: '单价',
     dataIndex: 'price',
