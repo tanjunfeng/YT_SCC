@@ -22,14 +22,11 @@ import {
     auditPurchaseOrderInfo,
     updatePmPurchaseOrder,
     repushPurchaseReceipt as repushPurchaseReceiptService,
-<<<<<<< HEAD
     fetchReturnMngList as queryReturnMngListService,
-=======
     queryDirectInfo as queryDirectInfoService,
     queryGoodsInfo as queryGoodsInfoService,
     updateGoodsInfo as updateGoodsInfoService,
     insertDirectOrder as insertDirectOrderService
->>>>>>> 5120cdef1ac95393dc8c24869d78fa1c3686b54a
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -462,7 +459,6 @@ export const repushPurchaseReceipt = (params) => dispatch => (
 );
 
 /**
-<<<<<<< HEAD
  * 查询采购退货单管理列表
  * @param {*} data
  */
@@ -476,11 +472,19 @@ export const fetchReturnMngList = (params) => dispatch => (
         queryReturnMngListService(params)
             .then(res => {
                 dispatch(returnMngListAction(res.data));
-=======
- * 查询根据门店编号直营店信息
- *
- * @param {*object} data
- */
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/*
+* 查询根据门店编号直营店信息
+*
+* @param {*object} data
+*/
 const queryDirectInfoAction = (data) => ({
     type: ActionType.FETCH_DIRECT_INFO,
     payload: data
@@ -566,7 +570,6 @@ export const updateGoodsInfo = params => dispatch => (
         updateGoodsInfoService(params)
             .then(res => {
                 dispatch(updateGoodsInfoAction(res.data));
->>>>>>> 5120cdef1ac95393dc8c24869d78fa1c3686b54a
                 resolve(res);
             })
             .catch(err => {

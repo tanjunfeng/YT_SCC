@@ -48,15 +48,12 @@ const initState = fromJS({
     poRcv: {},
     // 新增商品信息
     newPcOdData: {},
-<<<<<<< HEAD
     // 采购退货清单
     returnMngList: {},
-=======
     // 直营店信息
     directInfo: {},
     // 单个商品详情
     goodsInfo: {}
->>>>>>> 5120cdef1ac95393dc8c24869d78fa1c3686b54a
 });
 
 export default function (state = initState, action) {

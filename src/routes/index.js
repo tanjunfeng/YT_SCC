@@ -52,11 +52,9 @@ import PoPrintList from 'bundle-loader?lazy!../views/procurement/poPrintList';
 import PoRcvMngList from 'bundle-loader?lazy!../views/procurement/poRcvMngList';
 import PoRcvList from 'bundle-loader?lazy!../views/procurement/poRcvList';
 import PoRcvDetail from 'bundle-loader?lazy!../views/procurement/poRcvDetail';
-<<<<<<< HEAD
 import ReturnManagementList from 'bundle-loader?lazy!../views/procurement/returnManagementList';
-=======
 import DirectStoreOrder from 'bundle-loader?lazy!../views/procurement/directSalesOrders';
->>>>>>> 5120cdef1ac95393dc8c24869d78fa1c3686b54a
+import DirectStoreOrder from 'bundle-loader?lazy!../views/procurement/directSalesOrders';
 
 // IBM 修改
 // 商品采购关系维护
@@ -585,7 +583,6 @@ const routes = [
                 )
             },
             {
-<<<<<<< HEAD
                 path: '/returnManagementList',
                 parent: 'procurementMng',
                 key: 'returnManagementList',
@@ -603,7 +600,10 @@ const routes = [
                             exact
                             render={() => <Bundle load={ReturnManagementList}>{(App) => <App />}</Bundle>}
                         />
-=======
+                    </Switch>
+                )
+            },
+            {
                 path: '/directStoreOrder',
                 parent: 'procurementMng',
                 key: 'zydxd',
@@ -616,7 +616,6 @@ const routes = [
                                 {(App) => <App />}
                             </Bundle>)}
                         />
->>>>>>> 5120cdef1ac95393dc8c24869d78fa1c3686b54a
                     </Switch>
                 )
             }
