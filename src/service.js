@@ -567,6 +567,8 @@ export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', par
 export const repushPurchaseReceipt = (params) => http.get('/pmPurchaseReceipt/rePushPurchaseReceiptToMQ', params);
 // 查询采购退货列表
 export const fetchReturnMngList = (params) => http.get('/pmPurchaseRefund/queryRefundDetailById', params);
+// 查询采购退货列表详情
+export const fetchReturnPoRcvInit = (params) => http.get('/pmPurchaseRefund/queryPurchaseRefundList', params);
 
 // 审批
 export const auditPo = (params) => http.post('/provider/auditPo', params);
