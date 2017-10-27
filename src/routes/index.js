@@ -54,7 +54,6 @@ import PoRcvList from 'bundle-loader?lazy!../views/procurement/poRcvList';
 import PoRcvDetail from 'bundle-loader?lazy!../views/procurement/poRcvDetail';
 import ReturnManagementList from 'bundle-loader?lazy!../views/procurement/returnManagementList';
 import DirectStoreOrder from 'bundle-loader?lazy!../views/procurement/directSalesOrders';
-import DirectStoreOrder from 'bundle-loader?lazy!../views/procurement/directSalesOrders';
 
 // IBM 修改
 // 商品采购关系维护
