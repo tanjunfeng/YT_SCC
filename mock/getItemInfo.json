@@ -1,0 +1,36 @@
+{
+    "timestamp": 1505979093467,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "productCode": "1004055",
+        "internationalCodes": [
+            {
+                "id": "xincode322693",
+                "productId": "xprod340456",
+                "internationalCode": "6920428202319"
+            }
+        ],
+        "productId": "xprod340456",
+        "productName": "海圣薄荷清凉洗发水500ml",
+        "firstLevelCategoryName": "洗化针纺",
+        "secondLevelCategoryName": "洗护类",
+        "thirdLevelCategoryName": "洗护类",
+        "unitExplanation": "瓶",
+        "minUnit": "箱",
+        "packingSpecifications": "500ml",
+        "sellFullCase": 0,
+        "fullCaseUnit": "瓶",
+        "minNumber": 6,
+        "salePrice": 18,
+        "quantity": 10,
+        "saleQuantity": 10,
+        "amount": null,
+        "salesInsideNumber": 6,
+        "available": true,
+        "message": null,
+        "enough": true
+    },
+    "success": true
+}

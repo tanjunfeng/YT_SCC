@@ -1,0 +1,88 @@
+$directStoreSalesColWidth: 260px;
+.ant-table-pagination {
+    margin-right: 15px;
+}
+
+.change-form {
+    padding-left: 30px;
+    .ant-form-item {
+        margin-bottom: 15px
+    }
+    .ant-form-explain {
+        padding-left: 73px;
+    }
+    &-label {
+        min-width: 61px;
+        text-align: right;
+    }
+    &-tip {
+        margin-left: 10px;
+    }
+}
+
+.direct-sales-orders {
+    .direct-sales-orders-form {
+        h1 {
+            font-size: 14px;
+        }
+        .ant-form-item-label {
+            width: 80px;
+            .sc-form-item-label {
+                text-align: right;
+            }
+        }
+        .search-mind-label {
+            min-width: 80px;
+            display: inline-block;
+            text-align: right;
+            width: 80px;
+            margin-right: 0;
+            &::after {
+                content: ":";
+                margin: 0 8px 0 2px;
+                position: relative;
+                top: -0.5px;
+            }
+        }
+        .ywc-smind {
+            width: $directStoreSalesColWidth;
+        }
+        .ywc-smind-search-bar {
+            margin: 8px 0;
+        }
+        &.goods-form {
+            .ywc-smind {
+                width: 341px;
+            }
+            a.download {
+                line-height: 28px;
+                margin-left: 12px;
+                margin-right: 12px;
+            }
+            .file-upload {
+                margin-right: 0;
+            }
+            .fr {
+                float: right;
+            }
+            .info {
+                display: inline;
+                margin-left: 24px;
+                span {
+                    color: red;
+                }
+            }
+        }
+    }
+    .editable-cell {
+        position: relative;
+        .error-message {
+            display: inline-block;
+            color: red;
+            margin-left: 1em;
+        }
+        &:hover {
+            display: inline-block;
+        }
+    }
+}

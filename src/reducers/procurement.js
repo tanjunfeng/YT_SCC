@@ -48,6 +48,10 @@ const initState = fromJS({
     poRcv: {},
     // 新增商品信息
     newPcOdData: {},
+    // 直营店信息
+    directInfo: {},
+    // 单个商品详情
+    goodsInfo: {}
 });
 
 export default function (state = initState, action) {
@@ -174,6 +178,13 @@ export default function (state = initState, action) {
             basicInfo = Object.assign(basicInfo, payload);
             poRcv.basicInfo = basicInfo;
             return state.set('poRcv', poRcv);
+
+        // 直营店详情
+        case ActionType.FETCH_DIRECT_INFO:
+        case ActionType.CLEAR_DIRECT_INFO:
+            return state.set('directInfo', fromJS(action.payload));
+        case ActionType.FETCH_GOODS_INFO:
+            return state.set('goodsInfo', fromJS(action.payload));
         default:
             return state;
     }
