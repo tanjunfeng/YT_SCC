@@ -63,7 +63,7 @@ class GoodsForm extends PureComponent {
     uploadProps = {
         name: 'uploadProps',
         contentType: 'application/json;charset=UTF-8',
-        action: '/directStore/fileUpload',
+        action: `${window.config.apiHost}/directStore/fileUpload`,
         headers: {
             authorization: 'authorization-text',
         },
@@ -123,7 +123,7 @@ class GoodsForm extends PureComponent {
                                 </Upload>
                             </FormItem>
                             <FormItem>
-                                <a className="download" target="_blank" href="/api/sc/directStore/downloadExcelModel">
+                                <a className="download" target="_blank" href={`${window.config.apiHost}/directStore/downloadExcelModel`}>
                                     下载 Excel 模板
                                 </a>
                                 <div className="info">
