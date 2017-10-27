@@ -172,6 +172,16 @@ export default {
     DELETE_PO_LINE: 'DELETE_PO_LINE',
     // 更新采购单商品
     UPDATE_PO_LINE: 'UPDATE_PO_LINE',
+    // 查询直营店信息
+    FETCH_DIRECT_INFO: 'FETCH_DIRECT_INFO',
+    // 清空直营店信息
+    CLEAR_DIRECT_INFO: 'CLEAR_DIRECT_INFO',
+    // 查询单个商品详情
+    FETCH_GOODS_INFO: 'FETCH_GOODS_INFO',
+    // 修改单个商品的信息
+    UPDATE_GOODS_INFO: 'UPDATE_GOODS_INFO',
+    // 提交直营店下单
+    INSERT_DIRECT_ORDER: 'INSERT_DIRECT_ORDER',
 
     /** 值清单获取action，请根据实际情况拆分到单独action文件 Begin */
     // 仓库值清单
@@ -271,6 +281,8 @@ export default {
     RECEIVE_NEW_PURCHASE_ORDER: 'RECEIVE_NEW_PURCHASE_ORDER',
     // 重新推送采购收货单
     REPUSH_PURCHASE_RECEIPT: 'REPUSH_PURCHASE_RECEIPT',
+    // 退货列表
+    RECEIVE_RETURN_MNG_LIST: 'RECEIVE_RETURN_MNG_LIST',
 
     // 库存调整列表
     RECEIVE_STORE_ADJUST_LIST: 'RECEIVE_STORE_ADJUST_LIST',
