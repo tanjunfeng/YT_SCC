@@ -9,6 +9,7 @@ import { withRouter } from 'react-router';
 import { Form } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import StoresForm from './storesForm';
 import GoodsForm from './goodsForm';
 import GoodsTable from './goodsTable';
