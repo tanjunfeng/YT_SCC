@@ -50,10 +50,7 @@ class GoodsInfo extends PureComponent {
             );
             this.renderColumns();
         }
-        if (this.props.canBeSplit === false && nextProps.canBeSplit) {
-            this.renderColumns();
-        }
-        if (this.props.canBeSplit && nextProps.canBeSplit === false) {
+        if (this.props.canBeSplit === undefined && nextProps.canBeSplit === false) {
             columns.splice(columns.length - 2, 2);
         }
     }
