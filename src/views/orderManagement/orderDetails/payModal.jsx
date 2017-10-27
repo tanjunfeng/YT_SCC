@@ -166,16 +166,16 @@ class PayModal extends Component {
                             </FormItem>
                         </Col>
                         <Col className="pay-col" span={8}>
-                            {/* 交易号 */}
+                            {/* 参考号或交易号 */}
                             <FormItem>
                                 <div>
-                                    <span className="sc-form-item-label">交易号：</span>
+                                    <span className="sc-form-item-label">参考号/交易号：</span>
                                     {getFieldDecorator('tranNum', {
-                                        rules: [{ required: true, message: '请填写交易号' }],
+                                        rules: [{ required: true, message: '请填写参考号/交易号' }],
                                     })(
                                         <Input
                                             className="input"
-                                            placeholder="交易号"
+                                            placeholder="参考号/交易号"
                                             size="default"
                                         />
                                     )}
