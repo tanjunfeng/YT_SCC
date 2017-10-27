@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-27 11:23:06
+ * @Last Modified time: 2017-10-27 14:37:35
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -122,13 +122,17 @@ class ReturnManagementList extends PureComponent {
                 dataIndex: 'totalRefundCost',
                 key: 'totalRefundCost'
             }, {
+                title: '实际退货数量',
+                dataIndex: 'totalRealRefundAmount',
+                key: 'totalRealRefundAmount'
+            }, {
                 title: '实际退货金额(含税)',
                 dataIndex: 'totalRealRefundMoney',
                 key: 'totalRealRefundMoney'
             }, {
                 title: '退货金额(含税)',
-                dataIndex: 'returnAmount',
-                key: 'returnAmount'
+                dataIndex: 'totalRefundMoney',
+                key: 'totalRefundMoney'
             }, {
                 title: '创建日期',
                 dataIndex: 'createTime',
@@ -399,12 +403,12 @@ class ReturnManagementList extends PureComponent {
     }
 
     renderActions(text, record, index) {
-        const { id, status, refundAdr } = record;
+        const { purchaseRefundNo, status, refundAdr } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/${id}`}>退货单详情</Link>
+                    <Link to={`${pathname}/${purchaseRefundNo}`}>退货单详情</Link>
                 </Menu.Item>
                 {
                     // 状态为“制单”时可用

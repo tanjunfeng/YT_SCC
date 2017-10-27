@@ -53,6 +53,7 @@ import PoRcvMngList from 'bundle-loader?lazy!../views/procurement/poRcvMngList';
 import PoRcvList from 'bundle-loader?lazy!../views/procurement/poRcvList';
 import PoRcvDetail from 'bundle-loader?lazy!../views/procurement/poRcvDetail';
 import ReturnManagementList from 'bundle-loader?lazy!../views/procurement/returnManagementList';
+import ReturnManagementDetail from 'bundle-loader?lazy!../views/procurement/returnManagementDetail';
 import DirectStoreOrder from 'bundle-loader?lazy!../views/procurement/directSalesOrders';
 
 // IBM 修改
@@ -597,7 +598,7 @@ const routes = [
                         <Route
                             path="/returnManagementList/:porcvid"
                             exact
-                            render={() => <Bundle load={ReturnManagementList}>{(App) => <App />}</Bundle>}
+                            render={() => <Bundle load={ReturnManagementDetail}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )
