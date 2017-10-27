@@ -66,7 +66,9 @@ class PayModal extends Component {
                         this.setState({
                             textAreaNote: ''
                         });
-                        this.props.fetchPaymentDetailInfo({ orderId: this.props.orderDetailData.id });
+                        this.props.fetchPaymentDetailInfo(
+                            { orderId: this.props.orderDetailData.id }
+                        );
                     });
             }
         });
@@ -76,8 +78,11 @@ class PayModal extends Component {
      * 模态框取消
      */
     handleNewPayCancel = () => {
+        this.props.form.resetFields();
+        this.setState({ textAreaNote: '' });
         this.props.modifyPayModalVisible({ isShow: false });
     }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const { payModalVisible } = this.props;
@@ -236,9 +241,6 @@ PayModal.propTypes = {
     payModalVisible: PropTypes.bool,
     orderDetailData: PropTypes.objectOf(PropTypes.any),
     totalAmount: PropTypes.number
-}
-
-PayModal.defaultProps = {
 }
 
 export default withRouter(Form.create()(PayModal));
