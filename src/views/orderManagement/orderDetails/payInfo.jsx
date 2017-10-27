@@ -17,7 +17,7 @@ import PayModal from './payModal';
 import { DATE_FORMAT } from '../../../constant/index';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { modifyPayModalVisible } from '../../../actions/modify/modifyPayModalVisible';
-import { modifyConfirmPayment, fetchPaymentDetailInfo } from '../../../actions/order';
+import { modifyConfirmPayment, fetchPaymentDetailInfo, fetchOrderDetailInfo } from '../../../actions/order';
 
 @connect(
     state => ({
@@ -27,6 +27,7 @@ import { modifyConfirmPayment, fetchPaymentDetailInfo } from '../../../actions/o
         modifyCauseModalVisible,
         modifyPayModalVisible,
         fetchPaymentDetailInfo,
+        fetchOrderDetailInfo
     }, dispatch)
 )
 class PayInformation extends PureComponent {
@@ -165,14 +166,14 @@ class PayInformation extends PureComponent {
         modifyConfirmPayment({
             orderId,
             paymentId: id
+        }).then((res) => {
+            if (res.code === 200 && res.success) {
+                this.props.fetchPaymentDetailInfo({ orderId });
+                this.props.fetchOrderDetailInfo({ id: this.props.match.params.id });
+            } else if (!res.success) {
+                message.error(res.message);
+            }
         })
-            .then((res) => {
-                if (res.code === 200 && res.success) {
-                    this.props.fetchPaymentDetailInfo({ orderId })
-                } else if (!res.success) {
-                    message.error(res.message);
-                }
-            })
     }
 
     /**
@@ -267,9 +268,8 @@ PayInformation.propTypes = {
     modifyCauseModalVisible: PropTypes.func,
     modifyPayModalVisible: PropTypes.func,
     fetchPaymentDetailInfo: PropTypes.func,
-}
-
-PayInformation.defaultProps = {
+    fetchOrderDetailInfo: PropTypes.func,
+    match: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(PayInformation));
