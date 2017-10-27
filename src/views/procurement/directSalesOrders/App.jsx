@@ -51,9 +51,16 @@ class DirectSalesOrders extends PureComponent {
     }
 
     handleSubmit = () => {
+        const dist = [];
+        this.state.goodsList.forEach(goods => {
+            dist.push({
+                productId: goods.productId,
+                quantity: goods.quantity
+            });
+        });
         this.props.insertDirectOrder({
             storeId: this.state.storeId,
-            directStoreCommerItemVoList: []
+            directStoreCommerItemVoList: dist
         });
     }
 
