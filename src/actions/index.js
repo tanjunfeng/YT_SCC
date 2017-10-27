@@ -64,7 +64,8 @@ import {
     fetchPoRcvInit,
     updatePoRcvLine,
     updatePoRcvBasicinfo,
-    createPoRcv
+    createPoRcv,
+    fetchReturnMngList
 } from './procurement';
 
 // IBM
@@ -213,5 +214,7 @@ export {
 
     // 订单
     splitorderbyinventory,
-    interfaceInventory
+    interfaceInventory,
+    // 采购退货列表
+    fetchReturnMngList
 }

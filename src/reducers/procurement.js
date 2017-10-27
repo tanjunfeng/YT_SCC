@@ -48,6 +48,8 @@ const initState = fromJS({
     poRcv: {},
     // 新增商品信息
     newPcOdData: {},
+    // 采购退货清单
+    returnMngList: {},
     // 直营店信息
     directInfo: {},
     // 单个商品详情
@@ -153,6 +155,10 @@ export default function (state = initState, action) {
         case ActionType.RECEIVE_PO_RCV_INIT:// 初始收货单详情
             payload = action.payload || {};
             return state.set('poRcv', fromJS(action.payload));
+
+        case ActionType.RECEIVE_RETURN_MNG_LIST:// 采购退货列表
+            payload = action.payload || {};
+            return state.set('returnMngList', fromJS(action.payload));
 
         case ActionType.UPDATE_PO_RCV_LINE:// 更新收货单商品行
             poRcv = Object.assign(
