@@ -62,8 +62,9 @@ class GoodsForm extends PureComponent {
 
     uploadProps = {
         name: 'uploadProps',
-        contentType: 'application/json;charset=UTF-8',
-        action: `${window.config.apiHost}/directStore/fileUpload`,
+        action: `${window.config.apiHost}directStore/fileUpload`,
+            // ?branchCompanyId=${this.props.value.branchCompanyId}
+            // &deliveryWarehouseCode=${this.props.value.deliveryWarehouseCode}`,
         headers: {
             authorization: 'authorization-text',
         },
@@ -72,11 +73,8 @@ class GoodsForm extends PureComponent {
                 // console.log(info.file, info.fileList);
             }
             if (info.file.status === 'done') {
-                // post data
-                // data: {
-                //     branchCompanyId: this.props.value.branchCompanyId,
-                //         deliveryWarehouseCode: this.props.value.deliveryWarehouseCode,
-                // },
+                // branchCompanyId: this.props.value.branchCompanyId,
+                // deliveryWarehouseCode: this.props.value.deliveryWarehouseCode
                 message.success(`${info.file.name} file uploaded successfully`);
             } else if (info.file.status === 'error') {
                 message.error(`${info.file.name} file upload failed.`);
@@ -123,7 +121,7 @@ class GoodsForm extends PureComponent {
                                 </Upload>
                             </FormItem>
                             <FormItem>
-                                <a className="download" target="_blank" href={`${window.config.apiHost}/directStore/downloadExcelModel`}>
+                                <a className="download" target="_blank" href={`${window.config.apiHost}directStore/downloadExcelModel`}>
                                     下载 Excel 模板
                                 </a>
                                 <div className="info">
