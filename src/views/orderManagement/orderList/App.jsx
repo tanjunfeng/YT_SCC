@@ -655,12 +655,6 @@ class OrderManagementList extends Component {
                                             onClick={this.handleOrderReset}
                                         >重置</Button>
                                     </FormItem>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            onClick={this.handleOrderOutput}
-                                        >导出</Button>
-                                    </FormItem>
                                 </Col>
                             </Row>
                         </div>
