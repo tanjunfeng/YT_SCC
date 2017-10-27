@@ -11,7 +11,7 @@ import { pubFetchValueList } from '../../actions/pub';
 import SearchMind from '../../components/searchMind';
 
 @connect(() => ({}), dispatch => bindActionCreators({
-    pubFetchValueList,
+    pubFetchValueList
 }, dispatch))
 
 class SubCompanies extends PureComponent {

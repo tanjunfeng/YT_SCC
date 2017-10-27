@@ -22,7 +22,14 @@ import {
     auditPurchaseOrderInfo,
     updatePmPurchaseOrder,
     repushPurchaseReceipt as repushPurchaseReceiptService,
+<<<<<<< HEAD
     fetchReturnMngList as queryReturnMngListService,
+=======
+    queryDirectInfo as queryDirectInfoService,
+    queryGoodsInfo as queryGoodsInfoService,
+    updateGoodsInfo as updateGoodsInfoService,
+    insertDirectOrder as insertDirectOrderService
+>>>>>>> 5120cdef1ac95393dc8c24869d78fa1c3686b54a
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -455,6 +462,7 @@ export const repushPurchaseReceipt = (params) => dispatch => (
 );
 
 /**
+<<<<<<< HEAD
  * 查询采购退货单管理列表
  * @param {*} data
  */
@@ -468,6 +476,97 @@ export const fetchReturnMngList = (params) => dispatch => (
         queryReturnMngListService(params)
             .then(res => {
                 dispatch(returnMngListAction(res.data));
+=======
+ * 查询根据门店编号直营店信息
+ *
+ * @param {*object} data
+ */
+const queryDirectInfoAction = (data) => ({
+    type: ActionType.FETCH_DIRECT_INFO,
+    payload: data
+});
+
+export const queryDirectInfo = params => dispatch => (
+    new Promise((resolve, reject) => {
+        queryDirectInfoService(params)
+            .then(res => {
+                dispatch(queryDirectInfoAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 直营店下单商品提交
+ *
+ * @param {*object} data
+ */
+const insertDirectOrderAction = (data) => ({
+    type: ActionType.INSERT_DIRECT_ORDER,
+    payload: data
+});
+
+export const insertDirectOrder = params => dispatch => (
+    new Promise((resolve, reject) => {
+        insertDirectOrderService(params)
+            .then(res => {
+                dispatch(insertDirectOrderAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+// 清除直营店信息
+export const clearDirectInfo = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_DIRECT_INFO,
+    payload: {}
+}));
+
+/**
+ * 查询单个商品详情
+ *
+ * @param {*object} data
+ */
+const queryGoodsInfoAction = (data) => ({
+    type: ActionType.FETCH_GOODS_INFO,
+    payload: data
+});
+
+export const queryGoodsInfo = params => dispatch => (
+    new Promise((resolve, reject) => {
+        queryGoodsInfoService(params)
+            .then(res => {
+                dispatch(queryGoodsInfoAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 查询单个商品详情
+ *
+ * @param {*object} data
+ */
+const updateGoodsInfoAction = (data) => ({
+    type: ActionType.UPDATE_GOODS_INFO,
+    payload: data
+});
+
+export const updateGoodsInfo = params => dispatch => (
+    new Promise((resolve, reject) => {
+        updateGoodsInfoService(params)
+            .then(res => {
+                dispatch(updateGoodsInfoAction(res.data));
+>>>>>>> 5120cdef1ac95393dc8c24869d78fa1c3686b54a
                 resolve(res);
             })
             .catch(err => {

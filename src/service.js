@@ -712,7 +712,7 @@ export const findCanUseCompanyInfo = (params) => http.get('/supplier/findCompany
 // 此接口用于查询各级分类（值清单）
 export const queryCategorysByLevel = (params) => http.get('/category/queryCategories', params);
 
-// 此接口用于新增商品（值清单）
+// 根据供应商信息新增商品（值清单）
 export const queryProductForSelect = (params) => http.get('/product/queryProductForSelect', params);
 
 // 订单管理-查询订单列表
@@ -809,3 +809,19 @@ export const grantCoupon = (params) => http.post('/coupon/grantCoupon', params);
 
 // 查询品类
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
+
+/**
+ * 直营店下单模块
+ */
+// 查询直营店
+export const queryDirectStores = (params) => http.get('/directStore/getAllStores', params);
+// 根据门店信息新增商品（值清单）
+export const queryProductByStore = (params) => http.get('/directStore/getItemsInfo', params);
+// 根据门店id查询直营店下单数据
+export const queryDirectInfo = (params) => http.get('/directStore/getDirectInfo', params);
+// 获取单个商品详情
+export const queryGoodsInfo = params => http.get('/directStore/getItemInfo', params);
+// 修改单个商品的信息
+export const updateGoodsInfo = params => http.post('/directStore/updateItem', params);
+// 直营店下单提交商品
+export const insertDirectOrder = params => http.post('/directStore/directCommitOrder', params);
