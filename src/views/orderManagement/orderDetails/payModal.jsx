@@ -60,12 +60,7 @@ class PayModal extends Component {
                         if (res.code === 200 && res.data) {
                             message.error(res.data);
                         }
-                        this.props.modifyPayModalVisible({ isShow: false });
-                        // 清空数据
-                        this.props.form.resetFields();
-                        this.setState({
-                            textAreaNote: ''
-                        });
+                        this.handleNewPayCancel();
                         this.props.fetchPaymentDetailInfo(
                             { orderId: this.props.orderDetailData.id }
                         );
