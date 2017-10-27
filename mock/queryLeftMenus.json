@@ -175,6 +175,12 @@
                 },
                 {
                     "authorityId": 229,
+                    "authorityCode": "returnManagementList",
+                    "displayName": "退货单管理列表",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 230,
                     "authorityCode": "zydxd",
                     "displayName": "直营店下单",
                     "menuList": []

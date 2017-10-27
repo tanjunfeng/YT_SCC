@@ -9,6 +9,7 @@ import { withRouter } from 'react-router';
 import { Form } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import StoresForm from './storesForm';
 import GoodsForm from './goodsForm';
 import GoodsTable from './goodsTable';
@@ -50,9 +51,16 @@ class DirectSalesOrders extends PureComponent {
     }
 
     handleSubmit = () => {
+        const dist = [];
+        this.state.goodsList.forEach(goods => {
+            dist.push({
+                productId: goods.productId,
+                quantity: goods.quantity
+            });
+        });
         this.props.insertDirectOrder({
             storeId: this.state.storeId,
-            directStoreCommerItemVoList: []
+            directStoreCommerItemVoList: dist
         });
     }
 

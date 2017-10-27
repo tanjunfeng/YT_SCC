@@ -22,6 +22,7 @@ import {
     auditPurchaseOrderInfo,
     updatePmPurchaseOrder,
     repushPurchaseReceipt as repushPurchaseReceiptService,
+    fetchReturnMngList as queryReturnMngListService,
     queryDirectInfo as queryDirectInfoService,
     queryGoodsInfo as queryGoodsInfoService,
     updateGoodsInfo as updateGoodsInfoService,
@@ -458,10 +459,32 @@ export const repushPurchaseReceipt = (params) => dispatch => (
 );
 
 /**
- * 查询根据门店编号直营店信息
- *
- * @param {*object} data
+ * 查询采购退货单管理列表
+ * @param {*} data
  */
+const returnMngListAction = (data) => ({
+    type: ActionType.RECEIVE_RETURN_MNG_LIST,
+    payload: data
+});
+
+export const fetchReturnMngList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryReturnMngListService(params)
+            .then(res => {
+                dispatch(returnMngListAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/*
+* 查询根据门店编号直营店信息
+*
+* @param {*object} data
+*/
 const queryDirectInfoAction = (data) => ({
     type: ActionType.FETCH_DIRECT_INFO,
     payload: data

@@ -565,6 +565,8 @@ export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', p
 export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
 // 查询采购单列表
 export const repushPurchaseReceipt = (params) => http.get('/pmPurchaseReceipt/rePushPurchaseReceiptToMQ', params);
+// 查询采购退货列表
+export const fetchReturnMngList = (params) => http.get('/pmPurchaseRefund/queryRefundDetailById', params);
 
 // 审批
 export const auditPo = (params) => http.post('/provider/auditPo', params);
