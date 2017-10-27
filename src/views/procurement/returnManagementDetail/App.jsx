@@ -3,7 +3,7 @@
  * @Description: 采购退货详情页
  * @CreateDate: 2017-10-27 11:26:16
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-27 11:26:16
+ * @Last Modified time: 2017-10-27 14:25:13
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -35,7 +35,7 @@ const dateFormat = 'YYYY-MM-DD';
     updatePoRcvBasicinfo,
     createPoRcv
 }, dispatch))
-class PoRcvDetail extends PureComponent {
+class ReturnManagementDetail extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -91,22 +91,22 @@ class PoRcvDetail extends PureComponent {
                 key: 'receivedNumber'
             }, {
                 title: '采购价格(含税)',
-                dataIndex:'purchasePrice',
-                key:'purchasePrice'
+                dataIndex: 'purchasePrice',
+                key: 'purchasePrice'
             }, {
                 title: '收货金额(含税)',
-                dataIndex:'receiptPrice',
-                key:'receiptPrice'
-            }, 
+                dataIndex: 'receiptPrice',
+                key: 'receiptPrice'
+            },
         ];
     }
 
     componentDidMount() {
         const { match } = this.props;
-        // 收货单id
+        // 退货单id
         const poRcvId = match.params.porcvid;
 
-        // step 1：校验采购单id 收货单id
+        // step 1：校验采购单id 退货单id
         if (!poRcvId) {
             history.back();
         }
@@ -248,10 +248,10 @@ class PoRcvDetail extends PureComponent {
     }
 }
 
-PoRcvDetail.propTypes = {
+ReturnManagementDetail.propTypes = {
     fetchPoRcvDetail: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
     poRcvDetail: PropTypes.objectOf(PropTypes.any)
 }
 
-export default withRouter(Form.create()(PoRcvDetail));
+export default withRouter(Form.create()(ReturnManagementDetail));
