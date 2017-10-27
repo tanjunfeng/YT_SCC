@@ -43,14 +43,10 @@ class GoodsInfo extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.canBeSplit === undefined && nextProps.canBeSplit) {
-            columns.push(
-                { title: '子订单1', dataIndex: 'sub1' },
-                { title: '子订单2', dataIndex: 'sub2' }
-            );
+        if (nextProps.canBeSplit && this.props.canBeSplit !== nextProps.canBeSplit) {
             this.renderColumns();
         }
-        if (this.props.canBeSplit === undefined && nextProps.canBeSplit === false) {
+        if (nextProps.canBeSplit === false && this.props.canBeSplit !== nextProps.canBeSplit) {
             columns.splice(columns.length - 2, 2);
         }
     }
@@ -153,8 +149,10 @@ class GoodsInfo extends PureComponent {
     }
 
     renderColumns = () => {
-        columns[columns.length - 2].render = this.renderReadOnlyCell;
-        columns[columns.length - 1].render = this.renderEditableCell;
+        columns.push(
+            { title: '子订单1', dataIndex: 'sub1', render: this.renderReadOnlyCell },
+            { title: '子订单2', dataIndex: 'sub2', render: this.renderEditableCell }
+        );
     }
 
     render() {
