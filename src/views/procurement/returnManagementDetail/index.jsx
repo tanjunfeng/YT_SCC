@@ -1,4 +1,4 @@
-import PoRcvDetail from './App';
+import ReturnManagementDetail from './App';
 import './App.scss';
 
-export default PoRcvDetail;
+export default ReturnManagementDetail;

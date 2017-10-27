@@ -26,7 +26,8 @@ import {
     queryDirectInfo as queryDirectInfoService,
     queryGoodsInfo as queryGoodsInfoService,
     updateGoodsInfo as updateGoodsInfoService,
-    insertDirectOrder as insertDirectOrderService
+    insertDirectOrder as insertDirectOrderService,
+    fetchReturnPoRcvInit as queryReturnPoDetailSevice
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -335,6 +336,30 @@ export const fetchPoRcvInit = (params) => dispatch => (
         queryPoDetail(params)
             .then(res => {
                 dispatch(rcvPoRcvInit(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 查询采购单详情并创建退货单初始信息
+ * 1.根据采购单id查询采购单相关信息
+ * 2.根据查询结果初始显示采购收货单
+ * @param {*} data
+ */
+const returnPoRcvInit = (data) => ({
+    type: ActionType.RETURN_PO_RCV_INIT,
+    payload: data
+});
+
+export const fetchReturnPoRcvInit = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryReturnPoDetailSevice(params)
+            .then(res => {
+                dispatch(returnPoRcvInit(res.data));
                 resolve(res);
             })
             .catch(err => {
