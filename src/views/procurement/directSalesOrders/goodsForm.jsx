@@ -117,7 +117,7 @@ class GoodsForm extends PureComponent {
                             </FormItem>
                             <FormItem className="file-upload">
                                 <Upload {...this.uploadProps}>
-                                    <Button type="primary" size="default">
+                                    <Button type="primary" size="default" disabled={this.props.value.branchCompanyId === ''}>
                                         <Icon type="upload" /> Excel 导入
                                         </Button>
                                 </Upload>
