@@ -21,7 +21,8 @@ import {
     getNewPmPurchaseOrderItem,
     auditPurchaseOrderInfo,
     updatePmPurchaseOrder,
-    repushPurchaseReceipt as repushPurchaseReceiptService
+    repushPurchaseReceipt as repushPurchaseReceiptService,
+    fetchReturnMngList as queryReturnMngListService,
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -445,6 +446,28 @@ export const repushPurchaseReceipt = (params) => dispatch => (
         repushPurchaseReceiptService(params)
             .then(res => {
                 dispatch(repushPurchaseReceiptAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 查询采购退货单管理列表
+ * @param {*} data
+ */
+const returnMngListAction = (data) => ({
+    type: ActionType.RECEIVE_RETURN_MNG_LIST,
+    payload: data
+});
+
+export const fetchReturnMngList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryReturnMngListService(params)
+            .then(res => {
+                dispatch(returnMngListAction(res.data));
                 resolve(res);
             })
             .catch(err => {
