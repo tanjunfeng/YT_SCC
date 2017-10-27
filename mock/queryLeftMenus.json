@@ -172,6 +172,12 @@
                     "authorityCode": "poRcvMngList",
                     "displayName": "收货单管理列表",
                     "menuList": []
+                },
+                {
+                    "authorityId": 229,
+                    "authorityCode": "zydxd",
+                    "displayName": "直营店下单",
+                    "menuList": []
                 }
             ]
         },
