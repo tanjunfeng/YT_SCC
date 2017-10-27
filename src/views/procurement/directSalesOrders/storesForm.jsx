@@ -35,6 +35,7 @@ class StoresForm extends PureComponent {
             this.props.queryDirectInfo({ storeId: record.storeId }).then(res => {
                 // 返回分公司 id 供父页面使用
                 this.props.onChange({
+                    storeId: record.storeId,
                     branchCompanyId: res.data.branchCompanyId,
                     deliveryWarehouseCode: res.data.deliveryWarehouseCode
                 });
@@ -55,7 +56,7 @@ class StoresForm extends PureComponent {
                     <div className="search-box">
                         <h1>门店信息</h1>
                         <Row gutter={40}>
-                            <FormItem label="门店编号">
+                            <FormItem label="选择门店">
                                 {getFieldDecorator('stores', {
                                     initialValue: { storeId: '', storeName: '' },
                                     rules: [{ required: true, message: '请选择门店' }]

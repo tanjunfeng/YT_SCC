@@ -24,7 +24,6 @@ const FormItem = Form.Item;
 }, dispatch))
 
 class GoodsForm extends PureComponent {
-
     getRow = (goodsInfo) => {
         const {
             productId,
@@ -99,6 +98,10 @@ class GoodsForm extends PureComponent {
         });
     }
 
+    handleSubmit = () => {
+        this.props.onSubmit();
+    }
+
     render() {
         return (
             <div className="direct-sales-orders-form goods-form">
@@ -131,7 +134,7 @@ class GoodsForm extends PureComponent {
                                 </div>
                             </FormItem>
                             <FormItem className="fr">
-                                <Button type="primary" size="default">
+                                <Button type="primary" size="default" onClick={this.handleSubmit}>
                                     提交
                                 </Button>
                             </FormItem>
@@ -146,7 +149,8 @@ class GoodsForm extends PureComponent {
 GoodsForm.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     queryGoodsInfo: PropTypes.func,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    onSubmit: PropTypes.func
 };
 
 export default withRouter(Form.create()(GoodsForm));

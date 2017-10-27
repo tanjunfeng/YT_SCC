@@ -24,7 +24,8 @@ import {
     repushPurchaseReceipt as repushPurchaseReceiptService,
     queryDirectInfo as queryDirectInfoService,
     queryGoodsInfo as queryGoodsInfoService,
-    updateGoodsInfo as updateGoodsInfoService
+    updateGoodsInfo as updateGoodsInfoService,
+    insertDirectOrder as insertDirectOrderService
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -471,6 +472,29 @@ export const queryDirectInfo = params => dispatch => (
         queryDirectInfoService(params)
             .then(res => {
                 dispatch(queryDirectInfoAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 直营店下单商品提交
+ *
+ * @param {*object} data
+ */
+const insertDirectOrderAction = (data) => ({
+    type: ActionType.INSERT_DIRECT_ORDER,
+    payload: data
+});
+
+export const insertDirectOrder = params => dispatch => (
+    new Promise((resolve, reject) => {
+        insertDirectOrderService(params)
+            .then(res => {
+                dispatch(insertDirectOrderAction(res.data));
                 resolve(res);
             })
             .catch(err => {

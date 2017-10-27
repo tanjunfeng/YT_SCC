@@ -180,6 +180,8 @@ export default {
     FETCH_GOODS_INFO: 'FETCH_GOODS_INFO',
     // 修改单个商品的信息
     UPDATE_GOODS_INFO: 'UPDATE_GOODS_INFO',
+    // 提交直营店下单
+    INSERT_DIRECT_ORDER: 'INSERT_DIRECT_ORDER',
 
     /** 值清单获取action，请根据实际情况拆分到单独action文件 Begin */
     // 仓库值清单

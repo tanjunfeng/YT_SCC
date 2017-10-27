@@ -7,12 +7,22 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import { Form } from 'antd';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import StoresForm from './storesForm';
 import GoodsForm from './goodsForm';
 import GoodsTable from './goodsTable';
+import {
+    insertDirectOrder
+} from '../../../actions/procurement';
+
+@connect(() => ({}), dispatch => bindActionCreators({
+    insertDirectOrder
+}, dispatch))
 
 class DirectSalesOrders extends PureComponent {
     state = {
+        storeId: '',
         branchCompanyId: '',
         deliveryWarehouseCode: '',
         goodsList: [],
@@ -20,8 +30,8 @@ class DirectSalesOrders extends PureComponent {
     }
 
     handleStoresChange = (record) => {
-        const { branchCompanyId, deliveryWarehouseCode } = record;
-        this.setState({ branchCompanyId, deliveryWarehouseCode });
+        const { storeId, branchCompanyId, deliveryWarehouseCode } = record;
+        this.setState({ storeId, branchCompanyId, deliveryWarehouseCode });
         this.handleClear();
     }
 
@@ -30,12 +40,19 @@ class DirectSalesOrders extends PureComponent {
     }
 
     handleGoodsListChange = (goodsList) => {
-        this.setState({goodsList})
+        this.setState({ goodsList })
     }
 
     handleClear = () => {
         this.setState({
             goodsList: []
+        });
+    }
+
+    handleSubmit = () => {
+        this.props.insertDirectOrder({
+            storeId: this.state.storeId,
+            directStoreCommerItemVoList: []
         });
     }
 
@@ -49,6 +66,7 @@ class DirectSalesOrders extends PureComponent {
                 <GoodsForm
                     value={{ branchCompanyId, deliveryWarehouseCode }}
                     onChange={this.handleGoodsFormChange}
+                    onSubmit={this.handleSubmit}
                 />
                 <GoodsTable
                     goodsList={this.state.goodsList}
@@ -61,5 +79,9 @@ class DirectSalesOrders extends PureComponent {
         );
     }
 }
+
+DirectSalesOrders.propTypes = {
+    insertDirectOrder: PropTypes.func
+};
 
 export default withRouter(Form.create()(DirectSalesOrders));
