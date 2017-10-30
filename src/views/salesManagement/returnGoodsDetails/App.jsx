@@ -32,9 +32,8 @@ const dateFormat = 'YYYY-MM-DD';
 }), dispatch => bindActionCreators({
     // 请求详情数据
     returnGoodsDetail,
-    clearData: () => {
-        dispatch(returnGoodsDetailClearData({}))
-    }
+    // 清空详情数据
+    clearData: returnGoodsDetailClearData
 }, dispatch))
 
 class ReturnGoodsDetails extends PureComponent {
@@ -55,10 +54,10 @@ class ReturnGoodsDetails extends PureComponent {
         this.forData(id)
     }
 
-    // componentWillUnmount() {
-    //     const { clearData } = this.props
-    //     clearData()
-    // }
+    componentWillUnmount() {
+        const { clearData } = this.props
+        clearData()
+    }
 
     //请求数据
     forData(id) {
@@ -145,105 +144,103 @@ class ReturnGoodsDetails extends PureComponent {
         const data = this.props.data
         const { type } = this.props.match.params
         return (
-            data ? (
-                <div className="returngoods-detail">
-                    <div className="basic-box">
-                        <div className="header">
-                            <Icon type="solution" className="header-icon" />单据信息
+            <div className="returngoods-detail">
+                <div className="basic-box">
+                    <div className="header">
+                        <Icon type="solution" className="header-icon" />单据信息
                     </div>
-                        <div className="body">
-                            <Row>
-                                <Col span={6} offset={2}><div className="item"><span className="item-tit">换货单号：</span>{data.id}</div></Col>
-                                <Col span={6} offset={2}><div className="item"><span className="item-tit">原订单号：</span>{data.orderId}</div></Col>
-                                <Col span={6} offset={2}><div className="item"><span className="item-tit">申请时间：</span>{moment(parseInt(data.creationTime, 10)).format(dateFormat)}</div></Col>
-                            </Row>
-                            <Row>
-                                <Col span={6} offset={2}><div className="item"><span className="item-tit">子公司：</span>{data.branchCompanyName}</div></Col>
-                                <Col span={6} offset={2}><div className="item"><span className="item-tit">雅堂小超：</span>{data.franchiseeName}</div></Col>
-                                <Col span={6} offset={2}><div className="item"><span className="item-tit">换货单状态：</span>{data.stateDetail}</div></Col>
-                            </Row>
-                            <Row>
-                                <Col span={6} offset={2}><div className="item"><span className="item-tit">商品状态：</span>{data.productStateDetail}</div></Col>
-                            </Row>
-                        </div>
-                    </div>
-                    <div className="basic-box">
-                        <div className="header">
-                            <Icon type="solution" className="header-icon" />收货信息
-                    </div>
-                        <div className="body">
-                            <Row>
-                                <Col span={22} offset={2}><div className="item"><span className="item-tit">收货人：</span>{data.consigneeName}</div></Col>
-                            </Row>
-                            <Row>
-                                <Col span={22} offset={2}><div className="item"><span className="item-tit">所在地区：</span>{data.province} {data.city} {data.district}</div></Col>
-                            </Row>
-                            <Row>
-                                <Col span={22} offset={2}><div className="item"><span className="item-tit">街道地址：</span>{data.detailAddress}</div></Col>
-                            </Row>
-                            <Row>
-                                <Col span={22} offset={2}><div className="item"><span className="item-tit">手机：</span>{data.cellphone}</div></Col>
-                            </Row>
-                            <Row>
-                                <Col span={22} offset={2}><div className="item"><span className="item-tit">固定电话：</span>{data.telephone}</div></Col>
-                            </Row>
-                            <Row>
-                                <Col span={22} offset={2}><div className="item"><span className="item-tit">邮编：</span>{data.postcode}</div></Col>
-                            </Row>
-                        </div>
-                    </div>
-                    <div className="basic-box">
-                        <div className="header">
-                            <Icon type="solution" className="header-icon" />商品信息
-                    </div>
-                        <div className="body body-table">
-                            <Table
-                                dataSource={data.items}
-                                columns={columns}
-                                rowKey="productId"
-                                pagination={false}
-                            />
-                            <div className="bottom-text">
-                                <div className="bt-left">共<span className="bt-left-num">{data.commodityTotal}</span>件商品</div>
-                                <div className="bt-right"><span>总金额：</span><span className="bt-right-num">￥{data.amount}</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="basic-box">
-                        <div className="header">
-                            <Icon type="solution" className="header-icon" />换货原因
-                    </div>
-                        <div className="body body-form">
-                            <Row>
-                                <Col span={4}>
-                                    <Select onChange={this.handleChange} disabled={type == 2 ? false : true} defaultValue={data.returnReasonType} style={{ width: '153px' }} size="default">
-                                        {
-                                            reason.data.map((item) => (
-                                                <Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Option>
-                                            ))
-                                        }
-                                    </Select>
-                                </Col>
-                                <Col span={20}>
-                                    <TextArea onChange={this.inputChange} disabled={type == 2 ? false : true} rows={4} size="default" defaultValue={data.returnReason} />
-                                </Col>
-                            </Row>
-                        </div>
-                    </div>
-                    <div className="bt-button">
-                        {type == 2 ? (
-                            <span>
-                                <Button size="large" onClick={this.save}>保存</Button>
-                                <Button size="large" onClick={() => this.showConfirm(1)}>确认</Button>
-                                <Button size="large" onClick={() => this.showConfirm(2)}>取消</Button>
-                            </span>
-                        ) : null}
-                        <Button size="large" onClick={this.goBack}>关闭</Button>
+                    <div className="body">
+                        <Row>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">换货单号：</span>{data.id}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">原订单号：</span>{data.orderId}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">申请时间：</span>{moment(parseInt(data.creationTime, 10)).format(dateFormat)}</div></Col>
+                        </Row>
+                        <Row>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">子公司：</span>{data.branchCompanyName}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">雅堂小超：</span>{data.franchiseeName}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">换货单状态：</span>{data.stateDetail}</div></Col>
+                        </Row>
+                        <Row>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">商品状态：</span>{data.productStateDetail}</div></Col>
+                        </Row>
                     </div>
                 </div>
-            ) : null
+                <div className="basic-box">
+                    <div className="header">
+                        <Icon type="solution" className="header-icon" />收货信息
+                    </div>
+                    <div className="body">
+                        <Row>
+                            <Col span={22} offset={2}><div className="item"><span className="item-tit">收货人：</span>{data.consigneeName}</div></Col>
+                        </Row>
+                        <Row>
+                            <Col span={22} offset={2}><div className="item"><span className="item-tit">所在地区：</span>{data.province} {data.city} {data.district}</div></Col>
+                        </Row>
+                        <Row>
+                            <Col span={22} offset={2}><div className="item"><span className="item-tit">街道地址：</span>{data.detailAddress}</div></Col>
+                        </Row>
+                        <Row>
+                            <Col span={22} offset={2}><div className="item"><span className="item-tit">手机：</span>{data.cellphone}</div></Col>
+                        </Row>
+                        <Row>
+                            <Col span={22} offset={2}><div className="item"><span className="item-tit">固定电话：</span>{data.telephone}</div></Col>
+                        </Row>
+                        <Row>
+                            <Col span={22} offset={2}><div className="item"><span className="item-tit">邮编：</span>{data.postcode}</div></Col>
+                        </Row>
+                    </div>
+                </div>
+                <div className="basic-box">
+                    <div className="header">
+                        <Icon type="solution" className="header-icon" />商品信息
+                    </div>
+                    <div className="body body-table">
+                        <Table
+                            dataSource={data.items}
+                            columns={columns}
+                            rowKey="productId"
+                            pagination={false}
+                        />
+                        <div className="bottom-text">
+                            <div className="bt-left">共<span className="bt-left-num">{data.commodityTotal}</span>件商品</div>
+                            <div className="bt-right"><span>总金额：</span><span className="bt-right-num">￥{data.amount}</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div className="basic-box">
+                    <div className="header">
+                        <Icon type="solution" className="header-icon" />换货原因
+                    </div>
+                    <div className="body body-form">
+                        <Row>
+                            <Col span={4}>
+                                <Select onChange={this.handleChange} disabled={type == 2 ? false : true} defaultValue={data.returnReasonType} style={{ width: '153px' }} size="default">
+                                    {
+                                        reason.data.map((item) => (
+                                            <Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Option>
+                                        ))
+                                    }
+                                </Select>
+                            </Col>
+                            <Col span={20}>
+                                <TextArea onChange={this.inputChange} disabled={type == 2 ? false : true} rows={4} size="default" defaultValue={data.returnReason} />
+                            </Col>
+                        </Row>
+                    </div>
+                </div>
+                <div className="bt-button">
+                    {type == 2 ? (
+                        <span>
+                            <Button size="large" onClick={this.save}>保存</Button>
+                            <Button size="large" onClick={() => this.showConfirm(1)}>确认</Button>
+                            <Button size="large" onClick={() => this.showConfirm(2)}>取消</Button>
+                        </span>
+                    ) : null}
+                    <Button size="large" onClick={this.goBack}>关闭</Button>
+                </div>
+            </div>
         )
     }
 }

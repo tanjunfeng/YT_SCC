@@ -18,7 +18,7 @@ export default function (state = initState, action) {
         case ActionType.RETURN_GOODS_DETAIL:
             return state.set('detail', action.payload);
         case ActionType.RETURN_GOODS_DETAIL_CLEAR_DATA:
-            return state.set('detail', null);
+            return state.set('detail', {});
         default:
             return state;
     }
