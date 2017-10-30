@@ -53,20 +53,6 @@ export const goodsReceiptStatus = {
     }]
 }
 
-//退款状态
-export const refundStatus = {
-    defaultValue: '',
-    data: [{
-        key: '',
-        value: '请选择'
-    }, {
-        key: '0',
-        value: '未退款'
-    }, {
-        key: '1',
-        value: '已退款'
-    }]
-}
 
 // 退货详情页 退货原因
 

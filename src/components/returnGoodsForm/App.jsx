@@ -7,21 +7,12 @@ import { withRouter } from 'react-router';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../util/util';
-import { returnGoodsType, returnGoodsStatus, goodsReceiptStatus, refundStatus } from '../../constant/salesManagement';
-import SearchMind from '../searchMind';
-import { formData } from '../../actions'
+import { returnGoodsType, returnGoodsStatus, goodsReceiptStatus } from '../../constant/salesManagement';
 
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
-
-// @connect(state => ({
-//     st: state.toJS()
-// }), dispatch => bindActionCreators({
-//     formData
-// }, dispatch))
-
 
 
 class ReturGoodsForm extends PureComponent {
@@ -192,9 +183,5 @@ class ReturGoodsForm extends PureComponent {
 ReturGoodsForm.propTypes = {
     formData: PropTypes.func
 };
-
-// PoSearchForm.defaultProps = {
-//     prefixCls: 'po-modal'
-// }
 
 export default withRouter(Form.create()(ReturGoodsForm));
