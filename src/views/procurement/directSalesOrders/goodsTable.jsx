@@ -46,7 +46,7 @@ class GoodsTable extends PureComponent {
     }
 
     /**
-     * 检查库存
+     * 检查单个商品库存是否充足
      *
      * @param {*object} goods 商品信息
      */
