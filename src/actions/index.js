@@ -97,7 +97,8 @@ import stockListDetail from './stockListDetail';
 import storeAdList from './storeAdjustList';
 
 // 促销活动
-import { getPromotionList, createPromotion,
+import {
+    getPromotionList, createPromotion,
     getPromotionDetail, fetchCouponsListAction, getCouponsDetail
 } from './promotion';
 
@@ -110,6 +111,10 @@ import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './white
 
 // 根据库存实时拆单
 import { splitorderbyinventory, interfaceInventory } from './order';
+
+// 退货订单列表
+
+import { returnGoodsList, returnGoodsDetail, returnGoodsDetailClearData } from './salesManagement';
 
 export {
     fetchSupplierList,
@@ -213,5 +218,9 @@ export {
 
     // 订单
     splitorderbyinventory,
-    interfaceInventory
+    interfaceInventory,
+    //销售管理
+    returnGoodsList,
+    returnGoodsDetail,
+    returnGoodsDetailClearData
 }

@@ -656,10 +656,10 @@ export const checkSupplierAddOrgId = (params) => http.get('/supplier/checkSuppli
  * 商品模块
  */
 
- // 根据条件分页查询商品清单，并排序
+// 根据条件分页查询商品清单，并排序
 export const queryproductsbypages = (params) => http.get('/product/queryProductsByPages', params);
 
- // 根据商品id同步商品
+// 根据商品id同步商品
 export const syncProductByManualAction = (params) => http.get('/product/syncProductByManual', params);
 
 // 获取已审批通过供应商地点下拉框数据
@@ -807,3 +807,12 @@ export const grantCoupon = (params) => http.post('/coupon/grantCoupon', params);
 
 // 查询品类
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
+
+//退货单列表
+export const getReturnGoodsList = (params) => http.get('/webReturnRequest/queryReturnRequestItem', params)
+
+//退货单取消、确认
+export const getReturnGoodsOperation = (params) => http.get('/webReturnRequest/operateOrderReturnedReceipt', params)
+
+//退货单详情
+export const getReturnGoodsDetail = (params) => http.get('/webReturnRequest/returnRequestDetail', params)
