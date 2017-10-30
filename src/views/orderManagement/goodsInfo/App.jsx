@@ -47,7 +47,7 @@ class GoodsInfo extends PureComponent {
             this.renderColumns();
         }
         if (nextProps.canBeSplit === false && this.props.canBeSplit !== nextProps.canBeSplit) {
-            columns.splice(columns.length - 2, 2);
+            if (this.props.canBeSplit !== undefined) columns.splice(columns.length - 2, 2);
         }
     }
 
