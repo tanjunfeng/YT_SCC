@@ -22,10 +22,16 @@ import {
 
 class GoodsTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        const goodsAddOn = nextProps.goodsAddOn;
+        const { goodsAddOn, importList } = nextProps;
         // 当传入商品有变化时，添加到商品列表
         if (goodsAddOn !== null && this.props.goodsAddOn !== goodsAddOn) {
             this.appendToList(goodsAddOn);
+        }
+        if (this.props.importList.length === 0 && importList.length > 0) {
+            importList.forEach(item => {
+                this.appendToList(item);
+            });
+            this.props.onClearImportList();
         }
     }
 
@@ -89,7 +95,7 @@ class GoodsTable extends PureComponent {
     }
 
     /**
-     * 校验商品状态，并判断商品是否应该移动到第一行
+     * 添加单个商品并校验状态，并判断商品是否应该移动到第一行
      */
     appendToList = (record) => {
         this.checkMultiple(record);
@@ -167,9 +173,11 @@ class GoodsTable extends PureComponent {
 GoodsTable.propTypes = {
     updateGoodsInfo: PropTypes.func,
     onChange: PropTypes.func,
+    onClearImportList: PropTypes.func,
     branchCompanyId: PropTypes.string,
     deliveryWarehouseCode: PropTypes.string,
     goodsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+    importList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
     goodsAddOn: PropTypes.objectOf(PropTypes.any)
 };
 

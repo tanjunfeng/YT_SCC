@@ -41,7 +41,8 @@ class Excel extends PureComponent {
             method: 'post',
             processData: false,
             data: formData,
-            success: () => {
+            success: (res) => {
+                this.props.onChange(res.data);
                 this.setState({
                     fileList: [],
                     uploading: false,
@@ -105,7 +106,8 @@ class Excel extends PureComponent {
 
 Excel.propTypes = {
     disabled: PropTypes.bool,
-    value: PropTypes.objectOf(PropTypes.any)
+    value: PropTypes.objectOf(PropTypes.any),
+    onChange: PropTypes.func
 }
 
 export default Excel;

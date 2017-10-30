@@ -75,6 +75,14 @@ class GoodsForm extends PureComponent {
         });
     }
 
+    handleImport = (list) => {
+        const dist = [];
+        list.forEach(item => {
+            dist.push(this.getRow(item));
+        });
+        this.props.onImport(dist);
+    }
+
     handleSubmit = () => {
         this.props.onSubmit();
     }
@@ -99,6 +107,7 @@ class GoodsForm extends PureComponent {
                             <FormItem className="file-upload">
                                 <Excel
                                     value={excelParams}
+                                    onChange={this.handleImport}
                                 />
                             </FormItem>
                             <FormItem>
@@ -129,6 +138,7 @@ GoodsForm.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     queryGoodsInfo: PropTypes.func,
     onChange: PropTypes.func,
+    onImport: PropTypes.func,
     onSubmit: PropTypes.func
 };
 

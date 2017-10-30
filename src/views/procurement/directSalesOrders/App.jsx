@@ -27,6 +27,7 @@ class DirectSalesOrders extends PureComponent {
         branchCompanyId: '',
         deliveryWarehouseCode: '',
         goodsList: [],
+        importList: [],
         goodsAddOn: null
     }
 
@@ -48,6 +49,14 @@ class DirectSalesOrders extends PureComponent {
         this.setState({
             goodsList: []
         });
+    }
+
+    handleImport = (importList) => {
+        this.setState({ importList });
+    }
+
+    handleClearImportList = () => {
+        this.setState({ importList: [] });
     }
 
     handleSubmit = () => {
@@ -74,14 +83,17 @@ class DirectSalesOrders extends PureComponent {
                 <GoodsForm
                     value={{ branchCompanyId, deliveryWarehouseCode }}
                     onChange={this.handleGoodsFormChange}
+                    onImport={this.handleImport}
                     onSubmit={this.handleSubmit}
                 />
                 <GoodsTable
                     goodsList={this.state.goodsList}
                     goodsAddOn={this.state.goodsAddOn}
+                    importList={this.state.importList}
                     branchCompanyId={this.state.branchCompanyId}
                     deliveryWarehouseCode={this.state.deliveryWarehouseCode}
                     onChange={this.handleGoodsListChange}
+                    onClearImportList={this.handleClearImportList}
                 />
             </div>
         );
