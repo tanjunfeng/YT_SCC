@@ -9,13 +9,14 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Row, Button, Upload, Icon, message } from 'antd';
+import { Form, Row, Button } from 'antd';
 import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { AddingGoodsByStore } from '../../../container/search';
 import { queryGoodsInfo } from '../../../actions/procurement';
 import Utils from '../../../util/util';
+import { Excel } from '../../../container/upload';
 
 const FormItem = Form.Item;
 
@@ -60,28 +61,6 @@ class GoodsForm extends PureComponent {
         return record;
     }
 
-    uploadProps = {
-        name: 'uploadProps',
-        action: `${window.config.apiHost}directStore/fileUpload`,
-            // ?branchCompanyId=${this.props.value.branchCompanyId}
-            // &deliveryWarehouseCode=${this.props.value.deliveryWarehouseCode}`,
-        headers: {
-            authorization: 'authorization-text',
-        },
-        onChange(info) {
-            if (info.file.status !== 'uploading') {
-                // console.log(info.file, info.fileList);
-            }
-            if (info.file.status === 'done') {
-                // branchCompanyId: this.props.value.branchCompanyId,
-                // deliveryWarehouseCode: this.props.value.deliveryWarehouseCode
-                message.success(`${info.file.name} file uploaded successfully`);
-            } else if (info.file.status === 'error') {
-                message.error(`${info.file.name} file upload failed.`);
-            }
-        },
-    };
-
     handleGoodsChange = ({ record }) => {
         const { branchCompanyId, deliveryWarehouseCode } = this.props.value;
         if (record === undefined || branchCompanyId === '') {
@@ -114,11 +93,12 @@ class GoodsForm extends PureComponent {
                                 />
                             </FormItem>
                             <FormItem className="file-upload">
-                                <Upload {...this.uploadProps}>
-                                    <Button type="primary" size="default" disabled={this.props.value.branchCompanyId === ''}>
-                                        <Icon type="upload" /> Excel 导入
-                                        </Button>
-                                </Upload>
+                                <Excel
+                                    value={{
+                                        branchCompanyId: this.props.value.branchCompanyId,
+                                        deliveryWarehouseCode: this.props.value.deliveryWarehouseCode
+                                    }}
+                                />
                             </FormItem>
                             <FormItem>
                                 <a className="download" target="_blank" href={`${window.config.apiHost}directStore/downloadExcelModel`}>
