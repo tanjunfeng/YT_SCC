@@ -17,9 +17,7 @@ import {
     Icon,
     Menu,
     Dropdown,
-    Modal,
-    message,
-    Button
+    Modal
 } from 'antd';
 
 import { returnGoodsList } from '../../../actions';
@@ -43,9 +41,6 @@ class ReturnGoodsList extends PureComponent {
         this.searchParams = {};
         //初始页号
         this.current = 1
-        this.state = {
-
-        }
     }
 
     componentDidMount() {
