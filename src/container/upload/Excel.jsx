@@ -21,22 +21,23 @@ class Excel extends PureComponent {
         uploading: false,
     }
 
+    url = `${window.config.apiHost}directStore/fileUpload`;
+
     handleUpload = () => {
         const { fileList } = this.state;
         const formData = new FormData();
-        fileList.forEach((file) => {
-            formData.append('files[]', file);
-        });
         const params = this.props.value;
+        fileList.forEach((file) => {
+            formData.append('file', file);
+        });
         Object.keys(params).forEach(key => {
             formData.append([key], params[key]);
         });
         this.setState({
             uploading: true,
         });
-
         reqwest({
-            url: `${window.config.apiHost}directStore/fileUpload`,
+            url: this.url,
             method: 'post',
             processData: false,
             data: formData,
@@ -61,8 +62,8 @@ class Excel extends PureComponent {
         const length = this.state.fileList.length;
         const branchCompanyId = this.props.value.branchCompanyId || '';
         const canUpdate = !uploading && length === 0 && branchCompanyId !== '';
-        const uploadProps = {
-            action: `${window.config.apiHost}directStore/fileUpload`,
+        const props = {
+            action: this.url,
             onRemove: (file) => {
                 this.setState(({ fileList }) => {
                     const index = fileList.indexOf(file);
@@ -83,7 +84,7 @@ class Excel extends PureComponent {
         };
         return (
             <div className="excel">
-                <Upload {...uploadProps} className="choos-file">
+                <Upload {...props} className="choos-file">
                     <Button disabled={!canUpdate}>
                         <Icon type="upload" /> 选择文件
                     </Button>
