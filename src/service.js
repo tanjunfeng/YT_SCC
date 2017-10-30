@@ -76,6 +76,9 @@ export const exportPaymentList = '/settlement/downloadFranchiseePayment';
 // 下载采购订单PDF
 export const exportProcurementPdf = 'pmPurchaseOrder/exportPdf';
 
+// 根据退货单id下载PDF文件
+export const exportReturnProPdf = '/pmPurchaseRefund/exportPdf';
+
 // 下载库存调整列表
 export const exportStoreAdList = 'imAdjustment/exportListImAdjustment';
 
@@ -566,9 +569,11 @@ export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', par
 // 查询采购单列表
 export const repushPurchaseReceipt = (params) => http.get('/pmPurchaseReceipt/rePushPurchaseReceiptToMQ', params);
 // 查询采购退货列表
-export const fetchReturnMngList = (params) => http.get('/pmPurchaseRefund/queryRefundDetailById', params);
+export const fetchReturnMngList = (params) => http.get('/pmPurchaseRefund/queryPurchaseRefundList', params);
+// 查询退货流水号
+export const getRefundNo = (params) => http.get('/pmPurchaseRefund/getRefundNo', params);
 // 查询采购退货列表详情
-export const fetchReturnPoRcvInit = (params) => http.get('/pmPurchaseRefund/queryPurchaseRefundList', params);
+export const fetchReturnPoRcvDetail = (params) => http.get('/pmPurchaseRefund/queryRefundDetailById', params);
 
 // 审批
 export const auditPo = (params) => http.post('/provider/auditPo', params);

@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-27 14:37:35
+ * @Last Modified time: 2017-10-30 18:10:02
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -19,8 +19,7 @@ import {
     Table,
     Menu,
     Dropdown,
-    Modal,
-    message
+    Modal
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -35,7 +34,7 @@ import {
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
-import { repushPurchaseReceipt } from '../../../actions/procurement';
+import { getRefundNo, clearRefundNo } from '../../../actions/procurement';
 import {
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -61,7 +60,8 @@ const confirm = Modal.confirm;
     getSupplierLocMap,
     fetchReturnMngList,
     pubFetchValueList,
-    repushPurchaseReceipt
+    getRefundNo,
+    clearRefundNo
 }, dispatch))
 
 class ReturnManagementList extends PureComponent {
@@ -207,30 +207,9 @@ class ReturnManagementList extends PureComponent {
         this.searchParams = {};
         // 重置form
         this.props.form.resetFields();
-        this.handleSupplyClear();
+        this.handleSupplierClear();
+        this.handleSupplierAddressClear();
         this.handleAddressClear();
-    }
-
-    // 获取供应商编号
-    handleSupplyChoose = ({ record }) => {
-        this.setState({
-            spAdrId: record.spId,
-            spId: record.spId,
-            orgId: this.props.employeeCompanyId,
-            isSupplyAdrDisabled: false
-        });
-        this.handleSupplierAddressClear();
-    }
-
-    // 供应商值清单-清除
-    handleSupplyClear = () => {
-        this.setState({
-            spAdrId: '',
-            spId: '',
-            isSupplyAdrDisabled: true
-        });
-        this.supplySearchMind.reset();
-        this.handleSupplierAddressClear();
     }
 
     /**
@@ -306,10 +285,8 @@ class ReturnManagementList extends PureComponent {
             title: '删除退货单',
             content: '删除退货单将不能恢复，确认要删除此退货单?',
             onOk() {
-                console.log('OK');
             },
             onCancel() {
-                console.log('Cancel');
             },
         });
     }
@@ -340,17 +317,22 @@ class ReturnManagementList extends PureComponent {
     // 供货供应商-值清单
     handleSupplyChoose = ({ record }) => {
         this.setState({
-            stopBuyDisabled: false,
             spId: record.spAdrid
         })
     }
 
     // 供货供应商值清单-清除
-    handleSupplyClear = () => {
+    handleSupplierClear = () => {
         this.setState({
-            stopBuyDisabled: true,
             spId: ''
         });
+        this.supplySearchMind.reset();
+    }
+
+    handleCreact = () => {
+        const { pathname } = this.props.location;
+        this.prosp.getRefundNo()
+        this.props.history.push(`${pathname}/returnManagementCreat`);
     }
 
     /**
@@ -403,12 +385,12 @@ class ReturnManagementList extends PureComponent {
     }
 
     renderActions(text, record, index) {
-        const { purchaseRefundNo, status, refundAdr } = record;
+        const { id, status, refundAdr } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/${purchaseRefundNo}`}>退货单详情</Link>
+                    <Link to={`${pathname}/returnManagementDetail/${id}`}>退货单详情</Link>
                 </Menu.Item>
                 {
                     // 状态为“制单”时可用
@@ -551,7 +533,7 @@ class ReturnManagementList extends PureComponent {
                                             }, 'querySuppliersList')}
                                             addonBefore=""
                                             onChoosed={this.handleSupplyChoose}
-                                            onClear={this.handleSupplyClear}
+                                            onClear={this.handleSupplierClear}
                                             renderChoosedInputRaw={(row) => (
                                                 <div>{row.spId}-{row.companyName}</div>
                                             )}
@@ -594,7 +576,6 @@ class ReturnManagementList extends PureComponent {
                                             renderChoosedInputRaw={(row) => (
                                                 <div>{row.providerNo} - {row.providerName}</div>
                                             )}
-                                            disabled={this.state.isSupplyAdrDisabled}
                                             pageSize={6}
                                             columns={[{
                                                 title: '供应商地点编码',
@@ -637,7 +618,6 @@ class ReturnManagementList extends PureComponent {
                                             fetch={this.handleGetAddressMap}
                                             onChoosed={this.handleAddressChoose}
                                             onClear={this.handleAddressClear}
-                                            disabled={this.state.locDisabled}
                                             renderChoosedInputRaw={(row) => (
                                                 <div>
                                                     {row[this.state.locationData.code]} -
@@ -684,7 +664,7 @@ class ReturnManagementList extends PureComponent {
                         <Row gutter={40} type="flex" justify="end">
                             <Col className="ant-col-10 ant-col-offset-10 gutter-row" style={{ textAlign: 'right'}}>
                                 <FormItem>
-                                    <Button size="default" type="primary" >
+                                    <Button size="default" type="primary" onClick={this.handleCreact}>
                                         新建
                                     </Button>
                                 </FormItem>
@@ -741,6 +721,7 @@ ReturnManagementList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     returnMngList: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
 };
 

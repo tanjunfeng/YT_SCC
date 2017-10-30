@@ -23,11 +23,12 @@ import {
     updatePmPurchaseOrder,
     repushPurchaseReceipt as repushPurchaseReceiptService,
     fetchReturnMngList as queryReturnMngListService,
+    getRefundNo as getRefundNoActionService,
     queryDirectInfo as queryDirectInfoService,
     queryGoodsInfo as queryGoodsInfoService,
     updateGoodsInfo as updateGoodsInfoService,
     insertDirectOrder as insertDirectOrderService,
-    fetchReturnPoRcvInit as queryReturnPoDetailSevice
+    fetchReturnPoRcvDetail as queryReturnPoDetailSevice
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -321,9 +322,7 @@ export const fetchPoRcvDetail = (params) => dispatch => (
 )
 
 /**
- * 查询采购单详情并创建收货单初始信息
- * 1.根据采购单id查询采购单相关信息
- * 2.根据查询结果初始显示采购收货单
+ * 查询收货单详情
  * @param {*} data
  */
 const rcvPoRcvInit = (data) => ({
@@ -345,9 +344,7 @@ export const fetchPoRcvInit = (params) => dispatch => (
 );
 
 /**
- * 查询采购单详情并创建退货单初始信息
- * 1.根据采购单id查询采购单相关信息
- * 2.根据查询结果初始显示采购收货单
+ * 查询退货单详情
  * @param {*} data
  */
 const returnPoRcvInit = (data) => ({
@@ -355,7 +352,7 @@ const returnPoRcvInit = (data) => ({
     payload: data
 });
 
-export const fetchReturnPoRcvInit = (params) => dispatch => (
+export const fetchReturnPoRcvDetail = (params) => dispatch => (
     new Promise((resolve, reject) => {
         queryReturnPoDetailSevice(params)
             .then(res => {
@@ -504,6 +501,34 @@ export const fetchReturnMngList = (params) => dispatch => (
             })
     })
 );
+
+/**
+ * 查询采购退货流水号
+ * @param {*} data
+ */
+const getRefundNoAction = (data) => ({
+    type: ActionType.GET_REFUND_NO_ACTION,
+    payload: data
+});
+
+export const getRefundNo = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        getRefundNoActionService(params)
+            .then(res => {
+                dispatch(getRefundNoAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+// 清除采购退货流水号
+export const clearDirectInfo = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_REFUND_NO_INFO,
+    payload: {}
+}));
 
 /*
 * 查询根据门店编号直营店信息

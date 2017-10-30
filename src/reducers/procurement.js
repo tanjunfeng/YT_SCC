@@ -53,7 +53,9 @@ const initState = fromJS({
     // 直营店信息
     directInfo: {},
     // 单个商品详情
-    goodsInfo: {}
+    goodsInfo: {},
+    // 退货详情
+    poReturn: {}
 });
 
 export default function (state = initState, action) {
@@ -148,6 +150,8 @@ export default function (state = initState, action) {
 
         case ActionType.RECEIVE_PO_RCV_DETAIL:// 收货单详情
             return state.set('poRcv', fromJS(action.payload));
+        case ActionType.RETURN_PO_RCV_INIT:// 退货单详情
+            return state.set('poReturn', fromJS(action.payload));
 
         case ActionType.RECEIVE_NEW_PURCHASE_ORDER:// 收货单详情
             return state.set('newPcOdData', fromJS(action.payload));
