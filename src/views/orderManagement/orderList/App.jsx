@@ -619,7 +619,7 @@ class OrderManagementList extends Component {
                                                     className="input"
                                                     placeholder="请输入电商订单编号"
                                                 />
-                                                )}
+                                            )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -654,6 +654,12 @@ class OrderManagementList extends Component {
                                             size="default"
                                             onClick={this.handleOrderReset}
                                         >重置</Button>
+                                    </FormItem>
+                                    <FormItem>
+                                        <Button
+                                            size="default"
+                                            onClick={this.handleOrderOutput}
+                                        >导出</Button>
                                     </FormItem>
                                 </Col>
                             </Row>
