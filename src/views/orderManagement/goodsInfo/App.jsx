@@ -47,7 +47,7 @@ class GoodsInfo extends PureComponent {
             this.renderColumns();
         }
         if (nextProps.canBeSplit === false && this.props.canBeSplit !== nextProps.canBeSplit) {
-            columns.splice(columns.length - 2, 2);
+            this.removeColumns();
         }
     }
 
@@ -114,6 +114,34 @@ class GoodsInfo extends PureComponent {
         this.setState({ goodsList });
     }
 
+    removeColumns = () => {
+        if (columns[columns.length - 1].dataIndex === 'sub2') {
+            columns.splice(columns.length - 2, 2);
+        }
+    }
+
+    /**
+     * 渲染显示单元格，根据数量计算价格
+     */
+    renderReadOnlyCell = (text, record) => {
+        let value = text;
+        if (value === undefined) {
+            // 避免出现 NaN 值
+            value = record.quantityLeft;
+        }
+        const res = `${value}，￥${value * record.itemPrice.salePrice}`;
+        return res;
+    }
+
+    renderColumns = () => {
+        if (columns[columns.length - 1].dataIndex !== 'sub2') {
+            columns.push(
+                { title: '子订单1', dataIndex: 'sub1', render: this.renderReadOnlyCell },
+                { title: '子订单2', dataIndex: 'sub2', render: this.renderEditableCell }
+            );
+        }
+    }
+
     /**
      * 渲染可编辑单元格
      */
@@ -133,26 +161,6 @@ class GoodsInfo extends PureComponent {
             <span className="sub-total">￥{(value) * record.itemPrice.salePrice}</span>
         </div>);
         return res;
-    }
-
-    /**
-     * 渲染显示单元格，根据数量计算价格
-     */
-    renderReadOnlyCell = (text, record) => {
-        let value = text;
-        if (value === undefined) {
-            // 避免出现 NaN 值
-            value = record.quantityLeft;
-        }
-        const res = `${value}，￥${value * record.itemPrice.salePrice}`;
-        return res;
-    }
-
-    renderColumns = () => {
-        columns.push(
-            { title: '子订单1', dataIndex: 'sub1', render: this.renderReadOnlyCell },
-            { title: '子订单2', dataIndex: 'sub2', render: this.renderEditableCell }
-        );
     }
 
     render() {
