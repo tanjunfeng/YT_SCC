@@ -31,7 +31,6 @@ class Excel extends PureComponent {
         Object.keys(params).forEach(key => {
             formData.append([key], params[key]);
         });
-        console.log(formData);
         this.setState({
             uploading: true,
         });
@@ -59,8 +58,11 @@ class Excel extends PureComponent {
 
     render() {
         const { uploading } = this.state;
-        const props = {
-            action: '//jsonplaceholder.typicode.com/posts/',
+        const length = this.state.fileList.length;
+        const branchCompanyId = this.props.value.branchCompanyId || '';
+        const canUpdate = !uploading && length === 0 && branchCompanyId !== '';
+        const uploadProps = {
+            action: `${window.config.apiHost}directStore/fileUpload`,
             onRemove: (file) => {
                 this.setState(({ fileList }) => {
                     const index = fileList.indexOf(file);
@@ -77,17 +79,17 @@ class Excel extends PureComponent {
                 }));
                 return false;
             },
-            fileList: this.state.fileList,
+            fileList: this.state.fileList
         };
         return (
-            <div>
-                <Upload {...props}>
-                    <Button>
+            <div className="excel">
+                <Upload {...uploadProps} className="choos-file">
+                    <Button disabled={!canUpdate}>
                         <Icon type="upload" /> 选择文件
                     </Button>
                 </Upload>
                 <Button
-                    className="upload-demo-start"
+                    className="upload-start"
                     type="primary"
                     onClick={this.handleUpload}
                     disabled={this.state.fileList.length === 0}

@@ -80,6 +80,10 @@ class GoodsForm extends PureComponent {
     }
 
     render() {
+        const excelParams = Utils.removeInvalid({
+            branchCompanyId: this.props.value.branchCompanyId,
+            deliveryWarehouseCode: this.props.value.deliveryWarehouseCode
+        });
         return (
             <div className="direct-sales-orders-form goods-form">
                 <Form layout="inline">
@@ -94,10 +98,7 @@ class GoodsForm extends PureComponent {
                             </FormItem>
                             <FormItem className="file-upload">
                                 <Excel
-                                    value={{
-                                        branchCompanyId: this.props.value.branchCompanyId,
-                                        deliveryWarehouseCode: this.props.value.deliveryWarehouseCode
-                                    }}
+                                    value={excelParams}
                                 />
                             </FormItem>
                             <FormItem>
