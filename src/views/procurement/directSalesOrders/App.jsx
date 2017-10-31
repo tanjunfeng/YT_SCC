@@ -14,11 +14,11 @@ import StoresForm from './storesForm';
 import GoodsForm from './goodsForm';
 import GoodsTable from './goodsTable';
 import {
-    insertDirectOrder
+    insertDirectOrder, batchCheckStorage
 } from '../../../actions/procurement';
 
 @connect(() => ({}), dispatch => bindActionCreators({
-    insertDirectOrder
+    insertDirectOrder, batchCheckStorage
 }, dispatch))
 
 class DirectSalesOrders extends PureComponent {
@@ -67,6 +67,18 @@ class DirectSalesOrders extends PureComponent {
                 quantity: goods.quantity
             });
         });
+        const { branchCompanyId, deliveryWarehouseCode, goodsList } = this.state;
+        const arr = [];
+        goodsList.forEach(item => {
+            arr.push({
+                productId: item.productId,
+                branchCompanyId,
+                loc: deliveryWarehouseCode
+            });
+        });
+        this.props.batchCheckStorage(arr).then((res) => {
+            console.log(res);
+        });
         this.props.insertDirectOrder({
             storeId: this.state.storeId,
             directStoreCommerItemVoList: dist
@@ -112,7 +124,8 @@ class DirectSalesOrders extends PureComponent {
 }
 
 DirectSalesOrders.propTypes = {
-    insertDirectOrder: PropTypes.func
+    insertDirectOrder: PropTypes.func,
+    batchCheckStorage: PropTypes.func
 };
 
 export default withRouter(Form.create()(DirectSalesOrders));

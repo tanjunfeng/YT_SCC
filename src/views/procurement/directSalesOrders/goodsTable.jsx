@@ -103,8 +103,8 @@ class GoodsTable extends PureComponent {
             });
             this.props.batchCheckStorage({
                 directValidateInventoryVos: dist
-            }).then(() => {
-                resolve(goodsList);
+            }).then((res) => {
+                resolve(res);
             }).catch(err => {
                 reject(err);
             });
