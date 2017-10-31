@@ -76,9 +76,7 @@ class DirectSalesOrders extends PureComponent {
                 loc: deliveryWarehouseCode
             });
         });
-        this.props.batchCheckStorage(arr).then((res) => {
-            console.log(res);
-        });
+        this.props.batchCheckStorage(arr);
         this.props.insertDirectOrder({
             storeId: this.state.storeId,
             directStoreCommerItemVoList: dist
