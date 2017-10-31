@@ -22,7 +22,6 @@ import { payChannel } from '../../../constant/searchParams';
 import { modifyPayModalVisible } from '../../../actions/modify/modifyPayModalVisible';
 import { modifyAddPaymentInfo, fetchPaymentDetailInfo } from '../../../actions/order';
 
-
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -57,18 +56,15 @@ class PayModal extends Component {
                 params.payDate = moment().format(DATE_FORMAT);
                 params.amount = params.amount.toString();
                 modifyAddPaymentInfo(params)
-                .then((res) => {
-                    if (res.code === 200 && res.data) {
-                        message.error(res.data);
-                    }
-                    this.props.modifyPayModalVisible({ isShow: false });
-                    // 清空数据
-                    this.props.form.resetFields();
-                    this.setState({
-                        textAreaNote: ''
+                    .then((res) => {
+                        if (res.code === 200 && res.data) {
+                            message.error(res.data);
+                        }
+                        this.handleNewPayCancel();
+                        this.props.fetchPaymentDetailInfo(
+                            { orderId: this.props.orderDetailData.id }
+                        );
                     });
-                    this.props.fetchPaymentDetailInfo({orderId: this.props.orderDetailData.id});
-                });
             }
         });
     }
@@ -77,8 +73,11 @@ class PayModal extends Component {
      * 模态框取消
      */
     handleNewPayCancel = () => {
+        this.props.form.resetFields();
+        this.setState({ textAreaNote: '' });
         this.props.modifyPayModalVisible({ isShow: false });
     }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const { payModalVisible } = this.props;
@@ -171,14 +170,16 @@ class PayModal extends Component {
                                 <div>
                                     <span className="sc-form-item-label">参考号/交易号：</span>
                                     {getFieldDecorator('tranNum', {
-                                        rules: [{ required: true, message: '请填写参考号/交易号' }],
+                                        rules: [{ required: true, message: '请填写参考号/交易号' }, {
+                                            validator: Util.limit12to20Places
+                                        }],
                                     })(
                                         <Input
                                             className="input"
                                             placeholder="参考号/交易号"
                                             size="default"
                                         />
-                                    )}
+                                        )}
                                 </div>
                             </FormItem>
                         </Col>
@@ -191,12 +192,13 @@ class PayModal extends Component {
                                         initialValue: moment(new Date(), DATE_FORMAT),
                                         rules: [{
                                             required: true,
-                                            message: '请填写日期'}],
+                                            message: '请填写日期'
+                                        }]
                                     })(
                                         <DatePicker
                                             placeholder="日期"
                                         />
-                                    )}
+                                        )}
                                 </div>
                             </FormItem>
                         </Col>
@@ -208,7 +210,7 @@ class PayModal extends Component {
                                     <TextArea
                                         autosize={{ minRows: 3, maxRows: 6 }}
                                         value={this.state.textAreaNote}
-                                        style={{resize: 'none' }}
+                                        style={{ resize: 'none' }}
                                         maxLength="250"
                                         onChange={(e) => {
                                             this.setState({
@@ -234,9 +236,6 @@ PayModal.propTypes = {
     payModalVisible: PropTypes.bool,
     orderDetailData: PropTypes.objectOf(PropTypes.any),
     totalAmount: PropTypes.number
-}
-
-PayModal.defaultProps = {
 }
 
 export default withRouter(Form.create()(PayModal));
