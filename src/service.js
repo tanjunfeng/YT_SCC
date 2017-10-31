@@ -570,10 +570,16 @@ export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', par
 export const repushPurchaseReceipt = (params) => http.get('/pmPurchaseReceipt/rePushPurchaseReceiptToMQ', params);
 // 查询采购退货列表
 export const fetchReturnMngList = (params) => http.get('/pmPurchaseRefund/queryPurchaseRefundList', params);
+// 查询退货单审批列表
+export const queryAuditPurchaseRefundList = (params) => http.get('/pmPurchaseRefund/queryAuditPurchaseRefundList', params);
+// 查看退货单审批意见
+export const queryApprovalInfo = (params) => http.get('/processAuditLog/queryApprovalInfo', params);
 // 查询退货流水号
 export const getRefundNo = (params) => http.get('/pmPurchaseRefund/getRefundNo', params);
 // 查询采购退货列表详情
 export const fetchReturnPoRcvDetail = (params) => http.get('/pmPurchaseRefund/queryRefundDetailById', params);
+// 查询采购退货列表详情
+export const deleteBatchRefundOrder = (params) => http.get('/pmPurchaseRefund/deleteBatchRefundOrder', params);
 
 // 审批
 export const auditPo = (params) => http.post('/provider/auditPo', params);
@@ -592,6 +598,8 @@ export const querycategories = (params) => http.get('/category/queryCategories',
 
 // 商品值清单
 export const queryMaterialMap = (params) => http.get('/provider/queryMaterialMap', params);
+// 商品值清单
+export const queryPurchaseOrderProducts = (params) => http.get('/pmPurchaseRefund/queryPurchaseOrderProducts', params);
 // 删除处于草稿状态的订单
 export const deletePurchaseList = (params) => http.get('/pmPurchaseOrder/batchDeletePmPurchaseOrderByIds', params);
 // 查询采购单打印列表
@@ -775,6 +783,9 @@ export const supplierSearchBox = (params) => http.get('/supplier/supplierSearchB
 
 // 供应商地点选择组件
 export const supplierAdrSearchBox = (params) => http.get('/supplier/supplierAdrSearchBox', params);
+
+// 品牌值清单
+export const queryPurchaseOrderBrands = (params) => http.get('/pmPurchaseRefund/queryPurchaseOrderBrands', params);
 
 // 根据条件查询销售价格区间列表
 export const findStepPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);

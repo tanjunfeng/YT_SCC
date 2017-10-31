@@ -3,7 +3,7 @@
  * @Description: 采购退货新建编辑页
  * @CreateDate: 2017-10-27 11:26:16
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-30 17:42:43
+ * @Last Modified time: 2017-10-31 16:27:36
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -557,14 +557,14 @@ class ReturnManagementCreat extends PureComponent {
                                 <span>
                                     <SearchMind
                                         style={{ zIndex: 9 }}
-                                        compKey="providerNo"
+                                        compKey="productBrandId"
                                         ref={ref => { this.joiningAdressMind = ref }}
                                         fetch={(params) =>
                                         this.props.pubFetchValueList(Util.removeInvalid({
                                             condition: params.value,
                                             pageSize: params.pagination.pageSize,
                                             pageNum: params.pagination.current || 1
-                                        }), 'supplierAdrSearchBox').then((res) => {
+                                        }), 'queryPurchaseOrderBrands').then((res) => {
                                             const dataArr = res.data.data || [];
                                             if (!dataArr || dataArr.length === 0) {
                                                 message.warning('没有可用的数据');
@@ -574,17 +574,17 @@ class ReturnManagementCreat extends PureComponent {
                                         onChoosed={this.handleAdressChoose}
                                         onClear={this.handleAdressClear}
                                         renderChoosedInputRaw={(res) => (
-                                            <div>{res.providerNo} - {res.providerName}</div>
+                                            <div>{res.productBrandId} - {res.productBrandName}</div>
                                         )}
                                         pageSize={6}
                                         columns={[
                                             {
                                                 title: '品牌编码',
-                                                dataIndex: 'providerNo',
+                                                dataIndex: 'productBrandId',
                                                 maxWidth: 98
                                             }, {
                                                 title: '品牌名称',
-                                                dataIndex: 'providerName'
+                                                dataIndex: 'productBrandName'
                                             }
                                         ]}
                                     />

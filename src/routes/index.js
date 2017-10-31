@@ -606,6 +606,11 @@ const routes = [
                             exact
                             render={() => <Bundle load={ReturnManagementCreat}>{(App) => <App />}</Bundle>}
                         />
+                        <Route
+                            path="/returnManagementList/returnManagementCreat/:id"
+                            exact
+                            render={() => <Bundle load={ReturnManagementCreat}>{(App) => <App />}</Bundle>}
+                        />
                     </Switch>
                 )
             },

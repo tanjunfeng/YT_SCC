@@ -21,6 +21,7 @@
                 "totalRealRefundAmount": 16,
                 "totalRealRefundMoney": 11,
                 "returnAmount": 19,
+                "businessId": 19,
                 "createTime": 1508318870020,
                 "status": "已提交"
             },
@@ -36,9 +37,11 @@
                 "totalRefundMoney": 13,
                 "totalRealRefundAmount": 14,
                 "totalRealRefundMoney": 15,
+                "businessId": 15,
                 "returnAmount": 16,
                 "createTime": 152831887201,
-                "status": "制单"
+                "status": "制单",
+                "approval": true
             },
             {
                 "id":3,
@@ -51,6 +54,7 @@
                 "totalRefundCost": 11,
                 "totalRefundMoney": 13,
                 "totalRealRefundAmount": 14,
+                "businessId": 14,
                 "totalRealRefundMoney": 15,
                 "returnAmount": 16,
                 "createTime": 150831887201,
@@ -66,6 +70,7 @@
                 "totalRefundAmount": 12,
                 "totalRefundCost": 11,
                 "totalRefundMoney": 13,
+                "businessId": 13,
                 "totalRealRefundAmount": 14,
                 "totalRealRefundMoney": 15,
                 "returnAmount": 16,
@@ -80,6 +85,7 @@
                 "adrType": "仓库",
                 "refundAdr": "门店",
                 "totalRefundAmount": 12,
+                "businessId": 12,
                 "totalRefundCost": 11,
                 "totalRefundMoney": 13,
                 "totalRealRefundAmount": 14,

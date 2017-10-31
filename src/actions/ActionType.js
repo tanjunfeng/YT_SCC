@@ -192,6 +192,8 @@ export default {
     GET_SUPPLIER_MAP: 'GET_SUPPLIER_MAP',
     // 供应商地点值清单
     GET_SUPPLIER_LOC_MAP: 'GET_SUPPLIER_LOC_MAP',
+    // 品牌值清单
+    QUERY_PUR_ORDER_BRANDS: 'QUERY_PUR_ORDER_BRANDS',
     // 大类值清单
     GET_BIG_CLASS_MAP: 'GET_BIG_CLASS_MAP',
     /** 值清单获取action，请根据实际情况拆分到单独action文件 end */
@@ -285,10 +287,16 @@ export default {
     REPUSH_PURCHASE_RECEIPT: 'REPUSH_PURCHASE_RECEIPT',
     // 退货列表
     RECEIVE_RETURN_MNG_LIST: 'RECEIVE_RETURN_MNG_LIST',
+    // 查询退货单审批列表
+    QUERY_AUDIT_PURCHASE_LIST: 'QUERY_AUDIT_PURCHASE_LIST',
+    // 查看退货单审批意见
+    QUERY_APPROVAL_INFO: 'QUERY_APPROVAL_INFO',
     // 查询退货流水号
     GET_REFUND_NO_ACTION: 'GET_REFUND_NO_ACTION',
     // 清除退货流水号
     CLEAR_REFUND_NO_INFO: 'CLEAR_REFUND_NO_INFO',
+    // 批量删除处于草稿状态的退货单
+    DELETE_BATCH_REFOND_ORDER: 'DELETE_BATCH_REFOND_ORDER',
 
     // 库存调整列表
     RECEIVE_STORE_ADJUST_LIST: 'RECEIVE_STORE_ADJUST_LIST',
@@ -321,6 +329,8 @@ export default {
     // 获取所有子公司列表
     FIND_ALL_COMPANIES: 'FIND_ALL_COMPANIES',
     CLEAR_ALL_COMPANIES: 'CLEAR_ALL_COMPANIES',
+    // 商品值清单
+    QUERY_PUR_ORDER_PRO_ACTION: 'QUERY_PUR_ORDER_PRO_ACTION',
 
     // 根据 parentId 查询品类
     FETCH_CATEGORY_BY_PARENT: 'FETCH_CATEGORY_BY_PARENT',

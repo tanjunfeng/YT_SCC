@@ -55,7 +55,13 @@ const initState = fromJS({
     // 单个商品详情
     goodsInfo: {},
     // 退货详情
-    poReturn: {}
+    poReturn: {},
+    // 查询退货流水号
+    getRefundNumebr: {},
+    // 退货单审批列表
+    queryPurchaseRefundList: {},
+    // 退货单审批意见
+    approvalInfo: {},
 });
 
 export default function (state = initState, action) {
@@ -152,6 +158,12 @@ export default function (state = initState, action) {
             return state.set('poRcv', fromJS(action.payload));
         case ActionType.RETURN_PO_RCV_INIT:// 退货单详情
             return state.set('poReturn', fromJS(action.payload));
+        case ActionType.GET_REFUND_NO_ACTION:// 退货单详情
+            return state.set('getRefundNumebr', fromJS(action.payload));
+        case ActionType.QUERY_AUDIT_PURCHASE_LIST:// 退货单审批列表
+            return state.set('queryPurchaseRefundList', fromJS(action.payload));
+        case ActionType.QUERY_APPROVAL_INFO:// 退货单审批意见
+            return state.set('approvalInfo', fromJS(action.payload));
 
         case ActionType.RECEIVE_NEW_PURCHASE_ORDER:// 收货单详情
             return state.set('newPcOdData', fromJS(action.payload));

@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-30 18:10:02
+ * @Last Modified time: 2017-10-31 15:59:03
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -19,7 +19,8 @@ import {
     Table,
     Menu,
     Dropdown,
-    Modal
+    Modal,
+    message
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -34,14 +35,20 @@ import {
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
-import { getRefundNo, clearRefundNo } from '../../../actions/procurement';
+import {
+    getRefundNo,
+    clearRefundNo,
+    deleteBatchRefundOrder,
+    queryApprovalInfo
+} from '../../../actions/procurement';
 import {
     getWarehouseAddressMap,
     getShopAddressMap,
     getSupplierMap,
     getSupplierLocMap,
-    fetchReturnMngList
+    fetchReturnMngList,
 } from '../../../actions';
+import ApproModal from './approModal';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -52,6 +59,7 @@ const confirm = Modal.confirm;
 @connect(state => ({
     poRcvMngList: state.toJS().procurement.poRcvMngList,
     returnMngList: state.toJS().procurement.returnMngList,
+    getRefundNumebr: state.toJS().procurement.getRefundNumebr,
     employeeCompanyId: state.toJS().user.data.user.employeeCompanyId,
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
@@ -61,7 +69,9 @@ const confirm = Modal.confirm;
     fetchReturnMngList,
     pubFetchValueList,
     getRefundNo,
-    clearRefundNo
+    clearRefundNo,
+    deleteBatchRefundOrder,
+    queryApprovalInfo
 }, dispatch))
 
 class ReturnManagementList extends PureComponent {
@@ -80,6 +90,7 @@ class ReturnManagementList extends PureComponent {
             isSupplyAdrDisabled: true, // 供应商地点禁用
             locDisabled: true,  // 地点禁用
             locationData: {},
+            isVisibleModal: false,
             adrTypeCode: '',    // 地点编码
             receivedTypeCode: ''  // 收货单状态编码
         };
@@ -280,14 +291,41 @@ class ReturnManagementList extends PureComponent {
         this.poAddress.reset();
     }
 
-    showConfirm = () => {
+    showConfirm = (record) => {
         confirm({
             title: '删除退货单',
             content: '删除退货单将不能恢复，确认要删除此退货单?',
             onOk() {
+                if (record.approval) {
+                    message.error('该退货单不能删除。原因：只能删除制单状态且无审批记录退货单!')
+                } else {
+                    this.props.deleteBatchRefundOrder({id: record.id}).then((res) => {
+                        if (res.code === 200) {
+                            message.success(res.message)
+                        }
+                    })
+                }
+                return false
             },
             onCancel() {
             },
+        });
+    }
+
+    showModal = () => {
+        this.setState({
+            isVisibleModal: true,
+        });
+    }
+
+    handleModalOk = () => {
+        this.setState({
+            isVisibleModal: false,
+        });
+    }
+    handleModalCancel = () => {
+        this.setState({
+            isVisibleModal: false,
         });
     }
 
@@ -295,7 +333,13 @@ class ReturnManagementList extends PureComponent {
         const { key } = items;
         switch (key) {
             case 'delete':
-                this.showConfirm();
+                this.showConfirm(record);
+                break;
+            case 'viewApprovalrogress':
+                break;
+            case 'viewApproval':
+                this.showModal();
+                this.props.queryApprovalInfo({businessId: record.businessId})
                 break;
             default:
                 break;
@@ -331,8 +375,21 @@ class ReturnManagementList extends PureComponent {
 
     handleCreact = () => {
         const { pathname } = this.props.location;
-        this.prosp.getRefundNo()
+        this.props.getRefundNo();
         this.props.history.push(`${pathname}/returnManagementCreat`);
+    }
+
+    handleDelete = () => {
+        const { selectedListData } = this.state;
+        const pmRefundOrderIds = [];
+        selectedListData.forEach((item) => {
+            pmRefundOrderIds.push(item.id)
+        });
+        this.props.deleteBatchRefundOrder({pmRefundOrderIds: pmRefundOrderIds.join(',')}).then((res) => {
+            if (res.code === 200) {
+                message.success(res.message)
+            }
+        })
     }
 
     /**
@@ -406,9 +463,7 @@ class ReturnManagementList extends PureComponent {
                     // 状态为“制单”、“已拒绝”时可用；
                     (status === '制单' || status === '已拒绝') ?
                         <Menu.Item key="modify">
-                            <a target="_blank" rel="noopener noreferrer">
-                                修改
-                            </a>
+                            <Link to={`${pathname}/returnManagementCreat/${id}`}>修改</Link>
                         </Menu.Item>
                         : null
                 }
@@ -477,7 +532,6 @@ class ReturnManagementList extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.returnMngList;
-        // const selectListlength = this.state.chooseGoodsList.length === 0;
         const rowSelection = {
             selectedRowKeys: this.state.chooseGoodsList,
             onChange: (selectedRowKeys, selectedRows) => {
@@ -669,7 +723,7 @@ class ReturnManagementList extends PureComponent {
                                     </Button>
                                 </FormItem>
                                 <FormItem>
-                                    <Button size="default" type="danger" >
+                                    <Button size="default" type="danger" onClick={this.handleDelete}>
                                         删除
                                     </Button>
                                 </FormItem>
@@ -708,6 +762,11 @@ class ReturnManagementList extends PureComponent {
                                 onChange: this.onPaginate
                             }}
                         />
+                        <ApproModal
+                            visible={this.state.isVisibleModal}
+                            onOk={this.handleModalOk}
+                            onCancel={this.handleModalCancel}
+                        />
                     </div>
                 </Form>
             </div >
@@ -718,11 +777,14 @@ class ReturnManagementList extends PureComponent {
 ReturnManagementList.propTypes = {
     employeeCompanyId: PropTypes.string,
     fetchReturnMngList: PropTypes.func,
+    getRefundNo: PropTypes.func,
+    queryApprovalInfo: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     returnMngList: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
+    deleteBatchRefundOrder: PropTypes.func,
 };
 
 export default withRouter(Form.create()(ReturnManagementList));

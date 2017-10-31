@@ -1,0 +1,22 @@
+{
+    "timestamp": 1508815060047,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 15,
+        "total": 2,
+        "data": [
+            {
+                "productBrandId": "brand_001",
+                "productBrandName": "测试品牌01"
+            },
+            {
+                "productBrandId": "brand_002",
+                "productBrandName": "测试品牌02"
+            }
+        ]
+    },
+    "success": true
+}

@@ -28,6 +28,8 @@ import {
     queryBranchCompanyInfo,
     queryProductForSelect,
     queryDirectStores,
+    queryPurchaseOrderProducts,
+    queryPurchaseOrderBrands,
     findCompanyBaseInfo as findCompaniesService
 } from '../service';
 
@@ -68,7 +70,11 @@ const pubValueList = {
     // 添加商品
     queryProductForSelect,
     // 查询直营店
-    queryDirectStores
+    queryDirectStores,
+    // 品牌值清单
+    queryPurchaseOrderBrands,
+    // 商品值清单
+    queryPurchaseOrderProducts
 };
 
 const receiveCollapsed = (isCollapsed) => ({
