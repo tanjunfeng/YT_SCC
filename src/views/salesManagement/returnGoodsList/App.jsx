@@ -20,7 +20,7 @@ import {
     Modal
 } from 'antd';
 
-import { returnGoodsList } from '../../../actions';
+import { returnGoodsList, returnGoodsListFormData } from '../../../actions';
 import SearchForm from '../../../components/returnGoodsForm';
 import { PAGE_SIZE } from '../../../constant';
 import { returnGoodsListColumns as columns } from '../columns';
@@ -28,9 +28,11 @@ import { getReturnGoodsOperation } from '../../../service';
 
 
 @connect(state => ({
-    listData: state.toJS().salesManagement.data
+    listData: state.toJS().salesManagement.data,
+    formData: state.toJS().pageParameters.returnGoodsParams
 }), dispatch => bindActionCreators({
-    returnGoodsList
+    returnGoodsList,
+    returnGoodsListFormData
 }, dispatch))
 
 
@@ -44,7 +46,11 @@ class ReturnGoodsList extends PureComponent {
     }
 
     componentDidMount() {
-        this.forData()
+        const { formData } = this.props
+        if (formData.pageNum) {
+            this.current = formData.pageNum
+        }
+        this.forData(formData)
     }
 
     /**
@@ -66,11 +72,14 @@ class ReturnGoodsList extends PureComponent {
     */
 
     forData = (params) => {
-        this.props.returnGoodsList({
+        const { returnGoodsList, returnGoodsListFormData } = this.props
+        let data = {
             pageSize: PAGE_SIZE,
             pageNum: this.current,
             ...params
-        })
+        }
+        returnGoodsListFormData(data)
+        returnGoodsList(data)
     }
 
     /**
@@ -91,18 +100,20 @@ class ReturnGoodsList extends PureComponent {
 
     // 退货单确定或取消
     operation = (id, type) => {
-        getReturnGoodsOperation({
-            returnId: id,
-            operateType: type
+        new Promise((resolve, reject) => {
+            getReturnGoodsOperation({
+                returnId: id,
+                operateType: type
+            })
+                .then(res => {
+                    if (res.success) {
+                        this.forData(this.searchParams)
+                    }
+                })
+                .catch(err => {
+                    reject(err);
+                })
         })
-            .then(res => {
-                if (res.success) {
-                    this.forData(this.searchParams)
-                }
-            })
-            .catch(err => {
-                reject(err);
-            })
     }
 
     //模态框弹出
@@ -160,13 +171,14 @@ class ReturnGoodsList extends PureComponent {
 
     render() {
         columns[columns.length - 1].render = this.renderActions;
-        const { listData = {} } = this.props
+        const { listData = {}, formData } = this.props
         const { data = [], total, pageNum } = listData;
         return (
             <div className="po-mng-list">
                 <SearchForm
                     onSearch={this.applySearch}
                     onReset={this.applyReset}
+                    data={formData}
                 />
                 <div>
                     <Table
@@ -189,7 +201,10 @@ class ReturnGoodsList extends PureComponent {
 }
 
 ReturnGoodsList.propTypes = {
-    returnGoodsList: PropTypes.func
+    returnGoodsList: PropTypes.func,
+    returnGoodsListFormData: PropTypes.func,
+    listData: PropTypes.objectOf(PropTypes.any),
+    formData: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(ReturnGoodsList));

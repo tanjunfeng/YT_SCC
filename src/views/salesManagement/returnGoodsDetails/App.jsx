@@ -20,10 +20,12 @@ import Utils from '../../../util/util';
 import { returnGoodsDetailColumns as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
 import { returnGoodsDetail, returnGoodsDetailClearData } from '../../../actions';
-import { getReturnGoodsOperation } from '../../../service';
+import { getReturnGoodsOperation, getReturnGoodsDetailSave } from '../../../service';
+import Promise from 'bluebird';
 
 const Option = Select.Option;
 const dateFormat = 'YYYY-MM-DD';
+const FormItem = Form.Item;
 
 
 @connect(state => ({
@@ -40,9 +42,7 @@ class ReturnGoodsDetails extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            id: '',
-            returnReasonType: '',
-            returnReason: ''
+            id: ''
         }
     }
 
@@ -71,18 +71,20 @@ class ReturnGoodsDetails extends PureComponent {
 
     // 退货单确定或取消
     operation = (type) => {
-        getReturnGoodsOperation({
-            returnId: this.state.id,
-            operateType: type
+        new Promise((resolve, reject) => {
+            getReturnGoodsOperation({
+                returnId: this.state.id,
+                operateType: type
+            })
+                .then(res => {
+                    if (res.success) {
+                        this.goBack()
+                    }
+                })
+                .catch(err => {
+                    reject(err);
+                })
         })
-            .then(res => {
-                if (res.success) {
-                    this.goBack()
-                }
-            })
-            .catch(err => {
-                reject(err);
-            })
     }
 
     //确认、取消模态框弹出
@@ -103,38 +105,51 @@ class ReturnGoodsDetails extends PureComponent {
 
     //保存模态框弹出
     showConfirmSave = () => {
-        const confirm = Modal.confirm;
-        confirm({
-            title: "提示",
-            content: "换货类型为其他时，请输入相关原因",
-            onOk() { },
-            onCancel() { },
+        Modal.error({
+            title: '提示',
+            content: '当退货类型为其他时，请输入相关原因',
+            okText: '确认'
         });
     }
 
-    //退货原因选择
-    handleChange = (value) => {
-        this.setState({
-            returnReasonType: value
-        })
+    //保存成功模态框弹出
+    showConfirmSaveSuccess = () => {
+        Modal.success({
+            title: '保存成功',
+            content: '编辑内容已成功保存',
+            okText: '确认'
+        });
     }
 
-    //退货原因输入
-    inputChange = (ev) => {
-        this.setState({
-            returnReason: ev.target.value
-        })
-    }
-
-    //点击保存
+    // 保存提交
     save = () => {
-        if (this.state.returnReasonType == '7' && this.state.returnReason == '') {
+        const {
+            returnReasonType,
+            returnReason,
+            description
+            } = this.props.form.getFieldsValue();
+        if (returnReasonType == '7' && returnReason == '') {
             this.showConfirmSave()
         } else {
-            // 等后端接口
-            console.log(this.state.returnReasonType)
-            console.log(this.state.returnReason)
+            // 提交数据
+            new Promise((resolve, reject) => {
+                getReturnGoodsDetailSave({
+                    orderId: this.state.id,
+                    returnReasonType: returnReasonType,
+                    returnReason: returnReason,
+                    description: description
+                })
+                    .then(res => {
+                        if (res.success) {
+                            this.showConfirmSaveSuccess()
+                        }
+                    })
+                    .catch(err => {
+                        reject(err);
+                    })
+            })
         }
+
     }
 
 
@@ -207,29 +222,64 @@ class ReturnGoodsDetails extends PureComponent {
                         </div>
                     </div>
                 </div>
-                <div className="basic-box">
-                    <div className="header">
-                        <Icon type="solution" className="header-icon" />换货原因
+                <Form
+                    layout="inline"
+                    className="ant-advanced-search-form"
+                >
+                    <div className="basic-box">
+                        <div className="header">
+                            <Icon type="solution" className="header-icon" />换货原因
                     </div>
-                    <div className="body body-form">
-                        <Row>
-                            <Col span={4}>
-                                <Select onChange={this.handleChange} disabled={type == 2 ? false : true} defaultValue={data.returnReasonType} style={{ width: '153px' }} size="default">
-                                    {
-                                        reason.data.map((item) => (
-                                            <Option key={item.key} value={item.key}>
-                                                {item.value}
-                                            </Option>
-                                        ))
-                                    }
-                                </Select>
-                            </Col>
-                            <Col span={20}>
-                                <TextArea onChange={this.inputChange} disabled={type == 2 ? false : true} rows={4} size="default" defaultValue={data.returnReason} />
-                            </Col>
-                        </Row>
+                        <div className="body body-form">
+                            <Row>
+                                <Col span={4}>
+                                    <FormItem>
+                                        {getFieldDecorator('returnReasonType', {
+                                            initialValue: data.returnReasonType ? data.returnReasonType : ''
+                                        })(
+                                            <Select style={{ width: '153px' }} size="default">
+                                                {
+                                                    reason.data.map((item) => (
+                                                        <Select.Option key={item.key} value={item.key}>
+                                                            {item.value}
+                                                        </Select.Option>
+                                                    ))
+                                                }
+                                            </Select>
+                                            )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={20}>
+                                    <FormItem>
+                                        {getFieldDecorator(`returnReason`, {
+                                            initialValue: data.returnReason
+                                        })(
+                                            <TextArea className="input-ret" autosize={{ minRows: 4, maxRows: 4 }} disabled={type == 2 ? false : true} size="default" />
+                                            )}
+                                    </FormItem>
+                                </Col>
+                            </Row>
+                        </div>
                     </div>
-                </div>
+                    <div className="basic-box">
+                        <div className="header">
+                            <Icon type="solution" className="header-icon" />备注
+                    </div>
+                        <div className="body body-form">
+                            <Row>
+                                <Col span={24}>
+                                    <FormItem>
+                                        {getFieldDecorator(`description`, {
+                                            initialValue: data.description
+                                        })(
+                                            <TextArea className="input-des" autosize={{ minRows: 4, maxRows: 4 }} disabled={type == 2 ? false : true} size="default" />
+                                            )}
+                                    </FormItem>
+                                </Col>
+                            </Row>
+                        </div>
+                    </div>
+                </Form>
                 <div className="bt-button">
                     {type == 2 ? (
                         <span>
@@ -246,7 +296,9 @@ class ReturnGoodsDetails extends PureComponent {
 }
 
 ReturnGoodsDetails.propTypes = {
-    returnGoodsDetail: PropTypes.func
+    returnGoodsDetail: PropTypes.func,
+    returnGoodsDetailClearData: PropTypes.func,
+    data: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(ReturnGoodsDetails));

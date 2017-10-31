@@ -86,7 +86,7 @@ export const returnGoodsDetailColumns = [{
     dataIndex: 'productImg',
     key: 'productImg',
     render: (text, record) => (
-        <img src={text} className='item-img'/>
+        <img src={text} className='item-img' />
     )
 },
 {

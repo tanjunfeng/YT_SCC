@@ -56,7 +56,6 @@ class ReturGoodsForm extends PureComponent {
         const { onSearch } = this.props;
         const seachParams = this.getSearchParams();
         if (onSearch) {
-            console.log(seachParams)
             onSearch(seachParams);
         }
     }
@@ -73,6 +72,7 @@ class ReturGoodsForm extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
+        const { data } = this.props
         return (
             <div className="search-box">
                 <Form
@@ -83,38 +83,46 @@ class ReturGoodsForm extends PureComponent {
                     <Row gutter={40}>
                         <Col span={8}>
                             <FormItem label='原订单号'>
-                                {getFieldDecorator(`orderId`)(
+                                {getFieldDecorator(`orderId`, {
+                                    initialValue: data.orderId
+                                })(
                                     <Input size="default" placeholder="原订单号" />
-                                )}
+                                    )}
                             </FormItem>
                         </Col>
                         <Col span={8}>
                             <FormItem label='子公司'>
-                                {getFieldDecorator(`branchCompanyId`)(
+                                {getFieldDecorator(`branchCompanyId`, {
+                                    initialValue: data.branchCompanyId
+                                })(
                                     <Input size="default" placeholder="子公司名称" />
-                                )}
+                                    )}
                             </FormItem>
                         </Col>
                         <Col span={8}>
                             <FormItem label='雅堂小超'>
-                                {getFieldDecorator(`franchiseeId`)(
+                                {getFieldDecorator(`franchiseeId`, {
+                                    initialValue: data.franchiseeId
+                                })(
                                     <Input size="default" placeholder="雅堂小超名称" />
-                                )}
+                                    )}
                             </FormItem>
                         </Col>
                     </Row>
                     <Row gutter={40}>
                         <Col span={8}>
                             <FormItem label='退货单号'>
-                                {getFieldDecorator(`id`)(
+                                {getFieldDecorator(`id`, {
+                                    initialValue: data.id
+                                })(
                                     <Input size="default" placeholder="退货单号" />
-                                )}
+                                    )}
                             </FormItem>
                         </Col>
                         <Col span={8}>
                             <FormItem label="退货单状态">
                                 {getFieldDecorator('state', {
-                                    initialValue: returnGoodsStatus.defaultValue
+                                    initialValue: data.state ? data.state : ''
                                 })(
                                     <Select style={{ width: '153px' }} size="default">
                                         {
@@ -131,7 +139,7 @@ class ReturGoodsForm extends PureComponent {
                         <Col span={8}>
                             <FormItem label="收货状态">
                                 {getFieldDecorator('shippingState', {
-                                    initialValue: goodsReceiptStatus.defaultValue
+                                    initialValue: data.shippingState ? data.shippingState : ''
                                 })(
                                     <Select style={{ width: '153px' }} size="default">
                                         {
@@ -151,7 +159,9 @@ class ReturGoodsForm extends PureComponent {
                             <FormItem >
                                 <div className="row middle">
                                     <span className="ant-form-item-label search-mind-label">退货日期</span>
-                                    {getFieldDecorator('createTime')(
+                                    {getFieldDecorator('createTime', {
+                                        initialValue: data.startCreateTime ? [moment(data.startCreateTime), moment(data.endCreateTime)] : null
+                                    })(
                                         <RangePicker
                                             className="date-range-picker"
                                             style={{ width: 250 }}
@@ -163,7 +173,7 @@ class ReturGoodsForm extends PureComponent {
                                             placeholder={['开始日期', '结束日期']}
                                             onChange={this.chooseCreateDate}
                                         />
-                                    )}
+                                        )}
                                 </div>
                             </FormItem>
                         </Col>
@@ -181,7 +191,9 @@ class ReturGoodsForm extends PureComponent {
 }
 
 ReturGoodsForm.propTypes = {
-    formData: PropTypes.func
+    onSearch: PropTypes.func,
+    onReset: PropTypes.func,
+    data: PropTypes.objectOf(PropTypes.any)
 };
 
 export default withRouter(Form.create()(ReturGoodsForm));

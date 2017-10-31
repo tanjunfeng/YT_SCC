@@ -52,3 +52,11 @@ export const returnGoodsDetailClearData = () => ({
     type: ActionType.RETURN_GOODS_DETAIL_CLEAR_DATA
 })
 
+
+//页面返回定位参数
+
+export const returnGoodsListFormData = (params) => ({
+    type: ActionType.RETURN_GOODS_LIST_FORM_DATA,
+    payload: params
+})
+

@@ -816,3 +816,6 @@ export const getReturnGoodsOperation = (params) => http.get('/webReturnRequest/o
 
 //退货单详情
 export const getReturnGoodsDetail = (params) => http.get('/webReturnRequest/returnRequestDetail', params)
+
+//退货详情保存
+export const getReturnGoodsDetailSave = (params) => http.get('/webReturnRequest/orderDescription', params);
