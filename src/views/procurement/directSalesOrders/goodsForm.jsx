@@ -14,14 +14,14 @@ import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { AddingGoodsByStore } from '../../../container/search';
-import { queryGoodsInfo, batchImportGoods } from '../../../actions/procurement';
+import { queryGoodsInfo } from '../../../actions/procurement';
 import Utils from '../../../util/util';
 import Excel from './excel';
 
 const FormItem = Form.Item;
 
 @connect(() => ({}), dispatch => bindActionCreators({
-    queryGoodsInfo, batchImportGoods
+    queryGoodsInfo
 }, dispatch))
 
 class GoodsForm extends PureComponent {

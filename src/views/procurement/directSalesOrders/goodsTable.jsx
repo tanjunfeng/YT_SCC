@@ -51,11 +51,16 @@ class GoodsTable extends PureComponent {
     }
 
     importToList = (list) => {
-        this.checkStorage(list);
         list.forEach(item => {
-            this.checkMultiple(item);
+            this.appendToList(item);
         });
-        this.props.onClearImportList();
+        this.props.onClearImportList(); // 通知父组件清空导入商品列表
+        // this.checkStorage(list).then(() => {
+        //     list.forEach(item => {
+        //         this.checkMultiple(item);
+        //     });
+        //     this.props.onClearImportList();
+        // });
     }
 
     /**
