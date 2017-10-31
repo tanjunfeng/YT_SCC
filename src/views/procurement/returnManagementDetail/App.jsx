@@ -3,7 +3,7 @@
  * @Description: 采购退货详情页
  * @CreateDate: 2017-10-27 11:26:16
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-30 10:42:34
+ * @Last Modified time: 2017-10-31 19:24:23
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -184,7 +184,13 @@ class ReturnManagementDetail extends PureComponent {
     }
 
     render() {
-        const { poReturn } = this.props;
+        const { poReturn = {} } = this.props;
+        const { pmPurchaseRefundItems = [] } = poReturn;
+        let returnNum;
+        pmPurchaseRefundItems.forEach((item) => {
+            returnNum += Number(item.refundAmount)
+        });
+        console.log(returnNum)
         return (
             <div className="po-return-detail">
                 <Form layout="inline">
