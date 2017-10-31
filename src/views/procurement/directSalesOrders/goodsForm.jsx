@@ -77,9 +77,11 @@ class GoodsForm extends PureComponent {
 
     handleImport = (list) => {
         const dist = [];
-        list.forEach(item => {
-            dist.push(this.getRow(item));
-        });
+        if (list.length > 0) {
+            list.forEach(item => {
+                dist.push(this.getRow(item));
+            });
+        }
         this.props.onImport(dist);
     }
 
