@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import { AddingGoodsByStore } from '../../../container/search';
 import { queryGoodsInfo, batchImportGoods } from '../../../actions/procurement';
 import Utils from '../../../util/util';
-import { Excel } from './excel';
+import Excel from './excel';
 
 const FormItem = Form.Item;
 
@@ -106,7 +106,7 @@ class GoodsForm extends PureComponent {
                             </FormItem>
                             <FormItem className="file-upload">
                                 <Excel
-                                    value={excelParams}
+                                    value={{ ...excelParams }}
                                     onChange={this.handleImport}
                                 />
                             </FormItem>
