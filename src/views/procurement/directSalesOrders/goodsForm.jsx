@@ -88,10 +88,8 @@ class GoodsForm extends PureComponent {
     }
 
     render() {
-        const excelParams = Utils.removeInvalid({
-            branchCompanyId: this.props.value.branchCompanyId,
-            deliveryWarehouseCode: this.props.value.deliveryWarehouseCode
-        });
+        const { branchCompanyId, deliveryWarehouseCode, canBeSubmit } = this.props.value;
+        const excelParams = Utils.removeInvalid({ branchCompanyId, deliveryWarehouseCode });
         return (
             <div className="direct-sales-orders-form goods-form">
                 <Form layout="inline">
@@ -122,7 +120,7 @@ class GoodsForm extends PureComponent {
                                 </div>
                             </FormItem>
                             <FormItem className="fr">
-                                <Button type="primary" size="default" onClick={this.handleSubmit}>
+                                <Button type="primary" size="default" onClick={this.handleSubmit} disabled={!canBeSubmit}>
                                     提交
                                 </Button>
                             </FormItem>
@@ -136,6 +134,7 @@ class GoodsForm extends PureComponent {
 
 GoodsForm.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
+    canBeSubmit: PropTypes.bool,
     queryGoodsInfo: PropTypes.func,
     onChange: PropTypes.func,
     onImport: PropTypes.func,

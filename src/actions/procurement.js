@@ -28,7 +28,7 @@ import {
     updateGoodsInfo as updateGoodsInfoService,
     insertDirectOrder as insertDirectOrderService,
     fetchReturnPoRcvInit as queryReturnPoDetailSevice,
-    validateDirectOrder as validateDirectOrderService
+    batchCheckStorage as batchCheckStorageService
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -557,16 +557,16 @@ export const insertDirectOrder = params => dispatch => (
  *
  * @param {*object} data
  */
-const validateDirectOrderAction = (data) => ({
+const batchCheckStorageAction = (data) => ({
     type: ActionType.VALIDATE_DIRECT_ORDER,
     payload: data
 });
 
-export const validateDirectOrder = params => dispatch => (
+export const batchCheckStorage = params => dispatch => (
     new Promise((resolve, reject) => {
-        validateDirectOrderService(params)
+        batchCheckStorageService(params)
             .then(res => {
-                dispatch(validateDirectOrderAction(res.data));
+                dispatch(batchCheckStorageAction(res.data));
                 resolve(res);
             })
             .catch(err => {
