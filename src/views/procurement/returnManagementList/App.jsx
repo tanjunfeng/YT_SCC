@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-31 15:59:03
+ * @Last Modified time: 2017-10-31 17:09:58
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -81,7 +81,6 @@ class ReturnManagementList extends PureComponent {
         this.handleResetValue = this.handleResetValue.bind(this);
         this.onLocTypeChange = this.onLocTypeChange.bind(this);
         this.renderActions = this.renderActions.bind(this);
-        this.queryRcvMngPoList = this.queryRcvMngPoList.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.searchParams = {};
         this.state = {
@@ -170,8 +169,8 @@ class ReturnManagementList extends PureComponent {
         ]
     }
 
-    componentWillMount() {
-        this.queryRcvMngPoList();
+    componentDidMount() {
+        this.queryReturnMngList();
     }
 
     /**
@@ -193,7 +192,7 @@ class ReturnManagementList extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNumber) => {
-        this.current = pageNumber;
+        this.current = pageNumber
         this.props.fetchReturnMngList({
             pageSize: PAGE_SIZE,
             pageNum: this.current,
@@ -201,13 +200,13 @@ class ReturnManagementList extends PureComponent {
         });
     }
 
-    queryRcvMngPoList(params) {
-        const tmp = params || {};
-        const allParams = Object.assign({
+    queryReturnMngList = () => {
+        this.current = 1;
+        this.props.fetchReturnMngList({
             pageSize: PAGE_SIZE,
-            pageNum: this.current || 1
-        }, this.searchParams, tmp);
-        this.props.fetchReturnMngList(allParams);
+            pageNum: this.current,
+            ...this.searchParams
+        });
     }
 
     /**
@@ -350,10 +349,7 @@ class ReturnManagementList extends PureComponent {
      * 查询退货单管理列表
      */
     handleSearch() {
-        // 编辑查询条件
-        this.editSearchParams();
-        // 查询收货单单列表
-        this.queryRcvMngPoList();
+        this.queryReturnMngList(this.editSearchParams());
     }
 
     /* *************** 供货供应商 ************************* */
@@ -422,20 +418,20 @@ class ReturnManagementList extends PureComponent {
         // 供应商地点编号
         const spAdrId = this.state.spAdrId;
 
-        // 地点
-        const adrTypeCode = this.state.adrTypeCode;
+        // 退货地点
+        const refundAdr = this.state.adrTypeCode;
 
         const searchParams = {
             purchaseRefundNo,
             purchaseOrderNo,
             adrType,
-            adrTypeCode,
+            refundAdr,
             purchaseOrderType,
             status,
             spId,
             spAdrId,
             createTimeStart,
-            createTimeEnd
+            createTimeEnd,
         };
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
@@ -755,9 +751,10 @@ class ReturnManagementList extends PureComponent {
                                 x: 1600
                             }}
                             pagination={{
-                                current: pageNum,
+                                current: this.current,
                                 total,
                                 pageSize,
+                                pageNum,
                                 showQuickJumper: true,
                                 onChange: this.onPaginate
                             }}
