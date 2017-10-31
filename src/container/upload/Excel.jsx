@@ -5,15 +5,8 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import { Button, Upload, Icon, message } from 'antd';
 import reqwest from 'reqwest';
-import { pubFetchValueList } from '../../actions/pub';
-
-@connect(() => ({}), dispatch => bindActionCreators({
-    pubFetchValueList
-}, dispatch))
 
 class Excel extends PureComponent {
     state = {
@@ -21,9 +14,7 @@ class Excel extends PureComponent {
         uploading: false,
     }
 
-    url = `${window.config.apiHost}directStore/fileUpload`;
-
-    handleUpload = () => {
+    getFormData = () => {
         const { fileList } = this.state;
         const formData = new FormData();
         const params = this.props.value;
@@ -33,6 +24,12 @@ class Excel extends PureComponent {
         Object.keys(params).forEach(key => {
             formData.append([key], params[key]);
         });
+        return formData;
+    }
+
+    url = `${window.config.apiHost}directStore/fileUpload`;
+
+    handleUpload = () => {
         this.setState({
             uploading: true,
         });
@@ -40,7 +37,7 @@ class Excel extends PureComponent {
             url: this.url,
             method: 'post',
             processData: false,
-            data: formData,
+            data: this.getFormData(),
             success: (res) => {
                 this.props.onChange(res.data);
                 this.setState({

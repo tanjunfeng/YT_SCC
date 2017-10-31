@@ -23,12 +23,12 @@ import {
 
 class DirectSalesOrders extends PureComponent {
     state = {
-        storeId: '',
-        branchCompanyId: '',
-        deliveryWarehouseCode: '',
-        goodsList: [],
-        importList: [],
-        goodsAddOn: null
+        storeId: '',    // 门店编号
+        branchCompanyId: '',    // 分公司 id
+        deliveryWarehouseCode: '',  // 送货舱编码
+        goodsList: [],  // 当前显示商品列表
+        importList: [], // 导入商品列表
+        goodsAddOn: null    // 手工添加的单个商品
     }
 
     handleStoresChange = (record) => {

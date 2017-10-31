@@ -27,6 +27,7 @@ class GoodsTable extends PureComponent {
         if (goodsAddOn !== null && this.props.goodsAddOn !== goodsAddOn) {
             this.appendToList(goodsAddOn);
         }
+        // 当导入商品有变化时,批量校验库存并添加到商品列表,通知父组件清空导入列表
         if (this.props.importList.length === 0 && importList.length > 0) {
             importList.forEach(item => {
                 this.appendToList(item);

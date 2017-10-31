@@ -27,7 +27,8 @@ import {
     queryGoodsInfo as queryGoodsInfoService,
     updateGoodsInfo as updateGoodsInfoService,
     insertDirectOrder as insertDirectOrderService,
-    fetchReturnPoRcvInit as queryReturnPoDetailSevice
+    fetchReturnPoRcvInit as queryReturnPoDetailSevice,
+    validateDirectOrder as validateDirectOrderService
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -543,6 +544,29 @@ export const insertDirectOrder = params => dispatch => (
         insertDirectOrderService(params)
             .then(res => {
                 dispatch(insertDirectOrderAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 直营店下单商品提交
+ *
+ * @param {*object} data
+ */
+const validateDirectOrderAction = (data) => ({
+    type: ActionType.VALIDATE_DIRECT_ORDER,
+    payload: data
+});
+
+export const validateDirectOrder = params => dispatch => (
+    new Promise((resolve, reject) => {
+        validateDirectOrderService(params)
+            .then(res => {
+                dispatch(validateDirectOrderAction(res.data));
                 resolve(res);
             })
             .catch(err => {
