@@ -5,15 +5,8 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import { Button, Upload, Icon, message } from 'antd';
 import reqwest from 'reqwest';
-import { pubFetchValueList } from '../../actions/pub';
-
-@connect(() => ({}), dispatch => bindActionCreators({
-    pubFetchValueList
-}, dispatch))
 
 class Excel extends PureComponent {
     state = {
