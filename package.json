@@ -68,7 +68,6 @@
     "prop-types": "^15.5.10",
     "react-fileupload": "^2.4.0",
     "react-immutable-proptypes": "^2.1.0",
-    "reqwest": "^2.0.5",
     "sass-loader": "^6.0.5",
     "step": "^1.0.0",
     "style-loader": "^0.18.1",
