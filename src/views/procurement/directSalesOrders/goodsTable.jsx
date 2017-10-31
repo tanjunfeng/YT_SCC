@@ -13,11 +13,12 @@ import PropTypes from 'prop-types';
 import { goodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
 import {
-    updateGoodsInfo
+    updateGoodsInfo,
+    batchCheckStorage
 } from '../../../actions/procurement';
 
 @connect(() => ({}), dispatch => bindActionCreators({
-    updateGoodsInfo
+    updateGoodsInfo, batchCheckStorage
 }, dispatch))
 
 class GoodsTable extends PureComponent {
@@ -29,10 +30,7 @@ class GoodsTable extends PureComponent {
         }
         // 当导入商品有变化时,批量校验库存并添加到商品列表,通知父组件清空导入列表
         if (this.props.importList.length === 0 && importList.length > 0) {
-            importList.forEach(item => {
-                this.appendToList(item);
-            });
-            this.props.onClearImportList();
+            this.importToList(importList);
         }
     }
 
@@ -52,6 +50,14 @@ class GoodsTable extends PureComponent {
         this.props.onChange(goodsList.filter(item => item.productCode !== productCode));
     }
 
+    importToList = (list) => {
+        this.checkStorage(list);
+        list.forEach(item => {
+            this.checkMultiple(item);
+        });
+        this.props.onClearImportList();
+    }
+
     /**
      * 检查单个商品库存是否充足
      *
@@ -59,11 +65,12 @@ class GoodsTable extends PureComponent {
      */
     checkStore = (goods) => (
         new Promise((resolve, reject) => {
+            const { branchCompanyId, deliveryWarehouseCode } = this.props;
             this.props.updateGoodsInfo({
                 productId: goods.productId,
                 quantity: goods.quantity,
-                branchCompanyId: this.props.branchCompanyId,
-                deliveryWarehouseCode: this.props.deliveryWarehouseCode
+                branchCompanyId,
+                deliveryWarehouseCode
             }).then(res => {
                 // 库存不足
                 if (!res.data.enough) {
@@ -76,7 +83,33 @@ class GoodsTable extends PureComponent {
                 reject(err);
             });
         })
-    )
+    );
+
+    /**
+     * 批量检查库存是否充足
+     *
+     * @param {*object} goodsList 商品信息
+     */
+    checkStorage = (goodsList) => (
+        new Promise((resolve, reject) => {
+            const { branchCompanyId, deliveryWarehouseCode } = this.props;
+            const dist = [];
+            goodsList.forEach(item => {
+                dist.push({
+                    productId: item.productId,
+                    branchCompanyId,
+                    loc: deliveryWarehouseCode
+                });
+            });
+            this.props.batchCheckStorage({
+                directValidateInventoryVos: dist
+            }).then((res) => {
+                resolve(res);
+            }).catch(err => {
+                reject(err);
+            });
+        })
+    );
 
     checkGoodsStatus = (goods, errors) => {
         let isValid = true;
@@ -173,6 +206,7 @@ class GoodsTable extends PureComponent {
 
 GoodsTable.propTypes = {
     updateGoodsInfo: PropTypes.func,
+    batchCheckStorage: PropTypes.func,
     onChange: PropTypes.func,
     onClearImportList: PropTypes.func,
     branchCompanyId: PropTypes.string,

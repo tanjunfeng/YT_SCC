@@ -1,5 +1,5 @@
 {
-    "timestamp": 1508482549080,
+    "timestamp": 1509432902212,
     "code": 200,
     "message": "请求成功",
     "exception": null,
@@ -24,16 +24,16 @@
             "sellFullCase": 0,
             "fullCaseUnit": null,
             "minUnit": "个",
-            "minNuber": 2,
-            "salePrice": 3,
+            "minNumber": 1,
+            "salePrice": null,
             "quantity": 30,
             "saleQuantity": 30,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
-            "available": true,
+            "enough": false,
+            "available": false,
             "integerTimes": true,
-            "message": null
+            "message": "桃李葡萄干蛋糕卷,不支持该区域销售"
         },
         {
             "productCode": "1000191",
@@ -55,14 +55,14 @@
             "sellFullCase": 0,
             "fullCaseUnit": "盒",
             "minUnit": "袋1",
-            "minNuber": 1,
+            "minNumber": 1,
             "salePrice": null,
             "quantity": 50,
             "saleQuantity": 50,
             "amount": null,
             "salesInsideNumber": 1,
             "enough": false,
-            "available": false,
+            "available": true,
             "integerTimes": true,
             "message": "老灶花生72g,不支持该区域销售"
         }

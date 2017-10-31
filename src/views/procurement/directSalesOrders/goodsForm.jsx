@@ -14,14 +14,14 @@ import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { AddingGoodsByStore } from '../../../container/search';
-import { queryGoodsInfo } from '../../../actions/procurement';
+import { queryGoodsInfo, batchImportGoods } from '../../../actions/procurement';
 import Utils from '../../../util/util';
-import { Excel } from '../../../container/upload';
+import { Excel } from './excel';
 
 const FormItem = Form.Item;
 
 @connect(() => ({}), dispatch => bindActionCreators({
-    queryGoodsInfo
+    queryGoodsInfo, batchImportGoods
 }, dispatch))
 
 class GoodsForm extends PureComponent {
@@ -77,9 +77,11 @@ class GoodsForm extends PureComponent {
 
     handleImport = (list) => {
         const dist = [];
-        list.forEach(item => {
-            dist.push(this.getRow(item));
-        });
+        if (list.length > 0) {
+            list.forEach(item => {
+                dist.push(this.getRow(item));
+            });
+        }
         this.props.onImport(dist);
     }
 
@@ -88,10 +90,8 @@ class GoodsForm extends PureComponent {
     }
 
     render() {
-        const excelParams = Utils.removeInvalid({
-            branchCompanyId: this.props.value.branchCompanyId,
-            deliveryWarehouseCode: this.props.value.deliveryWarehouseCode
-        });
+        const { branchCompanyId, deliveryWarehouseCode, canBeSubmit } = this.props.value;
+        const excelParams = Utils.removeInvalid({ branchCompanyId, deliveryWarehouseCode });
         return (
             <div className="direct-sales-orders-form goods-form">
                 <Form layout="inline">
@@ -122,7 +122,7 @@ class GoodsForm extends PureComponent {
                                 </div>
                             </FormItem>
                             <FormItem className="fr">
-                                <Button type="primary" size="default" onClick={this.handleSubmit}>
+                                <Button type="primary" size="default" onClick={this.handleSubmit} disabled={!canBeSubmit}>
                                     提交
                                 </Button>
                             </FormItem>
@@ -136,6 +136,7 @@ class GoodsForm extends PureComponent {
 
 GoodsForm.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
+    canBeSubmit: PropTypes.bool,
     queryGoodsInfo: PropTypes.func,
     onChange: PropTypes.func,
     onImport: PropTypes.func,

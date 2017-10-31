@@ -184,6 +184,8 @@ export default {
     INSERT_DIRECT_ORDER: 'INSERT_DIRECT_ORDER',
     // 批量校验库存
     VALIDATE_DIRECT_ORDER: 'VALIDATE_DIRECT_ORDER',
+    // 批量导入商品
+    BATCH_IMPORT_GOODS: 'BATCH_IMPORT_GOODS',
 
     /** 值清单获取action，请根据实际情况拆分到单独action文件 Begin */
     // 仓库值清单
