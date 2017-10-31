@@ -28,8 +28,7 @@ import {
     updateGoodsInfo as updateGoodsInfoService,
     insertDirectOrder as insertDirectOrderService,
     fetchReturnPoRcvInit as queryReturnPoDetailSevice,
-    batchCheckStorage as batchCheckStorageService,
-    batchImportGoods as batchImportGoodsService
+    batchCheckStorage as batchCheckStorageService
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -568,29 +567,6 @@ export const batchCheckStorage = params => dispatch => (
         batchCheckStorageService(params)
             .then(res => {
                 dispatch(batchCheckStorageAction(res.data));
-                resolve(res);
-            })
-            .catch(err => {
-                reject(err);
-            })
-    })
-);
-
-/**
- * 直营店下单批量导入商品
- *
- * @param {*object} data
- */
-const batchImportGoodsAction = (data) => ({
-    type: ActionType.BATCH_IMPORT_GOODS,
-    payload: data
-});
-
-export const batchImportGoods = params => dispatch => (
-    new Promise((resolve, reject) => {
-        batchImportGoodsService(params)
-            .then(res => {
-                dispatch(batchImportGoodsAction(res.data));
                 resolve(res);
             })
             .catch(err => {

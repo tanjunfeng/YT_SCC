@@ -6,13 +6,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Upload, Icon, message } from 'antd';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { queryGoodsInfo, batchImportGoods } from '../../../actions/procurement';
-
-@connect(() => ({}), dispatch => bindActionCreators({
-    queryGoodsInfo, batchImportGoods
-}, dispatch))
+import axios from 'axios';
 
 class Excel extends PureComponent {
     state = {
@@ -39,8 +33,8 @@ class Excel extends PureComponent {
         this.setState({
             uploading: true,
         });
-        this.props.batchImportGoods(this.getFormData).then(list => {
-            this.props.onChange(list);
+        axios.post(this.url, this.getFormData()).then(res => {
+            this.props.onChange(res.data);
             this.setState({
                 fileList: [],
                 uploading: false,
@@ -103,8 +97,7 @@ class Excel extends PureComponent {
 Excel.propTypes = {
     disabled: PropTypes.bool,
     value: PropTypes.objectOf(PropTypes.any),
-    onChange: PropTypes.func,
-    batchImportGoods: PropTypes.func
+    onChange: PropTypes.func
 }
 
 export default Excel;
