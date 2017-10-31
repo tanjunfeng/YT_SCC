@@ -65,7 +65,12 @@ import {
     updatePoRcvLine,
     updatePoRcvBasicinfo,
     createPoRcv,
-    fetchReturnMngList
+    fetchReturnMngList,
+    fetchReturnPoRcvDetail,
+    getRefundNo,
+    deleteBatchRefundOrder,
+    queryAuditPurchaseRefundList,
+    queryApprovalInfo,
 } from './procurement';
 
 // IBM
@@ -216,5 +221,15 @@ export {
     splitorderbyinventory,
     interfaceInventory,
     // 采购退货列表
-    fetchReturnMngList
+    fetchReturnMngList,
+    // 采购退货详情
+    fetchReturnPoRcvDetail,
+    // 查询退货流水号
+    getRefundNo,
+    // 批量删除处于草稿状态的退货单
+    deleteBatchRefundOrder,
+    // 查询退货单审批列表
+    queryAuditPurchaseRefundList,
+    // 查看退货单审批意见
+    queryApprovalInfo,
 }

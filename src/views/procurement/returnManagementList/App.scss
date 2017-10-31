@@ -50,3 +50,26 @@ $poRcvMngListColWidth: 250px;
         }
     }
 }
+.start-circle{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid;
+}
+.start-arrow{
+    width: 0px;
+    height: 0px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 15px solid black;
+    font-size: 0px;
+    line-height: 0px;
+    margin-top: 18px;
+}
+.start-line{
+    width: 50px;
+    height: 3px;
+    margin-top: 21px;
+    background: black;
+    border: 1px solid
+}

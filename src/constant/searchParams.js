@@ -150,6 +150,30 @@ export const supplierTypeOptions = {
     }]
 }
 
+// 退货地点类型
+export const returnLocationType = {
+    defaultValue: '0',
+    data: [{
+        key: '0',
+        value: '请选择'
+    }, {
+        key: '1',
+        value: '仓库'
+    }, {
+        key: '2',
+        value: '门店'
+    }]
+}
+
+// 货币类型
+export const currencyType = {
+    defaultValue: '1',
+    data: [{
+        key: '1',
+        value: 'CNY'
+    }]
+}
+
 // 入驻-供应商状态
 export const firstSupplierStatusOptions = {
     defaultValue: '-1',

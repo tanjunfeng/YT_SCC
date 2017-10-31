@@ -13,6 +13,7 @@ import {
     auditPo as svcAuditPo,
     queryPoDetail,
     queryMaterialMap as svcQueryMateriMap,
+    queryPurchaseOrderBrands as queryPurchaseOrderBrandsService,
     queryPoRcvMngList,
     queryPoRcvList,
     queryPoRcvDetail,
@@ -23,11 +24,15 @@ import {
     updatePmPurchaseOrder,
     repushPurchaseReceipt as repushPurchaseReceiptService,
     fetchReturnMngList as queryReturnMngListService,
+    queryAuditPurchaseRefundList as queryAuditPurchaseRefundListService,
+    queryApprovalInfo as queryApprovalInfoService,
+    getRefundNo as getRefundNoActionService,
     queryDirectInfo as queryDirectInfoService,
     queryGoodsInfo as queryGoodsInfoService,
     updateGoodsInfo as updateGoodsInfoService,
     insertDirectOrder as insertDirectOrderService,
-    fetchReturnPoRcvInit as queryReturnPoDetailSevice
+    fetchReturnPoRcvDetail as queryReturnPoDetailSevice,
+    deleteBatchRefundOrder as deleteBatchRefundOrderService,
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -38,6 +43,22 @@ import { ProcurementDt } from '../view-model';
 export const getMaterialMap = (params) => () => (
     new Promise((resolve, reject) => {
         svcQueryMateriMap(params)
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 查询品牌值清单
+ * @param {*} data
+ */
+export const queryPurchaseOrderBrands = (params) => () => (
+    new Promise((resolve, reject) => {
+        queryPurchaseOrderBrandsService(params)
             .then(res => {
                 resolve(res);
             })
@@ -321,9 +342,7 @@ export const fetchPoRcvDetail = (params) => dispatch => (
 )
 
 /**
- * 查询采购单详情并创建收货单初始信息
- * 1.根据采购单id查询采购单相关信息
- * 2.根据查询结果初始显示采购收货单
+ * 查询收货单详情
  * @param {*} data
  */
 const rcvPoRcvInit = (data) => ({
@@ -345,9 +364,7 @@ export const fetchPoRcvInit = (params) => dispatch => (
 );
 
 /**
- * 查询采购单详情并创建退货单初始信息
- * 1.根据采购单id查询采购单相关信息
- * 2.根据查询结果初始显示采购收货单
+ * 查询退货单详情
  * @param {*} data
  */
 const returnPoRcvInit = (data) => ({
@@ -355,7 +372,7 @@ const returnPoRcvInit = (data) => ({
     payload: data
 });
 
-export const fetchReturnPoRcvInit = (params) => dispatch => (
+export const fetchReturnPoRcvDetail = (params) => dispatch => (
     new Promise((resolve, reject) => {
         queryReturnPoDetailSevice(params)
             .then(res => {
@@ -497,6 +514,100 @@ export const fetchReturnMngList = (params) => dispatch => (
         queryReturnMngListService(params)
             .then(res => {
                 dispatch(returnMngListAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 查询退货单审批列表
+ * @param {*} data
+ */
+const queryAuditPurchaseRefundListAction = (data) => ({
+    type: ActionType.QUERY_AUDIT_PURCHASE_LIST,
+    payload: data
+});
+
+export const queryAuditPurchaseRefundList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryAuditPurchaseRefundListService(params)
+            .then(res => {
+                dispatch(queryAuditPurchaseRefundListAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 查看退货单审批意见
+ * @param {*} data
+ */
+const queryApprovalInfoAction = (data) => ({
+    type: ActionType.QUERY_APPROVAL_INFO,
+    payload: data
+});
+
+export const queryApprovalInfo = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryApprovalInfoService(params)
+            .then(res => {
+                dispatch(queryApprovalInfoAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 查询采购退货流水号
+ * @param {*} data
+ */
+const getRefundNoAction = (data) => ({
+    type: ActionType.GET_REFUND_NO_ACTION,
+    payload: data
+});
+
+export const getRefundNo = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        getRefundNoActionService(params)
+            .then(res => {
+                dispatch(getRefundNoAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+// 清除采购退货流水号
+export const clearRefundNo = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_REFUND_NO_INFO,
+    payload: {}
+}));
+
+/**
+ * 批量删除处于草稿状态的退货单
+ * @param {*} data
+ */
+const deleteBatchRefundOrderAction = (data) => ({
+    type: ActionType.DELETE_BATCH_REFOND_ORDER,
+    payload: data
+});
+
+export const deleteBatchRefundOrder = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        deleteBatchRefundOrderService(params)
+            .then(res => {
+                dispatch(deleteBatchRefundOrderAction(res.data));
                 resolve(res);
             })
             .catch(err => {

@@ -3,7 +3,7 @@
  * @Description: 采购退货详情页
  * @CreateDate: 2017-10-27 11:26:16
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-27 14:25:13
+ * @Last Modified time: 2017-10-30 10:42:34
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -12,25 +12,25 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import moment from 'moment';
 import {
-    Table, Form, Icon, Row, Col
+    Table, Form, Icon, Row, Col, Input, Button
 } from 'antd';
 import {
-    fetchPoRcvInit,
-    fetchPoRcvDetail,
+    fetchReturnPoRcvDetail,
     updatePoRcvBasicinfo,
     updatePoRcvLine,
     createPoRcv
-} from '../../../actions';
+} from '../../../actions/procurement';
 import Utils from '../../../util/util';
+import { exportReturnProPdf } from '../../../service';
 
 const FormItem = Form.Item;
 const dateFormat = 'YYYY-MM-DD';
+const { TextArea } = Input;
 
 @connect(state => ({
-    poRcvDetail: state.toJS().procurement.poRcv,
+    poReturn: state.toJS().procurement.poReturn,
 }), dispatch => bindActionCreators({
-    fetchPoRcvInit,
-    fetchPoRcvDetail,
+    fetchReturnPoRcvDetail,
     updatePoRcvLine,
     updatePoRcvBasicinfo,
     createPoRcv
@@ -49,25 +49,25 @@ class ReturnManagementDetail extends PureComponent {
                 key: 'rowNo',
                 render: (text, record, index) => (<span>{index + 1}</span>)
             }, {
-                title: '商品编码',
+                title: '采购单号',
+                dataIndex: 'purchaseOrderNo',
+                key: 'purchaseOrderNo'
+            }, {
+                title: '商品编号',
                 dataIndex: 'productCode',
                 key: 'productCode'
-            }, {
-                title: '商品名称',
-                dataIndex: 'productName',
-                key: 'productName'
             }, {
                 title: '商品条码',
                 dataIndex: 'internationalCode',
                 key: 'internationalCode'
             }, {
+                title: '商品名称',
+                dataIndex: 'productName',
+                key: 'productName'
+            }, {
                 title: '规格',
                 dataIndex: 'packingSpecifications',
                 key: 'packingSpecifications'
-            }, {
-                title: '产地',
-                dataIndex: 'producePlace',
-                key: 'producePlace'
             }, {
                 title: '采购内装数',
                 dataIndex: 'purchaseInsideNumber',
@@ -78,41 +78,89 @@ class ReturnManagementDetail extends PureComponent {
                 dataIndex: 'unitExplanation',
                 key: 'unitExplanation'
             }, {
-                title: '采购数量',
-                dataIndex: 'purchaseNumber',
-                key: 'purchaseNumber'
-            }, {
-                title: '供应商出库数量',
-                dataIndex: 'deliveryNumber',
-                key: 'deliveryNumber'
-            }, {
-                title: '收货数量',
-                dataIndex: 'receivedNumber',
-                key: 'receivedNumber'
+                title: '税率',
+                dataIndex: 'inputTaxRate',
+                key: 'inputTaxRate'
             }, {
                 title: '采购价格(含税)',
                 dataIndex: 'purchasePrice',
                 key: 'purchasePrice'
             }, {
-                title: '收货金额(含税)',
-                dataIndex: 'receiptPrice',
-                key: 'receiptPrice'
-            },
+                title: '可退库存',
+                dataIndex: 'possibleNum',
+                key: 'possibleNum'
+            }, {
+                title: '退货数量',
+                dataIndex: 'refundAmount',
+                key: 'refundAmount'
+            }, {
+                title: '原因',
+                dataIndex: 'refundReason',
+                key: 'refundReason',
+                render: (text) => {
+                    switch (text) {
+                        case '0':
+                            return '破损';
+                        case '1':
+                            return '临期';
+                        case '2':
+                            return '库存过剩';
+                        case '3':
+                            return '其他';
+                        default:
+                            return text;
+                    }
+                }
+            }, {
+                title: '退货金额(含税)',
+                dataIndex: 'refundMoney',
+                key: 'refundMoney'
+            }, {
+                title: '退货成本额',
+                dataIndex: 'refundCost',
+                key: 'refundCost'
+            }, {
+                title: '实际退货数量',
+                dataIndex: 'realRefundAmount',
+                key: 'realRefundAmount'
+            }, {
+                title: '实际金额(含税)',
+                dataIndex: 'realRefundMoney',
+                key: 'realRefundMoney'
+            }
         ];
     }
 
     componentDidMount() {
         const { match } = this.props;
         // 退货单id
-        const poRcvId = match.params.porcvid;
+        const id = match.params.id;
 
-        // step 1：校验采购单id 退货单id
-        if (!poRcvId) {
+        // step 1：校验退购单id
+        if (!id) {
             history.back();
         }
         // 请根据后端api进行调整
-        this.props.fetchPoRcvDetail(Utils.removeInvalid({ id: poRcvId }));
+        this.props.fetchReturnPoRcvDetail(Utils.removeInvalid({ id }));
     }
+
+    goBack = () => {
+        this.props.history.replace('/returnManagementList');
+    }
+
+    /**
+     * 下载pdf
+     */
+    handleDownPDF = () => {
+        const { match } = this.props;
+        // 退货单id
+        const id = match.params.id;
+        Utils.exportExcel(
+            exportReturnProPdf,
+            {id}
+        );
+    }
+
 
     /**
      * 渲染订单状态
@@ -136,10 +184,9 @@ class ReturnManagementDetail extends PureComponent {
     }
 
     render() {
-        const { poRcvDetail } = this.props;
-        const { pmPurchaseReceipt = {}, receiptPruducts = [] } = poRcvDetail;
+        const { poReturn } = this.props;
         return (
-            <div className="po-rcv-detail">
+            <div className="po-return-detail">
                 <Form layout="inline">
                     <div className="basic-box">
                         <div className="header">
@@ -148,80 +195,115 @@ class ReturnManagementDetail extends PureComponent {
                         <div className="body">
                             <Row >
                                 <Col span={6}>
-                                    {/* 收货单号 */}
-                                    <span className="ant-form-item-label search-mind-label">收货单号</span>
-                                    <span className="text">{pmPurchaseReceipt.purchaseReceiptNo}</span>
+                                    {/* 退货单号 */}
+                                    <span className="ant-form-item-label search-mind-label" style={{width: 90}}>退货单号</span>
+                                    <span className="text">{poReturn.purchaseRefundNo}</span>
                                 </Col>
-                                <Col span={6}>
-                                    {/* 采购单号 */}
-                                    <span className="ant-form-item-label search-mind-label">采购单号</span>
-                                    <span className="text">{pmPurchaseReceipt.purchaseOrderNo}</span>
-                                </Col>
-                                <Col span={6}>
-                                    {/* 收货单状态 */}
-                                    <span className="ant-form-item-label search-mind-label">收货单状态</span>
-                                    <span className="text">
-                                        {this.renderStatus(pmPurchaseReceipt.status)}
-                                    </span>
-                                </Col>
-                                <Col span={6}>
-                                    {/* ASN */}
-                                    <span className="ant-form-item-label search-mind-label">ASN</span>
-                                    <span className="text">{pmPurchaseReceipt.asn || '-'}</span>
-                                </Col>
-                            </Row>
-                            <Row >
                                 <Col span={6}>
                                     {/* 供应商 */}
-                                    <FormItem >
-                                        <span className="ant-form-item-label search-mind-label">供应商</span>
-                                        <span className="text">{pmPurchaseReceipt.spNo}-{pmPurchaseReceipt.spName}</span>
-                                    </FormItem>
+                                    <span className="ant-form-item-label search-mind-label">供应商</span>
+                                    <span className="text">{poReturn.spName}</span>
                                 </Col>
                                 <Col span={6}>
                                     {/* 供应商地点 */}
+                                    <span className="ant-form-item-label search-mind-label">供应商地点</span>
+                                    <span className="text">
+                                        {this.renderStatus(poReturn.spAdrName)}
+                                    </span>
+                                </Col>
+                                <Col span={6}>
+                                    {/* 状态 */}
+                                    <span className="ant-form-item-label search-mind-label">状态</span>
+                                    <span className="text">{poReturn.asn || '-'}</span>
+                                </Col>
+                            </Row>
+                            <Row >
+                                <Col span={6}>
+                                    {/* 退货地点类型 */}
+                                    <FormItem >
+                                        <span className="ant-form-item-label search-mind-label" style={{width: 90}}>退货地点类型</span>
+                                        <span className="text">{poReturn.adrType}</span>
+                                    </FormItem>
+                                </Col>
+                                <Col span={6}>
+                                    {/* 退货地点 */}
                                     <FormItem formItemLayout >
-                                        <span className="ant-form-item-label search-mind-label">供应商地点</span>
-                                        <span className="text">{pmPurchaseReceipt.spAdrNo}-{pmPurchaseReceipt.spAdrName}</span>
+                                        <span className="ant-form-item-label search-mind-label">退货地点</span>
+                                        <span className="text">{poReturn.refundAdr}</span>
                                     </FormItem>
                                 </Col>
                                 <Col span={6}>
-                                    {/* 地点类型 */}
+                                    {/* 退货日期早于 */}
                                     <FormItem >
-                                        <span className="ant-form-item-label search-mind-label">地点类型</span>
-                                        <span className="text">{pmPurchaseReceipt.adrType === 0 ? '仓库' : '门店'}</span>
-                                    </FormItem>
-                                </Col>
-                                <Col span={6}>
-                                    {/* 地点类型 */}
-                                    <FormItem >
-                                        <span className="ant-form-item-label search-mind-label">地点</span>
-                                        <span className="text">{pmPurchaseReceipt.adrTypeCode}-{pmPurchaseReceipt.adrTypeName}</span>
+                                        <span className="ant-form-item-label search-mind-label">退货日期早于</span>
+                                        <span className="text">{poReturn.refundTimeEarly ? moment(poReturn.refundTimeEarly).format(dateFormat) : '-'}</span>
                                     </FormItem>
                                 </Col>
                             </Row>
                             <Row >
                                 <Col span={6}>
-                                    {/* 预计收货日期 */}
-                                    <span className="ant-form-item-label search-mind-label">预计到货日期</span>
-                                    <span className="text">{pmPurchaseReceipt.estimatedReceivedDate ? moment(pmPurchaseReceipt.estimatedReceivedDate).format(dateFormat) : '-'}</span>
+                                    {/* 退货日期 */}
+                                    <FormItem >
+                                        <span className="ant-form-item-label search-mind-label" style={{width: 90}}>退货日期</span>
+                                        <span className="text">{poReturn.refundTime ? moment(poReturn.refundTime).format(dateFormat) : '-'}</span>
+                                    </FormItem>
                                 </Col>
                                 <Col span={6}>
-                                    {/* 预计到货日期 */}
-                                    <span className="ant-form-item-label search-mind-label">预计收货日期</span>
-                                    <span className="text">{pmPurchaseReceipt.estimatedReceivedDate ? moment(pmPurchaseReceipt.estimatedReceivedDate).format(dateFormat) : '-'}</span>
+                                    {/* 货币类型 */}
+                                    <span className="ant-form-item-label search-mind-label">货币类型</span>
+                                    <span className="text">{poReturn.currencyCode || '-'}</span>
+                                </Col>
+                                <Col className="pay-col" span={24}>
+                                    {/* 备注 */}
+                                    <FormItem>
+                                        <div style={{display: 'flex'}}>
+                                            <div className="sc-form-item-label" style={{textAlign: 'right', width: 123}}>备注: </div>
+                                            <TextArea
+                                                autosize={{ minRows: 4, maxRows: 6 }}
+                                                value={this.state.remark}
+                                                style={{resize: 'none' }}
+                                                maxLength="250"
+                                                onChange={(e) => {
+                                                    this.setState({
+                                                        remark: e.target.value
+                                                    })
+                                                }}
+                                            />
+                                        </div>
+                                    </FormItem>
+                                </Col>
+                            </Row>
+                            <Row >
+                                <Col span={6}>
+                                    {/* 创建人 */}
+                                    <span className="ant-form-item-label search-mind-label">创建人</span>
+                                    <span className="text">{poReturn.createUserId || '-'}</span>
                                 </Col>
                                 <Col span={6}>
-                                    {/* 收货日期 */}
-                                    <span className="ant-form-item-label search-mind-label">收货日期</span>
-                                    <span className="text">{pmPurchaseReceipt.receivedTime ? moment(pmPurchaseReceipt.receivedTime).format(dateFormat) : '-'}</span>
+                                    {/* 创建日期 */}
+                                    <FormItem >
+                                        <span className="ant-form-item-label search-mind-label">创建日期</span>
+                                        <span className="text">{poReturn.createTime ? moment(poReturn.createTime).format(dateFormat) : '-'}</span>
+                                    </FormItem>
+                                </Col>
+                                <Col span={6}>
+                                    {/* 审核人 */}
+                                    <span className="ant-form-item-label search-mind-label">审核人</span>
+                                    <span className="text">{poReturn.auditUserId || '-'}</span>
+                                </Col>
+                                <Col span={6}>
+                                    {/* 审核日期 */}
+                                    <FormItem >
+                                        <span className="ant-form-item-label search-mind-label">审核日期</span>
+                                        <span className="text">{poReturn.auditTime ? moment(poReturn.auditTime).format(dateFormat) : '-'}</span>
+                                    </FormItem>
                                 </Col>
                             </Row>
                         </div>
                     </div>
                     <div className="">
                         <Table
-                            dataSource={receiptPruducts}
+                            dataSource={poReturn.pmPurchaseRefundItems}
                             pagination={false}
                             columns={this.columns}
                             rowKey="id"
@@ -233,15 +315,41 @@ class ReturnManagementDetail extends PureComponent {
                     <div className="total-row">
                         <Row >
                             <Col span={6}>
-                                <span className="ant-form-item-label search-mind-label">合计收货数量</span>
-                                <span className="text">{pmPurchaseReceipt.receiveTotalNumber}</span>
+                                <span className="ant-form-item-label search-mind-label">合计退货数量:</span>
+                                <span className="text">{poReturn.refundAmount}</span>
+                            </Col>
+                            <Col span={4}>
+                                <span className="ant-form-item-label search-mind-label">合计退货金额(含税):</span>
+                                <span className="text">{poReturn.refundMoney}</span>
+                            </Col>
+                            <Col span={4}>
+                                <span className="ant-form-item-label search-mind-label">合计退货成本额:</span>
+                                <span className="text">{poReturn.refundCost}</span>
+                            </Col>
+                            <Col span={4}>
+                                <span className="ant-form-item-label search-mind-label">实际退货数量:</span>
+                                <span className="text">{poReturn.realRefundAmount}</span>
                             </Col>
                             <Col span={6}>
-                                <span className="ant-form-item-label search-mind-label">合计收货金额</span>
-                                <span className="text">{pmPurchaseReceipt.receiveTotalPrice}</span>
+                                <span className="ant-form-item-label search-mind-label">实际退货金额(含税);</span>
+                                <span className="text">{poReturn.realRefundMoney}</span>
                             </Col>
                         </Row >
                     </div>
+                    <Row gutter={40} type="flex" justify="end">
+                        <Col className="ant-col-10 ant-col-offset-10 gutter-row" style={{ textAlign: 'right'}}>
+                            <FormItem>
+                                <Button size="default" type="default" onClick={this.goBack}>
+                                    返回
+                                </Button>
+                            </FormItem>
+                            <FormItem>
+                                <Button size="default" type="primary" onClick={this.handleDownPDF}>
+                                    下载PDF
+                                </Button>
+                            </FormItem>
+                        </Col>
+                    </Row>
                 </Form>
             </div>
         )
@@ -249,9 +357,10 @@ class ReturnManagementDetail extends PureComponent {
 }
 
 ReturnManagementDetail.propTypes = {
-    fetchPoRcvDetail: PropTypes.func,
+    fetchReturnPoRcvDetail: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
-    poRcvDetail: PropTypes.objectOf(PropTypes.any)
+    poReturn: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(ReturnManagementDetail));
