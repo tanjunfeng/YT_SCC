@@ -8,16 +8,33 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../util/util';
 import { returnGoodsType, returnGoodsStatus, goodsReceiptStatus } from '../../constant/salesManagement';
+import { returnGoodsList, returnGoodsListFormData } from '../../actions';
+import { PAGE_SIZE } from '../../constant';
 
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 
+@connect(
+    state => ({
+        data: state.toJS().pageParameters.returnGoodsParams
+    }),
+    dispatch => bindActionCreators({
+        returnGoodsList,
+        returnGoodsListFormData
+    }, dispatch)
+)
+
 
 class ReturGoodsForm extends PureComponent {
     constructor(props) {
         super(props);
+    }
+
+    componentDidMount() {
+        const { returnGoodsList, data } = this.props
+        returnGoodsList(data)
     }
 
     // 获取用于搜索的所有有效表单值
@@ -48,25 +65,37 @@ class ReturGoodsForm extends PureComponent {
         return Utils.removeInvalid(searchParams);
     }
 
+    //搜索方法
+    requestSearch = (nextPage) => {
+        const { returnGoodsListFormData, returnGoodsList, page } = this.props;
+        const seachParams = this.getSearchParams();
+        let data = {
+            pageSize: PAGE_SIZE,
+            pageNum: nextPage ? nextPage : page,
+            ...seachParams
+        }
+        returnGoodsListFormData(data)
+        returnGoodsList(data)
+    }
+
 
     //搜索
 
     handleSearch = (e) => {
         e.preventDefault();
-        const { onSearch } = this.props;
-        const seachParams = this.getSearchParams();
-        if (onSearch) {
-            onSearch(seachParams);
-        }
+        this.requestSearch()
     }
 
 
     //重置
     handleReset = () => {
-        const { onReset } = this.props;
         this.props.form.resetFields();
-        if (onReset) {
-            onReset();
+    }
+
+    //父组件page改变
+    componentWillReceiveProps(nextProps) {
+        if (this.props.page !== nextProps.page) {
+            this.requestSearch(nextProps.page)
         }
     }
 

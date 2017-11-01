@@ -7,7 +7,7 @@ import Immutable from 'immutable';
 import ActionType from '../actions/ActionType';
 
 const initState = Immutable.fromJS({
-    data: {},
+    data: null,
     detail: {}
 });
 

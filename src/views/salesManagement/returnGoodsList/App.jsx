@@ -19,8 +19,6 @@ import {
     Dropdown,
     Modal
 } from 'antd';
-
-import { returnGoodsList, returnGoodsListFormData } from '../../../actions';
 import SearchForm from '../../../components/returnGoodsForm';
 import { PAGE_SIZE } from '../../../constant';
 import { returnGoodsListColumns as columns } from '../columns';
@@ -30,74 +28,27 @@ import { getReturnGoodsOperation } from '../../../service';
 @connect(state => ({
     listData: state.toJS().salesManagement.data,
     formData: state.toJS().pageParameters.returnGoodsParams
-}), dispatch => bindActionCreators({
-    returnGoodsList,
-    returnGoodsListFormData
-}, dispatch))
+}), dispatch => bindActionCreators({}, dispatch))
 
 
 class ReturnGoodsList extends PureComponent {
     constructor(props) {
         super(props)
-        //表达数据
-        this.searchParams = {};
-        //初始页号
-        this.current = 1
+        this.state = {
+            page: props.formData.pageNum || 1
+        }
     }
 
-    componentDidMount() {
-        const { formData } = this.props
-        if (formData.pageNum) {
-            this.current = formData.pageNum
-        }
-        this.forData(formData)
-    }
 
     /**
      * 点击翻页
      * @param {pageNumber}    pageNumber
      */
     onPageChange = (pageNumber) => {
-        this.current = pageNumber
-        this.forData({
-            pageSize: PAGE_SIZE,
-            pageNum: this.current,
-            ...this.searchParams
-        });
+        this.setState({
+            page: pageNumber
+        })
     }
-
-    /**
-    * 请求列表数据
-    * @param {*} params
-    */
-
-    forData = (params) => {
-        const { returnGoodsList, returnGoodsListFormData } = this.props
-        let data = {
-            pageSize: PAGE_SIZE,
-            pageNum: this.current,
-            ...params
-        }
-        returnGoodsListFormData(data)
-        returnGoodsList(data)
-    }
-
-    /**
-    * 搜索回调
-    * @param {object}  res
-    */
-    applySearch = (res) => {
-        this.searchParams = res
-        this.current = 1
-        this.forData(this.searchParams)
-    }
-
-    // 重置回调
-    applyReset = () => {
-        this.searchParams = {};
-        this.current = 1;
-    }
-
     // 退货单确定或取消
     operation = (id, type) => {
         new Promise((resolve, reject) => {
@@ -171,38 +122,38 @@ class ReturnGoodsList extends PureComponent {
 
     render() {
         columns[columns.length - 1].render = this.renderActions;
-        const { listData = {}, formData } = this.props
-        const { data = [], total, pageNum } = listData;
+        const { listData } = this.props
         return (
             <div className="po-mng-list">
                 <SearchForm
-                    onSearch={this.applySearch}
-                    onReset={this.applyReset}
-                    data={formData}
+                    page={this.state.page}
                 />
-                <div>
-                    <Table
-                        dataSource={data}
-                        columns={columns}
-                        rowKey="id"
-                        pagination={{
-                            current: pageNum,
-                            total: total,
-                            pageNum: this.current,
-                            pageSize: PAGE_SIZE,
-                            showQuickJumper: true,
-                            onChange: this.onPageChange
-                        }}
-                    />
-                </div>
+                {
+                    listData ?
+                        <div>
+                            <Table
+                                dataSource={listData.data}
+                                columns={columns}
+                                rowKey="id"
+                                pagination={{
+                                    current: listData.pageNum,
+                                    total: listData.total,
+                                    pageNum: this.current,
+                                    pageSize: PAGE_SIZE,
+                                    showQuickJumper: true,
+                                    onChange: this.onPageChange
+                                }}
+                            />
+                        </div> : ''
+                }
             </div>
         )
     }
 }
 
 ReturnGoodsList.propTypes = {
-    returnGoodsList: PropTypes.func,
-    returnGoodsListFormData: PropTypes.func,
+    // returnGoodsList: PropTypes.func,
+    // returnGoodsListFormData: PropTypes.func,
     listData: PropTypes.objectOf(PropTypes.any),
     formData: PropTypes.objectOf(PropTypes.any)
 }
