@@ -67,29 +67,56 @@ class DirectSalesOrders extends PureComponent {
                 quantity: goods.quantity
             });
         });
-        this.checkStorage().then(() => {
-            this.props.insertDirectOrder({
-                storeId: this.state.storeId,
-                directStoreCommerItemList: dist
-            });
+        this.checkStorage().then(list => {
+            if (list.length === 0) {
+                this.props.insertDirectOrder({
+                    storeId: this.state.storeId,
+                    directStoreCommerItemList: dist
+                });
+            } else {
+                this.markStorage(list);
+            }
         });
+    }
+
+    /**
+     * 标记库存不足的商品
+     */
+    markStorage = (list) => {
+        const goodsList = [...this.state.goodsList];
+        list.forEach(productId => {
+            const index = goodsList.findIndex(
+                item => item.productId === productId);
+            if (index > -1) goodsList[index].enough = false;
+        });
+        this.setState({ goodsList });
     }
 
     /**
      * 批量校验库存
      */
-    checkStorage = () => {
-        const { branchCompanyId, deliveryWarehouseCode, goodsList } = this.state;
-        const arr = [];
-        goodsList.forEach(item => {
-            arr.push({
-                productId: item.productId,
-                branchCompanyId,
-                loc: deliveryWarehouseCode
+    checkStorage = () => (
+        new Promise((resove, reject) => {
+            const { branchCompanyId, deliveryWarehouseCode, goodsList } = this.state;
+            const products = [];
+            goodsList.forEach(item => {
+                products.push({
+                    productId: item.productId,
+                    quantity: item.quantity
+                });
             });
-        });
-        this.props.batchCheckStorage(arr);
-    }
+            // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/validateDirectOrder
+            this.props.batchCheckStorage({
+                branchCompanyId,
+                deliveryWarehouseCode,
+                products
+            }).then(res => {
+                resove(res.data);
+            }).catch(error => {
+                reject(error);
+            });
+        })
+    )
 
     /**
      * 依次校验是否可以提交
