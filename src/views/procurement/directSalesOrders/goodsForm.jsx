@@ -53,7 +53,7 @@ class GoodsForm extends PureComponent {
         };
         const quantity = sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber;
         const subTotal = quantity * salePrice;
-         // 起订数量显示单位
+        // 起订数量显示单位
         const minNumberSpecifications = sellFullCase === 0 ? `${minNumber}${fullCaseUnit || ''}` : `${minNumber}${minUnit || '-'}`;
         Object.assign(record, {
             productSpecifications: `${packingSpecifications || '-'} / ${unitExplanation || '-'}`,
@@ -121,6 +121,10 @@ class GoodsForm extends PureComponent {
                                 <a className="download" target="_blank" href={`${window.config.apiHost}directStore/downloadExcelModel`}>
                                     下载 Excel 模板
                                 </a>
+                            </FormItem>
+                        </Row>
+                        <Row gutter={40}>
+                            <FormItem>
                                 <div className="info">
                                     数量：<span>30</span>
                                 </div>
