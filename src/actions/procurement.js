@@ -33,6 +33,7 @@ import {
     insertDirectOrder as insertDirectOrderService,
     fetchReturnPoRcvDetail as queryReturnPoDetailSevice,
     deleteBatchRefundOrder as deleteBatchRefundOrderService,
+    batchCheckStorage as batchCheckStorageService
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -654,6 +655,29 @@ export const insertDirectOrder = params => dispatch => (
         insertDirectOrderService(params)
             .then(res => {
                 dispatch(insertDirectOrderAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 直营店下单批量检查库存
+ *
+ * @param {*object} data
+ */
+const batchCheckStorageAction = (data) => ({
+    type: ActionType.VALIDATE_DIRECT_ORDER,
+    payload: data
+});
+
+export const batchCheckStorage = params => dispatch => (
+    new Promise((resolve, reject) => {
+        batchCheckStorageService(params)
+            .then(res => {
+                dispatch(batchCheckStorageAction(res.data));
                 resolve(res);
             })
             .catch(err => {

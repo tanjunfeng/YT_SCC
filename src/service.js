@@ -843,3 +843,5 @@ export const queryGoodsInfo = params => http.get('/directStore/getItemInfo', par
 export const updateGoodsInfo = params => http.post('/directStore/updateItem', params);
 // 直营店下单提交商品
 export const insertDirectOrder = params => http.post('/directStore/directCommitOrder', params);
+// 批量校验库存
+export const batchCheckStorage = params => http.post('/directStore/validateDirectOrder', params);

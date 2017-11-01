@@ -2,6 +2,10 @@
     width: 300px;
     .choos-file {
         float: left;
+        .ant-upload-list {
+            width: 110px;
+            text-overflow: ellipsis;
+        }
     }
     .upload-start {
         position: relative;

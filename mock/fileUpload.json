@@ -1,0 +1,71 @@
+{
+    "timestamp": 1509432902212,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": [
+        {
+            "productCode": "1000381",
+            "internationalCodes": [
+                {
+                    "id": "xincode329865",
+                    "productId": "xprod347915",
+                    "internationalCode": "6922222702132",
+                    "barcodeType": 1
+                }
+            ],
+            "productId": "xprod347915",
+            "productName": "桃李葡萄干蛋糕卷",
+            "firstLevelCategoryName": "生鲜日配",
+            "secondLevelCategoryName": "面包主食",
+            "thirdLevelCategoryName": null,
+            "unitExplanation": null,
+            "packingSpecifications": "1",
+            "sellFullCase": 0,
+            "fullCaseUnit": null,
+            "minUnit": "个",
+            "minNumber": 1,
+            "salePrice": null,
+            "quantity": 30,
+            "saleQuantity": 30,
+            "amount": null,
+            "salesInsideNumber": 1,
+            "enough": false,
+            "available": false,
+            "integerTimes": true,
+            "message": "桃李葡萄干蛋糕卷,不支持该区域销售"
+        },
+        {
+            "productCode": "1000191",
+            "internationalCodes": [
+                {
+                    "id": "xincode329675",
+                    "productId": "xprod347725",
+                    "internationalCode": "6938029400119",
+                    "barcodeType": 1
+                }
+            ],
+            "productId": "xprod347725",
+            "productName": "老灶花生72g",
+            "firstLevelCategoryName": "休闲食品",
+            "secondLevelCategoryName": "休闲零食",
+            "thirdLevelCategoryName": null,
+            "unitExplanation": null,
+            "packingSpecifications": "72g",
+            "sellFullCase": 0,
+            "fullCaseUnit": "盒",
+            "minUnit": "袋1",
+            "minNumber": 1,
+            "salePrice": null,
+            "quantity": 50,
+            "saleQuantity": 50,
+            "amount": null,
+            "salesInsideNumber": 1,
+            "enough": false,
+            "available": true,
+            "integerTimes": true,
+            "message": "老灶花生72g,不支持该区域销售"
+        }
+    ],
+    "success": true
+}
