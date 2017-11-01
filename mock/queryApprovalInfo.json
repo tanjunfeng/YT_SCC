@@ -1,0 +1,19 @@
+{
+    "timestamp": 1508918347352,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": [
+        {
+        "id": 1,
+        "businessId": 2,
+        "businessType": 3,
+        "auditUserId": "4",
+        "auditUser": "5",
+        "auditTime": 1507622021000,
+        "auditResult": 4,
+        "auditOpinion": "5"
+    }
+],
+    "success": true
+}
