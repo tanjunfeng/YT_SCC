@@ -65,7 +65,12 @@ import {
     updatePoRcvLine,
     updatePoRcvBasicinfo,
     createPoRcv,
-    fetchReturnMngList
+    fetchReturnMngList,
+    fetchReturnPoRcvDetail,
+    getRefundNo,
+    deleteBatchRefundOrder,
+    queryAuditPurchaseRefundList,
+    queryApprovalInfo,
 } from './procurement';
 
 // IBM
@@ -98,7 +103,8 @@ import stockListDetail from './stockListDetail';
 import storeAdList from './storeAdjustList';
 
 // 促销活动
-import { getPromotionList, createPromotion,
+import {
+    getPromotionList, createPromotion,
     getPromotionDetail, fetchCouponsListAction, getCouponsDetail
 } from './promotion';
 
@@ -111,6 +117,10 @@ import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './white
 
 // 根据库存实时拆单
 import { splitorderbyinventory, interfaceInventory } from './order';
+
+// 退货订单列表
+
+import { returnGoodsList, returnGoodsDetail, returnGoodsDetailClearData, returnGoodsListFormData } from './salesManagement';
 
 export {
     fetchSupplierList,
@@ -215,6 +225,21 @@ export {
     // 订单
     splitorderbyinventory,
     interfaceInventory,
+    // 销售管理
+    returnGoodsList,
+    returnGoodsDetail,
+    returnGoodsDetailClearData,
+    returnGoodsListFormData,
     // 采购退货列表
-    fetchReturnMngList
+    fetchReturnMngList,
+    // 采购退货详情
+    fetchReturnPoRcvDetail,
+    // 查询退货流水号
+    getRefundNo,
+    // 批量删除处于草稿状态的退货单
+    deleteBatchRefundOrder,
+    // 查询退货单审批列表
+    queryAuditPurchaseRefundList,
+    // 查看退货单审批意见
+    queryApprovalInfo,
 }

@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author taoqiyu
  *
- * 采购管理 - 直营店下单
+ * 采购管理 - 直营店下单 - 商品列表渲染
  */
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
@@ -13,12 +13,11 @@ import PropTypes from 'prop-types';
 import { goodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
 import {
-    updateGoodsInfo,
-    batchCheckStorage
+    updateGoodsInfo
 } from '../../../actions/procurement';
 
 @connect(() => ({}), dispatch => bindActionCreators({
-    updateGoodsInfo, batchCheckStorage
+    updateGoodsInfo
 }, dispatch))
 
 class GoodsTable extends PureComponent {
@@ -51,11 +50,10 @@ class GoodsTable extends PureComponent {
     }
 
     importToList = (list) => {
-        this.checkStorage(list);
         list.forEach(item => {
-            this.checkMultiple(item);
+            this.appendToList(item);
         });
-        this.props.onClearImportList();
+        this.props.onClearImportList(); // 通知父组件清空导入商品列表
     }
 
     /**
@@ -66,6 +64,7 @@ class GoodsTable extends PureComponent {
     checkStore = (goods) => (
         new Promise((resolve, reject) => {
             const { branchCompanyId, deliveryWarehouseCode } = this.props;
+            // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/updateItem
             this.props.updateGoodsInfo({
                 productId: goods.productId,
                 quantity: goods.quantity,
@@ -79,32 +78,6 @@ class GoodsTable extends PureComponent {
                     });
                 }
                 resolve(goods);
-            }).catch(err => {
-                reject(err);
-            });
-        })
-    );
-
-    /**
-     * 批量检查库存是否充足
-     *
-     * @param {*object} goodsList 商品信息
-     */
-    checkStorage = (goodsList) => (
-        new Promise((resolve, reject) => {
-            const { branchCompanyId, deliveryWarehouseCode } = this.props;
-            const dist = [];
-            goodsList.forEach(item => {
-                dist.push({
-                    productId: item.productId,
-                    branchCompanyId,
-                    loc: deliveryWarehouseCode
-                });
-            });
-            this.props.batchCheckStorage({
-                directValidateInventoryVos: dist
-            }).then((res) => {
-                resolve(res);
             }).catch(err => {
                 reject(err);
             });
@@ -137,14 +110,13 @@ class GoodsTable extends PureComponent {
             const goodsList = [...this.props.goodsList];
             const index = goodsList.findIndex(
                 item => item.productCode === goods.productCode);
-            const errors = [];
             // 该商品不在列表中，则新增
             if (index === -1) {
                 goodsList.unshift(goods);
             } else if (index > 0) {
                 goodsList.splice(index, 1);
                 goodsList.unshift(goods);
-                message.info(`${errors.join(',')}该商品已被移动到顶部`);
+                message.info('该商品已被移动到顶部');
             }
             this.props.onChange(goodsList);
         });
@@ -181,6 +153,16 @@ class GoodsTable extends PureComponent {
             />);
     }
 
+    /**
+     * 计算金额小计
+     */
+    renderSubTotal = (text, record) => {
+        if (record.salePrice === null) {
+            return '-';
+        }
+        return record.salePrice * record.quantity;
+    }
+
     renderOperations = (text, record) => (
         <Popconfirm title="确定删除商品？" onConfirm={() => this.onDelete(record.productCode)}>
             <a href="#">删除</a>
@@ -188,6 +170,7 @@ class GoodsTable extends PureComponent {
 
     render() {
         columns[columns.length - 4].render = this.renderNumber;
+        columns[columns.length - 2].render = this.renderSubTotal;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <Table
@@ -206,7 +189,6 @@ class GoodsTable extends PureComponent {
 
 GoodsTable.propTypes = {
     updateGoodsInfo: PropTypes.func,
-    batchCheckStorage: PropTypes.func,
     onChange: PropTypes.func,
     onClearImportList: PropTypes.func,
     branchCompanyId: PropTypes.string,

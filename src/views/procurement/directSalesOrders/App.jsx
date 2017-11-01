@@ -67,22 +67,72 @@ class DirectSalesOrders extends PureComponent {
                 quantity: goods.quantity
             });
         });
-        const { branchCompanyId, deliveryWarehouseCode, goodsList } = this.state;
-        const arr = [];
-        goodsList.forEach(item => {
-            arr.push({
-                productId: item.productId,
-                branchCompanyId,
-                loc: deliveryWarehouseCode
+        this.checkStorage().then(list => {
+            if (list.length === 0) {
+                this.props.insertDirectOrder({
+                    storeId: this.state.storeId,
+                    directStoreCommerItemList: dist
+                });
+            } else {
+                this.markStorage(list);
+            }
+        });
+    }
+
+    /**
+     * 标记库存不足的商品
+     */
+    markStorage = (list) => {
+        const goodsList = [...this.state.goodsList];
+        list.forEach(productId => {
+            const index = goodsList.findIndex(
+                item => item.productId === productId);
+            if (index > -1) goodsList[index].enough = false;
+        });
+        this.setState({ goodsList });
+    }
+
+    /**
+     * 批量校验库存
+     */
+    checkStorage = () => (
+        new Promise((resove, reject) => {
+            const { branchCompanyId, deliveryWarehouseCode, goodsList } = this.state;
+            const products = [];
+            goodsList.forEach(item => {
+                products.push({
+                    productId: item.productId,
+                    quantity: item.quantity
+                });
             });
-        });
-        this.props.batchCheckStorage(arr).then((res) => {
-            console.log(res);
-        });
-        this.props.insertDirectOrder({
-            storeId: this.state.storeId,
-            directStoreCommerItemVoList: dist
-        });
+            // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/validateDirectOrder
+            this.props.batchCheckStorage({
+                branchCompanyId,
+                deliveryWarehouseCode,
+                products
+            }).then(res => {
+                resove(res.data);
+            }).catch(error => {
+                reject(error);
+            });
+        })
+    )
+
+    /**
+     * 依次校验是否可以提交
+     */
+    validateGoods = () => {
+        const goodsList = this.state.goodsList;
+        const length = goodsList.length;
+        if (goodsList.length === 0) {
+            return false;
+        }
+        for (let i = 0, item = goodsList[i]; i < length; i++) {
+            if (!item.available) return false; // 不在当前销售区域
+            if (!item.enough) return false; // 库存不足
+            if (!item.isMultiple) return false; // 不是内装数的整数倍
+        }
+        return true;
     }
 
     render() {
@@ -96,7 +146,7 @@ class DirectSalesOrders extends PureComponent {
         const goodsFormValue = {
             branchCompanyId,
             deliveryWarehouseCode,
-            canBeSubmit: goodsList.length > 0
+            canBeSubmit: this.validateGoods()
         };
         return (
             <div className="direct-sales-orders">

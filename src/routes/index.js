@@ -54,6 +54,7 @@ import PoRcvList from 'bundle-loader?lazy!../views/procurement/poRcvList';
 import PoRcvDetail from 'bundle-loader?lazy!../views/procurement/poRcvDetail';
 import ReturnManagementList from 'bundle-loader?lazy!../views/procurement/returnManagementList';
 import ReturnManagementDetail from 'bundle-loader?lazy!../views/procurement/returnManagementDetail';
+import ReturnManagementCreat from 'bundle-loader?lazy!../views/procurement/returnManagementCreat';
 import DirectStoreOrder from 'bundle-loader?lazy!../views/procurement/directSalesOrders';
 
 // IBM 修改
@@ -92,6 +93,11 @@ import CouponsParticipate from 'bundle-loader?lazy!../views/coupon/participate';
 // 发放优惠券
 import GrantCouponList from 'bundle-loader?lazy!../views/grantCoupons/mngList';
 import grantCouponDetail from 'bundle-loader?lazy!../views/grantCoupons/detail';
+
+// 销售管理
+
+import ReturnGoodsList from 'bundle-loader?lazy!../views/salesManagement/returnGoodsList';
+import ReturnGoodsDetails from 'bundle-loader?lazy!../views/salesManagement/returnGoodsDetails';
 
 /* eslint-enable */
 
@@ -596,9 +602,19 @@ const routes = [
                             </Bundle>)}
                         />
                         <Route
-                            path="/returnManagementList/:porcvid"
+                            path="/returnManagementList/returnManagementDetail/:id"
                             exact
                             render={() => <Bundle load={ReturnManagementDetail}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/returnManagementList/:id"
+                            exact
+                            render={() => <Bundle load={ReturnManagementCreat}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/returnManagementList/returnManagementCreat/:id"
+                            exact
+                            render={() => <Bundle load={ReturnManagementCreat}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )
@@ -741,6 +757,37 @@ const routes = [
                             exact
                             render={() => (<Bundle load={grantCouponDetail}>
                                 {(App) => <App />}</Bundle>)}
+                        />
+                    </Switch>
+                )
+            }
+        ]
+    },
+    // 退货管理
+    {
+        key: 'salesManagement',
+        iconType: 'save',
+        routes: [
+            // 退货单列表
+            {
+                path: '/returnGoodsList',
+                parent: 'salesManagement',
+                key: 'returnGoodsList',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/returnGoodsList"
+                            exact
+                            render={() => (<Bundle load={ReturnGoodsList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/returnGoodsList/detail/:type/:id"
+                            exact
+                            render={() => (<Bundle load={ReturnGoodsDetails}>
+                                {(App) => <App />}
+                            </Bundle>)}
                         />
                     </Switch>
                 )

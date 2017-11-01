@@ -14,14 +14,14 @@ import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { AddingGoodsByStore } from '../../../container/search';
-import { queryGoodsInfo, batchImportGoods } from '../../../actions/procurement';
+import { queryGoodsInfo } from '../../../actions/procurement';
 import Utils from '../../../util/util';
-import { Excel } from './excel';
+import Excel from './excel';
 
 const FormItem = Form.Item;
 
 @connect(() => ({}), dispatch => bindActionCreators({
-    queryGoodsInfo, batchImportGoods
+    queryGoodsInfo
 }, dispatch))
 
 class GoodsForm extends PureComponent {
@@ -34,30 +34,37 @@ class GoodsForm extends PureComponent {
             unitExplanation,
             salePrice,
             packingSpecifications,
-            available,  // 是否在本区域销售
-            minNumber,  // 起订数量
-            minUnit,    // 最小销售单位
-            fullCaseUnit,   // 整箱单位
-            salesInsideNumber,  // 销售内装数
-            sellFullCase    // 是否整箱销售，１:按整箱销售，0:不按整箱销售
+            available, // 是否在本区域销售
+            minNumber, // 起订数量
+            minUnit, // 最小销售单位
+            fullCaseUnit, // 整箱单位
+            salesInsideNumber, // 销售内装数
+            sellFullCase // 是否整箱销售，１:按整箱销售，0:不按整箱销售
         } = goodsInfo;
         const record = {
             productId,
             productCode,
-            internationalCode: internationalCodes[0].internationalCode,
             productName,
-            productSpecifications: `${packingSpecifications || '-'} / ${unitExplanation || '-'}`,
             available,
             salePrice,
             sellFullCase,
             salesInsideNumber,
-            packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit || ''} / ${minUnit || '-'}`,
-            quantity: sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber,
-            minNumber,
-            minNumberSpecifications: sellFullCase === 0 ? `${minNumber}${fullCaseUnit || ''}` : `${minNumber}${minUnit || '-'}`, // 起订数量显示单位
-            enough: true,    // 是否库存充足，默认充足
-            isMultiple: true    // 是否是销售内装数的整数倍，默认是整数倍
+            minNumber
         };
+        const quantity = sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber;
+        const subTotal = quantity * salePrice;
+         // 起订数量显示单位
+        const minNumberSpecifications = sellFullCase === 0 ? `${minNumber}${fullCaseUnit || ''}` : `${minNumber}${minUnit || '-'}`;
+        Object.assign(record, {
+            productSpecifications: `${packingSpecifications || '-'} / ${unitExplanation || '-'}`,
+            packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit || ''} / ${minUnit || '-'}`,
+            internationalCode: internationalCodes[0].internationalCode,
+            quantity,
+            subTotal,
+            minNumberSpecifications,
+            enough: true, // 是否库存充足，默认充足
+            isMultiple: true // 是否是销售内装数的整数倍，默认是整数倍
+        });
         return record;
     }
 
@@ -100,13 +107,13 @@ class GoodsForm extends PureComponent {
                         <Row gutter={40}>
                             <FormItem>
                                 <AddingGoodsByStore
-                                    branchCompanyId={this.props.value.branchCompanyId}
+                                    branchCompanyId={branchCompanyId}
                                     onChange={this.handleGoodsChange}
                                 />
                             </FormItem>
                             <FormItem className="file-upload">
                                 <Excel
-                                    value={excelParams}
+                                    value={{ ...excelParams }}
                                     onChange={this.handleImport}
                                 />
                             </FormItem>
