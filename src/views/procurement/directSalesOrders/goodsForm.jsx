@@ -44,20 +44,27 @@ class GoodsForm extends PureComponent {
         const record = {
             productId,
             productCode,
-            internationalCode: internationalCodes[0].internationalCode,
             productName,
-            productSpecifications: `${packingSpecifications || '-'} / ${unitExplanation || '-'}`,
             available,
             salePrice,
             sellFullCase,
             salesInsideNumber,
+            minNumber
+        };
+        const quantity = sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber;
+        const subTotal = quantity * salePrice;
+         // 起订数量显示单位
+        const minNumberSpecifications = sellFullCase === 0 ? `${minNumber}${fullCaseUnit || ''}` : `${minNumber}${minUnit || '-'}`;
+        Object.assign(record, {
+            productSpecifications: `${packingSpecifications || '-'} / ${unitExplanation || '-'}`,
             packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit || ''} / ${minUnit || '-'}`,
-            quantity: sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber,
-            minNumber,
-            minNumberSpecifications: sellFullCase === 0 ? `${minNumber}${fullCaseUnit || ''}` : `${minNumber}${minUnit || '-'}`, // 起订数量显示单位
+            internationalCode: internationalCodes[0].internationalCode,
+            quantity,
+            subTotal,
+            minNumberSpecifications,
             enough: true, // 是否库存充足，默认充足
             isMultiple: true // 是否是销售内装数的整数倍，默认是整数倍
-        };
+        });
         return record;
     }
 

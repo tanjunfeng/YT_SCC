@@ -64,6 +64,7 @@ class GoodsTable extends PureComponent {
     checkStore = (goods) => (
         new Promise((resolve, reject) => {
             const { branchCompanyId, deliveryWarehouseCode } = this.props;
+            // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/updateItem
             this.props.updateGoodsInfo({
                 productId: goods.productId,
                 quantity: goods.quantity,
@@ -109,14 +110,13 @@ class GoodsTable extends PureComponent {
             const goodsList = [...this.props.goodsList];
             const index = goodsList.findIndex(
                 item => item.productCode === goods.productCode);
-            const errors = [];
             // 该商品不在列表中，则新增
             if (index === -1) {
                 goodsList.unshift(goods);
             } else if (index > 0) {
                 goodsList.splice(index, 1);
                 goodsList.unshift(goods);
-                message.info(`${errors.join(',')}该商品已被移动到顶部`);
+                message.info('该商品已被移动到顶部');
             }
             this.props.onChange(goodsList);
         });
@@ -153,16 +153,14 @@ class GoodsTable extends PureComponent {
             />);
     }
 
-    renderPrice = (text, record) => {
-        const hasQuantity = typeof record.quantity === 'number' && record.quantity !== 0;
-        let price = record.salePrice || 0;
-        if (record.sellFullCase === 1) {
-            price *= record.salesInsideNumber;
+    /**
+     * 计算金额小计
+     */
+    renderSubTotal = (text, record) => {
+        if (record.salePrice === null) {
+            return '-';
         }
-        if (hasQuantity && price > 0) {
-            return record.quantity * price;
-        }
-        return '-';
+        return record.salePrice * record.quantity;
     }
 
     renderOperations = (text, record) => (
@@ -172,7 +170,7 @@ class GoodsTable extends PureComponent {
 
     render() {
         columns[columns.length - 4].render = this.renderNumber;
-        columns[columns.length - 2].render = this.renderPrice;
+        columns[columns.length - 2].render = this.renderSubTotal;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <Table
