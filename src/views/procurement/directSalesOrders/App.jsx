@@ -67,16 +67,16 @@ class DirectSalesOrders extends PureComponent {
                 quantity: goods.quantity
             });
         });
-        const { branchCompanyId, deliveryWarehouseCode, goodsList } = this.state;
-        const arr = [];
-        goodsList.forEach(item => {
-            arr.push({
-                productId: item.productId,
-                branchCompanyId,
-                loc: deliveryWarehouseCode
-            });
-        });
-        this.props.batchCheckStorage(arr);
+        // const { branchCompanyId, deliveryWarehouseCode, goodsList } = this.state;
+        // const arr = [];
+        // goodsList.forEach(item => {
+        //     arr.push({
+        //         productId: item.productId,
+        //         branchCompanyId,
+        //         loc: deliveryWarehouseCode
+        //     });
+        // });
+        // this.props.batchCheckStorage(arr);
         this.props.insertDirectOrder({
             storeId: this.state.storeId,
             directStoreCommerItemVoList: dist

@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author taoqiyu
  *
- * 采购管理 - 直营店下单
+ * 采购管理 - 直营店下单 - 商品列表渲染
  */
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
