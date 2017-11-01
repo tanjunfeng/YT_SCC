@@ -67,21 +67,28 @@ class DirectSalesOrders extends PureComponent {
                 quantity: goods.quantity
             });
         });
-        // 批量校验库存
-        // const { branchCompanyId, deliveryWarehouseCode, goodsList } = this.state;
-        // const arr = [];
-        // goodsList.forEach(item => {
-        //     arr.push({
-        //         productId: item.productId,
-        //         branchCompanyId,
-        //         loc: deliveryWarehouseCode
-        //     });
-        // });
-        // this.props.batchCheckStorage(arr);
-        this.props.insertDirectOrder({
-            storeId: this.state.storeId,
-            directStoreCommerItemList: dist
+        this.checkStorage().then(() => {
+            this.props.insertDirectOrder({
+                storeId: this.state.storeId,
+                directStoreCommerItemList: dist
+            });
         });
+    }
+
+    /**
+     * 批量校验库存
+     */
+    checkStorage = () => {
+        const { branchCompanyId, deliveryWarehouseCode, goodsList } = this.state;
+        const arr = [];
+        goodsList.forEach(item => {
+            arr.push({
+                productId: item.productId,
+                branchCompanyId,
+                loc: deliveryWarehouseCode
+            });
+        });
+        this.props.batchCheckStorage(arr);
     }
 
     /**
