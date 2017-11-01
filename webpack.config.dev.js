@@ -3,19 +3,19 @@
  * @author denglingbo
  *
  */
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebPlugin = require('html-webpack-plugin');
-var CopyPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const HtmlWebPlugin = require('html-webpack-plugin');
+// const webpack = require('webpack');
+// const CopyPlugin = require('copy-webpack-plugin');
 
 // 调用 framework
-var makeWebpack = require('freed-spa/make-webpack.config');
+const makeWebpack = require('freed-spa/make-webpack.config');
 
-var ROOT_PATH = path.resolve(__dirname);
-const ENV = process.env.NODE_ENV;
-const CONF = process.env.CONF;
+const ROOT_PATH = path.resolve(__dirname);
+// const ENV = process.env.NODE_ENV;
+// const CONF = process.env.CONF;
 
-var webpackConfig = makeWebpack({
+const webpackConfig = makeWebpack({
     entry: {
         common: ['moment', 'core-js', 'immutable'],
         index: './src/index',

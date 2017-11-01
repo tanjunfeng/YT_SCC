@@ -26,6 +26,8 @@ import CommodifyDetail from 'bundle-loader?lazy!../views/commodity/commodifyDeta
 import CateListGoodsSortManage from 'bundle-loader?lazy!../views/SysConfig/CateListGoodsSortManage';
 // 数据字典
 import DataDictionary from 'bundle-loader?lazy!../views/SysConfig/DataDictionary';
+// 白名单
+import WhiteListConfig from 'bundle-loader?lazy!../views/SysConfig/whiteListConfiguration/whiteList';
 // 静态页管理
 import StaticPageHome from 'bundle-loader?lazy!../views/mediaManagement/StaticPageHome';
 // ckeditor
@@ -43,13 +45,17 @@ import CategoryIconManagement from 'bundle-loader?lazy!../views/wrapConfigure/ca
 // wap端分类图标管理
 import AdPlanList404 from 'bundle-loader?lazy!../views/wrapConfigure/adPlanList404';
 
-/*********************procurement************************* */
+// 采购管理
 import PoMngList from 'bundle-loader?lazy!../views/procurement/poMngList';
 import PoDetail from 'bundle-loader?lazy!../views/procurement/poDetail';
 import PoPrintList from 'bundle-loader?lazy!../views/procurement/poPrintList';
 import PoRcvMngList from 'bundle-loader?lazy!../views/procurement/poRcvMngList';
 import PoRcvList from 'bundle-loader?lazy!../views/procurement/poRcvList';
 import PoRcvDetail from 'bundle-loader?lazy!../views/procurement/poRcvDetail';
+import ReturnManagementList from 'bundle-loader?lazy!../views/procurement/returnManagementList';
+import ReturnManagementDetail from 'bundle-loader?lazy!../views/procurement/returnManagementDetail';
+import ReturnManagementCreat from 'bundle-loader?lazy!../views/procurement/returnManagementCreat';
+import DirectStoreOrder from 'bundle-loader?lazy!../views/procurement/directSalesOrders';
 
 // IBM 修改
 // 商品采购关系维护
@@ -88,6 +94,11 @@ import CouponsParticipate from 'bundle-loader?lazy!../views/coupon/participate';
 import GrantCouponList from 'bundle-loader?lazy!../views/grantCoupons/mngList';
 import grantCouponDetail from 'bundle-loader?lazy!../views/grantCoupons/detail';
 
+// 销售管理
+
+import ReturnGoodsList from 'bundle-loader?lazy!../views/salesManagement/returnGoodsList';
+import ReturnGoodsDetails from 'bundle-loader?lazy!../views/salesManagement/returnGoodsDetails';
+
 /* eslint-enable */
 
 /**
@@ -125,6 +136,21 @@ const routes = [
                         path="/DataDictionary"
                         exact
                         render={() => <Bundle load={DataDictionary}>{(App) => <App />}</Bundle>}
+                    />
+                ),
+            },
+            {
+                // 白名单配置
+                path: '/whiteListConfig',
+                parent: 'gylxtpz',
+                key: 'whiteListConfig',
+                component: () => (
+                    <Route
+                        path="/whiteListConfig"
+                        exact
+                        render={() =>
+                            <Bundle load={WhiteListConfig}>{(App) => <App />}</Bundle>
+                        }
                     />
                 ),
             }
@@ -234,12 +260,6 @@ const routes = [
                                 {(App) => <App />}
                             </Bundle>)}
                         />
-                        {/*
-                          * /suppliersAppList/supplier/xprov334#/  供应商详情
-                          * /suppliersAppList/place/14#/ 供应商地点详情
-                          * /suppliersAppList/add/14#/ 新增供应商地点
-                          * /suppliersAppList/edit/14#/ 修改供应商地点
-                         */}
                         <Route
                             path="/SuppliersAppList/:type/:id"
                             exact
@@ -251,9 +271,6 @@ const routes = [
                             exact
                             render={() => <Bundle load={AddSupplier}>{(App) => <App />}</Bundle>}
                         />
-                        {/*
-                         * /SuppliersAppList/edit/supplier/xprov334 编辑供应商地点
-                        */}
                         <Route
                             path="/SuppliersAppList/edit/:type/:id"
                             exact
@@ -276,12 +293,6 @@ const routes = [
                                 {(App) => <App />}
                             </Bundle>)}
                         />
-                        {/*
-                          * /supplierInputList/supplier/xprov334#/  供应商详情
-                          * /supplierInputList/place/14#/ 供应商地点详情
-                          * /supplierInputList/add/14#/ 新增供应商地点
-                          * /supplierInputList/edit/14#/ 修改供应商地点
-                         */}
                         <Route
                             path="/supplierInputList/:type/:id"
                             exact
@@ -510,15 +521,6 @@ const routes = [
                             exact
                             render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
                         />
-                        {/* <Route
-                            path="/po/:purchaseOrderNo"
-                            exact
-                            render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
-                        />  */}
-                        {/*
-                          *  /po/edit/xxxx
-                          *  /po/detail/xxxx
-                          */}
                         <Route
                             path="/po/:type/:purchaseOrderNo"
                             exact
@@ -582,6 +584,53 @@ const routes = [
                             path="/porcvlist/create/:poid"
                             exact
                             render={() => <Bundle load={PoRcvDetail}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
+            {
+                path: '/returnManagementList',
+                parent: 'procurementMng',
+                key: 'returnManagementList',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/returnManagementList"
+                            exact
+                            render={() => (<Bundle load={ReturnManagementList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/returnManagementList/returnManagementDetail/:id"
+                            exact
+                            render={() => <Bundle load={ReturnManagementDetail}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/returnManagementList/:id"
+                            exact
+                            render={() => <Bundle load={ReturnManagementCreat}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
+                            path="/returnManagementList/returnManagementCreat/:id"
+                            exact
+                            render={() => <Bundle load={ReturnManagementCreat}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
+            {
+                path: '/directStoreOrder',
+                parent: 'procurementMng',
+                key: 'zydxd',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/directStoreOrder"
+                            exact
+                            render={() => (<Bundle load={DirectStoreOrder}>
+                                {(App) => <App />}
+                            </Bundle>)}
                         />
                     </Switch>
                 )
@@ -708,6 +757,37 @@ const routes = [
                             exact
                             render={() => (<Bundle load={grantCouponDetail}>
                                 {(App) => <App />}</Bundle>)}
+                        />
+                    </Switch>
+                )
+            }
+        ]
+    },
+    // 退货管理
+    {
+        key: 'salesManagement',
+        iconType: 'save',
+        routes: [
+            // 退货单列表
+            {
+                path: '/returnGoodsList',
+                parent: 'salesManagement',
+                key: 'returnGoodsList',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/returnGoodsList"
+                            exact
+                            render={() => (<Bundle load={ReturnGoodsList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/returnGoodsList/detail/:type/:id"
+                            exact
+                            render={() => (<Bundle load={ReturnGoodsDetails}>
+                                {(App) => <App />}
+                            </Bundle>)}
                         />
                     </Switch>
                 )

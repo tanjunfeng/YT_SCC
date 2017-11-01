@@ -28,9 +28,15 @@ import {
 import { exportOrderList } from '../../../service';
 import CauseModal from './causeModal';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
-import { fetchOrderList, modifyBatchApproval, modifyResendOrder, modifyApprovalOrder } from '../../../actions/order';
+import {
+    fetchOrderList,
+    modifyBatchApproval,
+    modifyResendOrder,
+    modifyApprovalOrder
+} from '../../../actions/order';
 import { pubFetchValueList } from '../../../actions/pub';
-import { TIME_FORMAT, DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
+import { DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
+import { orderListColumns as columns } from '../columns';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -41,62 +47,6 @@ const yesterdayDate = moment().subtract(1, 'days').valueOf().toString();
 const todayDate = moment().valueOf().toString();
 const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
 
-const columns = [{
-    title: '序号',
-    dataIndex: 'sort',
-    key: 'sort',
-    render: (text, record, index) => index + 1
-}, {
-    title: '订单编号',
-    dataIndex: 'id',
-    key: 'id',
-}, {
-    title: '父订单编号',
-    dataIndex: 'createdByOrderId',
-    key: 'createdByOrderId',
-}, {
-    title: '订单日期',
-    dataIndex: 'submitTime',
-    key: 'submitTime',
-    render: (text) => (
-        <span>
-            {moment(parseInt(text, 10)).format(TIME_FORMAT)}
-        </span>
-    )
-}, {
-    title: '订单类型',
-    dataIndex: 'orderTypeDesc',
-    key: 'orderTypeDesc',
-}, {
-    title: '订单金额',
-    dataIndex: 'total',
-    key: 'total',
-}, {
-    title: '订单状态',
-    dataIndex: 'orderStateDesc',
-    key: 'orderStateDesc',
-}, {
-    title: '支付状态',
-    dataIndex: 'paymentStateDesc',
-    key: 'paymentStateDesc',
-}, {
-    title: '物流状态',
-    dataIndex: 'shippingStateDesc',
-    key: 'shippingStateDesc',
-}, {
-    title: '子公司',
-    dataIndex: 'branchCompanyName',
-    key: 'branchCompanyName',
-}, {
-    title: '加盟商编号',
-    dataIndex: 'franchiseeId',
-    key: 'franchiseeId',
-}, {
-    title: '操作',
-    dataIndex: 'operation',
-    key: 'operation',
-}];
-
 @connect(
     state => ({
         orderListData: state.toJS().order.orderListData,
@@ -104,14 +54,13 @@ const columns = [{
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
         fetchOrderList,
-        pubFetchValueList,
+        pubFetchValueList
     }, dispatch)
 )
 class OrderManagementList extends Component {
     constructor(props) {
         super(props);
         this.onEnterTimeChange = ::this.onEnterTimeChange;
-        this.renderOperation = ::this.renderOperation;
         this.handleOrderBatchReview = ::this.handleOrderBatchReview;
         this.handleOrderBatchCancel = ::this.handleOrderBatchCancel;
         this.handleOrderSearch = ::this.handleOrderSearch;
@@ -125,6 +74,7 @@ class OrderManagementList extends Component {
         this.orderTypeSelect = ::this.orderTypeSelect;
         this.getSearchData = ::this.getSearchData;
         this.joiningSearchMind = null;
+        this.renderOperation = ::this.renderOperation;
         this.searchData = {};
         this.current = 1;
         this.state = {
@@ -181,6 +131,7 @@ class OrderManagementList extends Component {
             paymentState,
             cellphone,
             shippingState,
+            thirdPartOrderNo
         } = this.props.form.getFieldsValue();
 
         const { franchiseeId, branchCompanyId } = this.state;
@@ -196,6 +147,7 @@ class OrderManagementList extends Component {
             franchiseeId,
             branchCompanyId,
             submitStartTime,
+            thirdPartOrderNo,
             submitEndTime,
             pageSize: PAGE_SIZE,
         }
@@ -396,7 +348,7 @@ class OrderManagementList extends Component {
         const pathname = window.location.pathname;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
-                <Menu.Item key={0}>
+                <Menu.Item key="detail">
                     <Link to={`${pathname}/orderDetails/${id}`}>查看订单详情</Link>
                 </Menu.Item>
                 {
@@ -658,6 +610,22 @@ class OrderManagementList extends Component {
                             </Row>
                             <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
+                                    {/* 电商订单编号 */}
+                                    <FormItem>
+                                        <div>
+                                            <span className="sc-form-item-label">电商订单编号</span>
+                                            {getFieldDecorator('thirdPartOrderNo')(
+                                                <Input
+                                                    className="input"
+                                                    placeholder="请输入电商订单编号"
+                                                />
+                                            )}
+                                        </div>
+                                    </FormItem>
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col className="gutter-row" span={8}>
                                     <FormItem>
                                         <Button
                                             size="default"
@@ -726,7 +694,7 @@ OrderManagementList.propTypes = {
     orderListData: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
     fetchOrderList: PropTypes.func,
-    pubFetchValueList: PropTypes.func,
+    pubFetchValueList: PropTypes.func
 }
 
 OrderManagementList.defaultProps = {

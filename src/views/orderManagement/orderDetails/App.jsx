@@ -20,7 +20,7 @@ const orderDT = 'order-details';
 
 @connect(
     state => ({
-        initialData: state.toJS().order.initialData,
+        orderListData: state.toJS().order.orderListData,
     }),
     dispatch => bindActionCreators({
         fetchOrderDetailInfo,
@@ -28,18 +28,13 @@ const orderDT = 'order-details';
         fetchShippingDetailInfo,
     }, dispatch)
 )
-class OrderManagementDetails extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        }
-    }
 
-    componentDidMount() {
+class OrderManagementDetails extends Component {
+    componentWillMount() {
         const { id } = this.props.match.params;
-        this.props.fetchOrderDetailInfo({id});
-        this.props.fetchPaymentDetailInfo({orderId: id});
-        this.props.fetchShippingDetailInfo({id});
+        this.props.fetchOrderDetailInfo({ id });
+        this.props.fetchPaymentDetailInfo({ orderId: id });
+        this.props.fetchShippingDetailInfo({ id });
     }
 
     render() {
@@ -48,7 +43,7 @@ class OrderManagementDetails extends Component {
                 <Tabs
                     defaultActiveKey="1"
                     className={`${orderDT}`}
-                    style={{marginTop: '16px'}}
+                    style={{ marginTop: '16px' }}
                 >
                     <TabPane tab="订单信息" key="1">
                         <OrderInformation />

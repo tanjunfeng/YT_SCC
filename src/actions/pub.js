@@ -20,12 +20,15 @@ import {
     getWarehouseInfo1,
     queryAllCategoriesWithIconByParentId,
     getStoreInfo,
+    queryProductByStore,
     querycategories,
     getFranchiseeInfo,
     findCanUseCompanyInfo,
     queryCategorysByLevel,
     queryBranchCompanyInfo,
     queryProductForSelect,
+    queryDirectStores,
+    queryPurchaseOrderBrands,
     findCompanyBaseInfo as findCompaniesService
 } from '../service';
 
@@ -52,6 +55,7 @@ const pubValueList = {
     getWarehouseInfo1,
     // 查询门店列表
     getStoreInfo,
+    queryProductByStore,
     // 根据分类名字或者编码查询指定等级的分类列表
     querycategories,
     // 查询加盟商
@@ -63,8 +67,12 @@ const pubValueList = {
     // 通过商品id查询子公司
     queryBranchCompanyInfo,
     // 添加商品
-    queryProductForSelect
-}
+    queryProductForSelect,
+    // 查询直营店
+    queryDirectStores,
+    // 品牌值清单
+    queryPurchaseOrderBrands
+};
 
 const receiveCollapsed = (isCollapsed) => ({
     type: ActionType.PUB_COLLAPSED,

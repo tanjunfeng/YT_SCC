@@ -108,7 +108,7 @@ class ReleaseCouponModal extends PureComponent {
     }
 
     handleCancel() {
-        this.props.onReleaseCouponModalCancel();
+        this.props.onReleaseCouponModalCancel(this.state.promoIds);
     }
 
     render() {

@@ -64,7 +64,13 @@ import {
     fetchPoRcvInit,
     updatePoRcvLine,
     updatePoRcvBasicinfo,
-    createPoRcv
+    createPoRcv,
+    fetchReturnMngList,
+    fetchReturnPoRcvDetail,
+    getRefundNo,
+    deleteBatchRefundOrder,
+    queryAuditPurchaseRefundList,
+    queryApprovalInfo,
 } from './procurement';
 
 // IBM
@@ -82,6 +88,7 @@ import suppplierSettledAudit from './fetch/suppplierSettledAudit';
 import supplierAdrSettledAudit from './fetch/supplierAdrSettledAudit';
 import modifyAuditAdrVisible from './modify/modifyAuditAdrVisible';
 import auditSupplierEditInfoAction from '../actions/supplier';
+import syncProductByManualAction from '../actions/syncProductByManual';
 import {
     UpdateProdPurchase,
     getProductById,
@@ -96,13 +103,24 @@ import stockListDetail from './stockListDetail';
 import storeAdList from './storeAdjustList';
 
 // 促销活动
-import { getPromotionList, createPromotion,
+import {
+    getPromotionList, createPromotion,
     getPromotionDetail, fetchCouponsListAction, getCouponsDetail
 } from './promotion';
 
 // 商品管理列表
 // 根据条件分页查询商品清单，并排序
 import queryCommodityList from './queryCommodityList';
+
+// 根据条件分页查询白名单列表, 上线下线
+import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './whiteListConfiguration';
+
+// 根据库存实时拆单
+import { splitorderbyinventory, interfaceInventory } from './order';
+
+// 退货订单列表
+
+import { returnGoodsList, returnGoodsDetail, returnGoodsDetailClearData, returnGoodsListFormData } from './salesManagement';
 
 export {
     fetchSupplierList,
@@ -193,5 +211,35 @@ export {
     fetchAddProdPurchase,
     fetchUpdateProdPurchase,
     fetchChangeProPurchaseStatus,
-    fetchDeleteProdPurchaseById
+    fetchDeleteProdPurchaseById,
+
+    // 根据条件分页查询白名单列表
+    queryWhiteListAction,
+    // 上线下线
+    onlineWhitelist,
+    offlineWhitelist,
+
+    // 商品管理
+    syncProductByManualAction,
+
+    // 订单
+    splitorderbyinventory,
+    interfaceInventory,
+    // 销售管理
+    returnGoodsList,
+    returnGoodsDetail,
+    returnGoodsDetailClearData,
+    returnGoodsListFormData,
+    // 采购退货列表
+    fetchReturnMngList,
+    // 采购退货详情
+    fetchReturnPoRcvDetail,
+    // 查询退货流水号
+    getRefundNo,
+    // 批量删除处于草稿状态的退货单
+    deleteBatchRefundOrder,
+    // 查询退货单审批列表
+    queryAuditPurchaseRefundList,
+    // 查看退货单审批意见
+    queryApprovalInfo,
 }

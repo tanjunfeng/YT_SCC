@@ -48,6 +48,20 @@ const initState = fromJS({
     poRcv: {},
     // 新增商品信息
     newPcOdData: {},
+    // 采购退货清单
+    returnMngList: {},
+    // 直营店信息
+    directInfo: {},
+    // 单个商品详情
+    goodsInfo: {},
+    // 退货详情
+    poReturn: {},
+    // 查询退货流水号
+    getRefundNumebr: {},
+    // 退货单审批列表
+    queryPurchaseRefundList: {},
+    // 退货单审批意见
+    approvalInfo: {},
 });
 
 export default function (state = initState, action) {
@@ -142,6 +156,14 @@ export default function (state = initState, action) {
 
         case ActionType.RECEIVE_PO_RCV_DETAIL:// 收货单详情
             return state.set('poRcv', fromJS(action.payload));
+        case ActionType.RETURN_PO_RCV_INIT:// 退货单详情
+            return state.set('poReturn', fromJS(action.payload));
+        case ActionType.GET_REFUND_NO_ACTION:// 退货单详情
+            return state.set('getRefundNumebr', fromJS(action.payload));
+        case ActionType.QUERY_AUDIT_PURCHASE_LIST:// 退货单审批列表
+            return state.set('queryPurchaseRefundList', fromJS(action.payload));
+        case ActionType.QUERY_APPROVAL_INFO:// 退货单审批意见
+            return state.set('approvalInfo', fromJS(action.payload));
 
         case ActionType.RECEIVE_NEW_PURCHASE_ORDER:// 收货单详情
             return state.set('newPcOdData', fromJS(action.payload));
@@ -149,6 +171,10 @@ export default function (state = initState, action) {
         case ActionType.RECEIVE_PO_RCV_INIT:// 初始收货单详情
             payload = action.payload || {};
             return state.set('poRcv', fromJS(action.payload));
+
+        case ActionType.RECEIVE_RETURN_MNG_LIST:// 采购退货列表
+            payload = action.payload || {};
+            return state.set('returnMngList', fromJS(action.payload));
 
         case ActionType.UPDATE_PO_RCV_LINE:// 更新收货单商品行
             poRcv = Object.assign(
@@ -174,6 +200,13 @@ export default function (state = initState, action) {
             basicInfo = Object.assign(basicInfo, payload);
             poRcv.basicInfo = basicInfo;
             return state.set('poRcv', poRcv);
+
+        // 直营店详情
+        case ActionType.FETCH_DIRECT_INFO:
+        case ActionType.CLEAR_DIRECT_INFO:
+            return state.set('directInfo', fromJS(action.payload));
+        case ActionType.FETCH_GOODS_INFO:
+            return state.set('goodsInfo', fromJS(action.payload));
         default:
             return state;
     }

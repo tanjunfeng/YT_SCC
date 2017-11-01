@@ -1,4 +1,5 @@
 import SubCompanies from './SubCompanies';
-import './index.scss';
+import DirectStores from './DirectStores';
+import AddingGoodsByStore from './AddingGoodsByStore';
 
-export { SubCompanies };
+export { SubCompanies, DirectStores, AddingGoodsByStore };

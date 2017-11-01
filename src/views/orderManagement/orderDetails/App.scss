@@ -43,17 +43,6 @@
             margin-right: 10px;
         }
     }
-    .ant-table-footer {
-        background-color: #fff;
-        text-align: right;
-        .red-number {
-            color: #f00;
-        }
-        .table-footer-item {
-            margin-right: 30px;
-            display: inline-block;
-        }
-    }
     .red-star {
         color: red;
     }
@@ -66,6 +55,15 @@
     }
     .ant-input-number {
         width: 60px;
+    }
+    .table-statistics {
+        line-height: 32px;
+        .table-statistics-item {
+            margin-right: 2em;
+            .red {
+                color: red;
+            }
+        }
     }
 }
 .ant-modal-wrap {
@@ -86,4 +84,8 @@
     }
 
 }
-
+.order-details-split-btn{
+    .details-split-btns{
+        margin: 0 5px 10px 5px;
+    }
+}

@@ -17,7 +17,7 @@ import PayModal from './payModal';
 import { DATE_FORMAT } from '../../../constant/index';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { modifyPayModalVisible } from '../../../actions/modify/modifyPayModalVisible';
-import { modifyConfirmPayment, fetchPaymentDetailInfo } from '../../../actions/order';
+import { modifyConfirmPayment, fetchPaymentDetailInfo, fetchOrderDetailInfo } from '../../../actions/order';
 
 @connect(
     state => ({
@@ -27,6 +27,7 @@ import { modifyConfirmPayment, fetchPaymentDetailInfo } from '../../../actions/o
         modifyCauseModalVisible,
         modifyPayModalVisible,
         fetchPaymentDetailInfo,
+        fetchOrderDetailInfo
     }, dispatch)
 )
 class PayInformation extends PureComponent {
@@ -165,14 +166,14 @@ class PayInformation extends PureComponent {
         modifyConfirmPayment({
             orderId,
             paymentId: id
+        }).then((res) => {
+            if (res.code === 200 && res.success) {
+                this.props.fetchPaymentDetailInfo({ orderId });
+                this.props.fetchOrderDetailInfo({ id: this.props.match.params.id });
+            } else if (!res.success) {
+                message.error(res.message);
+            }
         })
-            .then((res) => {
-                if (res.code === 200 && res.success) {
-                    this.props.fetchPaymentDetailInfo({ orderId })
-                } else if (!res.success) {
-                    message.error(res.message);
-                }
-            })
     }
 
     /**
@@ -186,25 +187,6 @@ class PayInformation extends PureComponent {
     render() {
         const { paymentDetailData } = this.props;
         const { totalAmount, totalPaidAmount, totalRefundedAmount } = paymentDetailData;
-        const tableFooter = () =>
-            (<div>
-                <span className="table-footer-item">
-                    <span>总金额： ￥</span>
-                    <span className="red-number">{totalAmount}</span>
-                </span>
-                <span className="table-footer-item">
-                    <span>付款： ￥</span>
-                    <span className="red-number">{totalPaidAmount}</span>
-                </span>
-                <span className="table-footer-item">
-                    <span>退款： ￥</span>
-                    <span className="red-number">{totalRefundedAmount}</span>
-                </span>
-                {/* <span className="table-footer-item">
-                    <span>差额： ￥</span>
-                    <span className="red-number">{totalPaidAmount - totalRefundedAmount}</span>
-                </span> */}
-            </div>)
         return (
             <div>
                 <div className="order-details-item">
@@ -233,8 +215,21 @@ class PayInformation extends PureComponent {
                                 columns={this.columns}
                                 pagination={false}
                                 rowKey="id"
-                                footer={tableFooter}
                             />
+                        </div>
+                        <div className="table-statistics" style={{ textAlign: 'right' }}>
+                            <span className="table-statistics-item">
+                                <span>总金额： ￥</span>
+                                <span className="red">{totalAmount}</span>
+                            </span>
+                            <span className="table-statistics-item">
+                                <span>付款： ￥</span>
+                                <span className="red">{totalPaidAmount}</span>
+                            </span>
+                            <span className="table-statistics-item">
+                                <span>退款： ￥</span>
+                                <span className="red">{totalRefundedAmount}</span>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -273,9 +268,8 @@ PayInformation.propTypes = {
     modifyCauseModalVisible: PropTypes.func,
     modifyPayModalVisible: PropTypes.func,
     fetchPaymentDetailInfo: PropTypes.func,
-}
-
-PayInformation.defaultProps = {
+    fetchOrderDetailInfo: PropTypes.func,
+    match: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(PayInformation));
