@@ -6,7 +6,7 @@
  */
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
-import { Form } from 'antd';
+import { Form, BackTop, Modal } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -28,13 +28,38 @@ class DirectSalesOrders extends PureComponent {
         deliveryWarehouseCode: '', // 送货舱编码
         goodsList: [], // 当前显示商品列表
         importList: [], // 导入商品列表
-        goodsAddOn: null // 手工添加的单个商品
+        goodsAddOn: null, // 手工添加的单个商品
+        modalVisible: false
     }
 
+    record = null; // 重新选择的门店信息
+
     handleStoresChange = (record) => {
-        const { storeId, branchCompanyId, deliveryWarehouseCode } = record;
-        this.setState({ storeId, branchCompanyId, deliveryWarehouseCode });
+        this.record = record;
+        const { storeId, goodsList } = this.state;
+        // 门店信息变化时，判断是否存在已选商品列表，并弹出确认框
+        if (goodsList.length > 0 && storeId !== '') {
+            this.setState({ modalVisible: true });
+        } else {
+            this.handleModalOk();
+        }
+    }
+
+    /**
+     * 重新选择商品
+     */
+    handleModalOk = () => {
+        const { storeId, branchCompanyId, deliveryWarehouseCode } = this.record;
+        this.setState({ storeId, branchCompanyId, deliveryWarehouseCode, modalVisible: false });
         this.handleClear();
+    }
+
+    /**
+     * 不重新选择商品，清空传入的门店信息
+     */
+    handleModalCancel = () => {
+        this.record = null;
+        this.setState({ modalVisible: false });
     }
 
     handleGoodsFormChange = (goodsAddOn) => {
@@ -168,6 +193,15 @@ class DirectSalesOrders extends PureComponent {
                     onChange={this.handleGoodsListChange}
                     onClearImportList={this.handleClearImportList}
                 />
+                <Modal
+                    title="重新选择门店"
+                    visible={this.state.modalVisible}
+                    onOk={this.handleModalOk}
+                    onCancel={this.handleModalCancel}
+                >
+                    <p>这个操作将要重新选择门店并清空已选择商品，确定吗？</p>
+                </Modal>
+                <BackTop />
             </div>
         );
     }

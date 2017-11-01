@@ -111,19 +111,19 @@ class GoodsForm extends PureComponent {
                                     onChange={this.handleGoodsChange}
                                 />
                             </FormItem>
+                            <FormItem className="download" >
+                                <a target="_blank" href={`${window.config.apiHost}directStore/downloadExcelModel`}>
+                                    下载 Excel 模板
+                                </a>
+                            </FormItem>
                             <FormItem className="file-upload">
                                 <Excel
                                     value={{ ...excelParams }}
                                     onChange={this.handleImport}
                                 />
                             </FormItem>
-                            <FormItem>
-                                <a className="download" target="_blank" href={`${window.config.apiHost}directStore/downloadExcelModel`}>
-                                    下载 Excel 模板
-                                </a>
-                            </FormItem>
                         </Row>
-                        <Row gutter={40}>
+                        <Row gutter={40} type="flex" justify="end">
                             <FormItem>
                                 <div className="info">
                                     数量：<span>30</span>
@@ -132,7 +132,7 @@ class GoodsForm extends PureComponent {
                                     金额：<span>2000</span>
                                 </div>
                             </FormItem>
-                            <FormItem className="fr">
+                            <FormItem>
                                 <Button type="primary" size="default" onClick={this.handleSubmit} disabled={!canBeSubmit}>
                                     提交
                                 </Button>
