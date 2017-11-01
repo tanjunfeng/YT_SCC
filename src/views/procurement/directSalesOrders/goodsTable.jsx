@@ -13,12 +13,11 @@ import PropTypes from 'prop-types';
 import { goodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
 import {
-    updateGoodsInfo,
-    batchCheckStorage
+    updateGoodsInfo
 } from '../../../actions/procurement';
 
 @connect(() => ({}), dispatch => bindActionCreators({
-    updateGoodsInfo, batchCheckStorage
+    updateGoodsInfo
 }, dispatch))
 
 class GoodsTable extends PureComponent {
@@ -55,12 +54,6 @@ class GoodsTable extends PureComponent {
             this.appendToList(item);
         });
         this.props.onClearImportList(); // 通知父组件清空导入商品列表
-        // this.checkStorage(list).then(() => {
-        //     list.forEach(item => {
-        //         this.checkMultiple(item);
-        //     });
-        //     this.props.onClearImportList();
-        // });
     }
 
     /**
@@ -84,32 +77,6 @@ class GoodsTable extends PureComponent {
                     });
                 }
                 resolve(goods);
-            }).catch(err => {
-                reject(err);
-            });
-        })
-    );
-
-    /**
-     * 批量检查库存是否充足
-     *
-     * @param {*object} goodsList 商品信息
-     */
-    checkStorage = (goodsList) => (
-        new Promise((resolve, reject) => {
-            const { branchCompanyId, deliveryWarehouseCode } = this.props;
-            const dist = [];
-            goodsList.forEach(item => {
-                dist.push({
-                    productId: item.productId,
-                    branchCompanyId,
-                    loc: deliveryWarehouseCode
-                });
-            });
-            this.props.batchCheckStorage({
-                directValidateInventoryVos: dist
-            }).then((res) => {
-                resolve(res);
             }).catch(err => {
                 reject(err);
             });
@@ -224,7 +191,6 @@ class GoodsTable extends PureComponent {
 
 GoodsTable.propTypes = {
     updateGoodsInfo: PropTypes.func,
-    batchCheckStorage: PropTypes.func,
     onChange: PropTypes.func,
     onClearImportList: PropTypes.func,
     branchCompanyId: PropTypes.string,

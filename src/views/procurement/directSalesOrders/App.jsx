@@ -67,6 +67,7 @@ class DirectSalesOrders extends PureComponent {
                 quantity: goods.quantity
             });
         });
+        // 批量校验库存
         // const { branchCompanyId, deliveryWarehouseCode, goodsList } = this.state;
         // const arr = [];
         // goodsList.forEach(item => {
@@ -79,8 +80,25 @@ class DirectSalesOrders extends PureComponent {
         // this.props.batchCheckStorage(arr);
         this.props.insertDirectOrder({
             storeId: this.state.storeId,
-            directStoreCommerItemVoList: dist
+            directStoreCommerItemList: dist
         });
+    }
+
+    /**
+     * 依次校验是否可以提交
+     */
+    validateGoods = () => {
+        const goodsList = this.state.goodsList;
+        const length = goodsList.length;
+        if (goodsList.length === 0) {
+            return false;
+        }
+        for (let i = 0, item = goodsList[i]; i < length; i++) {
+            if (!item.available) return false; // 不在当前销售区域
+            if (!item.enough) return false; // 库存不足
+            if (!item.isMultiple) return false; // 不是内装数的整数倍
+        }
+        return true;
     }
 
     render() {
@@ -94,7 +112,7 @@ class DirectSalesOrders extends PureComponent {
         const goodsFormValue = {
             branchCompanyId,
             deliveryWarehouseCode,
-            canBeSubmit: goodsList.length > 0
+            canBeSubmit: this.validateGoods()
         };
         return (
             <div className="direct-sales-orders">

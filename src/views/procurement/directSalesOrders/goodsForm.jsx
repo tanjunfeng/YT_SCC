@@ -100,7 +100,7 @@ class GoodsForm extends PureComponent {
                         <Row gutter={40}>
                             <FormItem>
                                 <AddingGoodsByStore
-                                    branchCompanyId={this.props.value.branchCompanyId}
+                                    branchCompanyId={branchCompanyId}
                                     onChange={this.handleGoodsChange}
                                 />
                             </FormItem>
