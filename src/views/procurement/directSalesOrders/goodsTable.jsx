@@ -51,11 +51,16 @@ class GoodsTable extends PureComponent {
     }
 
     importToList = (list) => {
-        this.checkStorage(list);
         list.forEach(item => {
-            this.checkMultiple(item);
+            this.appendToList(item);
         });
-        this.props.onClearImportList();
+        this.props.onClearImportList(); // 通知父组件清空导入商品列表
+        // this.checkStorage(list).then(() => {
+        //     list.forEach(item => {
+        //         this.checkMultiple(item);
+        //     });
+        //     this.props.onClearImportList();
+        // });
     }
 
     /**
@@ -181,6 +186,18 @@ class GoodsTable extends PureComponent {
             />);
     }
 
+    renderPrice = (text, record) => {
+        const hasQuantity = typeof record.quantity === 'number' && record.quantity !== 0;
+        let price = record.salePrice || 0;
+        if (record.sellFullCase === 1) {
+            price *= record.salesInsideNumber;
+        }
+        if (hasQuantity && price > 0) {
+            return record.quantity * price;
+        }
+        return '-';
+    }
+
     renderOperations = (text, record) => (
         <Popconfirm title="确定删除商品？" onConfirm={() => this.onDelete(record.productCode)}>
             <a href="#">删除</a>
@@ -188,6 +205,7 @@ class GoodsTable extends PureComponent {
 
     render() {
         columns[columns.length - 4].render = this.renderNumber;
+        columns[columns.length - 2].render = this.renderPrice;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <Table
