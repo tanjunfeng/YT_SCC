@@ -619,7 +619,7 @@ class OrderManagementList extends Component {
                                                     className="input"
                                                     placeholder="请输入电商订单编号"
                                                 />
-                                                )}
+                                            )}
                                         </div>
                                     </FormItem>
                                 </Col>

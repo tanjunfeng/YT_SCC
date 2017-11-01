@@ -154,3 +154,54 @@ export const printColumns = [{
     key: 'totalAmount',
     width: 100
 }];
+
+export const goodsColumns = [{
+    title: '序号',
+    dataIndex: 'index',
+    width: 30,
+    render: (text, record, index) => index + 1
+}, {
+    title: '商品编码',
+    dataIndex: 'productCode',
+    width: 50
+}, {
+    title: '商品条码',
+    dataIndex: 'internationalCode',
+    width: 80
+}, {
+    title: '商品名称',
+    dataIndex: 'productName',
+    width: 120
+}, {
+    title: '产品规格',
+    dataIndex: 'productSpecifications',
+    width: 50
+}, {
+    title: '箱装规格',
+    dataIndex: 'packingSpecifications',
+    width: 80
+}, {
+    title: '起定量',
+    dataIndex: 'minNumberSpecifications',
+    width: 50
+}, {
+    title: '数量',
+    dataIndex: 'quantity',
+    width: 120
+}, {
+    title: '单价',
+    dataIndex: 'salePrice',
+    width: 70,
+    render: text => {
+        if (text || +text === 0) return text;
+        return '-';
+    }
+}, {
+    title: '金额',
+    dataIndex: '',
+    width: 100
+}, {
+    title: '操作',
+    dataIndex: 'operation',
+    width: 50
+}];

@@ -76,6 +76,9 @@ export const exportPaymentList = '/settlement/downloadFranchiseePayment';
 // 下载采购订单PDF
 export const exportProcurementPdf = 'pmPurchaseOrder/exportPdf';
 
+// 根据退货单id下载PDF文件
+export const exportReturnProPdf = '/pmPurchaseRefund/exportPdf';
+
 // 下载库存调整列表
 export const exportStoreAdList = 'imAdjustment/exportListImAdjustment';
 
@@ -565,6 +568,18 @@ export const fetchPoMngList = (params) => http.get('/provider/queryPoMngList', p
 export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', params);
 // 查询采购单列表
 export const repushPurchaseReceipt = (params) => http.get('/pmPurchaseReceipt/rePushPurchaseReceiptToMQ', params);
+// 查询采购退货列表
+export const fetchReturnMngList = (params) => http.get('/pmPurchaseRefund/queryPurchaseRefundList', params);
+// 查询退货单审批列表
+export const queryAuditPurchaseRefundList = (params) => http.get('/pmPurchaseRefund/queryAuditPurchaseRefundList', params);
+// 查看退货单审批意见
+export const queryApprovalInfo = (params) => http.get('/processAuditLog/queryApprovalInfo', params);
+// 查询退货流水号
+export const getRefundNo = (params) => http.get('/pmPurchaseRefund/getRefundNo', params);
+// 查询采购退货列表详情
+export const fetchReturnPoRcvDetail = (params) => http.get('/pmPurchaseRefund/queryRefundDetailById', params);
+// 查询采购退货列表详情
+export const deleteBatchRefundOrder = (params) => http.get('/pmPurchaseRefund/deleteBatchRefundOrder', params);
 
 // 审批
 export const auditPo = (params) => http.post('/provider/auditPo', params);
@@ -583,6 +598,8 @@ export const querycategories = (params) => http.get('/category/queryCategories',
 
 // 商品值清单
 export const queryMaterialMap = (params) => http.get('/provider/queryMaterialMap', params);
+// 商品值清单
+export const queryPurchaseOrderProducts = (params) => http.get('/pmPurchaseRefund/queryPurchaseOrderProducts', params);
 // 删除处于草稿状态的订单
 export const deletePurchaseList = (params) => http.get('/pmPurchaseOrder/batchDeletePmPurchaseOrderByIds', params);
 // 查询采购单打印列表
@@ -710,7 +727,7 @@ export const findCanUseCompanyInfo = (params) => http.get('/supplier/findCompany
 // 此接口用于查询各级分类（值清单）
 export const queryCategorysByLevel = (params) => http.get('/category/queryCategories', params);
 
-// 此接口用于新增商品（值清单）
+// 根据供应商信息新增商品（值清单）
 export const queryProductForSelect = (params) => http.get('/product/queryProductForSelect', params);
 
 // 订单管理-查询订单列表
@@ -767,6 +784,9 @@ export const supplierSearchBox = (params) => http.get('/supplier/supplierSearchB
 // 供应商地点选择组件
 export const supplierAdrSearchBox = (params) => http.get('/supplier/supplierAdrSearchBox', params);
 
+// 品牌值清单
+export const queryPurchaseOrderBrands = (params) => http.get('/pmPurchaseRefund/queryPurchaseOrderBrands', params);
+
 // 根据条件查询销售价格区间列表
 export const findStepPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);
 
@@ -805,17 +825,37 @@ export const getCouponsDetail = (params) => http.get('/coupon/queryCouponsById',
 export const queryFranchiseeList = (params) => http.get('/franchisee/grantFranchisee', params);
 export const grantCoupon = (params) => http.post('/coupon/grantCoupon', params);
 
+/**
+ * 销售管理模块
+ */
+/**
+ * 销售退货
+ */
 // 查询品类
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
-
-//退货单列表
+// 退货单列表
 export const getReturnGoodsList = (params) => http.get('/webReturnRequest/queryReturnRequestItem', params)
-
-//退货单取消、确认
+// 退货单取消、确认
 export const getReturnGoodsOperation = (params) => http.get('/webReturnRequest/operateOrderReturnedReceipt', params)
-
-//退货单详情
+// 退货单详情
 export const getReturnGoodsDetail = (params) => http.get('/webReturnRequest/returnRequestDetail', params)
-
-//退货详情保存
+// 退货详情保存
 export const getReturnGoodsDetailSave = (params) => http.get('/webReturnRequest/orderDescription', params);
+
+/**
+ * 直营店下单模块
+ */
+// 查询直营店
+export const queryDirectStores = (params) => http.get('/directStore/getAllStores', params);
+// 根据门店信息新增商品（值清单）
+export const queryProductByStore = (params) => http.get('/directStore/getItemsInfo', params);
+// 根据门店id查询直营店下单数据
+export const queryDirectInfo = (params) => http.get('/directStore/getDirectInfo', params);
+// 获取单个商品详情
+export const queryGoodsInfo = params => http.get('/directStore/getItemInfo', params);
+// 修改单个商品的信息
+export const updateGoodsInfo = params => http.post('/directStore/updateItem', params);
+// 直营店下单提交商品
+export const insertDirectOrder = params => http.post('/directStore/directCommitOrder', params);
+// 批量校验库存
+export const batchCheckStorage = params => http.post('/directStore/validateDirectOrder', params);
