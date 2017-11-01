@@ -94,6 +94,11 @@ import CouponsParticipate from 'bundle-loader?lazy!../views/coupon/participate';
 import GrantCouponList from 'bundle-loader?lazy!../views/grantCoupons/mngList';
 import grantCouponDetail from 'bundle-loader?lazy!../views/grantCoupons/detail';
 
+// 销售管理
+
+import ReturnGoodsList from 'bundle-loader?lazy!../views/salesManagement/returnGoodsList';
+import ReturnGoodsDetails from 'bundle-loader?lazy!../views/salesManagement/returnGoodsDetails';
+
 /* eslint-enable */
 
 /**
@@ -752,6 +757,37 @@ const routes = [
                             exact
                             render={() => (<Bundle load={grantCouponDetail}>
                                 {(App) => <App />}</Bundle>)}
+                        />
+                    </Switch>
+                )
+            }
+        ]
+    },
+    // 退货管理
+    {
+        key: 'salesManagement',
+        iconType: 'save',
+        routes: [
+            // 退货单列表
+            {
+                path: '/returnGoodsList',
+                parent: 'salesManagement',
+                key: 'returnGoodsList',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/returnGoodsList"
+                            exact
+                            render={() => (<Bundle load={ReturnGoodsList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/returnGoodsList/detail/:type/:id"
+                            exact
+                            render={() => (<Bundle load={ReturnGoodsDetails}>
+                                {(App) => <App />}
+                            </Bundle>)}
                         />
                     </Switch>
                 )

@@ -1,0 +1,57 @@
+{
+    "timestamp": 1509088183121,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "id": "100042017101200005H01",
+        "creationTime": 1509087120000,
+        "orderId": "100042017101200005",
+        "branchCompanyName": "湖南子公司",
+        "franchiseeName": "长沙市岳麓区友昌食品店",
+        "stateDetail": "已确认",
+        "productState": 1,
+        "productStateDetail": "待取货",
+        "shippingStateDetail": null,
+        "returnReasonType": "1",
+        "province": "湖南",
+        "city": "长沙",
+        "district": "岳麓区",
+        "detailAddress": "枫林三路589号1楼17号门面",
+        "postcode": null,
+        "consigneeName": "谯老板",
+        "telephone": null,
+        "cellphone": "185212452648",
+        "commodityTotal": 1,
+        "amount": 48,
+        "items": [
+            {
+                "productId": "xprod347942",
+                "productName": "测试111",
+                "productImg": "http://sit.image.com/group1/M00/01/32/rB4KPVmRUByAAOTDAAIK2xNp5JE636.jpg",
+                "secondLevelCategoryName": "酒类",
+                "thirdLevelCategoryName": "洋酒",
+                "productCode": "1001866",
+                "internationalCode": "12",
+                "quantity": 1,
+                "actualReturnQuantity":1,
+                "itemPrice": {
+                    "id": "47878",
+                    "amount": 48,
+                    "currencyCode": null,
+                    "finalReasonCode": null,
+                    "listPrice": 12,
+                    "orderDiscountShare": 0,
+                    "quantityAsQualifier": 0,
+                    "quantityDiscounted": 0,
+                    "rawTotalPrice": 48,
+                    "salePrice": 12,
+                    "adjustments": []
+                }
+            }
+        ],
+        "returnReason": "不想要了",
+        "description": "呵呵呵呵呵呵呵"
+    },
+    "success": true
+}
