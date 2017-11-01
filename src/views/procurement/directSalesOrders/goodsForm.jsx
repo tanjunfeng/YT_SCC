@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import { AddingGoodsByStore } from '../../../container/search';
 import { queryGoodsInfo } from '../../../actions/procurement';
 import Utils from '../../../util/util';
-import { Excel } from '../../../container/upload';
+import Excel from './excel';
 
 const FormItem = Form.Item;
 
@@ -34,12 +34,12 @@ class GoodsForm extends PureComponent {
             unitExplanation,
             salePrice,
             packingSpecifications,
-            available,  // 是否在本区域销售
-            minNumber,  // 起订数量
-            minUnit,    // 最小销售单位
-            fullCaseUnit,   // 整箱单位
-            salesInsideNumber,  // 销售内装数
-            sellFullCase    // 是否整箱销售，１:按整箱销售，0:不按整箱销售
+            available, // 是否在本区域销售
+            minNumber, // 起订数量
+            minUnit, // 最小销售单位
+            fullCaseUnit, // 整箱单位
+            salesInsideNumber, // 销售内装数
+            sellFullCase // 是否整箱销售，１:按整箱销售，0:不按整箱销售
         } = goodsInfo;
         const record = {
             productId,
@@ -55,8 +55,8 @@ class GoodsForm extends PureComponent {
             quantity: sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber,
             minNumber,
             minNumberSpecifications: sellFullCase === 0 ? `${minNumber}${fullCaseUnit || ''}` : `${minNumber}${minUnit || '-'}`, // 起订数量显示单位
-            enough: true,    // 是否库存充足，默认充足
-            isMultiple: true    // 是否是销售内装数的整数倍，默认是整数倍
+            enough: true, // 是否库存充足，默认充足
+            isMultiple: true // 是否是销售内装数的整数倍，默认是整数倍
         };
         return record;
     }
@@ -75,15 +75,23 @@ class GoodsForm extends PureComponent {
         });
     }
 
+    handleImport = (list) => {
+        const dist = [];
+        if (list.length > 0) {
+            list.forEach(item => {
+                dist.push(this.getRow(item));
+            });
+        }
+        this.props.onImport(dist);
+    }
+
     handleSubmit = () => {
         this.props.onSubmit();
     }
 
     render() {
-        const excelParams = Utils.removeInvalid({
-            branchCompanyId: this.props.value.branchCompanyId,
-            deliveryWarehouseCode: this.props.value.deliveryWarehouseCode
-        });
+        const { branchCompanyId, deliveryWarehouseCode, canBeSubmit } = this.props.value;
+        const excelParams = Utils.removeInvalid({ branchCompanyId, deliveryWarehouseCode });
         return (
             <div className="direct-sales-orders-form goods-form">
                 <Form layout="inline">
@@ -98,7 +106,8 @@ class GoodsForm extends PureComponent {
                             </FormItem>
                             <FormItem className="file-upload">
                                 <Excel
-                                    value={excelParams}
+                                    value={{ ...excelParams }}
+                                    onChange={this.handleImport}
                                 />
                             </FormItem>
                             <FormItem>
@@ -113,7 +122,7 @@ class GoodsForm extends PureComponent {
                                 </div>
                             </FormItem>
                             <FormItem className="fr">
-                                <Button type="primary" size="default" onClick={this.handleSubmit}>
+                                <Button type="primary" size="default" onClick={this.handleSubmit} disabled={!canBeSubmit}>
                                     提交
                                 </Button>
                             </FormItem>
@@ -127,8 +136,10 @@ class GoodsForm extends PureComponent {
 
 GoodsForm.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
+    canBeSubmit: PropTypes.bool,
     queryGoodsInfo: PropTypes.func,
     onChange: PropTypes.func,
+    onImport: PropTypes.func,
     onSubmit: PropTypes.func
 };
 

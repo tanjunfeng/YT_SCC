@@ -47,12 +47,14 @@ class CouponsParticipate extends PureComponent {
         this.handleParticipateReset = this.handleParticipateReset.bind(this);
         this.handleParticipateExport = this.handleParticipateExport.bind(this);
         this.onPaginate = this.onPaginate.bind(this);
-        this.onPaginate1 = this.onPaginate1.bind(this);
+        this.onPaginateUnUsed = this.onPaginateUnUsed.bind(this);
         this.handleTabChange = this.handleTabChange.bind(this);
         this.query = this.query.bind(this);
         this.state = {
             tabPage: '1'
         };
+        this.current = 1;
+        this.currentUnUnsed = 1;
         this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
@@ -78,15 +80,17 @@ class CouponsParticipate extends PureComponent {
      * Tab1 - 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        Object.assign(this.param, { pageNum, current: pageNum });
+        Object.assign(this.param, { pageNum });
+        this.current = pageNum;
         this.query('used');
     }
 
     /**
      *  Tab2 - 分页页码改变的回调
      */
-    onPaginate1 = (pageNum) => {
-        Object.assign(this.paramUnUsed, { pageNum, current: pageNum });
+    onPaginateUnUsed = (pageNum) => {
+        Object.assign(this.paramUnUsed, { pageNum });
+        this.currentUnUnsed = pageNum;
         this.query('unUsed');
     }
 
@@ -124,8 +128,8 @@ class CouponsParticipate extends PureComponent {
     handleParticipateSearch(param) {
         this.handleParticipateReset();
         this.param = {
-            current: 1,
-            ...param
+            ...param,
+            ...this.param
         };
         this.paramUnUsed = this.param;
         this.query();
@@ -134,10 +138,12 @@ class CouponsParticipate extends PureComponent {
     handleParticipateReset() {
         // 重置检索条件
         this.param = {
+            promoId: this.PROMOTION_ID,
             pageNum: 1,
-            pageSize: PAGE_SIZE,
-            promoId: this.PROMOTION_ID
+            pageSize: PAGE_SIZE
         };
+        this.current = 1;
+        this.currentUnUnsed = 1;
         this.paramUnUsed = this.param;
     }
 
@@ -181,7 +187,7 @@ class CouponsParticipate extends PureComponent {
                             }}
                             bordered
                             pagination={{
-                                current: this.param.current,
+                                current: this.current,
                                 pageNum,
                                 pageSize,
                                 total,
@@ -200,12 +206,12 @@ class CouponsParticipate extends PureComponent {
                             }}
                             bordered
                             pagination={{
-                                current: this.paramUnUsed.current,
+                                current: this.currentUnUnsed,
                                 pageNum: this.paramUnUsed.pageNum,
                                 pageSize: this.paramUnUsed.pageSize,
                                 total: this.props.unUsedCouponParticipate.total,
                                 showQuickJumper: true,
-                                onChange: this.onPaginate1
+                                onChange: this.onPaginateUnUsed
                             }}
                         />
                     </TabPane>

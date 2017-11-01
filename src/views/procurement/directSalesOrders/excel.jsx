@@ -6,7 +6,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Upload, Icon, message } from 'antd';
-import reqwest from 'reqwest';
+import axios from 'axios';
 
 class Excel extends PureComponent {
     state = {
@@ -33,25 +33,18 @@ class Excel extends PureComponent {
         this.setState({
             uploading: true,
         });
-        reqwest({
-            url: this.url,
-            method: 'post',
-            processData: false,
-            data: this.getFormData(),
-            success: (res) => {
-                this.props.onChange(res.data);
-                this.setState({
-                    fileList: [],
-                    uploading: false,
-                });
-                message.success('上传成功');
-            },
-            error: () => {
-                this.setState({
-                    uploading: false,
-                });
-                message.error('上传失败');
-            },
+        axios.post(this.url, this.getFormData()).then(res => {
+            this.props.onChange(res.data.data);
+            this.setState({
+                fileList: [],
+                uploading: false,
+            });
+            message.success('上传成功');
+        }).catch(() => {
+            this.setState({
+                uploading: false,
+            });
+            message.error('上传失败');
         });
     }
 
