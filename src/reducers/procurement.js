@@ -61,7 +61,9 @@ const initState = fromJS({
     // 退货单审批列表
     queryPurchaseRefundList: {},
     // 退货单审批意见
-    approvalInfo: {},
+    approvalInfo: [],
+    // 查询退货单审批列表
+    auditPurReList: {},
 });
 
 export default function (state = initState, action) {
@@ -172,6 +174,8 @@ export default function (state = initState, action) {
             payload = action.payload || {};
             return state.set('poRcv', fromJS(action.payload));
 
+        case ActionType.QUERY_AUDIT_PUR_RE_LIST:// 查询退货单审批列表
+            return state.set('auditPurReList', fromJS(action.payload));
         case ActionType.RECEIVE_RETURN_MNG_LIST:// 采购退货列表
             payload = action.payload || {};
             return state.set('returnMngList', fromJS(action.payload));

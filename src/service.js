@@ -824,11 +824,16 @@ export const queryAliveCouponsList = (params) => http.get('/coupon/queryAliveCou
 export const getCouponsDetail = (params) => http.get('/coupon/queryCouponsById', params);
 export const queryFranchiseeList = (params) => http.get('/franchisee/grantFranchisee', params);
 export const grantCoupon = (params) => http.post('/coupon/grantCoupon', params);
+export const invalidRecordList = (params) => http.post('/coupon/queryCouponActivityActiveList', params);
+export const cancelCoupons = (params) => http.get('/coupon/cancelCoupons', params);
 
 // 查询品类
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
 
+// 查询退货单审批列表
+export const queryAuditPurReList = (params) => http.get('/pmPurchaseRefund/queryAuditPurchaseRefundList', params);
 /**
+
  * 直营店下单模块
  */
 // 查询直营店

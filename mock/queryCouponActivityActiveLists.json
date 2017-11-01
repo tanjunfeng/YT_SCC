@@ -1,0 +1,43 @@
+//查询作废记录
+{
+    "timestamp": 1509501852495,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 15,
+        "total": 2,
+        "data": [
+            {
+                "id": 817,
+                "branchCompanyName": "湖南子公司",
+                "franchiseeId": "jms_001217",
+                "franchinessController": "益阳市资阳区金太阳马良便利店",
+                "storeId": "A001217",
+                "storeName": "益阳市资阳区金太阳马良便利店",
+                "promotionName": "测试1509329044454",
+                "promoId": "J244",
+                "activityDate": 1509329065000,
+                "state": "canceled",
+                "modifyUser": "100010",
+                "modifyTime": 1509443542000
+            },
+            {
+                "id": 816,
+                "branchCompanyName": "湖南子公司",
+                "franchiseeId": "jms_001217",
+                "franchinessController": "益阳市资阳区金太阳马良便利店",
+                "storeId": "A001217",
+                "storeName": "益阳市资阳区金太阳马良便利店",
+                "promotionName": "测试1509329044454",
+                "promoId": "J244",
+                "activityDate": 1509328534000,
+                "state": "canceled",
+                "modifyUser": "100010",
+                "modifyTime": 1509499571000
+            }
+        ]
+    },
+    "success": true
+}

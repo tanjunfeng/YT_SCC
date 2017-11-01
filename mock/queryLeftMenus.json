@@ -151,6 +151,25 @@
             ]
         },
         {
+            "authorityId": 290,
+            "authorityCode": "dbsx",
+            "displayName": "待办事项",
+            "menuList": [
+                {
+                    "authorityId": 291,
+                    "authorityCode": "cgdsplb",
+                    "displayName": "采购单审批列表",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 292,
+                    "authorityCode": "thdsplb",
+                    "displayName": "退货单审批列表",
+                    "menuList": []
+                }
+            ]
+        },
+        {
             "authorityId": 225,
             "authorityCode": "procurementMng",
             "displayName": "采购管理",
