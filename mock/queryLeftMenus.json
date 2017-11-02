@@ -1,5 +1,5 @@
 {
-    "timestamp": 1506322648823,
+    "timestamp": 1509619569074,
     "code": 200,
     "message": {},
     "exception": null,
@@ -57,7 +57,19 @@
                 {
                     "authorityId": 216,
                     "authorityCode": "orderList",
-                    "displayName": "订单管理列表",
+                    "displayName": "销售订单列表",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 331,
+                    "authorityCode": "returnGoodsList",
+                    "displayName": "退货单列表",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 314,
+                    "authorityCode": "zydxd",
+                    "displayName": "直营店下单",
                     "menuList": []
                 }
             ]
@@ -172,18 +184,6 @@
                     "authorityCode": "poRcvMngList",
                     "displayName": "收货单管理列表",
                     "menuList": []
-                },
-                {
-                    "authorityId": 229,
-                    "authorityCode": "returnManagementList",
-                    "displayName": "退货单管理列表",
-                    "menuList": []
-                },
-                {
-                    "authorityId": 230,
-                    "authorityCode": "zydxd",
-                    "displayName": "直营店下单",
-                    "menuList": []
                 }
             ]
         },
@@ -227,19 +227,6 @@
                     "authorityId": 281,
                     "authorityCode": "jmsjs",
                     "displayName": "加盟商结算",
-                    "menuList": []
-                }
-            ]
-        },
-        {
-            "authorityId": 800,
-            "authorityCode": "salesManagement",
-            "displayName": "销售管理",
-            "menuList": [
-                {
-                    "authorityId": 801,
-                    "authorityCode": "aGoodsList",
-                    "displayName": "退货单列表",
                     "menuList": []
                 }
             ]

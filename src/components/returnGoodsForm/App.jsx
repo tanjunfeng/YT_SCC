@@ -11,9 +11,7 @@ import { returnGoodsList, returnGoodsListFormData } from '../../actions';
 import { pubFetchValueList } from '../../actions/pub';
 import { PAGE_SIZE } from '../../constant';
 import SearchMind from '../../components/searchMind';
-import { SubCompanies } from '../../container/search';
 import { BranchCompany } from '../../container/search';
-
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -36,13 +34,14 @@ class ReturGoodsForm extends PureComponent {
     constructor(props) {
         super(props);
         const { data, franchiseeIdName } = this.props;
-        this.joiningSearchMind = null;
         this.state = {
             franchiseeId: data.franchiseeId ? data.franchiseeId : '',
-            franchiseeIdName: franchiseeIdName ? franchiseeIdName : '',
-            branchCompany: null
+            franchiseeIdName: franchiseeIdName ? franchiseeIdName : ''
         }
+        this.joiningSearchMind = null;
+        this.branchCompany = this.props.branchCompany;
     }
+
     componentDidMount() {
         this.requestSearch()
     }
@@ -64,12 +63,17 @@ class ReturGoodsForm extends PureComponent {
             createTime,
             state
             } = this.props.form.getFieldsValue();
-        this.setState({ branchCompany: { ...branchCompany } })
-
+        let branchCompanyId = '';
+        if (branchCompany && branchCompany.id) {
+            branchCompanyId = branchCompany.id;
+            this.branchCompany = { id: branchCompany.id, name: branchCompany.name }
+        } else {
+            this.branchCompany = null;
+        }
         const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
         const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
         const searchParams = {
-            branchCompanyId: branchCompany.id,
+            branchCompanyId,
             id,
             orderId,
             shippingState,
@@ -79,12 +83,6 @@ class ReturGoodsForm extends PureComponent {
         };
 
         return Utils.removeInvalid(searchParams);
-    }
-
-    shouldComponentWillUpdate(nextProps, nextState) {
-        if (this.state.branchCompany.id !== nextState.branchCompany.id) {
-            return true;
-        }
     }
 
     // 搜索方法
@@ -99,7 +97,7 @@ class ReturGoodsForm extends PureComponent {
                 ...seachParams
             },
             franchiseeIdName: this.state.franchiseeIdName,
-            branchCompany: this.state.branchCompany
+            branchCompany: this.branchCompany
         }
         returnGoodsListFormData(data)
         returnGoodsList(Utils.removeInvalid(data.data))
@@ -117,24 +115,12 @@ class ReturGoodsForm extends PureComponent {
     // 重置
     handleReset = () => {
         this.handleJoiningClear();
-        this.handleSubCompanyClear();
-        this.joiningSearchMind.handleClear();
+        this.joiningSearchMind.reset();
         this.props.form.resetFields();
+        // this.props.form.setFieldsValue({
+        //     branchCompany: null
+        // });
     }
-
-    // handleOrderReset() {
-    //     this.setState({
-    //         rengeTime: yesterdayrengeDate,
-    //         isPayDisabled: false,
-    //         time: {
-    //             submitStartTime: yesterdayDate,
-    //             submitEndTime: todayDate,
-    //         }
-    //     });
-    //     this.handleSubCompanyClear();
-    //     this.joiningSearchMind.handleClear();
-    //     this.props.form.resetFields();
-    // }
 
     /**
      * 加盟商-值清单
@@ -142,36 +128,22 @@ class ReturGoodsForm extends PureComponent {
     handleJoiningChoose = ({ record }) => {
         this.setState({
             franchiseeId: record.franchiseeId,
-            franchiseeIdName: record.franchiseeId + ' - ' + record.franchiseeName
+            franchiseeIdName: `${record.franchiseeId} - ${record.franchiseeName}`
         });
     }
 
     /**
-     * 子公司-值清单
-     */
-    // handleSubCompanyChoose = (branchCompanyId) => {
-    //     this.setState({ branchCompanyId });
-    // }
-
-    /**
      * 加盟商-清除
      */
-    handleJoiningClear() {
+    handleJoiningClear = () => {
         this.setState({
             franchiseeId: ''
         });
     }
 
-    /**
-     * 子公司-清除
-     */
-    // handleSubCompanyClear() {
-    //     this.setState({ branchCompanyId: '' });
-    // }
-
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { data } = this.props
+        const { data } = this.props;
         return (
             <div className="search-box">
                 <Form
@@ -202,7 +174,7 @@ class ReturGoodsForm extends PureComponent {
                                 </div> */}
                                 <FormItem label="分公司">
                                     {getFieldDecorator('branchCompany', {
-                                        initialValue: { ...this.state.branchCompany }
+                                        initialValue: { ...this.branchCompany }
                                     })(<BranchCompany />)}
                                 </FormItem>
                             </FormItem>
@@ -334,9 +306,9 @@ ReturGoodsForm.propTypes = {
     pubFetchValueList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     data: PropTypes.objectOf(PropTypes.any),
+    branchCompany: PropTypes.objectOf(PropTypes.any),
     page: PropTypes.number,
-    franchiseeIdName: PropTypes.string,
-    branchCompanyIdName: PropTypes.string
+    franchiseeIdName: PropTypes.string
 };
 
 export default withRouter(Form.create()(ReturGoodsForm));

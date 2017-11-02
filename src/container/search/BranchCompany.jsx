@@ -17,10 +17,16 @@ import './BranchCompany.scss';
 
 class BranchCompany extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        if (nextProps.value === null) {
+        if (this.props.value.id && nextProps.value === null) {
+            this.defaultValue = '';
             this.searchMind.reset();
         }
+        if (nextProps.value && nextProps.value.id) {
+            this.defaultValue = `${nextProps.value.id} - ${nextProps.value.name}`
+        }
     }
+
+    defaultValue = '';
 
     /**
      * 子公司-清除
@@ -41,6 +47,7 @@ class BranchCompany extends PureComponent {
         return (
             <SearchMind
                 compKey="spId"
+                defaultValue={this.defaultValue}
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
                     // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodSell/findCompanyBaseInfo
