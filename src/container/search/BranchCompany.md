@@ -1,9 +1,9 @@
-# 选择子公司值清单(已弃用,请采用 BranchComany.jsx)
+# 选择子公司值清单
 # by [taoqiyu](taoqiyu@yatang.cn)
 
 ## 导入
 ```jsx
-import { SubCompanies } from '../../../container/search';
+import { BranchCompany } from '../../../container/search';
 ```
 
 ## 构造器声明
@@ -46,7 +46,7 @@ class SearchForm extends PureComponent {
 ## render 方法
 
 ```jsx
-<SubCompanies
+<BranchCompany
     value={this.state.branchCompanyId}
     onSubCompaniesChooesd={this.handleSubCompanyChoose}
     onSubCompaniesClear={this.hanldeSubCompanyClear}
