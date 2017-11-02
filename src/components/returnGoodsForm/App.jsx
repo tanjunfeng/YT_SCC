@@ -117,6 +117,9 @@ class ReturGoodsForm extends PureComponent {
         this.handleJoiningClear();
         this.joiningSearchMind.reset();
         this.props.form.resetFields();
+        // this.props.form.setFieldsValue({
+        //     branchCompany: null
+        // });
     }
 
     /**

@@ -17,8 +17,7 @@ import './BranchCompany.scss';
 
 class BranchCompany extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps.value);
-        if (nextProps.value === null) {
+        if (this.props.value.id && nextProps.value === null) {
             this.defaultValue = '';
             this.searchMind.reset();
         }
