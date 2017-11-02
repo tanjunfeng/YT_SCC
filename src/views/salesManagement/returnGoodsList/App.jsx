@@ -35,7 +35,8 @@ class ReturnGoodsList extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            page: props.formData.pageNum || 1
+            page: props.formData.pageNum || 1,
+            refresh: false
         }
     }
 
@@ -57,7 +58,9 @@ class ReturnGoodsList extends PureComponent {
         })
             .then(res => {
                 if (res.success) {
-                    this.forData(this.searchParams)
+                    this.setState({
+                        refresh: !this.state.refresh
+                    })
                 }
             })
     )
@@ -122,6 +125,7 @@ class ReturnGoodsList extends PureComponent {
             <div className="po-mng-list">
                 <SearchForm
                     page={this.state.page}
+                    refresh={this.state.refresh}
                 />
                 {
                     listData ?

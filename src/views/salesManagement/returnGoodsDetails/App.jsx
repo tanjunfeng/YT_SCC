@@ -264,7 +264,7 @@ class ReturnGoodsDetails extends PureComponent {
                     </div>
                 </Form>
                 <div className="bt-button">
-                    {type === 2 ? (
+                    {type === '2' ? (
                         <span>
                             <Button size="large" onClick={this.save}>保存</Button>
                             <Button size="large" onClick={() => this.showConfirm(1)}>确认</Button>

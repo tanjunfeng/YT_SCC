@@ -35,21 +35,25 @@ class ReturGoodsForm extends PureComponent {
         super(props);
         const { data, franchiseeIdName } = this.props;
         this.state = {
-            franchiseeId: data.franchiseeId ? data.franchiseeId : '',
-            franchiseeIdName: franchiseeIdName ? franchiseeIdName : ''
+            franchiseeId: data.franchiseeId || '',
+            franchiseeIdName: franchiseeIdName || ''
         }
         this.joiningSearchMind = null;
         this.branchCompany = this.props.branchCompany;
     }
 
     componentDidMount() {
-        this.requestSearch()
+        const nextPage = this.props.data.pageNum || 1;
+        this.requestSearch(nextPage)
     }
 
-    // 父组件page改变
+    // 父组件page改变或点击确定或取消
     componentWillReceiveProps(nextProps) {
         if (this.props.page !== nextProps.page) {
             this.requestSearch(nextProps.page)
+        }
+        if (this.props.refresh !== nextProps.refresh) {
+            this.requestSearch()
         }
     }
 
@@ -122,9 +126,7 @@ class ReturGoodsForm extends PureComponent {
         // });
     }
 
-    /**
-     * 加盟商-值清单
-     */
+    // 加盟商-值清单
     handleJoiningChoose = ({ record }) => {
         this.setState({
             franchiseeId: record.franchiseeId,
@@ -132,9 +134,8 @@ class ReturGoodsForm extends PureComponent {
         });
     }
 
-    /**
-     * 加盟商-清除
-     */
+
+    // 加盟商-清除
     handleJoiningClear = () => {
         this.setState({
             franchiseeId: ''
@@ -161,17 +162,9 @@ class ReturGoodsForm extends PureComponent {
                                     )}
                             </FormItem>
                         </Col>
-                        <Col className="franchisee-item" span={8}>
+                        <Col span={8} className="company-time">
                             {/* 子公司 */}
                             <FormItem>
-                                {/* <div>
-                                    <span className="sc-form-item-label">子公司:</span>
-                                    <SubCompanies
-                                        value={this.state.branchCompanyId}
-                                        onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                        onSubCompaniesClear={this.handleSubCompanyClear}
-                                    />
-                                </div> */}
                                 <FormItem label="分公司">
                                     {getFieldDecorator('branchCompany', {
                                         initialValue: { ...this.branchCompany }
@@ -308,6 +301,7 @@ ReturGoodsForm.propTypes = {
     data: PropTypes.objectOf(PropTypes.any),
     branchCompany: PropTypes.objectOf(PropTypes.any),
     page: PropTypes.number,
+    refresh: PropTypes.bool,
     franchiseeIdName: PropTypes.string
 };
 
