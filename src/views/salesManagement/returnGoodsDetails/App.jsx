@@ -11,22 +11,16 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import moment from 'moment';
-import Immutable, { fromJS } from 'immutable';
 import {
     Table, Form, Select, Icon, Modal, Row,
     Col, Button, Input
 } from 'antd';
-import Utils from '../../../util/util';
 import { returnGoodsDetailColumns as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
-import { returnGoodsDetail, returnGoodsDetailClearData } from '../../../actions';
-import { getReturnGoodsOperation, getReturnGoodsDetailSave } from '../../../service';
-import Promise from 'bluebird';
+import { returnGoodsDetail, returnGoodsDetailClearData, returnGoodsOperation, returnGoodsDetailSave } from '../../../actions';
+import { DATE_FORMAT } from '../../../constant';
 
-const Option = Select.Option;
-const dateFormat = 'YYYY-MM-DD';
 const FormItem = Form.Item;
-
 
 @connect(state => ({
     // 详情数据
@@ -39,19 +33,16 @@ const FormItem = Form.Item;
 }, dispatch))
 
 class ReturnGoodsDetails extends PureComponent {
-    constructor(props) {
-        super(props)
-        this.state = {
-            id: ''
-        }
+    state = {
+        id: ''
     }
 
     componentDidMount() {
-        const { id, type } = this.props.match.params
-        this.setState({
-            id: id
-        })
-        this.forData(id)
+        const { id } = this.props.match.params;
+        this.setState({ id });
+        this.forData({
+            id
+        });
     }
 
     componentWillUnmount() {
@@ -59,43 +50,38 @@ class ReturnGoodsDetails extends PureComponent {
         clearData()
     }
 
-    //请求数据
+    // 请求数据
     forData(id) {
         this.props.returnGoodsDetail(id)
     }
 
     // 返回
     goBack = () => {
-        this.props.history.replace('/returnGoodsList')
+        this.props.history.replace('/aGoodsList')
     }
 
     // 退货单确定或取消
-    operation = (type) => {
-        new Promise((resolve, reject) => {
-            getReturnGoodsOperation({
-                returnId: this.state.id,
-                operateType: type
-            })
-                .then(res => {
-                    if (res.success) {
-                        this.goBack()
-                    }
-                })
-                .catch(err => {
-                    reject(err);
-                })
+    operation = (type) => (
+        returnGoodsOperation({
+            returnId: this.state.id,
+            operateType: type
         })
-    }
+            .then(res => {
+                if (res.success) {
+                    this.goBack()
+                }
+            })
+    )
 
-    //确认、取消模态框弹出
+    // 确认、取消模态框弹出
     showConfirm = (type) => {
-        let _this = this
-        let title = type === 1 ? '确认退货' : '取消退货'
-        let content = type === 1 ? '是否确认退货，此操作不可取消' : '是否取消退货，此操作不可取消'
+        const _this = this
+        const title = type === 1 ? '确认退货' : '取消退货'
+        const content = type === 1 ? '是否确认退货，此操作不可取消' : '是否取消退货，此操作不可取消'
         const confirm = Modal.confirm;
         confirm({
-            title: title,
-            content: content,
+            title,
+            content,
             onOk() {
                 _this.operation(type)
             },
@@ -103,7 +89,7 @@ class ReturnGoodsDetails extends PureComponent {
         });
     }
 
-    //保存模态框弹出
+    // 保存模态框弹出
     showConfirmSave = () => {
         Modal.error({
             title: '提示',
@@ -112,7 +98,7 @@ class ReturnGoodsDetails extends PureComponent {
         });
     }
 
-    //保存成功模态框弹出
+    // 保存成功模态框弹出
     showConfirmSaveSuccess = () => {
         Modal.success({
             title: '保存成功',
@@ -128,28 +114,22 @@ class ReturnGoodsDetails extends PureComponent {
             returnReason,
             description
             } = this.props.form.getFieldsValue();
-        if (returnReasonType == '7' && returnReason == '') {
+        if (returnReasonType === '7' && returnReason === '') {
             this.showConfirmSave()
         } else {
             // 提交数据
-            new Promise((resolve, reject) => {
-                getReturnGoodsDetailSave({
-                    orderId: this.state.id,
-                    returnReasonType: returnReasonType,
-                    returnReason: returnReason,
-                    description: description
-                })
-                    .then(res => {
-                        if (res.success) {
-                            this.showConfirmSaveSuccess()
-                        }
-                    })
-                    .catch(err => {
-                        reject(err);
-                    })
+            returnGoodsDetailSave({
+                orderId: this.state.id,
+                returnReasonType,
+                returnReason,
+                description
             })
+                .then(res => {
+                    if (res.success) {
+                        this.showConfirmSaveSuccess()
+                    }
+                })
         }
-
     }
 
 
@@ -168,7 +148,7 @@ class ReturnGoodsDetails extends PureComponent {
                         <Row>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">换货单号：</span>{data.id}</div></Col>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">原订单号：</span>{data.orderId}</div></Col>
-                            <Col span={6} offset={2}><div className="item"><span className="item-tit">申请时间：</span>{moment(parseInt(data.creationTime, 10)).format(dateFormat)}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">申请时间：</span>{moment(parseInt(data.creationTime, 10)).format(DATE_FORMAT)}</div></Col>
                         </Row>
                         <Row>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">子公司：</span>{data.branchCompanyName}</div></Col>
@@ -237,10 +217,13 @@ class ReturnGoodsDetails extends PureComponent {
                                         {getFieldDecorator('returnReasonType', {
                                             initialValue: data.returnReasonType ? data.returnReasonType : ''
                                         })(
-                                            <Select style={{ width: '153px' }} size="default">
+                                            <Select style={{ width: '153px' }} size="default" disabled={type === '2' ? false : true}>
                                                 {
                                                     reason.data.map((item) => (
-                                                        <Select.Option key={item.key} value={item.key}>
+                                                        <Select.Option
+                                                            key={item.key}
+                                                            value={item.key}
+                                                        >
                                                             {item.value}
                                                         </Select.Option>
                                                     ))
@@ -251,10 +234,10 @@ class ReturnGoodsDetails extends PureComponent {
                                 </Col>
                                 <Col span={20}>
                                     <FormItem>
-                                        {getFieldDecorator(`returnReason`, {
+                                        {getFieldDecorator('returnReason', {
                                             initialValue: data.returnReason
                                         })(
-                                            <TextArea className="input-ret" autosize={{ minRows: 4, maxRows: 4 }} disabled={type == 2 ? false : true} size="default" />
+                                            <TextArea className="input-ret" autosize={{ minRows: 4, maxRows: 4 }} disabled={type === '2' ? false : true} size="default" />
                                             )}
                                     </FormItem>
                                 </Col>
@@ -269,10 +252,10 @@ class ReturnGoodsDetails extends PureComponent {
                             <Row>
                                 <Col span={24}>
                                     <FormItem>
-                                        {getFieldDecorator(`description`, {
+                                        {getFieldDecorator('description', {
                                             initialValue: data.description
                                         })(
-                                            <TextArea className="input-des" autosize={{ minRows: 4, maxRows: 4 }} disabled={type == 2 ? false : true} size="default" />
+                                            <TextArea className="input-des" autosize={{ minRows: 4, maxRows: 4 }} disabled={type === '2' ? false : true} size="default" />
                                             )}
                                     </FormItem>
                                 </Col>
@@ -281,7 +264,7 @@ class ReturnGoodsDetails extends PureComponent {
                     </div>
                 </Form>
                 <div className="bt-button">
-                    {type == 2 ? (
+                    {type === 2 ? (
                         <span>
                             <Button size="large" onClick={this.save}>保存</Button>
                             <Button size="large" onClick={() => this.showConfirm(1)}>确认</Button>
@@ -297,7 +280,11 @@ class ReturnGoodsDetails extends PureComponent {
 
 ReturnGoodsDetails.propTypes = {
     returnGoodsDetail: PropTypes.func,
-    returnGoodsDetailClearData: PropTypes.func,
+    clearData: PropTypes.func,
+    getFieldDecorator: PropTypes.func,
+    form: PropTypes.objectOf(PropTypes.any),
+    match: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
     data: PropTypes.objectOf(PropTypes.any)
 }
 

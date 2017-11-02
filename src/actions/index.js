@@ -120,7 +120,14 @@ import { splitorderbyinventory, interfaceInventory } from './order';
 
 // 退货订单列表
 
-import { returnGoodsList, returnGoodsDetail, returnGoodsDetailClearData, returnGoodsListFormData } from './salesManagement';
+import {
+    returnGoodsList,
+    returnGoodsDetail,
+    returnGoodsDetailClearData,
+    returnGoodsListFormData,
+    returnGoodsOperation,
+    returnGoodsDetailSave
+} from './salesManagement';
 
 export {
     fetchSupplierList,
@@ -230,6 +237,8 @@ export {
     returnGoodsDetail,
     returnGoodsDetailClearData,
     returnGoodsListFormData,
+    returnGoodsOperation,
+    returnGoodsDetailSave,
     // 采购退货列表
     fetchReturnMngList,
     // 采购退货详情

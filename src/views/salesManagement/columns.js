@@ -85,8 +85,8 @@ export const returnGoodsDetailColumns = [{
     title: '商品图片',
     dataIndex: 'productImg',
     key: 'productImg',
-    render: (text, record) => (
-        <img src={text} className='item-img' />
+    render: (text) => (
+        <img src={text} alt={text} className="item-img" />
     )
 },
 {
@@ -109,7 +109,7 @@ export const returnGoodsDetailColumns = [{
     key: 'category',
     render: (text, record) => (
         <span>
-            {record.secondLevelCategoryName}>{record.thirdLevelCategoryName}
+            {record.secondLevelCategoryName} &rt; {record.thirdLevelCategoryName}
         </span>
     )
 },

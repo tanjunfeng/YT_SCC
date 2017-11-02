@@ -7,7 +7,11 @@ import Immutable from 'immutable';
 import ActionType from '../actions/ActionType';
 
 const initState = Immutable.fromJS({
-    returnGoodsParams: {}
+    returnGoodsParams: {
+        data: {},
+        franchiseeIdName: '',
+        branchCompanyIdName: ''
+    }
 });
 
 export default function (state = initState, action) {

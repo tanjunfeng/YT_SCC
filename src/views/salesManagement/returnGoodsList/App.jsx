@@ -22,7 +22,7 @@ import {
 import SearchForm from '../../../components/returnGoodsForm';
 import { PAGE_SIZE } from '../../../constant';
 import { returnGoodsListColumns as columns } from '../columns';
-import { getReturnGoodsOperation } from '../../../service';
+import { returnGoodsOperation } from '../../../actions';
 
 
 @connect(state => ({
@@ -50,32 +50,27 @@ class ReturnGoodsList extends PureComponent {
         })
     }
     // 退货单确定或取消
-    operation = (id, type) => {
-        new Promise((resolve, reject) => {
-            getReturnGoodsOperation({
-                returnId: id,
-                operateType: type
-            })
-                .then(res => {
-                    if (res.success) {
-                        this.forData(this.searchParams)
-                    }
-                })
-                .catch(err => {
-                    reject(err);
-                })
+    operation = (id, type) => (
+        returnGoodsOperation({
+            returnId: id,
+            operateType: type
         })
-    }
+            .then(res => {
+                if (res.success) {
+                    this.forData(this.searchParams)
+                }
+            })
+    )
 
-    //模态框弹出
+    // 模态框弹出
     showConfirm = (id, type) => {
-        let _this = this
-        let title = type === 1 ? '确认退货' : '取消退货'
-        let content = type === 1 ? '是否确认退货，此操作不可取消' : '是否取消退货，此操作不可取消'
+        const _this = this
+        const title = type === 1 ? '确认退货' : '取消退货'
+        const content = type === 1 ? '是否确认退货，此操作不可取消' : '是否取消退货，此操作不可取消'
         const confirm = Modal.confirm;
         confirm({
-            title: title,
-            content: content,
+            title,
+            content,
             onOk() {
                 _this.operation(id, type)
             },
@@ -152,8 +147,7 @@ class ReturnGoodsList extends PureComponent {
 }
 
 ReturnGoodsList.propTypes = {
-    // returnGoodsList: PropTypes.func,
-    // returnGoodsListFormData: PropTypes.func,
+    location: PropTypes.objectOf(PropTypes.any),
     listData: PropTypes.objectOf(PropTypes.any),
     formData: PropTypes.objectOf(PropTypes.any)
 }

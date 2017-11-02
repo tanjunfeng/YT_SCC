@@ -1,15 +1,17 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { Button, Input, Form, Select, DatePicker, Row, Col, Icon } from 'antd';
+import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../util/util';
-import { returnGoodsType, returnGoodsStatus, goodsReceiptStatus } from '../../constant/salesManagement';
+import { returnGoodsStatus, goodsReceiptStatus } from '../../constant/salesManagement';
 import { returnGoodsList, returnGoodsListFormData } from '../../actions';
+import { pubFetchValueList } from '../../actions/pub';
 import { PAGE_SIZE } from '../../constant';
+import SearchMind from '../../components/searchMind';
+import { SubCompanies } from '../../container/search';
 
 
 const FormItem = Form.Item;
@@ -18,11 +20,14 @@ const dateFormat = 'YYYY-MM-DD';
 
 @connect(
     state => ({
-        data: state.toJS().pageParameters.returnGoodsParams
+        data: state.toJS().pageParameters.returnGoodsParams.data,
+        franchiseeIdName: state.toJS().pageParameters.returnGoodsParams.franchiseeIdName,
+        branchCompanyIdName: state.toJS().pageParameters.returnGoodsParams.branchCompanyIdName
     }),
     dispatch => bindActionCreators({
         returnGoodsList,
-        returnGoodsListFormData
+        returnGoodsListFormData,
+        pubFetchValueList
     }, dispatch)
 )
 
@@ -30,18 +35,30 @@ const dateFormat = 'YYYY-MM-DD';
 class ReturGoodsForm extends PureComponent {
     constructor(props) {
         super(props);
+        const { data, franchiseeIdName, branchCompanyIdName } = this.props;
+        this.joiningSearchMind = null;
+        this.state = {
+            franchiseeId: data.franchiseeId ? data.franchiseeId : '',
+            franchiseeIdName: franchiseeIdName ? franchiseeIdName : '',
+            branchCompanyId: data.branchCompanyId ? data.branchCompanyId : '',
+            branchCompanyIdName: branchCompanyIdName ? branchCompanyIdName : ''
+        }
+    }
+    componentDidMount() {
+        this.requestSearch()
     }
 
-    componentDidMount() {
-        const { returnGoodsList, data } = this.props
-        returnGoodsList(data)
+    // 父组件page改变
+    componentWillReceiveProps(nextProps) {
+        if (this.props.page !== nextProps.page) {
+            this.requestSearch(nextProps.page)
+        }
     }
 
     // 获取用于搜索的所有有效表单值
     getSearchParams = () => {
         const {
             branchCompanyId,
-            franchiseeId,
             id,
             orderId,
             shippingState,
@@ -52,12 +69,11 @@ class ReturGoodsForm extends PureComponent {
         const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
         const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
         const searchParams = {
-            branchCompanyId: branchCompanyId,
-            franchiseeId: franchiseeId,
-            id: id,
-            orderId: orderId,
-            shippingState: shippingState,
-            state: state,
+            branchCompanyId,
+            id,
+            orderId,
+            shippingState,
+            state,
             startCreateTime,
             endCreateTime
         };
@@ -65,21 +81,27 @@ class ReturGoodsForm extends PureComponent {
         return Utils.removeInvalid(searchParams);
     }
 
-    //搜索方法
+    // 搜索方法
     requestSearch = (nextPage) => {
         const { returnGoodsListFormData, returnGoodsList, page } = this.props;
         const seachParams = this.getSearchParams();
-        let data = {
-            pageSize: PAGE_SIZE,
-            pageNum: nextPage ? nextPage : page,
-            ...seachParams
+        const data = {
+            data: {
+                pageSize: PAGE_SIZE,
+                pageNum: nextPage ? nextPage : page,
+                franchiseeId: this.state.franchiseeId,
+                branchCompanyId: this.state.branchCompanyId,
+                ...seachParams
+            },
+            franchiseeIdName: this.state.franchiseeIdName,
+            branchCompanyIdName: this.state.franchiseeIdName
         }
         returnGoodsListFormData(data)
-        returnGoodsList(data)
+        returnGoodsList(Utils.removeInvalid(data.data))
     }
 
 
-    //搜索
+    // 搜索
 
     handleSearch = (e) => {
         e.preventDefault();
@@ -87,16 +109,59 @@ class ReturGoodsForm extends PureComponent {
     }
 
 
-    //重置
+    // 重置
     handleReset = () => {
+        this.handleJoiningClear();
+        this.handleSubCompanyClear();
+        this.joiningSearchMind.handleClear();
         this.props.form.resetFields();
     }
 
-    //父组件page改变
-    componentWillReceiveProps(nextProps) {
-        if (this.props.page !== nextProps.page) {
-            this.requestSearch(nextProps.page)
-        }
+    // handleOrderReset() {
+    //     this.setState({
+    //         rengeTime: yesterdayrengeDate,
+    //         isPayDisabled: false,
+    //         time: {
+    //             submitStartTime: yesterdayDate,
+    //             submitEndTime: todayDate,
+    //         }
+    //     });
+    //     this.handleSubCompanyClear();
+    //     this.joiningSearchMind.handleClear();
+    //     this.props.form.resetFields();
+    // }
+
+    /**
+     * 加盟商-值清单
+     */
+    handleJoiningChoose = ({ record }) => {
+        this.setState({
+            franchiseeId: record.franchiseeId,
+            franchiseeIdName: record.franchiseeId + ' - ' + record.franchiseeName
+        });
+    }
+
+    /**
+     * 子公司-值清单
+     */
+    handleSubCompanyChoose = (branchCompanyId) => {
+        this.setState({ branchCompanyId });
+    }
+
+    /**
+     * 加盟商-清除
+     */
+    handleJoiningClear() {
+        this.setState({
+            franchiseeId: ''
+        });
+    }
+
+    /**
+     * 子公司-清除
+     */
+    handleSubCompanyClear() {
+        this.setState({ branchCompanyId: '' });
     }
 
     render() {
@@ -111,37 +176,71 @@ class ReturGoodsForm extends PureComponent {
                 >
                     <Row gutter={40}>
                         <Col span={8}>
-                            <FormItem label='原订单号'>
-                                {getFieldDecorator(`orderId`, {
+                            <FormItem label="原订单号">
+                                {getFieldDecorator('orderId', {
                                     initialValue: data.orderId
                                 })(
                                     <Input size="default" placeholder="原订单号" />
                                     )}
                             </FormItem>
                         </Col>
-                        <Col span={8}>
-                            <FormItem label='子公司'>
-                                {getFieldDecorator(`branchCompanyId`, {
-                                    initialValue: data.branchCompanyId
-                                })(
-                                    <Input size="default" placeholder="子公司名称" />
-                                    )}
+                        <Col className="franchisee-item" span={8}>
+                            {/* 子公司 */}
+                            <FormItem>
+                                <div>
+                                    <span className="sc-form-item-label">子公司:</span>
+                                    <SubCompanies
+                                        value={this.state.branchCompanyId}
+                                        onSubCompaniesChooesd={this.handleSubCompanyChoose}
+                                        onSubCompaniesClear={this.handleSubCompanyClear}
+                                    />
+                                </div>
                             </FormItem>
                         </Col>
-                        <Col span={8}>
-                            <FormItem label='雅堂小超'>
-                                {getFieldDecorator(`franchiseeId`, {
-                                    initialValue: data.franchiseeId
-                                })(
-                                    <Input size="default" placeholder="雅堂小超名称" />
-                                    )}
+                        <Col span={8} className="franchisee-item">
+                            <FormItem>
+                                <div>
+                                    <span className="sc-form-item-label">雅堂小超:</span>
+                                    <SearchMind
+                                        defaultValue={this.state.franchiseeIdName}
+                                        rowKey="franchiseeId"
+                                        compKey="search-mind-joining"
+                                        ref={ref => { this.joiningSearchMind = ref }}
+                                        fetch={(params) =>
+                                            this.props.pubFetchValueList({
+                                                param: params.value,
+                                                pageNum: params.pagination.current || 1,
+                                                pageSize: params.pagination.pageSize
+                                            }, 'getFranchiseeInfo')
+                                        }
+                                        onChoosed={this.handleJoiningChoose}
+                                        onClear={this.handleJoiningClear}
+                                        renderChoosedInputRaw={(row) => (
+                                            <div>
+                                                {row.franchiseeId} - {row.franchiseeName}
+                                            </div>
+                                        )}
+                                        pageSize={6}
+                                        columns={[
+                                            {
+                                                title: '加盟商id',
+                                                dataIndex: 'franchiseeId',
+                                                width: 98
+                                            }, {
+                                                title: '加盟商名字',
+                                                dataIndex: 'franchiseeName',
+                                                width: 140
+                                            }
+                                        ]}
+                                    />
+                                </div>
                             </FormItem>
                         </Col>
                     </Row>
                     <Row gutter={40}>
                         <Col span={8}>
-                            <FormItem label='退货单号'>
-                                {getFieldDecorator(`id`, {
+                            <FormItem label="退货单号">
+                                {getFieldDecorator('id', {
                                     initialValue: data.id
                                 })(
                                     <Input size="default" placeholder="退货单号" />
@@ -153,7 +252,7 @@ class ReturGoodsForm extends PureComponent {
                                 {getFieldDecorator('state', {
                                     initialValue: data.state ? data.state : ''
                                 })(
-                                    <Select style={{ width: '153px' }} size="default">
+                                    <Select style={{ width: '200px' }} size="default">
                                         {
                                             returnGoodsStatus.data.map((item) => (
                                                 <Select.Option key={item.key} value={item.key}>
@@ -170,7 +269,7 @@ class ReturGoodsForm extends PureComponent {
                                 {getFieldDecorator('shippingState', {
                                     initialValue: data.shippingState ? data.shippingState : ''
                                 })(
-                                    <Select style={{ width: '153px' }} size="default">
+                                    <Select style={{ width: '200px' }} size="default">
                                         {
                                             goodsReceiptStatus.data.map((item) => (
                                                 <Select.Option key={item.key} value={item.key}>
@@ -220,9 +319,14 @@ class ReturGoodsForm extends PureComponent {
 }
 
 ReturGoodsForm.propTypes = {
-    onSearch: PropTypes.func,
-    onReset: PropTypes.func,
-    data: PropTypes.objectOf(PropTypes.any)
+    returnGoodsListFormData: PropTypes.func,
+    returnGoodsList: PropTypes.func,
+    pubFetchValueList: PropTypes.func,
+    form: PropTypes.objectOf(PropTypes.any),
+    data: PropTypes.objectOf(PropTypes.any),
+    page: PropTypes.number,
+    franchiseeIdName: PropTypes.string,
+    branchCompanyIdName: PropTypes.string
 };
 
 export default withRouter(Form.create()(ReturGoodsForm));
