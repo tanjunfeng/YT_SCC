@@ -10,6 +10,7 @@ import { Form, message, Popconfirm, Table } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Utils from '../../../util/util';
 import { goodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
 import {
@@ -49,10 +50,9 @@ class GoodsTable extends PureComponent {
         this.props.onChange(goodsList.filter(item => item.productCode !== productCode));
     }
 
-    importToList = (list) => {
-        list.forEach(item => {
-            this.appendToList(item);
-        });
+    importToList = (importList) => {
+        const goodsList = Utils.merge(this.props.goodsList, importList, 'productId');
+        this.props.onChange(goodsList);
         this.props.onClearImportList(); // 通知父组件清空导入商品列表
     }
 
