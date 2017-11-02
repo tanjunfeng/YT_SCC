@@ -57,7 +57,7 @@ class ReturnGoodsDetails extends PureComponent {
 
     // 返回
     goBack = () => {
-        this.props.history.replace('/aGoodsList')
+        this.props.history.replace('/returnGoodsList')
     }
 
     // 退货单确定或取消
