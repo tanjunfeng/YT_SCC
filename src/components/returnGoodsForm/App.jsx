@@ -12,6 +12,7 @@ import { pubFetchValueList } from '../../actions/pub';
 import { PAGE_SIZE } from '../../constant';
 import SearchMind from '../../components/searchMind';
 import { SubCompanies } from '../../container/search';
+import { BranchCompany } from '../../container/search';
 
 
 const FormItem = Form.Item;
@@ -22,7 +23,7 @@ const dateFormat = 'YYYY-MM-DD';
     state => ({
         data: state.toJS().pageParameters.returnGoodsParams.data,
         franchiseeIdName: state.toJS().pageParameters.returnGoodsParams.franchiseeIdName,
-        branchCompanyIdName: state.toJS().pageParameters.returnGoodsParams.branchCompanyIdName
+        branchCompany: state.toJS().pageParameters.returnGoodsParams.branchCompany
     }),
     dispatch => bindActionCreators({
         returnGoodsList,
@@ -31,17 +32,15 @@ const dateFormat = 'YYYY-MM-DD';
     }, dispatch)
 )
 
-
 class ReturGoodsForm extends PureComponent {
     constructor(props) {
         super(props);
-        const { data, franchiseeIdName, branchCompanyIdName } = this.props;
+        const { data, franchiseeIdName } = this.props;
         this.joiningSearchMind = null;
         this.state = {
             franchiseeId: data.franchiseeId ? data.franchiseeId : '',
             franchiseeIdName: franchiseeIdName ? franchiseeIdName : '',
-            branchCompanyId: data.branchCompanyId ? data.branchCompanyId : '',
-            branchCompanyIdName: branchCompanyIdName ? branchCompanyIdName : ''
+            branchCompany: null
         }
     }
     componentDidMount() {
@@ -58,18 +57,19 @@ class ReturGoodsForm extends PureComponent {
     // 获取用于搜索的所有有效表单值
     getSearchParams = () => {
         const {
-            branchCompanyId,
+            branchCompany,
             id,
             orderId,
             shippingState,
             createTime,
             state
             } = this.props.form.getFieldsValue();
+        this.setState({ branchCompany: { ...branchCompany } })
 
         const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
         const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
         const searchParams = {
-            branchCompanyId,
+            branchCompanyId: branchCompany.id,
             id,
             orderId,
             shippingState,
@@ -81,6 +81,12 @@ class ReturGoodsForm extends PureComponent {
         return Utils.removeInvalid(searchParams);
     }
 
+    shouldComponentWillUpdate(nextProps, nextState) {
+        if (this.state.branchCompany.id !== nextState.branchCompany.id) {
+            return true;
+        }
+    }
+
     // 搜索方法
     requestSearch = (nextPage) => {
         const { returnGoodsListFormData, returnGoodsList, page } = this.props;
@@ -90,11 +96,10 @@ class ReturGoodsForm extends PureComponent {
                 pageSize: PAGE_SIZE,
                 pageNum: nextPage ? nextPage : page,
                 franchiseeId: this.state.franchiseeId,
-                branchCompanyId: this.state.branchCompanyId,
                 ...seachParams
             },
             franchiseeIdName: this.state.franchiseeIdName,
-            branchCompanyIdName: this.state.franchiseeIdName
+            branchCompany: this.state.branchCompany
         }
         returnGoodsListFormData(data)
         returnGoodsList(Utils.removeInvalid(data.data))
@@ -144,9 +149,9 @@ class ReturGoodsForm extends PureComponent {
     /**
      * 子公司-值清单
      */
-    handleSubCompanyChoose = (branchCompanyId) => {
-        this.setState({ branchCompanyId });
-    }
+    // handleSubCompanyChoose = (branchCompanyId) => {
+    //     this.setState({ branchCompanyId });
+    // }
 
     /**
      * 加盟商-清除
@@ -160,9 +165,9 @@ class ReturGoodsForm extends PureComponent {
     /**
      * 子公司-清除
      */
-    handleSubCompanyClear() {
-        this.setState({ branchCompanyId: '' });
-    }
+    // handleSubCompanyClear() {
+    //     this.setState({ branchCompanyId: '' });
+    // }
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -187,14 +192,19 @@ class ReturGoodsForm extends PureComponent {
                         <Col className="franchisee-item" span={8}>
                             {/* 子公司 */}
                             <FormItem>
-                                <div>
+                                {/* <div>
                                     <span className="sc-form-item-label">子公司:</span>
                                     <SubCompanies
                                         value={this.state.branchCompanyId}
                                         onSubCompaniesChooesd={this.handleSubCompanyChoose}
                                         onSubCompaniesClear={this.handleSubCompanyClear}
                                     />
-                                </div>
+                                </div> */}
+                                <FormItem label="分公司">
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: { ...this.state.branchCompany }
+                                    })(<BranchCompany />)}
+                                </FormItem>
                             </FormItem>
                         </Col>
                         <Col span={8} className="franchisee-item">
