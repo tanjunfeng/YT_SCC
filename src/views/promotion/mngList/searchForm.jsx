@@ -10,7 +10,7 @@ import { withRouter } from 'react-router';
 import Util from '../../../util/util';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { promotionStatus } from '../constants';
-import { SubCompanies } from '../../../container/search';
+import { BranchCompany } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -45,9 +45,10 @@ class SearchForm extends PureComponent {
             id,
             promotionName,
             promotionDateRange,
-            statusCode
+            statusCode,
+            branchCompany
         } = this.props.form.getFieldsValue();
-        const branchCompanyId = this.state.branchCompanyId;
+        const branchCompanyId = branchCompany.id;
         let status = statusCode;
         if (statusCode === 'all') {
             status = '';
@@ -104,15 +105,10 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem>
-                                    <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">所属公司</span>
-                                        <SubCompanies
-                                            value={this.state.branchCompanyId}
-                                            onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                            onSubCompaniesClear={this.hanldeSubCompanyClear}
-                                        />
-                                    </div>
+                                <FormItem label="所属公司">
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: null
+                                    })(<BranchCompany />)}
                                 </FormItem>
                             </Col>
                         </Row>

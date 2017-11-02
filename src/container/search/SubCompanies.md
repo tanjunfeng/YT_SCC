@@ -1,4 +1,4 @@
-# 选择子公司值清单
+# 选择子公司值清单(已弃用,请采用 BranchComany.jsx)
 # by [taoqiyu](taoqiyu@yatang.cn)
 
 ## 导入
