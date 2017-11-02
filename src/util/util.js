@@ -332,8 +332,9 @@ class Utils {
     }
 
     /**
-     * 按照属性 p 合并数组 a b
+     * 按照唯一属性标识 p 合并数组 a b
      *
+     * b 会覆盖 a
      * @param {*array} a
      * @param {*array} b
      * @param {*string} p
