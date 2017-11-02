@@ -238,7 +238,7 @@
             "menuList": [
                 {
                     "authorityId": 801,
-                    "authorityCode": "returnGoodsList",
+                    "authorityCode": "aGoodsList",
                     "displayName": "退货单列表",
                     "menuList": []
                 }

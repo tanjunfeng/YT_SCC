@@ -84,6 +84,6 @@ export default Immutable.fromJS({
     queryWhiteList,
     // 销售管理
     salesManagement,
-    //页面返回定位参数管理
+    // 页面返回定位参数管理
     pageParameters
 });
