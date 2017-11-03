@@ -44,6 +44,7 @@ class ReturGoodsForm extends PureComponent {
 
     componentDidMount() {
         const nextPage = this.props.data.pageNum || 1;
+        console.log(1)
         this.requestSearch(nextPage)
     }
 
@@ -124,6 +125,7 @@ class ReturGoodsForm extends PureComponent {
         // this.props.form.setFieldsValue({
         //     branchCompany: null
         // });
+        // this.requestSearch(1)
     }
 
     // 加盟商-值清单
