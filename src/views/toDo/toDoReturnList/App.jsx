@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-02 11:39:46
+ * @Last Modified time: 2017-11-03 10:08:09
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -241,7 +241,8 @@ class toDoReturnList extends PureComponent {
     }
 
     nodeModal = () => {
-
+        this.showOpinionModal();
+        this.props.queryProcessDefinitions({processType: 1});
     }
 
     /**
@@ -384,8 +385,6 @@ class toDoReturnList extends PureComponent {
         const { key } = items;
         switch (key) {
             case 'examinationApproval':
-                this.showOpinionModal();
-                this.props.queryProcessDefinitions({processType: 1});
                 break;
             case 'viewApproval':
                 this.showModal();
@@ -515,11 +514,11 @@ class toDoReturnList extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.auditPurReList;
         const { processDefinitions } = this.props;
-        const customDot = (dot, { status, index }) => (
-            <Popover content={<span>step {index} status: {status}</span>}>
-                {dot}
-            </Popover>
-        );
+        const processList = [];
+        processDefinitions.forEach((item) => {
+            processList.push(item.processNodeName)
+        });
+        console.log(processList)
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -759,14 +758,9 @@ class toDoReturnList extends PureComponent {
                             onCancel={this.handleOpinionCancel}
                             width={1000}
                         >
-                            {/* <Steps current={1} progressDot={customDot}>
-                                <Step title="门店店长" description="李四 2017-11-1 通过" />
-                                <Step title="子公司经理" description="王五  2017-11-2 拒绝" />
-                                <Step title="总公司经理" description="赵六" />
-                            </Steps> */}
-                            <Steps current={1} status="error">
-                                <Step title="门店店长" description="李四 2017-11-1 通过" />
-                                <Step title="子公司经理" description="王五  2017-11-2 拒绝" />
+                            <Steps current={1} progressDot>
+                                <Step title="门店店长" description="李四" />
+                                <Step title="子公司经理" description="王五" />
                                 <Step title="总公司经理" description="赵六" />
                             </Steps>
                         </Modal>
@@ -781,6 +775,7 @@ toDoReturnList.propTypes = {
     employeeCompanyId: PropTypes.string,
     queryAuditPurReList: PropTypes.func,
     queryProcessDefinitions: PropTypes.func,
+    processDefinitions: PropTypes.objectOf(PropTypes.array),
     form: PropTypes.objectOf(PropTypes.any),
     auditPurReList: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
