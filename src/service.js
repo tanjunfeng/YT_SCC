@@ -836,11 +836,11 @@ export const queryCategoriesByParentId = (params) => http.get('/category/queryDi
 // 退货单列表
 export const getReturnGoodsList = (params) => http.get('/webReturnRequest/queryReturnRequestList', params)
 // 退货单取消、确认
-export const getReturnGoodsOperation = (params) => http.get('/webReturnRequest/operateOrderReturnedReceipt', params)
+export const getReturnGoodsOperation = (params) => http.post('/webReturnRequest/operateOrderReturnedReceipt', params)
 // 退货单详情
 export const getReturnGoodsDetail = (params) => http.get('/webReturnRequest/returnRequestDetail', params)
 // 退货详情保存
-export const getReturnGoodsDetailSave = (params) => http.get('/webReturnRequest/returnDescription', params);
+export const getReturnGoodsDetailSave = (params) => http.post('/webReturnRequest/returnDescription', params);
 /**
  * 直营店下单模块
  */
