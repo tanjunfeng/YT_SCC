@@ -1,4 +1,4 @@
-.search {
+.search-box {
     &-box {
         background: #ffffff;
         border: 1px solid #c4c5c9;
@@ -50,8 +50,29 @@
             }
         }
     }
+    .ant-advanced-search-form {
+        .ant-form-item {
+            margin-bottom: 0;
+            .ant-input {
+                width: 200px;
+            }
+        }
+    }
+}
+.company-time {
+    .ywc-smind {
+        width: 200px;
+        vertical-align: middle;
+    }
 }
 
-.ant-advanced-search-form .ant-form-item {
-    margin-bottom: 0;
+.franchisee-item {
+    .ywc-smind {
+        width: 200px;
+        vertical-align: middle;
+    }
+    .sc-form-item-label {
+            margin-right: 0!important;
+        }
+    padding-left: 40px!important;
 }

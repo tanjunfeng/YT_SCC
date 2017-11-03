@@ -44,20 +44,27 @@ class GoodsForm extends PureComponent {
         const record = {
             productId,
             productCode,
-            internationalCode: internationalCodes[0].internationalCode,
             productName,
-            productSpecifications: `${packingSpecifications || '-'} / ${unitExplanation || '-'}`,
             available,
             salePrice,
             sellFullCase,
             salesInsideNumber,
+            minNumber
+        };
+        const quantity = sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber;
+        const subTotal = quantity * salePrice;
+        // 起订数量显示单位
+        const minNumberSpecifications = sellFullCase === 0 ? `${minNumber}${fullCaseUnit || ''}` : `${minNumber}${minUnit || '-'}`;
+        Object.assign(record, {
+            productSpecifications: `${packingSpecifications || '-'} / ${unitExplanation || '-'}`,
             packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit || ''} / ${minUnit || '-'}`,
-            quantity: sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber,
-            minNumber,
-            minNumberSpecifications: sellFullCase === 0 ? `${minNumber}${fullCaseUnit || ''}` : `${minNumber}${minUnit || '-'}`, // 起订数量显示单位
+            internationalCode: internationalCodes[0].internationalCode,
+            quantity,
+            subTotal,
+            minNumberSpecifications,
             enough: true, // 是否库存充足，默认充足
             isMultiple: true // 是否是销售内装数的整数倍，默认是整数倍
-        };
+        });
         return record;
     }
 
@@ -100,9 +107,14 @@ class GoodsForm extends PureComponent {
                         <Row gutter={40}>
                             <FormItem>
                                 <AddingGoodsByStore
-                                    branchCompanyId={this.props.value.branchCompanyId}
+                                    branchCompanyId={branchCompanyId}
                                     onChange={this.handleGoodsChange}
                                 />
+                            </FormItem>
+                            <FormItem className="download" >
+                                <a target="_blank" href={`${window.config.apiHost}directStore/downloadExcelModel`}>
+                                    下载 Excel 模板
+                                </a>
                             </FormItem>
                             <FormItem className="file-upload">
                                 <Excel
@@ -110,10 +122,9 @@ class GoodsForm extends PureComponent {
                                     onChange={this.handleImport}
                                 />
                             </FormItem>
+                        </Row>
+                        <Row gutter={40} type="flex" justify="end">
                             <FormItem>
-                                <a className="download" target="_blank" href={`${window.config.apiHost}directStore/downloadExcelModel`}>
-                                    下载 Excel 模板
-                                </a>
                                 <div className="info">
                                     数量：<span>30</span>
                                 </div>
@@ -121,7 +132,7 @@ class GoodsForm extends PureComponent {
                                     金额：<span>2000</span>
                                 </div>
                             </FormItem>
-                            <FormItem className="fr">
+                            <FormItem>
                                 <Button type="primary" size="default" onClick={this.handleSubmit} disabled={!canBeSubmit}>
                                     提交
                                 </Button>

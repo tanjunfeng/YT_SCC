@@ -367,7 +367,6 @@ class toDoPurchaseList extends PureComponent {
         const { key } = items;
         switch (key) {
             case 'examinationApproval':
-                console.log(111111)
                 this.showOpinionModal();
                 break;
             case 'viewApproval':

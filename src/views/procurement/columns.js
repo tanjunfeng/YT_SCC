@@ -192,13 +192,10 @@ export const goodsColumns = [{
     title: '单价',
     dataIndex: 'salePrice',
     width: 70,
-    render: text => {
-        if (text || +text === 0) return text;
-        return '-';
-    }
+    render: text => (text === null ? '-' : text)
 }, {
     title: '金额',
-    dataIndex: '',
+    dataIndex: 'subTotal',
     width: 100
 }, {
     title: '操作',
