@@ -11,7 +11,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Utils from '../../../util/util';
-import { goodsColumns as columns } from '../columns';
+import { directSalesgoodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
 import {
     updateGoodsInfo
@@ -50,9 +50,22 @@ class GoodsTable extends PureComponent {
         this.props.onChange(goodsList.filter(item => item.productCode !== productCode));
     }
 
+    /**
+     * 将不在销售区域的剔除,重复的商品剔除,添加到商品列表中
+     */
     importToList = (importList) => {
-        const goodsList = Utils.merge(this.props.goodsList, importList, 'productId');
+        const list = [];
+        const deleteList = [];
+        importList.forEach(item => {
+            if (item.available) {
+                list.push(item);
+            } else {
+                deleteList.push(item);
+            }
+        });
+        const goodsList = Utils.merge(this.props.goodsList, list, 'productId');
         this.props.onChange(goodsList);
+        this.props.onDeleteUnavailable(deleteList);
         this.props.onClearImportList(); // 通知父组件清空导入商品列表
     }
 
