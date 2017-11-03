@@ -30,7 +30,7 @@ const dateFormat = 'YYYY-MM-DD';
     }, dispatch)
 )
 
-class ReturGoodsForm extends PureComponent {
+class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
         const { data, franchiseeIdName } = this.props;
@@ -284,7 +284,7 @@ class ReturGoodsForm extends PureComponent {
     }
 }
 
-ReturGoodsForm.propTypes = {
+SearchForm.propTypes = {
     returnGoodsListFormData: PropTypes.func,
     returnGoodsList: PropTypes.func,
     pubFetchValueList: PropTypes.func,
@@ -296,4 +296,4 @@ ReturGoodsForm.propTypes = {
     franchiseeIdName: PropTypes.string
 };
 
-export default withRouter(Form.create()(ReturGoodsForm));
+export default withRouter(Form.create()(SearchForm));
