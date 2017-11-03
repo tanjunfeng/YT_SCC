@@ -12,7 +12,7 @@ import { BranchCompany } from '../../../container/search';
 
 <FormItem label="分公司">
     {getFieldDecorator('branchCompany', {
-        initialValue: null
+        initialValue: { id: '10003', name: '成都子公司' }
     })(<BranchCompany />)}
 </FormItem>
 
