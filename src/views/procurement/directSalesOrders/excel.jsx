@@ -8,6 +8,8 @@ import PropTypes from 'prop-types';
 import { Button, Upload, Icon, message } from 'antd';
 import axios from 'axios';
 
+axios.defaults.timeout = 100000;
+
 class Excel extends PureComponent {
     state = {
         fileList: [],
