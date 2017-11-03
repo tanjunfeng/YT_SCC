@@ -61,24 +61,16 @@ class ReturGoodsForm extends PureComponent {
     // 获取用于搜索的所有有效表单值
     getSearchParams = () => {
         const {
-            branchCompany,
             id,
             orderId,
             shippingState,
             createTime,
             state
             } = this.props.form.getFieldsValue();
-        let branchCompanyId = '';
-        if (branchCompany && branchCompany.id) {
-            branchCompanyId = branchCompany.id;
-            this.branchCompany = { id: branchCompany.id, name: branchCompany.name }
-        } else {
-            this.branchCompany = null;
-        }
         const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
         const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
         const searchParams = {
-            branchCompanyId,
+            branchCompanyId: this.branchCompany.id,
             id,
             orderId,
             shippingState,
@@ -102,7 +94,7 @@ class ReturGoodsForm extends PureComponent {
                 ...seachParams
             },
             franchiseeIdName: this.state.franchiseeIdName,
-            branchCompany: this.branchCompany
+            branchCompany: this.branchCompany.name
         }
         returnGoodsListFormData(data)
         returnGoodsList(Utils.removeInvalid(data.data))
@@ -122,10 +114,7 @@ class ReturGoodsForm extends PureComponent {
         this.handleJoiningClear();
         this.joiningSearchMind.reset();
         this.props.form.resetFields();
-        // this.props.form.setFieldsValue({
-        //     branchCompany: null
-        // });
-        // this.requestSearch(1)
+        this.branchCompany = { id: '', name: '' };
     }
 
     // 加盟商-值清单
