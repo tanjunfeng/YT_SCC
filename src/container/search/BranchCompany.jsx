@@ -33,7 +33,7 @@ class BranchCompany extends PureComponent {
      */
     handleSubCompanyClear = () => {
         this.searchMind.reset();
-        this.props.onChange(null);
+        this.props.onChange({ id: '', name: '' });
     }
 
     /**
