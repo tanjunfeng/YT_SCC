@@ -72,6 +72,7 @@ import {
     queryAuditPurchaseRefundList,
     queryApprovalInfo,
     queryAuditPurReList,
+    queryProcessDefinitions
 } from './procurement';
 
 // IBM
@@ -245,4 +246,6 @@ export {
     queryApprovalInfo,
     // 查询退货单审批列表
     queryAuditPurReList,
+    // 查询退货单审批流程
+    queryProcessDefinitions,
 }

@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-01 15:27:15
+ * @Last Modified time: 2017-11-02 10:41:56
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -81,6 +81,7 @@ class toDoPurchaseList extends PureComponent {
             locDisabled: true,  // 地点禁用
             locationData: {},
             isVisibleModal: false,
+            opinionvisible: false,
             adrTypeCode: '',    // 地点编码
             receivedTypeCode: ''  // 收货单状态编码
         };
@@ -345,10 +346,29 @@ class toDoPurchaseList extends PureComponent {
         });
     }
 
+    showOpinionModal = () => {
+        this.setState({
+            opinionvisible: true,
+        });
+    }
+
+    handleOpinionOk = () => {
+        this.setState({
+            opinionvisible: false,
+        });
+    }
+    handleOpinionCancel = () => {
+        this.setState({
+            opinionvisible: false,
+        });
+    }
+
     handleSelect(record, index, items) {
         const { key } = items;
         switch (key) {
             case 'examinationApproval':
+                console.log(111111)
+                this.showOpinionModal();
                 break;
             case 'viewApproval':
                 this.showModal();
@@ -704,6 +724,16 @@ class toDoPurchaseList extends PureComponent {
                             onOk={this.handleModalOk}
                             onCancel={this.handleModalCancel}
                         />
+                        <Modal
+                            title="Basic Modal"
+                            visible={this.state.opinionvisible}
+                            onOk={this.handleOpinionOk}
+                            onCancel={this.handleOpinionCancel}
+                        >
+                            <p>Some contents...</p>
+                            <p>Some contents...</p>
+                            <p>Some contents...</p>
+                        </Modal>
                     </div>
                 </Form>
             </div >
@@ -716,7 +746,6 @@ toDoPurchaseList.propTypes = {
     queryAuditPurReList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     auditPurReList: PropTypes.objectOf(PropTypes.any),
-    location: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     queryApprovalInfo: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,

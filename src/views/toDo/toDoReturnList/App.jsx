@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-01 15:15:56
+ * @Last Modified time: 2017-11-02 11:39:46
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -20,7 +20,9 @@ import {
     Menu,
     Dropdown,
     Modal,
-    message
+    message,
+    Steps,
+    Popover
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -37,7 +39,8 @@ import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
     queryAuditPurReList,
-    queryApprovalInfo
+    queryApprovalInfo,
+    queryProcessDefinitions
 } from '../../../actions/procurement';
 import {
     getWarehouseAddressMap,
@@ -52,9 +55,11 @@ const Option = Select.Option;
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
+const Step = Steps.Step;
 
 @connect(state => ({
-    auditPurReList: state.toJS().procurement.auditPurReList
+    auditPurReList: state.toJS().procurement.auditPurReList,
+    processDefinitions: state.toJS().procurement.processDefinitions
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -62,7 +67,8 @@ const confirm = Modal.confirm;
     getSupplierLocMap,
     pubFetchValueList,
     queryAuditPurReList,
-    queryApprovalInfo
+    queryApprovalInfo,
+    queryProcessDefinitions
 }, dispatch))
 
 class toDoReturnList extends PureComponent {
@@ -81,6 +87,7 @@ class toDoReturnList extends PureComponent {
             locDisabled: true,  // 地点禁用
             locationData: {},
             isVisibleModal: false,
+            opinionvisible: false,
             adrTypeCode: '',    // 地点编码
             receivedTypeCode: ''  // 收货单状态编码
         };
@@ -178,6 +185,17 @@ class toDoReturnList extends PureComponent {
                 dataIndex: 'operation',
                 key: 'operation',
                 render: this.renderActions
+            }
+        ]
+        this.definColumns = [
+            {
+                title: '流程节点编码',
+                dataIndex: 'processNodeCode',
+                key: 'processNodeCode'
+            }, {
+                title: '流程节点名称',
+                dataIndex: 'processNodeName',
+                key: 'processNodeName'
             }
         ]
     }
@@ -345,10 +363,29 @@ class toDoReturnList extends PureComponent {
         });
     }
 
+    showOpinionModal = () => {
+        this.setState({
+            opinionvisible: true,
+        });
+    }
+
+    handleOpinionOk = () => {
+        this.setState({
+            opinionvisible: false,
+        });
+    }
+    handleOpinionCancel = () => {
+        this.setState({
+            opinionvisible: false,
+        });
+    }
+
     handleSelect(record, index, items) {
         const { key } = items;
         switch (key) {
             case 'examinationApproval':
+                this.showOpinionModal();
+                this.props.queryProcessDefinitions({processType: 1});
                 break;
             case 'viewApproval':
                 this.showModal();
@@ -477,6 +514,12 @@ class toDoReturnList extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.auditPurReList;
+        const { processDefinitions } = this.props;
+        const customDot = (dot, { status, index }) => (
+            <Popover content={<span>step {index} status: {status}</span>}>
+                {dot}
+            </Popover>
+        );
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -709,6 +752,24 @@ class toDoReturnList extends PureComponent {
                             onOk={this.handleModalOk}
                             onCancel={this.handleModalCancel}
                         />
+                        <Modal
+                            title="审批进度"
+                            visible={this.state.opinionvisible}
+                            onOk={this.handleOpinionOk}
+                            onCancel={this.handleOpinionCancel}
+                            width={1000}
+                        >
+                            {/* <Steps current={1} progressDot={customDot}>
+                                <Step title="门店店长" description="李四 2017-11-1 通过" />
+                                <Step title="子公司经理" description="王五  2017-11-2 拒绝" />
+                                <Step title="总公司经理" description="赵六" />
+                            </Steps> */}
+                            <Steps current={1} status="error">
+                                <Step title="门店店长" description="李四 2017-11-1 通过" />
+                                <Step title="子公司经理" description="王五  2017-11-2 拒绝" />
+                                <Step title="总公司经理" description="赵六" />
+                            </Steps>
+                        </Modal>
                     </div>
                 </Form>
             </div >
@@ -719,6 +780,7 @@ class toDoReturnList extends PureComponent {
 toDoReturnList.propTypes = {
     employeeCompanyId: PropTypes.string,
     queryAuditPurReList: PropTypes.func,
+    queryProcessDefinitions: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     auditPurReList: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),

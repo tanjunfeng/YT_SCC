@@ -297,6 +297,8 @@ export default {
     QUERY_AUDIT_PURCHASE_LIST: 'QUERY_AUDIT_PURCHASE_LIST',
     // 查看退货单审批意见
     QUERY_APPROVAL_INFO: 'QUERY_APPROVAL_INFO',
+    // 查询退货单审批流程
+    QUERY_PRO_DEFINITIONS: 'QUERY_PRO_DEFINITIONS',
     // 查询退货流水号
     GET_REFUND_NO_ACTION: 'GET_REFUND_NO_ACTION',
     // 清除退货流水号
