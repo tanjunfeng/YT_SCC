@@ -52,7 +52,12 @@ class DirectSalesOrders extends PureComponent {
      */
     handleRechooseOk = () => {
         const { storeId, branchCompanyId, deliveryWarehouseCode } = this.record;
-        this.setState({ storeId, branchCompanyId, deliveryWarehouseCode, modalRechooseVisible: false });
+        this.setState({
+            storeId,
+            branchCompanyId,
+            deliveryWarehouseCode,
+            modalRechooseVisible: false
+        });
         this.handleClear();
     }
 

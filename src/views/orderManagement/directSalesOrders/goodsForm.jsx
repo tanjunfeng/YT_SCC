@@ -25,7 +25,7 @@ const FormItem = Form.Item;
 }, dispatch))
 
 class GoodsForm extends PureComponent {
-    getRow = (goodsInfo) => {
+    getRow = (goodsInfo, q) => {
         const {
             productId,
             productCode,
@@ -59,7 +59,7 @@ class GoodsForm extends PureComponent {
             productSpecifications: `${packingSpecifications || '-'} / ${unitExplanation || '-'}`,
             packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit || ''} / ${minUnit || '-'}`,
             internationalCode: internationalCodes[0].internationalCode,
-            quantity,
+            quantity: q || quantity,
             subTotal,
             minNumberSpecifications,
             enough: true, // 是否库存充足，默认充足
