@@ -95,7 +95,7 @@ class ReturGoodsForm extends PureComponent {
                 ...seachParams
             },
             franchiseeIdName: this.state.franchiseeIdName,
-            branchCompany: this.branchCompany.name
+            branchCompany: this.branchCompany
         }
         returnGoodsListFormData(data)
         returnGoodsList(Utils.removeInvalid(data.data))
@@ -103,7 +103,6 @@ class ReturGoodsForm extends PureComponent {
 
 
     // 搜索
-
     handleSearch = (e) => {
         e.preventDefault();
         this.requestSearch()
