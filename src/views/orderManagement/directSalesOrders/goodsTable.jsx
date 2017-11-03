@@ -55,18 +55,16 @@ class GoodsTable extends PureComponent {
      */
     importToList = (importList) => {
         const list = [];
-        const deleteList = [];
+        const deletedIds = [];
         importList.forEach(item => {
             if (item.available) {
                 list.push(item);
             } else {
-                deleteList.push(item);
+                deletedIds.push(item.productId);
             }
         });
         const goodsList = Utils.merge(this.props.goodsList, list, 'productId');
-        this.props.onChange(goodsList);
-        this.props.onDeleteUnavailable(deleteList);
-        this.props.onClearImportList(); // 通知父组件清空导入商品列表
+        this.props.onChange(goodsList, deletedIds);
     }
 
     /**
@@ -203,7 +201,6 @@ class GoodsTable extends PureComponent {
 GoodsTable.propTypes = {
     updateGoodsInfo: PropTypes.func,
     onChange: PropTypes.func,
-    onClearImportList: PropTypes.func,
     branchCompanyId: PropTypes.string,
     deliveryWarehouseCode: PropTypes.string,
     goodsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),

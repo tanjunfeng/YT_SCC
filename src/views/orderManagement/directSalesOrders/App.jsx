@@ -28,8 +28,10 @@ class DirectSalesOrders extends PureComponent {
         deliveryWarehouseCode: '', // 送货舱编码
         goodsList: [], // 当前显示商品列表
         importList: [], // 导入商品列表
+        deletedIds: [], // 由于不在销售区域而被删除的商品编号列表
         goodsAddOn: null, // 手工添加的单个商品
-        modalVisible: false
+        modalRechooseVisible: false, // 提示重新选择门店的模态框
+        modalDeletedIdsVisible: false // 提示未导入商品的模态框
     }
 
     record = null; // 重新选择的门店信息
@@ -39,35 +41,46 @@ class DirectSalesOrders extends PureComponent {
         const { storeId, goodsList } = this.state;
         // 门店信息变化时，判断是否存在已选商品列表，并弹出确认框
         if (goodsList.length > 0 && storeId !== '') {
-            this.setState({ modalVisible: true });
+            this.setState({ modalRechooseVisible: true });
         } else {
-            this.handleModalOk();
+            this.handleRechooseOk();
         }
     }
 
     /**
      * 重新选择商品
      */
-    handleModalOk = () => {
+    handleRechooseOk = () => {
         const { storeId, branchCompanyId, deliveryWarehouseCode } = this.record;
-        this.setState({ storeId, branchCompanyId, deliveryWarehouseCode, modalVisible: false });
+        this.setState({ storeId, branchCompanyId, deliveryWarehouseCode, modalRechooseVisible: false });
         this.handleClear();
+    }
+
+    /**
+     * 关闭未导入商品提示框
+     */
+    handleDeletedIdsClose = () => {
+        this.setState({ modalDeletedIdsVisible: false, deletedIds: [] });
     }
 
     /**
      * 不重新选择商品，清空传入的门店信息
      */
-    handleModalCancel = () => {
+    handleRechooseCancel = () => {
         this.record = null;
-        this.setState({ modalVisible: false });
+        this.setState({ modalRechooseVisible: false });
     }
 
     handleGoodsFormChange = (goodsAddOn) => {
         this.setState({ goodsAddOn });
     }
 
-    handleGoodsListChange = (goodsList) => {
-        this.setState({ goodsList })
+    handleGoodsListChange = (goodsList, deletedIds = []) => {
+        if (deletedIds.length > 0) {
+            this.setState({ modalDeletedIdsVisible: true });
+        }
+        // 清空导入商品列表
+        this.setState({ goodsList, deletedIds, importList: [] })
     }
 
     handleClear = () => {
@@ -78,10 +91,6 @@ class DirectSalesOrders extends PureComponent {
 
     handleImport = (importList) => {
         this.setState({ importList });
-    }
-
-    handleClearImportList = () => {
-        this.setState({ importList: [] });
     }
 
     handleSubmit = () => {
@@ -191,15 +200,25 @@ class DirectSalesOrders extends PureComponent {
                     branchCompanyId={branchCompanyId}
                     deliveryWarehouseCode={deliveryWarehouseCode}
                     onChange={this.handleGoodsListChange}
-                    onClearImportList={this.handleClearImportList}
                 />
                 <Modal
                     title="重新选择门店"
-                    visible={this.state.modalVisible}
-                    onOk={this.handleModalOk}
-                    onCancel={this.handleModalCancel}
+                    visible={this.state.modalRechooseVisible}
+                    onOk={this.handleRechooseOk}
+                    onCancel={this.handleRechooseCancel}
                 >
                     <p>这个操作将要重新选择门店并清空已选择商品，确定吗？</p>
+                </Modal>
+                <Modal
+                    className="deleted-ids"
+                    title="不在销售区域的商品编号"
+                    visible={this.state.modalDeletedIdsVisible}
+                    onOk={this.handleDeletedIdsClose}
+                    onCancel={this.handleDeletedIdsClose}
+                >
+                    <span className="red">
+                        {this.state.deletedIds.join(', ')}
+                    </span>
                 </Modal>
                 <BackTop />
             </div>
