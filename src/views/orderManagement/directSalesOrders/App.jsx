@@ -162,7 +162,6 @@ class DirectSalesOrders extends PureComponent {
             return false;
         }
         for (let i = 0, item = goodsList[i]; i < length; i++) {
-            if (!item.available) return false; // 不在当前销售区域
             if (!item.enough) return false; // 库存不足
             if (!item.isMultiple) return false; // 不是内装数的整数倍
         }
