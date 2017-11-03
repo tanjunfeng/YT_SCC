@@ -61,6 +61,7 @@ class CouponsParticipate extends PureComponent {
             promoId: this.PROMOTION_ID
         };
         this.paramUnUsed = {
+            queryType: 1,
             pageNum: 1,
             pageSize: PAGE_SIZE,
             promoId: this.PROMOTION_ID
