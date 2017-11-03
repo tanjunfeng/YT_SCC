@@ -132,7 +132,10 @@ class CouponsParticipate extends PureComponent {
             ...param,
             ...this.param
         };
-        this.paramUnUsed = this.param;
+        this.paramUnUsed = {
+            ...param,
+            ...this.paramUnUsed
+        };
         this.query();
     }
 
@@ -143,9 +146,14 @@ class CouponsParticipate extends PureComponent {
             pageNum: 1,
             pageSize: PAGE_SIZE
         };
+        this.paramUnUsed = {
+            queryType: 1,
+            promoId: this.PROMOTION_ID,
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        };
         this.current = 1;
         this.currentUnUnsed = 1;
-        this.paramUnUsed = this.param;
     }
 
     handleParticipateExport(param) {

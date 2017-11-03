@@ -44,7 +44,6 @@ class ReturGoodsForm extends PureComponent {
 
     componentDidMount() {
         const nextPage = this.props.data.pageNum || 1;
-        console.log(1)
         this.requestSearch(nextPage)
     }
 
@@ -61,6 +60,7 @@ class ReturGoodsForm extends PureComponent {
     // 获取用于搜索的所有有效表单值
     getSearchParams = () => {
         const {
+            branchCompany,
             id,
             orderId,
             shippingState,
@@ -69,8 +69,9 @@ class ReturGoodsForm extends PureComponent {
             } = this.props.form.getFieldsValue();
         const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
         const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
+        this.branchCompany = { ...branchCompany };
         const searchParams = {
-            branchCompanyId: this.branchCompany.id,
+            branchCompanyId: branchCompany.id,
             id,
             orderId,
             shippingState,
