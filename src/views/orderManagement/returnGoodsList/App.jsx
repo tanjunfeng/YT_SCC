@@ -19,7 +19,7 @@ import {
     Dropdown,
     Modal
 } from 'antd';
-import SearchForm from '../../../components/returnGoodsForm';
+import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { returnGoodsListColumns as columns } from '../columns';
 import { returnGoodsOperation } from '../../../actions';
@@ -122,7 +122,7 @@ class ReturnGoodsList extends PureComponent {
         columns[columns.length - 1].render = this.renderActions;
         const { listData } = this.props
         return (
-            <div className="po-mng-list">
+            <div className="return-goods-list">
                 <SearchForm
                     page={this.state.page}
                     refresh={this.state.refresh}
