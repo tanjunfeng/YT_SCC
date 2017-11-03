@@ -1,0 +1,8 @@
+{
+    "timestamp": 1509440927841,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": "作废操作成功！",
+    "success": true
+}

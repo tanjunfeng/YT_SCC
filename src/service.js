@@ -824,6 +824,8 @@ export const queryAliveCouponsList = (params) => http.get('/coupon/queryAliveCou
 export const getCouponsDetail = (params) => http.get('/coupon/queryCouponsById', params);
 export const queryFranchiseeList = (params) => http.get('/franchisee/grantFranchisee', params);
 export const grantCoupon = (params) => http.post('/coupon/grantCoupon', params);
+export const invalidRecordList = (params) => http.post('/coupon/queryCouponActivityActiveList', params);
+export const cancelCoupons = (params) => http.get('/coupon/cancelCoupons', params);
 
 /**
  * 销售管理模块
@@ -842,7 +844,10 @@ export const getReturnGoodsDetail = (params) => http.get('/webReturnRequest/retu
 // 退货详情保存
 export const getReturnGoodsDetailSave = (params) => http.get('/webReturnRequest/orderDescription', params);
 
+// 查询退货单审批列表
+export const queryAuditPurReList = (params) => http.get('/pmPurchaseRefund/queryAuditPurchaseRefundList', params);
 /**
+
  * 直营店下单模块
  */
 // 查询直营店
@@ -859,3 +864,6 @@ export const updateGoodsInfo = params => http.post('/directStore/updateItem', pa
 export const insertDirectOrder = params => http.post('/directStore/directCommitOrder', params);
 // 批量校验库存
 export const batchCheckStorage = params => http.post('/directStore/validateDirectOrder', params);
+
+// 查询退货单审批流程
+export const queryProcessDefinitions = params => http.post('/pmPurchaseRefund/queryProcessDefinitions', params);

@@ -71,6 +71,8 @@ import {
     deleteBatchRefundOrder,
     queryAuditPurchaseRefundList,
     queryApprovalInfo,
+    queryAuditPurReList,
+    queryProcessDefinitions
 } from './procurement';
 
 // IBM
@@ -103,9 +105,8 @@ import stockListDetail from './stockListDetail';
 import storeAdList from './storeAdjustList';
 
 // 促销活动
-import {
-    getPromotionList, createPromotion,
-    getPromotionDetail, fetchCouponsListAction, getCouponsDetail
+import { getPromotionList, createPromotion,
+    getPromotionDetail, fetchCouponsListAction, getCouponsDetail, cancelCoupons
 } from './promotion';
 
 // 商品管理列表
@@ -205,6 +206,7 @@ export {
     getPromotionDetail,
     fetchCouponsListAction,
     getCouponsDetail,
+    cancelCoupons,
 
     // 根据条件分页查询商品清单，并排序
     queryCommodityList,
@@ -242,4 +244,8 @@ export {
     queryAuditPurchaseRefundList,
     // 查看退货单审批意见
     queryApprovalInfo,
+    // 查询退货单审批列表
+    queryAuditPurReList,
+    // 查询退货单审批流程
+    queryProcessDefinitions,
 }

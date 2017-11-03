@@ -38,31 +38,10 @@ export const returnStatus = {
         value: '请选择'
     }, {
         key: '0',
-        value: '制单'
+        value: '进行中'
     }, {
         key: '1',
-        value: '已提交'
-    }, {
-        key: '2',
-        value: '已审核'
-    }, {
-        key: '3',
-        value: '已拒绝'
-    }, {
-        key: '4',
-        value: '待退货'
-    }, {
-        key: '5',
-        value: '已退货'
-    }, {
-        key: '6',
-        value: '已取消'
-    }, {
-        key: '7',
-        value: '取消失败'
-    }, {
-        key: '8',
-        value: '异常'
+        value: '已结束'
     }]
 }
 

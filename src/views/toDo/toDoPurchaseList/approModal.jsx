@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-01 14:54:48
+ * @Last Modified time: 2017-11-01 14:55:41
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -102,6 +102,7 @@ class ApproModal extends PureComponent {
     }
 
     render() {
+        const { approvalInfo } = this.props;
         return (
             <Modal
                 title="审批意见"
@@ -111,7 +112,7 @@ class ApproModal extends PureComponent {
                 width={1200}
             >
                 <Table
-                    dataSource={this.props.approvalInfo}
+                    dataSource={approvalInfo}
                     columns={this.columns}
                     rowKey="id"
                     scroll={{

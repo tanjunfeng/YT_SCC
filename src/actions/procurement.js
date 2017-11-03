@@ -14,6 +14,7 @@ import {
     queryPoDetail,
     queryMaterialMap as svcQueryMateriMap,
     queryPurchaseOrderBrands as queryPurchaseOrderBrandsService,
+    queryAuditPurReList as queryAuditPurReListService,
     queryPoRcvMngList,
     queryPoRcvList,
     queryPoRcvDetail,
@@ -33,7 +34,8 @@ import {
     insertDirectOrder as insertDirectOrderService,
     fetchReturnPoRcvDetail as queryReturnPoDetailSevice,
     deleteBatchRefundOrder as deleteBatchRefundOrderService,
-    batchCheckStorage as batchCheckStorageService
+    batchCheckStorage as batchCheckStorageService,
+    queryProcessDefinitions as ueryProcessDefinitionsService,
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -568,6 +570,28 @@ export const queryApprovalInfo = (params) => dispatch => (
 );
 
 /**
+ * 查询退货单审批流程
+ * @param {*} data
+ */
+const queryProcessDefinitionsAction = (data) => ({
+    type: ActionType.QUERY_PRO_DEFINITIONS,
+    payload: data
+});
+
+export const queryProcessDefinitions = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        ueryProcessDefinitionsService(params)
+            .then(res => {
+                dispatch(queryProcessDefinitionsAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
  * 查询采购退货流水号
  * @param {*} data
  */
@@ -730,6 +754,28 @@ export const updateGoodsInfo = params => dispatch => (
         updateGoodsInfoService(params)
             .then(res => {
                 dispatch(updateGoodsInfoAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 查询退货单审批列表
+ * @param {*} data
+ */
+const queryAuditPurReListAction = (data) => ({
+    type: ActionType.QUERY_AUDIT_PUR_RE_LIST,
+    payload: data
+});
+
+export const queryAuditPurReList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryAuditPurReListService(params)
+            .then(res => {
+                dispatch(queryAuditPurReListAction(res.data));
                 resolve(res);
             })
             .catch(err => {

@@ -71,6 +71,12 @@ import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/
 import StoreAdjList from 'bundle-loader?lazy!../views/storeAdjustment/storeAdjList';
 import ItemDetail from 'bundle-loader?lazy!../views/storeAdjustment/itemDetail';
 
+// 采购单审批列表
+import ToDoPurchaseList from 'bundle-loader?lazy!../views/toDo/toDoPurchaseList';
+// 退货单审批列表
+import ToDoReturnList from 'bundle-loader?lazy!../views/toDo/toDoReturnList';
+import ToDoReturnDetail from 'bundle-loader?lazy!../views/toDo/toDoReturnDetail';
+
 // 实时库存查询
 import StoreRealTime from 'bundle-loader?lazy!../views/storeAdjustment/storeRealTime';
 
@@ -631,6 +637,52 @@ const routes = [
                             render={() => (<Bundle load={DirectStoreOrder}>
                                 {(App) => <App />}
                             </Bundle>)}
+                        />
+                    </Switch>
+                )
+            }
+        ]
+    },
+    {
+        // 待办事项
+        key: 'dbsx',
+        iconType: 'pushpin',
+        routes: [
+            // 采购单审批列表
+            {
+                path: '/toDoPurchaseList',
+                parent: 'dbsx',
+                key: 'cgdsplb',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/toDoPurchaseList"
+                            exact
+                            render={() => (<Bundle load={ToDoPurchaseList}>
+                                {(App) => <App />}</Bundle>
+                            )}
+                        />
+                    </Switch>
+                )
+            },
+            // 退货单审批列表
+            {
+                path: '/toDoReturnList',
+                parent: 'dbsx',
+                key: 'thsplb',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/toDoReturnList"
+                            exact
+                            render={() => (<Bundle load={ToDoReturnList}>
+                                {(App) => <App />}</Bundle>
+                            )}
+                        />
+                        <Route
+                            path="/toDoReturnDetail/returnManagementDetail/:id"
+                            render={() => (<Bundle load={ToDoReturnDetail}>
+                                {(App) => <App />}</Bundle>)}
                         />
                     </Switch>
                 )
