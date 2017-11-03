@@ -181,6 +181,7 @@ class GoodsTable extends PureComponent {
                     x: 1400,
                     y: 500
                 }}
+                bordered
             />
         );
     }

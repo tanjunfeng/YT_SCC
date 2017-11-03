@@ -133,7 +133,7 @@ class DirectSalesOrders extends PureComponent {
             // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/validateDirectOrder
             this.props.batchCheckStorage({
                 branchCompanyId,
-                deliveryWarehouseCode,
+                loc: deliveryWarehouseCode,
                 products
             }).then(res => {
                 resove(res.data);
