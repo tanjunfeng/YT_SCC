@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-03 10:08:09
+ * @Last Modified time: 2017-11-03 14:10:46
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -21,8 +21,7 @@ import {
     Dropdown,
     Modal,
     message,
-    Steps,
-    Popover
+    Steps
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -518,7 +517,6 @@ class toDoReturnList extends PureComponent {
         processDefinitions.forEach((item) => {
             processList.push(item.processNodeName)
         });
-        console.log(processList)
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -759,9 +757,17 @@ class toDoReturnList extends PureComponent {
                             width={1000}
                         >
                             <Steps current={1} progressDot>
-                                <Step title="门店店长" description="李四" />
-                                <Step title="子公司经理" description="王五" />
-                                <Step title="总公司经理" description="赵六" />
+                                {processList.map((item, index) => (
+                                    <Step
+                                        key={`toDo-${index}`}
+                                        title={processList[index]}
+                                        description={
+                                            processList.map((key) => (
+                                                key <= 1 ? '通过' : '未通过'
+                                            ))
+                                        }
+                                    />
+                                ))}
                             </Steps>
                         </Modal>
                     </div>
