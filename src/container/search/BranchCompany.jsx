@@ -17,11 +17,11 @@ import './BranchCompany.scss';
 
 class BranchCompany extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        if (this.props.value.id && nextProps.value === null) {
+        if (nextProps.value.id === '') {
             this.defaultValue = '';
             this.searchMind.reset();
         }
-        if (nextProps.value && nextProps.value.id) {
+        if (nextProps.value.id !== '') {
             this.defaultValue = `${nextProps.value.id} - ${nextProps.value.name}`
         }
     }

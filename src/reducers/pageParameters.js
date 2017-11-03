@@ -10,7 +10,7 @@ const initState = Immutable.fromJS({
     returnGoodsParams: {
         data: {},
         franchiseeIdName: '',
-        branchCompany: null
+        branchCompany: { id: '', name: '' }
     }
 });
 
