@@ -29,11 +29,11 @@ class Excel extends PureComponent {
         return formData;
     }
 
-    handleFailure = () => {
+    handleFailure = (err = '上传失败') => {
         this.setState({
             uploading: false
         });
-        message.error('上传失败');
+        message.error(err);
     }
 
     url = '/directStore/fileUpload';
@@ -43,10 +43,18 @@ class Excel extends PureComponent {
             uploading: true
         });
         axios.post(this.url, this.getFormData()).then(res => {
-            console.log(res);
+            if (res.data.data.code === 200) {
+                this.props.onChange(res.data.data);
+                this.setState({
+                    fileList: [],
+                    uploading: false
+                });
+                message.success('上传成功');
+            } else {
+                this.handleFailure();
+            }
         }).catch(err => {
-            console.log(err);
-            this.handleFailure();
+            this.handleFailure(err);
         });
     }
 
