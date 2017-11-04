@@ -25,6 +25,9 @@ const FormItem = Form.Item;
 }, dispatch))
 
 class GoodsForm extends PureComponent {
+    /**
+     * 组装表格显示字段
+     */
     getRow = (goodsInfo) => {
         const {
             productId,
@@ -86,7 +89,12 @@ class GoodsForm extends PureComponent {
         const dist = [];
         if (list.length > 0) {
             list.forEach(item => {
-                dist.push(this.getRow(item));
+                const goods = this.getRow(item);
+                // 数量从导入返回数据重新复制
+                Object.assign(goods, {
+                    quantity: item.quantity
+                });
+                dist.push(goods);
             });
         }
         this.props.onImport(dist);
