@@ -43,8 +43,8 @@ class Excel extends PureComponent {
             uploading: true
         });
         axios.post(this.url, this.getFormData()).then(res => {
-            if (res.data.data.code === 200) {
-                this.props.onChange(res.data.data);
+            if (res.code === 200) {
+                this.props.onChange(res.data);
                 this.setState({
                     fileList: [],
                     uploading: false
