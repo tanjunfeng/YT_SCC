@@ -11,7 +11,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Utils from '../../../util/util';
-import { goodsColumns as columns } from '../columns';
+import { directSalesgoodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
 import {
     updateGoodsInfo
@@ -50,10 +50,21 @@ class GoodsTable extends PureComponent {
         this.props.onChange(goodsList.filter(item => item.productCode !== productCode));
     }
 
+    /**
+     * 将不在销售区域的剔除,重复的商品剔除,添加到商品列表中
+     */
     importToList = (importList) => {
-        const goodsList = Utils.merge(this.props.goodsList, importList, 'productId');
-        this.props.onChange(goodsList);
-        this.props.onClearImportList(); // 通知父组件清空导入商品列表
+        const list = [];
+        const deletedIds = [];
+        importList.forEach(item => {
+            if (item.available) {
+                list.push(item);
+            } else {
+                deletedIds.push(item.productId);
+            }
+        });
+        const goodsList = Utils.merge(this.props.goodsList, list, 'productId');
+        this.props.onChange(goodsList, deletedIds);
     }
 
     /**
@@ -181,6 +192,7 @@ class GoodsTable extends PureComponent {
                     x: 1400,
                     y: 500
                 }}
+                bordered
             />
         );
     }
@@ -189,7 +201,6 @@ class GoodsTable extends PureComponent {
 GoodsTable.propTypes = {
     updateGoodsInfo: PropTypes.func,
     onChange: PropTypes.func,
-    onClearImportList: PropTypes.func,
     branchCompanyId: PropTypes.string,
     deliveryWarehouseCode: PropTypes.string,
     goodsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
