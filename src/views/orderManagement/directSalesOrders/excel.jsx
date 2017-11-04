@@ -13,7 +13,7 @@ axios.defaults.timeout = 100000;
 class Excel extends PureComponent {
     state = {
         fileList: [],
-        uploading: false,
+        uploading: false
     }
 
     getFormData = () => {
@@ -29,24 +29,32 @@ class Excel extends PureComponent {
         return formData;
     }
 
-    url = `${window.config.apiHost}directStore/fileUpload`;
+    handleFailure = () => {
+        this.setState({
+            uploading: false
+        });
+        message.error('上传失败');
+    }
+
+    url = '/directStore/fileUpload';
 
     handleUpload = () => {
         this.setState({
-            uploading: true,
+            uploading: true
         });
         axios.post(this.url, this.getFormData()).then(res => {
-            this.props.onChange(res.data.data);
-            this.setState({
-                fileList: [],
-                uploading: false,
-            });
-            message.success('上传成功');
+            if (res.status === 200) {
+                this.props.onChange(res.data.data);
+                this.setState({
+                    fileList: [],
+                    uploading: false
+                });
+                message.success('上传成功');
+            } else {
+                this.handleFailure();
+            }
         }).catch(() => {
-            this.setState({
-                uploading: false,
-            });
-            message.error('上传失败');
+            this.handleFailure();
         });
     }
 
@@ -63,7 +71,7 @@ class Excel extends PureComponent {
                     const newFileList = fileList.slice();
                     newFileList.splice(index, 1);
                     return {
-                        fileList: newFileList,
+                        fileList: newFileList
                     };
                 });
             },
