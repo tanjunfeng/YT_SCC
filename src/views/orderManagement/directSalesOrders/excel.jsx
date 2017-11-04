@@ -13,7 +13,7 @@ axios.defaults.timeout = 100000;
 class Excel extends PureComponent {
     state = {
         fileList: [],
-        uploading: false,
+        uploading: false
     }
 
     getFormData = () => {
@@ -33,18 +33,19 @@ class Excel extends PureComponent {
 
     handleUpload = () => {
         this.setState({
-            uploading: true,
+            uploading: true
         });
-        axios.post(this.url, this.getFormData()).then(res => {
+        axios.post(this.getFormData()).then(res => {
+            console.log(res.data);
             this.props.onChange(res.data.data);
             this.setState({
                 fileList: [],
-                uploading: false,
+                uploading: false
             });
             message.success('上传成功');
         }).catch(() => {
             this.setState({
-                uploading: false,
+                uploading: false
             });
             message.error('上传失败');
         });
@@ -63,7 +64,7 @@ class Excel extends PureComponent {
                     const newFileList = fileList.slice();
                     newFileList.splice(index, 1);
                     return {
-                        fileList: newFileList,
+                        fileList: newFileList
                     };
                 });
             },
