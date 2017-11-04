@@ -43,6 +43,7 @@ class Excel extends PureComponent {
             uploading: true
         });
         axios.post(this.url, this.getFormData()).then(res => {
+            console.log(res.data.code);
             if (res.data.code === 200) {
                 this.props.onChange(res.data.data);
                 this.setState({
@@ -53,6 +54,8 @@ class Excel extends PureComponent {
             } else {
                 this.handleFailure();
             }
+        }).catch(() => {
+            this.handleFailure();
         });
     }
 
