@@ -29,14 +29,13 @@ class Excel extends PureComponent {
         return formData;
     }
 
-    url = `${window.config.apiHost}directStore/fileUpload`;
+    url = '/directStore/fileUpload';
 
     handleUpload = () => {
         this.setState({
             uploading: true
         });
-        axios.post(this.getFormData()).then(res => {
-            console.log(res.data);
+        axios.post(this.url, this.getFormData()).then(res => {
             this.props.onChange(res.data.data);
             this.setState({
                 fileList: [],
