@@ -179,10 +179,14 @@ class GoodsTable extends PureComponent {
             <a href="#">删除</a>
         </Popconfirm>)
 
-    render() {
+    renderColumns = () => {
         columns[columns.length - 4].render = this.renderNumber;
         columns[columns.length - 2].render = this.renderSubTotal;
         columns[columns.length - 1].render = this.renderOperations;
+    }
+
+    render() {
+        this.renderColumns();
         return (
             <Table
                 rowKey="productCode"
