@@ -43,9 +43,7 @@ class Excel extends PureComponent {
             uploading: true
         });
         axios.post(this.url, this.getFormData()).then(res => {
-            console.log(`url: ${this.url}`);
-            console.log(res);
-            if (res.status === 200) {
+            if (res.data.code === 200) {
                 this.props.onChange(res.data.data);
                 this.setState({
                     fileList: [],
@@ -55,8 +53,6 @@ class Excel extends PureComponent {
             } else {
                 this.handleFailure();
             }
-        }).catch(() => {
-            this.handleFailure();
         });
     }
 
