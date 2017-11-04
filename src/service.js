@@ -85,6 +85,12 @@ export const exportStoreAdList = 'imAdjustment/exportListImAdjustment';
 // 实时库存查询 导出
 export const exportQueryStoreRealTime = 'inventory/excelInventoryBIRecords';
 
+// 退货单列表 导出
+export const exportPurchaseRefundList = '/pmPurchaseRefund/exportPurchaseRefundList';
+
+// 退货单下载PDF
+export const exportPdf = '/pmPurchaseRefund/exportPdf';
+
 // 促销活动 - 下单打折 - 参与数据导出
 export const exportParticipateData = 'promotion/toExcel';
 
