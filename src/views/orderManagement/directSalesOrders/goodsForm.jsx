@@ -25,7 +25,10 @@ const FormItem = Form.Item;
 }, dispatch))
 
 class GoodsForm extends PureComponent {
-    getRow = (goodsInfo, q) => {
+    /**
+     * 组装表格显示字段
+     */
+    getRow = (goodsInfo) => {
         const {
             productId,
             productCode,
@@ -59,7 +62,7 @@ class GoodsForm extends PureComponent {
             productSpecifications: `${packingSpecifications || '-'} / ${unitExplanation || '-'}`,
             packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit || ''} / ${minUnit || '-'}`,
             internationalCode: internationalCodes[0].internationalCode,
-            quantity: q || quantity,
+            quantity,
             subTotal,
             minNumberSpecifications,
             enough: true, // 是否库存充足，默认充足
@@ -86,7 +89,12 @@ class GoodsForm extends PureComponent {
         const dist = [];
         if (list.length > 0) {
             list.forEach(item => {
-                dist.push(this.getRow(item));
+                const goods = this.getRow(item);
+                // 数量从导入返回数据重新复制
+                Object.assign(goods, {
+                    quantity: item.quantity
+                });
+                dist.push(goods);
             });
         }
         this.props.onImport(dist);
