@@ -9,12 +9,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
-import { Layout } from 'antd';
+import { Layout, message } from 'antd';
 import { receiveUser, fetchRightsAction } from './actions/user';
 import AuthLayout from './views/layout/AuthLayout';
 import LoginLayout from './views/login/LoginLayout';
 import { findCodeByPath } from './routes/util';
-import Routes from './constant/route';
+import routes from './routes';
 import './style/common.scss';
 
 /**
@@ -83,14 +83,11 @@ class App extends PureComponent {
         // 如果当前 pathname 为 login，则跳转到到 index
         if (initData && location.pathname === '/') {
             const { menus = {} } = initData;
-            const { menu = [] } = menus;
-            if (menu.length) {
-                const { submenu } = menu[0];
-                if (!submenu.length) {
-                    return;
-                }
-                const { code } = submenu[0];
-                history.replace(Routes[code]);
+            const firstMenu = this.getFirstMenu(menus);
+            if (firstMenu === null) {
+                message.error('当前用户未被授予任何权限');
+            } else {
+                this.getFirstPath(firstMenu);
             }
         }
     }
@@ -107,6 +104,25 @@ class App extends PureComponent {
     componentWillUnmount() {
         this.unlisten();
         this.unrights();
+    }
+
+    getFirstMenu = (menus) => {
+        for (let i = 0, menu = menus.menu[i]; menu; i++) {
+            if (menu.submenu.length > 0) {
+                return menu;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取第一个主菜单下面的第一个有权限的子菜单
+     */
+    getFirstPath = (menu) => {
+        const { code, submenu } = menu;
+        const secondRouteList = routes.find(r => code === r.key).routes;
+        const path = secondRouteList.find(s => s.key === submenu[0].code).path;
+        this.props.history.replace(path);
     }
 
     /**
