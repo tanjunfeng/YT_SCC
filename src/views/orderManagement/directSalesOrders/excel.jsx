@@ -6,14 +6,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Upload, Icon, message } from 'antd';
-import axios from 'axios';
-
-axios.defaults.timeout = 100000;
+import reqwest from 'reqwest';
 
 class Excel extends PureComponent {
     state = {
         fileList: [],
-        uploading: false,
+        uploading: false
     }
 
     getFormData = () => {
@@ -29,24 +27,39 @@ class Excel extends PureComponent {
         return formData;
     }
 
-    url = `${window.config.apiHost}directStore/fileUpload`;
+    handleFailure = (err = '上传失败') => {
+        this.setState({
+            uploading: false
+        });
+        message.error(err);
+    }
+
+    url = `${window.config.apiHost}/directStore/fileUpload`;
 
     handleUpload = () => {
         this.setState({
-            uploading: true,
+            uploading: true
         });
-        axios.post(this.url, this.getFormData()).then(res => {
-            this.props.onChange(res.data.data);
-            this.setState({
-                fileList: [],
-                uploading: false,
-            });
-            message.success('上传成功');
-        }).catch(() => {
-            this.setState({
-                uploading: false,
-            });
-            message.error('上传失败');
+        reqwest({
+            url: this.url,
+            method: 'post',
+            processData: false,
+            data: this.getFormData(),
+            success: (res) => {
+                if (res.code === 200) {
+                    this.setState({
+                        fileList: [],
+                        uploading: false
+                    });
+                    message.success('上传成功');
+                    this.props.onChange(res.data);
+                } else {
+                    this.handleFailure();
+                }
+            },
+            error: err => {
+                this.handleFailure(err);
+            }
         });
     }
 
@@ -63,7 +76,7 @@ class Excel extends PureComponent {
                     const newFileList = fileList.slice();
                     newFileList.splice(index, 1);
                     return {
-                        fileList: newFileList,
+                        fileList: newFileList
                     };
                 });
             },

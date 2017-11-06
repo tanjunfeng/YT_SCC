@@ -55,7 +55,6 @@ class GoodsForm extends PureComponent {
             minNumber
         };
         const quantity = sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber;
-        const subTotal = quantity * salePrice;
         // 起订数量显示单位
         const minNumberSpecifications = sellFullCase === 0 ? `${minNumber}${fullCaseUnit || ''}` : `${minNumber}${minUnit || '-'}`;
         Object.assign(record, {
@@ -63,7 +62,6 @@ class GoodsForm extends PureComponent {
             packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit || ''} / ${minUnit || '-'}`,
             internationalCode: internationalCodes[0].internationalCode,
             quantity,
-            subTotal,
             minNumberSpecifications,
             enough: true, // 是否库存充足，默认充足
             isMultiple: true // 是否是销售内装数的整数倍，默认是整数倍
@@ -85,19 +83,32 @@ class GoodsForm extends PureComponent {
         });
     }
 
+    /**
+     * 处理导入的商品
+     *
+     * 将无效的商品和不在销售区域的商品筛选出来分别存入 importList 和 deletedGoodsList
+     */
     handleImport = (list) => {
-        const dist = [];
+        const importList = [];
+        const deletedGoodsList = [];
         if (list.length > 0) {
             list.forEach(item => {
-                const goods = this.getRow(item);
-                // 数量从导入返回数据重新复制
-                Object.assign(goods, {
-                    quantity: item.quantity
-                });
-                dist.push(goods);
+                if (item.uploadFailedVos === null) {
+                    const goods = this.getRow(item);
+                    // 数量从导入返回数据重新复制
+                    Object.assign(goods, {
+                        quantity: item.quantity
+                    });
+                    importList.push(goods);
+                } else {
+                    deletedGoodsList.push({
+                        productName: item.uploadFailedVos.productName,
+                        productCode: item.uploadFailedVos.productCode
+                    });
+                }
             });
         }
-        this.props.onImport(dist);
+        this.props.onImport(importList, deletedGoodsList);
     }
 
     handleSubmit = () => {
@@ -105,7 +116,7 @@ class GoodsForm extends PureComponent {
     }
 
     render() {
-        const { branchCompanyId, deliveryWarehouseCode, canBeSubmit } = this.props.value;
+        const { branchCompanyId, deliveryWarehouseCode, canBeSubmit, total } = this.props.value;
         const excelParams = Utils.removeInvalid({ branchCompanyId, deliveryWarehouseCode });
         return (
             <div className="direct-sales-orders-form goods-form">
@@ -134,10 +145,13 @@ class GoodsForm extends PureComponent {
                         <Row gutter={40} type="flex" justify="end">
                             <FormItem>
                                 <div className="info">
-                                    数量：<span>30</span>
+                                    总条数：<span>{total.rows}</span>
                                 </div>
                                 <div className="info">
-                                    金额：<span>2000</span>
+                                    商品数量：<span>{total.quantities}</span>
+                                </div>
+                                <div className="info">
+                                    金额：<span>{total.amount}</span>
                                 </div>
                             </FormItem>
                             <FormItem>

@@ -1,48 +1,16 @@
 {
-    "timestamp": 1509432902212,
+    "timestamp": 1509946394039,
     "code": 200,
     "message": "请求成功",
     "exception": null,
     "data": [
-        {
-            "productCode": "1000381",
-            "internationalCodes": [
-                {
-                    "id": "xincode329865",
-                    "productId": "xprod347915",
-                    "internationalCode": "6922222702132",
-                    "barcodeType": 1
-                }
-            ],
-            "productId": "xprod347915",
-            "productName": "桃李葡萄干蛋糕卷",
-            "firstLevelCategoryName": "生鲜日配",
-            "secondLevelCategoryName": "面包主食",
-            "thirdLevelCategoryName": null,
-            "unitExplanation": null,
-            "packingSpecifications": "1",
-            "sellFullCase": 0,
-            "fullCaseUnit": null,
-            "minUnit": "个",
-            "minNumber": 1,
-            "salePrice": null,
-            "quantity": 30,
-            "saleQuantity": 30,
-            "amount": null,
-            "salesInsideNumber": 1,
-            "enough": false,
-            "available": false,
-            "integerTimes": true,
-            "message": "桃李葡萄干蛋糕卷,不支持该区域销售"
-        },
         {
             "productCode": "1000191",
             "internationalCodes": [
                 {
                     "id": "xincode329675",
                     "productId": "xprod347725",
-                    "internationalCode": "6938029400119",
-                    "barcodeType": 1
+                    "internationalCode": "6938029400119"
                 }
             ],
             "productId": "xprod347725",
@@ -61,41 +29,104 @@
             "saleQuantity": 50,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": false,
-            "available": true,
+            "enough": true,
+            "available": false,
+            "uploadFailedVos": {
+                "productName": "老灶花生72g",
+                "productCode": "1000191"
+            },
             "integerTimes": true,
-            "message": ""
+            "message": "老灶花生72g,不支持该区域销售"
         },
         {
-            "productCode": "1000192",
+            "productCode": "1001866",
             "internationalCodes": [
                 {
-                    "id": "xincode329675",
-                    "productId": "xprod347725",
-                    "internationalCode": "6938029400119",
-                    "barcodeType": 1
+                    "id": "xincode329892",
+                    "productId": "xprod347942",
+                    "internationalCode": "6922222702360"
                 }
             ],
-            "productId": "xprod347726",
-            "productName": "小灶花生72g",
-            "firstLevelCategoryName": "休闲食品",
-            "secondLevelCategoryName": "休闲零食",
-            "thirdLevelCategoryName": null,
+            "productId": "xprod347942",
+            "productName": "测试111",
+            "firstLevelCategoryName": "饮料烟酒",
+            "secondLevelCategoryName": "酒类",
+            "thirdLevelCategoryName": "洋酒",
             "unitExplanation": null,
-            "packingSpecifications": "72g",
+            "packingSpecifications": "12",
             "sellFullCase": 0,
-            "fullCaseUnit": "盒",
-            "minUnit": "袋1",
-            "minNumber": 1,
-            "salePrice": null,
-            "quantity": 50,
-            "saleQuantity": 50,
+            "fullCaseUnit": null,
+            "minUnit": "kiss1",
+            "minNumber": 10,
+            "salePrice": 10000,
+            "quantity": 51,
+            "saleQuantity": 51,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": false,
-            "available": false,
+            "enough": true,
+            "available": true,
+            "uploadFailedVos": null,
             "integerTimes": true,
-            "message": "小灶花生72g,不支持该区域销售"
+            "message": null
+        },
+        {
+            "productCode": "1000393",
+            "internationalCodes": [
+                {
+                    "id": "xincode329877",
+                    "productId": "xprod347927",
+                    "internationalCode": "6922222702064"
+                }
+            ],
+            "productId": "xprod347927",
+            "productName": "桃李",
+            "firstLevelCategoryName": "生鲜日配",
+            "secondLevelCategoryName": "面包主食",
+            "thirdLevelCategoryName": null,
+            "unitExplanation": null,
+            "packingSpecifications": "1",
+            "sellFullCase": 0,
+            "fullCaseUnit": null,
+            "minUnit": "个",
+            "minNumber": 12,
+            "salePrice": 100,
+            "quantity": 30,
+            "saleQuantity": 30,
+            "amount": null,
+            "salesInsideNumber": 1,
+            "enough": true,
+            "available": true,
+            "uploadFailedVos": null,
+            "integerTimes": true,
+            "message": null
+        },
+        {
+            "productCode": null,
+            "internationalCodes": [],
+            "productId": null,
+            "productName": null,
+            "firstLevelCategoryName": null,
+            "secondLevelCategoryName": null,
+            "thirdLevelCategoryName": null,
+            "unitExplanation": null,
+            "packingSpecifications": null,
+            "sellFullCase": null,
+            "fullCaseUnit": null,
+            "minUnit": null,
+            "minNumber": 1,
+            "salePrice": null,
+            "quantity": 0,
+            "saleQuantity": 0,
+            "amount": null,
+            "salesInsideNumber": 1,
+            "enough": true,
+            "available": false,
+            "uploadFailedVos": {
+                "productName": "无商品信息",
+                "productCode": "1001131"
+            },
+            "integerTimes": true,
+            "message": "通过编码没有查到该商品,商品编码是:1001131"
         }
     ],
     "success": true
