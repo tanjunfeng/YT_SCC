@@ -79,7 +79,6 @@ import ItemDetail from 'bundle-loader?lazy!../views/storeAdjustment/itemDetail';
 import ToDoPurchaseList from 'bundle-loader?lazy!../views/toDo/toDoPurchaseList';
 // 退货单审批列表
 import ToDoReturnList from 'bundle-loader?lazy!../views/toDo/toDoReturnList';
-import ToDoReturnDetail from 'bundle-loader?lazy!../views/toDo/toDoReturnDetail';
 
 // 实时库存查询
 import StoreRealTime from 'bundle-loader?lazy!../views/storeAdjustment/storeRealTime';
@@ -750,8 +749,8 @@ const routes = [
                             )}
                         />
                         <Route
-                            path="/toDoReturnDetail/returnManagementDetail/:id"
-                            render={() => (<Bundle load={ToDoReturnDetail}>
+                            path="/toDoReturnList/returnManagementDetail/:id"
+                            render={() => (<Bundle load={ReturnManagementDetail}>
                                 {(App) => <App />}</Bundle>)}
                         />
                     </Switch>

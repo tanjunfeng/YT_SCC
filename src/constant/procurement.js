@@ -45,6 +45,21 @@ export const returnStatus = {
     }]
 }
 
+// 退货单审批状态
+export const optionStatus = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '请选择'
+    }, {
+        key: '0',
+        value: '通过'
+    }, {
+        key: '1',
+        value: '拒绝'
+    }]
+}
+
 // 收货单状态清单
 export const receivedStatus = {
     defaultValue: '',

@@ -7,7 +7,7 @@
         {
             "id": 1,
             "processNodeCode": "1",
-            "processNodeName": "1",
+            "processNodeName": "采购主管审批",
             "nextNodeId": 2,
             "branchCompanyId": "1",
             "type": 1,
@@ -20,7 +20,7 @@
         {
             "id": 2,
             "processNodeCode": "2",
-            "processNodeName": "哈哈",
+            "processNodeName": "子公司主管审批",
             "nextNodeId": 3,
             "branchCompanyId": "1",
             "type": 1,
@@ -33,7 +33,7 @@
         {
             "id": 3,
             "processNodeCode": "3",
-            "processNodeName": "嘻嘻嘻",
+            "processNodeName": "子公司经理",
             "nextNodeId": null,
             "branchCompanyId": "1",
             "type": 1,

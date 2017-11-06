@@ -85,6 +85,12 @@ export const exportStoreAdList = 'imAdjustment/exportListImAdjustment';
 // 实时库存查询 导出
 export const exportQueryStoreRealTime = 'inventory/excelInventoryBIRecords';
 
+// 退货单列表 导出
+export const exportPurchaseRefundList = '/pmPurchaseRefund/exportPurchaseRefundList';
+
+// 退货单下载PDF
+export const exportPdf = '/pmPurchaseRefund/exportPdf';
+
 // 促销活动 - 下单打折 - 参与数据导出
 export const exportParticipateData = 'promotion/toExcel';
 
@@ -578,7 +584,7 @@ export const queryApprovalInfo = (params) => http.get('/processAuditLog/queryApp
 export const getRefundNo = (params) => http.get('/pmPurchaseRefund/getRefundNo', params);
 // 查询采购退货列表详情
 export const fetchReturnPoRcvDetail = (params) => http.get('/pmPurchaseRefund/queryRefundDetailById', params);
-// 查询采购退货列表详情
+// 批量删除处于草稿状态的退货单
 export const deleteBatchRefundOrder = (params) => http.get('/pmPurchaseRefund/deleteBatchRefundOrder', params);
 
 // 审批

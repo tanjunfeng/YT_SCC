@@ -27,6 +27,7 @@ import {
     queryCategorysByLevel,
     queryBranchCompanyInfo,
     queryProductForSelect,
+    queryPurchaseOrderProducts,
     queryDirectStores,
     queryPurchaseOrderBrands,
     findCompanyBaseInfo as findCompaniesService
@@ -68,6 +69,8 @@ const pubValueList = {
     queryBranchCompanyInfo,
     // 添加商品
     queryProductForSelect,
+    // 查询采购单下的商品值清单
+    queryPurchaseOrderProducts,
     // 查询直营店
     queryDirectStores,
     // 品牌值清单
