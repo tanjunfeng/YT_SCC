@@ -206,11 +206,16 @@ class SearchForm extends PureComponent {
                                         查询
                                     </Button>
                                 </FormItem>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleExport}>
-                                        导出
-                                    </Button>
-                                </FormItem>
+                                {
+                                    !this.props.value ?
+                                        <FormItem>
+                                            <Button size="default" onClick={this.handleExport}>
+                                                导出
+                                            </Button>
+                                        </FormItem>
+                                        :
+                                        null
+                                }
                                 <FormItem>
                                     <Button size="default" onClick={this.handleReset}>
                                         重置
@@ -230,6 +235,7 @@ SearchForm.propTypes = {
     onParticipateReset: PropTypes.func,
     onParticipateExport: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
+    value: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any)
 };
 
