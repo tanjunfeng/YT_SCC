@@ -28,7 +28,7 @@ class DirectSalesOrders extends PureComponent {
         deliveryWarehouseCode: '', // 送货舱编码
         goodsList: [], // 当前显示商品列表
         importList: [], // 导入商品列表
-        deletedIds: [], // 由于不在销售区域而被删除的商品编号列表
+        deletedGoodsList: [], // 由于不在销售区域而被删除的商品编号列表
         goodsAddOn: null, // 手工添加的单个商品
         modalRechooseVisible: false, // 提示重新选择门店的模态框
         modalDeletedIdsVisible: false // 提示未导入商品的模态框
@@ -65,7 +65,7 @@ class DirectSalesOrders extends PureComponent {
      * 关闭未导入商品提示框
      */
     handleDeletedIdsClose = () => {
-        this.setState({ modalDeletedIdsVisible: false, deletedIds: [] });
+        this.setState({ modalDeletedIdsVisible: false, deletedGoodsList: [] });
     }
 
     /**
@@ -80,12 +80,9 @@ class DirectSalesOrders extends PureComponent {
         this.setState({ goodsAddOn });
     }
 
-    handleGoodsListChange = (goodsList, deletedIds = []) => {
-        if (deletedIds.length > 0) {
-            this.setState({ modalDeletedIdsVisible: true });
-        }
-        // 清空导入商品列表
-        this.setState({ goodsList, deletedIds, importList: [] })
+    handleGoodsListChange = (goodsList) => {
+        // 清空导入商品列表，报错商品列表
+        this.setState({ goodsList, importList: [] })
     }
 
     handleClear = () => {
@@ -94,8 +91,11 @@ class DirectSalesOrders extends PureComponent {
         });
     }
 
-    handleImport = (importList) => {
-        this.setState({ importList });
+    handleImport = (importList, deletedGoodsList = []) => {
+        if (deletedGoodsList.length > 0) {
+            this.setState({ modalDeletedIdsVisible: true });
+        }
+        this.setState({ importList, deletedGoodsList });
     }
 
     handleSubmit = () => {
@@ -179,7 +179,8 @@ class DirectSalesOrders extends PureComponent {
             deliveryWarehouseCode,
             goodsList,
             goodsAddOn,
-            importList
+            importList,
+            deletedGoodsList
         } = this.state;
         const goodsFormValue = {
             branchCompanyId,
@@ -213,17 +214,19 @@ class DirectSalesOrders extends PureComponent {
                 >
                     <p>这个操作将要重新选择门店并清空已选择商品，确定吗？</p>
                 </Modal>
-                <Modal
-                    className="deleted-ids"
-                    title="不在销售区域的商品编号"
-                    visible={this.state.modalDeletedIdsVisible}
-                    onOk={this.handleDeletedIdsClose}
-                    onCancel={this.handleDeletedIdsClose}
-                >
-                    <span className="red">
-                        {this.state.deletedIds.join(', ')}
-                    </span>
-                </Modal>
+                {deletedGoodsList.length > 0 ?
+                    <Modal
+                        className="deleted-ids"
+                        title="导入失败的商品"
+                        visible={this.state.modalDeletedIdsVisible}
+                        onOk={this.handleDeletedIdsClose}
+                        onCancel={this.handleDeletedIdsClose}
+                    >
+                        <span className="red">
+                            {deletedGoodsList.map(goods => `${goods.productName} - ${goods.productCode}`).join('，')}
+                        </span>
+                    </Modal>
+                    : null}
                 <BackTop />
             </div>
         );

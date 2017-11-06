@@ -51,20 +51,14 @@ class GoodsTable extends PureComponent {
     }
 
     /**
-     * 将不在销售区域的剔除,重复的商品剔除,添加到商品列表中
+     * 将重复的商品剔除，判断是否销售内装数的整数倍,添加到商品列表中
      */
     importToList = (importList) => {
-        const list = [];
-        const deletedIds = [];
         importList.forEach(item => {
-            if (item.available) {
-                list.push(item);
-            } else {
-                deletedIds.push(item.productId);
-            }
+            this.checkMultiple(item);
         });
-        const goodsList = Utils.merge(this.props.goodsList, list, 'productId');
-        this.props.onChange(goodsList, deletedIds);
+        const goodsList = Utils.merge(this.props.goodsList, importList, 'productCode');
+        this.props.onChange(goodsList);
     }
 
     /**
@@ -95,14 +89,13 @@ class GoodsTable extends PureComponent {
         })
     );
 
+    /**
+     * 检查行状态
+     */
     checkGoodsStatus = (goods, errors) => {
         let isValid = true;
         if (!goods.enough) {
             errors.push('库存不足');
-            isValid = false;
-        }
-        if (!goods.available) {
-            errors.push('不在销售区域');
             isValid = false;
         }
         if (!goods.isMultiple) {
@@ -149,16 +142,15 @@ class GoodsTable extends PureComponent {
     }
 
     renderNumber = (text, record) => {
-        const { minNumber } = record;
+        const { minNumber, salesInsideNumber } = record;
         // 填入的数量是否是内装数量的整数倍
-        const step = minNumber;
         const errors = [];
         this.checkGoodsStatus(record, errors);
         return (
             <EditableCell
                 value={text}
                 min={minNumber}
-                step={step}
+                step={salesInsideNumber}
                 error={errors.join(', ')}
                 onChange={this.onCellChange(record.productCode)}
             />);
