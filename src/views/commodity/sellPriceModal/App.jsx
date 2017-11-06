@@ -42,6 +42,7 @@ class SellPriceModal extends Component {
             branchCompanyName: props.datas.branchCompanyName
         } : {};
         this.state = {
+            isEditPrice: false,
             currentInside: null,
             insideValue: null
         }
@@ -81,7 +82,17 @@ class SellPriceModal extends Component {
                     productId: datas.productId
                 })
             }
-            handlePostAdd(result, isEdit, choose);
+            const priceList = [];
+            results.forEach((item) => (
+                priceList.push(item.price)
+            ))
+            priceList.forEach((obj) => {
+                if (obj === 0 || obj === null) {
+                    message.error('请仔细核对销售价格，确认为当前显示的价格!', 2, () => { handlePostAdd(result, isEdit, choose) })
+                } else {
+                    handlePostAdd(result, isEdit, choose)
+                }
+            })
             return null;
         })
     }
@@ -135,7 +146,8 @@ class SellPriceModal extends Component {
      */
     handleMinChange = (num) => {
         this.setState({
-            startNumber: num
+            startNumber: num,
+            isEditPrice: true
         }, () => {
             this.props.form.setFieldsValue({ minNumber: num });
             this.steppedPrice.reset();
@@ -301,6 +313,7 @@ class SellPriceModal extends Component {
                                     {getFieldDecorator('sellSectionPrices', {
                                     })(
                                         <SteppedPrice
+                                            isEdit={this.state.isEditPrice}
                                             ref={node => { this.steppedPrice = node }}
                                             handleChange={this.handlePriceChange}
                                             startNumber={startNumber}
