@@ -439,7 +439,7 @@ const routes = [
             // 实时库存查询
             {
                 path: '/storeRealTime',
-                parent: 'jyjszc',
+                parent: 'kctz',
                 key: 'sskccx',
                 component: () => (
                     <Switch>
