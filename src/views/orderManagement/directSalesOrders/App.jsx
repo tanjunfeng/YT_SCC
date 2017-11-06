@@ -209,7 +209,7 @@ class DirectSalesOrders extends PureComponent {
     validateGoods = () => {
         const goodsList = this.state.goodsList;
         const length = goodsList.length;
-        if (goodsList.length === 0) {
+        if (goodsList.length === 0 || goodsList.length > 300) {
             return false;
         }
         for (let i = 0, item = goodsList[i]; i < length; i++) {
@@ -217,6 +217,16 @@ class DirectSalesOrders extends PureComponent {
             if (!item.isMultiple) return false; // 不是内装数的整数倍
         }
         return true;
+    }
+
+    importError = () => {
+        if (!this.state.modalDeletedIdsVisible) {
+            Modal.error({
+                title: '导入失败的商品',
+                content: () => (this.state.deletedGoodsList.map(goods => `${goods.productName} - ${goods.productCode}`).join('，'))
+            });
+            this.setState({ modalDeletedIdsVisible: true });
+        }
     }
 
     render() {
@@ -252,7 +262,8 @@ class DirectSalesOrders extends PureComponent {
                     onCancel={this.handleDeletedIdsClose}
                 >
                     <span className="red">
-                        {deletedGoodsList.map(goods => `${goods.productName} - ${goods.productCode}`).join('，')}
+                        {deletedGoodsList.map(goods =>
+                            `${goods.productName} - ${goods.productCode}`).join('，')}
                     </span>
                 </Modal>
                 <BackTop />
