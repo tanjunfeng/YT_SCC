@@ -63,7 +63,7 @@ class GoodsTable extends PureComponent {
                 deletedIds.push(item.productId);
             }
         });
-        const goodsList = Utils.merge(this.props.goodsList, list, 'productId');
+        const goodsList = Utils.merge(this.props.goodsList, list, 'productCode');
         this.props.onChange(goodsList, deletedIds);
     }
 

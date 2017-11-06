@@ -57,7 +57,6 @@ class GrantCouponList extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        console.log(pageNum)
         Object.assign(this.param, {
             pageNum
         });
