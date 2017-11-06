@@ -85,19 +85,32 @@ class GoodsForm extends PureComponent {
         });
     }
 
+    /**
+     * 处理导入的商品
+     *
+     * 将无效的商品和不在销售区域的商品筛选出来分别存入 importList 和 deletedGoodsList
+     */
     handleImport = (list) => {
-        const dist = [];
+        const importList = [];
+        const deletedGoodsList = [];
         if (list.length > 0) {
             list.forEach(item => {
-                const goods = this.getRow(item);
-                // 数量从导入返回数据重新复制
-                Object.assign(goods, {
-                    quantity: item.quantity
-                });
-                dist.push(goods);
+                if (item.uploadFailedVos === null) {
+                    const goods = this.getRow(item);
+                    // 数量从导入返回数据重新复制
+                    Object.assign(goods, {
+                        quantity: item.quantity
+                    });
+                    importList.push(goods);
+                } else {
+                    deletedGoodsList.push({
+                        productName: item.uploadFailedVos.productName,
+                        productCode: item.uploadFailedVos.productCode
+                    });
+                }
             });
         }
-        this.props.onImport(dist);
+        this.props.onImport(importList, deletedGoodsList);
     }
 
     handleSubmit = () => {
