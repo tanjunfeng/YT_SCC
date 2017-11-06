@@ -129,9 +129,9 @@ class DirectSalesOrders extends PureComponent {
      */
     handleGoodsListChange = (goodsList, total) => {
         // 批量校验库存
-        this.checkStorage().then(list => {
+        this.checkStorage(goodsList).then(list => {
             if (list.length > 0) {
-                this.markStorage(list);
+                this.markStorage(list, goodsList);
             }
         });
         // 清空导入商品列表，报错商品列表
@@ -152,14 +152,15 @@ class DirectSalesOrders extends PureComponent {
     }
 
     handleSubmit = () => {
-        this.checkStorage().then(list => {
+        const goodsList = this.state.goodsList;
+        this.checkStorage(goodsList).then(list => {
             if (list.length === 0) {
                 this.props.insertDirectOrder({
                     storeId: this.state.storeId,
                     directStoreCommerItemList: this.getDirectStoreCommerItemList()
                 });
             } else {
-                this.markStorage(list);
+                this.markStorage(list, goodsList);
             }
         });
     }
@@ -167,22 +168,25 @@ class DirectSalesOrders extends PureComponent {
     /**
      * 标记库存不足的商品
      */
-    markStorage = (list) => {
-        const goodsList = [...this.state.goodsList];
+    markStorage = (list, goodsList) => {
         list.forEach(productId => {
-            const index = goodsList.findIndex(
+            const goods = goodsList.find(
                 item => item.productId === productId);
-            if (index > -1) goodsList[index].enough = false;
+            if (goods) {
+                Object.assign(goods, {
+                    enough: false
+                });
+            }
         });
-        this.setState({ goodsList });
+        this.setState({ goodsList: [...goodsList] });
     }
 
     /**
      * 批量校验库存
      */
-    checkStorage = () => (
+    checkStorage = (goodsList) => (
         new Promise((resove, reject) => {
-            const { branchCompanyId, deliveryWarehouseCode, goodsList } = this.state;
+            const { branchCompanyId, deliveryWarehouseCode } = this.state;
             const products = [];
             goodsList.forEach(item => {
                 products.push({
@@ -209,7 +213,7 @@ class DirectSalesOrders extends PureComponent {
     validateGoods = () => {
         const goodsList = this.state.goodsList;
         const length = goodsList.length;
-        if (goodsList.length === 0) {
+        if (goodsList.length === 0 || goodsList.length > 300) {
             return false;
         }
         for (let i = 0, item = goodsList[i]; i < length; i++) {
@@ -217,6 +221,16 @@ class DirectSalesOrders extends PureComponent {
             if (!item.isMultiple) return false; // 不是内装数的整数倍
         }
         return true;
+    }
+
+    importError = () => {
+        if (!this.state.modalDeletedIdsVisible) {
+            Modal.error({
+                title: '导入失败的商品',
+                content: () => (this.state.deletedGoodsList.map(goods => `${goods.productName} - ${goods.productCode}`).join('，'))
+            });
+            this.setState({ modalDeletedIdsVisible: true });
+        }
     }
 
     render() {
@@ -252,7 +266,8 @@ class DirectSalesOrders extends PureComponent {
                     onCancel={this.handleDeletedIdsClose}
                 >
                     <span className="red">
-                        {deletedGoodsList.map(goods => `${goods.productName} - ${goods.productCode}`).join('，')}
+                        {deletedGoodsList.map(goods =>
+                            `${goods.productName} - ${goods.productCode}`).join('，')}
                     </span>
                 </Modal>
                 <BackTop />
