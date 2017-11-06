@@ -330,6 +330,16 @@ class Utils {
         }
         callback()
     }
+
+    /**
+     * 按照唯一属性标识 p 合并数组 a b
+     *
+     * b 会覆盖 a
+     * @param {*array} a
+     * @param {*array} b
+     * @param {*string} p
+     */
+    static merge = (a, b, p) => a.filter(aa => !b.find(bb => aa[p] === bb[p])).concat(b);
 }
 
 export default Utils;
