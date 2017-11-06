@@ -52,7 +52,7 @@ class Excel extends PureComponent {
                         uploading: false
                     });
                     message.success('上传成功');
-                    this.onChange(res.data);
+                    this.props.onChange(res.data);
                 } else {
                     this.handleFailure();
                 }
