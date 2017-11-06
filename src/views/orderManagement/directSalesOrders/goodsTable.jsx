@@ -149,16 +149,15 @@ class GoodsTable extends PureComponent {
     }
 
     renderNumber = (text, record) => {
-        const { minNumber } = record;
+        const { minNumber, salesInsideNumber } = record;
         // 填入的数量是否是内装数量的整数倍
-        const step = minNumber;
         const errors = [];
         this.checkGoodsStatus(record, errors);
         return (
             <EditableCell
                 value={text}
                 min={minNumber}
-                step={step}
+                step={salesInsideNumber}
                 error={errors.join(', ')}
                 onChange={this.onCellChange(record.productCode)}
             />);
