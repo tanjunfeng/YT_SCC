@@ -7,19 +7,10 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import { Form, message, Popconfirm, Table } from 'antd';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Utils from '../../../util/util';
 import { directSalesgoodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
-import {
-    updateGoodsInfo
-} from '../../../actions/procurement';
-
-@connect(() => ({}), dispatch => bindActionCreators({
-    updateGoodsInfo
-}, dispatch))
 
 class GoodsTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
@@ -41,53 +32,29 @@ class GoodsTable extends PureComponent {
             Object.assign(goods, {
                 quantity: value
             });
-            this.appendToList(goods);
+            this.noticeChanges(goodsList);
         }
     }
 
     onDelete = (productCode) => {
-        const goodsList = [...this.props.goodsList];
-        this.props.onChange(goodsList.filter(item => item.productCode !== productCode));
+        this.noticeChanges(this.props.goodsList.filter(item => item.productCode !== productCode));
+    }
+
+    /**
+     * 通知父组件刷新页面
+     */
+    noticeChanges = (goodsList) => {
+        this.checkMultiple(goodsList);
+        this.props.onChange([...goodsList]);
     }
 
     /**
      * 将重复的商品剔除，判断是否销售内装数的整数倍,添加到商品列表中
      */
     importToList = (importList) => {
-        importList.forEach(item => {
-            this.checkMultiple(item);
-        });
         const goodsList = Utils.merge(this.props.goodsList, importList, 'productCode');
-        this.props.onChange(goodsList);
+        this.noticeChanges(goodsList);
     }
-
-    /**
-     * 检查单个商品库存是否充足
-     *
-     * @param {*object} goods 商品信息
-     */
-    checkStore = (goods) => (
-        new Promise((resolve, reject) => {
-            const { branchCompanyId, deliveryWarehouseCode } = this.props;
-            // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/updateItem
-            this.props.updateGoodsInfo({
-                productId: goods.productId,
-                quantity: goods.quantity,
-                branchCompanyId,
-                deliveryWarehouseCode
-            }).then(res => {
-                // 库存不足
-                if (!res.data.enough) {
-                    Object.assign(goods, {
-                        enough: false
-                    });
-                }
-                resolve(goods);
-            }).catch(err => {
-                reject(err);
-            });
-        })
-    );
 
     /**
      * 检查行状态
@@ -108,22 +75,19 @@ class GoodsTable extends PureComponent {
     /**
      * 添加单个商品并校验状态，并判断商品是否应该移动到第一行
      */
-    appendToList = (record) => {
-        this.checkMultiple(record);
-        this.checkStore(record).then(goods => {
-            const goodsList = [...this.props.goodsList];
-            const index = goodsList.findIndex(
-                item => item.productCode === goods.productCode);
-            // 该商品不在列表中，则新增
-            if (index === -1) {
-                goodsList.unshift(goods);
-            } else if (index > 0) {
-                goodsList.splice(index, 1);
-                goodsList.unshift(goods);
-                message.info('该商品已被移动到顶部');
-            }
-            this.props.onChange(goodsList);
-        });
+    appendToList = (goods) => {
+        const goodsList = this.props.goodsList;
+        const index = goodsList.findIndex(
+            item => item.productCode === goods.productCode);
+        // 该商品不在列表中，则新增
+        if (index === -1) {
+            goodsList.unshift(goods);
+        } else if (index > 0) {
+            goodsList.splice(index, 1);
+            goodsList.unshift(goods);
+            message.info('该商品已被移动到顶部');
+        }
+        this.noticeChanges(goodsList);
     }
 
     /**
@@ -131,14 +95,16 @@ class GoodsTable extends PureComponent {
      *
      * @returns {*object}
      */
-    checkMultiple = (goods) => {
-        const { quantity, salesInsideNumber, sellFullCase } = goods;
-        let isMultiple = true;
-        // 不按整箱销售时，判断当前所填数量是否是内装数量的整数倍
-        if (sellFullCase === 0 && quantity % salesInsideNumber > 0) {
-            isMultiple = false;
-        }
-        Object.assign(goods, { isMultiple });
+    checkMultiple = (goodsList) => {
+        goodsList.forEach(goods => {
+            const { quantity, salesInsideNumber, sellFullCase } = goods;
+            let isMultiple = true;
+            // 不按整箱销售时，判断当前所填数量是否是内装数量的整数倍
+            if (sellFullCase === 0 && quantity % salesInsideNumber > 0) {
+                isMultiple = false;
+            }
+            Object.assign(goods, { isMultiple });
+        });
     }
 
     renderNumber = (text, record) => {
@@ -195,10 +161,7 @@ class GoodsTable extends PureComponent {
 }
 
 GoodsTable.propTypes = {
-    updateGoodsInfo: PropTypes.func,
     onChange: PropTypes.func,
-    branchCompanyId: PropTypes.string,
-    deliveryWarehouseCode: PropTypes.string,
     goodsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
     importList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
     goodsAddOn: PropTypes.objectOf(PropTypes.any)
