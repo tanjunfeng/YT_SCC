@@ -32,7 +32,12 @@ class DirectSalesOrders extends PureComponent {
         goodsAddOn: null, // 手工添加的单个商品
         modalRechooseVisible: false, // 提示重新选择门店的模态框
         modalDeletedIdsVisible: false, // 提示未导入商品的模态框
-        total: {}   // 商品列表总计信息
+        // 商品列表总计信息
+        total: {
+            rows: 0, // 记录行数
+            quantities: 0, // 订购数量
+            amount: 0   // 金额总计
+        }
     }
 
     getDirectStoreCommerItemList = () => {
@@ -44,6 +49,30 @@ class DirectSalesOrders extends PureComponent {
             });
         });
         return dist;
+    }
+
+    getGoodsTableValues = () => {
+        const {
+            branchCompanyId, deliveryWarehouseCode, goodsList, goodsAddOn, importList
+        } = this.state;
+        return {
+            goodsList, goodsAddOn, importList, branchCompanyId, deliveryWarehouseCode
+        }
+    }
+
+    getGoodsFormValues = () => {
+        const {
+            branchCompanyId,
+            deliveryWarehouseCode,
+            total
+        } = this.state;
+        const goodsFormValue = {
+            branchCompanyId,
+            deliveryWarehouseCode,
+            total,
+            canBeSubmit: this.validateGoods()
+        };
+        return goodsFormValue;
     }
 
     record = null; // 重新选择的门店信息
@@ -191,36 +220,20 @@ class DirectSalesOrders extends PureComponent {
     }
 
     render() {
-        const {
-            branchCompanyId,
-            deliveryWarehouseCode,
-            goodsList,
-            goodsAddOn,
-            importList,
-            deletedGoodsList
-        } = this.state;
-        const goodsFormValue = {
-            branchCompanyId,
-            deliveryWarehouseCode,
-            canBeSubmit: this.validateGoods()
-        };
+        const { deletedGoodsList } = this.state;
         return (
             <div className="direct-sales-orders">
                 <StoresForm
                     onChange={this.handleStoresChange}
                 />
                 <GoodsForm
-                    value={goodsFormValue}
+                    value={this.getGoodsFormValues()}
                     onChange={this.handleGoodsFormChange}
                     onImport={this.handleImport}
                     onSubmit={this.handleSubmit}
                 />
                 <GoodsTable
-                    goodsList={goodsList}
-                    goodsAddOn={goodsAddOn}
-                    importList={importList}
-                    branchCompanyId={branchCompanyId}
-                    deliveryWarehouseCode={deliveryWarehouseCode}
+                    value={this.getGoodsTableValues()}
                     onChange={this.handleGoodsListChange}
                 />
                 <Modal
@@ -231,19 +244,17 @@ class DirectSalesOrders extends PureComponent {
                 >
                     <p>这个操作将要重新选择门店并清空已选择商品，确定吗？</p>
                 </Modal>
-                {deletedGoodsList.length > 0 ?
-                    <Modal
-                        className="deleted-ids"
-                        title="导入失败的商品"
-                        visible={this.state.modalDeletedIdsVisible}
-                        onOk={this.handleDeletedIdsClose}
-                        onCancel={this.handleDeletedIdsClose}
-                    >
-                        <span className="red">
-                            {deletedGoodsList.map(goods => `${goods.productName} - ${goods.productCode}`).join('，')}
-                        </span>
-                    </Modal>
-                    : null}
+                <Modal
+                    className="deleted-ids"
+                    title="导入失败的商品"
+                    visible={this.state.modalDeletedIdsVisible}
+                    onOk={this.handleDeletedIdsClose}
+                    onCancel={this.handleDeletedIdsClose}
+                >
+                    <span className="red">
+                        {deletedGoodsList.map(goods => `${goods.productName} - ${goods.productCode}`).join('，')}
+                    </span>
+                </Modal>
                 <BackTop />
             </div>
         );

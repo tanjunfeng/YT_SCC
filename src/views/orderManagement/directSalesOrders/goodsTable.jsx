@@ -14,19 +14,19 @@ import EditableCell from './editableCell';
 
 class GoodsTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        const { goodsAddOn, importList } = nextProps;
+        const { goodsAddOn, importList } = nextProps.value;
         // 当传入商品有变化时，添加到商品列表
-        if (goodsAddOn !== null && this.props.goodsAddOn !== goodsAddOn) {
+        if (goodsAddOn !== null && this.props.value.goodsAddOn !== goodsAddOn) {
             this.appendToList(goodsAddOn);
         }
-        // 当导入商品有变化时,批量校验库存并添加到商品列表,通知父组件清空导入列表
-        if (this.props.importList.length === 0 && importList.length > 0) {
+        // 当导入商品有变化时，添加到商品列表
+        if (this.props.value.importList.length === 0 && importList.length > 0) {
             this.importToList(importList);
         }
     }
 
     onCellChange = (productCode) => value => {
-        const goodsList = [...this.props.goodsList];
+        const goodsList = this.props.value.goodsList;
         const goods = goodsList.find(item => item.productCode === productCode);
         if (goods) {
             Object.assign(goods, {
@@ -37,7 +37,8 @@ class GoodsTable extends PureComponent {
     }
 
     onDelete = (productCode) => {
-        this.noticeChanges(this.props.goodsList.filter(item => item.productCode !== productCode));
+        this.noticeChanges(this.props.value.goodsList.filter(
+            item => item.productCode !== productCode));
     }
 
     /**
@@ -45,14 +46,30 @@ class GoodsTable extends PureComponent {
      */
     noticeChanges = (goodsList) => {
         this.checkMultiple(goodsList);
-        this.props.onChange([...goodsList]);
+        const total = {
+            rows: 0, // 记录行数
+            quantities: 0, // 订购数量
+            amount: 0   // 金额总计
+        };
+        goodsList.forEach(goods => {
+            let amount = 0;
+            if (typeof goods.salePrice === 'number') {
+                amount = goods.quantity * goods.salePrice;
+            }
+            Object.assign(total, {
+                rows: total.rows + 1,
+                quantities: total.quantities + goods.quantity,
+                amount: total.amount + amount
+            });
+        });
+        this.props.onChange([...goodsList], total);
     }
 
     /**
      * 将重复的商品剔除，判断是否销售内装数的整数倍,添加到商品列表中
      */
     importToList = (importList) => {
-        const goodsList = Utils.merge(this.props.goodsList, importList, 'productCode');
+        const goodsList = Utils.merge(this.props.value.goodsList, importList, 'productCode');
         this.noticeChanges(goodsList);
     }
 
@@ -76,7 +93,7 @@ class GoodsTable extends PureComponent {
      * 添加单个商品并校验状态，并判断商品是否应该移动到第一行
      */
     appendToList = (goods) => {
-        const goodsList = this.props.goodsList;
+        const goodsList = this.props.value.goodsList;
         const index = goodsList.findIndex(
             item => item.productCode === goods.productCode);
         // 该商品不在列表中，则新增
@@ -148,7 +165,7 @@ class GoodsTable extends PureComponent {
         return (
             <Table
                 rowKey="productCode"
-                dataSource={this.props.goodsList}
+                dataSource={this.props.value.goodsList}
                 columns={columns}
                 scroll={{
                     x: 1400,
@@ -162,9 +179,7 @@ class GoodsTable extends PureComponent {
 
 GoodsTable.propTypes = {
     onChange: PropTypes.func,
-    goodsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
-    importList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
-    goodsAddOn: PropTypes.objectOf(PropTypes.any)
+    value: PropTypes.objectOf(PropTypes.any)
 };
 
 export default withRouter(Form.create()(GoodsTable));
