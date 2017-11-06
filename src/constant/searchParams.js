@@ -165,8 +165,29 @@ export const returnLocationType = {
     }]
 }
 
+// 原因
+export const resons = {
+    defaultValue: '0',
+    data: [{
+        key: '0',
+        value: '请选择'
+    }, {
+        key: '1',
+        value: '破损'
+    }, {
+        key: '2',
+        value: '临期'
+    }, {
+        key: '3',
+        value: '库存剩余'
+    }, {
+        key: '4',
+        value: '其他'
+    }]
+}
+
 // 货币类型
-export const currencyType = {
+export const currencyTypes = {
     defaultValue: '1',
     data: [{
         key: '1',

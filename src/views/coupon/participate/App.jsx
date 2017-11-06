@@ -112,7 +112,7 @@ class CouponsParticipate extends PureComponent {
     onPaginateUnUsed = (pageNum) => {
         Object.assign(this.paramUnUsed, { pageNum });
         this.currentInvalidRecord = pageNum;
-        this.query('unUsed');
+        this.query('invalidRecord');
     }
 
     handleTabChange(key) {
@@ -182,6 +182,7 @@ class CouponsParticipate extends PureComponent {
             cancelCouponsList.push(item.id)
         })
         this.props.cancelCoupons({ couponActivityIds: cancelCouponsList.join(',') });
+        this.queryUnUsed();
     }
 
     handleParticipateSearch(param) {

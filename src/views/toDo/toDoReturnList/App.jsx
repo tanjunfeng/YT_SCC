@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-02 11:39:46
+ * @Last Modified time: 2017-11-04 17:35:34
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -21,8 +21,7 @@ import {
     Dropdown,
     Modal,
     message,
-    Steps,
-    Popover
+    Steps
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -33,7 +32,8 @@ import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import {
     locType,
-    returnStatus
+    returnStatus,
+    optionStatus
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
@@ -56,6 +56,7 @@ const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
 const Step = Steps.Step;
+const { TextArea } = Input;
 
 @connect(state => ({
     auditPurReList: state.toJS().procurement.auditPurReList,
@@ -80,6 +81,10 @@ class toDoReturnList extends PureComponent {
         this.renderActions = this.renderActions.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.searchParams = {};
+        this.param = {
+            approvalStatus: '',
+            opinion: ''
+        };
         this.state = {
             spId: '',   // 供应商编码
             spAdrId: '',    // 供应商地点编码
@@ -87,7 +92,9 @@ class toDoReturnList extends PureComponent {
             locDisabled: true,  // 地点禁用
             locationData: {},
             isVisibleModal: false,
-            opinionvisible: false,
+            approvalVisible: false,
+            opinionVisible: false,
+            approvalStatus: false,
             adrTypeCode: '',    // 地点编码
             receivedTypeCode: ''  // 收货单状态编码
         };
@@ -231,6 +238,52 @@ class toDoReturnList extends PureComponent {
         });
     }
 
+    getFormData = () => {
+        return new Promise((resolve, reject) => {
+            this.props.form.validateFields((err, values) => {
+                if (err) {
+                    reject(err);
+                }
+                const {
+                    approvalStatus,
+                    opinion
+                } = values;
+                const dist = {
+                    approvalStatus,
+                    opinion
+                };
+                if (approvalStatus === '') {
+                    this.props.form.setFields({
+                        approvalStatus: {
+                            value: values.area,
+                            errors: [new Error('未选择审批状态')],
+                        },
+                    });
+                    reject();
+                } else {
+                    Object.assign(dist, {
+                        approvalStatus
+                    });
+                }
+                if (approvalStatus === '1') {
+                    this.props.form.setFields({
+                        opinion: {
+                            value: opinion,
+                            errors: [new Error('请输入审批意见!')]
+                        }
+                    });
+                    reject();
+                } else {
+                    Object.assign(dist, {
+                        opinion
+                    });
+                }
+                resolve(Utils.removeInvalid(dist));
+            });
+        });
+    }
+
+
     queryReturnMngList = () => {
         this.current = 1;
         this.props.queryAuditPurReList({
@@ -241,7 +294,8 @@ class toDoReturnList extends PureComponent {
     }
 
     nodeModal = () => {
-
+        this.showOpinionModal();
+        this.props.queryProcessDefinitions({ processType: 1 });
     }
 
     /**
@@ -333,7 +387,7 @@ class toDoReturnList extends PureComponent {
                 if (record.approval) {
                     message.error('该退货单不能删除。原因：只能删除制单状态且无审批记录退货单!')
                 } else {
-                    this.props.deleteBatchRefundOrder({id: record.id}).then((res) => {
+                    this.props.deleteBatchRefundOrder({ id: record.id }).then((res) => {
                         if (res.code === 200) {
                             message.success(res.message)
                         }
@@ -357,6 +411,7 @@ class toDoReturnList extends PureComponent {
             isVisibleModal: false,
         });
     }
+
     handleModalCancel = () => {
         this.setState({
             isVisibleModal: false,
@@ -365,18 +420,43 @@ class toDoReturnList extends PureComponent {
 
     showOpinionModal = () => {
         this.setState({
-            opinionvisible: true,
+            opinionVisible: true,
         });
     }
 
     handleOpinionOk = () => {
         this.setState({
-            opinionvisible: false,
+            opinionVisible: false,
         });
     }
     handleOpinionCancel = () => {
         this.setState({
-            opinionvisible: false,
+            opinionVisible: false,
+        });
+    }
+
+    showApprovalModal = () => {
+        this.setState({
+            approvalVisible: true,
+        });
+    }
+
+    handleApprovalOk = () => {
+        this.getFormData().then((param) => {
+            this.props.queryProcessDefinitions(param).then((res) => {
+                if (res.code === 200) {
+                    message.success(res.message);
+                    this.setState({
+                        approvalVisible: false,
+                    });
+                }
+            });
+        });
+    }
+
+    handleApprovalCancel = () => {
+        this.setState({
+            approvalVisible: false,
         });
     }
 
@@ -384,12 +464,11 @@ class toDoReturnList extends PureComponent {
         const { key } = items;
         switch (key) {
             case 'examinationApproval':
-                this.showOpinionModal();
-                this.props.queryProcessDefinitions({processType: 1});
+                this.showApprovalModal();
                 break;
             case 'viewApproval':
                 this.showModal();
-                this.props.queryApprovalInfo({businessId: record.purchaseRefundNo})
+                this.props.queryApprovalInfo({ businessId: record.purchaseRefundNo })
                 break;
             default:
                 break;
@@ -429,7 +508,7 @@ class toDoReturnList extends PureComponent {
         const {
             purchaseRefundNo,
             purchaseOrderNo,
-            adrType,
+            approvalStatus,
             purchaseOrderType,
             status,
         } = this.props.form.getFieldsValue();
@@ -466,7 +545,7 @@ class toDoReturnList extends PureComponent {
         const searchParams = {
             purchaseRefundNo,
             purchaseOrderNo,
-            adrType,
+            approvalStatus,
             refundAdr,
             purchaseOrderType,
             status,
@@ -515,11 +594,10 @@ class toDoReturnList extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.auditPurReList;
         const { processDefinitions } = this.props;
-        const customDot = (dot, { status, index }) => (
-            <Popover content={<span>step {index} status: {status}</span>}>
-                {dot}
-            </Popover>
-        );
+        const agreeOrRefuse = ['拒绝', '同意'];
+        // processDefinitions.map((item, index) => (
+        //     agreeOrRefuse[item]
+        // ))
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -716,7 +794,7 @@ class toDoReturnList extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
-                            <Col className="ant-col-10 ant-col-offset-10 gutter-row" style={{ textAlign: 'right'}}>
+                            <Col className="ant-col-10 ant-col-offset-10 gutter-row" style={{ textAlign: 'right' }}>
                                 <FormItem>
                                     <Button size="default" onClick={this.handleResetValue}>
                                         重置
@@ -752,24 +830,76 @@ class toDoReturnList extends PureComponent {
                             onOk={this.handleModalOk}
                             onCancel={this.handleModalCancel}
                         />
-                        <Modal
-                            title="审批进度"
-                            visible={this.state.opinionvisible}
-                            onOk={this.handleOpinionOk}
-                            onCancel={this.handleOpinionCancel}
-                            width={1000}
-                        >
-                            {/* <Steps current={1} progressDot={customDot}>
-                                <Step title="门店店长" description="李四 2017-11-1 通过" />
-                                <Step title="子公司经理" description="王五  2017-11-2 拒绝" />
-                                <Step title="总公司经理" description="赵六" />
-                            </Steps> */}
-                            <Steps current={1} status="error">
-                                <Step title="门店店长" description="李四 2017-11-1 通过" />
-                                <Step title="子公司经理" description="王五  2017-11-2 拒绝" />
-                                <Step title="总公司经理" description="赵六" />
-                            </Steps>
-                        </Modal>
+                        {
+                            this.state.opinionVisible &&
+                            <Modal
+                                title="审批进度"
+                                visible={this.state.opinionVisible}
+                                onOk={this.handleOpinionOk}
+                                onCancel={this.handleOpinionCancel}
+                                width={1000}
+                            >
+                                <Steps current={1} progressDot>
+                                    {processDefinitions.map((item, index) => (
+                                        <Step
+                                            key={`toDo-${index}`}
+                                            title={item.processNodeName}
+                                            description={agreeOrRefuse[item.type]}
+                                        />
+                                    ))}
+                                </Steps>
+                            </Modal>
+                        }
+                        {
+                            this.state.approvalVisible &&
+                            <Modal
+                                title="审批"
+                                visible={this.state.approvalVisible}
+                                onOk={this.handleApprovalOk}
+                                onCancel={this.handleApprovalCancel}
+                                width={400}
+                            >
+                                <div>
+                                    <Form onSubmit={(e) => {
+                                        e.preventDefault()
+                                    }}
+                                    >
+                                        {/* 审批意见 */}
+                                        <FormItem label="审批意见" style={{ display: 'flex' }}>
+                                            {getFieldDecorator('approvalStatus', {
+                                                initialValue: optionStatus.defaultValue,
+                                                rules: [{ required: true, message: '请选择审批意见!' }]
+                                            })(
+                                                <Select style={{ width: '153px' }} size="default">
+                                                    {
+                                                        optionStatus.data.map((item) => (
+                                                            <Option key={item.key} value={item.key}>
+                                                                {item.value}
+                                                            </Option>))
+                                                    }
+                                                </Select>
+                                                )}
+                                        </FormItem>
+                                        <FormItem label="意见" style={{ display: 'flex' }}>
+                                            {getFieldDecorator('opinion', {
+                                                initialValue: '',
+                                                rules: [{ required: false, message: '请填写审批意见!' }]
+                                            })(
+                                                <TextArea
+                                                    placeholder="可填写意见"
+                                                    maxLength="150"
+                                                    style={{ resize: 'none' }}
+                                                    autosize={{
+                                                        minRows: 4,
+                                                        maxRows: 6
+                                                    }}
+                                                />
+                                                )}
+                                        </FormItem>
+                                    </Form>
+                                </div>
+                            </Modal>
+                        }
                     </div>
                 </Form>
             </div >
@@ -781,6 +911,7 @@ toDoReturnList.propTypes = {
     employeeCompanyId: PropTypes.string,
     queryAuditPurReList: PropTypes.func,
     queryProcessDefinitions: PropTypes.func,
+    processDefinitions: PropTypes.objectOf(PropTypes.array),
     form: PropTypes.objectOf(PropTypes.any),
     auditPurReList: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
