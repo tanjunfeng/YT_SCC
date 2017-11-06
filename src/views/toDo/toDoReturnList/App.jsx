@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-03 16:52:47
+ * @Last Modified time: 2017-11-04 17:35:34
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -411,6 +411,7 @@ class toDoReturnList extends PureComponent {
             isVisibleModal: false,
         });
     }
+
     handleModalCancel = () => {
         this.setState({
             isVisibleModal: false,
@@ -443,13 +444,11 @@ class toDoReturnList extends PureComponent {
     handleApprovalOk = () => {
         this.getFormData().then((param) => {
             this.props.queryProcessDefinitions(param).then((res) => {
-                if (res.code === 200 && res.message === '请求成功') {
-                    message.info('新增优惠券成功，请到列表页发布');
+                if (res.code === 200) {
+                    message.success(res.message);
                     this.setState({
                         approvalVisible: false,
                     });
-                } else {
-                    message.error(res.message);
                 }
             });
         });

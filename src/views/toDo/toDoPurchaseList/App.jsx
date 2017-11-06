@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-02 10:41:56
+ * @Last Modified time: 2017-11-04 16:44:30
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -367,7 +367,6 @@ class toDoPurchaseList extends PureComponent {
         const { key } = items;
         switch (key) {
             case 'examinationApproval':
-                console.log(111111)
                 this.showOpinionModal();
                 break;
             case 'viewApproval':
