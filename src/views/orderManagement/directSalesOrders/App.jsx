@@ -129,9 +129,9 @@ class DirectSalesOrders extends PureComponent {
      */
     handleGoodsListChange = (goodsList, total) => {
         // 批量校验库存
-        this.checkStorage().then(list => {
+        this.checkStorage(goodsList).then(list => {
             if (list.length > 0) {
-                this.markStorage(list);
+                this.markStorage(list, goodsList);
             }
         });
         // 清空导入商品列表，报错商品列表
@@ -152,14 +152,15 @@ class DirectSalesOrders extends PureComponent {
     }
 
     handleSubmit = () => {
-        this.checkStorage().then(list => {
+        const goodsList = this.state.goodsList;
+        this.checkStorage(goodsList).then(list => {
             if (list.length === 0) {
                 this.props.insertDirectOrder({
                     storeId: this.state.storeId,
                     directStoreCommerItemList: this.getDirectStoreCommerItemList()
                 });
             } else {
-                this.markStorage(list);
+                this.markStorage(list, goodsList);
             }
         });
     }
@@ -167,22 +168,25 @@ class DirectSalesOrders extends PureComponent {
     /**
      * 标记库存不足的商品
      */
-    markStorage = (list) => {
-        const goodsList = [...this.state.goodsList];
+    markStorage = (list, goodsList) => {
         list.forEach(productId => {
-            const index = goodsList.findIndex(
+            const goods = goodsList.find(
                 item => item.productId === productId);
-            if (index > -1) goodsList[index].enough = false;
+            if (goods) {
+                Object.assign(goods, {
+                    enough: false
+                });
+            }
         });
-        this.setState({ goodsList });
+        this.setState({ goodsList: [...goodsList] });
     }
 
     /**
      * 批量校验库存
      */
-    checkStorage = () => (
+    checkStorage = (goodsList) => (
         new Promise((resove, reject) => {
-            const { branchCompanyId, deliveryWarehouseCode, goodsList } = this.state;
+            const { branchCompanyId, deliveryWarehouseCode } = this.state;
             const products = [];
             goodsList.forEach(item => {
                 products.push({
