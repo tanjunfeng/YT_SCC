@@ -34,7 +34,7 @@ class Excel extends PureComponent {
         message.error(err);
     }
 
-    url = '/directStore/fileUpload';
+    url = `${window.config.apiHost}/directStore/fileUpload`;
 
     handleUpload = () => {
         this.setState({
