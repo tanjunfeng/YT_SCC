@@ -45,12 +45,17 @@ class Excel extends PureComponent {
             method: 'post',
             processData: false,
             data: this.getFormData(),
-            success: () => {
-                this.setState({
-                    fileList: [],
-                    uploading: false
-                });
-                message.success('上传成功');
+            success: (res) => {
+                if (res.code === 200) {
+                    this.setState({
+                        fileList: [],
+                        uploading: false
+                    });
+                    message.success('上传成功');
+                    this.onChange(res.data);
+                } else {
+                    this.handleFailure();
+                }
             },
             error: err => {
                 this.handleFailure(err);
