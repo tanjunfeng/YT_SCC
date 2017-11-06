@@ -54,6 +54,7 @@ class CouponsParticipate extends PureComponent {
             tabPage: '1'
         };
         this.current = 1;
+        this.tabKey = false;
         this.currentUnUnsed = 1;
         this.param = {
             pageNum: 1,
@@ -115,9 +116,11 @@ class CouponsParticipate extends PureComponent {
         switch (tab) {
             case 'used':
                 queryUsed();
+                this.tabKey = false;
                 break;
             case 'unUsed':
                 queryUnUsed();
+                this.tabKey = false;
                 break;
             default:
                 queryUsed();
@@ -164,7 +167,7 @@ class CouponsParticipate extends PureComponent {
         if (this.state.tabPage === '1') {
             Util.exportExcel(exportParticipateData1, condition);
         } else {
-            Util.exportExcel(exportParticipateData2, condition);
+            Util.exportExcel(exportParticipateData2, {condition, queryType: 1});
         }
     }
 
@@ -176,6 +179,7 @@ class CouponsParticipate extends PureComponent {
         return (
             <div>
                 <SearchForm
+                    value={this.tabKey}
                     onParticipateSearch={this.handleParticipateSearch}
                     onParticipateReset={this.handleParticipateReset}
                     onParticipateExport={this.handleParticipateExport}
