@@ -184,6 +184,12 @@
                     "authorityCode": "poRcvMngList",
                     "displayName": "收货单管理列表",
                     "menuList": []
+                },
+                {
+                    "authorityId": 229,
+                    "authorityCode": "returnManagementList",
+                    "displayName": "退货单管理列表",
+                    "menuList": []
                 }
             ]
         },
