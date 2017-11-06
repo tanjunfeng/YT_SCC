@@ -88,7 +88,7 @@ class SellPriceModal extends Component {
             ))
             priceList.forEach((obj) => {
                 if (obj === 0 || obj === null) {
-                    message.error('请仔细核对销售价格，确认为当前显示的价格，请点击确认按钮继续操作!', 2, () => { handlePostAdd(result, isEdit, choose) })
+                    message.error('请仔细核对销售价格，确认为当前显示的价格!', 2, () => { handlePostAdd(result, isEdit, choose) })
                 } else {
                     handlePostAdd(result, isEdit, choose)
                 }
@@ -104,7 +104,6 @@ class SellPriceModal extends Component {
     handlePriceChange(result) {
         const { setFields, getFieldError } = this.props.form;
         const { isContinuity } = result;
-        const { results } = result;
         if (isContinuity && getFieldError('sellSectionPrices')) {
             setFields({
                 sellSectionPrices: {
