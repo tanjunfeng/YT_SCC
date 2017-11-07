@@ -152,8 +152,13 @@ class DirectSalesOrders extends PureComponent {
      */
     handleGoodsListImport = (importList, deletedGoodsList = []) => {
         if (deletedGoodsList.length > 0) {
+            const msg = deletedGoodsList.map(goods => (`${goods.productName} - ${goods.productCode}`)).join(',');
             // 存在导入出错商品时，显示弹窗
-            this.setState({ modalDeletedIdsVisible: true, deletedGoodsList });
+            Modal.error({
+                title: '导入失败的商品',
+                content: msg,
+            });
+            // this.setState({ modalDeletedIdsVisible: true, deletedGoodsList });
         }
         const goodsList = Utils.merge(this.state.goodsList, importList, 'productCode');
         this.checkStorage(goodsList).then((list) => {
@@ -242,7 +247,7 @@ class DirectSalesOrders extends PureComponent {
     }
 
     render() {
-        const { deletedGoodsList } = this.state;
+        // const { deletedGoodsList } = this.state;
         return (
             <div className="direct-sales-orders">
                 <StoresForm
@@ -266,7 +271,7 @@ class DirectSalesOrders extends PureComponent {
                 >
                     <p>这个操作将要重新选择门店并清空已选择商品，确定吗？</p>
                 </Modal>
-                <Modal
+                {/* <Modal
                     className="deleted-ids"
                     title="导入失败的商品"
                     visible={this.state.modalDeletedIdsVisible}
@@ -277,7 +282,7 @@ class DirectSalesOrders extends PureComponent {
                         {deletedGoodsList.map(goods =>
                             `${goods.productName} - ${goods.productCode}`).join('，')}
                     </span>
-                </Modal>
+                </Modal> */}
                 <BackTop />
             </div>
         );
