@@ -257,7 +257,6 @@ class DirectSalesOrders extends PureComponent {
     }
 
     render() {
-        // const { deletedGoodsList } = this.state;
         return (
             <div className="direct-sales-orders">
                 <StoresForm
