@@ -188,11 +188,11 @@ class DirectSalesOrders extends PureComponent {
             /**
              * 标记库存不足的商品
              *
-             * @param {*array} list 库存不足商品编号
+             * @param {*array} notEnouphIds 库存不足商品编号
              * @param {*array} productsList 商品列表
              */
-            const markStorage = (list, productsList) => {
-                list.forEach(productId => {
+            const markStorage = (notEnouphIds, productsList) => {
+                notEnouphIds.forEach(productId => {
                     const goods = productsList.find(
                         item => item.productId === productId);
                     if (goods) {
@@ -212,7 +212,7 @@ class DirectSalesOrders extends PureComponent {
                 if (res.data.length > 0) {
                     markStorage(res.data, goodsList);
                 }
-                // 返回商品列表和库存不足的商品数量
+                // 返回标记完毕的商品列表和库存不足的商品数量
                 resove(goodsList, res.data.length);
             }).catch(error => {
                 reject(error);
