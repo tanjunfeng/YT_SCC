@@ -6,7 +6,7 @@
  */
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
-import { Form, BackTop, Modal } from 'antd';
+import { Form, BackTop, Modal, message } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -28,6 +28,7 @@ class DirectSalesOrders extends PureComponent {
         branchCompanyId: '', // 分公司 id
         deliveryWarehouseCode: '', // 送货舱编码
         goodsList: [], // 当前显示商品列表
+        isSubmitDisabled: false, // 提交按钮是否禁用
         deletedGoodsList: [], // 由于不在销售区域而被删除的商品编号列表
         goodsAddOn: null, // 手工添加的单个商品
         modalRechooseVisible: false, // 提示重新选择门店的模态框
@@ -100,7 +101,8 @@ class DirectSalesOrders extends PureComponent {
             storeId,
             branchCompanyId,
             deliveryWarehouseCode,
-            modalRechooseVisible: false
+            modalRechooseVisible: false,
+            isSubmitDisabled: false
         });
         this.handleClear();
     }
@@ -132,7 +134,7 @@ class DirectSalesOrders extends PureComponent {
      */
     handleGoodsListChange = (goodsList, total) => {
         // 批量校验库存
-        this.checkStorage(goodsList).then(list => {
+        this.checkStorage(goodsList, (list) => {
             // 刷新导入商品列表，清空报错商品列表
             this.setState({ goodsList: [...list], total })
         });
@@ -161,47 +163,34 @@ class DirectSalesOrders extends PureComponent {
             // this.setState({ modalDeletedIdsVisible: true, deletedGoodsList });
         }
         const goodsList = Utils.merge(this.state.goodsList, importList, 'productCode');
-        this.checkStorage(goodsList).then((list) => {
+        this.checkStorage(goodsList, (list) => {
             this.setState({ goodsList: [...list] });
         });
     }
 
     handleSubmit = () => {
+        this.setState({ isSubmitDisabled: true });
         const goodsList = this.state.goodsList;
-        this.checkStorage(goodsList).then((list, length) => {
-            if (length === 0) {
-                this.props.insertDirectOrder({
-                    storeId: this.state.storeId,
-                    directStoreCommerItemList: this.getParams(list)
-                });
-            }
+        // 校验库存
+        this.checkStorage(goodsList, (list, length) => {
+            if (length > 0) return;
+            // 提交订单
+            this.props.insertDirectOrder({
+                storeId: this.state.storeId,
+                directStoreCommerItemList: this.getParams(list)
+            }).then(res => {
+                // 报错或提交失败之后可继续提交
+                if (res.code !== 200) {
+                    this.setState({ isSubmitDisabled: false });
+                }
+            }).catch(() => {
+                this.setState({ isSubmitDisabled: false });
+            });
         });
     }
 
-    /**
-     * 批量校验库存
-     *
-     * @param {*array} goodsList 商品列表
-     */
-    checkStorage = (goodsList) => (
+    batchCheckStorageAction = (goodsList) => (
         new Promise((resove, reject) => {
-            /**
-             * 标记库存不足的商品
-             *
-             * @param {*array} notEnouphIds 库存不足商品编号
-             * @param {*array} productsList 商品列表
-             */
-            const markStorage = (notEnouphIds, productsList) => {
-                notEnouphIds.forEach(productId => {
-                    const goods = productsList.find(
-                        item => item.productId === productId);
-                    if (goods) {
-                        Object.assign(goods, {
-                            enough: false
-                        });
-                    }
-                });
-            }
             const { branchCompanyId, deliveryWarehouseCode } = this.state;
             // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/validateDirectOrder
             this.props.batchCheckStorage({
@@ -209,11 +198,7 @@ class DirectSalesOrders extends PureComponent {
                 loc: deliveryWarehouseCode,
                 products: this.getParams(goodsList)
             }).then(res => {
-                if (res.data.length > 0) {
-                    markStorage(res.data, goodsList);
-                }
-                // 返回标记完毕的商品列表和库存不足的商品数量
-                resove(goodsList, res.data.length);
+                resove(res.data);
             }).catch(error => {
                 reject(error);
             });
@@ -221,11 +206,47 @@ class DirectSalesOrders extends PureComponent {
     )
 
     /**
+     * 批量校验库存
+     *
+     * @param {*array} goodsList 商品列表
+     */
+    checkStorage = (goodsList, callback) => {
+        /**
+         * 标记库存不足的商品
+         *
+         * @param {*array} notEnouphIds 库存不足商品编号
+         * @param {*array} products 商品列表
+         */
+        const markStorage = (notEnouphIds, products) => {
+            notEnouphIds.forEach(productId => {
+                const goods = products.find(item => item.productId === productId);
+                if (goods) {
+                    Object.assign(goods, {
+                        enough: false
+                    });
+                }
+            });
+        }
+        this.batchCheckStorageAction(goodsList).then(data => {
+            if (data.length > 0) {
+                markStorage(data, goodsList);
+            }
+            // 返回标记完毕的商品列表和库存不足的商品数量
+            if (typeof callback === 'function') callback(goodsList, data.length);
+        }).catch(error => {
+            message.error(error);
+        });
+    }
+
+    /**
      * 依次校验是否可以提交
      */
     validateGoods = () => {
         const goodsList = this.state.goodsList;
         const length = goodsList.length;
+        if (this.state.isSubmitDisabled) {
+            return false;
+        }
         if (goodsList.length === 0 || goodsList.length > 300) {
             return false;
         }
