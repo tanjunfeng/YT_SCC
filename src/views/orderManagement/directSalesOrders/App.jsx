@@ -139,6 +139,22 @@ class DirectSalesOrders extends PureComponent {
     }
 
     /**
+     * 整理顺序，将不合法的前置，合法的后置
+     */
+    sortList = (goodsList) => {
+        const frontList = [];
+        const backList = [];
+        goodsList.forEach(goods => {
+            if (!goods.isMultiple || !goods.enough) {
+                frontList.push(goods);
+            } else {
+                backList.push(goods);
+            }
+        });
+        return frontList.concat(backList);
+    }
+
+    /**
      * 商品导入回调函数
      *
      * @param {*array} importList 导入成功商品列表
@@ -156,7 +172,7 @@ class DirectSalesOrders extends PureComponent {
         }
         const goodsList = Utils.merge(this.state.goodsList, importList, 'productCode');
         this.checkStorage(goodsList, (list) => {
-            this.setState({ goodsList: [...list] });
+            this.setState({ goodsList: [...this.sortList(list)] });
         });
     }
 
