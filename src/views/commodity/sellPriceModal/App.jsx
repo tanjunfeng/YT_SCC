@@ -47,6 +47,8 @@ class SellPriceModal extends Component {
             insideValue: null
         }
         this.choose = 0;
+        this.isDisabled = false;
+        this.successPost = false;
     }
 
     handleOk() {
@@ -87,10 +89,35 @@ class SellPriceModal extends Component {
                 priceList.push(item.price)
             ))
             priceList.forEach((obj) => {
-                if (obj === 0 || obj === null) {
-                    message.error('请仔细核对销售价格，确认为当前显示的价格!', 2, () => { handlePostAdd(result, isEdit, choose) })
+                if (obj === null) {
+                    setFields({
+                        sellSectionPrices: {
+                            errors: [new Error('价格不能为空，无法提交')],
+                        },
+                    })
+                    return;
+                }
+                if (obj === null || obj === 0) {
+                    this.successPost = true;
                 } else {
-                    handlePostAdd(result, isEdit, choose)
+                    this.successPost = false;
+                }
+                if (this.successPost) {
+                    this.isDisabled = true;
+                    message.error('请仔细核对销售价格，确认为当前显示的价格!', 2, () => {
+                        handlePostAdd(result, isEdit, choose).then((res) => {
+                            if (res.code === 200) {
+                                this.isDisabled = false;
+                            }
+                        })
+                    })
+                } else {
+                    this.isDisabled = true;
+                    handlePostAdd(result, isEdit, choose).then((res) => {
+                        if (res.code === 200) {
+                            this.isDisabled = false;
+                        }
+                    });
                 }
             })
             return null;
@@ -190,8 +217,10 @@ class SellPriceModal extends Component {
                 className={prefixCls}
                 onOk={this.handleOk}
                 width={'447px'}
+                disabled={this.isDisabled}
                 onCancel={this.handleCancel}
                 maskClosable={false}
+                confirmLoading={this.isDisabled}
             >
                 <div className={`${prefixCls}-body-wrap`}>
                     <Form layout="inline" onSubmit={this.handleSubmit}>
@@ -313,7 +342,8 @@ class SellPriceModal extends Component {
                                     {getFieldDecorator('sellSectionPrices', {
                                     })(
                                         <SteppedPrice
-                                            isEdit={this.state.isEditPrice}
+                                            isEditor={this.state.isEditPrice}
+                                            isEdit={isEdit}
                                             ref={node => { this.steppedPrice = node }}
                                             handleChange={this.handlePriceChange}
                                             startNumber={startNumber}
