@@ -126,7 +126,7 @@ class GoodsForm extends PureComponent {
                         <Row gutter={40}>
                             <FormItem>
                                 <AddingGoodsByStore
-                                    branchCompanyId={branchCompanyId}
+                                    value={{ branchCompanyId }}
                                     onChange={this.handleGoodsChange}
                                 />
                             </FormItem>
@@ -151,7 +151,7 @@ class GoodsForm extends PureComponent {
                                     商品数量：<span>{total.quantities}</span>
                                 </div>
                                 <div className="info">
-                                    金额：<span>{total.amount}</span>
+                                    金额：<span>{total.amount.toFixed(2)}</span>
                                 </div>
                             </FormItem>
                             <FormItem>
