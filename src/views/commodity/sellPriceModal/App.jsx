@@ -89,7 +89,7 @@ class SellPriceModal extends Component {
                 priceList.push(item.price)
             ))
             priceList.forEach((obj) => {
-                if (obj === null) {
+                if (obj === null || obj === undefined) {
                     setFields({
                         sellSectionPrices: {
                             errors: [new Error('价格不能为空，无法提交')],
@@ -109,6 +109,9 @@ class SellPriceModal extends Component {
                             if (res.code === 200) {
                                 this.isDisabled = false;
                             }
+                        }).catch(() => {
+                            setTimeout(this.isDisabled = false, 3000)
+                            this.isDisabled = true;
                         })
                     })
                 } else {
@@ -117,7 +120,10 @@ class SellPriceModal extends Component {
                         if (res.code === 200) {
                             this.isDisabled = false;
                         }
-                    });
+                    }).catch(() => {
+                        setTimeout(this.isDisabled = false, 3000)
+                        this.isDisabled = true;
+                    })
                 }
             })
             return null;

@@ -73,7 +73,6 @@ class SteppedPrice extends PureComponent {
             results: defaultValue,
             isContinuity: isContinuity(defaultValue)
         })
-        console.log(defaultValue)
     }
 
     handleValueChange(index, obj) {
@@ -135,6 +134,7 @@ class SteppedPrice extends PureComponent {
     render() {
         const { prefixCls, initvalue } = this.props;
         const { defaultValue } = this.state;
+        console.log(defaultValue)
         const len = defaultValue.length;
         return (
             <div className={prefixCls}>
@@ -150,7 +150,7 @@ class SteppedPrice extends PureComponent {
                             <ul className={`${prefixCls}-content`}>
                                 {
                                     defaultValue.map((item, index) => {
-                                        const { startNumber, endNumber, price } = item;
+                                        const { startNumber, endNumber, price = null } = item;
                                         return (
                                             <InputItem
                                                 {...this.props}
@@ -173,7 +173,7 @@ class SteppedPrice extends PureComponent {
                             <ul className={`${prefixCls}-content`}>
                                 {
                                     defaultValue.map((item, index) => {
-                                        const { startNumber, endNumber, price } = item;
+                                        const { startNumber, endNumber, price = null } = item;
                                         return (
                                             <InputItem
                                                 {...this.props}
