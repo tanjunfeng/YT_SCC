@@ -126,7 +126,7 @@ class GoodsForm extends PureComponent {
                         <Row gutter={40}>
                             <FormItem>
                                 <AddingGoodsByStore
-                                    branchCompanyId={branchCompanyId}
+                                    value={{ branchCompanyId }}
                                     onChange={this.handleGoodsChange}
                                 />
                             </FormItem>

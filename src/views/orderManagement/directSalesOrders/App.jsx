@@ -32,7 +32,6 @@ class DirectSalesOrders extends PureComponent {
         deletedGoodsList: [], // 由于不在销售区域而被删除的商品编号列表
         goodsAddOn: null, // 手工添加的单个商品
         modalRechooseVisible: false, // 提示重新选择门店的模态框
-        modalDeletedIdsVisible: false, // 提示未导入商品的模态框
         // 商品列表总计信息
         total: {
             rows: 0, // 记录行数
@@ -108,13 +107,6 @@ class DirectSalesOrders extends PureComponent {
     }
 
     /**
-     * 关闭未导入商品提示框
-     */
-    handleDeletedIdsClose = () => {
-        this.setState({ modalDeletedIdsVisible: false, deletedGoodsList: [] });
-    }
-
-    /**
      * 不重新选择商品，清空传入的门店信息
      */
     handleRechooseCancel = () => {
@@ -157,10 +149,10 @@ class DirectSalesOrders extends PureComponent {
             const msg = deletedGoodsList.map(goods => (`${goods.productName} - ${goods.productCode}`)).join(',');
             // 存在导入出错商品时，显示弹窗
             Modal.error({
+                className: 'deleted-ids',
                 title: '导入失败的商品',
                 content: msg,
             });
-            // this.setState({ modalDeletedIdsVisible: true, deletedGoodsList });
         }
         const goodsList = Utils.merge(this.state.goodsList, importList, 'productCode');
         this.checkStorage(goodsList, (list) => {
@@ -180,7 +172,14 @@ class DirectSalesOrders extends PureComponent {
                 directStoreCommerItemList: this.getParams(list)
             }).then(res => {
                 // 报错或提交失败之后可继续提交
-                if (res.code !== 200) {
+                if (res.code === 200) {
+                    // 提交成功时显示订单编号
+                    Modal.success({
+                        title: '生成的订单编号',
+                        content: res.data,
+                    });
+                } else {
+                    message.error(res.message);
                     this.setState({ isSubmitDisabled: false });
                 }
             }).catch(() => {
@@ -257,16 +256,6 @@ class DirectSalesOrders extends PureComponent {
         return true;
     }
 
-    importError = () => {
-        if (!this.state.modalDeletedIdsVisible) {
-            Modal.error({
-                title: '导入失败的商品',
-                content: () => (this.state.deletedGoodsList.map(goods => `${goods.productName} - ${goods.productCode}`).join('，'))
-            });
-            this.setState({ modalDeletedIdsVisible: true });
-        }
-    }
-
     render() {
         // const { deletedGoodsList } = this.state;
         return (
@@ -292,18 +281,6 @@ class DirectSalesOrders extends PureComponent {
                 >
                     <p>这个操作将要重新选择门店并清空已选择商品，确定吗？</p>
                 </Modal>
-                {/* <Modal
-                    className="deleted-ids"
-                    title="导入失败的商品"
-                    visible={this.state.modalDeletedIdsVisible}
-                    onOk={this.handleDeletedIdsClose}
-                    onCancel={this.handleDeletedIdsClose}
-                >
-                    <span className="red">
-                        {deletedGoodsList.map(goods =>
-                            `${goods.productName} - ${goods.productCode}`).join('，')}
-                    </span>
-                </Modal> */}
                 <BackTop />
             </div>
         );
