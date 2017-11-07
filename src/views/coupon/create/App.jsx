@@ -39,7 +39,6 @@ class CouponCreate extends PureComponent {
             condition: 0,
             area: 0,
             category: 0,
-            couponType: 'default',
             isSuperposeUserDiscount: 0,
             isSuperposeProOrCouDiscount: 0,
             grantChannel: 1
@@ -62,7 +61,6 @@ class CouponCreate extends PureComponent {
         this.handleSelectorOk = this.handleSelectorOk.bind(this);
         this.handleSelectorCancel = this.handleSelectorCancel.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
-        this.handleCouponTypeChange = this.handleCouponTypeChange.bind(this);
         this.handleCategorySelect = this.handleCategorySelect.bind(this);
         this.handleGrantChannel = this.handleGrantChannel.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
@@ -79,7 +77,6 @@ class CouponCreate extends PureComponent {
                     discount,
                     promotionDateRange,
                     quanifyAmount,
-                    couponType,
                     condition,
                     totalQuantity,
                     grantChannel,
@@ -103,7 +100,6 @@ class CouponCreate extends PureComponent {
                     discount,
                     startDate,
                     endDate,
-                    couponType,
                     note,
                     personQty,
                     grantChannel: grantChannel === 1 ? 'personal' : 'platform',
@@ -234,11 +230,6 @@ class CouponCreate extends PureComponent {
         }
     }
 
-    handleCouponTypeChange(e) {
-        this.param.couponType = e.target.value;
-        this.props.form.setFieldsValue({ couponType: this.param.couponType });
-    }
-
     /**
      * 使用品类选项
      * @param {*object} e
@@ -311,7 +302,6 @@ class CouponCreate extends PureComponent {
     handleSubmit(e) {
         e.preventDefault();
         this.getFormData().then((param) => {
-            // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/coupon/insertCoupons
             this.props.createCoupons(param).then((res) => {
                 if (res.code === 200 && res.message === '请求成功') {
                     message.info('新增优惠券成功，请到列表页发布');
@@ -389,26 +379,6 @@ class CouponCreate extends PureComponent {
                                                     format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
                                                     placeholder={['开始时间', '结束时间']}
                                                 />
-                                                )}
-                                        </FormItem>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col span={16}>
-                                        <FormItem className="condition" label="优惠券类型">
-                                            {getFieldDecorator('couponType', {
-                                                initialValue: this.param.couponType,
-                                                rules: [{ required: true, message: '请选择优惠券类型' }]
-                                            })(
-                                                <RadioGroup
-                                                    onChange={this.handleCouponTypeChange}
-                                                >
-                                                    <Radio
-                                                        className="default"
-                                                        value={'default'}
-                                                    >默认</Radio>
-                                                    <Radio value={'toGive'}>返券</Radio>
-                                                </RadioGroup>
                                                 )}
                                         </FormItem>
                                     </Col>
