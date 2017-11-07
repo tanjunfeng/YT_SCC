@@ -134,7 +134,7 @@ class GoodsTable extends PureComponent {
         if (record.salePrice === null) {
             return '-';
         }
-        return record.salePrice * record.quantity;
+        return (record.salePrice * record.quantity).toFixed(2);
     }
 
     renderOperations = (text, record) => (
