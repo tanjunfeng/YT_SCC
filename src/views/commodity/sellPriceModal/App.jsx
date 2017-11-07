@@ -47,6 +47,7 @@ class SellPriceModal extends Component {
             insideValue: null
         }
         this.choose = 0;
+        this.successPost = false;
     }
 
     handleOk() {
@@ -88,11 +89,16 @@ class SellPriceModal extends Component {
             ))
             priceList.forEach((obj) => {
                 if (obj === 0 || obj === null) {
-                    message.error('请仔细核对销售价格，确认为当前显示的价格!', 2, () => { handlePostAdd(result, isEdit, choose) })
+                    this.successPost = true;
                 } else {
-                    handlePostAdd(result, isEdit, choose)
+                    this.successPost = false;
                 }
             })
+            if (this.successPost) {
+                message.error('请仔细核对销售价格，确认为当前显示的价格!', 2, () => { handlePostAdd(result, isEdit, choose) })
+            } else {
+                handlePostAdd(result, isEdit, choose);
+            }
             return null;
         })
     }
@@ -313,7 +319,8 @@ class SellPriceModal extends Component {
                                     {getFieldDecorator('sellSectionPrices', {
                                     })(
                                         <SteppedPrice
-                                            isEdit={this.state.isEditPrice}
+                                            isEditor={this.state.isEditPrice}
+                                            isEdit={isEdit}
                                             ref={node => { this.steppedPrice = node }}
                                             handleChange={this.handlePriceChange}
                                             startNumber={startNumber}
