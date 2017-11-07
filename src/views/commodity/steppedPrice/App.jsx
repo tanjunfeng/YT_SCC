@@ -134,7 +134,6 @@ class SteppedPrice extends PureComponent {
     render() {
         const { prefixCls, initvalue } = this.props;
         const { defaultValue } = this.state;
-        console.log(defaultValue)
         const len = defaultValue.length;
         return (
             <div className={prefixCls}>
