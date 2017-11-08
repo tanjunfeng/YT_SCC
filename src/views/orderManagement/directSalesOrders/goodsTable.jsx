@@ -20,28 +20,33 @@ class GoodsTable extends PureComponent {
         }
     }
 
-    onCellChange = (productCode) => value => {
+    onCellChange = productCode => quantity => {
         const goodsList = this.props.value.goodsList;
-        const goods = goodsList.find(item => item.productCode === productCode);
-        if (goods) {
+        const index = goodsList.findIndex(item => item.productCode === productCode);
+        const goods = goodsList[index];
+        if (index > -1) {
             Object.assign(goods, {
-                quantity: value
+                quantity
             });
-            this.noticeChanges(goodsList);
+            this.noticeChanges(goodsList, index);
         }
     }
 
-    onDelete = (productCode) => {
+    onDelete = productCode => {
         this.noticeChanges(this.props.value.goodsList.filter(
             item => item.productCode !== productCode));
     }
 
     /**
      * 通知父组件刷新页面
+     *
+     * @param {*array} goodsList
+     * @param {*number} dataIndex 单元格修改时的索引值
      */
-    noticeChanges = (goodsList) => {
+    noticeChanges = (goodsList, dataIndex = -1) => {
         this.checkMultiple(goodsList); // 检查当前数量是否合法
         const total = {
+            dataIndex, // 单个商品修改的索引
             rows: 0, // 记录行数
             quantities: 0, // 订购数量
             amount: 0   // 金额总计
@@ -80,7 +85,7 @@ class GoodsTable extends PureComponent {
     /**
      * 添加单个商品并校验状态，并判断商品是否应该移动到第一行
      */
-    appendToList = (goods) => {
+    appendToList = goods => {
         const goodsList = this.props.value.goodsList;
         const index = goodsList.findIndex(
             item => item.productCode === goods.productCode);
@@ -100,7 +105,7 @@ class GoodsTable extends PureComponent {
      *
      * @returns {*object} goodsList 商品列表
      */
-    checkMultiple = (goodsList) => {
+    checkMultiple = goodsList => {
         goodsList.forEach(goods => {
             const { quantity, salesInsideNumber, sellFullCase } = goods;
             let isMultiple = true;
