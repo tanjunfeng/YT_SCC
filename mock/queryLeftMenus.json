@@ -67,6 +67,12 @@
                     "menuList": []
                 },
                 {
+                    "authorityId": 333,
+                    "authorityCode": "returnGoodsList",
+                    "displayName": "退货单列表",
+                    "menuList": []
+                },
+                {
                     "authorityId": 314,
                     "authorityCode": "zydxd",
                     "displayName": "直营店下单",
