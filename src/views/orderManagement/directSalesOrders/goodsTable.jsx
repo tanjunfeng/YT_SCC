@@ -92,10 +92,6 @@ class GoodsTable extends PureComponent {
         // 该商品不在列表中，则新增
         if (index === -1) {
             goodsList.unshift(goods);
-        } else if (index > 0) {
-            goodsList.splice(index, 1);
-            goodsList.unshift(goods);
-            message.info('该商品已被移动到顶部');
         }
         this.noticeChanges(goodsList);
     }
