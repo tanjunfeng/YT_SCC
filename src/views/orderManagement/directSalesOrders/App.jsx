@@ -14,12 +14,13 @@ import Utils from '../../../util/util';
 import StoresForm from './storesForm';
 import GoodsForm from './goodsForm';
 import GoodsTable from './goodsTable';
+import { getRow } from './helper';
 import {
-    insertDirectOrder, batchCheckStorage
+    insertDirectOrder, updateGoodsInfo, batchCheckStorage
 } from '../../../actions/procurement';
 
 @connect(() => ({}), dispatch => bindActionCreators({
-    insertDirectOrder, batchCheckStorage
+    insertDirectOrder, updateGoodsInfo, batchCheckStorage
 }, dispatch))
 
 class DirectSalesOrders extends PureComponent {
@@ -114,8 +115,22 @@ class DirectSalesOrders extends PureComponent {
         this.setState({ modalRechooseVisible: false });
     }
 
+    /**
+     * 接受新增单个商品，并单个校验库存
+     */
     handleGoodsFormChange = (goodsAddOn) => {
-        this.setState({ goodsAddOn });
+        if (goodsAddOn === null) {
+            this.setState({ goodsAddOn });
+            return;
+        }
+        const { productId, quantity } = goodsAddOn;
+        const { branchCompanyId, deliveryWarehouseCode } = this.state;
+        // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/updateItem
+        this.props.updateGoodsInfo({
+            productId, quantity, branchCompanyId, deliveryWarehouseCode
+        }).then(res => {
+            this.setState({ goodsAddOn: getRow(res.data) });
+        });
     }
 
     /**
@@ -301,6 +316,7 @@ class DirectSalesOrders extends PureComponent {
 
 DirectSalesOrders.propTypes = {
     insertDirectOrder: PropTypes.func,
+    updateGoodsInfo: PropTypes.func,
     batchCheckStorage: PropTypes.func
 };
 

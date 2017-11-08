@@ -8,8 +8,17 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import { Form, message, Popconfirm, Table } from 'antd';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { directSalesgoodsColumns as columns } from '../columns';
+import {
+    updateGoodsInfo
+} from '../../../actions/procurement';
 import EditableCell from './editableCell';
+
+@connect(() => ({}), dispatch => bindActionCreators({
+    updateGoodsInfo
+}, dispatch))
 
 class GoodsTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
@@ -20,12 +29,13 @@ class GoodsTable extends PureComponent {
         }
     }
 
-    onCellChange = (productCode) => value => {
+    onCellChange = productCode => quantity => {
         const goodsList = this.props.value.goodsList;
-        const goods = goodsList.find(item => item.productCode === productCode);
-        if (goods) {
+        const index = goodsList.findIndex(item => item.productCode === productCode);
+        const goods = goodsList[index];
+        if (index > -1) {
             Object.assign(goods, {
-                quantity: value
+                quantity
             });
             this.noticeChanges(goodsList);
         }
@@ -167,6 +177,7 @@ class GoodsTable extends PureComponent {
 
 GoodsTable.propTypes = {
     onChange: PropTypes.func,
+    updateGoodsInfo: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any)
 };
 
