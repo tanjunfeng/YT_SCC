@@ -82,3 +82,13 @@ export const returnGoodsDetailSave = (params) => (
     })
 )
 
+// 重置清空form数据
+export const returnGoodsListFormDataClear = () => ({
+    type: ActionType.RETURN_GOODS_LIST_FORM_DATA_CLEAR,
+    payload: {
+        data: {},
+        franchiseeIdName: '',
+        branchCompany: { id: '', name: '' }
+    }
+})
+
