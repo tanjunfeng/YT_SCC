@@ -32,7 +32,7 @@ class GoodsTable extends PureComponent {
         }
     }
 
-    onDelete = (productCode) => {
+    onDelete = productCode => {
         this.noticeChanges(this.props.value.goodsList.filter(
             item => item.productCode !== productCode));
     }
@@ -85,7 +85,7 @@ class GoodsTable extends PureComponent {
     /**
      * 添加单个商品并校验状态，并判断商品是否应该移动到第一行
      */
-    appendToList = (goods) => {
+    appendToList = goods => {
         const goodsList = this.props.value.goodsList;
         const index = goodsList.findIndex(
             item => item.productCode === goods.productCode);
@@ -105,7 +105,7 @@ class GoodsTable extends PureComponent {
      *
      * @returns {*object} goodsList 商品列表
      */
-    checkMultiple = (goodsList) => {
+    checkMultiple = goodsList => {
         goodsList.forEach(goods => {
             const { quantity, salesInsideNumber, sellFullCase } = goods;
             let isMultiple = true;

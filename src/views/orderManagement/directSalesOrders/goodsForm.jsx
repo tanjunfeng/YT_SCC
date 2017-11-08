@@ -45,7 +45,7 @@ class GoodsForm extends PureComponent {
      *
      * 将无效的商品和不在销售区域的商品筛选出来分别存入 importList 和 deletedGoodsList
      */
-    handleImport = (list) => {
+    handleImport = list => {
         const importList = [];
         const deletedGoodsList = [];
         if (list.length > 0) {

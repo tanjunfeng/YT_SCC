@@ -44,7 +44,7 @@ class DirectSalesOrders extends PureComponent {
     /**
      * 根据传入商品列表，提取需要商品编号和数量
      */
-    getParams = (goodsList) => {
+    getParams = goodsList => {
         const dist = [];
         goodsList.forEach(goods => {
             dist.push({
@@ -81,7 +81,7 @@ class DirectSalesOrders extends PureComponent {
 
     record = null; // 重新选择的门店信息
 
-    handleStoresChange = (record) => {
+    handleStoresChange = record => {
         this.record = record;
         const { storeId, goodsList } = this.state;
         // 门店信息变化时，判断是否存在已选商品列表，并弹出确认框
@@ -150,7 +150,7 @@ class DirectSalesOrders extends PureComponent {
     /**
      * 整理顺序，将不合法的前置，合法的后置
      */
-    sortList = (goodsList) => {
+    sortList = goodsList => {
         const frontList = [];
         const backList = [];
         goodsList.forEach(goods => {
@@ -213,7 +213,7 @@ class DirectSalesOrders extends PureComponent {
         });
     }
 
-    batchCheckStorageAction = (goodsList) => (
+    batchCheckStorageAction = goodsList => (
         new Promise((resove, reject) => {
             const { branchCompanyId, deliveryWarehouseCode } = this.state;
             // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/validateDirectOrder
@@ -281,7 +281,7 @@ class DirectSalesOrders extends PureComponent {
         return true;
     }
 
-    updateGoodsInfoAction(goods) {
+    updateGoodsInfoAction = goods => {
         const { productId, quantity } = goods;
         const { branchCompanyId, deliveryWarehouseCode } = this.state;
         // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/updateItem
