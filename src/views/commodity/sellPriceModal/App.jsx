@@ -26,7 +26,7 @@ const Option = Select.Option;
     dispatch => bindActionCreators({
         productAddPriceVisible,
         fetchAddProdPurchase,
-        pubFetchValueList
+        pubFetchValueList,
     }, dispatch)
 )
 class SellPriceModal extends Component {
@@ -48,7 +48,8 @@ class SellPriceModal extends Component {
         }
         this.choose = 0;
         this.isDisabled = false;
-        this.successPost = false;
+        this.successPost = true;
+        this.messageAlert = true;
     }
 
     handleOk() {
@@ -90,6 +91,7 @@ class SellPriceModal extends Component {
             ))
             priceList.forEach((obj) => {
                 if (obj === null || obj === undefined) {
+                    this.successPost = true;
                     setFields({
                         sellSectionPrices: {
                             errors: [new Error('价格不能为空，无法提交')],
@@ -97,35 +99,39 @@ class SellPriceModal extends Component {
                     })
                     return;
                 }
-                if (obj === null || obj === 0) {
-                    this.successPost = true;
+                if (obj === 0) {
+                    this.messageAlert = true;
                 } else {
+                    this.messageAlert = false;
+                }
+                if (obj >= 0) {
                     this.successPost = false;
                 }
-                if (this.successPost) {
-                    this.isDisabled = true;
-                    message.error('请仔细核对销售价格，确认为当前显示的价格!', 2, () => {
-                        handlePostAdd(result, isEdit, choose).then((res) => {
-                            if (res.code === 200) {
-                                this.isDisabled = false;
-                            }
-                        }).catch(() => {
-                            setTimeout(this.isDisabled = false, 3000)
-                            this.isDisabled = true;
-                        })
-                    })
-                } else {
-                    this.isDisabled = true;
+            })
+            if (this.successPost) {
+                this.isDisabled = true;
+                if (this.messageAlert) {
+                    message.error('请仔细核对销售价格，确认为当前显示的价格!')
+                }
+                if (!this.isDisabled) {
                     handlePostAdd(result, isEdit, choose).then((res) => {
                         if (res.code === 200) {
                             this.isDisabled = false;
                         }
                     }).catch(() => {
-                        setTimeout(this.isDisabled = false, 3000)
-                        this.isDisabled = true;
+                        this.isDisabled = false;
                     })
                 }
-            })
+            }
+            if (this.successPost === false) {
+                if (this.messageAlert) {
+                    message.error('请仔细核对销售价格，确认为当前显示的价格!', 1, () => {
+                        handlePostAdd(result, isEdit, choose);
+                    })
+                } else {
+                    handlePostAdd(result, isEdit, choose);
+                }
+            }
             return null;
         })
     }
@@ -144,6 +150,7 @@ class SellPriceModal extends Component {
                 },
             })
         }
+        this.isDisabled = false;
     }
 
     handleChoose = ({ record }) => {
@@ -223,7 +230,6 @@ class SellPriceModal extends Component {
                 className={prefixCls}
                 onOk={this.handleOk}
                 width={'447px'}
-                disabled={this.isDisabled}
                 onCancel={this.handleCancel}
                 maskClosable={false}
                 confirmLoading={this.isDisabled}
