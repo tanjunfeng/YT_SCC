@@ -62,8 +62,14 @@
                 },
                 {
                     "authorityId": 331,
-                    "authorityCode": "returnGoodsList",
+                    "authorityCode": "returnManagementList",
                     "displayName": "退货单列表",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 332,
+                    "authorityCode": "exchangeGoodsList",
+                    "displayName": "换货单列表",
                     "menuList": []
                 },
                 {
