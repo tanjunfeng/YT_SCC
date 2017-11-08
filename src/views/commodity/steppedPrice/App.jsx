@@ -150,7 +150,7 @@ class SteppedPrice extends PureComponent {
                             <ul className={`${prefixCls}-content`}>
                                 {
                                     defaultValue.map((item, index) => {
-                                        const { startNumber, endNumber, price } = item;
+                                        const { startNumber, endNumber, price = null } = item;
                                         return (
                                             <InputItem
                                                 {...this.props}
@@ -173,7 +173,7 @@ class SteppedPrice extends PureComponent {
                             <ul className={`${prefixCls}-content`}>
                                 {
                                     defaultValue.map((item, index) => {
-                                        const { startNumber, endNumber, price } = item;
+                                        const { startNumber, endNumber, price = null } = item;
                                         return (
                                             <InputItem
                                                 {...this.props}
