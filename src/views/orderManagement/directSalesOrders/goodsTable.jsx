@@ -8,17 +8,8 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import { Form, message, Popconfirm, Table } from 'antd';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import { directSalesgoodsColumns as columns } from '../columns';
-import {
-    updateGoodsInfo
-} from '../../../actions/procurement';
 import EditableCell from './editableCell';
-
-@connect(() => ({}), dispatch => bindActionCreators({
-    updateGoodsInfo
-}, dispatch))
 
 class GoodsTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
@@ -37,7 +28,7 @@ class GoodsTable extends PureComponent {
             Object.assign(goods, {
                 quantity
             });
-            this.noticeChanges(goodsList);
+            this.noticeChanges(goodsList, index);
         }
     }
 
@@ -48,10 +39,14 @@ class GoodsTable extends PureComponent {
 
     /**
      * 通知父组件刷新页面
+     *
+     * @param {*array} goodsList
+     * @param {*number} dataIndex 单元格修改时的索引值
      */
-    noticeChanges = (goodsList) => {
+    noticeChanges = (goodsList, dataIndex) => {
         this.checkMultiple(goodsList); // 检查当前数量是否合法
         const total = {
+            dataIndex, // 单个商品修改的索引
             rows: 0, // 记录行数
             quantities: 0, // 订购数量
             amount: 0   // 金额总计
@@ -177,7 +172,6 @@ class GoodsTable extends PureComponent {
 
 GoodsTable.propTypes = {
     onChange: PropTypes.func,
-    updateGoodsInfo: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any)
 };
 
