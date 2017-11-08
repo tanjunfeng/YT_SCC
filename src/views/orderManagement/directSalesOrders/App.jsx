@@ -180,9 +180,7 @@ class DirectSalesOrders extends PureComponent {
             });
         }
         const goodsList = Utils.merge(this.state.goodsList, importList, 'productCode');
-        this.checkStorage(goodsList, (list) => {
-            this.setState({ goodsList: [...this.sortList(list)] });
-        });
+        this.setState({ goodsList: [...this.sortList(goodsList)] });
     }
 
     handleSubmit = () => {
