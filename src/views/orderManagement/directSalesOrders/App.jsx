@@ -125,11 +125,8 @@ class DirectSalesOrders extends PureComponent {
      * @param {*object} total 商品小计信息
      */
     handleGoodsListChange = (goodsList, total) => {
-        // 批量校验库存
-        this.checkStorage(goodsList, (list) => {
-            // 刷新导入商品列表，清空报错商品列表
-            this.setState({ goodsList: [...list], total })
-        });
+        // 刷新导入商品列表，清空报错商品列表
+        this.setState({ goodsList: [...goodsList], total });
     }
 
     handleClear = () => {
