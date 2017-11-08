@@ -54,7 +54,8 @@ class GoodsForm extends PureComponent {
                     const goods = getRow(item);
                     // 数量从导入返回数据重新复制
                     Object.assign(goods, {
-                        quantity: item.quantity
+                        quantity: item.quantity,
+                        enouph: item.enouph
                     });
                     importList.push(goods);
                 } else {
