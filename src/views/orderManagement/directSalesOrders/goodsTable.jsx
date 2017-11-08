@@ -43,7 +43,7 @@ class GoodsTable extends PureComponent {
      * @param {*array} goodsList
      * @param {*number} dataIndex 单元格修改时的索引值
      */
-    noticeChanges = (goodsList, dataIndex) => {
+    noticeChanges = (goodsList, dataIndex = -1) => {
         this.checkMultiple(goodsList); // 检查当前数量是否合法
         const total = {
             dataIndex, // 单个商品修改的索引
