@@ -123,14 +123,7 @@ class DirectSalesOrders extends PureComponent {
             this.setState({ goodsAddOn });
             return;
         }
-        const { productId, quantity } = goodsAddOn;
-        const { branchCompanyId, deliveryWarehouseCode } = this.state;
-        // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/updateItem
-        this.props.updateGoodsInfo({
-            productId, quantity, branchCompanyId, deliveryWarehouseCode
-        }).then(res => {
-            this.setState({ goodsAddOn: getRow(res.data) });
-        });
+        this.updateGoodsInfoAction(goodsAddOn);
     }
 
     /**
@@ -140,6 +133,10 @@ class DirectSalesOrders extends PureComponent {
      * @param {*object} total 商品小计信息
      */
     handleGoodsListChange = (goodsList, total) => {
+        if (total.dataIndex > -1) {
+            const goods = goodsList[total.dataIndex];
+            this.updateGoodsInfoAction(goods);
+        }
         // 刷新导入商品列表，清空报错商品列表
         this.setState({ goodsList: [...goodsList], total });
     }
@@ -282,6 +279,17 @@ class DirectSalesOrders extends PureComponent {
             if (!item.isMultiple) return false; // 不是内装数的整数倍
         }
         return true;
+    }
+
+    updateGoodsInfoAction(goods) {
+        const { productId, quantity } = goods;
+        const { branchCompanyId, deliveryWarehouseCode } = this.state;
+        // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/updateItem
+        this.props.updateGoodsInfo({
+            productId, quantity, branchCompanyId, deliveryWarehouseCode
+        }).then(res => {
+            this.setState({ goodsAddOn: getRow(res.data) });
+        });
     }
 
     render() {
