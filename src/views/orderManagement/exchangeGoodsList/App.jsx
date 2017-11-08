@@ -24,7 +24,6 @@ import { PAGE_SIZE } from '../../../constant';
 import { returnGoodsListColumns as columns } from '../columns';
 import { returnGoodsOperation } from '../../../actions';
 
-
 @connect(state => ({
     listData: state.toJS().salesManagement.data,
     formData: state.toJS().pageParameters.returnGoodsParams
@@ -39,7 +38,6 @@ class ExchangeGoodsList extends PureComponent {
             refresh: false
         }
     }
-
 
     /**
      * 点击翻页

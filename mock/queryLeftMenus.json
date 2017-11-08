@@ -61,14 +61,8 @@
                     "menuList": []
                 },
                 {
-                    "authorityId": 331,
-                    "authorityCode": "returnManagementList",
-                    "displayName": "退货单列表",
-                    "menuList": []
-                },
-                {
                     "authorityId": 332,
-                    "authorityCode": "exchangeGoodsList",
+                    "authorityCode": "ddhhdlb",
                     "displayName": "换货单列表",
                     "menuList": []
                 },
@@ -189,6 +183,12 @@
                     "authorityId": 228,
                     "authorityCode": "poRcvMngList",
                     "displayName": "收货单管理列表",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 223,
+                    "authorityCode": "cgthdgllb",
+                    "displayName": "退货单管理列表",
                     "menuList": []
                 }
             ]

@@ -1,9 +1,9 @@
 /*
  * @Author: tanjf
- * @Description: 采购退货
+ * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-04 16:44:30
+ * @Last Modified time: 2017-11-08 19:57:11
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -37,7 +37,8 @@ import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
     queryAuditPurReList,
-    queryApprovalInfo
+    queryApprovalInfo,
+    queryPoDetail
 } from '../../../actions/procurement';
 import {
     getWarehouseAddressMap,
@@ -62,7 +63,8 @@ const confirm = Modal.confirm;
     getSupplierLocMap,
     pubFetchValueList,
     queryAuditPurReList,
-    queryApprovalInfo
+    queryApprovalInfo,
+    queryPoDetail
 }, dispatch))
 
 class toDoPurchaseList extends PureComponent {
@@ -91,7 +93,13 @@ class toDoPurchaseList extends PureComponent {
             {
                 title: '采购单号',
                 dataIndex: 'purchaseRefundNo',
-                key: 'purchaseRefundNo'
+                key: 'purchaseRefundNo',
+                render: (text, record) => {
+                    console.log(record.id)
+                    return (
+                        <Link onClick={this.toPurDetail} to={`po/detail/${record.id}`}>{text}</Link>
+                    )
+                }
             }, {
                 title: '地点类型',
                 dataIndex: 'adrType',
@@ -376,6 +384,10 @@ class toDoPurchaseList extends PureComponent {
             default:
                 break;
         }
+    }
+
+    toPurDetail = (record) => {
+        this.props.queryPoDetail(record.id);
     }
 
     /**
@@ -747,6 +759,7 @@ toDoPurchaseList.propTypes = {
     auditPurReList: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     queryApprovalInfo: PropTypes.func,
+    queryPoDetail: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,
 };
 
