@@ -106,3 +106,10 @@ $directStoreSalesColWidth: 260px;
         }
     }
 }
+
+.deleted-ids {
+    width: 800px !important;
+    .red {
+        color: red;
+    }
+}

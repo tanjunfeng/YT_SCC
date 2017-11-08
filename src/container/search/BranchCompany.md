@@ -20,5 +20,5 @@ import { BranchCompany } from '../../../container/search';
 
 ## props 解释
 
-1. value 子公司对象 { id: '10003', name: '成都子公司' } || null
-1. onChange 回调函数,返回分公司对象 { id: '10003', name: '成都子公司' } || null
+1. value 子公司对象 { id: '10003', name: '成都子公司' } || { id: '', name: '' }
+1. onChange 回调函数,返回分公司对象 { id: '10003', name: '成都子公司' } || { id: '', name: '' }

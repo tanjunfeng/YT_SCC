@@ -40,7 +40,7 @@ class SteppedPrice extends PureComponent {
         this.initValue = [{
             startNumber: props.startNumber,
             endNumber: props.startNumber + 1,
-            price: 0
+            price: null
         }]
         const initState = defaultValue.length === 0 ? this.initValue : defaultValue;
         this.state = {
@@ -54,7 +54,7 @@ class SteppedPrice extends PureComponent {
             this.initValue = [{
                 startNumber: nextProps.startNumber,
                 endNumber: nextProps.startNumber + 1,
-                price: 0
+                price: null
             }]
         }
     }
@@ -73,6 +73,7 @@ class SteppedPrice extends PureComponent {
             results: defaultValue,
             isContinuity: isContinuity(defaultValue)
         })
+        console.log(defaultValue)
     }
 
     handleValueChange(index, obj) {
@@ -114,7 +115,7 @@ class SteppedPrice extends PureComponent {
         const newItem = {
             startNumber: endNumber + 1,
             endNumber: endNumber + 2,
-            price: 0
+            price: null
         }
         this.setState({
             defaultValue: [...defaultValue, newItem]
@@ -144,28 +145,54 @@ class SteppedPrice extends PureComponent {
                             售价 元/{initvalue}
                         </span>
                     </div>
-                    <ul className={`${prefixCls}-content`}>
-                        {
-                            defaultValue.map((item, index) => {
-                                const { startNumber, endNumber, price } = item;
-                                return (
-                                    <InputItem
-                                        {...this.props}
-                                        data-item={index}
-                                        index={index}
-                                        allLength={len}
-                                        key={`${item.startNumber}${item.endNumber}${item.price}`}
-                                        handleAddItem={this.handleAddItem}
-                                        handleDeleteItem={this.handleDeleteItem}
-                                        handleValueChange={this.handleValueChange}
-                                        firstDefault={startNumber}
-                                        scondDefault={endNumber}
-                                        resultDefault={price}
-                                    />
-                                )
-                            })
-                        }
-                    </ul>
+                    {
+                        this.props.isEdit ?
+                            <ul className={`${prefixCls}-content`}>
+                                {
+                                    defaultValue.map((item, index) => {
+                                        const { startNumber, endNumber, price } = item;
+                                        return (
+                                            <InputItem
+                                                {...this.props}
+                                                data-item={index}
+                                                index={index}
+                                                allLength={len}
+                                                key={`${item.startNumber}${item.endNumber}${item.price}`}
+                                                handleAddItem={this.handleAddItem}
+                                                handleDeleteItem={this.handleDeleteItem}
+                                                handleValueChange={this.handleValueChange}
+                                                firstDefault={startNumber}
+                                                scondDefault={endNumber}
+                                                resultDefault={this.props.isEdit ? price : null}
+                                            />
+                                        )
+                                    })
+                                }
+                            </ul>
+                        :
+                            <ul className={`${prefixCls}-content`}>
+                                {
+                                    defaultValue.map((item, index) => {
+                                        const { startNumber, endNumber, price } = item;
+                                        return (
+                                            <InputItem
+                                                {...this.props}
+                                                data-item={index}
+                                                index={index}
+                                                allLength={len}
+                                                key={`${item.startNumber}${item.endNumber}${item.price}`}
+                                                handleAddItem={this.handleAddItem}
+                                                handleDeleteItem={this.handleDeleteItem}
+                                                handleValueChange={this.handleValueChange}
+                                                firstDefault={startNumber}
+                                                scondDefault={endNumber}
+                                                resultDefault={price}
+                                            />
+                                        )
+                                    })
+                                }
+                            </ul>
+                    }
                 </div>
             </div>
         )
@@ -177,6 +204,7 @@ SteppedPrice.propTypes = {
     defaultValue: PropTypes.arrayOf(PropTypes.any),
     initvalue: PropTypes.arrayOf(PropTypes.any),
     handleChange: PropTypes.func,
+    isEdit: PropTypes.bool,
     maxLength: PropTypes.number,
     startNumber: PropTypes.number,
 }

@@ -54,6 +54,7 @@ class CouponsParticipate extends PureComponent {
             tabPage: '1'
         };
         this.current = 1;
+        this.tabKey = false;
         this.currentUnUnsed = 1;
         this.param = {
             pageNum: 1,
@@ -115,9 +116,11 @@ class CouponsParticipate extends PureComponent {
         switch (tab) {
             case 'used':
                 queryUsed();
+                this.tabKey = false;
                 break;
             case 'unUsed':
                 queryUnUsed();
+                this.tabKey = false;
                 break;
             default:
                 queryUsed();
@@ -132,7 +135,10 @@ class CouponsParticipate extends PureComponent {
             ...param,
             ...this.param
         };
-        this.paramUnUsed = this.param;
+        this.paramUnUsed = {
+            ...param,
+            ...this.paramUnUsed
+        };
         this.query();
     }
 
@@ -143,9 +149,14 @@ class CouponsParticipate extends PureComponent {
             pageNum: 1,
             pageSize: PAGE_SIZE
         };
+        this.paramUnUsed = {
+            queryType: 1,
+            promoId: this.PROMOTION_ID,
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        };
         this.current = 1;
         this.currentUnUnsed = 1;
-        this.paramUnUsed = this.param;
     }
 
     handleParticipateExport(param) {
@@ -156,7 +167,7 @@ class CouponsParticipate extends PureComponent {
         if (this.state.tabPage === '1') {
             Util.exportExcel(exportParticipateData1, condition);
         } else {
-            Util.exportExcel(exportParticipateData2, condition);
+            Util.exportExcel(exportParticipateData2, {condition, queryType: 1});
         }
     }
 
@@ -168,6 +179,7 @@ class CouponsParticipate extends PureComponent {
         return (
             <div>
                 <SearchForm
+                    value={this.tabKey}
                     onParticipateSearch={this.handleParticipateSearch}
                     onParticipateReset={this.handleParticipateReset}
                     onParticipateExport={this.handleParticipateExport}

@@ -5,13 +5,13 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import Utils from '../../util/util';
-import { returnGoodsStatus, goodsReceiptStatus } from '../../constant/salesManagement';
-import { returnGoodsList, returnGoodsListFormData, returnGoodsListFormDataClear } from '../../actions';
-import { pubFetchValueList } from '../../actions/pub';
-import { PAGE_SIZE } from '../../constant';
-import SearchMind from '../../components/searchMind';
-import { BranchCompany } from '../../container/search';
+import Utils from '../../../util/util';
+import { returnGoodsStatus, goodsReceiptStatus } from '../../../constant/salesManagement';
+import { returnGoodsList, returnGoodsListFormData, returnGoodsListFormDataClear } from '../../../actions';
+import { pubFetchValueList } from '../../../actions/pub';
+import { PAGE_SIZE } from '../../../constant';
+import SearchMind from '../../../components/searchMind';
+import { BranchCompany } from '../../../container/search';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -31,7 +31,7 @@ const dateFormat = 'YYYY-MM-DD';
     }, dispatch)
 )
 
-class ReturGoodsForm extends PureComponent {
+class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
         const { data, franchiseeIdName } = this.props;
@@ -45,7 +45,6 @@ class ReturGoodsForm extends PureComponent {
 
     componentDidMount() {
         const nextPage = this.props.data.pageNum || 1;
-        console.log(1)
         this.requestSearch(nextPage)
     }
 
@@ -62,6 +61,7 @@ class ReturGoodsForm extends PureComponent {
     // 获取用于搜索的所有有效表单值
     getSearchParams = () => {
         const {
+            branchCompany,
             id,
             orderId,
             shippingState,
@@ -70,8 +70,9 @@ class ReturGoodsForm extends PureComponent {
             } = this.props.form.getFieldsValue();
         const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
         const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
+        this.branchCompany = { ...branchCompany };
         const searchParams = {
-            branchCompanyId: this.branchCompany.id,
+            branchCompanyId: branchCompany.id,
             id,
             orderId,
             shippingState,
@@ -95,7 +96,7 @@ class ReturGoodsForm extends PureComponent {
                 ...seachParams
             },
             franchiseeIdName: this.state.franchiseeIdName,
-            branchCompany: this.branchCompany.name
+            branchCompany: this.branchCompany
         }
         returnGoodsListFormData(data)
         returnGoodsList(Utils.removeInvalid(data.data))
@@ -103,7 +104,6 @@ class ReturGoodsForm extends PureComponent {
 
 
     // 搜索
-
     handleSearch = (e) => {
         e.preventDefault();
         this.requestSearch()
@@ -287,7 +287,7 @@ class ReturGoodsForm extends PureComponent {
     }
 }
 
-ReturGoodsForm.propTypes = {
+SearchForm.propTypes = {
     returnGoodsListFormData: PropTypes.func,
     returnGoodsListFormDataClear: PropTypes.func,
     returnGoodsList: PropTypes.func,
@@ -300,4 +300,4 @@ ReturGoodsForm.propTypes = {
     franchiseeIdName: PropTypes.string
 };
 
-export default withRouter(Form.create()(ReturGoodsForm));
+export default withRouter(Form.create()(SearchForm));
