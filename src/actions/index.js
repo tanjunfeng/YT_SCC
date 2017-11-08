@@ -128,7 +128,8 @@ import {
     returnGoodsListFormData,
     returnGoodsOperation,
     returnGoodsDetailSave,
-    returnDescriptionSave
+    returnDescriptionSave,
+    returnGoodsListFormDataClear
 } from './salesManagement';
 
 export {
@@ -243,6 +244,7 @@ export {
     returnGoodsOperation,
     returnGoodsDetailSave,
     returnDescriptionSave,
+    returnGoodsListFormDataClear,
     // 采购退货列表
     fetchReturnMngList,
     // 采购退货详情
