@@ -192,6 +192,72 @@ const returnGoodsListColumns = [{
 }
 ]
 
+// 退货单列表
+const exchangeGoodsListColumns = [{
+    title: '序号',
+    dataIndex: 'idx',
+    key: 'idx',
+    render: (text, record, index) => index + 1
+},
+{
+    title: '换货单号',
+    dataIndex: 'id',
+    key: 'id'
+},
+{
+    title: '申请日期',
+    dataIndex: 'creationTime',
+    key: 'creationTime',
+    render: (text) => (
+        <span>
+            {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+        </span>
+    )
+},
+{
+    title: '原订单号',
+    dataIndex: 'orderId',
+    key: 'orderId',
+},
+{
+    title: '子公司',
+    dataIndex: 'branchCompanyName',
+    key: 'branchCompanyName',
+}, {
+    title: '雅堂小超',
+    dataIndex: 'franchiseeName',
+    key: 'franchiseeName',
+},
+{
+    title: '总金额',
+    dataIndex: 'amount',
+    key: 'amount',
+    render: (text) => {
+        if (text === null) {
+            return null
+        }
+        return (
+            <span>￥{text}</span>
+        )
+    }
+},
+{
+    title: '换货单状态',
+    dataIndex: 'paymentStateDetail',
+    key: 'paymentStateDetail'
+},
+{
+    title: '商品状态',
+    dataIndex: 'productStateDetail',
+    key: 'productStateDetail'
+},
+{
+    title: '操作',
+    dataIndex: 'operation',
+    key: 'operation'
+}
+]
+
 // 退货单详情列表
 const returnGoodsDetailColumns = [{
     title: '序号',
@@ -303,5 +369,5 @@ const directSalesgoodsColumns = [{
 
 export {
     goodsColumns, orderListColumns, returnGoodsListColumns,
-    returnGoodsDetailColumns, directSalesgoodsColumns
+    returnGoodsDetailColumns, directSalesgoodsColumns, exchangeGoodsListColumns
 };

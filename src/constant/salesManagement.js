@@ -15,11 +15,8 @@ export const returnGoodsType = {
 
 // 退货单状态
 export const returnGoodsStatus = {
-    defaultValue: '',
+    defaultValue: '1',
     data: [{
-        key: '',
-        value: '请选择'
-    }, {
         key: '1',
         value: '待确认'
     }, {
@@ -35,7 +32,7 @@ export const returnGoodsStatus = {
 }
 
 
-//收货状态
+// 收货状态
 export const goodsReceiptStatus = {
     defaultValue: '',
     data: [{
@@ -50,7 +47,7 @@ export const goodsReceiptStatus = {
     }, {
         key: '3',
         value: '待收货'
-    },]
+    }]
 }
 
 
