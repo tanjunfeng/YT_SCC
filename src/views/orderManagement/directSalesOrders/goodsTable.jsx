@@ -65,7 +65,6 @@ class GoodsTable extends PureComponent {
         this.props.onChange([...goodsList], total);
     }
 
-
     /**
      * 检查行状态
      */
