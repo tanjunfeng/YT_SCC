@@ -55,14 +55,13 @@ class ReturnGoodsList extends PureComponent {
         returnGoodsOperation({
             returnId: id,
             operateType: type
+        }).then(res => {
+            if (res.success) {
+                this.setState({
+                    refresh: !this.state.refresh
+                })
+            }
         })
-            .then(res => {
-                if (res.success) {
-                    this.setState({
-                        refresh: !this.state.refresh
-                    })
-                }
-            })
     )
 
     // 模态框弹出
@@ -81,9 +80,13 @@ class ReturnGoodsList extends PureComponent {
         });
     }
 
+    handleRefund = (id) => {
+        console.log(id)
+    }
+
     // table列表详情操作
     renderActions = (text, record) => {
-        const { state } = record;
+        const { state, orderType, paymentState } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu>
@@ -103,6 +106,12 @@ class ReturnGoodsList extends PureComponent {
                 {state === 1 &&
                     <Menu.Item key="confirm">
                         <span onClick={() => this.showConfirm(record.id, 1)}>确认</span>
+                    </Menu.Item>
+                }
+                {
+                    // orderType === 'ZCXS' && paymentState === 'WTK' &&
+                    <Menu.Item key="cancel">
+                        <span onClick={() => this.handleRefund(record.id, 3)}>退款</span>
                     </Menu.Item>
                 }
             </Menu>

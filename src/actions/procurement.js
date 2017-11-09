@@ -11,7 +11,7 @@ import {
     queryPoPrintList,
     createPo as svcCreatePo,
     auditPo as svcAuditPo,
-    queryPoDetail,
+    queryPoDetail as queryPoDetailService,
     queryMaterialMap as svcQueryMateriMap,
     queryPurchaseOrderBrands as queryPurchaseOrderBrandsService,
     queryAuditPurReList as queryAuditPurReListService,
@@ -166,13 +166,11 @@ export const ModifyPo = (params) => () => (
  */
 export const auditPo = (params) => () => (
     new Promise((resolve, reject) => {
-        svcAuditPo(params)
-            .then(res => {
-                resolve(res);
-            })
-            .catch(err => {
-                reject(err);
-            })
+        svcAuditPo(params).then(res => {
+            resolve(res);
+        }).catch(err => {
+            reject(err);
+        })
     })
 );
 
@@ -185,9 +183,9 @@ const rcvPoDetail = (data) => ({
     payload: data
 });
 
-export const fetchPoDetail = (params) => dispatch => (
+export const queryPoDetail = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        queryPoDetail(params)
+        queryPoDetailService(params)
             .then(res => {
                 dispatch(
                     rcvPoDetail(

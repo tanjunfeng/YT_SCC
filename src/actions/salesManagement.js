@@ -5,7 +5,7 @@
  */
 import Promise from 'bluebird';
 import { getReturnGoodsList, getReturnGoodsDetail,
-    getReturnGoodsOperation, getReturnGoodsDetailSave,
+    getReturnGoodsOperation, getReturnGoodsDetailSave as returnGoodsDetailSaveService,
     getReturnDescriptionSave
 } from '../service';
 import ActionType from './ActionType';
@@ -73,15 +73,40 @@ export const returnGoodsOperation = (params) => (
 )
 
 // 退货-详情页保存
-export const returnGoodsDetailSave = (params) => (
+const returnGoodsDetailSaveAtion = (data) => ({
+    type: ActionType.RETURN_GOODS_DETAIL_SAVE,
+    payload: data,
+})
+
+export const returnGoodsDetailSave = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        getReturnGoodsDetailSave(params)
+        returnGoodsDetailSaveService(params)
             .then(res => {
-                resolve(res)
+                dispatch(
+                    returnGoodsDetailSaveAtion(res.data)
+                );
+                resolve(res);
             })
-            .catch(err => {
-                reject(err);
+            .catch(err => reject(err))
+    })
+)
+
+// 退货-退款
+const returnGoodsDetailSaveAtion = (data) => ({
+    type: ActionType.RETURN_GOODS_DETAIL_SAVE,
+    payload: data,
+})
+
+export const returnGoodsDetailSave = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        returnGoodsDetailSaveService(params)
+            .then(res => {
+                dispatch(
+                    returnGoodsDetailSaveAtion(res.data)
+                );
+                resolve(res);
             })
+            .catch(err => reject(err))
     })
 )
 
@@ -97,6 +122,7 @@ export const returnDescriptionSave = (params) => (
             })
     })
 )
+
 // 重置清空form数据
 export const returnGoodsListFormDataClear = () => ({
     type: ActionType.RETURN_GOODS_LIST_FORM_DATA_CLEAR,
