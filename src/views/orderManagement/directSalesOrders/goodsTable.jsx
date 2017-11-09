@@ -113,7 +113,9 @@ class GoodsTable extends PureComponent {
     }
 
     renderNumber = (text, record) => {
-        const { minNumber, salesInsideNumber } = record;
+        const { minNumber, sellFullCase, salesInsideNumber } = record;
+        // https://solution.yatang.cn/jira/browse/GA-1024
+        const step = sellFullCase === 0 ? salesInsideNumber : 1;
         // 填入的数量是否是内装数量的整数倍
         const errors = [];
         this.checkGoodsStatus(record, errors);
@@ -121,7 +123,7 @@ class GoodsTable extends PureComponent {
             <EditableCell
                 value={text}
                 min={minNumber}
-                step={salesInsideNumber}
+                step={step}
                 error={errors.join(', ')}
                 onChange={this.onCellChange(record.productCode)}
             />);

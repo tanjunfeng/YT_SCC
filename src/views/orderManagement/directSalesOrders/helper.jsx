@@ -7,7 +7,6 @@ export const getRow = (goodsInfo) => {
         productCode,
         internationalCodes,
         productName,
-        unitExplanation,
         salePrice,
         packingSpecifications,
         enough,
@@ -28,14 +27,15 @@ export const getRow = (goodsInfo) => {
         salesInsideNumber,
         minNumber
     };
-    const quantity = sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber;
-    // 起订数量显示单位
-    const minNumberSpecifications = sellFullCase === 0 ? `${minNumber}${fullCaseUnit || ''}` : `${minNumber}${minUnit || '-'}`;
+    // https://solution.yatang.cn/jira/browse/GA-1047
+    // const quantity = sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber;
+    // https://solution.yatang.cn/jira/browse/GA-1017
+    const minNumberSpecifications = sellFullCase === 0 ? `${minNumber}${minUnit || ''}` : `${minNumber}${fullCaseUnit || '-'}`;
     Object.assign(record, {
-        productSpecifications: `${packingSpecifications || '-'} / ${unitExplanation || '-'}`,
-        packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit || ''} / ${minUnit || '-'}`,
+        packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${minUnit || ''} / ${fullCaseUnit || '-'}`,
+        productSpecifications: sellFullCase === 0 ? `${packingSpecifications}/${minUnit}` : `${packingSpecifications || '-'} / ${fullCaseUnit || '-'}`,
         internationalCode: internationalCodes[0].internationalCode,
-        quantity,
+        quantity: minNumber,
         minNumberSpecifications,
         enough: enough === true, // 是否库存充足，默认充足
         isMultiple: true // 是否是销售内装数的整数倍，默认是整数倍

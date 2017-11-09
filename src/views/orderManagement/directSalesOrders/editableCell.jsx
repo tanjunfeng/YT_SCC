@@ -10,7 +10,7 @@ import { MAX_AMOUNT_OF_ORDER } from '../../../constant/index';
 
 class EditableCell extends PureComponent {
     handleChange = (value) => {
-        this.props.onChange(value);
+        this.props.onChange(+(value));
     }
 
     handlePressEnter = (event) => {
