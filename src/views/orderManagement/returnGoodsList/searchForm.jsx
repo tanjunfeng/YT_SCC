@@ -133,6 +133,11 @@ class SearchForm extends PureComponent {
         });
     }
 
+    handleCreate = () => {
+        const { history } = this.props;
+        history.push('/returnGoodsList/modify');
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const { data } = this.props;
@@ -274,6 +279,7 @@ class SearchForm extends PureComponent {
                     </Row>
                     <Row gutter={40}>
                         <Col span={24} style={{ textAlign: 'right' }}>
+                            <Button style={{ marginRight: 8 }} onClick={this.handleCreate}>新建</Button>
                             <Button type="primary" htmlType="submit">搜索</Button>
                             <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>重置</Button>
                         </Col>
@@ -293,7 +299,8 @@ SearchForm.propTypes = {
     branchCompany: PropTypes.objectOf(PropTypes.any),
     page: PropTypes.number,
     refresh: PropTypes.bool,
-    franchiseeIdName: PropTypes.string
+    franchiseeIdName: PropTypes.string,
+    history: PropTypes.objectOf(PropTypes.any),
 };
 
 export default withRouter(Form.create()(SearchForm));

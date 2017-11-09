@@ -68,8 +68,13 @@ import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/
 // 直营店下单
 import DirectStoreOrder from 'bundle-loader?lazy!../views/orderManagement/directSalesOrders';
 // 销售管理
+
+// 退货单管理列表
 import ReturnGoodsList from 'bundle-loader?lazy!../views/orderManagement/returnGoodsList';
+// 退货单详情
 import ReturnGoodsDetails from 'bundle-loader?lazy!../views/orderManagement/returnGoodsDetails';
+// 新建/编辑退货单
+import ReturnGoodsModify from 'bundle-loader?lazy!../views/orderManagement/returnGoodsModify';
 
 // 库存调整列表
 import StoreAdjList from 'bundle-loader?lazy!../views/storeAdjustment/storeAdjList';
@@ -632,6 +637,20 @@ const routes = [
                             path="/returnGoodsList"
                             exact
                             render={() => (<Bundle load={ReturnGoodsList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/returnGoodsList/modify"
+                            exact
+                            render={() => (<Bundle load={ReturnGoodsModify}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/returnGoodsList/modify/:id"
+                            exact
+                            render={() => (<Bundle load={ReturnGoodsModify}>
                                 {(App) => <App />}
                             </Bundle>)}
                         />
