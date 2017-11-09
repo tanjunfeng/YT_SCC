@@ -123,7 +123,9 @@ class DirectSalesOrders extends PureComponent {
             this.setState({ goodsAddOn });
             return;
         }
-        this.updateGoodsInfoAction(goodsAddOn);
+        this.updateGoodsInfoAction(goodsAddOn, goods => {
+            this.setState({ goodsAddOn: { ...goods } });
+        });
     }
 
     /**
@@ -135,7 +137,9 @@ class DirectSalesOrders extends PureComponent {
     handleGoodsListChange = (goodsList, total) => {
         if (total.dataIndex > -1) {
             const goods = goodsList[total.dataIndex];
-            this.updateGoodsInfoAction(goods);
+            this.updateGoodsInfoAction(goods, goodsChecked => {
+                Object.assign(goods, { ...goodsChecked });
+            });
         }
         // 刷新导入商品列表，清空报错商品列表
         this.setState({ goodsList: [...goodsList], total });
@@ -284,14 +288,16 @@ class DirectSalesOrders extends PureComponent {
         return true;
     }
 
-    updateGoodsInfoAction = goods => {
+    updateGoodsInfoAction = (goods, callback) => {
         const { productId, quantity } = goods;
         const { branchCompanyId, deliveryWarehouseCode } = this.state;
         // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/updateItem
         this.props.updateGoodsInfo({
             productId, quantity, branchCompanyId, deliveryWarehouseCode
         }).then(res => {
-            this.setState({ goodsAddOn: getRow(res.data) });
+            if (typeof callback === 'function') {
+                callback(getRow(res.data));
+            }
         });
     }
 

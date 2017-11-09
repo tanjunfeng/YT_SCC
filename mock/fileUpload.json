@@ -233,7 +233,7 @@
             "saleQuantity": 15,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": true,
             "uploadFailedVos": null,
             "integerTimes": true,
@@ -298,7 +298,7 @@
             "saleQuantity": 15,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": true,
             "uploadFailedVos": null,
             "integerTimes": true,
@@ -323,7 +323,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -391,7 +391,7 @@
             "saleQuantity": 15,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "邯陶釉中彩招财进宝调羹",
@@ -1133,7 +1133,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -1569,7 +1569,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -1631,7 +1631,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -1764,7 +1764,7 @@
             "saleQuantity": 15,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": true,
             "uploadFailedVos": null,
             "integerTimes": true,
@@ -1795,7 +1795,7 @@
             "saleQuantity": 15,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": true,
             "uploadFailedVos": null,
             "integerTimes": true,
@@ -2262,7 +2262,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -2290,7 +2290,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -2352,7 +2352,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -2448,7 +2448,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -2714,7 +2714,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -3150,7 +3150,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -3314,7 +3314,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -3376,7 +3376,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -4560,7 +4560,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -4656,7 +4656,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -5095,7 +5095,7 @@
             "saleQuantity": 15,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "伞塔鱼香肉丝调料50g",
@@ -5265,7 +5265,7 @@
             "saleQuantity": 15,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "鹃城豆瓣袋装227g",
@@ -5939,7 +5939,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -6007,7 +6007,7 @@
             "saleQuantity": 15,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": true,
             "uploadFailedVos": null,
             "integerTimes": true,
@@ -6712,7 +6712,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -6740,7 +6740,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -6768,7 +6768,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -6796,7 +6796,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -6824,7 +6824,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -6852,7 +6852,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
@@ -6880,7 +6880,7 @@
             "saleQuantity": 0,
             "amount": null,
             "salesInsideNumber": 1,
-            "enough": true,
+            "enough": false,
             "available": false,
             "uploadFailedVos": {
                 "productName": "无商品信息",
