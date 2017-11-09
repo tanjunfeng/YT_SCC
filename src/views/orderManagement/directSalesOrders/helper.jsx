@@ -10,6 +10,7 @@ export const getRow = (goodsInfo) => {
         unitExplanation,
         salePrice,
         packingSpecifications,
+        enough,
         available, // 是否在本区域销售
         minNumber, // 起订数量
         minUnit, // 最小销售单位
@@ -36,7 +37,7 @@ export const getRow = (goodsInfo) => {
         internationalCode: internationalCodes[0].internationalCode,
         quantity,
         minNumberSpecifications,
-        enough: true, // 是否库存充足，默认充足
+        enough: enough === true, // 是否库存充足，默认充足
         isMultiple: true // 是否是销售内装数的整数倍，默认是整数倍
     });
     return record;

@@ -179,8 +179,11 @@ class DirectSalesOrders extends PureComponent {
                 content: msg,
             });
         }
-        const goodsList = Utils.merge(this.state.goodsList, importList, 'productCode');
-        this.setState({ goodsList: [...this.sortList(goodsList)] });
+        const goodsList = Utils.merge(
+            this.state.goodsList,
+            [...this.sortList(importList)],
+            'productCode');
+        this.setState({ goodsList: [...goodsList] });
     }
 
     handleSubmit = () => {
@@ -253,8 +256,10 @@ class DirectSalesOrders extends PureComponent {
             if (data.length > 0) {
                 markStorage(data, goodsList);
             }
-            // 返回标记完毕的商品列表和库存不足的商品数量
-            if (typeof callback === 'function') callback(goodsList, data.length);
+            // 返回标记完毕的商品列表和库存不足的商品数量，并把库存不足的商品整理到最前
+            if (typeof callback === 'function') {
+                callback([...this.sortList(goodsList)], data.length);
+            }
         }).catch(error => {
             message.error(error);
         });
