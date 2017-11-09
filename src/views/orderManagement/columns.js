@@ -8,6 +8,8 @@ import React from 'react';
 import moment from 'moment';
 import { TIME_FORMAT } from '../../constant/index';
 
+const { pathname } = this.props.location;
+
 // 订单详情商品列表
 const goodsColumns = [{
     title: '商品图片',
@@ -152,6 +154,9 @@ const returnGoodsListColumns = [{
     title: '原订单号',
     dataIndex: 'orderId',
     key: 'orderId',
+    render: (text, record) => (
+        <a onClick={this.props.history.push('/po/create')}>{text}</a>
+    )
 },
 {
     title: '子公司',

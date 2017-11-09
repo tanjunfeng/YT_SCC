@@ -850,9 +850,9 @@ export const getReturnGoodsDetail = (params) => http.get('/webReturnRequest/retu
 // 退换货详情保存
 export const getReturnGoodsDetailSave = (params) => http.post('/webReturnRequest/returnDescription', params);
 // 换货详情保存
-export const getReturnDescriptionSave = (params) => http.post('/webReturnRequest/returnDescription', params);
+export const returnDescriptionSave = (params) => http.post('/webReturnRequest/returnDescription', params);
 // 销售退货退款
-export const insertRefund = (params) => http.post('/webReturnRequest/insertRefund', params);
+export const insertRefund = (params) => http.get('/webReturnRequest/insertRefund', params);
 
 // 查询退货单审批列表
 export const queryAuditPurReList = (params) => http.get('/pmPurchaseRefund/queryAuditPurchaseRefundList', params);

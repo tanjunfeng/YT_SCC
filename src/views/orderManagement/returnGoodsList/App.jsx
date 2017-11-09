@@ -22,13 +22,15 @@ import {
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { returnGoodsListColumns as columns } from '../columns';
-import { returnGoodsOperation } from '../../../actions';
+import { returnGoodsOperation, insertRefund } from '../../../actions';
 
 
 @connect(state => ({
     listData: state.toJS().salesManagement.data,
     formData: state.toJS().pageParameters.returnGoodsParams
-}), dispatch => bindActionCreators({}, dispatch))
+}), dispatch => bindActionCreators({
+    insertRefund
+}, dispatch))
 
 
 class ReturnGoodsList extends PureComponent {
@@ -81,12 +83,12 @@ class ReturnGoodsList extends PureComponent {
     }
 
     handleRefund = (id) => {
-        console.log(id)
+        this.props.insertRefund({returnId: id});
     }
 
     // table列表详情操作
     renderActions = (text, record) => {
-        const { state, orderType, paymentState } = record;
+        const { state, orderType } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu>
@@ -109,8 +111,8 @@ class ReturnGoodsList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    // orderType === 'ZCXS' && paymentState === 'WTK' &&
-                    <Menu.Item key="cancel">
+                    // orderType === 'ZCXS' && state === '已完成' &&
+                    <Menu.Item key="refund">
                         <span onClick={() => this.handleRefund(record.id, 3)}>退款</span>
                     </Menu.Item>
                 }
@@ -160,6 +162,7 @@ class ReturnGoodsList extends PureComponent {
 }
 
 ReturnGoodsList.propTypes = {
+    insertRefund: PropTypes.func,
     location: PropTypes.objectOf(PropTypes.any),
     listData: PropTypes.objectOf(PropTypes.any),
     formData: PropTypes.objectOf(PropTypes.any)

@@ -6,7 +6,8 @@
 import Promise from 'bluebird';
 import { getReturnGoodsList, getReturnGoodsDetail,
     getReturnGoodsOperation, getReturnGoodsDetailSave as returnGoodsDetailSaveService,
-    getReturnDescriptionSave
+    insertRefund as insertRefundService,
+    returnDescriptionSave as returnDescriptionSaveService
 } from '../service';
 import ActionType from './ActionType';
 
@@ -92,17 +93,17 @@ export const returnGoodsDetailSave = (params) => dispatch => (
 )
 
 // 退货-退款
-const returnGoodsDetailSaveAtion = (data) => ({
+const insertRefundAction = (data) => ({
     type: ActionType.RETURN_GOODS_DETAIL_SAVE,
     payload: data,
 })
 
-export const returnGoodsDetailSave = (params) => dispatch => (
+export const insertRefund = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        returnGoodsDetailSaveService(params)
+        insertRefundService(params)
             .then(res => {
                 dispatch(
-                    returnGoodsDetailSaveAtion(res.data)
+                    insertRefundAction(res.data)
                 );
                 resolve(res);
             })
@@ -111,15 +112,21 @@ export const returnGoodsDetailSave = (params) => dispatch => (
 )
 
 // 换货-详情页保存
-export const returnDescriptionSave = (params) => (
+const returnDescriptionSaveAction = (data) => ({
+    type: ActionType.RETURN_DESCRIPTION_SAVE,
+    payload: data,
+})
+
+export const returnDescriptionSave = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        getReturnDescriptionSave(params)
+        returnDescriptionSaveService(params)
             .then(res => {
-                resolve(res)
+                dispatch(
+                    returnDescriptionSaveAction(res.data)
+                );
+                resolve(res);
             })
-            .catch(err => {
-                reject(err);
-            })
+            .catch(err => reject(err))
     })
 )
 

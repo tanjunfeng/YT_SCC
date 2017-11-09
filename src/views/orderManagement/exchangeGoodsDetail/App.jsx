@@ -30,6 +30,7 @@ const FormItem = Form.Item;
 }), dispatch => bindActionCreators({
     // 请求详情数据
     returnGoodsDetail,
+    returnDescriptionSave,
     // 清空详情数据
     clearData: returnGoodsDetailClearData
 }, dispatch))
@@ -120,7 +121,7 @@ class ExchangeGoodsDetail extends PureComponent {
             this.showConfirmSave()
         } else {
             // 提交数据
-            returnDescriptionSave({
+            this.props.returnDescriptionSave({
                 returnId: this.state.id,
                 returnReasonType,
                 returnReason,
@@ -282,6 +283,7 @@ class ExchangeGoodsDetail extends PureComponent {
 ExchangeGoodsDetail.propTypes = {
     returnGoodsDetail: PropTypes.func,
     clearData: PropTypes.func,
+    returnDescriptionSave: PropTypes.func,
     getFieldDecorator: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any),
