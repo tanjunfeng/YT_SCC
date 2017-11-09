@@ -18,7 +18,7 @@ import Util from '../../../util/util';
 import { createCoupons } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { AreaSelector } from '../../../container/tree';
-import Category from '../../../container/cascader';
+import { Category } from '../../../container/cascader';
 
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;

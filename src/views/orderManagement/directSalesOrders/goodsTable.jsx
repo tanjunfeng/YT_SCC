@@ -6,7 +6,7 @@
  */
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
-import { Form, message, Popconfirm, Table } from 'antd';
+import { Form, Popconfirm, Table } from 'antd';
 import PropTypes from 'prop-types';
 import { directSalesgoodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';

@@ -27,9 +27,9 @@
         "saleQuantity": 10,
         "amount": null,
         "salesInsideNumber": 12,
-        "available": false,
+        "available": true,
         "message": null,
-        "enough": true
+        "enough": false
     },
     "success": true
 }
