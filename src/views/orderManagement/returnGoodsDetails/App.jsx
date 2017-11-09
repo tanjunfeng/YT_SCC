@@ -35,14 +35,14 @@ const FormItem = Form.Item;
 
 class ReturnGoodsDetails extends PureComponent {
     state = {
-        id: ''
+        id: '',
     }
 
     componentDidMount() {
         const { id } = this.props.match.params;
         this.setState({ id });
         this.forData({
-            id
+            id,
         });
     }
 
@@ -71,6 +71,7 @@ class ReturnGoodsDetails extends PureComponent {
                 if (res.success) {
                     this.goBack()
                 }
+            }).catch(() => {
             })
     )
 

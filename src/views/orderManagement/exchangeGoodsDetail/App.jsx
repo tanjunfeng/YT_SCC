@@ -13,7 +13,7 @@ import { withRouter } from 'react-router';
 import moment from 'moment';
 import {
     Table, Form, Select, Icon, Modal, Row,
-    Col, Button, Input
+    Col, Button, Input, message
 } from 'antd';
 import { returnGoodsDetailColumns as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
@@ -37,7 +37,7 @@ const FormItem = Form.Item;
 
 class ExchangeGoodsDetail extends PureComponent {
     state = {
-        id: ''
+        id: '',
     }
 
     componentDidMount() {
@@ -69,11 +69,13 @@ class ExchangeGoodsDetail extends PureComponent {
             returnId: this.state.id,
             operateType: type
         })
-            .then(res => {
-                if (res.success) {
-                    this.goBack()
-                }
-            })
+        .then(res => {
+            if (res.success) {
+                this.goBack()
+                message.success(res.success)
+            }
+        }).catch(() => {
+        })
     )
 
     // 确认、取消模态框弹出
@@ -128,7 +130,7 @@ class ExchangeGoodsDetail extends PureComponent {
                 description
             }).then(res => {
                 if (res.success) {
-                    this.showConfirmSaveSuccess()
+                    this.showConfirmSaveSuccess();
                 }
             })
         }
@@ -139,7 +141,6 @@ class ExchangeGoodsDetail extends PureComponent {
         const { getFieldDecorator } = this.props.form
         const { TextArea } = Input
         const data = this.props.data
-        const { type } = this.props.match.params
         return (
             <div className="returngoods-detail">
                 <div className="basic-box">
