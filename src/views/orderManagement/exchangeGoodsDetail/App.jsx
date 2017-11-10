@@ -72,7 +72,7 @@ class ExchangeGoodsDetail extends PureComponent {
         .then(res => {
             if (res.success) {
                 this.goBack()
-                message.success(res.success)
+                message.success(res.message)
             }
         }).catch(() => {
         })
@@ -141,6 +141,7 @@ class ExchangeGoodsDetail extends PureComponent {
         const { getFieldDecorator } = this.props.form
         const { TextArea } = Input
         const data = this.props.data
+        const { type } = this.props.match.params;
         return (
             <div className="returngoods-detail">
                 <div className="basic-box">

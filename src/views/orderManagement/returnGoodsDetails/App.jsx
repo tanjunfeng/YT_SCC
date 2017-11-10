@@ -116,7 +116,7 @@ class ReturnGoodsDetails extends PureComponent {
             returnReason,
             description
             } = this.props.form.getFieldsValue();
-        if (returnReasonType === '7' && returnReason === '') {
+        if (returnReasonType === 7 && returnReason === '') {
             this.showConfirmSave()
         } else {
             // 提交数据
@@ -133,7 +133,6 @@ class ReturnGoodsDetails extends PureComponent {
                 })
         }
     }
-
 
     render() {
         const { getFieldDecorator } = this.props.form
