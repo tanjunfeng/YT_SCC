@@ -134,7 +134,7 @@ const returnGoodsListColumns = [{
     render: (text, record, index) => index + 1
 },
 {
-    title: '退货单号',
+    title: '换货单号',
     dataIndex: 'id',
     key: 'id'
 },
@@ -176,12 +176,12 @@ const returnGoodsListColumns = [{
     }
 },
 {
-    title: '退货单状态',
+    title: '换货单状态',
     dataIndex: 'stateDetail',
     key: 'stateDetail'
 },
 {
-    title: '收货状态',
+    title: '商品状态',
     dataIndex: 'shippingStateDetail',
     key: 'shippingStateDetail'
 },
@@ -192,7 +192,7 @@ const returnGoodsListColumns = [{
 }
 ]
 
-// 退货单列表
+// 换货单列表
 const exchangeGoodsListColumns = [{
     title: '序号',
     dataIndex: 'idx',
