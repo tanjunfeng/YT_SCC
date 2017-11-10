@@ -90,6 +90,7 @@ class GrantCouponList extends PureComponent {
     }
 
     release = (promoIds, storeIds, msg) => {
+        // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/coupon/grantCoupon
         this.props.grantCoupon({ promoIds, storeIds }).then(() => {
             message.info(msg);
         });
