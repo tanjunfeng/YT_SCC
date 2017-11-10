@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Tabs, Button } from 'antd';
+import { Table, Form, Tabs, Button, message } from 'antd';
 
 import {
     getUsedCouponParticipate,
@@ -181,8 +181,12 @@ class CouponsParticipate extends PureComponent {
         selectedListData.forEach((item) => {
             cancelCouponsList.push(item.id)
         })
-        this.props.cancelCoupons({ couponActivityIds: cancelCouponsList.join(',') });
-        this.queryUnUsed();
+        this.props.cancelCoupons({ couponActivityIds: cancelCouponsList.join(',') }).then((res) => {
+            if (res.code === 200) {
+                message.error(res.message);
+                this.queryUnUsed();
+            }
+        })
     }
 
     handleParticipateSearch(param) {
