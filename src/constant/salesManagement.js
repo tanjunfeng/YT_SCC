@@ -59,25 +59,25 @@ export const reason = {
         key: '',
         value: '请选择'
     }, {
-        key: '1',
+        key: 1,
         value: '包装破损'
     }, {
-        key: '2',
+        key: 2,
         value: '商品破损'
     }, {
-        key: '3',
+        key: 3,
         value: '保质期临期或过期'
     }, {
-        key: '4',
+        key: 4,
         value: '商品错发或漏发'
     }, {
-        key: '5',
+        key: 5,
         value: '订错货'
     }, {
-        key: '6',
+        key: 6,
         value: '商品质量问题'
     }, {
-        key: '7',
+        key: 7,
         value: '其他'
     }]
 }
