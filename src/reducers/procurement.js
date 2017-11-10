@@ -66,6 +66,8 @@ const initState = fromJS({
     auditPurReList: {},
     // 查询退货单审批流程
     processDefinitions: [],
+    // 退货商品列表
+    returnLists: []
 });
 
 export default function (state = initState, action) {
@@ -215,6 +217,8 @@ export default function (state = initState, action) {
             return state.set('directInfo', fromJS(action.payload));
         case ActionType.FETCH_GOODS_INFO:
             return state.set('goodsInfo', fromJS(action.payload));
+        case ActionType.ADD_REFUND_PRODUCTS:
+            return state.set('returnLists', fromJS(action.payload));
         default:
             return state;
     }

@@ -1,3 +1,10 @@
+/**
+ * @file App.jsx
+ * @author shijh
+ *
+ * 新建编辑采购退货单
+ */
+
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -71,6 +78,10 @@ class ReturnGoodsModify extends PureComponent {
 
     }
 
+    getFormData = () => {
+        return this.formContent.getValue();
+    }
+
     render() {
         const { prefixCls } = this.props;
 
@@ -85,9 +96,14 @@ class ReturnGoodsModify extends PureComponent {
             <div
                 className={cls}
             >
-                <FormContent />
+                <FormContent
+                    ref={node => { this.formContent = node }}
+                    pubFetchValueList={this.props.pubFetchValueList}
+                />
 
-                <List />
+                <List
+                    getFormData={this.getFormData}
+                />
             </div>
         )
     }

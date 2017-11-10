@@ -1,29 +1,17 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { withRouter } from 'react-router';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import { Row, Col, Select, DatePicker, Input } from 'antd';
 import SearchMind from '../../../components/searchMind';
-import {
-    pubFetchValueList,
-} from '../../../actions/pub';
+import Util from '../../../util/util';
 
 const Option = Select.Option;
 const { TextArea } = Input;
 
-@connect(
-    state => ({}),
-    dispatch => bindActionCreators({
-        pubFetchValueList,
-    }, dispatch)
-)
 class FormContent extends PureComponent {
     static propTypes = {
         prefixCls: PropTypes.string,
         match: PropTypes.objectOf(PropTypes.any),
-        pubFetchValueList: PropTypes.func,
     }
 
     static defaultProps = {
@@ -33,18 +21,16 @@ class FormContent extends PureComponent {
     constructor(props) {
         super(props);
 
-        const { match } = this.props;
-        const { params } = match;
-
-        if (params.id) {
-            this.type = 'edit';
-        } else {
-            this.type = 'new';
-        }
-
         this.state = {
-            locDisabled: true
+            locDisabled: true,
+            spaceType: '1',
+            locationData: {
+                code: 'warehouseCode',
+                name: 'warehouseName'
+            }
         }
+
+        this.submit = {};
     }
 
     componentDidMount() {
@@ -67,20 +53,26 @@ class FormContent extends PureComponent {
 
     }
 
-    handleTypeChange = () => {
-
+    handleTypeChange = (type) => {
+        this.setState({
+            spaceType: type
+        })
     }
 
     handleTimeChange = () => {
 
     }
 
+    handleCurrencyChange = () => {
+
+    }
+
     handleGetAddressMap = (param) => {
-        const { locTypeCode } = this.props.form.getFieldsValue(['locTypeCode'])
-        const libraryCode = '0';
-        const storeCode = '1';
+        const { spaceType } = this.state;
+        const libraryCode = '1';
+        const storeCode = '2';
         let locationTypeParam = '';
-        if (locTypeCode === libraryCode) {
+        if (spaceType === libraryCode) {
             locationTypeParam = 'getWarehouseInfo1';
             this.setState({
                 locationData: {
@@ -89,7 +81,7 @@ class FormContent extends PureComponent {
                 }
             })
         }
-        if (locTypeCode === storeCode) {
+        if (spaceType === storeCode) {
             locationTypeParam = 'getStoreInfo';
             this.setState({
                 locationData: {
@@ -105,8 +97,23 @@ class FormContent extends PureComponent {
         }, locationTypeParam);
     }
 
+    handleAddressChoose = (data) => {
+        const { locationData } = this.state;
+        const { record } = data;
+
+        const spaceId = record[locationData.code];
+
+        this.submit.id = spaceId;
+    }
+
+
+    getValue = () => {
+        return this.submit;
+    }
+
     render() {
         const { prefixCls } = this.props;
+        const { spaceType, locationData } = this.state;
 
         const cls = classnames(
             `${prefixCls}-modify`,
@@ -229,13 +236,12 @@ class FormContent extends PureComponent {
                             className={`${prefixCls}-modify-item-right`}
                         >
                             <Select
-                                defaultValue="lucy"
+                                value={spaceType}
                                 style={{ width: 120 }}
                                 onChange={this.handleTypeChange}
                             >
-                                <Option value="jack">请选择</Option>
-                                <Option value="lucy">仓库</Option>
-                                <Option value="Yiminghe">门店</Option>
+                                <Option value="1">仓库</Option>
+                                <Option value="2">门店</Option>
                             </Select>
                         </span>
                     </Col>
@@ -262,14 +268,15 @@ class FormContent extends PureComponent {
                                         }
                                     </div>
                                 )}
-                                disabled={this.state.locDisabled}
                                 pageSize={6}
                                 columns={[
                                     {
                                         title: '编码',
+                                        dataIndex: this.state.locationData.code,
                                         width: 80
                                     }, {
                                         title: '名称',
+                                        dataIndex: this.state.locationData.name
                                     }
                                 ]}
                             />
@@ -299,7 +306,7 @@ class FormContent extends PureComponent {
                             <Select
                                 defaultValue="lucy"
                                 style={{ width: 120 }}
-                                onChange={this.handleTypeChange}
+                                onChange={this.handleCurrencyChange}
                             >
                                 <Option value="jack">CNY</Option>
                             </Select>
@@ -375,4 +382,4 @@ class FormContent extends PureComponent {
     }
 }
 
-export default withRouter(FormContent)
+export default FormContent

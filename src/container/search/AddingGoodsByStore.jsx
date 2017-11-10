@@ -17,14 +17,14 @@ import Utils from '../../util/util';
 
 class AddingGoodsByStore extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        if (nextProps.branchCompanyId === '') {
+        if (nextProps.value.branchCompanyId === '') {
             this.handleClear();
         }
     }
 
     query = (params) => {
         const conditions = {
-            salesInfo: this.props.branchCompanyId,
+            salesInfo: this.props.value.branchCompanyId,
             teamText: params.value,
             pageNum: params.pagination.current || 1,
             pageSize: params.pagination.pageSize
@@ -59,7 +59,7 @@ class AddingGoodsByStore extends PureComponent {
                 rowKey="productCode"
                 ref={ref => { this.searchMind = ref }}
                 fetch={this.query}
-                disabled={this.props.branchCompanyId === ''}
+                disabled={this.props.value.branchCompanyId === ''}
                 addonBefore="添加商品"
                 onClear={this.handleClear}
                 onChoosed={this.handleChoose}
@@ -85,7 +85,7 @@ class AddingGoodsByStore extends PureComponent {
 AddingGoodsByStore.propTypes = {
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
-    branchCompanyId: PropTypes.string
+    value: PropTypes.objectOf(PropTypes.any)
 }
 
 export default AddingGoodsByStore;

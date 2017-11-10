@@ -36,6 +36,7 @@ import {
     deleteBatchRefundOrder as deleteBatchRefundOrderService,
     batchCheckStorage as batchCheckStorageService,
     queryProcessDefinitions as ueryProcessDefinitionsService,
+    addRefundProducts
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -783,3 +784,26 @@ export const queryAuditPurReList = (params) => dispatch => (
             })
     })
 );
+
+/**
+ * 根据采购单号、逻辑仓编号、商品code、品牌id添加退货商品
+ * @param {*} data
+ */
+const addRefundProductsAction = (data) => ({
+    type: ActionType.ADD_REFUND_PRODUCTS,
+    payload: data
+})
+
+export const putRefundProducts = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        addRefundProducts(params)
+            .then(res => {
+                dispatch(addRefundProductsAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+

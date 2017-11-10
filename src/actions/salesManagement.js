@@ -4,7 +4,10 @@
  *
  */
 import Promise from 'bluebird';
-import { getReturnGoodsList, getReturnGoodsDetail, getReturnGoodsOperation, getReturnGoodsDetailSave } from '../service';
+import { getReturnGoodsList, getReturnGoodsDetail,
+    getReturnGoodsOperation, getReturnGoodsDetailSave,
+    getReturnDescriptionSave
+} from '../service';
 import ActionType from './ActionType';
 
 // 获取list数据
@@ -69,7 +72,7 @@ export const returnGoodsOperation = (params) => (
     })
 )
 
-// 详情页保存
+// 退货-详情页保存
 export const returnGoodsDetailSave = (params) => (
     new Promise((resolve, reject) => {
         getReturnGoodsDetailSave(params)
@@ -81,4 +84,26 @@ export const returnGoodsDetailSave = (params) => (
             })
     })
 )
+
+// 换货-详情页保存
+export const returnDescriptionSave = (params) => (
+    new Promise((resolve, reject) => {
+        getReturnDescriptionSave(params)
+            .then(res => {
+                resolve(res)
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+// 重置清空form数据
+export const returnGoodsListFormDataClear = () => ({
+    type: ActionType.RETURN_GOODS_LIST_FORM_DATA_CLEAR,
+    payload: {
+        data: {},
+        franchiseeIdName: '',
+        branchCompany: { id: '', name: '' }
+    }
+})
 

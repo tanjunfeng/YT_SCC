@@ -8,20 +8,15 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import { Form, message, Popconfirm, Table } from 'antd';
 import PropTypes from 'prop-types';
-import Utils from '../../../util/util';
 import { directSalesgoodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
 
 class GoodsTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        const { goodsAddOn, importList } = nextProps.value;
+        const { goodsAddOn } = nextProps.value;
         // 当传入商品有变化时，添加到商品列表
         if (goodsAddOn !== null && this.props.value.goodsAddOn !== goodsAddOn) {
             this.appendToList(goodsAddOn);
-        }
-        // 当导入商品有变化时，添加到商品列表
-        if (this.props.value.importList.length === 0 && importList.length > 0) {
-            this.importToList(importList);
         }
     }
 
@@ -45,7 +40,7 @@ class GoodsTable extends PureComponent {
      * 通知父组件刷新页面
      */
     noticeChanges = (goodsList) => {
-        this.checkMultiple(goodsList);
+        this.checkMultiple(goodsList); // 检查当前数量是否合法
         const total = {
             rows: 0, // 记录行数
             quantities: 0, // 订购数量
@@ -65,13 +60,6 @@ class GoodsTable extends PureComponent {
         this.props.onChange([...goodsList], total);
     }
 
-    /**
-     * 将重复的商品剔除，判断是否销售内装数的整数倍,添加到商品列表中
-     */
-    importToList = (importList) => {
-        const goodsList = Utils.merge(this.props.value.goodsList, importList, 'productCode');
-        this.noticeChanges(goodsList);
-    }
 
     /**
      * 检查行状态
@@ -110,7 +98,7 @@ class GoodsTable extends PureComponent {
     /**
      * 检查是否整箱销售，若是，则判断当前数量是否是内装数量的整数倍
      *
-     * @returns {*object}
+     * @returns {*object} goodsList 商品列表
      */
     checkMultiple = (goodsList) => {
         goodsList.forEach(goods => {
@@ -146,7 +134,7 @@ class GoodsTable extends PureComponent {
         if (record.salePrice === null) {
             return '-';
         }
-        return record.salePrice * record.quantity;
+        return (record.salePrice * record.quantity).toFixed(2);
     }
 
     renderOperations = (text, record) => (

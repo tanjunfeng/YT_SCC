@@ -22,7 +22,7 @@
 
         &-item-left, &-item-right {
             display: inline-block;
-            line-height: 28px;
+            line-height: 22px;
         }
     }
 
@@ -32,6 +32,14 @@
         padding-left: 10px;
         &-left {
             margin-right: 4px;
+            vertical-align: middle;
+        }
+        &-right {
+            vertical-align: middle;
+        }
+        &-left, &-right {
+            display: inline-block;
+            line-height: 20px;
         }
     }
 

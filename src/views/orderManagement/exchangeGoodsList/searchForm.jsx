@@ -7,7 +7,7 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../../util/util';
 import { returnGoodsStatus, goodsReceiptStatus } from '../../../constant/salesManagement';
-import { returnGoodsList, returnGoodsListFormData, returnGoodsListFormDataClear } from '../../../actions';
+import { returnGoodsList, returnGoodsListFormData } from '../../../actions';
 import { pubFetchValueList } from '../../../actions/pub';
 import { PAGE_SIZE } from '../../../constant';
 import SearchMind from '../../../components/searchMind';
@@ -26,8 +26,7 @@ const dateFormat = 'YYYY-MM-DD';
     dispatch => bindActionCreators({
         returnGoodsList,
         returnGoodsListFormData,
-        pubFetchValueList,
-        returnGoodsListFormDataClear
+        pubFetchValueList
     }, dispatch)
 )
 
@@ -112,12 +111,10 @@ class SearchForm extends PureComponent {
 
     // 重置
     handleReset = () => {
-        const { returnGoodsListFormDataClear } = this.props;
         this.handleJoiningClear();
         this.joiningSearchMind.reset();
         this.props.form.resetFields();
         this.branchCompany = { id: '', name: '' };
-        returnGoodsListFormDataClear()
     }
 
     // 加盟商-值清单
@@ -134,11 +131,6 @@ class SearchForm extends PureComponent {
         this.setState({
             franchiseeId: ''
         });
-    }
-
-    handleCreate = () => {
-        const { history } = this.props;
-        history.push('/returnGoodsList/modify');
     }
 
     render() {
@@ -213,54 +205,18 @@ class SearchForm extends PureComponent {
                     </Row>
                     <Row gutter={40}>
                         <Col span={8}>
-                            <FormItem label="退货单号">
+                            <FormItem label="换货单号">
                                 {getFieldDecorator('id', {
                                     initialValue: data.id
                                 })(
-                                    <Input size="default" placeholder="退货单号" />
+                                    <Input size="default" placeholder="换货单号" />
                                     )}
                             </FormItem>
                         </Col>
-                        <Col span={8}>
-                            <FormItem label="退货单状态">
-                                {getFieldDecorator('state', {
-                                    initialValue: data.state ? data.state : ''
-                                })(
-                                    <Select style={{ width: '200px' }} size="default">
-                                        {
-                                            returnGoodsStatus.data.map((item) => (
-                                                <Select.Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Select.Option>
-                                            ))
-                                        }
-                                    </Select>
-                                    )}
-                            </FormItem>
-                        </Col>
-                        <Col span={8}>
-                            <FormItem label="收货状态">
-                                {getFieldDecorator('shippingState', {
-                                    initialValue: data.shippingState ? data.shippingState : ''
-                                })(
-                                    <Select style={{ width: '200px' }} size="default">
-                                        {
-                                            goodsReceiptStatus.data.map((item) => (
-                                                <Select.Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Select.Option>
-                                            ))
-                                        }
-                                    </Select>
-                                    )}
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row gutter={40}>
                         <Col span={8}>
                             <FormItem >
                                 <div className="row middle">
-                                    <span className="ant-form-item-label search-mind-label">退货日期</span>
+                                    <span className="ant-form-item-label search-mind-label">换货日期</span>
                                     {getFieldDecorator('createTime', {
                                         initialValue: data.startCreateTime ? [moment(data.startCreateTime), moment(data.endCreateTime)] : null
                                     })(
@@ -279,10 +235,45 @@ class SearchForm extends PureComponent {
                                 </div>
                             </FormItem>
                         </Col>
+                        <Col span={8}>
+                            <FormItem label="换货单状态">
+                                {getFieldDecorator('state', {
+                                    initialValue: data.state ? data.state : ''
+                                })(
+                                    <Select style={{ width: '200px' }} size="default">
+                                        {
+                                            returnGoodsStatus.data.map((item) => (
+                                                <Select.Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Select.Option>
+                                            ))
+                                        }
+                                    </Select>
+                                    )}
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={40}>
+                        <Col span={8}>
+                            <FormItem label="商品状态">
+                                {getFieldDecorator('shippingState', {
+                                    initialValue: data.shippingState ? data.shippingState : ''
+                                })(
+                                    <Select style={{ width: '200px' }} size="default">
+                                        {
+                                            goodsReceiptStatus.data.map((item) => (
+                                                <Select.Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Select.Option>
+                                            ))
+                                        }
+                                    </Select>
+                                    )}
+                            </FormItem>
+                        </Col>
                     </Row>
                     <Row gutter={40}>
                         <Col span={24} style={{ textAlign: 'right' }}>
-                            <Button style={{ marginRight: 8 }} onClick={this.handleCreate}>新建</Button>
                             <Button type="primary" htmlType="submit">搜索</Button>
                             <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>重置</Button>
                         </Col>
@@ -295,7 +286,6 @@ class SearchForm extends PureComponent {
 
 SearchForm.propTypes = {
     returnGoodsListFormData: PropTypes.func,
-    returnGoodsListFormDataClear: PropTypes.func,
     returnGoodsList: PropTypes.func,
     pubFetchValueList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
@@ -303,8 +293,7 @@ SearchForm.propTypes = {
     branchCompany: PropTypes.objectOf(PropTypes.any),
     page: PropTypes.number,
     refresh: PropTypes.bool,
-    franchiseeIdName: PropTypes.string,
-    history: PropTypes.objectOf(PropTypes.any),
+    franchiseeIdName: PropTypes.string
 };
 
 export default withRouter(Form.create()(SearchForm));

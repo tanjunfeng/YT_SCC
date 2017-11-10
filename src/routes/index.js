@@ -56,7 +56,6 @@ import ReturnManagementList from 'bundle-loader?lazy!../views/procurement/return
 import ReturnManagementDetail from 'bundle-loader?lazy!../views/procurement/returnManagementDetail';
 import ReturnManagementCreat from 'bundle-loader?lazy!../views/procurement/returnManagementCreat';
 
-// IBM 修改
 // 商品采购关系维护
 import ProcurementMaintenance from 'bundle-loader?lazy!../views/commodity/procurementMaintenance';
 // 商品销售关系维护
@@ -65,8 +64,9 @@ import SalesMaintenance from 'bundle-loader?lazy!../views/commodity/salesMainten
 import OrderManagementList from 'bundle-loader?lazy!../views/orderManagement/orderList';
 // 订单管理-详情页
 import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/orderDetails';
-// 直营店下单
+// 订单管理 - 直营店下单
 import DirectStoreOrder from 'bundle-loader?lazy!../views/orderManagement/directSalesOrders';
+
 // 销售管理
 
 // 退货单管理列表
@@ -74,7 +74,11 @@ import ReturnGoodsList from 'bundle-loader?lazy!../views/orderManagement/returnG
 // 退货单详情
 import ReturnGoodsDetails from 'bundle-loader?lazy!../views/orderManagement/returnGoodsDetails';
 // 新建/编辑退货单
-import ReturnGoodsModify from 'bundle-loader?lazy!../views/orderManagement/returnGoodsModify';
+import ReturnGoodsModify from 'bundle-loader?lazy!../views/procurement/returnGoodsModify';
+
+// 订单管理 - 销售换货
+import ExchangeGoodsList from 'bundle-loader?lazy!../views/orderManagement/exchangeGoodsList';
+import ExchangeGoodsDetail from 'bundle-loader?lazy!../views/orderManagement/exchangeGoodsDetail';
 
 // 库存调整列表
 import StoreAdjList from 'bundle-loader?lazy!../views/storeAdjustment/storeAdjList';
@@ -597,6 +601,55 @@ const routes = [
                         />
                     </Switch>
                 )
+            },
+            {
+                path: '/returnManagementList',
+                parent: 'procurementMng',
+                key: 'cgthdgllb',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/returnManagementList"
+                            exact
+                            render={() => (<Bundle load={ReturnManagementList}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/returnManagementList/returnManagementDetail/:id"
+                            exact
+                            render={
+                                () => (
+                                    <Bundle load={ReturnManagementDetail}>
+                                        {(App) => <App />}
+                                    </Bundle>
+                                )
+                            }
+                        />
+                        <Route
+                            path="/returnManagementList/modify"
+                            exact
+                            render={
+                                () => (
+                                    <Bundle load={ReturnGoodsModify}>
+                                        {(App) => <App />}
+                                    </Bundle>
+                                )
+                            }
+                        />
+                        <Route
+                            path="/returnManagementList/modify/:id"
+                            exact
+                            render={
+                                () => (
+                                    <Bundle load={ReturnGoodsModify}>
+                                        {(App) => <App />}
+                                    </Bundle>
+                                )
+                            }
+                        />
+                    </Switch>
+                )
             }
         ]
     },
@@ -641,20 +694,6 @@ const routes = [
                             </Bundle>)}
                         />
                         <Route
-                            path="/returnGoodsList/modify"
-                            exact
-                            render={() => (<Bundle load={ReturnGoodsModify}>
-                                {(App) => <App />}
-                            </Bundle>)}
-                        />
-                        <Route
-                            path="/returnGoodsList/modify/:id"
-                            exact
-                            render={() => (<Bundle load={ReturnGoodsModify}>
-                                {(App) => <App />}
-                            </Bundle>)}
-                        />
-                        <Route
                             path="/returnGoodsList/detail/:type/:id"
                             exact
                             render={() => (<Bundle load={ReturnGoodsDetails}>
@@ -665,50 +704,24 @@ const routes = [
                 )
             },
             {
-                path: '/returnManagementList',
+                path: '/exchangeGoodsList',
                 parent: 'ordergl',
-                key: 'returnManagementList',
+                key: 'ddhhdlb',
                 component: () => (
                     <Switch>
                         <Route
-                            path="/returnManagementList"
+                            path="/exchangeGoodsList"
                             exact
-                            render={() => (<Bundle load={ReturnManagementList}>
+                            render={() => (<Bundle load={ExchangeGoodsList}>
                                 {(App) => <App />}
                             </Bundle>)}
                         />
                         <Route
-                            path="/returnManagementList/returnManagementDetail/:id"
+                            path="/exchangeGoodsList/detail/:type/:id"
                             exact
-                            render={
-                                () => (
-                                    <Bundle load={ReturnManagementDetail}>
-                                        {(App) => <App />}
-                                    </Bundle>
-                                )
-                            }
-                        />
-                        <Route
-                            path="/returnManagementList/:id"
-                            exact
-                            render={
-                                () => (
-                                    <Bundle load={ReturnManagementCreat}>
-                                        {(App) => <App />}
-                                    </Bundle>
-                                )
-                            }
-                        />
-                        <Route
-                            path="/returnManagementList/returnManagementCreat/:id"
-                            exact
-                            render={
-                                () => (
-                                    <Bundle load={ReturnManagementCreat}>
-                                        {(App) => <App />}
-                                    </Bundle>
-                                )
-                            }
+                            render={() => (<Bundle load={ExchangeGoodsDetail}>
+                                {(App) => <App />}
+                            </Bundle>)}
                         />
                     </Switch>
                 )
@@ -771,58 +784,6 @@ const routes = [
                             path="/toDoReturnList/returnManagementDetail/:id"
                             render={() => (<Bundle load={ReturnManagementDetail}>
                                 {(App) => <App />}</Bundle>)}
-                        />
-                    </Switch>
-                )
-            }
-        ]
-    },
-    {
-        // 订单管理
-        key: 'ordergl',
-        iconType: 'pushpin',
-        routes: [
-            // 订单管理列表
-            {
-                path: '/orderList',
-                parent: 'ordergl',
-                key: 'orderList',
-                component: () => (
-                    <Switch>
-                        <Route
-                            path="/orderList"
-                            exact
-                            render={() => (<Bundle load={OrderManagementList}>
-                                {(App) => <App />}</Bundle>
-                            )}
-                        />
-                        <Route
-                            path="/orderList/orderDetails/:id"
-                            render={() => (<Bundle load={OrderManagementDetails}>
-                                {(App) => <App />}</Bundle>)}
-                        />
-                    </Switch>
-                )
-            },
-            {
-                path: '/returnGoodsList',
-                parent: 'ordergl',
-                key: 'returnGoodsList',
-                component: () => (
-                    <Switch>
-                        <Route
-                            path="/returnGoodsList"
-                            exact
-                            render={() => (<Bundle load={ReturnGoodsList}>
-                                {(App) => <App />}
-                            </Bundle>)}
-                        />
-                        <Route
-                            path="/returnGoodsList/detail/:type/:id"
-                            exact
-                            render={() => (<Bundle load={ReturnGoodsDetails}>
-                                {(App) => <App />}
-                            </Bundle>)}
                         />
                     </Switch>
                 )

@@ -26,7 +26,7 @@ const Option = Select.Option;
     dispatch => bindActionCreators({
         productAddPriceVisible,
         fetchAddProdPurchase,
-        pubFetchValueList
+        pubFetchValueList,
     }, dispatch)
 )
 class SellPriceModal extends Component {
@@ -47,6 +47,9 @@ class SellPriceModal extends Component {
             insideValue: null
         }
         this.choose = 0;
+        this.isDisabled = false;
+        this.successPost = true;
+        this.messageAlert = true;
     }
 
     handleOk() {
@@ -87,12 +90,48 @@ class SellPriceModal extends Component {
                 priceList.push(item.price)
             ))
             priceList.forEach((obj) => {
-                if (obj === 0 || obj === null) {
-                    message.error('请仔细核对销售价格，确认为当前显示的价格!', 2, () => { handlePostAdd(result, isEdit, choose) })
+                if (obj === null || obj === undefined) {
+                    this.successPost = true;
+                    setFields({
+                        sellSectionPrices: {
+                            errors: [new Error('价格不能为空，无法提交')],
+                        },
+                    })
+                    return;
+                }
+                if (obj === 0) {
+                    this.messageAlert = true;
                 } else {
-                    handlePostAdd(result, isEdit, choose)
+                    this.messageAlert = false;
+                }
+                if (obj >= 0) {
+                    this.successPost = false;
                 }
             })
+            if (this.successPost) {
+                this.isDisabled = true;
+                if (this.messageAlert) {
+                    message.error('请仔细核对销售价格，确认为当前显示的价格!')
+                }
+                if (!this.isDisabled) {
+                    handlePostAdd(result, isEdit, choose).then((res) => {
+                        if (res.code === 200) {
+                            this.isDisabled = false;
+                        }
+                    }).catch(() => {
+                        this.isDisabled = false;
+                    })
+                }
+            }
+            if (this.successPost === false) {
+                if (this.messageAlert) {
+                    message.error('请仔细核对销售价格，确认为当前显示的价格!', 1, () => {
+                        handlePostAdd(result, isEdit, choose);
+                    })
+                } else {
+                    handlePostAdd(result, isEdit, choose);
+                }
+            }
             return null;
         })
     }
@@ -111,6 +150,7 @@ class SellPriceModal extends Component {
                 },
             })
         }
+        this.isDisabled = false;
     }
 
     handleChoose = ({ record }) => {
@@ -192,6 +232,7 @@ class SellPriceModal extends Component {
                 width={'447px'}
                 onCancel={this.handleCancel}
                 maskClosable={false}
+                confirmLoading={this.isDisabled}
             >
                 <div className={`${prefixCls}-body-wrap`}>
                     <Form layout="inline" onSubmit={this.handleSubmit}>
@@ -313,7 +354,8 @@ class SellPriceModal extends Component {
                                     {getFieldDecorator('sellSectionPrices', {
                                     })(
                                         <SteppedPrice
-                                            isEdit={this.state.isEditPrice}
+                                            isEditor={this.state.isEditPrice}
+                                            isEdit={isEdit}
                                             ref={node => { this.steppedPrice = node }}
                                             handleChange={this.handlePriceChange}
                                             startNumber={startNumber}
