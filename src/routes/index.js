@@ -66,9 +66,16 @@ import OrderManagementList from 'bundle-loader?lazy!../views/orderManagement/ord
 import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/orderDetails';
 // 订单管理 - 直营店下单
 import DirectStoreOrder from 'bundle-loader?lazy!../views/orderManagement/directSalesOrders';
-// 订单管理 - 销售退货
+
+// 销售管理
+
+// 退货单管理列表
 import ReturnGoodsList from 'bundle-loader?lazy!../views/orderManagement/returnGoodsList';
+// 退货单详情
 import ReturnGoodsDetails from 'bundle-loader?lazy!../views/orderManagement/returnGoodsDetails';
+// 新建/编辑退货单
+import ReturnGoodsModify from 'bundle-loader?lazy!../views/procurement/returnGoodsModify';
+
 // 订单管理 - 销售换货
 import ExchangeGoodsList from 'bundle-loader?lazy!../views/orderManagement/exchangeGoodsList';
 import ExchangeGoodsDetail from 'bundle-loader?lazy!../views/orderManagement/exchangeGoodsDetail';
@@ -620,22 +627,22 @@ const routes = [
                             }
                         />
                         <Route
-                            path="/returnManagementList/:id"
+                            path="/returnManagementList/modify"
                             exact
                             render={
                                 () => (
-                                    <Bundle load={ReturnManagementCreat}>
+                                    <Bundle load={ReturnGoodsModify}>
                                         {(App) => <App />}
                                     </Bundle>
                                 )
                             }
                         />
                         <Route
-                            path="/returnManagementList/returnManagementCreat/:id"
+                            path="/returnManagementList/modify/:id"
                             exact
                             render={
                                 () => (
-                                    <Bundle load={ReturnManagementCreat}>
+                                    <Bundle load={ReturnGoodsModify}>
                                         {(App) => <App />}
                                     </Bundle>
                                 )

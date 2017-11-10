@@ -423,7 +423,7 @@ class ReturnManagementList extends PureComponent {
     handleCreact = () => {
         const { pathname } = this.props.location;
         this.props.getRefundNo();
-        this.props.history.push(`${pathname}/returnManagementCreat`);
+        this.props.history.push(`${pathname}/modify`);
     }
 
     handleDelete = () => {
