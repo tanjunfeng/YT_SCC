@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-31 15:37:53
+ * @Last Modified time: 2017-11-01 14:54:48
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -102,28 +102,20 @@ class ApproModal extends PureComponent {
     }
 
     render() {
-        const { data, total, pageNum, pageSize } = this.props.approvalInfo;
         return (
             <Modal
-                title="选择优惠券类型"
+                title="审批意见"
                 visible={this.props.visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 width={1200}
             >
                 <Table
-                    dataSource={data}
+                    dataSource={this.props.approvalInfo}
                     columns={this.columns}
                     rowKey="id"
                     scroll={{
                         x: 400
-                    }}
-                    pagination={{
-                        current: pageNum,
-                        total,
-                        pageSize,
-                        showQuickJumper: true,
-                        onChange: this.onPaginate
                     }}
                 />
             </Modal>

@@ -1,4 +1,4 @@
-import ReturnGoodsList from './App';
+import ReturnGoodsDetails from './App';
 import './App.scss';
 
-export default ReturnGoodsList;
+export default ReturnGoodsDetails;

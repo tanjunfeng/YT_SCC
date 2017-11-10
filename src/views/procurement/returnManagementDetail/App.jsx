@@ -3,7 +3,7 @@
  * @Description: 采购退货详情页
  * @CreateDate: 2017-10-27 11:26:16
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-30 10:42:34
+ * @Last Modified time: 2017-11-01 14:33:06
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -145,7 +145,7 @@ class ReturnManagementDetail extends PureComponent {
     }
 
     goBack = () => {
-        this.props.history.replace('/returnManagementList');
+        this.props.history.goBack();
     }
 
     /**
@@ -184,7 +184,28 @@ class ReturnManagementDetail extends PureComponent {
     }
 
     render() {
-        const { poReturn } = this.props;
+        const { poReturn = {} } = this.props;
+        const { pmPurchaseRefundItems = [] } = poReturn;
+        let returnNum = 0;
+        let returnMoney = 0;
+        let returnCost = 0;
+        let returnRealAmount = 0;
+        let returnRealMoney = 0;
+        pmPurchaseRefundItems.forEach((item) => {
+            returnNum += Number(item.refundAmount)
+        });
+        pmPurchaseRefundItems.forEach((item) => {
+            returnMoney += Number(item.refundMoney)
+        });
+        pmPurchaseRefundItems.forEach((item) => {
+            returnCost += Number(item.refundCost)
+        });
+        pmPurchaseRefundItems.forEach((item) => {
+            returnRealAmount += Number(item.realRefundAmount)
+        });
+        pmPurchaseRefundItems.forEach((item) => {
+            returnRealMoney += Number(item.realRefundMoney)
+        });
         return (
             <div className="po-return-detail">
                 <Form layout="inline">
@@ -316,23 +337,23 @@ class ReturnManagementDetail extends PureComponent {
                         <Row >
                             <Col span={6}>
                                 <span className="ant-form-item-label search-mind-label">合计退货数量:</span>
-                                <span className="text">{poReturn.refundAmount}</span>
+                                <span className="text">{returnNum}</span>
                             </Col>
                             <Col span={4}>
                                 <span className="ant-form-item-label search-mind-label">合计退货金额(含税):</span>
-                                <span className="text">{poReturn.refundMoney}</span>
+                                <span className="text">{returnMoney}</span>
                             </Col>
                             <Col span={4}>
                                 <span className="ant-form-item-label search-mind-label">合计退货成本额:</span>
-                                <span className="text">{poReturn.refundCost}</span>
+                                <span className="text">{returnCost}</span>
                             </Col>
                             <Col span={4}>
                                 <span className="ant-form-item-label search-mind-label">实际退货数量:</span>
-                                <span className="text">{poReturn.realRefundAmount}</span>
+                                <span className="text">{returnRealAmount}</span>
                             </Col>
                             <Col span={6}>
                                 <span className="ant-form-item-label search-mind-label">实际退货金额(含税);</span>
-                                <span className="text">{poReturn.realRefundMoney}</span>
+                                <span className="text">{returnRealMoney}</span>
                             </Col>
                         </Row >
                     </div>

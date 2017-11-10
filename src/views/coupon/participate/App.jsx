@@ -9,20 +9,22 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Tabs } from 'antd';
+import { Table, Form, Tabs, Button } from 'antd';
 
 import {
     getUsedCouponParticipate,
     getUnUsedCouponParticipate,
     clearUsedCouponPatipate,
-    clearUnUsedCouponPatipate
+    clearUnUsedCouponPatipate,
+    cancelCoupons
 } from '../../../actions/promotion';
 import { exportParticipateData1, exportParticipateData2 } from '../../../service';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import {
     usedParticipateList as usedColumns,
-    unUsedParticipateList as unUsedColumns
+    unUsedParticipateList as unUsedColumns,
+    invalidRecordList as invalidRecordColumns
 } from '../columns';
 import Util from '../../../util/util';
 
@@ -30,12 +32,14 @@ const TabPane = Tabs.TabPane;
 
 @connect(state => ({
     usedCouponParticipate: state.toJS().promotion.usedCouponParticipate,
+    invalidRecordList: state.toJS().promotion.invalidRecordList,
     unUsedCouponParticipate: state.toJS().promotion.unUsedCouponParticipate
 }), dispatch => bindActionCreators({
     getUsedCouponParticipate,
     getUnUsedCouponParticipate,
     clearUsedCouponPatipate,
-    clearUnUsedCouponPatipate
+    clearUnUsedCouponPatipate,
+    cancelCoupons
 }, dispatch))
 
 class CouponsParticipate extends PureComponent {
@@ -51,11 +55,13 @@ class CouponsParticipate extends PureComponent {
         this.handleTabChange = this.handleTabChange.bind(this);
         this.query = this.query.bind(this);
         this.state = {
-            tabPage: '1'
+            tabPage: '1',
+            selectedListData: []
         };
         this.current = 1;
         this.tabKey = false;
         this.currentUnUnsed = 1;
+        this.currentInvalidRecord = 1;
         this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE,
@@ -63,6 +69,12 @@ class CouponsParticipate extends PureComponent {
         };
         this.paramUnUsed = {
             queryType: 1,
+            pageNum: 1,
+            pageSize: PAGE_SIZE,
+            promoId: this.PROMOTION_ID
+        };
+        this.invalidRecord = {
+            queryType: 2,
             pageNum: 1,
             pageSize: PAGE_SIZE,
             promoId: this.PROMOTION_ID
@@ -91,42 +103,86 @@ class CouponsParticipate extends PureComponent {
      *  Tab2 - 分页页码改变的回调
      */
     onPaginateUnUsed = (pageNum) => {
-        Object.assign(this.paramUnUsed, { pageNum });
+        Object.assign(this.invalidRecord, { pageNum });
         this.currentUnUnsed = pageNum;
         this.query('unUsed');
+    }
+    /**
+     *  Tab3 - 分页页码改变的回调
+     */
+    onPaginateUnUsed = (pageNum) => {
+        Object.assign(this.paramUnUsed, { pageNum });
+        this.currentInvalidRecord = pageNum;
+        this.query('invalidRecord');
     }
 
     handleTabChange(key) {
         this.setState({ tabPage: key });
+        switch (key) {
+            case '1':
+                this.queryUsed();
+                break;
+            case '2':
+                this.queryUnUsed();
+                break;
+            case '3':
+                this.queryinvalidRecord();
+                break;
+            default:
+                this.queryUsed();
+                this.queryUnUsed();
+                this.queryinvalidRecord();
+                break;
+        }
+    }
+
+    queryUsed = () => {
+        this.props.getUsedCouponParticipate(this.param).then((data) => {
+            const { pageNum, pageSize } = data.data;
+            Object.assign(this.param, { pageNum, pageSize });
+        });
+    }
+
+    queryUnUsed = () => {
+        this.props.getUnUsedCouponParticipate(this.paramUnUsed).then((data) => {
+            const { pageNum, pageSize } = data.data;
+            Object.assign(this.paramUnUsed, { pageNum, pageSize });
+        });
+    }
+
+    queryinvalidRecord = () => {
+        this.props.getUnUsedCouponParticipate(this.invalidRecord).then((data) => {
+            const { pageNum, pageSize } = data.data;
+            Object.assign(this.invalidRecord, { pageNum, pageSize });
+        });
     }
 
     query(tab) {
-        const queryUsed = () => {
-            this.props.getUsedCouponParticipate(this.param).then((data) => {
-                const { pageNum, pageSize } = data.data;
-                Object.assign(this.param, { pageNum, pageSize });
-            });
-        };
-        const queryUnUsed = () => {
-            this.props.getUnUsedCouponParticipate(this.paramUnUsed).then((data) => {
-                const { pageNum, pageSize } = data.data;
-                Object.assign(this.paramUnUsed, { pageNum, pageSize });
-            });
-        };
         switch (tab) {
             case 'used':
-                queryUsed();
+                this.queryUsed();
                 this.tabKey = false;
                 break;
             case 'unUsed':
-                queryUnUsed();
+                this.queryUnUsed();
                 this.tabKey = false;
                 break;
             default:
-                queryUsed();
-                queryUnUsed();
+                this.queryUsed();
+                this.queryUnUsed();
+                this.queryinvalidRecord();
                 break;
         }
+    }
+
+    handleCanceled = () => {
+        const { selectedListData } = this.state;
+        const cancelCouponsList = [];
+        selectedListData.forEach((item) => {
+            cancelCouponsList.push(item.id)
+        })
+        this.props.cancelCoupons({ couponActivityIds: cancelCouponsList.join(',') });
+        this.queryUnUsed();
     }
 
     handleParticipateSearch(param) {
@@ -138,6 +194,10 @@ class CouponsParticipate extends PureComponent {
         this.paramUnUsed = {
             ...param,
             ...this.paramUnUsed
+        };
+        this.invalidRecord = {
+            ...param,
+            ...this.invalidRecord
         };
         this.query();
     }
@@ -155,8 +215,15 @@ class CouponsParticipate extends PureComponent {
             pageNum: 1,
             pageSize: PAGE_SIZE
         };
+        this.invalidRecord = {
+            queryType: 2,
+            promoId: this.PROMOTION_ID,
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        };
         this.current = 1;
         this.currentUnUnsed = 1;
+        this.currentInvalidRecord = 1;
     }
 
     handleParticipateExport(param) {
@@ -176,6 +243,15 @@ class CouponsParticipate extends PureComponent {
             participateDataDtoPageResult = {}
         } = this.props.usedCouponParticipate;
         const { total, pageNum, pageSize } = participateDataDtoPageResult;
+        const rowSelection = {
+            selectedRowKeys: this.state.chooseGoodsList,
+            onChange: (selectedRowKeys, selectedRows) => {
+                this.setState({
+                    chooseGoodsList: selectedRowKeys,
+                    selectedListData: selectedRows
+                })
+            },
+        };
         return (
             <div>
                 <SearchForm
@@ -209,7 +285,17 @@ class CouponsParticipate extends PureComponent {
                         />
                     </TabPane>
                     <TabPane tab="未使用" key="2">
+                        <Button
+                            className="Unused-button"
+                            type="primary"
+                            size="default"
+                            onClick={this.handleCanceled}
+                            style={{ float: 'right', marginTop: '-50px' }}
+                        >
+                            作废
+                        </Button>
                         <Table
+                            rowSelection={rowSelection}
                             dataSource={this.props.unUsedCouponParticipate.data}
                             columns={unUsedColumns}
                             rowKey="id"
@@ -227,6 +313,25 @@ class CouponsParticipate extends PureComponent {
                             }}
                         />
                     </TabPane>
+                    <TabPane tab="作废记录" key="3">
+                        <Table
+                            dataSource={this.props.unUsedCouponParticipate.data}
+                            columns={invalidRecordColumns}
+                            rowKey="id"
+                            scroll={{
+                                x: 1400
+                            }}
+                            bordered
+                            pagination={{
+                                current: this.currentInvalidRecord,
+                                pageNum: this.invalidRecord.pageNum,
+                                pageSize: this.invalidRecord.pageSize,
+                                total: this.props.invalidRecordList.total,
+                                showQuickJumper: true,
+                                onChange: this.onPaginateUnUsed
+                            }}
+                        />
+                    </TabPane>
                 </Tabs>
             </div>
         );
@@ -238,6 +343,8 @@ CouponsParticipate.propTypes = {
     getUnUsedCouponParticipate: PropTypes.func,
     clearUsedCouponPatipate: PropTypes.func,
     clearUnUsedCouponPatipate: PropTypes.func,
+    invalidRecordList: PropTypes.func,
+    cancelCoupons: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
     usedCouponParticipate: PropTypes.objectOf(PropTypes.any),
     unUsedCouponParticipate: PropTypes.objectOf(PropTypes.any),

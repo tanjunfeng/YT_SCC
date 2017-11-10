@@ -3,7 +3,7 @@
  * @Description: 优惠券列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-26 19:54:10
+ * @Last Modified time: 2017-11-01 17:02:38
  */
 /**
  * @file columns.js
@@ -341,4 +341,56 @@ const unUsedParticipateList = [{
     render: timestamp => Util.getTime(timestamp)
 }];
 
-export { couponList, couponsDetail, usedParticipateList, unUsedParticipateList };
+const invalidRecordList = [{
+    title: '所属子公司',
+    dataIndex: 'branchCompanyName',
+    key: 'branchCompanyName'
+}, {
+    title: '加盟商编号',
+    dataIndex: 'franchiseeId',
+    key: 'franchiseeId'
+}, {
+    title: '加盟商名称',
+    dataIndex: 'franchinessController',
+    key: 'franchinessController'
+}, {
+    title: '门店编号',
+    dataIndex: 'storeId',
+    key: 'storeId'
+}, {
+    title: '门店名称',
+    dataIndex: 'storeName',
+    key: 'storeName'
+}, {
+    title: '券ID',
+    dataIndex: 'promoId',
+    key: 'promoId'
+}, {
+    title: '领取时间',
+    dataIndex: 'activityDate',
+    key: 'activityDate',
+    render: timestamp => Util.getTime(timestamp)
+}, {
+    title: '状态',
+    dataIndex: 'state',
+    key: 'state',
+    render: (text) => {
+        switch (text) {
+            case 'active':
+                return '已领取';
+            case 'used':
+                return '已使用';
+            case 'canceled':
+                return '已作废)';
+            default:
+                return text;
+        }
+    }
+}, {
+    title: '作废时间',
+    dataIndex: 'modifyTime',
+    key: 'modifyTime',
+    render: timestamp => Util.getTime(timestamp)
+}];
+
+export { couponList, couponsDetail, usedParticipateList, unUsedParticipateList, invalidRecordList };
