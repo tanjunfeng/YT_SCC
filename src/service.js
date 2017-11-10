@@ -876,4 +876,4 @@ export const insertDirectOrder = params => http.post('/directStore/directCommitO
 export const batchCheckStorage = params => http.post('/directStore/validateDirectOrder', params);
 
 // 查询退货单审批流程
-export const queryProcessDefinitions = params => http.post('/pmPurchaseRefund/queryProcessDefinitions', params);
+export const queryProcessDefinitions = params => http.get('/pmPurchaseRefund/queryProcessDefinitions', params);
