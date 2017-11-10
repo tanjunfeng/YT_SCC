@@ -68,6 +68,11 @@ class ReleaseCouponModal extends PureComponent {
         this.props.onChange(index, quantity);
     }
 
+    /**
+     * 剩余优惠券数量，优惠券总数减去已发放数量
+     */
+    getLeftQuantity = record => (record.totalQuantity - record.grantQty)
+
     param = {
         pageNum: 1,
         pageSize: PAGE_SIZE,
@@ -110,11 +115,6 @@ class ReleaseCouponModal extends PureComponent {
             Object.assign(this.param, { pageNum, pageSize });
         });
     }
-
-    /**
-     * 剩余优惠券数量，优惠券总数减去已发放数量
-     */
-    getLeftQuantity = record => (record.totalQuantity - record.grantQty)
 
     renderQuantity = (text, record) => (
         <EditableCell
