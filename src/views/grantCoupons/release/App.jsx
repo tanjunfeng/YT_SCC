@@ -76,6 +76,7 @@ class ReleaseCouponModal extends PureComponent {
     }
 
     query() {
+        // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/coupon/queryAliveCouponsList
         this.props.queryAliveCouponsList(this.param).then((data) => {
             const { pageNum, pageSize } = data.data;
             Object.assign(this.param, { pageNum, pageSize });

@@ -71,12 +71,12 @@ const releaseCouponsColumns = [{
         return category.categoryName
     }
 }, {
-    title: '使用区域',
+    title: '范围',
     dataIndex: 'companiesPoList',
     key: 'companiesPoList',
     render: list => {
         if (!list || list.length === 0) {
-            return '全部区域';
+            return '全国';
         }
         const areas = list.map(company => company.companyName).join(',');
         return (
