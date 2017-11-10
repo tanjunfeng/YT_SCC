@@ -1,0 +1,8 @@
+{
+    "timestamp": 1509520114492,
+    "code": 500,
+    "message": "ID为J242的优惠券库存不足",
+    "exception": null,
+    "data": {},
+    "success": false
+  }
