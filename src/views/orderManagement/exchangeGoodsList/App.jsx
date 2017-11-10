@@ -1,8 +1,9 @@
-/**
- * @file App.jsx
- * @author liujinyu
- *
- * 销售管理 - 退货单列表
+/*
+ * @Author: tanjf
+ * @Description: 销售换货列表
+ * @CreateDate: 2017-11-10 11:22:13
+ * @Last Modified by: tanjf
+ * @Last Modified time: 2017-11-10 11:22:13
  */
 
 import React, { PureComponent } from 'react';
