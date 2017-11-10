@@ -27,7 +27,8 @@ import EditableCell from './editableCell';
 
 class ReleaseCouponModal extends PureComponent {
     state = {
-        promoIds: []
+        promoIds: [],
+        coupons: []
     };
 
     componentWillReceiveProps(nextProps) {
@@ -105,14 +106,23 @@ class ReleaseCouponModal extends PureComponent {
     }
 
     handleCancel = () => {
-        this.props.onReleaseCouponModalCancel(this.state.promoIds);
+        this.props.onReleaseCouponModalCancel();
     }
 
     query = () => {
         // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/coupon/queryAliveCouponsList
-        this.props.queryAliveCouponsList(this.param).then((data) => {
-            const { pageNum, pageSize } = data.data;
+        this.props.queryAliveCouponsList(this.param).then((res) => {
+            const { pageNum, pageSize, data } = res.data;
             Object.assign(this.param, { pageNum, pageSize });
+            // 当查询到优惠券列表时，组装编号和数量
+            const coupons = [];
+            data.forEach(item => {
+                coupons.push({
+                    [item.id]: 1
+                });
+            });
+            // 初始化回传参数
+            this.setState({ coupons });
         });
     }
 

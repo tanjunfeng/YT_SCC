@@ -21,7 +21,7 @@ class SearchForm extends PureComponent {
         this.state = {
             branchCompanyId: '',
             isReleaseCouponModalVisible: false,
-            grantMethod: 0
+            grantMethod: 0 // 发券策略
         }
         this.getStatus = this.getStatus.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
