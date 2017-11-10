@@ -61,9 +61,15 @@
                     "menuList": []
                 },
                 {
-                    "authorityId": 332,
+                    "authorityId": 362,
                     "authorityCode": "ddhhdlb",
                     "displayName": "换货单列表",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 333,
+                    "authorityCode": "returnGoodsList",
+                    "displayName": "退货单列表",
                     "menuList": []
                 },
                 {
@@ -194,18 +200,18 @@
             ]
         },
         {
-            "authorityId": 290,
+            "authorityId": 363,
             "authorityCode": "dbsx",
             "displayName": "待办事项",
             "menuList": [
                 {
-                    "authorityId": 291,
+                    "authorityId": 364,
                     "authorityCode": "cgdsplb",
                     "displayName": "采购单审批列表",
                     "menuList": []
                 },
                 {
-                    "authorityId": 292,
+                    "authorityId": 365,
                     "authorityCode": "thsplb",
                     "displayName": "退货审批列表",
                     "menuList": []

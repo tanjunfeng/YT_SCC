@@ -13,7 +13,7 @@ import { withRouter } from 'react-router';
 import moment from 'moment';
 import {
     Table, Form, Select, Icon, Modal, Row,
-    Col, Button, Input
+    Col, Button, Input, message
 } from 'antd';
 import { returnGoodsDetailColumns as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
@@ -30,13 +30,14 @@ const FormItem = Form.Item;
 }), dispatch => bindActionCreators({
     // 请求详情数据
     returnGoodsDetail,
+    returnDescriptionSave,
     // 清空详情数据
     clearData: returnGoodsDetailClearData
 }, dispatch))
 
 class ExchangeGoodsDetail extends PureComponent {
     state = {
-        id: ''
+        id: '',
     }
 
     componentDidMount() {
@@ -68,11 +69,13 @@ class ExchangeGoodsDetail extends PureComponent {
             returnId: this.state.id,
             operateType: type
         })
-            .then(res => {
-                if (res.success) {
-                    this.goBack()
-                }
-            })
+        .then(res => {
+            if (res.success) {
+                this.goBack()
+                message.success(res.success)
+            }
+        }).catch(() => {
+        })
     )
 
     // 确认、取消模态框弹出
@@ -120,14 +123,14 @@ class ExchangeGoodsDetail extends PureComponent {
             this.showConfirmSave()
         } else {
             // 提交数据
-            returnDescriptionSave({
+            this.props.returnDescriptionSave({
                 returnId: this.state.id,
                 returnReasonType,
                 returnReason,
                 description
             }).then(res => {
                 if (res.success) {
-                    this.showConfirmSaveSuccess()
+                    this.showConfirmSaveSuccess();
                 }
             })
         }
@@ -138,7 +141,6 @@ class ExchangeGoodsDetail extends PureComponent {
         const { getFieldDecorator } = this.props.form
         const { TextArea } = Input
         const data = this.props.data
-        const { type } = this.props.match.params
         return (
             <div className="returngoods-detail">
                 <div className="basic-box">
@@ -282,6 +284,7 @@ class ExchangeGoodsDetail extends PureComponent {
 ExchangeGoodsDetail.propTypes = {
     returnGoodsDetail: PropTypes.func,
     clearData: PropTypes.func,
+    returnDescriptionSave: PropTypes.func,
     getFieldDecorator: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any),
