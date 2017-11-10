@@ -53,6 +53,9 @@ class SearchForm extends PureComponent {
         if (this.props.page !== nextProps.page) {
             this.requestSearch(nextProps.page)
         }
+        if (this.props.upDate !== nextProps.upDate) {
+            this.requestSearch()
+        }
         if (this.props.refresh !== nextProps.refresh) {
             this.requestSearch()
         }
@@ -106,7 +109,8 @@ class SearchForm extends PureComponent {
     // 搜索
     handleSearch = (e) => {
         e.preventDefault();
-        this.requestSearch()
+        this.requestSearch();
+        this.props.onSearch(this.requestSearch());
     }
 
 
@@ -295,6 +299,7 @@ class SearchForm extends PureComponent {
 
 SearchForm.propTypes = {
     returnGoodsListFormData: PropTypes.func,
+    onSearch: PropTypes.func,
     returnGoodsListFormDataClear: PropTypes.func,
     returnGoodsList: PropTypes.func,
     pubFetchValueList: PropTypes.func,
@@ -303,6 +308,7 @@ SearchForm.propTypes = {
     branchCompany: PropTypes.objectOf(PropTypes.any),
     page: PropTypes.number,
     refresh: PropTypes.bool,
+    upDate: PropTypes.bool,
     franchiseeIdName: PropTypes.string,
     history: PropTypes.objectOf(PropTypes.any),
 };
