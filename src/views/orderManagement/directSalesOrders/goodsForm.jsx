@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import { AddingGoodsByStore } from '../../../container/search';
 import { queryGoodsInfo } from '../../../actions/procurement';
 import Utils from '../../../util/util';
+import { getRow } from './helper';
 import Excel from './excel';
 
 const FormItem = Form.Item;
@@ -25,50 +26,6 @@ const FormItem = Form.Item;
 }, dispatch))
 
 class GoodsForm extends PureComponent {
-    /**
-     * 组装表格显示字段
-     */
-    getRow = (goodsInfo) => {
-        const {
-            productId,
-            productCode,
-            internationalCodes,
-            productName,
-            unitExplanation,
-            salePrice,
-            packingSpecifications,
-            available, // 是否在本区域销售
-            minNumber, // 起订数量
-            minUnit, // 最小销售单位
-            fullCaseUnit, // 整箱单位
-            salesInsideNumber, // 销售内装数
-            sellFullCase // 是否整箱销售，１:按整箱销售，0:不按整箱销售
-        } = goodsInfo;
-        const record = {
-            productId,
-            productCode,
-            productName,
-            available,
-            salePrice,
-            sellFullCase,
-            salesInsideNumber,
-            minNumber
-        };
-        const quantity = sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber;
-        // 起订数量显示单位
-        const minNumberSpecifications = sellFullCase === 0 ? `${minNumber}${fullCaseUnit || ''}` : `${minNumber}${minUnit || '-'}`;
-        Object.assign(record, {
-            productSpecifications: `${packingSpecifications || '-'} / ${unitExplanation || '-'}`,
-            packingSpecifications: sellFullCase === 0 ? '-' : `${salesInsideNumber}${fullCaseUnit || ''} / ${minUnit || '-'}`,
-            internationalCode: internationalCodes[0].internationalCode,
-            quantity,
-            minNumberSpecifications,
-            enough: true, // 是否库存充足，默认充足
-            isMultiple: true // 是否是销售内装数的整数倍，默认是整数倍
-        });
-        return record;
-    }
-
     handleGoodsChange = ({ record }) => {
         const { branchCompanyId, deliveryWarehouseCode } = this.props.value;
         if (record === undefined || branchCompanyId === '') {
@@ -79,7 +36,7 @@ class GoodsForm extends PureComponent {
         this.props.queryGoodsInfo(Utils.removeInvalid({
             productId, branchCompanyId, deliveryWarehouseCode, quantity: 0
         })).then(res => {
-            this.props.onChange(this.getRow(res.data));
+            this.props.onChange(getRow(res.data));
         });
     }
 
@@ -88,13 +45,13 @@ class GoodsForm extends PureComponent {
      *
      * 将无效的商品和不在销售区域的商品筛选出来分别存入 importList 和 deletedGoodsList
      */
-    handleImport = (list) => {
+    handleImport = list => {
         const importList = [];
         const deletedGoodsList = [];
         if (list.length > 0) {
             list.forEach(item => {
                 if (item.uploadFailedVos === null) {
-                    const goods = this.getRow(item);
+                    const goods = getRow(item);
                     // 数量从导入返回数据重新复制
                     Object.assign(goods, {
                         quantity: item.quantity
