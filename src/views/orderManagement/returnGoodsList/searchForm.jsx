@@ -89,20 +89,20 @@ class SearchForm extends PureComponent {
 
     // 搜索方法
     requestSearch = (nextPage) => {
-        const { returnGoodsListFormData, returnGoodsList, page } = this.props;
+        const { page } = this.props;
         const seachParams = this.getSearchParams();
         const data = {
             data: {
                 pageSize: PAGE_SIZE,
-                pageNum: nextPage ? nextPage : page,
+                pageNum: nextPage || page,
                 franchiseeId: this.state.franchiseeId,
                 ...seachParams
             },
             franchiseeIdName: this.state.franchiseeIdName,
             branchCompany: this.branchCompany
         }
-        returnGoodsListFormData(data)
-        returnGoodsList(Utils.removeInvalid(data.data))
+        this.props.returnGoodsListFormData(data)
+        this.props.returnGoodsList(Utils.removeInvalid(data.data))
     }
 
 
@@ -110,18 +110,16 @@ class SearchForm extends PureComponent {
     handleSearch = (e) => {
         e.preventDefault();
         this.requestSearch();
-        this.props.onSearch(this.requestSearch());
     }
 
 
     // 重置
     handleReset = () => {
-        const { returnGoodsListFormDataClear } = this.props;
         this.handleJoiningClear();
         this.joiningSearchMind.reset();
         this.props.form.resetFields();
         this.branchCompany = { id: '', name: '' };
-        returnGoodsListFormDataClear()
+        this.props.returnGoodsListFormDataClear()
     }
 
     // 加盟商-值清单
@@ -138,11 +136,6 @@ class SearchForm extends PureComponent {
         this.setState({
             franchiseeId: ''
         });
-    }
-
-    handleCreate = () => {
-        const { history } = this.props;
-        history.push('/returnGoodsList/modify');
     }
 
     render() {
@@ -286,7 +279,7 @@ class SearchForm extends PureComponent {
                     </Row>
                     <Row gutter={40}>
                         <Col span={24} style={{ textAlign: 'right' }}>
-                            <Button type="primary" htmlType="submit">搜索</Button>
+                            <Button type="primary" htmlType="submit" onClick={this.handleSearch}>搜索</Button>
                             <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>重置</Button>
                         </Col>
                     </Row>
@@ -298,7 +291,6 @@ class SearchForm extends PureComponent {
 
 SearchForm.propTypes = {
     returnGoodsListFormData: PropTypes.func,
-    onSearch: PropTypes.func,
     returnGoodsListFormDataClear: PropTypes.func,
     returnGoodsList: PropTypes.func,
     pubFetchValueList: PropTypes.func,
@@ -309,7 +301,6 @@ SearchForm.propTypes = {
     refresh: PropTypes.bool,
     upDate: PropTypes.bool,
     franchiseeIdName: PropTypes.string,
-    history: PropTypes.objectOf(PropTypes.any),
 };
 
 export default withRouter(Form.create()(SearchForm));

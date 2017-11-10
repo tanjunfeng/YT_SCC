@@ -74,7 +74,7 @@ class ExchangeGoodsDetail extends PureComponent {
         .then(res => {
             if (res.success) {
                 this.goBack()
-                message.success(res.success)
+                message.success(res.message)
             }
         }).catch(() => {
         })
