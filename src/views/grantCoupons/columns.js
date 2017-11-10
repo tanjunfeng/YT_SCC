@@ -76,12 +76,12 @@ const releaseCouponsColumns = [{
     key: 'totalQuantity'
 }, {
     title: '剩余数量',
-    dataIndex: 'totalQuantity1',
-    key: 'totalQuantity1'
+    dataIndex: 'left',
+    key: 'left'
 }, {
     title: '发放数量',
-    dataIndex: 'totalQuantity2',
-    key: 'totalQuantity2'
+    dataIndex: 'quantity',
+    key: 'quantity'
 }, {
     title: '已使用',
     dataIndex: 'usedQty',
@@ -117,7 +117,8 @@ const releaseCouponsColumns = [{
 }, {
     title: '备注',
     dataIndex: 'note',
-    key: 'note'
+    key: 'note',
+    render: text => (text === null ? '无' : text)
 }];
 
 const grantCouponsDetail = [{

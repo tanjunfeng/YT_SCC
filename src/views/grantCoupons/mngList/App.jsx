@@ -29,20 +29,11 @@ import { grantCouponsColumns as columns } from '../columns';
 }, dispatch))
 
 class GrantCouponList extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            storeIds: [],
-            current: 1
-        };
-        this.param = {};
-        this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
-        this.handlePromotionReset = this.handlePromotionReset.bind(this);
-        this.handleReleaseAll = this.handleReleaseAll.bind(this);
-        this.handleReleaseChecked = this.handleReleaseChecked.bind(this);
-        this.onSelectChange = this.onSelectChange.bind(this);
-        this.query = this.query.bind(this);
-    }
+    state = {
+        storeIds: [],
+        current: 1
+    };
+
 
     componentDidMount() {
         this.handlePromotionReset();
@@ -67,18 +58,20 @@ class GrantCouponList extends PureComponent {
     /**
      * table复选框
      */
-    onSelectChange(storeIds) {
+    onSelectChange = (storeIds) => {
         this.setState({ storeIds });
     }
 
-    query() {
+    param = {};
+
+    query = () => {
         this.props.queryFranchiseeList(this.param).then((res) => {
             const { pageNum, pageSize } = res.data;
             Object.assign(this.param, { pageNum, pageSize });
         });
     }
 
-    handlePromotionSearch(param) {
+    handlePromotionSearch = (param) => {
         this.handlePromotionReset();
         Object.assign(this.param, {
             ...param
@@ -87,7 +80,7 @@ class GrantCouponList extends PureComponent {
         this.query();
     }
 
-    handlePromotionReset() {
+    handlePromotionReset = () => {
         // 重置检索条件
         this.param = {
             pageNum: 1,
@@ -96,7 +89,7 @@ class GrantCouponList extends PureComponent {
         this.setState({ storeIds: [] });
     }
 
-    handleReleaseAll(promoIds) {
+    handleReleaseAll = (promoIds) => {
         this.props.grantCoupon({
             promoIds,
             storeIds: this.props.franchiseeList.data.map(franchisee => franchisee.storeId)
@@ -105,7 +98,7 @@ class GrantCouponList extends PureComponent {
         });
     }
 
-    handleReleaseChecked(promoIds) {
+    handleReleaseChecked = (promoIds) => {
         this.props.grantCoupon({
             promoIds,
             storeIds: this.state.storeIds
