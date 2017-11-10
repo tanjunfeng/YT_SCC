@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { pubFetchValueList } from '../../actions/pub';
 import SearchMind from '../../components/searchMind';
+import Utils from '../../util/util';
 
 @connect(() => ({}), dispatch => bindActionCreators({
     pubFetchValueList
@@ -38,10 +39,11 @@ class DirectStores extends PureComponent {
 
     query = (params) => (
         // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/getAllStores
-        this.props.pubFetchValueList({
+        this.props.pubFetchValueList(Utils.removeInvalid({
             pageNo: params.pagination.current || 1,
-            pageSize: params.pagination.pageSize
-        }, 'queryDirectStores')
+            pageSize: params.pagination.pageSize,
+            storeId: params.value
+        }), 'queryDirectStores')
     )
 
     render() {

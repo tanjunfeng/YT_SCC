@@ -48,8 +48,8 @@ class StoresForm extends PureComponent {
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
-        const directInfo = this.props.directInfo || {};
+        const { form, directInfo = {} } = this.props;
+        const { getFieldDecorator } = form;
         return (
             <div className="direct-sales-orders-form">
                 <Form layout="inline">
