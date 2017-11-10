@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-04 10:25:28
+ * @Last Modified time: 2017-11-10 20:17:36
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -657,40 +657,44 @@ class ReturnManagementList extends PureComponent {
                                 </FormItem>
                             </Col>
                             {/* 供应商地点 */}
-                            <Col span={8}>
-                                <FormItem className="">
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">供应商地点</span>
+                            <Col className="gutter-row" span={8}>
+                                <FormItem>
+                                    <span className="sc-form-item-label">供应商地点</span>
+                                    <span className={`${prefixCls}-data-pic`}>
                                         <SearchMind
-                                            rowKey="providerNo"
-                                            compKey="search-mind-supply-address"
-                                            ref={ref => {
-                                                this.supplyAddressSearchMind = ref
-                                            }}
-                                            fetch={(params) => this.props.pubFetchValueList({
-                                                orgId: this.props.employeeCompanyId,
-                                                pId: this.state.spId,
+                                            style={{ zIndex: 9 }}
+                                            compKey="providerNo"
+                                            ref={ref => { this.joiningAdressMind = ref }}
+                                            fetch={(params) =>
+                                            this.props.pubFetchValueList(Util.removeInvalid({
                                                 condition: params.value,
-                                                pageNum: params.pagination.current || 1,
-                                                pageSize: params.pagination.pageSize
-                                            }, 'supplierAdrSearchBox')}
-                                            onChoosed={this.handleSupplierAddressChoose}
-                                            onClear={this.handleSupplierAddressClear}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>{row.providerNo} - {row.providerName}</div>
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
+                                            }), 'supplierAdrSearchBox').then((res) => {
+                                                const dataArr = res.data.data || [];
+                                                if (!dataArr || dataArr.length === 0) {
+                                                    message.warning('没有可用的数据');
+                                                }
+                                                return res;
+                                            })}
+                                            onChoosed={this.handleAdressChoose}
+                                            onClear={this.handleAdressClear}
+                                            renderChoosedInputRaw={(res) => (
+                                                <div>{res.providerNo} - {res.providerName}</div>
                                             )}
                                             pageSize={6}
-                                            columns={[{
-                                                title: '供应商地点编码',
-                                                dataIndex: 'providerNo',
-                                                width: 98
-                                            }, {
-                                                title: '供应商地点名称',
-                                                dataIndex: 'providerName'
-                                            }
+                                            columns={[
+                                                {
+                                                    title: '供应商地点编码',
+                                                    dataIndex: 'providerNo',
+                                                    width: 98
+                                                }, {
+                                                    title: '供应商地点名称',
+                                                    dataIndex: 'providerName'
+                                                }
                                             ]}
                                         />
-                                    </div>
+                                    </span>
                                 </FormItem>
                             </Col>
                             <Col span={8}>

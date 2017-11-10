@@ -52,6 +52,11 @@ class ReturnGoodsList extends PureComponent {
             render: (text, record, index) => index + 1
         },
         {
+            title: '退换货类型',
+            dataIndex: 'returnRequestType',
+            key: 'returnRequestType'
+        },
+        {
             title: '退货单号',
             dataIndex: 'id',
             key: 'id'
@@ -202,6 +207,7 @@ class ReturnGoodsList extends PureComponent {
                             onCancel={this.handleCancel}
                             okText="确认"
                             cancelText="取消"
+                            visible={this.setState.upDate}
                         >
                             <a>退款</a>
                         </Popconfirm>
