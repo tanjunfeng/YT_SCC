@@ -3,7 +3,7 @@
  * @Description: 销售退货详情
  * @CreateDate: 2017-11-10 11:22:28
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-10 11:22:28
+ * @Last Modified time: 2017-11-10 14:14:02
  */
 
 import React, { PureComponent } from 'react';
@@ -16,6 +16,7 @@ import {
     Table, Form, Select, Icon, Modal, Row,
     Col, Button, Input, message
 } from 'antd';
+import Utils from '../../../util/util';
 import { returnGoodsDetailColumns as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
 import { returnGoodsDetail, returnGoodsDetailClearData,
@@ -124,12 +125,12 @@ class ExchangeGoodsDetail extends PureComponent {
             this.showConfirmSave()
         } else {
             // 提交数据
-            this.props.returnDescriptionSave({
+            this.props.returnDescriptionSave(Utils.removeInvalid({
                 returnId: this.state.id,
                 returnReasonType,
                 returnReason,
                 description
-            }).then(res => {
+            })).then(res => {
                 if (res.success) {
                     this.showConfirmSaveSuccess();
                 }
@@ -142,6 +143,7 @@ class ExchangeGoodsDetail extends PureComponent {
         const { getFieldDecorator } = this.props.form
         const { TextArea } = Input
         const data = this.props.data
+        const { type } = this.props.match.params;
         return (
             <div className="returngoods-detail">
                 <div className="basic-box">
@@ -250,7 +252,7 @@ class ExchangeGoodsDetail extends PureComponent {
                     </div>
                     <div className="basic-box">
                         <div className="header">
-                            <Icon type="solution" className="header-icon" />备注
+                            <Icon type="solution" className="header-icon" />备注(必填)
                     </div>
                         <div className="body body-form">
                             <Row>

@@ -15,6 +15,7 @@ import {
     Table, Form, Select, Icon, Modal, Row,
     Col, Button, Input
 } from 'antd';
+import Utils from '../../../util/util';
 import { returnGoodsDetailColumns as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
 import { returnGoodsDetail, returnGoodsDetailClearData, returnGoodsOperation, returnGoodsDetailSave } from '../../../actions';
@@ -120,12 +121,12 @@ class ReturnGoodsDetails extends PureComponent {
             this.showConfirmSave()
         } else {
             // 提交数据
-            this.props.returnGoodsDetailSave({
+            this.props.returnGoodsDetailSave(Utils.removeInvalid({
                 returnId: this.state.id,
                 returnReasonType,
                 returnReason,
                 description
-            })
+            }))
                 .then(res => {
                     if (res.success) {
                         this.showConfirmSaveSuccess()
@@ -139,7 +140,7 @@ class ReturnGoodsDetails extends PureComponent {
         const { getFieldDecorator } = this.props.form
         const { TextArea } = Input
         const data = this.props.data
-        const { type } = this.props.match.params
+        const { type } = this.props.match.params;
         return (
             <div className="returngoods-detail">
                 <div className="basic-box">
@@ -248,14 +249,14 @@ class ReturnGoodsDetails extends PureComponent {
                     </div>
                     <div className="basic-box">
                         <div className="header">
-                            <Icon type="solution" className="header-icon" />备注
+                            <Icon type="solution" className="header-icon" />备注(必填)
                     </div>
                         <div className="body body-form">
                             <Row>
                                 <Col span={24}>
                                     <FormItem>
                                         {getFieldDecorator('description', {
-                                            initialValue: data.description
+                                            initialValue: data.description,
                                         })(
                                             <TextArea className="input-des" autosize={{ minRows: 4, maxRows: 4 }} disabled={type === '2' ? false : true} size="default" />
                                             )}
