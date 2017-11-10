@@ -111,16 +111,21 @@ class ReleaseCouponModal extends PureComponent {
         });
     }
 
+    /**
+     * 剩余优惠券数量，优惠券总数减去已发放数量
+     */
+    getLeftQuantity = record => (record.totalQuantity - record.grantQty)
+
     renderQuantity = (text, record) => (
         <EditableCell
             value={text}
-            max={record.totalQuantity - record.grantQty}
+            max={this.getLeftQuantity(record)}
             onChange={this.onCellChange(record.id)}
         />)
 
     renderColumns = () => {
         // 剩余数量计算
-        columns[5].render = (text, record) => (record.totalQuantity - record.grantQty);
+        columns[5].render = (text, record) => this.getLeftQuantity(record);
         columns[6].render = this.renderQuantity;
     }
 
