@@ -64,7 +64,6 @@ const Step = Steps.Step;
     poRcvMngList: state.toJS().procurement.poRcvMngList,
     returnMngList: state.toJS().procurement.returnMngList,
     getRefundNumebr: state.toJS().procurement.getRefundNumebr,
-    employeeCompanyId: state.toJS().user.data.user.employeeCompanyId,
     processDefinitions: state.toJS().procurement.processDefinitions
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
@@ -660,13 +659,13 @@ class ReturnManagementList extends PureComponent {
                             <Col className="gutter-row" span={8}>
                                 <FormItem>
                                     <span className="sc-form-item-label">供应商地点</span>
-                                    <span className={`${prefixCls}-data-pic`}>
+                                    <span className="search-box-data-pic">
                                         <SearchMind
                                             style={{ zIndex: 9 }}
                                             compKey="providerNo"
                                             ref={ref => { this.joiningAdressMind = ref }}
                                             fetch={(params) =>
-                                            this.props.pubFetchValueList(Util.removeInvalid({
+                                            this.props.pubFetchValueList(Utils.removeInvalid({
                                                 condition: params.value,
                                                 pageSize: params.pagination.pageSize,
                                                 pageNum: params.pagination.current || 1
@@ -852,7 +851,6 @@ class ReturnManagementList extends PureComponent {
 }
 
 ReturnManagementList.propTypes = {
-    employeeCompanyId: PropTypes.string,
     fetchReturnMngList: PropTypes.func,
     getRefundNo: PropTypes.func,
     queryProcessDefinitions: PropTypes.func,
