@@ -81,16 +81,16 @@ class SearchForm extends PureComponent {
         this.setState({ isReleaseCouponModalVisible: true, grantMethod: 1 });
     }
 
-    handleSelectOk(promoIds) {
+    handleSelectOk(coupons) {
         this.setState({ isReleaseCouponModalVisible: false });
         switch (this.state.grantMethod) {
             case 0:
                 // 通知查询结果发券
-                this.props.onPromotionReleaseAll(promoIds);
+                this.props.onPromotionReleaseAll(coupons);
                 break;
             case 1:
                 // 通知发券
-                this.props.onPromotionReleasChecked(promoIds);
+                this.props.onPromotionReleasChecked(coupons);
                 break;
             default:
                 break;

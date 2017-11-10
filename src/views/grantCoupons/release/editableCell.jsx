@@ -10,14 +10,14 @@ import PropTypes from 'prop-types';
 class EditableCell extends PureComponent {
     handleChange = (value) => {
         let v = value;
-        if (isNaN(v) || v < 0) {
-            v = 0;
+        if (isNaN(v) || v < 1) {
+            v = 1;
         }
         this.props.onChange(v);
     }
 
     handlePressEnter = (event) => {
-        const value = +(event.target.value) || 0;
+        const value = +(event.target.value) || 1;
         // 回车操作时保存数量
         if (event.keyCode === 13) {
             this.handleChange(value);
@@ -25,11 +25,11 @@ class EditableCell extends PureComponent {
     }
 
     render() {
-        const { max, value } = this.props;
+        const { max } = this.props;
         return (
             <div className="editable-cell">
                 <InputNumber
-                    defaultValue={value}
+                    defaultValue={1}
                     min={1}
                     max={max}
                     onChange={this.handleChange}
@@ -41,7 +41,6 @@ class EditableCell extends PureComponent {
 }
 
 EditableCell.propTypes = {
-    value: PropTypes.number,
     max: PropTypes.number,
     onChange: PropTypes.func
 };

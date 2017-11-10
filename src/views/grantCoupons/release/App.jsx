@@ -28,7 +28,7 @@ import EditableCell from './editableCell';
 class ReleaseCouponModal extends PureComponent {
     state = {
         promoIds: [],
-        coupons: []
+        coupons: {}
     };
 
     componentWillReceiveProps(nextProps) {
@@ -64,9 +64,10 @@ class ReleaseCouponModal extends PureComponent {
     }
 
     onCellChange = id => quantity => {
-        const { data } = this.props.couponsList;
-        const index = data.findIndex(item => item.id === id);
-        this.props.onChange(index, quantity);
+        const coupons = this.state.coupons;
+        Object.assign(coupons, {
+            [id]: quantity
+        });
     }
 
     /**
@@ -101,7 +102,17 @@ class ReleaseCouponModal extends PureComponent {
         if (this.state.promoIds.length === 0) {
             message.error('请选择至少一张优惠券');
         } else {
-            this.props.onReleaseCouponModalOk(this.state.promoIds);
+            const { coupons, promoIds } = this.state;
+            const dist = {};
+            // 过滤掉未选中的优惠券，只回传已选中的券
+            promoIds.forEach(id => {
+                if (coupons[id]) {
+                    Object.assign(dist, {
+                        [id]: coupons[id]
+                    });
+                }
+            });
+            this.props.onReleaseCouponModalOk(dist);
         }
     }
 
@@ -115,9 +126,9 @@ class ReleaseCouponModal extends PureComponent {
             const { pageNum, pageSize, data } = res.data;
             Object.assign(this.param, { pageNum, pageSize });
             // 当查询到优惠券列表时，组装编号和数量
-            const coupons = [];
+            const coupons = {};
             data.forEach(item => {
-                coupons.push({
+                Object.assign(coupons, {
                     [item.id]: 1
                 });
             });
@@ -185,7 +196,6 @@ class ReleaseCouponModal extends PureComponent {
 ReleaseCouponModal.propTypes = {
     visible: PropTypes.bool,
     queryAliveCouponsList: PropTypes.func,
-    onChange: PropTypes.func,
     clearCouponsList: PropTypes.func,
     onReleaseCouponModalOk: PropTypes.func,
     onReleaseCouponModalCancel: PropTypes.func,

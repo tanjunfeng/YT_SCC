@@ -89,26 +89,27 @@ class GrantCouponList extends PureComponent {
         this.setState({ storeIds: [] });
     }
 
-    release = (promoIds, storeIds, msg) => {
+    release = (coupons, storeIds, msg) => {
+        console.log(coupons);
         // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/coupon/grantCoupon
-        this.props.grantCoupon({ promoIds, storeIds }).then(res => {
+        this.props.grantCoupon({ couponParam: coupons, storeIds }).then(res => {
             if (res.code === 200) {
                 message.success(msg);
             }
         });
     }
 
-    handleReleaseAll = (promoIds) => {
+    handleReleaseAll = (coupons) => {
         this.release(
-            promoIds,
+            coupons,
             this.props.franchiseeList.data.map(franchisee => franchisee.storeId),
             '查询结果发券成功'
         );
     }
 
-    handleReleaseChecked = (promoIds) => {
+    handleReleaseChecked = (coupons) => {
         this.release(
-            promoIds,
+            coupons,
             this.state.storeIds,
             '选择加盟商发券成功'
         );
