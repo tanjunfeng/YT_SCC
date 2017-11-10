@@ -89,38 +89,42 @@ class GrantCouponList extends PureComponent {
         this.setState({ storeIds: [] });
     }
 
-    handleReleaseAll = (promoIds) => {
-        this.props.grantCoupon({
-            promoIds,
-            storeIds: this.props.franchiseeList.data.map(franchisee => franchisee.storeId)
-        }).then(() => {
-            message.info('查询结果发券成功');
+    release = (promoIds, storeIds, msg) => {
+        this.props.grantCoupon({ promoIds, storeIds }).then(() => {
+            message.info(msg);
         });
     }
 
-    handleReleaseChecked = (promoIds) => {
-        this.props.grantCoupon({
+    handleReleaseAll = (promoIds) => {
+        this.release(
             promoIds,
-            storeIds: this.state.storeIds
-        }).then(() => {
-            message.info('选择加盟商发券成功');
-        });
+            this.props.franchiseeList.data.map(franchisee => franchisee.storeId),
+            '查询结果发券成功'
+        );
+    }
+
+    handleReleaseChecked = (promoIds) => {
+        this.release(
+            promoIds,
+            this.state.storeIds,
+            '选择加盟商发券成功'
+        );
     }
 
     render() {
         const { data = [], total, pageNum, pageSize } = this.props.franchiseeList;
-        columns[columns.length - 1].render = this.renderOperations;
         const rowSelection = {
             selectedRowKeys: this.state.storeIds,
             onChange: this.onSelectChange
         };
+
         return (
             <div>
                 <SearchForm
+                    isGrantDisabled={this.state.storeIds.length === 0}
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
                     onPromotionReleaseAll={this.handleReleaseAll}
-                    isGrantDisabled={this.state.storeIds.length === 0}
                     onPromotionReleasChecked={this.handleReleaseChecked}
                 />
                 <Table
