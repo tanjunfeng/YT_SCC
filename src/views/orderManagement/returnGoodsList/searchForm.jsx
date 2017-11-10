@@ -280,7 +280,7 @@ class SearchForm extends PureComponent {
                     </Row>
                     <Row gutter={40}>
                         <Col span={24} style={{ textAlign: 'right' }}>
-                            <Button type="primary" htmlType="submit" onClick={this.handleSearch}>搜索</Button>
+                            <Button type="primary" htmlType="submit">搜索</Button>
                             <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>重置</Button>
                         </Col>
                     </Row>
@@ -292,7 +292,6 @@ class SearchForm extends PureComponent {
 
 SearchForm.propTypes = {
     returnGoodsListFormData: PropTypes.func,
-    onSearch: PropTypes.func,
     returnGoodsListFormDataClear: PropTypes.func,
     returnGoodsList: PropTypes.func,
     pubFetchValueList: PropTypes.func,
