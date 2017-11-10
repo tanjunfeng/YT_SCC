@@ -6,7 +6,7 @@ import { withRouter } from 'react-router';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../../util/util';
-import { returnGoodsStatus, goodsReceiptStatus } from '../../../constant/salesManagement';
+import { returnGoodsStatus, goodsReceiptStatus, returnType } from '../../../constant/salesManagement';
 import { returnGoodsList, returnGoodsListFormData, returnGoodsListFormDataClear } from '../../../actions';
 import { pubFetchValueList } from '../../../actions/pub';
 import { PAGE_SIZE } from '../../../constant';
@@ -55,6 +55,7 @@ class SearchForm extends PureComponent {
         }
         if (this.props.upDate !== nextProps.upDate) {
             this.requestSearch()
+            this.handleSearch()
         }
         if (this.props.refresh !== nextProps.refresh) {
             this.requestSearch()
@@ -69,7 +70,8 @@ class SearchForm extends PureComponent {
             orderId,
             shippingState,
             createTime,
-            state
+            state,
+            returnRequestType
             } = this.props.form.getFieldsValue();
         const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
         const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
@@ -81,7 +83,8 @@ class SearchForm extends PureComponent {
             shippingState,
             state,
             startCreateTime,
-            endCreateTime
+            endCreateTime,
+            returnRequestType
         };
 
         return Utils.removeInvalid(searchParams);
@@ -150,6 +153,23 @@ class SearchForm extends PureComponent {
                 >
                     <Row gutter={40}>
                         <Col span={8}>
+                            <FormItem label="退货单类型">
+                                {getFieldDecorator('returnRequestType', {
+                                    initialValue: data.state ? data.state : ''
+                                })(
+                                    <Select style={{ width: '200px' }} size="default">
+                                        {
+                                            returnType.data.map((item) => (
+                                                <Select.Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Select.Option>
+                                            ))
+                                        }
+                                    </Select>
+                                    )}
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
                             <FormItem label="原订单号">
                                 {getFieldDecorator('orderId', {
                                     initialValue: data.orderId
@@ -168,6 +188,8 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </FormItem>
                         </Col>
+                    </Row>
+                    <Row gutter={40}>
                         <Col span={8} className="franchisee-item">
                             <FormItem>
                                 <div>
@@ -207,8 +229,6 @@ class SearchForm extends PureComponent {
                                 </div>
                             </FormItem>
                         </Col>
-                    </Row>
-                    <Row gutter={40}>
                         <Col span={8}>
                             <FormItem label="退货单号">
                                 {getFieldDecorator('id', {
@@ -235,6 +255,8 @@ class SearchForm extends PureComponent {
                                     )}
                             </FormItem>
                         </Col>
+                    </Row>
+                    <Row gutter={40}>
                         <Col span={8}>
                             <FormItem label="收货状态">
                                 {getFieldDecorator('shippingState', {
@@ -252,8 +274,6 @@ class SearchForm extends PureComponent {
                                     )}
                             </FormItem>
                         </Col>
-                    </Row>
-                    <Row gutter={40}>
                         <Col span={8}>
                             <FormItem >
                                 <div className="row middle">

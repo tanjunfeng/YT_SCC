@@ -158,7 +158,9 @@ class ReturnGoodsDetails extends PureComponent {
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">换货单状态：</span>{data.stateDetail}</div></Col>
                         </Row>
                         <Row>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">收货状态: </span>{data.shipping_state}</div></Col>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">商品状态：</span>{data.productStateDetail}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">退货状态：</span>{data.paymentStateDetail}</div></Col>
                         </Row>
                     </div>
                 </div>
