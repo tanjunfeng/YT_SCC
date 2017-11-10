@@ -17,7 +17,9 @@ import {
     Icon,
     Menu,
     Dropdown,
-    Modal
+    Modal,
+    message,
+    Popconfirm
 } from 'antd';
 import moment from 'moment';
 import SearchForm from './searchForm';
@@ -38,7 +40,8 @@ class ReturnGoodsList extends PureComponent {
         super(props)
         this.state = {
             page: props.formData.pageNum || 1,
-            refresh: false
+            refresh: false,
+            upDate: false
         }
 
         // 退货单列表
@@ -69,7 +72,8 @@ class ReturnGoodsList extends PureComponent {
             key: 'orderId',
             render: (text, record) => (<a onClick={() => {
                 this.props.history.push(`/orderList/orderDetails/${record.orderId}`);
-            }}>{text}</a>
+            }}
+            >{text}</a>
             )
         },
         {
@@ -152,8 +156,17 @@ class ReturnGoodsList extends PureComponent {
         });
     }
 
-    handleRefund = (id) => {
-        this.props.insertRefund({ returnId: id });
+    handleConfirm =(record) => {
+        message.success('已发起退款');
+        this.props.insertRefund({recordId: record.record.id}).then(() => {
+            this.setState({
+                upDate: !this.state.upDate
+            })
+        })
+    }
+
+    handleCancel = () => {
+        message.error('已取消发送');
     }
 
     // table列表详情操作
@@ -181,9 +194,17 @@ class ReturnGoodsList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    // orderType === 'ZCXS' && state === '已完成' &&
+                    orderType === 'ZCXS' && state === '已完成' &&
                     <Menu.Item key="refund">
-                        <span onClick={() => this.handleRefund(record.id, 3)}>退款</span>
+                        <Popconfirm
+                            title="确认发起退款?"
+                            onConfirm={() => this.handleConfirm({record})}
+                            onCancel={this.handleCancel}
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <a>退款</a>
+                        </Popconfirm>
                     </Menu.Item>
                 }
             </Menu>
@@ -207,6 +228,7 @@ class ReturnGoodsList extends PureComponent {
                 <SearchForm
                     page={this.state.page}
                     refresh={this.state.refresh}
+                    upDate={this.state.upDate}
                 />
                 {
                     listData ?
