@@ -286,7 +286,6 @@ class SearchForm extends PureComponent {
                     </Row>
                     <Row gutter={40}>
                         <Col span={24} style={{ textAlign: 'right' }}>
-                            <Button style={{ marginRight: 8 }} onClick={this.handleCreate}>新建</Button>
                             <Button type="primary" htmlType="submit">搜索</Button>
                             <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>重置</Button>
                         </Col>
