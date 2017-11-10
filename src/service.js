@@ -610,6 +610,8 @@ export const queryPurchaseOrderProducts = (params) => http.get('/pmPurchaseRefun
 export const deletePurchaseList = (params) => http.get('/pmPurchaseOrder/batchDeletePmPurchaseOrderByIds', params);
 // 查询采购单打印列表
 export const queryPoPrintList = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderListInfo', params);
+// 此接口用于根据采购单号、逻辑仓编号、商品code、品牌id添加退货商品
+export const addRefundProducts = (params) => http.get('/pmPurchaseRefund/addRefundProducts', params);
 // 根据采购订单id下载PDF文件
 export const downloadPDF = 'pmPurchaseOrder/exportPdf';
 // 采购单列表批量下载PDF ZIP压缩文件
@@ -792,6 +794,7 @@ export const supplierAdrSearchBox = (params) => http.get('/supplier/supplierAdrS
 
 // 品牌值清单
 export const queryPurchaseOrderBrands = (params) => http.get('/pmPurchaseRefund/queryPurchaseOrderBrands', params);
+
 
 // 根据条件查询销售价格区间列表
 export const findStepPriceInfo = (params) => http.get('/prodSell/findPriceInfo', params);

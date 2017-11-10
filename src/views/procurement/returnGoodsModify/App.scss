@@ -1,0 +1,61 @@
+.return-goods {
+    &-top-modify {
+        border: 1px solid #e1e6ec;
+        padding: 20px 10px;
+        margin: 10px 0;
+        .ant-row {
+            margin-bottom: 4px;
+        }
+        &-item-left {
+            margin-right: 6px;
+            vertical-align: middle;
+            min-width: 54px;
+            text-align: right;
+        }
+
+        &-item-right {
+            vertical-align: middle;
+            .ywc-smind {
+                max-width: 190px;
+            }
+        }
+
+        &-item-left, &-item-right {
+            display: inline-block;
+            line-height: 22px;
+        }
+    }
+
+    &-choose {
+        margin-bottom: 10px;
+        margin-top: 20px;
+        padding-left: 10px;
+        &-left {
+            margin-right: 4px;
+            vertical-align: middle;
+        }
+        &-right {
+            vertical-align: middle;
+        }
+        &-left, &-right {
+            display: inline-block;
+            line-height: 20px;
+        }
+    }
+
+    &-table {
+        border: 1px solid #e1e6ec;
+        &-footer {
+            &-first {
+                margin-bottom: 16px;
+            }
+
+            &-second {
+                text-align: right;
+                .ant-btn {
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+}

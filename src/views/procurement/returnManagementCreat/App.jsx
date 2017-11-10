@@ -188,7 +188,7 @@ class ReturnManagementCreat extends PureComponent {
                                                 )
                                             }
                                         </Select>
-                                        )}
+                                    )}
                                 </div>
                             </FormItem>
                         )
