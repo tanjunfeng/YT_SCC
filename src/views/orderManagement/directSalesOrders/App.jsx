@@ -289,11 +289,11 @@ class DirectSalesOrders extends PureComponent {
     }
 
     updateGoodsInfoAction = (goods, callback) => {
-        const { productId, quantity } = goods;
+        const { productCode, quantity } = goods;
         const { branchCompanyId, deliveryWarehouseCode } = this.state;
         // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/updateItem
         this.props.updateGoodsInfo({
-            productId, quantity, branchCompanyId, deliveryWarehouseCode
+            productCode, quantity, branchCompanyId, deliveryWarehouseCode
         }).then(res => {
             if (typeof callback === 'function') {
                 callback(getRow(res.data));
