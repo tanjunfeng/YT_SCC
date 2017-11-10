@@ -71,6 +71,22 @@ const releaseCouponsColumns = [{
         return category.categoryName
     }
 }, {
+    title: '总数量',
+    dataIndex: 'totalQuantity',
+    key: 'totalQuantity'
+}, {
+    title: '剩余数量',
+    dataIndex: 'totalQuantity1',
+    key: 'totalQuantity1'
+}, {
+    title: '发放数量',
+    dataIndex: 'totalQuantity2',
+    key: 'totalQuantity2'
+}, {
+    title: '已使用',
+    dataIndex: 'usedQty',
+    key: 'usedQty'
+}, {
     title: '范围',
     dataIndex: 'companiesPoList',
     key: 'companiesPoList',
@@ -89,30 +105,15 @@ const releaseCouponsColumns = [{
     key: 'quanifyAmount',
     render: amount => (amount ? `满${amount}可用` : '不限制')
 }, {
-    title: '有效时间',
-    children: [{
-        title: '开始时间',
-        dataIndex: 'startDate',
-        key: 'startDate',
-        render: timestamp => Util.getTime(timestamp)
-    }, {
-        title: '结束时间',
-        dataIndex: 'endDate',
-        key: 'endDate',
-        render: timestamp => Util.getTime(timestamp)
-    }],
+    title: '开始时间',
+    dataIndex: 'startDate',
+    key: 'startDate',
+    render: timestamp => Util.getTime(timestamp)
 }, {
-    title: '发放数量',
-    dataIndex: 'totalQuantity',
-    key: 'totalQuantity'
-}, {
-    title: '已领取',
-    dataIndex: 'grantQty',
-    key: 'grantQty'
-}, {
-    title: '已使用',
-    dataIndex: 'usedQty',
-    key: 'usedQty'
+    title: '截至时间',
+    dataIndex: 'endDate',
+    key: 'endDate',
+    render: timestamp => Util.getTime(timestamp)
 }, {
     title: '备注',
     dataIndex: 'note',
