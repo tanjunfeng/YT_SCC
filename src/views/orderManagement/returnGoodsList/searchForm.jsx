@@ -110,7 +110,6 @@ class SearchForm extends PureComponent {
     handleSearch = (e) => {
         e.preventDefault();
         this.requestSearch();
-        this.props.onSearch(this.requestSearch());
     }
 
 
@@ -138,11 +137,6 @@ class SearchForm extends PureComponent {
         this.setState({
             franchiseeId: ''
         });
-    }
-
-    handleCreate = () => {
-        const { history } = this.props;
-        history.push('/returnGoodsList/modify');
     }
 
     render() {
@@ -286,8 +280,7 @@ class SearchForm extends PureComponent {
                     </Row>
                     <Row gutter={40}>
                         <Col span={24} style={{ textAlign: 'right' }}>
-                            <Button style={{ marginRight: 8 }} onClick={this.handleCreate}>新建</Button>
-                            <Button type="primary" htmlType="submit">搜索</Button>
+                            <Button type="primary" htmlType="submit" onClick={this.handleSearch}>搜索</Button>
                             <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>重置</Button>
                         </Col>
                     </Row>
@@ -310,7 +303,6 @@ SearchForm.propTypes = {
     refresh: PropTypes.bool,
     upDate: PropTypes.bool,
     franchiseeIdName: PropTypes.string,
-    history: PropTypes.objectOf(PropTypes.any),
 };
 
 export default withRouter(Form.create()(SearchForm));

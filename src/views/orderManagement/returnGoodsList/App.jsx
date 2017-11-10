@@ -157,8 +157,8 @@ class ReturnGoodsList extends PureComponent {
     }
 
     handleConfirm =(record) => {
-        message.success('已发起退款');
-        this.props.insertRefund({recordId: record.record.id}).then(() => {
+        this.props.insertRefund({returnId: record.record.id}).then((res) => {
+            message.success(res.message);
             this.setState({
                 upDate: !this.state.upDate
             })
@@ -194,7 +194,7 @@ class ReturnGoodsList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    orderType === 'ZCXS' && state === '已完成' &&
+                    orderType === 'ZCXS' && state === 3 &&
                     <Menu.Item key="refund">
                         <Popconfirm
                             title="确认发起退款?"
