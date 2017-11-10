@@ -74,7 +74,7 @@
         min-width: 80px;
         text-align: right;
     }
-    .return-delete:after{
+    .return-delete::after{
         clear: both;
     }
 }

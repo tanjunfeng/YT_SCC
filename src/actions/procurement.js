@@ -11,9 +11,10 @@ import {
     queryPoPrintList,
     createPo as svcCreatePo,
     auditPo as svcAuditPo,
-    queryPoDetail,
+    queryPoDetail as queryPoDetailService,
     queryMaterialMap as svcQueryMateriMap,
     queryPurchaseOrderBrands as queryPurchaseOrderBrandsService,
+    queryAuditPurReList as queryAuditPurReListService,
     queryPoRcvMngList,
     queryPoRcvList,
     queryPoRcvDetail,
@@ -33,7 +34,9 @@ import {
     insertDirectOrder as insertDirectOrderService,
     fetchReturnPoRcvDetail as queryReturnPoDetailSevice,
     deleteBatchRefundOrder as deleteBatchRefundOrderService,
-    batchCheckStorage as batchCheckStorageService
+    batchCheckStorage as batchCheckStorageService,
+    queryProcessDefinitions as ueryProcessDefinitionsService,
+    addRefundProducts
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -164,13 +167,11 @@ export const ModifyPo = (params) => () => (
  */
 export const auditPo = (params) => () => (
     new Promise((resolve, reject) => {
-        svcAuditPo(params)
-            .then(res => {
-                resolve(res);
-            })
-            .catch(err => {
-                reject(err);
-            })
+        svcAuditPo(params).then(res => {
+            resolve(res);
+        }).catch(err => {
+            reject(err);
+        })
     })
 );
 
@@ -183,9 +184,9 @@ const rcvPoDetail = (data) => ({
     payload: data
 });
 
-export const fetchPoDetail = (params) => dispatch => (
+export const queryPoDetail = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        queryPoDetail(params)
+        queryPoDetailService(params)
             .then(res => {
                 dispatch(
                     rcvPoDetail(
@@ -568,6 +569,28 @@ export const queryApprovalInfo = (params) => dispatch => (
 );
 
 /**
+ * 查询退货单审批流程
+ * @param {*} data
+ */
+const queryProcessDefinitionsAction = (data) => ({
+    type: ActionType.QUERY_PRO_DEFINITIONS,
+    payload: data
+});
+
+export const queryProcessDefinitions = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        ueryProcessDefinitionsService(params)
+            .then(res => {
+                dispatch(queryProcessDefinitionsAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
  * 查询采购退货流水号
  * @param {*} data
  */
@@ -737,3 +760,48 @@ export const updateGoodsInfo = params => dispatch => (
             })
     })
 );
+
+/**
+ * 查询退货单审批列表
+ * @param {*} data
+ */
+const queryAuditPurReListAction = (data) => ({
+    type: ActionType.QUERY_AUDIT_PUR_RE_LIST,
+    payload: data
+});
+
+export const queryAuditPurReList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryAuditPurReListService(params)
+            .then(res => {
+                dispatch(queryAuditPurReListAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 根据采购单号、逻辑仓编号、商品code、品牌id添加退货商品
+ * @param {*} data
+ */
+const addRefundProductsAction = (data) => ({
+    type: ActionType.ADD_REFUND_PRODUCTS,
+    payload: data
+})
+
+export const putRefundProducts = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        addRefundProducts(params)
+            .then(res => {
+                dispatch(addRefundProductsAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+

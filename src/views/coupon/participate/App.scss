@@ -60,3 +60,7 @@ $promotionColWidth: 250px;
         }
     }
 }
+.Unused-button::after{
+    clear: both;
+    overflow: hidden;
+}

@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-26 21:29:40
+ * @Last Modified time: 2017-11-03 15:56:50
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
