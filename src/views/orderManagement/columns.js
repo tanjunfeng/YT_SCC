@@ -243,8 +243,8 @@ const exchangeGoodsListColumns = [{
 },
 {
     title: '换货单状态',
-    dataIndex: 'paymentStateDetail',
-    key: 'paymentStateDetail'
+    dataIndex: 'state',
+    key: 'state'
 },
 {
     title: '商品状态',

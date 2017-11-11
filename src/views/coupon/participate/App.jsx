@@ -103,15 +103,15 @@ class CouponsParticipate extends PureComponent {
      *  Tab2 - 分页页码改变的回调
      */
     onPaginateUnUsed = (pageNum) => {
-        Object.assign(this.invalidRecord, { pageNum });
+        Object.assign(this.paramUnUsed, { pageNum });
         this.currentUnUnsed = pageNum;
         this.query('unUsed');
     }
     /**
      *  Tab3 - 分页页码改变的回调
      */
-    onPaginateUnUsed = (pageNum) => {
-        Object.assign(this.paramUnUsed, { pageNum });
+    onPaginateToVoid = (pageNum) => {
+        Object.assign(this.invalidRecord, { pageNum });
         this.currentInvalidRecord = pageNum;
         this.query('invalidRecord');
     }
@@ -129,9 +129,6 @@ class CouponsParticipate extends PureComponent {
                 this.queryinvalidRecord();
                 break;
             default:
-                this.queryUsed();
-                this.queryUnUsed();
-                this.queryinvalidRecord();
                 break;
         }
     }
@@ -165,6 +162,10 @@ class CouponsParticipate extends PureComponent {
                 break;
             case 'unUsed':
                 this.queryUnUsed();
+                this.tabKey = false;
+                break;
+            case 'invalidRecord':
+                this.queryinvalidRecord();
                 this.tabKey = false;
                 break;
             default:
@@ -258,6 +259,7 @@ class CouponsParticipate extends PureComponent {
                 })
             },
         };
+        console.log(this.props.unUsedCouponParticipate)
         return (
             <div>
                 <SearchForm
@@ -332,9 +334,9 @@ class CouponsParticipate extends PureComponent {
                                 current: this.currentInvalidRecord,
                                 pageNum: this.invalidRecord.pageNum,
                                 pageSize: this.invalidRecord.pageSize,
-                                total: this.props.invalidRecordList.total,
+                                total: this.props.unUsedCouponParticipate.total,
                                 showQuickJumper: true,
-                                onChange: this.onPaginateUnUsed
+                                onChange: this.onPaginateToVoid
                             }}
                         />
                     </TabPane>
