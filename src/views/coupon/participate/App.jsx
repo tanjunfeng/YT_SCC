@@ -237,8 +237,10 @@ class CouponsParticipate extends PureComponent {
         };
         if (this.state.tabPage === '1') {
             Util.exportExcel(exportParticipateData1, condition);
-        } else {
+        } else if (this.state.tabPage === '2') {
             Util.exportExcel(exportParticipateData2, {condition, queryType: 1});
+        } else {
+            Util.exportExcel(exportParticipateData2, {condition, queryType: 2});
         }
     }
 
