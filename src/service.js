@@ -77,7 +77,7 @@ export const exportPaymentList = '/settlement/downloadFranchiseePayment';
 export const exportProcurementPdf = 'pmPurchaseOrder/exportPdf';
 
 // 根据退货单id下载PDF文件
-export const exportReturnProPdf = '/pmPurchaseRefund/exportPdf';
+export const exportReturnProPdf = 'pmPurchaseRefund/exportPdf';
 
 // 下载库存调整列表
 export const exportStoreAdList = 'imAdjustment/exportListImAdjustment';
@@ -612,6 +612,8 @@ export const deletePurchaseList = (params) => http.get('/pmPurchaseOrder/batchDe
 export const queryPoPrintList = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderListInfo', params);
 // 此接口用于根据采购单号、逻辑仓编号、商品code、品牌id添加退货商品
 export const addRefundProducts = (params) => http.get('/pmPurchaseRefund/addRefundProducts', params);
+// 保存或者提交采购退货单
+export const createRefundWithItems = (params) => http.post('/pmPurchaseRefund/createRefundWithItems', params);
 // 根据采购订单id下载PDF文件
 export const downloadPDF = 'pmPurchaseOrder/exportPdf';
 // 采购单列表批量下载PDF ZIP压缩文件

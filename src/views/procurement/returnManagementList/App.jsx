@@ -38,8 +38,6 @@ import {
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
-    getRefundNo,
-    clearRefundNo,
     deleteBatchRefundOrder,
     queryApprovalInfo,
     queryProcessDefinitions,
@@ -73,8 +71,6 @@ const Step = Steps.Step;
     getSupplierLocMap,
     fetchReturnMngList,
     pubFetchValueList,
-    getRefundNo,
-    clearRefundNo,
     deleteBatchRefundOrder,
     queryApprovalInfo,
     queryProcessDefinitions,
@@ -430,7 +426,6 @@ class ReturnManagementList extends PureComponent {
 
     handleCreact = () => {
         const { pathname } = this.props.location;
-        this.props.getRefundNo();
         this.props.history.push(`${pathname}/modify`);
     }
 
@@ -518,7 +513,7 @@ class ReturnManagementList extends PureComponent {
                     // 状态为“制单”、“已拒绝”时可用；
                     (status === '制单' || status === '已拒绝') ?
                         <Menu.Item key="modify">
-                            <Link to={`${pathname}/returnManagementCreat/${id}`}>修改</Link>
+                            <Link to={`${pathname}/modify/${id}`}>修改</Link>
                         </Menu.Item>
                         : null
                 }
