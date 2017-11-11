@@ -9,11 +9,7 @@ import PropTypes from 'prop-types';
 
 class EditableCell extends PureComponent {
     handleChange = (value) => {
-        let v = value;
-        if (isNaN(v) || v < 0) {
-            v = 0;
-        }
-        this.props.onChange(v);
+        this.props.onChange(value);
     }
 
     handlePressEnter = (event) => {
@@ -29,6 +25,8 @@ class EditableCell extends PureComponent {
             <div className="editable-cell">
                 <InputNumber
                     defaultValue={value}
+                    formatter={text => Math.floor(text)}
+                    parser={text => Math.floor(text)}
                     min={min}
                     max={max}
                     step={step}
