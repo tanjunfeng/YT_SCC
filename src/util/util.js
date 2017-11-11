@@ -332,6 +332,11 @@ class Utils {
     }
 
     /**
+     * 判断是否正整数
+     */
+    static isPositiveInteger = (num) => /^[0-9]*[1-9][0-9]*$/.test(num)
+
+    /**
      * 按照唯一属性标识 p 合并数组 a b
      *
      * b 会覆盖 a
