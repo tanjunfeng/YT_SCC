@@ -164,9 +164,6 @@ class ReturnGoodsList extends PureComponent {
     handleConfirm =(record) => {
         this.props.insertRefund({returnId: record.record.id}).then((res) => {
             message.success(res.message);
-            this.setState({
-                upDate: !this.state.upDate
-            })
         })
     }
 
@@ -207,7 +204,6 @@ class ReturnGoodsList extends PureComponent {
                             onCancel={this.handleCancel}
                             okText="确认"
                             cancelText="取消"
-                            visible={!this.setState.upDate}
                         >
                             <a>退款</a>
                         </Popconfirm>
