@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-11 16:56:41
+ * @Last Modified time: 2017-11-11 22:28:30
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -230,7 +230,7 @@ class ReturnManagementList extends PureComponent {
         this.searchParams = {};
         // 重置form
         this.props.form.resetFields();
-        this.handleSupplierClear();
+        this.handleSupplyClear();
         this.handleSupplierAddressClear();
         this.handleAddressClear();
     }
@@ -296,7 +296,8 @@ class ReturnManagementList extends PureComponent {
         this.poAddress.reset();
         this.adressTypeCode = '';
         this.setState({
-            locDisabled: true
+            locDisabled: true,
+            refundAdr: ''
         })
     }
 
