@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-11 11:05:40
+ * @Last Modified time: 2017-11-11 11:39:43
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -42,7 +42,7 @@ import {
     clearRefundNo,
     deleteBatchRefundOrder,
     queryApprovalInfo,
-    queryProcessDefinitions
+    queryProcessDefinitions,
 } from '../../../actions/procurement';
 import { exportPurchaseRefundList, exportPdf } from '../../../service';
 import {
@@ -65,7 +65,6 @@ const Step = Steps.Step;
     poRcvMngList: state.toJS().procurement.poRcvMngList,
     returnMngList: state.toJS().procurement.returnMngList,
     getRefundNumebr: state.toJS().procurement.getRefundNumebr,
-    employeeCompanyId: state.toJS().user.data.user.employeeCompanyId,
     processDefinitions: state.toJS().procurement.processDefinitions
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
@@ -178,6 +177,7 @@ class ReturnManagementList extends PureComponent {
             }
         ]
     }
+
 
     componentDidMount() {
         this.queryReturnMngList();
@@ -322,6 +322,30 @@ class ReturnManagementList extends PureComponent {
             locDisabled: true
         });
         this.poAddress.reset();
+    }
+
+    /**
+     * 根据地点类型查询地点值清单
+     */
+    handleGetAddressMap = ({ value }) => {
+        // 地点类型
+        const { locTypeCd } = this.props.form.getFieldsValue(['locTypeCd'])
+        // 根据选择的地点类型获取对应地点的值清单
+        if (locTypeCd === locTypeCodes.warehouse) {
+            // 地点类型为仓库
+            return this.props.getWarehouseAddressMap({
+                value,
+            });
+        } else if (locTypeCd === locTypeCodes.shop) {
+            // 地点类型为门店
+            return this.props.getShopAddressMap({
+                value,
+            });
+        }
+        // 如果地点类型为空，返回空promise
+        return new Promise((resolve) => {
+            resolve({ total: 0, data: [] });
+        });
     }
 
     showConfirm = (record) => {
@@ -605,7 +629,7 @@ class ReturnManagementList extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.returnMngList;
-        const { processDefinitions } = this.props;
+        const { processDefinitions, prefixCls } = this.props;
         const agreeOrRefuse = ['拒绝', '同意'];
         const rowSelection = {
             selectedRowKeys: this.state.chooseGoodsList,
@@ -888,6 +912,8 @@ ReturnManagementList.propTypes = {
     processDefinitions: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
+    getWarehouseAddressMap: PropTypes.func,
+    getShopAddressMap: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,
 };
 

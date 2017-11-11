@@ -192,7 +192,7 @@ const returnGoodsListColumns = [{
 }
 ]
 
-// 退货单列表
+// 换货单列表
 const exchangeGoodsListColumns = [{
     title: '序号',
     dataIndex: 'idx',

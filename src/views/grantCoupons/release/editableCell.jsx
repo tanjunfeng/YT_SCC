@@ -13,38 +13,33 @@ class EditableCell extends PureComponent {
     }
 
     handlePressEnter = (event) => {
+        const value = +(event.target.value) || 1;
         // 回车操作时保存数量
         if (event.keyCode === 13) {
-            this.handleChange(+(event.target.value));
+            this.handleChange(value);
         }
     }
 
     render() {
-        const { min, max, step, error, value } = this.props;
+        const { max } = this.props;
         return (
             <div className="editable-cell">
                 <InputNumber
-                    defaultValue={value}
-                    formatter={text => Math.floor(text)}
-                    parser={text => Math.floor(text)}
-                    min={min}
+                    defaultValue={1}
+                    min={1}
+                    formatter={value => Math.floor(value)}
+                    parser={value => Math.floor(value)}
                     max={max}
-                    step={step}
                     onChange={this.handleChange}
                     onKeyUp={this.handlePressEnter}
                 />
-                <div className="error-message">{error}</div>
             </div>
         );
     }
 }
 
 EditableCell.propTypes = {
-    value: PropTypes.number,
-    min: PropTypes.number,
     max: PropTypes.number,
-    step: PropTypes.number,
-    error: PropTypes.string,
     onChange: PropTypes.func
 };
 
