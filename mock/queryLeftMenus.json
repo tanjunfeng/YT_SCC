@@ -1,5 +1,5 @@
 {
-    "timestamp": 1509619569074,
+    "timestamp": 1510320863192,
     "code": 200,
     "message": {},
     "exception": null,
@@ -61,15 +61,15 @@
                     "menuList": []
                 },
                 {
-                    "authorityId": 362,
-                    "authorityCode": "ddhhdlb",
-                    "displayName": "换货单列表",
+                    "authorityId": 331,
+                    "authorityCode": "returnGoodsList",
+                    "displayName": "退货单列表",
                     "menuList": []
                 },
                 {
-                    "authorityId": 333,
-                    "authorityCode": "returnGoodsList",
-                    "displayName": "退货单列表",
+                    "authorityId": 362,
+                    "authorityCode": "ddhhdlb",
+                    "displayName": "换货单列表",
                     "menuList": []
                 },
                 {
@@ -127,6 +127,25 @@
                     "authorityId": 285,
                     "authorityCode": "sskccx",
                     "displayName": "实时库存查询",
+                    "menuList": []
+                }
+            ]
+        },
+        {
+            "authorityId": 363,
+            "authorityCode": "dbsx",
+            "displayName": "待办事项",
+            "menuList": [
+                {
+                    "authorityId": 364,
+                    "authorityCode": "cgdsplb",
+                    "displayName": "采购单审批列表",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 365,
+                    "authorityCode": "thsplb",
+                    "displayName": "退货审批列表",
                     "menuList": []
                 }
             ]
@@ -192,28 +211,9 @@
                     "menuList": []
                 },
                 {
-                    "authorityId": 223,
+                    "authorityId": 367,
                     "authorityCode": "cgthdgllb",
                     "displayName": "退货单管理列表",
-                    "menuList": []
-                }
-            ]
-        },
-        {
-            "authorityId": 363,
-            "authorityCode": "dbsx",
-            "displayName": "待办事项",
-            "menuList": [
-                {
-                    "authorityId": 364,
-                    "authorityCode": "cgdsplb",
-                    "displayName": "采购单审批列表",
-                    "menuList": []
-                },
-                {
-                    "authorityId": 365,
-                    "authorityCode": "thsplb",
-                    "displayName": "退货审批列表",
                     "menuList": []
                 }
             ]
