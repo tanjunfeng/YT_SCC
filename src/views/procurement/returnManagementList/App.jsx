@@ -877,10 +877,7 @@ class ReturnManagementList extends PureComponent {
 }
 
 ReturnManagementList.propTypes = {
-<<<<<<< HEAD
     prefixCls: PropTypes.string,
-=======
->>>>>>> 7dc5b8b532cb43da91f5674c5b4ae2f433a345fa
     fetchReturnMngList: PropTypes.func,
     getRefundNo: PropTypes.func,
     queryProcessDefinitions: PropTypes.func,
