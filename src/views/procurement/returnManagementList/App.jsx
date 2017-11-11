@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-11 10:24:01
+ * @Last Modified time: 2017-11-11 11:36:06
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -877,10 +877,7 @@ class ReturnManagementList extends PureComponent {
 }
 
 ReturnManagementList.propTypes = {
-<<<<<<< HEAD
     prefixCls: PropTypes.string,
-=======
->>>>>>> 7dc5b8b532cb43da91f5674c5b4ae2f433a345fa
     fetchReturnMngList: PropTypes.func,
     getRefundNo: PropTypes.func,
     queryProcessDefinitions: PropTypes.func,
