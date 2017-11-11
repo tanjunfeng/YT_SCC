@@ -16,24 +16,35 @@ import FormContent from './FormContent';
 import List from './List';
 
 import {
-    pubFetchValueList,
-} from '../../../actions/pub';
+    getRefundNo,
+    clearRefundNo,
+    fetchReturnPoRcvDetail
+} from '../../../actions/procurement';
 
 import {
-    fetchReturnPoRcvDetail
-} from '../../../actions';
+    pubFetchValueList,
+} from '../../../actions/pub';
 
 const Option = Select.Option;
 const { TextArea } = Input;
 
+
 @connect(state => ({
     // 详情数据
-    data: state.toJS().salesManagement.detail
+    data: state.toJS().salesManagement.detail,
+    // 退货单id
+    getRefundNumebr: state.toJS().procurement.getRefundNumebr,
+    // 采购退货详情
+    poReturn: state.toJS().procurement.poReturn
 }), dispatch => bindActionCreators({
     // 请求详情数据
     fetchReturnPoRcvDetail,
     // 值列表
-    pubFetchValueList
+    pubFetchValueList,
+    // 获取退货单
+    getRefundNo,
+    // 清除退货单
+    clearRefundNo
 }, dispatch))
 
 class ReturnGoodsModify extends PureComponent {
@@ -42,6 +53,9 @@ class ReturnGoodsModify extends PureComponent {
         match: PropTypes.objectOf(PropTypes.any),
         pubFetchValueList: PropTypes.func,
         fetchReturnPoRcvDetail: PropTypes.func,
+        getRefundNo: PropTypes.func,
+        getRefundNumebr: PropTypes.string,
+        poReturn: PropTypes.objectOf(PropTypes.any),
     }
 
     static defaultProps = {
@@ -71,6 +85,8 @@ class ReturnGoodsModify extends PureComponent {
 
         if (this.type === 'edit') {
             this.props.fetchReturnPoRcvDetail({id: params.id})
+        } else {
+            this.props.getRefundNo()
         }
     }
 
@@ -83,7 +99,8 @@ class ReturnGoodsModify extends PureComponent {
     }
 
     render() {
-        const { prefixCls } = this.props;
+        const { prefixCls, getRefundNumebr, poReturn } = this.props;
+        const { pmPurchaseRefundItems, ...formData } = poReturn;
 
         const cls = classnames(
             `${prefixCls}-modify`,
@@ -91,7 +108,7 @@ class ReturnGoodsModify extends PureComponent {
                 [`${prefixCls}-modify-${this.type}`]: this.type
             }
         )
-       
+
         return (
             <div
                 className={cls}
@@ -99,10 +116,14 @@ class ReturnGoodsModify extends PureComponent {
                 <FormContent
                     ref={node => { this.formContent = node }}
                     pubFetchValueList={this.props.pubFetchValueList}
+                    type={this.type}
+                    refundNumber={getRefundNumebr}
+                    defaultValue={formData}
                 />
 
                 <List
                     getFormData={this.getFormData}
+                    defaultValue={pmPurchaseRefundItems}
                 />
             </div>
         )
