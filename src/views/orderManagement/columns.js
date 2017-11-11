@@ -134,7 +134,7 @@ const returnGoodsListColumns = [{
     render: (text, record, index) => index + 1
 },
 {
-    title: '换货单号',
+    title: '退货单号',
     dataIndex: 'id',
     key: 'id'
 },
