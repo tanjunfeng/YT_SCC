@@ -3,7 +3,7 @@
  * @Description: 采购退货详情页
  * @CreateDate: 2017-10-27 11:26:16
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-01 14:33:06
+ * @Last Modified time: 2017-11-10 21:52:36
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -235,7 +235,7 @@ class ReturnManagementDetail extends PureComponent {
                                 <Col span={6}>
                                     {/* 状态 */}
                                     <span className="ant-form-item-label search-mind-label">状态</span>
-                                    <span className="text">{poReturn.asn || '-'}</span>
+                                    <span className="text">{poReturn.status || '-'}</span>
                                 </Col>
                             </Row>
                             <Row >

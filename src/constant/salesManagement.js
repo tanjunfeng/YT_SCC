@@ -31,6 +31,18 @@ export const returnGoodsStatus = {
     }]
 }
 
+// 退货单状态
+export const returnType = {
+    defaultValue: '1',
+    data: [{
+        key: 'ZCTH',
+        value: '正常退货'
+    }, {
+        key: 'JSTH',
+        value: '拒收退货'
+    }]
+}
+
 
 // 收货状态
 export const goodsReceiptStatus = {
