@@ -3,7 +3,7 @@
  * @Description: 销售换货列表
  * @CreateDate: 2017-11-10 11:22:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-10 11:22:13
+ * @Last Modified time: 2017-11-11 23:28:49
  */
 
 import React, { PureComponent } from 'react';
@@ -22,7 +22,7 @@ import {
 } from 'antd';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { returnGoodsListColumns as columns } from '../columns';
+import { exchangeGoodsListColumns as columns } from '../columns';
 import { returnGoodsOperation } from '../../../actions';
 
 @connect(state => ({
