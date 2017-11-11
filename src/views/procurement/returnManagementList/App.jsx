@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-10 20:17:36
+ * @Last Modified time: 2017-11-11 11:05:40
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -32,7 +32,8 @@ import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import {
     locType,
-    returnStatus
+    returnStatus,
+    locTypeCodes
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
@@ -77,7 +78,8 @@ const Step = Steps.Step;
     clearRefundNo,
     deleteBatchRefundOrder,
     queryApprovalInfo,
-    queryProcessDefinitions
+    queryProcessDefinitions,
+    locTypeCodes
 }, dispatch))
 
 class ReturnManagementList extends PureComponent {
@@ -228,6 +230,30 @@ class ReturnManagementList extends PureComponent {
         this.handleSupplierClear();
         this.handleSupplierAddressClear();
         this.handleAddressClear();
+    }
+
+    /**
+     * 根据地点类型查询地点值清单
+     */
+    handleGetAddressMap = ({ value }) => {
+        // 地点类型
+        const { locTypeCd } = this.props.form.getFieldsValue(['adrType'])
+        // 根据选择的地点类型获取对应地点的值清单
+        if (locTypeCd === locTypeCodes.warehouse) {
+            // 地点类型为仓库
+            return this.props.getWarehouseAddressMap({
+                value,
+            });
+        } else if (locTypeCd === locTypeCodes.shop) {
+            // 地点类型为门店
+            return this.props.getShopAddressMap({
+                value,
+            });
+        }
+        // 如果地点类型为空，返回空promise
+        return new Promise((resolve) => {
+            resolve({ total: 0, data: [] });
+        });
     }
 
     /**
@@ -659,14 +685,14 @@ class ReturnManagementList extends PureComponent {
                             {/* 供应商地点 */}
                             <Col className="gutter-row" span={8}>
                                 <FormItem>
-                                    <span className="sc-form-item-label">供应商地点</span>
-                                    <span className={`${prefixCls}-data-pic`}>
+                                    <span className="sc-form-item-label" style={{width: 70}}>供应商地点</span>
+                                    <span className="search-box-data-pic">
                                         <SearchMind
-                                            style={{ zIndex: 9 }}
+                                            style={{ zIndex: 9, verticalAlign: 'bottom' }}
                                             compKey="providerNo"
                                             ref={ref => { this.joiningAdressMind = ref }}
                                             fetch={(params) =>
-                                            this.props.pubFetchValueList(Util.removeInvalid({
+                                            this.props.pubFetchValueList(Utils.removeInvalid({
                                                 condition: params.value,
                                                 pageSize: params.pagination.pageSize,
                                                 pageNum: params.pagination.current || 1
@@ -714,32 +740,30 @@ class ReturnManagementList extends PureComponent {
                             </Col>
                             {/* 退货地点 */}
                             <Col span={8}>
-                                <FormItem>
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">退货地点</span>
+                                <FormItem >
+                                    <div className="row small">
+                                        <span className="ant-form-item-label search-mind-label">地点</span>
                                         <SearchMind
-                                            style={{ zIndex: 7 }}
-                                            compKey="search-mind-key1"
-                                            rowKey="id"
+                                            compKey="comPoAddress"
                                             ref={ref => { this.poAddress = ref }}
-                                            fetch={this.handleGetAddressMap}
-                                            onChoosed={this.handleAddressChoose}
-                                            onClear={this.handleAddressClear}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>
-                                                    {row[this.state.locationData.code]} -
-                                                    {row[this.state.locationData.name]}
-                                                </div>
-                                            )}
-                                            pageSize={3}
+                                            fetch={
+                                                (value, pager) => (
+                                                    this.handleGetAddressMap(value, pager))
+                                            }
+                                            renderChoosedInputRaw={
+                                                (row) => (
+                                                    <div>{row.code} - {row.name}</div>
+                                                )}
+                                            pageSize={2}
                                             columns={[
                                                 {
-                                                    title: '退货地点编码',
-                                                    dataIndex: this.state.locationData.code,
-                                                    width: 80
+                                                    title: '编码',
+                                                    dataIndex: 'code',
+                                                    width: 98
                                                 }, {
-                                                    title: '退货地点名称',
-                                                    dataIndex: this.state.locationData.name
+                                                    title: '名称',
+                                                    dataIndex: 'name',
+                                                    width: 140
                                                 }
                                             ]}
                                         />
@@ -852,11 +876,12 @@ class ReturnManagementList extends PureComponent {
 }
 
 ReturnManagementList.propTypes = {
-    employeeCompanyId: PropTypes.string,
     fetchReturnMngList: PropTypes.func,
     getRefundNo: PropTypes.func,
     queryProcessDefinitions: PropTypes.func,
     queryApprovalInfo: PropTypes.func,
+    getWarehouseAddressMap: PropTypes.func,
+    getShopAddressMap: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     returnMngList: PropTypes.objectOf(PropTypes.any),
