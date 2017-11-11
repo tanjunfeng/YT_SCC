@@ -53,7 +53,6 @@ class SearchForm extends PureComponent {
         if (this.props.page !== nextProps.page) {
             this.requestSearch(nextProps.page)
         }
-        console.log(nextProps.upDate)
         if (this.props.upDate !== nextProps.upDate) {
             this.requestSearch()
             this.handleSearch()
