@@ -243,8 +243,8 @@ const exchangeGoodsListColumns = [{
 },
 {
     title: '换货单状态',
-    dataIndex: 'state',
-    key: 'state'
+    dataIndex: 'stateDetail',
+    key: 'stateDetail'
 },
 {
     title: '商品状态',
@@ -298,7 +298,7 @@ const returnGoodsDetailColumns = [{
     )
 },
 {
-    title: '换货数量',
+    title: '退货数量',
     dataIndex: 'quantity',
     key: 'quantity'
 },
@@ -308,7 +308,7 @@ const returnGoodsDetailColumns = [{
     key: 'itemPrice.listPrice'
 },
 {
-    title: '换货金额',
+    title: '退货金额',
     dataIndex: 'itemPrice.amount',
     key: 'itemPrice.amount'
 },

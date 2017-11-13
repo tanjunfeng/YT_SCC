@@ -844,8 +844,10 @@ export const cancelCoupons = (params) => http.get('/coupon/cancelCoupons', param
  */
 // 查询品类
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
-// 退换货单列表
+// 退货单列表
 export const getReturnGoodsList = (params) => http.get('/webReturnRequest/queryReturnRequestList', params);
+// 换货单列表
+export const getExchangeGoodsListAction = (params) => http.get('/webReturnRequest/queryChangeRequestList', params);
 // 退换货单取消、确认
 export const getReturnGoodsOperation = (params) => http.post('/webReturnRequest/operateOrderReturnedReceipt', params);
 // 退换货单详情
