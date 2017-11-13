@@ -328,7 +328,7 @@ class ReturnGoodsDetails extends PureComponent {
                                         {getFieldDecorator('returnReasonType', {
                                             initialValue: data.returnReasonType ? data.returnReasonType : ''
                                         })(
-                                            <Select style={{ width: '153px' }} size="default" disabled={type === '2' || type === '1' ? false : true}>
+                                            <Select style={{ width: '153px' }} size="default" disabled>
                                                 {
                                                     reason.data.map((item) => (
                                                         <Select.Option
@@ -348,7 +348,7 @@ class ReturnGoodsDetails extends PureComponent {
                                         {getFieldDecorator('returnReason', {
                                             initialValue: data.returnReason
                                         })(
-                                            <TextArea className="input-ret" autosize={{ minRows: 4, maxRows: 4 }} disabled={type === '2' || type === '1' ? false : true} size="default" />
+                                            <TextArea className="input-ret" autosize={{ minRows: 4, maxRows: 4 }} disabled size="default" />
                                             )}
                                     </FormItem>
                                 </Col>
