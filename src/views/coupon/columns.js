@@ -115,7 +115,7 @@ const couponsDetail = [{
     title: '优惠券类型',
     dataIndex: 'couponType',
     key: 'couponType',
-    redender: couponTypeCode => couponTypeStatus[couponTypeCode]
+    render: couponTypeCode => couponTypeStatus[couponTypeCode]
 }, {
     title: '券名称',
     dataIndex: 'promotionName',
