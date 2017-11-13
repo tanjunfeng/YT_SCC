@@ -15,6 +15,7 @@ import {
     Table, Form, Select, Icon, Modal, Row,
     Col, Button, Input
 } from 'antd';
+import Utils from '../../../util/util';
 import { returnGoodsDetailColumns as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
 import { returnGoodsDetail, returnGoodsDetailClearData, returnGoodsOperation, returnGoodsDetailSave } from '../../../actions';
@@ -26,6 +27,7 @@ const FormItem = Form.Item;
     // 详情数据
     data: state.toJS().salesManagement.detail
 }), dispatch => bindActionCreators({
+    returnGoodsDetailSave,
     // 请求详情数据
     returnGoodsDetail,
     // 清空详情数据
@@ -34,14 +36,14 @@ const FormItem = Form.Item;
 
 class ReturnGoodsDetails extends PureComponent {
     state = {
-        id: ''
+        id: '',
     }
 
     componentDidMount() {
         const { id } = this.props.match.params;
         this.setState({ id });
         this.forData({
-            id
+            id,
         });
     }
 
@@ -70,6 +72,7 @@ class ReturnGoodsDetails extends PureComponent {
                 if (res.success) {
                     this.goBack()
                 }
+            }).catch(() => {
             })
     )
 
@@ -114,16 +117,16 @@ class ReturnGoodsDetails extends PureComponent {
             returnReason,
             description
             } = this.props.form.getFieldsValue();
-        if (returnReasonType === '7' && returnReason === '') {
+        if (returnReasonType === 7 && returnReason === '') {
             this.showConfirmSave()
         } else {
             // 提交数据
-            returnGoodsDetailSave({
-                orderId: this.state.id,
+            this.props.returnGoodsDetailSave(Utils.removeInvalid({
+                returnId: this.state.id,
                 returnReasonType,
                 returnReason,
                 description
-            })
+            }))
                 .then(res => {
                     if (res.success) {
                         this.showConfirmSaveSuccess()
@@ -132,12 +135,11 @@ class ReturnGoodsDetails extends PureComponent {
         }
     }
 
-
     render() {
         const { getFieldDecorator } = this.props.form
         const { TextArea } = Input
         const data = this.props.data
-        const { type } = this.props.match.params
+        const { type } = this.props.match.params;
         return (
             <div className="returngoods-detail">
                 <div className="basic-box">
@@ -156,7 +158,9 @@ class ReturnGoodsDetails extends PureComponent {
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">换货单状态：</span>{data.stateDetail}</div></Col>
                         </Row>
                         <Row>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">收货状态: </span>{data.shipping_state}</div></Col>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">商品状态：</span>{data.productStateDetail}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">退货状态：</span>{data.paymentStateDetail}</div></Col>
                         </Row>
                     </div>
                 </div>
@@ -246,14 +250,14 @@ class ReturnGoodsDetails extends PureComponent {
                     </div>
                     <div className="basic-box">
                         <div className="header">
-                            <Icon type="solution" className="header-icon" />备注
+                            <Icon type="solution" className="header-icon" />备注(必填)
                     </div>
                         <div className="body body-form">
                             <Row>
                                 <Col span={24}>
                                     <FormItem>
                                         {getFieldDecorator('description', {
-                                            initialValue: data.description
+                                            initialValue: data.description,
                                         })(
                                             <TextArea className="input-des" autosize={{ minRows: 4, maxRows: 4 }} disabled={type === '2' ? false : true} size="default" />
                                             )}
@@ -281,6 +285,7 @@ class ReturnGoodsDetails extends PureComponent {
 ReturnGoodsDetails.propTypes = {
     returnGoodsDetail: PropTypes.func,
     clearData: PropTypes.func,
+    returnGoodsDetailSave: PropTypes.func,
     getFieldDecorator: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any),

@@ -3,7 +3,7 @@
  * @Description: 优惠券列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-01 17:02:38
+ * @Last Modified time: 2017-11-11 23:17:17
  */
 /**
  * @file columns.js
@@ -381,7 +381,7 @@ const invalidRecordList = [{
             case 'used':
                 return '已使用';
             case 'canceled':
-                return '已作废)';
+                return '已作废';
             default:
                 return text;
         }

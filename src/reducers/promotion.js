@@ -44,6 +44,7 @@ export default function (state = initState, action) {
             return state.set('unUsedCouponParticipate', fromJS(action.payload));
         case ActionType.INVALID_RECORD:
         case ActionType.CLEAR_INVALID_RECORD:
+            console.log(action.payload)
             return state.set('invalidRecordList', fromJS(action.payload));
         case ActionType.FETCH_CATEGORY_BY_PARENT:
         case ActionType.CLEAR_CATEGORIES:

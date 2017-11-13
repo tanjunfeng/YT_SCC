@@ -1,8 +1,9 @@
-/**
- * @file App.jsx
- * @author liujinyu
- *
- * 退货单查看及编辑页面
+/*
+ * @Author: tanjf
+ * @Description: 销售退货详情
+ * @CreateDate: 2017-11-10 11:22:28
+ * @Last Modified by: tanjf
+ * @Last Modified time: 2017-11-10 14:14:02
  */
 
 import React, { PureComponent } from 'react';
@@ -13,8 +14,9 @@ import { withRouter } from 'react-router';
 import moment from 'moment';
 import {
     Table, Form, Select, Icon, Modal, Row,
-    Col, Button, Input
+    Col, Button, Input, message
 } from 'antd';
+import Utils from '../../../util/util';
 import { returnGoodsDetailColumns as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
 import { returnGoodsDetail, returnGoodsDetailClearData,
@@ -30,13 +32,14 @@ const FormItem = Form.Item;
 }), dispatch => bindActionCreators({
     // 请求详情数据
     returnGoodsDetail,
+    returnDescriptionSave,
     // 清空详情数据
     clearData: returnGoodsDetailClearData
 }, dispatch))
 
 class ExchangeGoodsDetail extends PureComponent {
     state = {
-        id: ''
+        id: '',
     }
 
     componentDidMount() {
@@ -68,11 +71,13 @@ class ExchangeGoodsDetail extends PureComponent {
             returnId: this.state.id,
             operateType: type
         })
-            .then(res => {
-                if (res.success) {
-                    this.goBack()
-                }
-            })
+        .then(res => {
+            if (res.success) {
+                this.goBack()
+                message.success(res.message)
+            }
+        }).catch(() => {
+        })
     )
 
     // 确认、取消模态框弹出
@@ -120,14 +125,14 @@ class ExchangeGoodsDetail extends PureComponent {
             this.showConfirmSave()
         } else {
             // 提交数据
-            returnDescriptionSave({
+            this.props.returnDescriptionSave(Utils.removeInvalid({
                 returnId: this.state.id,
                 returnReasonType,
                 returnReason,
                 description
-            }).then(res => {
+            })).then(res => {
                 if (res.success) {
-                    this.showConfirmSaveSuccess()
+                    this.showConfirmSaveSuccess();
                 }
             })
         }
@@ -138,7 +143,7 @@ class ExchangeGoodsDetail extends PureComponent {
         const { getFieldDecorator } = this.props.form
         const { TextArea } = Input
         const data = this.props.data
-        const { type } = this.props.match.params
+        const { type } = this.props.match.params;
         return (
             <div className="returngoods-detail">
                 <div className="basic-box">
@@ -247,7 +252,7 @@ class ExchangeGoodsDetail extends PureComponent {
                     </div>
                     <div className="basic-box">
                         <div className="header">
-                            <Icon type="solution" className="header-icon" />备注
+                            <Icon type="solution" className="header-icon" />备注(必填)
                     </div>
                         <div className="body body-form">
                             <Row>
@@ -282,6 +287,7 @@ class ExchangeGoodsDetail extends PureComponent {
 ExchangeGoodsDetail.propTypes = {
     returnGoodsDetail: PropTypes.func,
     clearData: PropTypes.func,
+    returnDescriptionSave: PropTypes.func,
     getFieldDecorator: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any),

@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-04 10:25:28
+ * @Last Modified time: 2017-11-11 22:28:30
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -32,14 +32,15 @@ import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import {
     locType,
-    returnStatus
+    returnStatus,
+    locTypeCodes
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
     deleteBatchRefundOrder,
     queryApprovalInfo,
-    queryProcessDefinitions
+    queryProcessDefinitions,
 } from '../../../actions/procurement';
 import { exportPurchaseRefundList, exportPdf } from '../../../service';
 import {
@@ -62,7 +63,6 @@ const Step = Steps.Step;
     poRcvMngList: state.toJS().procurement.poRcvMngList,
     returnMngList: state.toJS().procurement.returnMngList,
     getRefundNumebr: state.toJS().procurement.getRefundNumebr,
-    employeeCompanyId: state.toJS().user.data.user.employeeCompanyId,
     processDefinitions: state.toJS().procurement.processDefinitions
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
@@ -73,7 +73,8 @@ const Step = Steps.Step;
     pubFetchValueList,
     deleteBatchRefundOrder,
     queryApprovalInfo,
-    queryProcessDefinitions
+    queryProcessDefinitions,
+    locTypeCodes
 }, dispatch))
 
 class ReturnManagementList extends PureComponent {
@@ -94,8 +95,11 @@ class ReturnManagementList extends PureComponent {
             locationData: {},
             isVisibleModal: false,
             opinionVisible: false,
+            refundAdr: '',
             adrTypeCode: '',    // 地点编码
-            receivedTypeCode: ''  // 收货单状态编码
+            receivedTypeCode: '',  // 收货单状态编码
+            spNo: '',   // 供应商编码
+            spAdrNo: '',    // 供应商地点编码
         };
         // 初始页号
         this.current = 1;
@@ -173,6 +177,7 @@ class ReturnManagementList extends PureComponent {
         ]
     }
 
+
     componentDidMount() {
         this.queryReturnMngList();
     }
@@ -221,24 +226,9 @@ class ReturnManagementList extends PureComponent {
         this.searchParams = {};
         // 重置form
         this.props.form.resetFields();
-        this.handleSupplierClear();
+        this.handleSupplyClear();
         this.handleSupplierAddressClear();
         this.handleAddressClear();
-    }
-
-    /**
-     * 获取供应商地点编号
-     */
-    handleSupplierAddressChoose = ({ record }) => {
-        this.setState({ spAdrNo: record.providerNo });
-    }
-
-    /**
-     * 清空供应商地点编号
-     */
-    handleSupplierAddressClear = () => {
-        this.setState({ spAdrNo: '' });
-        this.supplyAddressSearchMind.reset();
     }
 
     /**
@@ -276,22 +266,54 @@ class ReturnManagementList extends PureComponent {
     }
 
     /**
-     * 获取地点编号
+     * 获取供应商地点编号
      */
-    handleAddressChoose = ({ record }) => {
-        const encoded = record[this.state.locationData.code];
-        this.setState({ adrTypeCode: encoded });
+    handleSupplierAddressChoose = ({ record }) => {
+        this.setState({ spAdrId: record.spId });
     }
 
     /**
-     * 清空地点编号
+     * 清空供应商地点编号
      */
+    handleSupplierAddressClear = () => {
+        this.setState({ spAdrId: '' });
+        this.supplyAddressSearchMind.reset();
+    }
+
+    // 选择地点回调
+    handleAddressChoose = ({ record }) => {
+        const encoded = record.code;
+        this.adressTypeCode = encoded;
+        this.setState({ refundAdr: record.warehouseCode });
+    }
+
+    // 清除地点值
     handleAddressClear = () => {
-        this.setState({
-            adrTypeCode: '',
-            locDisabled: true
-        });
         this.poAddress.reset();
+        this.adressTypeCode = '';
+        this.setState({
+            locDisabled: true,
+            refundAdr: ''
+        })
+    }
+
+    // 获取供应商编号
+    handleSupplyChoose = ({ record }) => {
+        this.setState({
+            spNo: record.spNo,
+            spId: record.spId,
+            isSupplyAdrDisabled: false
+        });
+    }
+
+    // 供应商值清单-清除
+    handleSupplyClear = () => {
+        this.setState({
+            spNo: '',
+            spId: '',
+            isSupplyAdrDisabled: true
+        });
+        this.supplySearchMind.reset();
     }
 
     showConfirm = (record) => {
@@ -396,24 +418,10 @@ class ReturnManagementList extends PureComponent {
      * 查询退货单管理列表
      */
     handleSearch() {
-        this.queryReturnMngList(this.editSearchParams());
-    }
-
-    /* *************** 供货供应商 ************************* */
-
-    // 供货供应商-值清单
-    handleSupplyChoose = ({ record }) => {
-        this.setState({
-            spId: record.spAdrid
-        })
-    }
-
-    // 供货供应商值清单-清除
-    handleSupplierClear = () => {
-        this.setState({
-            spId: ''
-        });
-        this.supplySearchMind.reset();
+        // 编辑查询条件
+        this.editSearchParams();
+        // 查询收货单单列表
+        this.queryReturnMngList();
     }
 
     handleCreact = () => {
@@ -462,22 +470,22 @@ class ReturnManagementList extends PureComponent {
         const spId = this.state.spId;
 
         // 供应商地点编号
-        const spAdrId = this.state.spAdrId;
+        const spAdrId = this.state.spId;
 
-        // 退货地点
-        const refundAdr = this.state.adrTypeCode;
+        // 地点
+        const adrTypeCode = this.state.refundAdr;
 
         const searchParams = {
             purchaseRefundNo,
             purchaseOrderNo,
-            adrType,
-            refundAdr,
             purchaseOrderType,
             status,
             spId,
             spAdrId,
             createTimeStart,
             createTimeEnd,
+            adrType,
+            adrTypeCode
         };
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
@@ -631,16 +639,16 @@ class ReturnManagementList extends PureComponent {
                                             }, 'querySuppliersList')}
                                             addonBefore=""
                                             onChoosed={this.handleSupplyChoose}
-                                            onClear={this.handleSupplierClear}
+                                            onClear={this.handleSupplyClear}
                                             renderChoosedInputRaw={(row) => (
-                                                <div>{row.spId}-{row.companyName}</div>
+                                                <div>{row.spNo}-{row.companyName}</div>
                                             )}
                                             rowKey="spId"
                                             pageSize={5}
                                             columns={[
                                                 {
                                                     title: '供应商',
-                                                    dataIndex: 'spId',
+                                                    dataIndex: 'spNo',
                                                     width: 80
                                                 }, {
                                                     title: '供应商名称',
@@ -652,62 +660,68 @@ class ReturnManagementList extends PureComponent {
                                 </FormItem>
                             </Col>
                             {/* 供应商地点 */}
-                            <Col span={8}>
-                                <FormItem className="">
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">供应商地点</span>
+                            <Col className="gutter-row" span={8}>
+                                <FormItem>
+                                    <span className="sc-form-item-label" style={{width: 70}}>供应商地点</span>
+                                    <span className="search-box-data-pic">
                                         <SearchMind
-                                            rowKey="providerNo"
-                                            compKey="search-mind-supply-address"
-                                            ref={ref => {
-                                                this.supplyAddressSearchMind = ref
-                                            }}
-                                            fetch={(params) => this.props.pubFetchValueList({
-                                                orgId: this.props.employeeCompanyId,
-                                                pId: this.state.spId,
+                                            style={{ zIndex: 9, verticalAlign: 'bottom' }}
+                                            compKey="providerNo"
+                                            ref={ref => { this.joiningAdressMind = ref }}
+                                            fetch={(params) =>
+                                            this.props.pubFetchValueList(Utils.removeInvalid({
                                                 condition: params.value,
-                                                pageNum: params.pagination.current || 1,
-                                                pageSize: params.pagination.pageSize
-                                            }, 'supplierAdrSearchBox')}
+                                                pageSize: params.pagination.pageSize,
+                                                pageNum: params.pagination.current || 1
+                                            }), 'supplierAdrSearchBox').then((res) => {
+                                                const dataArr = res.data.data || [];
+                                                if (!dataArr || dataArr.length === 0) {
+                                                    message.warning('没有可用的数据');
+                                                }
+                                                return res;
+                                            })}
                                             onChoosed={this.handleSupplierAddressChoose}
                                             onClear={this.handleSupplierAddressClear}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>{row.providerNo} - {row.providerName}</div>
+                                            renderChoosedInputRaw={(res) => (
+                                                <div>{res.providerNo} - {res.providerName}</div>
                                             )}
                                             pageSize={6}
-                                            columns={[{
-                                                title: '供应商地点编码',
-                                                dataIndex: 'providerNo',
-                                                width: 98
-                                            }, {
-                                                title: '供应商地点名称',
-                                                dataIndex: 'providerName'
-                                            }
+                                            columns={[
+                                                {
+                                                    title: '供应商地点编码',
+                                                    dataIndex: 'providerNo',
+                                                    width: 98
+                                                }, {
+                                                    title: '供应商地点名称',
+                                                    dataIndex: 'providerName'
+                                                }
                                             ]}
                                         />
-                                    </div>
+                                    </span>
                                 </FormItem>
                             </Col>
                             <Col span={8}>
                                 {/* 地点类型 */}
                                 <FormItem label="地点类型">
-                                    {getFieldDecorator('adrType', { initialValue: locType.defaultValue })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {
-                                                locType.data.map((item) => (
-                                                    <Option key={item.key} value={item.key}>
-                                                        {item.value}
-                                                    </Option>))
-                                            }
+                                    {getFieldDecorator('adrType', {
+                                        initialValue: locType.defaultValue
+                                    })(
+                                        <Select style={{ width: '153px' }} size="default" onChange={this.onLocTypeChange}>
+                                            {locType.data.map((item) => (
+                                                <Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>
+                                            ))}
                                         </Select>
-                                    )}
+                                        )}
                                 </FormItem>
                             </Col>
                             {/* 退货地点 */}
                             <Col span={8}>
+                                {/* 地点 */}
                                 <FormItem>
                                     <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">退货地点</span>
+                                        <span className="ant-form-item-label search-mind-label">地点</span>
                                         <SearchMind
                                             style={{ zIndex: 7 }}
                                             compKey="search-mind-key1"
@@ -716,6 +730,7 @@ class ReturnManagementList extends PureComponent {
                                             fetch={this.handleGetAddressMap}
                                             onChoosed={this.handleAddressChoose}
                                             onClear={this.handleAddressClear}
+                                            disabled={this.state.locDisabled}
                                             renderChoosedInputRaw={(row) => (
                                                 <div>
                                                     {row[this.state.locationData.code]} -
@@ -725,11 +740,11 @@ class ReturnManagementList extends PureComponent {
                                             pageSize={3}
                                             columns={[
                                                 {
-                                                    title: '退货地点编码',
+                                                    title: '编码',
                                                     dataIndex: this.state.locationData.code,
                                                     width: 80
                                                 }, {
-                                                    title: '退货地点名称',
+                                                    title: '名称',
                                                     dataIndex: this.state.locationData.name
                                                 }
                                             ]}
@@ -843,7 +858,6 @@ class ReturnManagementList extends PureComponent {
 }
 
 ReturnManagementList.propTypes = {
-    employeeCompanyId: PropTypes.string,
     fetchReturnMngList: PropTypes.func,
     getRefundNo: PropTypes.func,
     queryProcessDefinitions: PropTypes.func,

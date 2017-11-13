@@ -3,7 +3,7 @@
  * @Description: 采购退货新建编辑页
  * @CreateDate: 2017-10-27 11:26:16
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-06 09:27:06
+ * @Last Modified time: 2017-11-09 20:39:06
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -24,7 +24,8 @@ import {
     updatePoRcvBasicinfo,
     updatePoRcvLine,
     createPoRcv,
-    deleteBatchRefundOrder
+    deleteBatchRefundOrder,
+    queryProcessDefinitions
 } from '../../../actions/procurement';
 import { pubFetchValueList } from '../../../actions/pub';
 import SearchMind from '../../../components/searchMind';
@@ -46,7 +47,8 @@ const Step = Steps.Step;
     updatePoRcvBasicinfo,
     createPoRcv,
     pubFetchValueList,
-    deleteBatchRefundOrder
+    deleteBatchRefundOrder,
+    queryProcessDefinitions
 }, dispatch))
 
 class ReturnManagementCreat extends PureComponent {
@@ -718,7 +720,7 @@ class ReturnManagementCreat extends PureComponent {
                                         })}
                                         onChoosed={this.handleAdressChoose}
                                         onClear={this.handleAdressClear}
-                                        
+
                                         renderChoosedInputRaw={(res) => (
                                             <div>{res.productCode} - {res.productName}</div>
                                         )}

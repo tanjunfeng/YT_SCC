@@ -6,16 +6,18 @@
 import React, { PureComponent } from 'react';
 import { InputNumber } from 'antd';
 import PropTypes from 'prop-types';
+import { MAX_AMOUNT_OF_ORDER } from '../../../constant/index';
 
 class EditableCell extends PureComponent {
     handleChange = (value) => {
-        this.props.onChange(value);
+        this.props.onChange(+(value));
     }
 
     handlePressEnter = (event) => {
+        const value = +(event.target.value) || 0;
         // 回车操作时保存数量
         if (event.keyCode === 13) {
-            this.handleChange();
+            this.handleChange(value);
         }
     }
 
@@ -26,6 +28,7 @@ class EditableCell extends PureComponent {
                 <InputNumber
                     defaultValue={value}
                     min={min}
+                    max={MAX_AMOUNT_OF_ORDER}
                     step={step}
                     onChange={this.handleChange}
                     onKeyUp={this.handlePressEnter}

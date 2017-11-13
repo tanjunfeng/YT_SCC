@@ -836,7 +836,7 @@ export const queryCouponsList = (params) => http.get('/coupon/queryCouponsList',
 export const queryAliveCouponsList = (params) => http.get('/coupon/queryAliveCouponsList', params);
 export const getCouponsDetail = (params) => http.get('/coupon/queryCouponsById', params);
 export const queryFranchiseeList = (params) => http.get('/franchisee/grantFranchisee', params);
-export const grantCoupon = (params) => http.post('/coupon/grantCoupon', params);
+export const grantCoupon = (params) => http.post('/coupon/grantMutiQtyCoupon', params);
 export const invalidRecordList = (params) => http.post('/coupon/queryCouponActivityActiveList', params);
 export const cancelCoupons = (params) => http.get('/coupon/cancelCoupons', params);
 
@@ -855,9 +855,11 @@ export const getReturnGoodsOperation = (params) => http.post('/webReturnRequest/
 // 退换货单详情
 export const getReturnGoodsDetail = (params) => http.get('/webReturnRequest/returnRequestDetail', params);
 // 退换货详情保存
-export const getReturnGoodsDetailSave = (params) => http.get('/webReturnRequest/orderDescription', params);
+export const getReturnGoodsDetailSave = (params) => http.post('/webReturnRequest/returnDescription', params);
 // 换货详情保存
-export const getReturnDescriptionSave = (params) => http.get('/webReturnRequest/returnDescription', params);
+export const returnDescriptionSave = (params) => http.post('/webReturnRequest/returnDescription', params);
+// 销售退货退款
+export const insertRefund = (params) => http.get('/webReturnRequest/insertRefund', params);
 
 // 查询退货单审批列表
 export const queryAuditPurReList = (params) => http.get('/pmPurchaseRefund/queryAuditPurchaseRefundList', params);
@@ -881,4 +883,4 @@ export const insertDirectOrder = params => http.post('/directStore/directCommitO
 export const batchCheckStorage = params => http.post('/directStore/validateDirectOrder', params);
 
 // 查询退货单审批流程
-export const queryProcessDefinitions = params => http.post('/pmPurchaseRefund/queryProcessDefinitions', params);
+export const queryProcessDefinitions = params => http.get('/pmPurchaseRefund/queryProcessDefinitions', params);

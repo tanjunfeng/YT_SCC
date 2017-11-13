@@ -6,7 +6,7 @@ import { withRouter } from 'react-router';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../../util/util';
-import { returnGoodsStatus, goodsReceiptStatus } from '../../../constant/salesManagement';
+import { returnGoodsStatus, goodsReceiptStatus, returnType } from '../../../constant/salesManagement';
 import { returnGoodsList, returnGoodsListFormData, returnGoodsListFormDataClear } from '../../../actions';
 import { pubFetchValueList } from '../../../actions/pub';
 import { PAGE_SIZE } from '../../../constant';
@@ -53,6 +53,10 @@ class SearchForm extends PureComponent {
         if (this.props.page !== nextProps.page) {
             this.requestSearch(nextProps.page)
         }
+        if (this.props.upDate !== nextProps.upDate) {
+            this.requestSearch()
+            this.handleSearch()
+        }
         if (this.props.refresh !== nextProps.refresh) {
             this.requestSearch()
         }
@@ -66,7 +70,8 @@ class SearchForm extends PureComponent {
             orderId,
             shippingState,
             createTime,
-            state
+            state,
+            returnRequestType
             } = this.props.form.getFieldsValue();
         const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
         const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
@@ -78,7 +83,8 @@ class SearchForm extends PureComponent {
             shippingState,
             state,
             startCreateTime,
-            endCreateTime
+            endCreateTime,
+            returnRequestType
         };
 
         return Utils.removeInvalid(searchParams);
@@ -86,38 +92,37 @@ class SearchForm extends PureComponent {
 
     // 搜索方法
     requestSearch = (nextPage) => {
-        const { returnGoodsListFormData, returnGoodsList, page } = this.props;
+        const { page } = this.props;
         const seachParams = this.getSearchParams();
         const data = {
             data: {
                 pageSize: PAGE_SIZE,
-                pageNum: nextPage ? nextPage : page,
+                pageNum: nextPage || page,
                 franchiseeId: this.state.franchiseeId,
                 ...seachParams
             },
             franchiseeIdName: this.state.franchiseeIdName,
             branchCompany: this.branchCompany
         }
-        returnGoodsListFormData(data)
-        returnGoodsList(Utils.removeInvalid(data.data))
+        this.props.returnGoodsListFormData(data)
+        this.props.returnGoodsList(Utils.removeInvalid(data.data))
     }
 
 
     // 搜索
     handleSearch = (e) => {
         e.preventDefault();
-        this.requestSearch()
+        this.requestSearch();
     }
 
 
     // 重置
     handleReset = () => {
-        const { returnGoodsListFormDataClear } = this.props;
         this.handleJoiningClear();
         this.joiningSearchMind.reset();
         this.props.form.resetFields();
         this.branchCompany = { id: '', name: '' };
-        returnGoodsListFormDataClear()
+        this.props.returnGoodsListFormDataClear()
     }
 
     // 加盟商-值清单
@@ -136,11 +141,6 @@ class SearchForm extends PureComponent {
         });
     }
 
-    handleCreate = () => {
-        const { history } = this.props;
-        history.push('/returnGoodsList/modify');
-    }
-
     render() {
         const { getFieldDecorator } = this.props.form;
         const { data } = this.props;
@@ -152,6 +152,23 @@ class SearchForm extends PureComponent {
                     onSubmit={this.handleSearch}
                 >
                     <Row gutter={40}>
+                        <Col span={8}>
+                            <FormItem label="退货单类型">
+                                {getFieldDecorator('returnRequestType', {
+                                    initialValue: data.state ? data.state : ''
+                                })(
+                                    <Select style={{ width: '200px' }} size="default">
+                                        {
+                                            returnType.data.map((item) => (
+                                                <Select.Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Select.Option>
+                                            ))
+                                        }
+                                    </Select>
+                                    )}
+                            </FormItem>
+                        </Col>
                         <Col span={8}>
                             <FormItem label="原订单号">
                                 {getFieldDecorator('orderId', {
@@ -171,6 +188,8 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </FormItem>
                         </Col>
+                    </Row>
+                    <Row gutter={40}>
                         <Col span={8} className="franchisee-item">
                             <FormItem>
                                 <div>
@@ -210,8 +229,6 @@ class SearchForm extends PureComponent {
                                 </div>
                             </FormItem>
                         </Col>
-                    </Row>
-                    <Row gutter={40}>
                         <Col span={8}>
                             <FormItem label="退货单号">
                                 {getFieldDecorator('id', {
@@ -238,6 +255,8 @@ class SearchForm extends PureComponent {
                                     )}
                             </FormItem>
                         </Col>
+                    </Row>
+                    <Row gutter={40}>
                         <Col span={8}>
                             <FormItem label="收货状态">
                                 {getFieldDecorator('shippingState', {
@@ -255,8 +274,6 @@ class SearchForm extends PureComponent {
                                     )}
                             </FormItem>
                         </Col>
-                    </Row>
-                    <Row gutter={40}>
                         <Col span={8}>
                             <FormItem >
                                 <div className="row middle">
@@ -282,7 +299,6 @@ class SearchForm extends PureComponent {
                     </Row>
                     <Row gutter={40}>
                         <Col span={24} style={{ textAlign: 'right' }}>
-                            <Button style={{ marginRight: 8 }} onClick={this.handleCreate}>新建</Button>
                             <Button type="primary" htmlType="submit">搜索</Button>
                             <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>重置</Button>
                         </Col>
@@ -303,8 +319,8 @@ SearchForm.propTypes = {
     branchCompany: PropTypes.objectOf(PropTypes.any),
     page: PropTypes.number,
     refresh: PropTypes.bool,
+    upDate: PropTypes.bool,
     franchiseeIdName: PropTypes.string,
-    history: PropTypes.objectOf(PropTypes.any),
 };
 
 export default withRouter(Form.create()(SearchForm));

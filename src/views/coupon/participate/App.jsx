@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Tabs, Button } from 'antd';
+import { Table, Form, Tabs, Button, message } from 'antd';
 
 import {
     getUsedCouponParticipate,
@@ -103,15 +103,15 @@ class CouponsParticipate extends PureComponent {
      *  Tab2 - 分页页码改变的回调
      */
     onPaginateUnUsed = (pageNum) => {
-        Object.assign(this.invalidRecord, { pageNum });
+        Object.assign(this.paramUnUsed, { pageNum });
         this.currentUnUnsed = pageNum;
         this.query('unUsed');
     }
     /**
      *  Tab3 - 分页页码改变的回调
      */
-    onPaginateUnUsed = (pageNum) => {
-        Object.assign(this.paramUnUsed, { pageNum });
+    onPaginateToVoid = (pageNum) => {
+        Object.assign(this.invalidRecord, { pageNum });
         this.currentInvalidRecord = pageNum;
         this.query('invalidRecord');
     }
@@ -129,9 +129,6 @@ class CouponsParticipate extends PureComponent {
                 this.queryinvalidRecord();
                 break;
             default:
-                this.queryUsed();
-                this.queryUnUsed();
-                this.queryinvalidRecord();
                 break;
         }
     }
@@ -167,6 +164,10 @@ class CouponsParticipate extends PureComponent {
                 this.queryUnUsed();
                 this.tabKey = false;
                 break;
+            case 'invalidRecord':
+                this.queryinvalidRecord();
+                this.tabKey = false;
+                break;
             default:
                 this.queryUsed();
                 this.queryUnUsed();
@@ -181,8 +182,12 @@ class CouponsParticipate extends PureComponent {
         selectedListData.forEach((item) => {
             cancelCouponsList.push(item.id)
         })
-        this.props.cancelCoupons({ couponActivityIds: cancelCouponsList.join(',') });
-        this.queryUnUsed();
+        this.props.cancelCoupons({ couponActivityIds: cancelCouponsList.join(',') }).then((res) => {
+            if (res.code === 200) {
+                message.error(res.message);
+                this.queryUnUsed();
+            }
+        })
     }
 
     handleParticipateSearch(param) {
@@ -233,8 +238,10 @@ class CouponsParticipate extends PureComponent {
         };
         if (this.state.tabPage === '1') {
             Util.exportExcel(exportParticipateData1, condition);
-        } else {
+        } else if (this.state.tabPage === '2') {
             Util.exportExcel(exportParticipateData2, {condition, queryType: 1});
+        } else {
+            Util.exportExcel(exportParticipateData2, {condition, queryType: 2});
         }
     }
 
@@ -252,6 +259,7 @@ class CouponsParticipate extends PureComponent {
                 })
             },
         };
+        console.log(this.props.unUsedCouponParticipate)
         return (
             <div>
                 <SearchForm
@@ -326,9 +334,9 @@ class CouponsParticipate extends PureComponent {
                                 current: this.currentInvalidRecord,
                                 pageNum: this.invalidRecord.pageNum,
                                 pageSize: this.invalidRecord.pageSize,
-                                total: this.props.invalidRecordList.total,
+                                total: this.props.unUsedCouponParticipate.total,
                                 showQuickJumper: true,
-                                onChange: this.onPaginateUnUsed
+                                onChange: this.onPaginateToVoid
                             }}
                         />
                     </TabPane>

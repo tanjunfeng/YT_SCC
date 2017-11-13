@@ -7,7 +7,7 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../../util/util';
 import { returnGoodsStatus, goodsReceiptStatus } from '../../../constant/salesManagement';
-import { returnGoodsList, returnGoodsListFormData } from '../../../actions';
+import { returnGoodsList, returnGoodsListFormData, returnGoodsListFormDataClear } from '../../../actions';
 import { pubFetchValueList } from '../../../actions/pub';
 import { PAGE_SIZE } from '../../../constant';
 import SearchMind from '../../../components/searchMind';
@@ -26,7 +26,8 @@ const dateFormat = 'YYYY-MM-DD';
     dispatch => bindActionCreators({
         returnGoodsList,
         returnGoodsListFormData,
-        pubFetchValueList
+        pubFetchValueList,
+        returnGoodsListFormDataClear
     }, dispatch)
 )
 
@@ -101,20 +102,20 @@ class SearchForm extends PureComponent {
         returnGoodsList(Utils.removeInvalid(data.data))
     }
 
-
     // 搜索
     handleSearch = (e) => {
         e.preventDefault();
         this.requestSearch()
     }
 
-
     // 重置
     handleReset = () => {
+        const { returnGoodsListFormDataClear } = this.props;
         this.handleJoiningClear();
         this.joiningSearchMind.reset();
         this.props.form.resetFields();
         this.branchCompany = { id: '', name: '' };
+        returnGoodsListFormDataClear()
     }
 
     // 加盟商-值清单
@@ -287,6 +288,7 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     returnGoodsListFormData: PropTypes.func,
     returnGoodsList: PropTypes.func,
+    returnGoodsListFormDataClear: PropTypes.func,
     pubFetchValueList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     data: PropTypes.objectOf(PropTypes.any),

@@ -63,7 +63,7 @@ class AddingGoodsByStore extends PureComponent {
                 addonBefore="添加商品"
                 onClear={this.handleClear}
                 onChoosed={this.handleChoose}
-                renderChoosedInputRaw={(data) => (
+                renderChoosedInputRaw={data => (
                     <div>{data.productCode} - {data.productName}</div>
                 )}
                 pageSize={6}

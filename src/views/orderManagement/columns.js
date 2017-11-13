@@ -151,7 +151,7 @@ const returnGoodsListColumns = [{
 {
     title: '原订单号',
     dataIndex: 'orderId',
-    key: 'orderId',
+    key: 'orderId'
 },
 {
     title: '子公司',
@@ -164,8 +164,8 @@ const returnGoodsListColumns = [{
 },
 {
     title: '总金额',
-    dataIndex: 'total',
-    key: 'total',
+    dataIndex: 'amount',
+    key: 'amount',
     render: (text) => {
         if (text === null) {
             return null
@@ -176,12 +176,12 @@ const returnGoodsListColumns = [{
     }
 },
 {
-    title: '退货单状态',
+    title: '换货单状态',
     dataIndex: 'stateDetail',
     key: 'stateDetail'
 },
 {
-    title: '收货状态',
+    title: '商品状态',
     dataIndex: 'productStateDetail',
     key: 'productStateDetail'
 },
@@ -192,7 +192,7 @@ const returnGoodsListColumns = [{
 }
 ]
 
-// 退货单列表
+// 换货单列表
 const exchangeGoodsListColumns = [{
     title: '序号',
     dataIndex: 'idx',
@@ -243,8 +243,8 @@ const exchangeGoodsListColumns = [{
 },
 {
     title: '换货单状态',
-    dataIndex: 'paymentStateDetail',
-    key: 'paymentStateDetail'
+    dataIndex: 'state',
+    key: 'state'
 },
 {
     title: '商品状态',

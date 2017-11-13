@@ -16,6 +16,7 @@ import {
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { releaseCouponsColumns as columns } from '../columns';
+import EditableCell from './editableCell';
 
 @connect(state => ({
     couponsList: state.toJS().promotion.couponsList
@@ -25,23 +26,10 @@ import { releaseCouponsColumns as columns } from '../columns';
 }, dispatch))
 
 class ReleaseCouponModal extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            promoIds: []
-        };
-        this.param = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE,
-            current: 1
-        };
-        this.handleCouponSearch = this.handleCouponSearch.bind(this);
-        this.handleCouponReset = this.handleCouponReset.bind(this);
-        this.handleOk = this.handleOk.bind(this);
-        this.handleCancel = this.handleCancel.bind(this);
-        this.onSelectChange = this.onSelectChange.bind(this);
-        this.query = this.query.bind(this);
-    }
+    state = {
+        promoIds: [],
+        coupons: {}
+    };
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.visible && this.props.visible) {
@@ -71,18 +59,29 @@ class ReleaseCouponModal extends PureComponent {
     /**
      * table复选框
      */
-    onSelectChange(promoIds) {
+    onSelectChange = (promoIds) => {
         this.setState({ promoIds });
     }
 
-    query() {
-        this.props.queryAliveCouponsList(this.param).then((data) => {
-            const { pageNum, pageSize } = data.data;
-            Object.assign(this.param, { pageNum, pageSize });
+    onCellChange = id => quantity => {
+        const coupons = this.state.coupons;
+        Object.assign(coupons, {
+            [id]: quantity
         });
     }
 
-    handleCouponSearch(param) {
+    /**
+     * 剩余优惠券数量，优惠券总数减去已发放数量
+     */
+    getLeftQuantity = record => (record.totalQuantity - record.grantQty)
+
+    param = {
+        pageNum: 1,
+        pageSize: PAGE_SIZE,
+        current: 1
+    };
+
+    handleCouponSearch = (param) => {
         this.handleCouponReset();
         Object.assign(this.param, {
             current: 1,
@@ -91,7 +90,7 @@ class ReleaseCouponModal extends PureComponent {
         this.query();
     }
 
-    handleCouponReset() {
+    handleCouponReset = () => {
         // 重置检索条件
         this.param = {
             pageNum: 1,
@@ -99,25 +98,65 @@ class ReleaseCouponModal extends PureComponent {
         }
     }
 
-    handleOk() {
+    handleOk = () => {
         if (this.state.promoIds.length === 0) {
             message.error('请选择至少一张优惠券');
         } else {
-            this.props.onReleaseCouponModalOk(this.state.promoIds);
+            const { coupons, promoIds } = this.state;
+            const dist = {};
+            // 过滤掉未选中的优惠券，只回传已选中的券
+            promoIds.forEach(id => {
+                if (coupons[id]) {
+                    Object.assign(dist, {
+                        [id]: coupons[id]
+                    });
+                }
+            });
+            this.props.onReleaseCouponModalOk(dist);
         }
     }
 
-    handleCancel() {
-        this.props.onReleaseCouponModalCancel(this.state.promoIds);
+    handleCancel = () => {
+        this.props.onReleaseCouponModalCancel();
+    }
+
+    query = () => {
+        // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/coupon/queryAliveCouponsList
+        this.props.queryAliveCouponsList(this.param).then((res) => {
+            const { pageNum, pageSize, data } = res.data;
+            Object.assign(this.param, { pageNum, pageSize });
+            // 当查询到优惠券列表时，组装编号和数量
+            const coupons = {};
+            data.forEach(item => {
+                Object.assign(coupons, {
+                    [item.id]: 1
+                });
+            });
+            // 初始化回传参数
+            this.setState({ coupons });
+        });
+    }
+
+    renderQuantity = (text, record) => (
+        <EditableCell
+            value={text}
+            max={this.getLeftQuantity(record)}
+            onChange={this.onCellChange(record.id)}
+        />)
+
+    renderColumns = () => {
+        // 剩余数量计算
+        columns[5].render = (text, record) => this.getLeftQuantity(record);
+        columns[6].render = this.renderQuantity;
     }
 
     render() {
+        this.renderColumns();
         const { data, total, pageNum, pageSize } = this.props.couponsList;
         const rowSelection = {
             selectedRowKeys: this.state.promoIds,
             onChange: this.onSelectChange
         };
-        columns[columns.length - 1].render = this.renderOperations;
         return (
             <Modal
                 title="选择优惠券类型"
