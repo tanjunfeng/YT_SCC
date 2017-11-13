@@ -8,7 +8,6 @@
 import React from 'react';
 import Util from '../../util/util';
 import { promotionStatus } from './constants';
-import { couponTypeStatus } from '../coupon/constants';
 
 // 发放优惠券列表
 const grantCouponsColumns = [{
@@ -61,11 +60,6 @@ const releaseCouponsColumns = [{
     title: '面额',
     dataIndex: 'discount',
     key: 'discount'
-}, {
-    title: '类型',
-    dataIndex: 'couponType',
-    key: 'couponType',
-    redender: couponTypeCode => couponTypeStatus[couponTypeCode]
 }, {
     title: '品类',
     dataIndex: 'promoCategoriesPo',

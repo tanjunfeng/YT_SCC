@@ -128,7 +128,7 @@ class SearchForm extends PureComponent {
                                 <FormItem>
                                     <div className="row">
                                         <span className="sc-form-item-label search-mind-label">
-                                            所属公司
+                                            所属子公司
                                         </span>
                                         <SubCompanies
                                             value={this.state.branchCompanyId}
