@@ -358,6 +358,26 @@ class CouponCreate extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={16}>
+                                        <FormItem className="condition" label="优惠券类型">
+                                            {getFieldDecorator('couponType', {
+                                                initialValue: this.param.couponType,
+                                                rules: [{ required: true, message: '请选择优惠券类型' }]
+                                            })(
+                                                <RadioGroup
+                                                    onChange={this.handleCouponTypeChange}
+                                                >
+                                                    <Radio
+                                                        className="default"
+                                                        value={'default'}
+                                                    >普通券</Radio>
+                                                    <Radio value={'toGive'}>会员等级券</Radio>
+                                                </RadioGroup>
+                                                )}
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span={16}>
                                         <FormItem label="面额" >
                                             {getFieldDecorator('discount', {
                                                 rules: [
@@ -389,26 +409,6 @@ class CouponCreate extends PureComponent {
                                                     format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
                                                     placeholder={['开始时间', '结束时间']}
                                                 />
-                                                )}
-                                        </FormItem>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col span={16}>
-                                        <FormItem className="condition" label="优惠券类型">
-                                            {getFieldDecorator('couponType', {
-                                                initialValue: this.param.couponType,
-                                                rules: [{ required: true, message: '请选择优惠券类型' }]
-                                            })(
-                                                <RadioGroup
-                                                    onChange={this.handleCouponTypeChange}
-                                                >
-                                                    <Radio
-                                                        className="default"
-                                                        value={'default'}
-                                                    >默认</Radio>
-                                                    <Radio value={'toGive'}>返券</Radio>
-                                                </RadioGroup>
                                                 )}
                                         </FormItem>
                                     </Col>
