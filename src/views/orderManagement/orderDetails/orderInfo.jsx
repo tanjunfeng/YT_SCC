@@ -163,6 +163,8 @@ class OrderInformation extends PureComponent {
         })
     }
 
+    getAmount = amount => (`￥${Number(amount).toFixed(2)}`);
+
     render() {
         const { orderDetailData } = this.props;
         return (
@@ -189,7 +191,7 @@ class OrderInformation extends PureComponent {
                                 </Col>
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">商品总金额:</span>
-                                    <span>¥{orderDetailData.rawSubtotal}</span>
+                                    <span>{this.getAmount(orderDetailData.rawSubtotal)}</span>
                                 </Col>
                             </Row>
                             <Row>
@@ -207,7 +209,7 @@ class OrderInformation extends PureComponent {
                                 </Col>
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">运费:</span>
-                                    <span>¥{orderDetailData.shipping}</span>
+                                    <span>{this.getAmount(orderDetailData.shipping)}</span>
                                 </Col>
                             </Row>
                             <Row>
@@ -225,7 +227,7 @@ class OrderInformation extends PureComponent {
                                 </Col>
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">优惠券优惠:</span>
-                                    <span>-¥{orderDetailData.couponDiscountAmount}</span>
+                                    <span>-{this.getAmount(orderDetailData.couponDiscountAmount)}</span>
                                 </Col>
                             </Row>
                             <Row>
@@ -235,7 +237,7 @@ class OrderInformation extends PureComponent {
                                 </Col>
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">活动优惠:</span>
-                                    <span>-¥{orderDetailData.discount}</span>
+                                    <span>-{this.getAmount(orderDetailData.discount)}</span>
                                 </Col>
                             </Row>
                             <Row>
@@ -262,7 +264,7 @@ class OrderInformation extends PureComponent {
                                 </Col>
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">实付金额:</span>
-                                    <span>¥{orderDetailData.amount}</span>
+                                    <span className="red-star">{this.getAmount(orderDetailData.amount)}</span>
                                 </Col>
                             </Row>
                         </div>

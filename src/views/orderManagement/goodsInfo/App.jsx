@@ -190,7 +190,7 @@ class GoodsInfo extends PureComponent {
                     </span>
                     <span className="table-statistics-item">
                         <span>总金额： ￥</span>
-                        <span className="red">{rawSubtotal}</span>
+                        <span className="red">{Number(rawSubtotal).toFixed(2)}</span>
                     </span>
                 </div>
             </div>
