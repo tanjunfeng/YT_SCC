@@ -12,7 +12,7 @@
  * 促销活动列表
  */
 import React from 'react';
-import { promotionStatus, couponType } from './constants';
+import { promotionStatus, couponTypeStatus } from './constants';
 import Util from '../../util/util';
 
 // 优惠券列表
@@ -21,6 +21,11 @@ const couponList = [{
     dataIndex: 'id',
     key: 'id'
 }, {
+    title: '类型',
+    dataIndex: 'couponType',
+    key: 'couponType',
+    render: couponTypeCode => (couponTypeStatus[couponTypeCode])
+}, {
     title: '券名称',
     dataIndex: 'promotionName',
     key: 'promotionName'
@@ -28,11 +33,6 @@ const couponList = [{
     title: '面额',
     dataIndex: 'discount',
     key: 'discount'
-}, {
-    title: '优惠券类型',
-    dataIndex: 'couponType',
-    key: 'couponType',
-    redender: couponTypeCode => couponType[couponTypeCode]
 }, {
     title: '品类',
     dataIndex: 'promoCategoriesPo',
@@ -63,18 +63,19 @@ const couponList = [{
     key: 'quanifyAmount',
     render: amount => (amount ? `满 ${amount} 元可用` : '不限制')
 }, {
-    title: '有效时间',
-    children: [{
-        title: '开始时间',
-        dataIndex: 'startDate',
-        key: 'startDate',
-        render: timestamp => Util.getTime(timestamp)
-    }, {
-        title: '结束时间',
-        dataIndex: 'endDate',
-        key: 'endDate',
-        render: timestamp => Util.getTime(timestamp)
-    }],
+    title: '有效日期',
+    colSpan: 2,
+    dataIndex: 'startDate',
+    render: timestamp => ({
+        children: Util.getTime(timestamp)
+    })
+}, {
+    title: '结束时间',
+    colSpan: 0,
+    dataIndex: 'endDate',
+    render: (timestamp, row) => ({
+        children: Util.getTime(row.endDate)
+    })
 }, {
     title: '发放数量',
     dataIndex: 'totalQuantity',
@@ -111,6 +112,11 @@ const couponsDetail = [{
     dataIndex: 'id',
     key: 'id'
 }, {
+    title: '优惠券类型',
+    dataIndex: 'couponType',
+    key: 'couponType',
+    redender: couponTypeCode => couponTypeStatus[couponTypeCode]
+}, {
     title: '券名称',
     dataIndex: 'promotionName',
     key: 'promotionName'
@@ -118,11 +124,6 @@ const couponsDetail = [{
     title: '面额',
     dataIndex: 'discount',
     key: 'discount'
-}, {
-    title: '优惠券类型',
-    dataIndex: 'couponType',
-    key: 'couponType',
-    redender: couponTypeCode => couponType[couponTypeCode]
 }, {
     title: '品类',
     dataIndex: 'promoCategoriesPo',
