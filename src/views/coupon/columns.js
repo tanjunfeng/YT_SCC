@@ -12,7 +12,7 @@
  * 促销活动列表
  */
 import React from 'react';
-import { promotionStatus } from './constants';
+import { promotionStatus, couponType } from './constants';
 import Util from '../../util/util';
 
 // 优惠券列表
@@ -28,6 +28,11 @@ const couponList = [{
     title: '面额',
     dataIndex: 'discount',
     key: 'discount'
+}, {
+    title: '优惠券类型',
+    dataIndex: 'couponType',
+    key: 'couponType',
+    redender: couponTypeCode => couponType[couponTypeCode]
 }, {
     title: '品类',
     dataIndex: 'promoCategoriesPo',
@@ -113,6 +118,11 @@ const couponsDetail = [{
     title: '面额',
     dataIndex: 'discount',
     key: 'discount'
+}, {
+    title: '优惠券类型',
+    dataIndex: 'couponType',
+    key: 'couponType',
+    redender: couponTypeCode => couponType[couponTypeCode]
 }, {
     title: '品类',
     dataIndex: 'promoCategoriesPo',
