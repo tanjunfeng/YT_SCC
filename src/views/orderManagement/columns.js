@@ -42,9 +42,13 @@ const goodsColumns = [{
     title: '商品分类',
     dataIndex: 'commodifyClassify',
     key: 'commodifyClassify',
-    render: (text, record) => (
-        <span>{record.secondLevelCategoryName}&gt;{record.thirdLevelCategoryName}</span>
-    )
+    render: (text, record) => {
+        let after = '';
+        if (record.thirdLevelCategoryName !== null) {
+            after = ` > ${record.thirdLevelCategoryName}`;
+        }
+        return <span>{record.secondLevelCategoryName}{after}</span>;
+    }
 }, {
     title: '数量',
     dataIndex: 'quantity',
