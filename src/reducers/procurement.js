@@ -222,6 +222,11 @@ export default function (state = initState, action) {
         case ActionType.ADD_REFUND_PRODUCTS: {
             return state.set('returnLists', fromJS(action.payload));
         }
+        case ActionType.CLEAR_RETURN_INFO:
+            return state
+                .set('returnLists', fromJS([]))
+                .set('poReturn', fromJS({}))
+                .set('getRefundNumebr', fromJS(''))
         default:
             return state;
     }

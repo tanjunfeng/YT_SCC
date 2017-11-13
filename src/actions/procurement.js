@@ -620,6 +620,12 @@ export const clearRefundNo = () => dispatch => (dispatch({
     payload: {}
 }));
 
+// 清除采购退货数据
+export const clearReturnInfo = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_RETURN_INFO,
+    payload: {}
+}))
+
 /**
  * 批量删除处于草稿状态的退货单
  * @param {*} data
