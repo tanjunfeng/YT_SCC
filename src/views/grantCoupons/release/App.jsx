@@ -123,7 +123,7 @@ class ReleaseCouponModal extends PureComponent {
     query = () => {
         // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/coupon/queryAliveCouponsList
         this.props.queryAliveCouponsList(this.param).then((res) => {
-            const { pageNum, pageSize, data } = res.data;
+            const { pageNum, pageSize, data = [] } = res.data;
             Object.assign(this.param, { pageNum, pageSize });
             // 当查询到优惠券列表时，组装编号和数量
             const coupons = {};

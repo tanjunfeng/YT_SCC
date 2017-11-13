@@ -259,7 +259,6 @@ class CouponsParticipate extends PureComponent {
                 })
             },
         };
-        console.log(this.props.unUsedCouponParticipate)
         return (
             <div>
                 <SearchForm

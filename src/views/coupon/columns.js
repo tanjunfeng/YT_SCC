@@ -45,7 +45,7 @@ const couponList = [{
     }
 },
 {
-    title: '范围',
+    title: '使用区域',
     dataIndex: 'companiesPoList',
     key: 'companiesPoList',
     render: list => {
@@ -115,7 +115,7 @@ const couponsDetail = [{
     title: '优惠券类型',
     dataIndex: 'couponType',
     key: 'couponType',
-    redender: couponTypeCode => couponTypeStatus[couponTypeCode]
+    render: couponTypeCode => couponTypeStatus[couponTypeCode]
 }, {
     title: '券名称',
     dataIndex: 'promotionName',

@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Utils from '../../../../util/util';
 import { promotionStatus } from '.././constants';
-import { SubCompanies } from '../../../../container/search';
+import { BranchCompany } from '../../../../container/search';
 import { pubFetchValueList } from '../../../../actions/pub';
 import { PAGE_SIZE } from '../../../../constant';
 
@@ -28,26 +28,16 @@ const Option = Select.Option;
 )
 
 class SearchForm extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.joiningSearchMind = null;
-        this.state = {
-            branchCompanyId: '',
-            isReleaseCouponModalVisible: false,
-            grantMethod: 0,
-            warehouseVisible: false,
-            companyVisible: false,
-            supplyChoose: {},
-        }
-        this.handleSearch = this.handleSearch.bind(this);
-        this.handleReset = this.handleReset.bind(this);
-        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-        this.hanldeSubCompanyClear = this.hanldeSubCompanyClear.bind(this);
-        this.handleGoOnline = this.handleGoOnline.bind(this);
-        this.handleOffline = this.handleOffline.bind(this);
+    state = {
+        branchCompanyId: '',
+        isReleaseCouponModalVisible: false,
+        grantMethod: 0,
+        warehouseVisible: false,
+        companyVisible: false,
+        supplyChoose: {},
     }
 
-    getStatus() {
+    getStatus = () => {
         const keys = Object.keys(promotionStatus);
         return keys.map((key) => (
             <Option key={key} value={key}>
@@ -56,15 +46,15 @@ class SearchForm extends PureComponent {
         ));
     }
 
-    getFormData() {
+    getFormData = () => {
         const {
             franchiseeId,
             franchinessName,
             storeId,
             storeName,
-            scPurchaseFlag
+            scPurchaseFlag,
+            branchCompany
         } = this.props.form.getFieldsValue();
-        const branchCompanyId = this.state.branchCompanyId;
         let status = scPurchaseFlag;
         const pageSize = PAGE_SIZE;
         if (scPurchaseFlag === 'all') {
@@ -76,27 +66,18 @@ class SearchForm extends PureComponent {
             storeId,
             storeName,
             scPurchaseFlag: status,
-            branchCompanyId,
+            branchCompanyId: branchCompany.id,
             pageSize,
             pageNo: 1,
         });
     }
 
-    handleSubCompanyChoose(branchCompanyId) {
-        this.setState({ branchCompanyId });
-    }
-
-    hanldeSubCompanyClear() {
-        this.setState({ branchCompanyId: '' });
-    }
-
-    handleSearch() {
+    handleSearch = () => {
         // 将查询条件回传给调用页
         this.props.onPromotionSearch(this.getFormData());
     }
 
-    handleReset() {
-        this.hanldeSubCompanyClear(); // 清除子公司值清单
+    handleReset = () => {
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onPromotionReset();  // 通知父页面已清空
     }
@@ -127,15 +108,10 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem>
-                                    <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">所属子公司</span>
-                                        <SubCompanies
-                                            value={this.state.branchCompanyId}
-                                            onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                            onSubCompaniesClear={this.hanldeSubCompanyClear}
-                                        />
-                                    </div>
+                                <FormItem label="所属子公司">
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: { id: '', name: '' }
+                                    })(<BranchCompany />)}
                                 </FormItem>
                             </Col>
                         </Row>

@@ -6,7 +6,7 @@ export const promotionStatus = {
     ended: '已结束'
 };
 
-export const couponTypeStatus = { default: '普通券', toGive: '会员等级券' };
+export const couponTypeStatus = { '': '请选择', default: '普通券', toGive: '会员等级券' };
 
 // 下单打折 - 参与数据
 export const participate = {
