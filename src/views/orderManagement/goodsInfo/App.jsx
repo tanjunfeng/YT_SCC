@@ -165,7 +165,7 @@ class GoodsInfo extends PureComponent {
 
     render() {
         const { value } = this.props;
-        const { countOfItem, amount } = value;
+        const { countOfItem, rawSubtotal } = value;
         return (
             <div className="detail-message add-sub-orders">
                 <div className="detail-message-header">
@@ -190,7 +190,7 @@ class GoodsInfo extends PureComponent {
                     </span>
                     <span className="table-statistics-item">
                         <span>总金额： ￥</span>
-                        <span className="red">{amount}</span>
+                        <span className="red">{rawSubtotal}</span>
                     </span>
                 </div>
             </div>

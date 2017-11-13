@@ -189,7 +189,7 @@ class OrderInformation extends PureComponent {
                                 </Col>
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">商品总金额:</span>
-                                    <span>{orderDetailData.orderTypeDesc}</span>
+                                    <span>¥{orderDetailData.rawSubtotal}</span>
                                 </Col>
                             </Row>
                             <Row>
@@ -205,6 +205,10 @@ class OrderInformation extends PureComponent {
                                     <span className="details-info-lable">物流状态:</span>
                                     <span>{orderDetailData.shippingStateDesc}</span>
                                 </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">运费:</span>
+                                    <span>¥{orderDetailData.shipping}</span>
+                                </Col>
                             </Row>
                             <Row>
                                 <Col className="gutter-row" span={6}>
@@ -219,22 +223,23 @@ class OrderInformation extends PureComponent {
                                     <span className="details-info-lable">出货仓:</span>
                                     <span>{orderDetailData.branchCompanyArehouse}</span>
                                 </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">优惠券优惠:</span>
+                                    <span>-¥{orderDetailData.couponDiscountAmount}</span>
+                                </Col>
                             </Row>
                             <Row>
-                                <Col className="gutter-row" span={6}>
+                                <Col className="gutter-row" span={18}>
                                     <span className="details-info-lable">电商单据编号:</span>
                                     <span>{orderDetailData.thirdPartOrderNo}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
-                                    <span className="details-info-lable">下单日期:</span>
-                                    <span>
-                                        {moment(parseInt(orderDetailData.creationTime, 10))
-                                            .format(TIME_FORMAT)}
-                                    </span>
+                                    <span className="details-info-lable">活动优惠:</span>
+                                    <span>-¥{orderDetailData.discount}</span>
                                 </Col>
                             </Row>
                             <Row>
-                                <Col className="gutter-row" span={14}>
+                                <Col className="gutter-row" span={12}>
                                     <span className="details-info-lable">备注:</span>
                                     <TextArea
                                         autosize={{ minRows: 3, maxRows: 6 }}
@@ -247,6 +252,17 @@ class OrderInformation extends PureComponent {
                                             })
                                         }}
                                     />
+                                </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">下单时间:</span>
+                                    <span>
+                                        {moment(parseInt(orderDetailData.creationTime, 10))
+                                            .format(TIME_FORMAT)}
+                                    </span>
+                                </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">实付金额:</span>
+                                    <span>¥{orderDetailData.amount}</span>
                                 </Col>
                             </Row>
                         </div>
