@@ -82,7 +82,8 @@ class ReturnGoodsDetails extends PureComponent {
         {
             title: '退货数量',
             dataIndex: 'quantity',
-            key: 'quantity'
+            key: 'quantity',
+            render: this.renderNumber()
         },
         {
             title: '单价',
@@ -236,7 +237,6 @@ class ReturnGoodsDetails extends PureComponent {
         const { TextArea } = Input
         const data = this.props.data
         const { type } = this.props.match.params;
-        this.renderColumns();
         return (
             <div className="returngoods-detail">
                 <div className="basic-box">
