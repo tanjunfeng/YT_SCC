@@ -6,6 +6,8 @@ export const promotionStatus = {
     ended: '已结束'
 };
 
+export const couponType = { default: '默认', toGive: '返券' };
+
 // 下单打折 - 参与数据
 export const participate = {
     // 订单状态
