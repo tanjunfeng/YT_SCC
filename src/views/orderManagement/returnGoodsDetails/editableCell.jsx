@@ -22,15 +22,15 @@ class EditableCell extends PureComponent {
     }
 
     render() {
-        const { min, step, error, value } = this.props;
+        const { min, max, step, error, value } = this.props;
         return (
-            <div className="editable-cell">
+            <div>
                 <InputNumber
                     defaultValue={value}
                     formatter={text => Number(text).toFixed(2)}
                     parser={text => Number(text).toFixed(2)}
                     min={min}
-                    max={MAX_AMOUNT_OF_ORDER}
+                    max={max}
                     step={step}
                     onChange={this.handleChange}
                     onKeyUp={this.handlePressEnter}
@@ -44,6 +44,7 @@ class EditableCell extends PureComponent {
 EditableCell.propTypes = {
     value: PropTypes.number,
     min: PropTypes.number,
+    max: PropTypes.number,
     step: PropTypes.number,
     error: PropTypes.string,
     onChange: PropTypes.func

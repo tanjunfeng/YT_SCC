@@ -20,7 +20,7 @@ import { returnGoodsDetailColumns as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
 import { returnGoodsDetail, returnGoodsDetailClearData, returnGoodsOperation, returnGoodsDetailSave } from '../../../actions';
 import { DATE_FORMAT } from '../../../constant';
-import EditableCell from './editableCell';
+import GoodsTable from './goodsTable';
 
 const FormItem = Form.Item;
 
@@ -39,67 +39,14 @@ class ReturnGoodsDetails extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            id: ''
+            id: '',
+            // 商品列表总计信息
+            total: {
+                rows: 0, // 记录行数
+                quantities: 0, // 订购数量
+                amount: 0   // 金额总计
+            }
         }
-        this.columns = [{
-            title: '序号',
-            dataIndex: 'idx',
-            key: 'idx',
-            render: (text, record, index) => index + 1
-        },
-        {
-            title: '商品图片',
-            dataIndex: 'productImg',
-            key: 'productImg',
-            render: (text) => (
-                <img src={text} alt={text} className="item-img" />
-            )
-        },
-        {
-            title: '商品编码',
-            dataIndex: 'productCode',
-            key: 'productCode'
-        },
-        {
-            title: '商品条码',
-            dataIndex: 'productId',
-            key: 'productId',
-        },
-        {
-            title: '商品名称',
-            dataIndex: 'productName',
-            key: 'productName',
-        }, {
-            title: '商品分类',
-            dataIndex: 'category',
-            key: 'category',
-            render: (text, record) => (
-                <span>
-                    {record.secondLevelCategoryName} - {record.thirdLevelCategoryName}
-                </span>
-            )
-        },
-        {
-            title: '退货数量',
-            dataIndex: 'quantity',
-            key: 'quantity',
-            render: this.renderNumber()
-        },
-        {
-            title: '单价',
-            dataIndex: 'salePrice',
-            key: 'salePrice'
-        },
-        {
-            title: '退货金额',
-            dataIndex: 'rawTotalPrice',
-            key: 'rawTotalPrice'
-        },
-        {
-            title: '实收数量',
-            dataIndex: 'actualReturnQuantity',
-            key: 'actualReturnQuantity'
-        }]
     }
 
     componentDidMount() {
@@ -115,20 +62,17 @@ class ReturnGoodsDetails extends PureComponent {
         clearData()
     }
 
-    onCellChange = productCode => quantity => {
-        const goodsList = this.props.value.goodsList;
-        const index = goodsList.findIndex(item => item.productCode === productCode);
-        const goods = goodsList[index];
-        if (index > -1) {
-            Object.assign(goods, {
-                quantity
-            });
-            this.noticeChanges(goodsList, index);
+    getGoodsTableValues = () => {
+        const {
+            items
+        } = this.props.data;
+        return {
+            items
         }
     }
 
     // 请求数据
-    forData(id) {
+    forData = (id) => {
         this.props.returnGoodsDetail(id)
     }
 
@@ -185,6 +129,18 @@ class ReturnGoodsDetails extends PureComponent {
         });
     }
 
+    /**
+     * 商品列表改变通知
+     *
+     * @param {*array} goodsList 更新的商品列表
+     * @param {*object} total 商品小计信息
+     */
+    handleGoodsListChange = (goodsList, total) => {
+        // 刷新导入商品列表，清空报错商品列表
+        this.setState({ goodsList: [...goodsList], total });
+        console.log(goodsList, total)
+    }
+
     // 保存提交
     save = () => {
         const {
@@ -208,28 +164,6 @@ class ReturnGoodsDetails extends PureComponent {
                     }
                 })
         }
-    }
-
-    renderNumber = (text, record) => {
-        console.log(record)
-        const { minNumber, sellFullCase, salesInsideNumber } = record;
-        // https://solution.yatang.cn/jira/browse/GA-1024
-        const step = sellFullCase === 0 ? salesInsideNumber : 1;
-        // 填入的数量是否是内装数量的整数倍
-        const errors = [];
-        this.checkGoodsStatus(record, errors);
-        return (
-            <EditableCell
-                value={text}
-                min={minNumber}
-                step={step}
-                error={errors.join(', ')}
-                onChange={this.onCellChange(record.productCode)}
-            />);
-    }
-
-    renderColumns = () => {
-        columns[columns.length - 4].render = this.renderNumber;
     }
 
     render() {
@@ -293,11 +227,9 @@ class ReturnGoodsDetails extends PureComponent {
                     <div className="body body-table">
                         {
                             type === '2' ?
-                                <Table
-                                    dataSource={data.items}
-                                    columns={this.columns}
-                                    rowKey="productId"
-                                    pagination={false}
+                                <GoodsTable
+                                    value={this.getGoodsTableValues()}
+                                    onChange={this.handleGoodsListChange}
                                 />
                                 :
                                 <Table
@@ -309,7 +241,8 @@ class ReturnGoodsDetails extends PureComponent {
                         }
                         <div className="bottom-text">
                             <div className="bt-left">共<span className="bt-left-num">{data.commodityTotal}</span>件商品</div>
-                            <div className="bt-right"><span>总金额：</span><span className="bt-right-num">￥{data.amount}</span></div>
+                            <div className="bt-right"><span>退货金额：</span><span className="bt-right-num">￥{this.state.total.amount}</span></div>
+                            <div className="bt-right"><span>退款金额：</span><span className="bt-right-num">￥{data.amount}</span></div>
                         </div>
                     </div>
                 </div>
