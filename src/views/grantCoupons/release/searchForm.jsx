@@ -5,28 +5,18 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, Form, Row, Col, DatePicker } from 'antd';
+import { Button, Input, Form, Row, Col, DatePicker, Select } from 'antd';
 import { withRouter } from 'react-router';
 import Utils from '../../../util/util';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
-import { SubCompanies } from '../../../container/search';
+import { BranchCompany } from '../../../container/search';
+import { couponTypeStatus } from '../../coupon/constants';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
 class SearchForm extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            branchCompanyId: ''
-        }
-        this.handleSearch = this.handleSearch.bind(this);
-        this.handleReset = this.handleReset.bind(this);
-        this.getFormData = this.getFormData.bind(this);
-        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-        this.hanldeSubCompanyClear = this.hanldeSubCompanyClear.bind(this);
-    }
-
     componentWillReceiveProps(nextProps) {
         if (!nextProps.visible && this.props.visible) {
             this.handleReset();
@@ -34,18 +24,28 @@ class SearchForm extends PureComponent {
         }
     }
 
-    getFormData() {
+    getCouponTypeStatus = () => {
+        const keys = Object.keys(couponTypeStatus);
+        return keys.map(key => (
+            <Option key={key} value={key}>
+                {couponTypeStatus[key]}
+            </Option>
+        ));
+    }
+
+    getFormData = () => {
         const {
             id,
             promotionName,
             releaseDateRange,
             statusCode,
+            couponType,
             storeId,
-            storeName
+            storeName,
+            branchCompany
         } = this.props.form.getFieldsValue();
         const startDate = releaseDateRange.length > 1 ? releaseDateRange[0].valueOf() : '';
         const endDate = releaseDateRange.length > 1 ? releaseDateRange[1].valueOf() : '';
-        const branchCompanyId = this.state.branchCompanyId;
         let status = statusCode;
         if (statusCode === 'all') {
             status = '';
@@ -54,29 +54,21 @@ class SearchForm extends PureComponent {
             id,
             promotionName,
             status,
+            couponType,
             storeId,
             storeName,
             startDate,
             endDate,
-            branchCompanyId
+            branchCompanyId: branchCompany.id
         });
     }
 
-    handleSubCompanyChoose(branchCompanyId) {
-        this.setState({ branchCompanyId });
-    }
-
-    hanldeSubCompanyClear() {
-        this.setState({ branchCompanyId: '' });
-    }
-
-    handleSearch() {
+    handleSearch = () => {
         // 将查询条件回传给调用页
         this.props.onCouponSearch(this.getFormData());
     }
 
-    handleReset() {
-        this.hanldeSubCompanyClear(); // 清除子公司值清单
+    handleReset = () => {
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onCouponReset();
     }
@@ -99,17 +91,10 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem>
-                                    <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">
-                                            使用范围
-                                        </span>
-                                        <SubCompanies
-                                            value={this.state.branchCompanyId}
-                                            onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                            onSubCompaniesClear={this.hanldeSubCompanyClear}
-                                        />
-                                    </div>
+                                <FormItem label="使用范围">
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: { id: '', name: '' }
+                                    })(<BranchCompany />)}
                                 </FormItem>
                             </Col>
                         </Row>
@@ -131,6 +116,18 @@ class SearchForm extends PureComponent {
                                             />
                                             )}
                                     </div>
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
+                                {/* 类型 */}
+                                <FormItem label="类型">
+                                    {getFieldDecorator('couponType', {
+                                        initialValue: ''
+                                    })(
+                                        <Select style={{ width: '153px' }} size="default">
+                                            {this.getCouponTypeStatus()}
+                                        </Select>
+                                        )}
                                 </FormItem>
                             </Col>
                         </Row>

@@ -18,7 +18,7 @@ import {
 import moment from 'moment';
 import Utils from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
-import { SubCompanies } from '../../../container/search';
+import { BranchCompany } from '../../../container/search';
 import {
     orderTypeOptions,
     orderStatusOptions,
@@ -67,9 +67,7 @@ class OrderManagementList extends Component {
         this.handleOrderReset = ::this.handleOrderReset;
         this.handleOrderOutput = ::this.handleOrderOutput;
         this.handleJoiningChoose = ::this.handleJoiningChoose;
-        this.handleSubCompanyChoose = ::this.handleSubCompanyChoose;
         this.handleJoiningClear = ::this.handleJoiningClear;
-        this.handleSubCompanyClear = ::this.handleSubCompanyClear;
         this.handlePaginationChange = ::this.handlePaginationChange;
         this.orderTypeSelect = ::this.orderTypeSelect;
         this.getSearchData = ::this.getSearchData;
@@ -80,7 +78,6 @@ class OrderManagementList extends Component {
         this.state = {
             choose: [],
             franchiseeId: null,
-            branchCompanyId: null,
             rengeTime: yesterdayrengeDate,
             auditModalVisible: false,
             tableOrderNumber: null,
@@ -131,10 +128,11 @@ class OrderManagementList extends Component {
             paymentState,
             cellphone,
             shippingState,
-            thirdPartOrderNo
+            thirdPartOrderNo,
+            branchCompany
         } = this.props.form.getFieldsValue();
 
-        const { franchiseeId, branchCompanyId } = this.state;
+        const { franchiseeId } = this.state;
         const { submitStartTime, submitEndTime } = this.state.time;
         this.current = 1;
         this.searchData = {
@@ -145,7 +143,7 @@ class OrderManagementList extends Component {
             cellphone,
             shippingState: shippingState === 'ALL' ? null : shippingState,
             franchiseeId,
-            branchCompanyId,
+            branchCompanyId: branchCompany.id,
             submitStartTime,
             thirdPartOrderNo,
             submitEndTime,
@@ -207,26 +205,12 @@ class OrderManagementList extends Component {
     }
 
     /**
-     * 子公司-值清单
-     */
-    handleSubCompanyChoose = (branchCompanyId) => {
-        this.setState({ branchCompanyId });
-    }
-
-    /**
      * 加盟商-清除
      */
     handleJoiningClear() {
         this.setState({
             franchiseeId: null,
         });
-    }
-
-    /**
-     * 子公司-清除
-     */
-    handleSubCompanyClear() {
-        this.setState({ branchCompanyId: '' });
     }
 
     /**
@@ -276,7 +260,6 @@ class OrderManagementList extends Component {
                 submitEndTime: todayDate,
             }
         });
-        this.handleSubCompanyClear();
         this.joiningSearchMind.handleClear();
         this.props.form.resetFields();
     }
@@ -534,16 +517,10 @@ class OrderManagementList extends Component {
                                     </FormItem>
                                 </Col>
                                 <Col className="gutter-row" span={8}>
-                                    {/* 子公司 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">子公司</span>
-                                            <SubCompanies
-                                                value={this.state.branchCompanyId}
-                                                onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                                onSubCompaniesClear={this.handleSubCompanyClear}
-                                            />
-                                        </div>
+                                    <FormItem label="子公司">
+                                        {getFieldDecorator('branchCompany', {
+                                            initialValue: { id: '', name: '' }
+                                        })(<BranchCompany />)}
                                     </FormItem>
                                 </Col>
                             </Row>

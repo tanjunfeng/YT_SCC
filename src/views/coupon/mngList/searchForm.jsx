@@ -10,17 +10,13 @@ import { withRouter } from 'react-router';
 import Utils from '../../../util/util';
 import { MINUTE_FORMAT, DATE_FORMAT } from '../../../constant';
 import { promotionStatus, couponTypeStatus } from '../constants';
-import { SubCompanies } from '../../../container/search';
+import { BranchCompany } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
 class SearchForm extends PureComponent {
-    state = {
-        branchCompanyId: ''
-    }
-
     getPromotionStatus = () => {
         const keys = Object.keys(promotionStatus);
         return keys.map(key => (
@@ -45,11 +41,11 @@ class SearchForm extends PureComponent {
             promotionName,
             promotionDateRange,
             statusCode,
+            branchCompany,
             couponType
         } = this.props.form.getFieldsValue();
         const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
         const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
-        const branchCompanyId = this.state.branchCompanyId;
         let status = statusCode;
         if (statusCode === 'all') {
             status = '';
@@ -61,16 +57,8 @@ class SearchForm extends PureComponent {
             couponType,
             startDate,
             endDate,
-            branchCompanyId
+            branchCompanyId: branchCompany.id
         });
-    }
-
-    handleSubCompanyChoose = (branchCompanyId) => {
-        this.setState({ branchCompanyId });
-    }
-
-    hanldeSubCompanyClear = () => {
-        this.setState({ branchCompanyId: '' });
     }
 
     handleSearch = () => {
@@ -79,7 +67,6 @@ class SearchForm extends PureComponent {
     }
 
     handleReset = () => {
-        this.hanldeSubCompanyClear(); // 清除子公司值清单
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onPromotionReset();  // 通知父页面已清空
     }
@@ -107,15 +94,10 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem>
-                                    <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">使用区域</span>
-                                        <SubCompanies
-                                            value={this.state.branchCompanyId}
-                                            onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                            onSubCompaniesClear={this.hanldeSubCompanyClear}
-                                        />
-                                    </div>
+                                <FormItem label="使用区域">
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: { id: '', name: '' }
+                                    })(<BranchCompany />)}
                                 </FormItem>
                             </Col>
                         </Row>
@@ -152,7 +134,7 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                {/* 状态 */}
+                                {/* 类型 */}
                                 <FormItem label="类型">
                                     {getFieldDecorator('couponType', {
                                         initialValue: ''
