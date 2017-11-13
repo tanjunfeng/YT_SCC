@@ -20,5 +20,7 @@ export const TABCONTENT = {}
 export const MAXGOODS = 2147483647;
 // ckeditor cdn
 export const ckeditorUrl = 'https://cdn.bootcss.com/ckeditor/4.7.1/ckeditor.js';
+// 新建退货单时时间预制延期时间（天）
+export const SET_ASIDE_TIME = 7;
 // 销售订单商品下单最大数量限制
 export const MAX_AMOUNT_OF_ORDER = 99999;

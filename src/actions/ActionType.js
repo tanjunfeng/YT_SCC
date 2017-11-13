@@ -303,6 +303,8 @@ export default {
     GET_REFUND_NO_ACTION: 'GET_REFUND_NO_ACTION',
     // 清除退货流水号
     CLEAR_REFUND_NO_INFO: 'CLEAR_REFUND_NO_INFO',
+    // 清除新建编辑采购退货单数据
+    CLEAR_RETURN_INFO: 'CLEAR_RETURN_INFO',
     // 批量删除处于草稿状态的退货单
     DELETE_BATCH_REFOND_ORDER: 'DELETE_BATCH_REFOND_ORDER',
 
