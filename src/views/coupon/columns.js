@@ -67,16 +67,14 @@ const couponList = [{
     colSpan: 2,
     dataIndex: 'startDate',
     render: timestamp => ({
-        children: Util.getTime(timestamp),
-        props: {}
+        children: Util.getTime(timestamp)
     })
 }, {
     title: '结束时间',
     colSpan: 0,
     dataIndex: 'endDate',
     render: (timestamp, row) => ({
-        children: Util.getTime(row.endDate),
-        props: {}
+        children: Util.getTime(row.endDate)
     })
 }, {
     title: '发放数量',
