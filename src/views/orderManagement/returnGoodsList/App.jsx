@@ -164,9 +164,6 @@ class ReturnGoodsList extends PureComponent {
     handleConfirm =(record) => {
         this.props.insertRefund({returnId: record.record.id}).then((res) => {
             message.success(res.message);
-            this.setState({
-                upDate: !this.state.upDate
-            })
         })
     }
 
