@@ -97,19 +97,19 @@ class SearchForm extends PureComponent {
                     <div className="search-conditions">
                         <Row gutter={40}>
                             <Col span={8}>
-                                <FormItem label="活动ID" style={{ paddingRight: 10 }}>
+                                <FormItem label="券ID" style={{ paddingRight: 10 }}>
                                     {getFieldDecorator('id')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem label="活动名称">
+                                <FormItem label="券名称">
                                     {getFieldDecorator('promotionName')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
                                 <FormItem>
                                     <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">所属公司</span>
+                                        <span className="sc-form-item-label search-mind-label">使用区域</span>
                                         <SubCompanies
                                             value={this.state.branchCompanyId}
                                             onSubCompaniesChooesd={this.handleSubCompanyChoose}
@@ -123,10 +123,10 @@ class SearchForm extends PureComponent {
                             <Col span={8}>
                                 <FormItem>
                                     <div className="promotion-date-range">
-                                        <span className="sc-form-item-label search-mind-label">活动时间</span>
+                                        <span className="sc-form-item-label search-mind-label">有效日期</span>
                                         {getFieldDecorator('promotionDateRange', {
                                             initialValue: '',
-                                            rules: [{ required: true, message: '请选择活动时间' }]
+                                            rules: [{ required: true, message: '请选择有效日期' }]
                                         })(
                                             <RangePicker
                                                 style={{ width: '240px' }}
@@ -153,7 +153,7 @@ class SearchForm extends PureComponent {
                             </Col>
                             <Col span={8}>
                                 {/* 状态 */}
-                                <FormItem label="优惠券类型">
+                                <FormItem label="类型">
                                     {getFieldDecorator('couponType', {
                                         initialValue: ''
                                     })(

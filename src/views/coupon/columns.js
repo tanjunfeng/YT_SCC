@@ -45,7 +45,7 @@ const couponList = [{
     }
 },
 {
-    title: '范围',
+    title: '使用区域',
     dataIndex: 'companiesPoList',
     key: 'companiesPoList',
     render: list => {
