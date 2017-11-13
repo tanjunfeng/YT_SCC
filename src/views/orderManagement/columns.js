@@ -45,7 +45,7 @@ const goodsColumns = [{
     render: (text, record) => {
         let after = '';
         if (record.thirdLevelCategoryName !== null) {
-            after = `&gt;${record.thirdLevelCategoryName}`;
+            after = ` > ${record.thirdLevelCategoryName}`;
         }
         return <span>{record.secondLevelCategoryName}{after}</span>;
     }
