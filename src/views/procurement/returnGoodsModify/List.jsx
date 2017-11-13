@@ -25,7 +25,10 @@ import {
 import {
     putRefundProducts
 } from '../../../actions/procurement';
-import { exportReturnProPdf, createRefundWithItems, updateRefundWithItems } from '../../../service';
+import {
+    exportReturnProPdf, createRefundWithItems,
+    updateRefundWithItems, deleteBatchRefundOrder
+} from '../../../service';
 
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -457,18 +460,42 @@ class List extends Component {
 
     handleType = (e) => {
         const type = e.target.getAttribute('data-type');
+        const { id } = this.props;
         switch (type) {
             case 'back':
                 this.props.history.push('/returnManagementList');
                 break;
             case 'delete':
-
+                Modal.error({
+                    title: '确认',
+                    content: '是否确认删除？',
+                    okText: '确认',
+                    cancelText: '取消',
+                    onCancel: () => {},
+                    onOk: () => {
+                        deleteBatchRefundOrder({
+                            pmRefundOrderIds: id
+                        }).then(() => {
+                            message.success('删除成功');
+                            this.props.history.push('/returnManagementList');
+                        })
+                    },
+                });
                 break;
             case 'cancel':
-
+                Modal.error({
+                    title: '确认',
+                    content: '是否确认取消？',
+                    okText: '确认',
+                    cancelText: '取消',
+                    onCancel: () => {},
+                    onOk: () => {
+                        // TODO 确认取消
+                    },
+                });
                 break;
             case 'download':
-                Util.exportExcel(exportReturnProPdf, {id: 1})
+                Util.exportExcel(exportReturnProPdf, {id})
                 break;
             case 'save':
                 this.saveOrSubmit(0)
@@ -477,7 +504,7 @@ class List extends Component {
                 this.saveOrSubmit(1)
                 break;
             case 'progress':
-
+                    
                 break;
             default:
                 break;
