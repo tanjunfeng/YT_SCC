@@ -33,20 +33,23 @@ class FormContent extends PureComponent {
     constructor(props) {
         super(props);
 
+        const timeRange = new Date * 1 + 7 * 86400000;
+
         this.state = {
             locDisabled: true,
             spaceType: '0',
             locationData: {
                 code: 'warehouseCode',
                 name: 'warehouseName'
-            }
+            },
+            defaultTime: moment(new Date(timeRange), 'YYYY-MM-DD')
         }
 
         this.submit = {
             currencyCode: 'CNY',
             adrType: '0',
             purchaseRefundNo: props.refundNumber,
-            defaultTime: moment(new Date(new Date * 1 + 7 * 86400000), 'YYYY-MM-DD')
+            refundTimeEarly: timeRange
         };
     }
 

@@ -134,6 +134,7 @@ class ReturnGoodsModify extends PureComponent {
                     defaultValue={pmPurchaseRefundItems}
                     type={this.type}
                     status={formData.status}
+                    id={formData.id}
                     history={history}
                 />
             </div>
