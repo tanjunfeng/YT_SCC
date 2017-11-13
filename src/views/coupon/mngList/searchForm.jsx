@@ -17,21 +17,11 @@ const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
 class SearchForm extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            branchCompanyId: ''
-        }
-        this.getStatus = this.getStatus.bind(this);
-        this.handleSearch = this.handleSearch.bind(this);
-        this.handleReset = this.handleReset.bind(this);
-        this.getFormData = this.getFormData.bind(this);
-        this.handleCreate = this.handleCreate.bind(this);
-        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-        this.hanldeSubCompanyClear = this.hanldeSubCompanyClear.bind(this);
+    state = {
+        branchCompanyId: ''
     }
 
-    getStatus() {
+    getStatus = () => {
         const keys = Object.keys(promotionStatus);
         return keys.map((key) => (
             <Option key={key} value={key}>
@@ -40,7 +30,7 @@ class SearchForm extends PureComponent {
         ));
     }
 
-    getFormData() {
+    getFormData = () => {
         const {
             id,
             promotionName,
@@ -64,26 +54,26 @@ class SearchForm extends PureComponent {
         });
     }
 
-    handleSubCompanyChoose(branchCompanyId) {
+    handleSubCompanyChoose = (branchCompanyId) => {
         this.setState({ branchCompanyId });
     }
 
-    hanldeSubCompanyClear() {
+    hanldeSubCompanyClear = () => {
         this.setState({ branchCompanyId: '' });
     }
 
-    handleSearch() {
+    handleSearch = () => {
         // 将查询条件回传给调用页
         this.props.onPromotionSearch(this.getFormData());
     }
 
-    handleReset() {
+    handleReset = () => {
         this.hanldeSubCompanyClear(); // 清除子公司值清单
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onPromotionReset();  // 通知父页面已清空
     }
 
-    handleCreate() {
+    handleCreate = () => {
         const { pathname } = this.props.location;
         this.props.history.push(`${pathname}/create`);
     }
