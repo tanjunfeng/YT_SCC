@@ -9,7 +9,7 @@ import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 import Utils from '../../../util/util';
 import { MINUTE_FORMAT, DATE_FORMAT } from '../../../constant';
-import { promotionStatus } from '../constants';
+import { promotionStatus, couponTypeStatus } from '../constants';
 import { SubCompanies } from '../../../container/search';
 
 const FormItem = Form.Item;
@@ -21,11 +21,20 @@ class SearchForm extends PureComponent {
         branchCompanyId: ''
     }
 
-    getStatus = () => {
+    getPromotionStatus = () => {
         const keys = Object.keys(promotionStatus);
-        return keys.map((key) => (
+        return keys.map(key => (
             <Option key={key} value={key}>
                 {promotionStatus[key]}
+            </Option>
+        ));
+    }
+
+    getCouponTypeStatus = () => {
+        const keys = Object.keys(couponTypeStatus);
+        return keys.map(key => (
+            <Option key={key} value={key}>
+                {couponTypeStatus[key]}
             </Option>
         ));
     }
@@ -35,7 +44,8 @@ class SearchForm extends PureComponent {
             id,
             promotionName,
             promotionDateRange,
-            statusCode
+            statusCode,
+            couponType
         } = this.props.form.getFieldsValue();
         const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
         const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
@@ -48,6 +58,7 @@ class SearchForm extends PureComponent {
             id,
             promotionName,
             status,
+            couponType,
             startDate,
             endDate,
             branchCompanyId
@@ -135,7 +146,19 @@ class SearchForm extends PureComponent {
                                         initialValue: 'all'
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
+                                            {this.getPromotionStatus()}
+                                        </Select>
+                                        )}
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
+                                {/* 状态 */}
+                                <FormItem label="优惠券类型">
+                                    {getFieldDecorator('couponType', {
+                                        initialValue: ''
+                                    })(
+                                        <Select style={{ width: '153px' }} size="default">
+                                            {this.getCouponTypeStatus()}
                                         </Select>
                                         )}
                                 </FormItem>
