@@ -186,8 +186,8 @@ const returnGoodsListColumns = [{
 },
 {
     title: '商品状态',
-    dataIndex: 'shippingStateDetail',
-    key: 'shippingStateDetail'
+    dataIndex: 'productStateDetail',
+    key: 'productStateDetail'
 },
 {
     title: '操作',
