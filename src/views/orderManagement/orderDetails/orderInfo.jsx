@@ -156,8 +156,10 @@ class OrderInformation extends PureComponent {
             ...manualSplitOrder
         }).then((res) => {
             if (res.code === 200) {
-                message.success('手动分组拆单成功!')
+                message.success(res.message)
             }
+        }).catch((res) => {
+            message.error(res.message)
         })
     }
 
