@@ -63,18 +63,21 @@ const couponList = [{
     key: 'quanifyAmount',
     render: amount => (amount ? `满 ${amount} 元可用` : '不限制')
 }, {
-    title: '有效时间',
-    children: [{
-        title: '开始时间',
-        dataIndex: 'startDate',
-        key: 'startDate',
-        render: timestamp => Util.getTime(timestamp)
-    }, {
-        title: '结束时间',
-        dataIndex: 'endDate',
-        key: 'endDate',
-        render: timestamp => Util.getTime(timestamp)
-    }],
+    title: '有效日期',
+    colSpan: 2,
+    dataIndex: 'startDate',
+    render: timestamp => ({
+        children: Util.getTime(timestamp),
+        props: {}
+    })
+}, {
+    title: '结束时间',
+    colSpan: 0,
+    dataIndex: 'endDate',
+    render: (timestamp, row) => ({
+        children: Util.getTime(row.endDate),
+        props: {}
+    })
 }, {
     title: '发放数量',
     dataIndex: 'totalQuantity',
