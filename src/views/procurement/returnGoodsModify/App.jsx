@@ -18,7 +18,8 @@ import List from './List';
 import {
     getRefundNo,
     clearRefundNo,
-    fetchReturnPoRcvDetail
+    clearReturnInfo,    
+    fetchReturnPoRcvDetail,
 } from '../../../actions/procurement';
 
 import {
@@ -44,7 +45,9 @@ const { TextArea } = Input;
     // 获取退货单
     getRefundNo,
     // 清除退货单
-    clearRefundNo
+    clearRefundNo,
+    // 清除新增编辑采购退货单数据
+    clearReturnInfo
 }, dispatch))
 
 class ReturnGoodsModify extends PureComponent {
@@ -56,6 +59,7 @@ class ReturnGoodsModify extends PureComponent {
         getRefundNo: PropTypes.func,
         getRefundNumebr: PropTypes.string,
         poReturn: PropTypes.objectOf(PropTypes.any),
+        history: PropTypes.objectOf(PropTypes.any),
     }
 
     static defaultProps = {
@@ -90,6 +94,10 @@ class ReturnGoodsModify extends PureComponent {
         }
     }
 
+    componentWillUnmount() {
+        this.props.clearReturnInfo();
+    }
+
     onPageChange = () => {
 
     }
@@ -99,8 +107,8 @@ class ReturnGoodsModify extends PureComponent {
     }
 
     render() {
-        const { prefixCls, getRefundNumebr, poReturn } = this.props;
-        const { pmPurchaseRefundItems, ...formData } = poReturn;
+        const { prefixCls, getRefundNumebr, poReturn, history } = this.props;
+        const { pmPurchaseRefundItems = [], ...formData } = poReturn;
 
         const cls = classnames(
             `${prefixCls}-modify`,
@@ -124,6 +132,9 @@ class ReturnGoodsModify extends PureComponent {
                 <List
                     getFormData={this.getFormData}
                     defaultValue={pmPurchaseRefundItems}
+                    type={this.type}
+                    status={formData.status}
+                    history={history}
                 />
             </div>
         )

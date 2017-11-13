@@ -14,7 +14,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
     Row, Col, Select, DatePicker, Input,
-    Table, Button, message, InputNumber 
+    Table, Button, message, InputNumber,
+    Modal
 } from 'antd';
 import SearchMind from '../../../components/searchMind';
 import Util from '../../../util/util';
@@ -24,7 +25,7 @@ import {
 import {
     putRefundProducts
 } from '../../../actions/procurement';
-import { exportReturnProPdf, createRefundWithItems } from '../../../service';
+import { exportReturnProPdf, createRefundWithItems, updateRefundWithItems } from '../../../service';
 
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -131,28 +132,68 @@ let originLists = [];
 
 let current = {};
 
+function parseLists(lists) {
+    // 退货数量大于了库存
+    const overrun = [];
+    // 库存数量为0
+    const zero = [];
+    // 退货数量
+    const amount = [];
+
+    const newList = lists.filter((item, index) => {
+        if (item.possibleNum === 0) {
+            zero.push(index + 1);
+            return false;
+        }
+
+        if (item.possibleNum < item.refundAmount) {
+            overrun.push(index + 1);
+            return false;
+        }
+
+        if (!item.refundAmount) {
+            amount.push(index + 1);
+            return false;
+        }
+
+        return true;
+    })
+
+    return {
+        newList,
+        overrun,
+        zero,
+        amount
+    }
+}
 
 function getNewLists(lists, cLists, orderId) {
     const ids = [];
     const newLists = [];
     const nLists = JSON.parse(JSON.stringify(cLists));
 
-    for (let i = 0; i < nLists.length; i++) {
-        ids.push(`${nLists[i].productCode}-${nLists[i].purchaseOrderNo}`);
-    }
+    // 可退货不为0的数组
+    const returnAble = nLists.filter((item) => {
+        // if (item.possibleNum > 0) {
+        ids.push(`${item.productCode}-${item.purchaseOrderNo}`);
+        return true;
+        // }
+        // return false;
+    })
+
     for (let j = 0; j < lists.length; j++) {
         const curr = lists[j];
         const index = ids.indexOf(`${curr.productCode}-${curr.purchaseOrderNo}`);
         if (index > -1) {
             newLists.unshift(curr)
             ids.splice(index, 1);
-            nLists.splice(index, 1);
+            returnAble.splice(index, 1);
         } else {
             newLists.push(curr);
         }
     }
 
-    return nLists.concat(newLists)
+    return returnAble.concat(newLists)
 }
 
 @connect(
@@ -234,6 +275,12 @@ class List extends Component {
             })
             originLists = defaultValue;
         }
+    }
+
+    componentWillUnmount() {
+        // 解决返回后数据没有被清除问题
+        originLists = [];
+        current = [];
     }
 
     onPageChange = () => {
@@ -335,15 +382,17 @@ class List extends Component {
     actualNumberRender = (text, record, index) => {
         const { purchaseOrderNo, productCode } = record;
 
-        return (
-            <InputNumber
-                defaultValue={text || 0}
-                style={{maxWidth: '60px'}}
-                min={0}
-                max={record.refundAmount}
-                onChange={(v) => this.handleEdit(purchaseOrderNo, productCode, 'realRefundAmount', v)}
-            />
-        )
+        return text || 0;
+
+        // return (
+        //     <InputNumber
+        //         defaultValue={text || 0}
+        //         style={{maxWidth: '60px'}}
+        //         min={0}
+        //         max={record.refundAmount}
+        //         onChange={(v) => this.handleEdit(purchaseOrderNo, productCode, 'realRefundAmount', v)}
+        //     />
+        // )
     }
 
     handleIdChange = (e) => {
@@ -410,7 +459,7 @@ class List extends Component {
         const type = e.target.getAttribute('data-type');
         switch (type) {
             case 'back':
-
+                this.props.history.push('/returnManagementList');
                 break;
             case 'delete':
 
@@ -437,11 +486,78 @@ class List extends Component {
 
     saveOrSubmit = (status) => {
         const {
-            lists, count, money, cost,
+            lists
+        } = this.state;
+
+        const {
+            type
+        } = this.props;
+
+        const { newList, overrun, zero, amount } = parseLists(lists);
+        const isEdit = type === 'edit';
+        const tip = isEdit ? '修改成功' : '新增成功';
+
+        if (overrun.length) {
+            Modal.error({
+                title: '数据错误',
+                content: `序号：${overrun.join('、')} 数据中存在退货数大于退货数，无法提交`,
+            });
+            return ;
+        }
+
+        if (amount.length) {
+            Modal.error({
+                title: '数据错误',
+                content: `序号：${amount.join('、')} 退货数为0, 无法提交`,
+            });
+            return ;
+        }
+
+        if (zero.length) {
+            Modal.error({
+                title: '数据错误',
+                content: `序号：${zero.join('、')} 可退货数为0的商品将过滤掉，是否继续`,
+                okText: '确认',
+                cancelText: '取消',
+                onCancel: () => {},
+                onOk: () => {
+                    if (!newList.length) {
+                        message.error('失败：没有可用商品信息');
+                        return ;
+                    }
+
+                    this.submit(newList, status).then((res) => {
+                        message.success(tip);
+                        this.props.history.push('/returnManagementList');
+                    })
+                },
+            });
+            return ;
+        }
+
+        if (!newList.length) {
+            message.error('失败：没有可用商品信息');
+            return ;
+        }
+
+        this.submit(newList, status).then((res) => {
+            message.success(tip)
+            this.props.history.push('/returnManagementList');
+        });
+    }
+
+    submit = (lists, status) => {
+        const {
+            count, money, cost,
             actualCount, actualMoneyCount
         } = this.state;
+        const {
+            type
+        } = this.props;
         const submit = this.props.getFormData();
-        submit.pmPurchaseRefundItems = lists;
+        const postService = type === 'edit' ? updateRefundWithItems : createRefundWithItems;
+
+        submit.pmPurchaseRefundItems = lists
         submit.status = status;
 
         // 退货数
@@ -454,16 +570,12 @@ class List extends Component {
         submit.totalRealRefundAmount = actualCount;
         // 合计实际退货金额
         submit.totalRealRefundMoney = actualMoneyCount;
-
-        createRefundWithItems(submit).then((res) => {
-            console.log(res)
-        })
-
-
+        
+        return postService(submit)
     }
 
     render() {
-        const { prefixCls, returnLists, type } = this.props;
+        const { prefixCls, returnLists, type, status } = this.props;
         const {
             orderId, count, money, cost,
             actualCount, actualMoneyCount,
@@ -483,6 +595,7 @@ class List extends Component {
         )
 
         const rowSelection = {
+            selectedRowKeys,
             onChange: (selectedRowKeys, selectedRows) => {
                 this.setState({
                     selectedRowKeys
@@ -515,12 +628,20 @@ class List extends Component {
                 </Row>
                 <div className={'return-goods-table-footer-second'}>
                     <Button data-type="back" onClick={this.handleType}>返回</Button>
-                    <Button data-type="delete" onClick={this.handleType}>删除</Button>
-                    <Button data-type="cancel" onClick={this.handleType}>取消</Button>
-                    <Button data-type="download" onClick={this.handleType}>下载退货单</Button>
-                    <Button data-type="save" onClick={this.handleType}>保存</Button>
-                    <Button data-type="submit" onClick={this.handleType}>提交</Button>
-                    <Button data-type="progress" onClick={this.handleType}>查看审批进度</Button>
+                    { isEdit && <Button data-type="delete" onClick={this.handleType}>删除</Button> }
+                    { isEdit && (status === 2 || status === 4) && <Button data-type="cancel" onClick={this.handleType}>取消</Button> }
+                    { isEdit && <Button data-type="download" onClick={this.handleType}>下载退货单</Button> }
+                    {
+                        (!isEdit || status === 0 || status === 1)
+                        && <Button data-type="save" onClick={this.handleType}>保存</Button>
+                    }
+                    {
+                        (!isEdit || status === 0 || status === 1)
+                        && <Button data-type="submit" onClick={this.handleType}>提交</Button>
+                    }
+                    {
+                        isEdit && status === 1 && <Button data-type="progress" onClick={this.handleType}>查看审批进度</Button>
+                    }
                 </div>
             </div>
         )

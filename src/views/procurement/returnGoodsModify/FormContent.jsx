@@ -13,6 +13,7 @@ import moment from 'moment';
 import { Row, Col, Select, DatePicker, Input } from 'antd';
 import SearchMind from '../../../components/searchMind';
 import Util from '../../../util/util';
+import { SET_ASIDE_TIME } from '../../../constant';
 
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -44,7 +45,8 @@ class FormContent extends PureComponent {
         this.submit = {
             currencyCode: 'CNY',
             adrType: '0',
-            purchaseRefundNo: props.refundNumber
+            purchaseRefundNo: props.refundNumber,
+            defaultTime: moment(new Date(new Date * 1 + 7 * 86400000), 'YYYY-MM-DD')
         };
     }
 
@@ -56,12 +58,13 @@ class FormContent extends PureComponent {
         const { defaultValue, refundNumber, type } = nextProps;
         if (!is(fromJS(this.props.defaultValue), fromJS(defaultValue))) {
             const { ...prop } = defaultValue;
-    
+
             this.submit = prop;
-console.log(prop.spId)
             this.setState({
                 pId: prop.spId,
-                spaceType: prop.adrType
+                spaceType: prop.adrType,
+                remark: prop.remark,
+                defaultTime: moment(new Date(defaultValue.refundTimeEarly), 'YYYY-MM-DD')
             })
         }
         if (type === 'new' && refundNumber !== this.props.refundNumber) {
@@ -112,7 +115,11 @@ console.log(prop.spId)
     }
 
     handleTimeChange = (date) => {
-        this.submit.refundTimeEarly = new Date(date._d) * 1;
+        this.setState({
+            defaultTime: date
+        }, () => {
+            this.submit.refundTimeEarly = new Date(date._d) * 1;
+        })
     }
 
     handleCurrencyChange = () => {
@@ -163,7 +170,13 @@ console.log(prop.spId)
     }
 
     handleRemark = (e) => {
-        this.submit.remark = e.target.value;
+        const value = e.target.value;
+
+        this.setState({
+            remark: value
+        }, () => {
+            this.submit.remark = value
+        })
     }
 
     renderStatus = (type, defaultValue) => {
@@ -199,7 +212,6 @@ console.log(prop.spId)
     render() {
         const { prefixCls, refundNumber, type, defaultValue = {} } = this.props;
         const { spaceType, locationData } = this.state;
-
         const isEdit = type === 'edit';
 
         const cls = classnames(
@@ -249,6 +261,7 @@ console.log(prop.spId)
                                 renderChoosedInputRaw={(data) => (
                                     <div>{data.spNo} - {data.companyName}</div>
                                 )}
+                                style={{ zIndex: 103 }}
                                 pageSize={6}
                                 columns={[
                                     {
@@ -385,7 +398,10 @@ console.log(prop.spId)
                         <span
                             className={`${prefixCls}-modify-item-right`}
                         >
-                            <DatePicker onChange={this.handleTimeChange} />
+                            <DatePicker
+                                value={this.state.defaultTime}
+                                onChange={this.handleTimeChange}
+                            />
                         </span>
                     </Col>
                     <Col span={6}>
@@ -461,7 +477,7 @@ console.log(prop.spId)
                     </Row>
                 }
                 <Row>
-                    <Col span={12} style={{marginTop: '10px'}}>
+                    <Col span={12} style={{ marginTop: '10px' }}>
                         <span
                             className={`${prefixCls}-modify-item-left`}
                         >
@@ -473,7 +489,7 @@ console.log(prop.spId)
                             <TextArea
                                 placeholder="请填写备注"
                                 autosize
-                                defaultValue={defaultValue.remark}
+                                value={this.state.remark}
                                 onChange={this.handleRemark}
                             />
                         </span>
