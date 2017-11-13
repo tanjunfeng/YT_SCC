@@ -54,11 +54,6 @@ const releaseCouponsColumns = [{
     dataIndex: 'id',
     key: 'id'
 }, {
-    title: '类型',
-    dataIndex: 'couponType',
-    key: 'couponType',
-    render: couponTypeCode => (couponTypeStatus[couponTypeCode])
-}, {
     title: '券名称',
     dataIndex: 'promotionName',
     key: 'promotionName'

@@ -5,15 +5,13 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, Form, Row, Col, DatePicker, Select } from 'antd';
+import { Button, Input, Form, Row, Col, DatePicker } from 'antd';
 import { withRouter } from 'react-router';
 import Utils from '../../../util/util';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { BranchCompany } from '../../../container/search';
-import { couponTypeStatus } from '../../coupon/constants';
 
 const FormItem = Form.Item;
-const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
 class SearchForm extends PureComponent {
@@ -22,15 +20,6 @@ class SearchForm extends PureComponent {
             this.handleReset();
             this.setState({ branchCompanyId: '' });
         }
-    }
-
-    getCouponTypeStatus = () => {
-        const keys = Object.keys(couponTypeStatus);
-        return keys.map(key => (
-            <Option key={key} value={key}>
-                {couponTypeStatus[key]}
-            </Option>
-        ));
     }
 
     getFormData = () => {
@@ -116,18 +105,6 @@ class SearchForm extends PureComponent {
                                             />
                                             )}
                                     </div>
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 类型 */}
-                                <FormItem label="类型">
-                                    {getFieldDecorator('couponType', {
-                                        initialValue: ''
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getCouponTypeStatus()}
-                                        </Select>
-                                        )}
                                 </FormItem>
                             </Col>
                         </Row>
