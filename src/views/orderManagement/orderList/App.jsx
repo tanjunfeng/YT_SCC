@@ -517,10 +517,13 @@ class OrderManagementList extends Component {
                                     </FormItem>
                                 </Col>
                                 <Col className="gutter-row" span={8}>
-                                    <FormItem label="子公司">
-                                        {getFieldDecorator('branchCompany', {
-                                            initialValue: { id: '', name: '' }
-                                        })(<BranchCompany />)}
+                                    <FormItem>
+                                        <div>
+                                            <span className="sc-form-item-label">子公司</span>
+                                            {getFieldDecorator('branchCompany', {
+                                                initialValue: { id: '', name: '' }
+                                            })(<BranchCompany />)}
+                                        </div>
                                     </FormItem>
                                 </Col>
                             </Row>
