@@ -32,9 +32,9 @@ class GoodsForm extends PureComponent {
             this.props.onChange(null);
             return;
         }
-        const productId = record.productId;
+        const productCode = record.productCode;
         this.props.queryGoodsInfo(Utils.removeInvalid({
-            productId, branchCompanyId, deliveryWarehouseCode, quantity: 0
+            productCode, branchCompanyId, deliveryWarehouseCode, quantity: 0
         })).then(res => {
             this.props.onChange(getRow(res.data));
         });
