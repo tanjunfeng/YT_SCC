@@ -42,9 +42,13 @@ const goodsColumns = [{
     title: '商品分类',
     dataIndex: 'commodifyClassify',
     key: 'commodifyClassify',
-    render: (text, record) => (
-        <span>{record.secondLevelCategoryName}&gt;{record.thirdLevelCategoryName}</span>
-    )
+    render: (text, record) => {
+        let after = '';
+        if (record.thirdLevelCategoryName !== null) {
+            after = ` > ${record.thirdLevelCategoryName}`;
+        }
+        return <span>{record.secondLevelCategoryName}{after}</span>;
+    }
 }, {
     title: '数量',
     dataIndex: 'quantity',
@@ -58,14 +62,14 @@ const goodsColumns = [{
     dataIndex: 'price',
     key: 'price',
     render: (text, record) => (
-        <span>￥{record.itemPrice.salePrice}</span>
+        <span>￥{Number(record.itemPrice.salePrice).toFixed(2)}</span>
     )
 }, {
     title: '金额',
     dataIndex: 'money',
     key: 'money',
     render: (text, record) => (
-        <span>￥{record.itemPrice.amount}</span>
+        <span>￥{Number(record.itemPrice.amount).toFixed(2)}</span>
     )
 }];
 
@@ -367,7 +371,62 @@ const directSalesgoodsColumns = [{
     width: 50
 }];
 
+const distributionInformationColumns = [{
+    title: '商品编码',
+    dataIndex: 'skuId',
+    key: 'skuId',
+}, {
+    title: '商品名称',
+    dataIndex: 'productName',
+    key: 'productName',
+}, {
+    title: '订单数量',
+    dataIndex: 'quantity',
+    key: 'quantity',
+    render: (text, record) => (
+        <span>
+            <span>{text}</span>
+            <span>{record.unit}</span>
+        </span>
+    )
+}, {
+    title: '配送数量',
+    dataIndex: 'shippedQuantity',
+    key: 'shippedQuantity',
+    render: (text, record) => (
+        <span>
+            <span>{text}</span>
+            <span>{record.unit}</span>
+        </span>
+    )
+}, {
+    title: '单价',
+    dataIndex: 'salePrice',
+    key: 'salePrice',
+    render: (amount) => (
+        <span>￥{Number(amount).toFixed(2)}</span>
+    )
+}, {
+    title: '签收数量',
+    dataIndex: 'completedQuantity',
+    key: 'completedQuantity',
+    render: (text, record) => (
+        <span>
+            <span>{text}</span>
+            <span>{record.unit}</span>
+        </span>
+    )
+}, {
+    title: '签收差额',
+    dataIndex: 'completedMulAmount',
+    key: 'completedMulAmount',
+    render: (amount) => (
+        <span>{Number(amount).toFixed(2)}元</span>
+    )
+}];
+
 export {
     goodsColumns, orderListColumns, returnGoodsListColumns,
-    returnGoodsDetailColumns, directSalesgoodsColumns, exchangeGoodsListColumns
+    returnGoodsDetailColumns, directSalesgoodsColumns, exchangeGoodsListColumns,
+    distributionInformationColumns
 };

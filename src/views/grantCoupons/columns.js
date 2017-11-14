@@ -8,6 +8,7 @@
 import React from 'react';
 import Util from '../../util/util';
 import { promotionStatus } from './constants';
+import { couponTypeStatus } from '../coupon/constants';
 
 // 发放优惠券列表
 const grantCouponsColumns = [{
