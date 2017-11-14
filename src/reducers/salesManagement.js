@@ -8,7 +8,8 @@ import ActionType from '../actions/ActionType';
 
 const initState = Immutable.fromJS({
     data: null,
-    detail: {}
+    detail: {},
+    exchangeList: {}
 });
 
 export default function (state = initState, action) {

@@ -24,14 +24,18 @@ import {
 import moment from 'moment';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { returnGoodsOperation, insertRefund } from '../../../actions';
+import { returnGoodsOperation, returnGoodsList,
+    insertRefund, returnGoodsListFormDataClear
+} from '../../../actions';
 
 
 @connect(state => ({
     listData: state.toJS().salesManagement.data,
     formData: state.toJS().pageParameters.returnGoodsParams
 }), dispatch => bindActionCreators({
-    insertRefund
+    insertRefund,
+    returnGoodsList,
+    returnGoodsListFormDataClear
 }, dispatch))
 
 
@@ -39,9 +43,9 @@ class ReturnGoodsList extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            page: props.formData.pageNum || 1,
             refresh: false,
-            upDate: false
+            upDate: false,
+            current: 1
         }
 
         // 退货单列表
@@ -122,27 +126,65 @@ class ReturnGoodsList extends PureComponent {
     }
 
 
-    /**
-     * 点击翻页
-     * @param {pageNumber}    pageNumber
-     */
-    onPageChange = (pageNumber) => {
-        this.setState({
-            page: pageNumber
-        })
+    componentDidMount() {
+        this.handlePromotionReset();
+        this.query();
     }
+
+    componentWillUnmount() {
+        this.props.returnGoodsListFormDataClear();
+    }
+
+    /**
+     * 分页页码改变的回调
+     */
+    onPaginate = (pageNum) => {
+        Object.assign(this.param, {
+            pageNum
+        });
+        this.setState({ current: pageNum });
+        this.query();
+    }
+
+    handlePromotionSearch = (param) => {
+        this.handlePromotionReset();
+        Object.assign(this.param, {
+            ...param
+        });
+        this.setState({ current: 1 });
+        this.query();
+    }
+
+    param = {};
+
+    query = () => {
+        this.props.returnGoodsList(this.param).then((res) => {
+            const { pageNum, pageSize } = res.data;
+            Object.assign(this.param, { pageNum, pageSize });
+        });
+    }
+
+    handlePromotionReset = () => {
+        // 重置检索条件
+        this.param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        }
+    }
+
     // 退货单确定或取消
     operation = (id, type) => (
         returnGoodsOperation({
             returnId: id,
             operateType: type
-        }).then(res => {
-            if (res.success) {
-                this.setState({
-                    refresh: !this.state.refresh
-                })
-            }
         })
+            .then(res => {
+                if (res.success) {
+                    this.setState({
+                        refresh: !this.state.refresh
+                    })
+                }
+            })
     )
 
     // 模态框弹出
@@ -169,6 +211,14 @@ class ReturnGoodsList extends PureComponent {
 
     handleCancel = () => {
         message.error('已取消发送');
+    }
+
+    handlePromotionReset = () => {
+        // 重置检索条件
+        this.param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        }
     }
 
     // table列表详情操作
@@ -228,9 +278,9 @@ class ReturnGoodsList extends PureComponent {
         return (
             <div className="return-goods-list">
                 <SearchForm
-                    page={this.state.page}
-                    refresh={this.state.refresh}
                     upDate={this.state.upDate}
+                    onPromotionSearch={this.handlePromotionSearch}
+                    onPromotionReset={this.handlePromotionReset}
                 />
                 {
                     listData ?
@@ -240,12 +290,12 @@ class ReturnGoodsList extends PureComponent {
                                 columns={this.returnGoodsListColumns}
                                 rowKey="id"
                                 pagination={{
-                                    current: listData.pageNum,
+                                    current: this.state.current,
                                     total: listData.total,
-                                    pageNum: this.current,
-                                    pageSize: PAGE_SIZE,
+                                    pageNum: listData.pageNum,
+                                    pageSize: listData.pageSize,
                                     showQuickJumper: true,
-                                    onChange: this.onPageChange
+                                    onChange: this.onPaginate
                                 }}
                             />
                         </div> : ''
@@ -257,10 +307,11 @@ class ReturnGoodsList extends PureComponent {
 
 ReturnGoodsList.propTypes = {
     insertRefund: PropTypes.func,
+    returnGoodsListFormDataClear: PropTypes.func,
+    returnGoodsList: PropTypes.func,
     location: PropTypes.objectOf(PropTypes.any),
     listData: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
-    formData: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(ReturnGoodsList));

@@ -247,8 +247,8 @@ const exchangeGoodsListColumns = [{
 },
 {
     title: '换货单状态',
-    dataIndex: 'state',
-    key: 'state'
+    dataIndex: 'stateDetail',
+    key: 'stateDetail'
 },
 {
     title: '商品状态',
@@ -284,8 +284,8 @@ const returnGoodsDetailColumns = [{
 },
 {
     title: '商品条码',
-    dataIndex: 'productId',
-    key: 'productId',
+    dataIndex: 'internationalCode',
+    key: 'internationalCode',
 },
 {
     title: '商品名称',
@@ -302,7 +302,7 @@ const returnGoodsDetailColumns = [{
     )
 },
 {
-    title: '换货数量',
+    title: '退货数量',
     dataIndex: 'quantity',
     key: 'quantity'
 },
@@ -312,7 +312,7 @@ const returnGoodsDetailColumns = [{
     key: 'itemPrice.listPrice'
 },
 {
-    title: '换货金额',
+    title: '退货金额',
     dataIndex: 'itemPrice.amount',
     key: 'itemPrice.amount'
 },
@@ -322,6 +322,65 @@ const returnGoodsDetailColumns = [{
     key: 'actualReturnQuantity'
 }
 ]
+
+const exchangeTableColums = [{
+    title: '序号',
+    dataIndex: 'idx',
+    key: 'idx',
+    render: (text, record, index) => index + 1
+},
+{
+    title: '商品图片',
+    dataIndex: 'productImg',
+    key: 'productImg',
+    render: (text) => (
+        <img src={text} alt={text} className="item-img" />
+    )
+},
+{
+    title: '商品编码',
+    dataIndex: 'productCode',
+    key: 'productCode'
+},
+{
+    title: '商品条码',
+    dataIndex: 'internationalCode',
+    key: 'internationalCode',
+},
+{
+    title: '商品名称',
+    dataIndex: 'productName',
+    key: 'productName',
+}, {
+    title: '商品分类',
+    dataIndex: 'category',
+    key: 'category',
+    render: (text, record) => (
+        <span>
+            {record.secondLevelCategoryName} - {record.thirdLevelCategoryName}
+        </span>
+    )
+},
+{
+    title: '退货/拒收数量',
+    dataIndex: 'quantity',
+    key: 'quantity'
+},
+{
+    title: '单价',
+    dataIndex: 'salePrice',
+    key: 'salePrice'
+},
+{
+    title: '退货金额',
+    dataIndex: 'rawTotalPrice',
+    key: 'rawTotalPrice'
+},
+{
+    title: '实收数量',
+    dataIndex: 'actualReturnQuantity',
+    key: 'actualReturnQuantity'
+}]
 
 const directSalesgoodsColumns = [{
     title: '序号',
@@ -428,5 +487,5 @@ const distributionInformationColumns = [{
 export {
     goodsColumns, orderListColumns, returnGoodsListColumns,
     returnGoodsDetailColumns, directSalesgoodsColumns, exchangeGoodsListColumns,
-    distributionInformationColumns
+    distributionInformationColumns, exchangeTableColums
 };
