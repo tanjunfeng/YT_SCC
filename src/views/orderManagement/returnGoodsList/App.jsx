@@ -28,7 +28,6 @@ import { returnGoodsOperation, returnGoodsList,
     insertRefund, returnGoodsListFormDataClear
 } from '../../../actions';
 
-
 @connect(state => ({
     listData: state.toJS().salesManagement.data,
     formData: state.toJS().pageParameters.returnGoodsParams
@@ -37,7 +36,6 @@ import { returnGoodsOperation, returnGoodsList,
     returnGoodsList,
     returnGoodsListFormDataClear
 }, dispatch))
-
 
 class ReturnGoodsList extends PureComponent {
     constructor(props) {
@@ -227,7 +225,7 @@ class ReturnGoodsList extends PureComponent {
 
     // table列表详情操作
     renderActions = (text, record) => {
-        const { state, orderType } = record;
+        const { state, orderType, paymentState } = record;
         const { pathname } = this.props.location;
         const menu = (
             <Menu>
@@ -250,7 +248,7 @@ class ReturnGoodsList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    orderType === 'ZCXS' && state === 3 && this.refreshVisible &&
+                    orderType === 'ZCXS' && state === 3 && paymentState === 'WTK' && this.refreshVisible &&
                     <Menu.Item key="refund">
                         <Popconfirm
                             title="确认发起退款?"
