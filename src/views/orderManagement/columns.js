@@ -297,7 +297,7 @@ const returnGoodsDetailColumns = [{
     key: 'category',
     render: (text, record) => (
         <span>
-            {record.secondLevelCategoryName} &rt; {record.thirdLevelCategoryName}
+            {record.secondLevelCategoryName} - {record.thirdLevelCategoryName}
         </span>
     )
 },
@@ -308,13 +308,13 @@ const returnGoodsDetailColumns = [{
 },
 {
     title: '单价',
-    dataIndex: 'itemPrice.listPrice',
-    key: 'itemPrice.listPrice'
+    dataIndex: 'salePrice',
+    key: 'salePrice'
 },
 {
     title: '退货金额',
-    dataIndex: 'itemPrice.amount',
-    key: 'itemPrice.amount'
+    dataIndex: 'rawTotalPrice',
+    key: 'rawTotalPrice'
 },
 {
     title: '实收数量',

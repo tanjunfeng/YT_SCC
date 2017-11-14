@@ -3,7 +3,7 @@
  * @Description: 销售退货详情
  * @CreateDate: 2017-11-10 11:22:28
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-10 14:14:02
+ * @Last Modified time: 2017-11-14 11:20:15
  */
 
 import React, { PureComponent } from 'react';
@@ -223,7 +223,7 @@ class ExchangeGoodsDetail extends PureComponent {
                                         {getFieldDecorator('returnReasonType', {
                                             initialValue: data.returnReasonType ? data.returnReasonType : ''
                                         })(
-                                            <Select style={{ width: '153px' }} size="default" disabled={type === '2' ? false : true}>
+                                            <Select style={{ width: '153px' }} size="default" disabled>
                                                 {
                                                     reason.data.map((item) => (
                                                         <Select.Option
@@ -243,7 +243,7 @@ class ExchangeGoodsDetail extends PureComponent {
                                         {getFieldDecorator('returnReason', {
                                             initialValue: data.returnReason
                                         })(
-                                            <TextArea className="input-ret" autosize={{ minRows: 4, maxRows: 4 }} disabled={type === '2' ? false : true} size="default" />
+                                            <TextArea className="input-ret" autosize={{ minRows: 4, maxRows: 4 }} disabled size="default" />
                                             )}
                                     </FormItem>
                                 </Col>

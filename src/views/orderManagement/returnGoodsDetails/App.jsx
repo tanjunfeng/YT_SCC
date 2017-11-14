@@ -20,7 +20,6 @@ import { returnGoodsDetailColumns as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
 import { returnGoodsDetail, returnGoodsDetailClearData, returnGoodsOperation, returnGoodsDetailSave } from '../../../actions';
 import { DATE_FORMAT } from '../../../constant';
-import GoodsTable from './goodsTable';
 
 const FormItem = Form.Item;
 
@@ -39,14 +38,7 @@ class ReturnGoodsDetails extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            id: '',
-            goodsList: [],
-            // 商品列表总计信息
-            total: {
-                rows: 0, // 记录行数
-                quantities: 0, // 订购数量
-                amount: 0   // 金额总计
-            }
+            id: ''
         }
     }
 
@@ -130,17 +122,6 @@ class ReturnGoodsDetails extends PureComponent {
         });
     }
 
-    /**
-     * 商品列表改变通知
-     *
-     * @param {*array} goodsList 更新的商品列表
-     * @param {*object} total 商品小计信息
-     */
-    handleGoodsListChange = (goodsList, total) => {
-        // 刷新导入商品列表，清空报错商品列表
-        this.setState({ goodsList: [...goodsList], total });
-    }
-
     // 保存提交
     save = () => {
         const {
@@ -171,8 +152,6 @@ class ReturnGoodsDetails extends PureComponent {
         const { TextArea } = Input
         const data = this.props.data
         const { type } = this.props.match.params;
-        console.log(this.state.total)
-        const { value } = this.state.goodsList;
         return (
             <div className="returngoods-detail">
                 <div className="basic-box">
@@ -191,9 +170,9 @@ class ReturnGoodsDetails extends PureComponent {
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">退货单状态：</span>{data.stateDetail}</div></Col>
                         </Row>
                         <Row>
-                            <Col span={6} offset={2}><div className="item"><span className="item-tit">收货状态: </span>{data.shipping_state}</div></Col>
-                            <Col span={6} offset={2}><div className="item"><span className="item-tit">退货单状态：</span>{data.productStateDetail}</div></Col>
-                            <Col span={6} offset={2}><div className="item"><span className="item-tit">退货状态：</span>{data.paymentStateDetail}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">收货状态: </span>{data.shippingStateDetail}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">退货单类型:</span>{data.returnRequestType}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">退款状态:</span>{data.paymentStateDetail}</div></Col>
                         </Row>
                     </div>
                 </div>
@@ -227,24 +206,16 @@ class ReturnGoodsDetails extends PureComponent {
                         <Icon type="solution" className="header-icon" />商品信息
                     </div>
                     <div className="body body-table">
-                        {
-                            type === '2' ?
-                                <GoodsTable
-                                    value={this.getGoodsTableValues()}
-                                    onChange={this.handleGoodsListChange}
-                                />
-                                :
-                                <Table
-                                    dataSource={data.items}
-                                    columns={columns}
-                                    rowKey="productId"
-                                    pagination={false}
-                                />
-                        }
+                        <Table
+                            dataSource={data.items}
+                            columns={columns}
+                            rowKey="productId"
+                            pagination={false}
+                        />
                         <div className="bottom-text">
                             <div className="bt-left">共<span className="bt-left-num">{data.commodityTotal}</span>件商品</div>
-                            <div className="bt-right"><span>退货金额：</span><span className="bt-right-num">￥{this.state.total.amount}</span></div>
-                            <div className="bt-right"><span>退款金额：</span><span className="bt-right-num">￥{data.amount}</span></div>
+                            <div className="bt-right"><span>退货金额：</span><span className="bt-right-num">￥{data.actualAmount}</span></div>
+                            <div className="bt-right"><span>退款金额：</span><span className="bt-right-num">￥{data.refundAmount}</span></div>
                         </div>
                     </div>
                 </div>
