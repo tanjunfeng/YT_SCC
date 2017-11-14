@@ -40,6 +40,7 @@ class ReturnGoodsDetails extends PureComponent {
         super(props)
         this.state = {
             id: '',
+            goodsList: [],
             // 商品列表总计信息
             total: {
                 rows: 0, // 记录行数
@@ -138,7 +139,6 @@ class ReturnGoodsDetails extends PureComponent {
     handleGoodsListChange = (goodsList, total) => {
         // 刷新导入商品列表，清空报错商品列表
         this.setState({ goodsList: [...goodsList], total });
-        console.log(goodsList, total)
     }
 
     // 保存提交
@@ -171,6 +171,8 @@ class ReturnGoodsDetails extends PureComponent {
         const { TextArea } = Input
         const data = this.props.data
         const { type } = this.props.match.params;
+        console.log(this.state.total)
+        const { value } = this.state.goodsList;
         return (
             <div className="returngoods-detail">
                 <div className="basic-box">

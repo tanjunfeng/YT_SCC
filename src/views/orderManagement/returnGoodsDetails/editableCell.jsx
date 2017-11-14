@@ -6,7 +6,6 @@
 import React, { PureComponent } from 'react';
 import { InputNumber } from 'antd';
 import PropTypes from 'prop-types';
-import { MAX_AMOUNT_OF_ORDER } from '../../../constant/index';
 
 class EditableCell extends PureComponent {
     handleChange = (value) => {
@@ -27,8 +26,8 @@ class EditableCell extends PureComponent {
             <div>
                 <InputNumber
                     defaultValue={value}
-                    formatter={text => Number(text).toFixed(2)}
-                    parser={text => Number(text).toFixed(2)}
+                    formatter={text => Math.floor(text)}
+                    parser={text => Math.floor(text)}
                     min={min}
                     max={max}
                     step={step}

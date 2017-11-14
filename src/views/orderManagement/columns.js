@@ -284,8 +284,8 @@ const returnGoodsDetailColumns = [{
 },
 {
     title: '商品条码',
-    dataIndex: 'productId',
-    key: 'productId',
+    dataIndex: 'internationalCode',
+    key: 'internationalCode',
 },
 {
     title: '商品名称',
@@ -344,8 +344,8 @@ const exchangeTableColums = [{
 },
 {
     title: '商品条码',
-    dataIndex: 'productId',
-    key: 'productId',
+    dataIndex: 'internationalCode',
+    key: 'internationalCode',
 },
 {
     title: '商品名称',

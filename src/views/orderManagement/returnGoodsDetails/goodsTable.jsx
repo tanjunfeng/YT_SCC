@@ -12,21 +12,12 @@ import { exchangeTableColums as columns } from '../columns';
 import EditableCell from './editableCell';
 
 class GoodsTable extends PureComponent {
-    componentWillReceiveProps(nextProps) {
-        const { goodsAddOn } = nextProps.value;
-        // 当传入商品有变化时，添加到商品列表
-        if (goodsAddOn !== null && this.props.value.goodsAddOn !== goodsAddOn) {
-            this.appendToList(goodsAddOn);
-        }
-    }
-
-    onCellChange = productCode => quantity => {
-        const goodsList = this.props.value.goodsList;
-        const index = goodsList.findIndex(item => item.productCode === productCode);
-        const goods = goodsList[index];
+    onCellChange = productId => value => {
+        const goodsList = this.props.value.items;
+        const index = goodsList.findIndex(item => item.productId === productId);
         if (index > -1) {
-            Object.assign(goods, {
-                quantity
+            Object.assign(goodsList[index], {
+                value
             });
             this.noticeChanges(goodsList, index);
         }
@@ -48,7 +39,7 @@ class GoodsTable extends PureComponent {
         goodsList.forEach(goods => {
             let amount = 0;
             if (typeof goods.quantity === 'number') {
-                amount = goods.quantity * goods.salePrice;
+                amount = goods.quantity * goods.itemPrice.salePrice;
             }
             Object.assign(total, {
                 rows: total.rows + 1,
@@ -59,13 +50,6 @@ class GoodsTable extends PureComponent {
         this.props.onChange([...goodsList], total);
     }
 
-    /**
-     * 添加单个商品并校验状态，并判断商品是否应该移动到第一行
-     */
-    appendToList = () => {
-        this.noticeChanges();
-    }
-
     renderNumber = (text, record) => {
         const { quantity } = record;
         return (
@@ -74,7 +58,7 @@ class GoodsTable extends PureComponent {
                 min={0}
                 max={quantity}
                 step={1}
-                onChange={this.onCellChange(record.productCode)}
+                onChange={this.onCellChange(record.productId)}
             />);
     }
 
@@ -86,7 +70,7 @@ class GoodsTable extends PureComponent {
         this.renderColumns();
         return (
             <Table
-                rowKey="productCode"
+                rowKey="productId"
                 dataSource={this.props.value.items}
                 columns={columns}
                 scroll={{
