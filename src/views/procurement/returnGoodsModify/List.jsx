@@ -94,11 +94,9 @@ const columns = [{
     key: 'refundMoney',
     render: (text, record) => {
         const { purchasePrice, refundAmount } = record;
-        if (!text) {
-            const result = purchasePrice * refundAmount;
-            return result.toFixed(2);
-        }
-        return text;
+        const result = purchasePrice * refundAmount;
+
+        return result.toFixed(2);
     }
 }, {
     title: '退货成本额',
@@ -106,11 +104,10 @@ const columns = [{
     key: 'refundCost',
     render: (text, record) => {
         const { avCost, refundAmount } = record;
-        if (!text) {
-            const result = avCost * refundAmount;
-            return result.toFixed(2);
-        }
-        return text;
+        const result = avCost * refundAmount;
+
+        return result.toFixed(2);
+
     }
 }, {
     title: '实际退货数量',
@@ -269,12 +266,16 @@ class List extends Component {
 
             this.setState({
                 lists: newLists
+            }, () => {
+                this.calculation()
             })
         }
 
         if (type === 'edit' && originLists.length === 0 && defaultValue.length) {
             this.setState({
                 lists: defaultValue
+            }, () => {
+                this.calculation()
             })
             originLists = defaultValue;
         }
@@ -344,6 +345,7 @@ class List extends Component {
 
     numberRender = (text, record) => {
         const { purchaseOrderNo, productCode } = record;
+
         return (
             <InputNumber
                 defaultValue={text || 0}
@@ -504,7 +506,7 @@ class List extends Component {
                 this.saveOrSubmit(1)
                 break;
             case 'progress':
-                    
+
                 break;
             default:
                 break;
