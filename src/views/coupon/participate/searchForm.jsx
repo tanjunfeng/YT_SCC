@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 import Util from '../../../util/util';
-import { SubCompanies } from '../../../container/search';
+import { BranchCompany } from '../../../container/search';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { participate } from '../constants';
 
@@ -17,22 +17,7 @@ const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
 class SearchForm extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            branchCompanyId: ''
-        };
-        this.getStatus = this.getStatus.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleReset = this.handleReset.bind(this);
-        this.getSearchCondition = this.getSearchCondition.bind(this);
-        this.getStatusFromCode = this.getStatusFromCode.bind(this);
-        this.handleExport = this.handleExport.bind(this);
-        this.handleSubCompanyClear = this.handleSubCompanyClear.bind(this);
-        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-    }
-
-    getStatus(stateName) {
+    getStatus = (stateName) => {
         const keys = Object.keys(participate[stateName]);
         return keys.map((key) => (
             <Option key={key} value={key}>
@@ -41,14 +26,14 @@ class SearchForm extends PureComponent {
         ));
     }
 
-    getStatusFromCode(statusCode) {
+    getStatusFromCode = (statusCode) => {
         if (statusCode === 'ALL') {
             return '';
         }
         return statusCode;
     }
 
-    getSearchCondition() {
+    getSearchCondition = () => {
         const {
             orderId,
             promotionName,
@@ -57,7 +42,8 @@ class SearchForm extends PureComponent {
             paymentState,
             shippingStateCode,
             franchiseeId,
-            storeId
+            storeId,
+            branchCompany
         } = this.props.form.getFieldsValue();
         const { match } = this.props;
         return Util.removeInvalid({
@@ -71,24 +57,8 @@ class SearchForm extends PureComponent {
             recordTimeStart: participateTimeRange.length > 1 ? participateTimeRange[0].valueOf() : '',
             recordTimeEnd: participateTimeRange.length > 1 ? participateTimeRange[1].valueOf() : '',
             franchiseeId,
-            branchCompanyId: this.state.branchCompanyId
+            branchCompanyId: branchCompany.id
         });
-    }
-
-    /**
-     * 子公司-清除
-     */
-    handleSubCompanyClear() {
-        this.setState({
-            branchCompanyId: ''
-        });
-    }
-
-    /**
-     * 子公司-值清单
-     */
-    handleSubCompanyChoose(branchCompanyId) {
-        this.setState({ branchCompanyId });
     }
 
     handleSubmit(e) {
@@ -97,7 +67,6 @@ class SearchForm extends PureComponent {
     }
 
     handleReset() {
-        this.handleSubCompanyClear(); // 清除子公司值清单
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onParticipateReset();  // 通知父页面已清空
     }
@@ -153,17 +122,10 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem>
-                                    <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">
-                                            所属公司
-                                        </span>
-                                        <SubCompanies
-                                            value={this.state.branchCompanyId}
-                                            onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                            onSubCompaniesClear={this.handleSubCompanyClear}
-                                        />
-                                    </div>
+                                <FormItem label="所属公司">
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: { id: '', name: '' }
+                                    })(<BranchCompany />)}
                                 </FormItem>
                             </Col>
                         </Row>
@@ -235,7 +197,7 @@ SearchForm.propTypes = {
     onParticipateReset: PropTypes.func,
     onParticipateExport: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    value: PropTypes.objectOf(PropTypes.any),
+    value: PropTypes.bool,
     match: PropTypes.objectOf(PropTypes.any)
 };
 

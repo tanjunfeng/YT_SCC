@@ -358,10 +358,9 @@ class CouponCreate extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={16}>
-                                        <FormItem className="condition" label="优惠券类型">
+                                        <FormItem className="condition" label="优惠券种类">
                                             {getFieldDecorator('couponType', {
-                                                initialValue: this.param.couponType,
-                                                rules: [{ required: true, message: '请选择优惠券类型' }]
+                                                initialValue: this.param.couponType
                                             })(
                                                 <RadioGroup
                                                     onChange={this.handleCouponTypeChange}
@@ -397,10 +396,10 @@ class CouponCreate extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={16}>
-                                        <FormItem label="活动时间">
+                                        <FormItem label="有效日期">
                                             {getFieldDecorator('promotionDateRange', {
                                                 initialValue: '',
-                                                rules: [{ required: true, message: '请选择活动日期' }]
+                                                rules: [{ required: true, message: '请选择有效日期' }]
                                             })(
                                                 <RangePicker
                                                     style={{ width: '240px' }}
