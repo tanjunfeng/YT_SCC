@@ -3,7 +3,7 @@
  * @Description: 销售换货列表
  * @CreateDate: 2017-11-10 11:22:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-13 16:55:28
+ * @Last Modified time: 2017-11-14 16:29:46
  */
 
 import React, { PureComponent } from 'react';
@@ -99,6 +99,8 @@ class ExchangeGoodsList extends PureComponent {
                     this.setState({
                         refresh: !this.state.refresh
                     })
+                    this.handlePromotionReset();
+                    this.query();
                 }
             })
     )

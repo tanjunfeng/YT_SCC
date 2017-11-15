@@ -182,6 +182,8 @@ class ReturnGoodsList extends PureComponent {
                     this.setState({
                         refresh: !this.state.refresh
                     })
+                    this.handlePromotionReset();
+                    this.query();
                 }
             })
     )
@@ -207,6 +209,8 @@ class ReturnGoodsList extends PureComponent {
             if (res.code === 200) {
                 this.refreshVisible = false
                 message.success(res.success);
+                this.handlePromotionReset();
+                this.query();
             }
         })
     }
