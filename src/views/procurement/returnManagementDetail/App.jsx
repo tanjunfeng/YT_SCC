@@ -3,7 +3,7 @@
  * @Description: 采购退货详情页
  * @CreateDate: 2017-10-27 11:26:16
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-10 21:52:36
+ * @Last Modified time: 2017-11-15 14:52:15
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
