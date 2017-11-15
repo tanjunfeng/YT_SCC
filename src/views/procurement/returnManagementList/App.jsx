@@ -129,8 +129,8 @@ class ReturnManagementList extends PureComponent {
                 key: 'adrType'
             }, {
                 title: '退货地点',
-                dataIndex: 'refundAdr',
-                key: 'refundAdr'
+                dataIndex: 'refundAdrName',
+                key: 'refundAdrName'
             }, {
                 title: '退货数量',
                 dataIndex: 'totalRefundAmount',
