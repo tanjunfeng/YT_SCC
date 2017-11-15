@@ -586,6 +586,8 @@ export const getRefundNo = (params) => http.get('/pmPurchaseRefund/getRefundNo',
 export const fetchReturnPoRcvDetail = (params) => http.get('/pmPurchaseRefund/queryRefundDetailById', params);
 // 修改采购退货单（只有制单状态和已拒绝的单子可以修改） 
 export const updateRefundWithItems = (params) => http.post('/pmPurchaseRefund/updateRefundWithItems', params);
+// 此接口用于取消待退货未出仓的退货单
+export const cancel = (params) => http.get('/pmPurchaseRefund/cancel', params);
 // 批量删除处于草稿状态的退货单
 export const deleteBatchRefundOrder = (params) => http.get('/pmPurchaseRefund/deleteBatchRefundOrder', params);
 

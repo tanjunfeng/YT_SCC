@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import Common from './common';
 import FileCut from '../../fileCut';
 import { saveItemAd, uploadImageBase64Data } from '../../../../service';
+import LinkType from '../../common/linkType';
 
 const defaultImge = require('../../../../images/default/1080x280.png');
 
@@ -69,13 +70,15 @@ class BannerItem extends Component {
     saveItems(values, ImageUrl) {
         const { data = {} } = this.props;
         const { id, itemAds = [] } = data;
-        const { url, ...params } = values;
+        const { url, chooseLink, ...params } = values;
         saveItemAd({
             id,
             areaId: itemAds[0].areaId,
             adType: itemAds[0].adType,
             icon: ImageUrl || itemAds[0].icon,
-            url: encodeURI(url),
+            url: chooseLink.link,
+            productNo: parseInt(chooseLink.selected, 10) === 1 ? chooseLink.link : '',
+            urlType: chooseLink.selected,
             ...params
         }).then(() => {
             this.setState({
@@ -133,67 +136,22 @@ class BannerItem extends Component {
                                         className="manage-form-input"
                                         placeholder="名称"
                                     />
-                                    )}
+                                )}
                                 <span className="change-form-tip">（说明：2~4个汉字）</span>
                             </FormItem>
                             <FormItem className="manage-form-item">
-                                <span className="manage-form-label banner-form-label">类型：</span>
-                                {getFieldDecorator('urlType', {
+                                {getFieldDecorator('chooseLink', {
                                     rules: [{
-                                        required: true,
-                                        message: '请选择类型'
+                                        required: true
                                     }],
-                                    initialValue: itemAds[0].urlType.toString()
+                                    initialValue: {
+                                        selected: itemAds[0].urlType ? `${itemAds[0].urlType}` : '1',
+                                        link: parseInt(itemAds[0].urlType, 10) === 1 ? itemAds[0].productNo : itemAds[0].url
+                                    }
                                 })(
-                                    <Select
-                                        style={{ width: '153px' }}
-                                        size="default"
-                                        placeholder="请选择"
-                                        onChange={this.handleLinkStyleChange}
-                                    >
-                                        <Option value="1">商品链接</Option>
-                                        <Option value="2">页面链接</Option>
-                                    </Select>
-                                    )}
+                                    <LinkType />
+                                )}
                             </FormItem>
-                            {
-                                `${this.state.select}` === '1'
-                                ? <div>
-                                    <FormItem className="home-style-modal-input-item">
-                                        <span>商品编号：</span>
-                                        {getFieldDecorator('productNo', {
-                                            rules: [{
-                                                required: true,
-                                                message: '请输入商品编号'
-                                            }, {
-                                                max: 20, message: '最大长度20位'
-                                            }, {
-                                                pattern: /^[^\u4e00-\u9fa5]+$/,
-                                                message: '不能包含中文'
-                                            }],
-                                            initialValue: itemAds[0].productNo
-                                        })(
-                                            <Input className="home-style-url" type="text" placeholder="请输入商品编号" />
-                                        )}
-                                    </FormItem>
-                                </div>
-                                : <div>
-                                    <FormItem className="home-style-modal-input-item">
-                                        <span>页面链接：</span>
-                                        {getFieldDecorator('url', {
-                                            rules: [
-                                                {required: true, message: '请输入页面链接'},
-                                                /* eslint-disable */
-                                                {/* {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'} */}
-                                                /* eslint-enable */
-                                            ],
-                                            initialValue: itemAds[0].url ? decodeURI(itemAds[0].url) : ''
-                                        })(
-                                            <Input className="home-style-url" type="textarea" rows={2} placeholder="请输入页面链接" />
-                                        )}
-                                    </FormItem>
-                                </div>
-                            }
                             <FormItem className={classnames('manage-form-item')} >
                                 <span className="manage-form-label banner-form-label">快捷icon：（说明：支持PNG，建议大小1080X240px）</span>
                                 <FileCut

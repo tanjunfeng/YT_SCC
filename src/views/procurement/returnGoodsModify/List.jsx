@@ -27,7 +27,8 @@ import {
 } from '../../../actions/procurement';
 import {
     exportReturnProPdf, createRefundWithItems,
-    updateRefundWithItems, deleteBatchRefundOrder
+    updateRefundWithItems, deleteBatchRefundOrder,
+    cancel
 } from '../../../service';
 
 const Option = Select.Option;
@@ -462,7 +463,11 @@ class List extends Component {
 
     handleType = (e) => {
         const type = e.target.getAttribute('data-type');
-        const { id } = this.props;
+        const {
+            id, purchaseRefundNo,
+            adrType, refundAdrCode
+        } = this.props.getFormData();
+
         switch (type) {
             case 'back':
                 this.props.history.push('/returnManagementList');
@@ -492,7 +497,15 @@ class List extends Component {
                     cancelText: '取消',
                     onCancel: () => {},
                     onOk: () => {
-                        // TODO 确认取消
+                        cancel({
+                            id,
+                            purchaseRefundNo,
+                            adrType,
+                            refundAdrCode
+                        }).then(() => {
+                            message.success('取消订单成功');
+                            this.props.history.push('/returnManagementList');
+                        })
                     },
                 });
                 break;
@@ -531,7 +544,7 @@ class List extends Component {
                 title: '数据错误',
                 content: `序号：${overrun.join('、')} 数据中存在退货数大于退货数，无法提交`,
             });
-            return ;
+            return;
         }
 
         if (amount.length) {
@@ -539,7 +552,7 @@ class List extends Component {
                 title: '数据错误',
                 content: `序号：${amount.join('、')} 退货数为0, 无法提交`,
             });
-            return ;
+            return;
         }
 
         if (zero.length) {
@@ -561,12 +574,12 @@ class List extends Component {
                     })
                 },
             });
-            return ;
+            return;
         }
 
         if (!newList.length) {
             message.error('失败：没有可用商品信息');
-            return ;
+            return;
         }
 
         this.submit(newList, status).then((res) => {

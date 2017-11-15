@@ -12,6 +12,7 @@ import { withRouter } from 'react-router';
 import { Modal, Form, Input, message, InputNumber, Radio, Select } from 'antd';
 import Utils from '../../../../util/util';
 import { uploadImageBase64Data } from '../../../../service';
+import LinkType from '../../common/linkType';
 import {
     modifyModalVisible,
     fetchCarouselAdList,
@@ -130,10 +131,13 @@ class ChangeMessage extends PureComponent {
         const {
             sorting,
             status,
-            linkType,
-            goodsId,
-            linkAddress
+            chooseLink
         } = this.props.form.getFieldsValue();
+
+        const linkType = chooseLink.selected;
+        const linkAddress = chooseLink.link;
+        const goodsId = parseInt(linkType, 10) === 1 ? chooseLink.link : '';
+
         const { modalTitle } = this.props;
         const { id } = this.props.visibleData;
         switch (modalTitle) {
@@ -245,83 +249,18 @@ class ChangeMessage extends PureComponent {
                         )}
                     </FormItem>
                     <FormItem className="modal-form-item">
-                        <span className="modal-form-item-title">
-                            <span style={{color: '#f00' }}>*</span>
-                            链接类型
-                        </span>
-                        {getFieldDecorator('linkType', {
+                        {getFieldDecorator('chooseLink', {
                             rules: [{
-                                required: true,
-                                message: '请选择链接类型'
+                                required: true
                             }],
-                            initialValue: linkType ? `${linkType}` : '1'
+                            initialValue: {
+                                selected: linkType,
+                                link: parseInt(linkType, 10) === 1 ? goodsId : linkAddress
+                            }
                         })(
-                            <Select
-                                style={{ width: 240 }}
-                                onChange={this.handleLinkStyleChange}
-                            >
-                                <Option value="1">商品链接</Option>
-                                <Option value="2">页面链接</Option>
-                            </Select>
+                            <LinkType />
                         )}
                     </FormItem>
-                    {
-                        `${this.state.selectLinkType}` === '1' &&
-                        <div>
-                            <FormItem className="modal-form-item modal-form-item-num">
-                                <span className="modal-form-item-title">
-                                    <span style={{color: '#f00' }}>*</span>
-                                    商品编号
-                                </span>
-                                {getFieldDecorator('goodsId', {
-                                    rules: [{
-                                        required: true,
-                                        message: '请输入商品编号'
-                                    }, {
-                                        max: 20, message: '最大长度20位'
-                                    }, {
-                                        pattern: /^[^\u4e00-\u9fa5]+$/,
-                                        message: '不能包含中文'
-                                    }],
-                                    initialValue: isShowValue ? goodsId : ''
-                                })(
-                                    <Input
-                                        placeholder="商品编号"
-                                    />
-                                )}
-                            </FormItem>
-                            <div className="form-description">
-                                （在商品管理中查看商品编号）
-                            </div>
-                        </div>
-                    }
-                    {
-                        `${this.state.selectLinkType}` === '2' &&
-                        <FormItem className="modal-form-item">
-                            <span className="modal-form-item-title">
-                                <span style={{color: '#f00' }}>*</span>
-                                页面链接
-                            </span>
-                            {getFieldDecorator('linkAddress', {
-                                rules: [{
-                                    required: true,
-                                    message: '请输入页面链接'
-                                }],
-                                initialValue: isShowValue && linkAddress ? decodeURI(linkAddress) : ''
-                            })(
-                                <Input
-                                    type="textarea"
-                                    disabled={this.state.selectLinkType === '1'}
-                                    rows={2}
-                                    placeholder="页面链接"
-                                />
-
-                            )}
-                            <div className="form-description">
-                                （填写商品编号之后保存，自动获取商品链接地址）
-                            </div>
-                        </FormItem>
-                    }
                     <FormItem className="modal-form-item">
                         <span className="modal-form-item-title">
                             <span style={{color: '#f00' }}>*</span>
