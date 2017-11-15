@@ -327,7 +327,7 @@ function Common(WrappedComponent) {
                             onOk={this.handleUpOk}
                             onCancel={this.handleUpCancel}
                         >
-                            <Form>
+                            <Form className="change-form">
                                 <FormItem className="home-style-modal-input-item">
                                     <div>序号： {current.prefex}号位</div>
                                 </FormItem>
