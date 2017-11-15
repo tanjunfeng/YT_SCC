@@ -282,7 +282,9 @@ class DirectSalesOrders extends PureComponent {
         }).then(res => {
             if (typeof callback === 'function') {
                 callback(Object.assign(goods, {
-                    enough: res.data.enough
+                    enough: res.data.enough,
+                    salePrice: res.data.salePrice,
+                    quantity
                 }));
             }
         });
