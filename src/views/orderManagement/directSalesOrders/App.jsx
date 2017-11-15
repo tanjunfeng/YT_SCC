@@ -10,14 +10,14 @@ import { Form, BackTop, Modal, message } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Utils from '../../../util/util';
+
 import StoresForm from './storesForm';
 import GoodsForm from './goodsForm';
 import GoodsTable from './goodsTable';
-import { getRow } from './helper';
 import {
     insertDirectOrder, updateGoodsInfo, batchCheckStorage
 } from '../../../actions/procurement';
+import { sortList } from './helper';
 
 @connect(() => ({}), dispatch => bindActionCreators({
     insertDirectOrder, updateGoodsInfo, batchCheckStorage
@@ -33,11 +33,12 @@ class DirectSalesOrders extends PureComponent {
         deletedGoodsList: [], // 由于不在销售区域而被删除的商品编号列表
         goodsAddOn: null, // 手工添加的单个商品
         modalRechooseVisible: false, // 提示重新选择门店的模态框
+        importList: [], // 新增导入商品
         // 商品列表总计信息
         total: {
             rows: 0, // 记录行数
             quantities: 0, // 订购数量
-            amount: 0   // 金额总计
+            amount: 0 // 金额总计
         }
     }
 
@@ -57,10 +58,10 @@ class DirectSalesOrders extends PureComponent {
 
     getGoodsTableValues = () => {
         const {
-            branchCompanyId, deliveryWarehouseCode, goodsList, goodsAddOn
+            branchCompanyId, deliveryWarehouseCode, goodsList, goodsAddOn, importList
         } = this.state;
         return {
-            goodsList, goodsAddOn, branchCompanyId, deliveryWarehouseCode
+            goodsList, goodsAddOn, branchCompanyId, deliveryWarehouseCode, importList
         }
     }
 
@@ -141,30 +142,18 @@ class DirectSalesOrders extends PureComponent {
                 Object.assign(goods, { ...goodsChecked });
             });
         }
-        // 刷新导入商品列表，清空报错商品列表
-        this.setState({ goodsList: [...goodsList], total });
+        // 刷新导入商品列表，清空报错商品列表, 清空excel导入商品列表
+        this.setState({
+            goodsList: [...goodsList],
+            total,
+            importList: []
+        });
     }
 
     handleClear = () => {
         this.setState({
             goodsList: []
         });
-    }
-
-    /**
-     * 整理顺序，将不合法的前置，合法的后置
-     */
-    sortList = goodsList => {
-        const frontList = [];
-        const backList = [];
-        goodsList.forEach(goods => {
-            if (!goods.isMultiple || !goods.enough) {
-                frontList.push(goods);
-            } else {
-                backList.push(goods);
-            }
-        });
-        return frontList.concat(backList);
     }
 
     /**
@@ -183,11 +172,7 @@ class DirectSalesOrders extends PureComponent {
                 content: msg,
             });
         }
-        const goodsList = Utils.merge(
-            this.state.goodsList,
-            [...this.sortList(importList)],
-            'productCode');
-        this.setState({ goodsList: [...goodsList] });
+        this.setState({ importList });
     }
 
     handleSubmit = () => {
@@ -262,7 +247,7 @@ class DirectSalesOrders extends PureComponent {
             }
             // 返回标记完毕的商品列表和库存不足的商品数量，并把库存不足的商品整理到最前
             if (typeof callback === 'function') {
-                callback([...this.sortList(goodsList)], data.length);
+                callback([...sortList(goodsList)], data.length);
             }
         }).catch(error => {
             message.error(error);
@@ -296,7 +281,9 @@ class DirectSalesOrders extends PureComponent {
             productCode, quantity, branchCompanyId, deliveryWarehouseCode
         }).then(res => {
             if (typeof callback === 'function') {
-                callback(getRow(res.data));
+                callback(Object.assign(goods, {
+                    enough: res.data.enough
+                }));
             }
         });
     }
