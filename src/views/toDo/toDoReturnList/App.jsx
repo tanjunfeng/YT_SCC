@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-15 14:46:43
+ * @Last Modified time: 2017-11-15 15:25:52
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -190,8 +190,8 @@ class toDoReturnList extends PureComponent {
                 dataIndex: 'processNodeName',
                 key: 'processNodeName',
                 width: '160px',
-                render: (text) => (
-                    <a onClick={this.nodeModal}>{text}</a>
+                render: (text, record) => (
+                    <a onClick={() => this.nodeModal(record)}>{text}</a>
                 )
             }, {
                 title: '操作',
@@ -302,9 +302,9 @@ class toDoReturnList extends PureComponent {
         });
     }
 
-    nodeModal = () => {
+    nodeModal = (record) => {
         this.showOpinionModal();
-        this.props.queryProcessDefinitions({ processType: 1 });
+        this.props.queryProcessDefinitions({ processType: 1, businessId: record.id });
     }
 
     /**
@@ -624,11 +624,10 @@ class toDoReturnList extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.auditPurReList;
         const { processDefinitions } = this.props;
-        let XXlist = 0;
+        let stepsList = 0;
         processDefinitions.filter((item) => (
-            item.processAuditLog && XXlist++
+            item.processAuditLog && stepsList++
         ))
-        const agreeOrRefuse = ['拒绝', '同意'];
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -877,12 +876,14 @@ class toDoReturnList extends PureComponent {
                                 onCancel={this.handleOpinionCancel}
                                 width={1000}
                             >
-                                <Steps current={3 - XXlist} progressDot>
+                                <Steps current={stepsList} progressDot>
                                     {processDefinitions.map((item, index) => (
                                         <Step
                                             key={`toDo-${index}`}
                                             title={item.processNodeName}
-                                            description={agreeOrRefuse[item.type]}
+                                            description={
+                                                item.processAuditLog === null ? '不同意' : '同意'
+                                            }
                                         />
                                     ))}
                                 </Steps>
