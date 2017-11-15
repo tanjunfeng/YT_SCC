@@ -43,43 +43,34 @@ const TabPane = Tabs.TabPane;
 class TabGroup extends PureComponent {
     getTableValues = (page) => {
         let columns = [];
-        let pageNum = 0;
-        let pageSize = 0;
-        let total = 0;
-        const dataSource = {};
-        const { usedCouponParticipate, unUsedCouponParticipate, garbageCouponParticipate } = this.props;
+        const stores = {};
+        const {
+            usedCouponParticipate,
+            unUsedCouponParticipate,
+            garbageCouponParticipate
+        } = this.props;
         switch (page) {
             case 'used':
                 columns = usedParticipateColumns;
-                pageNum = usedCouponParticipate.pageNum;
-                Object.assign(dataSource, {
-                    data: usedCouponParticipate.data
+                Object.assign(stores, {
+                    ...usedCouponParticipate
                 });
                 break;
             case 'unused':
                 columns = unUsedParticipateColumns;
-                pageNum = unUsedCouponParticipate.pageNum;
-                Object.assign(dataSource, {
-                    data: unUsedCouponParticipate.data
+                Object.assign(stores, {
+                    ...unUsedCouponParticipate
                 });
                 break;
             case 'garbage':
                 columns = garbageParticipateColumns;
-                pageNum = garbageCouponParticipate.pageNum;
-                Object.assign(dataSource, {
-                    data: garbageCouponParticipate.data
+                Object.assign(stores, {
+                    ...garbageCouponParticipate
                 });
                 break;
             default: break;
         }
-        return {
-            dataSource,
-            total,
-            columns,
-            pageNum,
-            pageSize,
-            current: this.current
-        };
+        return { ...stores, columns, current: this.current };
     }
 
     PROMOTION_ID = this.props.match.params.id;

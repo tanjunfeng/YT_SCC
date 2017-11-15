@@ -16,10 +16,10 @@ class TableCouponParticipate extends PureComponent {
     }
 
     render() {
-        const { dataSource, columns, pageNum, pageSize, total, current } = this.props;
+        const { data, columns, pageNum, pageSize, total, current } = this.props;
         return (
             <Table
-                dataSource={dataSource}
+                dataSource={data}
                 columns={columns}
                 rowKey="orderId"
                 scroll={{
@@ -41,7 +41,7 @@ class TableCouponParticipate extends PureComponent {
 
 TableCouponParticipate.propTypes = {
     columns: PropTypes.arrayOf(PropTypes.any),
-    dataSource: PropTypes.arrayOf(PropTypes.any),
+    data: PropTypes.arrayOf(PropTypes.any),
     pageNum: PropTypes.number,
     pageSize: PropTypes.number,
     total: PropTypes.number,
