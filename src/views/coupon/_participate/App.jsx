@@ -22,9 +22,9 @@ import { exportParticipateData1, exportParticipateData2 } from '../../../service
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import {
-    usedParticipateList as usedColumns,
-    unUsedParticipateList as unUsedColumns,
-    invalidRecordList as invalidRecordColumns
+    usedParticipateColumns as usedColumns,
+    unUsedParticipateColumns as unUsedColumns,
+    garbageParticipateColumns as invalidRecordColumns
 } from '../columns';
 import Util from '../../../util/util';
 
@@ -32,7 +32,7 @@ const TabPane = Tabs.TabPane;
 
 @connect(state => ({
     usedCouponParticipate: state.toJS().promotion.usedCouponParticipate,
-    invalidRecordList: state.toJS().promotion.invalidRecordList,
+    garbageCouponParticipate: state.toJS().promotion.garbageCouponParticipate,
     unUsedCouponParticipate: state.toJS().promotion.unUsedCouponParticipate
 }), dispatch => bindActionCreators({
     getUsedCouponParticipate,
@@ -47,13 +47,6 @@ class CouponsParticipate extends PureComponent {
         super(props);
         this.PROMOTION_ID = this.props.match.params.id;
         this.PROMOTION_NAME = this.props.match.params.promotionName;
-        this.handleParticipateSearch = this.handleParticipateSearch.bind(this);
-        this.handleParticipateReset = this.handleParticipateReset.bind(this);
-        this.handleParticipateExport = this.handleParticipateExport.bind(this);
-        this.onPaginate = this.onPaginate.bind(this);
-        this.onPaginateUnUsed = this.onPaginateUnUsed.bind(this);
-        this.handleTabChange = this.handleTabChange.bind(this);
-        this.query = this.query.bind(this);
         this.state = {
             tabPage: '1',
             selectedListData: []
@@ -350,7 +343,7 @@ CouponsParticipate.propTypes = {
     getUnUsedCouponParticipate: PropTypes.func,
     clearUsedCouponPatipate: PropTypes.func,
     clearUnUsedCouponPatipate: PropTypes.func,
-    invalidRecordList: PropTypes.func,
+    garbageCouponParticipate: PropTypes.func,
     cancelCoupons: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
     usedCouponParticipate: PropTypes.objectOf(PropTypes.any),

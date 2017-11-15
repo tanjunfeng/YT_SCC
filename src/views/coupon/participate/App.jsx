@@ -16,23 +16,23 @@ class CouponsParticipate extends PureComponent {
         page: 'used' // 默认打开已使用优惠券
     }
 
-    handleTabChange = (key) => {
-        this.setState({ page: key });
+    getTabGroupValue = () => {
+        const value = {};
+        const { page } = this.state;
+        return Object.assign(value, page);
     }
 
     handleSearch = () => {
     }
 
-    handleReset() {
+    handleReset = () => {
     }
 
-    handleExport() {
+    handleExport = () => {
     }
 
-    getTabGroupValue = () => {
-        const dist = {};
-        const { page } = this.state;
-        return Object.assign(dist, page);
+    handleTabChange = (page) => {
+        this.setState({ page });
     }
 
     render() {
@@ -51,6 +51,7 @@ class CouponsParticipate extends PureComponent {
                 </h2>
                 <TabGroup
                     value={this.getTabGroupValue()}
+                    onChange={this.handleTabChange}
                 />
             </div>
         );

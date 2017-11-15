@@ -20,7 +20,7 @@ import {
     fetchUnUsedCouponParticipate as fetchUnUsedCouponParticipateService,
     fetchPromotionParticipateData as fetchPromotionParticipateDataService,
     grantCoupon as grantCouponService,
-    invalidRecordList as invalidRecordService,
+    garbageCouponParticipate as invalidRecordService,
     cancelCoupons as cancelCouponsService,
 } from '../service';
 
@@ -116,7 +116,7 @@ const invalidRecordAction = (data) => ({
     payload: data
 });
 
-export const invalidRecordList = (params) => dispatch => (
+export const garbageCouponParticipate = (params) => dispatch => (
     new Promise((resolve, reject) => {
         invalidRecordService(params)
             .then(res => {

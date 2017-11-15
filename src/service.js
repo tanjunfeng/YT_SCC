@@ -839,7 +839,7 @@ export const queryAliveCouponsList = (params) => http.get('/coupon/queryAliveCou
 export const getCouponsDetail = (params) => http.get('/coupon/queryCouponsById', params);
 export const queryFranchiseeList = (params) => http.get('/franchisee/grantFranchisee', params);
 export const grantCoupon = (params) => http.post('/coupon/grantMutiQtyCoupon', params);
-export const invalidRecordList = (params) => http.post('/coupon/queryCouponActivityActiveList', params);
+export const garbageCouponParticipate = (params) => http.post('/coupon/queryCouponActivityActiveList', params);
 export const cancelCoupons = (params) => http.get('/coupon/cancelCoupons', params);
 
 /**
