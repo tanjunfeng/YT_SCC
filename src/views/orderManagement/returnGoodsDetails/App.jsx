@@ -16,12 +16,13 @@ import {
     Col, Button, Input
 } from 'antd';
 import Utils from '../../../util/util';
-import { returnGoodsDetailColumns as columns } from '../columns';
+import { returnGoodsTableColums as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
 import { returnGoodsDetail, returnGoodsDetailClearData, returnGoodsOperation, returnGoodsDetailSave } from '../../../actions';
 import { DATE_FORMAT } from '../../../constant';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 @connect(state => ({
     // 详情数据
@@ -147,6 +148,30 @@ class ReturnGoodsDetails extends PureComponent {
         }
     }
 
+    purchaseOrderType = () => {
+        const data = this.props.data
+        switch (data.returnReasonType) {
+            case '':
+                return '请选择';
+            case 1:
+                return '包装破损';
+            case 2:
+                return '商品破损';
+            case 3:
+                return '保质期临期或过期';
+            case 4:
+                return '商品错发或漏发';
+            case 5:
+                return '订错货';
+            case 6:
+                return '商品质量问题';
+            case 7:
+                return '其他';
+            default:
+                return '';
+        }
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form
         const { TextArea } = Input
@@ -232,19 +257,18 @@ class ReturnGoodsDetails extends PureComponent {
                                 <Col span={4}>
                                     <FormItem>
                                         {getFieldDecorator('returnReasonType', {
-                                            initialValue: data.returnReasonType ? data.returnReasonType : ''
+                                            initialValue: this.purchaseOrderType() || ''
                                         })(
                                             <Select style={{ width: '153px' }} size="default" disabled>
                                                 {
                                                     reason.data.map((item) => (
-                                                        <Select.Option
+                                                        <Option
                                                             key={item.key}
                                                             value={item.key}
                                                         >
                                                             {item.value}
-                                                        </Select.Option>
-                                                    ))
-                                                }
+                                                        </Option>
+                                                ))}
                                             </Select>
                                             )}
                                     </FormItem>
