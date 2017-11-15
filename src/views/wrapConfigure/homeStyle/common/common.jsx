@@ -364,6 +364,13 @@ function Common(WrappedComponent) {
                                         {getFieldDecorator('chooseLink', {
                                             rules: [{
                                                 required: true
+                                            }, {
+                                                validator: (rule, value, callback) => {
+                                                    if (!value.link) {
+                                                        callback('请输入链接')
+                                                    }
+                                                    callback()
+                                                }
                                             }],
                                             initialValue: {
                                                 selected: current.urlType ? `${current.urlType}` : '1',

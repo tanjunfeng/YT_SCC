@@ -143,6 +143,13 @@ class BannerItem extends Component {
                                 {getFieldDecorator('chooseLink', {
                                     rules: [{
                                         required: true
+                                    }, {
+                                        validator: (rule, value, callback) => {
+                                            if (!value.link) {
+                                                callback('请输入链接')
+                                            }
+                                            callback()
+                                        }
                                     }],
                                     initialValue: {
                                         selected: itemAds[0].urlType ? `${itemAds[0].urlType}` : '1',
