@@ -153,7 +153,7 @@ class SearchForm extends PureComponent {
                             </FormItem>
                         </Col>
                         <Col span={8} className="company-time">
-                            {/* 子公司 */}
+                            {/* 分公司 */}
                             <FormItem>
                                 <FormItem label="分公司">
                                     {getFieldDecorator('branchCompany', {
