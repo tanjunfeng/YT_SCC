@@ -262,8 +262,8 @@ const exchangeGoodsListColumns = [{
 }
 ]
 
-// 退货单详情列表
-const returnGoodsDetailColumns = [{
+// 换货单详情列表
+const exchangeGoodsDetailColumns = [{
     title: '序号',
     dataIndex: 'idx',
     key: 'idx',
@@ -323,7 +323,7 @@ const returnGoodsDetailColumns = [{
 }
 ]
 
-const exchangeTableColums = [{
+const returnGoodsTableColums = [{
     title: '序号',
     dataIndex: 'idx',
     key: 'idx',
@@ -486,6 +486,6 @@ const distributionInformationColumns = [{
 
 export {
     goodsColumns, orderListColumns, returnGoodsListColumns,
-    returnGoodsDetailColumns, directSalesgoodsColumns, exchangeGoodsListColumns,
-    distributionInformationColumns, exchangeTableColums
+    exchangeGoodsDetailColumns, directSalesgoodsColumns, exchangeGoodsListColumns,
+    distributionInformationColumns, returnGoodsTableColums
 };

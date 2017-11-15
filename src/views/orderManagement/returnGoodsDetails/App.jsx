@@ -16,7 +16,7 @@ import {
     Col, Button, Input
 } from 'antd';
 import Utils from '../../../util/util';
-import { returnGoodsDetailColumns as columns } from '../columns';
+import { returnGoodsTableColums as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
 import { returnGoodsDetail, returnGoodsDetailClearData, returnGoodsOperation, returnGoodsDetailSave } from '../../../actions';
 import { DATE_FORMAT } from '../../../constant';
