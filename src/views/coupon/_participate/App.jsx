@@ -343,7 +343,6 @@ CouponsParticipate.propTypes = {
     getUnUsedCouponParticipate: PropTypes.func,
     clearUsedCouponPatipate: PropTypes.func,
     clearUnUsedCouponPatipate: PropTypes.func,
-    garbageCouponParticipate: PropTypes.func,
     cancelCoupons: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
     usedCouponParticipate: PropTypes.objectOf(PropTypes.any),

@@ -14,8 +14,10 @@ import { Form, Tabs } from 'antd';
 import {
     getUsedCouponParticipate,
     getUnUsedCouponParticipate,
+    getGarbageCouponParticipate,
     clearUsedCouponPatipate,
     clearUnUsedCouponPatipate,
+    clearGarbageCouponPatipate,
     cancelCoupons
 } from '../../../actions/promotion';
 
@@ -35,8 +37,10 @@ const TabPane = Tabs.TabPane;
 }), dispatch => bindActionCreators({
     getUsedCouponParticipate,
     getUnUsedCouponParticipate,
+    getGarbageCouponParticipate,
     clearUsedCouponPatipate,
     clearUnUsedCouponPatipate,
+    clearGarbageCouponPatipate,
     cancelCoupons
 }, dispatch))
 
@@ -87,20 +91,40 @@ class TabGroup extends PureComponent {
         this.onChange(key); // 通知页面已发生改变
     }
 
-    handlePageNumChange = (pageNum) => {
-        Object.assign(this.param, { pageNum });
-        this.current = pageNum;
-        // todo: 执行查询一次
+    query = () => {
         switch (this.props.page) {
             case 'used':
-                this.props.getUsedCouponParticipate();
+                this.props.clearUnUsedCouponPatipate();
+                this.props.clearGarbageCouponPatipate();
+                this.props.getUsedCouponParticipate(this.param).then((data) => {
+                    const { pageNum, pageSize } = data.data;
+                    Object.assign(this.param, { pageNum, pageSize });
+                });
                 break;
             case 'unused':
+                this.props.clearUsedCouponPatipate();
+                this.props.clearGarbageCouponPatipate();
+                this.props.getUnUsedCouponParticipate(this.param).then((data) => {
+                    const { pageNum, pageSize } = data.data;
+                    Object.assign(this.param, { pageNum, pageSize });
+                });
                 break;
             case 'garbage':
+                this.props.clearUsedCouponPatipate();
+                this.props.clearUnUsedCouponPatipate();
+                this.props.getGarbageCouponParticipate(this.param).then((data) => {
+                    const { pageNum, pageSize } = data.data;
+                    Object.assign(this.param, { pageNum, pageSize });
+                });
                 break;
             default: break;
         }
+    }
+
+    handlePageNumChange = (pageNum) => {
+        Object.assign(this.param, { pageNum });
+        this.current = pageNum;
+        this.query();
     }
 
     render() {
@@ -134,8 +158,10 @@ TabGroup.propTypes = {
     page: PropTypes.string,
     getUsedCouponParticipate: PropTypes.func,
     getUnUsedCouponParticipate: PropTypes.func,
+    getGarbageCouponParticipate: PropTypes.func,
     clearUsedCouponPatipate: PropTypes.func,
     clearUnUsedCouponPatipate: PropTypes.func,
+    clearGarbageCouponPatipate: PropTypes.func,
     cancelCoupons: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
     usedCouponParticipate: PropTypes.objectOf(PropTypes.any),
