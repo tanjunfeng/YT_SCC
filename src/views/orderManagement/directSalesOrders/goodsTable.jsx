@@ -8,15 +8,26 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import { Form, Popconfirm, Table } from 'antd';
 import PropTypes from 'prop-types';
+
+import Utils from '../../../util/util';
 import { directSalesgoodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
+import { sortList } from './helper';
 
 class GoodsTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        const { goodsAddOn } = nextProps.value;
+        const { goodsAddOn, importList } = nextProps.value;
         // 当传入商品有变化时，添加到商品列表
         if (goodsAddOn !== null && this.props.value.goodsAddOn !== goodsAddOn) {
             this.appendToList(goodsAddOn);
+        }
+        // 当excel导入商品变化时，添加到商品列表
+        if (importList.length !== 0) {
+            const goodsList = Utils.merge(
+                this.props.value.goodsList,
+                [...sortList(importList)],
+                'productCode');
+            this.noticeChanges(goodsList);
         }
     }
 
@@ -49,7 +60,7 @@ class GoodsTable extends PureComponent {
             dataIndex, // 单个商品修改的索引
             rows: 0, // 记录行数
             quantities: 0, // 订购数量
-            amount: 0   // 金额总计
+            amount: 0 // 金额总计
         };
         goodsList.forEach(goods => {
             let amount = 0;
