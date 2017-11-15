@@ -1,0 +1,134 @@
+{
+    "timestamp": 1510553804365,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 10,
+        "total": 13,
+        "data": [
+            {
+                "id": "100002017111200005H01",
+                "orderId": "100002017111200005",
+                "branchCompanyName": "成都子公司",
+                "franchiseeName": "科学城1期D区店",
+                "creationTime": 1510474336000,
+                "amount": 300,
+                "state": 1,
+                "stateDetail": "待确认",
+                "productState": 1,
+                "productStateDetail": "待取货"
+            },
+            {
+                "id": "100002017111000030H01",
+                "orderId": "100002017111000030",
+                "branchCompanyName": "成都子公司",
+                "franchiseeName": "科学城1期D区店",
+                "creationTime": 1510394924000,
+                "amount": 595,
+                "state": 2,
+                "stateDetail": "已确认",
+                "productState": 1,
+                "productStateDetail": "待取货"
+            },
+            {
+                "id": "100002017111000056H01",
+                "orderId": "100002017111000056",
+                "branchCompanyName": "成都子公司",
+                "franchiseeName": "科学城1期D区店",
+                "creationTime": 1510303266000,
+                "amount": 850,
+                "state": 2,
+                "stateDetail": "已确认",
+                "productState": 2,
+                "productStateDetail": "已取货"
+            },
+            {
+                "id": "100002017110700014H01",
+                "orderId": "100002017110700014",
+                "branchCompanyName": "成都子公司",
+                "franchiseeName": "科学城1期D区店",
+                "creationTime": 1510128039000,
+                "amount": 850,
+                "state": 1,
+                "stateDetail": "待确认",
+                "productState": 1,
+                "productStateDetail": "待取货"
+            },
+            {
+                "id": "100002017101100015H09",
+                "orderId": "100001708087877",
+                "branchCompanyName": "成都子公司",
+                "franchiseeName": "鑫辉爱购",
+                "creationTime": 1509695880000,
+                "amount": null,
+                "state": 2,
+                "stateDetail": "已确认",
+                "productState": 1,
+                "productStateDetail": "待取货"
+            },
+            {
+                "id": "100002017101100015H08",
+                "orderId": "100002017101100015",
+                "branchCompanyName": "成都子公司",
+                "franchiseeName": "鑫辉爱购",
+                "creationTime": 1509609480000,
+                "amount": null,
+                "state": 4,
+                "stateDetail": "已取消",
+                "productState": 1,
+                "productStateDetail": "待取货"
+            },
+            {
+                "id": "100002017101100015H01",
+                "orderId": "100002017101100015",
+                "branchCompanyName": "成都子公司",
+                "franchiseeName": "鑫辉爱购",
+                "creationTime": 1509523080000,
+                "amount": 400,
+                "state": 2,
+                "stateDetail": "已确认",
+                "productState": 1,
+                "productStateDetail": "待取货"
+            },
+            {
+                "id": "100002017101100015H02",
+                "orderId": "100002017101100015",
+                "branchCompanyName": "成都子公司",
+                "franchiseeName": "鑫辉爱购",
+                "creationTime": 1509523080000,
+                "amount": null,
+                "state": 2,
+                "stateDetail": "已确认",
+                "productState": 1,
+                "productStateDetail": "待取货"
+            },
+            {
+                "id": "100002017101100015H03",
+                "orderId": "100002017101100015",
+                "branchCompanyName": "成都子公司",
+                "franchiseeName": "鑫辉爱购",
+                "creationTime": 1509523080000,
+                "amount": null,
+                "state": 4,
+                "stateDetail": "已取消",
+                "productState": 1,
+                "productStateDetail": "待取货"
+            },
+            {
+                "id": "100002017101100015H04",
+                "orderId": "100002017101100015",
+                "branchCompanyName": "成都子公司",
+                "franchiseeName": "鑫辉爱购",
+                "creationTime": 1509523080000,
+                "amount": null,
+                "state": 4,
+                "stateDetail": "已取消",
+                "productState": 1,
+                "productStateDetail": "待取货"
+            }
+        ]
+    },
+    "success": true
+}

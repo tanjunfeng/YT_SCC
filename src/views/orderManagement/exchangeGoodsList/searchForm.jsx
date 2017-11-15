@@ -7,9 +7,8 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../../util/util';
 import { returnGoodsStatus, goodsReceiptStatus } from '../../../constant/salesManagement';
-import { returnGoodsList, returnGoodsListFormData, returnGoodsListFormDataClear } from '../../../actions';
+import { getExchangeGoodsListAction, returnGoodsListFormDataClear } from '../../../actions';
 import { pubFetchValueList } from '../../../actions/pub';
-import { PAGE_SIZE } from '../../../constant';
 import SearchMind from '../../../components/searchMind';
 import { BranchCompany } from '../../../container/search';
 
@@ -19,13 +18,12 @@ const dateFormat = 'YYYY-MM-DD';
 
 @connect(
     state => ({
-        data: state.toJS().pageParameters.returnGoodsParams.data,
-        franchiseeIdName: state.toJS().pageParameters.returnGoodsParams.franchiseeIdName,
-        branchCompany: state.toJS().pageParameters.returnGoodsParams.branchCompany
+        data: state.toJS().pageParameters.exchangeGoodsParams.data,
+        franchiseeIdName: state.toJS().pageParameters.exchangeGoodsParams.franchiseeIdName,
+        branchCompany: state.toJS().pageParameters.exchangeGoodsParams.branchCompany
     }),
     dispatch => bindActionCreators({
-        returnGoodsList,
-        returnGoodsListFormData,
+        getExchangeGoodsListAction,
         pubFetchValueList,
         returnGoodsListFormDataClear
     }, dispatch)
@@ -43,18 +41,10 @@ class SearchForm extends PureComponent {
         this.branchCompany = this.props.branchCompany;
     }
 
-    componentDidMount() {
-        const nextPage = this.props.data.pageNum || 1;
-        this.requestSearch(nextPage)
-    }
-
     // 父组件page改变或点击确定或取消
     componentWillReceiveProps(nextProps) {
-        if (this.props.page !== nextProps.page) {
-            this.requestSearch(nextProps.page)
-        }
         if (this.props.refresh !== nextProps.refresh) {
-            this.requestSearch()
+            this.handleSearch()
         }
     }
 
@@ -85,37 +75,19 @@ class SearchForm extends PureComponent {
     }
 
     // 搜索方法
-    requestSearch = (nextPage) => {
-        const { returnGoodsListFormData, returnGoodsList, page } = this.props;
-        const seachParams = this.getSearchParams();
-        const data = {
-            data: {
-                pageSize: PAGE_SIZE,
-                pageNum: nextPage ? nextPage : page,
-                franchiseeId: this.state.franchiseeId,
-                ...seachParams
-            },
-            franchiseeIdName: this.state.franchiseeIdName,
-            branchCompany: this.branchCompany
-        }
-        returnGoodsListFormData(data)
-        returnGoodsList(Utils.removeInvalid(data.data))
-    }
-
-    // 搜索
-    handleSearch = (e) => {
-        e.preventDefault();
-        this.requestSearch()
+    handleSearch = () => {
+        // 将查询条件回传给调用页
+        this.props.onPromotionSearch(this.getSearchParams());
     }
 
     // 重置
     handleReset = () => {
-        const { returnGoodsListFormDataClear } = this.props;
         this.handleJoiningClear();
         this.joiningSearchMind.reset();
         this.props.form.resetFields();
         this.branchCompany = { id: '', name: '' };
-        returnGoodsListFormDataClear()
+        this.props.returnGoodsListFormDataClear()
+        this.props.onPromotionReset();  // 通知父页面已清空
     }
 
     // 加盟商-值清单
@@ -286,9 +258,9 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    returnGoodsListFormData: PropTypes.func,
-    returnGoodsList: PropTypes.func,
     returnGoodsListFormDataClear: PropTypes.func,
+    onPromotionSearch: PropTypes.func,
+    onPromotionReset: PropTypes.func,
     pubFetchValueList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     data: PropTypes.objectOf(PropTypes.any),

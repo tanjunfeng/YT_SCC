@@ -4,14 +4,16 @@
  *
  */
 import Promise from 'bluebird';
-import { getReturnGoodsList, getReturnGoodsDetail,
+import {
+    getReturnGoodsList, getReturnGoodsDetail,
+    getExchangeGoodsListAction as getExchangeGoodsListService,
     getReturnGoodsOperation, getReturnGoodsDetailSave as returnGoodsDetailSaveService,
     insertRefund as insertRefundService,
     returnDescriptionSave as returnDescriptionSaveService
 } from '../service';
 import ActionType from './ActionType';
 
-// 获取list数据
+// 获取退货list数据
 const receive = (data) => ({
     type: ActionType.RECEIVE_RETURN_GOODS_LIST,
     payload: data,
@@ -22,6 +24,24 @@ export const returnGoodsList = (params) => dispatch => (
         getReturnGoodsList(params)
             .then(res => {
                 dispatch(receive(res.data));
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+// 获取换货list数据
+const getExchangeGoodsList = (data) => ({
+    type: ActionType.RECEIVE_EXCHANGE_GOODS_LIST,
+    payload: data,
+});
+
+export const getExchangeGoodsListAction = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        getExchangeGoodsListService(params)
+            .then(res => {
+                dispatch(getExchangeGoodsList(res.data));
             })
             .catch(err => {
                 reject(err);
