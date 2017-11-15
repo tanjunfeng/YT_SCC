@@ -97,7 +97,7 @@ class SearchForm extends PureComponent {
                                             <Select style={{ width: '153px' }} size="default">
                                                 {this.getStatus('orderState')}
                                             </Select>
-                                        )}
+                                            )}
                                     </FormItem>
                                 </Col>
                                 <Col span={8}>
@@ -172,16 +172,11 @@ class SearchForm extends PureComponent {
                                         查询
                                     </Button>
                                 </FormItem>
-                                {
-                                    !this.props.value ?
-                                        <FormItem>
-                                            <Button size="default" onClick={this.handleExport}>
-                                                导出
+                                <FormItem>
+                                    <Button size="default" onClick={this.handleExport}>
+                                        导出
                                             </Button>
-                                        </FormItem>
-                                        :
-                                        null
-                                }
+                                </FormItem>
                                 <FormItem>
                                     <Button size="default" onClick={this.handleReset}>
                                         重置
@@ -201,7 +196,6 @@ SearchForm.propTypes = {
     onParticipateReset: PropTypes.func,
     onParticipateExport: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    value: PropTypes.bool,
     page: PropTypes.string,
     match: PropTypes.objectOf(PropTypes.any)
 };

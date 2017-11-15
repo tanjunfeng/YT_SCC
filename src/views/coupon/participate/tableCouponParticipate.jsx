@@ -19,7 +19,8 @@ class TableCouponParticipate extends PureComponent {
         const {
             data, columns, pageNum, pageSize,
             total, current, rowKey
-        } = this.props;
+        } = this.props.value;
+        console.log(data);
         return (
             <Table
                 dataSource={data}
@@ -43,6 +44,7 @@ class TableCouponParticipate extends PureComponent {
 }
 
 TableCouponParticipate.propTypes = {
+    value: PropTypes.objectOf(PropTypes.any),
     columns: PropTypes.arrayOf(PropTypes.any),
     data: PropTypes.arrayOf(PropTypes.any),
     rowKey: PropTypes.string,

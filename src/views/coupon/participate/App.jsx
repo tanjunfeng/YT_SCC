@@ -19,7 +19,7 @@ class CouponsParticipate extends PureComponent {
     getTabGroupValue = () => {
         const value = {};
         const { page } = this.state;
-        return Object.assign(value, page);
+        return Object.assign(value, { page });
     }
 
     handleSearch = () => {
