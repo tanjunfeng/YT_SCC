@@ -584,8 +584,10 @@ export const queryApprovalInfo = (params) => http.get('/processAuditLog/queryApp
 export const getRefundNo = (params) => http.get('/pmPurchaseRefund/getRefundNo', params);
 // 查询采购退货列表详情
 export const fetchReturnPoRcvDetail = (params) => http.get('/pmPurchaseRefund/queryRefundDetailById', params);
-// 修改采购退货单（只有制单状态和已拒绝的单子可以修改） 
+// 修改采购退货单（只有制单状态和已拒绝的单子可以修改）
 export const updateRefundWithItems = (params) => http.post('/pmPurchaseRefund/updateRefundWithItems', params);
+// 此接口用于取消待退货未出仓的退货单
+export const cancel = (params) => http.get('/pmPurchaseRefund/cancel', params);
 // 批量删除处于草稿状态的退货单
 export const deleteBatchRefundOrder = (params) => http.get('/pmPurchaseRefund/deleteBatchRefundOrder', params);
 
@@ -848,8 +850,10 @@ export const cancelCoupons = (params) => http.get('/coupon/cancelCoupons', param
  */
 // 查询品类
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
-// 退换货单列表
+// 退货单列表
 export const getReturnGoodsList = (params) => http.get('/webReturnRequest/queryReturnRequestList', params);
+// 换货单列表
+export const getExchangeGoodsListAction = (params) => http.get('/webReturnRequest/queryChangeRequestList', params);
 // 退换货单取消、确认
 export const getReturnGoodsOperation = (params) => http.post('/webReturnRequest/operateOrderReturnedReceipt', params);
 // 退换货单详情

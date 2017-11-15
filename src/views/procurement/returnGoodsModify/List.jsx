@@ -27,7 +27,8 @@ import {
 } from '../../../actions/procurement';
 import {
     exportReturnProPdf, createRefundWithItems,
-    updateRefundWithItems, deleteBatchRefundOrder
+    updateRefundWithItems, deleteBatchRefundOrder,
+    cancel
 } from '../../../service';
 
 const Option = Select.Option;
@@ -94,11 +95,9 @@ const columns = [{
     key: 'refundMoney',
     render: (text, record) => {
         const { purchasePrice, refundAmount } = record;
-        if (!text) {
-            const result = purchasePrice * refundAmount;
-            return result.toFixed(2);
-        }
-        return text;
+        const result = purchasePrice * refundAmount;
+
+        return result.toFixed(2);
     }
 }, {
     title: '退货成本额',
@@ -106,11 +105,10 @@ const columns = [{
     key: 'refundCost',
     render: (text, record) => {
         const { avCost, refundAmount } = record;
-        if (!text) {
-            const result = avCost * refundAmount;
-            return result.toFixed(2);
-        }
-        return text;
+        const result = avCost * refundAmount;
+
+        return result.toFixed(2);
+
     }
 }, {
     title: '实际退货数量',
@@ -269,12 +267,16 @@ class List extends Component {
 
             this.setState({
                 lists: newLists
+            }, () => {
+                this.calculation()
             })
         }
 
         if (type === 'edit' && originLists.length === 0 && defaultValue.length) {
             this.setState({
                 lists: defaultValue
+            }, () => {
+                this.calculation()
             })
             originLists = defaultValue;
         }
@@ -344,6 +346,7 @@ class List extends Component {
 
     numberRender = (text, record) => {
         const { purchaseOrderNo, productCode } = record;
+
         return (
             <InputNumber
                 defaultValue={text || 0}
@@ -460,7 +463,11 @@ class List extends Component {
 
     handleType = (e) => {
         const type = e.target.getAttribute('data-type');
-        const { id } = this.props;
+        const {
+            id, purchaseRefundNo,
+            adrType, refundAdrCode
+        } = this.props.getFormData();
+
         switch (type) {
             case 'back':
                 this.props.history.push('/returnManagementList');
@@ -490,7 +497,15 @@ class List extends Component {
                     cancelText: '取消',
                     onCancel: () => {},
                     onOk: () => {
-                        // TODO 确认取消
+                        cancel({
+                            id,
+                            purchaseRefundNo,
+                            adrType,
+                            refundAdrCode
+                        }).then(() => {
+                            message.success('取消订单成功');
+                            this.props.history.push('/returnManagementList');
+                        })
                     },
                 });
                 break;
@@ -504,7 +519,7 @@ class List extends Component {
                 this.saveOrSubmit(1)
                 break;
             case 'progress':
-                    
+
                 break;
             default:
                 break;
@@ -529,7 +544,7 @@ class List extends Component {
                 title: '数据错误',
                 content: `序号：${overrun.join('、')} 数据中存在退货数大于退货数，无法提交`,
             });
-            return ;
+            return;
         }
 
         if (amount.length) {
@@ -537,7 +552,7 @@ class List extends Component {
                 title: '数据错误',
                 content: `序号：${amount.join('、')} 退货数为0, 无法提交`,
             });
-            return ;
+            return;
         }
 
         if (zero.length) {
@@ -559,12 +574,12 @@ class List extends Component {
                     })
                 },
             });
-            return ;
+            return;
         }
 
         if (!newList.length) {
             message.error('失败：没有可用商品信息');
-            return ;
+            return;
         }
 
         this.submit(newList, status).then((res) => {

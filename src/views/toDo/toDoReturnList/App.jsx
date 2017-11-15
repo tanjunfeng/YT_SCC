@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-11 17:38:20
+ * @Last Modified time: 2017-11-15 11:04:54
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -187,6 +187,7 @@ class toDoReturnList extends PureComponent {
                 title: '当前节点',
                 dataIndex: 'processNodeName',
                 key: 'processNodeName',
+                width: '160px',
                 render: (text) => (
                     <a onClick={this.nodeModal}>{text}</a>
                 )
@@ -194,6 +195,7 @@ class toDoReturnList extends PureComponent {
                 title: '操作',
                 dataIndex: 'operation',
                 key: 'operation',
+                width: '80px',
                 render: this.renderActions
             }
         ]
@@ -503,7 +505,7 @@ class toDoReturnList extends PureComponent {
                 break;
             case 'viewApproval':
                 this.showModal();
-                this.props.queryApprovalInfo({ businessId: record.purchaseRefundNo })
+                this.props.queryApprovalInfo({ businessId: record.id })
                 break;
             default:
                 break;
@@ -615,10 +617,11 @@ class toDoReturnList extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.auditPurReList;
         const { processDefinitions } = this.props;
+        let XXlist = 0;
+        processDefinitions.filter((item) => (
+            item.processAuditLog && XXlist++
+        ))
         const agreeOrRefuse = ['拒绝', '同意'];
-        // processDefinitions.map((item, index) => (
-        //     agreeOrRefuse[item]
-        // ))
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -867,7 +870,7 @@ class toDoReturnList extends PureComponent {
                                 onCancel={this.handleOpinionCancel}
                                 width={1000}
                             >
-                                <Steps current={1} progressDot>
+                                <Steps current={3 - XXlist} progressDot>
                                     {processDefinitions.map((item, index) => (
                                         <Step
                                             key={`toDo-${index}`}
