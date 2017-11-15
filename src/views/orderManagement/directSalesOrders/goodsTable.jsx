@@ -8,9 +8,11 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import { Form, Popconfirm, Table } from 'antd';
 import PropTypes from 'prop-types';
+
 import Utils from '../../../util/util';
 import { directSalesgoodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
+import { sortList } from './helper';
 
 class GoodsTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
@@ -23,7 +25,7 @@ class GoodsTable extends PureComponent {
         if (importList.length !== 0) {
             const goodsList = Utils.merge(
                 this.props.value.goodsList,
-                [...this.sortList(importList)],
+                [...sortList(importList)],
                 'productCode');
             this.noticeChanges(goodsList);
         }
@@ -46,9 +48,6 @@ class GoodsTable extends PureComponent {
             item => item.productCode !== productCode));
     }
 
-    /**
-     * 整理顺序，将不合法的前置，合法的后置
-     */
     sortList = goodsList => {
         const frontList = [];
         const backList = [];

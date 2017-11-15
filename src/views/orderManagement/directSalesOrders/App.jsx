@@ -10,12 +10,14 @@ import { Form, BackTop, Modal, message } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
 import StoresForm from './storesForm';
 import GoodsForm from './goodsForm';
 import GoodsTable from './goodsTable';
 import {
     insertDirectOrder, updateGoodsInfo, batchCheckStorage
 } from '../../../actions/procurement';
+import { sortList } from './helper';
 
 @connect(() => ({}), dispatch => bindActionCreators({
     insertDirectOrder, updateGoodsInfo, batchCheckStorage
@@ -155,22 +157,6 @@ class DirectSalesOrders extends PureComponent {
     }
 
     /**
-     * 整理顺序，将不合法的前置，合法的后置
-     */
-    sortList = goodsList => {
-        const frontList = [];
-        const backList = [];
-        goodsList.forEach(goods => {
-            if (!goods.isMultiple || !goods.enough) {
-                frontList.push(goods);
-            } else {
-                backList.push(goods);
-            }
-        });
-        return frontList.concat(backList);
-    }
-
-    /**
      * 商品导入回调函数
      *
      * @param {*array} importList 导入成功商品列表
@@ -261,7 +247,7 @@ class DirectSalesOrders extends PureComponent {
             }
             // 返回标记完毕的商品列表和库存不足的商品数量，并把库存不足的商品整理到最前
             if (typeof callback === 'function') {
-                callback([...this.sortList(goodsList)], data.length);
+                callback([...sortList(goodsList)], data.length);
             }
         }).catch(error => {
             message.error(error);
