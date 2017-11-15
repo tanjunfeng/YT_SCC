@@ -60,7 +60,6 @@ class SearchForm extends PureComponent {
             branchCompanyId: branchCompany.id
         });
     }
-
     handleSubmit(e) {
         e.preventDefault();
         this.props.onParticipateSearch(this.getSearchCondition());

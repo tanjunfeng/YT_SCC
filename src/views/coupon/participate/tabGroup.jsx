@@ -59,7 +59,7 @@ class TabGroup extends PureComponent {
                     chooseGoodsList: selectedRowKeys,
                     selectedListData: selectedRows
                 })
-            },
+            }
         };
         return (
             <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
