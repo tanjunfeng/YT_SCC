@@ -302,7 +302,7 @@ const returnGoodsDetailColumns = [{
     )
 },
 {
-    title: '退货数量',
+    title: '换货数量',
     dataIndex: 'quantity',
     key: 'quantity'
 },
@@ -312,7 +312,7 @@ const returnGoodsDetailColumns = [{
     key: 'salePrice'
 },
 {
-    title: '退货金额',
+    title: '换货金额',
     dataIndex: 'rawTotalPrice',
     key: 'rawTotalPrice'
 },
