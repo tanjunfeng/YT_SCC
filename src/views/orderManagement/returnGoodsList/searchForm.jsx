@@ -43,15 +43,8 @@ class SearchForm extends PureComponent {
 
     // 父组件page改变或点击确定或取消
     componentWillReceiveProps(nextProps) {
-        if (this.props.page !== nextProps.page) {
-            this.requestSearch(nextProps.page)
-        }
         if (this.props.upDate !== nextProps.upDate) {
-            this.requestSearch()
             this.handleSearch()
-        }
-        if (this.props.refresh !== nextProps.refresh) {
-            this.requestSearch()
         }
     }
 
