@@ -45,7 +45,6 @@ class ReturnGoodsList extends PureComponent {
             upDate: false,
             current: 1
         }
-        this.refreshVisible = true;
 
         // 退货单列表
         this.returnGoodsListColumns = [{
@@ -207,8 +206,7 @@ class ReturnGoodsList extends PureComponent {
     handleConfirm =(record) => {
         this.props.insertRefund({returnId: record.record.id}).then((res) => {
             if (res.code === 200) {
-                this.refreshVisible = false
-                message.success(res.success);
+                message.success(res.message);
                 this.handlePromotionReset();
                 this.query();
             }
@@ -252,7 +250,7 @@ class ReturnGoodsList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    orderType === 'ZCXS' && state === 3 && paymentState === 'WTK' && this.refreshVisible &&
+                    orderType === 'ZCXS' && state === 3 && paymentState === 'WTK' &&
                     <Menu.Item key="refund">
                         <Popconfirm
                             title="确认发起退款?"
