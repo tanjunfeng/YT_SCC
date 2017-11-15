@@ -8,15 +8,24 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import { Form, Popconfirm, Table } from 'antd';
 import PropTypes from 'prop-types';
+import Utils from '../../../util/util';
 import { directSalesgoodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
 
 class GoodsTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        const { goodsAddOn } = nextProps.value;
+        const { goodsAddOn, importList } = nextProps.value;
         // 当传入商品有变化时，添加到商品列表
         if (goodsAddOn !== null && this.props.value.goodsAddOn !== goodsAddOn) {
             this.appendToList(goodsAddOn);
+        }
+        // 当excel导入商品变化时，添加到商品列表
+        if (importList.length !== 0) {
+            const goodsList = Utils.merge(
+                this.props.value.goodsList,
+                [...this.sortList(importList)],
+                'productCode');
+            this.noticeChanges(goodsList);
         }
     }
 
@@ -38,6 +47,22 @@ class GoodsTable extends PureComponent {
     }
 
     /**
+     * 整理顺序，将不合法的前置，合法的后置
+     */
+    sortList = goodsList => {
+        const frontList = [];
+        const backList = [];
+        goodsList.forEach(goods => {
+            if (!goods.isMultiple || !goods.enough) {
+                frontList.push(goods);
+            } else {
+                backList.push(goods);
+            }
+        });
+        return frontList.concat(backList);
+    }
+
+    /**
      * 通知父组件刷新页面
      *
      * @param {*array} goodsList
@@ -49,7 +74,7 @@ class GoodsTable extends PureComponent {
             dataIndex, // 单个商品修改的索引
             rows: 0, // 记录行数
             quantities: 0, // 订购数量
-            amount: 0   // 金额总计
+            amount: 0 // 金额总计
         };
         goodsList.forEach(goods => {
             let amount = 0;
