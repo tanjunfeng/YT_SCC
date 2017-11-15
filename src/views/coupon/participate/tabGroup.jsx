@@ -43,6 +43,7 @@ const TabPane = Tabs.TabPane;
 class TabGroup extends PureComponent {
     getTableValues = (page) => {
         let columns = [];
+        let rowKey = 'id';
         const stores = {};
         const {
             usedCouponParticipate,
@@ -52,6 +53,7 @@ class TabGroup extends PureComponent {
         switch (page) {
             case 'used':
                 columns = usedParticipateColumns;
+                rowKey = 'orderId';
                 Object.assign(stores, {
                     ...usedCouponParticipate
                 });
@@ -70,7 +72,7 @@ class TabGroup extends PureComponent {
                 break;
             default: break;
         }
-        return { ...stores, columns, current: this.current };
+        return { ...stores, columns, current: this.current, rowKey };
     }
 
     PROMOTION_ID = this.props.match.params.id;
