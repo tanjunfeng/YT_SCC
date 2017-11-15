@@ -15,8 +15,8 @@ import {
 const Option = Select.Option;
 
 const optionData = {
-    1: { text: '商品链接', placeholder: '请输入商品id', link: '' },
-    21: { text: '详情链接', placeholder: '请输入商品id', link: '' },
+    1: { text: '详情链接', placeholder: '请输入商品id', link: '' },
+    // 21: { text: '详情链接', placeholder: '请输入商品id', link: '' },
     22: { text: '分类链接', placeholder: '请选择分类', link: '' },
     23: { text: '列表链接', placeholder: '请输入查询关键字', link: '' },
     24: { text: '页面链接', placeholder: '输入页面连接', link: '' },
