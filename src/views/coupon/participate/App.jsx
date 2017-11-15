@@ -6,8 +6,9 @@
  */
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
-import { Form, Tabs } from 'antd';
+import { Form } from 'antd';
 
+import TabGroup from './tabGroup';
 import SearchForm from './searchForm';
 
 class CouponsParticipate extends PureComponent {
@@ -42,7 +43,9 @@ class CouponsParticipate extends PureComponent {
                     <span>活动ID：{this.PROMOTION_ID}</span>
                     <span style={{ paddingLeft: 10 }}>活动名称：{this.PROMOTION_NAME}</span>
                 </h2>
-                <Tabs defaultActiveKey={page} onChange={this.handleTabChange} />
+                <TabGroup
+                    value={page}
+                />
             </div>
         );
     }

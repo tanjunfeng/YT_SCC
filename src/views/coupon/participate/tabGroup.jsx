@@ -39,7 +39,6 @@ const TabPane = Tabs.TabPane;
 }, dispatch))
 
 class TabGroup extends PureComponent {
-
     render() {
         const {
             participateDataDtoPageResult = {}
@@ -56,73 +55,7 @@ class TabGroup extends PureComponent {
         };
         return (
             <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
-                <TabPane tab="已使用" key="1">
-                    <Table
-                        dataSource={this.props.usedCouponParticipate.data}
-                        columns={usedColumns}
-                        rowKey="orderId"
-                        scroll={{
-                            x: 1400
-                        }}
-                        bordered
-                        pagination={{
-                            current: this.current,
-                            pageNum,
-                            pageSize,
-                            total,
-                            showQuickJumper: true,
-                            onChange: this.onPaginate
-                        }}
-                    />
-                </TabPane>
-                <TabPane tab="未使用" key="2">
-                    <Button
-                        className="unused-button"
-                        type="primary"
-                        size="default"
-                        onClick={this.handleCanceled}
-                        style={{ float: 'right', marginTop: '-50px' }}
-                    >
-                        作废
-                    </Button>
-                    <Table
-                        rowSelection={rowSelection}
-                        dataSource={this.props.unUsedCouponParticipate.data}
-                        columns={unUsedColumns}
-                        rowKey="id"
-                        scroll={{
-                            x: 1400
-                        }}
-                        bordered
-                        pagination={{
-                            current: this.currentUnUnsed,
-                            pageNum: this.paramUnUsed.pageNum,
-                            pageSize: this.paramUnUsed.pageSize,
-                            total: this.props.unUsedCouponParticipate.total,
-                            showQuickJumper: true,
-                            onChange: this.onPaginateUnUsed
-                        }}
-                    />
-                </TabPane>
-                <TabPane tab="作废记录" key="3">
-                    <Table
-                        dataSource={this.props.unUsedCouponParticipate.data}
-                        columns={invalidRecordColumns}
-                        rowKey="id"
-                        scroll={{
-                            x: 1400
-                        }}
-                        bordered
-                        pagination={{
-                            current: this.currentInvalidRecord,
-                            pageNum: this.invalidRecord.pageNum,
-                            pageSize: this.invalidRecord.pageSize,
-                            total: this.props.unUsedCouponParticipate.total,
-                            showQuickJumper: true,
-                            onChange: this.onPaginateToVoid
-                        }}
-                    />
-                </TabPane>
+
             </Tabs>
         );
     }
