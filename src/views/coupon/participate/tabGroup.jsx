@@ -91,6 +91,16 @@ class TabGroup extends PureComponent {
         Object.assign(this.param, { pageNum });
         this.current = pageNum;
         // todo: 执行查询一次
+        switch (this.props.page) {
+            case 'used':
+                this.props.getUsedCouponParticipate();
+                break;
+            case 'unused':
+                break;
+            case 'garbage':
+                break;
+            default: break;
+        }
     }
 
     render() {
@@ -122,10 +132,15 @@ class TabGroup extends PureComponent {
 
 TabGroup.propTypes = {
     page: PropTypes.string,
+    getUsedCouponParticipate: PropTypes.func,
+    getUnUsedCouponParticipate: PropTypes.func,
+    clearUsedCouponPatipate: PropTypes.func,
+    clearUnUsedCouponPatipate: PropTypes.func,
+    cancelCoupons: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
     usedCouponParticipate: PropTypes.objectOf(PropTypes.any),
     unUsedCouponParticipate: PropTypes.objectOf(PropTypes.any),
-    garbageCouponParticipate: PropTypes.objectOf(PropTypes.any),
+    garbageCouponParticipate: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(TabGroup));

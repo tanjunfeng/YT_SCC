@@ -16,7 +16,10 @@ class TableCouponParticipate extends PureComponent {
     }
 
     render() {
-        const { data, columns, pageNum, pageSize, total, current, rowKey } = this.props;
+        const {
+            data, columns, pageNum, pageSize,
+            total, current, rowKey
+        } = this.props;
         return (
             <Table
                 dataSource={data}
