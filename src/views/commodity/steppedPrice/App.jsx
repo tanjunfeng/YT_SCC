@@ -76,7 +76,6 @@ class SteppedPrice extends PureComponent {
             results: defaultValue,
             isContinuity: isContinuity(defaultValue)
         })
-        console.log(defaultValue)
     }
 
     handleValueChange(index, obj) {
