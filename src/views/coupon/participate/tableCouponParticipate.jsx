@@ -20,7 +20,6 @@ class TableCouponParticipate extends PureComponent {
             data, columns, pageNum, pageSize,
             total, current, rowKey
         } = this.props.value;
-        console.log(data);
         return (
             <Table
                 dataSource={data}

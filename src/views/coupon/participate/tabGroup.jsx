@@ -49,6 +49,12 @@ class TabGroup extends PureComponent {
         this.query();
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.value.page !== nextProps.value.page) {
+            this.query(nextProps.value.page);
+        }
+    }
+
     getTableValues = (page) => {
         let columns = null;
         let rowKey = 'id';
@@ -95,8 +101,8 @@ class TabGroup extends PureComponent {
         this.props.onChange(key); // 通知页面已发生改变
     }
 
-    query = () => {
-        switch (this.props.page) {
+    query = (page = this.props.value.page) => {
+        switch (page) {
             case 'used':
                 this.props.clearUnUsedCouponPatipate();
                 this.props.clearGarbageCouponPatipate();
@@ -159,7 +165,6 @@ class TabGroup extends PureComponent {
 }
 
 TabGroup.propTypes = {
-    page: PropTypes.string,
     getUsedCouponParticipate: PropTypes.func,
     getUnUsedCouponParticipate: PropTypes.func,
     getGarbageCouponParticipate: PropTypes.func,
@@ -173,10 +178,6 @@ TabGroup.propTypes = {
     usedCouponParticipate: PropTypes.objectOf(PropTypes.any),
     unUsedCouponParticipate: PropTypes.objectOf(PropTypes.any),
     garbageCouponParticipate: PropTypes.objectOf(PropTypes.any)
-}
-
-TabGroup.defaultProps = {
-    page: 'used'
 }
 
 export default withRouter(Form.create()(TabGroup));
