@@ -29,6 +29,12 @@ class CouponsParticipate extends PureComponent {
     handleExport() {
     }
 
+    getTabGroupValue = () => {
+        const dist = {};
+        const { page } = this.state;
+        return Object.assign(dist, page);
+    }
+
     render() {
         const { page } = this.state;
         return (
@@ -44,7 +50,7 @@ class CouponsParticipate extends PureComponent {
                     <span style={{ paddingLeft: 10 }}>活动名称：{this.PROMOTION_NAME}</span>
                 </h2>
                 <TabGroup
-                    value={page}
+                    value={this.getTabGroupValue()}
                 />
             </div>
         );

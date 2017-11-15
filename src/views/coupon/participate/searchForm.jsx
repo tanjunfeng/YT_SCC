@@ -97,7 +97,7 @@ class SearchForm extends PureComponent {
                                             <Select style={{ width: '153px' }} size="default">
                                                 {this.getStatus('orderState')}
                                             </Select>
-                                            )}
+                                        )}
                                     </FormItem>
                                 </Col>
                                 <Col span={8}>

@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { Table, Form } from 'antd';
 
-class TableSimple extends PureComponent {
+class TableCouponParticipate extends PureComponent {
     // 通知父组件页面发生跳转
     onPaginate = (pageNum) => {
         this.onChange(pageNum);
@@ -39,7 +39,7 @@ class TableSimple extends PureComponent {
     }
 }
 
-TableSimple.propTypes = {
+TableCouponParticipate.propTypes = {
     columns: PropTypes.arrayOf(PropTypes.any),
     dataSource: PropTypes.arrayOf(PropTypes.any),
     pageNum: PropTypes.number,
@@ -48,4 +48,4 @@ TableSimple.propTypes = {
     current: PropTypes.number
 }
 
-export default withRouter(Form.create()(TableSimple));
+export default withRouter(Form.create()(TableCouponParticipate));
