@@ -1,9 +1,19 @@
+/**
+ * @file FormContent.jsx
+ * @author shijh
+ *
+ * 采购退货单form
+ */
+
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { is, fromJS } from 'immutable';
+import moment from 'moment';
 import { Row, Col, Select, DatePicker, Input } from 'antd';
 import SearchMind from '../../../components/searchMind';
 import Util from '../../../util/util';
+import { SET_ASIDE_TIME } from '../../../constant';
 
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -11,7 +21,9 @@ const { TextArea } = Input;
 class FormContent extends PureComponent {
     static propTypes = {
         prefixCls: PropTypes.string,
-        match: PropTypes.objectOf(PropTypes.any),
+        refundNumber: PropTypes.string,
+        defaultValue: PropTypes.objectOf(PropTypes.any),
+        type: PropTypes.string,
     }
 
     static defaultProps = {
@@ -21,46 +33,96 @@ class FormContent extends PureComponent {
     constructor(props) {
         super(props);
 
+        const timeRange = new Date * 1 + 7 * 86400000;
+
         this.state = {
             locDisabled: true,
-            spaceType: '1',
+            spaceType: '0',
             locationData: {
                 code: 'warehouseCode',
                 name: 'warehouseName'
-            }
+            },
+            defaultTime: moment(new Date(timeRange), 'YYYY-MM-DD')
         }
 
-        this.submit = {};
+        this.submit = {
+            currencyCode: 'CNY',
+            adrType: '0',
+            purchaseRefundNo: props.refundNumber,
+            refundTimeEarly: timeRange
+        };
     }
 
     componentDidMount() {
 
     }
 
-    handleSupplyChoose = () => {
+    componentWillReceiveProps(nextProps) {
+        const { defaultValue, refundNumber, type } = nextProps;
+        if (!is(fromJS(this.props.defaultValue), fromJS(defaultValue))) {
+            const { ...prop } = defaultValue;
 
+            this.submit = prop;
+            this.setState({
+                pId: prop.spId,
+                spaceType: prop.adrType,
+                remark: prop.remark,
+                defaultTime: moment(new Date(defaultValue.refundTimeEarly), 'YYYY-MM-DD')
+            })
+        }
+        if (type === 'new' && refundNumber !== this.props.refundNumber) {
+            this.submit.purchaseRefundNo = refundNumber;
+        }
+    }
+
+    getValue = () => {
+        return this.submit;
+    }
+
+    handleSupplyChoose = (data) => {
+        const { record } = data;
+        this.submit.spId = record.spId;
+        this.submit.spNo = record.spNo;
+        this.submit.spName = record.companyName;
+
+        this.setState({
+            pId: record.spId
+        })
     }
 
     handleSupplyClear = () => {
-
+        delete this.submit.spId;
+        delete this.submit.spNo;
+        delete this.submit.spName;
     }
 
-    handleAdressChoose = () => {
-
+    handleAdressChoose = (data) => {
+        const { record } = data;
+        this.submit.spAdrId = record.branchCompanyId;
+        this.submit.spAdrNo = record.providerNo;
+        this.submit.spAdrName = record.providerName;
     }
 
-    handleSupplyClear = () => {
-
+    handleAdressClear = () => {
+        delete this.submit.spAdrId;
+        delete this.submit.spAdrNo;
+        delete this.submit.spAdrName;
     }
 
     handleTypeChange = (type) => {
         this.setState({
             spaceType: type
+        }, () => {
+            this.submit.adrType = type;
         })
     }
 
-    handleTimeChange = () => {
-
+    handleTimeChange = (date) => {
+        this.setState({
+            defaultTime: date
+        }, () => {
+            this.submit.refundTimeEarly = new Date(date._d) * 1;
+        })
     }
 
     handleCurrencyChange = () => {
@@ -69,10 +131,8 @@ class FormContent extends PureComponent {
 
     handleGetAddressMap = (param) => {
         const { spaceType } = this.state;
-        const libraryCode = '1';
-        const storeCode = '2';
         let locationTypeParam = '';
-        if (spaceType === libraryCode) {
+        if (spaceType === '0') {
             locationTypeParam = 'getWarehouseInfo1';
             this.setState({
                 locationData: {
@@ -81,7 +141,7 @@ class FormContent extends PureComponent {
                 }
             })
         }
-        if (spaceType === storeCode) {
+        if (spaceType === '1') {
             locationTypeParam = 'getStoreInfo';
             this.setState({
                 locationData: {
@@ -103,17 +163,59 @@ class FormContent extends PureComponent {
 
         const spaceId = record[locationData.code];
 
-        this.submit.id = spaceId;
+        this.submit.refundAdrCode = record[locationData.code];
+        this.submit.refundAdrName = record[locationData.name];
     }
 
+    handleAddressClear = () => {
+        delete this.submit.refundAdrCode;
+        delete this.submit.refundAdrName;
+    }
 
-    getValue = () => {
-        return this.submit;
+    handleRemark = (e) => {
+        const value = e.target.value;
+
+        this.setState({
+            remark: value
+        }, () => {
+            this.submit.remark = value
+        })
+    }
+
+    renderStatus = (type, defaultValue) => {
+        if (type === 'edit') {
+            const status = parseInt(defaultValue.status, 10);
+            switch (status) {
+                case 0:
+                    return '制单';
+                case 1:
+                    return '已提交';
+                case 2:
+                    return '已审核';
+                case 3:
+                    return '已拒绝';
+                case 4:
+                    return '待退货';
+                case 5:
+                    return '已退货';
+                case 6:
+                    return '已取消';
+                case 7:
+                    return '取消失败';
+                case 8:
+                    return '异常';
+                default:
+                    break;
+            }
+        } else {
+            return '制单';
+        }
     }
 
     render() {
-        const { prefixCls } = this.props;
+        const { prefixCls, refundNumber, type, defaultValue = {} } = this.props;
         const { spaceType, locationData } = this.state;
+        const isEdit = type === 'edit';
 
         const cls = classnames(
             `${prefixCls}-modify`,
@@ -136,7 +238,7 @@ class FormContent extends PureComponent {
                         <span
                             className={`${prefixCls}-modify-item-right`}
                         >
-                            1709120001
+                            {defaultValue.purchaseRefundNo || refundNumber}
                         </span>
                     </Col>
                     <Col span={6}>
@@ -158,9 +260,11 @@ class FormContent extends PureComponent {
                                 }, 'supplierSearchBox')}
                                 onChoosed={this.handleSupplyChoose}
                                 onClear={this.handleSupplyClear}
+                                defaultValue={isEdit ? `${defaultValue.spNo}-${defaultValue.spName}` : ''}
                                 renderChoosedInputRaw={(data) => (
                                     <div>{data.spNo} - {data.companyName}</div>
                                 )}
+                                style={{ zIndex: 103 }}
                                 pageSize={6}
                                 columns={[
                                     {
@@ -180,7 +284,7 @@ class FormContent extends PureComponent {
                         <span
                             className={`${prefixCls}-modify-item-left`}
                         >
-                            供应商
+                            供应商地点
                         </span>
                         <span
                             className={`${prefixCls}-modify-item-right`}
@@ -190,11 +294,14 @@ class FormContent extends PureComponent {
                                 ref={ref => { this.addressSearchMind = ref }}
                                 fetch={(params) => this.props.pubFetchValueList({
                                     condition: params.value,
+                                    pId: this.state.pId,
                                     pageSize: params.pagination.pageSize,
                                     pageNum: params.pagination.current || 1
                                 }, 'supplierAdrSearchBox')}
                                 onChoosed={this.handleAdressChoose}
                                 onClear={this.handleAdressClear}
+                                defaultValue={isEdit ? `${defaultValue.spAdrNo}-${defaultValue.spAdrName}` : ''}
+                                disabled={!this.state.pId}
                                 renderChoosedInputRaw={(data) => (
                                     <div>{data.providerNo} - {data.providerName}</div>
                                 )}
@@ -221,7 +328,9 @@ class FormContent extends PureComponent {
                         <span
                             className={`${prefixCls}-modify-item-right`}
                         >
-                            制单
+                            {
+                                this.renderStatus(type, defaultValue)
+                            }
                         </span>
                     </Col>
                 </Row>
@@ -236,12 +345,12 @@ class FormContent extends PureComponent {
                             className={`${prefixCls}-modify-item-right`}
                         >
                             <Select
-                                value={spaceType}
+                                value={`${spaceType}`}
                                 style={{ width: 120 }}
                                 onChange={this.handleTypeChange}
                             >
-                                <Option value="1">仓库</Option>
-                                <Option value="2">门店</Option>
+                                <Option value="0">仓库</Option>
+                                <Option value="1">门店</Option>
                             </Select>
                         </span>
                     </Col>
@@ -269,6 +378,7 @@ class FormContent extends PureComponent {
                                     </div>
                                 )}
                                 pageSize={6}
+                                defaultValue={isEdit ? `${defaultValue.refundAdrCode}-${defaultValue.refundAdrName}` : ''}
                                 columns={[
                                     {
                                         title: '编码',
@@ -291,7 +401,10 @@ class FormContent extends PureComponent {
                         <span
                             className={`${prefixCls}-modify-item-right`}
                         >
-                            <DatePicker onChange={this.handleTimeChange} />
+                            <DatePicker
+                                value={this.state.defaultTime}
+                                onChange={this.handleTimeChange}
+                            />
                         </span>
                     </Col>
                     <Col span={6}>
@@ -304,67 +417,70 @@ class FormContent extends PureComponent {
                             className={`${prefixCls}-modify-item-right`}
                         >
                             <Select
-                                defaultValue="lucy"
+                                defaultValue="CNY"
                                 style={{ width: 120 }}
                                 onChange={this.handleCurrencyChange}
                             >
-                                <Option value="jack">CNY</Option>
+                                <Option value="CNY">CNY</Option>
                             </Select>
                         </span>
                     </Col>
                 </Row>
+                {
+                    type === 'edit' &&
+                    <Row>
+                        <Col span={6}>
+                            <span
+                                className={`${prefixCls}-modify-item-left`}
+                            >
+                                创建人
+                            </span>
+                            <span
+                                className={`${prefixCls}-modify-item-right`}
+                            >
+                                {defaultValue.createUserId}
+                            </span>
+                        </Col>
+                        <Col span={6}>
+                            <span
+                                className={`${prefixCls}-modify-item-left`}
+                            >
+                                创建日期
+                            </span>
+                            <span
+                                className={`${prefixCls}-modify-item-right`}
+                            >
+                                {moment(new Date(defaultValue.createTime)).format('YYYY-MM-DD')}
+                            </span>
+                        </Col>
+                        <Col span={6}>
+                            <span
+                                className={`${prefixCls}-modify-item-left`}
+                            >
+                                审核人
+                            </span>
+                            <span
+                                className={`${prefixCls}-modify-item-right`}
+                            >
+                                {defaultValue.auditUserId}
+                            </span>
+                        </Col>
+                        <Col span={6}>
+                            <span
+                                className={`${prefixCls}-modify-item-left`}
+                            >
+                                退货日期
+                            </span>
+                            <span
+                                className={`${prefixCls}-modify-item-right`}
+                            >
+                                {defaultValue.refundTimeEarly && moment(new Date(defaultValue.refundTimeEarly)).format('YYYY-MM-DD')}
+                            </span>
+                        </Col>
+                    </Row>
+                }
                 <Row>
-                    <Col span={6}>
-                        <span
-                            className={`${prefixCls}-modify-item-left`}
-                        >
-                            创建人
-                        </span>
-                        <span
-                            className={`${prefixCls}-modify-item-right`}
-                        >
-                            李云
-                        </span>
-                    </Col>
-                    <Col span={6}>
-                        <span
-                            className={`${prefixCls}-modify-item-left`}
-                        >
-                            创建日期
-                        </span>
-                        <span
-                            className={`${prefixCls}-modify-item-right`}
-                        >
-                            2017-07-02
-                        </span>
-                    </Col>
-                    <Col span={6}>
-                        <span
-                            className={`${prefixCls}-modify-item-left`}
-                        >
-                            审核人
-                        </span>
-                        <span
-                            className={`${prefixCls}-modify-item-right`}
-                        >
-                            李云
-                        </span>
-                    </Col>
-                    <Col span={6}>
-                        <span
-                            className={`${prefixCls}-modify-item-left`}
-                        >
-                            退货日期
-                        </span>
-                        <span
-                            className={`${prefixCls}-modify-item-right`}
-                        >
-                            123123123
-                        </span>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={12}>
+                    <Col span={12} style={{ marginTop: '10px' }}>
                         <span
                             className={`${prefixCls}-modify-item-left`}
                         >
@@ -373,7 +489,12 @@ class FormContent extends PureComponent {
                         <span
                             className={`${prefixCls}-modify-item-right`}
                         >
-                            <TextArea placeholder="请填写备注" autosize />
+                            <TextArea
+                                placeholder="请填写备注"
+                                autosize
+                                value={this.state.remark}
+                                onChange={this.handleRemark}
+                            />
                         </span>
                     </Col>
                 </Row>

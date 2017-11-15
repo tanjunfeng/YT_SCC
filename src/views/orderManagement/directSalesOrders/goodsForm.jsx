@@ -32,9 +32,9 @@ class GoodsForm extends PureComponent {
             this.props.onChange(null);
             return;
         }
-        const productId = record.productId;
+        const productCode = record.productCode;
         this.props.queryGoodsInfo(Utils.removeInvalid({
-            productId, branchCompanyId, deliveryWarehouseCode, quantity: 0
+            productCode, branchCompanyId, deliveryWarehouseCode, quantity: 0
         })).then(res => {
             this.props.onChange(getRow(res.data));
         });
@@ -54,7 +54,7 @@ class GoodsForm extends PureComponent {
                     const goods = getRow(item);
                     // 数量从导入返回数据重新复制
                     Object.assign(goods, {
-                        quantity: item.quantity
+                        quantity: item.saleQuantity
                     });
                     importList.push(goods);
                 } else {

@@ -30,6 +30,7 @@ import { modifyConfirmPayment, fetchPaymentDetailInfo, fetchOrderDetailInfo } fr
         fetchOrderDetailInfo
     }, dispatch)
 )
+
 class PayInformation extends PureComponent {
     constructor(props) {
         super(props);
@@ -68,8 +69,8 @@ class PayInformation extends PureComponent {
             title: '金额',
             dataIndex: 'amount',
             key: 'amount',
-            render: (text) => (
-                <span>￥{text}</span>
+            render: (amount) => (
+                <span>￥{Number(amount).toFixed(2)}</span>
             )
         }, {
             title: '方式',
@@ -136,9 +137,6 @@ class PayInformation extends PureComponent {
                 }
             }
         }];
-    }
-
-    componentDidMount() {
     }
 
     /**

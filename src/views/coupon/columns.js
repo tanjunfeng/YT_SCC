@@ -3,7 +3,7 @@
  * @Description: 优惠券列表
  * @CreateDate: 2017-09-20 14:06:42
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-10 19:28:51
+ * @Last Modified time: 2017-11-11 23:17:17
  */
 /**
  * @file columns.js
@@ -12,7 +12,7 @@
  * 促销活动列表
  */
 import React from 'react';
-import { promotionStatus } from './constants';
+import { promotionStatus, couponTypeStatus } from './constants';
 import Util from '../../util/util';
 
 // 优惠券列表
@@ -20,6 +20,11 @@ const couponList = [{
     title: '券ID',
     dataIndex: 'id',
     key: 'id'
+}, {
+    title: '类型',
+    dataIndex: 'couponType',
+    key: 'couponType',
+    render: couponTypeCode => (couponTypeStatus[couponTypeCode])
 }, {
     title: '券名称',
     dataIndex: 'promotionName',
@@ -40,7 +45,7 @@ const couponList = [{
     }
 },
 {
-    title: '范围',
+    title: '使用区域',
     dataIndex: 'companiesPoList',
     key: 'companiesPoList',
     render: list => {
@@ -58,18 +63,19 @@ const couponList = [{
     key: 'quanifyAmount',
     render: amount => (amount ? `满 ${amount} 元可用` : '不限制')
 }, {
-    title: '有效时间',
-    children: [{
-        title: '开始时间',
-        dataIndex: 'startDate',
-        key: 'startDate',
-        render: timestamp => Util.getTime(timestamp)
-    }, {
-        title: '结束时间',
-        dataIndex: 'endDate',
-        key: 'endDate',
-        render: timestamp => Util.getTime(timestamp)
-    }],
+    title: '有效日期',
+    colSpan: 2,
+    dataIndex: 'startDate',
+    render: timestamp => ({
+        children: Util.getTime(timestamp)
+    })
+}, {
+    title: '结束时间',
+    colSpan: 0,
+    dataIndex: 'endDate',
+    render: (timestamp, row) => ({
+        children: Util.getTime(row.endDate)
+    })
 }, {
     title: '发放数量',
     dataIndex: 'totalQuantity',
@@ -105,6 +111,11 @@ const couponsDetail = [{
     title: '券ID',
     dataIndex: 'id',
     key: 'id'
+}, {
+    title: '优惠券类型',
+    dataIndex: 'couponType',
+    key: 'couponType',
+    render: couponTypeCode => couponTypeStatus[couponTypeCode]
 }, {
     title: '券名称',
     dataIndex: 'promotionName',
@@ -381,7 +392,7 @@ const invalidRecordList = [{
             case 'used':
                 return '已使用';
             case 'canceled':
-                return '已作废)';
+                return '已作废';
             default:
                 return text;
         }

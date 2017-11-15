@@ -131,7 +131,8 @@ import {
     returnGoodsDetailSave,
     returnGoodsListFormDataClear,
     insertRefund,
-    returnDescriptionSave
+    returnDescriptionSave,
+    getExchangeGoodsListAction
 } from './salesManagement';
 
 export {
@@ -264,5 +265,7 @@ export {
     // 查询退货单审批流程
     queryProcessDefinitions,
     queryPoDetail,
-    insertRefund
+    insertRefund,
+    // 换货列表
+    getExchangeGoodsListAction
 }

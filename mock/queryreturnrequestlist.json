@@ -22,7 +22,8 @@
                 "shippingState": 2,
                 "shippingStateDetail": null,
                 "productState": 1,
-                "productStateDetail": "已确认1"
+                "productStateDetail": "已确认1",
+                "orderType": "ZCXS"
             },
             {
                 "id": "10004201710120000534",
@@ -33,7 +34,7 @@
                 "franchiseeName": "长沙市岳麓区友昌食品店",
                 "creationTime": 1508830583000,
                 "total": 90,
-                "state": 1,
+                "state": 3,
                 "stateDetail": "已确认",
                 "shippingState": 1,
                 "shippingStateDetail": null,
@@ -151,7 +152,7 @@
                 "shippingStateDetail": "已确认2",
                 "productState": 1,
                 "productStateDetail": "已确认"
-            }         
+            }
         ]
     },
     "success": true

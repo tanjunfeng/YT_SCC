@@ -35,8 +35,11 @@ const FormItem = Form.Item;
 }, dispatch))
 
 class ReturnGoodsDetails extends PureComponent {
-    state = {
-        id: '',
+    constructor(props) {
+        super(props)
+        this.state = {
+            id: ''
+        }
     }
 
     componentDidMount() {
@@ -52,8 +55,17 @@ class ReturnGoodsDetails extends PureComponent {
         clearData()
     }
 
+    getGoodsTableValues = () => {
+        const {
+            items
+        } = this.props.data;
+        return {
+            items
+        }
+    }
+
     // 请求数据
-    forData(id) {
+    forData = (id) => {
         this.props.returnGoodsDetail(id)
     }
 
@@ -148,19 +160,19 @@ class ReturnGoodsDetails extends PureComponent {
                     </div>
                     <div className="body">
                         <Row>
-                            <Col span={6} offset={2}><div className="item"><span className="item-tit">换货单号：</span>{data.id}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">退货单号：</span>{data.id}</div></Col>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">原订单号：</span>{data.orderId}</div></Col>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">申请时间：</span>{moment(parseInt(data.creationTime, 10)).format(DATE_FORMAT)}</div></Col>
                         </Row>
                         <Row>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">子公司：</span>{data.branchCompanyName}</div></Col>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">雅堂小超：</span>{data.franchiseeName}</div></Col>
-                            <Col span={6} offset={2}><div className="item"><span className="item-tit">换货单状态：</span>{data.stateDetail}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">退货单状态：</span>{data.stateDetail}</div></Col>
                         </Row>
                         <Row>
-                            <Col span={6} offset={2}><div className="item"><span className="item-tit">收货状态: </span>{data.shipping_state}</div></Col>
-                            <Col span={6} offset={2}><div className="item"><span className="item-tit">商品状态：</span>{data.productStateDetail}</div></Col>
-                            <Col span={6} offset={2}><div className="item"><span className="item-tit">退货状态：</span>{data.paymentStateDetail}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">收货状态: </span>{data.shippingStateDetail}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">退货单类型:</span>{data.returnRequestType}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">退款状态:</span>{data.paymentStateDetail}</div></Col>
                         </Row>
                     </div>
                 </div>
@@ -202,7 +214,8 @@ class ReturnGoodsDetails extends PureComponent {
                         />
                         <div className="bottom-text">
                             <div className="bt-left">共<span className="bt-left-num">{data.commodityTotal}</span>件商品</div>
-                            <div className="bt-right"><span>总金额：</span><span className="bt-right-num">￥{data.amount}</span></div>
+                            <div className="bt-right"><span>退款金额：</span><span className="bt-right-num">￥{data.refundAmount}</span></div>
+                            <div className="bt-right" style={{marginRight: 20}}><span>退货金额：</span><span className="bt-right-num">￥{data.amount}</span></div>
                         </div>
                     </div>
                 </div>
@@ -212,7 +225,7 @@ class ReturnGoodsDetails extends PureComponent {
                 >
                     <div className="basic-box">
                         <div className="header">
-                            <Icon type="solution" className="header-icon" />换货原因
+                            <Icon type="solution" className="header-icon" />退货原因
                     </div>
                         <div className="body body-form">
                             <Row>
@@ -221,7 +234,7 @@ class ReturnGoodsDetails extends PureComponent {
                                         {getFieldDecorator('returnReasonType', {
                                             initialValue: data.returnReasonType ? data.returnReasonType : ''
                                         })(
-                                            <Select style={{ width: '153px' }} size="default" disabled={type === '2' ? false : true}>
+                                            <Select style={{ width: '153px' }} size="default" disabled>
                                                 {
                                                     reason.data.map((item) => (
                                                         <Select.Option
@@ -241,7 +254,7 @@ class ReturnGoodsDetails extends PureComponent {
                                         {getFieldDecorator('returnReason', {
                                             initialValue: data.returnReason
                                         })(
-                                            <TextArea className="input-ret" autosize={{ minRows: 4, maxRows: 4 }} disabled={type === '2' ? false : true} size="default" />
+                                            <TextArea className="input-ret" autosize={{ minRows: 4, maxRows: 4 }} disabled size="default" />
                                             )}
                                     </FormItem>
                                 </Col>

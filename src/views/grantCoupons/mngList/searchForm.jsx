@@ -9,33 +9,19 @@ import { Button, Input, Form, Select, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 import Utils from '../../../util/util';
 import { promotionStatus } from '../constants';
-import { SubCompanies } from '../../../container/search';
+import { BranchCompany } from '../../../container/search';
 import ReleaseCouponModal from '../release';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 class SearchForm extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            branchCompanyId: '',
-            isReleaseCouponModalVisible: false,
-            grantMethod: 0 // 发券策略
-        }
-        this.getStatus = this.getStatus.bind(this);
-        this.handleSearch = this.handleSearch.bind(this);
-        this.handleReset = this.handleReset.bind(this);
-        this.getFormData = this.getFormData.bind(this);
-        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-        this.hanldeSubCompanyClear = this.hanldeSubCompanyClear.bind(this);
-        this.handleQueryResults = this.handleQueryResults.bind(this);
-        this.handleQueryCoupons = this.handleQueryCoupons.bind(this);
-        this.handleSelectOk = this.handleSelectOk.bind(this);
-        this.handleSelectCancel = this.handleSelectCancel.bind(this);
+    state = {
+        isReleaseCouponModalVisible: false,
+        grantMethod: 0 // 发券策略
     }
 
-    getStatus() {
+    getStatus = () => {
         const keys = Object.keys(promotionStatus);
         return keys.map((key) => (
             <Option key={key} value={key}>
@@ -44,44 +30,37 @@ class SearchForm extends PureComponent {
         ));
     }
 
-    getFormData() {
+    getFormData = () => {
         const {
             franchiseeId,
             franchinessController,
             storeId,
-            storeName
+            storeName,
+            branchCompany
         } = this.props.form.getFieldsValue();
         return Utils.removeInvalid({
             franchiseeId,
             franchinessController,
             storeId,
             storeName,
-            branchCompanyId: this.state.branchCompanyId
+            branchCompanyId: branchCompany.id
         });
     }
 
-    handleSubCompanyChoose(branchCompanyId) {
-        this.setState({ branchCompanyId });
-    }
-
-    hanldeSubCompanyClear() {
-        this.setState({ branchCompanyId: '' });
-    }
-
-    handleSearch() {
+    handleSearch = () => {
         // 将查询条件回传给调用页
         this.props.onPromotionSearch(this.getFormData());
     }
 
-    handleQueryResults() {
+    handleQueryResults = () => {
         this.setState({ isReleaseCouponModalVisible: true, grantMethod: 0 });
     }
 
-    handleQueryCoupons() {
+    handleQueryCoupons = () => {
         this.setState({ isReleaseCouponModalVisible: true, grantMethod: 1 });
     }
 
-    handleSelectOk(coupons) {
+    handleSelectOk = (coupons) => {
         this.setState({ isReleaseCouponModalVisible: false });
         switch (this.state.grantMethod) {
             case 0:
@@ -97,12 +76,11 @@ class SearchForm extends PureComponent {
         }
     }
 
-    handleSelectCancel() {
+    handleSelectCancel = () => {
         this.setState({ isReleaseCouponModalVisible: false });
     }
 
-    handleReset() {
-        this.hanldeSubCompanyClear(); // 清除子公司值清单
+    handleReset = () => {
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onPromotionReset();  // 通知父页面已清空
     }
@@ -125,18 +103,10 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem>
-                                    <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">
-                                            所属公司
-                                        </span>
-                                        <SubCompanies
-                                            value={this.state.branchCompanyId}
-                                            disabled={this.state.disabled}
-                                            onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                            onSubCompaniesClear={this.hanldeSubCompanyClear}
-                                        />
-                                    </div>
+                                <FormItem label="所属子公司">
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: { id: '', name: '' }
+                                    })(<BranchCompany />)}
                                 </FormItem>
                             </Col>
                         </Row>
