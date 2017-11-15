@@ -12,16 +12,26 @@ import { Table, Form } from 'antd';
 class TableCouponParticipate extends PureComponent {
     // 通知父组件页面发生跳转
     onPaginate = (pageNum) => {
-        this.onChange(pageNum);
+        this.props.onChange(pageNum);
+    }
+
+    onSelectChange = (selectedRowKeys) => {
+        this.props.onSelect({ selectedRowKeys });
     }
 
     render() {
         const {
             data, columns, pageNum, pageSize,
-            total, current, rowKey
+            total, current, rowKey, hasRowSelections, selectedRowKeys = []
         } = this.props.value;
+        console.log(selectedRowKeys);
+        const rowSelection = hasRowSelections ? {
+            selectedRowKeys,
+            onChange: this.onSelectChange,
+        } : null;
         return (
             <Table
+                rowSelection={rowSelection}
                 dataSource={data}
                 columns={columns}
                 rowKey={rowKey}
@@ -46,6 +56,9 @@ TableCouponParticipate.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     columns: PropTypes.arrayOf(PropTypes.any),
     data: PropTypes.arrayOf(PropTypes.any),
+    onChange: PropTypes.func,
+    onSelect: PropTypes.func,
+    hasRowSelections: PropTypes.bool,
     rowKey: PropTypes.string,
     pageNum: PropTypes.number,
     pageSize: PropTypes.number,

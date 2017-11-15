@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Form, Tabs } from 'antd';
+import { Form, Tabs, Button, message } from 'antd';
 
 import {
     getUsedCouponParticipate,
@@ -45,6 +45,10 @@ const TabPane = Tabs.TabPane;
 }, dispatch))
 
 class TabGroup extends PureComponent {
+    state = {
+        selectedRows: []
+    }
+
     componentDidMount() {
         this.query();
     }
@@ -75,7 +79,9 @@ class TabGroup extends PureComponent {
             case 'unused':
                 columns = unUsedParticipateColumns;
                 Object.assign(stores, {
-                    ...unUsedCouponParticipate
+                    ...unUsedCouponParticipate,
+                    hasRowSelections: true,
+                    selectedRowKeys: this.state.selectedRows
                 });
                 break;
             case 'garbage':
@@ -137,10 +143,50 @@ class TabGroup extends PureComponent {
         this.query();
     }
 
+    handleGarbage = () => {
+        const { selectedRows } = this.state;
+        const cancelCouponsList = [];
+        selectedRows.forEach((item) => {
+            cancelCouponsList.push(item.id)
+        })
+        this.props.cancelCoupons({ couponActivityIds: cancelCouponsList.join(',') }).then((res) => {
+            if (res.code === 200) {
+                message.success(res.message);
+                this.query();
+            }
+        })
+    }
+
+    /**
+     * 选中的未使用券
+     */
+    handleUnUsedSelect = (selectedRows) => {
+        this.setState({ selectedRows })
+    }
+
+    garbageButton = () => {
+        if (this.props.value.page === 'unused') {
+            return (
+                <Button
+                    type="primary"
+                    size="default"
+                    // onClick={this.handleGarbage()}
+                >
+                    作废
+                </Button>
+            );
+        }
+        return null;
+    }
+
     render() {
         const { page } = this.props.value;
         return (
-            <Tabs defaultActiveKey={page} onChange={this.handleTabChange}>
+            <Tabs
+                defaultActiveKey={page}
+                onChange={this.handleTabChange}
+                tabBarExtraContent={this.garbageButton()}
+            >
                 <TabPane tab="已使用" key="used">
                     <TableCouponParticipate
                         value={this.getTableValues('used')}
@@ -151,6 +197,7 @@ class TabGroup extends PureComponent {
                     <TableCouponParticipate
                         value={this.getTableValues('unused')}
                         onChange={this.handlePageNumChange}
+                        onSelect={this.handleUnUsedSelect}
                     />
                 </TabPane>
                 <TabPane tab="已作废" key="garbage">
