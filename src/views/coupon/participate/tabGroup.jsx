@@ -18,15 +18,11 @@ import {
     clearUnUsedCouponPatipate,
     cancelCoupons
 } from '../../../actions/promotion';
-import { exportParticipateData1, exportParticipateData2 } from '../../../service';
-import SearchForm from './searchForm';
-import { PAGE_SIZE } from '../../../constant';
 import {
     usedParticipateList as usedColumns,
     unUsedParticipateList as unUsedColumns,
     invalidRecordList as invalidRecordColumns
 } from '../columns';
-import Util from '../../../util/util';
 
 const TabPane = Tabs.TabPane;
 
@@ -43,9 +39,6 @@ const TabPane = Tabs.TabPane;
 }, dispatch))
 
 class TabGroup extends PureComponent {
-    handleTabChange = (key) => {
-        this.setState({ tabPage: key });
-    }
 
     render() {
         const {
