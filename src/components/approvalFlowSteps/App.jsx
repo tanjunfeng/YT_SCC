@@ -23,10 +23,13 @@ class OpinionSteps extends Component {
     }
 
     render() {
-        console.log(this.props)
-        const { processDefinitions, current } = this.props;
+        const { processDefinitions } = this.props;
+        let stepsList = 0;
+        processDefinitions.filter((item) => (
+            item.processAuditLog && stepsList++
+        ))
         return (
-            <Steps current={current} progressDot>
+            <Steps current={stepsList} progressDot>
                 {processDefinitions.map((item, index) => (
                     <Step
                         key={`toDo-${index}`}

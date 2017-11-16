@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-16 15:09:11
+ * @Last Modified time: 2017-11-16 15:27:37
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -626,10 +626,6 @@ class toDoReturnList extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.auditPurReList;
         const { processDefinitions } = this.props;
-        let stepsList = 0;
-        processDefinitions.filter((item) => (
-            item.processAuditLog && stepsList++
-        ))
         return (
             <div className="search-box">
                 <Form layout="inline">
