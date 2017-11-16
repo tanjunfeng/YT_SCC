@@ -6,7 +6,7 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Form, Row } from 'antd';
+import { Input, Form, Row, Modal } from 'antd';
 import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -26,14 +26,43 @@ const FormItem = Form.Item;
 }, dispatch))
 
 class StoresForm extends PureComponent {
+    state = {
+        record: null,
+        tmp: null,
+        modalRechooseVisible: false // 提示重新选择门店的模态框
+    }
+
     componentWillMount() {
         this.props.clearDirectInfo();
     }
 
-    handleDirectStoresChange = ({ record }) => {
+    /**
+     * 重新选择商品
+     */
+    handleRechooseOk = () => {
+        this.setState({
+            modalRechooseVisible: false,
+            record: { ...this.state.tmp }
+        }, () => {
+            this.query();
+        });
+    }
+
+    /**
+     * 不重新选择商品，清空传入的门店信息
+     */
+    handleRechooseCancel = () => {
+        this.setState({ modalRechooseVisible: false });
+    }
+
+    query = () => {
+        const record = this.state.record;
         if (record && record.storeId) {
             this.props.queryDirectInfo({ storeId: record.storeId }).then(res => {
                 // 返回分公司 id 供父页面使用
+                this.props.form.setFieldsValue({
+                    storeId: record.storeId
+                });
                 this.props.onChange({
                     storeId: record.storeId,
                     branchCompanyId: res.data.branchCompanyId,
@@ -41,10 +70,28 @@ class StoresForm extends PureComponent {
                 });
             });
         } else {
-            this.props.clearDirectInfo();
-            // 通知父页面清空
-            this.props.onChange({branchCompanyId: '', deliveryWarehouseCode: ''});
+            this.clear();
         }
+    }
+
+    clear = () => {
+        this.props.clearDirectInfo();
+        // 通知父页面清空
+        this.props.onChange({ storeId: '', branchCompanyId: '', deliveryWarehouseCode: '' });
+        this.props.form.resetFields();
+    }
+
+    handleDirectStoresChange = ({ record }) => {
+        if (this.props.value) {
+            this.setState({
+                tmp: { ...record },
+                modalRechooseVisible: true
+            });
+            return;
+        }
+        this.setState({ record }, () => {
+            this.query();
+        });
     }
 
     render() {
@@ -64,6 +111,11 @@ class StoresForm extends PureComponent {
                                     onChange={this.handleDirectStoresChange}
                                 />)}
                             </FormItem>
+                            <FormItem label="门店编号">
+                                {getFieldDecorator('storeId', {
+                                    initialValue: ''
+                                })(<Input size="default" disabled />)}
+                            </FormItem>
                             <FormItem label="收货地址">
                                 {getFieldDecorator('receivingAddress', {
                                     initialValue: directInfo.receivingAddress
@@ -82,6 +134,14 @@ class StoresForm extends PureComponent {
                         </Row>
                     </div>
                 </Form>
+                <Modal
+                    title="重新选择门店"
+                    visible={this.state.modalRechooseVisible}
+                    onOk={this.handleRechooseOk}
+                    onCancel={this.handleRechooseCancel}
+                >
+                    <p>这个操作将要重新选择门店并清空已选择商品，确定吗？</p>
+                </Modal>
             </div>
         );
     }
@@ -90,6 +150,7 @@ class StoresForm extends PureComponent {
 StoresForm.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     directInfo: PropTypes.objectOf(PropTypes.any),
+    value: PropTypes.bool,
     queryDirectInfo: PropTypes.func,
     clearDirectInfo: PropTypes.func,
     onChange: PropTypes.func

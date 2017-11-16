@@ -32,7 +32,6 @@ class DirectSalesOrders extends PureComponent {
         isSubmitDisabled: false, // 提交按钮是否禁用
         deletedGoodsList: [], // 由于不在销售区域而被删除的商品编号列表
         goodsAddOn: null, // 手工添加的单个商品
-        modalRechooseVisible: false, // 提示重新选择门店的模态框
         importList: [], // 新增导入商品
         // 商品列表总计信息
         total: {
@@ -80,40 +79,15 @@ class DirectSalesOrders extends PureComponent {
         return goodsFormValue;
     }
 
-    record = null; // 重新选择的门店信息
-
     handleStoresChange = record => {
-        this.record = record;
-        const { storeId, goodsList } = this.state;
-        // 门店信息变化时，判断是否存在已选商品列表，并弹出确认框
-        if (goodsList.length > 0 && storeId !== '') {
-            this.setState({ modalRechooseVisible: true });
-        } else {
-            this.handleRechooseOk();
-        }
-    }
-
-    /**
-     * 重新选择商品
-     */
-    handleRechooseOk = () => {
-        const { storeId, branchCompanyId, deliveryWarehouseCode } = this.record;
+        const { storeId, branchCompanyId, deliveryWarehouseCode } = record;
         this.setState({
             storeId,
             branchCompanyId,
             deliveryWarehouseCode,
-            modalRechooseVisible: false,
             isSubmitDisabled: false
         });
         this.handleClear();
-    }
-
-    /**
-     * 不重新选择商品，清空传入的门店信息
-     */
-    handleRechooseCancel = () => {
-        this.record = null;
-        this.setState({ modalRechooseVisible: false });
     }
 
     /**
@@ -294,6 +268,7 @@ class DirectSalesOrders extends PureComponent {
         return (
             <div className="direct-sales-orders">
                 <StoresForm
+                    value={this.state.goodsList.length > 0}
                     onChange={this.handleStoresChange}
                 />
                 <GoodsForm
@@ -306,14 +281,6 @@ class DirectSalesOrders extends PureComponent {
                     value={this.getGoodsTableValues()}
                     onChange={this.handleGoodsListChange}
                 />
-                <Modal
-                    title="重新选择门店"
-                    visible={this.state.modalRechooseVisible}
-                    onOk={this.handleRechooseOk}
-                    onCancel={this.handleRechooseCancel}
-                >
-                    <p>这个操作将要重新选择门店并清空已选择商品，确定吗？</p>
-                </Modal>
                 <BackTop />
             </div>
         );
