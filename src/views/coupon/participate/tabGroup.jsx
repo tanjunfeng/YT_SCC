@@ -101,10 +101,9 @@ class TabGroup extends PureComponent {
         return { ...stores, columns, current: this.current, rowKey };
     }
 
-    PROMOTION_ID = this.props.match.params.id;
     current = 1;
     param = {
-        promoId: this.PROMOTION_ID,
+        promoId: this.props.PROMOTION_ID,
         pageNum: 1,
         pageSize: PAGE_SIZE
     };
@@ -215,6 +214,7 @@ class TabGroup extends PureComponent {
 }
 
 TabGroup.propTypes = {
+    PROMOTION_ID: PropTypes.string,
     getUsedCouponParticipate: PropTypes.func,
     getUnUsedCouponParticipate: PropTypes.func,
     getGarbageCouponParticipate: PropTypes.func,
@@ -223,7 +223,6 @@ TabGroup.propTypes = {
     clearGarbageCouponPatipate: PropTypes.func,
     onChange: PropTypes.func,
     cancelCoupons: PropTypes.func,
-    match: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.objectOf(PropTypes.any),
     usedCouponParticipate: PropTypes.objectOf(PropTypes.any),
     unUsedCouponParticipate: PropTypes.objectOf(PropTypes.any),

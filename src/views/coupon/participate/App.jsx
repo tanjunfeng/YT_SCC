@@ -5,6 +5,7 @@
  * 促销管理 - 查询参与数据
  */
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { Form } from 'antd';
 
@@ -16,11 +17,21 @@ class CouponsParticipate extends PureComponent {
         page: 'used' // 默认打开已使用优惠券
     }
 
+    getSearchFormValue = () => {
+        const value = {
+            PROMOTION_ID: this.PROMOTION_ID
+        };
+        const { page } = this.state;
+        return Object.assign(value, { page });
+    }
+
     getTabGroupValue = () => {
         const value = {};
         const { page } = this.state;
         return Object.assign(value, { page });
     }
+
+    PROMOTION_ID = this.props.match.params.id;
 
     handleSearch = () => {
     }
@@ -36,11 +47,10 @@ class CouponsParticipate extends PureComponent {
     }
 
     render() {
-        const { page } = this.state;
         return (
             <div>
                 <SearchForm
-                    value={page}
+                    value={this.getSearchFormValue()}
                     onSearch={this.handleSearch}
                     onReset={this.handleReset}
                     onExport={this.handleExport}
@@ -56,6 +66,10 @@ class CouponsParticipate extends PureComponent {
             </div>
         );
     }
+}
+
+CouponsParticipate.propTypes = {
+    match: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(CouponsParticipate));

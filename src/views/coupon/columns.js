@@ -404,4 +404,7 @@ const garbageParticipateColumns = [{
     render: timestamp => Util.getTime(timestamp)
 }];
 
-export { couponList, couponsDetail, usedParticipateColumns, unUsedParticipateColumns, garbageParticipateColumns };
+export {
+    couponList, couponsDetail, usedParticipateColumns,
+    unUsedParticipateColumns, garbageParticipateColumns
+};

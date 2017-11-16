@@ -76,13 +76,14 @@ class SearchForm extends PureComponent {
     }
 
     render() {
-        const { form, page } = this.props;
+        const { form, value } = this.props;
         const { getFieldDecorator } = form;
+        const page = value.page;
         return (
             <div className="search-box participate">
                 <Form layout="inline" onSubmit={this.handleSubmit}>
                     <div className="search-conditions">
-                        {page === 'uesd' ?
+                        {page === 'used' ?
                             <Row gutter={40}>
                                 <Col span={8}>
                                     <FormItem label="订单编号" style={{ paddingRight: 10 }}>
@@ -132,22 +133,23 @@ class SearchForm extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40}>
-                            <Col span={8}>
-                                <FormItem label="领取时间">
-                                    {getFieldDecorator('participateTimeRange', {
-                                        initialValue: []
-                                    })(
-                                        <RangePicker
-                                            size="default"
-                                            className="manage-form-enterTime"
-                                            showTime={{ format: MINUTE_FORMAT }}
-                                            format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
-                                            placeholder={['开始时间', '结束时间']}
-                                        />
+                            {page === 'unused' ?
+                                <Col span={8}>
+                                    <FormItem label="领取时间">
+                                        {getFieldDecorator('participateTimeRange', {
+                                            initialValue: []
+                                        })(
+                                            <RangePicker
+                                                size="default"
+                                                className="manage-form-enterTime"
+                                                showTime={{ format: MINUTE_FORMAT }}
+                                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
+                                                placeholder={['开始时间', '结束时间']}
+                                            />
                                         )}
-                                </FormItem>
-                            </Col>
-                            {page === 'uesd' ?
+                                    </FormItem>
+                                </Col> : null}
+                            {page === 'used' ?
                                 <Col span={8}>
                                     <FormItem label="使用时间">
                                         {getFieldDecorator('recordTime', {
@@ -160,7 +162,7 @@ class SearchForm extends PureComponent {
                                                 format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
                                                 placeholder={['开始时间', '结束时间']}
                                             />
-                                            )}
+                                        )}
                                     </FormItem>
                                 </Col>
                                 : null}
@@ -175,7 +177,7 @@ class SearchForm extends PureComponent {
                                 <FormItem>
                                     <Button size="default" onClick={this.handleExport}>
                                         导出
-                                            </Button>
+                                    </Button>
                                 </FormItem>
                                 <FormItem>
                                     <Button size="default" onClick={this.handleReset}>
@@ -196,7 +198,7 @@ SearchForm.propTypes = {
     onParticipateReset: PropTypes.func,
     onParticipateExport: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    page: PropTypes.string,
+    value: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any)
 };
 
