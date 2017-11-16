@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-15 15:25:52
+ * @Last Modified time: 2017-11-16 15:09:11
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -49,6 +49,7 @@ import {
     getSupplierLocMap,
 } from '../../../actions';
 import ApproModal from './approModal';
+import OpinionSteps from '../../../components/approvalFlowSteps';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -484,8 +485,9 @@ class toDoReturnList extends PureComponent {
 
     handleApprovalOk = () => {
         const { processNodeId, id } = this.examinationAppData;
+        const processId = processNodeId;
         this.getFormData().then((param) => {
-            this.props.queryProcessDefinitions({...param, processNodeId, id, type: 1})
+            this.props.queryProcessDefinitions({...param, processId, id, type: 1})
             .then((res) => {
                 if (res.code === 200) {
                     message.success(res.message);
@@ -876,17 +878,7 @@ class toDoReturnList extends PureComponent {
                                 onCancel={this.handleOpinionCancel}
                                 width={1000}
                             >
-                                <Steps current={stepsList} progressDot>
-                                    {processDefinitions.map((item, index) => (
-                                        <Step
-                                            key={`toDo-${index}`}
-                                            title={item.processNodeName}
-                                            description={
-                                                item.processAuditLog === null ? '不同意' : '同意'
-                                            }
-                                        />
-                                    ))}
-                                </Steps>
+                                <OpinionSteps />
                             </Modal>
                         }
                         {
