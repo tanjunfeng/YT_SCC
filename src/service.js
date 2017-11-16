@@ -606,6 +606,9 @@ export const getStoreInfo = (params) => http.get('/store/getStoreInfo', params);
 // 大类值清单
 export const querycategories = (params) => http.get('/category/queryCategories', params);
 
+// 查询二级三级分类
+export const querySecondCategoriesOfApp = (params) => http.get('/category/querySecondCategoriesOfApp', params);
+
 // 商品值清单
 export const queryMaterialMap = (params) => http.get('/provider/queryMaterialMap', params);
 // 商品值清单
