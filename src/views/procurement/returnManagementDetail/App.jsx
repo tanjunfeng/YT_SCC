@@ -3,7 +3,7 @@
  * @Description: 采购退货详情页
  * @CreateDate: 2017-10-27 11:26:16
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-16 16:35:18
+ * @Last Modified time: 2017-11-16 17:13:10
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -307,7 +307,7 @@ class ReturnManagementDetail extends PureComponent {
                                         <span className="text">{poReturn.createTime ? moment(poReturn.createTime).format(dateFormat) : '-'}</span>
                                     </FormItem>
                                 </Col>
-                                <Col span={6}>
+                                <Col span={6} style={{ height: '42px', lineHeight: '42px'}}>
                                     {/* 审核人 */}
                                     <span className="ant-form-item-label search-mind-label">审核人</span>
                                     <span className="text">{poReturn.auditUserId || '-'}</span>
