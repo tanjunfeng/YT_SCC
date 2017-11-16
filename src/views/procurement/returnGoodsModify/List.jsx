@@ -26,6 +26,7 @@ import {
     cancel
 } from '../../../service';
 
+const confirm = Modal.confirm;
 const Option = Select.Option;
 const { TextArea } = Input;
 
@@ -457,12 +458,11 @@ class List extends Component {
                 this.props.history.push('/returnManagementList');
                 break;
             case 'delete':
-                Modal.error({
+                confirm({
                     title: '确认',
                     content: '是否确认删除？',
                     okText: '确认',
                     cancelText: '取消',
-                    onCancel: () => {},
                     onOk: () => {
                         deleteBatchRefundOrder({
                             pmRefundOrderIds: id
@@ -471,15 +471,15 @@ class List extends Component {
                             this.props.history.push('/returnManagementList');
                         })
                     },
+                    onCancel: () => { }
                 });
                 break;
             case 'cancel':
-                Modal.error({
+                confirm({
                     title: '确认',
                     content: '是否确认取消？',
                     okText: '确认',
                     cancelText: '取消',
-                    onCancel: () => {},
                     onOk: () => {
                         cancel({
                             id,
@@ -491,6 +491,7 @@ class List extends Component {
                             this.props.history.push('/returnManagementList');
                         })
                     },
+                    onCancel: () => { }
                 });
                 break;
             case 'download':
@@ -540,16 +541,15 @@ class List extends Component {
         }
 
         if (zero.length) {
-            Modal.error({
+            confirm({
                 title: '数据错误',
                 content: `序号：${zero.join('、')} 可退货数为0的商品将过滤掉，是否继续`,
                 okText: '确认',
                 cancelText: '取消',
-                onCancel: () => {},
                 onOk: () => {
                     if (!newList.length) {
                         message.error('失败：没有可用商品信息');
-                        return ;
+                        return;
                     }
 
                     this.submit(newList, status).then((res) => {
@@ -557,6 +557,7 @@ class List extends Component {
                         this.props.history.push('/returnManagementList');
                     })
                 },
+                onCancel: () => { }
             });
             return;
         }
