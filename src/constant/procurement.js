@@ -53,10 +53,10 @@ export const optionStatus = {
         value: '请选择'
     }, {
         key: '0',
-        value: '通过'
+        value: '拒绝'
     }, {
         key: '1',
-        value: '拒绝'
+        value: '通过'
     }]
 }
 

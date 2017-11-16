@@ -19,12 +19,7 @@ import {
 } from 'antd';
 import SearchMind from '../../../components/searchMind';
 import Util from '../../../util/util';
-import {
-    pubFetchValueList,
-} from '../../../actions/pub';
-import {
-    putRefundProducts
-} from '../../../actions/procurement';
+
 import {
     exportReturnProPdf, createRefundWithItems,
     updateRefundWithItems, deleteBatchRefundOrder,
@@ -197,15 +192,6 @@ function getNewLists(lists, cLists, orderId) {
     return returnAble.concat(newLists)
 }
 
-@connect(
-    state => ({
-        returnLists: state.toJS().procurement.returnLists
-    }),
-    dispatch => bindActionCreators({
-        pubFetchValueList,
-        putRefundProducts
-    }, dispatch)
-)
 class List extends Component {
     static propTypes = {
         prefixCls: PropTypes.string,
@@ -223,14 +209,7 @@ class List extends Component {
     constructor(props) {
         super(props);
 
-        const { match, returnLists } = this.props;
-        const { params } = match;
-
-        if (params.id) {
-            this.type = 'edit';
-        } else {
-            this.type = 'new';
-        }
+        const { returnLists } = this.props;
 
         this.state = {
             locDisabled: true,
@@ -259,6 +238,7 @@ class List extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { returnLists, defaultValue, type } = nextProps;
+        console.log(returnLists, current);
         if (!is(fromJS(returnLists), fromJS(current))) {
             const { lists, orderId } = this.state;
             current = returnLists;
@@ -436,7 +416,11 @@ class List extends Component {
 
     handleSubmitGoods = () => {
         const { orderId, goodsRecord = {}, brandRecord = {} } = this.state;
-        const { refundAdrCode } = this.props.getFormData();
+        const result = this.props.getFormData();
+        if (!result) {
+            return;
+        }
+        const { refundAdrCode } = result;
 
         this.props.putRefundProducts(Util.removeInvalid({
             purchaseOrderNo: orderId,
@@ -616,6 +600,21 @@ class List extends Component {
         return postService(submit)
     }
 
+    clearList = () => {
+        this.setState({
+            lists: []
+        }, () => {
+            this.calculation();
+            current = [];
+            originLists = [];
+            this.props.clearReturnInfo();
+        })
+    }
+
+    getValue() {
+        return this.state.lists;
+    }
+
     render() {
         const { prefixCls, returnLists, type, status } = this.props;
         const {
@@ -632,7 +631,7 @@ class List extends Component {
         const cls = classnames(
             `${prefixCls}-modify`,
             {
-                [`${prefixCls}-modify-${this.type}`]: this.type
+                [`${prefixCls}-modify-${type}`]: type
             }
         )
 
@@ -839,4 +838,4 @@ class List extends Component {
     }
 }
 
-export default withRouter(List)
+export default List;

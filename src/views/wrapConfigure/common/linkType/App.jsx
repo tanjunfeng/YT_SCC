@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { Select, Input, Row, Col } from 'antd';
 
 import {
-    querycategories
+    querySecondCategoriesOfApp
 } from '../../../../service';
 
 const Option = Select.Option;
@@ -108,7 +108,7 @@ class LinkType extends Component {
     }
 
     componentDidMount() {
-        querycategories({level: 2}).then((res) => {
+        querySecondCategoriesOfApp({}).then((res) => {
             this.setState({
                 categories: res.data
             })
@@ -211,7 +211,7 @@ class LinkType extends Component {
                                 >
                                     { 
                                         categories.map((item) => {
-                                            return <Option key={item.id} value={item.id}>{item.categoryName}</Option>
+                                            return <Option key={item.dimValId} value={item.dimValId}>{item.name}</Option>
                                         })
                                     }
                                 </Select>

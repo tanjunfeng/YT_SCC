@@ -3,7 +3,7 @@
  * @Description: 采购退货详情页
  * @CreateDate: 2017-10-27 11:26:16
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-15 14:52:15
+ * @Last Modified time: 2017-11-16 17:13:10
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -229,7 +229,7 @@ class ReturnManagementDetail extends PureComponent {
                                     {/* 供应商地点 */}
                                     <span className="ant-form-item-label search-mind-label">供应商地点</span>
                                     <span className="text">
-                                        {this.renderStatus(poReturn.spAdrName)}
+                                        {poReturn.spAdrName}
                                     </span>
                                 </Col>
                                 <Col span={6}>
@@ -250,7 +250,7 @@ class ReturnManagementDetail extends PureComponent {
                                     {/* 退货地点 */}
                                     <FormItem formItemLayout >
                                         <span className="ant-form-item-label search-mind-label">退货地点</span>
-                                        <span className="text">{poReturn.refundAdr}</span>
+                                        <span className="text">{poReturn.refundAdrName}</span>
                                     </FormItem>
                                 </Col>
                                 <Col span={6}>
@@ -307,7 +307,7 @@ class ReturnManagementDetail extends PureComponent {
                                         <span className="text">{poReturn.createTime ? moment(poReturn.createTime).format(dateFormat) : '-'}</span>
                                     </FormItem>
                                 </Col>
-                                <Col span={6}>
+                                <Col span={6} style={{ height: '42px', lineHeight: '42px'}}>
                                     {/* 审核人 */}
                                     <span className="ant-form-item-label search-mind-label">审核人</span>
                                     <span className="text">{poReturn.auditUserId || '-'}</span>
@@ -335,24 +335,24 @@ class ReturnManagementDetail extends PureComponent {
                     </div>
                     <div className="total-row">
                         <Row >
-                            <Col span={6}>
-                                <span className="ant-form-item-label search-mind-label">合计退货数量:</span>
+                            <Col span={5}>
+                                <span className="ant-form-item-label search-mind-label">合计退货数量</span>
                                 <span className="text">{returnNum}</span>
                             </Col>
-                            <Col span={4}>
-                                <span className="ant-form-item-label search-mind-label">合计退货金额(含税):</span>
+                            <Col span={5}>
+                                <span className="ant-form-item-label search-mind-label">合计退货金额(含税)</span>
                                 <span className="text">{returnMoney}</span>
                             </Col>
                             <Col span={4}>
-                                <span className="ant-form-item-label search-mind-label">合计退货成本额:</span>
+                                <span className="ant-form-item-label search-mind-label">合计退货成本额</span>
                                 <span className="text">{returnCost}</span>
                             </Col>
                             <Col span={4}>
-                                <span className="ant-form-item-label search-mind-label">实际退货数量:</span>
+                                <span className="ant-form-item-label search-mind-label">实际退货数量</span>
                                 <span className="text">{returnRealAmount}</span>
                             </Col>
                             <Col span={6}>
-                                <span className="ant-form-item-label search-mind-label">实际退货金额(含税);</span>
+                                <span className="ant-form-item-label search-mind-label">实际退货金额(含税)</span>
                                 <span className="text">{returnRealMoney}</span>
                             </Col>
                         </Row >

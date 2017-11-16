@@ -20,6 +20,8 @@ export default function (state = initState, action) {
             return state.set('detail', action.payload);
         case ActionType.RETURN_GOODS_DETAIL_CLEAR_DATA:
             return state.set('detail', {});
+        case ActionType.RECEIVE_EXCHANGE_GOODS_LIST:
+            return state.set('exchangeList', action.payload);
         default:
             return state;
     }

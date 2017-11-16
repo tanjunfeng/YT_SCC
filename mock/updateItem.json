@@ -29,7 +29,7 @@
         "salesInsideNumber": 12,
         "available": true,
         "message": null,
-        "enough": false
+        "enough": true
     },
     "success": true
 }

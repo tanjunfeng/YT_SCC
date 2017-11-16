@@ -7,7 +7,7 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../../util/util';
 import { returnGoodsStatus, goodsReceiptStatus } from '../../../constant/salesManagement';
-import { getExchangeGoodsListAction, returnGoodsListFormDataClear } from '../../../actions';
+import { getExchangeGoodsListAction } from '../../../actions';
 import { pubFetchValueList } from '../../../actions/pub';
 import SearchMind from '../../../components/searchMind';
 import { BranchCompany } from '../../../container/search';
@@ -17,25 +17,20 @@ const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 
 @connect(
-    state => ({
-        data: state.toJS().pageParameters.exchangeGoodsParams.data,
-        franchiseeIdName: state.toJS().pageParameters.exchangeGoodsParams.franchiseeIdName,
-        branchCompany: state.toJS().pageParameters.exchangeGoodsParams.branchCompany
+    () => ({
     }),
     dispatch => bindActionCreators({
         getExchangeGoodsListAction,
         pubFetchValueList,
-        returnGoodsListFormDataClear
     }, dispatch)
 )
 
 class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
-        const { data, franchiseeIdName } = this.props;
         this.state = {
-            franchiseeId: data.franchiseeId || '',
-            franchiseeIdName: franchiseeIdName || ''
+            data: [],
+            franchiseeId: '',
         }
         this.joiningSearchMind = null;
         this.branchCompany = this.props.branchCompany;
@@ -61,7 +56,9 @@ class SearchForm extends PureComponent {
         const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
         const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
         this.branchCompany = { ...branchCompany };
+        const franchiseeId = this.state.franchiseeId;
         const searchParams = {
+            franchiseeId,
             branchCompanyId: branchCompany.id,
             id,
             orderId,
@@ -75,8 +72,9 @@ class SearchForm extends PureComponent {
     }
 
     // 搜索方法
-    handleSearch = () => {
+    handleSearch = (e) => {
         // 将查询条件回传给调用页
+        e.preventDefault();
         this.props.onPromotionSearch(this.getSearchParams());
     }
 
@@ -86,7 +84,6 @@ class SearchForm extends PureComponent {
         this.joiningSearchMind.reset();
         this.props.form.resetFields();
         this.branchCompany = { id: '', name: '' };
-        this.props.returnGoodsListFormDataClear()
         this.props.onPromotionReset();  // 通知父页面已清空
     }
 
@@ -108,7 +105,7 @@ class SearchForm extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { data } = this.props;
+        const { data } = this.state;
         return (
             <div className="search-box">
                 <Form
@@ -131,7 +128,7 @@ class SearchForm extends PureComponent {
                             <FormItem>
                                 <FormItem label="分公司">
                                     {getFieldDecorator('branchCompany', {
-                                        initialValue: { ...this.branchCompany }
+                                        initialValue: { ...this.state.branchCompany }
                                     })(<BranchCompany />)}
                                 </FormItem>
                             </FormItem>
@@ -258,7 +255,7 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    returnGoodsListFormDataClear: PropTypes.func,
+    // returnGoodsListFormDataClear: PropTypes.func,
     onPromotionSearch: PropTypes.func,
     onPromotionReset: PropTypes.func,
     pubFetchValueList: PropTypes.func,

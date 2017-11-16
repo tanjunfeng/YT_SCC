@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-11 22:28:30
+ * @Last Modified time: 2017-11-16 16:00:02
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -20,8 +20,7 @@ import {
     Menu,
     Dropdown,
     Modal,
-    message,
-    Steps
+    message
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -51,13 +50,13 @@ import {
     fetchReturnMngList,
 } from '../../../actions';
 import ApproModal from './approModal';
+import OpinionSteps from '../../../components/approvalFlowSteps';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
-const Step = Steps.Step;
 
 @connect(state => ({
     poRcvMngList: state.toJS().procurement.poRcvMngList,
@@ -371,6 +370,11 @@ class ReturnManagementList extends PureComponent {
         });
     }
 
+    nodeModal = (record) => {
+        this.showOpinionModal();
+        this.props.queryProcessDefinitions({ processType: 1, businessId: record.businessId });
+    }
+
     handleOpinionOk = () => {
         this.setState({
             opinionVisible: false,
@@ -399,11 +403,10 @@ class ReturnManagementList extends PureComponent {
                 this.showConfirm(record);
                 break;
             case 'viewApprovalrogress':
-                this.props.queryProcessDefinitions({ businessId: record.purchaseRefundNo });
-                this.showOpinionModal();
+                this.nodeModal({ businessId: record.id });
                 break;
             case 'viewApproval':
-                this.props.queryApprovalInfo({businessId: record.purchaseRefundNo});
+                this.props.queryApprovalInfo({businessId: record.id});
                 this.showModal();
                 break;
             case 'downloadTheReturnInvoice':
@@ -582,8 +585,6 @@ class ReturnManagementList extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.returnMngList;
-        const { processDefinitions } = this.props;
-        const agreeOrRefuse = ['拒绝', '同意'];
         const rowSelection = {
             selectedRowKeys: this.state.chooseGoodsList,
             onChange: (selectedRowKeys, selectedRows) => {
@@ -840,15 +841,7 @@ class ReturnManagementList extends PureComponent {
                             onCancel={this.handleOpinionCancel}
                             width={1000}
                         >
-                            <Steps current={1} progressDot>
-                                {processDefinitions.map((item, index) => (
-                                    <Step
-                                        key={`toDo-${index}`}
-                                        title={item.processNodeName}
-                                        description={agreeOrRefuse[item.type]}
-                                    />
-                                ))}
-                            </Steps>
+                            <OpinionSteps />
                         </Modal>
                     }
                 </Form>
@@ -859,13 +852,11 @@ class ReturnManagementList extends PureComponent {
 
 ReturnManagementList.propTypes = {
     fetchReturnMngList: PropTypes.func,
-    getRefundNo: PropTypes.func,
     queryProcessDefinitions: PropTypes.func,
     queryApprovalInfo: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     returnMngList: PropTypes.objectOf(PropTypes.any),
-    processDefinitions: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,
