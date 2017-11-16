@@ -36,6 +36,12 @@ class StoresForm extends PureComponent {
         this.props.clearDirectInfo();
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.value.shouldClear && !this.props.value.shouldClear) {
+            this.clear();
+        }
+    }
+
     /**
      * 重新选择商品
      */
@@ -95,7 +101,7 @@ class StoresForm extends PureComponent {
     }
 
     render() {
-        const { form, directInfo = {}, value } = this.props;
+        const { form, directInfo = {} } = this.props;
         const { getFieldDecorator } = form;
         return (
             <div className="direct-sales-orders-form">
@@ -105,7 +111,7 @@ class StoresForm extends PureComponent {
                         <Row gutter={40}>
                             <FormItem label="选择门店">
                                 {getFieldDecorator('stores', {
-                                    initialValue: { storeId: value.storeId, storeName: '' },
+                                    initialValue: { storeId: '', storeName: '' },
                                     rules: [{ required: true, message: '请选择门店' }]
                                 })(<DirectStores
                                     onChange={this.handleDirectStoresChange}
@@ -151,6 +157,7 @@ StoresForm.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     directInfo: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.objectOf(PropTypes.any),
+    shouldClear: PropTypes.bool,
     queryDirectInfo: PropTypes.func,
     clearDirectInfo: PropTypes.func,
     onChange: PropTypes.func

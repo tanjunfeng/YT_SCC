@@ -38,7 +38,8 @@ class DirectSalesOrders extends PureComponent {
             rows: 0, // 记录行数
             quantities: 0, // 订购数量
             amount: 0 // 金额总计
-        }
+        },
+        shouldClear: false // 是否清空所有子组件
     }
 
     /**
@@ -68,13 +69,15 @@ class DirectSalesOrders extends PureComponent {
         const {
             branchCompanyId,
             deliveryWarehouseCode,
-            total
+            total,
+            shouldClear
         } = this.state;
         const goodsFormValue = {
             branchCompanyId,
             deliveryWarehouseCode,
             total,
-            canBeSubmit: this.validateGoods()
+            canBeSubmit: this.validateGoods(),
+            shouldClear
         };
         return goodsFormValue;
     }
@@ -127,7 +130,7 @@ class DirectSalesOrders extends PureComponent {
     pageReset = () => {
         this.handleClear();
         this.setState({
-            storeId: ''
+            shouldClear: true
         });
     }
 
@@ -274,13 +277,13 @@ class DirectSalesOrders extends PureComponent {
     }
 
     render() {
-        const { goodsList, storeId } = this.state;
+        const { goodsList, shouldClear } = this.state;
         return (
             <div className="direct-sales-orders">
                 <StoresForm
                     value={{
                         shouldWarning: goodsList.length > 0, // 是否应该弹窗警告
-                        storeId
+                        shouldClear
                     }}
                     onChange={this.handleStoresChange}
                 />
