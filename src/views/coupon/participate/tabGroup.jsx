@@ -20,9 +20,9 @@ import {
     clearGarbageCouponPatipate,
     cancelCoupons
 } from '../../../actions/promotion';
-
 import { PAGE_SIZE } from '../../../constant';
-import TableCouponParticipate from './tableCouponParticipate'; import {
+import TableCouponParticipate from './tableCouponParticipate';
+import {
     usedParticipateColumns,
     unUsedParticipateColumns,
     garbageParticipateColumns
@@ -151,11 +151,7 @@ class TabGroup extends PureComponent {
 
     handleGarbage = () => {
         const { promotionIds } = this.state;
-        const cancelCouponsList = [];
-        promotionIds.forEach((item) => {
-            cancelCouponsList.push(item.id)
-        })
-        this.props.cancelCoupons({ couponActivityIds: cancelCouponsList.join(',') }).then((res) => {
+        this.props.cancelCoupons({ couponActivityIds: promotionIds.join(',') }).then((res) => {
             if (res.code === 200) {
                 message.success(res.message);
                 this.query();
@@ -176,7 +172,8 @@ class TabGroup extends PureComponent {
                 <Button
                     type="primary"
                     size="default"
-                // onClick={this.handleGarbage()}
+                    disabled={this.state.promotionIds.length === 0}
+                    onClick={this.handleGarbage}
                 >
                     作废
                 </Button>
