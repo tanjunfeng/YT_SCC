@@ -18,8 +18,9 @@ import List from './List';
 import {
     getRefundNo,
     clearRefundNo,
-    clearReturnInfo,    
+    clearReturnInfo,
     fetchReturnPoRcvDetail,
+    putRefundProducts
 } from '../../../actions/procurement';
 
 import {
@@ -36,7 +37,8 @@ const { TextArea } = Input;
     // 退货单id
     getRefundNumebr: state.toJS().procurement.getRefundNumebr,
     // 采购退货详情
-    poReturn: state.toJS().procurement.poReturn
+    poReturn: state.toJS().procurement.poReturn,
+    returnLists: state.toJS().procurement.returnLists
 }), dispatch => bindActionCreators({
     // 请求详情数据
     fetchReturnPoRcvDetail,
@@ -47,7 +49,8 @@ const { TextArea } = Input;
     // 清除退货单
     clearRefundNo,
     // 清除新增编辑采购退货单数据
-    clearReturnInfo
+    clearReturnInfo,
+    putRefundProducts
 }, dispatch))
 
 class ReturnGoodsModify extends PureComponent {
@@ -106,6 +109,14 @@ class ReturnGoodsModify extends PureComponent {
         return this.formContent.getValue();
     }
 
+    handleClearList = () => {
+        this.listContent.clearList();
+    }
+
+    handleGetListValue = () => {
+        return this.listContent.getValue();
+    }
+
     render() {
         const { prefixCls, getRefundNumebr, poReturn, history } = this.props;
         const { pmPurchaseRefundItems = [], ...formData } = poReturn;
@@ -127,15 +138,22 @@ class ReturnGoodsModify extends PureComponent {
                     type={this.type}
                     refundNumber={getRefundNumebr}
                     defaultValue={formData}
+                    onClearList={this.handleClearList}
+                    onGetListValue={this.handleGetListValue}
                 />
 
                 <List
+                    ref={node => { this.listContent = node }}
                     getFormData={this.getFormData}
                     defaultValue={pmPurchaseRefundItems}
                     type={this.type}
                     status={formData.status}
                     id={formData.id}
                     history={history}
+                    pubFetchValueList={this.props.pubFetchValueList}
+                    putRefundProducts={this.props.putRefundProducts}
+                    returnLists={this.props.returnLists}
+                    clearReturnInfo={this.props.clearReturnInfo}
                 />
             </div>
         )

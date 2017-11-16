@@ -58,4 +58,13 @@
             }
         }
     }
+
+    &-modify {
+        .detail-tooltip-icon {
+            font-size: 15px;
+            color: #108EE9;
+            line-height: inherit;
+            margin-left: 5px;
+        }
+    }
 }
