@@ -46,7 +46,6 @@ class OpinionSteps extends Component {
 
 OpinionSteps.propTypes = {
     processDefinitions: PropTypes.arrayOf(PropTypes.any),
-    current: PropTypes.number
 };
 
 export default OpinionSteps;
