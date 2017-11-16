@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-16 16:40:46
+ * @Last Modified time: 2017-11-16 17:06:40
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -39,13 +39,14 @@ import { pubFetchValueList } from '../../../actions/pub';
 import {
     queryAuditPurReList,
     queryApprovalInfo,
-    queryProcessDefinitions
+    queryProcessDefinitions,
+    approveRefund
 } from '../../../actions/procurement';
 import {
     getWarehouseAddressMap,
     getShopAddressMap,
     getSupplierMap,
-    getSupplierLocMap,
+    getSupplierLocMap
 } from '../../../actions';
 import ApproModal from './approModal';
 import OpinionSteps from '../../../components/approvalFlowSteps';
@@ -68,7 +69,8 @@ const { TextArea } = Input;
     pubFetchValueList,
     queryAuditPurReList,
     queryApprovalInfo,
-    queryProcessDefinitions
+    queryProcessDefinitions,
+    approveRefund
 }, dispatch))
 
 class toDoReturnList extends PureComponent {
@@ -485,7 +487,7 @@ class toDoReturnList extends PureComponent {
         const { processNodeId, id } = this.examinationAppData;
         const processId = processNodeId;
         this.getFormData().then((param) => {
-            this.props.queryProcessDefinitions({...param, processId, id, processType: 1})
+            this.props.approveRefund({...param, processId, businessId: id, type: 1})
             .then((res) => {
                 if (res.code === 200) {
                     message.success(res.message);
@@ -934,6 +936,7 @@ class toDoReturnList extends PureComponent {
 toDoReturnList.propTypes = {
     queryAuditPurReList: PropTypes.func,
     queryProcessDefinitions: PropTypes.func,
+    approveRefund: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     auditPurReList: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),

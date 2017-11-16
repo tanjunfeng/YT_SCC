@@ -299,6 +299,8 @@ export default {
     QUERY_APPROVAL_INFO: 'QUERY_APPROVAL_INFO',
     // 查询退货单审批流程
     QUERY_PRO_DEFINITIONS: 'QUERY_PRO_DEFINITIONS',
+    // 退货单审批
+    APPROVE_REFUND: 'APPROVE_REFUND',
     // 查询退货流水号
     GET_REFUND_NO_ACTION: 'GET_REFUND_NO_ACTION',
     // 清除退货流水号
