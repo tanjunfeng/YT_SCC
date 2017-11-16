@@ -15,26 +15,17 @@ class TableCouponParticipate extends PureComponent {
         this.props.onChange(pageNum);
     }
 
-    onSelectChange = (selectedRowKeys) => {
-        this.props.onSelect({ selectedRowKeys });
-    }
-
     render() {
         const {
             data, columns, pageNum, pageSize,
-            total, current, rowKey, hasRowSelections, selectedRowKeys = []
+            total, current, rowKey, rowSelection
         } = this.props.value;
-        console.log(selectedRowKeys);
-        const rowSelection = hasRowSelections ? {
-            selectedRowKeys,
-            onChange: this.onSelectChange,
-        } : null;
         return (
             <Table
-                rowSelection={rowSelection}
                 dataSource={data}
                 columns={columns}
                 rowKey={rowKey}
+                rowSelection={rowSelection}
                 scroll={{
                     x: 1400
                 }}
@@ -57,8 +48,7 @@ TableCouponParticipate.propTypes = {
     columns: PropTypes.arrayOf(PropTypes.any),
     data: PropTypes.arrayOf(PropTypes.any),
     onChange: PropTypes.func,
-    onSelect: PropTypes.func,
-    hasRowSelections: PropTypes.bool,
+    rowSelection: PropTypes.objectOf(PropTypes.any),
     rowKey: PropTypes.string,
     pageNum: PropTypes.number,
     pageSize: PropTypes.number,

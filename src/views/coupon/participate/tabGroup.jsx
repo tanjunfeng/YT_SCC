@@ -46,7 +46,7 @@ const TabPane = Tabs.TabPane;
 
 class TabGroup extends PureComponent {
     state = {
-        selectedRows: []
+        promotionIds: []
     }
 
     componentDidMount() {
@@ -57,6 +57,10 @@ class TabGroup extends PureComponent {
         if (this.props.value.page !== nextProps.value.page) {
             this.query(nextProps.value.page);
         }
+    }
+
+    onSelectChange = (promotionIds) => {
+        this.setState({ promotionIds });
     }
 
     getTableValues = (page) => {
@@ -80,8 +84,10 @@ class TabGroup extends PureComponent {
                 columns = unUsedParticipateColumns;
                 Object.assign(stores, {
                     ...unUsedCouponParticipate,
-                    hasRowSelections: true,
-                    selectedRowKeys: this.state.selectedRows
+                    rowSelection: {
+                        selectedRowKeys: this.state.promotionIds,
+                        onChange: this.onSelectChange,
+                    }
                 });
                 break;
             case 'garbage':
@@ -144,9 +150,9 @@ class TabGroup extends PureComponent {
     }
 
     handleGarbage = () => {
-        const { selectedRows } = this.state;
+        const { promotionIds } = this.state;
         const cancelCouponsList = [];
-        selectedRows.forEach((item) => {
+        promotionIds.forEach((item) => {
             cancelCouponsList.push(item.id)
         })
         this.props.cancelCoupons({ couponActivityIds: cancelCouponsList.join(',') }).then((res) => {
@@ -160,8 +166,8 @@ class TabGroup extends PureComponent {
     /**
      * 选中的未使用券
      */
-    handleUnUsedSelect = (selectedRows) => {
-        this.setState({ selectedRows })
+    handleUnUsedSelect = (promotionIds) => {
+        this.setState({ promotionIds })
     }
 
     garbageButton = () => {
@@ -170,7 +176,7 @@ class TabGroup extends PureComponent {
                 <Button
                     type="primary"
                     size="default"
-                    // onClick={this.handleGarbage()}
+                // onClick={this.handleGarbage()}
                 >
                     作废
                 </Button>
