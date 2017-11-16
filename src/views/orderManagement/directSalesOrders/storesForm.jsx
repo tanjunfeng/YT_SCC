@@ -36,6 +36,12 @@ class StoresForm extends PureComponent {
         this.props.clearDirectInfo();
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.value.shouldClear && !this.props.value.shouldClear) {
+            this.clear();
+        }
+    }
+
     /**
      * 重新选择商品
      */
@@ -82,7 +88,7 @@ class StoresForm extends PureComponent {
     }
 
     handleDirectStoresChange = ({ record }) => {
-        if (this.props.value) {
+        if (this.props.value.shouldWarning) {
             this.setState({
                 tmp: { ...record },
                 modalRechooseVisible: true
@@ -150,7 +156,8 @@ class StoresForm extends PureComponent {
 StoresForm.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     directInfo: PropTypes.objectOf(PropTypes.any),
-    value: PropTypes.bool,
+    value: PropTypes.objectOf(PropTypes.any),
+    shouldClear: PropTypes.bool,
     queryDirectInfo: PropTypes.func,
     clearDirectInfo: PropTypes.func,
     onChange: PropTypes.func

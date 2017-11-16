@@ -38,7 +38,8 @@ class DirectSalesOrders extends PureComponent {
             rows: 0, // 记录行数
             quantities: 0, // 订购数量
             amount: 0 // 金额总计
-        }
+        },
+        shouldClear: false // 是否清空所有子组件
     }
 
     /**
@@ -68,13 +69,15 @@ class DirectSalesOrders extends PureComponent {
         const {
             branchCompanyId,
             deliveryWarehouseCode,
-            total
+            total,
+            shouldClear
         } = this.state;
         const goodsFormValue = {
             branchCompanyId,
             deliveryWarehouseCode,
             total,
-            canBeSubmit: this.validateGoods()
+            canBeSubmit: this.validateGoods(),
+            shouldClear
         };
         return goodsFormValue;
     }
@@ -121,6 +124,13 @@ class DirectSalesOrders extends PureComponent {
             goodsList: [...goodsList],
             total,
             importList: []
+        });
+    }
+
+    pageReset = () => {
+        this.handleClear();
+        this.setState({
+            shouldClear: true
         });
     }
 
@@ -173,6 +183,8 @@ class DirectSalesOrders extends PureComponent {
                 }
             }).catch(() => {
                 this.setState({ isSubmitDisabled: false });
+            }).finally(() => {
+                this.pageReset();
             });
         });
     }
@@ -265,10 +277,14 @@ class DirectSalesOrders extends PureComponent {
     }
 
     render() {
+        const { goodsList, shouldClear } = this.state;
         return (
             <div className="direct-sales-orders">
                 <StoresForm
-                    value={this.state.goodsList.length > 0}
+                    value={{
+                        shouldWarning: goodsList.length > 0, // 是否应该弹窗警告
+                        shouldClear
+                    }}
                     onChange={this.handleStoresChange}
                 />
                 <GoodsForm
