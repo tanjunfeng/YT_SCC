@@ -3,7 +3,7 @@
  * @Description: 销售换货列表
  * @CreateDate: 2017-11-10 11:22:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-14 16:29:46
+ * @Last Modified time: 2017-11-16 11:57:04
  */
 
 import React, { PureComponent } from 'react';
@@ -20,18 +20,17 @@ import {
     Dropdown,
     Modal
 } from 'antd';
+
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { exchangeGoodsListColumns as columns } from '../columns';
-import { returnGoodsOperation, getExchangeGoodsListAction, returnGoodsListFormDataClear } from '../../../actions';
+import { returnGoodsOperation, getExchangeGoodsListAction } from '../../../actions';
 
 @connect(state => ({
-    formData: state.toJS().pageParameters.exchangeGoodsParams
+    exchangeList: state.toJS().salesManagement.exchangeList,
 }), dispatch => bindActionCreators({
-    getExchangeGoodsListAction,
-    returnGoodsListFormDataClear
+    getExchangeGoodsListAction
 }, dispatch))
-
 
 class ExchangeGoodsList extends PureComponent {
     constructor(props) {
@@ -45,10 +44,6 @@ class ExchangeGoodsList extends PureComponent {
     componentDidMount() {
         this.handlePromotionReset();
         this.query();
-    }
-
-    componentWillUnmount() {
-        this.props.returnGoodsListFormDataClear();
     }
 
     /**
@@ -160,32 +155,26 @@ class ExchangeGoodsList extends PureComponent {
 
     render() {
         columns[columns.length - 1].render = this.renderActions;
-        const { formData } = this.props
-        const { total, pageNum, pageSize } = this.props.formData;
+        const { total, pageNum, pageSize, data = [] } = this.props.exchangeList;
         return (
             <div className="return-goods-list">
                 <SearchForm
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
                 />
-                {
-                    formData ?
-                        <div>
-                            <Table
-                                dataSource={formData.data}
-                                columns={columns}
-                                rowKey="id"
-                                pagination={{
-                                    current: this.state.current,
-                                    total,
-                                    pageNum,
-                                    pageSize,
-                                    showQuickJumper: true,
-                                    onChange: this.onPaginate
-                                }}
-                            />
-                        </div> : ''
-                }
+                <Table
+                    dataSource={data}
+                    columns={columns}
+                    rowKey="id"
+                    pagination={{
+                        current: this.state.current,
+                        total,
+                        pageNum,
+                        pageSize,
+                        showQuickJumper: true,
+                        onChange: this.onPaginate
+                    }}
+                />
             </div>
         )
     }
@@ -194,8 +183,7 @@ class ExchangeGoodsList extends PureComponent {
 ExchangeGoodsList.propTypes = {
     location: PropTypes.objectOf(PropTypes.any),
     getExchangeGoodsListAction: PropTypes.func,
-    returnGoodsListFormDataClear: PropTypes.func,
-    formData: PropTypes.objectOf(PropTypes.any)
+    exchangeList: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(ExchangeGoodsList));

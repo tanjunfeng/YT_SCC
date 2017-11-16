@@ -25,16 +25,14 @@ import moment from 'moment';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { returnGoodsOperation, returnGoodsList,
-    insertRefund, returnGoodsListFormDataClear
+    insertRefund
 } from '../../../actions';
 
 @connect(state => ({
     listData: state.toJS().salesManagement.data,
-    formData: state.toJS().pageParameters.returnGoodsParams
 }), dispatch => bindActionCreators({
     insertRefund,
     returnGoodsList,
-    returnGoodsListFormDataClear
 }, dispatch))
 
 class ReturnGoodsList extends PureComponent {
@@ -127,10 +125,6 @@ class ReturnGoodsList extends PureComponent {
     componentDidMount() {
         this.handlePromotionReset();
         this.query();
-    }
-
-    componentWillUnmount() {
-        this.props.returnGoodsListFormDataClear();
     }
 
     /**
@@ -311,7 +305,6 @@ class ReturnGoodsList extends PureComponent {
 
 ReturnGoodsList.propTypes = {
     insertRefund: PropTypes.func,
-    returnGoodsListFormDataClear: PropTypes.func,
     returnGoodsList: PropTypes.func,
     location: PropTypes.objectOf(PropTypes.any),
     listData: PropTypes.objectOf(PropTypes.any),

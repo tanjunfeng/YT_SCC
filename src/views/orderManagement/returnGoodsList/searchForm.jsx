@@ -7,7 +7,7 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../../util/util';
 import { returnGoodsStatus, goodsReceiptStatus, returnType } from '../../../constant/salesManagement';
-import { returnGoodsList, returnGoodsListFormDataClear } from '../../../actions';
+import { returnGoodsList } from '../../../actions';
 import { pubFetchValueList } from '../../../actions/pub';
 import SearchMind from '../../../components/searchMind';
 import { BranchCompany } from '../../../container/search';
@@ -17,27 +17,21 @@ const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 
 @connect(
-    state => ({
-        data: state.toJS().pageParameters.returnGoodsParams.data,
-        franchiseeIdName: state.toJS().pageParameters.returnGoodsParams.franchiseeIdName,
-        branchCompany: state.toJS().pageParameters.returnGoodsParams.branchCompany
+    () => ({
     }),
     dispatch => bindActionCreators({
         returnGoodsList,
         pubFetchValueList,
-        returnGoodsListFormDataClear
     }, dispatch)
 )
 
 class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
-        const { data, franchiseeIdName } = this.props;
         this.state = {
-            franchiseeId: data.franchiseeId || '',
-            franchiseeIdName: franchiseeIdName || ''
+            data: [],
+            franchiseeId: '',
         }
-        this.joiningSearchMind = null;
         this.branchCompany = this.props.branchCompany;
     }
 
@@ -62,7 +56,9 @@ class SearchForm extends PureComponent {
         const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
         const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
         this.branchCompany = { ...branchCompany };
+        const franchiseeId = this.state.franchiseeId;
         const searchParams = {
+            franchiseeId,
             branchCompanyId: branchCompany.id,
             id,
             orderId,
@@ -77,7 +73,8 @@ class SearchForm extends PureComponent {
     }
 
     // 搜索方法
-    handleSearch = () => {
+    handleSearch = (e) => {
+        e.preventDefault();
         // 将查询条件回传给调用页
         this.props.onPromotionSearch(this.getSearchParams());
     }
@@ -87,8 +84,7 @@ class SearchForm extends PureComponent {
         this.handleJoiningClear();
         this.joiningSearchMind.reset();
         this.props.form.resetFields();
-        this.branchCompany = { id: '', name: '' };
-        this.props.returnGoodsListFormDataClear()
+        this.branchCompany = { id: '', name: '' }
         this.props.onPromotionReset();  // 通知父页面已清空
     }
 
@@ -110,7 +106,7 @@ class SearchForm extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { data } = this.props;
+        const { data } = this.state;
         return (
             <div className="search-box">
                 <Form
@@ -150,7 +146,7 @@ class SearchForm extends PureComponent {
                             <FormItem>
                                 <FormItem label="分公司">
                                     {getFieldDecorator('branchCompany', {
-                                        initialValue: { ...this.branchCompany }
+                                        initialValue: { ...this.state.branchCompany }
                                     })(<BranchCompany />)}
                                 </FormItem>
                             </FormItem>
@@ -277,16 +273,13 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    returnGoodsListFormDataClear: PropTypes.func,
-    returnGoodsList: PropTypes.func,
+    // returnGoodsListFormDataClear: PropTypes.func,
+    onPromotionSearch: PropTypes.func,
     pubFetchValueList: PropTypes.func,
+    onPromotionReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    data: PropTypes.objectOf(PropTypes.any),
     branchCompany: PropTypes.objectOf(PropTypes.any),
-    page: PropTypes.number,
-    refresh: PropTypes.bool,
     upDate: PropTypes.bool,
-    franchiseeIdName: PropTypes.string,
 };
 
 export default withRouter(Form.create()(SearchForm));
