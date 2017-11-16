@@ -124,6 +124,13 @@ class DirectSalesOrders extends PureComponent {
         });
     }
 
+    pageReset = () => {
+        this.handleClear();
+        this.setState({
+            storeId: ''
+        });
+    }
+
     handleClear = () => {
         this.setState({
             goodsList: []
@@ -173,6 +180,8 @@ class DirectSalesOrders extends PureComponent {
                 }
             }).catch(() => {
                 this.setState({ isSubmitDisabled: false });
+            }).finally(() => {
+                this.pageReset();
             });
         });
     }
@@ -265,10 +274,14 @@ class DirectSalesOrders extends PureComponent {
     }
 
     render() {
+        const { goodsList, storeId } = this.state;
         return (
             <div className="direct-sales-orders">
                 <StoresForm
-                    value={this.state.goodsList.length > 0}
+                    value={{
+                        shouldWarning: goodsList.length > 0, // 是否应该弹窗警告
+                        storeId
+                    }}
                     onChange={this.handleStoresChange}
                 />
                 <GoodsForm

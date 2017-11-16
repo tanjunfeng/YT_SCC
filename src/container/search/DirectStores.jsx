@@ -18,6 +18,7 @@ import Utils from '../../util/util';
 class DirectStores extends PureComponent {
     componentWillReceiveProps(nextProps) {
         if (this.props.value.storeId !== '' && nextProps.value.storeId === '') {
+            console.log('cleared!');
             this.handleClear();
         }
     }

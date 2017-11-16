@@ -82,7 +82,7 @@ class StoresForm extends PureComponent {
     }
 
     handleDirectStoresChange = ({ record }) => {
-        if (this.props.value) {
+        if (this.props.value.shouldWarning) {
             this.setState({
                 tmp: { ...record },
                 modalRechooseVisible: true
@@ -95,7 +95,7 @@ class StoresForm extends PureComponent {
     }
 
     render() {
-        const { form, directInfo = {} } = this.props;
+        const { form, directInfo = {}, value } = this.props;
         const { getFieldDecorator } = form;
         return (
             <div className="direct-sales-orders-form">
@@ -105,7 +105,7 @@ class StoresForm extends PureComponent {
                         <Row gutter={40}>
                             <FormItem label="选择门店">
                                 {getFieldDecorator('stores', {
-                                    initialValue: { storeId: '', storeName: '' },
+                                    initialValue: { storeId: value.storeId, storeName: '' },
                                     rules: [{ required: true, message: '请选择门店' }]
                                 })(<DirectStores
                                     onChange={this.handleDirectStoresChange}
@@ -150,7 +150,7 @@ class StoresForm extends PureComponent {
 StoresForm.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     directInfo: PropTypes.objectOf(PropTypes.any),
-    value: PropTypes.bool,
+    value: PropTypes.objectOf(PropTypes.any),
     queryDirectInfo: PropTypes.func,
     clearDirectInfo: PropTypes.func,
     onChange: PropTypes.func
