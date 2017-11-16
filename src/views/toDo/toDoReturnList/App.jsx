@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-16 15:27:37
+ * @Last Modified time: 2017-11-16 16:40:46
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -21,7 +21,6 @@ import {
     Dropdown,
     Modal,
     message,
-    Steps
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -56,7 +55,6 @@ const Option = Select.Option;
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
-const Step = Steps.Step;
 const { TextArea } = Input;
 
 @connect(state => ({
@@ -125,8 +123,8 @@ class toDoReturnList extends PureComponent {
                 key: 'supplier'
             }, {
                 title: '供应商地点',
-                dataIndex: 'supplierAddress',
-                key: 'supplierAddress'
+                dataIndex: 'refundAdrName',
+                key: 'refundAdrName'
             }, {
                 title: '退货数量',
                 dataIndex: 'totalRefundAmount',
@@ -162,8 +160,8 @@ class toDoReturnList extends PureComponent {
                 }
             }, {
                 title: '流程开始时间',
-                dataIndex: 'processEndTime',
-                key: 'processEndTime',
+                dataIndex: 'processStartTime',
+                key: 'processStartTime',
                 render: text => {
                     let res = text;
                     if (!text) {
@@ -175,8 +173,8 @@ class toDoReturnList extends PureComponent {
                 }
             }, {
                 title: '流程结束时间',
-                dataIndex: 'processStartTime',
-                key: 'processStartTime',
+                dataIndex: 'processEndTime',
+                key: 'processEndTime',
                 render: text => {
                     let res = text;
                     if (!text) {
@@ -487,7 +485,7 @@ class toDoReturnList extends PureComponent {
         const { processNodeId, id } = this.examinationAppData;
         const processId = processNodeId;
         this.getFormData().then((param) => {
-            this.props.queryProcessDefinitions({...param, processId, id, type: 1})
+            this.props.queryProcessDefinitions({...param, processId, id, processType: 1})
             .then((res) => {
                 if (res.code === 200) {
                     message.success(res.message);
@@ -625,7 +623,6 @@ class toDoReturnList extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.auditPurReList;
-        const { processDefinitions } = this.props;
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -849,7 +846,7 @@ class toDoReturnList extends PureComponent {
                             columns={this.columns}
                             rowKey="id"
                             scroll={{
-                                x: 1600
+                                x: 1800
                             }}
                             pagination={{
                                 current: this.current,
@@ -937,7 +934,6 @@ class toDoReturnList extends PureComponent {
 toDoReturnList.propTypes = {
     queryAuditPurReList: PropTypes.func,
     queryProcessDefinitions: PropTypes.func,
-    processDefinitions: PropTypes.objectOf(PropTypes.array),
     form: PropTypes.objectOf(PropTypes.any),
     auditPurReList: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),

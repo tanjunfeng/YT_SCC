@@ -3,7 +3,7 @@
  * @Description: 采购退货新建编辑页
  * @CreateDate: 2017-10-27 11:26:16
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-09 20:39:06
+ * @Last Modified time: 2017-11-16 16:37:42
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -226,9 +226,6 @@ class ReturnManagementCreat extends PureComponent {
                 key: 'realRefundMoney'
             }
         ];
-    }
-
-    componentWillMount() {
     }
 
     componentDidMount() {
