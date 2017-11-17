@@ -591,7 +591,7 @@ export const logisticsStatusOptions = {
         value: '仓库拒收'
     }, {
         key: 'UJS',
-        value: '用户已拒签'
+        value: '已拒签'
     }]
 }
 
