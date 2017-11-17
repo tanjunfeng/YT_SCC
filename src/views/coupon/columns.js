@@ -205,7 +205,7 @@ const couponsDetail = [{
     render: statusCode => promotionStatus[statusCode]
 }];
 
-const usedParticipateList = [{
+const usedParticipateColumns = [{
     title: '所属子公司',
     dataIndex: 'branchCompanyName',
     key: 'branchCompanyName',
@@ -321,7 +321,7 @@ const usedParticipateList = [{
     key: 'orderPrice'
 }];
 
-const unUsedParticipateList = [{
+const unUsedParticipateColumns = [{
     title: '所属子公司',
     dataIndex: 'branchCompanyName',
     key: 'branchCompanyName'
@@ -352,7 +352,7 @@ const unUsedParticipateList = [{
     render: timestamp => Util.getTime(timestamp)
 }];
 
-const invalidRecordList = [{
+const garbageParticipateColumns = [{
     title: '所属子公司',
     dataIndex: 'branchCompanyName',
     key: 'branchCompanyName'
@@ -376,27 +376,6 @@ const invalidRecordList = [{
     title: '券ID',
     dataIndex: 'promoId',
     key: 'promoId'
-}, {
-    title: '领取时间',
-    dataIndex: 'activityDate',
-    key: 'activityDate',
-    render: timestamp => Util.getTime(timestamp)
-}, {
-    title: '状态',
-    dataIndex: 'state',
-    key: 'state',
-    render: (text) => {
-        switch (text) {
-            case 'active':
-                return '已领取';
-            case 'used':
-                return '已使用';
-            case 'canceled':
-                return '已作废';
-            default:
-                return text;
-        }
-    }
 }, {
     title: '作废时间',
     dataIndex: 'modifyTime',
@@ -404,4 +383,7 @@ const invalidRecordList = [{
     render: timestamp => Util.getTime(timestamp)
 }];
 
-export { couponList, couponsDetail, usedParticipateList, unUsedParticipateList, invalidRecordList };
+export {
+    couponList, couponsDetail, usedParticipateColumns,
+    unUsedParticipateColumns, garbageParticipateColumns
+};

@@ -37,7 +37,9 @@ class SearchForm extends PureComponent {
         const {
             orderId,
             promotionName,
-            participateTimeRange,
+            recordTimeRange, // 使用时间
+            activityTimeRange, // 领取时间
+            canceledTimeRange, // 作废时间
             orderState,
             paymentState,
             shippingStateCode,
@@ -45,71 +47,77 @@ class SearchForm extends PureComponent {
             storeId,
             branchCompany
         } = this.props.form.getFieldsValue();
-        const { match } = this.props;
         return Util.removeInvalid({
-            promoId: match.params.id,
+            promoId: this.props.match.params.id,
             orderId,
             storeId,
             promotionName,
             orderState: this.getStatusFromCode(orderState),
             paymentState: this.getStatusFromCode(paymentState),
             shippingState: this.getStatusFromCode(shippingStateCode),
-            recordTimeStart: participateTimeRange.length > 1 ? participateTimeRange[0].valueOf() : '',
-            recordTimeEnd: participateTimeRange.length > 1 ? participateTimeRange[1].valueOf() : '',
+            recordTimeStart: recordTimeRange && recordTimeRange.length > 1 ? recordTimeRange[0].valueOf() : '',
+            recordTimeEnd: recordTimeRange && recordTimeRange.length > 1 ? recordTimeRange[1].valueOf() : '',
+            activityDateStart: activityTimeRange && activityTimeRange.length > 1 ? activityTimeRange[0].valueOf() : '',
+            activityDateEnd: activityTimeRange && activityTimeRange.length > 1 ? activityTimeRange[1].valueOf() : '',
+            canceledDateStart: canceledTimeRange && canceledTimeRange.length > 1 ? canceledTimeRange[0].valueOf() : '',
+            canceledDateEnd: canceledTimeRange && canceledTimeRange.length > 1 ? canceledTimeRange[1].valueOf() : '',
             franchiseeId,
             branchCompanyId: branchCompany.id
         });
     }
 
-    handleSubmit(e) {
+    handleSubmit = (e) => {
         e.preventDefault();
-        this.props.onParticipateSearch(this.getSearchCondition());
+        this.props.onSearch(this.getSearchCondition());
     }
 
-    handleReset() {
+    handleReset = () => {
         this.props.form.resetFields();  // 清除当前查询条件
-        this.props.onParticipateReset();  // 通知父页面已清空
+        this.props.onReset();  // 通知父页面已清空
     }
 
-    handleExport() {
-        this.props.onParticipateExport(this.getSearchCondition());   // 通知父组件导出数据
+    handleExport = () => {
+        this.props.onExport(this.getSearchCondition());   // 通知父组件导出数据
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const { form, value } = this.props;
+        const { getFieldDecorator } = form;
+        const page = value.page;
         return (
             <div className="search-box participate">
                 <Form layout="inline" onSubmit={this.handleSubmit}>
                     <div className="search-conditions">
-                        <Row gutter={40}>
-                            <Col span={8}>
-                                <FormItem label="订单编号" style={{ paddingRight: 10 }}>
-                                    {getFieldDecorator('orderId')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="订单状态">
-                                    {getFieldDecorator('orderState', {
-                                        initialValue: 'ALL'
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus('orderState')}
-                                        </Select>
-                                        )}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="支付状态">
-                                    {getFieldDecorator('paymentState', {
-                                        initialValue: 'ALL'
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus('paymentState')}
-                                        </Select>
-                                        )}
-                                </FormItem>
-                            </Col>
-                        </Row>
+                        {page === 'used' ?
+                            <Row gutter={40}>
+                                <Col span={8}>
+                                    <FormItem label="订单编号" style={{ paddingRight: 10 }}>
+                                        {getFieldDecorator('orderId')(<Input size="default" />)}
+                                    </FormItem>
+                                </Col>
+                                <Col span={8}>
+                                    <FormItem label="订单状态">
+                                        {getFieldDecorator('orderState', {
+                                            initialValue: 'ALL'
+                                        })(
+                                            <Select style={{ width: '153px' }} size="default">
+                                                {this.getStatus('orderState')}
+                                            </Select>
+                                            )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={8}>
+                                    <FormItem label="支付状态">
+                                        {getFieldDecorator('paymentState', {
+                                            initialValue: 'ALL'
+                                        })(
+                                            <Select style={{ width: '153px' }} size="default">
+                                                {this.getStatus('paymentState')}
+                                            </Select>
+                                            )}
+                                    </FormItem>
+                                </Col>
+                            </Row> : null}
                         <Row gutter={40}>
                             <Col span={8}>
                                 <FormItem label="门店编号">
@@ -130,36 +138,57 @@ class SearchForm extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40}>
-                            <Col span={8}>
-                                <FormItem label="领取时间">
-                                    {getFieldDecorator('participateTimeRange', {
-                                        initialValue: []
-                                    })(
-                                        <RangePicker
-                                            size="default"
-                                            className="manage-form-enterTime"
-                                            showTime={{ format: MINUTE_FORMAT }}
-                                            format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
-                                            placeholder={['开始时间', '结束时间']}
-                                        />
-                                        )}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="使用时间">
-                                    {getFieldDecorator('recordTime', {
-                                        initialValue: []
-                                    })(
-                                        <RangePicker
-                                            size="default"
-                                            className="manage-form-enterTime"
-                                            showTime={{ format: MINUTE_FORMAT }}
-                                            format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
-                                            placeholder={['开始时间', '结束时间']}
-                                        />
-                                        )}
-                                </FormItem>
-                            </Col>
+                            {page === 'unused' ?
+                                <Col span={8}>
+                                    <FormItem label="领取时间">
+                                        {getFieldDecorator('activityTimeRange', {
+                                            initialValue: []
+                                        })(
+                                            <RangePicker
+                                                size="default"
+                                                className="manage-form-enterTime"
+                                                showTime={{ format: MINUTE_FORMAT }}
+                                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
+                                                placeholder={['开始时间', '结束时间']}
+                                            />
+                                            )}
+                                    </FormItem>
+                                </Col> : null}
+                            {page === 'used' ?
+                                <Col span={8}>
+                                    <FormItem label="使用时间">
+                                        {getFieldDecorator('recordTimeRange', {
+                                            initialValue: []
+                                        })(
+                                            <RangePicker
+                                                size="default"
+                                                className="manage-form-enterTime"
+                                                showTime={{ format: MINUTE_FORMAT }}
+                                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
+                                                placeholder={['开始时间', '结束时间']}
+                                            />
+                                            )}
+                                    </FormItem>
+                                </Col>
+                                : null}
+                            {page === 'garbage' ?
+                                <Col span={8}>
+                                    <FormItem label="作废时间">
+                                        {getFieldDecorator('canceledTimeRange', {
+                                            initialValue: []
+                                        })(
+                                            <RangePicker
+                                                size="default"
+                                                className="manage-form-enterTime"
+                                                showTime={{ format: MINUTE_FORMAT }}
+                                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
+                                                placeholder={['开始时间', '结束时间']}
+                                            />
+                                            )}
+                                    </FormItem>
+                                </Col>
+                                : null
+                            }
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
                             <Col>
@@ -168,16 +197,11 @@ class SearchForm extends PureComponent {
                                         查询
                                     </Button>
                                 </FormItem>
-                                {
-                                    !this.props.value ?
-                                        <FormItem>
-                                            <Button size="default" onClick={this.handleExport}>
-                                                导出
-                                            </Button>
-                                        </FormItem>
-                                        :
-                                        null
-                                }
+                                <FormItem>
+                                    <Button size="default" onClick={this.handleExport}>
+                                        导出
+                                    </Button>
+                                </FormItem>
                                 <FormItem>
                                     <Button size="default" onClick={this.handleReset}>
                                         重置
@@ -193,16 +217,12 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    onParticipateSearch: PropTypes.func,
-    onParticipateReset: PropTypes.func,
-    onParticipateExport: PropTypes.func,
+    onSearch: PropTypes.func,
+    onReset: PropTypes.func,
+    onExport: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    value: PropTypes.bool,
+    value: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any)
 };
-
-SearchForm.defaultProps = {
-    prefixCls: 'ParticipateList'
-}
 
 export default withRouter(Form.create()(SearchForm));
