@@ -249,12 +249,12 @@ class DirectSalesOrders extends PureComponent {
         if (this.state.isSubmitDisabled) {
             return false;
         }
-        if (goodsList.length === 0 || goodsList.length > 300) {
+        if (length === 0 || length > 300) {
             return false;
         }
-        for (let i = 0, item = goodsList[i]; i < length; i++) {
-            if (!item.enough) return false; // 库存不足
-            if (!item.isMultiple) return false; // 不是内装数的整数倍
+        for (let i = 0; i < length; i++) {
+            if (!goodsList[i].enough) return false; // 库存不足
+            if (!goodsList[i].isMultiple) return false; // 不是内装数的整数倍
         }
         return true;
     }
