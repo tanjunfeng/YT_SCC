@@ -107,8 +107,9 @@ class CouponsParticipate extends PureComponent {
      */
     handlePageNumChange = (pageNum) => {
         Object.assign(this.param, {
-            pageNum, current: pageNum
+            pageNum
         });
+        this.current = pageNum;
         this.setState({
             shouldSearch: true
         }, () => {
