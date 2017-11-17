@@ -46,7 +46,7 @@ class InputItem extends Component {
         const {
             firstValue,
             secondValue,
-         } = this.state;
+        } = this.state;
         if (firstValue && secondValue && keyCode === KeyCode.ENTER) {
             this.handleAddClick()
         }
@@ -186,10 +186,10 @@ InputItem.defaultProps = {
     inputSize: 'small',
     min: 0,
     isLast: false,
-    handleValueChange: () => {},
+    handleValueChange: () => { },
     allLength: 0,
-    handleAddItem: () => {},
-    handleDeleteItem: () => {}
+    handleAddItem: () => { },
+    handleDeleteItem: () => { }
 }
 
 export default InputItem;
