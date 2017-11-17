@@ -26,18 +26,25 @@ class CouponsParticipate extends PureComponent {
         shouldSearch: false // 是否触发一次搜索
     }
 
-    getSearchFormValue = () => {
-        const value = {
-            PROMOTION_ID: this.props.match.params.id
-        };
-        const { page } = this.state;
-        return Object.assign(value, { page });
+    /**
+     * 合并 param 和 condition 作为表格查询的条件
+     */
+    getTabGroupValue = () => {
+        const value = { ...this.state };
+        if (this.condition !== null) {
+            Object.assign(value.param, { ...this.condition });
+        }
+        return value;
     }
 
-    handleSearch = (param) => {
-        this.handleReset(() => {
+    /**
+     * 表单选择的查询条件
+     */
+    handleSearch = (condition) => {
+        this.clearPageParams(() => {
+            this.condition = { ...condition };
             this.setState({
-                param: { ...param, ...this.state.param },
+                param: { ...this.state.param },
                 shouldSearch: true
             }, () => {
                 // 触发一次搜索之后子组件就会执行搜索，此时置为 false
@@ -46,7 +53,10 @@ class CouponsParticipate extends PureComponent {
         });
     }
 
-    handleReset = (callback) => {
+    /**
+     * 清除表格相关查询条件
+     */
+    clearPageParams = (callback) => {
         // 重置检索条件
         this.setState({
             param: {
@@ -62,15 +72,39 @@ class CouponsParticipate extends PureComponent {
         });
     }
 
+    /**
+     * 清除表单相关查询条件
+     */
+    clearCondition = () => {
+        this.condition = null;
+    }
+
+    /**
+     * 表单重置时除了 Tab 页不切换，其余参数全部重置
+     */
+    handleReset = () => {
+        this.clearPageParams();
+        this.clearCondition();
+    }
+
+    /**
+     * 导出查询结果
+     */
     handleExport = () => {
     }
 
+    /**
+     * 切换 Tab 操作
+     */
     handleTabChange = (page) => {
-        this.handleReset(() => {
+        this.clearPageParams(() => {
             this.setState({ page });
         });
     }
 
+    /**
+     * 分页查询时回传当前页码
+     */
     handlePageNumChange = (pageNum) => {
         const param = { ...this.state.param };
         this.setState({
@@ -85,7 +119,7 @@ class CouponsParticipate extends PureComponent {
         return (
             <div>
                 <SearchForm
-                    value={this.getSearchFormValue()}
+                    value={{ page: this.state.page }}
                     onSearch={this.handleSearch}
                     onReset={this.handleReset}
                     onExport={this.handleExport}
@@ -95,7 +129,7 @@ class CouponsParticipate extends PureComponent {
                     <span style={{ paddingLeft: 10 }}>活动名称：{this.PROMOTION_NAME}</span>
                 </h2>
                 <TabGroup
-                    value={{ ...this.state }}
+                    value={this.getTabGroupValue()}
                     onChange={this.handleTabChange}
                     onPageNumChange={this.handlePageNumChange}
                 />

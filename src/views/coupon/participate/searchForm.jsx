@@ -47,9 +47,8 @@ class SearchForm extends PureComponent {
             storeId,
             branchCompany
         } = this.props.form.getFieldsValue();
-        const { match } = this.props;
         return Util.removeInvalid({
-            promoId: match.params.id,
+            promoId: this.props.match.params.id,
             orderId,
             storeId,
             promotionName,
