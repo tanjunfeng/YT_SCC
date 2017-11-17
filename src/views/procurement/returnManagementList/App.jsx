@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-16 16:00:02
+ * @Last Modified time: 2017-11-17 16:20:32
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -40,6 +40,7 @@ import {
     deleteBatchRefundOrder,
     queryApprovalInfo,
     queryProcessDefinitions,
+    cancelRefund
 } from '../../../actions/procurement';
 import { exportPurchaseRefundList, exportPdf } from '../../../service';
 import {
@@ -73,7 +74,8 @@ const confirm = Modal.confirm;
     deleteBatchRefundOrder,
     queryApprovalInfo,
     queryProcessDefinitions,
-    locTypeCodes
+    locTypeCodes,
+    cancelRefund
 }, dispatch))
 
 class ReturnManagementList extends PureComponent {
@@ -214,7 +216,7 @@ class ReturnManagementList extends PureComponent {
             pageSize: PAGE_SIZE,
             pageNum: this.current,
             ...this.searchParams
-        });
+        })
     }
 
     /**
@@ -412,6 +414,18 @@ class ReturnManagementList extends PureComponent {
             case 'downloadTheReturnInvoice':
                 Utils.exportExcel(exportPdf, {id: record.id})
                 break;
+            case 'cancel':
+                this.props.cancelRefund({
+                    id: record.id,
+                    purchaseRefundNo: record.purchaseRefundNo,
+                    adrType: record.adrType === '仓库' ? 0 : 1,
+                    refundAdrCode: record.refundAdrCode
+                }).then((res) => {
+                    if (res.code === 200) {
+                        message.success(res.message)
+                    }
+                })
+                break;
             default:
                 break;
         }
@@ -440,7 +454,8 @@ class ReturnManagementList extends PureComponent {
         });
         this.props.deleteBatchRefundOrder({pmRefundOrderIds: pmRefundOrderIds.join(',')}).then((res) => {
             if (res.code === 200) {
-                message.success(res.message)
+                message.success(res.message);
+                this.queryReturnMngList();
             }
         })
     }
@@ -552,7 +567,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 点击弹出框显示审批进度信息,按钮显示条件：状态为“已提交”
-                    (status !== '已提交') ?
+                    (status === '已提交') ?
                         <Menu.Item key="viewApprovalrogress">
                             <a target="_blank" rel="noopener noreferrer">
                                 查看审批进度
@@ -860,6 +875,7 @@ ReturnManagementList.propTypes = {
     history: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,
+    cancelRefund: PropTypes.func,
 };
 
 export default withRouter(Form.create()(ReturnManagementList));

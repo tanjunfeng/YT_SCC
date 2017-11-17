@@ -893,3 +893,5 @@ export const batchCheckStorage = params => http.post('/directStore/validateDirec
 export const queryProcessDefinitions = params => http.get('/pmPurchaseRefund/queryProcessDefinitions', params);
 // 退货单审批
 export const approveRefund = params => http.post('/pmPurchaseRefund/approveRefund', params);
+// 取消退货单
+export const cancelRefund = params => http.get('/pmPurchaseRefund/cancel', params);
