@@ -70,7 +70,8 @@ class TabGroup extends PureComponent {
         const {
             usedCouponParticipate,
             unUsedCouponParticipate,
-            garbageCouponParticipate
+            garbageCouponParticipate,
+            value
         } = this.props;
         switch (page) {
             case 'used':
@@ -98,7 +99,7 @@ class TabGroup extends PureComponent {
                 break;
             default: break;
         }
-        return { ...stores, columns, current: this.current, rowKey };
+        return { ...stores, columns, current: value.current, rowKey };
     }
 
     handleTabChange = (key) => {
