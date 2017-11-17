@@ -53,9 +53,13 @@ class TabGroup extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.value.page !== nextProps.value.page) {
+        const { page, shouldSearch } = nextProps.value;
+        if (this.props.value.page !== page) {
             // 切换 tab 时执行查询
-            this.query(nextProps.value.page);
+            this.query(page);
+        }
+        if (this.props.value.shouldSearch !== shouldSearch && !shouldSearch) {
+            this.query(page);
         }
     }
 

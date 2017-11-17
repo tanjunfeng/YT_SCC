@@ -56,12 +56,12 @@ class SearchForm extends PureComponent {
             orderState: this.getStatusFromCode(orderState),
             paymentState: this.getStatusFromCode(paymentState),
             shippingState: this.getStatusFromCode(shippingStateCode),
-            recordTimeStart: recordTimeRange.length > 1 ? recordTimeRange[0].valueOf() : '',
-            recordTimeEnd: recordTimeRange.length > 1 ? recordTimeRange[1].valueOf() : '',
-            activityDateStart: activityTimeRange.length > 1 ? activityTimeRange[0].valueOf() : '',
-            activityDateEnd: activityTimeRange.length > 1 ? activityTimeRange[1].valueOf() : '',
-            canceledDateStart: canceledTimeRange.length > 1 ? canceledTimeRange[0].valueOf() : '',
-            canceledDateEnd: canceledTimeRange.length > 1 ? canceledTimeRange[1].valueOf() : '',
+            recordTimeStart: recordTimeRange && recordTimeRange.length > 1 ? recordTimeRange[0].valueOf() : '',
+            recordTimeEnd: recordTimeRange && recordTimeRange.length > 1 ? recordTimeRange[1].valueOf() : '',
+            activityDateStart: activityTimeRange && activityTimeRange.length > 1 ? activityTimeRange[0].valueOf() : '',
+            activityDateEnd: activityTimeRange && activityTimeRange.length > 1 ? activityTimeRange[1].valueOf() : '',
+            canceledDateStart: canceledTimeRange && canceledTimeRange.length > 1 ? canceledTimeRange[0].valueOf() : '',
+            canceledDateEnd: canceledTimeRange && canceledTimeRange.length > 1 ? canceledTimeRange[1].valueOf() : '',
             franchiseeId,
             branchCompanyId: branchCompany.id
         });

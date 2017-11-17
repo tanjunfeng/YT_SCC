@@ -10,8 +10,8 @@ import { withRouter } from 'react-router';
 import { Form } from 'antd';
 
 import { PAGE_SIZE } from '../../../constant';
-import TabGroup from './tabGroup';
 import SearchForm from './searchForm';
+import TabGroup from './tabGroup';
 
 class CouponsParticipate extends PureComponent {
     state = {
@@ -22,7 +22,8 @@ class CouponsParticipate extends PureComponent {
             promoId: this.props.match.params.id,
             pageNum: 1,
             pageSize: PAGE_SIZE
-        }
+        },
+        shouldSearch: false // 是否触发一次搜索
     }
 
     getSearchFormValue = () => {
@@ -34,13 +35,18 @@ class CouponsParticipate extends PureComponent {
     }
 
     handleSearch = (param) => {
-        this.handleReset();
-        this.setState({
-            param: { ...param, ...this.state.param }
+        this.handleReset(() => {
+            this.setState({
+                param: { ...param, ...this.state.param },
+                shouldSearch: true
+            }, () => {
+                // 触发一次搜索之后子组件就会执行搜索，此时置为 false
+                this.setState({ shouldSearch: false });
+            });
         });
     }
 
-    handleReset = () => {
+    handleReset = (callback) => {
         // 重置检索条件
         this.setState({
             param: {
@@ -49,6 +55,10 @@ class CouponsParticipate extends PureComponent {
                 pageSize: PAGE_SIZE
             },
             current: 1
+        }, () => {
+            if (typeof callback === 'function') {
+                callback();
+            }
         });
     }
 
@@ -56,7 +66,9 @@ class CouponsParticipate extends PureComponent {
     }
 
     handleTabChange = (page) => {
-        this.setState({ page });
+        this.handleReset(() => {
+            this.setState({ page });
+        });
     }
 
     handlePageNumChange = (pageNum) => {
