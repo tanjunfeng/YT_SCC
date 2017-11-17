@@ -86,7 +86,7 @@ class GoodsTable extends PureComponent {
             isValid = false;
         }
         if (!goods.isMultiple) {
-            errors.push('非起订量整数倍');
+            errors.push('非内装数整数倍');
             isValid = false;
         }
         return isValid;
