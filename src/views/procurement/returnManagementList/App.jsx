@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-17 15:43:52
+ * @Last Modified time: 2017-11-17 16:20:32
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -567,7 +567,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 点击弹出框显示审批进度信息,按钮显示条件：状态为“已提交”
-                    (status !== '已提交') ?
+                    (status === '已提交') ?
                         <Menu.Item key="viewApprovalrogress">
                             <a target="_blank" rel="noopener noreferrer">
                                 查看审批进度
