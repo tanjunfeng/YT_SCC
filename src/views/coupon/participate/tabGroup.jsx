@@ -117,7 +117,6 @@ class TabGroup extends PureComponent {
      */
     query = (page = this.props.value.page) => {
         const param = this.props.value.param;
-        // console.log(param);
         switch (page) {
             case 'used':
                 this.props.clearUnUsedCouponPatipate();

@@ -17,12 +17,6 @@ class CouponsParticipate extends PureComponent {
     state = {
         page: 'used', // 默认打开已使用优惠券
         current: 1, // 当前页码
-        // 表单请求参数列表
-        param: {
-            promoId: this.props.match.params.id,
-            pageNum: 1,
-            pageSize: PAGE_SIZE
-        },
         shouldSearch: false // 是否触发一次搜索
     }
 
@@ -31,44 +25,45 @@ class CouponsParticipate extends PureComponent {
      */
     getTabGroupValue = () => {
         const value = { ...this.state };
-        if (this.condition !== null) {
-            Object.assign(value.param, { ...this.condition });
-        }
+        Object.assign(value, {
+            param: { ...this.param }
+        });
         return value;
+    }
+
+    // 表单请求参数列表
+    param = {
+        promoId: this.props.match.params.id,
+        pageNum: 1,
+        pageSize: PAGE_SIZE
     }
 
     /**
      * 表单选择的查询条件
      */
     handleSearch = (condition) => {
-        this.clearPageParams(() => {
-            this.condition = { ...condition };
-            this.setState({
-                param: { ...this.state.param },
-                shouldSearch: true
-            }, () => {
-                // 触发一次搜索之后子组件就会执行搜索，此时置为 false
-                this.setState({ shouldSearch: false });
-            });
+        this.clearPageParams();
+        this.param = { ...this.param, ...condition };
+        this.setState({
+            shouldSearch: true
+        }, () => {
+            // 触发一次搜索之后子组件就会执行搜索，此时置为 false
+            this.setState({ shouldSearch: false });
         });
     }
 
     /**
      * 清除表格相关查询条件
      */
-    clearPageParams = (callback) => {
+    clearPageParams = () => {
+        this.param = {
+            promoId: this.props.match.params.id,
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        }
         // 重置检索条件
         this.setState({
-            param: {
-                promoId: this.props.match.params.id,
-                pageNum: 1,
-                pageSize: PAGE_SIZE
-            },
             current: 1
-        }, () => {
-            if (typeof callback === 'function') {
-                callback();
-            }
         });
     }
 
@@ -97,20 +92,18 @@ class CouponsParticipate extends PureComponent {
      * 切换 Tab 操作
      */
     handleTabChange = (page) => {
-        this.clearPageParams(() => {
-            this.setState({ page });
-        });
+        this.clearPageParams();
+        this.setState({ page });
     }
 
     /**
      * 分页查询时回传当前页码
      */
     handlePageNumChange = (pageNum) => {
-        const param = { ...this.state.param };
+        Object.assign(this.param, {
+            pageNum
+        });
         this.setState({
-            param: Object.assign(param, {
-                pageNum
-            }),
             current: pageNum
         });
     }
