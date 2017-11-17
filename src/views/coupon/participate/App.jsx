@@ -19,7 +19,7 @@ class CouponsParticipate extends PureComponent {
         current: 1, // 当前页码
         // 表单请求参数列表
         param: {
-            promoId: this.PROMOTION_ID,
+            promoId: this.props.match.params.id,
             pageNum: 1,
             pageSize: PAGE_SIZE
         }
@@ -27,13 +27,11 @@ class CouponsParticipate extends PureComponent {
 
     getSearchFormValue = () => {
         const value = {
-            PROMOTION_ID: this.PROMOTION_ID
+            PROMOTION_ID: this.props.match.params.id
         };
         const { page } = this.state;
         return Object.assign(value, { page });
     }
-
-    PROMOTION_ID = this.props.match.params.id;
 
     handleSearch = (param) => {
         this.handleReset();
@@ -46,7 +44,7 @@ class CouponsParticipate extends PureComponent {
         // 重置检索条件
         this.setState({
             param: {
-                promoId: this.PROMOTION_ID,
+                promoId: this.props.match.params.id,
                 pageNum: 1,
                 pageSize: PAGE_SIZE
             },
@@ -59,6 +57,16 @@ class CouponsParticipate extends PureComponent {
 
     handleTabChange = (page) => {
         this.setState({ page });
+    }
+
+    handlePageNumChange = (pageNum) => {
+        const param = { ...this.state.param };
+        this.setState({
+            param: Object.assign(param, {
+                pageNum
+            }),
+            current: pageNum
+        });
     }
 
     render() {
@@ -77,6 +85,7 @@ class CouponsParticipate extends PureComponent {
                 <TabGroup
                     value={{ ...this.state }}
                     onChange={this.handleTabChange}
+                    onPageNumChange={this.handlePageNumChange}
                 />
             </div>
         );

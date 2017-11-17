@@ -142,8 +142,7 @@ class TabGroup extends PureComponent {
     }
 
     handlePageNumChange = (pageNum) => {
-        Object.assign(this.param, { pageNum });
-        this.current = pageNum;
+        this.props.onPageNumChange(pageNum);
         this.query();
     }
 
@@ -220,6 +219,7 @@ TabGroup.propTypes = {
     clearUnUsedCouponPatipate: PropTypes.func,
     clearGarbageCouponPatipate: PropTypes.func,
     onChange: PropTypes.func,
+    onPageNumChange: PropTypes.func,
     cancelCoupons: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any),
     usedCouponParticipate: PropTypes.objectOf(PropTypes.any),
