@@ -92,13 +92,13 @@ export const exportPurchaseRefundList = '/pmPurchaseRefund/exportPurchaseRefundL
 export const exportPdf = '/pmPurchaseRefund/exportPdf';
 
 // 促销活动 - 下单打折 - 参与数据导出
-export const exportParticipateData = 'promotion/toExcel';
+export const exportParticipateData = '/promotion/toExcel';
 
 // 促销活动 - 优惠券 - 已使用参与数据导出
-export const exportParticipateData1 = '/coupon/queryCouponRecordListExcel';
+export const usedParticipateData = '/coupon/queryCouponRecordListExcel';
 
 // 促销活动 - 优惠券 - 未使用参与数据导出
-export const exportParticipateData2 = '/coupon/queryCouponActivityActiveListExcel';
+export const unusedParticipateData = '/coupon/queryCouponActivityActiveListExcel';
 
 /**
  * 登录 Api

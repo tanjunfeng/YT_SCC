@@ -9,6 +9,8 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { Form } from 'antd';
 
+import Util from '../../../util/util';
+import { usedParticipateData, unusedParticipateData } from '../../../service';
 import { PAGE_SIZE } from '../../../constant';
 import SearchForm from './searchForm';
 import TabGroup from './tabGroup';
@@ -83,7 +85,23 @@ class CouponsParticipate extends PureComponent {
     /**
      * 导出查询结果
      */
-    handleExport = () => {
+    handleExport = (param) => {
+        const condition = {
+            promoId: this.PROMOTION_ID,
+            ...param
+        };
+        switch (this.state.page) {
+            case 'used':
+                Util.exportExcel(usedParticipateData, condition);
+                break;
+            case 'unused':
+                Util.exportExcel(unusedParticipateData, { condition, queryType: 1 });
+                break;
+            case 'garbage':
+                Util.exportExcel(unusedParticipateData, { condition, queryType: 2 });
+                break;
+            default: break;
+        }
     }
 
     /**
