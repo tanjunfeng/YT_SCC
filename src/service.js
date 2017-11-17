@@ -606,6 +606,9 @@ export const getStoreInfo = (params) => http.get('/store/getStoreInfo', params);
 // 大类值清单
 export const querycategories = (params) => http.get('/category/queryCategories', params);
 
+// 查询二级三级分类
+export const querySecondCategoriesOfApp = (params) => http.get('/category/querySecondCategoriesOfApp', params);
+
 // 商品值清单
 export const queryMaterialMap = (params) => http.get('/provider/queryMaterialMap', params);
 // 商品值清单
@@ -888,3 +891,7 @@ export const batchCheckStorage = params => http.post('/directStore/validateDirec
 
 // 查询退货单审批流程
 export const queryProcessDefinitions = params => http.get('/pmPurchaseRefund/queryProcessDefinitions', params);
+// 退货单审批
+export const approveRefund = params => http.post('/pmPurchaseRefund/approveRefund', params);
+// 取消退货单
+export const cancelRefund = params => http.get('/pmPurchaseRefund/cancel', params);

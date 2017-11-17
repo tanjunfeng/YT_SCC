@@ -19,18 +19,14 @@ import {
 } from 'antd';
 import SearchMind from '../../../components/searchMind';
 import Util from '../../../util/util';
-import {
-    pubFetchValueList,
-} from '../../../actions/pub';
-import {
-    putRefundProducts
-} from '../../../actions/procurement';
+
 import {
     exportReturnProPdf, createRefundWithItems,
     updateRefundWithItems, deleteBatchRefundOrder,
     cancel
 } from '../../../service';
 
+const confirm = Modal.confirm;
 const Option = Select.Option;
 const { TextArea } = Input;
 
@@ -197,15 +193,6 @@ function getNewLists(lists, cLists, orderId) {
     return returnAble.concat(newLists)
 }
 
-@connect(
-    state => ({
-        returnLists: state.toJS().procurement.returnLists
-    }),
-    dispatch => bindActionCreators({
-        pubFetchValueList,
-        putRefundProducts
-    }, dispatch)
-)
 class List extends Component {
     static propTypes = {
         prefixCls: PropTypes.string,
@@ -214,6 +201,7 @@ class List extends Component {
         putRefundProducts: PropTypes.func,
         getFormData: PropTypes.func,
         returnLists: PropTypes.arrayOf(PropTypes.any),
+        onShowModal: PropTypes.func,
     }
 
     static defaultProps = {
@@ -223,14 +211,7 @@ class List extends Component {
     constructor(props) {
         super(props);
 
-        const { match, returnLists } = this.props;
-        const { params } = match;
-
-        if (params.id) {
-            this.type = 'edit';
-        } else {
-            this.type = 'new';
-        }
+        const { returnLists } = this.props;
 
         this.state = {
             locDisabled: true,
@@ -263,7 +244,7 @@ class List extends Component {
             const { lists, orderId } = this.state;
             current = returnLists;
 
-            const newLists = getNewLists(lists, current, orderId);            
+            const newLists = getNewLists(lists, current, orderId);
 
             this.setState({
                 lists: newLists
@@ -361,7 +342,7 @@ class List extends Component {
     typeRender = (text, record) => {
         const keys = Object.keys(reason);
         const { purchaseOrderNo, productCode } = record;
-        
+
         return (
             <Select
                 defaultValue={reason[text] || '其他'}
@@ -436,7 +417,11 @@ class List extends Component {
 
     handleSubmitGoods = () => {
         const { orderId, goodsRecord = {}, brandRecord = {} } = this.state;
-        const { refundAdrCode } = this.props.getFormData();
+        const result = this.props.getFormData();
+        if (!result) {
+            return;
+        }
+        const { refundAdrCode } = result;
 
         this.props.putRefundProducts(Util.removeInvalid({
             purchaseOrderNo: orderId,
@@ -473,12 +458,11 @@ class List extends Component {
                 this.props.history.push('/returnManagementList');
                 break;
             case 'delete':
-                Modal.error({
+                confirm({
                     title: '确认',
                     content: '是否确认删除？',
                     okText: '确认',
                     cancelText: '取消',
-                    onCancel: () => {},
                     onOk: () => {
                         deleteBatchRefundOrder({
                             pmRefundOrderIds: id
@@ -487,15 +471,15 @@ class List extends Component {
                             this.props.history.push('/returnManagementList');
                         })
                     },
+                    onCancel: () => { }
                 });
                 break;
             case 'cancel':
-                Modal.error({
+                confirm({
                     title: '确认',
                     content: '是否确认取消？',
                     okText: '确认',
                     cancelText: '取消',
-                    onCancel: () => {},
                     onOk: () => {
                         cancel({
                             id,
@@ -507,6 +491,7 @@ class List extends Component {
                             this.props.history.push('/returnManagementList');
                         })
                     },
+                    onCancel: () => { }
                 });
                 break;
             case 'download':
@@ -519,7 +504,7 @@ class List extends Component {
                 this.saveOrSubmit(1)
                 break;
             case 'progress':
-
+                this.props.onShowModal(id)
                 break;
             default:
                 break;
@@ -556,16 +541,15 @@ class List extends Component {
         }
 
         if (zero.length) {
-            Modal.error({
+            confirm({
                 title: '数据错误',
                 content: `序号：${zero.join('、')} 可退货数为0的商品将过滤掉，是否继续`,
                 okText: '确认',
                 cancelText: '取消',
-                onCancel: () => {},
                 onOk: () => {
                     if (!newList.length) {
                         message.error('失败：没有可用商品信息');
-                        return ;
+                        return;
                     }
 
                     this.submit(newList, status).then((res) => {
@@ -573,6 +557,7 @@ class List extends Component {
                         this.props.history.push('/returnManagementList');
                     })
                 },
+                onCancel: () => { }
             });
             return;
         }
@@ -612,8 +597,23 @@ class List extends Component {
         submit.totalRealRefundAmount = actualCount;
         // 合计实际退货金额
         submit.totalRealRefundMoney = actualMoneyCount;
-        
+
         return postService(submit)
+    }
+
+    clearList = () => {
+        this.setState({
+            lists: []
+        }, () => {
+            this.calculation();
+            current = [];
+            originLists = [];
+            this.props.clearReturnInfo();
+        })
+    }
+
+    getValue() {
+        return this.state.lists;
     }
 
     render() {
@@ -632,7 +632,7 @@ class List extends Component {
         const cls = classnames(
             `${prefixCls}-modify`,
             {
-                [`${prefixCls}-modify-${this.type}`]: this.type
+                [`${prefixCls}-modify-${type}`]: type
             }
         )
 
@@ -839,4 +839,4 @@ class List extends Component {
     }
 }
 
-export default withRouter(List)
+export default List;

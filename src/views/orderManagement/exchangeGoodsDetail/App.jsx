@@ -3,7 +3,7 @@
  * @Description: 销售退货详情
  * @CreateDate: 2017-11-10 11:22:28
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-14 11:20:15
+ * @Last Modified time: 2017-11-15 17:42:02
  */
 
 import React, { PureComponent } from 'react';
@@ -17,7 +17,7 @@ import {
     Col, Button, Input, message
 } from 'antd';
 import Utils from '../../../util/util';
-import { returnGoodsDetailColumns as columns } from '../columns';
+import { exchangeGoodsDetailColumns as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
 import { returnGoodsDetail, returnGoodsDetailClearData,
     returnGoodsOperation, returnDescriptionSave
@@ -138,6 +138,29 @@ class ExchangeGoodsDetail extends PureComponent {
         }
     }
 
+    purchaseOrderType = () => {
+        const data = this.props.data
+        switch (data.returnReasonType) {
+            case '':
+                return '请选择';
+            case 1:
+                return '包装破损';
+            case 2:
+                return '商品破损';
+            case 3:
+                return '保质期临期或过期';
+            case 4:
+                return '商品错发或漏发';
+            case 5:
+                return '订错货';
+            case 6:
+                return '商品质量问题';
+            case 7:
+                return '其他';
+            default:
+                return '';
+        }
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form
@@ -221,7 +244,7 @@ class ExchangeGoodsDetail extends PureComponent {
                                 <Col span={4}>
                                     <FormItem>
                                         {getFieldDecorator('returnReasonType', {
-                                            initialValue: data.returnReasonType ? data.returnReasonType : ''
+                                            initialValue: this.purchaseOrderType() || ''
                                         })(
                                             <Select style={{ width: '153px' }} size="default" disabled>
                                                 {

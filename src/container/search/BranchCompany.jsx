@@ -21,9 +21,6 @@ class BranchCompany extends PureComponent {
             this.defaultValue = '';
             this.searchMind.reset();
         }
-        if (nextProps.value.id !== '') {
-            this.defaultValue = `${nextProps.value.id} - ${nextProps.value.name}`
-        }
     }
 
     defaultValue = '';

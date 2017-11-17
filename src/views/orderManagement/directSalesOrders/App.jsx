@@ -32,14 +32,14 @@ class DirectSalesOrders extends PureComponent {
         isSubmitDisabled: false, // 提交按钮是否禁用
         deletedGoodsList: [], // 由于不在销售区域而被删除的商品编号列表
         goodsAddOn: null, // 手工添加的单个商品
-        modalRechooseVisible: false, // 提示重新选择门店的模态框
         importList: [], // 新增导入商品
         // 商品列表总计信息
         total: {
             rows: 0, // 记录行数
             quantities: 0, // 订购数量
             amount: 0 // 金额总计
-        }
+        },
+        shouldClear: false // 是否清空所有子组件
     }
 
     /**
@@ -69,51 +69,28 @@ class DirectSalesOrders extends PureComponent {
         const {
             branchCompanyId,
             deliveryWarehouseCode,
-            total
+            total,
+            shouldClear
         } = this.state;
         const goodsFormValue = {
             branchCompanyId,
             deliveryWarehouseCode,
             total,
-            canBeSubmit: this.validateGoods()
+            canBeSubmit: this.validateGoods(),
+            shouldClear
         };
         return goodsFormValue;
     }
 
-    record = null; // 重新选择的门店信息
-
     handleStoresChange = record => {
-        this.record = record;
-        const { storeId, goodsList } = this.state;
-        // 门店信息变化时，判断是否存在已选商品列表，并弹出确认框
-        if (goodsList.length > 0 && storeId !== '') {
-            this.setState({ modalRechooseVisible: true });
-        } else {
-            this.handleRechooseOk();
-        }
-    }
-
-    /**
-     * 重新选择商品
-     */
-    handleRechooseOk = () => {
-        const { storeId, branchCompanyId, deliveryWarehouseCode } = this.record;
+        const { storeId, branchCompanyId, deliveryWarehouseCode } = record;
         this.setState({
             storeId,
             branchCompanyId,
             deliveryWarehouseCode,
-            modalRechooseVisible: false,
             isSubmitDisabled: false
         });
         this.handleClear();
-    }
-
-    /**
-     * 不重新选择商品，清空传入的门店信息
-     */
-    handleRechooseCancel = () => {
-        this.record = null;
-        this.setState({ modalRechooseVisible: false });
     }
 
     /**
@@ -147,6 +124,13 @@ class DirectSalesOrders extends PureComponent {
             goodsList: [...goodsList],
             total,
             importList: []
+        });
+    }
+
+    pageReset = () => {
+        this.handleClear();
+        this.setState({
+            shouldClear: true
         });
     }
 
@@ -199,6 +183,8 @@ class DirectSalesOrders extends PureComponent {
                 }
             }).catch(() => {
                 this.setState({ isSubmitDisabled: false });
+            }).finally(() => {
+                this.pageReset();
             });
         });
     }
@@ -263,12 +249,12 @@ class DirectSalesOrders extends PureComponent {
         if (this.state.isSubmitDisabled) {
             return false;
         }
-        if (goodsList.length === 0 || goodsList.length > 300) {
+        if (length === 0 || length > 300) {
             return false;
         }
-        for (let i = 0, item = goodsList[i]; i < length; i++) {
-            if (!item.enough) return false; // 库存不足
-            if (!item.isMultiple) return false; // 不是内装数的整数倍
+        for (let i = 0; i < length; i++) {
+            if (!goodsList[i].enough) return false; // 库存不足
+            if (!goodsList[i].isMultiple) return false; // 不是内装数的整数倍
         }
         return true;
     }
@@ -282,16 +268,23 @@ class DirectSalesOrders extends PureComponent {
         }).then(res => {
             if (typeof callback === 'function') {
                 callback(Object.assign(goods, {
-                    enough: res.data.enough
+                    enough: res.data.enough,
+                    salePrice: res.data.salePrice,
+                    quantity
                 }));
             }
         });
     }
 
     render() {
+        const { goodsList, shouldClear } = this.state;
         return (
             <div className="direct-sales-orders">
                 <StoresForm
+                    value={{
+                        shouldWarning: goodsList.length > 0, // 是否应该弹窗警告
+                        shouldClear
+                    }}
                     onChange={this.handleStoresChange}
                 />
                 <GoodsForm
@@ -304,14 +297,6 @@ class DirectSalesOrders extends PureComponent {
                     value={this.getGoodsTableValues()}
                     onChange={this.handleGoodsListChange}
                 />
-                <Modal
-                    title="重新选择门店"
-                    visible={this.state.modalRechooseVisible}
-                    onOk={this.handleRechooseOk}
-                    onCancel={this.handleRechooseCancel}
-                >
-                    <p>这个操作将要重新选择门店并清空已选择商品，确定吗？</p>
-                </Modal>
                 <BackTop />
             </div>
         );

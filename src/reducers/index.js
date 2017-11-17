@@ -50,9 +50,6 @@ import queryWhiteList from './queryWhiteList';
 /* ********************销售管理************************* */
 import salesManagement from './salesManagement'
 
-/* ********************页面返回定位参数管理************************* */
-import pageParameters from './pageParameters'
-
 export default Immutable.fromJS({
     pub,
     user,
@@ -84,6 +81,4 @@ export default Immutable.fromJS({
     queryWhiteList,
     // 销售管理
     salesManagement,
-    // 页面返回定位参数管理
-    pageParameters
 });

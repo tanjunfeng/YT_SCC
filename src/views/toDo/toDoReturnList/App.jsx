@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-15 11:04:54
+ * @Last Modified time: 2017-11-16 17:06:40
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -21,7 +21,6 @@ import {
     Dropdown,
     Modal,
     message,
-    Steps
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -40,22 +39,23 @@ import { pubFetchValueList } from '../../../actions/pub';
 import {
     queryAuditPurReList,
     queryApprovalInfo,
-    queryProcessDefinitions
+    queryProcessDefinitions,
+    approveRefund
 } from '../../../actions/procurement';
 import {
     getWarehouseAddressMap,
     getShopAddressMap,
     getSupplierMap,
-    getSupplierLocMap,
+    getSupplierLocMap
 } from '../../../actions';
 import ApproModal from './approModal';
+import OpinionSteps from '../../../components/approvalFlowSteps';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
-const Step = Steps.Step;
 const { TextArea } = Input;
 
 @connect(state => ({
@@ -69,7 +69,8 @@ const { TextArea } = Input;
     pubFetchValueList,
     queryAuditPurReList,
     queryApprovalInfo,
-    queryProcessDefinitions
+    queryProcessDefinitions,
+    approveRefund
 }, dispatch))
 
 class toDoReturnList extends PureComponent {
@@ -80,10 +81,12 @@ class toDoReturnList extends PureComponent {
         this.onLocTypeChange = this.onLocTypeChange.bind(this);
         this.renderActions = this.renderActions.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
+        this.getFormData = this.getFormData.bind(this);
         this.searchParams = {};
+        this.examinationAppData = {};
         this.param = {
-            approvalStatus: '',
-            opinion: ''
+            auditResult: '',
+            auditOpinion: ''
         };
         this.state = {
             spId: '',   // 供应商编码
@@ -94,7 +97,7 @@ class toDoReturnList extends PureComponent {
             isVisibleModal: false,
             approvalVisible: false,
             opinionVisible: false,
-            approvalStatus: false,
+            auditResult: false,
             adrTypeCode: '',    // 地点编码
             receivedTypeCode: '',  // 收货单状态编码
             refundAdr: '',
@@ -122,8 +125,8 @@ class toDoReturnList extends PureComponent {
                 key: 'supplier'
             }, {
                 title: '供应商地点',
-                dataIndex: 'supplierAddress',
-                key: 'supplierAddress'
+                dataIndex: 'refundAdrName',
+                key: 'refundAdrName'
             }, {
                 title: '退货数量',
                 dataIndex: 'totalRefundAmount',
@@ -159,8 +162,8 @@ class toDoReturnList extends PureComponent {
                 }
             }, {
                 title: '流程开始时间',
-                dataIndex: 'processEndTime',
-                key: 'processEndTime',
+                dataIndex: 'processStartTime',
+                key: 'processStartTime',
                 render: text => {
                     let res = text;
                     if (!text) {
@@ -172,8 +175,8 @@ class toDoReturnList extends PureComponent {
                 }
             }, {
                 title: '流程结束时间',
-                dataIndex: 'processStartTime',
-                key: 'processStartTime',
+                dataIndex: 'processEndTime',
+                key: 'processEndTime',
                 render: text => {
                     let res = text;
                     if (!text) {
@@ -188,8 +191,8 @@ class toDoReturnList extends PureComponent {
                 dataIndex: 'processNodeName',
                 key: 'processNodeName',
                 width: '160px',
-                render: (text) => (
-                    <a onClick={this.nodeModal}>{text}</a>
+                render: (text, record) => (
+                    <a onClick={() => this.nodeModal(record)}>{text}</a>
                 )
             }, {
                 title: '操作',
@@ -243,23 +246,23 @@ class toDoReturnList extends PureComponent {
         });
     }
 
-    getFormData = () => {
+    getFormData() {
         return new Promise((resolve, reject) => {
             this.props.form.validateFields((err, values) => {
                 if (err) {
                     reject(err);
                 }
                 const {
-                    approvalStatus,
-                    opinion
+                    auditResult,
+                    auditOpinion
                 } = values;
                 const dist = {
-                    approvalStatus,
-                    opinion
+                    auditResult,
+                    auditOpinion
                 };
-                if (approvalStatus === '') {
+                if (auditResult === '') {
                     this.props.form.setFields({
-                        approvalStatus: {
+                        auditResult: {
                             value: values.area,
                             errors: [new Error('未选择审批状态')],
                         },
@@ -267,21 +270,23 @@ class toDoReturnList extends PureComponent {
                     reject();
                 } else {
                     Object.assign(dist, {
-                        approvalStatus
+                        auditResult
                     });
                 }
-                if (approvalStatus === '1') {
-                    this.props.form.setFields({
-                        opinion: {
-                            value: opinion,
-                            errors: [new Error('请输入审批意见!')]
-                        }
-                    });
-                    reject();
-                } else {
-                    Object.assign(dist, {
-                        opinion
-                    });
+                if (auditResult === '1') {
+                    if (auditOpinion === '') {
+                        this.props.form.setFields({
+                            auditOpinion: {
+                                value: auditOpinion,
+                                errors: [new Error('请输入审批意见!')]
+                            }
+                        });
+                        reject();
+                    } else {
+                        Object.assign(dist, {
+                            auditOpinion
+                        });
+                    }
                 }
                 resolve(Utils.removeInvalid(dist));
             });
@@ -298,9 +303,9 @@ class toDoReturnList extends PureComponent {
         });
     }
 
-    nodeModal = () => {
+    nodeModal = (record) => {
         this.showOpinionModal();
-        this.props.queryProcessDefinitions({ processType: 1 });
+        this.props.queryProcessDefinitions({ processType: 1, businessId: record.id });
     }
 
     /**
@@ -479,8 +484,11 @@ class toDoReturnList extends PureComponent {
     }
 
     handleApprovalOk = () => {
+        const { processNodeId, id } = this.examinationAppData;
+        const processId = processNodeId;
         this.getFormData().then((param) => {
-            this.props.queryProcessDefinitions(param).then((res) => {
+            this.props.approveRefund({...param, processId, businessId: id, type: 1})
+            .then((res) => {
                 if (res.code === 200) {
                     message.success(res.message);
                     this.setState({
@@ -501,6 +509,7 @@ class toDoReturnList extends PureComponent {
         const { key } = items;
         switch (key) {
             case 'examinationApproval':
+                this.examinationAppData = record;
                 this.showApprovalModal();
                 break;
             case 'viewApproval':
@@ -529,7 +538,7 @@ class toDoReturnList extends PureComponent {
         const {
             purchaseRefundNo,
             purchaseOrderNo,
-            approvalStatus,
+            auditResult,
             purchaseOrderType,
             status,
             adrType
@@ -567,7 +576,7 @@ class toDoReturnList extends PureComponent {
         const searchParams = {
             purchaseRefundNo,
             purchaseOrderNo,
-            approvalStatus,
+            auditResult,
             purchaseOrderType,
             status,
             adrType,
@@ -616,12 +625,6 @@ class toDoReturnList extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.auditPurReList;
-        const { processDefinitions } = this.props;
-        let XXlist = 0;
-        processDefinitions.filter((item) => (
-            item.processAuditLog && XXlist++
-        ))
-        const agreeOrRefuse = ['拒绝', '同意'];
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -845,7 +848,7 @@ class toDoReturnList extends PureComponent {
                             columns={this.columns}
                             rowKey="id"
                             scroll={{
-                                x: 1600
+                                x: 1800
                             }}
                             pagination={{
                                 current: this.current,
@@ -870,15 +873,7 @@ class toDoReturnList extends PureComponent {
                                 onCancel={this.handleOpinionCancel}
                                 width={1000}
                             >
-                                <Steps current={3 - XXlist} progressDot>
-                                    {processDefinitions.map((item, index) => (
-                                        <Step
-                                            key={`toDo-${index}`}
-                                            title={item.processNodeName}
-                                            description={agreeOrRefuse[item.type]}
-                                        />
-                                    ))}
-                                </Steps>
+                                <OpinionSteps />
                             </Modal>
                         }
                         {
@@ -897,7 +892,7 @@ class toDoReturnList extends PureComponent {
                                     >
                                         {/* 审批意见 */}
                                         <FormItem label="审批意见" style={{ display: 'flex' }}>
-                                            {getFieldDecorator('approvalStatus', {
+                                            {getFieldDecorator('auditResult', {
                                                 initialValue: optionStatus.defaultValue,
                                                 rules: [{ required: true, message: '请选择审批意见!' }]
                                             })(
@@ -912,7 +907,7 @@ class toDoReturnList extends PureComponent {
                                                 )}
                                         </FormItem>
                                         <FormItem label="意见" style={{ display: 'flex' }}>
-                                            {getFieldDecorator('opinion', {
+                                            {getFieldDecorator('auditOpinion', {
                                                 initialValue: '',
                                                 rules: [{ required: false, message: '请填写审批意见!' }]
                                             })(
@@ -941,7 +936,7 @@ class toDoReturnList extends PureComponent {
 toDoReturnList.propTypes = {
     queryAuditPurReList: PropTypes.func,
     queryProcessDefinitions: PropTypes.func,
-    processDefinitions: PropTypes.objectOf(PropTypes.array),
+    approveRefund: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     auditPurReList: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),

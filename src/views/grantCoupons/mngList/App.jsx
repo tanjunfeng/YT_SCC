@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-22 10:36:41
+ * @Last Modified time: 2017-11-16 13:49:48
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -90,7 +90,6 @@ class GrantCouponList extends PureComponent {
     }
 
     release = (coupons, storeIds, msg) => {
-        console.log(coupons);
         // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/coupon/grantCoupon
         this.props.grantCoupon({ couponParam: coupons, storeIds }).then(res => {
             if (res.code === 200) {

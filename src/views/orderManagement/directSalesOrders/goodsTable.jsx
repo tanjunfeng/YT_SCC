@@ -48,19 +48,6 @@ class GoodsTable extends PureComponent {
             item => item.productCode !== productCode));
     }
 
-    sortList = goodsList => {
-        const frontList = [];
-        const backList = [];
-        goodsList.forEach(goods => {
-            if (!goods.isMultiple || !goods.enough) {
-                frontList.push(goods);
-            } else {
-                backList.push(goods);
-            }
-        });
-        return frontList.concat(backList);
-    }
-
     /**
      * 通知父组件刷新页面
      *

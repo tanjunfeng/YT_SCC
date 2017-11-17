@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-11 22:28:30
+ * @Last Modified time: 2017-11-17 16:20:32
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -20,8 +20,7 @@ import {
     Menu,
     Dropdown,
     Modal,
-    message,
-    Steps
+    message
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -41,6 +40,7 @@ import {
     deleteBatchRefundOrder,
     queryApprovalInfo,
     queryProcessDefinitions,
+    cancelRefund
 } from '../../../actions/procurement';
 import { exportPurchaseRefundList, exportPdf } from '../../../service';
 import {
@@ -51,13 +51,13 @@ import {
     fetchReturnMngList,
 } from '../../../actions';
 import ApproModal from './approModal';
+import OpinionSteps from '../../../components/approvalFlowSteps';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
-const Step = Steps.Step;
 
 @connect(state => ({
     poRcvMngList: state.toJS().procurement.poRcvMngList,
@@ -74,7 +74,8 @@ const Step = Steps.Step;
     deleteBatchRefundOrder,
     queryApprovalInfo,
     queryProcessDefinitions,
-    locTypeCodes
+    locTypeCodes,
+    cancelRefund
 }, dispatch))
 
 class ReturnManagementList extends PureComponent {
@@ -215,7 +216,7 @@ class ReturnManagementList extends PureComponent {
             pageSize: PAGE_SIZE,
             pageNum: this.current,
             ...this.searchParams
-        });
+        })
     }
 
     /**
@@ -371,6 +372,11 @@ class ReturnManagementList extends PureComponent {
         });
     }
 
+    nodeModal = (record) => {
+        this.showOpinionModal();
+        this.props.queryProcessDefinitions({ processType: 1, businessId: record.businessId });
+    }
+
     handleOpinionOk = () => {
         this.setState({
             opinionVisible: false,
@@ -399,15 +405,26 @@ class ReturnManagementList extends PureComponent {
                 this.showConfirm(record);
                 break;
             case 'viewApprovalrogress':
-                this.props.queryProcessDefinitions({ businessId: record.purchaseRefundNo });
-                this.showOpinionModal();
+                this.nodeModal({ businessId: record.id });
                 break;
             case 'viewApproval':
-                this.props.queryApprovalInfo({businessId: record.purchaseRefundNo});
+                this.props.queryApprovalInfo({businessId: record.id});
                 this.showModal();
                 break;
             case 'downloadTheReturnInvoice':
                 Utils.exportExcel(exportPdf, {id: record.id})
+                break;
+            case 'cancel':
+                this.props.cancelRefund({
+                    id: record.id,
+                    purchaseRefundNo: record.purchaseRefundNo,
+                    adrType: record.adrType === '仓库' ? 0 : 1,
+                    refundAdrCode: record.refundAdrCode
+                }).then((res) => {
+                    if (res.code === 200) {
+                        message.success(res.message)
+                    }
+                })
                 break;
             default:
                 break;
@@ -437,7 +454,8 @@ class ReturnManagementList extends PureComponent {
         });
         this.props.deleteBatchRefundOrder({pmRefundOrderIds: pmRefundOrderIds.join(',')}).then((res) => {
             if (res.code === 200) {
-                message.success(res.message)
+                message.success(res.message);
+                this.queryReturnMngList();
             }
         })
     }
@@ -549,7 +567,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 点击弹出框显示审批进度信息,按钮显示条件：状态为“已提交”
-                    (status !== '已提交') ?
+                    (status === '已提交') ?
                         <Menu.Item key="viewApprovalrogress">
                             <a target="_blank" rel="noopener noreferrer">
                                 查看审批进度
@@ -582,8 +600,6 @@ class ReturnManagementList extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.returnMngList;
-        const { processDefinitions } = this.props;
-        const agreeOrRefuse = ['拒绝', '同意'];
         const rowSelection = {
             selectedRowKeys: this.state.chooseGoodsList,
             onChange: (selectedRowKeys, selectedRows) => {
@@ -840,15 +856,7 @@ class ReturnManagementList extends PureComponent {
                             onCancel={this.handleOpinionCancel}
                             width={1000}
                         >
-                            <Steps current={1} progressDot>
-                                {processDefinitions.map((item, index) => (
-                                    <Step
-                                        key={`toDo-${index}`}
-                                        title={item.processNodeName}
-                                        description={agreeOrRefuse[item.type]}
-                                    />
-                                ))}
-                            </Steps>
+                            <OpinionSteps />
                         </Modal>
                     }
                 </Form>
@@ -859,16 +867,15 @@ class ReturnManagementList extends PureComponent {
 
 ReturnManagementList.propTypes = {
     fetchReturnMngList: PropTypes.func,
-    getRefundNo: PropTypes.func,
     queryProcessDefinitions: PropTypes.func,
     queryApprovalInfo: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     returnMngList: PropTypes.objectOf(PropTypes.any),
-    processDefinitions: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,
+    cancelRefund: PropTypes.func,
 };
 
 export default withRouter(Form.create()(ReturnManagementList));
