@@ -20,7 +20,6 @@ import {
     clearGarbageCouponPatipate,
     cancelCoupons
 } from '../../../actions/promotion';
-import { PAGE_SIZE } from '../../../constant';
 import TableCouponParticipate from './tableCouponParticipate';
 import {
     usedParticipateColumns,
@@ -55,6 +54,7 @@ class TabGroup extends PureComponent {
 
     componentWillReceiveProps(nextProps) {
         if (this.props.value.page !== nextProps.value.page) {
+            // 切换 tab 时执行查询
             this.query(nextProps.value.page);
         }
     }
@@ -101,41 +101,40 @@ class TabGroup extends PureComponent {
         return { ...stores, columns, current: this.current, rowKey };
     }
 
-    current = 1;
-    param = {
-        promoId: this.props.PROMOTION_ID,
-        pageNum: 1,
-        pageSize: PAGE_SIZE
-    };
-
     handleTabChange = (key) => {
         this.props.onChange(key); // 通知页面已发生改变
     }
 
+    /**
+     * 查询当页数据
+     *
+     * @param {*string} page 页码
+     */
     query = (page = this.props.value.page) => {
+        const param = this.props.value.param;
         switch (page) {
             case 'used':
                 this.props.clearUnUsedCouponPatipate();
                 this.props.clearGarbageCouponPatipate();
-                this.props.getUsedCouponParticipate(this.param).then((data) => {
+                this.props.getUsedCouponParticipate(param).then((data) => {
                     const { pageNum, pageSize } = data.data;
-                    Object.assign(this.param, { pageNum, pageSize });
+                    Object.assign(param, { pageNum, pageSize });
                 });
                 break;
             case 'unused':
                 this.props.clearUsedCouponPatipate();
                 this.props.clearGarbageCouponPatipate();
-                this.props.getUnUsedCouponParticipate(this.param).then((data) => {
+                this.props.getUnUsedCouponParticipate(param).then((data) => {
                     const { pageNum, pageSize } = data.data;
-                    Object.assign(this.param, { pageNum, pageSize });
+                    Object.assign(param, { pageNum, pageSize });
                 });
                 break;
             case 'garbage':
                 this.props.clearUsedCouponPatipate();
                 this.props.clearUnUsedCouponPatipate();
-                this.props.getGarbageCouponParticipate(this.param).then((data) => {
+                this.props.getGarbageCouponParticipate(param).then((data) => {
                     const { pageNum, pageSize } = data.data;
-                    Object.assign(this.param, { pageNum, pageSize });
+                    Object.assign(param, { pageNum, pageSize });
                 });
                 break;
             default: break;
@@ -214,7 +213,6 @@ class TabGroup extends PureComponent {
 }
 
 TabGroup.propTypes = {
-    PROMOTION_ID: PropTypes.string,
     getUsedCouponParticipate: PropTypes.func,
     getUnUsedCouponParticipate: PropTypes.func,
     getGarbageCouponParticipate: PropTypes.func,

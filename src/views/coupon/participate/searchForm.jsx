@@ -37,7 +37,9 @@ class SearchForm extends PureComponent {
         const {
             orderId,
             promotionName,
-            participateTimeRange,
+            recordTimeRange, // 使用时间
+            activityTimeRange, // 领取时间
+            canceledTimeRange, // 作废时间
             orderState,
             paymentState,
             shippingStateCode,
@@ -54,8 +56,12 @@ class SearchForm extends PureComponent {
             orderState: this.getStatusFromCode(orderState),
             paymentState: this.getStatusFromCode(paymentState),
             shippingState: this.getStatusFromCode(shippingStateCode),
-            recordTimeStart: participateTimeRange.length > 1 ? participateTimeRange[0].valueOf() : '',
-            recordTimeEnd: participateTimeRange.length > 1 ? participateTimeRange[1].valueOf() : '',
+            recordTimeStart: recordTimeRange.length > 1 ? recordTimeRange[0].valueOf() : '',
+            recordTimeEnd: recordTimeRange.length > 1 ? recordTimeRange[1].valueOf() : '',
+            activityDateStart: activityTimeRange.length > 1 ? activityTimeRange[0].valueOf() : '',
+            activityDateEnd: activityTimeRange.length > 1 ? activityTimeRange[1].valueOf() : '',
+            canceledDateStart: canceledTimeRange.length > 1 ? canceledTimeRange[0].valueOf() : '',
+            canceledDateEnd: canceledTimeRange.length > 1 ? canceledTimeRange[1].valueOf() : '',
             franchiseeId,
             branchCompanyId: branchCompany.id
         });
@@ -63,16 +69,16 @@ class SearchForm extends PureComponent {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.onParticipateSearch(this.getSearchCondition());
+        this.props.onSearch(this.getSearchCondition());
     }
 
     handleReset = () => {
         this.props.form.resetFields();  // 清除当前查询条件
-        this.props.onParticipateReset();  // 通知父页面已清空
+        this.props.onReset();  // 通知父页面已清空
     }
 
     handleExport = () => {
-        this.props.onParticipateExport(this.getSearchCondition());   // 通知父组件导出数据
+        this.props.onExport(this.getSearchCondition());   // 通知父组件导出数据
     }
 
     render() {
@@ -136,7 +142,7 @@ class SearchForm extends PureComponent {
                             {page === 'unused' ?
                                 <Col span={8}>
                                     <FormItem label="领取时间">
-                                        {getFieldDecorator('participateTimeRange', {
+                                        {getFieldDecorator('activityTimeRange', {
                                             initialValue: []
                                         })(
                                             <RangePicker
@@ -146,13 +152,13 @@ class SearchForm extends PureComponent {
                                                 format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
                                                 placeholder={['开始时间', '结束时间']}
                                             />
-                                        )}
+                                            )}
                                     </FormItem>
                                 </Col> : null}
                             {page === 'used' ?
                                 <Col span={8}>
                                     <FormItem label="使用时间">
-                                        {getFieldDecorator('recordTime', {
+                                        {getFieldDecorator('recordTimeRange', {
                                             initialValue: []
                                         })(
                                             <RangePicker
@@ -162,10 +168,28 @@ class SearchForm extends PureComponent {
                                                 format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
                                                 placeholder={['开始时间', '结束时间']}
                                             />
-                                        )}
+                                            )}
                                     </FormItem>
                                 </Col>
                                 : null}
+                            {page === 'garbage' ?
+                                <Col span={8}>
+                                    <FormItem label="作废时间">
+                                        {getFieldDecorator('canceledTimeRange', {
+                                            initialValue: []
+                                        })(
+                                            <RangePicker
+                                                size="default"
+                                                className="manage-form-enterTime"
+                                                showTime={{ format: MINUTE_FORMAT }}
+                                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
+                                                placeholder={['开始时间', '结束时间']}
+                                            />
+                                            )}
+                                    </FormItem>
+                                </Col>
+                                : null
+                            }
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
                             <Col>
@@ -194,9 +218,9 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    onParticipateSearch: PropTypes.func,
-    onParticipateReset: PropTypes.func,
-    onParticipateExport: PropTypes.func,
+    onSearch: PropTypes.func,
+    onReset: PropTypes.func,
+    onExport: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any)

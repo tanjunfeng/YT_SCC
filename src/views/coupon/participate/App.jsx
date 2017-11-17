@@ -9,12 +9,20 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { Form } from 'antd';
 
+import { PAGE_SIZE } from '../../../constant';
 import TabGroup from './tabGroup';
 import SearchForm from './searchForm';
 
 class CouponsParticipate extends PureComponent {
     state = {
-        page: 'used' // 默认打开已使用优惠券
+        page: 'used', // 默认打开已使用优惠券
+        current: 1, // 当前页码
+        // 表单请求参数列表
+        param: {
+            promoId: this.PROMOTION_ID,
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        }
     }
 
     getSearchFormValue = () => {
@@ -25,18 +33,25 @@ class CouponsParticipate extends PureComponent {
         return Object.assign(value, { page });
     }
 
-    getTabGroupValue = () => {
-        const value = {};
-        const { page } = this.state;
-        return Object.assign(value, { page });
-    }
-
     PROMOTION_ID = this.props.match.params.id;
 
-    handleSearch = () => {
+    handleSearch = (param) => {
+        this.handleReset();
+        this.setState({
+            param: { ...param, ...this.state.param }
+        });
     }
 
     handleReset = () => {
+        // 重置检索条件
+        this.setState({
+            param: {
+                promoId: this.PROMOTION_ID,
+                pageNum: 1,
+                pageSize: PAGE_SIZE
+            },
+            current: 1
+        });
     }
 
     handleExport = () => {
@@ -60,7 +75,7 @@ class CouponsParticipate extends PureComponent {
                     <span style={{ paddingLeft: 10 }}>活动名称：{this.PROMOTION_NAME}</span>
                 </h2>
                 <TabGroup
-                    value={this.getTabGroupValue()}
+                    value={{ ...this.state }}
                     onChange={this.handleTabChange}
                 />
             </div>
