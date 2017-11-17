@@ -148,7 +148,6 @@ class TabGroup extends PureComponent {
 
     handlePageNumChange = (pageNum) => {
         this.props.onPageNumChange(pageNum);
-        this.query();
     }
 
     handleGarbage = () => {

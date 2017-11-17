@@ -377,27 +377,6 @@ const garbageParticipateColumns = [{
     dataIndex: 'promoId',
     key: 'promoId'
 }, {
-    title: '领取时间',
-    dataIndex: 'activityDate',
-    key: 'activityDate',
-    render: timestamp => Util.getTime(timestamp)
-}, {
-    title: '状态',
-    dataIndex: 'state',
-    key: 'state',
-    render: (text) => {
-        switch (text) {
-            case 'active':
-                return '已领取';
-            case 'used':
-                return '已使用';
-            case 'canceled':
-                return '已作废';
-            default:
-                return text;
-        }
-    }
-}, {
     title: '作废时间',
     dataIndex: 'modifyTime',
     key: 'modifyTime',

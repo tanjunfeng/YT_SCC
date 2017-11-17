@@ -16,7 +16,6 @@ import TabGroup from './tabGroup';
 class CouponsParticipate extends PureComponent {
     state = {
         page: 'used', // 默认打开已使用优惠券
-        current: 1, // 当前页码
         shouldSearch: false // 是否触发一次搜索
     }
 
@@ -24,13 +23,14 @@ class CouponsParticipate extends PureComponent {
      * 合并 param 和 condition 作为表格查询的条件
      */
     getTabGroupValue = () => {
-        const value = { ...this.state };
+        const value = { ...this.state, current: this.current };
         Object.assign(value, {
             param: { ...this.param }
         });
         return value;
     }
 
+    current = 1; // 当前页码
     // 表单请求参数列表
     param = {
         promoId: this.props.match.params.id,
@@ -62,9 +62,7 @@ class CouponsParticipate extends PureComponent {
             pageSize: PAGE_SIZE
         }
         // 重置检索条件
-        this.setState({
-            current: 1
-        });
+        this.current = 1;
     }
 
     /**
@@ -93,7 +91,15 @@ class CouponsParticipate extends PureComponent {
      */
     handleTabChange = (page) => {
         this.clearPageParams();
-        this.setState({ page });
+        // 重置检索条件
+        this.setState({
+            page,
+            shouldSearch: true
+        }, () => {
+            this.setState({
+                shouldSearch: false
+            });
+        });
     }
 
     /**
@@ -101,10 +107,13 @@ class CouponsParticipate extends PureComponent {
      */
     handlePageNumChange = (pageNum) => {
         Object.assign(this.param, {
-            pageNum
+            pageNum, current: pageNum
         });
         this.setState({
-            current: pageNum
+            shouldSearch: true
+        }, () => {
+            // 触发一次搜索之后子组件就会执行搜索，此时置为 false
+            this.setState({ shouldSearch: false });
         });
     }
 
