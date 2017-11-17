@@ -5,8 +5,8 @@
     "exception": null,
     "data": {
         "pageNum": 1,
-        "pageSize": 1,
-        "total": 3,
+        "pageSize": 15,
+        "total": 1,
         "data": [
             {
                 "id": "HD1710110",
@@ -40,7 +40,8 @@
                 "grantQty": null,
                 "usedQty": null,
                 "grantChannel": null,
-                "superposeUserDiscount": null
+                "superposeUserDiscount": null,
+                "couponType": "default"
             }
         ]
     },

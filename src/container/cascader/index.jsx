@@ -1,4 +1,3 @@
-import Category from './App';
-import './App.scss';
+import Category from './Category';
 
-export default Category;
+export { Category };

@@ -156,10 +156,14 @@ class OrderInformation extends PureComponent {
             ...manualSplitOrder
         }).then((res) => {
             if (res.code === 200) {
-                message.success('手动分组拆单成功!')
+                message.success(res.message)
             }
+        }).catch((res) => {
+            message.error(res.message)
         })
     }
+
+    getAmount = amount => (`￥${Number(amount).toFixed(2)}`);
 
     render() {
         const { orderDetailData } = this.props;
@@ -173,55 +177,71 @@ class OrderInformation extends PureComponent {
                         </div>
                         <div className="detail-message-body">
                             <Row>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">订单编号:</span>
                                     <span>{orderDetailData.id}</span>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">父订单编号:</span>
                                     <span>{orderDetailData.createdByOrderId}</span>
                                 </Col>
-                                <Col className="gutter-row" span={10}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">订单类型:</span>
                                     <span>{orderDetailData.orderTypeDesc}</span>
                                 </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">商品总金额:</span>
+                                    <span>{this.getAmount(orderDetailData.rawSubtotal)}</span>
+                                </Col>
                             </Row>
                             <Row>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">订单状态:</span>
                                     <span>{orderDetailData.orderStateDesc}</span>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">支付状态:</span>
                                     <span>{orderDetailData.paymentStateDesc}</span>
                                 </Col>
-                                <Col className="gutter-row" span={10}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">物流状态:</span>
                                     <span>{orderDetailData.shippingStateDesc}</span>
                                 </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">运费:</span>
+                                    <span>{this.getAmount(orderDetailData.shipping)}</span>
+                                </Col>
                             </Row>
                             <Row>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">子公司:</span>
                                     <span>{orderDetailData.branchCompanyName}</span>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">加盟商:</span>
                                     <span>{orderDetailData.franchiseeId}</span>
                                 </Col>
-                                <Col className="gutter-row" span={10}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">出货仓:</span>
                                     <span>{orderDetailData.branchCompanyArehouse}</span>
                                 </Col>
-                            </Row>
-                            <Row>
-                                <Col className="gutter-row" span={7}>
-                                    <span className="details-info-lable">电商单据编号:</span>
-                                    <span>{orderDetailData.thirdPartOrderNo}</span>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">优惠券优惠:</span>
+                                    <span>-{this.getAmount(orderDetailData.couponDiscountAmount)}</span>
                                 </Col>
                             </Row>
                             <Row>
-                                <Col className="gutter-row" span={14}>
+                                <Col className="gutter-row" span={18}>
+                                    <span className="details-info-lable">电商单据编号:</span>
+                                    <span>{orderDetailData.thirdPartOrderNo}</span>
+                                </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">活动优惠:</span>
+                                    <span>-{this.getAmount(orderDetailData.discount)}</span>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col className="gutter-row" span={12}>
                                     <span className="details-info-lable">备注:</span>
                                     <TextArea
                                         autosize={{ minRows: 3, maxRows: 6 }}
@@ -235,12 +255,16 @@ class OrderInformation extends PureComponent {
                                         }}
                                     />
                                 </Col>
-                                <Col className="gutter-row" span={7}>
-                                    <span className="details-info-lable">下单日期:</span>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">下单时间:</span>
                                     <span>
                                         {moment(parseInt(orderDetailData.creationTime, 10))
                                             .format(TIME_FORMAT)}
                                     </span>
+                                </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">实付金额:</span>
+                                    <span className="red-star">{this.getAmount(orderDetailData.total)}</span>
                                 </Col>
                             </Row>
                         </div>
@@ -254,11 +278,11 @@ class OrderInformation extends PureComponent {
                         </div>
                         <div className="detail-message-body">
                             <Row>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">收货人:</span>
                                     <span>{orderDetailData.consigneeName}</span>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">所在地区:</span>
                                     <span>{orderDetailData.province}</span>
                                     <span>{orderDetailData.city}</span>
@@ -270,11 +294,11 @@ class OrderInformation extends PureComponent {
                                 </Col>
                             </Row>
                             <Row>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">手机:</span>
                                     <span>{orderDetailData.cellphone}</span>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">固定电话:</span>
                                     <span>{orderDetailData.telephone}</span>
                                 </Col>

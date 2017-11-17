@@ -46,6 +46,10 @@ import queryCommodityList from './queryCommodityList';
 
 import queryWhiteList from './queryWhiteList';
 
+
+/* ********************销售管理************************* */
+import salesManagement from './salesManagement'
+
 export default Immutable.fromJS({
     pub,
     user,
@@ -74,5 +78,7 @@ export default Immutable.fromJS({
 
     queryCommodityList,
 
-    queryWhiteList
+    queryWhiteList,
+    // 销售管理
+    salesManagement,
 });

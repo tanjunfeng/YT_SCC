@@ -64,7 +64,17 @@ import {
     fetchPoRcvInit,
     updatePoRcvLine,
     updatePoRcvBasicinfo,
-    createPoRcv
+    createPoRcv,
+    fetchReturnMngList,
+    fetchReturnPoRcvDetail,
+    getRefundNo,
+    deleteBatchRefundOrder,
+    queryAuditPurchaseRefundList,
+    queryApprovalInfo,
+    queryAuditPurReList,
+    queryProcessDefinitions,
+    queryPoDetail,
+    approveRefund
 } from './procurement';
 
 // IBM
@@ -98,7 +108,7 @@ import storeAdList from './storeAdjustList';
 
 // 促销活动
 import { getPromotionList, createPromotion,
-    getPromotionDetail, fetchCouponsListAction, getCouponsDetail
+    getPromotionDetail, fetchCouponsListAction, getCouponsDetail, cancelCoupons
 } from './promotion';
 
 // 商品管理列表
@@ -110,6 +120,21 @@ import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './white
 
 // 根据库存实时拆单
 import { splitorderbyinventory, interfaceInventory } from './order';
+
+// 退货订单列表
+
+import {
+    returnGoodsList,
+    returnGoodsDetail,
+    returnGoodsDetailClearData,
+    returnGoodsListFormData,
+    returnGoodsOperation,
+    returnGoodsDetailSave,
+    returnGoodsListFormDataClear,
+    insertRefund,
+    returnDescriptionSave,
+    getExchangeGoodsListAction
+} from './salesManagement';
 
 export {
     fetchSupplierList,
@@ -194,6 +219,7 @@ export {
     getPromotionDetail,
     fetchCouponsListAction,
     getCouponsDetail,
+    cancelCoupons,
 
     // 根据条件分页查询商品清单，并排序
     queryCommodityList,
@@ -213,5 +239,35 @@ export {
 
     // 订单
     splitorderbyinventory,
-    interfaceInventory
+    interfaceInventory,
+    // 销售管理
+    returnGoodsList,
+    returnGoodsDetail,
+    returnGoodsDetailClearData,
+    returnGoodsListFormData,
+    returnGoodsOperation,
+    returnGoodsDetailSave,
+    returnDescriptionSave,
+    returnGoodsListFormDataClear,
+    // 采购退货列表
+    fetchReturnMngList,
+    // 采购退货详情
+    fetchReturnPoRcvDetail,
+    // 查询退货流水号
+    getRefundNo,
+    // 批量删除处于草稿状态的退货单
+    deleteBatchRefundOrder,
+    // 查询退货单审批列表
+    queryAuditPurchaseRefundList,
+    // 查看退货单审批意见
+    queryApprovalInfo,
+    // 查询退货单审批列表
+    queryAuditPurReList,
+    // 查询退货单审批流程
+    queryProcessDefinitions,
+    approveRefund,
+    queryPoDetail,
+    insertRefund,
+    // 换货列表
+    getExchangeGoodsListAction
 }
