@@ -301,6 +301,8 @@ export default {
     QUERY_PRO_DEFINITIONS: 'QUERY_PRO_DEFINITIONS',
     // 退货单审批
     APPROVE_REFUND: 'APPROVE_REFUND',
+    // 取消退货单审
+    CANCEL_REFUND: 'CANCEL_REFUND',
     // 查询退货流水号
     GET_REFUND_NO_ACTION: 'GET_REFUND_NO_ACTION',
     // 清除退货流水号
