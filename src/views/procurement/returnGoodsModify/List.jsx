@@ -201,6 +201,7 @@ class List extends Component {
         putRefundProducts: PropTypes.func,
         getFormData: PropTypes.func,
         returnLists: PropTypes.arrayOf(PropTypes.any),
+        onShowModal: PropTypes.func,
     }
 
     static defaultProps = {
@@ -504,7 +505,7 @@ class List extends Component {
                 this.saveOrSubmit(1)
                 break;
             case 'progress':
-
+                this.props.onShowModal(id)
                 break;
             default:
                 break;
