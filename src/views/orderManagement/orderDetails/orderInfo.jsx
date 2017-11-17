@@ -264,7 +264,7 @@ class OrderInformation extends PureComponent {
                                 </Col>
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">实付金额:</span>
-                                    <span className="red-star">{this.getAmount(orderDetailData.amount)}</span>
+                                    <span className="red-star">{this.getAmount(orderDetailData.total)}</span>
                                 </Col>
                             </Row>
                         </div>
