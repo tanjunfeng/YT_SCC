@@ -240,12 +240,11 @@ class List extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { returnLists, defaultValue, type } = nextProps;
-        console.log(returnLists, current);
         if (!is(fromJS(returnLists), fromJS(current))) {
             const { lists, orderId } = this.state;
             current = returnLists;
 
-            const newLists = getNewLists(lists, current, orderId);            
+            const newLists = getNewLists(lists, current, orderId);
 
             this.setState({
                 lists: newLists
@@ -343,7 +342,7 @@ class List extends Component {
     typeRender = (text, record) => {
         const keys = Object.keys(reason);
         const { purchaseOrderNo, productCode } = record;
-        
+
         return (
             <Select
                 defaultValue={reason[text] || '其他'}
@@ -598,7 +597,7 @@ class List extends Component {
         submit.totalRealRefundAmount = actualCount;
         // 合计实际退货金额
         submit.totalRealRefundMoney = actualMoneyCount;
-        
+
         return postService(submit)
     }
 

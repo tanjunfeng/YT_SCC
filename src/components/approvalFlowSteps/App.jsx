@@ -24,18 +24,23 @@ class OpinionSteps extends Component {
 
     render() {
         const { processDefinitions } = this.props;
-        let stepsList = 0;
-        processDefinitions.filter((item) => (
-            item.processAuditLog && stepsList++
-        ))
+        let stepsList = -1;
+        processDefinitions.forEach(item => {
+            if (item.processAuditLog !== null) {
+                stepsList++;
+            }
+        });
+        if (stepsList === -1) {
+            stepsList = 0;
+        }
         return (
-            <Steps current={stepsList} progressDot>
+            <Steps progressDot current={stepsList}>
                 {processDefinitions.map((item, index) => (
                     <Step
                         key={`toDo-${index}`}
                         title={item.processNodeName}
                         description={
-                            item.processAuditLog === null ? '不同意' : '同意'
+                            !item.processAuditLog || item.processAuditLog.auditResult !== 1 ? '未同意' : '同意'
                         }
                     />
                 ))}

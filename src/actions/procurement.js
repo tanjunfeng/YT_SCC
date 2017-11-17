@@ -37,6 +37,7 @@ import {
     batchCheckStorage as batchCheckStorageService,
     queryProcessDefinitions as ueryProcessDefinitionsService,
     approveRefund as approveRefundService,
+    cancelRefund as cancelRefundService,
     addRefundProducts
 } from '../service';
 import { ProcurementDt } from '../view-model';
@@ -583,6 +584,28 @@ export const queryProcessDefinitions = (params) => dispatch => (
         ueryProcessDefinitionsService(params)
             .then(res => {
                 dispatch(queryProcessDefinitionsAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 查询退货单审批流程
+ * @param {*} data
+ */
+const cancelRefundAction = (data) => ({
+    type: ActionType.CANCEL_REFUND,
+    payload: data
+});
+
+export const cancelRefund = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        cancelRefundService(params)
+            .then(res => {
+                dispatch(cancelRefundAction(res.data));
                 resolve(res);
             })
             .catch(err => {

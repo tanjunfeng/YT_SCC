@@ -92,13 +92,13 @@ export const exportPurchaseRefundList = '/pmPurchaseRefund/exportPurchaseRefundL
 export const exportPdf = '/pmPurchaseRefund/exportPdf';
 
 // 促销活动 - 下单打折 - 参与数据导出
-export const exportParticipateData = 'promotion/toExcel';
+export const exportParticipateData = '/promotion/toExcel';
 
 // 促销活动 - 优惠券 - 已使用参与数据导出
-export const exportParticipateData1 = '/coupon/queryCouponRecordListExcel';
+export const usedParticipateData = '/coupon/queryCouponRecordListExcel';
 
 // 促销活动 - 优惠券 - 未使用参与数据导出
-export const exportParticipateData2 = '/coupon/queryCouponActivityActiveListExcel';
+export const unusedParticipateData = '/coupon/queryCouponActivityActiveListExcel';
 
 /**
  * 登录 Api
@@ -842,7 +842,7 @@ export const queryAliveCouponsList = (params) => http.get('/coupon/queryAliveCou
 export const getCouponsDetail = (params) => http.get('/coupon/queryCouponsById', params);
 export const queryFranchiseeList = (params) => http.get('/franchisee/grantFranchisee', params);
 export const grantCoupon = (params) => http.post('/coupon/grantMutiQtyCoupon', params);
-export const invalidRecordList = (params) => http.post('/coupon/queryCouponActivityActiveList', params);
+export const garbageCouponParticipate = (params) => http.post('/coupon/queryCouponActivityActiveList', params);
 export const cancelCoupons = (params) => http.get('/coupon/cancelCoupons', params);
 
 /**
@@ -893,3 +893,5 @@ export const batchCheckStorage = params => http.post('/directStore/validateDirec
 export const queryProcessDefinitions = params => http.get('/pmPurchaseRefund/queryProcessDefinitions', params);
 // 退货单审批
 export const approveRefund = params => http.post('/pmPurchaseRefund/approveRefund', params);
+// 取消退货单
+export const cancelRefund = params => http.get('/pmPurchaseRefund/cancel', params);
