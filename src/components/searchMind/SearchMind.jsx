@@ -322,7 +322,8 @@ class SearchMind extends Component {
                     fetchError: 0,
                 });
             })
-            .catch(() => {
+            .catch(err => {
+                console.error(err);
                 this.setState({
                     type: TYPE.DEFAULT,
                     total: 0,

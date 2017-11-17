@@ -52,11 +52,16 @@ $promotionColWidth: 250px;
             margin-right: 8px;
             display: inline-block;
         }
-        .ywc-smind {
-            width: $promotionColWidth;
-        }
-        .ywc-smind-search-bar {
-            margin: 8px 0;
-        }
     }
+    .ywc-smind {
+        width: $promotionColWidth;
+    }
+    .ywc-smind-search-bar {
+        margin: 8px 0;
+    }
+}
+
+.Unused-button::after {
+    clear: both;
+    overflow: hidden;
 }

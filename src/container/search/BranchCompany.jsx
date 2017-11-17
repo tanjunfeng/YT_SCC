@@ -9,43 +9,42 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { pubFetchValueList } from '../../actions/pub';
 import SearchMind from '../../components/searchMind';
+import './BranchCompany.scss';
 
 @connect(() => ({}), dispatch => bindActionCreators({
-    pubFetchValueList,
+    pubFetchValueList
 }, dispatch))
 
-class SubCompanies extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.handleSubCompanyClear = this.handleSubCompanyClear.bind(this);
-        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-    }
-
+class BranchCompany extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        if (nextProps.value === '') {
+        if (nextProps.value.id === '') {
+            this.defaultValue = '';
             this.searchMind.reset();
         }
     }
 
+    defaultValue = '';
+
     /**
      * 子公司-清除
      */
-    handleSubCompanyClear() {
+    handleSubCompanyClear = () => {
         this.searchMind.reset();
-        this.props.onSubCompaniesClear();
+        this.props.onChange({ id: '', name: '' });
     }
 
     /**
      * 子公司-值清单
      */
     handleSubCompanyChoose = ({ record }) => {
-        this.props.onSubCompaniesChooesd(record.id);
+        this.props.onChange(record);
     }
 
     render() {
         return (
             <SearchMind
                 compKey="spId"
+                defaultValue={this.defaultValue}
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
                     // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodSell/findCompanyBaseInfo
@@ -65,7 +64,7 @@ class SubCompanies extends PureComponent {
                     {
                         title: '子公司id',
                         dataIndex: 'id',
-                        width: 98
+                        width: 68
                     }, {
                         title: '子公司名字',
                         dataIndex: 'name'
@@ -76,12 +75,11 @@ class SubCompanies extends PureComponent {
     }
 }
 
-SubCompanies.propTypes = {
+BranchCompany.propTypes = {
     disabled: PropTypes.bool,
     pubFetchValueList: PropTypes.func,
-    onSubCompaniesChooesd: PropTypes.func,
-    onSubCompaniesClear: PropTypes.func,
-    value: PropTypes.string
+    onChange: PropTypes.func,
+    value: PropTypes.objectOf(PropTypes.any)
 }
 
-export default SubCompanies;
+export default BranchCompany;

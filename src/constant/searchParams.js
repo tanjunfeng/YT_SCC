@@ -150,6 +150,51 @@ export const supplierTypeOptions = {
     }]
 }
 
+// 退货地点类型
+export const returnLocationType = {
+    defaultValue: '0',
+    data: [{
+        key: '0',
+        value: '请选择'
+    }, {
+        key: '1',
+        value: '仓库'
+    }, {
+        key: '2',
+        value: '门店'
+    }]
+}
+
+// 原因
+export const resons = {
+    defaultValue: '0',
+    data: [{
+        key: '0',
+        value: '请选择'
+    }, {
+        key: '1',
+        value: '破损'
+    }, {
+        key: '2',
+        value: '临期'
+    }, {
+        key: '3',
+        value: '库存剩余'
+    }, {
+        key: '4',
+        value: '其他'
+    }]
+}
+
+// 货币类型
+export const currencyTypes = {
+    defaultValue: '1',
+    data: [{
+        key: '1',
+        value: 'CNY'
+    }]
+}
+
 // 入驻-供应商状态
 export const firstSupplierStatusOptions = {
     defaultValue: '-1',
@@ -279,10 +324,10 @@ export const commodityStatusOptions = {
         key: '3',
         value: '暂停使用'
     },
-    // {
-    //     key: '4',
-    //     value: '停止使用'
-    // }
+        // {
+        //     key: '4',
+        //     value: '停止使用'
+        // }
     ]
 
 }
@@ -544,6 +589,9 @@ export const logisticsStatusOptions = {
     }, {
         key: 'WJS',
         value: '仓库拒收'
+    }, {
+        key: 'UJS',
+        value: '已拒签'
     }]
 }
 

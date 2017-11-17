@@ -54,7 +54,7 @@ class SteppedPrice extends PureComponent {
             this.initValue = [{
                 startNumber: nextProps.startNumber,
                 endNumber: nextProps.startNumber + 1,
-                price: null
+                price: nextProps.price
             }]
         }
     }
@@ -147,7 +147,7 @@ class SteppedPrice extends PureComponent {
                     <ul className={`${prefixCls}-content`}>
                         {
                             defaultValue.map((item, index) => {
-                                const { startNumber, endNumber, price } = item;
+                                const { startNumber, endNumber, price = null } = item;
                                 return (
                                     <InputItem
                                         {...this.props}
@@ -160,7 +160,7 @@ class SteppedPrice extends PureComponent {
                                         handleValueChange={this.handleValueChange}
                                         firstDefault={startNumber}
                                         scondDefault={endNumber}
-                                        resultDefault={this.props.isEdit ? null : price}
+                                        resultDefault={price}
                                     />
                                 )
                             })
@@ -180,6 +180,7 @@ SteppedPrice.propTypes = {
     isEdit: PropTypes.bool,
     maxLength: PropTypes.number,
     startNumber: PropTypes.number,
+    price: PropTypes.number
 }
 
 SteppedPrice.defaultProps = {

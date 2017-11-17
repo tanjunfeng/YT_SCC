@@ -5,6 +5,7 @@ import { message, Form, Modal, Input, Select } from 'antd';
 import Common from './common';
 import FileCut from '../../fileCut';
 import { updateQuickNavigation, uploadImageBase64Data } from '../../../../service';
+import LinkType from '../../common/linkType';
 
 const defaultIcon = require('../../../../images/default/132x132.png');
 
@@ -73,12 +74,14 @@ class QuickItem extends Component {
 
     saveItems(values, url) {
         const { id, navigationPosition, picAddress } = this.current;
-        const { linkAddress, ...params } = values;
+        const { chooseLink, ...params } = values;
         updateQuickNavigation({
             id,
             navigationPosition,
             picAddress: url ? url : picAddress,
-            linkAddress: encodeURI(linkAddress),
+            linkAddress: chooseLink.link,
+            goodsId: parseInt(chooseLink.selected, 10) === 1 ? chooseLink.link : null,
+            navigationType: chooseLink.selected,
             ...params
         }).then(() => {
             this.setState({
@@ -162,71 +165,29 @@ class QuickItem extends Component {
                                         className="manage-form-input"
                                         placeholder="名称"
                                     />
-                                    )}
+                                )}
                                 <span className="change-form-tip">（说明：2~4个汉字）</span>
                             </FormItem>
                             <FormItem className="manage-form-item">
-                                <span className="manage-form-label quick-form-label">类型：</span>
-                                {getFieldDecorator('navigationType', {
+                                {getFieldDecorator('chooseLink', {
                                     rules: [{
-                                        required: true,
-                                        message: '请选择类型'
+                                        required: true
+                                    }, {
+                                        validator: (rule, value, callback) => {
+                                            if (!value.link) {
+                                                callback('请输入链接')
+                                            }
+                                            callback()
+                                        }
                                     }],
-                                    initialValue: `${current.navigationType}`
+                                    initialValue: {
+                                        selected: current.navigationType ? `${current.navigationType}` : '1',
+                                        link: parseInt(current.navigationType, 10) === 1 ? current.goodsId : current.linkAddress
+                                    }
                                 })(
-                                    <Select
-                                        style={{ width: '153px' }}
-                                        size="default"
-                                        placeholder="请选择"
-                                        onChange={this.handleLinkStyleChange}
-                                    >
-                                        <Option value="1">商品链接</Option>
-                                        <Option value="2">页面链接</Option>
-                                    </Select>
+                                    <LinkType />
                                 )}
                             </FormItem>
-                            {
-                                `${this.state.select}` === '1'
-                                ? <div>
-                                    <FormItem className="home-style-modal-input-item">
-                                        <span>商品编号：</span>
-                                        {getFieldDecorator('goodsId', {
-                                            rules: [{
-                                                required: true,
-                                                message: '请输入商品编号'
-                                            }, {
-                                                max: 20, message: '最大长度20位'
-                                            }, {
-                                                pattern: /^[^\u4e00-\u9fa5]+$/,
-                                                message: '不能包含中文'
-                                            }],
-                                            initialValue: current.goodsId
-                                        })(
-                                            <Input className="home-style-url" type="text" placeholder="请输入商品编号" />
-                                        )}
-                                    </FormItem>
-                                </div>
-                                : <div>
-                                    <FormItem className="application-form-item">
-                                        <span className="application-modal-label">页面链接：</span>
-                                        {getFieldDecorator('linkAddress', {
-                                            rules: [
-                                                { required: true, message: '请输入页面链接', whitespace: true },
-                                                {/* { pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'} */}
-                                            ],
-                                            initialValue: current.linkAddress ? decodeURI(current.linkAddress) : ''
-                                        })(
-                                            <Input
-                                                onChange={this.handleTextChange}
-                                                type="textarea"
-                                                placeholder="请输入页面链接"
-                                                className="application-modal-textarea"
-                                                autosize={{ minRows: 2, maxRows: 8 }}
-                                            />
-                                        )}
-                                    </FormItem>
-                                </div>
-                            }
                             <FormItem className={
                                 classnames('manage-form-item')
                             }>

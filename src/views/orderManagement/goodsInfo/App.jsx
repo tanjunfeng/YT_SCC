@@ -129,7 +129,7 @@ class GoodsInfo extends PureComponent {
             // 避免出现 NaN 值
             value = record.quantityLeft;
         }
-        const res = `${value}，￥${value * record.itemPrice.salePrice}`;
+        const res = `${value}，￥${(value * record.itemPrice.salePrice).toFixed(2)}`;
         return res;
     }
 
@@ -158,14 +158,14 @@ class GoodsInfo extends PureComponent {
                 max={record.quantityLeft}
                 onChange={this.onCellChange(record)}
             />
-            <span className="sub-total">￥{(value) * record.itemPrice.salePrice}</span>
+            <span className="sub-total">￥{(value * record.itemPrice.salePrice).toFixed(2)}</span>
         </div>);
         return res;
     }
 
     render() {
         const { value } = this.props;
-        const { countOfItem, amount } = value;
+        const { countOfItem, rawSubtotal } = value;
         return (
             <div className="detail-message add-sub-orders">
                 <div className="detail-message-header">
@@ -190,7 +190,7 @@ class GoodsInfo extends PureComponent {
                     </span>
                     <span className="table-statistics-item">
                         <span>总金额： ￥</span>
-                        <span className="red">{amount}</span>
+                        <span className="red">{Number(rawSubtotal).toFixed(2)}</span>
                     </span>
                 </div>
             </div>
