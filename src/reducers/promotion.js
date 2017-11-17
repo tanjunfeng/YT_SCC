@@ -17,7 +17,8 @@ const initState = fromJS({
     categories: [],  // 品类列表
     promotionDetail: {},   // 促销详情
     couponsDetail: {}, // 优惠券详情
-    franchiseeList: {}  // 加盟供应商列表
+    franchiseeList: {},  // 加盟供应商列表
+    processList: {} // 流程管理列表
 });
 
 export default function (state = initState, action) {
@@ -29,6 +30,9 @@ export default function (state = initState, action) {
         case ActionType.CLEAR_COUPONS_LIST:
         case ActionType.FETCHA_ALIVE_COUPONS_LIST:
             return state.set('couponsList', fromJS(action.payload));
+        case ActionType.FETCH_PROCESS_LIST:
+        case ActionType.CLEAR_PROCESS_LIST:
+            return state.set('processList', fromJS(action.payload));
         case ActionType.FETCH_FRANCHISEE_LIST:
         case ActionType.CLEAR_FRANCHISEE_LIST:
             return state.set('franchiseeList', fromJS(action.payload));

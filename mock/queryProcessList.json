@@ -1,0 +1,37 @@
+{
+    "timestamp": 1505985901605,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data":{
+        "overviewData": {
+            "pageNum": 1,
+            "pageSize": 1,
+            "total": 3,
+            "data": [
+                {
+                    "id": "HD1710110",
+                    "name": "123",
+                    "deploymentTime": 1505893364000
+                }
+            ]
+        },
+        "detailData": {
+            "pageNum": 1,
+            "pageSize": 1,
+            "total": 3,
+            "data": [
+                {
+                    "id": "12323",
+                    "name": "流程1",
+                    "key": "234345r",
+                    "version": "2342.2342",
+                    "resourceName": "流程1",
+                    "diagramResourceName": "規則名",
+                    "deploymentId": "2342"
+                }
+            ]
+        }
+    },
+    "success": true
+}

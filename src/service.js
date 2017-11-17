@@ -807,3 +807,6 @@ export const grantCoupon = (params) => http.post('/coupon/grantCoupon', params);
 
 // 查询品类
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
+
+// 流程管理
+export const queryProcessList = (params) => http.get('/process/queryProcessList', params);

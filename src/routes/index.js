@@ -90,6 +90,9 @@ import CouponsParticipate from 'bundle-loader?lazy!../views/coupon/participate';
 import GrantCouponList from 'bundle-loader?lazy!../views/grantCoupons/mngList';
 import grantCouponDetail from 'bundle-loader?lazy!../views/grantCoupons/detail';
 
+// 流程管理
+import ProcessList from 'bundle-loader?lazy!../views/process/processList';
+
 /* eslint-enable */
 
 /**
@@ -724,6 +727,29 @@ const routes = [
                             path="/grantCoupons/detail/:id"
                             exact
                             render={() => (<Bundle load={grantCouponDetail}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                    </Switch>
+                )
+            }
+        ]
+    },
+    {
+        // 流程管理
+        key: 'lcgl',
+        iconType: 'area-chart',
+        routes: [
+            {
+                // 流程列表
+                path: '/process',
+                parent: 'lcgl',
+                key: 'lclb',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/process"
+                            exact
+                            render={() => (<Bundle load={ProcessList}>
                                 {(App) => <App />}</Bundle>)}
                         />
                     </Switch>
