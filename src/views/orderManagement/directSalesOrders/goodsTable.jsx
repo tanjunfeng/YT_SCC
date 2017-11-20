@@ -125,7 +125,7 @@ class GoodsTable extends PureComponent {
             }
             Object.assign(total, {
                 rows: total.rows + 1,
-                quantities: total.quantities + goods.quantity,
+                quantities: total.quantities + quantity,
                 amount: total.amount + amount
             });
         });
