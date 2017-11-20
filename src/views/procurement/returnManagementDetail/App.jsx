@@ -3,7 +3,7 @@
  * @Description: 采购退货详情页
  * @CreateDate: 2017-10-27 11:26:16
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-16 17:13:10
+ * @Last Modified time: 2017-11-20 13:50:55
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -274,24 +274,10 @@ class ReturnManagementDetail extends PureComponent {
                                     <span className="ant-form-item-label search-mind-label">货币类型</span>
                                     <span className="text">{poReturn.currencyCode || '-'}</span>
                                 </Col>
-                                <Col className="pay-col" span={24}>
+                                <Col span={6}>
                                     {/* 备注 */}
-                                    <FormItem>
-                                        <div style={{display: 'flex'}}>
-                                            <div className="sc-form-item-label" style={{textAlign: 'right', width: 123}}>备注: </div>
-                                            <TextArea
-                                                autosize={{ minRows: 4, maxRows: 6 }}
-                                                value={this.state.remark}
-                                                style={{resize: 'none' }}
-                                                maxLength="250"
-                                                onChange={(e) => {
-                                                    this.setState({
-                                                        remark: e.target.value
-                                                    })
-                                                }}
-                                            />
-                                        </div>
-                                    </FormItem>
+                                    <span className="ant-form-item-label search-mind-label">备注</span>
+                                    <span className="text">{poReturn.remark || '-'}</span>
                                 </Col>
                             </Row>
                             <Row >
