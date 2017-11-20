@@ -148,9 +148,11 @@ class TabGroup extends PureComponent {
 
     handleGarbage = () => {
         const { promotionIds } = this.state;
+        const param = this.props.value.param;
         this.props.cancelCoupons({ couponActivityIds: promotionIds.join(',') }).then((res) => {
             if (res.code === 200) {
                 message.success(res.message);
+                Object.assign(param, { pageNum: 1 });
                 this.query();
             }
         })
