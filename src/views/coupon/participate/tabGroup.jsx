@@ -117,26 +117,17 @@ class TabGroup extends PureComponent {
             case 'used':
                 this.props.clearUnUsedCouponPatipate();
                 this.props.clearGarbageCouponPatipate();
-                this.props.getUsedCouponParticipate(param).then((data) => {
-                    const { pageNum, pageSize } = data.data;
-                    Object.assign(param, { pageNum, pageSize });
-                });
+                this.props.getUsedCouponParticipate(param);
                 break;
             case 'unused':
                 this.props.clearUsedCouponPatipate();
                 this.props.clearGarbageCouponPatipate();
-                this.props.getUnUsedCouponParticipate(param).then((data) => {
-                    const { pageNum, pageSize } = data.data;
-                    Object.assign(param, { pageNum, pageSize });
-                });
+                this.props.getUnUsedCouponParticipate(param);
                 break;
             case 'garbage':
                 this.props.clearUsedCouponPatipate();
                 this.props.clearUnUsedCouponPatipate();
-                this.props.getGarbageCouponParticipate(param).then((data) => {
-                    const { pageNum, pageSize } = data.data;
-                    Object.assign(param, { pageNum, pageSize });
-                });
+                this.props.getGarbageCouponParticipate(param);
                 break;
             default: break;
         }
