@@ -203,7 +203,7 @@ class RefundModal extends PureComponent {
                                         })(
                                             <InputNumber
                                                 min={0.00}
-                                                max={this.props.value}
+                                                max={this.props.totalPaidAmount}
                                                 step={0.01}
                                             />
                                             )}
@@ -247,7 +247,8 @@ RefundModal.propTypes = {
     payAuditModalVisible: PropTypes.bool,
     modifyCauseModalVisible: PropTypes.func,
     totalAmount: PropTypes.number,
-    totalPaidAmount: PropTypes.number
+    totalPaidAmount: PropTypes.number,
+    value: PropTypes.number,
 }
 
 RefundModal.defaultProps = {
