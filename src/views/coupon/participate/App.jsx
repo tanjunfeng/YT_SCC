@@ -90,15 +90,25 @@ class CouponsParticipate extends PureComponent {
             promoId: this.PROMOTION_ID,
             ...param
         };
+        const conditionUnused = {
+            promoId: this.PROMOTION_ID,
+            queryType: 1,
+            ...param
+        };
+        const conditionGarbage = {
+            promoId: this.PROMOTION_ID,
+            queryType: 2,
+            ...param
+        };
         switch (this.state.page) {
             case 'used':
                 Util.exportExcel(usedParticipateData, condition);
                 break;
             case 'unused':
-                Util.exportExcel(unusedParticipateData, { condition, queryType: 1 });
+                Util.exportExcel(unusedParticipateData, conditionUnused);
                 break;
             case 'garbage':
-                Util.exportExcel(unusedParticipateData, { condition, queryType: 2 });
+                Util.exportExcel(unusedParticipateData, conditionGarbage);
                 break;
             default: break;
         }
