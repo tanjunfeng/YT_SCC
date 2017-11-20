@@ -199,11 +199,11 @@ class RefundModal extends PureComponent {
                                             退款金额:
                                         </span>
                                         {getFieldDecorator('inputNumber', {
-                                            initialValue: this.props.totalPaidAmount
+                                            initialValue: this.props.value
                                         })(
                                             <InputNumber
                                                 min={0.00}
-                                                max={this.props.totalPaidAmount}
+                                                max={this.props.value}
                                                 step={0.01}
                                             />
                                             )}
