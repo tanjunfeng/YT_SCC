@@ -88,15 +88,18 @@ class CouponsParticipate extends PureComponent {
     handleExport = (param) => {
         const condition = {
             promoId: this.PROMOTION_ID,
+            ...this.param,
             ...param
         };
         const conditionUnused = {
             promoId: this.PROMOTION_ID,
+            ...this.param,
             queryType: 1,
             ...param
         };
         const conditionGarbage = {
             promoId: this.PROMOTION_ID,
+            ...this.param,
             queryType: 2,
             ...param
         };
