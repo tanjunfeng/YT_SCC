@@ -420,7 +420,7 @@ const directSalesgoodsColumns = [{
 }, {
     title: '数量',
     dataIndex: 'quantity',
-    width: 120
+    width: 130
 }, {
     title: '单价',
     dataIndex: 'salePrice',

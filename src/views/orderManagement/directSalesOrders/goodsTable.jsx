@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import Utils from '../../../util/util';
 import { directSalesgoodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
-import { sortList } from './helper';
+// import { sortList } from './helper';
 
 class GoodsTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
@@ -25,7 +25,7 @@ class GoodsTable extends PureComponent {
         if (importList.length !== 0) {
             const goodsList = Utils.merge(
                 this.props.value.goodsList,
-                [...sortList(importList)],
+                importList,
                 'productCode');
             this.noticeChanges(goodsList);
         }
@@ -55,25 +55,15 @@ class GoodsTable extends PureComponent {
      * @param {*number} dataIndex 单元格修改时的索引值
      */
     noticeChanges = (goodsList, dataIndex = -1) => {
-        this.checkMultiple(goodsList); // 检查当前数量是否合法
         const total = {
             dataIndex, // 单个商品修改的索引
             rows: 0, // 记录行数
             quantities: 0, // 订购数量
             amount: 0 // 金额总计
         };
-        goodsList.forEach(goods => {
-            let amount = 0;
-            if (typeof goods.salePrice === 'number') {
-                amount = goods.quantity * goods.salePrice;
-            }
-            Object.assign(total, {
-                rows: total.rows + 1,
-                quantities: total.quantities + goods.quantity,
-                amount: total.amount + amount
-            });
-        });
-        this.props.onChange([...goodsList], total);
+        // 检查当前数量是否合法以及把不合法的数据前置以及计算新的total
+        const newGoodList = this.checkMultiple(goodsList, total);
+        this.props.onChange([...newGoodList], total);
     }
 
     /**
@@ -86,7 +76,7 @@ class GoodsTable extends PureComponent {
             isValid = false;
         }
         if (!goods.isMultiple) {
-            errors.push('非内装数整数倍');
+            errors.push(`非内装数${goods.salesInsideNumber}的整数倍`);
             isValid = false;
         }
         return isValid;
@@ -111,16 +101,35 @@ class GoodsTable extends PureComponent {
      *
      * @returns {*object} goodsList 商品列表
      */
-    checkMultiple = goodsList => {
+    checkMultiple = (goodsList, total) => {
+        const frontList = [];
+        const backList = [];
         goodsList.forEach(goods => {
-            const { quantity, salesInsideNumber, sellFullCase } = goods;
+            const { quantity, salesInsideNumber, sellFullCase, salePrice } = goods;
             let isMultiple = true;
             // 不按整箱销售时，判断当前所填数量是否是内装数量的整数倍
             if (sellFullCase === 0 && quantity % salesInsideNumber > 0) {
                 isMultiple = false;
             }
             Object.assign(goods, { isMultiple });
+            // 整理顺序，将不合法的前置，合法的后置
+            if (!goods.isMultiple || !goods.enough) {
+                frontList.push(goods);
+            } else {
+                backList.push(goods);
+            }
+            // 处理total
+            let amount = 0;
+            if (typeof salePrice === 'number') {
+                amount = quantity * salePrice;
+            }
+            Object.assign(total, {
+                rows: total.rows + 1,
+                quantities: total.quantities + quantity,
+                amount: total.amount + amount
+            });
         });
+        return frontList.concat(backList)
     }
 
     renderNumber = (text, record) => {

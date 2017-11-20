@@ -5,9 +5,90 @@
     "exception": null,
     "data": {
         "pageNum": 1,
-        "pageSize": 5,
-        "total": 20,
+        "pageSize": 20,
+        "total": 40,
         "data": [
+            {
+                "id": 577,
+                "branchCompanyName": "湖南子公司",
+                "franchiseeId": "jms_000012",
+                "franchinessController": "长沙市望城区望联家家福超市",
+                "storeId": "A000012",
+                "storeName": "长沙市望城区望联家家福超市",
+                "promotionName": "alert</script>",
+                "promoId": "67217",
+                "activityDate": 1506430749000,
+                "state": "active"
+            },{
+                "id": 576,
+                "branchCompanyName": "湖南子公司",
+                "franchiseeId": "jms_000012",
+                "franchinessController": "长沙市望城区望联家家福超市",
+                "storeId": "A000012",
+                "storeName": "长沙市望城区望联家家福超市",
+                "promotionName": "alert</script>",
+                "promoId": "67217",
+                "activityDate": 1506430749000,
+                "state": "active"
+            },{
+                "id": 575,
+                "branchCompanyName": "湖南子公司",
+                "franchiseeId": "jms_000012",
+                "franchinessController": "长沙市望城区望联家家福超市",
+                "storeId": "A000012",
+                "storeName": "长沙市望城区望联家家福超市",
+                "promotionName": "alert</script>",
+                "promoId": "67217",
+                "activityDate": 1506430749000,
+                "state": "active"
+            },{
+                "id": 574,
+                "branchCompanyName": "湖南子公司",
+                "franchiseeId": "jms_000012",
+                "franchinessController": "长沙市望城区望联家家福超市",
+                "storeId": "A000012",
+                "storeName": "长沙市望城区望联家家福超市",
+                "promotionName": "alert</script>",
+                "promoId": "67217",
+                "activityDate": 1506430749000,
+                "state": "active"
+            },
+            {
+                "id": 573,
+                "branchCompanyName": "湖南子公司",
+                "franchiseeId": "jms_000012",
+                "franchinessController": "长沙市望城区望联家家福超市",
+                "storeId": "A000012",
+                "storeName": "长沙市望城区望联家家福超市",
+                "promotionName": "alert</script>",
+                "promoId": "67217",
+                "activityDate": 1506430749000,
+                "state": "active"
+            },
+            {
+                "id": 572,
+                "branchCompanyName": "湖南子公司",
+                "franchiseeId": "jms_000012",
+                "franchinessController": "长沙市望城区望联家家福超市",
+                "storeId": "A000012",
+                "storeName": "长沙市望城区望联家家福超市",
+                "promotionName": "alert</script>",
+                "promoId": "67217",
+                "activityDate": 1506430749000,
+                "state": "active"
+            },
+            {
+                "id": 571,
+                "branchCompanyName": "湖南子公司",
+                "franchiseeId": "jms_000012",
+                "franchinessController": "长沙市望城区望联家家福超市",
+                "storeId": "A000012",
+                "storeName": "长沙市望城区望联家家福超市",
+                "promotionName": "alert</script>",
+                "promoId": "67217",
+                "activityDate": 1506430749000,
+                "state": "active"
+            },
             {
                 "id": 570,
                 "branchCompanyName": "湖南子公司",
