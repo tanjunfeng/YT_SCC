@@ -259,6 +259,7 @@ class PoRcvMngList extends PureComponent {
      * 重置检索条件
      */
     handleResetValue() {
+        this.current = 1;
         // 重置检索条件
         this.searchParams = {};
         // 重置form
@@ -380,6 +381,7 @@ class PoRcvMngList extends PureComponent {
      * 查询收货单管理列表
      */
     handleSearch() {
+        this.current = 1;
         // 编辑查询条件
         this.editSearchParams();
         // 查询收货单单列表
