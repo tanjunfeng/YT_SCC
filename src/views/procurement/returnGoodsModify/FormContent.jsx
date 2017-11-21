@@ -122,7 +122,7 @@ class FormContent extends PureComponent {
 
     handleAdressChoose = (data) => {
         const { record } = data;
-        this.submit.spAdrId = record.branchCompanyId;
+        this.submit.spAdrId = record.spAdrid;
         this.submit.spAdrNo = record.providerNo;
         this.submit.spAdrName = record.providerName;
     }

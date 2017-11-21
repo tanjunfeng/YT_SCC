@@ -88,7 +88,12 @@ class DirectSalesOrders extends PureComponent {
             storeId,
             branchCompanyId,
             deliveryWarehouseCode,
-            isSubmitDisabled: false
+            isSubmitDisabled: false,
+            total: {
+                rows: 0, // 记录行数
+                quantities: 0, // 订购数量
+                amount: 0 // 金额总计
+            }
         });
         this.handleClear();
     }
