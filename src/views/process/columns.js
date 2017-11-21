@@ -7,7 +7,7 @@
  */
 /**
  * @file columns.js
- * @author taoqiyu
+ * @author chenghaojie
  *
  * 促销活动列表
  */
