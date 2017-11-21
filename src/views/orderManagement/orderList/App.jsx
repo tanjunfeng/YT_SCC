@@ -17,8 +17,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import Utils from '../../../util/util';
-import SearchMind from '../../../components/searchMind';
-import { BranchCompany } from '../../../container/search';
+import { BranchCompany, Franchisee } from '../../../container/search';
 import {
     orderTypeOptions,
     orderStatusOptions,
@@ -34,7 +33,6 @@ import {
     modifyResendOrder,
     modifyApprovalOrder
 } from '../../../actions/order';
-import { pubFetchValueList } from '../../../actions/pub';
 import { DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
 import { orderListColumns as columns } from '../columns';
 
@@ -53,26 +51,23 @@ const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
     }),
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
-        fetchOrderList,
-        pubFetchValueList
+        fetchOrderList
     }, dispatch)
 )
 class OrderManagementList extends Component {
     constructor(props) {
         super(props);
-        this.onEnterTimeChange = ::this.onEnterTimeChange;
-        this.handleOrderBatchReview = ::this.handleOrderBatchReview;
-        this.handleOrderBatchCancel = ::this.handleOrderBatchCancel;
-        this.handleOrderSearch = ::this.handleOrderSearch;
-        this.handleOrderReset = ::this.handleOrderReset;
-        this.handleOrderOutput = ::this.handleOrderOutput;
-        this.handleJoiningChoose = ::this.handleJoiningChoose;
-        this.handleJoiningClear = ::this.handleJoiningClear;
-        this.handlePaginationChange = ::this.handlePaginationChange;
-        this.orderTypeSelect = ::this.orderTypeSelect;
-        this.getSearchData = ::this.getSearchData;
+        this.onEnterTimeChange = :: this.onEnterTimeChange;
+        this.handleOrderBatchReview = :: this.handleOrderBatchReview;
+        this.handleOrderBatchCancel = :: this.handleOrderBatchCancel;
+        this.handleOrderSearch = :: this.handleOrderSearch;
+        this.handleOrderReset = :: this.handleOrderReset;
+        this.handleOrderOutput = :: this.handleOrderOutput;
+        this.handlePaginationChange = :: this.handlePaginationChange;
+        this.orderTypeSelect = :: this.orderTypeSelect;
+        this.getSearchData = :: this.getSearchData;
         this.joiningSearchMind = null;
-        this.renderOperation = ::this.renderOperation;
+        this.renderOperation = :: this.renderOperation;
         this.searchData = {};
         this.current = 1;
         this.state = {
@@ -129,10 +124,9 @@ class OrderManagementList extends Component {
             cellphone,
             shippingState,
             thirdPartOrderNo,
-            branchCompany
+            branchCompany,
+            franchisee
         } = this.props.form.getFieldsValue();
-
-        const { franchiseeId } = this.state;
         const { submitStartTime, submitEndTime } = this.state.time;
         this.current = 1;
         this.searchData = {
@@ -142,7 +136,7 @@ class OrderManagementList extends Component {
             paymentState: paymentState === 'ALL' ? null : paymentState,
             cellphone,
             shippingState: shippingState === 'ALL' ? null : shippingState,
-            franchiseeId,
+            franchiseeId: franchisee.franchiseeId,
             branchCompanyId: branchCompany.id,
             submitStartTime,
             thirdPartOrderNo,
@@ -196,24 +190,6 @@ class OrderManagementList extends Component {
     }
 
     /**
-     * 加盟商-值清单
-     */
-    handleJoiningChoose = ({ record }) => {
-        this.setState({
-            franchiseeId: record.franchiseeId,
-        });
-    }
-
-    /**
-     * 加盟商-清除
-     */
-    handleJoiningClear() {
-        this.setState({
-            franchiseeId: null,
-        });
-    }
-
-    /**
      * 批量审核
      */
     handleOrderBatchReview() {
@@ -260,7 +236,6 @@ class OrderManagementList extends Component {
                 submitEndTime: todayDate,
             }
         });
-        this.joiningSearchMind.handleClear();
         this.props.form.resetFields();
     }
 
@@ -479,42 +454,14 @@ class OrderManagementList extends Component {
                                 </Col>
                                 <Col className="gutter-row" span={8}>
                                     {/* 加盟商 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">加盟商</span>
-                                            <SearchMind
-                                                rowKey="franchiseeId"
-                                                compKey="search-mind-joining"
-                                                ref={ref => { this.joiningSearchMind = ref }}
-                                                fetch={(params) =>
-                                                    this.props.pubFetchValueList({
-                                                        param: params.value,
-                                                        pageNum: params.pagination.current || 1,
-                                                        pageSize: params.pagination.pageSize
-                                                    }, 'getFranchiseeInfo')
-                                                }
-                                                onChoosed={this.handleJoiningChoose}
-                                                onClear={this.handleJoiningClear}
-                                                renderChoosedInputRaw={(row) => (
-                                                    <div>
-                                                        {row.franchiseeId} - {row.franchiseeName}
-                                                    </div>
-                                                )}
-                                                pageSize={6}
-                                                columns={[
-                                                    {
-                                                        title: '加盟商id',
-                                                        dataIndex: 'franchiseeId',
-                                                        width: 98
-                                                    }, {
-                                                        title: '加盟商名字',
-                                                        dataIndex: 'franchiseeName',
-                                                        width: 140
-                                                    }
-                                                ]}
-                                            />
-                                        </div>
-                                    </FormItem>
+                                    <div>
+                                        <span className="sc-form-item-label">加盟商</span>
+                                        <FormItem>
+                                            {getFieldDecorator('franchisee', {
+                                                initialValue: { franchiseeId: '', franchiseeName: '' }
+                                            })(<Franchisee />)}
+                                        </FormItem>
+                                    </div>
                                 </Col>
                                 <Col className="gutter-row" span={8}>
                                     <FormItem>
@@ -675,11 +622,7 @@ OrderManagementList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     orderListData: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
-    fetchOrderList: PropTypes.func,
-    pubFetchValueList: PropTypes.func
-}
-
-OrderManagementList.defaultProps = {
+    fetchOrderList: PropTypes.func
 }
 
 export default withRouter(Form.create()(OrderManagementList));
