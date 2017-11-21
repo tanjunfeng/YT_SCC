@@ -20,7 +20,7 @@ $whiteListConfigurationColWidth: 250px;
     }
 }
 
-.whiteListConfiguration {
+.white-list {
     .ant-form-item-label {
         width: 80px;
         .sc-form-item-label {
@@ -39,6 +39,10 @@ $whiteListConfigurationColWidth: 250px;
             position: relative;
             top: -0.5px;
         }
+    }
+    .ywc-smind-search-bar {
+        position: relative;
+        top: 4px;
     }
     .row {
         display: flex;
@@ -60,7 +64,7 @@ $whiteListConfigurationColWidth: 250px;
         }
     }
 }
-.whiteListConfiguration-data-pic{
+.white-list-data-pic{
     height: 30px;
     display: inline-block;
     vertical-align: bottom;

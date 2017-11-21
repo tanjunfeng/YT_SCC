@@ -139,7 +139,7 @@ class SearchForm extends PureComponent {
                         </Row>
                         <Row gutter={40}>
                             {page === 'unused' ?
-                                <Col span={8}>
+                                <Col span={16}>
                                     <FormItem label="领取时间">
                                         {getFieldDecorator('activityTimeRange', {
                                             initialValue: []
@@ -155,7 +155,7 @@ class SearchForm extends PureComponent {
                                     </FormItem>
                                 </Col> : null}
                             {page === 'used' ?
-                                <Col span={8}>
+                                <Col span={16}>
                                     <FormItem label="使用时间">
                                         {getFieldDecorator('recordTimeRange', {
                                             initialValue: []
@@ -172,7 +172,7 @@ class SearchForm extends PureComponent {
                                 </Col>
                                 : null}
                             {page === 'garbage' ?
-                                <Col span={8}>
+                                <Col span={16}>
                                     <FormItem label="作废时间">
                                         {getFieldDecorator('canceledTimeRange', {
                                             initialValue: []

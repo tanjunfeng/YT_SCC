@@ -347,7 +347,7 @@ class SearchForm extends PureComponent {
                         </Col>
                     </Row>
                     <Row gutter={40} type="flex" justify="end">
-                        <Col span={8} className="tr">
+                        <Col span={16} className="tr">
                             <FormItem>
                                 <Button
                                     type="primary"

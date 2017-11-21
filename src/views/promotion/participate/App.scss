@@ -1,4 +1,4 @@
-$promotionColWidth: 250px;
+$promotionColWidth: 210px;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -54,7 +54,7 @@ $promotionColWidth: 250px;
         }
     }
     .ywc-smind {
-        width: $promotionColWidth;
+        width: $promotionColWidth !important;
     }
     .ywc-smind-search-bar {
         margin: 8px 0;
