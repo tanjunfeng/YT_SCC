@@ -16,11 +16,10 @@ import {
 } from 'antd';
 import moment from 'moment';
 import Util from '../../../util/util';
-import SearchMind from '../../../components/searchMind';
 import { exportFranchiseeList, exportPaymentList } from '../../../service';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
-import { pubFetchValueList } from '../../../actions/pub';
 import { DATE_FORMAT } from '../../../constant/index';
+import { BranchCompany, Franchisee } from '../../../container/search';
 
 const FormItem = Form.Item;
 const orderML = 'order-management';
@@ -37,8 +36,7 @@ const defaultCheckedList = ['已付款'];
         orderListData: state.toJS().order.orderListData
     }),
     dispatch => bindActionCreators({
-        modifyCauseModalVisible,
-        pubFetchValueList,
+        modifyCauseModalVisible
     }, dispatch)
 )
 class FranchiseeSettlement extends Component {
@@ -50,10 +48,6 @@ class FranchiseeSettlement extends Component {
         this.handleOrderReset = this.handleOrderReset.bind(this);
         this.handlePaymentOutput = this.handlePaymentOutput.bind(this);
         this.handleOrderOutput = this.handleOrderOutput.bind(this);
-        this.handleJoiningChoose = this.handleJoiningChoose.bind(this);
-        this.handleJoiningClear = this.handleJoiningClear.bind(this);
-        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-        this.handleSubCompanyClear = this.handleSubCompanyClear.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
         this.getSearchData = this.getSearchData.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -63,8 +57,6 @@ class FranchiseeSettlement extends Component {
         this.current = 1;
         this.state = {
             choose: [],
-            franchiseeId: null,
-            branchCompanyId: null,
             rengeTime: yesterdayrengeDate,
             auditModalVisible: false,
             tableOrderNumber: null,
@@ -168,8 +160,10 @@ class FranchiseeSettlement extends Component {
     getSearchData() {
         const {
             orderId,
+            franchisee,
+            branchCompany
         } = this.props.form.getFieldsValue();
-        const { franchiseeId, branchCompanyId, checkedList,
+        const { checkedList,
             completeDateStart, completeDateEnd, payDateStart,
             payDateEnd, refundDateStart, refundDateEnd } = this.state;
         this.current = 1;
@@ -179,8 +173,8 @@ class FranchiseeSettlement extends Component {
             isRefound: (checkedList.length === 1 &&
                 checkedList[0] === '已退款') || checkedList.length === 2 ? 1 : 0,
             orderId,
-            franchiseeId,
-            branchCompanyId,
+            franchiseeId: franchisee.franchiseeId,
+            branchCompanyId: branchCompany.id,
             completeDateStart,
             completeDateEnd,
             payDateStart,
@@ -205,47 +199,11 @@ class FranchiseeSettlement extends Component {
     }
 
     /**
-     * 加盟商-值清单
-     */
-    handleJoiningChoose = ({ record }) => {
-        this.setState({
-            franchiseeId: record.franchiseeId,
-        });
-    }
-
-    /**
-     * 子公司-值清单
-     */
-    handleSubCompanyChoose = ({ record }) => {
-        this.setState({
-            branchCompanyId: record.id,
-        });
-    }
-
-    /**
-     * 加盟商-清除
-     */
-    handleJoiningClear() {
-        this.setState({
-            franchiseeId: null,
-        });
-    }
-
-    /**
      * 供应商地点-清除
      */
     handleAdressClear() {
         this.setState({
             supplierAddNo: null,
-        });
-    }
-
-    /**
-     * 子公司-清除
-     */
-    handleSubCompanyClear() {
-        this.setState({
-            branchCompanyId: null,
         });
     }
 
@@ -262,8 +220,6 @@ class FranchiseeSettlement extends Component {
             refundDateStart: '',
             refundDateEnd: '',
         });
-        this.joiningSearchMind.handleClear();
-        this.subCompanySearchMind.handleClear();
         this.props.form.resetFields();
     }
 
@@ -401,37 +357,9 @@ class FranchiseeSettlement extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">加盟商</span>
-                                            <SearchMind
-                                                rowKey="franchiseeId"
-                                                compKey="search-mind-joining"
-                                                ref={ref => { this.joiningSearchMind = ref }}
-                                                fetch={(params) =>
-                                                    this.props.pubFetchValueList({
-                                                        param: params.value,
-                                                        pageNum: params.pagination.current || 1,
-                                                        pageSize: params.pagination.pageSize
-                                                    }, 'getFranchiseeInfo')
-                                                }
-                                                onChoosed={this.handleJoiningChoose}
-                                                onClear={this.handleJoiningClear}
-                                                renderChoosedInputRaw={(row) => (
-                                                    <div>
-                                                        {row.franchiseeId} - {row.franchiseeName}
-                                                    </div>
-                                                )}
-                                                pageSize={6}
-                                                columns={[
-                                                    {
-                                                        title: '加盟商id',
-                                                        dataIndex: 'franchiseeId',
-                                                        width: 150,
-                                                    }, {
-                                                        title: '加盟商名字',
-                                                        dataIndex: 'franchiseeName',
-                                                        width: 200,
-                                                    }
-                                                ]}
-                                            />
+                                            {getFieldDecorator('franchisee', {
+                                                initialValue: { franchiseeId: '', franchiseeName: '' }
+                                            })(<Franchisee />)}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -440,37 +368,9 @@ class FranchiseeSettlement extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">子公司</span>
-                                            <SearchMind
-                                                style={{ zIndex: 8 }}
-                                                compKey="spId"
-                                                ref={ref => { this.subCompanySearchMind = ref }}
-                                                fetch={(params) =>
-                                                    this.props.pubFetchValueList({
-                                                        branchCompanyId:
-                                                        !(isNaN(parseFloat(params.value))) ?
-                                                            params.value : '',
-                                                        branchCompanyName:
-                                                        isNaN(parseFloat(params.value)) ?
-                                                            params.value : ''
-                                                    }, 'findCompanyBaseInfo')
-                                                }
-                                                onChoosed={this.handleSubCompanyChoose}
-                                                onClear={this.handleSubCompanyClear}
-                                                renderChoosedInputRaw={(row) => (
-                                                    <div>{row.id} - {row.name}</div>
-                                                )}
-                                                pageSize={6}
-                                                columns={[
-                                                    {
-                                                        title: '子公司id',
-                                                        dataIndex: 'id',
-                                                        width: 100,
-                                                    }, {
-                                                        title: '子公司名字',
-                                                        dataIndex: 'name',
-                                                    }
-                                                ]}
-                                            />
+                                            {getFieldDecorator('branchCompany', {
+                                                initialValue: { id: '', name: '' }
+                                            })(<BranchCompany />)}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -506,7 +406,7 @@ class FranchiseeSettlement extends Component {
                                                     className="input"
                                                     placeholder="请输入订单编号"
                                                 />
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -543,8 +443,7 @@ class FranchiseeSettlement extends Component {
 }
 
 FranchiseeSettlement.propTypes = {
-    form: PropTypes.objectOf(PropTypes.any),
-    pubFetchValueList: PropTypes.func,
+    form: PropTypes.objectOf(PropTypes.any)
 }
 
 FranchiseeSettlement.defaultProps = {
