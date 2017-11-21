@@ -11,10 +11,7 @@ import classnames from 'classnames';
 import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-    Row, Col, Select, DatePicker,
-    Input, Table, Button, Modal
-} from 'antd';
+import { Modal } from 'antd';
 import FormContent from './FormContent';
 import List from './List';
 import OpinionSteps from '../../../components/approvalFlowSteps';
@@ -31,10 +28,6 @@ import {
 import {
     pubFetchValueList,
 } from '../../../actions/pub';
-
-const Option = Select.Option;
-const { TextArea } = Input;
-
 
 @connect(state => ({
     // 详情数据
@@ -196,6 +189,12 @@ class ReturnGoodsModify extends PureComponent {
             </div>
         )
     }
+}
+
+ReturnGoodsModify.propTypes = {
+    clearReturnInfo: PropTypes.func,
+    putRefundProducts: PropTypes.objectOf(PropTypes.any),
+    returnLists: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(ReturnGoodsModify)

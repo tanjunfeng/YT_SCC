@@ -3,7 +3,7 @@
  * @Description: 供应商结算
  * @CreateDate: 2017-09-06 17:54:20
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-09 15:04:14
+ * @Last Modified time: 2017-11-21 14:26:16
  */
 
 import React, { Component } from 'react';
@@ -263,7 +263,7 @@ class SimpleOrderList extends Component {
                                         <span className={`${prefixCls}-data-pic`}>
                                             <SearchMind
                                                 style={{ zIndex: 9 }}
-                                                compKey="spId"
+                                                compKey="spNo"
                                                 ref={ref => { this.joiningSupplierMind = ref }}
                                                 onChoosed={this.handleSupplierChoose}
                                                 onClear={this.handleSupplierClear}
@@ -367,7 +367,7 @@ class SimpleOrderList extends Component {
                                             <span className="sc-form-item-label">子公司</span>
                                             <SearchMind
                                                 style={{ zIndex: 8 }}
-                                                compKey="spId"
+                                                compKey="id"
                                                 ref={ref => { this.subCompanySearchMind = ref }}
                                                 fetch={(params) =>
                                                     this.props.pubFetchValueList({
@@ -410,10 +410,11 @@ class SimpleOrderList extends Component {
                                     </FormItem>
                                 </Col>
                             </Row>
-                            <Row gutter={8}>
-                                <Col className="gutter-row" span={8} offset={16}>
+                            <Row gutter={40} type="flex" justify="end">
+                                <Col className="tr" span={8}>
                                     <FormItem>
                                         <Button
+                                            type="primary"
                                             size="default"
                                             onClick={this.handleOrderOutput}
                                         >下载供应商结算数据</Button>
