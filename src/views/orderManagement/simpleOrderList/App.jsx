@@ -47,20 +47,20 @@ const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
 class OrderManagementList extends Component {
     constructor(props) {
         super(props);
-        this.onEnterTimeChange = ::this.onEnterTimeChange;
-        this.renderOperation = ::this.renderOperation;
-        this.handleOrderBatchReview = ::this.handleOrderBatchReview;
-        this.handleOrderBatchCancel = ::this.handleOrderBatchCancel;
-        this.handleOrderSearch = ::this.handleOrderSearch;
-        this.handleOrderReset = ::this.handleOrderReset;
-        this.handleOrderOutput = ::this.handleOrderOutput;
-        this.handleJoiningChoose = ::this.handleJoiningChoose;
-        this.handleSubCompanyChoose = ::this.handleSubCompanyChoose;
-        this.handleJoiningClear = ::this.handleJoiningClear;
-        this.handleSubCompanyClear = ::this.handleSubCompanyClear;
-        this.handlePaginationChange = ::this.handlePaginationChange;
-        this.orderTypeSelect = ::this.orderTypeSelect;
-        this.getSearchData = ::this.getSearchData;
+        this.onEnterTimeChange = :: this.onEnterTimeChange;
+        this.renderOperation = :: this.renderOperation;
+        this.handleOrderBatchReview = :: this.handleOrderBatchReview;
+        this.handleOrderBatchCancel = :: this.handleOrderBatchCancel;
+        this.handleOrderSearch = :: this.handleOrderSearch;
+        this.handleOrderReset = :: this.handleOrderReset;
+        this.handleOrderOutput = :: this.handleOrderOutput;
+        this.handleJoiningChoose = :: this.handleJoiningChoose;
+        this.handleSubCompanyChoose = :: this.handleSubCompanyChoose;
+        this.handleJoiningClear = :: this.handleJoiningClear;
+        this.handleSubCompanyClear = :: this.handleSubCompanyClear;
+        this.handlePaginationChange = :: this.handlePaginationChange;
+        this.orderTypeSelect = :: this.orderTypeSelect;
+        this.getSearchData = :: this.getSearchData;
         this.joiningSearchMind = null;
         this.subCompanySearchMind = null;
         this.searchData = {};
@@ -437,13 +437,18 @@ class OrderManagementList extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">收货人电话</span>
-                                            {getFieldDecorator('cellphone')(
+                                            {getFieldDecorator('cellphone', {
+                                                rules: [{
+                                                    max: 10,
+                                                    message: '不能输入超过10个字'
+                                                }]
+                                            })(
                                                 <Input
                                                     maxLength={11}
                                                     className="input"
                                                     placeholder="收货人电话"
                                                 />
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>

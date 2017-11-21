@@ -128,10 +128,14 @@ class SearchForm extends Component {
                     <FormItem className="sc-form-item">
                         <div>
                             <span className="sc-form-item-label">单据编号</span>
-                            {getFieldDecorator('supplierNumber')(
+                            {getFieldDecorator('supplierNumber', {
+                                rules: {
+                                    max: 10,
+                                    message: '不能输入超过10个字'
+                                }
+                            })(
                                 <Input
                                     className="sc-form-item-input"
-                                    maxLength="10"
                                     placeholder="单据编号"
                                 />
                             )}
