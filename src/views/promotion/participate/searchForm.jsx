@@ -105,8 +105,6 @@ class SearchForm extends PureComponent {
                                         )}
                                 </FormItem>
                             </Col>
-                        </Row>
-                        <Row gutter={40}>
                             <Col span={8}>
                                 <FormItem label="物流状态">
                                     {getFieldDecorator('shippingStateCode', {
@@ -130,9 +128,7 @@ class SearchForm extends PureComponent {
                                     })(<BranchCompany />)}
                                 </FormItem>
                             </Col>
-                        </Row>
-                        <Row gutter={40}>
-                            <Col span={8}>
+                            <Col span={12}>
                                 <FormItem label="使用时间">
                                     {getFieldDecorator('participateTimeRange', {
                                         initialValue: []
