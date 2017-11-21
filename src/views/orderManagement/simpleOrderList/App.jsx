@@ -444,7 +444,6 @@ class OrderManagementList extends Component {
                                                 }]
                                             })(
                                                 <Input
-                                                    maxLength={11}
                                                     className="input"
                                                     placeholder="收货人电话"
                                                 />
