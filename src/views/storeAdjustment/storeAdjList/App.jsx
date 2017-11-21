@@ -295,12 +295,14 @@ class StoreAdjList extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">单据编号</span>
-                                            {getFieldDecorator('id')(
+                                            {getFieldDecorator('id', {
+                                                rules: [{ max: 10, message: '不能输入超过10个字' }]
+                                            })(
                                                 <Input
                                                     className="input"
                                                     placeholder="单据编号"
                                                 />
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
