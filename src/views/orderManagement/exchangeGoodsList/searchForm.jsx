@@ -101,12 +101,10 @@ class SearchForm extends PureComponent {
                         </Col>
                         <Col span={8} className="company-time">
                             {/* 子公司 */}
-                            <FormItem>
-                                <FormItem label="分公司">
-                                    {getFieldDecorator('branchCompany', {
-                                        initialValue: { ...this.state.branchCompany }
-                                    })(<BranchCompany />)}
-                                </FormItem>
+                            <FormItem label="分公司">
+                                {getFieldDecorator('branchCompany', {
+                                    initialValue: { id: '', name: '' }
+                                })(<BranchCompany />)}
                             </FormItem>
                         </Col>
                         <Col span={8} className="franchisee-item">
@@ -206,7 +204,6 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    // returnGoodsListFormDataClear: PropTypes.func,
     onPromotionSearch: PropTypes.func,
     onPromotionReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
