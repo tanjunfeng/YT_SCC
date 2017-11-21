@@ -20,9 +20,9 @@ import {
     fetchUnUsedCouponParticipate as fetchUnUsedCouponParticipateService,
     fetchPromotionParticipateData as fetchPromotionParticipateDataService,
     grantCoupon as grantCouponService,
-    queryProcessList as queryProcessListService,
-    invalidRecordList as invalidRecordService,
-    cancelCoupons as cancelCouponsService
+    garbageCouponParticipate as invalidRecordService,
+    cancelCoupons as cancelCouponsService,
+    queryProcessList as queryProcessListService
 } from '../service';
 
 /**
