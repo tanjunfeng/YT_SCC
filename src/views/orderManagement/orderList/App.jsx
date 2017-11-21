@@ -238,7 +238,6 @@ class OrderManagementList extends Component {
                 submitEndTime: todayDate,
             }
         });
-        this.joiningSearchMind.handleClear();
         this.props.form.resetFields();
     }
 
@@ -457,11 +456,14 @@ class OrderManagementList extends Component {
                                 </Col>
                                 <Col className="gutter-row" span={8}>
                                     {/* 加盟商 */}
-                                    <FormItem label="加盟商">
-                                        {getFieldDecorator('franchisee', {
-                                            initialValue: { franchiseeId: '', franchiseeName: '' }
-                                        })(<Franchisee />)}
-                                    </FormItem>
+                                    <div>
+                                        <span className="sc-form-item-label">加盟商</span>
+                                        <FormItem>
+                                            {getFieldDecorator('franchisee', {
+                                                initialValue: { franchiseeId: '', franchiseeName: '' }
+                                            })(<Franchisee />)}
+                                        </FormItem>
+                                    </div>
                                 </Col>
                                 <Col className="gutter-row" span={8}>
                                     <FormItem>
@@ -622,8 +624,7 @@ OrderManagementList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     orderListData: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
-    fetchOrderList: PropTypes.func,
-    pubFetchValueList: PropTypes.func
+    fetchOrderList: PropTypes.func
 }
 
 OrderManagementList.defaultProps = {
