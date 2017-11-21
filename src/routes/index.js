@@ -83,14 +83,13 @@ import ExchangeGoodsDetail from 'bundle-loader?lazy!../views/orderManagement/exc
 // 库存调整列表
 import StoreAdjList from 'bundle-loader?lazy!../views/storeAdjustment/storeAdjList';
 import ItemDetail from 'bundle-loader?lazy!../views/storeAdjustment/itemDetail';
+// 实时库存查询
+import StoreRealTime from 'bundle-loader?lazy!../views/storeAdjustment/storeRealTime';
 
 // 采购单审批列表
 import ToDoPurchaseList from 'bundle-loader?lazy!../views/toDo/toDoPurchaseList';
 // 退货单审批列表
 import ToDoReturnList from 'bundle-loader?lazy!../views/toDo/toDoReturnList';
-
-// 实时库存查询
-import StoreRealTime from 'bundle-loader?lazy!../views/storeAdjustment/storeRealTime';
 
 // 简易结算支持
 import SimpleOrderList from 'bundle-loader?lazy!../views/simpleSettlement/simpleOrderList';

@@ -496,9 +496,13 @@ class FranchiseeSettlement extends Component {
                                                 className="sc-form-item-label"
                                                 style={{ marginLeft: 5 }}
                                             >订单编号</span>
-                                            {getFieldDecorator('orderId')(
+                                            {getFieldDecorator('orderId', {
+                                                rules: [{
+                                                    max: 20,
+                                                    message: '请输入20位以内的订单编号'
+                                                }]
+                                            })(
                                                 <Input
-                                                    maxLength={20}
                                                     className="input"
                                                     placeholder="请输入订单编号"
                                                 />
@@ -506,9 +510,12 @@ class FranchiseeSettlement extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8} offset={8}>
+                            </Row>
+                            <Row gutter={40} type="flex" justify="end">
+                                <Col className="tr" span={8}>
                                     <FormItem>
                                         <Button
+                                            type="primary"
                                             size="default"
                                             onClick={this.handleOrderOutput}
                                         >下载加盟商结算数据</Button>

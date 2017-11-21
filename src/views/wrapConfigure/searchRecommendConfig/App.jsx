@@ -183,7 +183,7 @@ class SearchRecommendConfig extends Component {
                                 ],
                                 initialValue: content
                             })(
-                                <Input placeholder="请输入推荐关键字" maxLength={11} name="content" />
+                                <Input placeholder="请输入推荐关键字" name="content" />
                             )}
                         </FormItem>
                         <Button

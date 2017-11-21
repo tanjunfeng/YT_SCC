@@ -317,13 +317,6 @@ class Utils {
         callback();
     }
 
-    static limit12to20Places = (rule, value, callback) => {
-        if (value && !/^\d{12,20}$/.test(value)) {
-            callback('仅允许12-20位数字');
-        }
-        callback();
-    }
-
     static validatePhone = (rule, value, callback) => {
         if (!/^1[34578]\d{9}$/.test(value)) {
             callback('手机号码有误')
