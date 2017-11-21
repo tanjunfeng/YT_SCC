@@ -307,6 +307,13 @@ class Utils {
         return moment(parseInt(timestamp, 10)).format(TIME_FORMAT);
     }
 
+    static limit20Places = (rule, value, callback) => {
+        if (value && !/^\d{0,20}$/.test(value)) {
+            callback('仅允许12-20位数字');
+        }
+        callback();
+    }
+
     /**
      * 限制输入两位小数校验
      */
