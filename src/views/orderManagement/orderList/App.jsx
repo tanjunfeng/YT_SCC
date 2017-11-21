@@ -621,7 +621,9 @@ class OrderManagementList extends Component {
                                         >批量取消</Button>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8} offset={8}>
+                            </Row>
+                            <Row gutter={40} type="flex" justify="end">
+                                <Col className="tr">
                                     <FormItem>
                                         <Button
                                             size="default"

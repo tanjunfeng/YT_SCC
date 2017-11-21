@@ -270,7 +270,7 @@ class SearchForm extends Component {
                                             )
                                         }
                                     </Select>
-                                )}
+                                    )}
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -342,27 +342,25 @@ class SearchForm extends Component {
                     </Row>
                     <Row gutter={40} type="flex" justify="end">
                         <Col span={8} className="tr">
-                            <div className="sc-form-button-group">
-                                <FormItem>
-                                    <Button
-                                        type="primary"
-                                        onClick={this.handleGetValue}
-                                        size="default"
-                                    >
-                                        搜索
+                            <FormItem>
+                                <Button
+                                    type="primary"
+                                    onClick={this.handleGetValue}
+                                    size="default"
+                                >
+                                    搜索
                                     </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleResetValue}>
-                                        重置
+                            </FormItem>
+                            <FormItem>
+                                <Button size="default" onClick={this.handleResetValue}>
+                                    重置
                                     </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleDownload}>
-                                        导出供应商列表
+                            </FormItem>
+                            <FormItem>
+                                <Button size="default" onClick={this.handleDownload}>
+                                    导出供应商列表
                                     </Button>
-                                </FormItem>
-                            </div>
+                            </FormItem>
                         </Col>
                     </Row>
                 </Form>
