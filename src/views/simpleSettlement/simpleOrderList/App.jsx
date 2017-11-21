@@ -410,10 +410,11 @@ class SimpleOrderList extends Component {
                                     </FormItem>
                                 </Col>
                             </Row>
-                            <Row gutter={8}>
-                                <Col className="gutter-row" span={8} offset={16}>
+                            <Row gutter={40} type="flex" justify="end">
+                                <Col className="tr" span={8}>
                                     <FormItem>
                                         <Button
+                                            type="primary"
                                             size="default"
                                             onClick={this.handleOrderOutput}
                                         >下载供应商结算数据</Button>

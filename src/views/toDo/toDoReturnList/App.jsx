@@ -487,15 +487,15 @@ class toDoReturnList extends PureComponent {
         const { processNodeId, id } = this.examinationAppData;
         const processId = processNodeId;
         this.getFormData().then((param) => {
-            this.props.approveRefund({...param, processId, businessId: id, type: 1})
-            .then((res) => {
-                if (res.code === 200) {
-                    message.success(res.message);
-                    this.setState({
-                        approvalVisible: false,
-                    });
-                }
-            });
+            this.props.approveRefund({ ...param, processId, businessId: id, type: 1 })
+                .then((res) => {
+                    if (res.code === 200) {
+                        message.success(res.message);
+                        this.setState({
+                            approvalVisible: false,
+                        });
+                    }
+                });
         });
     }
 
@@ -694,24 +694,24 @@ class toDoReturnList extends PureComponent {
                             {/* 供应商地点 */}
                             <Col className="gutter-row" span={8}>
                                 <FormItem>
-                                    <span className="sc-form-item-label" style={{width: 70}}>供应商地点</span>
+                                    <span className="sc-form-item-label" style={{ width: 70 }}>供应商地点</span>
                                     <span className="search-box-data-pic">
                                         <SearchMind
                                             style={{ zIndex: 9, verticalAlign: 'bottom' }}
                                             compKey="providerNo"
                                             ref={ref => { this.joiningAdressMind = ref }}
                                             fetch={(params) =>
-                                            this.props.pubFetchValueList(Utils.removeInvalid({
-                                                condition: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
-                                            }), 'supplierAdrSearchBox').then((res) => {
-                                                const dataArr = res.data.data || [];
-                                                if (!dataArr || dataArr.length === 0) {
-                                                    message.warning('没有可用的数据');
-                                                }
-                                                return res;
-                                            })}
+                                                this.props.pubFetchValueList(Utils.removeInvalid({
+                                                    condition: params.value,
+                                                    pageSize: params.pagination.pageSize,
+                                                    pageNum: params.pagination.current || 1
+                                                }), 'supplierAdrSearchBox').then((res) => {
+                                                    const dataArr = res.data.data || [];
+                                                    if (!dataArr || dataArr.length === 0) {
+                                                        message.warning('没有可用的数据');
+                                                    }
+                                                    return res;
+                                                })}
                                             onChoosed={this.handleSupplierAddressChoose}
                                             onClear={this.handleSupplierAddressClear}
                                             renderChoosedInputRaw={(res) => (
@@ -909,11 +909,13 @@ class toDoReturnList extends PureComponent {
                                         <FormItem label="意见" style={{ display: 'flex' }}>
                                             {getFieldDecorator('auditOpinion', {
                                                 initialValue: '',
-                                                rules: [{ required: false, message: '请填写审批意见!' }]
+                                                rules: [
+                                                    { required: false, message: '请填写审批意见!' },
+                                                    { max: 150, message: '请输入150字以内' }
+                                                ]
                                             })(
                                                 <TextArea
                                                     placeholder="可填写意见"
-                                                    maxLength="150"
                                                     style={{ resize: 'none' }}
                                                     autosize={{
                                                         minRows: 4,
