@@ -15,7 +15,7 @@ import './SearchMind.scss';
     pubFetchValueList
 }, dispatch))
 
-class BranchCompany extends PureComponent {
+class Franchisee extends PureComponent {
     componentWillReceiveProps(nextProps) {
         if (nextProps.value.id === '') {
             this.defaultValue = '';
@@ -30,7 +30,7 @@ class BranchCompany extends PureComponent {
      */
     handleClear = () => {
         this.searchMind.reset();
-        this.props.onChange({ id: '', name: '' });
+        this.props.onChange({ franchiseeId: '', franchiseeName: '' });
     }
 
     /**
@@ -43,31 +43,35 @@ class BranchCompany extends PureComponent {
     render() {
         return (
             <SearchMind
-                compKey="spId"
+                rowKey="franchiseeId"
+                compKey="search-mind-joining"
                 defaultValue={this.defaultValue}
+                disabled={this.props.disabled}
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
-                    // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodSell/findCompanyBaseInfo
                     this.props.pubFetchValueList({
-                        branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-                        branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
-                    }, 'findCompanyBaseInfo')
+                        param: params.value,
+                        pageNum: params.pagination.current || 1,
+                        pageSize: params.pagination.pageSize
+                    }, 'getFranchiseeInfo')
                 }
-                disabled={this.props.disabled}
                 onChoosed={this.handleChoose}
                 onClear={this.handleClear}
                 renderChoosedInputRaw={(row) => (
-                    <div>{row.id} - {row.name}</div>
+                    <div>
+                        {row.franchiseeId} - {row.franchiseeName}
+                    </div>
                 )}
                 pageSize={6}
                 columns={[
                     {
-                        title: '子公司id',
-                        dataIndex: 'id',
-                        width: 68
+                        title: '加盟商id',
+                        dataIndex: 'franchiseeId',
+                        width: 98
                     }, {
-                        title: '子公司名字',
-                        dataIndex: 'name'
+                        title: '加盟商名字',
+                        dataIndex: 'franchiseeName',
+                        width: 140
                     }
                 ]}
             />
@@ -75,11 +79,11 @@ class BranchCompany extends PureComponent {
     }
 }
 
-BranchCompany.propTypes = {
+Franchisee.propTypes = {
     disabled: PropTypes.bool,
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any)
 }
 
-export default BranchCompany;
+export default Franchisee;
