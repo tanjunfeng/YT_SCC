@@ -111,9 +111,19 @@ class SearchForm extends PureComponent {
                                     })(<BranchCompany />)}
                                 </FormItem>
                             </Col>
-                        </Row>
-                        <Row gutter={40}>
                             <Col span={8}>
+                                {/* 状态 */}
+                                <FormItem label="状态">
+                                    {getFieldDecorator('statusCode', {
+                                        initialValue: 'all'
+                                    })(
+                                        <Select style={{ width: '153px' }} size="default">
+                                            {this.getStatus()}
+                                        </Select>
+                                        )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
                                 <FormItem>
                                     <div className="promotion-date-range">
                                         <span className="sc-form-item-label search-mind-label">活动时间</span>
@@ -129,18 +139,6 @@ class SearchForm extends PureComponent {
                                             />
                                             )}
                                     </div>
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 状态 */}
-                                <FormItem label="状态">
-                                    {getFieldDecorator('statusCode', {
-                                        initialValue: 'all'
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
-                                        </Select>
-                                        )}
                                 </FormItem>
                             </Col>
                         </Row>

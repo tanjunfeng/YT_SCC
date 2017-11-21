@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-21 15:39:20
+ * @Last Modified time: 2017-11-21 16:40:15
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -600,11 +600,11 @@ class toDoReturnList extends PureComponent {
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/returnManagementDetail/${id}`}>退货单详情</Link>
                 </Menu.Item>
-                <Menu.Item key="examinationApproval">
+                {/* <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
                     </a>
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item key="viewApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         查看审批意见

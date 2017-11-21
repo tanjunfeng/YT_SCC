@@ -28,7 +28,6 @@ class SearchForm extends PureComponent {
         this.state = {
             data: []
         }
-        this.branchCompany = this.props.branchCompany;
     }
 
     // 父组件page改变或点击确定或取消
@@ -52,7 +51,6 @@ class SearchForm extends PureComponent {
             } = this.props.form.getFieldsValue();
         const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
         const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
-        this.branchCompany = { ...branchCompany };
         const franchiseeId = franchisee.franchiseeId;
         const searchParams = {
             franchiseeId,
@@ -121,13 +119,11 @@ class SearchForm extends PureComponent {
                             </FormItem>
                         </Col>
                         <Col span={8} className="company-time">
-                            {/* 分公司 */}
-                            <FormItem>
-                                <FormItem label="分公司">
-                                    {getFieldDecorator('branchCompany', {
-                                        initialValue: { ...this.state.branchCompany }
-                                    })(<BranchCompany />)}
-                                </FormItem>
+                            {/* 子公司 */}
+                            <FormItem label="分公司">
+                                {getFieldDecorator('branchCompany', {
+                                    initialValue: { id: '', name: '' }
+                                })(<BranchCompany />)}
                             </FormItem>
                         </Col>
                     </Row>
@@ -223,11 +219,9 @@ class SearchForm extends PureComponent {
 }
 
 SearchForm.propTypes = {
-    // returnGoodsListFormDataClear: PropTypes.func,
     onPromotionSearch: PropTypes.func,
     onPromotionReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    branchCompany: PropTypes.objectOf(PropTypes.any),
     upDate: PropTypes.bool,
 };
 
