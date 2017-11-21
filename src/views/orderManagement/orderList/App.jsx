@@ -33,7 +33,6 @@ import {
     modifyResendOrder,
     modifyApprovalOrder
 } from '../../../actions/order';
-import { pubFetchValueList } from '../../../actions/pub';
 import { DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
 import { orderListColumns as columns } from '../columns';
 
@@ -52,8 +51,7 @@ const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
     }),
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
-        fetchOrderList,
-        pubFetchValueList
+        fetchOrderList
     }, dispatch)
 )
 class OrderManagementList extends Component {
@@ -625,9 +623,6 @@ OrderManagementList.propTypes = {
     orderListData: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
     fetchOrderList: PropTypes.func
-}
-
-OrderManagementList.defaultProps = {
 }
 
 export default withRouter(Form.create()(OrderManagementList));

@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import Utils from '../../../util/util';
 import { returnGoodsStatus, goodsReceiptStatus } from '../../../constant/salesManagement';
 import { getExchangeGoodsListAction } from '../../../actions';
-import { pubFetchValueList } from '../../../actions/pub';
 import { BranchCompany, Franchisee } from '../../../container/search';
 
 const FormItem = Form.Item;
@@ -19,8 +18,7 @@ const dateFormat = 'YYYY-MM-DD';
     () => ({
     }),
     dispatch => bindActionCreators({
-        getExchangeGoodsListAction,
-        pubFetchValueList,
+        getExchangeGoodsListAction
     }, dispatch)
 )
 
