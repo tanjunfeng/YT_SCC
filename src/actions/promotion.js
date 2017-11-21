@@ -20,6 +20,8 @@ import {
     fetchUnUsedCouponParticipate as fetchUnUsedCouponParticipateService,
     fetchPromotionParticipateData as fetchPromotionParticipateDataService,
     grantCoupon as grantCouponService,
+    garbageCouponParticipate as invalidRecordService,
+    cancelCoupons as cancelCouponsService,
 } from '../service';
 
 /**
@@ -95,10 +97,52 @@ const fetchUnUsedCouponParticipateAction = (data) => ({
 
 export const getUnUsedCouponParticipate = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        fetchUnUsedCouponParticipateService(params)
+        fetchUnUsedCouponParticipateService({ ...params, queryType: 1 })
             .then(res => {
                 dispatch(
                     fetchUnUsedCouponParticipateAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 优惠券参与数据-已作废 Action
+ */
+const fetchGarbageCouponParticipateAction = (data) => ({
+    type: ActionType.FETCH_GARBAGE_COUPON_PATICIPATE_LIST,
+    payload: data
+});
+
+export const getGarbageCouponParticipate = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        fetchUnUsedCouponParticipateService({ ...params, queryType: 2 })
+            .then(res => {
+                dispatch(
+                    fetchGarbageCouponParticipateAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 优惠券参与数据-作废记录 Action
+ */
+const invalidRecordAction = (data) => ({
+    type: ActionType.FETCH_GARBAGE_COUPON_PATICIPATE_LIST,
+    payload: data
+});
+
+export const garbageCouponParticipate = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        invalidRecordService(params)
+            .then(res => {
+                dispatch(
+                    invalidRecordAction(res.data)
                 );
                 resolve(res);
             })
@@ -314,6 +358,24 @@ export const updatePromotionStatus = (params) => dispatch => (
     })
 );
 
+const cancelCouponsAction = (data) => ({
+    type: ActionType.CANCEL_COUPONS,
+    payload: data
+});
+
+export const cancelCoupons = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        cancelCouponsService(params)
+            .then(res => {
+                dispatch(
+                    cancelCouponsAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
 /**
  * 清空促销活动列表
  */
@@ -342,6 +404,11 @@ export const clearUsedCouponPatipate = () => dispatch => (dispatch({
 
 export const clearUnUsedCouponPatipate = () => dispatch => (dispatch({
     type: ActionType.CLEAR_UN_USED_COUPON_PATICIPATE_LIST,
+    payload: {}
+}));
+
+export const clearGarbageCouponPatipate = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_GARBAGE_COUPON_PATICIPATE_LIST,
     payload: {}
 }));
 

@@ -30,9 +30,14 @@ import { modifyConfirmPayment, fetchPaymentDetailInfo, fetchOrderDetailInfo } fr
         fetchOrderDetailInfo
     }, dispatch)
 )
+
 class PayInformation extends PureComponent {
     constructor(props) {
         super(props);
+
+        this.state = {
+            amount: null
+        }
 
         this.columns = [{
             title: '序号',
@@ -68,8 +73,8 @@ class PayInformation extends PureComponent {
             title: '金额',
             dataIndex: 'amount',
             key: 'amount',
-            render: (text) => (
-                <span>￥{text}</span>
+            render: (amount) => (
+                <span>￥{Number(amount).toFixed(2)}</span>
             )
         }, {
             title: '方式',
@@ -138,15 +143,15 @@ class PayInformation extends PureComponent {
         }];
     }
 
-    componentDidMount() {
-    }
-
     /**
      * 审核退款
      * @param {Object} record 该行数据
      */
     handleAuditRefund = (record) => {
         this.props.modifyCauseModalVisible({ isVisible: true, record })
+        this.setState({
+            amount: record.amount
+        })
     }
 
     /**
@@ -252,7 +257,11 @@ class PayInformation extends PureComponent {
                     </Row>
                 </div>
                 <div>
-                    <RefundModal totalAmount={totalAmount} totalPaidAmount={totalPaidAmount} />
+                    <RefundModal
+                        totalAmount={totalAmount}
+                        totalPaidAmount={totalPaidAmount}
+                        value={this.state.amount}
+                    />
                 </div>
                 <div>
                     <PayModal totalAmount={totalAmount} />

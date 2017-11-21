@@ -1,0 +1,64 @@
+{
+    "timestamp": 1507626205230,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "pageSize": 20,
+        "pageNum": 1,
+        "total": 23,
+        "data": [
+            {
+                "productId": "xprod324980",
+                "productCode": "1003364",
+                "productName": "李锦记麻辣火锅酱100g"
+            },
+            {
+                "productId": "xprod324993",
+                "productCode": "1003363",
+                "productName": "李锦记鲜味火锅酱100g"
+            },
+            {
+                "productId": "xprod325500",
+                "productCode": "1003356",
+                "productName": "李锦记麻辣火锅上汤100g"
+            },
+            {
+                "productId": "xprod347938",
+                "productCode": "1000404",
+                "productName": "桃李吉士排面包(110g)"
+            },
+            {
+                "productId": "xprod347881",
+                "productCode": "1000347",
+                "productName": "广川李海苔15g"
+            },
+            {
+                "productId": "81071",
+                "productCode": "1001945",
+                "productName": "徐福记凤梨酥182g"
+            },
+            {
+                "productId": "81073",
+                "productCode": "1001943",
+                "productName": "徐福记草莓酥182g"
+            },
+            {
+                "productId": "81069",
+                "productCode": "1000008",
+                "productName": "徐福记香橙酥182g"
+            },
+            {
+                "productId": "xprod347879",
+                "productCode": "1000345",
+                "productName": "广川李海苔20g"
+            },
+            {
+                "productId": "60000138077",
+                "productCode": "1001342",
+                "productName": "李锦记味蚝鲜复合味蚝油235g"
+            }
+        ]
+    },
+    "success": true
+}

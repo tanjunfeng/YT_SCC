@@ -873,15 +873,17 @@ class ManagementList extends PureComponent {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8}>
-                                    <FormItem className="">
+                            </Row>
+                            <Row gutter={16} type="flex" justify="end">
+                                <Col className="tr" span={4}>
+                                    <FormItem>
                                         <Button
                                             type="primary"
                                             size="default"
                                             onClick={this.handleFormSearch}
                                         >查询</Button>
                                     </FormItem>
-                                    <FormItem className="">
+                                    <FormItem>
                                         <Button
                                             size="default"
                                             onClick={this.handleFormReset}

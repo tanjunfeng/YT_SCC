@@ -317,19 +317,27 @@ class Utils {
         callback();
     }
 
-    static limit12to20Places = (rule, value, callback) => {
-        if (value && !/^\d{12,20}$/.test(value)) {
-            callback('仅允许12-20位数字');
-        }
-        callback();
-    }
-
     static validatePhone = (rule, value, callback) => {
         if (!/^1[34578]\d{9}$/.test(value)) {
             callback('手机号码有误')
         }
         callback()
     }
+
+    /**
+     * 判断是否正整数
+     */
+    static isPositiveInteger = (num) => /^[0-9]*[1-9][0-9]*$/.test(num)
+
+    /**
+     * 按照唯一属性标识 p 合并数组 a b
+     *
+     * b 会覆盖 a
+     * @param {*array} a
+     * @param {*array} b
+     * @param {*string} p
+     */
+    static merge = (a, b, p) => a.filter(aa => !b.find(bb => aa[p] === bb[p])).concat(b);
 }
 
 export default Utils;

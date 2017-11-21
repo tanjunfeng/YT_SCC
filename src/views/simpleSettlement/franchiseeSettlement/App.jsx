@@ -3,7 +3,7 @@
  * @Description: 加盟商结算
  * @CreateDate: 2017-09-06 17:53:59
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-19 17:58:49
+ * @Last Modified time: 2017-11-03 18:04:20
  */
 
 import React, { Component } from 'react';
@@ -337,7 +337,7 @@ class FranchiseeSettlement extends Component {
                 <div className="manage-form">
                     <Form layout="inline">
                         <div className="gutter-example">
-                            <Row gutter={24}>
+                            <Row gutter={16}>
                                 <Col className="gutter-row franchiseeSettlement-errPlace" span={8}>
                                     {/* 签收日期 */}
                                     <FormItem>
@@ -395,7 +395,7 @@ class FranchiseeSettlement extends Component {
                                     </FormItem>
                                 </Col>
                             </Row>
-                            <Row gutter={24}>
+                            <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
                                     {/* 加盟商 */}
                                     <FormItem>
@@ -483,7 +483,7 @@ class FranchiseeSettlement extends Component {
                                     />
                                 </Col>
                             </Row>
-                            <Row gutter={24}>
+                            <Row gutter={16}>
                                 <Col
                                     className="gutter-row"
                                     span={8}
@@ -494,11 +494,14 @@ class FranchiseeSettlement extends Component {
                                         <div>
                                             <span
                                                 className="sc-form-item-label"
-                                                style={{ marginLeft: 5 }}
                                             >订单编号</span>
-                                            {getFieldDecorator('orderId')(
+                                            {getFieldDecorator('orderId', {
+                                                rules: [{
+                                                    max: 20,
+                                                    message: '请输入20位以内的订单编号'
+                                                }]
+                                            })(
                                                 <Input
-                                                    maxLength={20}
                                                     className="input"
                                                     placeholder="请输入订单编号"
                                                 />
@@ -506,9 +509,12 @@ class FranchiseeSettlement extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8} offset={8}>
+                            </Row>
+                            <Row gutter={24} type="flex" justify="end">
+                                <Col className="tr" span={16}>
                                     <FormItem>
                                         <Button
+                                            type="primary"
                                             size="default"
                                             onClick={this.handleOrderOutput}
                                         >下载加盟商结算数据</Button>

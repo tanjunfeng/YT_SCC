@@ -30,6 +30,57 @@ export const poStatusCodes = {
     closed: 4
 }
 
+// 退货单状态清单
+export const returnStatus = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '请选择'
+    }, {
+        key: '0',
+        value: '制单'
+    }, {
+        key: '1',
+        value: '已提交'
+    }, {
+        key: '2',
+        value: '已审核'
+    }, {
+        key: '3',
+        value: '已拒绝'
+    }, {
+        key: '4',
+        value: '待退货'
+    }, {
+        key: '5',
+        value: '已退货'
+    }, {
+        key: '6',
+        value: '已取消'
+    }, {
+        key: '7',
+        value: '取消异常'
+    }, {
+        key: '8',
+        value: '异常'
+    }]
+}
+
+// 退货单审批状态
+export const optionStatus = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '请选择'
+    }, {
+        key: '0',
+        value: '拒绝'
+    }, {
+        key: '1',
+        value: '通过'
+    }]
+}
+
 // 收货单状态清单
 export const receivedStatus = {
     defaultValue: '',
@@ -83,6 +134,12 @@ export const poType = {
     }, {
         key: '0',
         value: '普通采购'
+    }, {
+        key: '1',
+        value: '赠品采购'
+    }, {
+        key: '2',
+        value: '促销采购'
     }]
 }
 

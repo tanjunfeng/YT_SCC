@@ -10,7 +10,7 @@ import { withRouter } from 'react-router';
 import Util from '../../../util/util';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { promotionStatus } from '../constants';
-import { SubCompanies } from '../../../container/search';
+import { BranchCompany } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -45,9 +45,10 @@ class SearchForm extends PureComponent {
             id,
             promotionName,
             promotionDateRange,
-            statusCode
+            statusCode,
+            branchCompany
         } = this.props.form.getFieldsValue();
-        const branchCompanyId = this.state.branchCompanyId;
+        const branchCompanyId = branchCompany.id;
         let status = statusCode;
         if (statusCode === 'all') {
             status = '';
@@ -104,20 +105,25 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem>
-                                    <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">所属公司</span>
-                                        <SubCompanies
-                                            value={this.state.branchCompanyId}
-                                            onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                            onSubCompaniesClear={this.hanldeSubCompanyClear}
-                                        />
-                                    </div>
+                                <FormItem label="所属公司">
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: { id: '', name: '' }
+                                    })(<BranchCompany />)}
                                 </FormItem>
                             </Col>
-                        </Row>
-                        <Row gutter={40}>
                             <Col span={8}>
+                                {/* 状态 */}
+                                <FormItem label="状态">
+                                    {getFieldDecorator('statusCode', {
+                                        initialValue: 'all'
+                                    })(
+                                        <Select style={{ width: '153px' }} size="default">
+                                            {this.getStatus()}
+                                        </Select>
+                                        )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
                                 <FormItem>
                                     <div className="promotion-date-range">
                                         <span className="sc-form-item-label search-mind-label">活动时间</span>
@@ -133,18 +139,6 @@ class SearchForm extends PureComponent {
                                             />
                                             )}
                                     </div>
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 状态 */}
-                                <FormItem label="状态">
-                                    {getFieldDecorator('statusCode', {
-                                        initialValue: 'all'
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
-                                        </Select>
-                                        )}
                                 </FormItem>
                             </Col>
                         </Row>

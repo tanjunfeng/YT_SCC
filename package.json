@@ -32,7 +32,8 @@
     "react-redux": "^4.4.5",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
-    "redux": "^3.6.0"
+    "redux": "^3.6.0",
+    "reqwest": "^2.0.5"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.2.0",
@@ -52,7 +53,7 @@
     "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^5.0.0",
     "css-loader": "^0.28.4",
-    "eslint": "^3.19.0",
+    "eslint": "^4.10.0",
     "eslint-config-airbnb": "^15.0.2",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.6.1",

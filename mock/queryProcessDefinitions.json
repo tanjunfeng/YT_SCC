@@ -1,0 +1,48 @@
+{
+    "timestamp": 1508927082427,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": [
+        {
+            "id": 1,
+            "processNodeCode": "1",
+            "processNodeName": "采购主管审批",
+            "nextNodeId": 2,
+            "branchCompanyId": "1",
+            "type": 1,
+            "createTime": 1508728966000,
+            "modifyTime": 1508728968000,
+            "createUserId": "1",
+            "modifyUserId": "1",
+            "isFirstNode": 0
+        },
+        {
+            "id": 2,
+            "processNodeCode": "2",
+            "processNodeName": "子公司主管审批",
+            "nextNodeId": 3,
+            "branchCompanyId": "1",
+            "type": 1,
+            "createTime": 1508924537000,
+            "modifyTime": 1508924539000,
+            "createUserId": "1",
+            "modifyUserId": "1",
+            "isFirstNode": 1
+        },
+        {
+            "id": 3,
+            "processNodeCode": "3",
+            "processNodeName": "子公司经理",
+            "nextNodeId": null,
+            "branchCompanyId": "1",
+            "type": 1,
+            "createTime": 1508924599000,
+            "modifyTime": 1508924601000,
+            "createUserId": "1",
+            "modifyUserId": "1",
+            "isFirstNode": 1
+        }
+    ],
+    "success": true
+}

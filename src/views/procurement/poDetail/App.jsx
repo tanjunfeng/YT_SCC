@@ -24,7 +24,7 @@ import {
     createPo,
     ModifyPo,
     auditPo,
-    fetchPoDetail,
+    queryPoDetail,
     updatePoBasicinfo,
     addPoLines,
     updatePoLine,
@@ -69,7 +69,7 @@ const RECORD_STATUS = {
     createPo,
     ModifyPo,
     auditPo,
-    fetchPoDetail,
+    queryPoDetail,
     updatePoBasicinfo,
     addPoLines,
     updatePoLine,
@@ -284,7 +284,7 @@ class PoDetail extends PureComponent {
         } else {
             // 1.采购单id存在，查询采购单详情
             // 2.设置界面状态，操作按钮状态
-            that.props.fetchPoDetail({
+            that.props.queryPoDetail({
                 id: poId
             }).then(() => {
                 // 获取采购单状态：编辑/只读

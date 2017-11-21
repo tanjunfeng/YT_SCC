@@ -146,9 +146,9 @@ class BasicInfo extends PureComponent {
                         purchasePhone,
                         purchaseEmail
                     },
-                    spAdrDeliverys: wareHouseIds.map((item) => {
-                        return { warehouseId: item };
-                    }),
+                    spAdrDeliverys: wareHouseIds.map((item) => (
+                        { warehouseId: item }
+                    )),
                     parentId: detailData.id
                 }
 
@@ -183,7 +183,8 @@ class BasicInfo extends PureComponent {
 
     submit(type) {
         const { isEdit } = this.props;
-        this.getValue((data) => {
+        this.getValue((d) => {
+            const data = d;
             data.commitType = type;
             this.props.hanldeSupplier(data,
                 isEdit
@@ -197,13 +198,12 @@ class BasicInfo extends PureComponent {
 
     handleAreaChange(item) {
         const { placeRegion } = this.props;
-        for (const i of placeRegion) {
+        for (let i = 0; i < placeRegion.length; i++) {
             if (i.code === item) {
                 this.company = i.name;
-                return null;
+                return;
             }
         }
-        return null;
     }
 
     handleChoose(item) {
@@ -269,7 +269,7 @@ class BasicInfo extends PureComponent {
     renderName(spAdrBasic, supplierBasicInfo) {
         const { isEdit } = this.props;
         const { providerName } = spAdrBasic;
-        { isEdit && !this.company ? spAdrBasic.providerName : `${this.company} - ${supplierBasicInfo.companyName}` }
+
         if (isEdit && !this.company) {
             this.childName = providerName;
             return providerName;
@@ -283,6 +283,8 @@ class BasicInfo extends PureComponent {
             this.childName = `${this.company} - ${supplierBasicInfo.companyName}`;
             return `${this.company} - ${supplierBasicInfo.companyName}`;
         }
+
+        return null;
     }
 
     render() {
@@ -356,7 +358,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="1">启用</Option>
                                                     <Option value="0">禁用</Option>
                                                 </Select>
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -375,7 +377,7 @@ class BasicInfo extends PureComponent {
                                                     min={0}
                                                     placeholder="周期"
                                                 />
-                                                )}
+                                            )}
                                             &nbsp;天
                                         </FormItem>
                                     </Col>
@@ -395,7 +397,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="2">月结</Option>
                                                     {/* <Option value="3">票到付款</Option> */}
                                                 </Select>
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -417,7 +419,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="4">代销商</Option>
                                                     <Option value="5">其他</Option>
                                                 </Select>
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -443,7 +445,7 @@ class BasicInfo extends PureComponent {
                                                         )
                                                     }
                                                 </Select>
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -464,7 +466,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="2">现金</Option>
                                                     <Option value="3">支票</Option>
                                                 </Select>
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -477,17 +479,19 @@ class BasicInfo extends PureComponent {
                                                     this.props.pubFetchValueList(
                                                         Utils.removeInvalid({
                                                             branchCompanyName: param.value,
-                                                            id: isEdit ? detailSp.spAdrBasic.id : null,
+                                                            id: isEdit
+                                                                ? detailSp.spAdrBasic.id
+                                                                : null,
                                                             parentId: detailData.id,
                                                         }), 'findCanUseCompanyInfo').then((res) => {
-                                                            const { data } = res.data;
-                                                            if (!data.length) {
-                                                                message.warning('无可用子公司，无法完成后续操作！');
-                                                            }
-                                                            return res;
-                                                        })
+                                                        const { data } = res.data;
+                                                        if (!data.length) {
+                                                            message.warning('无可用子公司，无法完成后续操作！');
+                                                        }
+                                                        return res;
+                                                    })
                                                 }
-                                                ref={node => (this.orgCompany = node)}
+                                                ref={node => { this.orgCompany = node }}
                                                 onChoosed={this.handleChoose}
                                                 onClear={this.handleReset}
                                                 placeholder={'请输入子公司名称'}
@@ -528,7 +532,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="3">票到三十天</Option>
                                                     <Option value="4">票到付款</Option>
                                                 </Select>
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -564,7 +568,7 @@ class BasicInfo extends PureComponent {
                                     defaultValue={spAdrDeliverys}
                                     handleChoose={this.props.fetchWarehouseInfo}
                                     handleDelete={this.props.deleteWarehouseInfo}
-                                    ref={node => (this.wareHouse = node)}
+                                    ref={node => { this.wareHouse = node }}
                                 />
                             </div>
                         </div>
@@ -589,7 +593,7 @@ class BasicInfo extends PureComponent {
                                                 <Input
                                                     placeholder="供应商姓名"
                                                 />
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -607,7 +611,7 @@ class BasicInfo extends PureComponent {
                                                 <Input
                                                     placeholder="供应商电话"
                                                 />
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -625,7 +629,7 @@ class BasicInfo extends PureComponent {
                                                 <Input
                                                     placeholder="供应商邮箱"
                                                 />
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -643,7 +647,7 @@ class BasicInfo extends PureComponent {
                                                 <Input
                                                     placeholder="采购员姓名"
                                                 />
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -659,7 +663,7 @@ class BasicInfo extends PureComponent {
                                                 <Input
                                                     placeholder="采购员电话"
                                                 />
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -677,7 +681,7 @@ class BasicInfo extends PureComponent {
                                                 <Input
                                                     placeholder="采购员邮箱"
                                                 />
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -708,5 +712,6 @@ BasicInfo.propTypes = {
     deleteWarehouseInfo: PropTypes.func,
     pubFetchValueList: PropTypes.func,
     getWarehouse: PropTypes.func,
+    hanldeSupplier: PropTypes.func
 }
 export default Form.create()(withRouter(BasicInfo));
