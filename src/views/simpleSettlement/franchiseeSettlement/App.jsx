@@ -498,7 +498,8 @@ class FranchiseeSettlement extends Component {
                                             >订单编号</span>
                                             {getFieldDecorator('orderId', {
                                                 rules: [{
-                                                    validator: Util.limit20Places
+                                                    max: 20,
+                                                    message: '请输入20位以内的订单编号'
                                                 }]
                                             })(
                                                 <Input
