@@ -40,6 +40,9 @@ class CouponsParticipate extends PureComponent {
         pageSize: PAGE_SIZE
     }
 
+    PROMOTION_ID = this.props.match.params.id;
+    PROMOTION_NAME = this.props.match.params.promotionName;
+
     /**
      * 表单选择的查询条件
      */

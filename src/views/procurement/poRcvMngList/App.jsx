@@ -713,7 +713,7 @@ class PoRcvMngList extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
-                            <Col className="ant-col-6 ant-col-offset-6 gutter-row">
+                            <Col className="tr">
                                 <FormItem>
                                     <Button size="default" onClick={this.handleResetValue}>
                                         重置
