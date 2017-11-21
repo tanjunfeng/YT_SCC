@@ -468,7 +468,7 @@ class StoreAdjList extends Component {
                                     {/* 调整日期 */}
                                     <FormItem>
                                         <div>
-                                            <span className="sc-form-item-label">调整日期起止</span>
+                                            <span className="sc-form-item-label">调整日期</span>
                                             <RangePicker
                                                 style={{ width: '240px' }}
                                                 className="manage-form-enterTime"
