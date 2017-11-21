@@ -12,7 +12,6 @@ import PropTypes from 'prop-types';
 import Utils from '../../../util/util';
 import { directSalesgoodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
-// import { sortList } from './helper';
 
 class GoodsTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
@@ -61,8 +60,8 @@ class GoodsTable extends PureComponent {
             quantities: 0, // 订购数量
             amount: 0 // 金额总计
         };
-        // 检查当前数量是否合法以及把不合法的数据前置以及计算新的total
-        const newGoodList = this.checkMultiple(goodsList, total);
+        // 整理列表，把不合法的数据前置以及计算新的 total
+        const newGoodList = this.sortOut(goodsList, total);
         this.props.onChange([...newGoodList], total);
     }
 
@@ -97,37 +96,52 @@ class GoodsTable extends PureComponent {
     }
 
     /**
-     * 检查是否整箱销售，若是，则判断当前数量是否是内装数量的整数倍
+     * 校验销售内装数
+     */
+    validateSalesInsideNumber = (goods) => {
+        const { quantity, salesInsideNumber, sellFullCase } = goods;
+        let isMultiple = true;
+        // 不按整箱销售时，判断当前所填数量是否是内装数量的整数倍
+        if (sellFullCase === 0 && quantity % salesInsideNumber > 0) {
+            isMultiple = false;
+        }
+        Object.assign(goods, { isMultiple });
+    }
+
+    /**
+     * 根据 goods 和已有 total 计算新的 total
+     */
+    calcTotal = (goods, total) => {
+        const { quantity, salePrice } = goods;
+        // 处理total
+        let amount = 0;
+        if (typeof salePrice === 'number') {
+            amount = quantity * salePrice;
+        }
+        Object.assign(total, {
+            rows: total.rows + 1,
+            quantities: total.quantities + quantity,
+            amount: total.amount + amount
+        });
+    }
+
+    /**
+     * 整理列表顺序，将不合法的数据前置，合法的后置
      *
      * @returns {*object} goodsList 商品列表
      */
-    checkMultiple = (goodsList, total) => {
+    sortOut = (goodsList, total) => {
         const frontList = [];
         const backList = [];
         goodsList.forEach(goods => {
-            const { quantity, salesInsideNumber, sellFullCase, salePrice } = goods;
-            let isMultiple = true;
-            // 不按整箱销售时，判断当前所填数量是否是内装数量的整数倍
-            if (sellFullCase === 0 && quantity % salesInsideNumber > 0) {
-                isMultiple = false;
-            }
-            Object.assign(goods, { isMultiple });
+            this.validateSalesInsideNumber(goods);
             // 整理顺序，将不合法的前置，合法的后置
             if (!goods.isMultiple || !goods.enough) {
                 frontList.push(goods);
             } else {
                 backList.push(goods);
             }
-            // 处理total
-            let amount = 0;
-            if (typeof salePrice === 'number') {
-                amount = quantity * salePrice;
-            }
-            Object.assign(total, {
-                rows: total.rows + 1,
-                quantities: total.quantities + quantity,
-                amount: total.amount + amount
-            });
+            this.calcTotal(goods, total);
         });
         return frontList.concat(backList)
     }
