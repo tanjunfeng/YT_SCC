@@ -32,9 +32,7 @@ class processList extends PureComponent {
     constructor(props) {
         super(props);
         this.param = {};
-        // this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
-        // this.handlePromotionReset = this.handlePromotionReset.bind(this);
-        // this.handleSelect = this.handleSelect.bind(this);
+        this.handlePromotionReset = this.handlePromotionReset.bind(this);
         this.renderOperation = this.renderOperation.bind(this);
         this.query = this.query.bind(this);
     }
@@ -44,7 +42,7 @@ class processList extends PureComponent {
     }
 
     componentDidMount() {
-        // this.handlePromotionReset();
+        this.handlePromotionReset();
         this.query();
     }
 
@@ -52,43 +50,28 @@ class processList extends PureComponent {
         this.props.clearProcessList();
     }
     
-    query() {
-        this.props.queryProcessList();
-    }
     /**
      * 分页页码改变的回调
      */
-    // onPaginate = (pageNum) => {
-    //     Object.assign(this.param, { pageNum, current: pageNum });
-    //     this.query();
-    // }
+    onPaginate = (pageNum) => {
+        Object.assign(this.param, { pageNum, current: pageNum });
+        this.query();
+    }
 
-    // query() {
-    //     this.props.queryCouponsList(this.param).then((data) => {
-    //         const { pageNum, pageSize } = data.data;
-    //         Object.assign(this.param, { pageNum, pageSize });
-    //     });
-    // }
-
-    // handlePromotionSearch(param) {
-    //     this.handlePromotionReset();
-    //     this.param = {
-    //         current: 1,
-    //         ...param
-    //     };
-    //     this.query();
-    // }
-
-    // handlePromotionReset() {
-    //     this.param = {
-    //         pageNum: 1,
-    //         pageSize: PAGE_SIZE
-    //     };
-    // }
-
+    query() {
+        this.props.queryProcessList(this.param).then((data) => {
+            const { pageNum, pageSize } = data.data;
+            Object.assign(this.param, { pageNum, pageSize });
+        });
+    }
     
+    handlePromotionReset() {
+        this.param = {
+            pageNum: 1,
+            pageSize: 1
+        };
+    }
 
-    
     /**
      * 表单操作
      * @param {Object} text 当前行的值
@@ -103,19 +86,14 @@ class processList extends PureComponent {
     }
     render() {
         if(Object.keys(this.props.processList).length === 0){
-            console.log('流程管理');
-            console.log(this.props.processList);
             return null;
         }
-        const { overviewData, detailData} = this.props.processList;
+        const url = `${window.config.apiHost}/commonUploadFile/uploadZip`;
+        const { overviewData, detailData, total, pageNum, pageSize} = this.props.processList;
         processOverview[processOverview.length - 1].render = this.renderOperation;
         processDetails[processDetails.length - 1].render = this.renderOperation;
-        const uploadProps = {
-            multiple: false,
-            action: 'src/commonUploadFile/uploadZip',
-            headers: {
-                authorization: 'multipart/form-data',
-            }
+        const props = {
+            action: url
         };
         return (
             <div>
@@ -127,7 +105,14 @@ class processList extends PureComponent {
                         x: 1400
                     }}
                     bordered
-                   
+                    pagination={{
+                        current: this.param.current,
+                        pageNum,
+                        pageSize,
+                        total,
+                        showQuickJumper: true,
+                        onChange: this.onPaginate
+                    }}
                 />
                 <Table
                     dataSource={detailData.data}
@@ -136,9 +121,16 @@ class processList extends PureComponent {
                     scroll={{
                         x: 1400
                     }}
-                   
+                    pagination={{
+                        current: this.param.current,
+                        pageNum,
+                        pageSize,
+                        total,
+                        showQuickJumper: true,
+                        onChange: this.onPaginate
+                    }}
                 />
-                <Upload {...uploadProps}>
+                <Upload {...props}>
                     <Button>
                     <Icon type="upload" /> Click to Upload
                     </Button>
@@ -152,9 +144,6 @@ class processList extends PureComponent {
 processList.propTypes = {
     queryProcessList: PropTypes.func,
     clearProcessList: PropTypes.func
-    // updatePromotionStatus: PropTypes.func,
-    // couponsList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
-    // location: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(processList));
