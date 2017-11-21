@@ -64,7 +64,7 @@ class OrderInformation extends PureComponent {
         });
     }
 
-    orderId = this.props.match.params.id;
+    getAmount = amount => (`￥${Number(amount).toFixed(2)}`);
 
     /**
      * 保存备注信息
@@ -163,7 +163,7 @@ class OrderInformation extends PureComponent {
         })
     }
 
-    getAmount = amount => (`￥${Number(amount).toFixed(2)}`);
+    orderId = this.props.match.params.id;
 
     render() {
         const { orderDetailData } = this.props;
@@ -227,7 +227,9 @@ class OrderInformation extends PureComponent {
                                 </Col>
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">优惠券优惠:</span>
-                                    <span>-{this.getAmount(orderDetailData.couponDiscountAmount)}</span>
+                                    <span>-{
+                                        this.getAmount(orderDetailData.couponDiscountAmount)
+                                    }</span>
                                 </Col>
                             </Row>
                             <Row>

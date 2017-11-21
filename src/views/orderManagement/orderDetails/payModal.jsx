@@ -112,7 +112,7 @@ class PayModal extends Component {
                                             required: true, message: '请填写支付金额'
                                         }, {
                                             validator: Util.limitTwoDecimalPlaces
-                                        }],
+                                        }]
                                     })(
                                         <InputNumber
                                             min={1}
@@ -170,9 +170,13 @@ class PayModal extends Component {
                                 <div>
                                     <span className="sc-form-item-label">参考号/交易号：</span>
                                     {getFieldDecorator('tranNum', {
-                                        rules: [{ required: true, message: '请填写参考号/交易号' }, {
-                                            validator: Util.limit12to20Places
-                                        }],
+                                        rules: [{
+                                            required: true, message: '请填写参考号/交易号'
+                                        },
+                                        {
+                                            pattern: /^\d{12,20}$/,
+                                            message: '仅允许12-20位数字'
+                                        }]
                                     })(
                                         <Input
                                             className="input"

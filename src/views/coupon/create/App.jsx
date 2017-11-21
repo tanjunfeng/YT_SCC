@@ -387,7 +387,6 @@ class CouponCreate extends PureComponent {
                                                     size="default"
                                                     min={1}
                                                     max={9999}
-                                                    maxlength={9999}
                                                     parser={value => Math.ceil(value)}
                                                 />)}
                                             <span>元</span>
@@ -441,7 +440,6 @@ class CouponCreate extends PureComponent {
                                                             <InputNumber
                                                                 min={1}
                                                                 max={99999}
-                                                                maxlength={99999}
                                                                 parser={value => Math.ceil(value)}
                                                                 onChange={
                                                                     this.handleQuanifyAmountChange
@@ -573,11 +571,14 @@ class CouponCreate extends PureComponent {
                                     <Col span={16}>
                                         <FormItem label="备注">
                                             {getFieldDecorator('note', {
-                                                initialValue: this.param.note
+                                                initialValue: this.param.note,
+                                                rules: [{
+                                                    max: 15,
+                                                    message: '不能输入超过15个字'
+                                                }]
                                             })(
                                                 <TextArea
                                                     placeholder="可填写备注"
-                                                    maxLength="15"
                                                     autosize={{
                                                         minRows: 4,
                                                         maxRows: 6
