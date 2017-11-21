@@ -511,8 +511,8 @@ class FranchiseeSettlement extends Component {
                                     </FormItem>
                                 </Col>
                             </Row>
-                            <Row gutter={40} type="flex" justify="end">
-                                <Col className="tr" span={8}>
+                            <Row gutter={24} type="flex" justify="end">
+                                <Col className="tr" span={16}>
                                     <FormItem>
                                         <Button
                                             type="primary"
