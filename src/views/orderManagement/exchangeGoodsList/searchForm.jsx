@@ -6,7 +6,7 @@ import { withRouter } from 'react-router';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../../util/util';
-import { returnGoodsStatus, goodsReceiptStatus } from '../../../constant/salesManagement';
+import { returnGoodsStatus, productStateOption } from '../../../constant/salesManagement';
 import { getExchangeGoodsListAction } from '../../../actions';
 import { pubFetchValueList } from '../../../actions/pub';
 import SearchMind from '../../../components/searchMind';
@@ -48,7 +48,7 @@ class SearchForm extends PureComponent {
             branchCompany,
             id,
             orderId,
-            shippingState,
+            productState,
             createTime,
             state
             } = this.props.form.getFieldsValue();
@@ -60,7 +60,7 @@ class SearchForm extends PureComponent {
             branchCompanyId: branchCompany.id,
             id,
             orderId,
-            shippingState,
+            productState,
             state,
             startCreateTime,
             endCreateTime
@@ -221,12 +221,12 @@ class SearchForm extends PureComponent {
                     <Row gutter={40}>
                         <Col span={8}>
                             <FormItem label="商品状态">
-                                {getFieldDecorator('shippingState', {
-                                    initialValue: data.shippingState ? data.shippingState : ''
+                                {getFieldDecorator('productState', {
+                                    initialValue: data.productState ? data.productState : ''
                                 })(
                                     <Select style={{ width: '200px' }} size="default">
                                         {
-                                            goodsReceiptStatus.data.map((item) => (
+                                            productStateOption.data.map((item) => (
                                                 <Select.Option key={item.key} value={item.key}>
                                                     {item.value}
                                                 </Select.Option>
