@@ -3,7 +3,7 @@
  * @Description: 采购退货详情页
  * @CreateDate: 2017-10-27 11:26:16
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-21 11:29:30
+ * @Last Modified time: 2017-11-21 11:33:22
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import moment from 'moment';
 import {
-    Table, Form, Icon, Row, Col, Input, Button
+    Table, Form, Icon, Row, Col, Button
 } from 'antd';
 import {
     fetchReturnPoRcvDetail,
@@ -25,7 +25,6 @@ import { exportReturnProPdf } from '../../../service';
 
 const FormItem = Form.Item;
 const dateFormat = 'YYYY-MM-DD';
-const { TextArea } = Input;
 
 @connect(state => ({
     poReturn: state.toJS().procurement.poReturn,
@@ -284,7 +283,7 @@ class ReturnManagementDetail extends PureComponent {
                                     {/* 退货地点 */}
                                     <FormItem formItemLayout >
                                         <span className="ant-form-item-label search-mind-label">退货地点</span>
-                                        <span className="text">{poReturn.refundAdrName}</span>
+                                        <span className="text">{poReturn.refundAdrCode} - {poReturn.refundAdrName}</span>
                                     </FormItem>
                                 </Col>
                                 <Col span={6}>
