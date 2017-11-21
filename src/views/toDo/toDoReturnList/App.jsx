@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-16 17:06:40
+ * @Last Modified time: 2017-11-21 15:39:20
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -273,7 +273,7 @@ class toDoReturnList extends PureComponent {
                         auditResult
                     });
                 }
-                if (auditResult === '1') {
+                if (auditResult === '0') {
                     if (auditOpinion === '') {
                         this.props.form.setFields({
                             auditOpinion: {

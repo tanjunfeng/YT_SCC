@@ -12,16 +12,13 @@ import { is, fromJS } from 'immutable';
 import moment from 'moment';
 import {
     Row, Col, Select, DatePicker,
-    Input, Modal, Tooltip, Icon, message
+    Input, Tooltip, Icon, message
 } from 'antd';
 import SearchMind from '../../../components/searchMind';
-import Util from '../../../util/util';
-import { SET_ASIDE_TIME } from '../../../constant';
 
 const Option = Select.Option;
 const { TextArea } = Input;
 
-const confirm = Modal.confirm;
 
 class FormContent extends PureComponent {
     static propTypes = {
@@ -553,6 +550,10 @@ class FormContent extends PureComponent {
             </div>
         )
     }
+}
+
+FormContent.propTypes = {
+    pubFetchValueList: PropTypes.func
 }
 
 export default FormContent
