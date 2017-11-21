@@ -464,7 +464,7 @@ class StoreAdjList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8}>
+                                <Col className="gutter-row" span={16}>
                                     {/* 调整日期 */}
                                     <FormItem>
                                         <div>
