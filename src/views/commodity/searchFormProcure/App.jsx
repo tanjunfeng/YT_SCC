@@ -237,7 +237,7 @@ class SearchForm extends Component {
                 <Form layout="inline" className={`${prefixCls}-content`}>
                     <Row type="flex" justify="start" className={`${prefixCls}-flex`}>
                         {/* 供应商 */}
-                        <Col span={8}>
+                        <Col>
                             <FormItem label="供应商">
                                 <span className="value-list-input">
                                     <SearchMind
@@ -258,11 +258,10 @@ class SearchForm extends Component {
                                             {
                                                 title: '供应商编码',
                                                 dataIndex: 'spNo',
-                                                width: 98
+                                                width: 68
                                             }, {
                                                 title: '供应商名称',
-                                                dataIndex: 'companyName',
-                                                width: 140
+                                                dataIndex: 'companyName'
                                             }
                                         ]}
                                     />
@@ -270,7 +269,7 @@ class SearchForm extends Component {
                             </FormItem>
                         </Col>
                         {/* 地点 */}
-                        <Col span={8}>
+                        <Col>
                             <FormItem label="地点">
                                 <span className="value-list-input">
                                     <SearchMind
@@ -291,7 +290,7 @@ class SearchForm extends Component {
                                             {
                                                 title: '供应商地点编码',
                                                 dataIndex: 'providerNo',
-                                                width: 98
+                                                width: 68
                                             }, {
                                                 title: '供应商地点名称',
                                                 dataIndex: 'providerName'
@@ -302,7 +301,7 @@ class SearchForm extends Component {
                             </FormItem>
                         </Col>
                         {/* 子公司 */}
-                        <Col span={8}>
+                        <Col>
                             <FormItem label="子公司">
                                 {getFieldDecorator('branchCompany', {
                                     initialValue: { id: '', name: '' }
@@ -312,13 +311,12 @@ class SearchForm extends Component {
                             </FormItem>
                         </Col>
                         {/* 是否启用 */}
-                        <Col span={8}>
+                        <Col>
                             <FormItem className="sc-form-item" label="启用">
                                 {getFieldDecorator('initiateModeOptions', {
                                     initialValue: initiateModeOptions.defaultValue
                                 })(
                                     <Select
-                                        style={{ width: 90 }}
                                         className="sc-form-item-select"
                                         size="default"
                                         disabled={this.state.supplierType === '-1'}
@@ -333,9 +331,7 @@ class SearchForm extends Component {
                                     </Select>
                                     )}
                             </FormItem>
-                        </Col>
-                        {/* 是否为主供应商 */}
-                        <Col span={8}>
+                            {/* 是否为主供应商 */}
                             <FormItem className="sc-form-item" label="主供应商">
                                 {getFieldDecorator('mainSupplierOptions', {
                                     initialValue: mainSupplierOptions.defaultValue
