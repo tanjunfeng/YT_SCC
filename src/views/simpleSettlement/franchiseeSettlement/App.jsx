@@ -293,7 +293,7 @@ class FranchiseeSettlement extends Component {
                 <div className="manage-form">
                     <Form layout="inline">
                         <div className="gutter-example">
-                            <Row gutter={24}>
+                            <Row gutter={16}>
                                 <Col className="gutter-row franchiseeSettlement-errPlace" span={8}>
                                     {/* 签收日期 */}
                                     <FormItem>
@@ -351,7 +351,7 @@ class FranchiseeSettlement extends Component {
                                     </FormItem>
                                 </Col>
                             </Row>
-                            <Row gutter={24}>
+                            <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
                                     {/* 加盟商 */}
                                     <FormItem>
@@ -383,7 +383,7 @@ class FranchiseeSettlement extends Component {
                                     />
                                 </Col>
                             </Row>
-                            <Row gutter={24}>
+                            <Row gutter={16}>
                                 <Col
                                     className="gutter-row"
                                     span={8}
@@ -394,7 +394,6 @@ class FranchiseeSettlement extends Component {
                                         <div>
                                             <span
                                                 className="sc-form-item-label"
-                                                style={{ marginLeft: 5 }}
                                             >订单编号</span>
                                             {getFieldDecorator('orderId', {
                                                 rules: [{
@@ -411,8 +410,8 @@ class FranchiseeSettlement extends Component {
                                     </FormItem>
                                 </Col>
                             </Row>
-                            <Row gutter={40} type="flex" justify="end">
-                                <Col className="tr" span={8}>
+                            <Row gutter={24} type="flex" justify="end">
+                                <Col className="tr" span={16}>
                                     <FormItem>
                                         <Button
                                             type="primary"

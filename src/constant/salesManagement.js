@@ -62,6 +62,24 @@ export const goodsReceiptStatus = {
     }]
 }
 
+// 商品状态
+export const productStateOption = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '请选择'
+    }, {
+        key: '1',
+        value: '待取货'
+    }, {
+        key: '2',
+        value: '已取货'
+    }, {
+        key: '3',
+        value: '已发货'
+    }]
+}
+
 
 // 退货详情页 退货原因
 
