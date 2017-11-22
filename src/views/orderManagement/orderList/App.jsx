@@ -269,7 +269,11 @@ class OrderManagementList extends Component {
                 });
                 break;
             case 'tableCancel':
-                this.props.modifyCauseModalVisible({ isShow: true, id });
+                this.props.modifyCauseModalVisible({ isShow: true, id })
+                .then(res => {
+                    this.getSearchData();
+                    message.success(res.message);
+                })
                 break;
             case 'tableRetransfer':
                 modifyResendOrder({
