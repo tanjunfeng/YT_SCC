@@ -7,25 +7,13 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import Utils from '../../../../util/util';
 import { promotionStatus } from '.././constants';
 import { BranchCompany } from '../../../../container/search';
-import { pubFetchValueList } from '../../../../actions/pub';
 import { PAGE_SIZE } from '../../../../constant';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-
-@connect(
-    state => ({
-        data: state.toJS().queryWhiteList.data,
-    }),
-    dispatch => bindActionCreators({
-        pubFetchValueList,
-    }, dispatch)
-)
 
 class SearchForm extends PureComponent {
     state = {
@@ -93,7 +81,7 @@ class SearchForm extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div className="search-box promotion">
+            <div className="search-box white-list">
                 <Form layout="inline">
                     <div className="search-conditions">
                         <Row gutter={40}>
@@ -188,9 +176,5 @@ SearchForm.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.objectOf(PropTypes.any),
 };
-
-SearchForm.defaultProps = {
-    prefixCls: 'whiteListConfiguration'
-}
 
 export default withRouter(Form.create()(SearchForm));

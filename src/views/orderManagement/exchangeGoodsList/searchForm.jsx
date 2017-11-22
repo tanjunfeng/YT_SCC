@@ -6,11 +6,9 @@ import { withRouter } from 'react-router';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../../util/util';
-import { returnGoodsStatus, goodsReceiptStatus } from '../../../constant/salesManagement';
+import { returnGoodsStatus, productStateOption } from '../../../constant/salesManagement';
 import { getExchangeGoodsListAction } from '../../../actions';
-import { pubFetchValueList } from '../../../actions/pub';
-import SearchMind from '../../../components/searchMind';
-import { BranchCompany } from '../../../container/search';
+import { BranchCompany, Franchisee } from '../../../container/search';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -20,8 +18,7 @@ const dateFormat = 'YYYY-MM-DD';
     () => ({
     }),
     dispatch => bindActionCreators({
-        getExchangeGoodsListAction,
-        pubFetchValueList,
+        getExchangeGoodsListAction
     }, dispatch)
 )
 
@@ -29,10 +26,8 @@ class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
-            franchiseeId: '',
+            data: []
         }
-        this.joiningSearchMind = null;
     }
 
     // 父组件page改变或点击确定或取消
@@ -48,19 +43,19 @@ class SearchForm extends PureComponent {
             branchCompany,
             id,
             orderId,
-            shippingState,
+            productState,
             createTime,
-            state
+            state,
+            franchisee
             } = this.props.form.getFieldsValue();
         const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
         const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
-        const franchiseeId = this.state.franchiseeId;
         const searchParams = {
-            franchiseeId,
             branchCompanyId: branchCompany.id,
+            franchiseeId: franchisee.franchiseeId,
             id,
             orderId,
-            shippingState,
+            productState,
             state,
             startCreateTime,
             endCreateTime
@@ -78,26 +73,8 @@ class SearchForm extends PureComponent {
 
     // 重置
     handleReset = () => {
-        this.handleJoiningClear();
-        this.joiningSearchMind.reset();
         this.props.form.resetFields();
         this.props.onPromotionReset();  // 通知父页面已清空
-    }
-
-    // 加盟商-值清单
-    handleJoiningChoose = ({ record }) => {
-        this.setState({
-            franchiseeId: record.franchiseeId,
-            franchiseeIdName: `${record.franchiseeId} - ${record.franchiseeName}`
-        });
-    }
-
-
-    // 加盟商-清除
-    handleJoiningClear = () => {
-        this.setState({
-            franchiseeId: ''
-        });
     }
 
     render() {
@@ -132,38 +109,9 @@ class SearchForm extends PureComponent {
                             <FormItem>
                                 <div>
                                     <span className="sc-form-item-label">雅堂小超:</span>
-                                    <SearchMind
-                                        defaultValue={this.state.franchiseeIdName}
-                                        rowKey="franchiseeId"
-                                        compKey="search-mind-joining"
-                                        ref={ref => { this.joiningSearchMind = ref }}
-                                        fetch={(params) =>
-                                            this.props.pubFetchValueList({
-                                                param: params.value,
-                                                pageNum: params.pagination.current || 1,
-                                                pageSize: params.pagination.pageSize
-                                            }, 'getFranchiseeInfo')
-                                        }
-                                        onChoosed={this.handleJoiningChoose}
-                                        onClear={this.handleJoiningClear}
-                                        renderChoosedInputRaw={(row) => (
-                                            <div>
-                                                {row.franchiseeId} - {row.franchiseeName}
-                                            </div>
-                                        )}
-                                        pageSize={6}
-                                        columns={[
-                                            {
-                                                title: '加盟商id',
-                                                dataIndex: 'franchiseeId',
-                                                width: 98
-                                            }, {
-                                                title: '加盟商名字',
-                                                dataIndex: 'franchiseeName',
-                                                width: 140
-                                            }
-                                        ]}
-                                    />
+                                    {getFieldDecorator('franchisee', {
+                                        initialValue: { franchiseeId: '', franchiseeName: '' }
+                                    })(<Franchisee />)}
                                 </div>
                             </FormItem>
                         </Col>
@@ -183,7 +131,11 @@ class SearchForm extends PureComponent {
                                 <div className="row middle">
                                     <span className="ant-form-item-label search-mind-label">换货日期</span>
                                     {getFieldDecorator('createTime', {
-                                        initialValue: data.startCreateTime ? [moment(data.startCreateTime), moment(data.endCreateTime)] : null
+                                        initialValue: data.startCreateTime
+                                            ? [moment(
+                                                data.startCreateTime), moment(
+                                                data.endCreateTime)]
+                                            : null
                                     })(
                                         <RangePicker
                                             className="date-range-picker"
@@ -221,12 +173,12 @@ class SearchForm extends PureComponent {
                     <Row gutter={40}>
                         <Col span={8}>
                             <FormItem label="商品状态">
-                                {getFieldDecorator('shippingState', {
-                                    initialValue: data.shippingState ? data.shippingState : ''
+                                {getFieldDecorator('productState', {
+                                    initialValue: data.productState ? data.productState : ''
                                 })(
                                     <Select style={{ width: '200px' }} size="default">
                                         {
-                                            goodsReceiptStatus.data.map((item) => (
+                                            productStateOption.data.map((item) => (
                                                 <Select.Option key={item.key} value={item.key}>
                                                     {item.value}
                                                 </Select.Option>
@@ -252,7 +204,6 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     onPromotionSearch: PropTypes.func,
     onPromotionReset: PropTypes.func,
-    pubFetchValueList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     refresh: PropTypes.bool
 };
