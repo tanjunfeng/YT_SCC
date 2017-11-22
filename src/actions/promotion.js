@@ -444,5 +444,5 @@ export const clearFranchiseeList = () => dispatch => (dispatch({
  */
 export const clearProcessList = () => dispatch => (dispatch({
     type: ActionType.CLEAR_COUPONS_LIST,
-    payload: []
+    payload: {}
 }));

@@ -10,8 +10,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Icon, Menu, Dropdown, Upload, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Table, Form, Icon, Upload, Button, Input} from 'antd';
+import FlowChart from '../flowChart';
 
 import {
     queryProcessList,
@@ -28,13 +28,18 @@ import { processOverview, processDetails } from '../columns';
     clearProcessList
 }, dispatch))
 
-class processList extends PureComponent {
+class ProcessList extends PureComponent {
     constructor(props) {
         super(props);
+        this.state = {
+            data: null,
+            visible: false
+        }
         this.param = {};
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
         this.renderOperation = this.renderOperation.bind(this);
-        this.query = this.query.bind(this);
+        this.getFlowChart = this.getFlowChart.bind(this);
+        this.closeCanvas = this.closeCanvas.bind(this);
     }
 
     componentWillMount() {
@@ -49,7 +54,6 @@ class processList extends PureComponent {
     componentWillUnmount() {
         this.props.clearProcessList();
     }
-    
     /**
      * 分页页码改变的回调
      */
@@ -57,38 +61,50 @@ class processList extends PureComponent {
         Object.assign(this.param, { pageNum, current: pageNum });
         this.query();
     }
-
-    query() {
+    getFlowChart = () => {
+        this.setState({data: {}});
+        this.showModal();
+    }
+    query = () => {
         this.props.queryProcessList(this.param).then((data) => {
             const { pageNum, pageSize } = data.data;
             Object.assign(this.param, { pageNum, pageSize });
         });
     }
-    
-    handlePromotionReset() {
+    handlePromotionReset = () => {
         this.param = {
             pageNum: 1,
-            pageSize: 1
-        };
+            pageSize: PAGE_SIZE
+        }
     }
-
+    closeCanvas = () => {
+        const canvasRoot = document.getElementById('canvasRoot');
+        while (canvasRoot.hasChildNodes()) {
+            canvasRoot.removeChild(canvasRoot.firstChild);
+        }
+    }
+    showModal = () => {
+        this.setState({
+            visible: true,
+        });
+    }
     /**
      * 表单操作
      * @param {Object} text 当前行的值
      * @param {object} record 单行数据
      */
     renderOperation(text, record) {
-        const { id } = record;
-        const pathname = window.location.pathname;
+        // const { id } = record;
+        // const pathname = window.location.pathname;
         return (
-            <Link to={`${pathname}/itemDetail/${id}`}>查看流程图</Link>
+            <a onClick={this.getFlowChart}>查看流程图</a>
         )
     }
     render() {
-        if(Object.keys(this.props.processList).length === 0){
+        if (Object.keys(this.props.processList).length === 0) {
             return null;
         }
-        const url = `${window.config.apiHost}/commonUploadFile/uploadZip`;
+        const url = `${window.config.apiHost}/bpm/newdeploy`;
         const { overviewData, detailData, total, pageNum, pageSize} = this.props.processList;
         processOverview[processOverview.length - 1].render = this.renderOperation;
         processDetails[processDetails.length - 1].render = this.renderOperation;
@@ -130,20 +146,27 @@ class processList extends PureComponent {
                         onChange: this.onPaginate
                     }}
                 />
+                <Input size="small" placeholder="small size" />
                 <Upload {...props}>
                     <Button>
-                    <Icon type="upload" /> Click to Upload
+                        <Icon type="upload" /> 点击选择zip文件
                     </Button>
                 </Upload>
+                <div id="canvasRoot">
+                    <FlowChart data={this.state.data} >
+                        <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
+                    </FlowChart>
+                </div>
             </div>
 
         );
     }
 }
 
-processList.propTypes = {
+ProcessList.propTypes = {
     queryProcessList: PropTypes.func,
-    clearProcessList: PropTypes.func
+    clearProcessList: PropTypes.func,
+    processList: PropTypes.objectOf(PropTypes.objectOf(PropTypes.any))
 }
 
-export default withRouter(Form.create()(processList));
+export default withRouter(Form.create()(ProcessList));
