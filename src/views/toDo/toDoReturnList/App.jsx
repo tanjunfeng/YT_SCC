@@ -31,7 +31,7 @@ import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import {
     locType,
-    auditStatus,
+    returnStatus,
     optionStatus
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
@@ -135,6 +135,10 @@ class toDoReturnList extends PureComponent {
                 title: '退货成本额',
                 dataIndex: 'totalRefundCost',
                 key: 'totalRefundCost'
+            }, {
+                title: '实际退货金额(含税)',
+                dataIndex: 'totalRealRefundMoney',
+                key: 'totalRealRefundMoney'
             }, {
                 title: '退货金额(含税)',
                 dataIndex: 'totalRefundMoney',
@@ -593,6 +597,9 @@ class toDoReturnList extends PureComponent {
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
+                <Menu.Item key="detail">
+                    <Link to={`${pathname}/returnManagementDetail/${id}`}>退货单详情</Link>
+                </Menu.Item>
                 {/* <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
@@ -602,9 +609,6 @@ class toDoReturnList extends PureComponent {
                     <a target="_blank" rel="noopener noreferrer">
                         查看审批意见
                     </a>
-                </Menu.Item>
-                <Menu.Item key="detail">
-                    <Link to={`${pathname}/returnManagementDetail/${id}`}>查看退货单详情</Link>
                 </Menu.Item>
             </Menu>
         );
@@ -635,10 +639,10 @@ class toDoReturnList extends PureComponent {
                             <Col span={8}>
                                 {/* 流程状态 */}
                                 <FormItem label="流程状态">
-                                    {getFieldDecorator('auditStatus', { initialValue: auditStatus.defaultValue })(
+                                    {getFieldDecorator('auditStatus', { initialValue: returnStatus.defaultValue })(
                                         <Select style={{ width: '153px' }} size="default">
                                             {
-                                                auditStatus.data.map((item) => (
+                                                returnStatus.data.map((item) => (
                                                     <Option key={item.key} value={item.key}>
                                                         {item.value}
                                                     </Option>))
