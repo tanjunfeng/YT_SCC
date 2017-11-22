@@ -1,14 +1,15 @@
+$commodityManagementFieldWidth: 220px;
 .commodity-management {
     .manage-form {
         .ant-input,
         .ant-select {
-            width: 240px;
+            width: $commodityManagementFieldWidth;
+        }
+        .value-list-input .ywc-smind {
+            top: 8px;
         }
         .ywc-smind {
-            vertical-align: middle;
-        }
-        .ywc-smind {
-            width: 240px;
+            width: $commodityManagementFieldWidth;
         }
         .tr {
             text-align: right;
