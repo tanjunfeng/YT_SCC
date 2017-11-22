@@ -1,0 +1,36 @@
+{
+    "timestamp": 1511319987004,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 20,
+        "total": 1,
+        "data": [
+            {
+                "id": 2001,
+                "spId": "xcsupp001",
+                "spName": "成都海王星商贸有限公司",
+                "spAdrId": "1",
+                "spAdrName": "四川-康定民族贸易有限责任公司",
+                "spNo": "100000",
+                "productId": "60000484352",
+                "branchCompanyId": "10000",
+                "supplierType": 1,
+                "purchaseInsideNumber": 1,
+                "purchasePrice": 66.33,
+                "internationalCode": "4901872818310",
+                "distributeWarehouseId": 1,
+                "distributeWarehouseName": "成都仓四川子公司常温正常仓",
+                "status": 1,
+                "deleteStatus": 0,
+                "createTime": 1511310788000,
+                "createUserId": "10001",
+                "modifyTime": null,
+                "modifyUserId": null
+            }
+        ]
+    },
+    "success": true
+}
