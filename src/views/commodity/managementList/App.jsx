@@ -550,7 +550,6 @@ class ManagementList extends PureComponent {
                                         <LevelTree className="levelTree-wrap" />
                                         <ClassifiedSelect onChange={this.handleSelectChange} />
                                     </FormItem>
-
                                 </Col>
                             </Row>
                             <Row gutter={16}>
