@@ -1,0 +1,79 @@
+{
+    "timestamp": 1511316179389,
+    "code": 200,
+    "message": {},
+    "exception": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 5,
+        "total": 40,
+        "data": [
+            {
+                "spId": "xcsupp001",
+                "spNo": "100000",
+                "companyName": "成都海王星商贸有限公司",
+                "spAdrid": 1,
+                "providerNo": "1000001",
+                "providerName": "四川-康定民族贸易有限责任公司",
+                "branchCompanyId": 10000,
+                "goodsArrivalCycle": 7,
+                "payType": 1,
+                "payCondition": 4,
+                "settlementPeriod": 0
+            },
+            {
+                "spId": "xcsupp002",
+                "spNo": "100001",
+                "companyName": "成都蒙利天和商贸有限公司",
+                "spAdrid": 2,
+                "providerNo": "1000002",
+                "providerName": "四川-成都蒙利天和商贸有限公司",
+                "branchCompanyId": 10000,
+                "goodsArrivalCycle": 7,
+                "payType": 1,
+                "payCondition": 1,
+                "settlementPeriod": 0
+            },
+            {
+                "spId": "xcsupp003",
+                "spNo": "100002",
+                "companyName": "成都诚心诚意商贸有限公司",
+                "spAdrid": 3,
+                "providerNo": "1000003",
+                "providerName": "四川-成都诚心诚意商贸有限公司",
+                "branchCompanyId": 10000,
+                "goodsArrivalCycle": 7,
+                "payType": 1,
+                "payCondition": 0,
+                "settlementPeriod": 1
+            },
+            {
+                "spId": "xcsupp005",
+                "spNo": "100004",
+                "companyName": "四川康昊食品贸易有限公司",
+                "spAdrid": 5,
+                "providerNo": "1000005",
+                "providerName": "四川-四川康昊食品贸易有限公司",
+                "branchCompanyId": 10000,
+                "goodsArrivalCycle": 7,
+                "payType": 1,
+                "payCondition": 1,
+                "settlementPeriod": 1
+            },
+            {
+                "spId": "xcsupp007",
+                "spNo": "100006",
+                "companyName": "日加满饮品（上海）有限公司new",
+                "spAdrid": 7,
+                "providerNo": "1000007",
+                "providerName": "重庆 - 日加满饮品（上海）有限公司new",
+                "branchCompanyId": 10003,
+                "goodsArrivalCycle": 7,
+                "payType": 0,
+                "payCondition": 4,
+                "settlementPeriod": 0
+            }
+        ]
+    },
+    "success": true
+}
