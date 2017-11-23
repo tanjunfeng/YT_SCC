@@ -1,0 +1,62 @@
+{
+    "timestamp": 1505985901605,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data":{
+        "pageNum": 1,
+        "pageSize": 1,
+        "total": 3,
+        "overviewData": {
+            "data": [
+                {
+                    "id": "HD1710110",
+                    "name": "123",
+                    "deploymentTime": 1505893364000
+                },
+                {
+                    "id": "HD222220",
+                    "name": "222",
+                    "deploymentTime": 1505893334000
+                },
+                {
+                    "id": "HD23333",
+                    "name": "333",
+                    "deploymentTime": 1505993334000
+                }
+            ]
+        },
+        "detailData": {
+            "data": [
+                {
+                    "id": "12323",
+                    "name": "流程1",
+                    "key": "234345r",
+                    "version": "2342.2342",
+                    "resourceName": "流程1",
+                    "diagramResourceName": "規則名",
+                    "deploymentId": "2342"
+                },
+                {
+                    "id": "2222",
+                    "name": "流程2",
+                    "key": "22222r",
+                    "version": "2342.2222",
+                    "resourceName": "流程2",
+                    "diagramResourceName": "規則名2",
+                    "deploymentId": "2222"
+                },
+                {
+                    "id": "33333",
+                    "name": "流程3",
+                    "key": "33333r",
+                    "version": "2342.3333",
+                    "resourceName": "流程3",
+                    "diagramResourceName": "規則名3",
+                    "deploymentId": "3333"
+                }
+            ]
+        }
+    },
+    "success": true
+}
