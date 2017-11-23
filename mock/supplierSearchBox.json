@@ -1,0 +1,92 @@
+{
+    "timestamp": 1511320096029,
+    "code": 200,
+    "message": {},
+    "exception": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 6,
+        "total": 50,
+        "data": [
+            {
+                "spId": "xcsupp001",
+                "spNo": "100000",
+                "companyName": "成都海王星商贸有限公司",
+                "spAdrid": null,
+                "providerNo": null,
+                "providerName": null,
+                "branchCompanyId": null,
+                "goodsArrivalCycle": null,
+                "payType": null,
+                "payCondition": null,
+                "settlementPeriod": null
+            },
+            {
+                "spId": "xcsupp002",
+                "spNo": "100001",
+                "companyName": "成都蒙利天和商贸有限公司",
+                "spAdrid": null,
+                "providerNo": null,
+                "providerName": null,
+                "branchCompanyId": null,
+                "goodsArrivalCycle": null,
+                "payType": null,
+                "payCondition": null,
+                "settlementPeriod": null
+            },
+            {
+                "spId": "xcsupp003",
+                "spNo": "100002",
+                "companyName": "成都诚心诚意商贸有限公司",
+                "spAdrid": null,
+                "providerNo": null,
+                "providerName": null,
+                "branchCompanyId": null,
+                "goodsArrivalCycle": null,
+                "payType": null,
+                "payCondition": null,
+                "settlementPeriod": null
+            },
+            {
+                "spId": "xcsupp005",
+                "spNo": "100004",
+                "companyName": "四川康昊食品贸易有限公司",
+                "spAdrid": null,
+                "providerNo": null,
+                "providerName": null,
+                "branchCompanyId": null,
+                "goodsArrivalCycle": null,
+                "payType": null,
+                "payCondition": null,
+                "settlementPeriod": null
+            },
+            {
+                "spId": "xcsupp006",
+                "spNo": "100005",
+                "companyName": "成都景中商贸有限公司",
+                "spAdrid": null,
+                "providerNo": null,
+                "providerName": null,
+                "branchCompanyId": null,
+                "goodsArrivalCycle": null,
+                "payType": null,
+                "payCondition": null,
+                "settlementPeriod": null
+            },
+            {
+                "spId": "xcsupp007",
+                "spNo": "100006",
+                "companyName": "日加满饮品（上海）有限公司new",
+                "spAdrid": null,
+                "providerNo": null,
+                "providerName": null,
+                "branchCompanyId": null,
+                "goodsArrivalCycle": null,
+                "payType": null,
+                "payCondition": null,
+                "settlementPeriod": null
+            }
+        ]
+    },
+    "success": true
+}

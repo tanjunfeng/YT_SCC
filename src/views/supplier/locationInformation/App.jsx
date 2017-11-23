@@ -146,9 +146,7 @@ class BasicInfo extends PureComponent {
                         purchasePhone,
                         purchaseEmail
                     },
-                    spAdrDeliverys: wareHouseIds.map((item) => (
-                        { warehouseId: item }
-                    )),
+                    spAdrDeliverys: wareHouseIds.map(item => ({ warehouseId: item })),
                     parentId: detailData.id
                 }
 
@@ -183,9 +181,10 @@ class BasicInfo extends PureComponent {
 
     submit(type) {
         const { isEdit } = this.props;
-        this.getValue((d) => {
-            const data = d;
-            data.commitType = type;
+        this.getValue((data) => {
+            Object.assign(data, {
+                commitType: type
+            });
             this.props.hanldeSupplier(data,
                 isEdit
                     ? 'updateSupplierAddressInfo'
@@ -196,14 +195,13 @@ class BasicInfo extends PureComponent {
         });
     }
 
-    handleAreaChange(item) {
+    handleAreaChange(placeCode) {
         const { placeRegion } = this.props;
-        for (let i = 0; i < placeRegion.length; i++) {
-            if (i.code === item) {
-                this.company = i.name;
-                return;
+        placeRegion.forEach(item => {
+            if (item.code === placeCode) {
+                this.company = item.name
             }
-        }
+        });
     }
 
     handleChoose(item) {
@@ -269,7 +267,6 @@ class BasicInfo extends PureComponent {
     renderName(spAdrBasic, supplierBasicInfo) {
         const { isEdit } = this.props;
         const { providerName } = spAdrBasic;
-
         if (isEdit && !this.company) {
             this.childName = providerName;
             return providerName;
@@ -283,8 +280,7 @@ class BasicInfo extends PureComponent {
             this.childName = `${this.company} - ${supplierBasicInfo.companyName}`;
             return `${this.company} - ${supplierBasicInfo.companyName}`;
         }
-
-        return null;
+        return '';
     }
 
     render() {
@@ -358,7 +354,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="1">启用</Option>
                                                     <Option value="0">禁用</Option>
                                                 </Select>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -377,7 +373,7 @@ class BasicInfo extends PureComponent {
                                                     min={0}
                                                     placeholder="周期"
                                                 />
-                                            )}
+                                                )}
                                             &nbsp;天
                                         </FormItem>
                                     </Col>
@@ -397,7 +393,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="2">月结</Option>
                                                     {/* <Option value="3">票到付款</Option> */}
                                                 </Select>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -419,7 +415,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="4">代销商</Option>
                                                     <Option value="5">其他</Option>
                                                 </Select>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -445,7 +441,7 @@ class BasicInfo extends PureComponent {
                                                         )
                                                     }
                                                 </Select>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -466,7 +462,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="2">现金</Option>
                                                     <Option value="3">支票</Option>
                                                 </Select>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -480,16 +476,15 @@ class BasicInfo extends PureComponent {
                                                         Utils.removeInvalid({
                                                             branchCompanyName: param.value,
                                                             id: isEdit
-                                                                ? detailSp.spAdrBasic.id
-                                                                : null,
+                                                                ? detailSp.spAdrBasic.id : null,
                                                             parentId: detailData.id,
                                                         }), 'findCanUseCompanyInfo').then((res) => {
-                                                        const { data } = res.data;
-                                                        if (!data.length) {
-                                                            message.warning('无可用子公司，无法完成后续操作！');
-                                                        }
-                                                        return res;
-                                                    })
+                                                            const { data } = res.data;
+                                                            if (!data.length) {
+                                                                message.warning('无可用子公司，无法完成后续操作！');
+                                                            }
+                                                            return res;
+                                                        })
                                                 }
                                                 ref={node => { this.orgCompany = node }}
                                                 onChoosed={this.handleChoose}
@@ -532,7 +527,7 @@ class BasicInfo extends PureComponent {
                                                     <Option value="3">票到三十天</Option>
                                                     <Option value="4">票到付款</Option>
                                                 </Select>
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -593,7 +588,7 @@ class BasicInfo extends PureComponent {
                                                 <Input
                                                     placeholder="供应商姓名"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -611,7 +606,7 @@ class BasicInfo extends PureComponent {
                                                 <Input
                                                     placeholder="供应商电话"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -629,7 +624,7 @@ class BasicInfo extends PureComponent {
                                                 <Input
                                                     placeholder="供应商邮箱"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -647,7 +642,7 @@ class BasicInfo extends PureComponent {
                                                 <Input
                                                     placeholder="采购员姓名"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                     <Col span={8}>
@@ -663,7 +658,7 @@ class BasicInfo extends PureComponent {
                                                 <Input
                                                     placeholder="采购员电话"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -681,7 +676,7 @@ class BasicInfo extends PureComponent {
                                                 <Input
                                                     placeholder="采购员邮箱"
                                                 />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>

@@ -1,10 +1,22 @@
-.select-line-content{
-    margin-left: 21px; 
-    .select-line-select{
+$searchFormProcureFieldWidth: 250px;
+.select-line-content {
+    margin-left: 21px;
+    .select-line-select {
         min-width: 60px;
         margin-right: 8px;
     }
-    .select-line-flex{
+    .ywc-smind {
+        position: relative;
+        top: 4px;
+        width: $searchFormProcureFieldWidth;
+    }
+    .ant-form-item-label {
+        width: 80px;
+    }
+    .sc-form-item-select {
+        width: 80px;
+    }
+    .select-line-flex {
         margin-top: 10px;
         margin-bottom: 5px;
     }
