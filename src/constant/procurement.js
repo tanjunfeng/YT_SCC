@@ -66,7 +66,7 @@ export const returnStatus = {
     }]
 }
 // 退货单流程状态
-export const auditStatus = {
+export const auditStatusOption = {
     defaultValue: '',
     data: [{
         key: '',
