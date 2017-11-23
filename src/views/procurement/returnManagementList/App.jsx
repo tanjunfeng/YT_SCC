@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-17 16:20:32
+ * @Last Modified time: 2017-11-23 15:47:47
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -96,6 +96,8 @@ class ReturnManagementList extends PureComponent {
             locationData: {},
             isVisibleModal: false,
             opinionVisible: false,
+            orderType: 0,
+            orderItem: 0, // 排序字段:退货单号：0,创建日期：1,状态：2
             refundAdr: '',
             adrTypeCode: '',    // 地点编码
             receivedTypeCode: '',  // 收货单状态编码
@@ -108,7 +110,8 @@ class ReturnManagementList extends PureComponent {
             {
                 title: '退货单号',
                 dataIndex: 'purchaseRefundNo',
-                key: 'purchaseRefundNo'
+                key: 'purchaseRefundNo',
+                sorter: (a, b) => a.age - b.age,
             }, {
                 title: '供应商',
                 dataIndex: 'supplier',
@@ -164,11 +167,13 @@ class ReturnManagementList extends PureComponent {
                         res = (moment(new Date(text)).format(dateFormat))
                     }
                     return res;
-                }
+                },
+                sorter: (a, b) => a.age - b.age,
             }, {
                 title: '状态',
                 dataIndex: 'status',
-                key: 'status'
+                key: 'status',
+                sorter: (a, b) => a.age - b.age,
             }, {
                 title: '操作',
                 dataIndex: 'operation',
@@ -483,7 +488,8 @@ class ReturnManagementList extends PureComponent {
         if (auditDuringArr.length > 1) {
             createTimeEnd = Date.parse(auditDuringArr[1].format(dateFormat));
         }
-
+        const orderType = this.state.orderType;
+        const orderItem = this.state.orderItem;
         // 供应商编号
         const spId = this.state.spId;
 
@@ -503,10 +509,40 @@ class ReturnManagementList extends PureComponent {
             createTimeStart,
             createTimeEnd,
             adrType,
-            adrTypeCode
+            adrTypeCode,
+            orderType,
+            orderItem
         };
+        console.log(searchParams)
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
+    }
+
+    sortOnChange = (pagination, filters, sorter) => {
+        console.log('params', pagination, filters, sorter);
+        if (sorter.order === 'descend') {
+            this.setState({
+                orderType: 1
+            })
+        } else {
+            this.setState({
+                orderType: 0
+            })
+        }
+        if (sorter.columnKey === 'purchaseRefundNo') {
+            this.setState({
+                orderItem: 0
+            })
+        } else if (sorter.columnKey === 'createTime') {
+            this.setState({
+                orderItem: 1
+            })
+        } else {
+            this.setState({
+                orderItem: 2
+            })
+        }
+        this.handleSearch();
     }
 
     renderActions(text, record, index) {
@@ -825,6 +861,7 @@ class ReturnManagementList extends PureComponent {
                             rowSelection={rowSelection}
                             dataSource={data}
                             columns={this.columns}
+                            onChange={this.sortOnChange}
                             rowKey="purchaseRefundNo"
                             scroll={{
                                 x: 1600
