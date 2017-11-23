@@ -8,7 +8,7 @@
 import {
     queryCarouselAdList,
     queryQuickNavigationList,
-    areaList,
+    // areaList,
     queryAllHot,
     saveInput,
     selectInputKeyword,
@@ -29,6 +29,7 @@ import {
     updateCarouselInterval,
     insertCarouselAd,
     queryCarouselAdBySorting,
+    queryAreas
 } from '../service';
 import ActionType from './ActionType';
 
@@ -94,25 +95,25 @@ const receiveAreaList = (data) => ({
 // 查询移动端首页配置
 export const fetchAreaList = (data) => dispatch => (
     new Promise((resolve, reject) => {
-        Promise.all([areaList(data), queryQuickNavigationList()])
-        .then((result) => {
-            const all = result[0].data;
-            const quick = result[1].data;
-            all.map((item, index) => {
-                if (item.id === 'quick-nav') {
-                    result[0].data[index].itemAds = quick;
-                    return null;
+        Promise.all([queryAreas(data), queryQuickNavigationList()])
+            .then((result) => {
+                const all = result[0].data;
+                const quick = result[1].data;
+                all.map((item, index) => {
+                    if (item.id === 'quick-nav') {
+                        result[0].data[index].itemAds = quick;
+                        return null;
+                    }
+                })
+                dispatch(
+                    receiveAreaList(result[0].data)
+                );
+                resolve(result[0].data);
+            }).catch((err) => {
+                if (err.data && err.data.code === 401) {
+                    reject(err);
                 }
             })
-            dispatch(
-                receiveAreaList(result[0].data)
-            );
-            resolve(result[0].data);
-        }).catch((err) => {
-            if (err.data && err.data.code === 401) {
-                reject(err);
-            }
-        })
     })
 )
 

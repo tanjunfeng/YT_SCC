@@ -1,0 +1,29 @@
+.switch-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .region {
+        line-height: 42px;
+        margin-bottom: 16px;
+        margin-left: 16px;
+    }
+}
+
+.wap-search-box {
+    margin-bottom: 0px!important;
+    .ant-form-item {
+        margin-bottom: 5px;
+    }
+    .search-btn {
+        margin-top: 9px;
+    }
+    .ywc-smind {
+        display: block;
+    }
+    .homePageType-hide {
+        display: none;
+    }
+    .homePageType-show {
+        display: block;
+    }
+}

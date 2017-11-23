@@ -409,8 +409,11 @@ export const queryQuickNavigation = (params) => http.get('sc/homeAd/queryQuickNa
 // 修改快捷导航
 export const updateQuickNavigation = (params) => http.post('/homeAd/updateQuickNavigation', params);
 
+// // 首页配置区域列表
+// export const areaList = (params) => http.get('/homeAd/areaList', params);
+
 // 首页配置区域列表
-export const areaList = (params) => http.get('/homeAd/areaList', params);
+export const queryAreas = (params) => http.get('/homeAd/queryAreas', params);
 
 // 设置首页广告区域停用或者启用
 export const setAreaEnable = (params) => http.post('/homeAd/setAreaEnable', params);
