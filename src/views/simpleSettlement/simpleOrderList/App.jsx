@@ -18,6 +18,7 @@ import {
 import moment from 'moment';
 import Util from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
+import { BranchCompany } from '../../../container/search';
 import {
     accountPeriod,
 } from '../../../constant/searchParams';
@@ -46,20 +47,17 @@ const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
 class SimpleOrderList extends Component {
     constructor(props) {
         super(props);
-        this.onEnterTimeChange = ::this.onEnterTimeChange;
-        this.handleOrderReset = ::this.handleOrderReset;
-        this.handleOrderOutput = ::this.handleOrderOutput;
-        this.handleSupplierChoose = ::this.handleSupplierChoose;
-        this.handleAdressChoose = ::this.handleAdressChoose;
-        this.handleSubCompanyChoose = ::this.handleSubCompanyChoose;
-        this.handleSubCompanyClear = ::this.handleSubCompanyClear;
-        this.handleAdressClear = ::this.handleAdressClear;
-        this.handleSupplierClear = ::this.handleSupplierClear;
-        this.handlePaginationChange = ::this.handlePaginationChange;
-        this.getSearchData = ::this.getSearchData;
+        this.onEnterTimeChange = :: this.onEnterTimeChange;
+        this.handleOrderReset = :: this.handleOrderReset;
+        this.handleOrderOutput = :: this.handleOrderOutput;
+        this.handleSupplierChoose = :: this.handleSupplierChoose;
+        this.handleAdressChoose = :: this.handleAdressChoose;
+        this.handleAdressClear = :: this.handleAdressClear;
+        this.handleSupplierClear = :: this.handleSupplierClear;
+        this.handlePaginationChange = :: this.handlePaginationChange;
+        this.getSearchData = :: this.getSearchData;
         this.joiningSupplierMind = null;
         this.joiningAdressMind = null;
-        this.subCompanySearchMind = null;
         this.searchData = {};
         this.current = 1;
         this.state = {
@@ -112,9 +110,9 @@ class SimpleOrderList extends Component {
         const {
             settlementPeriod,
             purchaseOrderNo,
+            branchCompany
         } = this.props.form.getFieldsValue();
-
-        const { supplierNo, supplierAddNo, branchCompanyNo } = this.state;
+        const { supplierNo, supplierAddNo } = this.state;
         const { receiveDateMin, receiveDateMax } = this.state.time;
         this.current = 1;
         this.searchData = {
@@ -122,7 +120,7 @@ class SimpleOrderList extends Component {
             purchaseOrderNo,
             supplierNo,
             supplierAddNo,
-            branchCompanyNo,
+            branchCompanyNo: branchCompany.id,
             receiveDateMin,
             receiveDateMax,
             pageSize: 2000,
@@ -160,15 +158,6 @@ class SimpleOrderList extends Component {
     }
 
     /**
-     * 子公司-值清单
-     */
-    handleSubCompanyChoose = ({ record }) => {
-        this.setState({
-            branchCompanyNo: record.id,
-        });
-    }
-
-    /**
      * 供应商-清除
      */
     handleSupplierClear() {
@@ -187,15 +176,6 @@ class SimpleOrderList extends Component {
     }
 
     /**
-     * 子公司-清除
-     */
-    handleSubCompanyClear() {
-        this.setState({
-            branchCompanyNo: null,
-        });
-    }
-
-    /**
      * 重置
      */
     handleOrderReset() {
@@ -208,7 +188,6 @@ class SimpleOrderList extends Component {
         });
         this.joiningSupplierMind.handleClear();
         this.joiningAdressMind.handleClear();
-        this.subCompanySearchMind.handleClear();
         this.props.form.resetFields();
     }
 
@@ -252,7 +231,7 @@ class SimpleOrderList extends Component {
                                                     placeholder={['开始时间', '结束时间']}
                                                     onChange={this.onEnterTimeChange}
                                                 />
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -300,17 +279,17 @@ class SimpleOrderList extends Component {
                                                 compKey="providerNo"
                                                 ref={ref => { this.joiningAdressMind = ref }}
                                                 fetch={(params) =>
-                                                this.props.pubFetchValueList(Util.removeInvalid({
-                                                    condition: params.value,
-                                                    pageSize: params.pagination.pageSize,
-                                                    pageNum: params.pagination.current || 1
-                                                }), 'supplierAdrSearchBox').then((res) => {
-                                                    const dataArr = res.data.data || [];
-                                                    if (!dataArr || dataArr.length === 0) {
-                                                        message.warning('没有可用的数据');
-                                                    }
-                                                    return res;
-                                                })}
+                                                    this.props.pubFetchValueList(Util.removeInvalid({
+                                                        condition: params.value,
+                                                        pageSize: params.pagination.pageSize,
+                                                        pageNum: params.pagination.current || 1
+                                                    }), 'supplierAdrSearchBox').then((res) => {
+                                                        const dataArr = res.data.data || [];
+                                                        if (!dataArr || dataArr.length === 0) {
+                                                            message.warning('没有可用的数据');
+                                                        }
+                                                        return res;
+                                                    })}
                                                 onChoosed={this.handleAdressChoose}
                                                 onClear={this.handleAdressClear}
                                                 renderChoosedInputRaw={(res) => (
@@ -333,7 +312,7 @@ class SimpleOrderList extends Component {
                                 </Col>
                             </Row>
                             <Row gutter={24}>
-                                <Col className="gutter-row" span={8} style={{paddingRight: 8}}>
+                                <Col className="gutter-row" span={8} style={{ paddingRight: 8 }}>
                                     {/* 账期 */}
                                     <FormItem>
                                         <div>
@@ -356,46 +335,20 @@ class SimpleOrderList extends Component {
                                                         )
                                                     }
                                                 </Select>
-                                            )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8} style={{paddingRight: 8, paddingLeft: 8}}>
-                                    {/* 子公司 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">子公司</span>
-                                            <SearchMind
-                                                style={{ zIndex: 8 }}
-                                                compKey="id"
-                                                ref={ref => { this.subCompanySearchMind = ref }}
-                                                fetch={(params) =>
-                                                    this.props.pubFetchValueList({
-                                                        branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-                                                        branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
-                                                    }, 'findCompanyBaseInfo')
-                                                }
-                                                onChoosed={this.handleSubCompanyChoose}
-                                                onClear={this.handleSubCompanyClear}
-                                                renderChoosedInputRaw={(row) => (
-                                                    <div>{row.id} - {row.name}</div>
                                                 )}
-                                                pageSize={6}
-                                                columns={[
-                                                    {
-                                                        title: '子公司id',
-                                                        dataIndex: 'id',
-                                                        width: 98
-                                                    }, {
-                                                        title: '子公司名字',
-                                                        dataIndex: 'name'
-                                                    }
-                                                ]}
-                                            />
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8} style={{paddingRight: 8, paddingLeft: 8}}>
+                                <Col className="gutter-row" span={8} style={{ paddingRight: 8, paddingLeft: 8 }}>
+                                    {/* 子公司 */}
+                                    <span className="sc-form-item-label">子公司</span>
+                                    <FormItem>
+                                        {getFieldDecorator('branchCompany', {
+                                            initialValue: { id: '', name: '' }
+                                        })(<BranchCompany />)}
+                                    </FormItem>
+                                </Col>
+                                <Col className="gutter-row" span={8} style={{ paddingRight: 8, paddingLeft: 8 }}>
                                     {/* 采购订单 */}
                                     <FormItem>
                                         <div>
