@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-21 16:40:15
+ * @Last Modified time: 2017-11-23 13:59:13
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -31,8 +31,8 @@ import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import {
     locType,
-    auditStatus,
-    optionStatus
+    optionStatus,
+    auditStatusOption
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
@@ -117,16 +117,16 @@ class toDoReturnList extends PureComponent {
                 key: 'adrType'
             }, {
                 title: '退货地点',
-                dataIndex: 'refundAdr',
-                key: 'refundAdr'
+                dataIndex: 'refundAdrName',
+                key: 'refundAdrName'
             }, {
                 title: '供应商',
                 dataIndex: 'supplier',
                 key: 'supplier'
             }, {
                 title: '供应商地点',
-                dataIndex: 'refundAdrName',
-                key: 'refundAdrName'
+                dataIndex: 'supplierAddress',
+                key: 'supplierAddress'
             }, {
                 title: '退货数量',
                 dataIndex: 'totalRefundAmount',
@@ -135,6 +135,10 @@ class toDoReturnList extends PureComponent {
                 title: '退货成本额',
                 dataIndex: 'totalRefundCost',
                 key: 'totalRefundCost'
+            }, {
+                title: '实际退货金额(含税)',
+                dataIndex: 'totalRealRefundMoney',
+                key: 'totalRealRefundMoney'
             }, {
                 title: '退货金额(含税)',
                 dataIndex: 'totalRefundMoney',
@@ -537,7 +541,8 @@ class toDoReturnList extends PureComponent {
             auditResult,
             purchaseOrderType,
             status,
-            adrType
+            adrType,
+            auditStatus
         } = this.props.form.getFieldsValue();
         // 流程开始时间
         const auditDuringArr = this.props.form.getFieldValue('createTime') || [];
@@ -582,7 +587,8 @@ class toDoReturnList extends PureComponent {
             createTimeEnd,
             stopTimeStart,
             stopTimeEnd,
-            adrTypeCode
+            adrTypeCode,
+            auditStatus
         };
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
@@ -593,18 +599,18 @@ class toDoReturnList extends PureComponent {
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
-                {/* <Menu.Item key="examinationApproval">
+                <Menu.Item key="detail">
+                    <Link to={`${pathname}/returnManagementDetail/${id}`}>退货单详情</Link>
+                </Menu.Item>
+                <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
                     </a>
-                </Menu.Item> */}
+                </Menu.Item>
                 <Menu.Item key="viewApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         查看审批意见
                     </a>
-                </Menu.Item>
-                <Menu.Item key="detail">
-                    <Link to={`${pathname}/returnManagementDetail/${id}`}>查看退货单详情</Link>
                 </Menu.Item>
             </Menu>
         );
@@ -635,10 +641,10 @@ class toDoReturnList extends PureComponent {
                             <Col span={8}>
                                 {/* 流程状态 */}
                                 <FormItem label="流程状态">
-                                    {getFieldDecorator('auditStatus', { initialValue: auditStatus.defaultValue })(
+                                    {getFieldDecorator('auditStatus', { initialValue: auditStatusOption.defaultValue })(
                                         <Select style={{ width: '153px' }} size="default">
                                             {
-                                                auditStatus.data.map((item) => (
+                                                auditStatusOption.data.map((item) => (
                                                     <Option key={item.key} value={item.key}>
                                                         {item.value}
                                                     </Option>))
