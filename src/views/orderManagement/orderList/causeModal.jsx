@@ -65,11 +65,13 @@ class CauseModal extends PureComponent {
                         id: causeRecordId,
                         remark: causeTextArea
                     }).then(res => {
-                        // 列表页单个取消，刷新列表
-                        if (this.props.getSearchData) this.props.getSearchData();
-                        this.props.modifyCauseModalVisible({ isShow: false });
-                        this.props.fetchOrderDetailInfo({ id: causeRecordId });
-                        message.success(res.message);
+                        if (res.code === 200) {
+                            // 列表页单个取消，刷新列表
+                            if (this.props.getSearchData) this.props.getSearchData();
+                            this.props.modifyCauseModalVisible({ isShow: false });
+                            this.props.fetchOrderDetailInfo({ id: causeRecordId });
+                            message.success(res.message);
+                        }
                     })
                 }
             }
