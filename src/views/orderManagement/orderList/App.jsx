@@ -270,10 +270,6 @@ class OrderManagementList extends Component {
                 break;
             case 'tableCancel':
                 this.props.modifyCauseModalVisible({ isShow: true, id })
-                .then(res => {
-                    this.getSearchData();
-                    message.success(res.message);
-                })
                 break;
             case 'tableRetransfer':
                 modifyResendOrder({
@@ -335,7 +331,7 @@ class OrderManagementList extends Component {
                     </Menu.Item>
                 }
                 {
-                    (shippingStateDesc === '仓库拒收')
+                    (shippingStateDesc === '仓库拒收' || shippingStateDesc === '未传送')
                     && <Menu.Item key="tableRetransfer">
                         <a target="_blank" rel="noopener noreferrer">重新传送</a>
                     </Menu.Item>
@@ -359,7 +355,7 @@ class OrderManagementList extends Component {
                 <div className="manage-form">
                     <Form layout="inline">
                         <div className="gutter-example">
-                            <Row gutter={16}>
+                            <Row>
                                 <Col className="gutter-row" span={8}>
                                     {/* 订单编号 */}
                                     <FormItem>
@@ -427,8 +423,6 @@ class OrderManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                            </Row>
-                            <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
                                     {/* 支付状态 */}
                                     <FormItem>
@@ -477,8 +471,6 @@ class OrderManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                            </Row>
-                            <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
                                     {/* 收货人电话 */}
                                     <FormItem>
@@ -538,8 +530,6 @@ class OrderManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                            </Row>
-                            <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
                                     {/* 电商订单编号 */}
                                     <FormItem>
@@ -555,25 +545,7 @@ class OrderManagementList extends Component {
                                     </FormItem>
                                 </Col>
                             </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            disabled={this.state.choose.length === 0}
-                                            onClick={this.handleOrderBatchReview}
-                                        >批量审核</Button>
-                                    </FormItem>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            disabled={this.state.choose.length === 0}
-                                            onClick={this.handleOrderBatchCancel}
-                                        >批量取消</Button>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={40} type="flex" justify="end">
+                            <Row type="flex" justify="end">
                                 <Col className="tr">
                                     <FormItem>
                                         <Button
@@ -593,6 +565,24 @@ class OrderManagementList extends Component {
                                             size="default"
                                             onClick={this.handleOrderOutput}
                                         >导出</Button>
+                                    </FormItem>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col className="gutter-row" span={8}>
+                                    <FormItem>
+                                        <Button
+                                            size="default"
+                                            disabled={this.state.choose.length === 0}
+                                            onClick={this.handleOrderBatchReview}
+                                        >批量审核</Button>
+                                    </FormItem>
+                                    <FormItem>
+                                        <Button
+                                            size="default"
+                                            disabled={this.state.choose.length === 0}
+                                            onClick={this.handleOrderBatchCancel}
+                                        >批量取消</Button>
                                     </FormItem>
                                 </Col>
                             </Row>
