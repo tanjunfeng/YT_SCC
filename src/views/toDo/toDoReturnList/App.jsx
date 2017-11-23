@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-16 17:06:40
+ * @Last Modified time: 2017-11-23 10:42:21
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -31,7 +31,7 @@ import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import {
     locType,
-    returnStatus,
+    auditStatus,
     optionStatus
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
@@ -135,10 +135,6 @@ class toDoReturnList extends PureComponent {
                 title: '退货成本额',
                 dataIndex: 'totalRefundCost',
                 key: 'totalRefundCost'
-            }, {
-                title: '实际退货金额(含税)',
-                dataIndex: 'totalRealRefundMoney',
-                key: 'totalRealRefundMoney'
             }, {
                 title: '退货金额(含税)',
                 dataIndex: 'totalRefundMoney',
@@ -273,7 +269,7 @@ class toDoReturnList extends PureComponent {
                         auditResult
                     });
                 }
-                if (auditResult === '1') {
+                if (auditResult === '0') {
                     if (auditOpinion === '') {
                         this.props.form.setFields({
                             auditOpinion: {
@@ -487,15 +483,15 @@ class toDoReturnList extends PureComponent {
         const { processNodeId, id } = this.examinationAppData;
         const processId = processNodeId;
         this.getFormData().then((param) => {
-            this.props.approveRefund({...param, processId, businessId: id, type: 1})
-            .then((res) => {
-                if (res.code === 200) {
-                    message.success(res.message);
-                    this.setState({
-                        approvalVisible: false,
-                    });
-                }
-            });
+            this.props.approveRefund({ ...param, processId, businessId: id, type: 1 })
+                .then((res) => {
+                    if (res.code === 200) {
+                        message.success(res.message);
+                        this.setState({
+                            approvalVisible: false,
+                        });
+                    }
+                });
         });
     }
 
@@ -597,9 +593,6 @@ class toDoReturnList extends PureComponent {
         const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
-                <Menu.Item key="detail">
-                    <Link to={`${pathname}/returnManagementDetail/${id}`}>退货单详情</Link>
-                </Menu.Item>
                 <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
@@ -609,6 +602,9 @@ class toDoReturnList extends PureComponent {
                     <a target="_blank" rel="noopener noreferrer">
                         查看审批意见
                     </a>
+                </Menu.Item>
+                <Menu.Item key="detail">
+                    <Link to={`${pathname}/returnManagementDetail/${id}`}>查看退货单详情</Link>
                 </Menu.Item>
             </Menu>
         );
@@ -639,10 +635,10 @@ class toDoReturnList extends PureComponent {
                             <Col span={8}>
                                 {/* 流程状态 */}
                                 <FormItem label="流程状态">
-                                    {getFieldDecorator('auditStatus', { initialValue: returnStatus.defaultValue })(
+                                    {getFieldDecorator('auditStatus', { initialValue: auditStatus.defaultValue })(
                                         <Select style={{ width: '153px' }} size="default">
                                             {
-                                                returnStatus.data.map((item) => (
+                                                auditStatus.data.map((item) => (
                                                     <Option key={item.key} value={item.key}>
                                                         {item.value}
                                                     </Option>))
@@ -694,24 +690,24 @@ class toDoReturnList extends PureComponent {
                             {/* 供应商地点 */}
                             <Col className="gutter-row" span={8}>
                                 <FormItem>
-                                    <span className="sc-form-item-label" style={{width: 70}}>供应商地点</span>
+                                    <span className="sc-form-item-label" style={{ width: 70 }}>供应商地点</span>
                                     <span className="search-box-data-pic">
                                         <SearchMind
                                             style={{ zIndex: 9, verticalAlign: 'bottom' }}
                                             compKey="providerNo"
                                             ref={ref => { this.joiningAdressMind = ref }}
                                             fetch={(params) =>
-                                            this.props.pubFetchValueList(Utils.removeInvalid({
-                                                condition: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
-                                            }), 'supplierAdrSearchBox').then((res) => {
-                                                const dataArr = res.data.data || [];
-                                                if (!dataArr || dataArr.length === 0) {
-                                                    message.warning('没有可用的数据');
-                                                }
-                                                return res;
-                                            })}
+                                                this.props.pubFetchValueList(Utils.removeInvalid({
+                                                    condition: params.value,
+                                                    pageSize: params.pagination.pageSize,
+                                                    pageNum: params.pagination.current || 1
+                                                }), 'supplierAdrSearchBox').then((res) => {
+                                                    const dataArr = res.data.data || [];
+                                                    if (!dataArr || dataArr.length === 0) {
+                                                        message.warning('没有可用的数据');
+                                                    }
+                                                    return res;
+                                                })}
                                             onChoosed={this.handleSupplierAddressChoose}
                                             onClear={this.handleSupplierAddressClear}
                                             renderChoosedInputRaw={(res) => (
@@ -909,11 +905,13 @@ class toDoReturnList extends PureComponent {
                                         <FormItem label="意见" style={{ display: 'flex' }}>
                                             {getFieldDecorator('auditOpinion', {
                                                 initialValue: '',
-                                                rules: [{ required: false, message: '请填写审批意见!' }]
+                                                rules: [
+                                                    { required: false, message: '请填写审批意见!' },
+                                                    { max: 150, message: '请输入150字以内' }
+                                                ]
                                             })(
                                                 <TextArea
                                                     placeholder="可填写意见"
-                                                    maxLength="150"
                                                     style={{ resize: 'none' }}
                                                     autosize={{
                                                         minRows: 4,

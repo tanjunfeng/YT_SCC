@@ -22,6 +22,21 @@ export const poStatus = {
     }]
 }
 
+// 采购单状态值清单
+export const auditStatus = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '请选择'
+    }, {
+        key: '0',
+        value: '进行中'
+    }, {
+        key: '1',
+        value: '已结束'
+    }]
+}
+
 export const poStatusCodes = {
     draft: 0,
     submited: 1,
