@@ -92,13 +92,13 @@ export const exportPurchaseRefundList = '/pmPurchaseRefund/exportPurchaseRefundL
 export const exportPdf = '/pmPurchaseRefund/exportPdf';
 
 // 促销活动 - 下单打折 - 参与数据导出
-export const exportParticipateData = 'promotion/toExcel';
+export const exportParticipateData = '/promotion/toExcel';
 
 // 促销活动 - 优惠券 - 已使用参与数据导出
-export const exportParticipateData1 = '/coupon/queryCouponRecordListExcel';
+export const usedParticipateData = '/coupon/queryCouponRecordListExcel';
 
 // 促销活动 - 优惠券 - 未使用参与数据导出
-export const exportParticipateData2 = '/coupon/queryCouponActivityActiveListExcel';
+export const unusedParticipateData = '/coupon/queryCouponActivityActiveListExcel';
 
 /**
  * 登录 Api
@@ -586,6 +586,8 @@ export const getRefundNo = (params) => http.get('/pmPurchaseRefund/getRefundNo',
 export const fetchReturnPoRcvDetail = (params) => http.get('/pmPurchaseRefund/queryRefundDetailById', params);
 // 修改采购退货单（只有制单状态和已拒绝的单子可以修改）
 export const updateRefundWithItems = (params) => http.post('/pmPurchaseRefund/updateRefundWithItems', params);
+// 此接口用于取消待退货未出仓的退货单
+export const cancel = (params) => http.get('/pmPurchaseRefund/cancel', params);
 // 批量删除处于草稿状态的退货单
 export const deleteBatchRefundOrder = (params) => http.get('/pmPurchaseRefund/deleteBatchRefundOrder', params);
 
@@ -603,6 +605,9 @@ export const getStoreInfo = (params) => http.get('/store/getStoreInfo', params);
 
 // 大类值清单
 export const querycategories = (params) => http.get('/category/queryCategories', params);
+
+// 查询二级三级分类
+export const querySecondCategoriesOfApp = (params) => http.get('/category/querySecondCategoriesOfApp', params);
 
 // 商品值清单
 export const queryMaterialMap = (params) => http.get('/provider/queryMaterialMap', params);
@@ -837,7 +842,7 @@ export const queryAliveCouponsList = (params) => http.get('/coupon/queryAliveCou
 export const getCouponsDetail = (params) => http.get('/coupon/queryCouponsById', params);
 export const queryFranchiseeList = (params) => http.get('/franchisee/grantFranchisee', params);
 export const grantCoupon = (params) => http.post('/coupon/grantMutiQtyCoupon', params);
-export const invalidRecordList = (params) => http.post('/coupon/queryCouponActivityActiveList', params);
+export const garbageCouponParticipate = (params) => http.post('/coupon/queryCouponActivityActiveList', params);
 export const cancelCoupons = (params) => http.get('/coupon/cancelCoupons', params);
 
 /**
@@ -886,3 +891,7 @@ export const batchCheckStorage = params => http.post('/directStore/validateDirec
 
 // 查询退货单审批流程
 export const queryProcessDefinitions = params => http.get('/pmPurchaseRefund/queryProcessDefinitions', params);
+// 退货单审批
+export const approveRefund = params => http.post('/pmPurchaseRefund/approveRefund', params);
+// 取消退货单
+export const cancelRefund = params => http.get('/pmPurchaseRefund/cancel', params);

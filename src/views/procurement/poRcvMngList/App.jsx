@@ -259,6 +259,7 @@ class PoRcvMngList extends PureComponent {
      * 重置检索条件
      */
     handleResetValue() {
+        this.current = 1;
         // 重置检索条件
         this.searchParams = {};
         // 重置form
@@ -380,6 +381,7 @@ class PoRcvMngList extends PureComponent {
      * 查询收货单管理列表
      */
     handleSearch() {
+        this.current = 1;
         // 编辑查询条件
         this.editSearchParams();
         // 查询收货单单列表
@@ -713,7 +715,7 @@ class PoRcvMngList extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
-                            <Col className="ant-col-6 ant-col-offset-6 gutter-row">
+                            <Col className="tr">
                                 <FormItem>
                                     <Button size="default" onClick={this.handleResetValue}>
                                         重置

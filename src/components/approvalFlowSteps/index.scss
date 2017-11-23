@@ -1,0 +1,40 @@
+.inline-upload {
+    display: inline-block;
+    vertical-align: text-top;
+    &-file {
+        display: inline-block;
+        vertical-align: middle;
+
+        &-link {
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        &-icon {
+            font-size: 16px;
+            margin-right: 4px;
+            vertical-align: middle;
+        }
+        &-delete {
+            cursor: pointer;
+            vertical-align: middle;
+            &:hover {
+                color: #108ee9
+            }
+        }
+        .ant-calendar-picker {
+            width: 120px;
+        }
+    }
+    &-limit {
+        .ant-upload {
+            display: none;
+        }
+    }
+    .effective-time-document {
+        margin-top: 10px;
+    }
+
+    .ant-upload {
+        margin-right: 6px;
+    }
+}

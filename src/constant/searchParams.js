@@ -324,10 +324,10 @@ export const commodityStatusOptions = {
         key: '3',
         value: '暂停使用'
     },
-    // {
-    //     key: '4',
-    //     value: '停止使用'
-    // }
+        // {
+        //     key: '4',
+        //     value: '停止使用'
+        // }
     ]
 
 }
@@ -589,6 +589,9 @@ export const logisticsStatusOptions = {
     }, {
         key: 'WJS',
         value: '仓库拒收'
+    }, {
+        key: 'UJS',
+        value: '已拒签'
     }]
 }
 

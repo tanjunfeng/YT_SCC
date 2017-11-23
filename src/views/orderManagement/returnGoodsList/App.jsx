@@ -25,16 +25,14 @@ import moment from 'moment';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { returnGoodsOperation, returnGoodsList,
-    insertRefund, returnGoodsListFormDataClear
+    insertRefund
 } from '../../../actions';
 
 @connect(state => ({
     listData: state.toJS().salesManagement.data,
-    formData: state.toJS().pageParameters.returnGoodsParams
 }), dispatch => bindActionCreators({
     insertRefund,
     returnGoodsList,
-    returnGoodsListFormDataClear
 }, dispatch))
 
 class ReturnGoodsList extends PureComponent {
@@ -130,10 +128,6 @@ class ReturnGoodsList extends PureComponent {
         this.query();
     }
 
-    componentWillUnmount() {
-        this.props.returnGoodsListFormDataClear();
-    }
-
     /**
      * 分页页码改变的回调
      */
@@ -207,8 +201,7 @@ class ReturnGoodsList extends PureComponent {
     handleConfirm =(record) => {
         this.props.insertRefund({returnId: record.record.id}).then((res) => {
             if (res.code === 200) {
-                this.refreshVisible = false
-                message.success(res.success);
+                message.success(res.message);
                 this.handlePromotionReset();
                 this.query();
             }
@@ -252,7 +245,7 @@ class ReturnGoodsList extends PureComponent {
                     </Menu.Item>
                 }
                 {
-                    orderType === 'ZCXS' && state === 3 && paymentState === 'WTK' && this.refreshVisible &&
+                    orderType === 'ZCXS' && state === 3 && paymentState === 'WTK' &&
                     <Menu.Item key="refund">
                         <Popconfirm
                             title="确认发起退款?"
@@ -313,7 +306,6 @@ class ReturnGoodsList extends PureComponent {
 
 ReturnGoodsList.propTypes = {
     insertRefund: PropTypes.func,
-    returnGoodsListFormDataClear: PropTypes.func,
     returnGoodsList: PropTypes.func,
     location: PropTypes.objectOf(PropTypes.any),
     listData: PropTypes.objectOf(PropTypes.any),

@@ -20,7 +20,7 @@ import {
     fetchUnUsedCouponParticipate as fetchUnUsedCouponParticipateService,
     fetchPromotionParticipateData as fetchPromotionParticipateDataService,
     grantCoupon as grantCouponService,
-    invalidRecordList as invalidRecordService,
+    garbageCouponParticipate as invalidRecordService,
     cancelCoupons as cancelCouponsService,
 } from '../service';
 
@@ -97,7 +97,7 @@ const fetchUnUsedCouponParticipateAction = (data) => ({
 
 export const getUnUsedCouponParticipate = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        fetchUnUsedCouponParticipateService(params)
+        fetchUnUsedCouponParticipateService({ ...params, queryType: 1 })
             .then(res => {
                 dispatch(
                     fetchUnUsedCouponParticipateAction(res.data)
@@ -109,14 +109,35 @@ export const getUnUsedCouponParticipate = (params) => dispatch => (
 );
 
 /**
- * 优惠券参与数据-作废记录 Action
+ * 优惠券参与数据-已作废 Action
  */
-const invalidRecordAction = (data) => ({
-    type: ActionType.INVALID_RECORD,
+const fetchGarbageCouponParticipateAction = (data) => ({
+    type: ActionType.FETCH_GARBAGE_COUPON_PATICIPATE_LIST,
     payload: data
 });
 
-export const invalidRecordList = (params) => dispatch => (
+export const getGarbageCouponParticipate = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        fetchUnUsedCouponParticipateService({ ...params, queryType: 2 })
+            .then(res => {
+                dispatch(
+                    fetchGarbageCouponParticipateAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+/**
+ * 优惠券参与数据-作废记录 Action
+ */
+const invalidRecordAction = (data) => ({
+    type: ActionType.FETCH_GARBAGE_COUPON_PATICIPATE_LIST,
+    payload: data
+});
+
+export const garbageCouponParticipate = (params) => dispatch => (
     new Promise((resolve, reject) => {
         invalidRecordService(params)
             .then(res => {
@@ -386,8 +407,8 @@ export const clearUnUsedCouponPatipate = () => dispatch => (dispatch({
     payload: {}
 }));
 
-export const clearInvalidRecord = () => dispatch => (dispatch({
-    type: ActionType.CLEAR_INVALID_RECORD,
+export const clearGarbageCouponPatipate = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_GARBAGE_COUPON_PATICIPATE_LIST,
     payload: {}
 }));
 

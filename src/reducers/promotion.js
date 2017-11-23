@@ -18,7 +18,7 @@ const initState = fromJS({
     promotionDetail: {},   // 促销详情
     couponsDetail: {}, // 优惠券详情
     franchiseeList: {},  // 加盟供应商列表
-    invalidRecordList: {}  // 作废记录
+    garbageCouponParticipate: {}  // 作废记录
 });
 
 export default function (state = initState, action) {
@@ -42,9 +42,9 @@ export default function (state = initState, action) {
         case ActionType.FETCH_UN_USED_COUPON_PATICIPATE_LIST:
         case ActionType.CLEAR_UN_USED_COUPON_PATICIPATE_LIST:
             return state.set('unUsedCouponParticipate', fromJS(action.payload));
-        case ActionType.INVALID_RECORD:
-        case ActionType.CLEAR_INVALID_RECORD:
-            return state.set('invalidRecordList', fromJS(action.payload));
+        case ActionType.FETCH_GARBAGE_COUPON_PATICIPATE_LIST:
+        case ActionType.CLEAR_GARBAGE_COUPON_PATICIPATE_LIST:
+            return state.set('garbageCouponParticipate', fromJS(action.payload));
         case ActionType.FETCH_CATEGORY_BY_PARENT:
         case ActionType.CLEAR_CATEGORIES:
             return state.set('categories', fromJS(action.payload));

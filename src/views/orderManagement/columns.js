@@ -262,8 +262,8 @@ const exchangeGoodsListColumns = [{
 }
 ]
 
-// 退货单详情列表
-const returnGoodsDetailColumns = [{
+// 换货单详情列表
+const exchangeGoodsDetailColumns = [{
     title: '序号',
     dataIndex: 'idx',
     key: 'idx',
@@ -284,8 +284,11 @@ const returnGoodsDetailColumns = [{
 },
 {
     title: '商品条码',
-    dataIndex: 'internationalCode',
-    key: 'internationalCode',
+    dataIndex: 'internationalCodes[0].internationalCode',
+    key: 'internationalCodes[0].internationalCode',
+    render: (text, record) => (
+        record.internationalCodes[0].internationalCode
+    )
 },
 {
     title: '商品名称',
@@ -312,7 +315,7 @@ const returnGoodsDetailColumns = [{
     key: 'salePrice'
 },
 {
-    title: '退货金额',
+    title: '换货金额',
     dataIndex: 'rawTotalPrice',
     key: 'rawTotalPrice'
 },
@@ -323,7 +326,7 @@ const returnGoodsDetailColumns = [{
 }
 ]
 
-const exchangeTableColums = [{
+const returnGoodsTableColums = [{
     title: '序号',
     dataIndex: 'idx',
     key: 'idx',
@@ -344,8 +347,11 @@ const exchangeTableColums = [{
 },
 {
     title: '商品条码',
-    dataIndex: 'internationalCode',
-    key: 'internationalCode',
+    dataIndex: 'internationalCodes[0].internationalCode',
+    key: 'internationalCodes[0].internationalCode',
+    render: (text, record) => (
+        record.internationalCodes[0].internationalCode
+    )
 },
 {
     title: '商品名称',
@@ -414,7 +420,7 @@ const directSalesgoodsColumns = [{
 }, {
     title: '数量',
     dataIndex: 'quantity',
-    width: 120
+    width: 130
 }, {
     title: '单价',
     dataIndex: 'salePrice',
@@ -486,6 +492,6 @@ const distributionInformationColumns = [{
 
 export {
     goodsColumns, orderListColumns, returnGoodsListColumns,
-    returnGoodsDetailColumns, directSalesgoodsColumns, exchangeGoodsListColumns,
-    distributionInformationColumns, exchangeTableColums
+    exchangeGoodsDetailColumns, directSalesgoodsColumns, exchangeGoodsListColumns,
+    distributionInformationColumns, returnGoodsTableColums
 };

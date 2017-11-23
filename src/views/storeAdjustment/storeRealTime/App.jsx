@@ -1,13 +1,13 @@
- /**
- * @file App.jsx
- * @author zhao zhi jian
- *
- */
-import React, {Component} from 'react';
+/**
+* @file App.jsx
+* @author zhao zhi jian
+*
+*/
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Table } from 'antd';
 import SearchBar from './SearchBar';
 import {
@@ -64,7 +64,7 @@ class App extends Component {
 
     // 翻页事件
     onPageChanges(pageNumber) {
-        const {searchData} = this.state;
+        const { searchData } = this.state;
         const params = {
             pageNum: pageNumber,
             pageSize: PAGE_SIZE,
@@ -120,7 +120,7 @@ class App extends Component {
                 <div className="area-list">
                     <Table
                         columns={TableHeader}
-                        scroll={{x: 2000}}
+                        scroll={{ x: 1400 }}
                         dataSource={listData.data}
                         rowKey={(record) => (Object.values(record).join('.'))}
                         pagination={{

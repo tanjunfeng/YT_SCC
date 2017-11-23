@@ -4,16 +4,20 @@
  *
  * 商品管理列表
  */
-
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Form, Input, Button, Row, Col, Select, Icon, Table, Menu, Dropdown, message, Modal } from 'antd';
+import {
+    Form, Input, Button, Row, Col, Select,
+    Icon, Table, Menu, Dropdown, message, Modal
+} from 'antd';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import SearchMind from '../../../components/searchMind';
+import { BranchCompany } from '../../../container/search';
+
 import {
     commodityStatusOptions,
     deliveryStatusOptions,
@@ -21,16 +25,11 @@ import {
     commoditySortOptions,
     commodityListOptions
 } from '../../../constant/searchParams';
-
 import LevelTree from '../../../common/levelTree';
 import ClassifiedSelect from '../../../components/threeStageClassification'
-
-
 import { pubFetchValueList, getAvailablProducts } from '../../../actions/pub';
-
 import { queryCommodityList, syncProductByManualAction } from '../../../actions';
 import { PAGE_SIZE } from '../../../constant';
-
 import Util from '../../../util/util';
 
 const defaultImg = require('../../../images/default/100x100.png');
@@ -60,7 +59,6 @@ class ManagementList extends PureComponent {
             supplierId: '',
             chooseGoodsList: [],
             brandName: '',
-            childCompanyMeg: {},
             subsidiaryChoose: '',
             areaShelvesDisabled: true,
             errorGoodsCode: '',
@@ -75,13 +73,6 @@ class ManagementList extends PureComponent {
         });
     }
 
-    // shouldComponentUpdate() {
-    //     if (Object.values(this.props.CommodityListData).length === 0) {
-    //         return false;
-    //     }
-    //     return true;
-    // }
-
     // 复制链接
     onCopy = () => {
         message.success('复制成功')
@@ -93,14 +84,15 @@ class ManagementList extends PureComponent {
     * @return {object}  返回所有填写了有效的表单值
     */
     getFormAllVulue = () => {
-        const { supplierId, classify, childCompanyMeg, brandName, sortType } = this.state;
+        const { supplierId, classify, brandName, sortType } = this.state;
         const {
             supplyChainStatus,
             internationalCode,
             productName,
             productCode,
             supplierInfo,
-            salesInfo
+            salesInfo,
+            branchCompany
         } = this.props.form.getFieldsValue();
 
         return Util.removeInvalid({
@@ -110,7 +102,7 @@ class ManagementList extends PureComponent {
             productCode,
             brand: brandName,
             supplierInfo: this.hasSpecifyValue(supplierId, supplierInfo),
-            salesInfo: this.hasSpecifyValue(childCompanyMeg.id, salesInfo),
+            salesInfo: this.hasSpecifyValue(branchCompany.id, salesInfo),
             sort: sortType,
             ...classify
         });
@@ -181,19 +173,6 @@ class ManagementList extends PureComponent {
         })
     }
 
-    // 判断商品状态是否正确，不正确则把商品编号存起来，用于提示用户取消选中
-    // selectedDataStateIsTrue = (status) => {
-    //     let goodsNumber = [];
-    //     this.state.selectedListData.forEach((item) => {
-    //         if (item.supplyChainStatus !== status) {
-    //             goodsNumber.push(item.productCode)
-    //         }
-    //     });
-    //     this.setState({
-    //         errorGoodsCode: goodsNumber
-    //     })
-    // }
-
     // 商品的暂停购进和恢复采购接口回调
     goodstatusChange = (status) => {
         const availbleGoodsId = 10027;
@@ -238,23 +217,15 @@ class ManagementList extends PureComponent {
         this.handleSuspendPurchase({ ...stopMsg }, this.goodstatusChange);
     }
 
-
     /* **************** 区域上下架 ****************** */
 
-    // 选择子公司
-    handleSubsidiaryChoose = ({ record }) => {
-        this.setState({
-            childCompanyMeg: record,
-            areaShelvesDisabled: false
-        });
-    }
-
-    // 清除经营子公司列表值
-    handleSubsidiaryClear = () => {
-        this.setState({
-            childCompanyMeg: {},
-            areaShelvesDisabled: true
-        });
+    // 选择或清空子公司
+    handleBranchCompanyChange = (record) => {
+        if (record.id === '') {
+            this.setState({ areaShelvesDisabled: true });
+        } else {
+            this.setState({ areaShelvesDisabled: false })
+        }
     }
 
     // 区域下架
@@ -283,7 +254,7 @@ class ManagementList extends PureComponent {
 
     // 区域上架回调接口
     prodBatchPutaway = (status) => {
-        const { name, id } = this.state.childCompanyMeg;
+        const { name, id } = this.props.form.getFieldsValue().branchCompany;
         return this.props.pubFetchValueList({
             branchCompanyName: name,
             branchCompanyId: id,
@@ -294,7 +265,7 @@ class ManagementList extends PureComponent {
 
     // 区域下架回调接口
     prodBatchUpdate = (status) => {
-        const { name, id } = this.state.childCompanyMeg;
+        const { name, id } = this.props.form.getFieldsValue().branchCompany;
         return this.props.pubFetchValueList({
             branchCompanyName: name,
             branchCompanyId: id,
@@ -351,12 +322,10 @@ class ManagementList extends PureComponent {
         });
     }
 
-
     // 重置
     handleFormReset = () => {
         this.brandSearchMind.handleClear();
         this.supplySearchMind.handleClear();
-        this.subsidiarySearchMind.handleClear();
         this.props.form.resetFields();
         if (this.slect) this.slect.resetValue();
         this.setState({
@@ -522,7 +491,6 @@ class ManagementList extends PureComponent {
         )
     }
 
-
     render() {
         const { getFieldDecorator } = this.props.form;
         const { data = [], total = 0, pageNum = 1 } = this.props.CommodityListData;
@@ -555,7 +523,6 @@ class ManagementList extends PureComponent {
                                                     className="input"
                                                     style={{ paddingLeft: '10px', paddingRight: '10px' }}
                                                     placeholder="商品名称"
-
                                                 />
                                             )}
                                         </div>
@@ -583,7 +550,6 @@ class ManagementList extends PureComponent {
                                         <LevelTree className="levelTree-wrap" />
                                         <ClassifiedSelect onChange={this.handleSelectChange} />
                                     </FormItem>
-
                                 </Col>
                             </Row>
                             <Row gutter={16}>
@@ -627,7 +593,7 @@ class ManagementList extends PureComponent {
                                 <Col className="gutter-row" span={8}>
                                     {/* 品牌 */}
                                     <FormItem className="">
-                                        <div>
+                                        <div className="value-list-input">
                                             <span className="sc-form-item-label">品牌</span>
                                             <SearchMind
                                                 compKey="search-mind-brand"
@@ -745,47 +711,15 @@ class ManagementList extends PureComponent {
                             <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
                                     {/* 经营子公司 */}
-                                    <FormItem className="">
-                                        <div>
-                                            <span className="sc-form-item-label">经营子公司</span>
-                                            <span className="value-list-input">
-                                                <SearchMind
-                                                    compKey="search-mind-subsidiary"
-                                                    ref={ref => { this.subsidiarySearchMind = ref }}
-                                                    fetch={(params) =>
-                                                        this.props.pubFetchValueList({
-                                                            branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-                                                            branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : '',
-                                                            pageSize: params.pagination.pageSize,
-                                                            pageNum: params.pagination.current || 1
-                                                        }, 'findCompanyBaseInfo')
-                                                    }
-                                                    onChoosed={this.handleSubsidiaryChoose}
-                                                    onClear={this.handleSubsidiaryClear}
-                                                    renderChoosedInputRaw={(companyList = []) => (
-                                                        <div ref={
-                                                            childCompany => {
-                                                                this.childCompany = childCompany
-                                                            }
-                                                        }
-                                                        >{companyList.id} -
-                                                            {companyList.name}</div>
-                                                    )}
-                                                    pageSize={2}
-                                                    columns={[
-                                                        {
-                                                            title: '子公司id',
-                                                            dataIndex: 'id',
-                                                            width: 98
-                                                        }, {
-                                                            title: '子公司名字',
-                                                            dataIndex: 'name',
-                                                            width: 140
-                                                        }
-                                                    ]}
-                                                />
-                                            </span>
-                                        </div>
+                                    <FormItem>
+                                        <span className="sc-form-item-label">经营子公司</span>
+                                        <FormItem>
+                                            {getFieldDecorator('branchCompany', {
+                                                initialValue: { id: '', name: '' }
+                                            })(<BranchCompany
+                                                onChange={this.handleBranchCompanyChange}
+                                            />)}
+                                        </FormItem>
                                     </FormItem>
                                 </Col>
                                 <Col className="gutter-row" span={8}>
@@ -873,15 +807,17 @@ class ManagementList extends PureComponent {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8}>
-                                    <FormItem className="">
+                            </Row>
+                            <Row gutter={16} type="flex" justify="end">
+                                <Col className="tr" span={4}>
+                                    <FormItem>
                                         <Button
                                             type="primary"
                                             size="default"
                                             onClick={this.handleFormSearch}
                                         >查询</Button>
                                     </FormItem>
-                                    <FormItem className="">
+                                    <FormItem>
                                         <Button
                                             size="default"
                                             onClick={this.handleFormReset}

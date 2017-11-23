@@ -73,7 +73,9 @@ import {
     queryApprovalInfo,
     queryAuditPurReList,
     queryProcessDefinitions,
-    queryPoDetail
+    queryPoDetail,
+    approveRefund,
+    cancelRefund
 } from './procurement';
 
 // IBM
@@ -264,8 +266,10 @@ export {
     queryAuditPurReList,
     // 查询退货单审批流程
     queryProcessDefinitions,
+    approveRefund,
     queryPoDetail,
     insertRefund,
     // 换货列表
-    getExchangeGoodsListAction
+    getExchangeGoodsListAction,
+    cancelRefund
 }

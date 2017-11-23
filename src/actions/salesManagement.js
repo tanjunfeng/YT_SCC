@@ -22,14 +22,17 @@ const receive = (data) => ({
 export const returnGoodsList = (params) => dispatch => (
     new Promise((resolve, reject) => {
         getReturnGoodsList(params)
-            .then(res => {
-                dispatch(receive(res.data));
-            })
-            .catch(err => {
-                reject(err);
-            })
+        .then(res => {
+            dispatch(
+                receive(res.data)
+            );
+            resolve(res);
+        })
+        .catch(err => {
+            reject(err);
+        });
     })
-)
+);
 
 // 获取换货list数据
 const getExchangeGoodsList = (data) => ({
@@ -61,6 +64,7 @@ export const returnGoodsDetail = (params) => dispatch => (
         getReturnGoodsDetail(params)
             .then(res => {
                 dispatch(detailReceive(res.data))
+                resolve(res);
             })
             .catch(err => {
                 reject(err);
@@ -149,14 +153,4 @@ export const returnDescriptionSave = (params) => dispatch => (
             .catch(err => reject(err))
     })
 )
-
-// 重置清空form数据
-export const returnGoodsListFormDataClear = () => ({
-    type: ActionType.RETURN_GOODS_LIST_FORM_DATA_CLEAR,
-    payload: {
-        data: {},
-        franchiseeIdName: '',
-        branchCompany: { id: '', name: '' }
-    }
-})
 

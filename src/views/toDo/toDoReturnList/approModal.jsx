@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-14 17:19:41
+ * @Last Modified time: 2017-11-23 10:07:24
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -70,19 +70,22 @@ class ApproModal extends PureComponent {
                 }
             }, {
                 title: '审批结果',
-                dataIndex: 'supplierAddress',
-                key: 'supplierAddress'
+                dataIndex: 'auditResult',
+                key: 'auditResult',
+                render: (text) => {
+                    switch (text) {
+                        case 0:
+                            return '拒绝';
+                        case 1:
+                            return '通过';
+                        default:
+                            return '';
+                    }
+                }
             }, {
                 title: '审批意见',
-                dataIndex: 'adrType',
-                key: 'adrType',
-                render: text => {
-                    let res = text;
-                    if (text === null || undefined === text || text === '') {
-                        res = '-';
-                    }
-                    return res;
-                }
+                dataIndex: 'auditOpinion',
+                key: 'auditOpinion'
             }
         ]
     }
