@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Table, Form, Icon, Upload, Button, Input} from 'antd';
 import FlowChart from '../flowChart';
+import UploadZip from './uploadZip';
 
 import {
     queryProcessList,
@@ -33,7 +34,8 @@ class ProcessList extends PureComponent {
         super(props);
         this.state = {
             data: null,
-            visible: false
+            visible: false,
+            flowName: ''
         }
         this.param = {};
         this.handlePromotionReset = this.handlePromotionReset.bind(this);
@@ -88,6 +90,11 @@ class ProcessList extends PureComponent {
             visible: true,
         });
     }
+    handleChange = (e) => {
+        this.setState({
+            flowName: e.target.value
+        })
+    }
     /**
      * 表单操作
      * @param {Object} text 当前行的值
@@ -104,15 +111,13 @@ class ProcessList extends PureComponent {
         if (Object.keys(this.props.processList).length === 0) {
             return null;
         }
+        const {flowName} = this.state;
         const url = `${window.config.apiHost}/bpm/newdeploy`;
         const { overviewData, detailData, total, pageNum, pageSize} = this.props.processList;
         processOverview[processOverview.length - 1].render = this.renderOperation;
         processDetails[processDetails.length - 1].render = this.renderOperation;
-        const props = {
-            action: url
-        };
         return (
-            <div>
+            <div className="processBox">
                 <Table
                     dataSource={overviewData.data}
                     columns={processOverview}
@@ -146,12 +151,8 @@ class ProcessList extends PureComponent {
                         onChange: this.onPaginate
                     }}
                 />
-                <Input size="small" placeholder="small size" />
-                <Upload {...props}>
-                    <Button>
-                        <Icon type="upload" /> 点击选择zip文件
-                    </Button>
-                </Upload>
+                <Input size="small" placeholder="流程名称" onChange={this.handleChange} />
+                <UploadZip flowName={flowName} url={url} />
                 <div id="canvasRoot">
                     <FlowChart data={this.state.data} >
                         <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
