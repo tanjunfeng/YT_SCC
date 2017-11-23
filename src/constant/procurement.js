@@ -65,7 +65,20 @@ export const returnStatus = {
         value: '异常'
     }]
 }
-
+// 退货单流程状态
+export const auditStatusOption = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '请选择'
+    }, {
+        key: '0',
+        value: '进行中'
+    }, {
+        key: '1',
+        value: '已结束'
+    }]
+}
 // 退货单审批状态
 export const optionStatus = {
     defaultValue: '',
