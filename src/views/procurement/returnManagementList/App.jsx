@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-23 15:51:02
+ * @Last Modified time: 2017-11-23 17:20:55
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -517,12 +517,12 @@ class ReturnManagementList extends PureComponent {
             orderType,
             orderItem
         };
-        console.log(searchParams)
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
     }
 
     sortOnChange = (pagination, filters, sorter) => {
+        console.log(pagination, sorter)
         if (sorter.order === 'descend') {
             this.setState({
                 orderType: 1
@@ -540,9 +540,13 @@ class ReturnManagementList extends PureComponent {
             this.setState({
                 orderItem: 1
             })
-        } else {
+        } else if (sorter.columnKey === 'status') {
             this.setState({
                 orderItem: 2
+            })
+        } else {
+            this.setState({
+                orderItem: 0
             })
         }
         this.handleSearch();
