@@ -602,11 +602,11 @@ class toDoReturnList extends PureComponent {
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/returnManagementDetail/${id}`}>退货单详情</Link>
                 </Menu.Item>
-                {/* <Menu.Item key="examinationApproval">
+                <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
                     </a>
-                </Menu.Item> */}
+                </Menu.Item>
                 <Menu.Item key="viewApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         查看审批意见
