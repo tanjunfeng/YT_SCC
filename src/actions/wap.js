@@ -8,7 +8,7 @@
 import {
     queryCarouselAdList,
     queryQuickNavigationList,
-    areaList,
+    // areaList,
     queryAllHot,
     saveInput,
     selectInputKeyword,
@@ -29,6 +29,9 @@ import {
     updateCarouselInterval,
     insertCarouselAd,
     queryCarouselAdBySorting,
+    queryAreas,
+    switchOptWayOfHome,
+    queryBranchCompanyInfoWap
 } from '../service';
 import ActionType from './ActionType';
 
@@ -94,25 +97,25 @@ const receiveAreaList = (data) => ({
 // 查询移动端首页配置
 export const fetchAreaList = (data) => dispatch => (
     new Promise((resolve, reject) => {
-        Promise.all([areaList(data), queryQuickNavigationList()])
-        .then((result) => {
-            const all = result[0].data;
-            const quick = result[1].data;
-            all.map((item, index) => {
-                if (item.id === 'quick-nav') {
-                    result[0].data[index].itemAds = quick;
-                    return null;
+        Promise.all([queryAreas(data), queryQuickNavigationList()])
+            .then((result) => {
+                const all = result[0].data;
+                const quick = result[1].data;
+                all.map((item, index) => {
+                    if (item.id === 'quick-nav') {
+                        result[0].data[index].itemAds = quick;
+                        return null;
+                    }
+                })
+                dispatch(
+                    receiveAreaList(result[0].data)
+                );
+                resolve(result[0].data);
+            }).catch((err) => {
+                if (err.data && err.data.code === 401) {
+                    reject(err);
                 }
             })
-            dispatch(
-                receiveAreaList(result[0].data)
-            );
-            resolve(result[0].data);
-        }).catch((err) => {
-            if (err.data && err.data.code === 401) {
-                reject(err);
-            }
-        })
     })
 )
 
@@ -374,3 +377,43 @@ export const fetchCarouselAdBySorting = (data) => (
     })
 )
 
+// 切换运营方式
+const receiveSwitchOptWayOfHome = (data) => ({
+    type: ActionType.SWITCH_OPTION_WAY_HOME,
+    payload: data,
+})
+export const fetchSwitchOptWayOfHome = (data) => dispatch => (
+    new Promise((resolve, reject) => {
+        switchOptWayOfHome(data)
+            .then(res => {
+                dispatch(receiveSwitchOptWayOfHome(res))
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
+// 获取用户有权限的子公司
+const receiveQueryBranchCompanyInfo = (data) => ({
+    type: ActionType.BRANCH_COMPANY_INFO,
+    payload: data,
+})
+export const fetchQueryBranchCompanyInfo = (data) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryBranchCompanyInfoWap(data)
+            .then(res => {
+                // 加入字段判断用户是否有修改总公司的权限
+                res.headquarters = false
+                for (let i = 0; i < res.data.length; i++) {
+                    if (res.data[i].id === 'headquarters') {
+                        res.headquarters = true
+                        break
+                    }
+                }
+                res.data.unshift({ id: '', name: '请选择' })
+                dispatch(receiveQueryBranchCompanyInfo(res))
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)

@@ -22,6 +22,7 @@ import {
     grantCoupon as grantCouponService,
     garbageCouponParticipate as invalidRecordService,
     cancelCoupons as cancelCouponsService,
+    queryProcessList as queryProcessListService
 } from '../service';
 
 /**
@@ -357,6 +358,23 @@ export const updatePromotionStatus = (params) => dispatch => (
             .catch(err => reject(err));
     })
 );
+// 流程管理
+const queryProcessListAction = (data) => ({
+    type: ActionType.FETCH_PROCESS_LIST,
+    payload: data
+});
+
+export const queryProcessList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryProcessListService(params)
+            .then(res => {
+                dispatch(
+                    queryProcessListAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
 
 const cancelCouponsAction = (data) => ({
     type: ActionType.CANCEL_COUPONS,
@@ -420,4 +438,11 @@ export const clearCompaniesList = () => dispatch => (dispatch({
 export const clearFranchiseeList = () => dispatch => (dispatch({
     type: ActionType.CLEAR_FRANCHISEE_LIST,
     payload: []
+}));
+/**
+ * 清空流程管理列表
+ */
+export const clearProcessList = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_COUPONS_LIST,
+    payload: {}
 }));

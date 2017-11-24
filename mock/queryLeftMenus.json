@@ -261,6 +261,19 @@
                     "menuList": []
                 }
             ]
+        },
+        {
+            "authorityId": 305,
+            "authorityCode": "lcgl",
+            "displayName": "流程管理",
+            "menuList": [
+                {
+                    "authorityId": 306,
+                    "authorityCode": "lclb",
+                    "displayName": "流程列表",
+                    "menuList": []
+                }
+            ]
         }
     ],
     "success": true

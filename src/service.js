@@ -410,7 +410,13 @@ export const queryQuickNavigation = (params) => http.get('sc/homeAd/queryQuickNa
 export const updateQuickNavigation = (params) => http.post('/homeAd/updateQuickNavigation', params);
 
 // 首页配置区域列表
-export const areaList = (params) => http.get('/homeAd/areaList', params);
+export const queryAreas = (params) => http.get('/homeAd/queryAreas', params);
+
+// 切换首页运营方式
+export const switchOptWayOfHome = (params) => http.post('/homeAd/switchOptWayOfHome', params);
+
+// 获取用户子公司
+export const queryBranchCompanyInfoWap = (params) => http.post('/homeAd/queryBranchCompanyInfo', params);
 
 // 设置首页广告区域停用或者启用
 export const setAreaEnable = (params) => http.post('/homeAd/setAreaEnable', params);
@@ -853,6 +859,9 @@ export const cancelCoupons = (params) => http.get('/coupon/cancelCoupons', param
  */
 // 查询品类
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
+
+// 流程管理
+export const queryProcessList = (params) => http.get('/process/queryProcessList', params);
 // 退货单列表
 export const getReturnGoodsList = (params) => http.get('/webReturnRequest/queryReturnRequestList', params);
 // 换货单列表
