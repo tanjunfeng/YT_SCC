@@ -10,32 +10,31 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Button, Input, Modal} from 'antd';
+import { Table, Form, Button, Input } from 'antd';
 import FlowChart from '../flowChart';
 import UploadZip from './uploadZip';
 
 import {
-    queryProcessList,
-    clearProcessList,
+    queryProcessData,
+    clearProcessData,
     queryChartData
-} from '../../../actions/promotion';
+} from '../../../actions/process';
 
 import { PAGE_SIZE } from '../../../constant';
 import { processOverview, processDetails } from '../columns';
 
 @connect(state => ({
-    processList: state.toJS().promotion.processList
+    processData: state.toJS().process.processData
 }), dispatch => bindActionCreators({
-    queryProcessList,
-    clearProcessList,
+    queryProcessData,
+    clearProcessData,
     queryChartData
 }, dispatch))
 
-class ProcessList extends PureComponent {
+class processData extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            data: null,
             visible: false,
             flowName: ''
         }
@@ -44,16 +43,12 @@ class ProcessList extends PureComponent {
     }
 
     componentWillMount() {
-        this.props.clearProcessList();
+        this.props.clearProcessData();
     }
 
     componentDidMount() {
-        this.handlePromotionReset();
+        this.handleReset();
         this.query();
-    }
-
-    componentWillUnmount() {
-        this.props.clearProcessList();
     }
     /**
      * 分页页码改变的回调
@@ -63,18 +58,17 @@ class ProcessList extends PureComponent {
         this.query();
     }
     queryFlowChart = (id) => {
-        this.props.queryChartData(id).then((data) => {
-            this.setState({data: data.data});
+        this.props.queryChartData(id).then(() => {
             this.showModal();
         });
     }
     query = () => {
-        this.props.queryProcessList(this.param).then((data) => {
+        this.props.queryProcessData(this.param).then((data) => {
             const { pageNum, pageSize } = data.data;
             Object.assign(this.param, { pageNum, pageSize });
         });
     }
-    handlePromotionReset = () => {
+    handleReset = () => {
         this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE
@@ -101,16 +95,19 @@ class ProcessList extends PureComponent {
      * @param {Object} text 当前行的值
      * @param {object} record 单行数据
      */
-    renderOperation = (text, record) => {
-        return (<a onClick={() => { this.queryFlowChart(record.id); this.showModal() }}>查看流程图</a>)
-    }
+    renderOperation = (text, record) => (
+        <a
+            onClick={() => { this.queryFlowChart(record.id); }}
+        >查看流程图</a>
+    )
+
     render() {
-        if (Object.keys(this.props.processList).length === 0) {
+        if (Object.keys(this.props.processData).length === 0) {
             return null;
         }
-        const {flowName, visible} = this.state;
+        const { flowName, visible } = this.state;
         const url = `${window.config.apiHost}/bpm/newdeploy`;
-        const { overviewData, detailData, total, pageNum, pageSize} = this.props.processList;
+        const { overviewData, detailData, total, pageNum, pageSize } = this.props.processData;
         processOverview[processOverview.length - 1].render = this.renderOperation;
         processDetails[processDetails.length - 1].render = this.renderOperation;
         return (
@@ -150,22 +147,20 @@ class ProcessList extends PureComponent {
                 />
                 <Input size="small" placeholder="流程名称" onChange={this.handleChange} />
                 <UploadZip flowName={flowName} url={url} />
-                <div id="canvasRoot">
-                    <FlowChart data={this.state.data} parentId={'canvasRoot'} visible={visible} >
-                        <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
-                    </FlowChart>
-                </div>
+                <FlowChart data={this.props.processData} visible={visible} >
+                    <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
+                </FlowChart>
             </div>
 
         );
     }
 }
 
-ProcessList.propTypes = {
-    queryProcessList: PropTypes.func,
-    clearProcessList: PropTypes.func,
+processData.propTypes = {
+    queryProcessData: PropTypes.func,
+    clearProcessData: PropTypes.func,
     queryChartData: PropTypes.func,
-    processList: PropTypes.objectOf(PropTypes.objectOf(PropTypes.any))
+    processData: PropTypes.objectOf(PropTypes.any)
 }
 
-export default withRouter(Form.create()(ProcessList));
+export default withRouter(Form.create()(processData));
