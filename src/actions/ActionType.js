@@ -150,6 +150,8 @@ export default {
     FETCH_CATEGORY_ID: 'FETCH_CATEGORY_ID', // cyx
     FETCH_ALL_AD_PLAN_LIST: 'FETCH_ALL_AD_PLAN_LIST', // cyx
     FETCH_CAROUSEL_INTERVAL: 'FETCH_CAROUSEL_INTERVAL', // cyx
+    SWITCH_OPTION_WAY_HOME: 'SWITCH_OPTION_WAY_HOME',
+    BRANCH_COMPANY_INFO: 'BRANCH_COMPANY_INFO',
 
     /* ********************procurement************************* */
     // 查询采购单管理列表
