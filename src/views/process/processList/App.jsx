@@ -17,18 +17,21 @@ import UploadZip from './uploadZip';
 import {
     queryProcessData,
     clearProcessData,
-    queryChartData
+    queryChartData,
+    clearChartData
 } from '../../../actions/process';
 
 import { PAGE_SIZE } from '../../../constant';
 import { processOverview, processDetails } from '../columns';
 
 @connect(state => ({
-    processData: state.toJS().process.processData
+    processData: state.toJS().process.processData,
+    flowChartData: state.toJS().process.flowChartData
 }), dispatch => bindActionCreators({
     queryProcessData,
     clearProcessData,
-    queryChartData
+    queryChartData,
+    clearChartData
 }, dispatch))
 
 class processData extends PureComponent {
@@ -39,7 +42,6 @@ class processData extends PureComponent {
             flowName: ''
         }
         this.param = {};
-        this.queryFlowChart = this.queryFlowChart.bind(this);
     }
 
     componentWillMount() {
@@ -58,6 +60,7 @@ class processData extends PureComponent {
         this.query();
     }
     queryFlowChart = (id) => {
+        this.props.clearChartData();
         this.props.queryChartData(id).then(() => {
             this.showModal();
         });
@@ -147,7 +150,7 @@ class processData extends PureComponent {
                 />
                 <Input size="small" placeholder="流程名称" onChange={this.handleChange} />
                 <UploadZip flowName={flowName} url={url} />
-                <FlowChart data={this.props.processData} visible={visible} >
+                <FlowChart data={this.props.flowChartData} visible={visible} >
                     <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
                 </FlowChart>
             </div>
@@ -160,7 +163,9 @@ processData.propTypes = {
     queryProcessData: PropTypes.func,
     clearProcessData: PropTypes.func,
     queryChartData: PropTypes.func,
-    processData: PropTypes.objectOf(PropTypes.any)
+    clearChartData: PropTypes.func,
+    processData: PropTypes.objectOf(PropTypes.any),
+    flowChartData: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(processData));

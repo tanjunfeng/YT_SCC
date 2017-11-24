@@ -5,7 +5,10 @@ import '../../../../lib/qunee-min';
 const qunee = window.Q;
 class FlowChart extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        if (this.props.data === null && nextProps.data) {
+        console.log(this.props.data);
+        console.log(Object.keys(this.props.data).length === 0)
+        console.log(nextProps.data);
+        if (Object.keys(this.props.data).length === 0 && nextProps.data) {
             this.clearFlowChart();
             this.graph = new qunee.Graph('canvas');
             this.GRADIENT = new qunee.Gradient(qunee.Consts.GRADIENT_TYPE_RADIAL,
@@ -94,18 +97,17 @@ class FlowChart extends PureComponent {
     }
     render() {
         return (
-            <div id="canvasRoot">
+            <div id="canvasRoot" className={this.props.visible ? 'show' : 'hide'}>
+                {this.props.children}
                 <div id="canvas" />
             </div>
         )
     }
 }
 FlowChart.propTypes = {
-    data: PropTypes.objectOf(PropTypes.objectOf(PropTypes.any))
-}
-
-FlowChart.propTypes = {
-    visible: PropTypes.bool
+    data: PropTypes.objectOf(PropTypes.objectOf(PropTypes.any)),
+    visible: PropTypes.bool,
+    children: PropTypes.node
 }
 
 export default FlowChart;

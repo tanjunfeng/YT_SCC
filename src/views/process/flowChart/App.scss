@@ -1,3 +1,24 @@
-#canvas{
-    position: relative;
+
+#canvasRoot{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.5);
+    #canvas{
+        position: relative;
+        width: 1000px;
+        height: 500px;
+    }
+    .closeBtn{
+        position: relative;
+        top: 0;
+        float: right;
+    }
+}
+.hide{
+    display: none;
+}
+.show{
+    display: block;
 }
