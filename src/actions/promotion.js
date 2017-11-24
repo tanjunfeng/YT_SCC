@@ -22,7 +22,8 @@ import {
     grantCoupon as grantCouponService,
     garbageCouponParticipate as invalidRecordService,
     cancelCoupons as cancelCouponsService,
-    queryProcessList as queryProcessListService
+    queryProcessList as queryProcessListService,
+    queryChartData as queryChartDataService
 } from '../service';
 
 /**
@@ -375,7 +376,25 @@ export const queryProcessList = (params) => dispatch => (
             .catch(err => reject(err));
     })
 );
+// 流程管理下获取流程图数据
+const queryChartDataAction = (data) => ({
+    type: ActionType.FETCH_CHART_DATA,
+    payload: data
+});
 
+export const queryChartData = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        console.log(params);
+        queryChartDataService(params)
+            .then(res => {
+                console.log(res);
+                dispatch(
+                    queryChartDataAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
 const cancelCouponsAction = (data) => ({
     type: ActionType.CANCEL_COUPONS,
     payload: data

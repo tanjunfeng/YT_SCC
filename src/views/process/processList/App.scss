@@ -4,3 +4,21 @@
         margin: 0 8px 8px 0;
     }
 }
+
+#canvasRoot{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.5);
+    .closeBtn{
+        position: relative;
+        float: right;
+    }
+}
+.hide{
+    display: none;
+}
+.show{
+    display: block;
+}

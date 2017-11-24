@@ -10,13 +10,14 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Icon, Upload, Button, Input} from 'antd';
+import { Table, Form, Button, Input, Modal} from 'antd';
 import FlowChart from '../flowChart';
 import UploadZip from './uploadZip';
 
 import {
     queryProcessList,
-    clearProcessList
+    clearProcessList,
+    queryChartData
 } from '../../../actions/promotion';
 
 import { PAGE_SIZE } from '../../../constant';
@@ -26,7 +27,8 @@ import { processOverview, processDetails } from '../columns';
     processList: state.toJS().promotion.processList
 }), dispatch => bindActionCreators({
     queryProcessList,
-    clearProcessList
+    clearProcessList,
+    queryChartData
 }, dispatch))
 
 class ProcessList extends PureComponent {
@@ -38,10 +40,7 @@ class ProcessList extends PureComponent {
             flowName: ''
         }
         this.param = {};
-        this.handlePromotionReset = this.handlePromotionReset.bind(this);
-        this.renderOperation = this.renderOperation.bind(this);
-        this.getFlowChart = this.getFlowChart.bind(this);
-        this.closeCanvas = this.closeCanvas.bind(this);
+        this.queryFlowChart = this.queryFlowChart.bind(this);
     }
 
     componentWillMount() {
@@ -63,9 +62,11 @@ class ProcessList extends PureComponent {
         Object.assign(this.param, { pageNum, current: pageNum });
         this.query();
     }
-    getFlowChart = () => {
-        this.setState({data: {}});
-        this.showModal();
+    queryFlowChart = (id) => {
+        this.props.queryChartData(id).then((data) => {
+            this.setState({data: data.data});
+            this.showModal();
+        });
     }
     query = () => {
         this.props.queryProcessList(this.param).then((data) => {
@@ -80,10 +81,10 @@ class ProcessList extends PureComponent {
         }
     }
     closeCanvas = () => {
-        const canvasRoot = document.getElementById('canvasRoot');
-        while (canvasRoot.hasChildNodes()) {
-            canvasRoot.removeChild(canvasRoot.firstChild);
-        }
+        this.setState({
+            data: null,
+            visible: false
+        });
     }
     showModal = () => {
         this.setState({
@@ -100,18 +101,14 @@ class ProcessList extends PureComponent {
      * @param {Object} text 当前行的值
      * @param {object} record 单行数据
      */
-    renderOperation(text, record) {
-        // const { id } = record;
-        // const pathname = window.location.pathname;
-        return (
-            <a onClick={this.getFlowChart}>查看流程图</a>
-        )
+    renderOperation = (text, record) => {
+        return (<a onClick={() => { this.queryFlowChart(record.id); this.showModal() }}>查看流程图</a>)
     }
     render() {
         if (Object.keys(this.props.processList).length === 0) {
             return null;
         }
-        const {flowName} = this.state;
+        const {flowName, visible} = this.state;
         const url = `${window.config.apiHost}/bpm/newdeploy`;
         const { overviewData, detailData, total, pageNum, pageSize} = this.props.processList;
         processOverview[processOverview.length - 1].render = this.renderOperation;
@@ -154,7 +151,7 @@ class ProcessList extends PureComponent {
                 <Input size="small" placeholder="流程名称" onChange={this.handleChange} />
                 <UploadZip flowName={flowName} url={url} />
                 <div id="canvasRoot">
-                    <FlowChart data={this.state.data} >
+                    <FlowChart data={this.state.data} parentId={'canvasRoot'} visible={visible} >
                         <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
                     </FlowChart>
                 </div>
@@ -167,6 +164,7 @@ class ProcessList extends PureComponent {
 ProcessList.propTypes = {
     queryProcessList: PropTypes.func,
     clearProcessList: PropTypes.func,
+    queryChartData: PropTypes.func,
     processList: PropTypes.objectOf(PropTypes.objectOf(PropTypes.any))
 }
 

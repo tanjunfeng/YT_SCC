@@ -856,6 +856,8 @@ export const queryCategoriesByParentId = (params) => http.get('/category/queryDi
 
 // 流程管理
 export const queryProcessList = (params) => http.get('/process/queryProcessList', params);
+// 流程管理下获取流程图数据的请求
+export const queryChartData = (params) => http.get('/process/queryChartData', params);
 // 退货单列表
 export const getReturnGoodsList = (params) => http.get('/webReturnRequest/queryReturnRequestList', params);
 // 换货单列表
