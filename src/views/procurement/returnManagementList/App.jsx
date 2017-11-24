@@ -724,17 +724,17 @@ class ReturnManagementList extends PureComponent {
                                             compKey="providerNo"
                                             ref={ref => { this.joiningAdressMind = ref }}
                                             fetch={(params) =>
-                                            this.props.pubFetchValueList(Utils.removeInvalid({
-                                                condition: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
-                                            }), 'supplierAdrSearchBox').then((res) => {
-                                                const dataArr = res.data.data || [];
-                                                if (!dataArr || dataArr.length === 0) {
-                                                    message.warning('没有可用的数据');
-                                                }
-                                                return res;
-                                            })}
+                                                this.props.pubFetchValueList(Utils.removeInvalid({
+                                                    condition: params.value,
+                                                    pageSize: params.pagination.pageSize,
+                                                    pageNum: params.pagination.current || 1
+                                                }), 'supplierAdrSearchBox').then((res) => {
+                                                    const dataArr = res.data.data || [];
+                                                    if (!dataArr || dataArr.length === 0) {
+                                                        message.warning('没有可用的数据');
+                                                    }
+                                                    return res;
+                                                })}
                                             onChoosed={this.handleSupplierAddressChoose}
                                             onClear={this.handleSupplierAddressClear}
                                             renderChoosedInputRaw={(res) => (
@@ -768,7 +768,7 @@ class ReturnManagementList extends PureComponent {
                                                 </Option>
                                             ))}
                                         </Select>
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
                             {/* 退货地点 */}
