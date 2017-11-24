@@ -42,6 +42,8 @@ import {
     fetchPoRcvMngList
 } from '../../../actions';
 
+import { Supplier } from '../../../container/search';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -268,25 +270,27 @@ class PoRcvMngList extends PureComponent {
         this.handleAddressClear();
     }
 
-    // 获取供应商编号
-    handleSupplyChoose = ({ record }) => {
-        this.setState({
-            spNo: record.spNo,
-            spId: record.spId,
-            orgId: this.props.employeeCompanyId,
-            isSupplyAdrDisabled: false
-        });
-        this.handleSupplierAddressClear();
-    }
-
-    // 供应商值清单-清除
-    handleSupplyClear = () => {
-        this.setState({
-            spNo: '',
-            spId: '',
-            isSupplyAdrDisabled: true
-        });
-        this.supplySearchMind.reset();
+    /**
+     * Supplier供应商组件改变的回调
+     * @param {object} record 改变后值
+     */
+    handleSupplierChange = (record) => {
+        const {spId, spNo} = record;
+        if (spId === '') {
+            this.setState({
+                spNo: '',
+                spId: '',
+                isSupplyAdrDisabled: true
+            });
+            this.supplySearchMind.reset();
+        } else {
+            this.setState({
+                spNo,
+                spId,
+                orgId: this.props.employeeCompanyId,
+                isSupplyAdrDisabled: false
+            });
+        }
         this.handleSupplierAddressClear();
     }
 
@@ -548,38 +552,13 @@ class PoRcvMngList extends PureComponent {
                                 <FormItem>
                                     <div className="row middle">
                                         <span className="ant-form-item-label search-mind-label">供应商</span>
-                                        <SearchMind
-                                            style={{
-                                                zIndex: 101
-                                            }}
-                                            compKey="search-mind-supply"
-                                            ref={ref => {
-                                                this.supplySearchMind = ref
-                                            }}
-                                            fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
-                                            }, 'querySuppliersList')}
-                                            addonBefore=""
-                                            onChoosed={this.handleSupplyChoose}
-                                            onClear={this.handleSupplyClear}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>{row.spNo}-{row.companyName}</div>
-                                            )}
-                                            rowKey="spId"
-                                            pageSize={5}
-                                            columns={[
-                                                {
-                                                    title: '供应商',
-                                                    dataIndex: 'spNo',
-                                                    width: 80
-                                                }, {
-                                                    title: '供应商名称',
-                                                    dataIndex: 'companyName'
-                                                }
-                                            ]}
-                                        />
+                                        {getFieldDecorator('spId', {
+                                            initialValue: { spId: '', spNo: '', companyName: ''}
+                                        })(
+                                            <Supplier
+                                                onChange={this.handleSupplierChange}
+                                            />
+                                        )}
                                     </div>
                                 </FormItem>
                             </Col>
