@@ -410,7 +410,10 @@ export const queryQuickNavigation = (params) => http.get('sc/homeAd/queryQuickNa
 export const updateQuickNavigation = (params) => http.post('/homeAd/updateQuickNavigation', params);
 
 // 首页配置区域列表
-export const areaList = (params) => http.get('/homeAd/areaList', params);
+export const queryAreas = (params) => http.get('/homeAd/queryAreas', params);
+
+// 切换首页运营方式
+export const switchOptWayOfHome = (params) => http.post('/homeAd/switchOptWayOfHome', params);
 
 // 设置首页广告区域停用或者启用
 export const setAreaEnable = (params) => http.post('/homeAd/setAreaEnable', params);
