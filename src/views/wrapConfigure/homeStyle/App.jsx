@@ -33,41 +33,25 @@ import FloorItem from './common/floor';
 class HomeStyle extends Component {
     constructor(props) {
         super(props)
-        this.headquarters = null
         this.state = {
             companyId: '',
             isChecked: false,
+            // 用户能否修改当前的页面
             isHeadquarters: true
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (!this.headquarters && nextProps.companyData) {
-            this.headquarters = nextProps.companyData.headquarters
         }
     }
 
     /**
      * 点击搜索后的回调
      * @param {object} submitObj 上传参数
+     * @param {bool} isHeadquarters 用户是否可以修改当前页面
      */
-    searchChange = (submitObj) => {
+    searchChange = (submitObj, isHeadquarters) => {
         const { branchCompany, homePageType } = submitObj
         const companyId = branchCompany.id
         const obj = {
             companyId,
             homePageType
-        }
-        // 判断用户是否可以修改当前页面
-        let isHeadquarters = null
-        if (homePageType === '1') {
-            if (this.headquarters) {
-                isHeadquarters = true
-            } else {
-                isHeadquarters = false
-            }
-        } else {
-            isHeadquarters = true
         }
         this.setState({
             companyId,
