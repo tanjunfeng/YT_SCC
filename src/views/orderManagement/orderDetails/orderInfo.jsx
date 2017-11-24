@@ -395,6 +395,14 @@ class OrderInformation extends PureComponent {
                             <Button
                                 size="default"
                                 onClick={() => {
+                                    this.props.history.replace('/orderReturns');
+                                }}
+                            >
+                                返回
+                            </Button>
+                            <Button
+                                size="default"
+                                onClick={() => {
                                     this.props.history.replace('/orderList');
                                 }}
                             >
