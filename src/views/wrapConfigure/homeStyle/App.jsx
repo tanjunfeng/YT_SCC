@@ -1,7 +1,15 @@
+/**
+ * @file wap.js
+ * @author shijh,liujinyu
+ *
+ * 配置移动端首页
+ */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Message } from 'antd';
 import { fetchAreaList, fetchSwitchOptWayOfHome } from '../../../actions/wap';
 
 import SearchItem from '../common/searchItem';
@@ -14,23 +22,29 @@ import FloorItem from './common/floor';
 @connect(
     state => ({
         homeData: state.toJS().wap.homeData,
+        companyData: state.toJS().wap.companyData
     }),
     dispatch => bindActionCreators({
         fetchAreaList,
+        fetchSwitchOptWayOfHome
     }, dispatch)
 )
 
 class HomeStyle extends Component {
     constructor(props) {
         super(props)
+        this.headquarters = null
         this.state = {
-            companyName: '',
-            companyId: ''
+            companyId: '',
+            isChecked: false,
+            isHeadquarters: true
         }
     }
 
-    componentDidMount() {
-        this.props.fetchAreaList();
+    componentWillReceiveProps(nextProps) {
+        if (!this.headquarters && nextProps.companyData) {
+            this.headquarters = nextProps.companyData.headquarters
+        }
     }
 
     /**
@@ -38,12 +52,28 @@ class HomeStyle extends Component {
      * @param {object} submitObj 上传参数
      */
     searchChange = (submitObj) => {
-        const { branchCompany, homePageType } = submitObj;
+        const { branchCompany, homePageType } = submitObj
+        const companyId = branchCompany.id
+        const obj = {
+            companyId,
+            homePageType
+        }
+        // 判断用户是否可以修改当前页面
+        let isHeadquarters = null
+        if (homePageType === '1') {
+            if (this.headquarters) {
+                isHeadquarters = true
+            } else {
+                isHeadquarters = false
+            }
+        } else {
+            isHeadquarters = true
+        }
         this.setState({
-            companyName: branchCompany.name,
-            companyId: branchCompany.id
+            companyId,
+            isHeadquarters
         })
-        // 这里调用请求接口
+        this.props.fetchAreaList(obj);
     }
 
     /**
@@ -55,10 +85,16 @@ class HomeStyle extends Component {
             isUsingNation,
             companyId: this.state.companyId
         }
-        fetchSwitchOptWayOfHome(obj)
-            .then(res => {
-                console.log(res)
-            })
+        this.props.fetchSwitchOptWayOfHome(obj).then(res => {
+            if (res.success) {
+                Message.success('切换成功')
+            } else {
+                Message.error(res.message)
+                this.setState({
+                    isChecked: !isUsingNation
+                })
+            }
+        })
     }
 
     render() {
@@ -68,39 +104,49 @@ class HomeStyle extends Component {
                 <SearchItem
                     searchChange={this.searchChange}
                     switchChange={this.switchChange}
-                    companyName={this.state.companyName}
-                    companyId={this.state.companyId}
+                    isChecked={this.state.isChecked}
                 />
-                <div className="home-style">
-                    {
-                        homeData.map((item, index) => {
-                            const { id } = item;
-                            const props = {
-                                index,
-                                key: id,
-                                data: item,
-                                allLength: homeData.length,
-                                fetchAreaList: this.props.fetchAreaList
+                {
+                    homeData.length > 0
+                        ? <div className="home-style">
+                            {
+                                homeData.map((item, index) => {
+                                    const { id } = item;
+                                    const props = {
+                                        index,
+                                        key: id,
+                                        data: item,
+                                        allLength: homeData.length,
+                                        fetchAreaList: this.props.fetchAreaList,
+                                        // 用户是否可以修改
+                                        headquarters: this.state.isHeadquarters
+                                    }
+                                    if (id.indexOf('carousel') > -1) {
+                                        return <CarouselItem {...props} />
+                                    }
+                                    if (id.indexOf('quick-nav') > -1) {
+                                        return <QuickItem type="quick" {...props} />
+                                    }
+                                    if (id.indexOf('hot') > -1) {
+                                        return <HotItem type="hot" {...props} />
+                                    }
+                                    if (id.indexOf('banner-') > -1) {
+                                        return <BannerItem type="banner" {...props} />
+                                    }
+                                    if (id.indexOf('floor-') > -1) {
+                                        return <FloorItem type="floor" {...props} />
+                                    }
+                                    return null;
+                                })
                             }
-                            if (id.indexOf('carousel') > -1) {
-                                return <CarouselItem {...props} />
+                            {
+                                !this.state.isHeadquarters
+                                    ? <div className="home-style-wrap" />
+                                    : null
                             }
-                            if (id.indexOf('quick-nav') > -1) {
-                                return <QuickItem type="quick" {...props} />
-                            }
-                            if (id.indexOf('hot') > -1) {
-                                return <HotItem type="hot" {...props} />
-                            }
-                            if (id.indexOf('banner-') > -1) {
-                                return <BannerItem type="banner" {...props} />
-                            }
-                            if (id.indexOf('floor-') > -1) {
-                                return <FloorItem type="floor" {...props} />
-                            }
-                            return null;
-                        })
-                    }
-                </div>
+                        </div>
+                        : null
+                }
             </div>
         );
     }
@@ -108,7 +154,9 @@ class HomeStyle extends Component {
 
 HomeStyle.propTypes = {
     fetchAreaList: PropTypes.func,
+    fetchSwitchOptWayOfHome: PropTypes.func,
     homeData: PropTypes.objectOf(PropTypes.any),
+    companyData: PropTypes.objectOf(PropTypes.any)
 };
 
 export default HomeStyle;

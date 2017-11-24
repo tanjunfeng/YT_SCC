@@ -2,26 +2,54 @@
  * @file App.jsx
  * @author liujinyu
  *
- * 首页样式管理条件查询区
+ * 首页样式运营状态切换区
  */
 import React, { PureComponent } from 'react';
-import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import { Form, Switch } from 'antd';
+import { Switch, Modal } from 'antd';
 
-const FormItem = Form.Item;
+const confirm = Modal.confirm;
 
 class SwitchBox extends PureComponent {
-    componentWillReceiveProps(nextProps) {
-        const isUsingNation = nextProps.form.getFieldValue('isUsingNation')
-        const isUsingNationOld = this.props.form.getFieldValue('isUsingNation')
-        if (isUsingNation !== isUsingNationOld) {
-            this.props.switchChange(isUsingNation)
+    constructor(props) {
+        super(props)
+        this.state = {
+            isChecked: this.props.isChecked,
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.isChecked !== this.state.isChecked) {
+            this.setState({
+                checked: nextProps.isChecked
+            })
+        }
+    }
+
+    /**
+     * 点击切换运营方式
+     * @param {bloon} checked 是否为总部运营
+     */
+    handleChange = (checked) => {
+        const _this = this
+        confirm({
+            title: '请确认',
+            content: '是否确认切换运营状态',
+            onOk() {
+                _this.setState({
+                    checked
+                })
+                _this.props.switchChange(checked)
+            },
+            onCancel() {
+                _this.setState({
+                    checked: !checked
+                })
+            },
+        });
+    }
+
     render() {
-        const { getFieldDecorator } = this.props.form;
         return (
             <div className="switch-box">
                 <div className="region">
@@ -30,17 +58,7 @@ class SwitchBox extends PureComponent {
                 {
                     this.props.companyId && this.props.companyId !== 'headquarters'
                         ? <div className="mode">
-                            <Form
-                                layout="inline"
-                                className="ant-advanced-search-form"
-                                onSubmit={this.handleSearch}
-                            >
-                                <FormItem label="设置运营方式" >
-                                    {getFieldDecorator('isUsingNation', { valuePropName: 'checked' })(
-                                        <Switch checkedChildren="总部运营" unCheckedChildren="独立运营" />
-                                    )}
-                                </FormItem>
-                            </Form>
+                            <Switch checkedChildren="总部运营" unCheckedChildren="总部运营" onChange={this.handleChange} checked={this.state.isChecked} />
                         </div>
                         : null
                 }
@@ -50,10 +68,9 @@ class SwitchBox extends PureComponent {
 }
 
 SwitchBox.propTypes = {
-    switchChange: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any),
     companyId: PropTypes.string,
-    companyName: PropTypes.string
+    companyName: PropTypes.string,
+    isChecked: PropTypes.bool
 };
 
-export default withRouter(Form.create()(SwitchBox));
+export default SwitchBox;

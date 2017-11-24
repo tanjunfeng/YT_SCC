@@ -89,6 +89,12 @@ export default function (state = initState, action) {
             const { isVisible, record = {}, mTitle } = action.payload;
             return state.set('modalVisible', isVisible).set('visibleData', record).set('modalTitle', mTitle);
         }
+        // 切换运营方式
+        case ActionType.SWITCH_OPTION_WAY_HOME:
+            return state.set('switchChange', fromJS(action.payload));
+        // 获取用户有权限的公司信息
+        case ActionType.BRANCH_COMPANY_INFO:
+            return state.set('companyData', fromJS(action.payload));
         default:
             return state;
     }

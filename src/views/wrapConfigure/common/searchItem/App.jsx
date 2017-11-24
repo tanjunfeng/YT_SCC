@@ -12,6 +12,14 @@ import SearchBox from './SearchBox';
 import SwitchBox from './SwitchBox';
 
 class SearchItem extends PureComponent {
+    constructor(props) {
+        super(props)
+        this.state = {
+            companyName: '未选择',
+            companyId: ''
+        }
+    }
+
     /**
      * 点击搜索后的回调
      * @param {object} submitObj 上传参数
@@ -19,6 +27,11 @@ class SearchItem extends PureComponent {
 
     searchChange = (submitObj) => {
         this.props.searchChange(submitObj)
+        const { branchCompany } = submitObj
+        this.setState({
+            companyName: branchCompany.name,
+            companyId: branchCompany.id
+        })
     }
 
     /**
@@ -26,7 +39,7 @@ class SearchItem extends PureComponent {
      * @param {bloon} isUsingNation 是否为总部运营
      */
     switchChange = (isUsingNation) => {
-        this.props.searchChange(isUsingNation)
+        this.props.switchChange(isUsingNation)
     }
 
     render() {
@@ -35,8 +48,9 @@ class SearchItem extends PureComponent {
                 <SearchBox searchChange={this.searchChange} />
                 <SwitchBox
                     switchChange={this.switchChange}
-                    companyName={this.props.companyName}
-                    companyId={this.props.companyId}
+                    companyName={this.state.companyName}
+                    companyId={this.state.companyId}
+                    isChecked={this.props.isChecked}
                 />
             </div>
         )
@@ -45,8 +59,8 @@ class SearchItem extends PureComponent {
 
 SearchItem.propTypes = {
     searchChange: PropTypes.func,
-    companyName: PropTypes.string,
-    companyId: PropTypes.string
+    switchChange: PropTypes.func,
+    isChecked: PropTypes.bool
 };
 
 export default withRouter(Form.create()(SearchItem));
