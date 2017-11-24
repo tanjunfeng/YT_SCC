@@ -522,7 +522,6 @@ class ReturnManagementList extends PureComponent {
     }
 
     sortOnChange = (pagination, filters, sorter) => {
-        console.log(pagination, sorter)
         if (sorter.order === 'descend') {
             this.setState({
                 orderType: 1
@@ -555,6 +554,7 @@ class ReturnManagementList extends PureComponent {
     renderActions(text, record, index) {
         const { id, status, refundAdr } = record;
         const { pathname } = this.props.location;
+        // 0:制单;1:已提交;2:已审核;3:已拒绝;4:待退货;5:已退货;6:已取消;7:取消失败;8:异常
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
@@ -590,7 +590,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 退货地点为门店且状态为“待退货”时可用
-                    (refundAdr === '门店' || status === '待退货') ?
+                    (refundAdr === '门店' && status === '待退货') ?
                         <Menu.Item key="returnGoods">
                             <a target="_blank" rel="noopener noreferrer">
                                 退货
@@ -703,17 +703,17 @@ class ReturnManagementList extends PureComponent {
                                             compKey="providerNo"
                                             ref={ref => { this.joiningAdressMind = ref }}
                                             fetch={(params) =>
-                                            this.props.pubFetchValueList(Utils.removeInvalid({
-                                                condition: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
-                                            }), 'supplierAdrSearchBox').then((res) => {
-                                                const dataArr = res.data.data || [];
-                                                if (!dataArr || dataArr.length === 0) {
-                                                    message.warning('没有可用的数据');
-                                                }
-                                                return res;
-                                            })}
+                                                this.props.pubFetchValueList(Utils.removeInvalid({
+                                                    condition: params.value,
+                                                    pageSize: params.pagination.pageSize,
+                                                    pageNum: params.pagination.current || 1
+                                                }), 'supplierAdrSearchBox').then((res) => {
+                                                    const dataArr = res.data.data || [];
+                                                    if (!dataArr || dataArr.length === 0) {
+                                                        message.warning('没有可用的数据');
+                                                    }
+                                                    return res;
+                                                })}
                                             onChoosed={this.handleSupplierAddressChoose}
                                             onClear={this.handleSupplierAddressClear}
                                             renderChoosedInputRaw={(res) => (
@@ -747,7 +747,7 @@ class ReturnManagementList extends PureComponent {
                                                 </Option>
                                             ))}
                                         </Select>
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
                             {/* 退货地点 */}
