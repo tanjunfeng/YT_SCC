@@ -23,20 +23,29 @@ class SearchBox extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        const companyObj = nextProps.form.getFieldValue('branchCompany');
-        if (companyObj.name === '总公司') {
+        const { branchCompany, homePageType } = nextProps.form.getFieldsValue();
+        if (branchCompany.id === 'headquarters') {
             this.setState({
                 isDisabled: false
             })
-        } else if (companyObj.name !== '' && companyObj.name !== '总公司') {
+        } else if (branchCompany.id !== '' && branchCompany.id !== 'headquarters') {
             this.setState({
-                isDisabled: false,
                 isHide: false
             })
         } else {
             this.setState({
                 isDisabled: true,
                 isHide: true
+            })
+        }
+
+        if (homePageType !== '0') {
+            this.setState({
+                isDisabled: false
+            })
+        } else {
+            this.setState({
+                isDisabled: true
             })
         }
     }

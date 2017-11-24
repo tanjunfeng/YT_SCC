@@ -29,7 +29,8 @@ import {
     updateCarouselInterval,
     insertCarouselAd,
     queryCarouselAdBySorting,
-    queryAreas
+    queryAreas,
+    switchOptWayOfHome
 } from '../service';
 import ActionType from './ActionType';
 
@@ -375,3 +376,13 @@ export const fetchCarouselAdBySorting = (data) => (
     })
 )
 
+// 切换运营方式
+export const fetchSwitchOptWayOfHome = (data) => (
+    new Promise((resolve, reject) => {
+        switchOptWayOfHome(data)
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)

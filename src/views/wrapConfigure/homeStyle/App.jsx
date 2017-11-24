@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchAreaList } from '../../../actions/wap';
+import { fetchAreaList, fetchSwitchOptWayOfHome } from '../../../actions/wap';
 
 import SearchItem from '../common/searchItem';
 import CarouselItem from './common/carousel';
@@ -24,7 +24,8 @@ class HomeStyle extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            areaName: '未选择'
+            companyName: '',
+            companyId: ''
         }
     }
 
@@ -32,20 +33,44 @@ class HomeStyle extends Component {
         this.props.fetchAreaList();
     }
 
-    // 点击搜索后的回调
+    /**
+     * 点击搜索后的回调
+     * @param {object} submitObj 上传参数
+     */
     searchChange = (submitObj) => {
         const { branchCompany, homePageType } = submitObj;
         this.setState({
-            areaName: branchCompany.name
+            companyName: branchCompany.name,
+            companyId: branchCompany.id
         })
+        // 这里调用请求接口
     }
 
+    /**
+     * 点击切换运营方式后的回调
+     * @param {bloon} isUsingNation 是否为总部运营
+     */
+    switchChange = (isUsingNation) => {
+        const obj = {
+            isUsingNation,
+            companyId: this.state.companyId
+        }
+        fetchSwitchOptWayOfHome(obj)
+            .then(res => {
+                console.log(res)
+            })
+    }
 
     render() {
         const { homeData } = this.props;
         return (
             <div className="home-box">
-                <SearchItem searchChange={this.searchChange} areaName={this.state.areaName} />
+                <SearchItem
+                    searchChange={this.searchChange}
+                    switchChange={this.switchChange}
+                    companyName={this.state.companyName}
+                    companyId={this.state.companyId}
+                />
                 <div className="home-style">
                     {
                         homeData.map((item, index) => {
