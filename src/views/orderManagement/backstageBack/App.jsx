@@ -6,24 +6,17 @@
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, Icon, Row, Col, Input, Button, Modal, message } from 'antd';
+import { bindActionCreators } from 'redux';
+import { Form, Icon, Row, Col, Input, Button, message } from 'antd';
 import moment from 'moment';
 import { TIME_FORMAT } from '../../../constant/index';
 import CauseModal from '../orderList/causeModal';
-import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
-import {
-    savaOrderDescription,
-    modifyApprovalOrder,
-    fetchOrderDetailInfo,
-    clearOrderDetailInfo,
-    splitorderbyinventory,
-    interfaceInventory
-} from '../../../actions/order';
 import GoodsReturnsInfo from '../goodsReturnsInfo';
+import {
+    fetchOrderDetailInfo, clearOrderDetailInfo, backstageOrderBack
+} from '../../../actions/order';
 
-const confirm = Modal.confirm;
 const { TextArea } = Input;
 
 @connect(
@@ -31,23 +24,24 @@ const { TextArea } = Input;
         orderDetailData: state.toJS().order.orderDetailData
     }),
     dispatch => bindActionCreators({
-        modifyCauseModalVisible,
         fetchOrderDetailInfo,
         clearOrderDetailInfo,
-        splitorderbyinventory,
-        interfaceInventory
+        backstageOrderBack
     }, dispatch)
 )
 
 class BackstageBack extends PureComponent {
     state = {
         textAreaNote: this.props.orderDetailData.description,
-        description: this.props.orderDetailData.description,
-        manualSplitOrder: {}
+        requestItems: []
     }
 
     componentWillMount() {
         this.props.clearOrderDetailInfo();
+    }
+
+    componentDidMount() {
+        this.props.fetchOrderDetailInfo({ id: this.props.match.params.id });
     }
 
     /**
@@ -57,8 +51,7 @@ class BackstageBack extends PureComponent {
     componentWillReceiveProps(nextProps) {
         const { orderDetailData } = nextProps;
         this.setState({
-            textAreaNote: orderDetailData.description,
-            description: orderDetailData.description
+            textAreaNote: orderDetailData.description
         });
     }
 
@@ -68,97 +61,25 @@ class BackstageBack extends PureComponent {
      * 执行退货操作
      */
     handleReturnStore = () => {
-        const { textAreaNote, description } = this.state;
-        confirm({
-            title: '保存',
-            content: '确认保存备注信息？',
-            onOk: () => {
-                if (textAreaNote === description) {
-                    message.error('备注未作修改！')
-                } else {
-                    savaOrderDescription({
-                        orderId: this.orderId,
-                        description: textAreaNote,
-                    }).then(() => {
-                        message.success('保存成功！')
-                    }).catch(() => {
-                        message.success('保存失败！')
-                    })
-                }
+        this.props.backstageOrderBack({
+            returnRequest: {
+                orderId: this.orderId,
+                returnReasonType: 7,
+                returnReason: '其他原因'
             },
-            onCancel() { },
+            requestItems: this.state.requestItems
+        }).then(res => {
+            if (res.code === 200) {
+                message.success('退货成功');
+            }
         });
-    }
-
-    /**
-     * 单个审核
-     */
-    handleOrderAudit = () => {
-        confirm({
-            title: '审核',
-            content: '确认审核？',
-            onOk: () => {
-                modifyApprovalOrder({
-                    id: this.orderId
-                }).then(res => {
-                    this.props.fetchOrderDetailInfo({ id: this.orderId });
-                    message.success(res.message);
-                })
-            },
-            onCancel() { },
-        });
-    }
-
-    /**
-     * 单个取消
-     */
-    handleOrderCancel = () => {
-        this.props.modifyCauseModalVisible({ isShow: true, id: this.orderId });
     }
 
     /**
      * 退货返回商品列表
      */
-    handleGoodsReturns = (splitGroups) => {
-        const manualSplitOrder = {
-            parentOrderId: this.orderId,
-            groups: splitGroups
-        }
-        this.setState({ manualSplitOrder });
-    }
-
-    /**
-     * 获取实时库存后拆单
-     */
-    realTimeDisassembly = () => {
-        const { orderDetailData } = this.props;
-        this.props.splitorderbyinventory({
-            orderId: orderDetailData.id
-        }).then((res) => {
-            if (res.code === 200) {
-                message.success('实时拆单成功!')
-            }
-        })
-    }
-
-    /**
-     * 基于界面显示库存拆单
-     */
-    displayInventory = () => {
-        const { manualSplitOrder = null } = this.state;
-        if (manualSplitOrder.groups === undefined) {
-            message.error('请完整填写拆单数据!')
-            return;
-        }
-        this.props.interfaceInventory({
-            ...manualSplitOrder
-        }).then((res) => {
-            if (res.code === 200) {
-                message.success(res.message)
-            }
-        }).catch((res) => {
-            message.error(res.message)
-        })
+    handleGoodsReturns = (requestItems) => {
+        this.setState({ requestItems });
     }
 
     orderId = this.props.match.params.id;
@@ -313,7 +234,10 @@ class BackstageBack extends PureComponent {
                 </div>
                 <div className="order-details-item">
                     <GoodsReturnsInfo
-                        value={this.props.orderDetailData}
+                        value={{
+                            orderDetailData: this.props.orderDetailData,
+                            requestItems: this.state.requestItems
+                        }}
                         onChange={this.handleGoodsReturns}
                     />
                 </div>
@@ -326,6 +250,7 @@ class BackstageBack extends PureComponent {
                         >
                             <Button
                                 size="default"
+                                disabled={this.state.requestItems.length === 0}
                                 onClick={this.handleReturnStore}
                                 type="primary"
                             >
@@ -344,12 +269,10 @@ class BackstageBack extends PureComponent {
 
 BackstageBack.propTypes = {
     orderDetailData: PropTypes.objectOf(PropTypes.any),
-    match: PropTypes.objectOf(PropTypes.any),
-    modifyCauseModalVisible: PropTypes.func,
     fetchOrderDetailInfo: PropTypes.func,
     clearOrderDetailInfo: PropTypes.func,
-    splitorderbyinventory: PropTypes.func,
-    interfaceInventory: PropTypes.func
+    backstageOrderBack: PropTypes.func,
+    match: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(BackstageBack));

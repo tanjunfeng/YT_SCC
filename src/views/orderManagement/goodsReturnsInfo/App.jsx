@@ -8,72 +8,30 @@ import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { Form, Icon, Table } from 'antd';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { goodsReturnsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
-import { fetchOrderDetailInfo, clearOrderDetailInfo } from '../../../actions/order';
-
-@connect(
-    state => ({
-        orderDetailData: state.toJS().order.orderDetailData
-    }),
-    dispatch => bindActionCreators({
-        fetchOrderDetailInfo, clearOrderDetailInfo
-    }, dispatch)
-)
 
 class GoodsReturnsInfo extends PureComponent {
     onCellChange = record => value => {
-        const goodsList = [...this.state.goodsList];
-        const index = goodsList.findIndex(goods => goods.id === record.id);
-        let v = value;
-        if (index > -1) {
-            if (v > goodsList[index].quantityLeft) {
-                v = goodsList[index].quantityLeft;
-            }
-            goodsList[index][`sub${this.getLastSubNum(1)}`] = v;
-            goodsList[index][`sub${this.getLastSubNum(2)}`] = goodsList[index].quantityLeft - v;
-            this.setState({ goodsList }, () => {
-                this.noticeParent();
-            });
+        const requestItems = [...this.props.value.requestItems];
+        const index = requestItems.findIndex(goods => goods.productId === record.productId);
+        const obj = {
+            productId: record.productId,
+            returnQuantity: value
         }
-    }
-
-    /**
-     * 获取单个子订单对象
-     */
-    getSubObject = (subIndex) => {
-        const goodsList = this.state.goodsList;
-        const dist = {};
-        goodsList.forEach(goods => {
-            Object.assign(dist, { [goods.id]: goods[`sub${subIndex}`] });
-        });
-        return dist;
-    }
-
-    /**
-     * 回传退货数据给父组件
-     */
-    noticeParent = () => {
-        const arr = [];
-        for (let i = 1; i <= this.getLastSubNum(); i++) {
-            arr.push(this.getSubObject(i));
+        // 当且仅当不存在商品且数量大于 0 时，才添加此条退货单
+        if (index === -1 && value > 0) {
+            requestItems.push(obj);
         }
-        this.props.onChange(arr);
-    }
-
-    /**
-     * 渲染显示单元格，根据数量计算价格
-     */
-    renderReadOnlyCell = (text, record) => {
-        let value = text;
-        if (value === undefined) {
-            // 避免出现 NaN 值
-            value = record.quantityLeft;
+        // 找到这个商品并且退货数量大于 0 时，修改退货数量
+        if (index > -1 && value > 0) {
+            Object.assign(requestItems[index], obj);
         }
-        const res = `${value}，￥${(value * record.itemPrice.salePrice).toFixed(2)}`;
-        return res;
+        // 找到这个商品，但退货数量为 0 时，删除此条货物
+        if (index > -1 && value === 0) {
+            requestItems.splice(index, 1);
+        }
+        this.props.onChange(requestItems);
     }
 
     /**
@@ -91,8 +49,7 @@ class GoodsReturnsInfo extends PureComponent {
         />);
 
     render() {
-        const { value } = this.props;
-        const { countOfItem, rawSubtotal } = value;
+        const { countOfItem, rawSubtotal, items = [] } = this.props.value.orderDetailData;
         columns[columns.length - 3].render = this.renderEditableCell;
         return (
             <div className="detail-message returns-orders">
@@ -102,7 +59,7 @@ class GoodsReturnsInfo extends PureComponent {
                 </div>
                 <div>
                     <Table
-                        dataSource={this.props.orderDetailData.data.items}
+                        dataSource={items}
                         columns={columns}
                         pagination={false}
                         rowKey="id"
@@ -128,10 +85,7 @@ class GoodsReturnsInfo extends PureComponent {
 
 GoodsReturnsInfo.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
-    orderDetailData: PropTypes.objectOf(PropTypes.any),
-    fetchOrderDetailInfo: PropTypes.func,
-    onChange: PropTypes.func,
-    match: PropTypes.objectOf(PropTypes.any)
+    onChange: PropTypes.func
 }
 
 export default withRouter(Form.create()(GoodsReturnsInfo));
