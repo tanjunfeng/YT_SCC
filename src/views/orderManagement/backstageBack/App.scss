@@ -37,31 +37,31 @@
                 vertical-align: text-top;
             }
         }
-    }
-    &-btns {
-        .ant-btn {
-            margin-right: 10px;
+        .red-star, .red {
+            color: red;
         }
-    }
-    .red-star {
-        color: red;
-    }
-    .arrival-date-picker .ant-calendar-picker-input {
-        width: 222px !important;
-    }
-    .gys-layout, .manage-form, .application-form, .area-form {
-        margin: 0;
-        border: 0;
-    }
-    .ant-input-number {
-        width: 60px;
-    }
-    .table-statistics {
-        line-height: 32px;
-        .table-statistics-item {
-            margin-right: 2em;
-            .red {
-                color: red;
+        &-btns {
+            .ant-btn {
+                margin-right: 10px;
+            }
+        }
+        .arrival-date-picker .ant-calendar-picker-input {
+            width: 222px !important;
+        }
+        .gys-layout, .manage-form, .application-form, .area-form {
+            margin: 0;
+            border: 0;
+        }
+        .ant-input-number {
+            width: 60px;
+        }
+        .table-statistics {
+            line-height: 32px;
+            .table-statistics-item {
+                margin-right: 2em;
+                .red {
+                    color: red;
+                }
             }
         }
     }

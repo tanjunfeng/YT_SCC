@@ -21,7 +21,7 @@ import {
     splitorderbyinventory,
     interfaceInventory
 } from '../../../actions/order';
-import GoodsInfo from '../goodsInfo';
+import GoodsReturnsInfo from '../goodsReturnsInfo';
 
 const confirm = Modal.confirm;
 const { TextArea } = Input;
@@ -117,9 +117,9 @@ class BackstageBack extends PureComponent {
     }
 
     /**
-     * 拆单返回数组
+     * 退货返回商品列表
      */
-    handleGoodsSplit = (splitGroups) => {
+    handleGoodsReturns = (splitGroups) => {
         const manualSplitOrder = {
             parentOrderId: this.orderId,
             groups: splitGroups
@@ -171,7 +171,7 @@ class BackstageBack extends PureComponent {
                     <div className="detail-message">
                         <div className="detail-message-header">
                             <Icon type="solution" className="detail-message-header-icon" />
-                            基础信息
+                            原订单信息
                         </div>
                         <div className="detail-message-body">
                             <Row>
@@ -244,6 +244,7 @@ class BackstageBack extends PureComponent {
                                 <Col className="gutter-row" span={12}>
                                     <span className="details-info-lable">备注:</span>
                                     <TextArea
+                                        disabled
                                         autosize={{ minRows: 3, maxRows: 6 }}
                                         value={this.state.textAreaNote}
                                         style={{ resize: 'none' }}
@@ -311,10 +312,9 @@ class BackstageBack extends PureComponent {
                     </div>
                 </div>
                 <div className="order-details-item">
-                    <GoodsInfo
+                    <GoodsReturnsInfo
                         value={this.props.orderDetailData}
-                        onChange={this.handleGoodsSplit}
-                        canBeSplit={false}
+                        onChange={this.handleGoodsReturns}
                     />
                 </div>
                 <div className="order-details-btns">
@@ -344,7 +344,6 @@ class BackstageBack extends PureComponent {
 
 BackstageBack.propTypes = {
     orderDetailData: PropTypes.objectOf(PropTypes.any),
-    history: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
     fetchOrderDetailInfo: PropTypes.func,
