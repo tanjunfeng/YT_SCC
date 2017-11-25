@@ -227,6 +227,8 @@ export default function (state = initState, action) {
                 .set('returnLists', fromJS([]))
                 .set('poReturn', fromJS({}))
                 .set('getRefundNumebr', fromJS(''))
+        case ActionType.CLEAR_RETURN_LISTS:
+            return state.set('returnLists', fromJS([]))
         default:
             return state;
     }

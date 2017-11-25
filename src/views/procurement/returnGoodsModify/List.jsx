@@ -212,6 +212,7 @@ class List extends Component {
         getFormData: PropTypes.func,
         returnLists: PropTypes.arrayOf(PropTypes.any),
         onShowModal: PropTypes.func,
+        clearList: PropTypes.func,
     }
 
     static defaultProps = {
@@ -250,12 +251,13 @@ class List extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { returnLists, defaultValue, type } = nextProps;
+
         if (!is(fromJS(returnLists), fromJS(current))) {
             const { lists, orderId } = this.state;
             current = returnLists;
 
             const newLists = getNewLists(lists, current, orderId);
-
+          
             this.setState({
                 lists: newLists
             }, () => {
@@ -452,6 +454,8 @@ class List extends Component {
             selectedRowKeys: []
         }, () => {
             this.calculation();
+            // 需要清空历史数据
+            this.props.clearList();
             current = [];
         })
     }
