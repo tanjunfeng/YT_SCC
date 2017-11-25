@@ -1,0 +1,91 @@
+.order-management {
+    .manage-form {
+        .ant-input {
+            width: 240px;
+            padding: 0 10px;
+        }
+        .ant-select {
+            width: 240px;
+        }
+        .ywc-smind {
+            vertical-align: middle;
+        }
+        .ywc-smind {
+            width: 240px;
+        }
+    }
+}
+
+// 详情页
+.order-details {
+    @extend .order-management;
+    &-item {
+        margin-bottom: 15px;
+        border: 1px solid #C3C4C7;
+        color: #515151;
+        border-radius: 2px;
+        overflow: hidden;
+        .ant-row {
+            margin: 10px 0;
+            .details-info-lable {
+                min-width: 70px;
+                display: inline-block;
+                margin-right: 6px;
+            }
+            textarea.ant-input {
+                width: 300px;
+                vertical-align: text-top;
+            }
+        }
+    }
+    &-btns {
+        .ant-btn {
+            margin-right: 10px;
+        }
+    }
+    .red-star {
+        color: red;
+    }
+    .arrival-date-picker .ant-calendar-picker-input {
+        width: 222px !important;
+    }
+    .gys-layout, .manage-form, .application-form, .area-form {
+        margin: 0;
+        border: 0;
+    }
+    .ant-input-number {
+        width: 60px;
+    }
+    .table-statistics {
+        line-height: 32px;
+        .table-statistics-item {
+            margin-right: 2em;
+            .red {
+                color: red;
+            }
+        }
+    }
+}
+.ant-modal-wrap {
+    .pay-col{
+        .ant-input {
+            width: 240px;
+            padding: 0 10px;
+        }
+        .ant-select {
+            width: 240px;
+        }
+        .ant-input-number{
+            width: 240px;
+        }
+        .ant-form-explain{
+            left:70px !important;
+        }
+    }
+
+}
+.order-details-split-btn{
+    .details-split-btns{
+        margin: 0 5px 10px 5px;
+    }
+}

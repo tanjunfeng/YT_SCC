@@ -332,7 +332,7 @@ class OrderManagementList extends Component {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/orderDetails/${id}`}>查看订单详情</Link>
+                    <a target="_blank" href={`${pathname}/orderDetails/${id}`}>查看订单详情</a>
                 </Menu.Item>
                 {
                     (orderStateDesc === '待审核'

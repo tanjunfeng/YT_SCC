@@ -1,10 +1,8 @@
 /**
- * @file orderInfo.jsx
- * @author caoyanxuan
+ * @author taoqiyu
  *
- * 订单管理详情页-订单信息
+ * 订单详情页-后台退货
  */
-
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
@@ -41,7 +39,7 @@ const { TextArea } = Input;
     }, dispatch)
 )
 
-class OrderInformation extends PureComponent {
+class BackstageBack extends PureComponent {
     state = {
         textAreaNote: this.props.orderDetailData.description,
         description: this.props.orderDetailData.description,
@@ -395,6 +393,14 @@ class OrderInformation extends PureComponent {
                             <Button
                                 size="default"
                                 onClick={() => {
+                                    this.props.history.replace('/orderReturns');
+                                }}
+                            >
+                                返回
+                            </Button>
+                            <Button
+                                size="default"
+                                onClick={() => {
                                     this.props.history.replace('/orderList');
                                 }}
                             >
@@ -411,7 +417,7 @@ class OrderInformation extends PureComponent {
     }
 }
 
-OrderInformation.propTypes = {
+BackstageBack.propTypes = {
     orderDetailData: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any),
@@ -422,7 +428,4 @@ OrderInformation.propTypes = {
     interfaceInventory: PropTypes.func
 }
 
-OrderInformation.defaultProps = {
-}
-
-export default withRouter(Form.create()(OrderInformation));
+export default withRouter(Form.create()(BackstageBack));
