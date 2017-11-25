@@ -857,3 +857,13 @@ export const putRefundProducts = (params) => dispatch => (
     })
 )
 
+/**
+ * 清除退货列表
+ */
+export const clearList = () => dispatch => {
+    dispatch({
+        type: ActionType.CLEAR_RETURN_LISTS,
+        payload: []
+    })
+}
+
