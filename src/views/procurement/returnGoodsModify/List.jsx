@@ -129,6 +129,16 @@ let originLists = [];
 
 let current = {};
 
+// 默认选择其他
+function parseReason(lists) {
+    return lists.map((item) => {
+        const newItem = item;
+        const { refundReason } = item;
+        newItem.refundReason = refundReason || '3';
+        return newItem;
+    })
+}
+
 function parseLists(lists) {
     // 退货数量大于了库存
     const overrun = [];
@@ -202,6 +212,7 @@ class List extends Component {
         getFormData: PropTypes.func,
         returnLists: PropTypes.arrayOf(PropTypes.any),
         onShowModal: PropTypes.func,
+        clearList: PropTypes.func,
     }
 
     static defaultProps = {
@@ -240,12 +251,13 @@ class List extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { returnLists, defaultValue, type } = nextProps;
+
         if (!is(fromJS(returnLists), fromJS(current))) {
             const { lists, orderId } = this.state;
             current = returnLists;
 
             const newLists = getNewLists(lists, current, orderId);
-
+          
             this.setState({
                 lists: newLists
             }, () => {
@@ -442,6 +454,8 @@ class List extends Component {
             selectedRowKeys: []
         }, () => {
             this.calculation();
+            // 需要清空历史数据
+            this.props.clearList();
             current = [];
         })
     }
@@ -584,7 +598,7 @@ class List extends Component {
         const submit = this.props.getFormData();
         const postService = type === 'edit' ? updateRefundWithItems : createRefundWithItems;
 
-        submit.pmPurchaseRefundItems = lists
+        submit.pmPurchaseRefundItems = parseReason(lists);
         submit.status = status;
 
         // 退货数
