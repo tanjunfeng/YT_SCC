@@ -505,7 +505,7 @@ class ReturnManagementList extends PureComponent {
         const spAdrId = this.state.spId;
 
         // 地点
-        const adrTypeCode = this.state.refundAdr;
+        const refundAdrCode = this.state.refundAdr;
 
         const searchParams = {
             purchaseRefundNo,
@@ -517,7 +517,7 @@ class ReturnManagementList extends PureComponent {
             createTimeStart,
             createTimeEnd,
             adrType,
-            adrTypeCode,
+            refundAdrCode,
             orderType,
             orderItem
         };
@@ -706,7 +706,7 @@ class ReturnManagementList extends PureComponent {
                                         <SearchMind
                                             style={{ zIndex: 9, verticalAlign: 'bottom' }}
                                             compKey="providerNo"
-                                            ref={ref => { this.joiningAdressMind = ref }}
+                                            ref={ref => { this.supplyAddressSearchMind = ref }}
                                             fetch={(params) =>
                                                 this.props.pubFetchValueList(Utils.removeInvalid({
                                                     condition: params.value,
