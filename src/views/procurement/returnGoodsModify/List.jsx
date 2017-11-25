@@ -129,6 +129,16 @@ let originLists = [];
 
 let current = {};
 
+// 默认选择其他
+function parseReason(lists) {
+    return lists.map((item) => {
+        const newItem = item;
+        const { refundReason } = item;
+        newItem.refundReason = refundReason || '3';
+        return newItem;
+    })
+}
+
 function parseLists(lists) {
     // 退货数量大于了库存
     const overrun = [];
@@ -584,7 +594,7 @@ class List extends Component {
         const submit = this.props.getFormData();
         const postService = type === 'edit' ? updateRefundWithItems : createRefundWithItems;
 
-        submit.pmPurchaseRefundItems = lists
+        submit.pmPurchaseRefundItems = parseReason(lists);
         submit.status = status;
 
         // 退货数
