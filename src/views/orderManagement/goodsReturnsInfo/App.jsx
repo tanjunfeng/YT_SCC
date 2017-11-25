@@ -10,38 +10,20 @@ import PropTypes from 'prop-types';
 import { Form, Icon, Table } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { goodsColumns as columns } from '../columns';
+import { goodsReturnsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
 import { fetchOrderDetailInfo, clearOrderDetailInfo } from '../../../actions/order';
 
 @connect(
-    () => ({}),
+    state => ({
+        orderDetailData: state.toJS().order.orderDetailData
+    }),
     dispatch => bindActionCreators({
         fetchOrderDetailInfo, clearOrderDetailInfo
     }, dispatch)
 )
 
 class GoodsReturnsInfo extends PureComponent {
-    state = {
-        goodsList: []
-    }
-
-    componentDidMount() {
-        this.props.fetchOrderDetailInfo({
-            id: this.props.match.params.id
-        }).then(res => {
-            const goodsList = [...res.data.items];
-            goodsList.forEach(goods => {
-                Object.assign(goods, {
-                    sub1: goods.quantity,
-                    sub2: 0,
-                    quantityLeft: goods.quantity
-                });
-            });
-            this.setState({ goodsList });
-        });
-    }
-
     onCellChange = record => value => {
         const goodsList = [...this.state.goodsList];
         const index = goodsList.findIndex(goods => goods.id === record.id);
@@ -59,15 +41,6 @@ class GoodsReturnsInfo extends PureComponent {
     }
 
     /**
-     * 获取最后 n 列的索引
-     *
-     * 不传值则取最后一列
-     */
-    getLastSubNum = (lastIndexOf = 1) => (
-        +(columns[columns.length - lastIndexOf].dataIndex.substr(3))
-    );
-
-    /**
      * 获取单个子订单对象
      */
     getSubObject = (subIndex) => {
@@ -80,7 +53,7 @@ class GoodsReturnsInfo extends PureComponent {
     }
 
     /**
-     * 回传子订单数据给父组件
+     * 回传退货数据给父组件
      */
     noticeParent = () => {
         const arr = [];
@@ -106,36 +79,30 @@ class GoodsReturnsInfo extends PureComponent {
     /**
      * 渲染可编辑单元格
      */
-    renderEditableCell = (text = 0, record) => {
-        let value = +(text);
-        if (isNaN(value)) {
-            value = 0;
-        }
-        const res = (<div>
-            <EditableCell
-                value={value}
-                min={0}
-                step={1}
-                max={record.quantityLeft}
-                onChange={this.onCellChange(record)}
-            />
-            <span className="sub-total">￥{(value * record.itemPrice.salePrice).toFixed(2)}</span>
-        </div>);
-        return res;
-    }
+    renderEditableCell = (val = 0, record) => (
+        <EditableCell
+            value={val}
+            min={0}
+            step={1}
+            max={record.quantity}
+            formatter={text => Math.floor(text)}
+            parser={text => Math.floor(text)}
+            onChange={this.onCellChange(record)}
+        />);
 
     render() {
         const { value } = this.props;
         const { countOfItem, rawSubtotal } = value;
+        columns[columns.length - 3].render = this.renderEditableCell;
         return (
-            <div className="detail-message add-sub-orders">
+            <div className="detail-message returns-orders">
                 <div className="detail-message-header">
                     <Icon type="picture" className="detail-message-header-icon" />
                     商品信息
                 </div>
                 <div>
                     <Table
-                        dataSource={this.state.goodsList}
+                        dataSource={this.props.orderDetailData.data.items}
                         columns={columns}
                         pagination={false}
                         rowKey="id"
@@ -161,6 +128,7 @@ class GoodsReturnsInfo extends PureComponent {
 
 GoodsReturnsInfo.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
+    orderDetailData: PropTypes.objectOf(PropTypes.any),
     fetchOrderDetailInfo: PropTypes.func,
     onChange: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any)
