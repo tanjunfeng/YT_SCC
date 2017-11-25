@@ -149,14 +149,14 @@ class OrderInformation extends PureComponent {
     displayInventory = () => {
         const { manualSplitOrder = null } = this.state;
         if (manualSplitOrder.groups === undefined) {
-            message.error('请完整填写拆单数据!')
+            message.error('请完整填写拆单数据!');
             return;
         }
         this.props.interfaceInventory({
             ...manualSplitOrder
         }).then((res) => {
             if (res.code === 200) {
-                message.success(res.message)
+                message.success('界面拆单成功！')
             }
         }).catch((res) => {
             message.error(res.message)
@@ -333,7 +333,6 @@ class OrderInformation extends PureComponent {
                         {this.props.orderDetailData.canSplitManual
                             ? <Button
                                 size="default"
-                                type="primary"
                                 className="details-split-btns"
                                 onClick={this.displayInventory}
                             >
