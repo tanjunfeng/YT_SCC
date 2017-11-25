@@ -238,6 +238,6 @@ export const interfaceInventory = (params) => dispatch => (
                 );
                 resolve(res);
             })
-            .catch(err => reject(err))
+            .catch(err => reject(err));
     })
 );
