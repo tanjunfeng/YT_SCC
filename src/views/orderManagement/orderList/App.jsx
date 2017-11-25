@@ -43,9 +43,9 @@ const Option = Select.Option;
 const confirm = Modal.confirm;
 const orderML = 'order-management';
 const { RangePicker } = DatePicker;
-const yesterdayDate = moment().subtract(1, 'days').valueOf().toString();
+const yesterdayDate = moment().subtract(6, 'days').valueOf().toString();
 const todayDate = moment().valueOf().toString();
-const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
+const yesterdayrengeDate = [moment().subtract(6, 'days'), moment()];
 
 @connect(
     state => ({

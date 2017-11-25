@@ -394,10 +394,10 @@ class OrderInformation extends PureComponent {
                             <Button
                                 size="default"
                                 onClick={() => {
-                                    this.props.history.replace('/orderList');
+                                    this.props.history.replace(`/orderList/orderBackstageBack/${this.orderId}`);
                                 }}
                             >
-                                返回
+                                后台退货
                             </Button>
                         </Col>
                     </Row>

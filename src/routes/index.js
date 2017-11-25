@@ -678,6 +678,11 @@ const routes = [
                             render={() => (<Bundle load={OrderManagementDetails}>
                                 {(App) => <App />}</Bundle>)}
                         />
+                        <Route
+                            path="/orderList/orderBackstageBack/:id"
+                            render={() => (<Bundle load={BackstageBack}>
+                                {(App) => <App />}</Bundle>)}
+                        />
                     </Switch>
                 )
             },
