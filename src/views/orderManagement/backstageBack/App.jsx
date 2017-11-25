@@ -65,9 +65,9 @@ class BackstageBack extends PureComponent {
     getAmount = amount => (`￥${Number(amount).toFixed(2)}`);
 
     /**
-     * 保存备注信息
+     * 执行退货操作
      */
-    handleOrderSave = () => {
+    handleReturnStore = () => {
         const { textAreaNote, description } = this.state;
         confirm({
             title: '保存',
@@ -314,44 +314,8 @@ class BackstageBack extends PureComponent {
                     <GoodsInfo
                         value={this.props.orderDetailData}
                         onChange={this.handleGoodsSplit}
-                        canBeSplit={this.props.orderDetailData.canSplitByInventory
-                            || this.props.orderDetailData.canSplitManual}
+                        canBeSplit={false}
                     />
-                    <div className="order-details-split-btn" style={{ textAlign: 'right' }}>
-                        {this.props.orderDetailData.canSplitByInventory
-                            ? <Button
-                                size="default"
-                                type="primary"
-                                className="details-split-btns"
-                                onClick={this.realTimeDisassembly}
-                            >
-                                获取实时库存后拆单
-                                </Button>
-                            : null}
-                        {this.props.orderDetailData.canSplitManual
-                            ? <Button
-                                size="default"
-                                type="primary"
-                                className="details-split-btns"
-                                onClick={this.displayInventory}
-                            >
-                                基于界面显示库存拆单
-                        </Button>
-                            : null}
-                        {this.props.orderDetailData.canSplitByInventory
-                            || this.props.orderDetailData.canSplitManual
-                            ? <Button
-                                size="default"
-                                type="default"
-                                className="details-split-btns"
-                                onClick={() => {
-                                    this.props.history.replace('/orderList');
-                                }}
-                            >
-                                取消
-                            </Button>
-                            : null}
-                    </div>
                 </div>
                 <div className="order-details-btns">
                     <Row>
@@ -362,49 +326,10 @@ class BackstageBack extends PureComponent {
                         >
                             <Button
                                 size="default"
-                                onClick={this.handleOrderSave}
+                                onClick={this.handleReturnStore}
                                 type="primary"
                             >
-                                保存
-                            </Button>
-                            {
-                                (orderDetailData.orderStateDesc === '待审核'
-                                    || orderDetailData.orderStateDesc === '待人工审核')
-                                && <Button
-                                    size="default"
-                                    onClick={this.handleOrderAudit}
-                                >
-                                    审核
-                                </Button>
-                            }
-                            {
-                                orderDetailData.shippingStateDesc !== '待收货'
-                                && orderDetailData.shippingStateDesc !== '未送达'
-                                && orderDetailData.shippingStateDesc !== '已签收'
-                                && orderDetailData.orderStateDesc !== '已取消'
-                                && <Button
-                                    size="default"
-                                    onClick={this.handleOrderCancel}
-                                    type="danger"
-                                >
-                                    取消
-                                </Button>
-                            }
-                            <Button
-                                size="default"
-                                onClick={() => {
-                                    this.props.history.replace('/orderReturns');
-                                }}
-                            >
-                                返回
-                            </Button>
-                            <Button
-                                size="default"
-                                onClick={() => {
-                                    this.props.history.replace('/orderList');
-                                }}
-                            >
-                                返回
+                                退货
                             </Button>
                         </Col>
                     </Row>
