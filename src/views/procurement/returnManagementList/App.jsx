@@ -61,6 +61,8 @@ const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
 
+const statusTypes = { 0: "制单", 1: "已提交", 2: "已审核", 3: "已拒绝", 4: "待退货", 5: "已退货", 6: "已取消", 7: "取消失败", 8: "异常" }
+const adrTypes = {0: '仓库', 1: '门店'}
 @connect(state => ({
     poRcvMngList: state.toJS().procurement.poRcvMngList,
     returnMngList: state.toJS().procurement.returnMngList,
@@ -132,7 +134,8 @@ class ReturnManagementList extends PureComponent {
             }, {
                 title: '地点类型',
                 dataIndex: 'adrType',
-                key: 'adrType'
+                key: 'adrType',
+                render: (text) => adrTypes[text]
             }, {
                 title: '退货地点',
                 dataIndex: 'refundAdrName',
@@ -175,6 +178,7 @@ class ReturnManagementList extends PureComponent {
                 title: '状态',
                 dataIndex: 'status',
                 key: 'status',
+                render: (text) => statusTypes[text],
                 sorter: (a, b) => a.age - b.age,
             }, {
                 title: '操作',
@@ -555,6 +559,7 @@ class ReturnManagementList extends PureComponent {
         const { id, status, refundAdr } = record;
         const { pathname } = this.props.location;
         // 0:制单;1:已提交;2:已审核;3:已拒绝;4:待退货;5:已退货;6:已取消;7:取消失败;8:异常
+        // 0: '仓库', 1: '门店'
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
@@ -562,7 +567,7 @@ class ReturnManagementList extends PureComponent {
                 </Menu.Item>
                 {
                     // 状态为“制单”时可用
-                    (status === '制单') ?
+                    (status === '0') ?
                         <Menu.Item key="delete">
                             <a target="_blank" rel="noopener noreferrer">
                                 删除
@@ -572,7 +577,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 状态为“制单”、“已拒绝”时可用；
-                    (status === '制单' || status === '已拒绝') ?
+                    (status === '0' || status === '3') ?
                         <Menu.Item key="modify">
                             <Link to={`${pathname}/modify/${id}`}>修改</Link>
                         </Menu.Item>
@@ -580,7 +585,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 状态为“已审核”、“待退货”时可用；
-                    (status === '已审核' || status === '待退货') ?
+                    (status === '2' || status === '4') ?
                         <Menu.Item key="cancel">
                             <a target="_blank" rel="noopener noreferrer">
                                 取消
@@ -590,7 +595,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 退货地点为门店且状态为“待退货”时可用
-                    (refundAdr === '门店' && status === '待退货') ?
+                    (refundAdr === '1' && status === '4') ?
                         <Menu.Item key="returnGoods">
                             <a target="_blank" rel="noopener noreferrer">
                                 退货
@@ -600,7 +605,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 非”制单”状态可用
-                    (status !== '制单') ?
+                    (status !== '0') ?
                         <Menu.Item key="downloadTheReturnInvoice">
                             <a target="_blank" rel="noopener noreferrer">
                                 下载退货单
@@ -610,7 +615,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 点击弹出框显示审批进度信息,按钮显示条件：状态为“已提交”
-                    (status === '已提交') ?
+                    (status === '1') ?
                         <Menu.Item key="viewApprovalrogress">
                             <a target="_blank" rel="noopener noreferrer">
                                 查看审批进度
@@ -620,7 +625,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 按钮显示条件：状态为“已提交”、“已审批”、“已拒绝”、“待退货”、“已退货”、“已取消”,”取消失败”
-                    (status !== '制单' && status !== '异常') ?
+                    (status !== '0' && status !== '8') ?
                         <Menu.Item key="viewApproval">
                             <a target="_blank" rel="noopener noreferrer">
                                 查看审批意见
