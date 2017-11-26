@@ -49,7 +49,7 @@ class CouponCreate extends PureComponent {
             categorySelectorVisible: false,
             formSelectorVisible: false,
             storeSelectorVisible: true,
-            companies: [],  // 所选区域子公司
+            companies: [], // 所选区域子公司
             categoryObj: {}, // 所选品类对象
             checkedList: [],
         }

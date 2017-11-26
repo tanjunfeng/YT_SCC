@@ -13,7 +13,11 @@ import moment from 'moment';
 import { TIME_FORMAT } from '../../../constant/index';
 import CauseModal from '../orderList/causeModal';
 import GoodsReturnsInfo from '../goodsReturnsInfo';
-import { fetchOrderDetailInfo, clearOrderDetailInfo, backstageOrderBack } from '../../../actions/order';
+import {
+    fetchOrderDetailInfo,
+    clearOrderDetailInfo,
+    backstageOrderBack
+} from '../../../actions/order';
 import { returnReasonStatus } from '../constants';
 
 const FormItem = Form.Item;
@@ -58,21 +62,23 @@ class BackstageBack extends PureComponent {
         });
     }
 
-    getReturnReasonStatus = () => {
-        const keys = Object.keys(returnReasonStatus);
-        return keys.map(key => (
-            <Option key={key} value={key}>
-                {returnReasonStatus[key]}
+    getReturnReasonStatus = () => (
+        returnReasonStatus.map((reason, index) => (
+            <Option key={reason} value={String(index)}>
+                {reason}
             </Option>
-        ));
-    }
+        ))
+    )
+
 
     getAmount = amount => (`￥${Number(amount).toFixed(2)}`);
 
     /**
      * 执行退货操作
      */
-    handleReturnStore = () => {
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.props.form.validate();
         this.props.backstageOrderBack({
             returnRequest: {
                 orderId: this.orderId,
@@ -261,64 +267,66 @@ class BackstageBack extends PureComponent {
                         onChange={this.handleGoodsReturns}
                     />
                 </div>
-                <div className="order-details-item">
-                    <div className="detail-message">
-                        <div className="detail-message-header">
-                            <Icon type="gift" className="detail-message-header-icon" />
-                            收货信息
+                <Form layout="inline" onSubmit={this.handleSubmit}>
+                    <div className="order-details-item">
+                        <div className="detail-message">
+                            <div className="detail-message-header">
+                                <Icon type="gift" className="detail-message-header-icon" />
+                                收货信息
+                            </div>
                         </div>
-                    </div>
-                    <Row>
-                        <Col className="gutter-row" span={6}>
-                            {getFieldDecorator('note', {
-                                initialValue: '',
-                                rules: [{
-                                    required: true,
-                                    message: '退货原因必选'
-                                }]
-                            })(
+                        <Row>
+                            <Col className="gutter-row" span={3}>
                                 <FormItem label="退货原因">
-                                    <Select size="default">
-                                        {this.getReturnReasonStatus()}
-                                    </Select>
-                                </FormItem>)}
-                        </Col>
-                        <Col className="gutter-row" span={6}>
-                            <FormItem>
-                                {getFieldDecorator('note', {
-                                    initialValue: '',
-                                    rules: [{
-                                        max: 150,
-                                        message: '不能输入超过150个字'
-                                    }]
-                                })(
-                                    <TextArea
-                                        placeholder="可填写备注"
-                                        autosize={{
-                                            minRows: 4,
-                                            maxRows: 6
-                                        }}
-                                    />)}
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col
-                            className="gutter-row"
-                            span={14}
-                            offset={10}
-                        >
-                            <Button
-                                size="default"
-                                disabled={this.state.requestItems.length === 0}
-                                onClick={this.handleReturnStore}
-                                type="primary"
+                                    {getFieldDecorator('returnReasonType', {
+                                        initialValue: '0',
+                                        rules: [{
+                                            min: 1,
+                                            message: '退货原因必选'
+                                        }]
+                                    })(
+                                        <Select className="reason-select" size="default">
+                                            {this.getReturnReasonStatus()}
+                                        </Select>)}
+                                </FormItem>
+                            </Col>
+                            <Col className="gutter-row" span={6}>
+                                <FormItem>
+                                    {getFieldDecorator('returnReason', {
+                                        initialValue: '',
+                                        rules: [{
+                                            max: 150,
+                                            message: '不能输入超过150个字'
+                                        }]
+                                    })(
+                                        <TextArea
+                                            placeholder="其他退货原因"
+                                            autosize={{
+                                                minRows: 4,
+                                                maxRows: 6
+                                            }}
+                                        />)}
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col
+                                className="gutter-row"
+                                span={14}
+                                offset={10}
                             >
-                                退货
-                            </Button>
-                        </Col>
-                    </Row>
-                </div>
+                                <Button
+                                    size="default"
+                                    htmlType="submit"
+                                    disabled={this.state.requestItems.length === 0}
+                                    type="primary"
+                                >
+                                    退货
+                                </Button>
+                            </Col>
+                        </Row>
+                    </div>
+                </Form>
                 <div>
                     <CauseModal />
                 </div>
