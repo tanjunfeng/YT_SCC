@@ -39,7 +39,8 @@ const Option = Select.Option;
 class BackstageBack extends PureComponent {
     state = {
         textAreaNote: this.props.orderDetailData.description,
-        requestItems: []
+        requestItems: [],
+        canSubmit: true
     }
 
     componentWillMount() {
@@ -74,6 +75,7 @@ class BackstageBack extends PureComponent {
     getFormData = (callback) => {
         this.props.form.validateFields((err, values) => {
             if (err) {
+                this.setState({ canSubmit: true });
                 return;
             }
             const { returnReasonType, returnReason } = values;
@@ -92,11 +94,14 @@ class BackstageBack extends PureComponent {
      * 执行退货操作
      */
     handleSubmit = (e) => {
+        this.setState({ canSubmit: false });
         e.preventDefault();
         this.getFormData(data => {
             this.props.backstageOrderBack(data).then(res => {
                 if (res.code === 200) {
                     message.success('退货成功');
+                } else {
+                    this.setState({ canSubmit: true });
                 }
             });
         });
@@ -115,6 +120,7 @@ class BackstageBack extends PureComponent {
 
     render() {
         const { orderDetailData, form } = this.props;
+        const { requestItems, canSubmit } = this.state;
         const getFieldDecorator = form.getFieldDecorator;
         return (
             <div>
@@ -287,7 +293,7 @@ class BackstageBack extends PureComponent {
                         <div className="detail-message-body">
                             <Row>
                                 <Col className="gutter-row">
-                                    <FormItem label="退货原因">
+                                    <FormItem label="*退货原因">
                                         {getFieldDecorator('returnReasonType', {
                                             initialValue: '0',
                                             rules: [{
@@ -331,7 +337,7 @@ class BackstageBack extends PureComponent {
                                     <Button
                                         size="default"
                                         htmlType="submit"
-                                        disabled={this.state.requestItems.length === 0}
+                                        disabled={requestItems.length === 0 || !canSubmit}
                                         type="primary"
                                     >
                                         退货
