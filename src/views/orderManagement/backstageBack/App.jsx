@@ -8,16 +8,17 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Form, Icon, Row, Col, Input, Button, message } from 'antd';
+import { Form, Icon, Row, Col, Input, Button, Select, message } from 'antd';
 import moment from 'moment';
 import { TIME_FORMAT } from '../../../constant/index';
 import CauseModal from '../orderList/causeModal';
 import GoodsReturnsInfo from '../goodsReturnsInfo';
-import {
-    fetchOrderDetailInfo, clearOrderDetailInfo, backstageOrderBack
-} from '../../../actions/order';
+import { fetchOrderDetailInfo, clearOrderDetailInfo, backstageOrderBack } from '../../../actions/order';
+import { returnReasonStatus } from '../constants';
 
+const FormItem = Form.Item;
 const { TextArea } = Input;
+const Option = Select.Option;
 
 @connect(
     state => ({
@@ -41,7 +42,9 @@ class BackstageBack extends PureComponent {
     }
 
     componentDidMount() {
-        this.props.fetchOrderDetailInfo({ id: this.props.match.params.id });
+        this.props.fetchOrderDetailInfo({
+            id: this.props.match.params.id
+        });
     }
 
     /**
@@ -53,6 +56,15 @@ class BackstageBack extends PureComponent {
         this.setState({
             textAreaNote: orderDetailData.description
         });
+    }
+
+    getReturnReasonStatus = () => {
+        const keys = Object.keys(returnReasonStatus);
+        return keys.map(key => (
+            <Option key={key} value={key}>
+                {returnReasonStatus[key]}
+            </Option>
+        ));
     }
 
     getAmount = amount => (`￥${Number(amount).toFixed(2)}`);
@@ -79,13 +91,16 @@ class BackstageBack extends PureComponent {
      * 退货返回商品列表
      */
     handleGoodsReturns = (requestItems) => {
-        this.setState({ requestItems });
+        this.setState({
+            requestItems
+        });
     }
 
     orderId = this.props.match.params.id;
 
     render() {
-        const { orderDetailData } = this.props;
+        const { orderDetailData, form } = this.props;
+        const getFieldDecorator = form.getFieldDecorator;
         return (
             <div>
                 <div className="order-details-item">
@@ -166,9 +181,14 @@ class BackstageBack extends PureComponent {
                                     <span className="details-info-lable">备注:</span>
                                     <TextArea
                                         disabled
-                                        autosize={{ minRows: 3, maxRows: 6 }}
+                                        autosize={{
+                                            minRows: 3,
+                                            maxRows: 6
+                                        }}
                                         value={this.state.textAreaNote}
-                                        style={{ resize: 'none' }}
+                                        style={{
+                                            resize: 'none'
+                                        }}
                                         maxLength="250"
                                         onChange={(e) => {
                                             this.setState({
@@ -241,7 +261,47 @@ class BackstageBack extends PureComponent {
                         onChange={this.handleGoodsReturns}
                     />
                 </div>
-                <div className="order-details-btns">
+                <div className="order-details-item">
+                    <div className="detail-message">
+                        <div className="detail-message-header">
+                            <Icon type="gift" className="detail-message-header-icon" />
+                            收货信息
+                        </div>
+                    </div>
+                    <Row>
+                        <Col className="gutter-row" span={6}>
+                            {getFieldDecorator('note', {
+                                initialValue: '',
+                                rules: [{
+                                    required: true,
+                                    message: '退货原因必选'
+                                }]
+                            })(
+                                <FormItem label="退货原因">
+                                    <Select size="default">
+                                        {this.getReturnReasonStatus()}
+                                    </Select>
+                                </FormItem>)}
+                        </Col>
+                        <Col className="gutter-row" span={6}>
+                            <FormItem>
+                                {getFieldDecorator('note', {
+                                    initialValue: '',
+                                    rules: [{
+                                        max: 150,
+                                        message: '不能输入超过150个字'
+                                    }]
+                                })(
+                                    <TextArea
+                                        placeholder="可填写备注"
+                                        autosize={{
+                                            minRows: 4,
+                                            maxRows: 6
+                                        }}
+                                    />)}
+                            </FormItem>
+                        </Col>
+                    </Row>
                     <Row>
                         <Col
                             className="gutter-row"
@@ -269,6 +329,7 @@ class BackstageBack extends PureComponent {
 
 BackstageBack.propTypes = {
     orderDetailData: PropTypes.objectOf(PropTypes.any),
+    form: PropTypes.objectOf(PropTypes.any),
     fetchOrderDetailInfo: PropTypes.func,
     clearOrderDetailInfo: PropTypes.func,
     backstageOrderBack: PropTypes.func,
