@@ -19,6 +19,7 @@ import {
     backstageOrderBack
 } from '../../../actions/order';
 import { returnReasonStatus } from '../constants';
+import Utils from '../../../util/util';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -70,6 +71,20 @@ class BackstageBack extends PureComponent {
         ))
     )
 
+    getFormData = (callback) => {
+        this.props.form.validateFields((err, values) => {
+            if (err) {
+                return;
+            }
+            const { returnReasonType, returnReason } = values;
+            const dist = {
+                orderId: this.orderId,
+                returnReasonType, returnReason,
+                requestItems: JSON.stringify(this.state.requestItems)
+            };
+            callback(Utils.removeInvalid(dist));
+        });
+    }
 
     getAmount = amount => (`￥${Number(amount).toFixed(2)}`);
 
@@ -78,18 +93,12 @@ class BackstageBack extends PureComponent {
      */
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validate();
-        this.props.backstageOrderBack({
-            returnRequest: {
-                orderId: this.orderId,
-                returnReasonType: 7,
-                returnReason: '其他原因'
-            },
-            requestItems: this.state.requestItems
-        }).then(res => {
-            if (res.code === 200) {
-                message.success('退货成功');
-            }
+        this.getFormData(data => {
+            this.props.backstageOrderBack(data).then(res => {
+                if (res.code === 200) {
+                    message.success('退货成功');
+                }
+            });
         });
     }
 
@@ -275,56 +284,61 @@ class BackstageBack extends PureComponent {
                                 收货信息
                             </div>
                         </div>
-                        <Row>
-                            <Col className="gutter-row" span={3}>
-                                <FormItem label="退货原因">
-                                    {getFieldDecorator('returnReasonType', {
-                                        initialValue: '0',
-                                        rules: [{
-                                            min: 1,
-                                            message: '退货原因必选'
-                                        }]
-                                    })(
-                                        <Select className="reason-select" size="default">
-                                            {this.getReturnReasonStatus()}
-                                        </Select>)}
-                                </FormItem>
-                            </Col>
-                            <Col className="gutter-row" span={6}>
-                                <FormItem>
-                                    {getFieldDecorator('returnReason', {
-                                        initialValue: '',
-                                        rules: [{
-                                            max: 150,
-                                            message: '不能输入超过150个字'
-                                        }]
-                                    })(
-                                        <TextArea
-                                            placeholder="其他退货原因"
-                                            autosize={{
-                                                minRows: 4,
-                                                maxRows: 6
-                                            }}
-                                        />)}
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col
-                                className="gutter-row"
-                                span={14}
-                                offset={10}
-                            >
-                                <Button
-                                    size="default"
-                                    htmlType="submit"
-                                    disabled={this.state.requestItems.length === 0}
-                                    type="primary"
+                        <div className="detail-message-body">
+                            <Row>
+                                <Col className="gutter-row">
+                                    <FormItem label="退货原因">
+                                        {getFieldDecorator('returnReasonType', {
+                                            initialValue: '0',
+                                            rules: [{
+                                                pattern: /^[1-7]$/,
+                                                message: '退货原因必选'
+                                            }]
+                                        })(
+                                            <Select className="reason-select" size="default">
+                                                {this.getReturnReasonStatus()}
+                                            </Select>)}
+                                    </FormItem>
+                                    {this.props.form.getFieldValue('returnReasonType') === '7' ?
+                                        <FormItem className="return-reason">
+                                            {getFieldDecorator('returnReason', {
+                                                initialValue: '',
+                                                rules: [{
+                                                    required: true,
+                                                    message: '其他退货原因必填'
+                                                }, {
+                                                    max: 150,
+                                                    message: '不能输入超过150个字'
+                                                }]
+                                            })(
+                                                <TextArea
+                                                    placeholder="其他退货原因"
+                                                    autosize={{
+                                                        minRows: 4,
+                                                        maxRows: 6
+                                                    }}
+                                                />)}
+                                        </FormItem>
+                                        : null}
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col
+                                    className="gutter-row"
+                                    span={14}
+                                    offset={10}
                                 >
-                                    退货
+                                    <Button
+                                        size="default"
+                                        htmlType="submit"
+                                        disabled={this.state.requestItems.length === 0}
+                                        type="primary"
+                                    >
+                                        退货
                                 </Button>
-                            </Col>
-                        </Row>
+                                </Col>
+                            </Row>
+                        </div>
                     </div>
                 </Form>
                 <div>
