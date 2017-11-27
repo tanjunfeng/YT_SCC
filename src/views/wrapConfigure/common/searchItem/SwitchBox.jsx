@@ -21,7 +21,7 @@ class SwitchBox extends PureComponent {
     componentWillReceiveProps(nextProps) {
         if (nextProps.isChecked !== this.state.isChecked) {
             this.setState({
-                checked: nextProps.isChecked
+                isChecked: nextProps.isChecked
             })
         }
     }

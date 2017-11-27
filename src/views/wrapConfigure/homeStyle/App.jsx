@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Message } from 'antd';
+import { Message, Modal } from 'antd';
 import { fetchAreaList, fetchSwitchOptWayOfHome } from '../../../actions/wap';
 
 import SearchItem from '../common/searchItem';
@@ -38,6 +38,16 @@ class HomeStyle extends Component {
             isChecked: false,
             // 用户能否修改当前的页面
             isHeadquarters: true
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        // 判断当前是否设置为总部运营方式
+        const { homeData } = nextProps;
+        if (homeData.length > 0) {
+            this.setState({
+                isChecked: homeData[0].isUsingNation
+            })
         }
     }
 
@@ -72,13 +82,23 @@ class HomeStyle extends Component {
         this.props.fetchSwitchOptWayOfHome(obj).then(res => {
             if (res.success) {
                 Message.success('切换成功')
+                this.setState({
+                    isChecked: isUsingNation
+                })
             } else {
                 Message.error(res.message)
-                this.setState({
-                    isChecked: !isUsingNation
-                })
             }
         })
+    }
+
+    /**
+     * 没有总部修改权限的提示
+     */
+    wrapClick = () => {
+        Modal.error({
+            title: '错误',
+            content: '您没有权限修改总部运营方式',
+        });
     }
 
     render() {
@@ -125,7 +145,7 @@ class HomeStyle extends Component {
                             }
                             {
                                 !this.state.isHeadquarters
-                                    ? <div className="home-style-wrap" />
+                                    ? <div className="home-style-wrap" onClick={this.wrapClick} />
                                     : null
                             }
                         </div>

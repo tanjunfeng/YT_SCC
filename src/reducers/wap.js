@@ -95,6 +95,12 @@ export default function (state = initState, action) {
         // 获取用户有权限的公司信息
         case ActionType.BRANCH_COMPANY_INFO:
             return state.set('companyData', fromJS(action.payload));
+        // 获取区域id
+        case ActionType.FETCH_CAROUSEL_AREA:
+            return state.set('areaId', fromJS(action.payload));
+        // 设置轮播运营方式
+        case ActionType.FETCH_SWITCH_OPT_WAYOF_CAROUSEL:
+            return state.set('switchOpt', fromJS(action.payload));
         default:
             return state;
     }
