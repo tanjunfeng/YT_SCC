@@ -129,6 +129,16 @@ let originLists = [];
 
 let current = {};
 
+// 默认选择其他
+function parseReason(lists) {
+    return lists.map((item) => {
+        const newItem = item;
+        const { refundReason } = item;
+        newItem.refundReason = refundReason || '3';
+        return newItem;
+    })
+}
+
 function parseLists(lists) {
     // 退货数量大于了库存
     const overrun = [];
@@ -202,6 +212,7 @@ class List extends Component {
         getFormData: PropTypes.func,
         returnLists: PropTypes.arrayOf(PropTypes.any),
         onShowModal: PropTypes.func,
+        clearList: PropTypes.func,
     }
 
     static defaultProps = {
@@ -240,12 +251,13 @@ class List extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { returnLists, defaultValue, type } = nextProps;
+
         if (!is(fromJS(returnLists), fromJS(current))) {
             const { lists, orderId } = this.state;
             current = returnLists;
 
             const newLists = getNewLists(lists, current, orderId);
-
+          
             this.setState({
                 lists: newLists
             }, () => {
@@ -442,6 +454,8 @@ class List extends Component {
             selectedRowKeys: []
         }, () => {
             this.calculation();
+            // 需要清空历史数据
+            this.props.clearList();
             current = [];
         })
     }
@@ -584,7 +598,7 @@ class List extends Component {
         const submit = this.props.getFormData();
         const postService = type === 'edit' ? updateRefundWithItems : createRefundWithItems;
 
-        submit.pmPurchaseRefundItems = lists
+        submit.pmPurchaseRefundItems = parseReason(lists);
         submit.status = status;
 
         // 退货数
@@ -647,6 +661,7 @@ class List extends Component {
             }),
         };
 
+        // 0:制单;1:已提交;2:已审核;3:已拒绝;4:待退货;5:已退货;6:已取消;7:取消失败;8:异常
         const footer = (
             <div
                 className={'return-goods-table-footer'}
@@ -674,11 +689,11 @@ class List extends Component {
                     { isEdit && (status === 2 || status === 4) && <Button data-type="cancel" onClick={this.handleType}>取消</Button> }
                     { isEdit && <Button data-type="download" onClick={this.handleType}>下载退货单</Button> }
                     {
-                        (!isEdit || status === 0 || status === 1)
+                        (!isEdit || status === 0 || status === 1 || status === 3)
                         && <Button data-type="save" onClick={this.handleType}>保存</Button>
                     }
                     {
-                        (!isEdit || status === 0 || status === 1)
+                        (!isEdit || status === 0 || status === 1 || status === 3)
                         && <Button data-type="submit" onClick={this.handleType}>提交</Button>
                     }
                     {

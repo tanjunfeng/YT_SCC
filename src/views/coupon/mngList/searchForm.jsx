@@ -67,8 +67,8 @@ class SearchForm extends PureComponent {
     }
 
     handleReset = () => {
-        this.props.form.resetFields();  // 清除当前查询条件
-        this.props.onPromotionReset();  // 通知父页面已清空
+        this.props.form.resetFields(); // 清除当前查询条件
+        this.props.onPromotionReset(); // 通知父页面已清空
     }
 
     handleCreate = () => {
@@ -109,7 +109,7 @@ class SearchForm extends PureComponent {
                                         <Select style={{ width: '153px' }} size="default">
                                             {this.getPromotionStatus()}
                                         </Select>
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -121,7 +121,7 @@ class SearchForm extends PureComponent {
                                         <Select style={{ width: '153px' }} size="default">
                                             {this.getCouponTypeStatus()}
                                         </Select>
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
                             <Col>
@@ -139,7 +139,7 @@ class SearchForm extends PureComponent {
                                                 format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
                                                 placeholder={['开始时间', '结束时间']}
                                             />
-                                            )}
+                                        )}
                                     </div>
                                 </FormItem>
                             </Col>

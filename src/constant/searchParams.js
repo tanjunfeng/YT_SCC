@@ -471,7 +471,7 @@ export const orderTypeOptions = {
 
 // 订单管理-订单状态
 export const orderStatusOptions = {
-    defaultValue: 'W',
+    defaultValue: 'ALL',
     data: [{
         key: 'ALL',
         value: '全部'
