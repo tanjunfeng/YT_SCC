@@ -9,15 +9,12 @@ function ImageDom(props) {
         height: `${imgStyle.height}px`,
         top: `${imgStyle.top}px`,
         left: `${imgStyle.left}px`,
-        position: 'absolute',
-        borderWidth: '3px',
-        borderStyle: 'solid',
         borderColor: imgStyle.color
     }
     return (
         <div className="canvas">
             <img src={url} alt="流程图" />
-            <div style={chartStyle} />
+            <div className="highLight" style={chartStyle} />
         </div>
     )
 }
