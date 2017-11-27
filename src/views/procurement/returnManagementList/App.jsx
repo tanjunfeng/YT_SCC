@@ -149,6 +149,10 @@ class ReturnManagementList extends PureComponent {
                 dataIndex: 'totalRefundCost',
                 key: 'totalRefundCost'
             }, {
+                title: '退货金额(含税)',
+                dataIndex: 'totalRefundMoney',
+                key: 'totalRefundMoney'
+            }, {
                 title: '实际退货数量',
                 dataIndex: 'totalRealRefundAmount',
                 key: 'totalRealRefundAmount'
@@ -156,10 +160,6 @@ class ReturnManagementList extends PureComponent {
                 title: '实际退货金额(含税)',
                 dataIndex: 'totalRealRefundMoney',
                 key: 'totalRealRefundMoney'
-            }, {
-                title: '退货金额(含税)',
-                dataIndex: 'totalRefundMoney',
-                key: 'totalRefundMoney'
             }, {
                 title: '创建日期',
                 dataIndex: 'createTime',
