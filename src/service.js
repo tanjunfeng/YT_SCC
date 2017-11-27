@@ -784,7 +784,7 @@ export const queryOrderDetailInfo = (params) => http.get('/sorder/orderDetail', 
 export const queryPaymentDetailInfo = (params) => http.get('/sorder/paymentInfo', params);
 
 // 订单管理-查询支付信息
-export const backstageOrderBack = (params) => http.get('/webreturnrequest/insert', params);
+export const backstageOrderBack = (params) => http.get('/webReturnRequest/insertReturn', params);
 
 // 订单管理-查询配送信息
 export const queryShippingDetailInfo = (params) => http.get('/sorder/shippingGroupInfo', params);
