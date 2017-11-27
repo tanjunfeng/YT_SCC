@@ -369,8 +369,8 @@ class OrderInformation extends PureComponent {
                                 保存
                             </Button>
                             {
-                                (orderDetailData.orderStateDesc === '待审核'
-                                    || orderDetailData.orderStateDesc === '待人工审核')
+                                (orderDetailData.orderState === 'W'
+                                    || orderDetailData.orderState === 'M')
                                 && <Button
                                     size="default"
                                     onClick={this.handleOrderAudit}
@@ -379,10 +379,10 @@ class OrderInformation extends PureComponent {
                                 </Button>
                             }
                             {
-                                orderDetailData.shippingStateDesc !== '待收货'
-                                && orderDetailData.shippingStateDesc !== '未送达'
-                                && orderDetailData.shippingStateDesc !== '已签收'
-                                && orderDetailData.orderStateDesc !== '已取消'
+                                orderDetailData.shippingState !== 'DSH'
+                                && orderDetailData.shippingState !== 'WSD'
+                                && orderDetailData.shippingState !== 'YQS'
+                                && orderDetailData.orderState !== 'Q'
                                 && <Button
                                     size="default"
                                     onClick={this.handleOrderCancel}

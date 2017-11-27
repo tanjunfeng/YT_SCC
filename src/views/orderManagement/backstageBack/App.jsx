@@ -81,7 +81,8 @@ class BackstageBack extends PureComponent {
             const { returnReasonType, returnReason } = values;
             const dist = {
                 orderId: this.orderId,
-                returnReasonType, returnReason,
+                returnReasonType,
+                returnReason,
                 requestItems: JSON.stringify(this.state.requestItems)
             };
             callback(Utils.removeInvalid(dist));

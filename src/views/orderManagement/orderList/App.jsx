@@ -327,7 +327,7 @@ class OrderManagementList extends Component {
      * @param {object} record 单行数据
      */
     renderOperation(text, record) {
-        const { id, orderStateDesc, shippingStateDesc } = record;
+        const { id, orderState, shippingState } = record;
         const pathname = window.location.pathname;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
@@ -335,28 +335,28 @@ class OrderManagementList extends Component {
                     <a target="_blank" href={`${pathname}/orderDetails/${id}`}>查看订单详情</a>
                 </Menu.Item>
                 {
-                    (orderStateDesc === '待审核'
-                        || orderStateDesc === '待人工审核')
+                    (orderState === 'W'
+                        || orderState === 'M')
                     && <Menu.Item key="tableAudit">
                         <a target="_blank" rel="noopener noreferrer">审核</a>
                     </Menu.Item>
                 }
                 {
-                    shippingStateDesc !== '待收货'
-                    && shippingStateDesc !== '已签收'
-                    && orderStateDesc !== '已取消'
+                    shippingState !== 'DSH'
+                    && shippingState !== 'YQS'
+                    && orderState !== 'Q'
                     && <Menu.Item key="tableCancel">
                         <a target="_blank" rel="noopener noreferrer">取消</a>
                     </Menu.Item>
                 }
                 {
-                    orderStateDesc === '已取消'
+                    orderState === 'Q'
                     && <Menu.Item key="tableShowFailure">
                         <a target="_blank" rel="noopener noreferrer">查看取消原因</a>
                     </Menu.Item>
                 }
                 {
-                    (shippingStateDesc === '仓库拒收' || shippingStateDesc === '未传送')
+                    (shippingState === 'WJS' || shippingState === 'WCS')
                     && <Menu.Item key="tableRetransfer">
                         <a target="_blank" rel="noopener noreferrer">重新传送</a>
                     </Menu.Item>
