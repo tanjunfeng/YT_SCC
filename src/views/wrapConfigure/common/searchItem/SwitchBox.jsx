@@ -58,7 +58,7 @@ class SwitchBox extends PureComponent {
                 {
                     !this.props.headquarters
                         ? <div className="mode">
-                            <Switch checkedChildren="总部运营" unCheckedChildren="总部运营" onChange={this.handleChange} checked={this.state.isChecked} />
+                            <Switch checkedChildren="总部运营" unCheckedChildren="独立运营" onChange={this.handleChange} checked={this.state.isChecked} />
                         </div>
                         : null
                 }
