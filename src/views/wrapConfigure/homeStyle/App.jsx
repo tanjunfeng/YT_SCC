@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Message, Modal } from 'antd';
+import { message, Modal } from 'antd';
 import { fetchAreaList, fetchSwitchOptWayOfHome, clearHomePage } from '../../../actions/wap';
 
 import SearchItem from '../common/searchItem';
@@ -86,12 +86,12 @@ class HomeStyle extends Component {
         }
         this.props.fetchSwitchOptWayOfHome(obj).then(res => {
             if (res.success) {
-                Message.success('切换成功')
+                message.success('切换成功')
                 this.setState({
                     isChecked: isUsingNation
                 })
             } else {
-                Message.error(res.message)
+                message.error(res.message)
             }
         })
     }

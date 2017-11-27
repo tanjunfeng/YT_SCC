@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Table, Menu, Icon, Dropdown, Modal, Button, Select, Message } from 'antd';
+import { Table, Menu, Icon, Dropdown, Modal, Button, Select, message } from 'antd';
 import { CATEGORY_INTERVAL_LIST } from '../../../constant';
 import ChangeModalMessage from './common/changeModalMessage';
 import {
@@ -173,12 +173,12 @@ class CarouselManagement extends Component {
         }
         this.props.fetchSwitchOptWayOfCarousel(obj).then(res => {
             if (res.success) {
-                Message.success('切换成功')
+                message.success('切换成功')
                 this.setState({
                     isChecked: isUsingNation
                 })
             } else {
-                Message.error(res.message)
+                message.error(res.message)
             }
         })
     }
@@ -197,7 +197,7 @@ class CarouselManagement extends Component {
                     carouselInterval: value
                 }
             })
-            Message.success('修改成功！');
+            message.success('修改成功！');
         })
     }
 
@@ -244,7 +244,7 @@ class CarouselManagement extends Component {
                         }).then(() => {
                             this.props.fetchCarouselAdList();
                             this.props.modifyModalVisible({ isVisible: false });
-                            Message.success('删除成功！');
+                            message.success('删除成功！');
                         })
                     },
                     onCancel() { },
@@ -260,7 +260,7 @@ class CarouselManagement extends Component {
                         }).then(() => {
                             this.props.fetchCarouselAdList();
                             this.props.modifyModalVisible({ isVisible: false });
-                            Message.success('启用成功！');
+                            message.success('启用成功！');
                         })
                     },
                     onCancel() { },
@@ -276,7 +276,7 @@ class CarouselManagement extends Component {
                         }).then(() => {
                             this.props.fetchCarouselAdList();
                             this.props.modifyModalVisible({ isVisible: false });
-                            Message.success('停用成功！');
+                            message.success('停用成功！');
                         })
                     },
                     onCancel() { },
