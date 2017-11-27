@@ -1,9 +1,6 @@
 /*
  * @Author: chenghaojie
  * @Description: 流程管理 - 流程列表
- * @CreateDate: 2017-11-17 09:09:43
- * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-09-22 15:18:02
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -16,6 +13,7 @@ import UploadZip from './uploadZip';
 
 import {
     queryProcessData,
+    delectProcessData,
     clearProcessData,
     queryChartData,
     clearChartData
@@ -29,6 +27,7 @@ import { processOverview, processDetails } from '../columns';
     flowChartData: state.toJS().process.flowChartData
 }), dispatch => bindActionCreators({
     queryProcessData,
+    delectProcessData,
     clearProcessData,
     queryChartData,
     clearChartData
@@ -38,12 +37,10 @@ class processData extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            visible: false,
             flowName: ''
         }
         this.param = {};
     }
-
     componentWillMount() {
         this.props.clearProcessData();
     }
@@ -52,6 +49,10 @@ class processData extends PureComponent {
         this.handleReset();
         this.query();
     }
+    componentWillReceiveProps(nextProps) {
+
+
+    }
     /**
      * 分页页码改变的回调
      */
@@ -59,17 +60,19 @@ class processData extends PureComponent {
         Object.assign(this.param, { pageNum, current: pageNum });
         this.query();
     }
-    queryFlowChart = (id) => {
+    queryFlowChart = (id, imageName) => {
         this.props.clearChartData();
-        this.props.queryChartData(id).then(() => {
+        this.props.queryChartData({deploymentId: id, imageName}).then(() => {
             this.showModal();
         });
     }
-    query = () => {
-        this.props.queryProcessData(this.param).then((data) => {
-            const { pageNum, pageSize } = data.data;
-            Object.assign(this.param, { pageNum, pageSize });
+    delect = (id) => {
+        this.props.delectProcessData({deploymentId: id}).then(() => {
+            this.query();
         });
+    }
+    query = () => {
+        this.props.queryProcessData(this.param)
     }
     handleReset = () => {
         this.param = {
@@ -78,8 +81,8 @@ class processData extends PureComponent {
         }
     }
     closeCanvas = () => {
+        this.props.clearChartData();
         this.setState({
-            data: null,
             visible: false
         });
     }
@@ -94,29 +97,35 @@ class processData extends PureComponent {
         })
     }
     /**
-     * 表单操作
+     * 表单操作删除表单
+     * @param {Object} text 当前行的值
+     * @param {object} record 单行数据
+     */
+    delectOperation = (text, record) => (
+        <a
+            onClick={() => { this.delect(record.id); }}
+        >删除</a>
+    )
+    /**
+     * 表单操作查看流程图
      * @param {Object} text 当前行的值
      * @param {object} record 单行数据
      */
     renderOperation = (text, record) => (
         <a
-            onClick={() => { this.queryFlowChart(record.id); }}
+            onClick={() => { this.queryFlowChart(record.id, record.diagramResourceName); }}
         >查看流程图</a>
     )
-
     render() {
-        if (Object.keys(this.props.processData).length === 0) {
-            return null;
-        }
-        const { flowName, visible } = this.state;
-        const url = `${window.config.apiHost}/bpm/newdeploy`;
-        const { overviewData, detailData, total, pageNum, pageSize } = this.props.processData;
-        processOverview[processOverview.length - 1].render = this.renderOperation;
+        const { flowName} = this.state;
+        const deployProcessUrl = `${window.config.apiHost}/bpm/newdeploy`;
+        const { deps, pros, total, pageNum, pageSize } = this.props.processData;
+        processOverview[processOverview.length - 1].render = this.delectOperation;
         processDetails[processDetails.length - 1].render = this.renderOperation;
         return (
             <div className="processBox">
                 <Table
-                    dataSource={overviewData.data}
+                    dataSource={deps}
                     columns={processOverview}
                     rowKey="id"
                     scroll={{
@@ -133,7 +142,7 @@ class processData extends PureComponent {
                     }}
                 />
                 <Table
-                    dataSource={detailData.data}
+                    dataSource={pros}
                     columns={processDetails}
                     rowKey="id"
                     scroll={{
@@ -149,18 +158,18 @@ class processData extends PureComponent {
                     }}
                 />
                 <Input size="small" placeholder="流程名称" onChange={this.handleChange} />
-                <UploadZip flowName={flowName} url={url} />
-                <FlowChart data={this.props.flowChartData} visible={visible} >
+                <UploadZip flowName={flowName} url={deployProcessUrl} />
+                <FlowChart data={this.props.flowChartData} >
                     <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
                 </FlowChart>
             </div>
-
         );
     }
 }
 
 processData.propTypes = {
     queryProcessData: PropTypes.func,
+    delectProcessData: PropTypes.func,
     clearProcessData: PropTypes.func,
     queryChartData: PropTypes.func,
     clearChartData: PropTypes.func,
