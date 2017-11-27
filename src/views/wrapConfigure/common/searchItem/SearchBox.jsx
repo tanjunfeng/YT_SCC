@@ -98,7 +98,8 @@ class SearchBox extends PureComponent {
             branchCompany,
             homePageType
         }
-        this.props.searchChange(submitObj)
+        const headquarters = this.props.companyData.headquarters
+        this.props.searchChange(submitObj, headquarters)
     }
 
     render() {

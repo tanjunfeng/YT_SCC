@@ -376,6 +376,12 @@ export const batchUpdateQuickNavigation = (params) => http.post('/homeAd/batchUp
 // 查询所有轮播
 export const queryCarouselAdList = (params) => http.get('/homeAd/queryCarouselAdList', params);
 
+// 查询区域id
+export const queryCarouselArea = (params) => http.get('/homeAd/queryCarouselArea', params);
+
+// 切换轮播运营方式
+export const switchOptWayOfCarousel = (params) => http.post('/homeAd/switchOptWayOfCarousel', params);
+
 // 轮播广告管理-修改
 export const updateCarouselAd = (params) => http.post('/homeAd/updateCarouselAd', params);
 
@@ -395,7 +401,7 @@ export const queryCarouselAdBySorting = (params) => http.get('/homeAd/queryCarou
 export const queryCarouselAdListById = (params) => http.get('/homeAd/queryCarouselAdListById', params);
 
 // 查询轮播间隔时间
-export const queryCarouselInterval = (params) => http.get('/homeAd/queryFirstCarouselInterval', params);
+export const queryCarouselInterval = (params) => http.get('/homeAd/queryCarouselInterval', params);
 
 // 修改轮播间隔时间
 export const updateCarouselInterval = (params) => http.post('/homeAd/updateCarouselIntervalById', params);

@@ -9,65 +9,64 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Message } from 'antd';
-import { fetchAreaList, fetchSwitchOptWayOfHome } from '../../../actions/wap';
+import { Message, Modal } from 'antd';
+import { fetchAreaList, fetchSwitchOptWayOfHome, clearHomePage } from '../../../actions/wap';
 
 import SearchItem from '../common/searchItem';
 import CarouselItem from './common/carousel';
 import QuickItem from './common/quick';
 import HotItem from './common/hot';
 import BannerItem from './common/banner';
-import FloorItem from './common/floor';
+import FloorItem from './common/floor'; 
 
 @connect(
     state => ({
-        homeData: state.toJS().wap.homeData,
-        companyData: state.toJS().wap.companyData
+        homeData: state.toJS().wap.homeData
     }),
     dispatch => bindActionCreators({
         fetchAreaList,
-        fetchSwitchOptWayOfHome
+        fetchSwitchOptWayOfHome,
+        clearHomePage
     }, dispatch)
 )
 
 class HomeStyle extends Component {
     constructor(props) {
         super(props)
-        this.headquarters = null
         this.state = {
             companyId: '',
             isChecked: false,
+            // 用户能否修改当前的页面
             isHeadquarters: true
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!this.headquarters && nextProps.companyData) {
-            this.headquarters = nextProps.companyData.headquarters
+        // 判断当前是否设置为总部运营方式
+        const { homeData } = nextProps;
+        if (homeData.length > 0) {
+            this.setState({
+                isChecked: homeData[0].isUsingNation
+            })
         }
+    }
+
+    componentWillUnmount() {
+        // 页面卸载时清空数据
+        this.props.clearHomePage()
     }
 
     /**
      * 点击搜索后的回调
      * @param {object} submitObj 上传参数
+     * @param {bool} isHeadquarters 用户是否可以修改当前页面
      */
-    searchChange = (submitObj) => {
+    searchChange = (submitObj, isHeadquarters) => {
         const { branchCompany, homePageType } = submitObj
         const companyId = branchCompany.id
         const obj = {
             companyId,
             homePageType
-        }
-        // 判断用户是否可以修改当前页面
-        let isHeadquarters = null
-        if (homePageType === '1') {
-            if (this.headquarters) {
-                isHeadquarters = true
-            } else {
-                isHeadquarters = false
-            }
-        } else {
-            isHeadquarters = true
         }
         this.setState({
             companyId,
@@ -88,13 +87,23 @@ class HomeStyle extends Component {
         this.props.fetchSwitchOptWayOfHome(obj).then(res => {
             if (res.success) {
                 Message.success('切换成功')
+                this.setState({
+                    isChecked: isUsingNation
+                })
             } else {
                 Message.error(res.message)
-                this.setState({
-                    isChecked: !isUsingNation
-                })
             }
         })
+    }
+
+    /**
+     * 没有总部修改权限的提示
+     */
+    wrapClick = () => {
+        Modal.error({
+            title: '错误',
+            content: '您没有权限修改总部运营方式',
+        });
     }
 
     render() {
@@ -141,7 +150,7 @@ class HomeStyle extends Component {
                             }
                             {
                                 !this.state.isHeadquarters
-                                    ? <div className="home-style-wrap" />
+                                    ? <div className="home-style-wrap" onClick={this.wrapClick} />
                                     : null
                             }
                         </div>
@@ -155,8 +164,8 @@ class HomeStyle extends Component {
 HomeStyle.propTypes = {
     fetchAreaList: PropTypes.func,
     fetchSwitchOptWayOfHome: PropTypes.func,
-    homeData: PropTypes.objectOf(PropTypes.any),
-    companyData: PropTypes.objectOf(PropTypes.any)
+    clearHomePage: PropTypes.func,
+    homeData: PropTypes.objectOf(PropTypes.any)
 };
 
 export default HomeStyle;
