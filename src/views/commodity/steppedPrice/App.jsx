@@ -154,7 +154,7 @@ class SteppedPrice extends PureComponent {
                                         data-item={index}
                                         index={index}
                                         allLength={len}
-                                        key={`${item.startNumber}${item.endNumber}${item.price}`}
+                                        key={`${item.startNumber}`}
                                         handleAddItem={this.handleAddItem}
                                         handleDeleteItem={this.handleDeleteItem}
                                         handleValueChange={this.handleValueChange}
