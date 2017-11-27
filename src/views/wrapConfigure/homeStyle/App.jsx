@@ -10,23 +10,23 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Message, Modal } from 'antd';
-import { fetchAreaList, fetchSwitchOptWayOfHome } from '../../../actions/wap';
+import { fetchAreaList, fetchSwitchOptWayOfHome, clearHomePage } from '../../../actions/wap';
 
 import SearchItem from '../common/searchItem';
 import CarouselItem from './common/carousel';
 import QuickItem from './common/quick';
 import HotItem from './common/hot';
 import BannerItem from './common/banner';
-import FloorItem from './common/floor';
+import FloorItem from './common/floor'; 
 
 @connect(
     state => ({
-        homeData: state.toJS().wap.homeData,
-        companyData: state.toJS().wap.companyData
+        homeData: state.toJS().wap.homeData
     }),
     dispatch => bindActionCreators({
         fetchAreaList,
-        fetchSwitchOptWayOfHome
+        fetchSwitchOptWayOfHome,
+        clearHomePage
     }, dispatch)
 )
 
@@ -49,6 +49,11 @@ class HomeStyle extends Component {
                 isChecked: homeData[0].isUsingNation
             })
         }
+    }
+
+    componentWillUnmount() {
+        // 页面卸载时清空数据
+        this.props.clearHomePage()
     }
 
     /**
@@ -159,8 +164,8 @@ class HomeStyle extends Component {
 HomeStyle.propTypes = {
     fetchAreaList: PropTypes.func,
     fetchSwitchOptWayOfHome: PropTypes.func,
-    homeData: PropTypes.objectOf(PropTypes.any),
-    companyData: PropTypes.objectOf(PropTypes.any)
+    clearHomePage: PropTypes.func,
+    homeData: PropTypes.objectOf(PropTypes.any)
 };
 
 export default HomeStyle;

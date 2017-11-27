@@ -20,7 +20,8 @@ import {
     modifyCarouselAdStatus,
     modifyCarouselInterval,
     fetchCarouselArea,
-    fetchSwitchOptWayOfCarousel
+    fetchSwitchOptWayOfCarousel,
+    clearAdList
 } from '../../../actions/wap';
 import SearchItem from '../common/searchItem';
 
@@ -95,7 +96,8 @@ const columns = [
         modifyModalVisible,
         modifyCarouselAd,
         fetchCarouselArea,
-        fetchSwitchOptWayOfCarousel
+        fetchSwitchOptWayOfCarousel,
+        clearAdList
     }, dispatch)
 )
 class CarouselManagement extends Component {
@@ -127,6 +129,11 @@ class CarouselManagement extends Component {
                 }
             })
         }
+    }
+
+    componentWillUnmount() {
+        // 页面卸载时清空表格
+        this.props.clearAdList()
     }
 
     /**
@@ -330,9 +337,6 @@ class CarouselManagement extends Component {
         );
         return (
             <div className="carousel-management wap-management">
-                {/* <div className="carousel-management-tip wap-management-tip">
-                    说明：APP端轮播广告管理，可以设定轮播时间、顺序、内容。
-                </div> */}
                 <SearchItem
                     searchChange={this.searchChange}
                     switchChange={this.switchChange}
@@ -387,6 +391,7 @@ CarouselManagement.propTypes = {
     modifyModalVisible: PropTypes.func,
     fetchCarouselArea: PropTypes.func,
     fetchSwitchOptWayOfCarousel: PropTypes.func,
+    clearAdList: PropTypes.func,
     modalVisible: PropTypes.bool,
 };
 

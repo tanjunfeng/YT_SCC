@@ -127,7 +127,7 @@ class SearchBox extends PureComponent {
                                                 ))
                                             }
                                         </Select>
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
                             {
@@ -150,7 +150,7 @@ class SearchBox extends PureComponent {
                                                         ))
                                                     }
                                                 </Select>
-                                                )}
+                                            )}
                                         </FormItem>
                                     </Col>
                                     : null

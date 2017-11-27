@@ -42,7 +42,15 @@ const initState = fromJS({
     // 轮播广告管理-查询轮播间隔时间(cyx)
     intervalData: {
         carouselInterval: 3
-    }
+    },
+    // 切换运营方式
+    switchChange: {},
+    // 获取用户有权限的公司信息
+    companyData: null,
+    // 获取区域id
+    areaId: {},
+    // 设置轮播运营方式
+    switchOpt: {}
 });
 
 export default function (state = initState, action) {
@@ -101,6 +109,12 @@ export default function (state = initState, action) {
         // 设置轮播运营方式
         case ActionType.FETCH_SWITCH_OPT_WAYOF_CAROUSEL:
             return state.set('switchOpt', fromJS(action.payload));
+        // 清空轮播图列表
+        case ActionType.CLEAR_AD_LIST:
+            return state.set('adData', []);
+        // 清空首页配置数据
+        case ActionType.CLEAR_HOME_PAGE:
+            return state.set('homeData', []);
         default:
             return state;
     }

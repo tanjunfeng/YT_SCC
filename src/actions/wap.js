@@ -37,6 +37,16 @@ import {
 } from '../service';
 import ActionType from './ActionType';
 
+// 清空轮播图列表信息
+export const clearAdList = () => ({
+    type: ActionType.CLEAR_AD_LIST
+})
+
+// 清空首页配置数据
+export const clearHomePage = () => ({
+    type: ActionType.CLEAR_HOME_PAGE
+})
+
 // 查询区域信息
 const receiveCarouselArea = (data) => ({
     type: ActionType.FETCH_CAROUSEL_AREA,

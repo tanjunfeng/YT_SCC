@@ -154,6 +154,8 @@ export default {
     BRANCH_COMPANY_INFO: 'BRANCH_COMPANY_INFO',
     FETCH_CAROUSEL_AREA: 'FETCH_CAROUSEL_AREA',
     FETCH_SWITCH_OPT_WAYOF_CAROUSEL: 'FETCH_SWITCH_OPT_WAYOF_CAROUSEL',
+    CLEAR_AD_LIST: 'CLEAR_AD_LIST',
+    CLEAR_HOME_PAGE: 'CLEAR_HOME_PAGE',
 
     /* ********************procurement************************* */
     // 查询采购单管理列表
