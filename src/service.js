@@ -870,7 +870,11 @@ export const cancelCoupons = (params) => http.get('/coupon/cancelCoupons', param
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
 
 // 流程管理
-export const queryProcessList = (params) => http.get('/process/queryProcessList', params);
+export const queryProcessList = (params) => http.get('/bpm/findDeployAndProcessDefList', params);
+// 流程管理
+export const delectProcessList = (params) => http.get('/bpm/delDeployment', params);
+// 流程管理下获取流程图数据的请求
+export const queryChartData = (params) => http.get('/bpm/viewImage', params);
 // 退货单列表
 export const getReturnGoodsList = (params) => http.get('/webReturnRequest/queryReturnRequestList', params);
 // 换货单列表
