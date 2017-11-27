@@ -21,8 +21,7 @@ import {
     fetchPromotionParticipateData as fetchPromotionParticipateDataService,
     grantCoupon as grantCouponService,
     garbageCouponParticipate as invalidRecordService,
-    cancelCoupons as cancelCouponsService,
-    queryProcessList as queryProcessListService
+    cancelCoupons as cancelCouponsService
 } from '../service';
 
 /**
@@ -353,23 +352,6 @@ export const updatePromotionStatus = (params) => dispatch => (
                 dispatch(
                     updatePromotionAction(res.data)
                 );
-                resolve(res);
-            })
-            .catch(err => reject(err));
-    })
-);
-// 流程管理
-const queryProcessListAction = (data) => ({
-    type: ActionType.FETCH_PROCESS_LIST,
-    payload: data
-});
-
-export const queryProcessList = (params) => dispatch => (
-    new Promise((resolve, reject) => {
-        queryProcessListService(params)
-            .then(res => {
-                dispatch(
-                    queryProcessListAction(res.data));
                 resolve(res);
             })
             .catch(err => reject(err));

@@ -1,0 +1,56 @@
+{
+    "timestamp": 1505985901605,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data":{
+        "deps": [
+            {
+                "id": "HD1710110",
+                "name": "123",
+                "deploymentTime": 1505893364000
+            },
+            {
+                "id": "HD222220",
+                "name": "222",
+                "deploymentTime": 1505893334000
+            },
+            {
+                "id": "HD23333",
+                "name": "333",
+                "deploymentTime": 1505993334000
+            }
+        ]
+        ,
+        "pros": [
+            {
+                "id": "myProcess:2:7504",
+                "name": "My process",
+                "key": "myProcess",
+                "version": 2,
+                "deploymentId": "7501",
+                "resourceName": "cqcgthProcess.bpmn",
+                "diagramResourceName": "cqcgthProcess.png"
+            },
+            {
+                "id": "myProcess:3:7508",
+                "name": "My process",
+                "key": "myProcess",
+                "version": 3,
+                "deploymentId": "7505",
+                "resourceName": "cqcgthProcess.bpmn",
+                "diagramResourceName": "cqcgthProcess.png"
+            },
+            {
+                "id": "myProcess:3:7509",
+                "name": "My process",
+                "key": "myProcess",
+                "version": 3,
+                "deploymentId": "7509",
+                "resourceName": "cqcgthProcess.bpmn",
+                "diagramResourceName": "cqcgthProcess.png"
+            }
+        ]
+    },
+    "success": true
+}

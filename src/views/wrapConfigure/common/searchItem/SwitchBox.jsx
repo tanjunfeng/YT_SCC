@@ -21,7 +21,7 @@ class SwitchBox extends PureComponent {
     componentWillReceiveProps(nextProps) {
         if (nextProps.isChecked !== this.state.isChecked) {
             this.setState({
-                checked: nextProps.isChecked
+                isChecked: nextProps.isChecked
             })
         }
     }
@@ -56,9 +56,9 @@ class SwitchBox extends PureComponent {
                     当前设置区域：<span>{this.props.companyName}</span>
                 </div>
                 {
-                    this.props.companyId && this.props.companyId !== 'headquarters'
+                    !this.props.headquarters
                         ? <div className="mode">
-                            <Switch checkedChildren="总部运营" unCheckedChildren="总部运营" onChange={this.handleChange} checked={this.state.isChecked} />
+                            <Switch checkedChildren="总部运营" unCheckedChildren="独立运营" onChange={this.handleChange} checked={this.state.isChecked} />
                         </div>
                         : null
                 }
@@ -68,7 +68,7 @@ class SwitchBox extends PureComponent {
 }
 
 SwitchBox.propTypes = {
-    companyId: PropTypes.string,
+    headquarters: PropTypes.bool,
     companyName: PropTypes.string,
     isChecked: PropTypes.bool
 };

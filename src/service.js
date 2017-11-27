@@ -376,6 +376,12 @@ export const batchUpdateQuickNavigation = (params) => http.post('/homeAd/batchUp
 // 查询所有轮播
 export const queryCarouselAdList = (params) => http.get('/homeAd/queryCarouselAdList', params);
 
+// 查询区域id
+export const queryCarouselArea = (params) => http.get('/homeAd/queryCarouselArea', params);
+
+// 切换轮播运营方式
+export const switchOptWayOfCarousel = (params) => http.post('/homeAd/switchOptWayOfCarousel', params);
+
 // 轮播广告管理-修改
 export const updateCarouselAd = (params) => http.post('/homeAd/updateCarouselAd', params);
 
@@ -395,7 +401,7 @@ export const queryCarouselAdBySorting = (params) => http.get('/homeAd/queryCarou
 export const queryCarouselAdListById = (params) => http.get('/homeAd/queryCarouselAdListById', params);
 
 // 查询轮播间隔时间
-export const queryCarouselInterval = (params) => http.get('/homeAd/queryFirstCarouselInterval', params);
+export const queryCarouselInterval = (params) => http.get('/homeAd/queryCarouselInterval', params);
 
 // 修改轮播间隔时间
 export const updateCarouselInterval = (params) => http.post('/homeAd/updateCarouselIntervalById', params);
@@ -864,7 +870,11 @@ export const cancelCoupons = (params) => http.get('/coupon/cancelCoupons', param
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
 
 // 流程管理
-export const queryProcessList = (params) => http.get('/process/queryProcessList', params);
+export const queryProcessList = (params) => http.get('/bpm/findDeployAndProcessDefList', params);
+// 流程管理
+export const delectProcessList = (params) => http.get('/bpm/delDeployment', params);
+// 流程管理下获取流程图数据的请求
+export const queryChartData = (params) => http.get('/bpm/viewImage', params);
 // 退货单列表
 export const getReturnGoodsList = (params) => http.get('/webReturnRequest/queryReturnRequestList', params);
 // 换货单列表
