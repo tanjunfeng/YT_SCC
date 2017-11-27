@@ -252,7 +252,7 @@ class PoDetail extends PureComponent {
             // nextProps里的polings
             nextPoLines: [],
             // 修改页，仓库是否被清空的标志
-            ispoAddressClear: false
+            ispoAddressClear: false,
         }
     }
 
@@ -666,7 +666,7 @@ class PoDetail extends PureComponent {
                                             供应商:
                                         </span>
                                     </span>
-                                    {getFieldDecorator('spId', {
+                                    {getFieldDecorator('supplier', {
                                         initialValue: { spId: basicInfo.spId || '', spNo: basicInfo.spNo || '', companyName: basicInfo.spName || ''}
                                     })(
                                         <Supplier
@@ -1086,15 +1086,8 @@ class PoDetail extends PureComponent {
         }
 
         // 供应商
-        let spId;
-        let spNo;
-        let spName;
-        const selectedSupplierRawData = this.supplier.state.selectedRawData;
-        if (selectedSupplierRawData) {
-            spId = selectedSupplierRawData.spId;
-            spNo = selectedSupplierRawData.spNo;
-            spName = selectedSupplierRawData.companyName;
-        }
+        const {spId, spNo} = this.props.form.getFieldValue('supplier');
+        const spName = this.props.form.getFieldValue('supplier').companyName;
 
         // 供应商地点
         let spAdrId;
