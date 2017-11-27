@@ -13,9 +13,10 @@
        left: 50%;
        transform: translate(-50%, -50%);
     }
-    .hightLight{
-        position: absolute;
-        border: 3px solid red;
+    .highLight{
+        position: 'absolute';
+        border-width: 3px;
+        border-style: 'solid';
     }
     .closeBtn{
         position: relative;

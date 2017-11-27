@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Table, Form, Button, Input } from 'antd';
-import FlowChart from '../flowChart';
+import FlowImage from '../../../components/flowImage';
 import UploadZip from './uploadZip';
 
 import {
@@ -48,10 +48,6 @@ class processData extends PureComponent {
     componentDidMount() {
         this.handleReset();
         this.query();
-    }
-    componentWillReceiveProps(nextProps) {
-
-
     }
     /**
      * 分页页码改变的回调
@@ -159,9 +155,9 @@ class processData extends PureComponent {
                 />
                 <Input size="small" placeholder="流程名称" onChange={this.handleChange} />
                 <UploadZip flowName={flowName} url={deployProcessUrl} />
-                <FlowChart data={this.props.flowChartData} >
+                <FlowImage data={this.props.flowChartData} >
                     <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
-                </FlowChart>
+                </FlowImage>
             </div>
         );
     }
