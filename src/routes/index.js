@@ -64,6 +64,8 @@ import SalesMaintenance from 'bundle-loader?lazy!../views/commodity/salesMainten
 import OrderManagementList from 'bundle-loader?lazy!../views/orderManagement/orderList';
 // 订单管理-详情页
 import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/orderDetails';
+// 订单管理-订单详情-后台退货
+import BackstageBack from 'bundle-loader?lazy!../views/orderManagement/backstageBack';
 // 订单管理 - 直营店下单
 import DirectStoreOrder from 'bundle-loader?lazy!../views/orderManagement/directSalesOrders';
 
@@ -676,6 +678,11 @@ const routes = [
                         <Route
                             path="/orderList/orderDetails/:id"
                             render={() => (<Bundle load={OrderManagementDetails}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                        <Route
+                            path="/orderList/orderBackstageBack/:id"
+                            render={() => (<Bundle load={BackstageBack}>
                                 {(App) => <App />}</Bundle>)}
                         />
                     </Switch>

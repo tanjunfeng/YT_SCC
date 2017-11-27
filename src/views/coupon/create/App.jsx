@@ -49,7 +49,7 @@ class CouponCreate extends PureComponent {
             categorySelectorVisible: false,
             formSelectorVisible: false,
             storeSelectorVisible: true,
-            companies: [],  // 所选区域子公司
+            companies: [], // 所选区域子公司
             categoryObj: {}, // 所选品类对象
             checkedList: [],
         }
@@ -370,8 +370,7 @@ class CouponCreate extends PureComponent {
                                                         value={'default'}
                                                     >普通券</Radio>
                                                     <Radio value={'toGive'}>会员等级券</Radio>
-                                                </RadioGroup>
-                                                )}
+                                                </RadioGroup>)}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -406,8 +405,7 @@ class CouponCreate extends PureComponent {
                                                     showTime={{ format: MINUTE_FORMAT }}
                                                     format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
                                                     placeholder={['开始时间', '结束时间']}
-                                                />
-                                                )}
+                                                />)}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -426,8 +424,7 @@ class CouponCreate extends PureComponent {
                                                         value={1}
                                                     >不限制</Radio>
                                                     <Radio value={0}>满</Radio>
-                                                </RadioGroup>
-                                                )}
+                                                </RadioGroup>)}
                                         </FormItem>
                                         {
                                             this.param.condition === 0 ?
@@ -444,8 +441,7 @@ class CouponCreate extends PureComponent {
                                                                 onChange={
                                                                     this.handleQuanifyAmountChange
                                                                 }
-                                                            />
-                                                            )}
+                                                            />)}
                                                     </FormItem>
                                                     元可用
                                                 </span>
@@ -466,8 +462,7 @@ class CouponCreate extends PureComponent {
                                                     {subCompanies.length > 0 ?
                                                         subCompanies.join(',')
                                                         : null}
-                                                </RadioGroup>
-                                                )}
+                                                </RadioGroup>)}
                                             <AreaSelector
                                                 isSelectorVisible={this.state.areaSelectorVisible}
                                                 onSelectorOk={this.handleSelectorOk}
@@ -486,8 +481,7 @@ class CouponCreate extends PureComponent {
                                                 <RadioGroup onChange={this.handleCategoryChange}>
                                                     <Radio className="default" value={0}>全部品类</Radio>
                                                     <Radio value={1}>指定品类</Radio>
-                                                </RadioGroup>
-                                                )}
+                                                </RadioGroup>)}
                                             {this.state.categorySelectorVisible
                                                 ? <Category
                                                     onCategorySelect={this.handleCategorySelect}
@@ -524,8 +518,7 @@ class CouponCreate extends PureComponent {
                                                         用户领取
                                                     </Radio>
                                                     <Radio value={0}>平台发放</Radio>
-                                                </RadioGroup>
-                                                )}
+                                                </RadioGroup>)}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -548,8 +541,7 @@ class CouponCreate extends PureComponent {
                                                         max={99}
                                                         parser={value => Math.ceil(value)}
                                                         formatter={value => `${value}`}
-                                                    />
-                                                    )}
+                                                    />)}
                                                 <span>张</span>
                                             </FormItem>
                                         </Col>
@@ -583,8 +575,7 @@ class CouponCreate extends PureComponent {
                                                         minRows: 4,
                                                         maxRows: 6
                                                     }}
-                                                />
-                                                )}
+                                                />)}
                                         </FormItem>
                                     </Col>
                                 </Row>

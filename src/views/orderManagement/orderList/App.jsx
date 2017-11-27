@@ -41,9 +41,9 @@ const Option = Select.Option;
 const confirm = Modal.confirm;
 const orderML = 'order-management';
 const { RangePicker } = DatePicker;
-const yesterdayDate = moment().subtract(1, 'days').valueOf().toString();
+const yesterdayDate = moment().subtract(6, 'days').valueOf().toString();
 const todayDate = moment().valueOf().toString();
-const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
+const yesterdayrengeDate = [moment().subtract(6, 'days'), moment()];
 
 @connect(
     state => ({
@@ -307,7 +307,7 @@ class OrderManagementList extends Component {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/orderDetails/${id}`}>查看订单详情</Link>
+                    <a target="_blank" href={`${pathname}/orderDetails/${id}`}>查看订单详情</a>
                 </Menu.Item>
                 {
                     (orderStateDesc === '待审核'

@@ -1,55 +1,56 @@
 /**
- * @file orderInfo.jsx
- * @author caoyanxuan
+ * @author taoqiyu
  *
- * 订单管理详情页-订单信息
+ * 订单详情页-后台退货
  */
-
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, Icon, Row, Col, Input, Button, Modal, message } from 'antd';
+import { bindActionCreators } from 'redux';
+import { Form, Icon, Row, Col, Input, Button, Select, message } from 'antd';
 import moment from 'moment';
 import { TIME_FORMAT } from '../../../constant/index';
 import CauseModal from '../orderList/causeModal';
-import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
+import GoodsReturnsInfo from '../goodsReturnsInfo';
 import {
-    savaOrderDescription,
-    modifyApprovalOrder,
     fetchOrderDetailInfo,
     clearOrderDetailInfo,
-    splitorderbyinventory,
-    interfaceInventory
+    backstageOrderBack
 } from '../../../actions/order';
-import GoodsInfo from '../goodsInfo';
+import { returnReasonStatus } from '../constants';
+import Utils from '../../../util/util';
 
-const confirm = Modal.confirm;
+const FormItem = Form.Item;
 const { TextArea } = Input;
+const Option = Select.Option;
 
 @connect(
     state => ({
         orderDetailData: state.toJS().order.orderDetailData
     }),
     dispatch => bindActionCreators({
-        modifyCauseModalVisible,
         fetchOrderDetailInfo,
         clearOrderDetailInfo,
-        splitorderbyinventory,
-        interfaceInventory
+        backstageOrderBack
     }, dispatch)
 )
 
-class OrderInformation extends PureComponent {
+class BackstageBack extends PureComponent {
     state = {
         textAreaNote: this.props.orderDetailData.description,
-        description: this.props.orderDetailData.description,
-        manualSplitOrder: {}
+        requestItems: [],
+        canSubmit: true
     }
 
     componentWillMount() {
         this.props.clearOrderDetailInfo();
+    }
+
+    componentDidMount() {
+        this.props.fetchOrderDetailInfo({
+            id: this.props.match.params.id
+        });
     }
 
     /**
@@ -59,121 +60,75 @@ class OrderInformation extends PureComponent {
     componentWillReceiveProps(nextProps) {
         const { orderDetailData } = nextProps;
         this.setState({
-            textAreaNote: orderDetailData.description,
-            description: orderDetailData.description
+            textAreaNote: orderDetailData.description
+        });
+    }
+
+    getReturnReasonStatus = () => (
+        returnReasonStatus.map((reason, index) => (
+            <Option key={reason} value={String(index)}>
+                {reason}
+            </Option>
+        ))
+    )
+
+    getFormData = (callback) => {
+        this.props.form.validateFields((err, values) => {
+            if (err) {
+                this.setState({ canSubmit: true });
+                return;
+            }
+            const { returnReasonType, returnReason } = values;
+            const dist = {
+                orderId: this.orderId,
+                returnReasonType, returnReason,
+                requestItems: JSON.stringify(this.state.requestItems)
+            };
+            callback(Utils.removeInvalid(dist));
         });
     }
 
     getAmount = amount => (`￥${Number(amount).toFixed(2)}`);
 
     /**
-     * 保存备注信息
+     * 执行退货操作
      */
-    handleOrderSave = () => {
-        const { textAreaNote, description } = this.state;
-        confirm({
-            title: '保存',
-            content: '确认保存备注信息？',
-            onOk: () => {
-                if (textAreaNote === description) {
-                    message.error('备注未作修改！')
+    handleSubmit = (e) => {
+        this.setState({ canSubmit: false });
+        e.preventDefault();
+        this.getFormData(data => {
+            this.props.backstageOrderBack(data).then(res => {
+                if (res.code === 200) {
+                    message.success('退货成功');
                 } else {
-                    savaOrderDescription({
-                        orderId: this.orderId,
-                        description: textAreaNote,
-                    }).then(() => {
-                        message.success('保存成功！')
-                    }).catch(() => {
-                        message.success('保存失败！')
-                    })
+                    this.setState({ canSubmit: true });
                 }
-            },
-            onCancel() { },
+            });
         });
     }
 
     /**
-     * 单个审核
+     * 退货返回商品列表
      */
-    handleOrderAudit = () => {
-        confirm({
-            title: '审核',
-            content: '确认审核？',
-            onOk: () => {
-                modifyApprovalOrder({
-                    id: this.orderId
-                }).then(res => {
-                    this.props.fetchOrderDetailInfo({ id: this.orderId });
-                    message.success(res.message);
-                })
-            },
-            onCancel() { },
+    handleGoodsReturns = (requestItems) => {
+        this.setState({
+            requestItems
         });
-    }
-
-    /**
-     * 单个取消
-     */
-    handleOrderCancel = () => {
-        this.props.modifyCauseModalVisible({ isShow: true, id: this.orderId });
-    }
-
-    /**
-     * 拆单返回数组
-     */
-    handleGoodsSplit = (splitGroups) => {
-        const manualSplitOrder = {
-            parentOrderId: this.orderId,
-            groups: splitGroups
-        }
-        this.setState({ manualSplitOrder });
-    }
-
-    /**
-     * 获取实时库存后拆单
-     */
-    realTimeDisassembly = () => {
-        const { orderDetailData } = this.props;
-        this.props.splitorderbyinventory({
-            orderId: orderDetailData.id
-        }).then((res) => {
-            if (res.code === 200) {
-                message.success('实时拆单成功!')
-            }
-        })
-    }
-
-    /**
-     * 基于界面显示库存拆单
-     */
-    displayInventory = () => {
-        const { manualSplitOrder = null } = this.state;
-        if (manualSplitOrder.groups === undefined) {
-            message.error('请完整填写拆单数据!');
-            return;
-        }
-        this.props.interfaceInventory({
-            ...manualSplitOrder
-        }).then((res) => {
-            if (res.code === 200) {
-                message.success('界面拆单成功！')
-            }
-        }).catch((res) => {
-            message.error(res.message)
-        })
     }
 
     orderId = this.props.match.params.id;
 
     render() {
-        const { orderDetailData } = this.props;
+        const { orderDetailData, form } = this.props;
+        const { requestItems, canSubmit } = this.state;
+        const getFieldDecorator = form.getFieldDecorator;
         return (
             <div>
                 <div className="order-details-item">
                     <div className="detail-message">
                         <div className="detail-message-header">
                             <Icon type="solution" className="detail-message-header-icon" />
-                            基础信息
+                            原订单信息
                         </div>
                         <div className="detail-message-body">
                             <Row>
@@ -246,9 +201,15 @@ class OrderInformation extends PureComponent {
                                 <Col className="gutter-row" span={12}>
                                     <span className="details-info-lable">备注:</span>
                                     <TextArea
-                                        autosize={{ minRows: 3, maxRows: 6 }}
+                                        disabled
+                                        autosize={{
+                                            minRows: 3,
+                                            maxRows: 6
+                                        }}
                                         value={this.state.textAreaNote}
-                                        style={{ resize: 'none' }}
+                                        style={{
+                                            resize: 'none'
+                                        }}
                                         maxLength="250"
                                         onChange={(e) => {
                                             this.setState({
@@ -313,95 +274,79 @@ class OrderInformation extends PureComponent {
                     </div>
                 </div>
                 <div className="order-details-item">
-                    <GoodsInfo
-                        value={this.props.orderDetailData}
-                        onChange={this.handleGoodsSplit}
-                        canBeSplit={this.props.orderDetailData.canSplitByInventory
-                            || this.props.orderDetailData.canSplitManual}
+                    <GoodsReturnsInfo
+                        value={{
+                            orderDetailData: this.props.orderDetailData,
+                            requestItems: this.state.requestItems
+                        }}
+                        onChange={this.handleGoodsReturns}
                     />
-                    <div className="order-details-split-btn" style={{ textAlign: 'right' }}>
-                        {this.props.orderDetailData.canSplitByInventory
-                            ? <Button
-                                size="default"
-                                type="primary"
-                                className="details-split-btns"
-                                onClick={this.realTimeDisassembly}
-                            >
-                                获取实时库存后拆单
+                </div>
+                <Form layout="inline" onSubmit={this.handleSubmit}>
+                    <div className="order-details-item">
+                        <div className="detail-message">
+                            <div className="detail-message-header">
+                                <Icon type="gift" className="detail-message-header-icon" />
+                                收货信息
+                            </div>
+                        </div>
+                        <div className="detail-message-body">
+                            <Row>
+                                <Col className="gutter-row">
+                                    <FormItem label="*退货原因">
+                                        {getFieldDecorator('returnReasonType', {
+                                            initialValue: '0',
+                                            rules: [{
+                                                pattern: /^[1-7]$/,
+                                                message: '退货原因必选'
+                                            }]
+                                        })(
+                                            <Select className="reason-select" size="default">
+                                                {this.getReturnReasonStatus()}
+                                            </Select>)}
+                                    </FormItem>
+                                    {this.props.form.getFieldValue('returnReasonType') === '7' ?
+                                        <FormItem className="return-reason">
+                                            {getFieldDecorator('returnReason', {
+                                                initialValue: '',
+                                                rules: [{
+                                                    required: true,
+                                                    message: '其他退货原因必填'
+                                                }, {
+                                                    max: 150,
+                                                    message: '不能输入超过150个字'
+                                                }]
+                                            })(
+                                                <TextArea
+                                                    placeholder="其他退货原因"
+                                                    autosize={{
+                                                        minRows: 4,
+                                                        maxRows: 6
+                                                    }}
+                                                />)}
+                                        </FormItem>
+                                        : null}
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col
+                                    className="gutter-row"
+                                    span={14}
+                                    offset={10}
+                                >
+                                    <Button
+                                        size="default"
+                                        htmlType="submit"
+                                        disabled={requestItems.length === 0 || !canSubmit}
+                                        type="primary"
+                                    >
+                                        退货
                                 </Button>
-                            : null}
-                        {this.props.orderDetailData.canSplitManual
-                            ? <Button
-                                size="default"
-                                className="details-split-btns"
-                                onClick={this.displayInventory}
-                            >
-                                基于界面显示库存拆单
-                        </Button>
-                            : null}
-                        {this.props.orderDetailData.canSplitByInventory
-                            || this.props.orderDetailData.canSplitManual
-                            ? <Button
-                                size="default"
-                                type="default"
-                                className="details-split-btns"
-                                onClick={() => {
-                                    this.props.history.replace('/orderList');
-                                }}
-                            >
-                                取消
-                            </Button>
-                            : null}
+                                </Col>
+                            </Row>
+                        </div>
                     </div>
-                </div>
-                <div className="order-details-btns">
-                    <Row>
-                        <Col
-                            className="gutter-row"
-                            span={14}
-                            offset={10}
-                        >
-                            <Button
-                                size="default"
-                                onClick={this.handleOrderSave}
-                                type="primary"
-                            >
-                                保存
-                            </Button>
-                            {
-                                (orderDetailData.orderStateDesc === '待审核'
-                                    || orderDetailData.orderStateDesc === '待人工审核')
-                                && <Button
-                                    size="default"
-                                    onClick={this.handleOrderAudit}
-                                >
-                                    审核
-                                </Button>
-                            }
-                            {
-                                orderDetailData.shippingStateDesc !== '待收货'
-                                && orderDetailData.shippingStateDesc !== '未送达'
-                                && orderDetailData.shippingStateDesc !== '已签收'
-                                && orderDetailData.orderStateDesc !== '已取消'
-                                && <Button
-                                    size="default"
-                                    onClick={this.handleOrderCancel}
-                                    type="danger"
-                                >
-                                    取消
-                                </Button>
-                            }
-                            <Button
-                                size="default"
-                                onClick={() => {
-                                    this.props.history.replace(`/orderList/orderBackstageBack/${this.orderId}`);
-                                }}
-                            >
-                                后台退货
-                            </Button>
-                        </Col>
-                    </Row>
-                </div>
+                </Form>
                 <div>
                     <CauseModal />
                 </div>
@@ -410,18 +355,13 @@ class OrderInformation extends PureComponent {
     }
 }
 
-OrderInformation.propTypes = {
+BackstageBack.propTypes = {
     orderDetailData: PropTypes.objectOf(PropTypes.any),
-    history: PropTypes.objectOf(PropTypes.any),
-    match: PropTypes.objectOf(PropTypes.any),
-    modifyCauseModalVisible: PropTypes.func,
+    form: PropTypes.objectOf(PropTypes.any),
     fetchOrderDetailInfo: PropTypes.func,
     clearOrderDetailInfo: PropTypes.func,
-    splitorderbyinventory: PropTypes.func,
-    interfaceInventory: PropTypes.func
+    backstageOrderBack: PropTypes.func,
+    match: PropTypes.objectOf(PropTypes.any)
 }
 
-OrderInformation.defaultProps = {
-}
-
-export default withRouter(Form.create()(OrderInformation));
+export default withRouter(Form.create()(BackstageBack));
