@@ -109,7 +109,9 @@ class processData extends PureComponent {
      */
     renderOperation = (text, record) => (
         <a
-            onClick={() => { this.queryFlowChart(record.id, record.diagramResourceName); }}
+            onClick={() => {
+                this.queryFlowChart(record.deploymentId, record.diagramResourceName);
+            }}
         >查看流程图</a>
     )
     render() {
