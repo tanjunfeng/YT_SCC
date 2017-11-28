@@ -581,8 +581,8 @@ class ReturnManagementList extends PureComponent {
                         : null
                 }
                 {
-                    // 状态为“已审核”、“待退货”时可用；
-                    (status === '2' || status === '4') ?
+                    // “待退货”时可用；
+                    (status === '4') ?
                         <Menu.Item key="cancel">
                             <a target="_blank" rel="noopener noreferrer">
                                 取消

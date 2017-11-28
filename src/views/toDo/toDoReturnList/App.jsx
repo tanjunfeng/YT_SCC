@@ -136,10 +136,6 @@ class toDoReturnList extends PureComponent {
                 dataIndex: 'totalRefundCost',
                 key: 'totalRefundCost'
             }, {
-                title: '实际退货金额(含税)',
-                dataIndex: 'totalRealRefundMoney',
-                key: 'totalRealRefundMoney'
-            }, {
                 title: '退货金额(含税)',
                 dataIndex: 'totalRefundMoney',
                 key: 'totalRefundMoney'
