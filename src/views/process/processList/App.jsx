@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Button, Input } from 'antd';
+import { Table, Form, Button, Input, Popconfirm, message } from 'antd';
 import FlowImage from '../../../components/flowImage';
 import UploadZip from './uploadZip';
 
@@ -57,18 +57,21 @@ class processData extends PureComponent {
         this.query();
     }
     queryFlowChart = (id, imageName) => {
-        this.props.clearChartData();
+        // this.props.clearChartData();
         this.props.queryChartData({deploymentId: id, imageName}).then(() => {
             this.showModal();
         });
     }
     delect = (id) => {
-        this.props.delectProcessData({deploymentId: id}).then(() => {
-            this.query();
-        });
+        this.props.delectProcessData({deploymentId: id}).then((res) => {
+            if (res.code === 200) {
+                message.success(res.message);
+                this.query();
+            }
+        })
     }
     query = () => {
-        this.props.queryProcessData(this.param)
+        this.props.queryProcessData(this.param);
     }
     handleReset = () => {
         this.param = {
@@ -98,9 +101,9 @@ class processData extends PureComponent {
      * @param {object} record 单行数据
      */
     delectOperation = (text, record) => (
-        <a
-            onClick={() => { this.delect(record.id); }}
-        >删除</a>
+        <Popconfirm title="确定删除流程？" onConfirm={() => this.delect(record.id)}>
+            <a href="#">删除</a>
+        </Popconfirm>
     )
     /**
      * 表单操作查看流程图
@@ -117,7 +120,7 @@ class processData extends PureComponent {
     render() {
         const { flowName} = this.state;
         const deployProcessUrl = `${window.config.apiHost}/bpm/newdeploy`;
-        const { deps, pros, total, pageNum, pageSize } = this.props.processData;
+        const { deps, pros } = this.props.processData;
         processOverview[processOverview.length - 1].render = this.delectOperation;
         processDetails[processDetails.length - 1].render = this.renderOperation;
         return (
@@ -130,14 +133,6 @@ class processData extends PureComponent {
                         x: 1400
                     }}
                     bordered
-                    pagination={{
-                        current: this.param.current,
-                        pageNum,
-                        pageSize,
-                        total,
-                        showQuickJumper: true,
-                        onChange: this.onPaginate
-                    }}
                 />
                 <Table
                     dataSource={pros}
@@ -146,17 +141,15 @@ class processData extends PureComponent {
                     scroll={{
                         x: 1400
                     }}
-                    pagination={{
-                        current: this.param.current,
-                        pageNum,
-                        pageSize,
-                        total,
-                        showQuickJumper: true,
-                        onChange: this.onPaginate
-                    }}
                 />
-                <Input size="small" placeholder="流程名称" onChange={this.handleChange} />
-                <UploadZip flowName={flowName} url={deployProcessUrl} />
+                <div className="uploadProcess">
+                    <Input placeholder="流程名称" onChange={this.handleChange} />
+                    <UploadZip
+                        flowName={flowName}
+                        url={deployProcessUrl}
+                        onUploadSuccess={this.query}
+                    />
+                </div>
                 <FlowImage data={this.props.flowChartData} >
                     <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
                 </FlowImage>
