@@ -46,7 +46,6 @@ class Search extends Component {
         this.handleWarehouseEmpty = this.handleWarehouseEmpty.bind(this);
         this.handleOk = this.handleOk.bind(this)
         this.state = {
-            branchCompanyId: '',
             logicWareHouseCode: ''
         };
     }
@@ -79,9 +78,12 @@ class Search extends Component {
 
     // 重置
     handleReset() {
-        this.WarehouseSearch.handleClear();
+        this.WarehouseSearch.reset();
         this.props.form.resetFields();
         this.props.saveParams();
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
     // 导出文件

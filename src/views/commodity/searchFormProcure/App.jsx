@@ -65,10 +65,6 @@ class SearchForm extends Component {
         }
     }
 
-    componentDidMount() {
-        // this.props.fetchAction();
-    }
-
     /**
      * 供应商-值清单
      */
@@ -206,6 +202,10 @@ class SearchForm extends Component {
         })
         this.props.form.resetFields();
         this.props.onReset();
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
     /**
@@ -301,60 +301,59 @@ class SearchForm extends Component {
                             </FormItem>
                         </Col>
                         {/* 子公司 */}
-                        <Col>
-                            <FormItem label="子公司">
+                        <Col span={8}>
+                            <FormItem label="所属公司">
                                 {getFieldDecorator('branchCompany', {
                                     initialValue: { id: '', name: '' }
-                                })(<BranchCompany
-                                    onChange={this.handleBranchCompanyChange}
-                                />)}
-                            </FormItem>
-                        </Col>
-                        {/* 是否启用 */}
-                        <Col>
-                            <FormItem className="sc-form-item" label="启用">
-                                {getFieldDecorator('initiateModeOptions', {
-                                    initialValue: initiateModeOptions.defaultValue
-                                })(
-                                    <Select
-                                        className="sc-form-item-select"
-                                        size="default"
-                                        disabled={this.state.supplierType === '-1'}
-                                    >
-                                        {
-                                            initiateModeOptions.data.map((item) =>
-                                                (<Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Option>)
-                                            )
-                                        }
-                                    </Select>
-                                    )}
-                            </FormItem>
-                            {/* 是否为主供应商 */}
-                            <FormItem className="sc-form-item" label="主供应商">
-                                {getFieldDecorator('mainSupplierOptions', {
-                                    initialValue: mainSupplierOptions.defaultValue
-                                })(
-                                    <Select
-                                        style={{ width: 90 }}
-                                        className="sc-form-item-select"
-                                        size="default"
-                                        disabled={this.state.supplierType === '-1'}
-                                    >
-                                        {
-                                            mainSupplierOptions.data.map((item) =>
-                                                (<Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Option>)
-                                            )
-                                        }
-                                    </Select>
-                                    )}
+                                })(<BranchCompany />)}
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row type="flex" justify="end">
+                    {/* 是否启用 */}
+                    <FormItem className="sc-form-item">
+                        <span className={`${prefixCls}-select`}>启用</span>
+                        {getFieldDecorator('initiateModeOptions', {
+                            initialValue: initiateModeOptions.defaultValue
+                        })(
+                            <Select
+                                style={{ width: 90 }}
+                                className="sc-form-item-select"
+                                size="default"
+                                disabled={this.state.supplierType === '-1'}
+                            >
+                                {
+                                    initiateModeOptions.data.map((item) =>
+                                        (<Option key={item.key} value={item.key}>
+                                            {item.value}
+                                        </Option>)
+                                    )
+                                }
+                            </Select>
+                            )}
+                    </FormItem>
+                    {/* 是否为主供应商 */}
+                    <FormItem className="sc-form-item">
+                        <span className={`${prefixCls}-select`}>主供应商</span>
+                        {getFieldDecorator('mainSupplierOptions', {
+                            initialValue: mainSupplierOptions.defaultValue
+                        })(
+                            <Select
+                                style={{ width: 90 }}
+                                className="sc-form-item-select"
+                                size="default"
+                                disabled={this.state.supplierType === '-1'}
+                            >
+                                {
+                                    mainSupplierOptions.data.map((item) =>
+                                        (<Option key={item.key} value={item.key}>
+                                            {item.value}
+                                        </Option>)
+                                    )
+                                }
+                            </Select>
+                            )}
+                    </FormItem>
+                    <div className="sc-form-button-group">
                         <FormItem>
                             <Button
                                 type="primary"
