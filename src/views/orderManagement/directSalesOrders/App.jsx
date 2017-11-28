@@ -29,6 +29,7 @@ class DirectSalesOrders extends PureComponent {
         branchCompanyId: '', // 分公司 id
         deliveryWarehouseCode: '', // 送货舱编码
         goodsList: [], // 当前显示商品列表
+        loading: false,
         isSubmitDisabled: false, // 提交按钮是否禁用
         deletedGoodsList: [], // 由于不在销售区域而被删除的商品编号列表
         goodsAddOn: null, // 手工添加的单个商品
@@ -58,10 +59,10 @@ class DirectSalesOrders extends PureComponent {
 
     getGoodsTableValues = () => {
         const {
-            branchCompanyId, deliveryWarehouseCode, goodsList, goodsAddOn, importList
+            branchCompanyId, deliveryWarehouseCode, goodsList, goodsAddOn, importList, loading
         } = this.state;
         return {
-            goodsList, goodsAddOn, branchCompanyId, deliveryWarehouseCode, importList
+            goodsList, goodsAddOn, branchCompanyId, deliveryWarehouseCode, importList, loading
         }
     }
 
@@ -106,7 +107,7 @@ class DirectSalesOrders extends PureComponent {
             this.setState({ goodsAddOn });
             return;
         }
-        this.updateGoodsInfoAction(goodsAddOn, goods => {
+        this.updateGoods(goodsAddOn, goods => {
             this.setState({ goodsAddOn: { ...goods } });
         });
     }
@@ -120,7 +121,7 @@ class DirectSalesOrders extends PureComponent {
     handleGoodsListChange = (goodsList, total) => {
         if (total.dataIndex > -1) {
             const goods = goodsList[total.dataIndex];
-            this.updateGoodsInfoAction(goods, goodsChecked => {
+            this.updateGoods(goods, goodsChecked => {
                 Object.assign(goods, { ...goodsChecked });
             });
         }
@@ -182,14 +183,13 @@ class DirectSalesOrders extends PureComponent {
                         title: '生成的订单编号',
                         content: res.data,
                     });
+                    this.pageReset();
                 } else {
                     message.error(res.message);
                     this.setState({ isSubmitDisabled: false });
                 }
             }).catch(() => {
                 this.setState({ isSubmitDisabled: false });
-            }).finally(() => {
-                this.pageReset();
             });
         });
     }
@@ -197,6 +197,7 @@ class DirectSalesOrders extends PureComponent {
     batchCheckStorageAction = goodsList => (
         new Promise((resove, reject) => {
             const { branchCompanyId, deliveryWarehouseCode } = this.state;
+            this.setState({ loading: true });
             // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/validateDirectOrder
             this.props.batchCheckStorage({
                 branchCompanyId,
@@ -206,6 +207,8 @@ class DirectSalesOrders extends PureComponent {
                 resove(res.data);
             }).catch(error => {
                 reject(error);
+            }).finally(() => {
+                this.setState({ loading: false });
             });
         })
     )
@@ -264,9 +267,10 @@ class DirectSalesOrders extends PureComponent {
         return true;
     }
 
-    updateGoodsInfoAction = (goods, callback) => {
+    updateGoods = (goods, callback) => {
         const { productCode, quantity } = goods;
         const { branchCompanyId, deliveryWarehouseCode } = this.state;
+        this.setState({ loading: true });
         // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/updateItem
         this.props.updateGoodsInfo({
             productCode, quantity, branchCompanyId, deliveryWarehouseCode
@@ -278,6 +282,8 @@ class DirectSalesOrders extends PureComponent {
                     quantity
                 }));
             }
+        }).finally(() => {
+            this.setState({ loading: false });
         });
     }
 
