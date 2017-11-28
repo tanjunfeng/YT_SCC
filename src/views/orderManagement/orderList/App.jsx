@@ -242,6 +242,10 @@ class OrderManagementList extends Component {
             }
         });
         this.props.form.resetFields();
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
     /**

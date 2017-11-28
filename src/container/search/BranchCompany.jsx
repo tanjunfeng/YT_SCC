@@ -20,6 +20,9 @@ class BranchCompany extends PureComponent {
         if (this.props.value.id !== '' && nextProps.value.id === '') {
             this.searchMind.reset();
         }
+        if (nextProps.value.reset && !this.props.value.reset) {
+            this.handleClear();
+        }
     }
 
     /**
