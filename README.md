@@ -40,15 +40,14 @@ transform-do-expressions
 1. master 受保护分支，除了管理者用于发版不应当被操作
 
 ### Developer 手册
-1. 假设你叫张三，需开发一个新模块，切换到 dev 分支，执行
 
+1. 假设你叫张三，需开发一个新模块，切换到 dev 分支，执行
 ```shell
     git checkout dev
     git checkout -b dev-zhangsan
 ```
 
 2. 开发并完成本地调试后，进入等待与后端联调阶段，在网页上提起合并到 dev 分支的 [merge request](http://gitlab.yatang.net/yt-fe/web/sc/merge_requests/new#)，source branch 选择 dev-zhangsan，target branch 选择 dev。由 Master 处理 merge request，并决定何时合并到 sit，假设代码已经经过审核，已合并到 sit 环境，则在本地执行如下命令
-
 ```shell
     # 你的代码审核通过之后，由管理员合并到了 sit 分支
     git checkout sit
@@ -64,7 +63,6 @@ transform-do-expressions
 ```
 
 3. 在联调阶段发现接口参数设置有误，则从 sit 新建自己的分支修复，修复完成后发起 merge request 合并到 sit 分支
-
 ```shell
     git checkout sit
     git pull origin sit
@@ -72,7 +70,6 @@ transform-do-expressions
 ```
 
 4. 测试在 sit 环境发现 bug，并在 jira 新建了一个“缺陷”，jira 号为 GA-1101，则运行如下命令开始修复，修复完成后提起 merge request 合并回 sit 分支
-
 ```shell
     git checkout sit
     git pull origin sit
@@ -80,7 +77,6 @@ transform-do-expressions
 ```
 
 5. 测试在 uat 环境发现 bug，并在 jira 新建了一个“缺陷”，jira 号为 GA-1201，则运行如下命令开始修复，修复完成后提起 merge request 合并回 uat 分支
-
 ```shell
     git checkout uat
     git pull origin uat
@@ -88,7 +84,6 @@ transform-do-expressions
 ```
 
 6. 产品发起了一个紧急需求任务，并在 jira 新建了一个“任务”，jira 号为 GA-1301，则从 uat 分支拉取子分支，开发完成之后提起 merge request 合并到 sit 分支，sit 分支测试通过之后再合并回 uat 分支，并进行 uat 环境测试，然后重复步骤5
-
 ```shell
     git checkout uat
     git pull origin uat
