@@ -295,8 +295,8 @@ class toDoReturnList extends PureComponent {
     }
 
 
-    queryReturnMngList = () => {
-        this.current = 1;
+    queryReturnMngList = (page = 1) => {
+        this.current = page;
         this.props.queryAuditPurReList({
             pageSize: PAGE_SIZE,
             pageNum: this.current,
@@ -497,6 +497,8 @@ class toDoReturnList extends PureComponent {
                         this.setState({
                             approvalVisible: false,
                         });
+
+                        this.queryReturnMngList(this.current);
                     }
                 });
         });

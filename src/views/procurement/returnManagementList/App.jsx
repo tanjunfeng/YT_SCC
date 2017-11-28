@@ -436,6 +436,7 @@ class ReturnManagementList extends PureComponent {
                 }).then((res) => {
                     if (res.code === 200) {
                         message.success(res.message)
+                        this.queryReturnMngList(this.current);
                     }
                 })
                 break;
