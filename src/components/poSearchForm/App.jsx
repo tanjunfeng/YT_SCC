@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import Utils from '../../util/util';
-import { poStatus, locType, poType } from '../../constant/procurement';
+import { poStatus, locType, poType, businessMode } from '../../constant/procurement';
 import SearchMind from '../searchMind';
 import {
     getWarehouseAddressMap,
@@ -61,6 +61,7 @@ class PoSearchForm extends PureComponent {
         const {
             purchaseNumber,
             locTypeCode,
+            businessModeCode,
             purchaseTypeCode,
             statusCode,
             createTime,
@@ -83,7 +84,8 @@ class PoSearchForm extends PureComponent {
             startCreateTime,
             endCreateTime,
             startAuditTime,
-            endAuditTime
+            endAuditTime,
+            businessMode: businessModeCode
         };
 
         return Utils.removeInvalid(searchParams);
@@ -252,8 +254,7 @@ class PoSearchForm extends PureComponent {
                                                     {item.value}
                                                 </Option>
                                             ))}
-                                        </Select>
-                                        )}
+                                        </Select>)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -325,8 +326,7 @@ class PoSearchForm extends PureComponent {
                                                     </Option>
                                                 ))
                                             }
-                                        </Select>
-                                        )}
+                                        </Select>)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -436,6 +436,21 @@ class PoSearchForm extends PureComponent {
                                     </div>
                                 </FormItem>
                             </Col>
+                            <Col span={8}>
+                                {/* 经营模式 */}
+                                <FormItem label="经营模式">
+                                    {getFieldDecorator('businessModeCode', {
+                                        initialValue: businessMode.defaultValue
+                                    })(
+                                        <Select style={{ width: '153px' }} size="default" >
+                                            {businessMode.data.map((item) => (
+                                                <Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>
+                                            ))}
+                                        </Select>)}
+                                </FormItem>
+                            </Col>
                         </Row>
                         <Row gutter={40}>
                             <Col span={8}>
@@ -493,19 +508,16 @@ class PoSearchForm extends PureComponent {
                                 }
                                 {auth.delete && <FormItem>
                                     <Button size="default" onClick={this.handleDelete}>
-                                        删除
-                                        </Button>
+                                        删除</Button>
                                 </FormItem>
                                 }
                                 <FormItem>
                                     <Button size="default" onClick={this.handleResetValue}>
-                                        重置
-                                        </Button>
+                                        重置</Button>
                                 </FormItem>
                                 <FormItem>
                                     <Button type="primary" onClick={this.handleSearch} size="default">
-                                        搜索
-                                        </Button>
+                                        搜索</Button>
                                 </FormItem>
                                 {auth.downPDF &&
                                     <FormItem>
