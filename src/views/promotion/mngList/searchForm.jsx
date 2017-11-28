@@ -65,7 +65,6 @@ class SearchForm extends PureComponent {
     handleReset() {
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onPromotionReset();  // 通知查询条件已清除
-        this.forceUpdate();
     }
 
     handleCreate() {
