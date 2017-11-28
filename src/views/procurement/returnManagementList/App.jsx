@@ -149,6 +149,10 @@ class ReturnManagementList extends PureComponent {
                 dataIndex: 'totalRefundCost',
                 key: 'totalRefundCost'
             }, {
+                title: '退货金额(含税)',
+                dataIndex: 'totalRefundMoney',
+                key: 'totalRefundMoney'
+            }, {
                 title: '实际退货数量',
                 dataIndex: 'totalRealRefundAmount',
                 key: 'totalRealRefundAmount'
@@ -156,10 +160,6 @@ class ReturnManagementList extends PureComponent {
                 title: '实际退货金额(含税)',
                 dataIndex: 'totalRealRefundMoney',
                 key: 'totalRealRefundMoney'
-            }, {
-                title: '退货金额(含税)',
-                dataIndex: 'totalRefundMoney',
-                key: 'totalRefundMoney'
             }, {
                 title: '创建日期',
                 dataIndex: 'createTime',
@@ -221,8 +221,8 @@ class ReturnManagementList extends PureComponent {
         });
     }
 
-    queryReturnMngList = () => {
-        this.current = 1;
+    queryReturnMngList = (current = 1) => {
+        this.current = current;
         this.props.fetchReturnMngList({
             pageSize: PAGE_SIZE,
             pageNum: this.current,
@@ -447,11 +447,11 @@ class ReturnManagementList extends PureComponent {
     /**
      * 查询退货单管理列表
      */
-    handleSearch() {
+    handleSearch(e, current) {
         // 编辑查询条件
         this.editSearchParams();
         // 查询收货单单列表
-        this.queryReturnMngList();
+        this.queryReturnMngList(current);
     }
 
     handleCreact = () => {
@@ -552,7 +552,7 @@ class ReturnManagementList extends PureComponent {
                 orderItem: 0
             })
         }
-        this.handleSearch();
+        this.handleSearch({}, pagination.current);
     }
 
     renderActions(text, record, index) {
@@ -656,6 +656,9 @@ class ReturnManagementList extends PureComponent {
                     selectedListData: selectedRows
                 })
             },
+            getCheckboxProps: record => ({
+                disabled: record.status !== '0', // Column configuration not to be checked
+            })
         };
         return (
             <div className="search-box">
@@ -859,7 +862,7 @@ class ReturnManagementList extends PureComponent {
                                 pageSize,
                                 pageNum,
                                 showQuickJumper: true,
-                                onChange: this.onPaginate
+                                // onChange: this.onPaginate
                             }}
                         />
                         {

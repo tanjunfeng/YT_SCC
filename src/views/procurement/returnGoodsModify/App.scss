@@ -6,6 +6,12 @@
         .ant-row {
             margin-bottom: 6px;
         }
+
+        &-red {
+            color: red;
+            margin-right: 4px;
+        }
+
         &-item-left {
             margin-right: 6px;
             vertical-align: middle;
@@ -40,6 +46,10 @@
         &-left, &-right {
             display: inline-block;
             line-height: 20px;
+        }
+
+        &-wrap {
+            width: 976px;
         }
     }
 

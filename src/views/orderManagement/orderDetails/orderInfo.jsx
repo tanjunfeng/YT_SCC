@@ -391,14 +391,16 @@ class OrderInformation extends PureComponent {
                                     取消
                                 </Button>
                             }
-                            <Button
-                                size="default"
-                                onClick={() => {
-                                    this.props.history.replace(`/orderList/orderBackstageBack/${this.orderId}`);
-                                }}
-                            >
-                                后台退货
-                            </Button>
+                            {orderDetailData.returnOrder === 1 ?
+                                <Button
+                                    size="default"
+                                    onClick={() => {
+                                        this.props.history.replace(`/orderList/orderBackstageBack/${this.orderId}`);
+                                    }}
+                                >
+                                    后台退货
+                                </Button>
+                                : null}
                         </Col>
                     </Row>
                 </div>
