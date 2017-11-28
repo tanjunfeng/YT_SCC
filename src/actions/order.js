@@ -12,6 +12,7 @@ import {
     resendOrder,
     cancelOrder,
     queryOrderDetailInfo,
+    backstageOrderBack as backstageOrderBackService,
     queryPaymentDetailInfo,
     queryShippingDetailInfo,
     orderDescription,
@@ -107,6 +108,25 @@ export const fetchOrderDetailInfo = (data) => dispatch => (
             .then(res => {
                 dispatch(
                     receiveOrderDetailInfo(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+// 后台订单退货
+const backstageOrderBackAction = (data) => ({
+    type: ActionType.BACKSTAGE_ORDER_BACK,
+    payload: data
+});
+
+export const backstageOrderBack = (data) => dispatch => (
+    new Promise((resolve, reject) => {
+        backstageOrderBackService(data)
+            .then(res => {
+                dispatch(
+                    backstageOrderBackAction(res.data)
                 );
                 resolve(res);
             })
