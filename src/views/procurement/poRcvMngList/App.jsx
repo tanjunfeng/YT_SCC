@@ -461,7 +461,7 @@ class PoRcvMngList extends PureComponent {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/${id}`}>收货单详情</Link>
+                    <a target="_blank" href={`${pathname}/${id}`}>收货单详情</a>
                 </Menu.Item>
                 {
                     // 仅待下发状态时能够点击重新推送采购收货单
