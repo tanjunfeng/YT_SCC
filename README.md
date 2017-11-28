@@ -40,6 +40,7 @@ transform-do-expressions
 1. master 受保护分支，除了管理者用于发版不应当被操作
 
 ### Developer 手册
+
 1. 假设你叫张三，需开发一个新模块，切换到 dev 分支，执行
 
 ```shell
