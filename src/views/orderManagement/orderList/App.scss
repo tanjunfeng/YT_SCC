@@ -1,20 +1,28 @@
 .order-management {
     .manage-form {
         .ant-input {
-            width: 240px;
+            width: 210px!important;
             padding: 0 10px;
         }
         .ant-select {
-            width: 240px;
+            width: 210px!important;
         }
         .ywc-smind {
             vertical-align: middle;
         }
         .ywc-smind {
-            width: 240px;
+            width: 210px!important;
         }
         .sc-form-item-label {
             line-height: 42px;
+            min-width: 75px;
+            margin-right: 5px;
+        }
+        .z-up {
+            z-index: 101;
+        }
+        .check-item {
+            padding-left: 200px;
         }
     }
 }

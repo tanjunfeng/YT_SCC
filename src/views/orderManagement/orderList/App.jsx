@@ -1,6 +1,6 @@
 /**
  * @file App.jsx
- * @author caoyanxuan
+ * @author caoyanxuan,liujinyu
  *
  * 订单管理列表
  */
@@ -9,11 +9,10 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import {
     Form, Input, Button, Row, Col,
     Select, Icon, Table, Menu, Dropdown,
-    message, Modal, DatePicker
+    message, Modal, DatePicker, Checkbox
 } from 'antd';
 import moment from 'moment';
 import Utils from '../../../util/util';
@@ -125,7 +124,10 @@ class OrderManagementList extends Component {
             shippingState,
             thirdPartOrderNo,
             branchCompany,
-            franchisee
+            franchisee,
+            transNum,
+            productName,
+            containParent
         } = this.props.form.getFieldsValue();
         const { submitStartTime, submitEndTime } = this.state.time;
         this.current = 1;
@@ -142,6 +144,9 @@ class OrderManagementList extends Component {
             thirdPartOrderNo,
             submitEndTime,
             pageSize: PAGE_SIZE,
+            transNum,
+            productName,
+            containParent: containParent ? 1 : 0
         }
         const searchData = this.searchData;
         searchData.page = 1;
@@ -392,8 +397,7 @@ class OrderManagementList extends Component {
                                                             </Option>)
                                                         )
                                                     }
-                                                </Select>
-                                                )}
+                                                </Select>)}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -418,8 +422,7 @@ class OrderManagementList extends Component {
                                                             </Option>)
                                                         )
                                                     }
-                                                </Select>
-                                                )}
+                                                </Select>)}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -445,15 +448,14 @@ class OrderManagementList extends Component {
                                                             </Option>)
                                                         )
                                                     }
-                                                </Select>
-                                                )}
+                                                </Select>)}
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 加盟商 */}
+                                <Col className="gutter-row z-up" span={8}>
+                                    {/* 雅堂小超 */}
                                     <div>
-                                        <span className="sc-form-item-label">加盟商</span>
+                                        <span className="sc-form-item-label">雅堂小超</span>
                                         <FormItem>
                                             {getFieldDecorator('franchisee', {
                                                 initialValue: { franchiseeId: '', franchiseeName: '' }
@@ -482,8 +484,7 @@ class OrderManagementList extends Component {
                                                 <Input
                                                     className="input"
                                                     placeholder="收货人电话"
-                                                />
-                                                )}
+                                                />)}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -508,8 +509,7 @@ class OrderManagementList extends Component {
                                                             </Option>)
                                                         )
                                                     }
-                                                </Select>
-                                                )}
+                                                </Select>)}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -542,6 +542,43 @@ class OrderManagementList extends Component {
                                                 />
                                             )}
                                         </div>
+                                    </FormItem>
+                                </Col>
+                                <Col className="gutter-row" span={8}>
+                                    {/* 电商订单编号 */}
+                                    <FormItem>
+                                        <div>
+                                            <span className="sc-form-item-label">参考号/凭证号</span>
+                                            {getFieldDecorator('transNum')(
+                                                <Input
+                                                    className="input"
+                                                    placeholder="请输入参考号/凭证号"
+                                                />
+                                            )}
+                                        </div>
+                                    </FormItem>
+                                </Col>
+                                <Col className="gutter-row" span={8}>
+                                    {/* 电商订单编号 */}
+                                    <FormItem>
+                                        <div>
+                                            <span className="sc-form-item-label">商品名称</span>
+                                            {getFieldDecorator('productName')(
+                                                <Input
+                                                    className="input"
+                                                    placeholder="请输入商品名称"
+                                                />
+                                            )}
+                                        </div>
+                                    </FormItem>
+                                </Col>
+                                <Col className="gutter-row check-item" offset={16} span={8}>
+                                    {/* 是否包含父订单 */}
+                                    <FormItem>
+                                        {getFieldDecorator('containParent', {
+                                            valuePropName: 'checked',
+                                        })(
+                                            <Checkbox>是否包含父订单</Checkbox>)}
                                     </FormItem>
                                 </Col>
                             </Row>
