@@ -108,20 +108,6 @@ class DistributionInformation extends PureComponent {
                         </div>
                     </div>
                 </div>
-                <div className="order-details-btns">
-                    <Row>
-                        <Col className="gutter-row" span={14} offset={10}>
-                            <Button
-                                size="default"
-                                onClick={() => {
-                                    this.props.history.replace('/orderList');
-                                }}
-                            >
-                                返回
-                            </Button>
-                        </Col>
-                    </Row>
-                </div>
             </div>
         );
     }
