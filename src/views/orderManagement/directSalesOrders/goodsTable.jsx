@@ -21,7 +21,7 @@ class GoodsTable extends PureComponent {
             this.appendToList(goodsAddOn);
         }
         // 当excel导入商品变化时，添加到商品列表
-        if (importList.length !== 0) {
+        if (importList.length > 0 && this.props.value.importList.length === 0) {
             const goodsList = Utils.merge(
                 this.props.value.goodsList,
                 importList,
@@ -190,6 +190,7 @@ class GoodsTable extends PureComponent {
             <Table
                 rowKey="productCode"
                 dataSource={this.props.value.goodsList}
+                loading={this.props.value.loading}
                 columns={columns}
                 scroll={{
                     x: 1400,

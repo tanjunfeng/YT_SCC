@@ -65,7 +65,20 @@ export const returnStatus = {
         value: '异常'
     }]
 }
-
+// 退货单流程状态
+export const auditStatusOption = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '请选择'
+    }, {
+        key: '0',
+        value: '进行中'
+    }, {
+        key: '1',
+        value: '已结束'
+    }]
+}
 // 退货单审批状态
 export const optionStatus = {
     defaultValue: '',
@@ -126,6 +139,13 @@ export const locTypeCodes = {
 }
 
 // 采购单类型值清单
+// , {
+//     key: '1',
+//     value: '赠品采购'
+// }, {
+//     key: '2',
+//     value: '促销采购'
+// }
 export const poType = {
     defaultValue: '',
     data: [{
@@ -134,12 +154,6 @@ export const poType = {
     }, {
         key: '0',
         value: '普通采购'
-    }, {
-        key: '1',
-        value: '赠品采购'
-    }, {
-        key: '2',
-        value: '促销采购'
     }]
 }
 

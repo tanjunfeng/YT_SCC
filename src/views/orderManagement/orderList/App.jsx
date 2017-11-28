@@ -43,9 +43,9 @@ const Option = Select.Option;
 const confirm = Modal.confirm;
 const orderML = 'order-management';
 const { RangePicker } = DatePicker;
-const yesterdayDate = moment().subtract(1, 'days').valueOf().toString();
+const yesterdayDate = moment().subtract(6, 'days').valueOf().toString();
 const todayDate = moment().valueOf().toString();
-const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
+const yesterdayrengeDate = [moment().subtract(6, 'days'), moment()];
 
 @connect(
     state => ({
@@ -295,10 +295,6 @@ class OrderManagementList extends Component {
                 break;
             case 'tableCancel':
                 this.props.modifyCauseModalVisible({ isShow: true, id })
-                .then(res => {
-                    this.getSearchData();
-                    message.success(res.message);
-                })
                 break;
             case 'tableRetransfer':
                 modifyResendOrder({
@@ -331,36 +327,36 @@ class OrderManagementList extends Component {
      * @param {object} record 单行数据
      */
     renderOperation(text, record) {
-        const { id, orderStateDesc, shippingStateDesc } = record;
+        const { id, orderState, shippingState } = record;
         const pathname = window.location.pathname;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/orderDetails/${id}`}>查看订单详情</Link>
+                    <a target="_blank" href={`${pathname}/orderDetails/${id}`}>查看订单详情</a>
                 </Menu.Item>
                 {
-                    (orderStateDesc === '待审核'
-                        || orderStateDesc === '待人工审核')
+                    (orderState === 'W'
+                        || orderState === 'M')
                     && <Menu.Item key="tableAudit">
                         <a target="_blank" rel="noopener noreferrer">审核</a>
                     </Menu.Item>
                 }
                 {
-                    shippingStateDesc !== '待收货'
-                    && shippingStateDesc !== '已签收'
-                    && orderStateDesc !== '已取消'
+                    shippingState !== 'DSH'
+                    && shippingState !== 'YQS'
+                    && orderState !== 'Q'
                     && <Menu.Item key="tableCancel">
                         <a target="_blank" rel="noopener noreferrer">取消</a>
                     </Menu.Item>
                 }
                 {
-                    orderStateDesc === '已取消'
+                    orderState === 'Q'
                     && <Menu.Item key="tableShowFailure">
                         <a target="_blank" rel="noopener noreferrer">查看取消原因</a>
                     </Menu.Item>
                 }
                 {
-                    (shippingStateDesc === '仓库拒收' || shippingStateDesc === '未传送')
+                    (shippingState === 'WJS' || shippingState === 'WCS')
                     && <Menu.Item key="tableRetransfer">
                         <a target="_blank" rel="noopener noreferrer">重新传送</a>
                     </Menu.Item>
@@ -384,7 +380,7 @@ class OrderManagementList extends Component {
                 <div className="manage-form">
                     <Form layout="inline">
                         <div className="gutter-example">
-                            <Row gutter={16}>
+                            <Row>
                                 <Col className="gutter-row" span={8}>
                                     {/* 订单编号 */}
                                     <FormItem>
@@ -452,8 +448,6 @@ class OrderManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                            </Row>
-                            <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
                                     {/* 支付状态 */}
                                     <FormItem>
@@ -530,8 +524,6 @@ class OrderManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                            </Row>
-                            <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
                                     {/* 收货人电话 */}
                                     <FormItem>
@@ -591,8 +583,6 @@ class OrderManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                            </Row>
-                            <Row gutter={16}>
                                 <Col className="gutter-row" span={8}>
                                     {/* 电商订单编号 */}
                                     <FormItem>
@@ -608,25 +598,7 @@ class OrderManagementList extends Component {
                                     </FormItem>
                                 </Col>
                             </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            disabled={this.state.choose.length === 0}
-                                            onClick={this.handleOrderBatchReview}
-                                        >批量审核</Button>
-                                    </FormItem>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            disabled={this.state.choose.length === 0}
-                                            onClick={this.handleOrderBatchCancel}
-                                        >批量取消</Button>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={40} type="flex" justify="end">
+                            <Row type="flex" justify="end">
                                 <Col className="tr">
                                     <FormItem>
                                         <Button
@@ -646,6 +618,24 @@ class OrderManagementList extends Component {
                                             size="default"
                                             onClick={this.handleOrderOutput}
                                         >导出</Button>
+                                    </FormItem>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col className="gutter-row" span={8}>
+                                    <FormItem>
+                                        <Button
+                                            size="default"
+                                            disabled={this.state.choose.length === 0}
+                                            onClick={this.handleOrderBatchReview}
+                                        >批量审核</Button>
+                                    </FormItem>
+                                    <FormItem>
+                                        <Button
+                                            size="default"
+                                            disabled={this.state.choose.length === 0}
+                                            onClick={this.handleOrderBatchCancel}
+                                        >批量取消</Button>
                                     </FormItem>
                                 </Col>
                             </Row>
