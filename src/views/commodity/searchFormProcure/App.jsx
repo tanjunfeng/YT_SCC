@@ -31,6 +31,7 @@ import {
 import {
     pubFetchValueList,
 } from '../../../actions/pub';
+import { BranchCompany } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -55,15 +56,13 @@ class SearchForm extends Component {
     constructor(props) {
         super(props);
 
-        this.handleDrop = ::this.handleDrop;
-        this.handleChangeSort = ::this.handleChangeSort;
-        this.handleChangeStatus = ::this.handleChangeStatus;
-        this.handleResetValue = ::this.handleResetValue;
-        this.handleGetValue = ::this.handleGetValue;
-        this.handleSupplyClear = ::this.handleSupplyClear;
-        this.handleCompChoose = ::this.handleCompChoose;
-        this.handleAdressClear = ::this.handleAdressClear;
-        this.handleCompClear = ::this.handleCompClear;
+        this.handleDrop = :: this.handleDrop;
+        this.handleChangeSort = :: this.handleChangeSort;
+        this.handleChangeStatus = :: this.handleChangeStatus;
+        this.handleResetValue = :: this.handleResetValue;
+        this.handleGetValue = :: this.handleGetValue;
+        this.handleSupplyClear = :: this.handleSupplyClear;
+        this.handleAdressClear = :: this.handleAdressClear;
         // Test
         // this.handleSave = ::this.handleSave;
         this.state = {
@@ -72,14 +71,9 @@ class SearchForm extends Component {
             disabled: false,
             supplyChoose: {},
             supplyChoose1: {},
-            supplyChoose2: {},
             visible: true,
             sort: 1,
         }
-    }
-
-    componentDidMount() {
-        // this.props.fetchAction();
     }
 
     /**
@@ -101,15 +95,6 @@ class SearchForm extends Component {
     }
 
     /**
-     * 子公司-值清单
-     */
-    handleCompChoose = ({ record }) => {
-        this.setState({
-            supplyChoose2: record,
-        });
-    }
-
-    /**
      * 搜索
      */
     handleGetValue() {
@@ -124,7 +109,7 @@ class SearchForm extends Component {
             this.props.onSearch(Utils.removeInvalid({
                 spId: this.state.supplyChoose.spId,
                 spAdrId: this.state.supplyChoose1.spAdrid,
-                branchCompanyId: this.state.supplyChoose2.id,
+                branchCompanyId: values.branchCompany.id,
                 supplierType,
                 status
             }))
@@ -222,14 +207,16 @@ class SearchForm extends Component {
     handleResetValue() {
         this.addressSearchMind.reset();
         this.supplySearchMind.reset();
-        this.supplyCompSearchMind.reset();
         this.setState({
             supplyChoose: {},
-            supplyChoose1: {},
-            supplyChoose2: {},
+            supplyChoose1: {}
         })
         this.props.form.resetFields();
-        this.props.onReset()
+        this.props.onReset();
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
     /**
@@ -250,21 +237,12 @@ class SearchForm extends Component {
         })
     }
 
-    /**
-     * 子公司清空数据
-     */
-    handleCompClear() {
-        this.setState({
-            supplyChoose2: {},
-        })
-    }
-
     render() {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls } = this.props;
         return (
             <div className={`${prefixCls}-content manage-form`}>
-                <div style={{fontSize: 16, fontWeight: 900}}>
+                <div style={{ fontSize: 16, fontWeight: 900 }}>
                     <Icon type="desktop" className="css-appstore" />&nbsp;价格明细
                 </div>
                 <Form layout="inline" className={`${prefixCls}-content`}>
@@ -342,37 +320,10 @@ class SearchForm extends Component {
                         </Col>
                         {/* 子公司 */}
                         <Col span={8}>
-                            <FormItem className="">
-                                <div>
-                                    <span className="value-list-input">
-                                        <SearchMind
-                                            compKey="search-mind-supply3"
-                                            ref={ref => { this.supplyCompSearchMind = ref }}
-                                            fetch={(params) => this.props.pubFetchValueList({
-                                                branchCompanyName: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
-                                            }, 'findCompanyBaseInfo')}
-                                            addonBefore="子公司"
-                                            onChoosed={this.handleCompChoose}
-                                            onClear={this.handleCompClear}
-                                            renderChoosedInputRaw={(data) => (
-                                                <div>{data.id} - {data.name}</div>
-                                            )}
-                                            pageSize={6}
-                                            columns={[
-                                                {
-                                                    title: '子公司ID',
-                                                    dataIndex: 'id',
-                                                    width: 98
-                                                }, {
-                                                    title: '子公司名称',
-                                                    dataIndex: 'name'
-                                                }
-                                            ]}
-                                        />
-                                    </span>
-                                </div>
+                            <FormItem label="所属公司">
+                                {getFieldDecorator('branchCompany', {
+                                    initialValue: { id: '', name: '' }
+                                })(<BranchCompany />)}
                             </FormItem>
                         </Col>
                     </Row>
@@ -390,13 +341,13 @@ class SearchForm extends Component {
                             >
                                 {
                                     initiateModeOptions.data.map((item) =>
-                                    (<Option key={item.key} value={item.key}>
-                                        {item.value}
-                                    </Option>)
+                                        (<Option key={item.key} value={item.key}>
+                                            {item.value}
+                                        </Option>)
                                     )
                                 }
                             </Select>
-                        )}
+                            )}
                     </FormItem>
                     {/* 是否为主供应商 */}
                     <FormItem className="sc-form-item">
@@ -412,13 +363,13 @@ class SearchForm extends Component {
                             >
                                 {
                                     mainSupplierOptions.data.map((item) =>
-                                (<Option key={item.key} value={item.key}>
-                                    {item.value}
-                                </Option>)
-                            )
+                                        (<Option key={item.key} value={item.key}>
+                                            {item.value}
+                                        </Option>)
+                                    )
                                 }
                             </Select>
-                        )}
+                            )}
                     </FormItem>
                     <div className="sc-form-button-group">
                         <FormItem>
@@ -467,8 +418,8 @@ SearchForm.defaultProps = {
         name: 'Who?'
     },
     prefixCls: 'select-line',
-    onSearch: () => {},
-    onReset: () => {},
+    onSearch: () => { },
+    onReset: () => { },
 }
 
 export default Form.create()(withRouter(SearchForm));
