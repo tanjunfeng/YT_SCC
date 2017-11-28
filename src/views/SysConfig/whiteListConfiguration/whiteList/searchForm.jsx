@@ -146,7 +146,7 @@ class SearchForm extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { uploading } = this.state;
         const props = {
-            action: '/oles/electronicContract/templeteAdd.htm',
+            action: '/sc/sp/whiteListBatchImport',
             onRemove: () => {
                 this.setState({
                     fileList: []
