@@ -218,8 +218,8 @@ class OrderInformation extends PureComponent {
                                     <span>{orderDetailData.branchCompanyName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
-                                    <span className="details-info-lable">加盟商:</span>
-                                    <span>{orderDetailData.franchiseeId}</span>
+                                    <span className="details-info-lable">雅堂小超:</span>
+                                    <span>{orderDetailData.franchiseeStoreName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">出货仓:</span>
