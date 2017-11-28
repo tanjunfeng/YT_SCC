@@ -17,7 +17,7 @@ export default function (state = initState, action) {
     switch (action.type) {
         case ActionType.FETCH_PROCESS_DATA:
         case ActionType.CLEAR_PROCESS_DATA:
-        case ActionType.DELECT_PROCESS_DATA:
+        // case ActionType.DELECT_PROCESS_DATA:
             return state.set('processData', fromJS(action.payload));
         case ActionType.FETCH_CHART_DATA:
         case ActionType.CLEAR_CHART_DATA:
