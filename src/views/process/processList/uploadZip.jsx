@@ -41,7 +41,7 @@ class UploadZip extends PureComponent {
                         uploading: false
                     });
                     message.success('上传成功');
-                    // this.props.onChange(res.data);
+                    this.props.onUploadSuccess();
                 } else {
                     this.handleFailure();
                 }
@@ -74,7 +74,7 @@ class UploadZip extends PureComponent {
         }
         const {uploading} = this.state;
         return (
-            <div>
+            <div className="uploadZip">
                 <Upload {...props}>
                     <Button>
                         <Icon type="upload" /> Select File
@@ -95,6 +95,7 @@ class UploadZip extends PureComponent {
 }
 UploadZip.propTypes = {
     url: PropTypes.string,
-    flowName: PropTypes.string
+    flowName: PropTypes.string,
+    onUploadSuccess: PropTypes.func
 }
 export default UploadZip;

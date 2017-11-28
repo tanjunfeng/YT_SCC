@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Button, Input } from 'antd';
+import { Table, Form, Button, Input, Popconfirm } from 'antd';
 import FlowImage from '../../../components/flowImage';
 import UploadZip from './uploadZip';
 
@@ -98,9 +98,9 @@ class processData extends PureComponent {
      * @param {object} record 单行数据
      */
     delectOperation = (text, record) => (
-        <a
-            onClick={() => { this.delect(record.id); }}
-        >删除</a>
+        <Popconfirm title="确定删除商品？" onConfirm={() => this.delect(record.id)}>
+            <a href="#">删除</a>
+        </Popconfirm>
     )
     /**
      * 表单操作查看流程图
@@ -109,7 +109,9 @@ class processData extends PureComponent {
      */
     renderOperation = (text, record) => (
         <a
-            onClick={() => { this.queryFlowChart(record.id, record.diagramResourceName); }}
+            onClick={() => {
+                this.queryFlowChart(record.deploymentId, record.diagramResourceName);
+            }}
         >查看流程图</a>
     )
     render() {
@@ -153,8 +155,10 @@ class processData extends PureComponent {
                         onChange: this.onPaginate
                     }}
                 />
-                <Input size="small" placeholder="流程名称" onChange={this.handleChange} />
-                <UploadZip flowName={flowName} url={deployProcessUrl} />
+                <div className="uploadProcess">
+                    <Input placeholder="流程名称" onChange={this.handleChange} />
+                    <UploadZip flowName={flowName} url={deployProcessUrl} onUploadSuccess={this.query} />
+                </div>
                 <FlowImage data={this.props.flowChartData} >
                     <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
                 </FlowImage>

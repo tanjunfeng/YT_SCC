@@ -26,7 +26,7 @@ class FlowImage extends PureComponent {
                 {data ? (
                     <div id="canvasRoot" >
                         {this.props.children}
-                        <ImageDom imgUrl={this.props.data} imgStyle={this.props.imgStyle} />
+                        <ImageDom imgUrl={`data:img/jpg;base64,${this.props.data}`} imgStyle={this.props.imgStyle} />
                     </div>
                 ) : (
                     null
