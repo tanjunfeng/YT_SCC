@@ -309,51 +309,51 @@ class SearchForm extends Component {
                             </FormItem>
                         </Col>
                     </Row>
-                    {/* 是否启用 */}
-                    <FormItem className="sc-form-item">
-                        <span className={`${prefixCls}-select`}>启用</span>
-                        {getFieldDecorator('initiateModeOptions', {
-                            initialValue: initiateModeOptions.defaultValue
-                        })(
-                            <Select
-                                style={{ width: 90 }}
-                                className="sc-form-item-select"
-                                size="default"
-                                disabled={this.state.supplierType === '-1'}
-                            >
-                                {
-                                    initiateModeOptions.data.map((item) =>
-                                        (<Option key={item.key} value={item.key}>
-                                            {item.value}
-                                        </Option>)
-                                    )
-                                }
-                            </Select>
-                            )}
-                    </FormItem>
-                    {/* 是否为主供应商 */}
-                    <FormItem className="sc-form-item">
-                        <span className={`${prefixCls}-select`}>主供应商</span>
-                        {getFieldDecorator('mainSupplierOptions', {
-                            initialValue: mainSupplierOptions.defaultValue
-                        })(
-                            <Select
-                                style={{ width: 90 }}
-                                className="sc-form-item-select"
-                                size="default"
-                                disabled={this.state.supplierType === '-1'}
-                            >
-                                {
-                                    mainSupplierOptions.data.map((item) =>
-                                        (<Option key={item.key} value={item.key}>
-                                            {item.value}
-                                        </Option>)
-                                    )
-                                }
-                            </Select>
-                            )}
-                    </FormItem>
-                    <div className="sc-form-button-group">
+                    <Row>
+                        {/* 是否启用 */}
+                        <FormItem className="sc-form-item">
+                            <span className={`${prefixCls}-select`}>启用</span>
+                            {getFieldDecorator('initiateModeOptions', {
+                                initialValue: initiateModeOptions.defaultValue
+                            })(
+                                <Select
+                                    style={{ width: 90 }}
+                                    className="sc-form-item-select"
+                                    size="default"
+                                    disabled={this.state.supplierType === '-1'}
+                                >
+                                    {
+                                        initiateModeOptions.data.map((item) =>
+                                            (<Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Option>)
+                                        )
+                                    }
+                                </Select>
+                                )}
+                        </FormItem>
+                        {/* 是否为主供应商 */}
+                        <FormItem className="sc-form-item">
+                            <span className={`${prefixCls}-select`}>主供应商</span>
+                            {getFieldDecorator('mainSupplierOptions', {
+                                initialValue: mainSupplierOptions.defaultValue
+                            })(
+                                <Select
+                                    style={{ width: 90 }}
+                                    className="sc-form-item-select"
+                                    size="default"
+                                    disabled={this.state.supplierType === '-1'}
+                                >
+                                    {
+                                        mainSupplierOptions.data.map((item) =>
+                                            (<Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Option>)
+                                        )
+                                    }
+                                </Select>
+                                )}
+                        </FormItem>
                         <FormItem>
                             <Button
                                 type="primary"

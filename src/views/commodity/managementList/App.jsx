@@ -31,7 +31,6 @@ import ClassifiedSelect from '../../../components/threeStageClassification';
 import { pubFetchValueList, getAvailablProducts } from '../../../actions/pub';
 import { queryCommodityList, syncProductByManualAction } from '../../../actions';
 import { PAGE_SIZE } from '../../../constant';
-import { BranchCompany } from '../../../container/search';
 
 import Util from '../../../util/util';
 
