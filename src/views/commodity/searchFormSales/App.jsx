@@ -12,7 +12,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { message, Form, Select, Button, Icon } from 'antd';
 import Utils from '../../../util/util';
-import SearchMind from '../../../components/searchMind';
 import {
     fetchAction,
     receiveData,
@@ -26,6 +25,7 @@ import {
 import {
     initiateModeOptions,
 } from '../../../constant/searchParams';
+import { BranchCompany } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -47,11 +47,11 @@ class SearchForm extends Component {
     constructor(props) {
         super(props);
 
-        this.handleDrop = ::this.handleDrop;
-        this.handleChangeSort = ::this.handleChangeSort;
-        this.handleChangeStatus = ::this.handleChangeStatus;
-        this.handleResetValue = ::this.handleResetValue;
-        this.handleGetValue = ::this.handleGetValue;
+        this.handleDrop = :: this.handleDrop;
+        this.handleChangeSort = :: this.handleChangeSort;
+        this.handleChangeStatus = :: this.handleChangeStatus;
+        this.handleResetValue = :: this.handleResetValue;
+        this.handleGetValue = :: this.handleGetValue;
 
         this.state = {
             img: null,
@@ -61,7 +61,7 @@ class SearchForm extends Component {
         this.choose = null;
     }
 
-    componentWillMount() {}
+    componentWillMount() { }
 
     componentDidMount() {
         this.props.fetchAction();
@@ -72,7 +72,7 @@ class SearchForm extends Component {
      */
     handleGetValue() {
         this.props.onSearch(Utils.removeInvalid({
-            branchCompanyName: this.name,
+            branchCompanyName: this.props.form.getFieldValue('branchCompany').name,
             status: this.choose
         }))
     }
@@ -167,18 +167,13 @@ class SearchForm extends Component {
      */
     handleResetValue() {
         this.props.form.resetFields();
-        this.searchMind.reset();
         this.name = null;
         this.choose = null;
         this.props.onReset();
-    }
-
-    handleCanpanyChoose = ({ record }) => {
-        this.name = record.name;
-    }
-
-    handleClear = () => {
-        this.name = null;
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
     handleSelectChange = (item) => {
@@ -194,38 +189,15 @@ class SearchForm extends Component {
         const { prefixCls } = this.props;
         return (
             <div className={`${prefixCls}-content manage-form`}>
-                <div style={{fontSize: 16, fontWeight: 900}}>
+                <div style={{ fontSize: 16, fontWeight: 900 }}>
                     <Icon type="desktop" className="css-appstore" />&nbsp;商品信息
                 </div>
                 <Form layout="inline" className={`${prefixCls}`}>
-                    {/* 子公司 */}
-                    <SearchMind
-                        className={`${prefixCls}-zgs`}
-                        compKey="search-mind-key1"
-                        ref={ref => { this.searchMind = ref }}
-                        fetch={(param) => this.props.pubFetchValueList({
-                            branchCompanyName: param.value
-                        }, 'findCompanyBaseInfo')}
-                        addonBefore="子公司"
-                        placeholder="请输入子公司名"
-                        onClear={this.handleClear}
-                        onChoosed={this.handleCanpanyChoose}
-                        renderChoosedInputRaw={(data) => (
-                            <div>{data.id} - {data.name}</div>
-                        )}
-                        pageSize={100}
-                        columns={[
-                            {
-                                title: '公司编号',
-                                dataIndex: 'id',
-                                width: 98
-                            }, {
-                                title: '公司名',
-                                dataIndex: 'name',
-                                width: 140
-                            }
-                        ]}
-                    />
+                    <FormItem label="子公司">
+                        {getFieldDecorator('branchCompany', {
+                            initialValue: { id: '', name: '' }
+                        })(<BranchCompany />)}
+                    </FormItem>
                     {/* 是否启用 */}
                     <FormItem className={`${prefixCls}-qy`}>
                         <span className={`${prefixCls}-select`}>启用</span>
@@ -246,7 +218,7 @@ class SearchForm extends Component {
                                     )
                                 }
                             </Select>
-                        )}
+                            )}
                     </FormItem>
                     <FormItem>
                         <Button
@@ -294,9 +266,9 @@ SearchForm.defaultProps = {
         name: 'Who?'
     },
     prefixCls: 'select-line-sales',
-    onSearch: () => {},
-    onReset: () => {},
-    handleAdd: () => {},
+    onSearch: () => { },
+    onReset: () => { },
+    handleAdd: () => { },
 }
 
 export default Form.create()(SearchForm);
