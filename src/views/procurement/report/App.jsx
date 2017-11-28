@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../constant/index';
-import { poType } from '../../../constant/procurement';
+import { poType, businessMode } from '../../../constant/procurement';
 import { printColumns } from '../columns';
 
 @connect(state => ({
@@ -40,6 +40,12 @@ class Report extends PureComponent {
                 purchaseOrder = item.value;
             }
         });
+        let businessType = '';
+        businessMode.data.forEach((item) => {
+            if (+item.key === data.businessMode) {
+                businessType = item.value;
+            }
+        })
         return (
             <div className="print-container">
                 <div className="content">
@@ -69,13 +75,13 @@ class Report extends PureComponent {
                                 <div className="label">供应商：</div>
                                 <span className="field">{data.spAdrNo}-{data.spAdrName}</span>
                             </Col>
+                            <Col span={3}>
+                                <div className="label">经营模式：</div>
+                                <span className="field">{businessType}</span>
+                            </Col>
                             <Col span={4}>
                                 <div className="label">采购单类型：</div>
                                 <span className="field">{purchaseOrder}</span>
-                            </Col>
-                            <Col span={3}>
-                                <div className="label">创建人：</div>
-                                <span className="field">{data.createUserName}</span>
                             </Col>
                         </Row>
                         <Row type="flex" justify="start">
@@ -104,6 +110,10 @@ class Report extends PureComponent {
                             <Col span={11}>
                                 <div className="label">收货日期：</div>
                                 <span className="field">{moment(new Date(data.estimatedDeliveryDate)).format(DATE_FORMAT)}</span>
+                            </Col>
+                            <Col span={3}>
+                                <div className="label">创建人：</div>
+                                <span className="field">{data.createUserName}</span>
                             </Col>
                         </Row>
                     </div>
