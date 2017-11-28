@@ -427,7 +427,7 @@ class ReturnManagementList extends PureComponent {
                 this.props.cancelRefund({
                     id: record.id,
                     purchaseRefundNo: record.purchaseRefundNo,
-                    adrType: record.adrType === '仓库' ? 0 : 1,
+                    adrType: record.adrType,
                     refundAdrCode: record.refundAdrCode
                 }).then((res) => {
                     if (res.code === 200) {
