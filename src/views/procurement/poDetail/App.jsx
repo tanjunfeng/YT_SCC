@@ -253,6 +253,8 @@ class PoDetail extends PureComponent {
             nextPoLines: [],
             // 修改页，仓库是否被清空的标志
             ispoAddressClear: false,
+            // 经营模式
+            businessMode: null
         }
     }
 
@@ -304,7 +306,7 @@ class PoDetail extends PureComponent {
     componentWillReceiveProps(nextProps) {
         const {
             adrType, settlementPeriod, payType, payCondition, estimatedDeliveryDate,
-            purchaseOrderType, currencyCode, id, spId, spAdrId
+            purchaseOrderType, currencyCode, id, spId, spAdrId, businessMode
         } = nextProps.basicInfo;
         const { basicInfo = {}} = this.props;
         const newPo = fromJS(nextProps.po.poLines);
@@ -328,6 +330,7 @@ class PoDetail extends PureComponent {
                 purchaseOrderType: purchaseOrderType === 0 ? `${purchaseOrderType}` : '',
                 localType: adrType === 0 || adrType === 1 ? `${adrType}` : '',
                 currencyCode: currencyCode === 'CNY' ? `${currencyCode}` : 'CNY',
+                businessMode
             })
         }
     }
@@ -401,9 +404,11 @@ class PoDetail extends PureComponent {
             }
         }
         const businessModeType = () => {
-            switch (this.props.basicInfo.businessModeType) {
+            switch (this.props.basicInfo.businessMode) {
                 case 0:
                     return '经销';
+                case 1:
+                    return '代销';
                 default:
                     return '';
             }
@@ -1520,7 +1525,7 @@ class PoDetail extends PureComponent {
 
     /**
      * 添加采购商品
-     *  .检查商品列表中是否存在改商品
+     *  .检查商品列表中是否存在该商品
      *    a.已存在：显示已存在
      *    b   在：添加该商品(recordStatus:new 新添加)
      */
