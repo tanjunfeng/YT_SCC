@@ -15,6 +15,7 @@ import {
     Icon, Table, Menu, Dropdown, message, Modal
 } from 'antd';
 import CopyToClipboard from 'react-copy-to-clipboard';
+
 import SearchMind from '../../../components/searchMind';
 import { BranchCompany } from '../../../container/search';
 
@@ -26,10 +27,11 @@ import {
     commodityListOptions
 } from '../../../constant/searchParams';
 import LevelTree from '../../../common/levelTree';
-import ClassifiedSelect from '../../../components/threeStageClassification'
+import ClassifiedSelect from '../../../components/threeStageClassification';
 import { pubFetchValueList, getAvailablProducts } from '../../../actions/pub';
 import { queryCommodityList, syncProductByManualAction } from '../../../actions';
 import { PAGE_SIZE } from '../../../constant';
+
 import Util from '../../../util/util';
 
 const defaultImg = require('../../../images/default/100x100.png');
@@ -254,7 +256,7 @@ class ManagementList extends PureComponent {
 
     // 区域上架回调接口
     prodBatchPutaway = (status) => {
-        const { name, id } = this.props.form.getFieldsValue().branchCompany;
+        const { id, name } = this.props.form.getFieldValue('branchCompany');
         return this.props.pubFetchValueList({
             branchCompanyName: name,
             branchCompanyId: id,
@@ -265,7 +267,7 @@ class ManagementList extends PureComponent {
 
     // 区域下架回调接口
     prodBatchUpdate = (status) => {
-        const { name, id } = this.props.form.getFieldsValue().branchCompany;
+        const { id, name } = this.props.form.getFieldValue('branchCompany');
         return this.props.pubFetchValueList({
             branchCompanyName: name,
             branchCompanyId: id,
@@ -324,14 +326,20 @@ class ManagementList extends PureComponent {
 
     // 重置
     handleFormReset = () => {
-        this.brandSearchMind.handleClear();
-        this.supplySearchMind.handleClear();
+        this.brandSearchMind.reset();
+        this.supplySearchMind.reset();
         this.props.form.resetFields();
-        if (this.slect) this.slect.resetValue();
+        if (this.slect) {
+            this.slect.resetValue();
+        }
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
         this.setState({
             classify: {},
             chooseGoodsList: []
-        })
+        });
     }
 
     // 获取排序类型

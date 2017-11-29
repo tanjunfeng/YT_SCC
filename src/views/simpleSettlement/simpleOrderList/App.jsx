@@ -63,7 +63,6 @@ class SimpleOrderList extends Component {
         this.state = {
             choose: [],
             supplierNo: null,
-            branchCompanyNo: null,
             supplierAddNo: null,
             rengeTime: yesterdayrengeDate,
             auditModalVisible: false,
@@ -186,9 +185,13 @@ class SimpleOrderList extends Component {
                 receiveDateMax: todayDate,
             }
         });
-        this.joiningSupplierMind.handleClear();
-        this.joiningAdressMind.handleClear();
+        this.joiningSupplierMind.reset();
+        this.joiningAdressMind.reset();
         this.props.form.resetFields();
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
     /**

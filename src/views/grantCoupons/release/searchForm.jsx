@@ -60,6 +60,10 @@ class SearchForm extends PureComponent {
     handleReset = () => {
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onCouponReset();
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
     render() {

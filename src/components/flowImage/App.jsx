@@ -33,6 +33,10 @@ class FlowImage extends PureComponent {
         )
     }
 }
+ImageDom.propTypes = {
+    imgUrl: PropTypes.string,
+    imgStyle: PropTypes.objectOf(PropTypes.any)
+}
 FlowImage.propTypes = {
     data: PropTypes.string,
     children: PropTypes.node,
