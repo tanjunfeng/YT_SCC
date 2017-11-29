@@ -100,8 +100,6 @@ class ReturnManagementList extends PureComponent {
             locationData: {},
             isVisibleModal: false,
             opinionVisible: false,
-            orderType: 0,
-            orderItem: 0, // 排序字段:退货单号：0,创建日期：1,状态：2
             refundAdr: '',
             adrTypeCode: '',    // 地点编码
             receivedTypeCode: '',  // 收货单状态编码
@@ -110,6 +108,8 @@ class ReturnManagementList extends PureComponent {
         };
         // 初始页号
         this.current = 1;
+        this.orderItem = 0;
+        this.orderItem = 0;// 排序字段:退货单号：0,创建日期：1,状态：2
         this.columns = [
             {
                 title: '退货单号',
@@ -475,9 +475,7 @@ class ReturnManagementList extends PureComponent {
     }
 
     /**
-     *
      * 返回查询条件
-     *
      */
     editSearchParams() {
         const {
@@ -497,8 +495,8 @@ class ReturnManagementList extends PureComponent {
         if (auditDuringArr.length > 1) {
             createTimeEnd = Date.parse(auditDuringArr[1].format(dateFormat));
         }
-        const orderType = this.state.orderType;
-        const orderItem = this.state.orderItem;
+        const orderType = this.orderType;
+        const orderItem = this.orderItem;
         // 供应商编号
         const spId = this.state.spId;
 
@@ -528,32 +526,20 @@ class ReturnManagementList extends PureComponent {
 
     sortOnChange = (pagination, filters, sorter) => {
         if (sorter.order === 'descend') {
-            this.setState({
-                orderType: 1
-            })
+            this.orderType = 1
         } else {
-            this.setState({
-                orderType: 0
-            })
+            this.orderType = 0
         }
         if (sorter.columnKey === 'purchaseRefundNo') {
-            this.setState({
-                orderItem: 0
-            })
+            this.orderItem = 0
         } else if (sorter.columnKey === 'createTime') {
-            this.setState({
-                orderItem: 1
-            })
+            this.orderItem = 1
         } else if (sorter.columnKey === 'status') {
-            this.setState({
-                orderItem: 2
-            })
+            this.orderItem = 2
         } else {
-            this.setState({
-                orderItem: 0
-            })
+            this.orderItem = 0
         }
-        this.handleSearch({}, pagination.current);
+        this.handleSearch({}, pagination.current, this.orderType, this.orderItem);
     }
 
     renderActions(text, record, index) {
