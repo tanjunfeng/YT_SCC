@@ -42,9 +42,13 @@ const goodsColumns = [{
     title: '商品分类',
     dataIndex: 'commodifyClassify',
     key: 'commodifyClassify',
-    render: (text, record) => (
-        <span>{record.secondLevelCategoryName}&gt;{record.thirdLevelCategoryName}</span>
-    )
+    render: (text, record) => {
+        let after = '';
+        if (record.thirdLevelCategoryName !== null) {
+            after = ` > ${record.thirdLevelCategoryName}`;
+        }
+        return <span>{record.secondLevelCategoryName}{after}</span>;
+    }
 }, {
     title: '数量',
     dataIndex: 'quantity',
@@ -58,14 +62,79 @@ const goodsColumns = [{
     dataIndex: 'price',
     key: 'price',
     render: (text, record) => (
-        <span>￥{record.itemPrice.salePrice}</span>
+        <span>￥{Number(record.itemPrice.salePrice).toFixed(2)}</span>
     )
 }, {
     title: '金额',
     dataIndex: 'money',
     key: 'money',
     render: (text, record) => (
-        <span>￥{record.itemPrice.amount}</span>
+        <span>￥{Number(record.itemPrice.amount).toFixed(2)}</span>
+    )
+}];
+
+// 后台退货商品列表
+const goodsReturnsColumns = [{
+    title: '商品图片',
+    dataIndex: 'productImg',
+    key: 'productImg',
+    render: (text) => (
+        <img
+            src={text}
+            alt="未上传"
+            style={{ width: 50, height: 50 }}
+        />
+    )
+}, {
+    title: '商品编码',
+    dataIndex: 'productCode',
+    key: 'productCode',
+}, {
+    title: '商品条码',
+    dataIndex: 'internationalCodes',
+    key: 'internationalCodes',
+    render: (item) => {
+        if (item instanceof Array && item.length) {
+            return item[0].internationalCode;
+        }
+        return null;
+    }
+}, {
+    title: '商品名称',
+    dataIndex: 'productName',
+    key: 'productName',
+}, {
+    title: '商品分类',
+    dataIndex: 'commodifyClassify',
+    key: 'commodifyClassify',
+    render: (text, record) => {
+        let after = '';
+        if (record.thirdLevelCategoryName !== null) {
+            after = ` > ${record.thirdLevelCategoryName}`;
+        }
+        return <span>{record.secondLevelCategoryName}{after}</span>;
+    }
+}, {
+    title: '订单数量',
+    dataIndex: 'quantity',
+    key: 'quantity',
+}, {
+    title: '退货数量',
+    dataIndex: 'returnQuantity',
+    key: 'returnQuantity',
+}, {
+    title: '单价',
+    dataIndex: 'price',
+    key: 'price',
+    render: (text, record) => (
+        <span>￥{Number(record.itemPrice.salePrice).toFixed(2)}</span>
+    )
+}, {
+    title: '金额',
+    dataIndex: 'money',
+    key: 'money',
+    render: (text, record) => (
+        <span>￥{Number(record.itemPrice.amount).toFixed(2)}</span>
     )
 }];
 
@@ -116,6 +185,10 @@ const orderListColumns = [{
     dataIndex: 'branchCompanyName',
     key: 'branchCompanyName',
 }, {
+    title: '雅堂小超',
+    dataIndex: 'franchiseeStoreId',
+    key: 'franchiseeStoreId',
+}, {
     title: '加盟商编号',
     dataIndex: 'franchiseeId',
     key: 'franchiseeId',
@@ -134,7 +207,7 @@ const returnGoodsListColumns = [{
     render: (text, record, index) => index + 1
 },
 {
-    title: '换货单号',
+    title: '退货单号',
     dataIndex: 'id',
     key: 'id'
 },
@@ -182,8 +255,8 @@ const returnGoodsListColumns = [{
 },
 {
     title: '商品状态',
-    dataIndex: 'shippingStateDetail',
-    key: 'shippingStateDetail'
+    dataIndex: 'productStateDetail',
+    key: 'productStateDetail'
 },
 {
     title: '操作',
@@ -243,8 +316,8 @@ const exchangeGoodsListColumns = [{
 },
 {
     title: '换货单状态',
-    dataIndex: 'paymentStateDetail',
-    key: 'paymentStateDetail'
+    dataIndex: 'stateDetail',
+    key: 'stateDetail'
 },
 {
     title: '商品状态',
@@ -258,8 +331,8 @@ const exchangeGoodsListColumns = [{
 }
 ]
 
-// 退货单详情列表
-const returnGoodsDetailColumns = [{
+// 换货单详情列表
+const exchangeGoodsDetailColumns = [{
     title: '序号',
     dataIndex: 'idx',
     key: 'idx',
@@ -280,8 +353,11 @@ const returnGoodsDetailColumns = [{
 },
 {
     title: '商品条码',
-    dataIndex: 'productId',
-    key: 'productId',
+    dataIndex: 'internationalCodes[0].internationalCode',
+    key: 'internationalCodes[0].internationalCode',
+    render: (text, record) => (
+        record.internationalCodes[0].internationalCode
+    )
 },
 {
     title: '商品名称',
@@ -293,7 +369,7 @@ const returnGoodsDetailColumns = [{
     key: 'category',
     render: (text, record) => (
         <span>
-            {record.secondLevelCategoryName} &rt; {record.thirdLevelCategoryName}
+            {record.secondLevelCategoryName} - {record.thirdLevelCategoryName}
         </span>
     )
 },
@@ -304,13 +380,13 @@ const returnGoodsDetailColumns = [{
 },
 {
     title: '单价',
-    dataIndex: 'itemPrice.listPrice',
-    key: 'itemPrice.listPrice'
+    dataIndex: 'salePrice',
+    key: 'salePrice'
 },
 {
     title: '换货金额',
-    dataIndex: 'itemPrice.amount',
-    key: 'itemPrice.amount'
+    dataIndex: 'rawTotalPrice',
+    key: 'rawTotalPrice'
 },
 {
     title: '实收数量',
@@ -318,6 +394,68 @@ const returnGoodsDetailColumns = [{
     key: 'actualReturnQuantity'
 }
 ]
+
+const returnGoodsTableColums = [{
+    title: '序号',
+    dataIndex: 'idx',
+    key: 'idx',
+    render: (text, record, index) => index + 1
+},
+{
+    title: '商品图片',
+    dataIndex: 'productImg',
+    key: 'productImg',
+    render: (text) => (
+        <img src={text} alt={text} className="item-img" />
+    )
+},
+{
+    title: '商品编码',
+    dataIndex: 'productCode',
+    key: 'productCode'
+},
+{
+    title: '商品条码',
+    dataIndex: 'internationalCodes[0].internationalCode',
+    key: 'internationalCodes[0].internationalCode',
+    render: (text, record) => (
+        record.internationalCodes[0].internationalCode
+    )
+},
+{
+    title: '商品名称',
+    dataIndex: 'productName',
+    key: 'productName',
+}, {
+    title: '商品分类',
+    dataIndex: 'category',
+    key: 'category',
+    render: (text, record) => (
+        <span>
+            {record.secondLevelCategoryName} - {record.thirdLevelCategoryName}
+        </span>
+    )
+},
+{
+    title: '退货/拒收数量',
+    dataIndex: 'quantity',
+    key: 'quantity'
+},
+{
+    title: '单价',
+    dataIndex: 'salePrice',
+    key: 'salePrice'
+},
+{
+    title: '退货金额',
+    dataIndex: 'rawTotalPrice',
+    key: 'rawTotalPrice'
+},
+{
+    title: '实收数量',
+    dataIndex: 'actualReturnQuantity',
+    key: 'actualReturnQuantity'
+}]
 
 const directSalesgoodsColumns = [{
     title: '序号',
@@ -351,7 +489,7 @@ const directSalesgoodsColumns = [{
 }, {
     title: '数量',
     dataIndex: 'quantity',
-    width: 120
+    width: 130
 }, {
     title: '单价',
     dataIndex: 'salePrice',
@@ -367,7 +505,63 @@ const directSalesgoodsColumns = [{
     width: 50
 }];
 
+const distributionInformationColumns = [{
+    title: '商品编码',
+    dataIndex: 'skuId',
+    key: 'skuId',
+}, {
+    title: '商品名称',
+    dataIndex: 'productName',
+    key: 'productName',
+}, {
+    title: '订单数量',
+    dataIndex: 'quantity',
+    key: 'quantity',
+    render: (text, record) => (
+        <span>
+            <span>{text}</span>
+            <span>{record.unit}</span>
+        </span>
+    )
+}, {
+    title: '配送数量',
+    dataIndex: 'shippedQuantity',
+    key: 'shippedQuantity',
+    render: (text, record) => (
+        <span>
+            <span>{text}</span>
+            <span>{record.unit}</span>
+        </span>
+    )
+}, {
+    title: '单价',
+    dataIndex: 'salePrice',
+    key: 'salePrice',
+    render: (amount) => (
+        <span>￥{Number(amount).toFixed(2)}</span>
+    )
+}, {
+    title: '签收数量',
+    dataIndex: 'completedQuantity',
+    key: 'completedQuantity',
+    render: (text, record) => (
+        <span>
+            <span>{text}</span>
+            <span>{record.unit}</span>
+        </span>
+    )
+}, {
+    title: '签收差额',
+    dataIndex: 'completedMulAmount',
+    key: 'completedMulAmount',
+    render: (amount) => (
+        <span>{Number(amount).toFixed(2)}元</span>
+    )
+}];
+
 export {
     goodsColumns, orderListColumns, returnGoodsListColumns,
-    returnGoodsDetailColumns, directSalesgoodsColumns, exchangeGoodsListColumns
+    exchangeGoodsDetailColumns, directSalesgoodsColumns, exchangeGoodsListColumns,
+    distributionInformationColumns, returnGoodsTableColums,
+    goodsReturnsColumns
 };

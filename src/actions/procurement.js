@@ -36,6 +36,8 @@ import {
     deleteBatchRefundOrder as deleteBatchRefundOrderService,
     batchCheckStorage as batchCheckStorageService,
     queryProcessDefinitions as ueryProcessDefinitionsService,
+    approveRefund as approveRefundService,
+    cancelRefund as cancelRefundService,
     addRefundProducts
 } from '../service';
 import { ProcurementDt } from '../view-model';
@@ -591,6 +593,50 @@ export const queryProcessDefinitions = (params) => dispatch => (
 );
 
 /**
+ * 查询退货单审批流程
+ * @param {*} data
+ */
+const cancelRefundAction = (data) => ({
+    type: ActionType.CANCEL_REFUND,
+    payload: data
+});
+
+export const cancelRefund = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        cancelRefundService(params)
+            .then(res => {
+                dispatch(cancelRefundAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
+ * 退货单审批
+ * @param {*} data
+ */
+const approveRefundAction = (data) => ({
+    type: ActionType.APPROVE_REFUND,
+    payload: data
+});
+
+export const approveRefund = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        approveRefundService(params)
+            .then(res => {
+                dispatch(approveRefundAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+);
+
+/**
  * 查询采购退货流水号
  * @param {*} data
  */
@@ -617,6 +663,12 @@ export const clearRefundNo = () => dispatch => (dispatch({
     type: ActionType.CLEAR_REFUND_NO_INFO,
     payload: {}
 }));
+
+// 清除采购退货数据
+export const clearReturnInfo = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_RETURN_INFO,
+    payload: {}
+}))
 
 /**
  * 批量删除处于草稿状态的退货单
@@ -804,4 +856,14 @@ export const putRefundProducts = (params) => dispatch => (
             })
     })
 )
+
+/**
+ * 清除退货列表
+ */
+export const clearList = () => dispatch => {
+    dispatch({
+        type: ActionType.CLEAR_RETURN_LISTS,
+        payload: []
+    })
+}
 

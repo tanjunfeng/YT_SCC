@@ -36,6 +36,7 @@ import { locType, poType, poNo, poStatusCodes } from '../../../constant/procurem
 import SearchMind from '../../../components/searchMind';
 import { exportProcurementPdf } from '../../../service';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
+import { Supplier } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -104,14 +105,14 @@ class PoDetail extends PureComponent {
         this.getBaiscInfoElements = ::this.getBaiscInfoElements;
         this.applySupplierLocChoosed = ::this.applySupplierLocChoosed;
         this.applySupplierLocClear = ::this.applySupplierLocClear;
-        this.applySupplierChange = ::this.applySupplierChange;
         this.deletePoLines = ::this.deletePoLines;
         this.getFormBasicInfo = ::this.getFormBasicInfo;
         this.renderPeriod = ::this.renderPeriod;
         this.renderPayType = ::this.renderPayType;
         this.renderPayCondition = ::this.renderPayCondition;
         this.getAllValue = ::this.getAllValue;
-        this.applySupplierClear = ::this.applySupplierClear;
+        this.handleSupplierChange = ::this.handleSupplierChange;
+        this.clearSupplierAbout = ::this.clearSupplierAbout;
         this.createPoRequest = ::this.createPoRequest;
         // 采购单商品行信息
         this.columns = [
@@ -251,7 +252,7 @@ class PoDetail extends PureComponent {
             // nextProps里的polings
             nextPoLines: [],
             // 修改页，仓库是否被清空的标志
-            ispoAddressClear: false
+            ispoAddressClear: false,
         }
     }
 
@@ -437,10 +438,6 @@ class PoDetail extends PureComponent {
         ? basicInfo.createdAt
         : moment().format('YYYY-MM-DD')
 
-        // 供应商值清单回显数据
-        const supplierDefaultValue = basicInfo.spId
-        ? `${basicInfo.spNo}-${basicInfo.spName}`
-        : ''
 
         // 供应商地点值清单回显数据
         const spAdrDefaultValue = basicInfo.spAdrId
@@ -669,36 +666,13 @@ class PoDetail extends PureComponent {
                                             供应商:
                                         </span>
                                     </span>
-                                    <SearchMind
-                                        style={{ zIndex: 10000 }}
-                                        compKey="spId"
-                                        ref={ref => { this.supplier = ref }}
-                                        fetch={(params) =>
-                                            this.props.pubFetchValueList({
-                                                condition: params.value,
-                                                pageNum: params.pagination.current || 1,
-                                                pageSize: params.pagination.pageSize
-                                            }, 'querySuppliersList')
-                                        }
-                                        defaultValue={supplierDefaultValue}
-                                        onChoosed={this.applySupplierChange}
-                                        onClear={this.applySupplierClear}
-                                        renderChoosedInputRaw={(data) => (
-                                            <div>{data.spNo} - {data.companyName}</div>
-                                        )}
-                                        pageSize={6}
-                                        columns={[
-                                            {
-                                                title: '供应商编号',
-                                                dataIndex: 'spNo',
-                                                width: 98
-                                            }, {
-                                                title: '供应商名称',
-                                                dataIndex: 'companyName',
-                                                width: 140
-                                            }
-                                        ]}
-                                    />
+                                    {getFieldDecorator('supplier', {
+                                        initialValue: { spId: basicInfo.spId || '', spNo: basicInfo.spNo || '', companyName: basicInfo.spName || ''}
+                                    })(
+                                        <Supplier
+                                            onChange={this.handleSupplierChange}
+                                        />
+                                    )}
                                     {tooltipItem('修改供应商会清空仓库地点和采购商品')}
                                 </div>
                             </FormItem>
@@ -1112,15 +1086,8 @@ class PoDetail extends PureComponent {
         }
 
         // 供应商
-        let spId;
-        let spNo;
-        let spName;
-        const selectedSupplierRawData = this.supplier.state.selectedRawData;
-        if (selectedSupplierRawData) {
-            spId = selectedSupplierRawData.spId;
-            spNo = selectedSupplierRawData.spNo;
-            spName = selectedSupplierRawData.companyName;
-        }
+        const {spId, spNo} = this.props.form.getFieldValue('supplier');
+        const spName = this.props.form.getFieldValue('supplier').companyName;
 
         // 供应商地点
         let spAdrId;
@@ -1383,31 +1350,38 @@ class PoDetail extends PureComponent {
             totalAmounts: Math.round(totalAmounts * 100) / 100
         });
     }
-
-
     /**
-     * //TODO 请绑定值清单清空事件
-     * 供应商变更时，需做如下处理onchoose事件
-     *   1.清空供应商地点
-     *   2.删除采购商品行
-     *   3.清空账期、付款方式
-     * @param {*} value
+     * Supplier供应商组件改变的回调
+     * @param {Object} value
      */
-    applySupplierChange(value) {
-        // 供应商有值
-        if (value) {
-            // 地点类型有值时，供应商地点可编辑
-            this.setState({
-                spId: value.record.spId,
-                isSupplyAdrDisabled: false,
-            })
-        } else {
+    handleSupplierChange(value) {
+        const { spId } = value;
+        const { basicInfo } = this.props;
+        if (spId === '') {
             // 供应商有值无值时，供应商地点不可编辑
             this.setState({
                 isSupplyAdrDisabled: true,
                 isWarehouseDisabled: true,
+            }, () => {
+                this.clearSupplierAbout();
+            })
+        } else {
+            // 地点类型有值时，供应商地点可编辑
+            this.setState({
+                spId,
+                isSupplyAdrDisabled: false,
+            }, () => {
+                this.clearSupplierAbout();
+                this.props.updatePoBasicinfo(basicInfo);
             })
         }
+    }
+    /**
+     *   1.清空供应商地点
+     *   2.删除采购商品行
+     *   3.清空账期、付款方式
+     */
+    clearSupplierAbout() {
         // 1.清空供应商地点，仓库值清单
         this.supplierLoc.reset();
         if (this.state.localType === '0') {
@@ -1420,23 +1394,6 @@ class PoDetail extends PureComponent {
         basicInfo.settlementPeriod = null;
         basicInfo.payType = null;
         basicInfo.payCondition = null;
-        this.props.updatePoBasicinfo(basicInfo);
-    }
-
-    /**
-     * 供应商清空
-     */
-    applySupplierClear() {
-        this.setState({
-            isSupplyAdrDisabled: true,
-            isWarehouseDisabled: true,
-        }, () => {
-            // 清空供应商地点和仓库值清单
-            this.supplierLoc.reset();
-            if (this.state.localType === '0') {
-                this.poAddress.reset();
-            }
-        })
     }
 
     /**

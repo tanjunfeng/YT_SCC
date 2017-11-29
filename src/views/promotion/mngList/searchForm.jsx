@@ -19,16 +19,11 @@ const { RangePicker } = DatePicker;
 class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
-            branchCompanyId: ''
-        }
         this.getStatus = this.getStatus.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
         this.getFormData = this.getFormData.bind(this);
         this.handleCreate = this.handleCreate.bind(this);
-        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-        this.hanldeSubCompanyClear = this.hanldeSubCompanyClear.bind(this);
     }
 
     getStatus() {
@@ -48,7 +43,6 @@ class SearchForm extends PureComponent {
             statusCode,
             branchCompany
         } = this.props.form.getFieldsValue();
-        const branchCompanyId = branchCompany.id;
         let status = statusCode;
         if (statusCode === 'all') {
             status = '';
@@ -59,16 +53,8 @@ class SearchForm extends PureComponent {
             status,
             startDate: promotionDateRange.length > 1 ? promotionDateRange[0].valueOf() : '',
             endDate: promotionDateRange.length > 1 ? promotionDateRange[1].valueOf() : '',
-            branchCompanyId
+            branchCompanyId: branchCompany.id
         });
-    }
-
-    handleSubCompanyChoose(branchCompanyId) {
-        this.setState({ branchCompanyId });
-    }
-
-    hanldeSubCompanyClear() {
-        this.setState({ branchCompanyId: '' });
     }
 
     handleSearch() {
@@ -77,9 +63,12 @@ class SearchForm extends PureComponent {
     }
 
     handleReset() {
-        this.hanldeSubCompanyClear(); // 清除子公司值清单
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onPromotionReset();  // 通知查询条件已清除
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
     handleCreate() {
@@ -107,13 +96,23 @@ class SearchForm extends PureComponent {
                             <Col span={8}>
                                 <FormItem label="所属公司">
                                     {getFieldDecorator('branchCompany', {
-                                        initialValue: null
+                                        initialValue: { id: '', name: '' }
                                     })(<BranchCompany />)}
                                 </FormItem>
                             </Col>
-                        </Row>
-                        <Row gutter={40}>
                             <Col span={8}>
+                                {/* 状态 */}
+                                <FormItem label="状态">
+                                    {getFieldDecorator('statusCode', {
+                                        initialValue: 'all'
+                                    })(
+                                        <Select style={{ width: '153px' }} size="default">
+                                            {this.getStatus()}
+                                        </Select>
+                                        )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
                                 <FormItem>
                                     <div className="promotion-date-range">
                                         <span className="sc-form-item-label search-mind-label">活动时间</span>
@@ -129,18 +128,6 @@ class SearchForm extends PureComponent {
                                             />
                                             )}
                                     </div>
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 状态 */}
-                                <FormItem label="状态">
-                                    {getFieldDecorator('statusCode', {
-                                        initialValue: 'all'
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
-                                        </Select>
-                                        )}
                                 </FormItem>
                             </Col>
                         </Row>

@@ -54,10 +54,7 @@ class SteppedPrice extends PureComponent {
             this.initValue = [{
                 startNumber: nextProps.startNumber,
                 endNumber: nextProps.startNumber + 1,
-                price: nextProps.defaultValue.map((item) => {
-                    const { price = null } = item;
-                    return price;
-                })
+                price: nextProps.price
             }]
         }
     }
@@ -76,7 +73,6 @@ class SteppedPrice extends PureComponent {
             results: defaultValue,
             isContinuity: isContinuity(defaultValue)
         })
-        console.log(defaultValue)
     }
 
     handleValueChange(index, obj) {
@@ -158,7 +154,7 @@ class SteppedPrice extends PureComponent {
                                         data-item={index}
                                         index={index}
                                         allLength={len}
-                                        key={`${item.startNumber}${item.endNumber}${item.price}`}
+                                        key={`${item.startNumber}`}
                                         handleAddItem={this.handleAddItem}
                                         handleDeleteItem={this.handleDeleteItem}
                                         handleValueChange={this.handleValueChange}
@@ -184,6 +180,7 @@ SteppedPrice.propTypes = {
     isEdit: PropTypes.bool,
     maxLength: PropTypes.number,
     startNumber: PropTypes.number,
+    price: PropTypes.number
 }
 
 SteppedPrice.defaultProps = {

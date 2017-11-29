@@ -11,37 +11,61 @@ import classnames from 'classnames';
 import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Row, Col, Select, DatePicker, Input, Table, Button } from 'antd';
+import { Modal } from 'antd';
 import FormContent from './FormContent';
 import List from './List';
+import OpinionSteps from '../../../components/approvalFlowSteps';
+
+import {
+    getRefundNo,
+    clearRefundNo,
+    clearReturnInfo,
+    fetchReturnPoRcvDetail,
+    putRefundProducts,
+    queryProcessDefinitions,
+    clearList
+} from '../../../actions/procurement';
 
 import {
     pubFetchValueList,
 } from '../../../actions/pub';
 
-import {
-    fetchReturnPoRcvDetail
-} from '../../../actions';
-
-const Option = Select.Option;
-const { TextArea } = Input;
-
 @connect(state => ({
     // 详情数据
-    data: state.toJS().salesManagement.detail
+    data: state.toJS().salesManagement.detail,
+    // 退货单id
+    getRefundNumebr: state.toJS().procurement.getRefundNumebr,
+    // 采购退货详情
+    poReturn: state.toJS().procurement.poReturn,
+    returnLists: state.toJS().procurement.returnLists
 }), dispatch => bindActionCreators({
     // 请求详情数据
     fetchReturnPoRcvDetail,
     // 值列表
-    pubFetchValueList
+    pubFetchValueList,
+    // 获取退货单
+    getRefundNo,
+    // 清除退货单
+    clearRefundNo,
+    // 清除新增编辑采购退货单数据
+    clearReturnInfo,
+    // 清除lists
+    clearList,
+    putRefundProducts,
+    queryProcessDefinitions
 }, dispatch))
-
 class ReturnGoodsModify extends PureComponent {
     static propTypes = {
         prefixCls: PropTypes.string,
         match: PropTypes.objectOf(PropTypes.any),
         pubFetchValueList: PropTypes.func,
         fetchReturnPoRcvDetail: PropTypes.func,
+        getRefundNo: PropTypes.func,
+        getRefundNumebr: PropTypes.string,
+        poReturn: PropTypes.objectOf(PropTypes.any),
+        history: PropTypes.objectOf(PropTypes.any),
+        queryProcessDefinitions: PropTypes.func,
+        clearList: PropTypes.func,
     }
 
     static defaultProps = {
@@ -61,7 +85,8 @@ class ReturnGoodsModify extends PureComponent {
         }
 
         this.state = {
-            locDisabled: true
+            locDisabled: true,
+            opinionVisible: false
         }
     }
 
@@ -71,7 +96,13 @@ class ReturnGoodsModify extends PureComponent {
 
         if (this.type === 'edit') {
             this.props.fetchReturnPoRcvDetail({id: params.id})
+        } else {
+            this.props.getRefundNo()
         }
+    }
+
+    componentWillUnmount() {
+        this.props.clearReturnInfo();
     }
 
     onPageChange = () => {
@@ -82,8 +113,34 @@ class ReturnGoodsModify extends PureComponent {
         return this.formContent.getValue();
     }
 
+    handleClearList = () => {
+        this.listContent.clearList();
+    }
+
+    handleGetListValue = () => {
+        return this.listContent.getValue();
+    }
+
+    nodeModal = (id) => {
+        this.handleOpinionOk();
+        this.props.queryProcessDefinitions({ processType: 1, businessId: id });
+    }
+
+    handleOpinionOk = () => {
+        this.setState({
+            opinionVisible: true
+        })
+    }
+
+    handleOpinionCancel = () => {
+        this.setState({
+            opinionVisible: false
+        })
+    }
+
     render() {
-        const { prefixCls } = this.props;
+        const { prefixCls, getRefundNumebr, poReturn, history } = this.props;
+        const { pmPurchaseRefundItems = [], ...formData } = poReturn;
 
         const cls = classnames(
             `${prefixCls}-modify`,
@@ -91,7 +148,7 @@ class ReturnGoodsModify extends PureComponent {
                 [`${prefixCls}-modify-${this.type}`]: this.type
             }
         )
-       
+
         return (
             <div
                 className={cls}
@@ -99,14 +156,50 @@ class ReturnGoodsModify extends PureComponent {
                 <FormContent
                     ref={node => { this.formContent = node }}
                     pubFetchValueList={this.props.pubFetchValueList}
+                    type={this.type}
+                    refundNumber={getRefundNumebr}
+                    defaultValue={formData}
+                    onClearList={this.handleClearList}
+                    onGetListValue={this.handleGetListValue}
                 />
 
                 <List
+                    ref={node => { this.listContent = node }}
                     getFormData={this.getFormData}
+                    defaultValue={pmPurchaseRefundItems}
+                    type={this.type}
+                    status={formData.status}
+                    id={formData.id}
+                    history={history}
+                    pubFetchValueList={this.props.pubFetchValueList}
+                    putRefundProducts={this.props.putRefundProducts}
+                    returnLists={this.props.returnLists}
+                    clearReturnInfo={this.props.clearReturnInfo}
+                    onShowModal={this.nodeModal}
+                    clearList={this.props.clearList}
                 />
+                {
+                    this.state.opinionVisible
+                        ? <Modal
+                            title="审批进度"
+                            visible
+                            onOk={this.handleOpinionOk}
+                            onCancel={this.handleOpinionCancel}
+                            width={1000}
+                        >
+                            <OpinionSteps />
+                        </Modal>
+                        : null
+                }
             </div>
         )
     }
+}
+
+ReturnGoodsModify.propTypes = {
+    clearReturnInfo: PropTypes.func,
+    putRefundProducts: PropTypes.objectOf(PropTypes.any),
+    returnLists: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(ReturnGoodsModify)

@@ -12,14 +12,14 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import {
-  Table,
-  Form,
-  Icon,
-  Menu,
-  Dropdown,
-  Modal,
-  message,
-  Button
+    Table,
+    Form,
+    Icon,
+    Menu,
+    Dropdown,
+    Modal,
+    message,
+    Button
 } from 'antd';
 
 import { fetchPoMngList, changePoMngSelectedRows, deletePoByIds } from '../../../actions';
@@ -103,13 +103,14 @@ class PoMngList extends PureComponent {
      * @param {object}  res
      */
     applySearch = (res) => {
+        this.current = 1;
         this.searchParams = res;
         this.queryPoList(this.searchParams);
     }
-  /**
-   * 点击删除按钮回调
-   * @param {*} res
-   */
+    /**
+     * 点击删除按钮回调
+     * @param {*} res
+     */
     applyDelete = () => {
         if (this.deleteListData.length === 0) {
             message.error('请选择需要删除的采购单');
@@ -157,14 +158,14 @@ class PoMngList extends PureComponent {
         const menu = (
             <Menu>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/detail/${id}`}>详情</Link>
+                    <a target="_blank" href={`${pathname}/detail/${id}`}>详情</a>
                 </Menu.Item>
-                { status === deleteCode &&
+                {status === deleteCode &&
                     <Menu.Item key="modify">
                         <Link to={`${pathname}/edit/${id}`}>修改</Link>
                     </Menu.Item>
                 }
-                { status === deleteCode &&
+                {status === deleteCode &&
                     <Menu.Item key="delete">
                         <span onClick={() => this.singleRowsDelete(record)}>删除</span>
                     </Menu.Item>
@@ -251,7 +252,7 @@ class PoMngList extends PureComponent {
                             <Button type="primary" onClick={this.handleAuditingCancel}>返回</Button>
                         ]}
                     >
-                        { this.state.failedReason }
+                        {this.state.failedReason}
                     </Modal>
                 }
             </div>

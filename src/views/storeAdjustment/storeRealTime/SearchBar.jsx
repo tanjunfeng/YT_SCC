@@ -1,14 +1,14 @@
- /**
- * @file SearchBar.jsx
- * @author zhao zhi jian
- *
- */
-import React, {Component} from 'react';
+/**
+* @file SearchBar.jsx
+* @author zhao zhi jian
+*
+*/
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {withRouter} from 'react-router';
-import { Input, Button, Modal, Form, Row, Col} from 'antd';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router';
+import { Input, Button, Modal, Form, Row, Col } from 'antd';
 import {
     getListData
 } from '../../../actions/storeRealTime';
@@ -19,6 +19,7 @@ import Util from '../../../util/util';
 import { PAGE_SIZE } from '../../../constant';
 import { pubFetchValueList } from '../../../actions/pub';
 import SearchMind from '../../../components/searchMind';
+import { BranchCompany } from '../../../container/search';
 
 @connect(
     () => ({}),
@@ -41,13 +42,10 @@ class Search extends Component {
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
         this.handleExport = this.handleExport.bind(this);
-        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-        this.handleSubCompanyEmpty = this.handleSubCompanyEmpty.bind(this);
         this.handleWarehouseChoose = this.handleWarehouseChoose.bind(this);
         this.handleWarehouseEmpty = this.handleWarehouseEmpty.bind(this);
         this.handleOk = this.handleOk.bind(this)
         this.state = {
-            branchCompanyId: '',
             logicWareHouseCode: ''
         };
     }
@@ -60,7 +58,8 @@ class Search extends Component {
                 // 搜索参数
                 const searchData = Util.removeInvalid({
                     productCode: value.productCode,
-                    ...this.state
+                    branchCompanyId: value.branchCompany.id,
+                    logicWareHouseCode: this.state.logicWareHouseCode
                 });
                 // 请求参数
                 const params = {
@@ -79,10 +78,12 @@ class Search extends Component {
 
     // 重置
     handleReset() {
-        this.subCompanySearch.handleClear();
-        this.WarehouseSearch.handleClear();
+        this.WarehouseSearch.reset();
         this.props.form.resetFields();
         this.props.saveParams();
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
     // 导出文件
@@ -113,20 +114,6 @@ class Search extends Component {
                 }
             }
         });
-    }
-
-    // 选择子公司列表数据
-    handleSubCompanyChoose(data) {
-        this.setState({
-            branchCompanyId: data.record.id
-        })
-    }
-
-    // 清空子公司列表数据
-    handleSubCompanyEmpty() {
-        this.setState({
-            branchCompanyId: ''
-        })
     }
 
     // 选择所属仓库列表数据
@@ -169,37 +156,11 @@ class Search extends Component {
                                 </Col>
                                 <Col className="gutter-row" span={8}>
                                     {/* 子公司 */}
+                                    <span className="sc-form-item-label">子公司</span>
                                     <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">子公司</span>
-                                            <SearchMind
-                                                style={{ zIndex: 8 }}
-                                                compKey="spId"
-                                                ref={ref => { this.subCompanySearch = ref }}
-                                                fetch={(params) =>
-                                                    this.props.pubFetchValueList({
-                                                        branchCompanyId: !(isNaN(parseFloat(params.value))) ? params.value : '',
-                                                        branchCompanyName: isNaN(parseFloat(params.value)) ? params.value : ''
-                                                    }, 'findCompanyBaseInfo')
-                                                }
-                                                onChoosed={this.handleSubCompanyChoose}
-                                                onClear={this.handleSubCompanyEmpty}
-                                                renderChoosedInputRaw={(row) => (
-                                                    <div>{row.name}</div>
-                                                )}
-                                                pageSize={6}
-                                                columns={[
-                                                    {
-                                                        title: '子公司id',
-                                                        dataIndex: 'id',
-                                                        width: 98
-                                                    }, {
-                                                        title: '子公司名字',
-                                                        dataIndex: 'name'
-                                                    }
-                                                ]}
-                                            />
-                                        </div>
+                                        {getFieldDecorator('branchCompany', {
+                                            initialValue: { id: '', name: '' }
+                                        })(<BranchCompany />)}
                                     </FormItem>
                                 </Col>
                                 <Col className="gutter-row" span={8}>
@@ -237,8 +198,8 @@ class Search extends Component {
                                     </FormItem>
                                 </Col>
                             </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={24}>
+                            <Row gutter={16} type="flex" justify="end">
+                                <Col className="tr" span={8}>
                                     <FormItem>
                                         <Button
                                             size="default"

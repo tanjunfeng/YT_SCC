@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 import Util from '../../../util/util';
-import { SubCompanies } from '../../../container/search';
+import { BranchCompany } from '../../../container/search';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { participate } from '../constants';
 
@@ -17,22 +17,7 @@ const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
 class SearchForm extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            branchCompanyId: ''
-        };
-        this.getStatus = this.getStatus.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleReset = this.handleReset.bind(this);
-        this.getSearchCondition = this.getSearchCondition.bind(this);
-        this.getStatusFromCode = this.getStatusFromCode.bind(this);
-        this.handleExport = this.handleExport.bind(this);
-        this.handleSubCompanyClear = this.handleSubCompanyClear.bind(this);
-        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-    }
-
-    getStatus(stateName) {
+    getStatus = (stateName) => {
         const keys = Object.keys(participate[stateName]);
         return keys.map((key) => (
             <Option key={key} value={key}>
@@ -41,14 +26,14 @@ class SearchForm extends PureComponent {
         ));
     }
 
-    getStatusFromCode(statusCode) {
+    getStatusFromCode = (statusCode) => {
         if (statusCode === 'ALL') {
             return '';
         }
         return statusCode;
     }
 
-    getSearchCondition() {
+    getSearchCondition = () => {
         const {
             orderId,
             promotionName,
@@ -56,7 +41,8 @@ class SearchForm extends PureComponent {
             orderStateCode,
             paymentStateCode,
             shippingStateCode,
-            franchiseeStoreId
+            franchiseeStoreId,
+            branchCompany
         } = this.props.form.getFieldsValue();
         return Util.removeInvalid({
             orderId,
@@ -67,38 +53,25 @@ class SearchForm extends PureComponent {
             startTime: participateTimeRange.length > 1 ? participateTimeRange[0].valueOf() : '',
             endTime: participateTimeRange.length > 1 ? participateTimeRange[1].valueOf() : '',
             franchiseeStoreId,
-            branchCompanyId: this.state.branchCompanyId
+            branchCompanyId: branchCompany.id
         });
     }
 
-    /**
-     * 子公司-清除
-     */
-    handleSubCompanyClear() {
-        this.setState({
-            branchCompanyId: ''
-        });
-    }
-
-    /**
-     * 子公司-值清单
-     */
-    handleSubCompanyChoose(branchCompanyId) {
-        this.setState({ branchCompanyId });
-    }
-
-    handleSubmit(e) {
+    handleSubmit = (e) => {
         e.preventDefault();
         this.props.onParticipateSearch(this.getSearchCondition());
     }
 
-    handleReset() {
-        this.handleSubCompanyClear(); // 清除子公司值清单
+    handleReset = () => {
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onParticipateReset();  // 通知父页面已清空
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
-    handleExport() {
+    handleExport = () => {
         this.props.onParticipateExport(this.getSearchCondition());   // 通知父组件导出数据
     }
 
@@ -136,8 +109,6 @@ class SearchForm extends PureComponent {
                                         )}
                                 </FormItem>
                             </Col>
-                        </Row>
-                        <Row gutter={40}>
                             <Col span={8}>
                                 <FormItem label="物流状态">
                                     {getFieldDecorator('shippingStateCode', {
@@ -155,20 +126,13 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem>
-                                    <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">所属公司</span>
-                                        <SubCompanies
-                                            value={this.state.branchCompanyId}
-                                            onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                            onSubCompaniesClear={this.handleSubCompanyClear}
-                                        />
-                                    </div>
+                                <FormItem label="所属公司">
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: { id: '', name: '' }
+                                    })(<BranchCompany />)}
                                 </FormItem>
                             </Col>
-                        </Row>
-                        <Row gutter={40}>
-                            <Col span={8}>
+                            <Col span={12}>
                                 <FormItem label="使用时间">
                                     {getFieldDecorator('participateTimeRange', {
                                         initialValue: []

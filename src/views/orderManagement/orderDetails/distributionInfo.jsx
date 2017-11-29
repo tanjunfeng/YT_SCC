@@ -12,60 +12,7 @@ import { connect } from 'react-redux';
 import { Form, Icon, Row, Col, Button, Table } from 'antd';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../constant/index';
-
-const columns = [{
-    title: '商品编码',
-    dataIndex: 'skuId',
-    key: 'skuId',
-}, {
-    title: '商品名称',
-    dataIndex: 'productName',
-    key: 'productName',
-}, {
-    title: '订单数量',
-    dataIndex: 'quantity',
-    key: 'quantity',
-    render: (text, record) => (
-        <span>
-            <span>{text}</span>
-            <span>{record.unit}</span>
-        </span>
-    )
-}, {
-    title: '配送数量',
-    dataIndex: 'shippedQuantity',
-    key: 'shippedQuantity',
-    render: (text, record) => (
-        <span>
-            <span>{text}</span>
-            <span>{record.unit}</span>
-        </span>
-    )
-}, {
-    title: '单价',
-    dataIndex: 'salePrice',
-    key: 'salePrice',
-    render: (text) => (
-        <span>￥{text}</span>
-    )
-}, {
-    title: '签收数量',
-    dataIndex: 'completedQuantity',
-    key: 'completedQuantity',
-    render: (text, record) => (
-        <span>
-            <span>{text}</span>
-            <span>{record.unit}</span>
-        </span>
-    )
-}, {
-    title: '签收差额',
-    dataIndex: 'completedMulAmount',
-    key: 'completedMulAmount',
-    render: (text) => (
-        <span>{text}元</span>
-    )
-}];
+import { distributionInformationColumns as columns } from '../columns';
 
 @connect(
     state => ({
@@ -161,20 +108,6 @@ class DistributionInformation extends PureComponent {
                         </div>
                     </div>
                 </div>
-                <div className="order-details-btns">
-                    <Row>
-                        <Col className="gutter-row" span={14} offset={10}>
-                            <Button
-                                size="default"
-                                onClick={() => {
-                                    this.props.history.replace('/orderList');
-                                }}
-                            >
-                                返回
-                            </Button>
-                        </Col>
-                    </Row>
-                </div>
             </div>
         );
     }
@@ -183,9 +116,6 @@ class DistributionInformation extends PureComponent {
 DistributionInformation.propTypes = {
     shippingDetailData: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
-}
-
-DistributionInformation.defaultProps = {
 }
 
 export default withRouter(Form.create()(DistributionInformation));

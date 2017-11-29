@@ -324,10 +324,10 @@ export const commodityStatusOptions = {
         key: '3',
         value: '暂停使用'
     },
-    // {
-    //     key: '4',
-    //     value: '停止使用'
-    // }
+        // {
+        //     key: '4',
+        //     value: '停止使用'
+        // }
     ]
 
 }
@@ -471,7 +471,7 @@ export const orderTypeOptions = {
 
 // 订单管理-订单状态
 export const orderStatusOptions = {
-    defaultValue: 'W',
+    defaultValue: 'ALL',
     data: [{
         key: 'ALL',
         value: '全部'
@@ -578,9 +578,6 @@ export const logisticsStatusOptions = {
         key: 'YQS',
         value: '已签收'
     }, {
-        key: 'WSD',
-        value: '未送达'
-    }, {
         key: 'QX',
         value: '取消送货'
     }, {
@@ -589,6 +586,9 @@ export const logisticsStatusOptions = {
     }, {
         key: 'WJS',
         value: '仓库拒收'
+    }, {
+        key: 'UJS',
+        value: '已拒签'
     }]
 }
 

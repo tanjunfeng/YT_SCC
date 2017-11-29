@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
- * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-25 14:18:38
+ * @Last Modified by: liujinyu
+ * @Last Modified time: 2017-11-28 17:15:30
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -216,7 +216,7 @@ class WhiteListConfig extends PureComponent {
                         <Menu.Item key="Offline">
                             <a target="_blank" rel="noopener noreferrer">
                                 下线
-                        </a>
+                            </a>
                         </Menu.Item>
                         : null
                 }
@@ -226,7 +226,7 @@ class WhiteListConfig extends PureComponent {
                         <Menu.Item key="Online">
                             <a target="_blank" rel="noopener noreferrer">
                                 上线
-                        </a>
+                            </a>
                         </Menu.Item>
                         : null
                 }

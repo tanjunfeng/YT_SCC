@@ -3,7 +3,7 @@
  * @Description: 销售换货列表
  * @CreateDate: 2017-11-10 11:22:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-10 11:22:13
+ * @Last Modified time: 2017-11-16 11:57:04
  */
 
 import React, { PureComponent } from 'react';
@@ -20,35 +20,69 @@ import {
     Dropdown,
     Modal
 } from 'antd';
+
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { returnGoodsListColumns as columns } from '../columns';
-import { returnGoodsOperation } from '../../../actions';
+import { exchangeGoodsListColumns as columns } from '../columns';
+import { returnGoodsOperation, getExchangeGoodsListAction } from '../../../actions';
 
 @connect(state => ({
-    listData: state.toJS().salesManagement.data,
-    formData: state.toJS().pageParameters.returnGoodsParams
-}), dispatch => bindActionCreators({}, dispatch))
-
+    exchangeList: state.toJS().salesManagement.exchangeList,
+}), dispatch => bindActionCreators({
+    getExchangeGoodsListAction
+}, dispatch))
 
 class ExchangeGoodsList extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            page: props.formData.pageNum || 1,
-            refresh: false
+            refresh: false,
+            current: 1
         }
     }
 
-    /**
-     * 点击翻页
-     * @param {pageNumber}    pageNumber
-     */
-    onPageChange = (pageNumber) => {
-        this.setState({
-            page: pageNumber
-        })
+    componentDidMount() {
+        this.handlePromotionReset();
+        this.query();
     }
+
+    /**
+     * 分页页码改变的回调
+     */
+    onPaginate = (pageNum) => {
+        Object.assign(this.param, {
+            pageNum
+        });
+        this.setState({ current: pageNum });
+        this.query();
+    }
+
+    handlePromotionSearch = (param) => {
+        this.handlePromotionReset();
+        Object.assign(this.param, {
+            ...param
+        });
+        this.setState({ current: 1 });
+        this.query();
+    }
+
+    param = {};
+
+    query = () => {
+        this.props.getExchangeGoodsListAction(this.param).then((res) => {
+            const { pageNum, pageSize } = res.data;
+            Object.assign(this.param, { pageNum, pageSize });
+        });
+    }
+
+    handlePromotionReset = () => {
+        // 重置检索条件
+        this.param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        }
+    }
+
     // 退货单确定或取消
     operation = (id, type) => (
         returnGoodsOperation({
@@ -60,6 +94,8 @@ class ExchangeGoodsList extends PureComponent {
                     this.setState({
                         refresh: !this.state.refresh
                     })
+                    this.handlePromotionReset();
+                    this.query();
                 }
             })
     )
@@ -119,31 +155,26 @@ class ExchangeGoodsList extends PureComponent {
 
     render() {
         columns[columns.length - 1].render = this.renderActions;
-        const { listData } = this.props
+        const { total, pageNum, pageSize, data = [] } = this.props.exchangeList;
         return (
             <div className="return-goods-list">
                 <SearchForm
-                    page={this.state.page}
-                    refresh={this.state.refresh}
+                    onPromotionSearch={this.handlePromotionSearch}
+                    onPromotionReset={this.handlePromotionReset}
                 />
-                {
-                    listData ?
-                        <div>
-                            <Table
-                                dataSource={listData.data}
-                                columns={columns}
-                                rowKey="id"
-                                pagination={{
-                                    current: listData.pageNum,
-                                    total: listData.total,
-                                    pageNum: this.current,
-                                    pageSize: PAGE_SIZE,
-                                    showQuickJumper: true,
-                                    onChange: this.onPageChange
-                                }}
-                            />
-                        </div> : ''
-                }
+                <Table
+                    dataSource={data}
+                    columns={columns}
+                    rowKey="id"
+                    pagination={{
+                        current: this.state.current,
+                        total,
+                        pageNum,
+                        pageSize,
+                        showQuickJumper: true,
+                        onChange: this.onPaginate
+                    }}
+                />
             </div>
         )
     }
@@ -151,8 +182,8 @@ class ExchangeGoodsList extends PureComponent {
 
 ExchangeGoodsList.propTypes = {
     location: PropTypes.objectOf(PropTypes.any),
-    listData: PropTypes.objectOf(PropTypes.any),
-    formData: PropTypes.objectOf(PropTypes.any)
+    getExchangeGoodsListAction: PropTypes.func,
+    exchangeList: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(ExchangeGoodsList));

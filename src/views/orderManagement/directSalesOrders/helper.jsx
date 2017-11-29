@@ -42,3 +42,19 @@ export const getRow = (goodsInfo) => {
     });
     return record;
 }
+
+/**
+ * 整理顺序，将不合法的前置，合法的后置
+ */
+export const sortList = goodsList => {
+    const frontList = [];
+    const backList = [];
+    goodsList.forEach(goods => {
+        if (!goods.isMultiple || !goods.enough) {
+            frontList.push(goods);
+        } else {
+            backList.push(goods);
+        }
+    });
+    return frontList.concat(backList);
+}

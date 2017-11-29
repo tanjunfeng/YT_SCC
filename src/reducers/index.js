@@ -40,6 +40,7 @@ import stockAdjust from './stockAdjust';
 import stockListDetail from './stockListDetail';
 import storeAdjustList from './storeAdjustList';
 import promotion from './promotion';
+import process from './process';
 import storeRealTime from './storeRealTime';
 
 import queryCommodityList from './queryCommodityList';
@@ -49,9 +50,6 @@ import queryWhiteList from './queryWhiteList';
 
 /* ********************销售管理************************* */
 import salesManagement from './salesManagement'
-
-/* ********************页面返回定位参数管理************************* */
-import pageParameters from './pageParameters'
 
 export default Immutable.fromJS({
     pub,
@@ -77,13 +75,11 @@ export default Immutable.fromJS({
     stockListDetail,
     storeAdjustList,
     promotion,
+    process,
     storeRealTime,
-
     queryCommodityList,
 
     queryWhiteList,
     // 销售管理
     salesManagement,
-    // 页面返回定位参数管理
-    pageParameters
 });

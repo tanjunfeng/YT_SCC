@@ -4,8 +4,14 @@
         padding: 20px 10px;
         margin: 10px 0;
         .ant-row {
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
+
+        &-red {
+            color: red;
+            margin-right: 4px;
+        }
+
         &-item-left {
             margin-right: 6px;
             vertical-align: middle;
@@ -41,6 +47,10 @@
             display: inline-block;
             line-height: 20px;
         }
+
+        &-wrap {
+            width: 976px;
+        }
     }
 
     &-table {
@@ -56,6 +66,15 @@
                     margin-left: 10px;
                 }
             }
+        }
+    }
+
+    &-modify {
+        .detail-tooltip-icon {
+            font-size: 15px;
+            color: #108EE9;
+            line-height: inherit;
+            margin-left: 5px;
         }
     }
 }

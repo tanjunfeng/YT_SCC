@@ -1,6 +1,7 @@
 import BranchCompany from './BranchCompany';
-import SubCompanies from './SubCompanies';
+import Franchisee from './Franchisee';
 import DirectStores from './DirectStores';
 import AddingGoodsByStore from './AddingGoodsByStore';
+import Supplier from './Supplier';
 
-export { BranchCompany, SubCompanies, DirectStores, AddingGoodsByStore };
+export { BranchCompany, Franchisee, DirectStores, AddingGoodsByStore, Supplier };

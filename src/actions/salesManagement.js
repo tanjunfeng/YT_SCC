@@ -4,14 +4,16 @@
  *
  */
 import Promise from 'bluebird';
-import { getReturnGoodsList, getReturnGoodsDetail,
+import {
+    getReturnGoodsList, getReturnGoodsDetail,
+    getExchangeGoodsListAction as getExchangeGoodsListService,
     getReturnGoodsOperation, getReturnGoodsDetailSave as returnGoodsDetailSaveService,
     insertRefund as insertRefundService,
     returnDescriptionSave as returnDescriptionSaveService
 } from '../service';
 import ActionType from './ActionType';
 
-// 获取list数据
+// 获取退货list数据
 const receive = (data) => ({
     type: ActionType.RECEIVE_RETURN_GOODS_LIST,
     payload: data,
@@ -20,12 +22,36 @@ const receive = (data) => ({
 export const returnGoodsList = (params) => dispatch => (
     new Promise((resolve, reject) => {
         getReturnGoodsList(params)
-            .then(res => {
-                dispatch(receive(res.data));
-            })
-            .catch(err => {
-                reject(err);
-            })
+        .then(res => {
+            dispatch(
+                receive(res.data)
+            );
+            resolve(res);
+        })
+        .catch(err => {
+            reject(err);
+        });
+    })
+);
+
+// 获取换货list数据
+const getExchangeGoodsList = (data) => ({
+    type: ActionType.RECEIVE_EXCHANGE_GOODS_LIST,
+    payload: data,
+});
+
+export const getExchangeGoodsListAction = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        getExchangeGoodsListService(params)
+        .then(res => {
+            dispatch(
+                getExchangeGoodsList(res.data)
+            );
+            resolve(res);
+        })
+        .catch(err => {
+            reject(err);
+        });
     })
 )
 
@@ -41,6 +67,7 @@ export const returnGoodsDetail = (params) => dispatch => (
         getReturnGoodsDetail(params)
             .then(res => {
                 dispatch(detailReceive(res.data))
+                resolve(res);
             })
             .catch(err => {
                 reject(err);
@@ -129,14 +156,4 @@ export const returnDescriptionSave = (params) => dispatch => (
             .catch(err => reject(err))
     })
 )
-
-// 重置清空form数据
-export const returnGoodsListFormDataClear = () => ({
-    type: ActionType.RETURN_GOODS_LIST_FORM_DATA_CLEAR,
-    payload: {
-        data: {},
-        franchiseeIdName: '',
-        branchCompany: { id: '', name: '' }
-    }
-})
 

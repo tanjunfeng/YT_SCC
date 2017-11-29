@@ -11,7 +11,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Table, Input, Form, Button, Dropdown, Menu, Icon, Modal, message } from 'antd';
 import HotLableItem from './common/hotLableItem';
-import ChangeModalMessage from './common/changeModalMessage';
+import ChangeModalMessage from '../carousel/common/changeModalMessage';
 import { PAGE_SIZE } from '../../../constant';
 import { fetchAllHot, addSaveInput, fetchInputKeyword, modifyModalVisible, removeTableHot } from '../../../actions/wap';
 
@@ -183,7 +183,7 @@ class SearchRecommendConfig extends Component {
                                 ],
                                 initialValue: content
                             })(
-                                <Input placeholder="请输入推荐关键字" maxLength={11} name="content" />
+                                <Input placeholder="请输入推荐关键字" name="content" />
                             )}
                         </FormItem>
                         <Button
