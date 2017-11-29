@@ -26,6 +26,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
+import { queryPoRcvMngList } from '../../../service';
 import {
     locType,
     receivedStatus,
@@ -232,11 +233,9 @@ class PoRcvMngList extends PureComponent {
             }
         ]
     }
-
     componentDidMount() {
         this.queryRcvMngPoList();
     }
-
     /**
      * 根据地点类型值控制地点值清单是否可编辑
      * 地点类型有值时：地点值清单可编辑
@@ -407,7 +406,43 @@ class PoRcvMngList extends PureComponent {
         // 查询收货单单列表
         this.queryRcvMngPoList();
     }
-
+    /**
+    * 获取form的值，赋给this.searchDate
+    */
+    getValue() {
+        const {
+            purchaseOrderNo,
+            purchaseReceiptNo,
+            receivedDuring,
+            purchaseOrderType,
+            spId,
+            adrType,
+            status,
+            businessMode
+        } = this.props.form.getFieldsValue();
+        const receivedTimeStart = null;
+        const receivedTimeEnd = null;
+        const searchData = {
+            purchaseOrderNo,
+            purchaseReceiptNo,
+            receivedTimeStart: receivedDuring[0]._d,
+            receivedTimeEnd: receivedDuring[1]._d,
+            purchaseOrderType,
+            spNo: spId.spNo,
+            adrType,
+            status,
+            businessMode
+        };
+        // this.searchData = Utils.removeInvalid(searchData);
+    }
+    /**
+    * 导出Excel
+    */
+    handleDownload = () => {
+        //this.getValue();
+        const searchData = this.editSearchParams();
+        Utils.exportExcel(queryPoRcvMngList, searchData);
+    }
     /**
      *
      * 返回查询条件
@@ -536,6 +571,7 @@ class PoRcvMngList extends PureComponent {
                                             <RangePicker
                                                 className="date-range-picker"
                                                 style={{ width: 250 }}
+                                                onChange={this.onEnterTimeChange}
                                                 format={dateFormat}
                                                 showTime={{
                                                     hideDisabledOptions: true,
@@ -727,6 +763,11 @@ class PoRcvMngList extends PureComponent {
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
                             <Col className="tr">
+                                <FormItem>
+                                    <Button type="primary" onClick={this.handleDownload} size="default">
+                                        导出EXCEL
+                                    </Button>
+                                </FormItem>
                                 <FormItem>
                                     <Button size="default" onClick={this.handleResetValue}>
                                         重置
