@@ -308,7 +308,7 @@ class PoSearchForm extends PureComponent {
                                                 ))
                                             }
                                         </Select>
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
                             <Col span={8}>

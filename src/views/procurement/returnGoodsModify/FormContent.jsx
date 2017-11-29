@@ -63,6 +63,7 @@ class FormContent extends PureComponent {
 
     componentWillReceiveProps(nextProps) {
         const { defaultValue, refundNumber, type } = nextProps;
+
         if (!is(fromJS(this.props.defaultValue), fromJS(defaultValue))) {
             const { ...prop } = defaultValue;
 
@@ -102,9 +103,11 @@ class FormContent extends PureComponent {
 
     handleSupplyChoose = (data) => {
         const { record } = data;
-        this.submit.spId = record.spId;
-        this.submit.spNo = record.spNo;
-        this.submit.spName = record.companyName;
+        this.clearList(() => {
+            this.submit.spId = record.spId;
+            this.submit.spNo = record.spNo;
+            this.submit.spName = record.companyName;
+        })
 
         this.setState({
             pId: record.spId
@@ -112,22 +115,28 @@ class FormContent extends PureComponent {
     }
 
     handleSupplyClear = () => {
-        delete this.submit.spId;
-        delete this.submit.spNo;
-        delete this.submit.spName;
+        this.clearList(() => {
+            delete this.submit.spId;
+            delete this.submit.spNo;
+            delete this.submit.spName;
+        })
     }
 
     handleAdressChoose = (data) => {
         const { record } = data;
-        this.submit.spAdrId = record.spAdrid;
-        this.submit.spAdrNo = record.providerNo;
-        this.submit.spAdrName = record.providerName;
+        this.clearList(() => {
+            this.submit.spAdrId = record.spAdrid;
+            this.submit.spAdrNo = record.providerNo;
+            this.submit.spAdrName = record.providerName;
+        })
     }
 
     handleAdressClear = () => {
-        delete this.submit.spAdrId;
-        delete this.submit.spAdrNo;
-        delete this.submit.spAdrName;
+        this.clearList(() => {
+            delete this.submit.spAdrId;
+            delete this.submit.spAdrNo;
+            delete this.submit.spAdrName;
+        })
     }
 
     handleTypeChange = (type) => {
@@ -175,7 +184,8 @@ class FormContent extends PureComponent {
         return this.props.pubFetchValueList({
             param: param.value,
             pageNum: param.pagination.current || 1,
-            pageSize: param.pagination.pageSize
+            pageSize: param.pagination.pageSize,
+            supplierAddressId: this.submit.spAdrId || '',
         }, locationTypeParam);
     }
 
@@ -292,7 +302,7 @@ class FormContent extends PureComponent {
                         <span
                             className={`${prefixCls}-modify-item-left`}
                         >
-                            *供应商
+                            <span className={`${prefixCls}-modify-red`}>*</span>供应商
                         </span>
                         <span
                             className={`${prefixCls}-modify-item-right`}
@@ -326,12 +336,13 @@ class FormContent extends PureComponent {
                                 ]}
                             />
                         </span>
+                        {tooltipItem('修改供应商会清空退货商品列表')}
                     </Col>
                     <Col span={6}>
                         <span
                             className={`${prefixCls}-modify-item-left`}
                         >
-                            *供应商地点
+                            <span className={`${prefixCls}-modify-red`}>*</span>供应商地点
                         </span>
                         <span
                             className={`${prefixCls}-modify-item-right`}
@@ -365,6 +376,7 @@ class FormContent extends PureComponent {
                                 ]}
                             />
                         </span>
+                        {tooltipItem('修改供应商地点会清空退货商品列表')}
                     </Col>
                     <Col span={6}>
                         <span
@@ -386,7 +398,7 @@ class FormContent extends PureComponent {
                         <span
                             className={`${prefixCls}-modify-item-left`}
                         >
-                            *退货地点类型
+                            <span className={`${prefixCls}-modify-red`}>*</span>退货地点类型
                         </span>
                         <span
                             className={`${prefixCls}-modify-item-right`}
@@ -406,7 +418,7 @@ class FormContent extends PureComponent {
                         <span
                             className={`${prefixCls}-modify-item-left`}
                         >
-                            *退货地点
+                            <span className={`${prefixCls}-modify-red`}>*</span>退货地点
                         </span>
                         <span
                             className={`${prefixCls}-modify-item-right`}

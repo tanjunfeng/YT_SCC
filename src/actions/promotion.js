@@ -21,7 +21,7 @@ import {
     fetchPromotionParticipateData as fetchPromotionParticipateDataService,
     grantCoupon as grantCouponService,
     garbageCouponParticipate as invalidRecordService,
-    cancelCoupons as cancelCouponsService,
+    cancelCoupons as cancelCouponsService
 } from '../service';
 
 /**
@@ -420,4 +420,11 @@ export const clearCompaniesList = () => dispatch => (dispatch({
 export const clearFranchiseeList = () => dispatch => (dispatch({
     type: ActionType.CLEAR_FRANCHISEE_LIST,
     payload: []
+}));
+/**
+ * 清空流程管理列表
+ */
+export const clearProcessList = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_COUPONS_LIST,
+    payload: {}
 }));

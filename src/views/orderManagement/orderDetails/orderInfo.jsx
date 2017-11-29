@@ -149,14 +149,14 @@ class OrderInformation extends PureComponent {
     displayInventory = () => {
         const { manualSplitOrder = null } = this.state;
         if (manualSplitOrder.groups === undefined) {
-            message.error('请完整填写拆单数据!')
+            message.error('请完整填写拆单数据!');
             return;
         }
         this.props.interfaceInventory({
             ...manualSplitOrder
         }).then((res) => {
             if (res.code === 200) {
-                message.success(res.message)
+                message.success('界面拆单成功！')
             }
         }).catch((res) => {
             message.error(res.message)
@@ -218,8 +218,8 @@ class OrderInformation extends PureComponent {
                                     <span>{orderDetailData.branchCompanyName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
-                                    <span className="details-info-lable">加盟商:</span>
-                                    <span>{orderDetailData.franchiseeId}</span>
+                                    <span className="details-info-lable">雅堂小超:</span>
+                                    <span>{orderDetailData.franchiseeStoreName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">出货仓:</span>
@@ -333,7 +333,6 @@ class OrderInformation extends PureComponent {
                         {this.props.orderDetailData.canSplitManual
                             ? <Button
                                 size="default"
-                                type="primary"
                                 className="details-split-btns"
                                 onClick={this.displayInventory}
                             >
@@ -370,8 +369,8 @@ class OrderInformation extends PureComponent {
                                 保存
                             </Button>
                             {
-                                (orderDetailData.orderStateDesc === '待审核'
-                                    || orderDetailData.orderStateDesc === '待人工审核')
+                                (orderDetailData.orderState === 'W'
+                                    || orderDetailData.orderState === 'M')
                                 && <Button
                                     size="default"
                                     onClick={this.handleOrderAudit}
@@ -380,10 +379,10 @@ class OrderInformation extends PureComponent {
                                 </Button>
                             }
                             {
-                                orderDetailData.shippingStateDesc !== '待收货'
-                                && orderDetailData.shippingStateDesc !== '未送达'
-                                && orderDetailData.shippingStateDesc !== '已签收'
-                                && orderDetailData.orderStateDesc !== '已取消'
+                                orderDetailData.shippingState !== 'DSH'
+                                && orderDetailData.shippingState !== 'WSD'
+                                && orderDetailData.shippingState !== 'YQS'
+                                && orderDetailData.orderState !== 'Q'
                                 && <Button
                                     size="default"
                                     onClick={this.handleOrderCancel}
@@ -392,14 +391,16 @@ class OrderInformation extends PureComponent {
                                     取消
                                 </Button>
                             }
-                            <Button
-                                size="default"
-                                onClick={() => {
-                                    this.props.history.replace('/orderList');
-                                }}
-                            >
-                                返回
-                            </Button>
+                            {orderDetailData.returnOrder === 1 ?
+                                <Button
+                                    size="default"
+                                    onClick={() => {
+                                        this.props.history.replace(`/orderList/orderBackstageBack/${this.orderId}`);
+                                    }}
+                                >
+                                    后台退货
+                                </Button>
+                                : null}
                         </Col>
                     </Row>
                 </div>

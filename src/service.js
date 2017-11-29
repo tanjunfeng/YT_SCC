@@ -376,6 +376,12 @@ export const batchUpdateQuickNavigation = (params) => http.post('/homeAd/batchUp
 // 查询所有轮播
 export const queryCarouselAdList = (params) => http.get('/homeAd/queryCarouselAdList', params);
 
+// 查询区域id
+export const queryCarouselArea = (params) => http.get('/homeAd/queryCarouselArea', params);
+
+// 切换轮播运营方式
+export const switchOptWayOfCarousel = (params) => http.post('/homeAd/switchOptWayOfCarousel', params);
+
 // 轮播广告管理-修改
 export const updateCarouselAd = (params) => http.post('/homeAd/updateCarouselAd', params);
 
@@ -395,7 +401,7 @@ export const queryCarouselAdBySorting = (params) => http.get('/homeAd/queryCarou
 export const queryCarouselAdListById = (params) => http.get('/homeAd/queryCarouselAdListById', params);
 
 // 查询轮播间隔时间
-export const queryCarouselInterval = (params) => http.get('/homeAd/queryFirstCarouselInterval', params);
+export const queryCarouselInterval = (params) => http.get('/homeAd/queryCarouselInterval', params);
 
 // 修改轮播间隔时间
 export const updateCarouselInterval = (params) => http.post('/homeAd/updateCarouselIntervalById', params);
@@ -410,7 +416,13 @@ export const queryQuickNavigation = (params) => http.get('sc/homeAd/queryQuickNa
 export const updateQuickNavigation = (params) => http.post('/homeAd/updateQuickNavigation', params);
 
 // 首页配置区域列表
-export const areaList = (params) => http.get('/homeAd/areaList', params);
+export const queryAreas = (params) => http.get('/homeAd/queryAreas', params);
+
+// 切换首页运营方式
+export const switchOptWayOfHome = (params) => http.post('/homeAd/switchOptWayOfHome', params);
+
+// 获取用户子公司
+export const queryBranchCompanyInfoWap = (params) => http.post('/homeAd/queryBranchCompanyInfo', params);
 
 // 设置首页广告区域停用或者启用
 export const setAreaEnable = (params) => http.post('/homeAd/setAreaEnable', params);
@@ -771,6 +783,9 @@ export const queryOrderDetailInfo = (params) => http.get('/sorder/orderDetail', 
 // 订单管理-查询支付信息
 export const queryPaymentDetailInfo = (params) => http.get('/sorder/paymentInfo', params);
 
+// 订单管理-查询支付信息
+export const backstageOrderBack = (params) => http.post('/webReturnRequest/insertReturn', params);
+
 // 订单管理-查询配送信息
 export const queryShippingDetailInfo = (params) => http.get('/sorder/shippingGroupInfo', params);
 
@@ -853,6 +868,13 @@ export const cancelCoupons = (params) => http.get('/coupon/cancelCoupons', param
  */
 // 查询品类
 export const queryCategoriesByParentId = (params) => http.get('/category/queryDisplayCategoriesWithIconByParentId', params);
+
+// 流程管理
+export const queryProcessList = (params) => http.get('/bpm/findDeployAndProcessDefList', params);
+// 流程管理
+export const delectProcessList = (params) => http.get('/bpm/delDeployment', params);
+// 流程管理下获取流程图数据的请求
+export const queryChartData = (params) => http.get('/bpm/viewImage', params);
 // 退货单列表
 export const getReturnGoodsList = (params) => http.get('/webReturnRequest/queryReturnRequestList', params);
 // 换货单列表

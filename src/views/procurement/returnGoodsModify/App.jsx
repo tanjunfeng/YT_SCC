@@ -22,7 +22,8 @@ import {
     clearReturnInfo,
     fetchReturnPoRcvDetail,
     putRefundProducts,
-    queryProcessDefinitions
+    queryProcessDefinitions,
+    clearList
 } from '../../../actions/procurement';
 
 import {
@@ -49,6 +50,8 @@ import {
     clearRefundNo,
     // 清除新增编辑采购退货单数据
     clearReturnInfo,
+    // 清除lists
+    clearList,
     putRefundProducts,
     queryProcessDefinitions
 }, dispatch))
@@ -63,6 +66,7 @@ class ReturnGoodsModify extends PureComponent {
         poReturn: PropTypes.objectOf(PropTypes.any),
         history: PropTypes.objectOf(PropTypes.any),
         queryProcessDefinitions: PropTypes.func,
+        clearList: PropTypes.func,
     }
 
     static defaultProps = {
@@ -173,6 +177,7 @@ class ReturnGoodsModify extends PureComponent {
                     returnLists={this.props.returnLists}
                     clearReturnInfo={this.props.clearReturnInfo}
                     onShowModal={this.nodeModal}
+                    clearList={this.props.clearList}
                 />
                 {
                     this.state.opinionVisible

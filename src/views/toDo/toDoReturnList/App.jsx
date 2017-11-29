@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-23 10:29:57
+ * @Last Modified time: 2017-11-23 13:59:13
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -31,7 +31,8 @@ import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import {
     locType,
-    returnStatus
+    optionStatus,
+    auditStatusOption
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
@@ -47,6 +48,8 @@ import {
     getSupplierLocMap,
 } from '../../../actions';
 import ApproModal from './approModal';
+import OpinionSteps from '../../../components/approvalFlowSteps';
+import { Supplier } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -110,8 +113,8 @@ class toDoPurchaseList extends PureComponent {
                 key: 'adrType'
             }, {
                 title: '退货地点',
-                dataIndex: 'refundAdr',
-                key: 'refundAdr'
+                dataIndex: 'refundAdrName',
+                key: 'refundAdrName'
             }, {
                 title: '供应商',
                 dataIndex: 'supplier',
@@ -226,8 +229,56 @@ class toDoPurchaseList extends PureComponent {
         });
     }
 
-    queryReturnMngList = () => {
-        this.current = 1;
+    getFormData() {
+        return new Promise((resolve, reject) => {
+            this.props.form.validateFields((err, values) => {
+                if (err) {
+                    reject(err);
+                }
+                const {
+                    auditResult,
+                    auditOpinion
+                } = values;
+                const dist = {
+                    auditResult,
+                    auditOpinion
+                };
+                if (auditResult === '') {
+                    this.props.form.setFields({
+                        auditResult: {
+                            value: values.area,
+                            errors: [new Error('未选择审批状态')],
+                        },
+                    });
+                    reject();
+                } else {
+                    Object.assign(dist, {
+                        auditResult
+                    });
+                }
+                if (auditResult === '0') {
+                    if (auditOpinion === '') {
+                        this.props.form.setFields({
+                            auditOpinion: {
+                                value: auditOpinion,
+                                errors: [new Error('请输入审批意见!')]
+                            }
+                        });
+                        reject();
+                    } else {
+                        Object.assign(dist, {
+                            auditOpinion
+                        });
+                    }
+                }
+                resolve(Utils.removeInvalid(dist));
+            });
+        });
+    }
+
+
+    queryReturnMngList = (page = 1) => {
+        this.current = page;
         this.props.queryAuditPurReList({
             pageSize: PAGE_SIZE,
             pageNum: this.current,
@@ -332,24 +383,26 @@ class toDoPurchaseList extends PureComponent {
             refundAdr: ''
         })
     }
-
-    // 获取供应商编号
-    handleSupplyChoose = ({ record }) => {
-        this.setState({
-            spNo: record.spNo,
-            spId: record.spId,
-            isSupplyAdrDisabled: false
-        });
-    }
-
-    // 供应商值清单-清除
-    handleSupplyClear = () => {
-        this.setState({
-            spNo: '',
-            spId: '',
-            isSupplyAdrDisabled: true
-        });
-        this.supplySearchMind.reset();
+    /**
+     * Supplier供应商组件改变的回调
+     * @param {object} record 改变后值
+     */
+    handleSupplierChange = (record) => {
+        const {spId, spNo } = record;
+        if (spId === '') {
+            this.setState({
+                spNo: '',
+                spId: '',
+                isSupplyAdrDisabled: true
+            });
+            this.supplySearchMind.reset();
+        } else {
+            this.setState({
+                spNo,
+                spId,
+                isSupplyAdrDisabled: false
+            });
+        }
     }
 
     showConfirm = (record) => {
@@ -403,7 +456,37 @@ class toDoPurchaseList extends PureComponent {
     }
     handleOpinionCancel = () => {
         this.setState({
-            opinionvisible: false,
+            opinionVisible: false,
+        });
+    }
+
+    showApprovalModal = () => {
+        this.setState({
+            approvalVisible: true,
+        });
+    }
+
+    handleApprovalOk = () => {
+        const { processNodeId, id } = this.examinationAppData;
+        const processId = processNodeId;
+        this.getFormData().then((param) => {
+            this.props.approveRefund({ ...param, processId, businessId: id, type: 1 })
+                .then((res) => {
+                    if (res.code === 200) {
+                        message.success(res.message);
+                        this.setState({
+                            approvalVisible: false,
+                        });
+
+                        this.queryReturnMngList(this.current);
+                    }
+                });
+        });
+    }
+
+    handleApprovalCancel = () => {
+        this.setState({
+            approvalVisible: false,
         });
     }
 
@@ -446,7 +529,8 @@ class toDoPurchaseList extends PureComponent {
             approvalStatus,
             purchaseOrderType,
             status,
-            adrType
+            adrType,
+            auditStatus
         } = this.props.form.getFieldsValue();
         // 流程开始时间
         const auditDuringArr = this.props.form.getFieldValue('createTime') || [];
@@ -491,7 +575,8 @@ class toDoPurchaseList extends PureComponent {
             createTimeEnd,
             stopTimeStart,
             stopTimeEnd,
-            adrTypeCode
+            adrTypeCode,
+            auditStatus
         };
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
@@ -500,6 +585,9 @@ class toDoPurchaseList extends PureComponent {
     renderActions(text, record, index) {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
+                <Menu.Item key="detail">
+                    <Link to={`${pathname}/returnManagementDetail/${id}`}>退货单详情</Link>
+                </Menu.Item>
                 <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
@@ -539,10 +627,10 @@ class toDoPurchaseList extends PureComponent {
                             <Col span={8}>
                                 {/* 流程状态 */}
                                 <FormItem label="流程状态">
-                                    {getFieldDecorator('auditStatus', { initialValue: returnStatus.defaultValue })(
+                                    {getFieldDecorator('auditStatus', { initialValue: auditStatusOption.defaultValue })(
                                         <Select style={{ width: '153px' }} size="default">
                                             {
-                                                returnStatus.data.map((item) => (
+                                                auditStatusOption.data.map((item) => (
                                                     <Option key={item.key} value={item.key}>
                                                         {item.value}
                                                     </Option>))
@@ -556,38 +644,13 @@ class toDoPurchaseList extends PureComponent {
                                 <FormItem>
                                     <div className="row middle">
                                         <span className="ant-form-item-label search-mind-label">供应商</span>
-                                        <SearchMind
-                                            style={{
-                                                zIndex: 101
-                                            }}
-                                            compKey="search-mind-supply"
-                                            ref={ref => {
-                                                this.supplySearchMind = ref
-                                            }}
-                                            fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
-                                            }, 'querySuppliersList')}
-                                            addonBefore=""
-                                            onChoosed={this.handleSupplyChoose}
-                                            onClear={this.handleSupplyClear}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>{row.spNo}-{row.companyName}</div>
-                                            )}
-                                            rowKey="spId"
-                                            pageSize={5}
-                                            columns={[
-                                                {
-                                                    title: '供应商',
-                                                    dataIndex: 'spNo',
-                                                    width: 80
-                                                }, {
-                                                    title: '供应商名称',
-                                                    dataIndex: 'companyName'
-                                                }
-                                            ]}
-                                        />
+                                        {getFieldDecorator('spId', {
+                                            initialValue: { spId: '', spNo: '', companyName: ''}
+                                        })(
+                                            <Supplier
+                                                onChange={this.handleSupplierChange}
+                                            />
+                                        )}
                                     </div>
                                 </FormItem>
                             </Col>
