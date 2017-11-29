@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../constant/index';
-import { poType, businessMode } from '../../../constant/procurement';
+import { poType, businessModeType } from '../../../constant/procurement';
 import { printColumns } from '../columns';
 
 @connect(state => ({
@@ -41,7 +41,7 @@ class Report extends PureComponent {
             }
         });
         let businessType = '';
-        businessMode.data.forEach((item) => {
+        businessModeType.data.forEach((item) => {
             if (+item.key === data.businessMode) {
                 businessType = item.value;
             }

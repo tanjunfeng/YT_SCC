@@ -6,7 +6,7 @@
  */
 import React from 'react';
 import moment from 'moment';
-import { locType, poStatus, businessMode } from '../../constant/procurement';
+import { locType, poStatus, businessModeType } from '../../constant/procurement';
 
 const purchase = ['普通采购单'];
 // 供应商列表
@@ -24,7 +24,7 @@ export const poMngListColumns = [
             if (text === null) {
                 return null;
             }
-            return (businessMode.data[text + 1].value);
+            return (businessModeType.data[text + 1].value);
         }
     },
     {

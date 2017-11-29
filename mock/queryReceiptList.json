@@ -26,7 +26,8 @@
                 "purchaseOrderType": 0,
                 "estimatedDeliveryDate": 1507791288000,
                 "receiveTotalNumber": null,
-                "receiveTotalPrice": null
+                "receiveTotalPrice": null,
+                "businessMode": 0
             },
             {
                 "id": 86,
@@ -46,7 +47,8 @@
                 "purchaseOrderType": 0,
                 "estimatedDeliveryDate": 1507167248000,
                 "receiveTotalNumber": null,
-                "receiveTotalPrice": null
+                "receiveTotalPrice": null,
+                "businessMode": 0
             },
             {
                 "id": 85,
@@ -66,7 +68,8 @@
                 "purchaseOrderType": 0,
                 "estimatedDeliveryDate": 1507167248000,
                 "receiveTotalNumber": null,
-                "receiveTotalPrice": null
+                "receiveTotalPrice": null,
+                "businessMode": 1
             },
             {
                 "id": 84,
@@ -86,7 +89,8 @@
                 "purchaseOrderType": 0,
                 "estimatedDeliveryDate": 1507196601000,
                 "receiveTotalNumber": null,
-                "receiveTotalPrice": null
+                "receiveTotalPrice": null,
+                "businessMode": 1
             },
             {
                 "id": 83,

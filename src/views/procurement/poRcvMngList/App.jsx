@@ -29,7 +29,8 @@ import Utils from '../../../util/util';
 import {
     locType,
     receivedStatus,
-    poType
+    poType,
+    businessModeType
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
@@ -73,14 +74,14 @@ class PoRcvMngList extends PureComponent {
         this.handleSelect = this.handleSelect.bind(this);
         this.searchParams = {};
         this.state = {
-            spNo: '',   // 供应商编码
-            spId: '',   // 供应商ID
-            spAdrNo: '',    // 供应商地点编码
+            spNo: '', // 供应商编码
+            spId: '', // 供应商ID
+            spAdrNo: '', // 供应商地点编码
             isSupplyAdrDisabled: true, // 供应商地点禁用
-            locDisabled: true,  // 地点禁用
+            locDisabled: true, // 地点禁用
             locationData: {},
-            adrTypeCode: '',    // 地点编码
-            receivedTypeCode: ''  // 收货单状态编码
+            adrTypeCode: '', // 地点编码
+            receivedTypeCode: '' // 收货单状态编码
         };
         // 初始页号
         this.current = 1;
@@ -104,6 +105,21 @@ class PoRcvMngList extends PureComponent {
                 title: '采购单号',
                 dataIndex: 'purchaseOrderNo',
                 key: 'purchaseOrderNo'
+            }, {
+                title: '经营模式',
+                dataIndex: 'businessMode',
+                key: 'businessMode',
+                render: businessModeCode => {
+                    let text = '';
+                    businessModeType.data.forEach(item => {
+                        if (businessModeCode === +(item.key)) {
+                            text = item.value;
+                            return text;
+                        }
+                        return text;
+                    })
+                    return text;
+                }
             }, {
                 title: '采购单类型',
                 dataIndex: 'purchaseOrderType',
@@ -365,7 +381,7 @@ class PoRcvMngList extends PureComponent {
     handleSelect(record, index, items) {
         const { key } = items;
         switch (key) {
-            case 'push':    // 重新推送采购收货单失败
+            case 'push': // 重新推送采购收货单失败
                 this.props.repushPurchaseReceipt({
                     purchaseOrderNo: record.purchaseOrderNo
                 }).then(res => {
@@ -403,7 +419,8 @@ class PoRcvMngList extends PureComponent {
             purchaseOrderNo,
             adrType,
             purchaseOrderType,
-            status
+            status,
+            businessMode
         } = this.props.form.getFieldsValue();
 
         // 收货日期区间
@@ -453,7 +470,8 @@ class PoRcvMngList extends PureComponent {
             receivedTimeStart,
             receivedTimeEnd,
             startAuditTime,
-            endAuditTime
+            endAuditTime,
+            businessMode
         };
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
@@ -629,8 +647,7 @@ class PoRcvMngList extends PureComponent {
                                                     {item.value}
                                                 </Option>
                                             ))}
-                                        </Select>
-                                        )}
+                                        </Select>)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -670,6 +687,21 @@ class PoRcvMngList extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40}>
+                            <Col span={8}>
+                                {/* 经营模式 */}
+                                <FormItem label="经营模式">
+                                    {getFieldDecorator('businessMode', {
+                                        initialValue: businessModeType.defaultValue
+                                    })(
+                                        <Select style={{ width: '153px' }} size="default" >
+                                            {businessModeType.data.map((item) => (
+                                                <Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>
+                                            ))}
+                                        </Select>)}
+                                </FormItem>
+                            </Col>
                             <Col span={8}>
                                 {/* 审批日期 */}
                                 <FormItem>

@@ -400,6 +400,14 @@ class PoDetail extends PureComponent {
                     return '';
             }
         }
+        const businessModeType = () => {
+            switch (this.props.basicInfo.businessModeType) {
+                case 0:
+                    return '经销';
+                default:
+                    return '';
+            }
+        }
         const purchaseOrderState = () => {
             switch (this.props.basicInfo.status) {
                 case 0:
@@ -472,7 +480,13 @@ class PoDetail extends PureComponent {
                                     <span>{this.props.basicInfo.purchaseOrderNo}</span>
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
+                            <Col span={3}>
+                                {/* 经营模式 */}
+                                <FormItem label="经营模式">
+                                    <span>{businessModeType()}</span>
+                                </FormItem>
+                            </Col>
+                            <Col span={5}>
                                 {/* 采购单类型 */}
                                 <FormItem label="采购单类型">
                                     <span>{purchaseOrderType()}</span>
@@ -1215,7 +1229,7 @@ class PoDetail extends PureComponent {
             adrType,
             currencyCode,
             purchaseOrderType,
-            addressCd,
+            addressCd
         } = poData.basicInfo;
 
         // 采购商品信息
@@ -1686,7 +1700,7 @@ class PoDetail extends PureComponent {
             <Dropdown overlay={menu} placement="bottomCenter">
                 <a className="ant-dropdown-link">
                     表单操作
-          <Icon type="down" />
+                    <Icon type="down" />
                 </a>
             </Dropdown>
         )

@@ -134,7 +134,7 @@ export const locType = {
 }
 
 // 经营模式值清单
-export const businessMode = {
+export const businessModeType = {
     defaultValue: '',
     data: [{
         key: '',
