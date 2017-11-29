@@ -22,7 +22,7 @@
         "secondCategoryName": null,
         "currencyCode": "CNY",
         "branchCompanyId": "10000",
-        "purchaseOrderType": 0,
+        "purchaseOrderType": 1,
         "status": 4,
         "failedReason": "超期关闭",
         "auditUserId": "10018",

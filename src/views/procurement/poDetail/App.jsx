@@ -32,7 +32,7 @@ import {
     fetchNewPmPurchaseOrderItem,
 } from '../../../actions/procurement';
 import { pubFetchValueList } from '../../../actions/pub';
-import { locType, poType, poNo, poStatusCodes } from '../../../constant/procurement';
+import { locType, poType, poNo, poStatusCodes, businessModeType } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { exportProcurementPdf } from '../../../service';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
@@ -165,7 +165,15 @@ class PoDetail extends PureComponent {
             {
                 title: '采购价格（含税）',
                 dataIndex: 'purchasePrice',
-                key: 'purchasePrice'
+                key: 'purchasePrice',
+                render: (text, record, index) =>
+                    (<EditableCell
+                        value={text}
+                        editable={this.state.currentType !== 'detail' && this.state.purchaseOrderType === '2'}
+                        step={record.purchaseInsideNumber}
+                        purchaseInsideNumber={null}
+                        onChange={value => this.applyPriceChange(record, index, value)}
+                    />)
             },
             {
                 title: '采购数量',
@@ -263,7 +271,7 @@ class PoDetail extends PureComponent {
         const { match } = this.props;
         const { type } = match.params;
         this.setState({
-            currentType: type
+            currentType: type,
         })
         // 采购单id
         const poId = match.params.purchaseOrderNo;
@@ -325,12 +333,12 @@ class PoDetail extends PureComponent {
                 spId,
                 spAdrId,
                 pickerDate: estimatedDeliveryDate
-                ? moment(parseInt(estimatedDeliveryDate, 10))
-                : null,
-                purchaseOrderType: purchaseOrderType === 0 ? `${purchaseOrderType}` : '',
+                    ? moment(parseInt(estimatedDeliveryDate, 10))
+                    : null,
+                purchaseOrderType: purchaseOrderType === 0 || purchaseOrderType === 1 || purchaseOrderType === 2 ? `${purchaseOrderType}` : '',
                 localType: adrType === 0 || adrType === 1 ? `${adrType}` : '',
                 currencyCode: currencyCode === 'CNY' ? `${currencyCode}` : 'CNY',
-                businessMode
+                businessMode: businessMode === 0 || businessMode === 1 ? `${businessMode}` : '',
             })
         }
     }
@@ -399,11 +407,15 @@ class PoDetail extends PureComponent {
             switch (this.props.basicInfo.purchaseOrderType) {
                 case 0:
                     return '普通采购单';
+                case 1:
+                    return '赠品采购单';
+                case 2:
+                    return '促销采购单';
                 default:
                     return '';
             }
         }
-        const businessModeType = () => {
+        const businessMode = () => {
             switch (this.props.basicInfo.businessMode) {
                 case 0:
                     return '经销';
@@ -443,24 +455,24 @@ class PoDetail extends PureComponent {
         const { currentType } = this.state;
         // 创建者
         const createdByName = basicInfo.createdByName
-        ? this.basicInfo.createdByName
-        : this.props.data.user.employeeName
+            ? this.basicInfo.createdByName
+            : this.props.data.user.employeeName
 
         // 创建日期
         const createdAt = basicInfo.createdAt
-        ? basicInfo.createdAt
-        : moment().format('YYYY-MM-DD')
+            ? basicInfo.createdAt
+            : moment().format('YYYY-MM-DD')
 
 
         // 供应商地点值清单回显数据
         const spAdrDefaultValue = basicInfo.spAdrId
-        ? `${basicInfo.spAdrId}-${basicInfo.spAdrName}`
-        : ''
+            ? `${basicInfo.spAdrId}-${basicInfo.spAdrName}`
+            : ''
 
         // 地点值清单回显数据
         const adresssDefaultValue = basicInfo.adrTypeCode
-        ? `${basicInfo.adrTypeCode}-${basicInfo.adrTypeName}`
-        : ''
+            ? `${basicInfo.adrTypeCode}-${basicInfo.adrTypeName}`
+            : ''
 
         // 回显预期送货日期
         const estimatedDeliveryDate = basicInfo.estimatedDeliveryDate ? moment(basicInfo.estimatedDeliveryDate).format('YYYY-MM-DD') : null
@@ -488,7 +500,7 @@ class PoDetail extends PureComponent {
                             <Col span={3}>
                                 {/* 经营模式 */}
                                 <FormItem label="经营模式">
-                                    <span>{businessModeType()}</span>
+                                    <span>{businessMode()}</span>
                                 </FormItem>
                             </Col>
                             <Col span={5}>
@@ -659,7 +671,7 @@ class PoDetail extends PureComponent {
                                                     key={item.key}
                                                     value={item.key}
                                                 >{item.value}</Option>
-                                            ))
+                                                ))
                                         }
                                     </Select>
                                 )}
@@ -786,10 +798,10 @@ class PoDetail extends PureComponent {
                                                     key={item.key}
                                                     value={item.key}
                                                 >{item.value}</Option>
-                                            ))
+                                                ))
                                         }
                                     </Select>
-                                    )}
+                                )}
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -941,7 +953,7 @@ class PoDetail extends PureComponent {
                                                     key={item.key}
                                                     value={item.key}
                                                 >{item.value}</Option>
-                                            ))
+                                                ))
                                         }
                                     </Select>
                                 )}
@@ -955,6 +967,32 @@ class PoDetail extends PureComponent {
                                 <span>
                                     {this.renderPayCondition(this.state.payCondition)}
                                 </span>
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            {/* 经营模式 */}
+                            <FormItem>
+                                <span className="ant-form-item-label">
+                                    <span className="label-wrap">
+                                        <span style={{ color: '#F00' }}>*</span>
+                                        经营模式:
+                                    </span>
+                                </span>
+                                {getFieldDecorator('businessMode', {
+                                    rules: [{ required: true, message: '请输入经营模式' }],
+                                    initialValue: this.state.businessMode
+                                })(
+                                    <Select size="default">
+                                        {
+                                            businessModeType.data.map((item) =>
+                                                (<Option
+                                                    key={item.key}
+                                                    value={item.key}
+                                                >{item.value}</Option>
+                                                ))
+                                        }
+                                    </Select>
+                                )}
                             </FormItem>
                         </Col>
                     </Row>
@@ -1236,7 +1274,6 @@ class PoDetail extends PureComponent {
             purchaseOrderType,
             addressCd
         } = poData.basicInfo;
-
         // 采购商品信息
         const pmPurchaseOrderItems = poData.poLines.map((item) => {
             const {
@@ -1257,8 +1294,8 @@ class PoDetail extends PureComponent {
 
         // 预计送货日期
         const estimatedDeliveryDate = this.state.pickerDate
-        ? this.state.pickerDate.valueOf().toString()
-        : null;
+            ? this.state.pickerDate.valueOf().toString()
+            : null;
 
         if (CId) {
             // 修改页
@@ -1344,7 +1381,33 @@ class PoDetail extends PureComponent {
             }
         }
     }
-
+    /**
+     * 商品行价格变化回调，做如下处理
+     *  1.更新store中该行信息（校验结果，采购价格，采购金额）
+     *  2.计算采购总金额并更新store
+     * result:{value:输入值,isValidate:检验结果 true/false}
+     */
+    applyPriceChange = (records, index, result) => {
+        const record = records;
+        const { value, isValidate } = result;
+        // 更新store中采购单商品
+        if (record) {
+            // 未输入采购价格，则清空store中采购数量，采购金额
+            if (!value) {
+                record.purchasePrice = null;
+                record.totalAmount = null;
+                this.props.updatePoLine(record);
+            } else {
+                // 保存输入数据和校验状态 给submit用
+                record.purchasePrice = value;
+                // 计算采购金额（含税）
+                record.totalAmount = Math.round(value * record.purchaseNumber * 100) / 100;
+                // 校验状态
+                record.isValidate = isValidate;
+                this.props.updatePoLine(record);
+            }
+        }
+    }
     /**
      * 计算采购总数量、采购总金额
      * 计算对象：未删除&&采购数量不为空
