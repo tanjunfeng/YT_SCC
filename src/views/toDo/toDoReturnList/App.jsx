@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-23 13:59:13
+ * @Last Modified time: 2017-11-29 15:41:50
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -583,6 +583,8 @@ class toDoPurchaseList extends PureComponent {
     }
 
     renderActions(text, record, index) {
+        const { id } = record;
+        const { pathname } = this.props.location;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
