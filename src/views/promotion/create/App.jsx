@@ -13,7 +13,9 @@ import {
     Form, Row, Col, Input,
     Button, DatePicker, Checkbox
 } from 'antd';
+
 import { createPromotion } from '../../../actions/promotion';
+import Area from './Area';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
 
@@ -70,6 +72,15 @@ class PromotionCreate extends PureComponent {
                                 format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
                                 placeholder={['开始时间', '结束时间']}
                             />)}
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={16}>
+                        <FormItem label="使用区域">
+                            {getFieldDecorator('area', {
+                                initialValue: 0
+                            })(<Area />)}
                         </FormItem>
                     </Col>
                 </Row>
