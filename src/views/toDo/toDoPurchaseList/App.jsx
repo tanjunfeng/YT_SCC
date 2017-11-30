@@ -77,9 +77,7 @@ class toDoPurchaseList extends PureComponent {
         this.handleSelect = this.handleSelect.bind(this);
         this.searchParams = {};
         this.state = {
-            spId: '',   // 供应商编码
             spAdrId: '',    // 供应商地点编码
-            isSupplyAdrDisabled: true, // 供应商地点禁用
             locDisabled: true,  // 地点禁用
             locationData: {},
             isVisibleModal: false,
@@ -245,9 +243,11 @@ class toDoPurchaseList extends PureComponent {
         this.searchParams = {};
         // 重置form
         this.props.form.resetFields();
-        this.handleSupplyClear();
         this.handleSupplierAddressClear();
         this.handleAddressClear();
+        this.props.form.setFieldsValue({
+            supplier: { reset: true }
+        });
     }
 
     /**
@@ -330,26 +330,12 @@ class toDoPurchaseList extends PureComponent {
             refundAdr: ''
         })
     }
+
     /**
      * Supplier供应商组件改变的回调
      * @param {object} record 改变后值
      */
-    handleSupplierChange = (record) => {
-        const { spId, spNo } = record;
-        if (spId === '') {
-            this.setState({
-                spNo: '',
-                spId: '',
-                isSupplyAdrDisabled: true
-            });
-            this.supplySearchMind.reset();
-        } else {
-            this.setState({
-                spNo,
-                spId,
-                isSupplyAdrDisabled: false
-            });
-        }
+    handleSupplierChange = () => {
         this.handleSupplierAddressClear();
     }
 
@@ -447,7 +433,8 @@ class toDoPurchaseList extends PureComponent {
             approvalStatus,
             purchaseOrderType,
             status,
-            adrType
+            adrType,
+            supplier
         } = this.props.form.getFieldsValue();
         // 流程开始时间
         const auditDuringArr = this.props.form.getFieldValue('createTime') || [];
@@ -471,10 +458,10 @@ class toDoPurchaseList extends PureComponent {
         }
 
         // 供应商编号
-        const spId = this.state.spId;
+        const spId = supplier.spId;
 
         // 供应商地点编号
-        const spAdrId = this.state.spId;
+        const spAdrId = this.state.spAdrId;
 
         // 地点
         const adrTypeCode = this.state.refundAdr;
@@ -557,13 +544,13 @@ class toDoPurchaseList extends PureComponent {
                                 <FormItem>
                                     <div className="row middle">
                                         <span className="ant-form-item-label search-mind-label">供应商</span>
-                                        {getFieldDecorator('spId', {
+                                        {getFieldDecorator('supplier', {
                                             initialValue: { spId: '', spNo: '', companyName: '' }
                                         })(
                                             <Supplier
                                                 onChange={this.handleSupplierChange}
                                             />
-                                            )}
+                                        )}
                                     </div>
                                 </FormItem>
                             </Col>
@@ -576,6 +563,7 @@ class toDoPurchaseList extends PureComponent {
                                             style={{ zIndex: 9, verticalAlign: 'bottom' }}
                                             compKey="providerNo"
                                             ref={ref => { this.joiningAdressMind = ref }}
+                                            disabled={this.props.form.getFieldValue('supplier').spId === ''}
                                             fetch={(params) =>
                                                 this.props.pubFetchValueList(Utils.removeInvalid({
                                                     condition: params.value,
