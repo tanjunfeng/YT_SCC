@@ -19,13 +19,13 @@ import {
     Dropdown,
     message
 } from 'antd';
-import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
+import { queryPoRcvMngList } from '../../../service';
 import {
     locType,
     receivedStatus,
@@ -232,11 +232,9 @@ class PoRcvMngList extends PureComponent {
             }
         ]
     }
-
     componentDidMount() {
         this.queryRcvMngPoList();
     }
-
     /**
      * 根据地点类型值控制地点值清单是否可编辑
      * 地点类型有值时：地点值清单可编辑
@@ -407,7 +405,14 @@ class PoRcvMngList extends PureComponent {
         // 查询收货单单列表
         this.queryRcvMngPoList();
     }
-
+    /**
+    * 导出Excel
+    */
+    handleDownload = () => {
+        const searchData = this.editSearchParams();
+        console.log(searchData);
+        Utils.exportExcel(queryPoRcvMngList, searchData);
+    }
     /**
      *
      * 返回查询条件
@@ -536,6 +541,7 @@ class PoRcvMngList extends PureComponent {
                                             <RangePicker
                                                 className="date-range-picker"
                                                 style={{ width: 250 }}
+                                                onChange={this.onEnterTimeChange}
                                                 format={dateFormat}
                                                 showTime={{
                                                     hideDisabledOptions: true,
@@ -727,6 +733,11 @@ class PoRcvMngList extends PureComponent {
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
                             <Col className="tr">
+                                <FormItem>
+                                    <Button type="primary" onClick={this.handleDownload} size="default">
+                                        导出EXCEL
+                                    </Button>
+                                </FormItem>
                                 <FormItem>
                                     <Button size="default" onClick={this.handleResetValue}>
                                         重置
