@@ -19,7 +19,6 @@ import {
     Dropdown,
     message
 } from 'antd';
-import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -407,40 +406,11 @@ class PoRcvMngList extends PureComponent {
         this.queryRcvMngPoList();
     }
     /**
-    * 获取form的值，赋给this.searchDate
-    */
-    getValue() {
-        const {
-            purchaseOrderNo,
-            purchaseReceiptNo,
-            receivedDuring,
-            purchaseOrderType,
-            spId,
-            adrType,
-            status,
-            businessMode
-        } = this.props.form.getFieldsValue();
-        const receivedTimeStart = null;
-        const receivedTimeEnd = null;
-        const searchData = {
-            purchaseOrderNo,
-            purchaseReceiptNo,
-            receivedTimeStart: receivedDuring[0]._d,
-            receivedTimeEnd: receivedDuring[1]._d,
-            purchaseOrderType,
-            spNo: spId.spNo,
-            adrType,
-            status,
-            businessMode
-        };
-        // this.searchData = Utils.removeInvalid(searchData);
-    }
-    /**
     * 导出Excel
     */
     handleDownload = () => {
-        //this.getValue();
         const searchData = this.editSearchParams();
+        console.log(searchData);
         Utils.exportExcel(queryPoRcvMngList, searchData);
     }
     /**
