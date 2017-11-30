@@ -38,8 +38,10 @@ $promotionAddLabelWidth: 100px;
             width: $promotionAddLabelWidth;
             display: inline-block;
         }
-        .ant-form-item-control textarea {
-            width: 260px;
+        &.multi-line {
+            .ant-form-item-label {
+                line-height: 98px;
+            }
         }
     }
     .tips .ant-col-16 {

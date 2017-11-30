@@ -42,3 +42,5 @@ export const participate = {
         CGWDH: '采购未到货'
     }
 };
+
+export const overlayOptions = ['优惠劵叠加', '会员等级'];
