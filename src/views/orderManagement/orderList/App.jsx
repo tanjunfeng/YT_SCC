@@ -14,6 +14,7 @@ import {
     Select, Icon, Table, Menu, Dropdown,
     message, Modal, DatePicker, Checkbox
 } from 'antd';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import Utils from '../../../util/util';
 import { BranchCompany, Franchisee } from '../../../container/search';
@@ -319,7 +320,7 @@ class OrderManagementList extends Component {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
                 <Menu.Item key="detail">
-                    <a target="_blank" href={`${pathname}/orderDetails/${id}`}>查看订单详情</a>
+                    <Link target="_blank" to={`${pathname}/orderDetails/${id}`}>查看订单详情</Link>
                 </Menu.Item>
                 {
                     (orderState === 'W'
