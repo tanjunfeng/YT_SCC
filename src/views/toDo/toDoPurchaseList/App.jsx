@@ -37,7 +37,7 @@ import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
     queryAuditPurReList,
-    queryApprovalInfo,
+    queryCommentHis,
     queryPoDetail
 } from '../../../actions/procurement';
 import {
@@ -53,6 +53,7 @@ import {
 import ApproModal from './approModal';
 import { Supplier } from '../../../container/search';
 import FlowImage from '../../../components/flowImage';
+import ApproComment from './approComment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -70,7 +71,7 @@ const confirm = Modal.confirm;
     getSupplierLocMap,
     pubFetchValueList,
     queryAuditPurReList,
-    queryApprovalInfo,
+    queryCommentHis,
     queryPoDetail,
     queryHighChart,
     clearHighChart
@@ -431,7 +432,7 @@ class toDoPurchaseList extends PureComponent {
                 break;
             case 'viewApproval':
                 this.showModal();
-                this.props.queryApprovalInfo({businessId: record.purchaseRefundNo})
+                this.props.queryCommentHis({tackId: record.purchaseRefundNo})
                 break;
             default:
                 break;
@@ -755,6 +756,11 @@ class toDoPurchaseList extends PureComponent {
                             onOk={this.handleModalOk}
                             onCancel={this.handleModalCancel}
                         />
+                        <ApproComment
+                            visible={this.state.opinionvisible}
+                            onOk={this.handleOpinionOk}
+                            onCancel={this.handleOpinionCancel}
+                        />
                         <FlowImage data={this.props.highChartData} >
                             <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
                         </FlowImage>
@@ -770,7 +776,7 @@ toDoPurchaseList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     auditPurReList: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
-    queryApprovalInfo: PropTypes.func,
+    queryCommentHis: PropTypes.func,
     queryPoDetail: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,
     queryHighChart: PropTypes.func,
