@@ -1136,9 +1136,7 @@ class PoDetail extends PureComponent {
         }
 
         // 供应商
-        const { spId, spNo } = this.props.form.getFieldValue('supplier');
-        const spName = this.props.form.getFieldValue('supplier').companyName;
-
+        const { spId, spNo, companyName } = this.props.form.getFieldValue('supplier');
         // 供应商地点
         let spAdrId;
         let spAdrNo;
@@ -1156,7 +1154,7 @@ class PoDetail extends PureComponent {
             address,
             spId,
             spNo,
-            spName,
+            spName: companyName,
             spAdrId,
             spAdrNo,
             spAdrName,

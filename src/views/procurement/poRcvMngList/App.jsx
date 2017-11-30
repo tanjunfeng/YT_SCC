@@ -277,8 +277,10 @@ class PoRcvMngList extends PureComponent {
         this.searchParams = {};
         // 重置form
         this.props.form.resetFields();
-        this.handleSupplyClear();
         this.handleAddressClear();
+        this.props.form.setFieldsValue({
+            supplier: { reset: true }
+        });
     }
 
     /**
