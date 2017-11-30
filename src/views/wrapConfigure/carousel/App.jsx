@@ -1,6 +1,6 @@
 /**
  * @file App.jsx
- * @author caoyanxuan
+ * @author caoyanxuan,liujinyu
  *
  * 轮播广告管理
  */
@@ -18,8 +18,12 @@ import {
     removeCarouselAd,
     modifyCarouselAd,
     modifyCarouselAdStatus,
-    modifyCarouselInterval
+    modifyCarouselInterval,
+    fetchCarouselArea,
+    fetchSwitchOptWayOfCarousel,
+    clearAdList
 } from '../../../actions/wap';
+import SearchItem from '../common/searchItem';
 
 const confirm = Modal.confirm;
 const Option = Select.Option;
@@ -43,7 +47,6 @@ const columns = [
                 default:
                     return '';
             }
-            return '';
         }
     },
     {
@@ -92,6 +95,9 @@ const columns = [
         fetchCarouselInterval,
         modifyModalVisible,
         modifyCarouselAd,
+        fetchCarouselArea,
+        fetchSwitchOptWayOfCarousel,
+        clearAdList
     }, dispatch)
 )
 class CarouselManagement extends Component {
@@ -105,13 +111,12 @@ class CarouselManagement extends Component {
             inputValue: '',
             setModalVisible: false,
             parameterModalVisible: false,
-            intervalData: this.props.intervalData
+            intervalData: this.props.intervalData,
+            companyId: '',
+            isChecked: false,
+            // 用户能否修改当前的页面
+            isHeadquarters: true
         }
-    }
-
-    componentDidMount() {
-        this.props.fetchCarouselAdList();
-        this.props.fetchCarouselInterval();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -124,6 +129,62 @@ class CarouselManagement extends Component {
                 }
             })
         }
+    }
+
+    componentWillUnmount() {
+        // 页面卸载时清空表格
+        this.props.clearAdList()
+    }
+
+    /**
+    * 点击搜索后的回调
+    * @param {object} submitObj 上传参数
+    * @param {bool} isHeadquarters 用户是否可以修改当前页面
+    */
+    searchChange = (submitObj, isHeadquarters) => {
+        if (submitObj) {
+            const { branchCompany, homePageType } = submitObj
+            const companyId = branchCompany.id
+            this.homePageType = homePageType
+            this.companyId = companyId
+            this.setState({
+                companyId,
+                isHeadquarters
+            })
+        }
+        const obj = {
+            companyId: this.companyId,
+            homePageType: this.homePageType
+        }
+        this.props.fetchCarouselArea(obj)
+            .then(res => {
+                this.setState({
+                    isChecked: res.isUsingNation
+                })
+                this.props.fetchCarouselAdList({ areaId: res.id })
+                this.props.fetchCarouselInterval({ areaId: res.id })
+            });
+    }
+
+    /**
+     * 点击切换运营方式后的回调
+     * @param {bloon} isUsingNation 是否为总部运营
+     */
+    switchChange = (isUsingNation) => {
+        const obj = {
+            isUsingNation,
+            companyId: this.state.companyId
+        }
+        this.props.fetchSwitchOptWayOfCarousel(obj).then(res => {
+            if (res.success) {
+                message.success('切换成功')
+                this.setState({
+                    isChecked: isUsingNation
+                })
+            } else {
+                message.error(res.message)
+            }
+        })
     }
 
     /**
@@ -160,6 +221,14 @@ class CarouselManagement extends Component {
      * @param {*} items 当前按钮
      */
     handleSelect(record, items) {
+        // 当前用户是否可修改总部运营方式
+        if (!this.state.isHeadquarters) {
+            Modal.error({
+                title: '错误',
+                content: '您没有权限修改总部运营方式',
+            });
+            return;
+        }
         const { id } = record;
         const { key } = items;
         switch (key) {
@@ -177,7 +246,7 @@ class CarouselManagement extends Component {
                         removeCarouselAd({
                             carouselAdId: id
                         }).then(() => {
-                            this.props.fetchCarouselAdList();
+                            this.searchChange();
                             this.props.modifyModalVisible({ isVisible: false });
                             message.success('删除成功！');
                         })
@@ -193,7 +262,7 @@ class CarouselManagement extends Component {
                             id,
                             status: 1
                         }).then(() => {
-                            this.props.fetchCarouselAdList();
+                            this.searchChange();
                             this.props.modifyModalVisible({ isVisible: false });
                             message.success('启用成功！');
                         })
@@ -209,7 +278,7 @@ class CarouselManagement extends Component {
                             id,
                             status: 0
                         }).then(() => {
-                            this.props.fetchCarouselAdList();
+                            this.searchChange();
                             this.props.modifyModalVisible({ isVisible: false });
                             message.success('停用成功！');
                         })
@@ -218,7 +287,6 @@ class CarouselManagement extends Component {
                 });
                 break;
             default:
-
                 break;
         }
     }
@@ -273,38 +341,46 @@ class CarouselManagement extends Component {
         );
         return (
             <div className="carousel-management wap-management">
-                <div className="carousel-management-tip wap-management-tip">
-                    说明：APP端轮播广告管理，可以设定轮播时间、顺序、内容。
-                </div>
-                <span>
-                    <span className="modal-carousel-interval">
-                        <span style={{ color: '#f00' }}>*</span>
-                        轮播间隔
-                    </span>
-                    <Select
-                        className="carousel-management-select"
-                        style={{ width: 70 }}
-                        value={`${this.state.intervalData.carouselInterval}`}
-                        onChange={this.handleIntervalChange}
-                    >
-                        {lists}
-                    </Select>
-                </span>
-                <Button type="primary" onClick={this.showAddModal}>
-                    新增轮播广告
-                </Button>
-                <div className="area-list">
-                    <Table
-                        dataSource={adData}
-                        columns={columns}
-                        pagination={false}
-                        rowKey="id"
-                        footer={null}
-                    />
-                </div>
+                <SearchItem
+                    searchChange={this.searchChange}
+                    switchChange={this.switchChange}
+                    isChecked={this.state.isChecked}
+                />
+                {
+                    adData.length > 0
+                        ? <div>
+                            <span>
+                                <span className="modal-carousel-interval">
+                                    <span style={{ color: '#f00' }}>*</span>
+                                    轮播间隔
+                                </span>
+                                <Select
+                                    className="carousel-management-select"
+                                    style={{ width: 70 }}
+                                    value={`${this.state.intervalData.carouselInterval}`}
+                                    onChange={this.handleIntervalChange}
+                                >
+                                    {lists}
+                                </Select>
+                            </span>
+                            <Button type="primary" onClick={this.showAddModal}>
+                                新增轮播广告
+                            </Button>
+                            <div className="area-list">
+                                <Table
+                                    dataSource={adData}
+                                    columns={columns}
+                                    pagination={false}
+                                    rowKey="id"
+                                    footer={null}
+                                />
+                            </div>
+                        </div>
+                        : null
+                }
                 {
                     this.props.modalVisible &&
-                    <ChangeModalMessage />
+                    <ChangeModalMessage searchChange={this.searchChange} />
                 }
             </div>
         );
@@ -317,6 +393,9 @@ CarouselManagement.propTypes = {
     fetchCarouselAdList: PropTypes.func,
     fetchCarouselInterval: PropTypes.func,
     modifyModalVisible: PropTypes.func,
+    fetchCarouselArea: PropTypes.func,
+    fetchSwitchOptWayOfCarousel: PropTypes.func,
+    clearAdList: PropTypes.func,
     modalVisible: PropTypes.bool,
 };
 

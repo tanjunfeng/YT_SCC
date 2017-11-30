@@ -1,0 +1,37 @@
+
+#canvasRoot{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    width: 1000px;
+    height: 500px;
+    .canvas{
+       position: absolute;
+       top: 50%;
+       left: 50%;
+       transform: translate(-50%, -50%);
+       img{
+        max-width: 1000px;
+        max-height: 500px;
+       }
+    }
+    .highLight{
+        position: 'absolute';
+        border-width: 3px;
+        border-style: 'solid';
+    }
+    .closeBtn{
+        position: relative;
+        top: 0;
+        float: right;
+        z-index: 99;
+    }
+}
+.hide{
+    display: none;
+}
+.show{
+    display: block;
+}

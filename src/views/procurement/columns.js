@@ -6,7 +6,7 @@
  */
 import React from 'react';
 import moment from 'moment';
-import { locType, poStatus } from '../../constant/procurement';
+import { locType, poStatus, businessModeType, poType } from '../../constant/procurement';
 
 const purchase = ['普通采购单'];
 // 供应商列表
@@ -17,10 +17,26 @@ export const poMngListColumns = [
         key: 'purchaseOrderNo',
     },
     {
+        title: '经营模式',
+        dataIndex: 'businessMode',
+        key: 'businessMode',
+        render: (text) => {
+            if (text === null) {
+                return null;
+            }
+            return (businessModeType.data[text + 1].value);
+        }
+    },
+    {
         title: '采购单类型',
         dataIndex: 'purchaseOrderType',
         key: 'purchaseOrderType',
-        render: text => (purchase[text])
+        render: text => {
+            if (text === null) {
+                return null;
+            }
+            return (poType.data[text + 1].value);
+        }
     },
     {
         title: '供应商编号',
@@ -153,55 +169,4 @@ export const printColumns = [{
     dataIndex: 'totalAmount',
     key: 'totalAmount',
     width: 100
-}];
-
-export const goodsColumns = [{
-    title: '序号',
-    dataIndex: 'index',
-    width: 30,
-    render: (text, record, index) => index + 1
-}, {
-    title: '商品编码',
-    dataIndex: 'productCode',
-    width: 50
-}, {
-    title: '商品条码',
-    dataIndex: 'internationalCode',
-    width: 80
-}, {
-    title: '商品名称',
-    dataIndex: 'productName',
-    width: 120
-}, {
-    title: '产品规格',
-    dataIndex: 'productSpecifications',
-    width: 50
-}, {
-    title: '箱装规格',
-    dataIndex: 'packingSpecifications',
-    width: 80
-}, {
-    title: '起定量',
-    dataIndex: 'minNumberSpecifications',
-    width: 50
-}, {
-    title: '数量',
-    dataIndex: 'quantity',
-    width: 120
-}, {
-    title: '单价',
-    dataIndex: 'salePrice',
-    width: 70,
-    render: text => {
-        if (text || +text === 0) return text;
-        return '-';
-    }
-}, {
-    title: '金额',
-    dataIndex: '',
-    width: 100
-}, {
-    title: '操作',
-    dataIndex: 'operation',
-    width: 50
 }];

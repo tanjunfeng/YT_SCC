@@ -435,7 +435,6 @@ class PoRcvList extends PureComponent {
                                         />
                                     </div>
                                 </FormItem>
-
                             </Col>
                         </Row>
 

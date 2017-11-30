@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, InputNumber, message, Select } from 'antd';
+import { Modal, Form, InputNumber, message, Select, Button } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import SteppedPrice from '../steppedPrice';
@@ -26,7 +26,7 @@ const Option = Select.Option;
     dispatch => bindActionCreators({
         productAddPriceVisible,
         fetchAddProdPurchase,
-        pubFetchValueList
+        pubFetchValueList,
     }, dispatch)
 )
 class SellPriceModal extends Component {
@@ -41,11 +41,55 @@ class SellPriceModal extends Component {
             branchCompanyId: props.datas.branchCompanyId,
             branchCompanyName: props.datas.branchCompanyName
         } : {};
+
         this.state = {
+            isEditPrice: false,
             currentInside: null,
-            insideValue: null
+            insideValue: null,
+            confirmVisible: false,
+            hasZero: this.hasZero(props.datas.sellSectionPrices || [])
         }
         this.choose = 0;
+        this.isDisabled = false;
+        this.successPost = true;
+        this.messageAlert = true;
+    }
+
+    componentDidMount() {
+        const { datas } = this.props;
+        const { validateFields, setFields } = this.props.form;
+        const { results } = this.steppedPrice.getValue();
+        validateFields((err, values) => {
+            if (err) return null;
+            const result = values;
+            result.sellSectionPrices = results;
+            result.productId = datas.id || datas.productId;
+            const priceList = [];
+            results.forEach((item) => (
+                priceList.push(item.price)
+            ))
+
+            priceList.forEach((obj) => {
+                if (obj === null || obj === undefined) {
+                    this.successPost = true;
+                    setFields({
+                        sellSectionPrices: {
+                            errors: [new Error('价格不能为空，无法提交')],
+                        },
+                    })
+                    return;
+                }
+
+                if (obj === 0) {
+                    this.messageAlert = true;
+                } else {
+                    this.messageAlert = false;
+                }
+                if (obj >= 0) {
+                    this.successPost = false;
+                }
+            })
+        })
     }
 
     handleOk() {
@@ -81,9 +125,71 @@ class SellPriceModal extends Component {
                     productId: datas.productId
                 })
             }
-            handlePostAdd(result, isEdit, choose);
+            const priceList = [];
+            results.forEach((item) => (
+                priceList.push(item.price)
+            ))
+            if (priceList.length === 0) {
+                setFields({
+                    sellSectionPrices: {
+                        errors: [new Error('价格不能为空，无法提交')],
+                    },
+                })
+                return false;
+            }
+            priceList.forEach((obj) => {
+                if (obj === null || obj === undefined) {
+                    this.successPost = true;
+                    setFields({
+                        sellSectionPrices: {
+                            errors: [new Error('价格不能为空，无法提交')],
+                        },
+                    })
+                    return;
+                }
+                if (obj === 0) {
+                    this.messageAlert = true;
+                } else {
+                    this.messageAlert = false;
+                }
+                if (obj >= 0) {
+                    this.successPost = false;
+                }
+            })
+            if (this.successPost) {
+                this.isDisabled = true;
+                if (this.messageAlert) {
+                    message.error('请仔细核对销售价格，确认为当前显示的价格!')
+                }
+                if (!this.isDisabled) {
+                    handlePostAdd(result, isEdit, choose).then((res) => {
+                        if (res.code === 200) {
+                            this.isDisabled = false;
+                        }
+                    }).catch(() => {
+                        this.isDisabled = false;
+                    })
+                }
+            }
+            if (this.successPost === false) {
+                if (this.messageAlert) {
+                    message.error('请仔细核对销售价格，确认为当前显示的价格!', 2, () => {
+                        handlePostAdd(result, isEdit, choose);
+                    })
+                } else {
+                    handlePostAdd(result, isEdit, choose);
+                }
+            }
             return null;
         })
+    }
+
+    hasZero(items) {
+        const filter = items.filter((item) => {
+            return item.price === 0;
+        })
+  
+        return !!filter.length;
     }
 
     handleCancel() {
@@ -92,7 +198,12 @@ class SellPriceModal extends Component {
 
     handlePriceChange(result) {
         const { setFields, getFieldError } = this.props.form;
-        const { isContinuity } = result;
+        const { isContinuity, results } = result;
+
+        this.setState({
+            hasZero: this.hasZero(results)
+        })
+
         if (isContinuity && getFieldError('sellSectionPrices')) {
             setFields({
                 sellSectionPrices: {
@@ -100,6 +211,7 @@ class SellPriceModal extends Component {
                 },
             })
         }
+        this.isDisabled = false;
     }
 
     handleChoose = ({ record }) => {
@@ -134,8 +246,11 @@ class SellPriceModal extends Component {
      * 最小起订数量
      */
     handleMinChange = (num) => {
+        const { results } = this.steppedPrice.getValue();
         this.setState({
-            startNumber: num
+            startNumber: num,
+            isEditPrice: true,
+            price: results[0].price
         }, () => {
             this.props.form.setFieldsValue({ minNumber: num });
             this.steppedPrice.reset();
@@ -160,17 +275,24 @@ class SellPriceModal extends Component {
         //     startNumber: num
         // }, () => {
         this.props.form.setFieldsValue({ maxNumber: num });
-            // this.steppedPrice.reset();
+        // this.steppedPrice.reset();
         // })
+    }
+
+    handleConfirm = () => {
+        this.setState({
+            confirmVisible: true
+        })
     }
 
     render() {
         const { prefixCls, form, datas, isEdit, getProductById } = this.props;
         const { getFieldDecorator } = form;
-        const { currentInside, startNumber } = this.state;
+        const { currentInside, startNumber, price, hasZero } = this.state;
         const newDates = JSON.parse(JSON.stringify(datas));
         const preHarvestPinStatusChange =
-            (newDates.preHarvestPinStatus === 1 ? '1' : '0')
+            (newDates.preHarvestPinStatus === 1 ? '1' : '0');
+
         return (
             <Modal
                 title={isEdit ? '编辑销售价格' : '新增销售价格'}
@@ -180,6 +302,18 @@ class SellPriceModal extends Component {
                 width={'447px'}
                 onCancel={this.handleCancel}
                 maskClosable={false}
+                confirmLoading={this.isDisabled}
+                footer={
+                    !this.state.confirmVisible && hasZero
+                        ? [
+                            <Button key="confirm" size="large" type="danger" onClick={this.handleConfirm}>确认价格为0提交</Button>,
+                            <Button key="handleCancel" size="large" onClick={this.handleCancel}>取消</Button>
+                        ]
+                        : [
+                            <Button key="handleOk" size="large" type="primary" onClick={this.handleOk}>确认</Button>,
+                            <Button key="handleCancel" size="large" onClick={this.handleCancel}>取消</Button>
+                        ]
+                }
             >
                 <div className={`${prefixCls}-body-wrap`}>
                     <Form layout="inline" onSubmit={this.handleSubmit}>
@@ -197,7 +331,7 @@ class SellPriceModal extends Component {
                                                 min={0}
                                                 onChange={this.handleInsideChange}
                                             />
-                                            )}
+                                        )}
                                     </span>
                                 </FormItem>
                                 <FormItem>
@@ -224,7 +358,7 @@ class SellPriceModal extends Component {
                                                 onChange={this.handleMinChange}
                                                 step={currentInside || newDates.salesInsideNumber}
                                             />
-                                            )}
+                                        )}
                                     </span>
                                 </FormItem>
                                 <FormItem>
@@ -238,7 +372,7 @@ class SellPriceModal extends Component {
                                                 onChange={this.handleMaxChange}
                                                 step={currentInside || newDates.salesInsideNumber}
                                             />
-                                            )}
+                                        )}
                                     </span>
                                 </FormItem>
                                 <FormItem>
@@ -249,7 +383,7 @@ class SellPriceModal extends Component {
                                             initialValue: newDates.deliveryDay
                                         })(
                                             <InputNumber min={0} />
-                                            )}
+                                        )}
                                     </span>
                                     天内发货
                                 </FormItem>
@@ -285,7 +419,7 @@ class SellPriceModal extends Component {
                                                 )
                                             }
                                         </Select>
-                                        )}
+                                    )}
                                 </FormItem>
                             </div>
                         </div>
@@ -301,14 +435,17 @@ class SellPriceModal extends Component {
                                     {getFieldDecorator('sellSectionPrices', {
                                     })(
                                         <SteppedPrice
+                                            isEditor={this.state.isEditPrice}
+                                            isEdit={isEdit}
                                             ref={node => { this.steppedPrice = node }}
                                             handleChange={this.handlePriceChange}
                                             startNumber={startNumber}
                                             defaultValue={isEdit ? newDates.sellSectionPrices : []}
                                             inputSize="default"
                                             initvalue={getProductById.minUnit}
+                                            price={price}
                                         />
-                                        )}
+                                    )}
                                 </FormItem>
                                 <FormItem>
                                     <span>* 建议零售价(元)：</span>
@@ -318,7 +455,7 @@ class SellPriceModal extends Component {
                                             initialValue: newDates.suggestPrice
                                         })(
                                             <InputNumber min={0} />
-                                            )}
+                                        )}
                                     </span>
                                 </FormItem>
                             </div>
@@ -339,8 +476,8 @@ class SellPriceModal extends Component {
                                         disabled={isEdit}
                                         defaultValue={
                                             newDates.branchCompanyId ?
-                                            `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` :
-                                            undefined}
+                                                `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` :
+                                                undefined}
                                         onClear={this.handleClear}
                                         renderChoosedInputRaw={(data) => (
                                             <div>{data.id} - {data.name}</div>

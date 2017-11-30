@@ -8,6 +8,7 @@
 import React from 'react';
 import Util from '../../util/util';
 import { promotionStatus } from './constants';
+import { couponTypeStatus } from '../coupon/constants';
 
 // 发放优惠券列表
 const grantCouponsColumns = [{
@@ -71,12 +72,28 @@ const releaseCouponsColumns = [{
         return category.categoryName
     }
 }, {
-    title: '使用区域',
+    title: '总数量',
+    dataIndex: 'totalQuantity',
+    key: 'totalQuantity'
+}, {
+    title: '剩余数量',
+    dataIndex: 'left',
+    key: 'left'
+}, {
+    title: '发放数量',
+    dataIndex: 'quantity',
+    key: 'quantity'
+}, {
+    title: '已使用',
+    dataIndex: 'usedQty',
+    key: 'usedQty'
+}, {
+    title: '范围',
     dataIndex: 'companiesPoList',
     key: 'companiesPoList',
     render: list => {
         if (!list || list.length === 0) {
-            return '全部区域';
+            return '全国';
         }
         const areas = list.map(company => company.companyName).join(',');
         return (
@@ -89,34 +106,20 @@ const releaseCouponsColumns = [{
     key: 'quanifyAmount',
     render: amount => (amount ? `满${amount}可用` : '不限制')
 }, {
-    title: '有效时间',
-    children: [{
-        title: '开始时间',
-        dataIndex: 'startDate',
-        key: 'startDate',
-        render: timestamp => Util.getTime(timestamp)
-    }, {
-        title: '结束时间',
-        dataIndex: 'endDate',
-        key: 'endDate',
-        render: timestamp => Util.getTime(timestamp)
-    }],
+    title: '开始时间',
+    dataIndex: 'startDate',
+    key: 'startDate',
+    render: timestamp => Util.getTime(timestamp)
 }, {
-    title: '发放数量',
-    dataIndex: 'totalQuantity',
-    key: 'totalQuantity'
-}, {
-    title: '已领取',
-    dataIndex: 'grantQty',
-    key: 'grantQty'
-}, {
-    title: '已使用',
-    dataIndex: 'usedQty',
-    key: 'usedQty'
+    title: '截至时间',
+    dataIndex: 'endDate',
+    key: 'endDate',
+    render: timestamp => Util.getTime(timestamp)
 }, {
     title: '备注',
     dataIndex: 'note',
-    key: 'note'
+    key: 'note',
+    render: text => (text === null ? '无' : text)
 }];
 
 const grantCouponsDetail = [{

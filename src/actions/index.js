@@ -71,6 +71,11 @@ import {
     deleteBatchRefundOrder,
     queryAuditPurchaseRefundList,
     queryApprovalInfo,
+    queryAuditPurReList,
+    queryProcessDefinitions,
+    queryPoDetail,
+    approveRefund,
+    cancelRefund
 } from './procurement';
 
 // IBM
@@ -103,9 +108,8 @@ import stockListDetail from './stockListDetail';
 import storeAdList from './storeAdjustList';
 
 // 促销活动
-import {
-    getPromotionList, createPromotion,
-    getPromotionDetail, fetchCouponsListAction, getCouponsDetail
+import { getPromotionList, createPromotion,
+    getPromotionDetail, fetchCouponsListAction, getCouponsDetail, cancelCoupons
 } from './promotion';
 
 // 商品管理列表
@@ -120,7 +124,18 @@ import { splitorderbyinventory, interfaceInventory } from './order';
 
 // 退货订单列表
 
-import { returnGoodsList, returnGoodsDetail, returnGoodsDetailClearData, returnGoodsListFormData } from './salesManagement';
+import {
+    returnGoodsList,
+    returnGoodsDetail,
+    returnGoodsDetailClearData,
+    returnGoodsListFormData,
+    returnGoodsOperation,
+    returnGoodsDetailSave,
+    returnGoodsListFormDataClear,
+    insertRefund,
+    returnDescriptionSave,
+    getExchangeGoodsListAction
+} from './salesManagement';
 
 export {
     fetchSupplierList,
@@ -205,6 +220,7 @@ export {
     getPromotionDetail,
     fetchCouponsListAction,
     getCouponsDetail,
+    cancelCoupons,
 
     // 根据条件分页查询商品清单，并排序
     queryCommodityList,
@@ -230,6 +246,10 @@ export {
     returnGoodsDetail,
     returnGoodsDetailClearData,
     returnGoodsListFormData,
+    returnGoodsOperation,
+    returnGoodsDetailSave,
+    returnDescriptionSave,
+    returnGoodsListFormDataClear,
     // 采购退货列表
     fetchReturnMngList,
     // 采购退货详情
@@ -242,4 +262,14 @@ export {
     queryAuditPurchaseRefundList,
     // 查看退货单审批意见
     queryApprovalInfo,
+    // 查询退货单审批列表
+    queryAuditPurReList,
+    // 查询退货单审批流程
+    queryProcessDefinitions,
+    approveRefund,
+    queryPoDetail,
+    insertRefund,
+    // 换货列表
+    getExchangeGoodsListAction,
+    cancelRefund
 }

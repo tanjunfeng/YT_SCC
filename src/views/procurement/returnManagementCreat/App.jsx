@@ -3,7 +3,7 @@
  * @Description: 采购退货新建编辑页
  * @CreateDate: 2017-10-27 11:26:16
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-31 16:27:36
+ * @Last Modified time: 2017-11-16 16:37:42
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -12,17 +12,20 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import moment from 'moment';
 import {
-    Table, Form, Icon, Row, Col, Input, Button, message, Select, DatePicker
+    Table, Form, Icon, Row, Col, Input, Button,
+    message, Select, DatePicker, Modal, Steps, InputNumber
 } from 'antd';
 import {
     returnLocationType,
-    currencyType
+    currencyTypes
 } from '../../../constant/searchParams';
 import {
     fetchReturnPoRcvDetail,
     updatePoRcvBasicinfo,
     updatePoRcvLine,
-    createPoRcv
+    createPoRcv,
+    deleteBatchRefundOrder,
+    queryProcessDefinitions
 } from '../../../actions/procurement';
 import { pubFetchValueList } from '../../../actions/pub';
 import SearchMind from '../../../components/searchMind';
@@ -33,23 +36,34 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const dateFormat = 'YYYY-MM-DD';
 const { TextArea } = Input;
+const Step = Steps.Step;
 
 @connect(state => ({
     poReturn: state.toJS().procurement.poReturn,
+    processDefinitions: state.toJS().procurement.processDefinitions
 }), dispatch => bindActionCreators({
     fetchReturnPoRcvDetail,
     updatePoRcvLine,
     updatePoRcvBasicinfo,
     createPoRcv,
-    pubFetchValueList
+    pubFetchValueList,
+    deleteBatchRefundOrder,
+    queryProcessDefinitions
 }, dispatch))
+
 class ReturnManagementCreat extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
             editable: false,
+            opinionVisible: false,
             // 控制DatePicker的value
             rengeTime: null,
+            selectedListData: [],
+            remark: null,
+        }
+        this.NumberList = {
+
         }
         // 收货单商品行信息
         this.columns = [
@@ -98,27 +112,100 @@ class ReturnManagementCreat extends PureComponent {
             }, {
                 title: '可退库存',
                 dataIndex: 'possibleNum',
-                key: 'possibleNum'
+                key: 'possibleNum',
+                render: text => {
+                    let res = text;
+                    if (!text) {
+                        res = '-';
+                    }
+                    return res;
+                }
             }, {
                 title: '退货数量',
                 dataIndex: 'refundAmount',
-                key: 'refundAmount'
+                key: 'refundAmount',
+                render: (text) => {
+                    const { currencyType } = this.getFormData();
+                    let res = (<InputNumber
+                        min={0}
+                        max={Number(text)}
+                        defaultValue={text}
+                        onChange={this.numberChange}
+                    />)
+                    if (currencyType !== '1') {
+                        res = '-';
+                    }
+                    return res;
+                }
             }, {
                 title: '原因',
                 dataIndex: 'refundReason',
                 key: 'refundReason',
                 render: (text) => {
-                    switch (text) {
-                        case '0':
-                            return '破损';
-                        case '1':
-                            return '临期';
-                        case '2':
-                            return '库存过剩';
-                        case '3':
-                            return '其他';
-                        default:
-                            return text;
+                    const { match } = this.props;
+                    const { getFieldDecorator } = this.props.form;
+                    // 退货单id
+                    const id = match.params.id;
+                    const resons = {
+                        defaultValue: '0',
+                        data: [{
+                            key: '0',
+                            value: '请选择'
+                        }, {
+                            key: '1',
+                            value: '破损'
+                        }, {
+                            key: '2',
+                            value: '临期'
+                        }, {
+                            key: '3',
+                            value: '库存剩余'
+                        }, {
+                            key: '4',
+                            value: '其他'
+                        }]
+                    }
+                    if (id === 'returnManagementCreat') {
+                        return (
+                            <FormItem >
+                                <div>
+                                    {getFieldDecorator('reason', {
+                                        initialValue: resons.defaultValue,
+                                        rules: [{
+                                            required: true,
+                                            message: '请选择退货原因'}],
+                                    })(
+                                        <Select
+                                            style={{width: 100, marginBottom: 7}}
+                                            className="return-creat-select"
+                                            size="default"
+                                        >
+                                            {
+                                                resons.data.map((item) =>
+                                                    (<Option key={item.key} value={item.key}>
+                                                        {item.value}
+                                                    </Option>)
+                                                )
+                                            }
+                                        </Select>
+                                    )}
+                                </div>
+                            </FormItem>
+                        )
+                    }
+                    if (id !== 'returnManagementCreat') {
+                        switch (text) {
+                            case '0':
+                                return '破损';
+                            case '1':
+                                return '临期';
+                            case '2':
+                                return '库存过剩';
+                            case '3':
+                                return '其他';
+                            default:
+                                return text;
+                        }
                     }
                 }
             }, {
@@ -150,8 +237,10 @@ class ReturnManagementCreat extends PureComponent {
         if (!id) {
             history.back();
         }
-        // 请根据后端api进行调整
-        this.props.fetchReturnPoRcvDetail(Util.removeInvalid({ id }));
+        // 如果不是新建页面，则加载table数据
+        if (id !== 'returnManagementCreat') {
+            this.props.fetchReturnPoRcvDetail(Util.removeInvalid({ id }));
+        }
     }
 
     /**
@@ -164,6 +253,55 @@ class ReturnManagementCreat extends PureComponent {
         this.setState({
             rengeTime: date
         });
+    }
+
+    getTableData() {
+        return new Promise((resolve, reject) => {
+            this.props.form.validateFields((err, values) => {
+                if (err) {
+                    reject(err);
+                }
+                const {
+                    reason
+                } = values;
+                const dist = {
+                    reason
+                };
+                if (reason === '') {
+                    this.props.form.setFields({
+                        approvalStatus: {
+                            value: values.reason,
+                            errors: [new Error('未选择退货原因')],
+                        },
+                    });
+                    reject();
+                } else {
+                    Object.assign(dist, {
+                        reason
+                    });
+                }
+                resolve(Util.removeInvalid(dist));
+            });
+        });
+    }
+
+    getFormData() {
+        const {
+            providerType,
+            payDate,
+            currencyType,
+            purchaseOrderNo
+        } = this.props.form.getFieldsValue();
+        return Util.removeInvalid({
+            providerType,
+            payDate,
+            currencyType,
+            purchaseOrderNo
+        });
+    }
+
+    numberChange = (text) => {
+        this.returnQuantity = Number(text);
     }
 
     goBack = () => {
@@ -199,6 +337,42 @@ class ReturnManagementCreat extends PureComponent {
         );
     }
 
+    handleTableDelete = () => {
+        const { selectedListData } = this.state;
+        const DeleteList = [];
+        selectedListData.forEach((item) => {
+            DeleteList.push(item.id);
+        });
+        DeleteList.join(',');
+        this.props.deleteBatchRefundOrder({pmRefundOrderIds: DeleteList.join(',')}).then((res) => {
+            if (res.code === 200) {
+                message.success(res.message)
+            }
+        });
+    }
+
+    showOpinionModal = () => {
+        this.setState({
+            opinionVisible: true,
+        });
+    }
+
+    handleOpinionOk = () => {
+        this.setState({
+            opinionVisible: false,
+        });
+    }
+    handleOpinionCancel = () => {
+        this.setState({
+            opinionVisible: false,
+        });
+    }
+
+    handleApprovalProgress = () => {
+        this.showOpinionModal();
+        this.props.queryProcessDefinitions({ processType: 1 });
+    }
+
     /**
      * 渲染订单状态
      * @param {number} status 订单状态
@@ -224,6 +398,17 @@ class ReturnManagementCreat extends PureComponent {
         const { match } = this.props;
         const { poReturn } = this.props;
         const { getFieldDecorator } = this.props.form;
+        const rowSelection = {
+            selectedRowKeys: this.state.chooseGoodsList,
+            onChange: (selectedRowKeys, selectedRows) => {
+                this.setState({
+                    chooseGoodsList: selectedRowKeys,
+                    selectedListData: selectedRows
+                })
+            },
+        };
+        const { processDefinitions } = this.props;
+        const agreeOrRefuse = ['拒绝', '同意'];
         return (
             <div className="po-return-detail">
                 <Form layout="inline">
@@ -246,7 +431,7 @@ class ReturnManagementCreat extends PureComponent {
                                             <span className="value-list-input">
                                                 <SearchMind
                                                     style={{ zIndex: 101 }}
-                                                    compKey="search-mind-supply"
+                                                    compKey="comSupplier"
                                                     ref={ref => { this.supplySearchMind = ref }}
                                                     fetch={(params) =>
                                                         this.props.pubFetchValueList({
@@ -261,17 +446,16 @@ class ReturnManagementCreat extends PureComponent {
                                                         <div>{datas.providerNo} -
                                                             {datas.providerName}</div>
                                                     )}
-                                                    rowKey="spAdrid"
+                                                    rowKey="spNo"
                                                     pageSize={5}
                                                     columns={[
                                                         {
-                                                            title: '地点编码',
-                                                            dataIndex: 'providerNo',
-                                                            width: 98,
+                                                            title: '供应商编号',
+                                                            dataIndex: 'spNo',
+                                                            width: 80
                                                         }, {
-                                                            title: '地点名称',
-                                                            dataIndex: 'providerName',
-                                                            width: 140
+                                                            title: '供应商名称',
+                                                            dataIndex: 'companyName'
                                                         }
                                                     ]}
                                                 />
@@ -305,6 +489,7 @@ class ReturnManagementCreat extends PureComponent {
                                                 renderChoosedInputRaw={(res) => (
                                                     <div>{res.providerNo} - {res.providerName}</div>
                                                 )}
+                                                rowKey="providerNo"
                                                 pageSize={6}
                                                 columns={[
                                                     {
@@ -426,14 +611,14 @@ class ReturnManagementCreat extends PureComponent {
                                         <div>
                                             <span className="sc-form-item-label">货币类型</span>
                                             {getFieldDecorator('currencyType', {
-                                                initialValue: currencyType.defaultValue
+                                                initialValue: currencyTypes.defaultValue
                                             })(
                                                 <Select
                                                     className="sc-form-item-select"
                                                     size="default"
                                                 >
                                                     {
-                                                        currencyType.data.map((item) =>
+                                                        currencyTypes.data.map((item) =>
                                                             (<Option key={item.key} value={item.key}>
                                                                 {item.value}
                                                             </Option>)
@@ -516,14 +701,14 @@ class ReturnManagementCreat extends PureComponent {
                                 <span>
                                     <SearchMind
                                         style={{ zIndex: 9 }}
-                                        compKey="providerNo"
+                                        compKey="productCode"
                                         ref={ref => { this.joiningAdressMind = ref }}
                                         fetch={(params) =>
                                         this.props.pubFetchValueList(Util.removeInvalid({
                                             condition: params.value,
                                             pageSize: params.pagination.pageSize,
                                             pageNum: params.pagination.current || 1
-                                        }), 'supplierAdrSearchBox').then((res) => {
+                                        }), 'queryPurchaseOrderProducts').then((res) => {
                                             const dataArr = res.data.data || [];
                                             if (!dataArr || dataArr.length === 0) {
                                                 message.warning('没有可用的数据');
@@ -532,18 +717,20 @@ class ReturnManagementCreat extends PureComponent {
                                         })}
                                         onChoosed={this.handleAdressChoose}
                                         onClear={this.handleAdressClear}
+
                                         renderChoosedInputRaw={(res) => (
-                                            <div>{res.providerNo} - {res.providerName}</div>
+                                            <div>{res.productCode} - {res.productName}</div>
                                         )}
+                                        rowKey="productCode"
                                         pageSize={6}
                                         columns={[
                                             {
                                                 title: '商品编码',
-                                                dataIndex: 'providerNo',
+                                                dataIndex: 'productCode',
                                                 maxWidth: 98
                                             }, {
                                                 title: '商品名称',
-                                                dataIndex: 'providerName'
+                                                dataIndex: 'productName'
                                             }
                                         ]}
                                     />
@@ -576,6 +763,7 @@ class ReturnManagementCreat extends PureComponent {
                                         renderChoosedInputRaw={(res) => (
                                             <div>{res.productBrandId} - {res.productBrandName}</div>
                                         )}
+                                        rowKey="productBrandId"
                                         pageSize={6}
                                         columns={[
                                             {
@@ -593,6 +781,7 @@ class ReturnManagementCreat extends PureComponent {
                         </span>
                         <Button type="primary" style={{verticalAlign: 'sub'}}>添加</Button>
                         <Button
+                            onClick={this.handleTableDelete}
                             className="return-delete"
                             type="danger"
                             style={{float: 'right', marginTop: '4px'}}
@@ -600,6 +789,7 @@ class ReturnManagementCreat extends PureComponent {
                             删除
                         </Button>
                         <Table
+                            rowSelection={rowSelection}
                             dataSource={poReturn.pmPurchaseRefundItems}
                             pagination={false}
                             columns={this.columns}
@@ -633,6 +823,26 @@ class ReturnManagementCreat extends PureComponent {
                             </Col>
                         </Row >
                     </div>
+                    {
+                        this.state.opinionVisible &&
+                        <Modal
+                            title="审批进度"
+                            visible={this.state.opinionVisible}
+                            onOk={this.handleOpinionOk}
+                            onCancel={this.handleOpinionCancel}
+                            width={1000}
+                        >
+                            <Steps current={1} progressDot>
+                                {processDefinitions.map((item, index) => (
+                                    <Step
+                                        key={`toDo-${index}`}
+                                        title={item.processNodeName}
+                                        description={agreeOrRefuse[item.type]}
+                                    />
+                                ))}
+                            </Steps>
+                        </Modal>
+                    }
                     <Row gutter={40} type="flex" justify="end">
                         <Col className="ant-col-16 ant-col-offset-6 gutter-row" style={{ textAlign: 'right'}}>
                             <FormItem>
@@ -681,8 +891,11 @@ class ReturnManagementCreat extends PureComponent {
 ReturnManagementCreat.propTypes = {
     fetchReturnPoRcvDetail: PropTypes.func,
     pubFetchValueList: PropTypes.func,
+    deleteBatchRefundOrder: PropTypes.func,
+    queryProcessDefinitions: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
     form: PropTypes.objectOf(PropTypes.any),
+    processDefinitions: PropTypes.objectOf(PropTypes.any),
     poReturn: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any)
 }

@@ -1,0 +1,71 @@
+.returngoods-detail {
+  margin: 10px 0;
+  .basic-box,materials {
+    margin-bottom: 30px;
+    border: 1px solid #C3C4C7;
+    color: #515151;
+    border-radius: 2px;
+    .header {
+      background-color: #F9f9f9;
+      border-bottom: 1px solid #C3C4C7;
+      padding: 8px 18px;
+      color: #242424;
+      font-size: 14px;
+      &-icon {
+        font-size: 16px;
+        margin-right: 8px;
+      }
+    }
+    .body {
+      padding: 10px 0;
+      .item {
+        margin: 5px 0;
+        .item-tit {
+          font-weight: bold;
+        }
+      }
+      .item-img {
+        width: 50px;
+        height: 50px;
+        border: 1px solid #ccc;
+      }
+    }
+    .body-table {
+      padding: 0;
+      .bottom-text {
+        height: 50px;
+        line-height: 50px;
+        padding: 0 50px;
+        .bt-left {
+          float: left;
+          .bt-left-num {
+            margin: 0 5px;
+          }
+        }
+        .bt-right {
+          float: right;
+          font-weight: bold;
+          .bt-right-num {
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+    .body-form {
+      padding: 10px 30px;
+      .input-ret {
+        width: 835px;
+      }
+      .input-des {
+        width: 1000px;
+      }
+    }
+  }
+  .bt-button {
+    height: 100px;
+    text-align: right;
+    button {
+      margin: 0 10px;
+    }
+  }
+}

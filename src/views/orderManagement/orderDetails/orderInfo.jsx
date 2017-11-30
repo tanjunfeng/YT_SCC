@@ -64,7 +64,7 @@ class OrderInformation extends PureComponent {
         });
     }
 
-    orderId = this.props.match.params.id;
+    getAmount = amount => (`￥${Number(amount).toFixed(2)}`);
 
     /**
      * 保存备注信息
@@ -149,17 +149,21 @@ class OrderInformation extends PureComponent {
     displayInventory = () => {
         const { manualSplitOrder = null } = this.state;
         if (manualSplitOrder.groups === undefined) {
-            message.error('请完整填写拆单数据!')
+            message.error('请完整填写拆单数据!');
             return;
         }
         this.props.interfaceInventory({
             ...manualSplitOrder
         }).then((res) => {
             if (res.code === 200) {
-                message.success('手动分组拆单成功!')
+                message.success('界面拆单成功！')
             }
+        }).catch((res) => {
+            message.error(res.message)
         })
     }
+
+    orderId = this.props.match.params.id;
 
     render() {
         const { orderDetailData } = this.props;
@@ -173,55 +177,73 @@ class OrderInformation extends PureComponent {
                         </div>
                         <div className="detail-message-body">
                             <Row>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">订单编号:</span>
                                     <span>{orderDetailData.id}</span>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">父订单编号:</span>
                                     <span>{orderDetailData.createdByOrderId}</span>
                                 </Col>
-                                <Col className="gutter-row" span={10}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">订单类型:</span>
                                     <span>{orderDetailData.orderTypeDesc}</span>
                                 </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">商品总金额:</span>
+                                    <span>{this.getAmount(orderDetailData.rawSubtotal)}</span>
+                                </Col>
                             </Row>
                             <Row>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">订单状态:</span>
                                     <span>{orderDetailData.orderStateDesc}</span>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">支付状态:</span>
                                     <span>{orderDetailData.paymentStateDesc}</span>
                                 </Col>
-                                <Col className="gutter-row" span={10}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">物流状态:</span>
                                     <span>{orderDetailData.shippingStateDesc}</span>
                                 </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">运费:</span>
+                                    <span>{this.getAmount(orderDetailData.shipping)}</span>
+                                </Col>
                             </Row>
                             <Row>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">子公司:</span>
                                     <span>{orderDetailData.branchCompanyName}</span>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
-                                    <span className="details-info-lable">加盟商:</span>
-                                    <span>{orderDetailData.franchiseeId}</span>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">雅堂小超:</span>
+                                    <span>{orderDetailData.franchiseeStoreName}</span>
                                 </Col>
-                                <Col className="gutter-row" span={10}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">出货仓:</span>
                                     <span>{orderDetailData.branchCompanyArehouse}</span>
                                 </Col>
-                            </Row>
-                            <Row>
-                                <Col className="gutter-row" span={7}>
-                                    <span className="details-info-lable">电商单据编号:</span>
-                                    <span>{orderDetailData.thirdPartOrderNo}</span>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">优惠券优惠:</span>
+                                    <span>-{
+                                        this.getAmount(orderDetailData.couponDiscountAmount)
+                                    }</span>
                                 </Col>
                             </Row>
                             <Row>
-                                <Col className="gutter-row" span={14}>
+                                <Col className="gutter-row" span={18}>
+                                    <span className="details-info-lable">电商单据编号:</span>
+                                    <span>{orderDetailData.thirdPartOrderNo}</span>
+                                </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">活动优惠:</span>
+                                    <span>-{this.getAmount(orderDetailData.discount)}</span>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col className="gutter-row" span={12}>
                                     <span className="details-info-lable">备注:</span>
                                     <TextArea
                                         autosize={{ minRows: 3, maxRows: 6 }}
@@ -235,12 +257,16 @@ class OrderInformation extends PureComponent {
                                         }}
                                     />
                                 </Col>
-                                <Col className="gutter-row" span={7}>
-                                    <span className="details-info-lable">下单日期:</span>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">下单时间:</span>
                                     <span>
                                         {moment(parseInt(orderDetailData.creationTime, 10))
                                             .format(TIME_FORMAT)}
                                     </span>
+                                </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">实付金额:</span>
+                                    <span className="red-star">{this.getAmount(orderDetailData.total)}</span>
                                 </Col>
                             </Row>
                         </div>
@@ -254,11 +280,11 @@ class OrderInformation extends PureComponent {
                         </div>
                         <div className="detail-message-body">
                             <Row>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">收货人:</span>
                                     <span>{orderDetailData.consigneeName}</span>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">所在地区:</span>
                                     <span>{orderDetailData.province}</span>
                                     <span>{orderDetailData.city}</span>
@@ -270,11 +296,11 @@ class OrderInformation extends PureComponent {
                                 </Col>
                             </Row>
                             <Row>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">手机:</span>
                                     <span>{orderDetailData.cellphone}</span>
                                 </Col>
-                                <Col className="gutter-row" span={7}>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">固定电话:</span>
                                     <span>{orderDetailData.telephone}</span>
                                 </Col>
@@ -307,7 +333,6 @@ class OrderInformation extends PureComponent {
                         {this.props.orderDetailData.canSplitManual
                             ? <Button
                                 size="default"
-                                type="primary"
                                 className="details-split-btns"
                                 onClick={this.displayInventory}
                             >
@@ -344,8 +369,8 @@ class OrderInformation extends PureComponent {
                                 保存
                             </Button>
                             {
-                                (orderDetailData.orderStateDesc === '待审核'
-                                    || orderDetailData.orderStateDesc === '待人工审核')
+                                (orderDetailData.orderState === 'W'
+                                    || orderDetailData.orderState === 'M')
                                 && <Button
                                     size="default"
                                     onClick={this.handleOrderAudit}
@@ -354,10 +379,10 @@ class OrderInformation extends PureComponent {
                                 </Button>
                             }
                             {
-                                orderDetailData.shippingStateDesc !== '待收货'
-                                && orderDetailData.shippingStateDesc !== '未送达'
-                                && orderDetailData.shippingStateDesc !== '已签收'
-                                && orderDetailData.orderStateDesc !== '已取消'
+                                orderDetailData.shippingState !== 'DSH'
+                                && orderDetailData.shippingState !== 'WSD'
+                                && orderDetailData.shippingState !== 'YQS'
+                                && orderDetailData.orderState !== 'Q'
                                 && <Button
                                     size="default"
                                     onClick={this.handleOrderCancel}
@@ -366,14 +391,16 @@ class OrderInformation extends PureComponent {
                                     取消
                                 </Button>
                             }
-                            <Button
-                                size="default"
-                                onClick={() => {
-                                    this.props.history.replace('/orderList');
-                                }}
-                            >
-                                返回
-                            </Button>
+                            {orderDetailData.returnOrder === 1 ?
+                                <Button
+                                    size="default"
+                                    onClick={() => {
+                                        this.props.history.replace(`/orderList/orderBackstageBack/${this.orderId}`);
+                                    }}
+                                >
+                                    后台退货
+                                </Button>
+                                : null}
                         </Col>
                     </Row>
                 </div>

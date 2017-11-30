@@ -1,0 +1,17 @@
+{
+    "timestamp": 1511407308624,
+    "code": 200,
+    "message": {},
+    "exception": null,
+    "data": {
+        "id": "carousel",
+        "name": "轮播广告区",
+        "sequence": -0.4100996404886246,
+        "isEnabled": true,
+        "itemAds": [],
+        "isUsingNation": true,
+        "companyId": "headquarters",
+        "type": 3
+    },
+    "success": true
+}

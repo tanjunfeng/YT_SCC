@@ -146,9 +146,7 @@ class BasicInfo extends PureComponent {
                         purchasePhone,
                         purchaseEmail
                     },
-                    spAdrDeliverys: wareHouseIds.map((item) => {
-                        return { warehouseId: item };
-                    }),
+                    spAdrDeliverys: wareHouseIds.map(item => ({ warehouseId: item })),
                     parentId: detailData.id
                 }
 
@@ -184,7 +182,9 @@ class BasicInfo extends PureComponent {
     submit(type) {
         const { isEdit } = this.props;
         this.getValue((data) => {
-            data.commitType = type;
+            Object.assign(data, {
+                commitType: type
+            });
             this.props.hanldeSupplier(data,
                 isEdit
                     ? 'updateSupplierAddressInfo'
@@ -195,15 +195,13 @@ class BasicInfo extends PureComponent {
         });
     }
 
-    handleAreaChange(item) {
+    handleAreaChange(placeCode) {
         const { placeRegion } = this.props;
-        for (const i of placeRegion) {
-            if (i.code === item) {
-                this.company = i.name;
-                return null;
+        placeRegion.forEach(item => {
+            if (item.code === placeCode) {
+                this.company = item.name
             }
-        }
-        return null;
+        });
     }
 
     handleChoose(item) {
@@ -269,7 +267,6 @@ class BasicInfo extends PureComponent {
     renderName(spAdrBasic, supplierBasicInfo) {
         const { isEdit } = this.props;
         const { providerName } = spAdrBasic;
-        { isEdit && !this.company ? spAdrBasic.providerName : `${this.company} - ${supplierBasicInfo.companyName}` }
         if (isEdit && !this.company) {
             this.childName = providerName;
             return providerName;
@@ -283,6 +280,7 @@ class BasicInfo extends PureComponent {
             this.childName = `${this.company} - ${supplierBasicInfo.companyName}`;
             return `${this.company} - ${supplierBasicInfo.companyName}`;
         }
+        return '';
     }
 
     render() {
@@ -477,7 +475,8 @@ class BasicInfo extends PureComponent {
                                                     this.props.pubFetchValueList(
                                                         Utils.removeInvalid({
                                                             branchCompanyName: param.value,
-                                                            id: isEdit ? detailSp.spAdrBasic.id : null,
+                                                            id: isEdit
+                                                                ? detailSp.spAdrBasic.id : null,
                                                             parentId: detailData.id,
                                                         }), 'findCanUseCompanyInfo').then((res) => {
                                                             const { data } = res.data;
@@ -487,7 +486,7 @@ class BasicInfo extends PureComponent {
                                                             return res;
                                                         })
                                                 }
-                                                ref={node => (this.orgCompany = node)}
+                                                ref={node => { this.orgCompany = node }}
                                                 onChoosed={this.handleChoose}
                                                 onClear={this.handleReset}
                                                 placeholder={'请输入子公司名称'}
@@ -564,7 +563,7 @@ class BasicInfo extends PureComponent {
                                     defaultValue={spAdrDeliverys}
                                     handleChoose={this.props.fetchWarehouseInfo}
                                     handleDelete={this.props.deleteWarehouseInfo}
-                                    ref={node => (this.wareHouse = node)}
+                                    ref={node => { this.wareHouse = node }}
                                 />
                             </div>
                         </div>
@@ -708,5 +707,6 @@ BasicInfo.propTypes = {
     deleteWarehouseInfo: PropTypes.func,
     pubFetchValueList: PropTypes.func,
     getWarehouse: PropTypes.func,
+    hanldeSupplier: PropTypes.func
 }
 export default Form.create()(withRouter(BasicInfo));

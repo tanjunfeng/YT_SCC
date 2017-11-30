@@ -1,53 +1,34 @@
 /**
  * 促销管理查询条件
  *
- * @author taoqiyu,tanjf
+ * @author taoqiyu,tanjf,liujinyu
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, Form, Select, Row, Col } from 'antd';
+import { Button, Input, Form, Select, Row, Col, Upload, Icon, Modal, message } from 'antd';
 import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import reqwest from 'reqwest';
 import Utils from '../../../../util/util';
 import { promotionStatus } from '.././constants';
-import { SubCompanies } from '../../../../container/search';
-import { pubFetchValueList } from '../../../../actions/pub';
+import { BranchCompany } from '../../../../container/search';
 import { PAGE_SIZE } from '../../../../constant';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-@connect(
-    state => ({
-        data: state.toJS().queryWhiteList.data,
-    }),
-    dispatch => bindActionCreators({
-        pubFetchValueList,
-    }, dispatch)
-)
-
 class SearchForm extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.joiningSearchMind = null;
-        this.state = {
-            branchCompanyId: '',
-            isReleaseCouponModalVisible: false,
-            grantMethod: 0,
-            warehouseVisible: false,
-            companyVisible: false,
-            supplyChoose: {},
-        }
-        this.handleSearch = this.handleSearch.bind(this);
-        this.handleReset = this.handleReset.bind(this);
-        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-        this.hanldeSubCompanyClear = this.hanldeSubCompanyClear.bind(this);
-        this.handleGoOnline = this.handleGoOnline.bind(this);
-        this.handleOffline = this.handleOffline.bind(this);
+    state = {
+        branchCompanyId: '',
+        isReleaseCouponModalVisible: false,
+        grantMethod: 0,
+        warehouseVisible: false,
+        companyVisible: false,
+        supplyChoose: {},
+        visibleUpload: false,
+        fileList: []
     }
 
-    getStatus() {
+    getStatus = () => {
         const keys = Object.keys(promotionStatus);
         return keys.map((key) => (
             <Option key={key} value={key}>
@@ -56,15 +37,15 @@ class SearchForm extends PureComponent {
         ));
     }
 
-    getFormData() {
+    getFormData = () => {
         const {
             franchiseeId,
             franchinessName,
             storeId,
             storeName,
-            scPurchaseFlag
+            scPurchaseFlag,
+            branchCompany
         } = this.props.form.getFieldsValue();
-        const branchCompanyId = this.state.branchCompanyId;
         let status = scPurchaseFlag;
         const pageSize = PAGE_SIZE;
         if (scPurchaseFlag === 'all') {
@@ -76,29 +57,24 @@ class SearchForm extends PureComponent {
             storeId,
             storeName,
             scPurchaseFlag: status,
-            branchCompanyId,
+            branchCompanyId: branchCompany.id,
             pageSize,
             pageNo: 1,
         });
     }
 
-    handleSubCompanyChoose(branchCompanyId) {
-        this.setState({ branchCompanyId });
-    }
-
-    hanldeSubCompanyClear() {
-        this.setState({ branchCompanyId: '' });
-    }
-
-    handleSearch() {
+    handleSearch = () => {
         // 将查询条件回传给调用页
         this.props.onPromotionSearch(this.getFormData());
     }
 
-    handleReset() {
-        this.hanldeSubCompanyClear(); // 清除子公司值清单
+    handleReset = () => {
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onPromotionReset();  // 通知父页面已清空
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
     handleGoOnline = () => {
@@ -109,10 +85,88 @@ class SearchForm extends PureComponent {
         this.props.onModalOfflineClick();
     }
 
+    /**
+    *
+    * 上传文件模态框显示隐藏
+    */
+    showModalUpload = () => {
+        this.setState({
+            visibleUpload: true,
+        });
+    }
+
+    hideModalUpload = () => {
+        this.props.form.resetFields()
+        this.versionExplain = ''
+        this.setState({
+            visibleUpload: false,
+            fileList: [],
+            uploading: false
+        })
+    }
+
+    /**
+    *
+    * 上传
+    */
+    handleUpload = () => {
+        const { fileList } = this.state;
+        if (fileList[0].name.indexOf('.xlsx') !== -1) {
+            const formData = new FormData();
+            formData.append('file', fileList[0]);
+            this.setState({
+                uploading: true,
+            });
+            reqwest({
+                url: '/sc/sp/whiteListBatchImport',
+                method: 'post',
+                processData: false,
+                data: formData,
+                success: (res) => {
+                    if (res.success) {
+                        message.success('上传成功');
+                        this.handleSearch()
+                        this.hideModalUpload()
+                    } else {
+                        this.setState({
+                            uploading: false
+                        });
+                        message.error(res.errorMessage);
+                    }
+                },
+                error: () => {
+                    this.setState({
+                        uploading: false
+                    });
+                    message.error('上传失败,请检查格式并清除后重新尝试');
+                },
+            });
+        } else {
+            message.error('上传文件格式必须为03版以后的excel（*.xlsx）格式，请清除后重新尝试');
+        }
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
+        const { uploading } = this.state;
+        const props = {
+            action: '/sc/sp/whiteListBatchImport',
+            onRemove: () => {
+                this.setState({
+                    fileList: []
+                });
+            },
+            beforeUpload: (file) => {
+                this.setState({
+                    fileList: [file]
+                });
+                return false;
+            },
+            fileList: this.state.fileList
+        };
+
         return (
-            <div className="search-box promotion">
+            <div className="search-box white-list">
                 <Form layout="inline">
                     <div className="search-conditions">
                         <Row gutter={40}>
@@ -127,15 +181,10 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem>
-                                    <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">所属子公司</span>
-                                        <SubCompanies
-                                            value={this.state.branchCompanyId}
-                                            onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                            onSubCompaniesClear={this.hanldeSubCompanyClear}
-                                        />
-                                    </div>
+                                <FormItem label="所属子公司">
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: { id: '', name: '' }
+                                    })(<BranchCompany />)}
                                 </FormItem>
                             </Col>
                         </Row>
@@ -159,7 +208,7 @@ class SearchForm extends PureComponent {
                                         <Select style={{ width: '153px' }} size="default">
                                             {this.getStatus()}
                                         </Select>
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
                         </Row>
@@ -195,10 +244,39 @@ class SearchForm extends PureComponent {
                                         下线
                                     </Button>
                                 </FormItem>
+                                <FormItem>
+                                    <Button type="primary" size="default" onClick={this.showModalUpload}>导入</Button>
+                                </FormItem>
+                                <FormItem>
+                                    <Button type="primary" size="default">导出</Button>
+                                </FormItem>
                             </Col>
                         </Row>
                     </div>
                 </Form>
+                <Modal
+                    title="模板导入"
+                    visible={this.state.visibleUpload}
+                    onCancel={this.hideModalUpload}
+                    footer={null}
+                >
+                    <div>
+                        <Upload {...props}>
+                            <Button disabled={this.state.fileList.length > 0}>
+                                <Icon type="upload" /> 选择文件
+                            </Button>
+                        </Upload>
+                        <Button
+                            className="upload-demo-start"
+                            type="primary"
+                            onClick={this.handleUpload}
+                            disabled={this.state.fileList.length === 0}
+                            loading={uploading}
+                        >
+                            {uploading ? '上传中' : '点击上传'}
+                        </Button>
+                    </div>
+                </Modal>
             </div >
         );
     }
@@ -212,9 +290,5 @@ SearchForm.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.objectOf(PropTypes.any),
 };
-
-SearchForm.defaultProps = {
-    prefixCls: 'whiteListConfiguration'
-}
 
 export default withRouter(Form.create()(SearchForm));

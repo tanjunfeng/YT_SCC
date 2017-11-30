@@ -3,7 +3,7 @@
  * @Description: 促销管理-新建
  * @CreateDate: 2017-09-20 18:34:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-26 21:29:40
+ * @Last Modified time: 2017-11-03 15:56:50
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -39,6 +39,7 @@ class CouponCreate extends PureComponent {
             condition: 0,
             area: 0,
             category: 0,
+            couponType: 'default',
             isSuperposeUserDiscount: 0,
             isSuperposeProOrCouDiscount: 0,
             grantChannel: 1
@@ -48,7 +49,7 @@ class CouponCreate extends PureComponent {
             categorySelectorVisible: false,
             formSelectorVisible: false,
             storeSelectorVisible: true,
-            companies: [],  // 所选区域子公司
+            companies: [], // 所选区域子公司
             categoryObj: {}, // 所选品类对象
             checkedList: [],
         }
@@ -61,6 +62,7 @@ class CouponCreate extends PureComponent {
         this.handleSelectorOk = this.handleSelectorOk.bind(this);
         this.handleSelectorCancel = this.handleSelectorCancel.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
+        this.handleCouponTypeChange = this.handleCouponTypeChange.bind(this);
         this.handleCategorySelect = this.handleCategorySelect.bind(this);
         this.handleGrantChannel = this.handleGrantChannel.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
@@ -77,6 +79,7 @@ class CouponCreate extends PureComponent {
                     discount,
                     promotionDateRange,
                     quanifyAmount,
+                    couponType,
                     condition,
                     totalQuantity,
                     grantChannel,
@@ -100,6 +103,7 @@ class CouponCreate extends PureComponent {
                     discount,
                     startDate,
                     endDate,
+                    couponType,
                     note,
                     personQty,
                     grantChannel: grantChannel === 1 ? 'personal' : 'platform',
@@ -230,6 +234,11 @@ class CouponCreate extends PureComponent {
         }
     }
 
+    handleCouponTypeChange(e) {
+        this.param.couponType = e.target.value;
+        this.props.form.setFieldsValue({ couponType: this.param.couponType });
+    }
+
     /**
      * 使用品类选项
      * @param {*object} e
@@ -302,6 +311,7 @@ class CouponCreate extends PureComponent {
     handleSubmit(e) {
         e.preventDefault();
         this.getFormData().then((param) => {
+            // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/coupon/insertCoupons
             this.props.createCoupons(param).then((res) => {
                 if (res.code === 200 && res.message === '请求成功') {
                     message.info('新增优惠券成功，请到列表页发布');
@@ -348,6 +358,24 @@ class CouponCreate extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={16}>
+                                        <FormItem className="condition" label="优惠券种类">
+                                            {getFieldDecorator('couponType', {
+                                                initialValue: this.param.couponType
+                                            })(
+                                                <RadioGroup
+                                                    onChange={this.handleCouponTypeChange}
+                                                >
+                                                    <Radio
+                                                        className="default"
+                                                        value={'default'}
+                                                    >普通券</Radio>
+                                                    <Radio value={'toGive'}>会员等级券</Radio>
+                                                </RadioGroup>)}
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span={16}>
                                         <FormItem label="面额" >
                                             {getFieldDecorator('discount', {
                                                 rules: [
@@ -358,7 +386,6 @@ class CouponCreate extends PureComponent {
                                                     size="default"
                                                     min={1}
                                                     max={9999}
-                                                    maxlength={9999}
                                                     parser={value => Math.ceil(value)}
                                                 />)}
                                             <span>元</span>
@@ -367,10 +394,10 @@ class CouponCreate extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={16}>
-                                        <FormItem label="活动时间">
+                                        <FormItem label="有效日期">
                                             {getFieldDecorator('promotionDateRange', {
                                                 initialValue: '',
-                                                rules: [{ required: true, message: '请选择活动日期' }]
+                                                rules: [{ required: true, message: '请选择有效日期' }]
                                             })(
                                                 <RangePicker
                                                     style={{ width: '240px' }}
@@ -378,8 +405,7 @@ class CouponCreate extends PureComponent {
                                                     showTime={{ format: MINUTE_FORMAT }}
                                                     format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
                                                     placeholder={['开始时间', '结束时间']}
-                                                />
-                                                )}
+                                                />)}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -398,8 +424,7 @@ class CouponCreate extends PureComponent {
                                                         value={1}
                                                     >不限制</Radio>
                                                     <Radio value={0}>满</Radio>
-                                                </RadioGroup>
-                                                )}
+                                                </RadioGroup>)}
                                         </FormItem>
                                         {
                                             this.param.condition === 0 ?
@@ -412,13 +437,11 @@ class CouponCreate extends PureComponent {
                                                             <InputNumber
                                                                 min={1}
                                                                 max={99999}
-                                                                maxlength={99999}
                                                                 parser={value => Math.ceil(value)}
                                                                 onChange={
                                                                     this.handleQuanifyAmountChange
                                                                 }
-                                                            />
-                                                            )}
+                                                            />)}
                                                     </FormItem>
                                                     元可用
                                                 </span>
@@ -439,8 +462,7 @@ class CouponCreate extends PureComponent {
                                                     {subCompanies.length > 0 ?
                                                         subCompanies.join(',')
                                                         : null}
-                                                </RadioGroup>
-                                                )}
+                                                </RadioGroup>)}
                                             <AreaSelector
                                                 isSelectorVisible={this.state.areaSelectorVisible}
                                                 onSelectorOk={this.handleSelectorOk}
@@ -459,8 +481,7 @@ class CouponCreate extends PureComponent {
                                                 <RadioGroup onChange={this.handleCategoryChange}>
                                                     <Radio className="default" value={0}>全部品类</Radio>
                                                     <Radio value={1}>指定品类</Radio>
-                                                </RadioGroup>
-                                                )}
+                                                </RadioGroup>)}
                                             {this.state.categorySelectorVisible
                                                 ? <Category
                                                     onCategorySelect={this.handleCategorySelect}
@@ -497,8 +518,7 @@ class CouponCreate extends PureComponent {
                                                         用户领取
                                                     </Radio>
                                                     <Radio value={0}>平台发放</Radio>
-                                                </RadioGroup>
-                                                )}
+                                                </RadioGroup>)}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -521,8 +541,7 @@ class CouponCreate extends PureComponent {
                                                         max={99}
                                                         parser={value => Math.ceil(value)}
                                                         formatter={value => `${value}`}
-                                                    />
-                                                    )}
+                                                    />)}
                                                 <span>张</span>
                                             </FormItem>
                                         </Col>
@@ -544,17 +563,19 @@ class CouponCreate extends PureComponent {
                                     <Col span={16}>
                                         <FormItem label="备注">
                                             {getFieldDecorator('note', {
-                                                initialValue: this.param.note
+                                                initialValue: this.param.note,
+                                                rules: [{
+                                                    max: 15,
+                                                    message: '不能输入超过15个字'
+                                                }]
                                             })(
                                                 <TextArea
                                                     placeholder="可填写备注"
-                                                    maxLength="15"
                                                     autosize={{
                                                         minRows: 4,
                                                         maxRows: 6
                                                     }}
-                                                />
-                                                )}
+                                                />)}
                                         </FormItem>
                                     </Col>
                                 </Row>

@@ -3,7 +3,7 @@
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-09-22 10:36:41
+ * @Last Modified time: 2017-11-16 13:49:48
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -29,20 +29,11 @@ import { grantCouponsColumns as columns } from '../columns';
 }, dispatch))
 
 class GrantCouponList extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            storeIds: [],
-            current: 1
-        };
-        this.param = {};
-        this.handlePromotionSearch = this.handlePromotionSearch.bind(this);
-        this.handlePromotionReset = this.handlePromotionReset.bind(this);
-        this.handleReleaseAll = this.handleReleaseAll.bind(this);
-        this.handleReleaseChecked = this.handleReleaseChecked.bind(this);
-        this.onSelectChange = this.onSelectChange.bind(this);
-        this.query = this.query.bind(this);
-    }
+    state = {
+        storeIds: [],
+        current: 1
+    };
+
 
     componentDidMount() {
         this.handlePromotionReset();
@@ -57,7 +48,6 @@ class GrantCouponList extends PureComponent {
      * 分页页码改变的回调
      */
     onPaginate = (pageNum) => {
-        console.log(pageNum)
         Object.assign(this.param, {
             pageNum
         });
@@ -68,18 +58,20 @@ class GrantCouponList extends PureComponent {
     /**
      * table复选框
      */
-    onSelectChange(storeIds) {
+    onSelectChange = (storeIds) => {
         this.setState({ storeIds });
     }
 
-    query() {
+    param = {};
+
+    query = () => {
         this.props.queryFranchiseeList(this.param).then((res) => {
             const { pageNum, pageSize } = res.data;
             Object.assign(this.param, { pageNum, pageSize });
         });
     }
 
-    handlePromotionSearch(param) {
+    handlePromotionSearch = (param) => {
         this.handlePromotionReset();
         Object.assign(this.param, {
             ...param
@@ -88,7 +80,7 @@ class GrantCouponList extends PureComponent {
         this.query();
     }
 
-    handlePromotionReset() {
+    handlePromotionReset = () => {
         // 重置检索条件
         this.param = {
             pageNum: 1,
@@ -97,38 +89,45 @@ class GrantCouponList extends PureComponent {
         this.setState({ storeIds: [] });
     }
 
-    handleReleaseAll(promoIds) {
-        this.props.grantCoupon({
-            promoIds,
-            storeIds: this.props.franchiseeList.data.map(franchisee => franchisee.storeId)
-        }).then(() => {
-            message.info('查询结果发券成功');
+    release = (coupons, storeIds, msg) => {
+        // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/coupon/grantCoupon
+        this.props.grantCoupon({ couponParam: coupons, storeIds }).then(res => {
+            if (res.code === 200) {
+                message.success(msg);
+            }
         });
     }
 
-    handleReleaseChecked(promoIds) {
-        this.props.grantCoupon({
-            promoIds,
-            storeIds: this.state.storeIds
-        }).then(() => {
-            message.info('选择加盟商发券成功');
-        });
+    handleReleaseAll = (coupons) => {
+        this.release(
+            coupons,
+            this.props.franchiseeList.data.map(franchisee => franchisee.storeId),
+            '查询结果发券成功'
+        );
+    }
+
+    handleReleaseChecked = (coupons) => {
+        this.release(
+            coupons,
+            this.state.storeIds,
+            '选择加盟商发券成功'
+        );
     }
 
     render() {
         const { data = [], total, pageNum, pageSize } = this.props.franchiseeList;
-        columns[columns.length - 1].render = this.renderOperations;
         const rowSelection = {
             selectedRowKeys: this.state.storeIds,
             onChange: this.onSelectChange
         };
+
         return (
             <div>
                 <SearchForm
+                    isGrantDisabled={this.state.storeIds.length === 0}
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
                     onPromotionReleaseAll={this.handleReleaseAll}
-                    isGrantDisabled={this.state.storeIds.length === 0}
                     onPromotionReleasChecked={this.handleReleaseChecked}
                 />
                 <Table

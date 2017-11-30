@@ -9,47 +9,43 @@ import { Button, Input, Form, Select, DatePicker, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 import Utils from '../../../util/util';
 import { MINUTE_FORMAT, DATE_FORMAT } from '../../../constant';
-import { promotionStatus } from '../constants';
-import { SubCompanies } from '../../../container/search';
+import { promotionStatus, couponTypeStatus } from '../constants';
+import { BranchCompany } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
 class SearchForm extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            branchCompanyId: ''
-        }
-        this.getStatus = this.getStatus.bind(this);
-        this.handleSearch = this.handleSearch.bind(this);
-        this.handleReset = this.handleReset.bind(this);
-        this.getFormData = this.getFormData.bind(this);
-        this.handleCreate = this.handleCreate.bind(this);
-        this.handleSubCompanyChoose = this.handleSubCompanyChoose.bind(this);
-        this.hanldeSubCompanyClear = this.hanldeSubCompanyClear.bind(this);
-    }
-
-    getStatus() {
+    getPromotionStatus = () => {
         const keys = Object.keys(promotionStatus);
-        return keys.map((key) => (
+        return keys.map(key => (
             <Option key={key} value={key}>
                 {promotionStatus[key]}
             </Option>
         ));
     }
 
-    getFormData() {
+    getCouponTypeStatus = () => {
+        const keys = Object.keys(couponTypeStatus);
+        return keys.map(key => (
+            <Option key={key} value={key}>
+                {couponTypeStatus[key]}
+            </Option>
+        ));
+    }
+
+    getFormData = () => {
         const {
             id,
             promotionName,
             promotionDateRange,
-            statusCode
+            statusCode,
+            branchCompany,
+            couponType
         } = this.props.form.getFieldsValue();
         const startDate = promotionDateRange ? promotionDateRange[0].valueOf() : '';
         const endDate = promotionDateRange ? promotionDateRange[1].valueOf() : '';
-        const branchCompanyId = this.state.branchCompanyId;
         let status = statusCode;
         if (statusCode === 'all') {
             status = '';
@@ -58,32 +54,28 @@ class SearchForm extends PureComponent {
             id,
             promotionName,
             status,
+            couponType,
             startDate,
             endDate,
-            branchCompanyId
+            branchCompanyId: branchCompany.id
         });
     }
 
-    handleSubCompanyChoose(branchCompanyId) {
-        this.setState({ branchCompanyId });
-    }
-
-    hanldeSubCompanyClear() {
-        this.setState({ branchCompanyId: '' });
-    }
-
-    handleSearch() {
+    handleSearch = () => {
         // 将查询条件回传给调用页
         this.props.onPromotionSearch(this.getFormData());
     }
 
-    handleReset() {
-        this.hanldeSubCompanyClear(); // 清除子公司值清单
-        this.props.form.resetFields();  // 清除当前查询条件
-        this.props.onPromotionReset();  // 通知父页面已清空
+    handleReset = () => {
+        this.props.form.resetFields(); // 清除当前查询条件
+        this.props.onPromotionReset(); // 通知父页面已清空
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
-    handleCreate() {
+    handleCreate = () => {
         const { pathname } = this.props.location;
         this.props.history.push(`${pathname}/create`);
     }
@@ -94,48 +86,22 @@ class SearchForm extends PureComponent {
             <div className="search-box promotion">
                 <Form layout="inline">
                     <div className="search-conditions">
-                        <Row gutter={40}>
+                        <Row>
                             <Col span={8}>
-                                <FormItem label="活动ID" style={{ paddingRight: 10 }}>
+                                <FormItem label="券ID" style={{ paddingRight: 10 }}>
                                     {getFieldDecorator('id')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem label="活动名称">
+                                <FormItem label="券名称">
                                     {getFieldDecorator('promotionName')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem>
-                                    <div className="row">
-                                        <span className="sc-form-item-label search-mind-label">所属公司</span>
-                                        <SubCompanies
-                                            value={this.state.branchCompanyId}
-                                            onSubCompaniesChooesd={this.handleSubCompanyChoose}
-                                            onSubCompaniesClear={this.hanldeSubCompanyClear}
-                                        />
-                                    </div>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={40}>
-                            <Col span={8}>
-                                <FormItem>
-                                    <div className="promotion-date-range">
-                                        <span className="sc-form-item-label search-mind-label">活动时间</span>
-                                        {getFieldDecorator('promotionDateRange', {
-                                            initialValue: '',
-                                            rules: [{ required: true, message: '请选择活动时间' }]
-                                        })(
-                                            <RangePicker
-                                                style={{ width: '240px' }}
-                                                className="manage-form-enterTime"
-                                                showTime={{ format: MINUTE_FORMAT }}
-                                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
-                                                placeholder={['开始时间', '结束时间']}
-                                            />
-                                            )}
-                                    </div>
+                                <FormItem label="使用区域">
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: { id: '', name: '' }
+                                    })(<BranchCompany />)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -145,13 +111,44 @@ class SearchForm extends PureComponent {
                                         initialValue: 'all'
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
+                                            {this.getPromotionStatus()}
                                         </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
+                                {/* 类型 */}
+                                <FormItem label="类型">
+                                    {getFieldDecorator('couponType', {
+                                        initialValue: ''
+                                    })(
+                                        <Select style={{ width: '153px' }} size="default">
+                                            {this.getCouponTypeStatus()}
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col>
+                                <FormItem>
+                                    <div className="promotion-date-range">
+                                        <span className="sc-form-item-label search-mind-label">有效日期</span>
+                                        {getFieldDecorator('promotionDateRange', {
+                                            initialValue: '',
+                                            rules: [{ required: true, message: '请选择有效日期' }]
+                                        })(
+                                            <RangePicker
+                                                style={{ width: '250px' }}
+                                                className="manage-form-enterTime"
+                                                showTime={{ format: MINUTE_FORMAT }}
+                                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
+                                                placeholder={['开始时间', '结束时间']}
+                                            />
                                         )}
+                                    </div>
                                 </FormItem>
                             </Col>
                         </Row>
-                        <Row gutter={40} type="flex" justify="end">
+                        <Row type="flex" justify="end">
                             <Col>
                                 <FormItem>
                                     <Button type="primary" size="default" onClick={this.handleSearch}>

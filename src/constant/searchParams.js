@@ -165,8 +165,29 @@ export const returnLocationType = {
     }]
 }
 
+// 原因
+export const resons = {
+    defaultValue: '0',
+    data: [{
+        key: '0',
+        value: '请选择'
+    }, {
+        key: '1',
+        value: '破损'
+    }, {
+        key: '2',
+        value: '临期'
+    }, {
+        key: '3',
+        value: '库存剩余'
+    }, {
+        key: '4',
+        value: '其他'
+    }]
+}
+
 // 货币类型
-export const currencyType = {
+export const currencyTypes = {
     defaultValue: '1',
     data: [{
         key: '1',
@@ -303,10 +324,10 @@ export const commodityStatusOptions = {
         key: '3',
         value: '暂停使用'
     },
-    // {
-    //     key: '4',
-    //     value: '停止使用'
-    // }
+        // {
+        //     key: '4',
+        //     value: '停止使用'
+        // }
     ]
 
 }
@@ -450,7 +471,7 @@ export const orderTypeOptions = {
 
 // 订单管理-订单状态
 export const orderStatusOptions = {
-    defaultValue: 'W',
+    defaultValue: 'ALL',
     data: [{
         key: 'ALL',
         value: '全部'
@@ -557,9 +578,6 @@ export const logisticsStatusOptions = {
         key: 'YQS',
         value: '已签收'
     }, {
-        key: 'WSD',
-        value: '未送达'
-    }, {
         key: 'QX',
         value: '取消送货'
     }, {
@@ -568,6 +586,9 @@ export const logisticsStatusOptions = {
     }, {
         key: 'WJS',
         value: '仓库拒收'
+    }, {
+        key: 'UJS',
+        value: '已拒签'
     }]
 }
 
