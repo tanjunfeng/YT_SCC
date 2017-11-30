@@ -142,16 +142,20 @@ class CarouselManagement extends Component {
     * @param {bool} isHeadquarters 用户是否可以修改当前页面
     */
     searchChange = (submitObj, isHeadquarters) => {
-        const { branchCompany, homePageType } = submitObj
-        const companyId = branchCompany.id
-        const obj = {
-            companyId,
-            homePageType
+        if (submitObj) {
+            const { branchCompany, homePageType } = submitObj
+            const companyId = branchCompany.id
+            this.homePageType = homePageType
+            this.companyId = companyId
+            this.setState({
+                companyId,
+                isHeadquarters
+            })
         }
-        this.setState({
-            companyId,
-            isHeadquarters
-        })
+        const obj = {
+            companyId: this.companyId,
+            homePageType: this.homePageType
+        }
         this.props.fetchCarouselArea(obj)
             .then(res => {
                 this.setState({
@@ -242,7 +246,7 @@ class CarouselManagement extends Component {
                         removeCarouselAd({
                             carouselAdId: id
                         }).then(() => {
-                            this.props.fetchCarouselAdList();
+                            this.searchChange();
                             this.props.modifyModalVisible({ isVisible: false });
                             message.success('删除成功！');
                         })
@@ -258,7 +262,7 @@ class CarouselManagement extends Component {
                             id,
                             status: 1
                         }).then(() => {
-                            this.props.fetchCarouselAdList();
+                            this.searchChange();
                             this.props.modifyModalVisible({ isVisible: false });
                             message.success('启用成功！');
                         })
@@ -274,7 +278,7 @@ class CarouselManagement extends Component {
                             id,
                             status: 0
                         }).then(() => {
-                            this.props.fetchCarouselAdList();
+                            this.searchChange();
                             this.props.modifyModalVisible({ isVisible: false });
                             message.success('停用成功！');
                         })
@@ -376,7 +380,7 @@ class CarouselManagement extends Component {
                 }
                 {
                     this.props.modalVisible &&
-                    <ChangeModalMessage />
+                    <ChangeModalMessage searchChange={this.searchChange} />
                 }
             </div>
         );
