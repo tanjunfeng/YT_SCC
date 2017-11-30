@@ -448,6 +448,28 @@ class PromotionCreate extends PureComponent {
                                 </Row>
                                 <Row>
                                     <Col span={16}>
+                                        <FormItem label="简易描述">
+                                            {getFieldDecorator('quote', {
+                                                initialValue: this.param.note
+                                            })(
+                                                <TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />
+                                                )}
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span={16}>
+                                        <FormItem label="详细描述">
+                                            {getFieldDecorator('description', {
+                                                initialValue: this.param.note
+                                            })(
+                                                <TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />
+                                                )}
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span={16}>
                                         <FormItem label="备注">
                                             {getFieldDecorator('note', {
                                                 initialValue: this.param.note
