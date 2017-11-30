@@ -74,10 +74,7 @@ class PoRcvMngList extends PureComponent {
         this.handleSelect = this.handleSelect.bind(this);
         this.searchParams = {};
         this.state = {
-            spNo: '', // 供应商编码
-            spId: '', // 供应商ID
             spAdrNo: '', // 供应商地点编码
-            isSupplyAdrDisabled: true, // 供应商地点禁用
             locDisabled: true, // 地点禁用
             locationData: {},
             adrTypeCode: '', // 地点编码
@@ -289,20 +286,10 @@ class PoRcvMngList extends PureComponent {
      * @param {object} record 改变后值
      */
     handleSupplierChange = (record) => {
-        const {spId, spNo} = record;
-        if (spId === '') {
+        const { spId } = record;
+        if (spId !== '') {
             this.setState({
-                spNo: '',
-                spId: '',
-                isSupplyAdrDisabled: true
-            });
-            this.supplySearchMind.reset();
-        } else {
-            this.setState({
-                spNo,
-                spId,
-                orgId: this.props.employeeCompanyId,
-                isSupplyAdrDisabled: false
+                orgId: this.props.employeeCompanyId
             });
         }
         this.handleSupplierAddressClear();
@@ -425,7 +412,8 @@ class PoRcvMngList extends PureComponent {
             adrType,
             purchaseOrderType,
             status,
-            businessMode
+            businessMode,
+            supplier
         } = this.props.form.getFieldsValue();
 
         // 收货日期区间
@@ -451,7 +439,7 @@ class PoRcvMngList extends PureComponent {
         }
 
         // 供应商编号
-        const spNo = this.state.spNo;
+        const spNo = supplier.spNo;
 
         // 供应商地点编号
         const spAdrNo = this.state.spAdrNo;
@@ -513,7 +501,7 @@ class PoRcvMngList extends PureComponent {
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator, getFieldValue } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.poRcvMngList;
         return (
             <div className="search-box">
@@ -576,13 +564,11 @@ class PoRcvMngList extends PureComponent {
                                 <FormItem>
                                     <div className="row middle">
                                         <span className="ant-form-item-label search-mind-label">供应商</span>
-                                        {getFieldDecorator('spId', {
-                                            initialValue: { spId: '', spNo: '', companyName: ''}
-                                        })(
-                                            <Supplier
-                                                onChange={this.handleSupplierChange}
-                                            />
-                                        )}
+                                        {getFieldDecorator('supplier', {
+                                            initialValue: { spId: '', spNo: '', companyName: '' }
+                                        })(<Supplier
+                                            onChange={this.handleSupplierChange}
+                                        />)}
                                     </div>
                                 </FormItem>
                             </Col>
@@ -599,7 +585,7 @@ class PoRcvMngList extends PureComponent {
                                             }}
                                             fetch={(params) => this.props.pubFetchValueList({
                                                 orgId: this.props.employeeCompanyId,
-                                                pId: this.state.spId,
+                                                pId: getFieldValue('supplier').spId,
                                                 condition: params.value,
                                                 pageNum: params.pagination.current || 1,
                                                 pageSize: params.pagination.pageSize
@@ -609,7 +595,7 @@ class PoRcvMngList extends PureComponent {
                                             renderChoosedInputRaw={(row) => (
                                                 <div>{row.providerNo} - {row.providerName}</div>
                                             )}
-                                            disabled={this.state.isSupplyAdrDisabled}
+                                            disabled={getFieldValue('supplier').spId === ''}
                                             pageSize={6}
                                             columns={[{
                                                 title: '供应商地点编码',
