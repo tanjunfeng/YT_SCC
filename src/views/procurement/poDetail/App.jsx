@@ -168,7 +168,7 @@ class PoDetail extends PureComponent {
                 key: 'purchasePrice',
                 render: (text, record, index) =>
                     (<EditableCell
-                        value={text}
+                        value={this.state.purchaseOrderType === '1' ? 0 : text}
                         editable={this.state.currentType !== 'detail' && this.state.purchaseOrderType === '2'}
                         step={record.purchaseInsideNumber}
                         purchaseInsideNumber={null}
@@ -664,7 +664,7 @@ class PoDetail extends PureComponent {
                                     rules: [{ required: true, message: '请输入采购单类型' }],
                                     initialValue: this.state.purchaseOrderType
                                 })(
-                                    <Select size="default">
+                                    <Select size="default" onChange={this.selectChange}>
                                         {
                                             poType.data.map((item) =>
                                                 (<Option
@@ -1250,6 +1250,12 @@ class PoDetail extends PureComponent {
         } else {
             this.createPoRequest(validPoLines, status, isGoBack);
         }
+    }
+
+    selectChange = (value) => {
+        this.setState({
+            purchaseOrderType: value
+        })
     }
 
     /**
