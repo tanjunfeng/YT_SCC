@@ -21,7 +21,8 @@ const processOverview = [{
 }, {
     title: '发布时间',
     dataIndex: 'deploymentTime',
-    key: 'deploymentTime'
+    key: 'deploymentTime',
+    render: timestamp => Util.getTime(timestamp)
 }, {
     title: '操作',
     dataIndex: 'operating',
@@ -58,8 +59,7 @@ const processDetails = [{
 }, {
     title: '操作',
     dataIndex: 'operating',
-    key: 'operating',
-    render: timestamp => Util.getTime(timestamp)
+    key: 'operating'
 }];
 
 export {processOverview, processDetails};

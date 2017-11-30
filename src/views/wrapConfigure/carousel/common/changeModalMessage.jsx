@@ -15,7 +15,6 @@ import { uploadImageBase64Data } from '../../../../service';
 import LinkType from '../../common/linkType';
 import {
     modifyModalVisible,
-    fetchCarouselAdList,
     addCarouselAd,
     modifyCarouselAd,
     fetchCarouselAdBySorting
@@ -34,8 +33,7 @@ const Option = Select.Option;
         modalTitle: state.toJS().wap.modalTitle
     }),
     dispatch => bindActionCreators({
-        modifyModalVisible,
-        fetchCarouselAdList,
+        modifyModalVisible
     }, dispatch)
 )
 class ChangeMessage extends PureComponent {
@@ -154,7 +152,7 @@ class ChangeMessage extends PureComponent {
                                 picAddress,
                             })
                         }).then(() => {
-                            this.props.fetchCarouselAdList();
+                            this.props.searchChange();
                             this.props.modifyModalVisible({
                                 isVisible: false
                             });
@@ -177,7 +175,7 @@ class ChangeMessage extends PureComponent {
                                 picAddress
                             })
                         }).then(() => {
-                            this.props.fetchCarouselAdList();
+                            this.props.searchChange();
                             this.props.modifyModalVisible({
                                 isVisible: false
                             });
@@ -291,7 +289,7 @@ class ChangeMessage extends PureComponent {
 
 ChangeMessage.propTypes = {
     modifyModalVisible: PropTypes.func,
-    fetchCarouselAdList: PropTypes.func,
+    searchChange: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     visibleData: PropTypes.objectOf(PropTypes.any),
     modalTitle: PropTypes.objectOf(PropTypes.any),

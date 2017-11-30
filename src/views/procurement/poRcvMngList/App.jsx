@@ -25,10 +25,12 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
+import { queryPoRcvMngList } from '../../../service';
 import {
     locType,
     receivedStatus,
-    poType
+    poType,
+    businessModeType
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
@@ -72,14 +74,14 @@ class PoRcvMngList extends PureComponent {
         this.handleSelect = this.handleSelect.bind(this);
         this.searchParams = {};
         this.state = {
-            spNo: '',   // 供应商编码
-            spId: '',   // 供应商ID
-            spAdrNo: '',    // 供应商地点编码
+            spNo: '', // 供应商编码
+            spId: '', // 供应商ID
+            spAdrNo: '', // 供应商地点编码
             isSupplyAdrDisabled: true, // 供应商地点禁用
-            locDisabled: true,  // 地点禁用
+            locDisabled: true, // 地点禁用
             locationData: {},
-            adrTypeCode: '',    // 地点编码
-            receivedTypeCode: ''  // 收货单状态编码
+            adrTypeCode: '', // 地点编码
+            receivedTypeCode: '' // 收货单状态编码
         };
         // 初始页号
         this.current = 1;
@@ -103,6 +105,21 @@ class PoRcvMngList extends PureComponent {
                 title: '采购单号',
                 dataIndex: 'purchaseOrderNo',
                 key: 'purchaseOrderNo'
+            }, {
+                title: '经营模式',
+                dataIndex: 'businessMode',
+                key: 'businessMode',
+                render: businessModeCode => {
+                    let text = '';
+                    businessModeType.data.forEach(item => {
+                        if (businessModeCode === +(item.key)) {
+                            text = item.value;
+                            return text;
+                        }
+                        return text;
+                    })
+                    return text;
+                }
             }, {
                 title: '采购单类型',
                 dataIndex: 'purchaseOrderType',
@@ -215,11 +232,9 @@ class PoRcvMngList extends PureComponent {
             }
         ]
     }
-
     componentDidMount() {
         this.queryRcvMngPoList();
     }
-
     /**
      * 根据地点类型值控制地点值清单是否可编辑
      * 地点类型有值时：地点值清单可编辑
@@ -364,7 +379,7 @@ class PoRcvMngList extends PureComponent {
     handleSelect(record, index, items) {
         const { key } = items;
         switch (key) {
-            case 'push':    // 重新推送采购收货单失败
+            case 'push': // 重新推送采购收货单失败
                 this.props.repushPurchaseReceipt({
                     purchaseOrderNo: record.purchaseOrderNo
                 }).then(res => {
@@ -390,7 +405,14 @@ class PoRcvMngList extends PureComponent {
         // 查询收货单单列表
         this.queryRcvMngPoList();
     }
-
+    /**
+    * 导出Excel
+    */
+    handleDownload = () => {
+        const searchData = this.editSearchParams();
+        console.log(searchData);
+        Utils.exportExcel(queryPoRcvMngList, searchData);
+    }
     /**
      *
      * 返回查询条件
@@ -402,7 +424,8 @@ class PoRcvMngList extends PureComponent {
             purchaseOrderNo,
             adrType,
             purchaseOrderType,
-            status
+            status,
+            businessMode
         } = this.props.form.getFieldsValue();
 
         // 收货日期区间
@@ -452,7 +475,8 @@ class PoRcvMngList extends PureComponent {
             receivedTimeStart,
             receivedTimeEnd,
             startAuditTime,
-            endAuditTime
+            endAuditTime,
+            businessMode
         };
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
@@ -517,6 +541,7 @@ class PoRcvMngList extends PureComponent {
                                             <RangePicker
                                                 className="date-range-picker"
                                                 style={{ width: 250 }}
+                                                onChange={this.onEnterTimeChange}
                                                 format={dateFormat}
                                                 showTime={{
                                                     hideDisabledOptions: true,
@@ -628,8 +653,7 @@ class PoRcvMngList extends PureComponent {
                                                     {item.value}
                                                 </Option>
                                             ))}
-                                        </Select>
-                                        )}
+                                        </Select>)}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
@@ -670,6 +694,21 @@ class PoRcvMngList extends PureComponent {
                         </Row>
                         <Row gutter={40}>
                             <Col span={8}>
+                                {/* 经营模式 */}
+                                <FormItem label="经营模式">
+                                    {getFieldDecorator('businessMode', {
+                                        initialValue: businessModeType.defaultValue
+                                    })(
+                                        <Select style={{ width: '153px' }} size="default" >
+                                            {businessModeType.data.map((item) => (
+                                                <Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>
+                                            ))}
+                                        </Select>)}
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
                                 {/* 审批日期 */}
                                 <FormItem>
                                     <div className="row middle">
@@ -694,6 +733,11 @@ class PoRcvMngList extends PureComponent {
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
                             <Col className="tr">
+                                <FormItem>
+                                    <Button type="primary" onClick={this.handleDownload} size="default">
+                                        导出EXCEL
+                                    </Button>
+                                </FormItem>
                                 <FormItem>
                                     <Button size="default" onClick={this.handleResetValue}>
                                         重置

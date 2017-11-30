@@ -6,7 +6,7 @@
  */
 import React from 'react';
 import moment from 'moment';
-import { locType, poStatus } from '../../constant/procurement';
+import { locType, poStatus, businessModeType, poType } from '../../constant/procurement';
 
 const purchase = ['普通采购单'];
 // 供应商列表
@@ -17,10 +17,26 @@ export const poMngListColumns = [
         key: 'purchaseOrderNo',
     },
     {
+        title: '经营模式',
+        dataIndex: 'businessMode',
+        key: 'businessMode',
+        render: (text) => {
+            if (text === null) {
+                return null;
+            }
+            return (businessModeType.data[text + 1].value);
+        }
+    },
+    {
         title: '采购单类型',
         dataIndex: 'purchaseOrderType',
         key: 'purchaseOrderType',
-        render: text => (purchase[text])
+        render: text => {
+            if (text === null) {
+                return null;
+            }
+            return (poType.data[text + 1].value);
+        }
     },
     {
         title: '供应商编号',

@@ -1,0 +1,19 @@
+{
+    "timestamp": 1502194823928,
+    "code": 200,
+    "message": {},
+    "data": {
+        "pageNum": 1,
+        "pageSize": null,
+        "total": 1,
+        "data": [
+            {
+                "productId": "60000335741",
+                "productCode": "1000064",
+                "saleName": "12"
+            }
+        ],
+        "imgDomain": null
+    },
+    "success": true
+}
