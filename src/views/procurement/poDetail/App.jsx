@@ -191,7 +191,13 @@ class PoDetail extends PureComponent {
             {
                 title: '采购金额（含税）',
                 dataIndex: 'totalAmount',
-                key: 'totalAmount'
+                key: 'totalAmount',
+                render: (text) => {
+                    if (this.state.purchaseOrderType === '1') {
+                        return 0
+                    }
+                    return text
+                }
             },
             {
                 title: '已收货数量',
@@ -1254,7 +1260,8 @@ class PoDetail extends PureComponent {
 
     selectChange = (value) => {
         this.setState({
-            purchaseOrderType: value
+            purchaseOrderType: value,
+            totalAmounts: 0
         })
     }
 
