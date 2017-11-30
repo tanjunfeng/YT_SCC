@@ -34,3 +34,4 @@ checkUser().then(data => {
 }).catch(() => {
     startApp();
 });
+

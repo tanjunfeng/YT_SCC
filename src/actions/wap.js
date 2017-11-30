@@ -452,17 +452,8 @@ export const fetchQueryBranchCompanyInfo = (data) => dispatch => (
     new Promise((resolve, reject) => {
         queryBranchCompanyInfoWap(data)
             .then(res => {
-                // 加入字段判断用户是否有修改总公司的权限
-                res.headquarters = false
-                for (let i = 0; i < res.data.length; i++) {
-                    if (res.data[i].id === 'headquarters') {
-                        res.headquarters = true
-                        break
-                    }
-                }
-                res.data.unshift({ id: '', name: '请选择' })
-                dispatch(receiveQueryBranchCompanyInfo(res))
-                resolve(res);
+                dispatch(receiveQueryBranchCompanyInfo(res.data))
+                resolve(res.data);
             })
             .catch(err => reject(err))
     })
