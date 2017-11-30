@@ -114,6 +114,7 @@ class HomeStyle extends Component {
 
     render() {
         const { homeData } = this.props;
+        console.log(homeData)
         return (
             <div className="home-box">
                 <SearchItem

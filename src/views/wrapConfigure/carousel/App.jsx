@@ -206,9 +206,24 @@ class CarouselManagement extends Component {
     }
 
     /**
+     * 没有修改权限的提示
+     */
+    showError = () => {
+        Modal.error({
+            title: '错误',
+            content: '您没有权限修改总部运营方式',
+        });
+    }
+
+    /**
      * “添加”模态框
      */
     showAddModal() {
+        // 当前用户是否可修改总部运营方式
+        if (!this.state.isHeadquarters) {
+            this.showError();
+            return;
+        }
         this.props.modifyModalVisible({
             isVisible: true,
             mTitle: '新增轮播广告设置'
@@ -223,10 +238,7 @@ class CarouselManagement extends Component {
     handleSelect(record, items) {
         // 当前用户是否可修改总部运营方式
         if (!this.state.isHeadquarters) {
-            Modal.error({
-                title: '错误',
-                content: '您没有权限修改总部运营方式',
-            });
+            this.showError();
             return;
         }
         const { id } = record;
@@ -347,7 +359,7 @@ class CarouselManagement extends Component {
                     isChecked={this.state.isChecked}
                 />
                 {
-                    adData.length > 0
+                    this.state.companyId
                         ? <div>
                             <span>
                                 <span className="modal-carousel-interval">
