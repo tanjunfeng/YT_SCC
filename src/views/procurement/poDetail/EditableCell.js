@@ -46,7 +46,9 @@ export default class EditableCell extends PureComponent {
     validate(value) {
         let isValidate;
         // 采购数量未输入、不为采购内装数整数倍
-        if (!value || (value > 0 && (value % this.state.purchaseInsideNumber !== 0))) {
+        if (!value || (value > 0 &&
+            (this.state.purchaseInsideNumber) &&
+            (value % this.state.purchaseInsideNumber !== 0))) {
             this.setState({ validateStatus: 'error' });
             isValidate = false;
         } else {
