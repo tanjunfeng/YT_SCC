@@ -17,21 +17,10 @@
         max-height: 500px;
        }
     }
-    .highLight{
-        position: 'absolute';
-        border-width: 3px;
-        border-style: 'solid';
-    }
     .closeBtn{
         position: relative;
         top: 0;
         float: right;
         z-index: 99;
     }
-}
-.hide{
-    display: none;
-}
-.show{
-    display: block;
 }

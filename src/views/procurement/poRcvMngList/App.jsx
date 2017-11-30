@@ -410,7 +410,6 @@ class PoRcvMngList extends PureComponent {
     */
     handleDownload = () => {
         const searchData = this.editSearchParams();
-        console.log(searchData);
         Utils.exportExcel(queryPoRcvMngList, searchData);
     }
     /**

@@ -917,3 +917,8 @@ export const queryProcessDefinitions = params => http.get('/pmPurchaseRefund/que
 export const approveRefund = params => http.post('/pmPurchaseRefund/approveRefund', params);
 // 取消退货单
 export const cancelRefund = params => http.get('/pmPurchaseRefund/cancel', params);
+/**
+ * 待办事项模块
+ */
+// 采购审批列表下获取高亮流程图
+export const processImage = params => http.get('/bpm/processImage', params);
