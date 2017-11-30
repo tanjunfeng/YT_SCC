@@ -81,7 +81,7 @@ class SearchBox extends PureComponent {
      * @param {string} homePageType form中运营类型的数据
      */
     isType = (companyId, homePageType) => {
-        if (homePageType && homePageType !== '0') {
+        if (homePageType) {
             this.setState({
                 isDisabled: false
             })

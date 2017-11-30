@@ -45,8 +45,13 @@ import {
     getSupplierMap,
     getSupplierLocMap,
 } from '../../../actions';
+import {
+    queryHighChart,
+    clearHighChart
+} from '../../../actions/process';
 import ApproModal from './approModal';
 import { Supplier } from '../../../container/search';
+import FlowImage from '../../../components/flowImage';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -55,7 +60,8 @@ const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
 
 @connect(state => ({
-    auditPurReList: state.toJS().procurement.auditPurReList
+    auditPurReList: state.toJS().procurement.auditPurReList,
+    highChartData: state.toJS().process.highChartData
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -64,7 +70,9 @@ const confirm = Modal.confirm;
     pubFetchValueList,
     queryAuditPurReList,
     queryApprovalInfo,
-    queryPoDetail
+    queryPoDetail,
+    queryHighChart,
+    clearHighChart
 }, dispatch))
 
 class toDoPurchaseList extends PureComponent {
@@ -84,11 +92,11 @@ class toDoPurchaseList extends PureComponent {
             approvalVisible: false,
             opinionVisible: false,
             approvalStatus: false,
-            adrTypeCode: '',    // 地点编码
-            receivedTypeCode: '',  // 收货单状态编码
+            adrTypeCode: '', // 地点编码
+            receivedTypeCode: '', // 收货单状态编码
             refundAdr: '',
-            spNo: '',   // 供应商编码
-            spAdrNo: '',    // 供应商地点编码
+            spNo: '', // 供应商编码
+            spAdrNo: '', // 供应商地点编码
         };
         // 初始页号
         this.current = 1;
@@ -179,8 +187,8 @@ class toDoPurchaseList extends PureComponent {
                 title: '当前节点',
                 dataIndex: 'processNodeName',
                 key: 'processNodeName',
-                render: (text) => (
-                    <a onClick={this.nodeModal}>{text}</a>
+                render: (text, record) => (
+                    <a onClick={() => this.nodeModal(record.id)}>{text}</a>
                 )
             }, {
                 title: '操作',
@@ -231,8 +239,12 @@ class toDoPurchaseList extends PureComponent {
         });
     }
 
-    nodeModal = () => {
+    nodeModal = (id) => {
+        this.props.queryHighChart({taskId: id})
+    }
 
+    closeCanvas = () => {
+        this.props.clearHighChart();
     }
 
     /**
@@ -609,7 +621,7 @@ class toDoPurchaseList extends PureComponent {
                                                 </Option>
                                             ))}
                                         </Select>
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
                             {/* 退货地点 */}
@@ -728,16 +740,9 @@ class toDoPurchaseList extends PureComponent {
                             onOk={this.handleModalOk}
                             onCancel={this.handleModalCancel}
                         />
-                        <Modal
-                            title="Basic Modal"
-                            visible={this.state.opinionvisible}
-                            onOk={this.handleOpinionOk}
-                            onCancel={this.handleOpinionCancel}
-                        >
-                            <p>Some contents...</p>
-                            <p>Some contents...</p>
-                            <p>Some contents...</p>
-                        </Modal>
+                        <FlowImage data={this.props.highChartData} >
+                            <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
+                        </FlowImage>
                     </div>
                 </Form>
             </div >
@@ -752,7 +757,10 @@ toDoPurchaseList.propTypes = {
     pubFetchValueList: PropTypes.func,
     queryApprovalInfo: PropTypes.func,
     queryPoDetail: PropTypes.func,
-    deleteBatchRefundOrder: PropTypes.func
+    deleteBatchRefundOrder: PropTypes.func,
+    queryHighChart: PropTypes.func,
+    clearHighChart: PropTypes.func,
+    highChartData: PropTypes.string
 };
 
 export default withRouter(Form.create()(toDoPurchaseList));
