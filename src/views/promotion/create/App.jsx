@@ -10,7 +10,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {
-    Form, Row, Col, Input, Button, DatePicker, Checkbox
+    Form, Row, Col, Input,
+    Button, DatePicker, Checkbox
 } from 'antd';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
@@ -27,10 +28,24 @@ const CheckboxGroup = Checkbox.Group;
 }, dispatch))
 
 class PromotionCreate extends PureComponent {
+    getFormData = () => {
+        this.props.form.validateFields((err, values) => {
+            if (err) {
+                return;
+            }
+            console.log(values);
+        });
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.getFormData();
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form className="promotion-create" layout="inline">
+            <Form className="promotion-create" layout="inline" onSubmit={this.handleSubmit}>
                 <Row>
                     <Col span={16}>
                         <FormItem label="活动名称" >
@@ -45,28 +60,24 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 <Row>
                     <Col span={16}>
-                        <FormItem label="活动时间">
+                        <FormItem label="活动时间" className="promotion-date-range">
                             {getFieldDecorator('promotionDateRange', {
                                 initialValue: '',
                                 rules: [{ required: true, message: '请选择活动日期' }]
-                            })(
-                                <RangePicker
-                                    style={{ width: '240px' }}
-                                    className="manage-form-enterTime"
-                                    showTime={{ format: MINUTE_FORMAT }}
-                                    format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
-                                    placeholder={['开始时间', '结束时间']}
-                                />
-                                )}
+                            })(<RangePicker
+                                className="manage-form-enterTime"
+                                showTime={{ format: MINUTE_FORMAT }}
+                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
+                                placeholder={['开始时间', '结束时间']}
+                            />)}
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={16}>
                         <FormItem label="活动叠加">
-                            {getFieldDecorator('promotionDateRange', {
-                                initialValue: '',
-                                rules: [{ required: true, message: '请选择活动日期' }]
+                            {getFieldDecorator('overlay', {
+                                initialValue: []
                             })(<CheckboxGroup
                                 options={overlayOptions}
                             />)}
@@ -78,9 +89,7 @@ class PromotionCreate extends PureComponent {
                         <FormItem label="简易描述">
                             {getFieldDecorator('quote', {
                                 initialValue: ''
-                            })(
-                                <TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />
-                                )}
+                            })(<TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />)}
                         </FormItem>
                     </Col>
                 </Row>
@@ -89,9 +98,7 @@ class PromotionCreate extends PureComponent {
                         <FormItem label="详细描述">
                             {getFieldDecorator('description', {
                                 initialValue: ''
-                            })(
-                                <TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />
-                                )}
+                            })(<TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />)}
                         </FormItem>
                     </Col>
                 </Row>
@@ -100,9 +107,7 @@ class PromotionCreate extends PureComponent {
                         <FormItem label="备注">
                             {getFieldDecorator('note', {
                                 initialValue: ''
-                            })(
-                                <TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />
-                                )}
+                            })(<TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />)}
                         </FormItem>
                     </Col>
                 </Row>
@@ -111,7 +116,7 @@ class PromotionCreate extends PureComponent {
                         <FormItem>
                             <Button type="primary" size="default" htmlType="submit">
                                 保存
-                                            </Button>
+                            </Button>
                         </FormItem>
                     </Col>
                 </Row>

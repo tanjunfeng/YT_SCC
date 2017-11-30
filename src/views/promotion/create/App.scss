@@ -43,6 +43,9 @@ $promotionAddLabelWidth: 100px;
                 line-height: 98px;
             }
         }
+        .promotion-date-range .ant-calendar-picker {
+            width: 288px !important;
+        }
     }
     .tips .ant-col-16 {
         margin-left: $promotionAddLabelWidth;
