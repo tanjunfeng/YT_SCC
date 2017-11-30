@@ -374,7 +374,7 @@ const exchangeGoodsDetailColumns = [{
     )
 },
 {
-    title: '换货数量',
+    title: '退货数量',
     dataIndex: 'quantity',
     key: 'quantity'
 },

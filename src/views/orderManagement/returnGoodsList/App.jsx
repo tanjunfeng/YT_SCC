@@ -43,6 +43,7 @@ class ReturnGoodsList extends PureComponent {
             upDate: false,
             current: 1
         }
+        this.refreshVisible = true;
 
         // 退货单列表
         this.returnGoodsListColumns = [{

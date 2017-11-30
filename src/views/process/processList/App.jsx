@@ -165,7 +165,7 @@ processData.propTypes = {
     queryChartData: PropTypes.func,
     clearChartData: PropTypes.func,
     processData: PropTypes.objectOf(PropTypes.any),
-    flowChartData: PropTypes.objectOf(PropTypes.any)
+    flowChartData: PropTypes.string
 }
 
 export default withRouter(Form.create()(processData));
