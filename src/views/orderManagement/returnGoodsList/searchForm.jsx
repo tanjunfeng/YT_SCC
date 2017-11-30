@@ -83,6 +83,9 @@ class SearchForm extends PureComponent {
         this.props.form.setFieldsValue({
             branchCompany: { reset: true }
         });
+        this.props.form.setFieldsValue({
+            franchisee: { reset: true }
+        });
     }
 
     render() {
