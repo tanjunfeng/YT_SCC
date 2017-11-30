@@ -38,13 +38,8 @@ $promotionAddLabelWidth: 100px;
             width: $promotionAddLabelWidth;
             display: inline-block;
         }
-        &.multi-line {
-            .ant-form-item-label {
-                line-height: 98px;
-            }
-        }
-        .promotion-date-range .ant-calendar-picker {
-            width: 288px !important;
+        .ant-form-item-control textarea {
+            width: 260px;
         }
     }
     .tips .ant-col-16 {
