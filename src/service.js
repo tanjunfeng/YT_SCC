@@ -517,6 +517,9 @@ export const insertDictionary = (params) => http.post('/dictionary/insertDiction
 // 根据条件分页查询白名单列表
 export const queryWhitelist = (params) => http.get('/sp/queryWhiteList', params);
 
+// 白名单到出
+export const whiteListBatchExport = (params) => http.get('/sp/whiteListBatchExport', params);
+
 // 白名单上线
 export const onlineWhitelist = (params) => http.post('/sp/whiteListOnline', params);
 

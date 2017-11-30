@@ -11,7 +11,6 @@ import reqwest from 'reqwest';
 import Utils from '../../../../util/util';
 import { promotionStatus } from '.././constants';
 import { BranchCompany } from '../../../../container/search';
-import { PAGE_SIZE } from '../../../../constant';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -47,7 +46,6 @@ class SearchForm extends PureComponent {
             branchCompany
         } = this.props.form.getFieldsValue();
         let status = scPurchaseFlag;
-        const pageSize = PAGE_SIZE;
         if (scPurchaseFlag === 'all') {
             status = '';
         }
@@ -57,15 +55,21 @@ class SearchForm extends PureComponent {
             storeId,
             storeName,
             scPurchaseFlag: status,
-            branchCompanyId: branchCompany.id,
-            pageSize,
-            pageNo: 1,
+            branchCompanyId: branchCompany.id
         });
     }
 
     handleSearch = () => {
         // 将查询条件回传给调用页
         this.props.onPromotionSearch(this.getFormData());
+    }
+
+    /**
+     * 白名单导出
+     */
+    handleExport = () => {
+        // 将查询条件回传给调用页
+        this.props.onExportList(this.getFormData());
     }
 
     handleReset = () => {
@@ -207,8 +211,7 @@ class SearchForm extends PureComponent {
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
                                             {this.getStatus()}
-                                        </Select>
-                                    )}
+                                        </Select>)}
                                 </FormItem>
                             </Col>
                         </Row>
@@ -248,7 +251,7 @@ class SearchForm extends PureComponent {
                                     <Button type="primary" size="default" onClick={this.showModalUpload}>导入</Button>
                                 </FormItem>
                                 <FormItem>
-                                    <Button type="primary" size="default">导出</Button>
+                                    <Button type="primary" size="default" onClick={this.handleExport}>导出</Button>
                                 </FormItem>
                             </Col>
                         </Row>
@@ -287,6 +290,7 @@ SearchForm.propTypes = {
     onPromotionReset: PropTypes.func,
     onModalClick: PropTypes.func,
     onModalOfflineClick: PropTypes.func,
+    onExportList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.objectOf(PropTypes.any),
 };
