@@ -17,7 +17,7 @@ import './SearchMind.scss';
 
 class Supplier extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        const {spId} = nextProps.value;
+        const { spId } = nextProps.value;
         if (this.props.value.spId !== '' && spId === '') {
             this.searchMind.reset();
         }
@@ -31,7 +31,7 @@ class Supplier extends PureComponent {
      */
     handleClear = () => {
         this.searchMind.reset();
-        this.props.onChange({ spId: '', spNo: '', companyName: ''});
+        this.props.onChange({ spId: '', spNo: '', companyName: '' });
     }
 
     /**
