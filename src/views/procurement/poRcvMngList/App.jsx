@@ -19,7 +19,6 @@ import {
     Dropdown,
     message
 } from 'antd';
-import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';

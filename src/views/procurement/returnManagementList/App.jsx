@@ -61,7 +61,7 @@ const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
 
-const statusTypes = { 0: "制单", 1: "已提交", 2: "已审核", 3: "已拒绝", 4: "待退货", 5: "已退货", 6: "已取消", 7: "取消失败", 8: "异常" }
+const statusTypes = { 0: '制单', 1: '已提交', 2: '已审核', 3: '已拒绝', 4: '待退货', 5: '已退货', 6: '已取消', 7: '取消失败', 8: '异常' }
 const adrTypes = {0: '仓库', 1: '门店'}
 @connect(state => ({
     poRcvMngList: state.toJS().procurement.poRcvMngList,

@@ -48,7 +48,6 @@ import {
     getSupplierLocMap,
 } from '../../../actions';
 import ApproModal from './approModal';
-import OpinionSteps from '../../../components/approvalFlowSteps';
 import { Supplier } from '../../../container/search';
 
 const FormItem = Form.Item;
@@ -102,11 +101,9 @@ class toDoPurchaseList extends PureComponent {
                 title: '采购单号',
                 dataIndex: 'purchaseRefundNo',
                 key: 'purchaseRefundNo',
-                render: (text, record) => {
-                    return (
-                        <Link onClick={this.toPurDetail} to={`po/detail/${record.id}`}>{text}</Link>
-                    )
-                }
+                render: (text, record) => (
+                    <a target="_blank" onClick={this.toPurDetail} href={`po/detail/${record.id}`}>查看订单详情</a>
+                )
             }, {
                 title: '地点类型',
                 dataIndex: 'adrType',
