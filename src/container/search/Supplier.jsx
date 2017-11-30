@@ -17,16 +17,15 @@ import './SearchMind.scss';
 
 class Supplier extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        const {spId, spNo, companyName} = nextProps.value
-        if (spId) {
-            this.defaultValue = `${spNo}-${companyName}`
-        } else {
-            this.defaultValue = '';
+        const {spId} = nextProps.value;
+        if (this.props.value.spId !== '' && spId === '') {
             this.searchMind.reset();
+        }
+        if (nextProps.value.reset && !this.props.value.reset) {
+            this.handleClear();
         }
     }
 
-    defaultValue = '';
     /**
      * 子公司-清除
      */
@@ -46,7 +45,6 @@ class Supplier extends PureComponent {
         return (
             <SearchMind
                 style={{ zIndex: 10000 }}
-                defaultValue={this.defaultValue}
                 compKey="spId"
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
