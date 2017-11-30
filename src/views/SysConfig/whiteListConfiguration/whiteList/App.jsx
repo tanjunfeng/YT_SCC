@@ -21,7 +21,8 @@ import Utils from '../../../../util/util';
 import {
     queryWhitelist,
     onlineWhitelist,
-    offlineWhitelist
+    offlineWhitelist,
+    queryWhiteListBatchExport
 } from '../../../../actions/whiteListConfiguration';
 import ModalOnline from '../modalOnline';
 import ModalOffline from '../modalOffline';
@@ -32,7 +33,8 @@ import ModalOffline from '../modalOffline';
     queryWhitelist,
     updatePromotionStatus,
     onlineWhitelist,
-    offlineWhitelist
+    offlineWhitelist,
+    queryWhiteListBatchExport
 }, dispatch))
 
 class WhiteListConfig extends PureComponent {
@@ -162,11 +164,20 @@ class WhiteListConfig extends PureComponent {
         this.handlePromotionReset();
         this.param = {
             pageNo: 1,
+            pageSize: PAGE_SIZE,
             ...param
         };
         this.setState({ current: 1 }, () => {
             this.query();
         });
+    }
+
+    /**
+     * 白名单导出
+     * @param {object} param 查询参数
+     */
+    exportList = (param) => {
+        this.props.queryWhiteListBatchExport(param)
     }
 
     handlePromotionReset() {
@@ -264,6 +275,7 @@ class WhiteListConfig extends PureComponent {
                 <SearchForm
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
+                    onExportList={this.exportList}
                     value={{ selectListlength }}
                     onModalClick={this.onModalOnline}
                     onModalOfflineClick={this.onModalOffline}
@@ -311,6 +323,7 @@ WhiteListConfig.propTypes = {
     queryWhitelist: PropTypes.func,
     onlineWhitelist: PropTypes.func,
     offlineWhitelist: PropTypes.func,
+    queryWhiteListBatchExport: PropTypes.func,
     data: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 };
 

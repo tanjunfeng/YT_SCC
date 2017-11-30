@@ -105,6 +105,8 @@ export default {
     RECEIVE_GET_CATEGORYS: 'RECEIVE_GET_CATEGORYS',
     // 根据条件分页查询白名单列表
     QUERY_WHITE_LIST: 'QUERY_WHITE_LIST',
+    // 根据条件到出白名单
+    QUERY_WHITE_LIST_BATCH_EXPORT: 'QUERY_WHITE_LIST_BATCH_EXPORT',
     // 白名单上线
     ONLINE_WHITE_LIST: 'ONLINE_WHITE_LIST',
     // 白名单下线
