@@ -32,38 +32,17 @@ const plainOptions = ['优惠劵叠加', '会员等级'];
 }, dispatch))
 
 class PromotionCreate extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.param = {
-            condition: 0,
-            area: 0,
-            category: 0,
-            store: 0
-        };
-        this.state = {
-            areaSelectorVisible: false,
-            categorySelectorVisible: false,
-            storeSelectorVisible: false,
-            companies: [],  // 所选区域子公司
-            categoryObj: {}, // 所选品类对象
-            checkedList: []
-        }
-        this.getFormData = this.getFormData.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleBack = this.handleBack.bind(this);
-        this.handleConditionChange = this.handleConditionChange.bind(this);
-        this.handleQuanifyAmountChange = this.handleQuanifyAmountChange.bind(this);
-        this.handleAreaChange = this.handleAreaChange.bind(this);
-        this.handleSelectorOk = this.handleSelectorOk.bind(this);
-        this.handleSelectorCancel = this.handleSelectorCancel.bind(this);
-        this.handleCategoryChange = this.handleCategoryChange.bind(this);
-        this.handleCategorySelect = this.handleCategorySelect.bind(this);
-        this.handleStoreChange = this.handleStoreChange.bind(this);
-        this.handleStrategyChange = this.handleStrategyChange.bind(this);
+    state = {
+        areaSelectorVisible: false,
+        categorySelectorVisible: false,
+        storeSelectorVisible: false,
+        companies: [],  // 所选区域子公司
+        categoryObj: {}, // 所选品类对象
+        checkedList: []
     }
 
-    getFormData() {
-        return new Promise((resolve, reject) => {
+    getFormData = () => (
+        new Promise((resolve, reject) => {
             this.props.form.validateFields((err, values) => {
                 if (err) {
                     reject(err);
@@ -138,14 +117,21 @@ class PromotionCreate extends PureComponent {
                 }
                 resolve(Util.removeInvalid(dist));
             });
-        });
-    }
+        })
+    )
+
+    param = {
+        condition: 0,
+        area: 0,
+        category: 0,
+        store: 0
+    };
 
     /**
      * 条件金额选项
      * @param {*event} e
      */
-    handleConditionChange(e) {
+    handleConditionChange = (e) => {
         this.props.form.setFieldsValue({
             condition: e.target.value
         });
@@ -155,7 +141,7 @@ class PromotionCreate extends PureComponent {
     /**
      * 使用条件金额
      */
-    handleQuanifyAmountChange(number) {
+    handleQuanifyAmountChange = (number) => {
         this.props.form.setFieldsValue({
             quanifyAmount: number
         });
@@ -165,7 +151,7 @@ class PromotionCreate extends PureComponent {
      * 所选区域选项
      * @param {*object} e
      */
-    handleAreaChange(e) {
+    handleAreaChange = (e) => {
         const nextArea = e.target.value;
         this.props.form.setFieldsValue({
             area: nextArea
@@ -187,7 +173,7 @@ class PromotionCreate extends PureComponent {
      * 使用品类选项
      * @param {*object} e
      */
-    handleCategoryChange(e) {
+    handleCategoryChange = (e) => {
         const nextCategory = e.target.value;
         this.props.form.setFieldsValue({
             category: nextCategory
@@ -205,11 +191,11 @@ class PromotionCreate extends PureComponent {
         }
     }
 
-    handleCategorySelect(categoryObj) {
+    handleCategorySelect = (categoryObj) => {
         this.setState({ categoryObj });
     }
 
-    handleStoreChange(e) {
+    handleStoreChange = (e) => {
         const nextStore = e.target.value;
         this.props.form.setFieldsValue({
             store: nextStore
@@ -241,19 +227,19 @@ class PromotionCreate extends PureComponent {
         });
     }
 
-    handleSelectorClear() {
+    handleSelectorClear = () => {
         this.setState({
             companies: []
         });
     }
 
-    handleSelectorCancel() {
+    handleSelectorCancel = () => {
         this.setState({
             areaSelectorVisible: false
         });
     }
 
-    handleSubmit(e) {
+    handleSubmit = (e) => {
         e.preventDefault();
         this.getFormData().then((param) => {
             this.props.createPromotion(param).then((res) => {
@@ -264,16 +250,6 @@ class PromotionCreate extends PureComponent {
                     message.error(res.message);
                 }
             });
-        });
-    }
-
-    handleBack() {
-        this.props.history.replace('/promotion');
-    }
-
-    handleStrategyChange(e) {
-        this.props.form.setFieldsValue({
-            isSuperposeUserDiscount: e.target.checked
         });
     }
 
@@ -488,11 +464,6 @@ class PromotionCreate extends PureComponent {
                                                 保存
                                             </Button>
                                         </FormItem>
-                                        <FormItem>
-                                            <Button size="default" onClick={this.handleBack}>
-                                                返回
-                                            </Button>
-                                        </FormItem>
                                     </Col>
                                 </Row>
                             </div>
@@ -506,8 +477,7 @@ class PromotionCreate extends PureComponent {
 
 PromotionCreate.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
-    createPromotion: PropTypes.func,
-    history: PropTypes.objectOf(PropTypes.any)
+    createPromotion: PropTypes.func
 }
 
 export default withRouter(Form.create()(PromotionCreate));
