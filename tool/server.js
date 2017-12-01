@@ -20,8 +20,9 @@ if (__TEST__) {
     host = 'sitxcsc-static.yatang.com.cn';
     rules = [{
         pattern: /https?:\/\/[-\w\.]*(?::\d+)?\/(.+)/,
-        responder: 'http://sitxcsc.yatang.com.cn/$1',
+        // responder: 'http://sitxcsc.yatang.com.cn/$1',
         // responder: 'http://172.30.40.23:8080/$1',
+        responder: 'http://172.30.40.217:8082/$1'
     }];
 } else {
     host = 'localhost';
