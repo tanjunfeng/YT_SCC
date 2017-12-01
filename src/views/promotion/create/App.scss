@@ -50,7 +50,11 @@ $promotionAddLabelWidth: 100px;
             a {
                 margin-left: 2px;
             }
-            margin-right: 10px;
+            margin-left: 10px;
+        }
+        #companies {
+            width: 228px;
+            text-overflow: ellipsis;
         }
     }
     .tips .ant-col-16 {

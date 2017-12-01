@@ -53,8 +53,7 @@ class PromotionCreate extends PureComponent {
     getSubCompanies = () => {
         const subCompanies = this.state.companies.map(company => company.companyName);
         return (<span className="sub-companies">
-            {subCompanies.length > 0 ? subCompanies.join(',') : null}
-            {subCompanies.length > 0 ? <a href="#" onClick={this.handleSubCompaniesRechoose}>重新选择</a> : null}
+            <a href="#" onClick={this.handleSubCompaniesRechoose}>{subCompanies.length > 0 ? '重新选择' : '选择'}</a>
         </span>);
     }
 
@@ -118,7 +117,7 @@ class PromotionCreate extends PureComponent {
 
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        const { areaSelectorVisible, storeSelectorVisible } = this.state;
+        const { companies, areaSelectorVisible, storeSelectorVisible } = this.state;
         return (
             <Form className="promotion-create" layout="inline" onSubmit={this.handleSubmit}>
                 <Row>
@@ -156,22 +155,35 @@ class PromotionCreate extends PureComponent {
                             })(<RadioGroup onChange={this.handleAreaChange}>
                                 <Radio className="default" value={0}>全部区域</Radio>
                                 <Radio value={1}>指定区域</Radio>
-                                {this.getSubCompanies()}
                                 <Radio value={2}>指定门店</Radio>
                             </RadioGroup>)}
-                            <AreaSelector
-                                reset={getFieldValue('area') === 1}
-                                isSelectorVisible={areaSelectorVisible}
-                                onSelectorOk={this.handleSelectorOk}
-                                onSelectorCancel={this.handleSelectorCancel}
-                            />
                         </FormItem>
                     </Col>
                 </Row>
+                {getFieldValue('area') === 1 ?
+                    <Row>
+                        <Col span={16}>
+                            <FormItem label="指定区域">
+                                {getFieldDecorator('companies', {
+                                    initialValue: companies.map(company => company.companyId),
+                                    rules: [{ required: true, message: '请选择子公司' }]
+                                })(<Input disabled />)}
+                                {this.getSubCompanies()}
+                                <AreaSelector
+                                    reset={getFieldValue('area') === 1}
+                                    isSelectorVisible={areaSelectorVisible}
+                                    onSelectorOk={this.handleSelectorOk}
+                                    onSelectorCancel={this.handleSelectorCancel}
+                                />
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    : null
+                }
                 {storeSelectorVisible ?
                     <Row className="store">
                         <Col span={16}>
-                            <FormItem label="">
+                            <FormItem>
                                 {getFieldDecorator('storeId', {
                                     initialValue: '',
                                     rules: [{ required: true, message: '请输入指定门店' }]
