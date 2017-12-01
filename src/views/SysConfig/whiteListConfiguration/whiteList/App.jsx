@@ -21,9 +21,9 @@ import Utils from '../../../../util/util';
 import {
     queryWhitelist,
     onlineWhitelist,
-    offlineWhitelist,
-    queryWhiteListBatchExport
+    offlineWhitelist
 } from '../../../../actions/whiteListConfiguration';
+import { whiteListBatchExport } from '../../../../service';
 import ModalOnline from '../modalOnline';
 import ModalOffline from '../modalOffline';
 
@@ -33,8 +33,7 @@ import ModalOffline from '../modalOffline';
     queryWhitelist,
     updatePromotionStatus,
     onlineWhitelist,
-    offlineWhitelist,
-    queryWhiteListBatchExport
+    offlineWhitelist
 }, dispatch))
 
 class WhiteListConfig extends PureComponent {
@@ -177,7 +176,7 @@ class WhiteListConfig extends PureComponent {
      * @param {object} param 查询参数
      */
     exportList = (param) => {
-        this.props.queryWhiteListBatchExport(param)
+        Utils.exportExcel(whiteListBatchExport, Utils.removeInvalid(param));
     }
 
     handlePromotionReset() {
@@ -323,7 +322,6 @@ WhiteListConfig.propTypes = {
     queryWhitelist: PropTypes.func,
     onlineWhitelist: PropTypes.func,
     offlineWhitelist: PropTypes.func,
-    queryWhiteListBatchExport: PropTypes.func,
     data: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 };
 

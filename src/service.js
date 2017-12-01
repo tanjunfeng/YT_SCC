@@ -102,6 +102,9 @@ export const unusedParticipateData = '/coupon/queryCouponActivityActiveListExcel
 
 // 下载收货单管理列表excel
 export const exportReceiptList = '/pmPurchaseReceipt/exportReceiptList';
+// 白名单导出
+export const whiteListBatchExport = 'sp/whiteListBatchExport';
+
 /**
  * 登录 Api
  */
@@ -424,7 +427,7 @@ export const queryAreas = (params) => http.get('/homeAd/queryAreas', params);
 export const switchOptWayOfHome = (params) => http.post('/homeAd/switchOptWayOfHome', params);
 
 // 获取用户子公司
-export const queryBranchCompanyInfoWap = (params) => http.post('/homeAd/queryBranchCompanyInfo', params);
+export const queryBranchCompanyInfoWap = (params) => http.get('/homeAd/queryBranchCompanyInfo', params);
 
 // 设置首页广告区域停用或者启用
 export const setAreaEnable = (params) => http.post('/homeAd/setAreaEnable', params);
@@ -518,9 +521,6 @@ export const insertDictionary = (params) => http.post('/dictionary/insertDiction
 
 // 根据条件分页查询白名单列表
 export const queryWhitelist = (params) => http.get('/sp/queryWhiteList', params);
-
-// 白名单到出
-export const whiteListBatchExport = (params) => http.get('/sp/whiteListBatchExport', params);
 
 // 白名单上线
 export const onlineWhitelist = (params) => http.post('/sp/whiteListOnline', params);

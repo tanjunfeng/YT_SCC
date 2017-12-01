@@ -115,46 +115,45 @@ class SearchForm extends PureComponent {
     */
     handleUpload = () => {
         const { fileList } = this.state;
-        if (fileList[0].name.indexOf('.xlsx') !== -1) {
-            const formData = new FormData();
-            formData.append('file', fileList[0]);
-            this.setState({
-                uploading: true,
-            });
-            reqwest({
-                url: '/sc/sp/whiteListBatchImport',
-                method: 'post',
-                processData: false,
-                data: formData,
-                success: (res) => {
-                    if (res.success) {
-                        message.success('上传成功');
-                        this.handleSearch()
-                        this.hideModalUpload()
-                    } else {
-                        this.setState({
-                            uploading: false
-                        });
-                        message.error(res.errorMessage);
-                    }
-                },
-                error: () => {
+        if (fileList[0].name.indexOf('.xlsx') === -1) {
+            message.error('上传文件格式必须为03版以后的excel（*.xlsx）格式，请清除后重新尝试');
+        }
+        const formData = new FormData();
+        formData.append('file', fileList[0]);
+        this.setState({
+            uploading: true,
+        });
+        reqwest({
+            url: `${window.config.apiHost}sp/whiteListBatchImport`,
+            method: 'post',
+            processData: false,
+            data: formData,
+            success: (res) => {
+                if (res.code === 200) {
+                    message.success('上传成功');
+                    this.handleSearch()
+                    this.hideModalUpload()
+                } else {
                     this.setState({
                         uploading: false
                     });
-                    message.error('上传失败,请检查格式并清除后重新尝试');
-                },
-            });
-        } else {
-            message.error('上传文件格式必须为03版以后的excel（*.xlsx）格式，请清除后重新尝试');
-        }
+                    message.error(res.message);
+                }
+            },
+            error: () => {
+                this.setState({
+                    uploading: false
+                });
+                message.error('服务异常，请重新尝试');
+            },
+        });
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         const { uploading } = this.state;
         const props = {
-            action: '/sc/sp/whiteListBatchImport',
+            action: `${window.config.apiHost}sp/whiteListBatchImport`,
             onRemove: () => {
                 this.setState({
                     fileList: []
@@ -216,7 +215,15 @@ class SearchForm extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
-                            <Col>
+                            <Col span={8} className="export-left">
+                                <FormItem>
+                                    <Button type="primary" size="default" onClick={this.showModalUpload}>导入</Button>
+                                </FormItem>
+                                <FormItem>
+                                    <Button type="primary" size="default" onClick={this.handleExport}>导出备份</Button>
+                                </FormItem>
+                            </Col>
+                            <Col span={16} className="search-right">
                                 <FormItem>
                                     <Button type="primary" size="default" onClick={this.handleSearch}>
                                         查询
@@ -246,12 +253,6 @@ class SearchForm extends PureComponent {
                                     >
                                         下线
                                     </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.showModalUpload}>导入</Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleExport}>导出</Button>
                                 </FormItem>
                             </Col>
                         </Row>

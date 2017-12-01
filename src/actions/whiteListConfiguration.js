@@ -8,8 +8,7 @@ import ActionType from './ActionType';
 import {
     queryWhitelist as queryWhiteListService,
     onlineWhitelist as onlineService,
-    offlineWhitelist as offlineService,
-    whiteListBatchExport as whiteListBatchExportService
+    offlineWhitelist as offlineService
 } from '../service';
 /**
  * 白名单列表 Action
@@ -25,27 +24,6 @@ export const queryWhitelist = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     queryWhiteListAction(res.data)
-                );
-                resolve(res);
-            })
-            .catch(err => reject(err))
-    })
-);
-
-/**
- * 白名单到出
- */
-const whiteListBatchExportAction = (data) => ({
-    type: ActionType.QUERY_WHITE_LIST_BATCH_EXPORT,
-    payload: data
-});
-
-export const queryWhiteListBatchExport = (params) => dispatch => (
-    new Promise((resolve, reject) => {
-        whiteListBatchExportService(params)
-            .then(res => {
-                dispatch(
-                    whiteListBatchExportAction(res)
                 );
                 resolve(res);
             })
