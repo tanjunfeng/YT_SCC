@@ -21,7 +21,7 @@ export const poMngListColumns = [
         dataIndex: 'businessMode',
         key: 'businessMode',
         render: (text) => {
-            if (text === null) {
+            if (text === null || typeof text === 'undefined') {
                 return null;
             }
             return (businessModeType.data[text + 1].value);
