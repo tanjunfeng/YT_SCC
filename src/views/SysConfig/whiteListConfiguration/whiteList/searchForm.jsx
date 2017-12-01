@@ -124,7 +124,7 @@ class SearchForm extends PureComponent {
             uploading: true,
         });
         reqwest({
-            url: 'api/sc/sp/whiteListBatchImport',
+            url: `${window.config.apiHost}sc/sp/whiteListBatchImport`,
             method: 'post',
             processData: false,
             data: formData,
@@ -153,7 +153,7 @@ class SearchForm extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { uploading } = this.state;
         const props = {
-            action: 'api/sc/sp/whiteListBatchImport',
+            action: `${window.config.apiHost}sc/sp/whiteListBatchImport`,
             onRemove: () => {
                 this.setState({
                     fileList: []

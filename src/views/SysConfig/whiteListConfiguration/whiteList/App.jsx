@@ -322,7 +322,6 @@ WhiteListConfig.propTypes = {
     queryWhitelist: PropTypes.func,
     onlineWhitelist: PropTypes.func,
     offlineWhitelist: PropTypes.func,
-    queryWhiteListBatchExport: PropTypes.func,
     data: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 };
 

@@ -8,8 +8,7 @@ import ActionType from './ActionType';
 import {
     queryWhitelist as queryWhiteListService,
     onlineWhitelist as onlineService,
-    offlineWhitelist as offlineService,
-    whiteListBatchExport as whiteListBatchExportService
+    offlineWhitelist as offlineService
 } from '../service';
 /**
  * 白名单列表 Action
