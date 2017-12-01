@@ -14,8 +14,8 @@ import {
     Button, DatePicker, Checkbox
 } from 'antd';
 
+import Util from '../../../util/util';
 import { AreaSelector } from '../../../container/tree';
-
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
@@ -37,23 +37,55 @@ class PromotionCreate extends PureComponent {
         categorySelectorVisible: false,
         storeSelectorVisible: false,
         companies: [],  // 所选区域子公司
-        categoryObj: {}, // 所选品类对象
         checkedList: []
     }
 
-    getFormData = () => {
+    getFormData = (callback) => {
         this.props.form.validateFields((err, values) => {
             if (err) {
                 return;
             }
-            console.log(values);
+            const {
+                promotionName,
+                dateRange,
+                condition,
+                store,
+                category,
+                quanifyAmount,
+                note,
+                storeId,
+                overlay
+            } = values;
+            const startDate = dateRange ? dateRange[0].valueOf() : '';
+            const endDate = dateRange ? dateRange[1].valueOf() : '';
+            let overLayNum = 0;
+            overlay.forEach(v => {
+                overLayNum += v;
+            });
+            const dist = {
+                promotionName,
+                startDate,
+                endDate,
+                condition,
+                store,
+                category,
+                quanifyAmount,
+                note,
+                companiesPoList: this.state.companies,
+                storeId,
+                isSuperposeProOrCouDiscount: overLayNum % 2 === 1 ? 1 : 0,
+                isSuperposeUserDiscount: overLayNum >= 2 ? 1 : 0
+            }
+            if (typeof callback === 'function') {
+                callback(Util.removeInvalid(dist));
+            }
         });
     }
 
     getSubCompanies = () => {
-        const subCompanies = this.state.companies.map(company => company.companyName);
+        const companies = this.state.companies;
         return (<span className="sub-companies">
-            <a href="#" onClick={this.handleSubCompaniesRechoose}>{subCompanies.length > 0 ? '重新选择' : '选择'}</a>
+            <a href="#" onClick={this.handleSubCompaniesRechoose}>{companies.length > 0 ? '重新选择' : '选择'}</a>
         </span>);
     }
 
@@ -61,6 +93,9 @@ class PromotionCreate extends PureComponent {
         this.setState({
             areaSelectorVisible: false,
             companies
+        });
+        this.props.form.setFieldsValue({
+            companies: companies.map(c => c.companyName)
         });
     }
 
@@ -112,7 +147,9 @@ class PromotionCreate extends PureComponent {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.getFormData();
+        this.getFormData(data => {
+            console.log(data);
+        });
     }
 
     render() {
@@ -135,7 +172,7 @@ class PromotionCreate extends PureComponent {
                 <Row>
                     <Col span={16}>
                         <FormItem label="活动时间" className="promotion-date-range">
-                            {getFieldDecorator('promotionDateRange', {
+                            {getFieldDecorator('dateRange', {
                                 initialValue: '',
                                 rules: [{ required: true, message: '请选择活动日期' }]
                             })(<RangePicker
@@ -165,7 +202,7 @@ class PromotionCreate extends PureComponent {
                         <Col span={16}>
                             <FormItem label="指定区域">
                                 {getFieldDecorator('companies', {
-                                    initialValue: companies.map(company => company.companyId),
+                                    initialValue: companies.map(company => company.companyName),
                                     rules: [{ required: true, message: '请选择子公司' }]
                                 })(<Input disabled />)}
                                 {this.getSubCompanies()}
@@ -198,9 +235,7 @@ class PromotionCreate extends PureComponent {
                 }
                 {storeSelectorVisible ?
                     <Row className="tips">
-                        <Col span={16}>
-                            请按照数据模板的格式准备导入数据如：A000999, A000900, A000991
-                                        </Col>
+                        <Col span={16}>请按照数据模板的格式准备导入数据如：A000999, A000900, A000991</Col>
                     </Row>
                     : null
                 }
@@ -218,18 +253,20 @@ class PromotionCreate extends PureComponent {
                 <Row>
                     <Col span={16} className="multi-line">
                         <FormItem label="简易描述">
-                            {getFieldDecorator('quote', {
-                                initialValue: ''
-                            })(<TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />)}
+                            {getFieldDecorator('simpleDescription', {
+                                initialValue: '',
+                                rules: [{ max: 20, message: '限填20字' }]
+                            })(<TextArea placeholder="可填写简易描述" autosize={{ minRows: 4, maxRows: 6 }} />)}
                         </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={16} className="multi-line">
                         <FormItem label="详细描述">
-                            {getFieldDecorator('description', {
-                                initialValue: ''
-                            })(<TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />)}
+                            {getFieldDecorator('detailDescription', {
+                                initialValue: '',
+                                rules: [{ max: 100, message: '限填100字' }]
+                            })(<TextArea placeholder="可填写详细描述" autosize={{ minRows: 4, maxRows: 6 }} />)}
                         </FormItem>
                     </Col>
                 </Row>

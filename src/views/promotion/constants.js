@@ -46,10 +46,10 @@ export const participate = {
 export const overlayOptions = [
     {
         label: '优惠劵叠加',
-        value: 'isSuperposeUserDiscount'
+        value: 1
     },
     {
         label: '会员等级',
-        value: 'isSuperposeProOrCouDiscount'
+        value: 2
     }
 ];
