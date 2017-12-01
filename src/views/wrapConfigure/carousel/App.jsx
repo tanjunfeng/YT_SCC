@@ -41,9 +41,15 @@ const columns = [
         render: (text) => {
             switch (text) {
                 case 1:
-                    return '商品链接';
+                    return '详情链接';
                 case 2:
+                    return '分类链接';
+                case 3:
+                    return '列表链接';
+                case 4:
                     return '页面链接';
+                case 5:
+                    return '外部链接';
                 default:
                     return '';
             }
@@ -115,7 +121,9 @@ class CarouselManagement extends Component {
             companyId: '',
             isChecked: false,
             // 用户能否修改当前的页面
-            isHeadquarters: true
+            isHeadquarters: true,
+            // 区域id
+            areaId: ''
         }
     }
 
@@ -159,7 +167,8 @@ class CarouselManagement extends Component {
         this.props.fetchCarouselArea(obj)
             .then(res => {
                 this.setState({
-                    isChecked: res.isUsingNation
+                    isChecked: res.isUsingNation,
+                    areaId: res.id
                 })
                 this.props.fetchCarouselAdList({ areaId: res.id })
                 this.props.fetchCarouselInterval({ areaId: res.id })
@@ -392,7 +401,7 @@ class CarouselManagement extends Component {
                 }
                 {
                     this.props.modalVisible &&
-                    <ChangeModalMessage searchChange={this.searchChange} />
+                    <ChangeModalMessage searchChange={this.searchChange} areaId={this.state.areaId} />
                 }
             </div>
         );
