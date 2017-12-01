@@ -17,8 +17,6 @@ export default function (state = initState, action) {
     switch (action.type) {
         case ActionType.QUERY_WHITE_LIST:
             return state.set('data', action.payload);
-        case ActionType.QUERY_WHITE_LIST_BATCH_EXPORT:
-            return state.set('export', action.payload);
         default:
             return state;
     }
