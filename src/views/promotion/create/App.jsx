@@ -117,8 +117,8 @@ class PromotionCreate extends PureComponent {
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
-        const { companies, areaSelectorVisible, storeSelectorVisible } = this.state;
+        const { getFieldDecorator, getFieldValue } = this.props.form;
+        const { areaSelectorVisible, storeSelectorVisible } = this.state;
         return (
             <Form className="promotion-create" layout="inline" onSubmit={this.handleSubmit}>
                 <Row>
@@ -160,7 +160,7 @@ class PromotionCreate extends PureComponent {
                                 <Radio value={2}>指定门店</Radio>
                             </RadioGroup>)}
                             <AreaSelector
-                                checkedCompanies={companies.map(company => company.id)}
+                                reset={getFieldValue('area') === 1}
                                 isSelectorVisible={areaSelectorVisible}
                                 onSelectorOk={this.handleSelectorOk}
                                 onSelectorCancel={this.handleSelectorCancel}
