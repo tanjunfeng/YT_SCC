@@ -422,7 +422,7 @@ export const queryAreas = (params) => http.get('/homeAd/queryAreas', params);
 export const switchOptWayOfHome = (params) => http.post('/homeAd/switchOptWayOfHome', params);
 
 // 获取用户子公司
-export const queryBranchCompanyInfoWap = (params) => http.post('/homeAd/queryBranchCompanyInfo', params);
+export const queryBranchCompanyInfoWap = (params) => http.get('/homeAd/queryBranchCompanyInfo', params);
 
 // 设置首页广告区域停用或者启用
 export const setAreaEnable = (params) => http.post('/homeAd/setAreaEnable', params);
