@@ -33,27 +33,6 @@ export const queryWhitelist = (params) => dispatch => (
 );
 
 /**
- * 白名单到出
- */
-const whiteListBatchExportAction = (data) => ({
-    type: ActionType.QUERY_WHITE_LIST_BATCH_EXPORT,
-    payload: data
-});
-
-export const queryWhiteListBatchExport = (params) => dispatch => (
-    new Promise((resolve, reject) => {
-        whiteListBatchExportService(params)
-            .then(res => {
-                dispatch(
-                    whiteListBatchExportAction(res)
-                );
-                resolve(res);
-            })
-            .catch(err => reject(err))
-    })
-);
-
-/**
  * 上线
  */
 const onlineAction = (data) => ({
