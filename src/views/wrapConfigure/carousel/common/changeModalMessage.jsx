@@ -1,6 +1,6 @@
 /**
  * @file App.jsx
- * @author caoyanxuan
+ * @author caoyanxuan,liujinyu
  *
  * 轮播广告管理--子组件--模态框
  */
@@ -136,7 +136,7 @@ class ChangeMessage extends PureComponent {
         const linkAddress = chooseLink.link;
         const goodsId = parseInt(linkType, 10) === 1 ? chooseLink.link : '';
 
-        const { modalTitle } = this.props;
+        const { modalTitle, areaId } = this.props;
         const { id } = this.props.visibleData;
         switch (modalTitle) {
             case '新增轮播广告设置':
@@ -150,6 +150,7 @@ class ChangeMessage extends PureComponent {
                                 goodsId,
                                 linkAddress: linkAddress ? encodeURI(linkAddress) : null,
                                 picAddress,
+                                areaId
                             })
                         }).then(() => {
                             this.props.searchChange();
@@ -294,6 +295,7 @@ ChangeMessage.propTypes = {
     visibleData: PropTypes.objectOf(PropTypes.any),
     modalTitle: PropTypes.objectOf(PropTypes.any),
     modalVisible: PropTypes.bool,
+    areaId: PropTypes.string,
 }
 
 export default withRouter(Form.create()(ChangeMessage));
