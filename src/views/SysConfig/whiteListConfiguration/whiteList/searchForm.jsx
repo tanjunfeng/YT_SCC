@@ -137,7 +137,7 @@ class SearchForm extends PureComponent {
                     this.setState({
                         uploading: false
                     });
-                    message.error(res.errorMessage);
+                    message.error(res.message);
                 }
             },
             error: () => {
@@ -215,7 +215,15 @@ class SearchForm extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
-                            <Col>
+                            <Col span={8} className="export-left">
+                                <FormItem>
+                                    <Button type="primary" size="default" onClick={this.showModalUpload}>导入</Button>
+                                </FormItem>
+                                <FormItem>
+                                    <Button type="primary" size="default" onClick={this.handleExport}>导出备份</Button>
+                                </FormItem>
+                            </Col>
+                            <Col span={16} className="search-right">
                                 <FormItem>
                                     <Button type="primary" size="default" onClick={this.handleSearch}>
                                         查询
@@ -245,12 +253,6 @@ class SearchForm extends PureComponent {
                                     >
                                         下线
                                     </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.showModalUpload}>导入</Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleExport}>导出</Button>
                                 </FormItem>
                             </Col>
                         </Row>
