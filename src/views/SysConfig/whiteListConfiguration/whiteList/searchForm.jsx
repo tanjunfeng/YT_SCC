@@ -115,46 +115,45 @@ class SearchForm extends PureComponent {
     */
     handleUpload = () => {
         const { fileList } = this.state;
-        if (fileList[0].name.indexOf('.xlsx') !== -1) {
-            const formData = new FormData();
-            formData.append('file', fileList[0]);
-            this.setState({
-                uploading: true,
-            });
-            reqwest({
-                url: '/sc/sp/whiteListBatchImport',
-                method: 'post',
-                processData: false,
-                data: formData,
-                success: (res) => {
-                    if (res.success) {
-                        message.success('上传成功');
-                        this.handleSearch()
-                        this.hideModalUpload()
-                    } else {
-                        this.setState({
-                            uploading: false
-                        });
-                        message.error(res.errorMessage);
-                    }
-                },
-                error: () => {
+        if (fileList[0].name.indexOf('.xlsx') === -1) {
+            message.error('上传文件格式必须为03版以后的excel（*.xlsx）格式，请清除后重新尝试');
+        }
+        const formData = new FormData();
+        formData.append('file', fileList[0]);
+        this.setState({
+            uploading: true,
+        });
+        reqwest({
+            url: `${window.config.apiHost}sc/sp/whiteListBatchImport`,
+            method: 'post',
+            processData: false,
+            data: formData,
+            success: (res) => {
+                if (res.code === 200) {
+                    message.success('上传成功');
+                    this.handleSearch()
+                    this.hideModalUpload()
+                } else {
                     this.setState({
                         uploading: false
                     });
-                    message.error('上传失败,请检查格式并清除后重新尝试');
-                },
-            });
-        } else {
-            message.error('上传文件格式必须为03版以后的excel（*.xlsx）格式，请清除后重新尝试');
-        }
+                    message.error(res.errorMessage);
+                }
+            },
+            error: () => {
+                this.setState({
+                    uploading: false
+                });
+                message.error('服务异常，请重新尝试');
+            },
+        });
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         const { uploading } = this.state;
         const props = {
-            action: '/sc/sp/whiteListBatchImport',
+            action: `${window.config.apiHost}sc/sp/whiteListBatchImport`,
             onRemove: () => {
                 this.setState({
                     fileList: []
