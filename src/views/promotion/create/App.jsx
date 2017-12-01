@@ -11,7 +11,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {
     Form, Row, Col, Input, Radio,
-    Button, DatePicker, Checkbox
+    Button, DatePicker, Checkbox,
+    InputNumber
 } from 'antd';
 
 import Util from '../../../util/util';
@@ -186,6 +187,32 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 <Row>
                     <Col span={16}>
+                        <FormItem label="使用条件">
+                            {getFieldDecorator('condition', {
+                                initialValue: 0,
+                                rules: [{ required: true, message: '请选择使用条件' }]
+                            })(<RadioGroup onChange={this.handleAreaChange}>
+                                <Radio className="default" value={0}>不限制</Radio>
+                                <Radio value={1}>指定条件</Radio>
+                            </RadioGroup>)}
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={16}>
+                        <FormItem label="优惠方式">
+                            {getFieldDecorator('rule', {
+                                initialValue: 0,
+                                rules: [{ required: true, message: '请选择优惠方式' }]
+                            })(<RadioGroup onChange={this.handleAreaChange}>
+                                <Radio className="default" value={0}>不限制</Radio>
+                                <Radio value={1}>指定条件</Radio>
+                            </RadioGroup>)}
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={16}>
                         <FormItem label="使用区域">
                             {getFieldDecorator('area', {
                                 initialValue: 0
@@ -241,6 +268,15 @@ class PromotionCreate extends PureComponent {
                 }
                 <Row>
                     <Col span={16}>
+                        <FormItem label="活动优先级">
+                            {getFieldDecorator('priority', {
+                                initialValue: []
+                            })(<InputNumber />)}
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={16}>
                         <FormItem label="活动叠加">
                             {getFieldDecorator('overlay', {
                                 initialValue: []
@@ -251,12 +287,12 @@ class PromotionCreate extends PureComponent {
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={16} className="multi-line">
+                    <Col span={16} className="few-line">
                         <FormItem label="简易描述">
                             {getFieldDecorator('simpleDescription', {
                                 initialValue: '',
                                 rules: [{ max: 20, message: '限填20字' }]
-                            })(<TextArea placeholder="可填写简易描述" autosize={{ minRows: 4, maxRows: 6 }} />)}
+                            })(<TextArea placeholder="可填写简易描述，限填20字" autosize={{ minRows: 2, maxRows: 4 }} />)}
                         </FormItem>
                     </Col>
                 </Row>
@@ -265,8 +301,8 @@ class PromotionCreate extends PureComponent {
                         <FormItem label="详细描述">
                             {getFieldDecorator('detailDescription', {
                                 initialValue: '',
-                                rules: [{ max: 100, message: '限填100字' }]
-                            })(<TextArea placeholder="可填写详细描述" autosize={{ minRows: 4, maxRows: 6 }} />)}
+                                rules: [{ max: 200, message: '限填200字' }]
+                            })(<TextArea placeholder="可填写详细描述，限填200字" autosize={{ minRows: 4, maxRows: 6 }} />)}
                         </FormItem>
                     </Col>
                 </Row>
@@ -274,8 +310,9 @@ class PromotionCreate extends PureComponent {
                     <Col span={16} className="multi-line">
                         <FormItem label="备注">
                             {getFieldDecorator('note', {
-                                initialValue: ''
-                            })(<TextArea placeholder="可填写备注" autosize={{ minRows: 4, maxRows: 6 }} />)}
+                                initialValue: '',
+                                rules: [{ max: 200, message: '限填200字' }]
+                            })(<TextArea placeholder="可填写备注，限填200字" autosize={{ minRows: 4, maxRows: 6 }} />)}
                         </FormItem>
                     </Col>
                 </Row>
