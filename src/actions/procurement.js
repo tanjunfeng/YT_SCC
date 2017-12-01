@@ -38,7 +38,8 @@ import {
     queryProcessDefinitions as ueryProcessDefinitionsService,
     approveRefund as approveRefundService,
     cancelRefund as cancelRefundService,
-    addRefundProducts
+    addRefundProducts,
+    queryCommentHis as queryCommentHisService
 } from '../service';
 import { ProcurementDt } from '../view-model';
 
@@ -867,3 +868,24 @@ export const clearList = () => dispatch => {
     })
 }
 
+/**
+ * 根据采购单号、逻辑仓编号、商品code、品牌id添加退货商品
+ * @param {*} data
+ */
+const queryCommentHisAction = (data) => ({
+    type: ActionType.QUERY_COMMENT_HIS,
+    payload: data
+})
+
+export const queryCommentHis = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryCommentHisService(params)
+            .then(res => {
+                dispatch(queryCommentHisAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)

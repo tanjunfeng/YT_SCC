@@ -925,3 +925,6 @@ export const cancelRefund = params => http.get('/pmPurchaseRefund/cancel', param
  */
 // 采购审批列表下获取高亮流程图
 export const processImage = params => http.get('/bpm/processImage', params);
+// 采购审批列表下获取审批意见的审批列表
+export const queryCommentHis = params => http.get('/bpm/queryCommentHis', params);
+
