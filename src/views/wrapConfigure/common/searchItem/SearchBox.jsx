@@ -15,9 +15,6 @@ import { operationState } from '../../../../constant/wrapConfigure';
 
 const FormItem = Form.Item;
 const companyData = [{
-    id: 'headquarters',
-    name: '总公司'
-}, {
     id: 'sichuan',
     name: '四川'
 }]
@@ -104,7 +101,7 @@ class SearchBox extends PureComponent {
         ))
         const submitObj = {
             branchCompany,
-            homePageType: homePageType || 1
+            homePageType: homePageType || '1'
         }
         let headquarters = false
         for (let i = 0; i < companyData.length; i++) {

@@ -236,7 +236,7 @@ function Common(WrappedComponent) {
                         saveBase64={this.saveBase64}
                     />
                     {
-                        this.props.headquarters
+                        this.props.isHeadquarters
                             ? <ul className="home-style-common-btns">
                                 {
                                     type !== 'quick' &&
@@ -263,7 +263,7 @@ function Common(WrappedComponent) {
                                     </li>
                                 }
                                 {
-                                    type === 'quick' &&
+                                    type === 'quick' && this.props.isChangeQuick &&
                                     <li className="home-style-common-btns2">
                                         <Button
                                             type="primary"
@@ -280,7 +280,7 @@ function Common(WrappedComponent) {
 
                                 }
                                 {
-                                    type === 'quick' &&
+                                    type === 'quick' && this.props.isChangeQuick &&
                                     <li className="home-style-common-btns2">
                                         <Button
                                             type="primary"
@@ -410,7 +410,8 @@ function Common(WrappedComponent) {
         type: PropTypes.string,
         index: PropTypes.number,
         allLength: PropTypes.number,
-        headquarters: PropTypes.bool
+        isHeadquarters: PropTypes.bool,
+        isChangeQuick: PropTypes.bool
     }
     return HOC;
 }
