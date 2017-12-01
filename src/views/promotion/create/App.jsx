@@ -12,7 +12,7 @@ import { withRouter } from 'react-router';
 import {
     Form, Row, Col, Input, Radio,
     Button, DatePicker, Checkbox,
-    InputNumber
+    InputNumber, Select
 } from 'antd';
 
 import Util from '../../../util/util';
@@ -22,6 +22,7 @@ import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
 
 const RadioGroup = Radio.Group;
+const Option = Select.Option;
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 const { TextArea } = Input;
@@ -37,7 +38,7 @@ class PromotionCreate extends PureComponent {
         areaSelectorVisible: false,
         categorySelectorVisible: false,
         storeSelectorVisible: false,
-        companies: [],  // 所选区域子公司
+        companies: [], // 所选区域子公司
         checkedList: []
     }
 
@@ -49,13 +50,13 @@ class PromotionCreate extends PureComponent {
             const {
                 promotionName,
                 dateRange,
-                condition,
                 store,
                 category,
                 quanifyAmount,
                 note,
                 storeId,
-                overlay
+                overlay,
+                priority
             } = values;
             const startDate = dateRange ? dateRange[0].valueOf() : '';
             const endDate = dateRange ? dateRange[1].valueOf() : '';
@@ -67,13 +68,13 @@ class PromotionCreate extends PureComponent {
                 promotionName,
                 startDate,
                 endDate,
-                condition,
                 store,
                 category,
                 quanifyAmount,
                 note,
                 companiesPoList: this.state.companies,
                 storeId,
+                priority,
                 isSuperposeProOrCouDiscount: overLayNum % 2 === 1 ? 1 : 0,
                 isSuperposeUserDiscount: overLayNum >= 2 ? 1 : 0
             }
@@ -191,7 +192,7 @@ class PromotionCreate extends PureComponent {
                             {getFieldDecorator('condition', {
                                 initialValue: 0,
                                 rules: [{ required: true, message: '请选择使用条件' }]
-                            })(<RadioGroup onChange={this.handleAreaChange}>
+                            })(<RadioGroup>
                                 <Radio className="default" value={0}>不限制</Radio>
                                 <Radio value={1}>指定条件</Radio>
                             </RadioGroup>)}
@@ -202,13 +203,35 @@ class PromotionCreate extends PureComponent {
                     <Col span={16}>
                         <FormItem label="优惠方式">
                             {getFieldDecorator('rule', {
-                                initialValue: 0,
+                                initialValue: '-1',
                                 rules: [{ required: true, message: '请选择优惠方式' }]
-                            })(<RadioGroup onChange={this.handleAreaChange}>
-                                <Radio className="default" value={0}>不限制</Radio>
-                                <Radio value={1}>指定条件</Radio>
-                            </RadioGroup>)}
+                            })(<Select size="default" className="wd-90">
+                                <Option key={-1} value="-1">- 请选择 -</Option>
+                                <Option key={0} value="0">折扣百分比</Option>
+                                <Option key={1} value="1">折扣金额</Option>
+                            </Select>)}
                         </FormItem>
+                        {/* 优惠百分比 */}
+                        {getFieldValue('rule') === '0' ?
+                            <FormItem>
+                                {getFieldDecorator('percent', {
+                                    initialValue: 95,
+                                    rules: [{ required: true, message: '请输入折扣百分比' }]
+                                })(<InputNumber min={0} max={100} step={5} className="wd-50" />)} %
+                            </FormItem>
+                            : null}
+                        {/* 折扣金额 */}
+                        {getFieldValue('rule') === '1' ?
+                            <FormItem>
+                                ￥{getFieldDecorator('amout', {
+                                    initialValue: 0,
+                                    rules: [
+                                        { required: true, message: '请输入折扣金额' },
+                                        { validator: Util.limitTwoDecimalPlaces }
+                                    ]
+                                })(<InputNumber className="wd-60" />)} 元
+                            </FormItem>
+                            : null}
                     </Col>
                 </Row>
                 <Row>
@@ -270,8 +293,11 @@ class PromotionCreate extends PureComponent {
                     <Col span={16}>
                         <FormItem label="活动优先级">
                             {getFieldDecorator('priority', {
-                                initialValue: []
-                            })(<InputNumber />)}
+                                initialValue: 1,
+                                rules: [
+                                    { validator: Util.validatePositiveInteger }
+                                ]
+                            })(<InputNumber max={9999} className="wd-90" />)}
                         </FormItem>
                     </Col>
                 </Row>
