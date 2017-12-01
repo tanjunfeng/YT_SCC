@@ -24,7 +24,7 @@ class AreaSelector extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            checkedCompanies: []
+            checkedCompanies: props.checkedCompanies
         }
         this.handleOk = this.handleOk.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
@@ -41,9 +41,9 @@ class AreaSelector extends PureComponent {
 
     // 当弹框隐藏时，通知本组件
     componentWillReceiveProps(nextProps) {
-        if (!nextProps.isSelectorVisible) {
+        if (nextProps.checkedCompanies) {
             this.setState({
-                checkedCompanies: []
+                checkedCompanies: nextProps.checkedCompanies
             });
         }
     }
@@ -55,7 +55,7 @@ class AreaSelector extends PureComponent {
     handleChecked(checkedIds) {
         // 根据选中的区域编号，拼接所选区域列表
         const checkedCompanies = [];
-        this.props.companies.forEach((company) => {
+        this.props.companies.forEach(company => {
             checkedIds.forEach((id) => {
                 if (+(company.id) === +(id)) {
                     checkedCompanies.push({
@@ -81,18 +81,21 @@ class AreaSelector extends PureComponent {
     }
 
     render() {
+        const { isSelectorVisible, companies } = this.props;
+        const { checkedCompanies } = this.state;
+        console.log(checkedCompanies);
         return (
             <div>
                 <Modal
                     title="选择区域"
                     maskClosable={false}
-                    visible={this.props.isSelectorVisible}
+                    visible={isSelectorVisible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                 >
                     <CheckedTree
-                        list={this.props.companies}
-                        isEmpty={!this.props.isSelectorVisible}
+                        list={companies}
+                        checkedKeys={checkedCompanies.map(c => c.companyId)}
                         onCheckTreeOk={this.handleChecked}
                     />
                 </Modal>
@@ -107,6 +110,7 @@ AreaSelector.propTypes = {
     onSelectorCancel: PropTypes.func,
     getAllCompanies: PropTypes.func,
     clearCompaniesList: PropTypes.func,
+    checkedCompanies: PropTypes.arrayOf(PropTypes.string),
     companies: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 

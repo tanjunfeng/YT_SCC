@@ -30,16 +30,16 @@ class CheckedTree extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            checkedKeys: []
+            checkedKeys: props.checkedKeys
         }
         this.handleCheck = this.handleCheck.bind(this);
     }
 
-    // 当父容器需要清空选择框时，通知本组件
+    // 当父容器改变选项时，通知本组件
     componentWillReceiveProps(nextProps) {
-        if (nextProps.isEmpty) {
+        if (nextProps.checkedKeys) {
             this.setState({
-                checkedKeys: []
+                checkedKeys: nextProps.checkedKeys
             });
         }
     }
@@ -66,7 +66,7 @@ class CheckedTree extends PureComponent {
 
 CheckedTree.propTypes = {
     onCheckTreeOk: PropTypes.func,
-    isEmpty: PropTypes.bool,
+    checkedKeys: PropTypes.arrayOf(PropTypes.string),
     list: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 

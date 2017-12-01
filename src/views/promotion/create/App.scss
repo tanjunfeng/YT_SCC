@@ -46,6 +46,12 @@ $promotionAddLabelWidth: 100px;
         .promotion-date-range .ant-calendar-picker {
             width: 288px !important;
         }
+        span.sub-companies {
+            a {
+                margin-left: 2px;
+            }
+            margin-right: 10px;
+        }
     }
     .tips .ant-col-16 {
         margin-left: $promotionAddLabelWidth;
