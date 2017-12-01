@@ -12,7 +12,7 @@ import { withRouter } from 'react-router';
 import {
     Form, Row, Col, Input, Radio,
     Button, DatePicker, Checkbox,
-    InputNumber, Select
+    InputNumber
 } from 'antd';
 
 import Util from '../../../util/util';
@@ -20,9 +20,9 @@ import { AreaSelector } from '../../../container/tree';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
+import { getChooseButton, getRuls } from './DomHelper';
 
 const RadioGroup = Radio.Group;
-const Option = Select.Option;
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 const { TextArea } = Input;
@@ -60,6 +60,7 @@ class PromotionCreate extends PureComponent {
             } = values;
             const startDate = dateRange ? dateRange[0].valueOf() : '';
             const endDate = dateRange ? dateRange[1].valueOf() : '';
+            const companies = this.state.companies;
             let overLayNum = 0;
             overlay.forEach(v => {
                 overLayNum += v;
@@ -72,7 +73,7 @@ class PromotionCreate extends PureComponent {
                 category,
                 quanifyAmount,
                 note,
-                companiesPoList: this.state.companies,
+                companiesPoList: companies.length === 0 ? '' : companies,
                 storeId,
                 priority,
                 isSuperposeProOrCouDiscount: overLayNum % 2 === 1 ? 1 : 0,
@@ -82,13 +83,6 @@ class PromotionCreate extends PureComponent {
                 callback(Util.removeInvalid(dist));
             }
         });
-    }
-
-    getSubCompanies = () => {
-        const companies = this.state.companies;
-        return (<span className="sub-companies">
-            <a href="#" onClick={this.handleSubCompaniesRechoose}>{companies.length > 0 ? '重新选择' : '选择'}</a>
-        </span>);
     }
 
     handleSelectorOk = (companies) => {
@@ -199,41 +193,7 @@ class PromotionCreate extends PureComponent {
                         </FormItem>
                     </Col>
                 </Row>
-                <Row>
-                    <Col span={16}>
-                        <FormItem label="优惠方式">
-                            {getFieldDecorator('rule', {
-                                initialValue: '-1',
-                                rules: [{ required: true, message: '请选择优惠方式' }]
-                            })(<Select size="default" className="wd-90">
-                                <Option key={-1} value="-1">- 请选择 -</Option>
-                                <Option key={0} value="0">折扣百分比</Option>
-                                <Option key={1} value="1">折扣金额</Option>
-                            </Select>)}
-                        </FormItem>
-                        {/* 优惠百分比 */}
-                        {getFieldValue('rule') === '0' ?
-                            <FormItem>
-                                {getFieldDecorator('percent', {
-                                    initialValue: 95,
-                                    rules: [{ required: true, message: '请输入折扣百分比' }]
-                                })(<InputNumber min={0} max={100} step={5} className="wd-50" />)} %
-                            </FormItem>
-                            : null}
-                        {/* 折扣金额 */}
-                        {getFieldValue('rule') === '1' ?
-                            <FormItem>
-                                ￥{getFieldDecorator('amout', {
-                                    initialValue: 0,
-                                    rules: [
-                                        { required: true, message: '请输入折扣金额' },
-                                        { validator: Util.limitTwoDecimalPlaces }
-                                    ]
-                                })(<InputNumber className="wd-60" />)} 元
-                            </FormItem>
-                            : null}
-                    </Col>
-                </Row>
+                {getFieldValue('condition') === 0 ? getRuls(getFieldDecorator, getFieldValue) : null}
                 <Row>
                     <Col span={16}>
                         <FormItem label="使用区域">
@@ -255,7 +215,7 @@ class PromotionCreate extends PureComponent {
                                     initialValue: companies.map(company => company.companyName),
                                     rules: [{ required: true, message: '请选择子公司' }]
                                 })(<Input disabled />)}
-                                {this.getSubCompanies()}
+                                {getChooseButton(companies)}
                                 <AreaSelector
                                     reset={getFieldValue('area') === 1}
                                     isSelectorVisible={areaSelectorVisible}
