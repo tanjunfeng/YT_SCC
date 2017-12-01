@@ -2,9 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import {Modal, Select, Form} from 'antd';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import {}from '../../../actions';
 
 const Option = Select.Option;
 

@@ -32,14 +32,14 @@ class ApproModal extends PureComponent {
         super(props);
         this.searchParams = {};
         this.state = {
-            spId: '',   // 供应商编码
-            spAdrId: '',    // 供应商地点编码
+            spId: '', // 供应商编码
+            spAdrId: '', // 供应商地点编码
             isSupplyAdrDisabled: true, // 供应商地点禁用
-            locDisabled: true,  // 地点禁用
+            locDisabled: true, // 地点禁用
             locationData: {},
             isVisibleModal: false,
-            adrTypeCode: '',    // 地点编码
-            receivedTypeCode: ''  // 收货单状态编码
+            adrTypeCode: '', // 地点编码
+            receivedTypeCode: '' // 收货单状态编码
         };
         this.columns = [
             {
