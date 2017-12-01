@@ -246,6 +246,9 @@ class OrderManagementList extends Component {
         this.props.form.setFieldsValue({
             branchCompany: { reset: true }
         });
+        this.props.form.setFieldsValue({
+            franchisee: { reset: true }
+        });
     }
 
     /**
