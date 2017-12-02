@@ -1,5 +1,4 @@
 /**
- * @file App.jsx
  * @author taoqiyu
  *
  * 促销管理 - 促销管理列表
@@ -215,7 +214,7 @@ class PromotionCreate extends PureComponent {
                                     initialValue: companies.map(company => company.companyName),
                                     rules: [{ required: true, message: '请选择子公司' }]
                                 })(<Input disabled />)}
-                                {getChooseButton(companies)}
+                                {getChooseButton(companies, this.handleSubCompaniesRechoose)}
                                 <AreaSelector
                                     reset={getFieldValue('area') === 1}
                                     isSelectorVisible={areaSelectorVisible}

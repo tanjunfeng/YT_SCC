@@ -1,8 +1,8 @@
 /**
- * 促销管理 - 下单打折
- *
- * 抽取公共表单 Component *
  * @author taoqiyu
+ *
+ * 促销管理 - 下单打折
+ * 抽取公共表单 Component
  */
 import React from 'react';
 import {
@@ -15,9 +15,9 @@ import Util from '../../../util/util';
 const Option = Select.Option;
 const FormItem = Form.Item;
 
-export const getChooseButton = (companies) => (
+export const getChooseButton = (companies, handleClick) => (
     <span className="sub-companies">
-        <a href="#" onClick={this.handleSubCompaniesRechoose}>{companies.length > 0 ? '重新选择' : '选择'}</a>
+        <a href="#" onClick={handleClick}>{companies.length > 0 ? '重新选择' : '选择'}</a>
     </span>
 )
 
