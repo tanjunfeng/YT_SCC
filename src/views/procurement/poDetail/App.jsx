@@ -252,6 +252,10 @@ class PoDetail extends PureComponent {
             purchaseOrderType: '0',
             // 货币类型
             currencyCode: 'CNY',
+            // 供应商编号
+            spNo: null,
+            // 供应商名称
+            spName: null,
             // 供应商id
             spId: null,
             // 供应商地点id
@@ -315,7 +319,7 @@ class PoDetail extends PureComponent {
     componentWillReceiveProps(nextProps) {
         const {
             adrType, settlementPeriod, payType, payCondition, estimatedDeliveryDate,
-            purchaseOrderType, currencyCode, id, spAdrId, businessMode
+            purchaseOrderType, currencyCode, id, spAdrId, businessMode, spName, spNo
         } = nextProps.basicInfo;
         const { basicInfo = {} } = this.props;
         const newPo = fromJS(nextProps.po.poLines);
@@ -331,6 +335,8 @@ class PoDetail extends PureComponent {
                 payType,
                 payCondition,
                 spAdrId,
+                spName,
+                spNo,
                 pickerDate: estimatedDeliveryDate
                     ? moment(parseInt(estimatedDeliveryDate, 10))
                     : null,
@@ -462,6 +468,10 @@ class PoDetail extends PureComponent {
             ? basicInfo.createdAt
             : moment().format('YYYY-MM-DD')
 
+        // 供应商
+        const spDefaultValue = basicInfo.spId
+            ? `${basicInfo.spId}-${basicInfo.spName}`
+            : ''
 
         // 供应商地点值清单回显数据
         const spAdrDefaultValue = basicInfo.spAdrId
@@ -701,6 +711,7 @@ class PoDetail extends PureComponent {
                                     })(
                                         <Supplier
                                             onChange={this.handleSupplierChange}
+                                            initialValue={spDefaultValue}
                                         />
                                         )}
                                     {tooltipItem('修改供应商会清空仓库地点和采购商品')}
@@ -1218,7 +1229,6 @@ class PoDetail extends PureComponent {
             message.error('无有效的商品！');
             return;
         }
-
         // 清除无效商品弹框
         if (invalidPoLines.length !== 0) {
             const invalidGoodsList = invalidPoLines.map(item =>
@@ -1267,7 +1277,8 @@ class PoDetail extends PureComponent {
             adrType,
             currencyCode,
             purchaseOrderType,
-            addressCd
+            addressCd,
+            businessMode
         } = poData.basicInfo;
         // 采购商品信息
         const pmPurchaseOrderItems = poData.poLines.map((item) => {
@@ -1308,6 +1319,7 @@ class PoDetail extends PureComponent {
                     currencyCode,
                     purchaseOrderType: parseInt(purchaseOrderType, 10),
                     status,
+                    businessMode: parseInt(businessMode, 10)
                 },
                 pmPurchaseOrderItems
             }).then((res) => {
@@ -1332,6 +1344,7 @@ class PoDetail extends PureComponent {
                     currencyCode,
                     purchaseOrderType: parseInt(purchaseOrderType, 10),
                     status,
+                    businessMode
                 },
                 pmPurchaseOrderItems
             }).then((res) => {
