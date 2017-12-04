@@ -82,6 +82,10 @@ class SearchForm extends PureComponent {
         this.joiningSearchMind.reset();
         this.props.form.resetFields();
         this.props.onPromotionReset();  // 通知父页面已清空
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
     // 加盟商-值清单

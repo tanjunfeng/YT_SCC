@@ -1,6 +1,6 @@
 /**
  * @file App.jsx
- * @author caoyanxuan
+ * @author caoyanxuan,liujinyu
  *
  * 轮播广告管理--子组件--模态框
  */
@@ -9,13 +9,12 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Modal, Form, Input, message, InputNumber, Radio, Select } from 'antd';
+import { Modal, Form, message, InputNumber, Radio } from 'antd';
 import Utils from '../../../../util/util';
 import { uploadImageBase64Data } from '../../../../service';
 import LinkType from '../../common/linkType';
 import {
     modifyModalVisible,
-    fetchCarouselAdList,
     addCarouselAd,
     modifyCarouselAd,
     fetchCarouselAdBySorting
@@ -25,7 +24,6 @@ import FileCut from '../../fileCut';
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 @connect(
     state => ({
@@ -34,8 +32,7 @@ const Option = Select.Option;
         modalTitle: state.toJS().wap.modalTitle
     }),
     dispatch => bindActionCreators({
-        modifyModalVisible,
-        fetchCarouselAdList,
+        modifyModalVisible
     }, dispatch)
 )
 class ChangeMessage extends PureComponent {
@@ -55,11 +52,12 @@ class ChangeMessage extends PureComponent {
 
     handleSortBlur() {
         const { sorting } = this.props.form.getFieldsValue();
-        const { modalTitle, visibleData } = this.props;
+        const { modalTitle, visibleData, areaId } = this.props;
         const sortData = {
             sorting,
             queryType: modalTitle === '新增轮播广告设置' ? 0 : 1,
-            carouselAdId: visibleData.id
+            carouselAdId: visibleData.id,
+            areaId
         }
         fetchCarouselAdBySorting({
             ...Utils.removeInvalid(sortData)
@@ -138,7 +136,7 @@ class ChangeMessage extends PureComponent {
         const linkAddress = chooseLink.link;
         const goodsId = parseInt(linkType, 10) === 1 ? chooseLink.link : '';
 
-        const { modalTitle } = this.props;
+        const { modalTitle, areaId } = this.props;
         const { id } = this.props.visibleData;
         switch (modalTitle) {
             case '新增轮播广告设置':
@@ -152,9 +150,10 @@ class ChangeMessage extends PureComponent {
                                 goodsId,
                                 linkAddress: linkAddress ? encodeURI(linkAddress) : null,
                                 picAddress,
+                                areaId
                             })
                         }).then(() => {
-                            this.props.fetchCarouselAdList();
+                            this.props.searchChange();
                             this.props.modifyModalVisible({
                                 isVisible: false
                             });
@@ -177,7 +176,7 @@ class ChangeMessage extends PureComponent {
                                 picAddress
                             })
                         }).then(() => {
-                            this.props.fetchCarouselAdList();
+                            this.props.searchChange();
                             this.props.modifyModalVisible({
                                 isVisible: false
                             });
@@ -291,11 +290,12 @@ class ChangeMessage extends PureComponent {
 
 ChangeMessage.propTypes = {
     modifyModalVisible: PropTypes.func,
-    fetchCarouselAdList: PropTypes.func,
+    searchChange: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     visibleData: PropTypes.objectOf(PropTypes.any),
     modalTitle: PropTypes.objectOf(PropTypes.any),
     modalVisible: PropTypes.bool,
+    areaId: PropTypes.string,
 }
 
 export default withRouter(Form.create()(ChangeMessage));

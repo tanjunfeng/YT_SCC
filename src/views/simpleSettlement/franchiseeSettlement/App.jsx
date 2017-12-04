@@ -51,8 +51,6 @@ class FranchiseeSettlement extends Component {
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
         this.getSearchData = this.getSearchData.bind(this);
         this.onChange = this.onChange.bind(this);
-        this.joiningSearchMind = null;
-        this.subCompanySearchMind = null;
         this.searchData = {};
         this.current = 1;
         this.state = {
@@ -221,6 +219,13 @@ class FranchiseeSettlement extends Component {
             refundDateEnd: '',
         });
         this.props.form.resetFields();
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
+        this.props.form.setFieldsValue({
+            franchisee: { reset: true }
+        });
     }
 
     /**

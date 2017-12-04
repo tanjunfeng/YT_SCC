@@ -18,16 +18,16 @@ function Common(WrappedComponent) {
     class HOC extends PureComponent {
         constructor(props) {
             super(props);
-            this.handleDisable = ::this.handleDisable;
-            this.handleEnable = ::this.handleEnable;
-            this.handleUp = ::this.handleUp;
-            this.handleDown = ::this.handleDown;
-            this.handleSaveItem = ::this.handleSaveItem;
-            this.handleUpOk = ::this.handleUpOk;
-            this.handleUpCancel = ::this.handleUpCancel;
-            this.handleUpload = ::this.handleUpload;
-            this.hideEditModal = ::this.hideEditModal;
-            this.saveItems = ::this.saveItems;
+            this.handleDisable = :: this.handleDisable;
+            this.handleEnable = :: this.handleEnable;
+            this.handleUp = :: this.handleUp;
+            this.handleDown = :: this.handleDown;
+            this.handleSaveItem = :: this.handleSaveItem;
+            this.handleUpOk = :: this.handleUpOk;
+            this.handleUpCancel = :: this.handleUpCancel;
+            this.handleUpload = :: this.handleUpload;
+            this.hideEditModal = :: this.hideEditModal;
+            this.saveItems = :: this.saveItems;
             this.state = {
                 img: '',
                 isEdit: true,
@@ -235,89 +235,93 @@ function Common(WrappedComponent) {
                         handleUpload={this.handleUpload}
                         saveBase64={this.saveBase64}
                     />
-                    <ul className="home-style-common-btns">
-                        {
-                            type !== 'quick' &&
-                            <li className="home-style-common-btns1">
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    onClick={this.handleEnable}
-                                >
-                                    启用
-                                </Button>
-                            </li>
-                        }
-                        {
-                            type !== 'quick' &&
-                            <li className="home-style-common-btns2">
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    onClick={this.handleDisable}
-                                >
-                                    停用
-                                </Button>
-                            </li>
-                        }
-                        {
-                            type === 'quick' &&
-                            <li className="home-style-common-btns2">
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    onClick={this.handleDisableFirst}
-                                >
-                                    {
-                                        data.itemAds[4].status === 0
-                                            ? '启用第一栏'
-                                            : '停用第一栏'
-                                    }
-                                </Button>
-                            </li>
+                    {
+                        this.props.isHeadquarters
+                            ? <ul className="home-style-common-btns">
+                                {
+                                    type !== 'quick' &&
+                                    <li className="home-style-common-btns1">
+                                        <Button
+                                            type="primary"
+                                            size="large"
+                                            onClick={this.handleEnable}
+                                        >
+                                            启用
+                                        </Button>
+                                    </li>
+                                }
+                                {
+                                    type !== 'quick' &&
+                                    <li className="home-style-common-btns2">
+                                        <Button
+                                            type="primary"
+                                            size="large"
+                                            onClick={this.handleDisable}
+                                        >
+                                            停用
+                                        </Button>
+                                    </li>
+                                }
+                                {
+                                    type === 'quick' && this.props.isChangeQuick &&
+                                    <li className="home-style-common-btns2">
+                                        <Button
+                                            type="primary"
+                                            size="large"
+                                            onClick={this.handleDisableFirst}
+                                        >
+                                            {
+                                                data.itemAds[4].status === 0
+                                                    ? '启用第一栏'
+                                                    : '停用第一栏'
+                                            }
+                                        </Button>
+                                    </li>
 
-                        }
-                        {
-                            type === 'quick' &&
-                            <li className="home-style-common-btns2">
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    onClick={this.handleDisablSecond}
-                                >
-                                    {
-                                        data.itemAds[5].status === 0
-                                            ? '启用第二栏'
-                                            : '停用第二栏'
-                                    }
-                                </Button>
-                            </li>
-                        }
-                        {
-                            this.props.index !== 0 &&
-                            <li className="home-style-common-btns2">
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    onClick={this.handleUp}
-                                >
-                                    上移
-                                </Button>
-                            </li>
-                        }
-                        {
-                            this.props.index < (this.props.allLength - 1) &&
-                            <li className="home-style-common-btns2">
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    onClick={this.handleDown}
-                                >
-                                    下移
-                                </Button>
-                            </li>
-                        }
-                    </ul>
+                                }
+                                {
+                                    type === 'quick' && this.props.isChangeQuick &&
+                                    <li className="home-style-common-btns2">
+                                        <Button
+                                            type="primary"
+                                            size="large"
+                                            onClick={this.handleDisablSecond}
+                                        >
+                                            {
+                                                data.itemAds[5].status === 0
+                                                    ? '启用第二栏'
+                                                    : '停用第二栏'
+                                            }
+                                        </Button>
+                                    </li>
+                                }
+                                {
+                                    this.props.index !== 0 &&
+                                    <li className="home-style-common-btns2">
+                                        <Button
+                                            type="primary"
+                                            size="large"
+                                            onClick={this.handleUp}
+                                        >
+                                            上移
+                                        </Button>
+                                    </li>
+                                }
+                                {
+                                    this.props.index < (this.props.allLength - 1) &&
+                                    <li className="home-style-common-btns2">
+                                        <Button
+                                            type="primary"
+                                            size="large"
+                                            onClick={this.handleDown}
+                                        >
+                                            下移
+                                        </Button>
+                                    </li>
+                                }
+                            </ul>
+                            : null
+                    }
                     {
                         this.state.uploadVisible &&
                         <Modal
@@ -405,7 +409,9 @@ function Common(WrappedComponent) {
         fetchAreaList: PropTypes.func,
         type: PropTypes.string,
         index: PropTypes.number,
-        allLength: PropTypes.number
+        allLength: PropTypes.number,
+        isHeadquarters: PropTypes.bool,
+        isChangeQuick: PropTypes.bool
     }
     return HOC;
 }

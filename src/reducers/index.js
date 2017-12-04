@@ -40,6 +40,7 @@ import stockAdjust from './stockAdjust';
 import stockListDetail from './stockListDetail';
 import storeAdjustList from './storeAdjustList';
 import promotion from './promotion';
+import process from './process';
 import storeRealTime from './storeRealTime';
 
 import queryCommodityList from './queryCommodityList';
@@ -74,8 +75,8 @@ export default Immutable.fromJS({
     stockListDetail,
     storeAdjustList,
     promotion,
+    process,
     storeRealTime,
-
     queryCommodityList,
 
     queryWhiteList,

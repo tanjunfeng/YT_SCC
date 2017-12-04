@@ -129,6 +129,16 @@ let originLists = [];
 
 let current = {};
 
+// 默认选择其他
+function parseReason(lists) {
+    return lists.map((item) => {
+        const newItem = item;
+        const { refundReason } = item;
+        newItem.refundReason = refundReason || '3';
+        return newItem;
+    })
+}
+
 function parseLists(lists) {
     // 退货数量大于了库存
     const overrun = [];
@@ -202,6 +212,7 @@ class List extends Component {
         getFormData: PropTypes.func,
         returnLists: PropTypes.arrayOf(PropTypes.any),
         onShowModal: PropTypes.func,
+        clearList: PropTypes.func,
     }
 
     static defaultProps = {
@@ -240,12 +251,13 @@ class List extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { returnLists, defaultValue, type } = nextProps;
+
         if (!is(fromJS(returnLists), fromJS(current))) {
             const { lists, orderId } = this.state;
             current = returnLists;
 
             const newLists = getNewLists(lists, current, orderId);
-
+          
             this.setState({
                 lists: newLists
             }, () => {
@@ -440,6 +452,8 @@ class List extends Component {
             selectedRowKeys: []
         }, () => {
             this.calculation();
+            // 需要清空历史数据
+            this.props.clearList();
             current = [];
         })
     }
@@ -582,7 +596,7 @@ class List extends Component {
         const submit = this.props.getFormData();
         const postService = type === 'edit' ? updateRefundWithItems : createRefundWithItems;
 
-        submit.pmPurchaseRefundItems = lists
+        submit.pmPurchaseRefundItems = parseReason(lists);
         submit.status = status;
 
         // 退货数
@@ -605,13 +619,56 @@ class List extends Component {
         }, () => {
             this.calculation();
             current = [];
-            originLists = [];
-            this.props.clearReturnInfo();
+            // originLists = [];
+            this.props.clearList()
+            // this.props.clearReturnInfo();
         })
     }
 
     getValue() {
         return this.state.lists;
+    }
+
+    handleFetchGoods = (params) => {
+        const result = this.props.getFormData();
+        const { orderId } = this.state;
+        if (!result) {
+            return;
+        }
+        const { refundAdrCode, spAdrNo } = result;
+        return this.props.pubFetchValueList(Util.removeInvalid({
+            productName: params.value,
+            purchaseOrderNo: orderId,
+            spAdrNo: spAdrNo,
+            logicWareHouseCode: refundAdrCode
+        }), 'queryPurchaseOrderProducts').then((res) => {
+            const dataArr = res.data.data || [];
+            if (!dataArr || dataArr.length === 0) {
+                message.warning('没有可用的数据');
+            }
+            return res;
+        })
+    }
+
+    handleFetchBrand = (params) => {
+        const result = this.props.getFormData();
+        const { orderId } = this.state;
+        if (!result) {
+            return;
+        }
+        const { refundAdrCode, spAdrNo } = result;
+        return this.props.pubFetchValueList(Util.removeInvalid({
+            name: params.value,
+            purchaseOrderNo: orderId,
+            spAdrNo: spAdrNo,
+            logicWareHouseCode: refundAdrCode
+        }), 'queryPurchaseOrderBrands').then((res) => {
+            const dataArr = res.data.data || [];
+            if (!dataArr || dataArr.length === 0) {
+                message.warning('没有可用的数据');
+            }
+            return res;
+        })
     }
 
     render() {
@@ -645,6 +702,7 @@ class List extends Component {
             }),
         };
 
+        // 0:制单;1:已提交;2:已审核;3:已拒绝;4:待退货;5:已退货;6:已取消;7:取消失败;8:异常
         const footer = (
             <div
                 className={'return-goods-table-footer'}
@@ -672,11 +730,11 @@ class List extends Component {
                     { isEdit && (status === 2 || status === 4) && <Button data-type="cancel" onClick={this.handleType}>取消</Button> }
                     { isEdit && <Button data-type="download" onClick={this.handleType}>下载退货单</Button> }
                     {
-                        (!isEdit || status === 0 || status === 1)
+                        (!isEdit || status === 0 || status === 1 || status === 3)
                         && <Button data-type="save" onClick={this.handleType}>保存</Button>
                     }
                     {
-                        (!isEdit || status === 0 || status === 1)
+                        (!isEdit || status === 0 || status === 1 || status === 3)
                         && <Button data-type="submit" onClick={this.handleType}>提交</Button>
                     }
                     {
@@ -694,116 +752,98 @@ class List extends Component {
                     className={'return-goods-choose'}
                 >
                     <Row>
-                        <Col span={4}>
-                            <span
-                                className={'return-goods-choose-left'}
-                            >
-                                *采购单号
-                            </span>
-                            <span>
-                                <Input
-                                    type="text"
-                                    style={{ maxWidth: '118px' }}
-                                    placeholder="采购单号"
-                                    onChange={this.handleIdChange}
-                                />
-                            </span>
-                        </Col>
-                        <Col span={4}>
-                            <span
-                                className={'return-goods-choose-left'}
-                            >
-                                商品
-                            </span>
-                            <span
-                                className={'return-goods-choose-right'}
-                            >
-                                <SearchMind
-                                    style={{ zIndex: 9 }}
-                                    compKey="productCode"
-                                    ref={ref => { this.joiningAdressMind = ref }}
-                                    fetch={(params) =>
-                                        this.props.pubFetchValueList(Util.removeInvalid({
-                                            productName: params.value,
-                                            purchaseOrderNo: orderId
-                                        }), 'queryPurchaseOrderProducts').then((res) => {
-                                            const dataArr = res.data.data || [];
-                                            if (!dataArr || dataArr.length === 0) {
-                                                message.warning('没有可用的数据');
+                        <div className={"return-goods-choose-wrap"}>
+                            <Col span={6}>
+                                <span
+                                    className={'return-goods-choose-left'}
+                                >
+                                    *采购单号
+                                </span>
+                                <span>
+                                    <Input
+                                        type="text"
+                                        style={{ maxWidth: '118px' }}
+                                        placeholder="采购单号"
+                                        onChange={this.handleIdChange}
+                                    />
+                                </span>
+                            </Col>
+                            <Col span={6}>
+                                <span
+                                    className={'return-goods-choose-left'}
+                                >
+                                    商品
+                                </span>
+                                <span
+                                    className={'return-goods-choose-right'}
+                                >
+                                    <SearchMind
+                                        style={{ zIndex: 9 }}
+                                        compKey="productCode"
+                                        ref={ref => { this.joiningAdressMind = ref }}
+                                        fetch={this.handleFetchGoods}
+                                        placeholder={'名称/编码/条码'}
+                                        onChoosed={this.handleGoodsChoose}
+                                        onClear={this.handleGoodsClear}
+                                        disabled={!orderId}
+                                        renderChoosedInputRaw={(res) => (
+                                            <div>{res.productCode} - {res.productName}</div>
+                                        )}
+                                        rowKey="productCode"
+                                        pageSize={6}
+                                        columns={[
+                                            {
+                                                title: '商品编码',
+                                                dataIndex: 'productCode',
+                                                maxWidth: 98
+                                            }, {
+                                                title: '商品名称',
+                                                dataIndex: 'productName'
                                             }
-                                            return res;
-                                        })}
-                                    placeholder={'名称/编码/条码'}
-                                    onChoosed={this.handleGoodsChoose}
-                                    onClear={this.handleGoodsClear}
-                                    disabled={!orderId}
-                                    renderChoosedInputRaw={(res) => (
-                                        <div>{res.productCode} - {res.productName}</div>
-                                    )}
-                                    rowKey="productCode"
-                                    pageSize={6}
-                                    columns={[
-                                        {
-                                            title: '商品编码',
-                                            dataIndex: 'productCode',
-                                            maxWidth: 98
-                                        }, {
-                                            title: '商品名称',
-                                            dataIndex: 'productName'
-                                        }
-                                    ]}
-                                />
-                            </span>
-                        </Col>
-                        <Col span={4}>
-                            <span
-                                className={'return-goods-choose-left'}
-                            >
-                                品牌
-                            </span>
-                            <span
-                                className={'return-goods-choose-right'}
-                            >
-                                <SearchMind
-                                    style={{ zIndex: 9 }}
-                                    compKey="productBrandId"
-                                    ref={ref => { this.joiningAdressMind = ref }}
-                                    fetch={(params) =>
-                                        this.props.pubFetchValueList(Util.removeInvalid({
-                                            name: params.value,
-                                            purchaseOrderNo: orderId
-                                        }), 'queryPurchaseOrderBrands').then((res) => {
-                                            const dataArr = res.data.data || [];
-                                            if (!dataArr || dataArr.length === 0) {
-                                                message.warning('没有可用的数据');
+                                        ]}
+                                    />
+                                </span>
+                            </Col>
+                            <Col span={6}>
+                                <span
+                                    className={'return-goods-choose-left'}
+                                >
+                                    品牌
+                                </span>
+                                <span
+                                    className={'return-goods-choose-right'}
+                                >
+                                    <SearchMind
+                                        style={{ zIndex: 9 }}
+                                        compKey="productBrandId"
+                                        ref={ref => { this.joiningAdressMind = ref }}
+                                        fetch={this.handleFetchBrand}
+                                        onChoosed={this.handleBrandChoose}
+                                        onClear={this.handleBrandClear}
+                                        renderChoosedInputRaw={(res) => (
+                                            <div>{res.productBrandId} - {res.productBrandName}</div>
+                                        )}
+                                        placeholder={'请输入品牌'}
+                                        disabled={!orderId}
+                                        rowKey="productBrandId"
+                                        pageSize={6}
+                                        columns={[
+                                            {
+                                                title: '品牌编码',
+                                                dataIndex: 'productBrandId',
+                                                maxWidth: 98
+                                            }, {
+                                                title: '品牌名称',
+                                                dataIndex: 'productBrandName'
                                             }
-                                            return res;
-                                        })}
-                                    onChoosed={this.handleBrandChoose}
-                                    onClear={this.handleBrandClear}
-                                    renderChoosedInputRaw={(res) => (
-                                        <div>{res.productBrandId} - {res.productBrandName}</div>
-                                    )}
-                                    placeholder={'请输入品牌'}
-                                    disabled={!orderId}
-                                    rowKey="productBrandId"
-                                    pageSize={6}
-                                    columns={[
-                                        {
-                                            title: '品牌编码',
-                                            dataIndex: 'productBrandId',
-                                            maxWidth: 98
-                                        }, {
-                                            title: '品牌名称',
-                                            dataIndex: 'productBrandName'
-                                        }
-                                    ]}
-                                />
-                            </span>
-                        </Col>
-                        <Col span={4}>
-                            <Button disabled={!orderId} onClick={this.handleSubmitGoods}>提交</Button>
-                        </Col>
+                                        ]}
+                                    />
+                                </span>
+                            </Col>
+                            <Col span={6}>
+                                <Button disabled={!orderId} onClick={this.handleSubmitGoods}>添加</Button>
+                            </Col>
+                        </div>
                         <Button
                             className={'return-goods-table'}
                             disabled={!selectedRowKeys.length}

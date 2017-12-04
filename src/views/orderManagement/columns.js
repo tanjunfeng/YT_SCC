@@ -73,6 +73,71 @@ const goodsColumns = [{
     )
 }];
 
+// 后台退货商品列表
+const goodsReturnsColumns = [{
+    title: '商品图片',
+    dataIndex: 'productImg',
+    key: 'productImg',
+    render: (text) => (
+        <img
+            src={text}
+            alt="未上传"
+            style={{ width: 50, height: 50 }}
+        />
+    )
+}, {
+    title: '商品编码',
+    dataIndex: 'productCode',
+    key: 'productCode',
+}, {
+    title: '商品条码',
+    dataIndex: 'internationalCodes',
+    key: 'internationalCodes',
+    render: (item) => {
+        if (item instanceof Array && item.length) {
+            return item[0].internationalCode;
+        }
+        return null;
+    }
+}, {
+    title: '商品名称',
+    dataIndex: 'productName',
+    key: 'productName',
+}, {
+    title: '商品分类',
+    dataIndex: 'commodifyClassify',
+    key: 'commodifyClassify',
+    render: (text, record) => {
+        let after = '';
+        if (record.thirdLevelCategoryName !== null) {
+            after = ` > ${record.thirdLevelCategoryName}`;
+        }
+        return <span>{record.secondLevelCategoryName}{after}</span>;
+    }
+}, {
+    title: '订单数量',
+    dataIndex: 'quantity',
+    key: 'quantity',
+}, {
+    title: '退货数量',
+    dataIndex: 'returnQuantity',
+    key: 'returnQuantity',
+}, {
+    title: '单价',
+    dataIndex: 'price',
+    key: 'price',
+    render: (text, record) => (
+        <span>￥{Number(record.itemPrice.salePrice).toFixed(2)}</span>
+    )
+}, {
+    title: '金额',
+    dataIndex: 'money',
+    key: 'money',
+    render: (text, record) => (
+        <span>￥{Number(record.itemPrice.amount).toFixed(2)}</span>
+    )
+}];
+
 const orderListColumns = [{
     title: '序号',
     dataIndex: 'sort',
@@ -119,6 +184,10 @@ const orderListColumns = [{
     title: '子公司',
     dataIndex: 'branchCompanyName',
     key: 'branchCompanyName',
+}, {
+    title: '雅堂小超',
+    dataIndex: 'franchiseeStoreId',
+    key: 'franchiseeStoreId',
 }, {
     title: '加盟商编号',
     dataIndex: 'franchiseeId',
@@ -493,5 +562,6 @@ const distributionInformationColumns = [{
 export {
     goodsColumns, orderListColumns, returnGoodsListColumns,
     exchangeGoodsDetailColumns, directSalesgoodsColumns, exchangeGoodsListColumns,
-    distributionInformationColumns, returnGoodsTableColums
+    distributionInformationColumns, returnGoodsTableColums,
+    goodsReturnsColumns
 };

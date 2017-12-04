@@ -64,6 +64,8 @@ import SalesMaintenance from 'bundle-loader?lazy!../views/commodity/salesMainten
 import OrderManagementList from 'bundle-loader?lazy!../views/orderManagement/orderList';
 // 订单管理-详情页
 import OrderManagementDetails from 'bundle-loader?lazy!../views/orderManagement/orderDetails';
+// 订单管理-订单详情-后台退货
+import BackstageBack from 'bundle-loader?lazy!../views/orderManagement/backstageBack';
 // 订单管理 - 直营店下单
 import DirectStoreOrder from 'bundle-loader?lazy!../views/orderManagement/directSalesOrders';
 
@@ -111,6 +113,8 @@ import CouponsParticipate from 'bundle-loader?lazy!../views/coupon/participate';
 import GrantCouponList from 'bundle-loader?lazy!../views/grantCoupons/mngList';
 import grantCouponDetail from 'bundle-loader?lazy!../views/grantCoupons/detail';
 
+// 流程管理
+import ProcessList from 'bundle-loader?lazy!../views/process/processList';
 
 /* eslint-enable */
 
@@ -676,6 +680,11 @@ const routes = [
                             render={() => (<Bundle load={OrderManagementDetails}>
                                 {(App) => <App />}</Bundle>)}
                         />
+                        <Route
+                            path="/orderList/orderBackstageBack/:id"
+                            render={() => (<Bundle load={BackstageBack}>
+                                {(App) => <App />}</Bundle>)}
+                        />
                     </Switch>
                 )
             },
@@ -879,6 +888,29 @@ const routes = [
                             path="/grantCoupons/detail/:id"
                             exact
                             render={() => (<Bundle load={grantCouponDetail}>
+                                {(App) => <App />}</Bundle>)}
+                        />
+                    </Switch>
+                )
+            }
+        ]
+    },
+    {
+        // 流程管理
+        key: 'lcgl',
+        iconType: 'area-chart',
+        routes: [
+            {
+                // 流程列表
+                path: '/process',
+                parent: 'lcgl',
+                key: 'lclb',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/process"
+                            exact
+                            render={() => (<Bundle load={ProcessList}>
                                 {(App) => <App />}</Bundle>)}
                         />
                     </Switch>

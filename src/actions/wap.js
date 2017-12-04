@@ -8,7 +8,7 @@
 import {
     queryCarouselAdList,
     queryQuickNavigationList,
-    areaList,
+    // areaList,
     queryAllHot,
     saveInput,
     selectInputKeyword,
@@ -29,15 +29,68 @@ import {
     updateCarouselInterval,
     insertCarouselAd,
     queryCarouselAdBySorting,
+    queryAreas,
+    switchOptWayOfHome,
+    queryBranchCompanyInfoWap,
+    queryCarouselArea,
+    switchOptWayOfCarousel
 } from '../service';
 import ActionType from './ActionType';
 
+// 清空轮播图列表信息
+export const clearAdList = () => ({
+    type: ActionType.CLEAR_AD_LIST
+})
+
+// 清空首页配置数据
+export const clearHomePage = () => ({
+    type: ActionType.CLEAR_HOME_PAGE
+})
+
+// 查询区域信息
+const receiveCarouselArea = (data) => ({
+    type: ActionType.FETCH_CAROUSEL_AREA,
+    payload: data,
+})
+
+export const fetchCarouselArea = (data) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryCarouselArea(data)
+            .then(res => {
+                dispatch(
+                    receiveCarouselArea(res.data)
+                )
+                resolve(res.data)
+            })
+            .catch(err => reject(err))
+    })
+)
+
+// 切换轮播运营方式
+const receiveSwitchOptWayOfCarousel = (data) => ({
+    type: ActionType.FETCH_SWITCH_OPT_WAYOF_CAROUSEL,
+    payload: data,
+})
+
+export const fetchSwitchOptWayOfCarousel = (data) => dispatch => (
+    new Promise((resolve, reject) => {
+        switchOptWayOfCarousel(data)
+            .then(res => {
+                dispatch(
+                    receiveSwitchOptWayOfCarousel(res)
+                )
+                resolve(res)
+            })
+            .catch(err => reject(err))
+    })
+)
+
+// 查询图片轮播
 const receiveAdList = (data) => ({
     type: ActionType.FETCH_CAROUSEL_AD_LIST,
     payload: data,
 })
 
-// 查询图片轮播
 export const fetchCarouselAdList = (data) => dispatch => (
     queryCarouselAdList(data)
         .then(res => {
@@ -94,25 +147,25 @@ const receiveAreaList = (data) => ({
 // 查询移动端首页配置
 export const fetchAreaList = (data) => dispatch => (
     new Promise((resolve, reject) => {
-        Promise.all([areaList(data), queryQuickNavigationList()])
-        .then((result) => {
-            const all = result[0].data;
-            const quick = result[1].data;
-            all.map((item, index) => {
-                if (item.id === 'quick-nav') {
-                    result[0].data[index].itemAds = quick;
-                    return null;
+        Promise.all([queryAreas(data), queryQuickNavigationList()])
+            .then((result) => {
+                const all = result[0].data;
+                const quick = result[1].data;
+                all.map((item, index) => {
+                    if (item.id === 'quick-nav') {
+                        result[0].data[index].itemAds = quick;
+                        return null;
+                    }
+                })
+                dispatch(
+                    receiveAreaList(result[0].data)
+                );
+                resolve(result[0].data);
+            }).catch((err) => {
+                if (err.data && err.data.code === 401) {
+                    reject(err);
                 }
             })
-            dispatch(
-                receiveAreaList(result[0].data)
-            );
-            resolve(result[0].data);
-        }).catch((err) => {
-            if (err.data && err.data.code === 401) {
-                reject(err);
-            }
-        })
     })
 )
 
@@ -374,3 +427,34 @@ export const fetchCarouselAdBySorting = (data) => (
     })
 )
 
+// 切换运营方式
+const receiveSwitchOptWayOfHome = (data) => ({
+    type: ActionType.SWITCH_OPTION_WAY_HOME,
+    payload: data,
+})
+export const fetchSwitchOptWayOfHome = (data) => dispatch => (
+    new Promise((resolve, reject) => {
+        switchOptWayOfHome(data)
+            .then(res => {
+                dispatch(receiveSwitchOptWayOfHome(res))
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+)
+
+// 获取用户有权限的子公司
+const receiveQueryBranchCompanyInfo = (data) => ({
+    type: ActionType.BRANCH_COMPANY_INFO,
+    payload: data,
+})
+export const fetchQueryBranchCompanyInfo = (data) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryBranchCompanyInfoWap(data)
+            .then(res => {
+                dispatch(receiveQueryBranchCompanyInfo(res.data))
+                resolve(res.data);
+            })
+            .catch(err => reject(err))
+    })
+)

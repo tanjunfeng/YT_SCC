@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 促销管理 - 优惠券列表
  * @CreateDate: 2017-09-20 14:09:43
- * @Last Modified by: tanjf
- * @Last Modified time: 2017-10-25 14:18:38
+ * @Last Modified by: liujinyu
+ * @Last Modified time: 2017-11-28 17:15:30
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -23,6 +23,7 @@ import {
     onlineWhitelist,
     offlineWhitelist
 } from '../../../../actions/whiteListConfiguration';
+import { whiteListBatchExport } from '../../../../service';
 import ModalOnline from '../modalOnline';
 import ModalOffline from '../modalOffline';
 
@@ -162,11 +163,20 @@ class WhiteListConfig extends PureComponent {
         this.handlePromotionReset();
         this.param = {
             pageNo: 1,
+            pageSize: PAGE_SIZE,
             ...param
         };
         this.setState({ current: 1 }, () => {
             this.query();
         });
+    }
+
+    /**
+     * 白名单导出
+     * @param {object} param 查询参数
+     */
+    exportList = (param) => {
+        Utils.exportExcel(whiteListBatchExport, Utils.removeInvalid(param));
     }
 
     handlePromotionReset() {
@@ -216,7 +226,7 @@ class WhiteListConfig extends PureComponent {
                         <Menu.Item key="Offline">
                             <a target="_blank" rel="noopener noreferrer">
                                 下线
-                        </a>
+                            </a>
                         </Menu.Item>
                         : null
                 }
@@ -226,7 +236,7 @@ class WhiteListConfig extends PureComponent {
                         <Menu.Item key="Online">
                             <a target="_blank" rel="noopener noreferrer">
                                 上线
-                        </a>
+                            </a>
                         </Menu.Item>
                         : null
                 }
@@ -264,6 +274,7 @@ class WhiteListConfig extends PureComponent {
                 <SearchForm
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
+                    onExportList={this.exportList}
                     value={{ selectListlength }}
                     onModalClick={this.onModalOnline}
                     onModalOfflineClick={this.onModalOffline}

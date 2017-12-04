@@ -69,7 +69,9 @@ const initState = fromJS({
     // 退货商品列表
     returnLists: [],
     // 原始退货上品列表
-    originReturnList: []
+    originReturnList: [],
+    // 采购单审批列表
+    approvalList: []
 });
 
 export default function (state = initState, action) {
@@ -172,7 +174,8 @@ export default function (state = initState, action) {
             return state.set('queryPurchaseRefundList', fromJS(action.payload));
         case ActionType.QUERY_APPROVAL_INFO:// 退货单审批意见
             return state.set('approvalInfo', fromJS(action.payload));
-
+        case ActionType.QUERY_COMMENT_HIS:// 采购审批意见表
+            return state.set('approvalList', fromJS(action.payload));
         case ActionType.RECEIVE_NEW_PURCHASE_ORDER:// 收货单详情
             return state.set('newPcOdData', fromJS(action.payload));
 
@@ -227,6 +230,8 @@ export default function (state = initState, action) {
                 .set('returnLists', fromJS([]))
                 .set('poReturn', fromJS({}))
                 .set('getRefundNumebr', fromJS(''))
+        case ActionType.CLEAR_RETURN_LISTS:
+            return state.set('returnLists', fromJS([]))
         default:
             return state;
     }
