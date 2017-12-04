@@ -12,7 +12,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import moment from 'moment';
 import Immutable, { fromJS } from 'immutable';
-import { Table, Form, Select, Icon, Dropdown, Modal, Row, Tooltip,
+import {
+    Table, Form, Select, Icon, Dropdown, Modal, Row, Tooltip,
     Col, DatePicker, Button, message, Menu, Affix
 } from 'antd';
 import EditableCell from './EditableCell';
@@ -32,7 +33,7 @@ import {
     fetchNewPmPurchaseOrderItem,
 } from '../../../actions/procurement';
 import { pubFetchValueList } from '../../../actions/pub';
-import { locType, poType, poNo, poStatusCodes } from '../../../constant/procurement';
+import { locType, poType, poNo, poStatusCodes, businessModeType } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { exportProcurementPdf } from '../../../service';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
@@ -83,37 +84,37 @@ const RECORD_STATUS = {
 class PoDetail extends PureComponent {
     constructor(props) {
         super(props);
-        this.onLocTypeChange = ::this.onLocTypeChange;
-        this.S4 = ::this.S4;
-        this.guid = ::this.guid;
-        this.isMaterialExists = ::this.isMaterialExists;
-        this.renderActions = ::this.renderActions;
-        this.onActionMenuSelect = ::this.onActionMenuSelect;
-        this.caculate = ::this.caculate;
-        this.handleSave = ::this.handleSave;
-        this.handleSubmit = ::this.handleSubmit;
-        this.handleAudit = ::this.handleAudit;
-        this.handleDownPDF = ::this.handleDownPDF;
-        this.hasInvalidateMaterial = ::this.hasInvalidateMaterial;
-        this.hasEmptyQtyMaterial = ::this.hasEmptyQtyMaterial;
-        this.applyAuditOk = ::this.applyAuditOk;
-        this.applyAuditCancel = ::this.applyAuditCancel;
-        this.validateForm = ::this.validateForm;
-        this.getPageMode = ::this.getPageMode;
-        this.getActionAuth = ::this.getActionAuth;
-        this.getPoData = ::this.getPoData;
-        this.getBaiscInfoElements = ::this.getBaiscInfoElements;
-        this.applySupplierLocChoosed = ::this.applySupplierLocChoosed;
-        this.applySupplierLocClear = ::this.applySupplierLocClear;
-        this.deletePoLines = ::this.deletePoLines;
-        this.getFormBasicInfo = ::this.getFormBasicInfo;
-        this.renderPeriod = ::this.renderPeriod;
-        this.renderPayType = ::this.renderPayType;
-        this.renderPayCondition = ::this.renderPayCondition;
-        this.getAllValue = ::this.getAllValue;
-        this.handleSupplierChange = ::this.handleSupplierChange;
-        this.clearSupplierAbout = ::this.clearSupplierAbout;
-        this.createPoRequest = ::this.createPoRequest;
+        this.onLocTypeChange = :: this.onLocTypeChange;
+        this.S4 = :: this.S4;
+        this.guid = :: this.guid;
+        this.isMaterialExists = :: this.isMaterialExists;
+        this.renderActions = :: this.renderActions;
+        this.onActionMenuSelect = :: this.onActionMenuSelect;
+        this.caculate = :: this.caculate;
+        this.handleSave = :: this.handleSave;
+        this.handleSubmit = :: this.handleSubmit;
+        this.handleAudit = :: this.handleAudit;
+        this.handleDownPDF = :: this.handleDownPDF;
+        this.hasInvalidateMaterial = :: this.hasInvalidateMaterial;
+        this.hasEmptyQtyMaterial = :: this.hasEmptyQtyMaterial;
+        this.applyAuditOk = :: this.applyAuditOk;
+        this.applyAuditCancel = :: this.applyAuditCancel;
+        this.validateForm = :: this.validateForm;
+        this.getPageMode = :: this.getPageMode;
+        this.getActionAuth = :: this.getActionAuth;
+        this.getPoData = :: this.getPoData;
+        this.getBaiscInfoElements = :: this.getBaiscInfoElements;
+        this.applySupplierLocChoosed = :: this.applySupplierLocChoosed;
+        this.applySupplierLocClear = :: this.applySupplierLocClear;
+        this.deletePoLines = :: this.deletePoLines;
+        this.getFormBasicInfo = :: this.getFormBasicInfo;
+        this.renderPeriod = :: this.renderPeriod;
+        this.renderPayType = :: this.renderPayType;
+        this.renderPayCondition = :: this.renderPayCondition;
+        this.getAllValue = :: this.getAllValue;
+        this.handleSupplierChange = :: this.handleSupplierChange;
+        this.clearSupplierAbout = :: this.clearSupplierAbout;
+        this.createPoRequest = :: this.createPoRequest;
         // 采购单商品行信息
         this.columns = [
             {
@@ -165,7 +166,15 @@ class PoDetail extends PureComponent {
             {
                 title: '采购价格（含税）',
                 dataIndex: 'purchasePrice',
-                key: 'purchasePrice'
+                key: 'purchasePrice',
+                render: (text, record, index) =>
+                    (<EditableCell
+                        value={this.state.purchaseOrderType === '1' ? 0 : text}
+                        editable={this.state.currentType !== 'detail' && this.state.purchaseOrderType === '2'}
+                        step={record.purchaseInsideNumber}
+                        purchaseInsideNumber={null}
+                        onChange={value => this.applyPriceChange(record, index, value)}
+                    />)
             },
             {
                 title: '采购数量',
@@ -183,7 +192,13 @@ class PoDetail extends PureComponent {
             {
                 title: '采购金额（含税）',
                 dataIndex: 'totalAmount',
-                key: 'totalAmount'
+                key: 'totalAmount',
+                render: (text) => {
+                    if (this.state.purchaseOrderType === '1') {
+                        return 0
+                    }
+                    return text
+                }
             },
             {
                 title: '已收货数量',
@@ -229,8 +244,6 @@ class PoDetail extends PureComponent {
             payType: null,
             // 付款条件
             payCondition: null,
-            // 子公司id
-            branchCompanyId: null,
             // 详细收货地点
             adrName: null,
             // 供应商地点附带信息
@@ -239,10 +252,6 @@ class PoDetail extends PureComponent {
             purchaseOrderType: '0',
             // 货币类型
             currencyCode: 'CNY',
-            // 供应商地点禁用
-            isSupplyAdrDisabled: true,
-            // 仓库禁用
-            isWarehouseDisabled: true,
             // 供应商id
             spId: null,
             // 供应商地点id
@@ -253,6 +262,8 @@ class PoDetail extends PureComponent {
             nextPoLines: [],
             // 修改页，仓库是否被清空的标志
             ispoAddressClear: false,
+            // 经营模式
+            businessMode: null
         }
     }
 
@@ -261,7 +272,7 @@ class PoDetail extends PureComponent {
         const { match } = this.props;
         const { type } = match.params;
         this.setState({
-            currentType: type
+            currentType: type,
         })
         // 采购单id
         const poId = match.params.purchaseOrderNo;
@@ -304,9 +315,9 @@ class PoDetail extends PureComponent {
     componentWillReceiveProps(nextProps) {
         const {
             adrType, settlementPeriod, payType, payCondition, estimatedDeliveryDate,
-            purchaseOrderType, currencyCode, id, spId, spAdrId
+            purchaseOrderType, currencyCode, id, spAdrId, businessMode
         } = nextProps.basicInfo;
-        const { basicInfo = {}} = this.props;
+        const { basicInfo = {} } = this.props;
         const newPo = fromJS(nextProps.po.poLines);
         const oldPo = fromJS(this.props.po.poLines);
         if (!Immutable.is(newPo, oldPo)) {
@@ -316,18 +327,17 @@ class PoDetail extends PureComponent {
             this.setState({
                 locDisabled: !(adrType === 0 || adrType === 1),
                 isSupplyAdrDisabled: false,
-                isWarehouseDisabled: false,
                 settlementPeriod,
                 payType,
                 payCondition,
-                spId,
                 spAdrId,
                 pickerDate: estimatedDeliveryDate
-                ? moment(parseInt(estimatedDeliveryDate, 10))
-                : null,
-                purchaseOrderType: purchaseOrderType === 0 ? `${purchaseOrderType}` : '',
+                    ? moment(parseInt(estimatedDeliveryDate, 10))
+                    : null,
+                purchaseOrderType: purchaseOrderType === 0 || purchaseOrderType === 1 || purchaseOrderType === 2 ? `${purchaseOrderType}` : '',
                 localType: adrType === 0 || adrType === 1 ? `${adrType}` : '',
                 currencyCode: currencyCode === 'CNY' ? `${currencyCode}` : 'CNY',
+                businessMode: businessMode === 0 || businessMode === 1 ? `${businessMode}` : '',
             })
         }
     }
@@ -396,6 +406,20 @@ class PoDetail extends PureComponent {
             switch (this.props.basicInfo.purchaseOrderType) {
                 case 0:
                     return '普通采购单';
+                case 1:
+                    return '赠品采购单';
+                case 2:
+                    return '促销采购单';
+                default:
+                    return '';
+            }
+        }
+        const businessMode = () => {
+            switch (this.props.basicInfo.businessMode) {
+                case 0:
+                    return '经销';
+                case 1:
+                    return '代销';
                 default:
                     return '';
             }
@@ -430,24 +454,24 @@ class PoDetail extends PureComponent {
         const { currentType } = this.state;
         // 创建者
         const createdByName = basicInfo.createdByName
-        ? this.basicInfo.createdByName
-        : this.props.data.user.employeeName
+            ? this.basicInfo.createdByName
+            : this.props.data.user.employeeName
 
         // 创建日期
         const createdAt = basicInfo.createdAt
-        ? basicInfo.createdAt
-        : moment().format('YYYY-MM-DD')
+            ? basicInfo.createdAt
+            : moment().format('YYYY-MM-DD')
 
 
         // 供应商地点值清单回显数据
         const spAdrDefaultValue = basicInfo.spAdrId
-        ? `${basicInfo.spAdrId}-${basicInfo.spAdrName}`
-        : ''
+            ? `${basicInfo.spAdrId}-${basicInfo.spAdrName}`
+            : ''
 
         // 地点值清单回显数据
         const adresssDefaultValue = basicInfo.adrTypeCode
-        ? `${basicInfo.adrTypeCode}-${basicInfo.adrTypeName}`
-        : ''
+            ? `${basicInfo.adrTypeCode}-${basicInfo.adrTypeName}`
+            : ''
 
         // 回显预期送货日期
         const estimatedDeliveryDate = basicInfo.estimatedDeliveryDate ? moment(basicInfo.estimatedDeliveryDate).format('YYYY-MM-DD') : null
@@ -472,7 +496,13 @@ class PoDetail extends PureComponent {
                                     <span>{this.props.basicInfo.purchaseOrderNo}</span>
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
+                            <Col span={3}>
+                                {/* 经营模式 */}
+                                <FormItem label="经营模式">
+                                    <span>{businessMode()}</span>
+                                </FormItem>
+                            </Col>
+                            <Col span={5}>
                                 {/* 采购单类型 */}
                                 <FormItem label="采购单类型">
                                     <span>{purchaseOrderType()}</span>
@@ -633,17 +663,17 @@ class PoDetail extends PureComponent {
                                     rules: [{ required: true, message: '请输入采购单类型' }],
                                     initialValue: this.state.purchaseOrderType
                                 })(
-                                    <Select size="default">
+                                    <Select size="default" onChange={this.selectChange}>
                                         {
                                             poType.data.map((item) =>
                                                 (<Option
                                                     key={item.key}
                                                     value={item.key}
                                                 >{item.value}</Option>
-                                            ))
+                                                ))
                                         }
                                     </Select>
-                                )}
+                                    )}
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -667,12 +697,12 @@ class PoDetail extends PureComponent {
                                         </span>
                                     </span>
                                     {getFieldDecorator('supplier', {
-                                        initialValue: { spId: basicInfo.spId || '', spNo: basicInfo.spNo || '', companyName: basicInfo.spName || ''}
+                                        initialValue: { spId: basicInfo.spId || '', spNo: basicInfo.spNo || '', companyName: basicInfo.spName || '' }
                                     })(
                                         <Supplier
                                             onChange={this.handleSupplierChange}
                                         />
-                                    )}
+                                        )}
                                     {tooltipItem('修改供应商会清空仓库地点和采购商品')}
                                 </div>
                             </FormItem>
@@ -694,13 +724,13 @@ class PoDetail extends PureComponent {
                                         fetch={(params) =>
                                             this.props.pubFetchValueList({
                                                 orgId: this.props.data.user.employeeCompanyId,
-                                                pId: this.state.spId,
+                                                pId: this.props.form.getFieldValue('supplier').spId,
                                                 condition: params.value,
                                                 pageNum: params.pagination.current || 1,
                                                 pageSize: params.pagination.pageSize
                                             }, 'supplierAdrSearchBox')
                                         }
-                                        disabled={this.state.isSupplyAdrDisabled}
+                                        disabled={this.props.form.getFieldValue('supplier').spId === ''}
                                         defaultValue={spAdrDefaultValue}
                                         onChoosed={this.applySupplierLocChoosed}
                                         onClear={this.applySupplierLocClear}
@@ -734,7 +764,7 @@ class PoDetail extends PureComponent {
                                     </span>
                                 </span>
                                 <DatePicker
-                                    style={{width: 241}}
+                                    style={{ width: 241 }}
                                     format={dateFormat}
                                     value={this.state.pickerDate}
                                     onChange={(e) => {
@@ -767,7 +797,7 @@ class PoDetail extends PureComponent {
                                                     key={item.key}
                                                     value={item.key}
                                                 >{item.value}</Option>
-                                            ))
+                                                ))
                                         }
                                     </Select>
                                     )}
@@ -803,7 +833,7 @@ class PoDetail extends PureComponent {
                                                     ispoAddressClear: false
                                                 })
                                             }}
-                                            disabled={this.state.isWarehouseDisabled || this.state.localType !== '0'}
+                                            disabled={this.props.form.getFieldValue('supplier').spId === '' || this.state.localType !== '0'}
                                             defaultValue={adresssDefaultValue}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.warehouseCode}-{data.warehouseName}</div>
@@ -922,10 +952,10 @@ class PoDetail extends PureComponent {
                                                     key={item.key}
                                                     value={item.key}
                                                 >{item.value}</Option>
-                                            ))
+                                                ))
                                         }
                                     </Select>
-                                )}
+                                    )}
                             </FormItem>
                         </Col>
                     </Row>
@@ -936,6 +966,32 @@ class PoDetail extends PureComponent {
                                 <span>
                                     {this.renderPayCondition(this.state.payCondition)}
                                 </span>
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            {/* 经营模式 */}
+                            <FormItem>
+                                <span className="ant-form-item-label">
+                                    <span className="label-wrap">
+                                        <span style={{ color: '#F00' }}>*</span>
+                                        经营模式:
+                                    </span>
+                                </span>
+                                {getFieldDecorator('businessMode', {
+                                    rules: [{ required: true, message: '请输入经营模式' }],
+                                    initialValue: this.state.businessMode
+                                })(
+                                    <Select size="default">
+                                        {
+                                            businessModeType.data.map((item) =>
+                                                (<Option
+                                                    key={item.key}
+                                                    value={item.key}
+                                                >{item.value}</Option>
+                                                ))
+                                        }
+                                    </Select>
+                                    )}
                             </FormItem>
                         </Col>
                     </Row>
@@ -1086,9 +1142,7 @@ class PoDetail extends PureComponent {
         }
 
         // 供应商
-        const {spId, spNo} = this.props.form.getFieldValue('supplier');
-        const spName = this.props.form.getFieldValue('supplier').companyName;
-
+        const { spId, spNo, companyName } = this.props.form.getFieldValue('supplier');
         // 供应商地点
         let spAdrId;
         let spAdrNo;
@@ -1100,27 +1154,18 @@ class PoDetail extends PureComponent {
             spAdrName = selectedSupplierLocRawData.providerName;
         }
 
-        // 大类
-        // let bigClassCd;
-        // let bigCLassName;
-        // const selectedBigClassRawData = this.bigClass.state.selectedRawData;
-        // if (selectedBigClassRawData) {
-        //     bigClassCd = selectedBigClassRawData.id;
-        //     bigCLassName = selectedBigClassRawData.categoryName;
-        // }
-
         const mapValues = {
             addressId,
             addressCd,
             address,
             spId,
             spNo,
-            spName,
+            spName: companyName,
             spAdrId,
             spAdrNo,
             spAdrName,
         };
-        const {applySupplierRecord} = this.state;
+        const { applySupplierRecord } = this.state;
         const basicInfo = Object.assign({}, formValues, mapValues, applySupplierRecord);
         return basicInfo;
     }
@@ -1195,6 +1240,13 @@ class PoDetail extends PureComponent {
         }
     }
 
+    selectChange = (value) => {
+        this.setState({
+            purchaseOrderType: value,
+            totalAmounts: 0
+        })
+    }
+
     /**
      * 新增/修改的请求
      */
@@ -1215,9 +1267,8 @@ class PoDetail extends PureComponent {
             adrType,
             currencyCode,
             purchaseOrderType,
-            addressCd,
+            addressCd
         } = poData.basicInfo;
-
         // 采购商品信息
         const pmPurchaseOrderItems = poData.poLines.map((item) => {
             const {
@@ -1227,19 +1278,21 @@ class PoDetail extends PureComponent {
                 productCode,
                 purchaseNumber
             } = item;
-            return {...Utils.removeInvalid({
-                id,
-                prodPurchaseId,
-                productId,
-                productCode,
-                purchaseNumber
-            })}
+            return {
+                ...Utils.removeInvalid({
+                    id,
+                    prodPurchaseId,
+                    productId,
+                    productCode,
+                    purchaseNumber
+                })
+            }
         })
 
         // 预计送货日期
         const estimatedDeliveryDate = this.state.pickerDate
-        ? this.state.pickerDate.valueOf().toString()
-        : null;
+            ? this.state.pickerDate.valueOf().toString()
+            : null;
 
         if (CId) {
             // 修改页
@@ -1325,7 +1378,33 @@ class PoDetail extends PureComponent {
             }
         }
     }
-
+    /**
+     * 商品行价格变化回调，做如下处理
+     *  1.更新store中该行信息（校验结果，采购价格，采购金额）
+     *  2.计算采购总金额并更新store
+     * result:{value:输入值,isValidate:检验结果 true/false}
+     */
+    applyPriceChange = (records, index, result) => {
+        const record = records;
+        const { value, isValidate } = result;
+        // 更新store中采购单商品
+        if (record) {
+            // 未输入采购价格，则清空store中采购数量，采购金额
+            if (!value) {
+                record.purchasePrice = null;
+                record.totalAmount = null;
+                this.props.updatePoLine(record);
+            } else {
+                // 保存输入数据和校验状态 给submit用
+                record.purchasePrice = value;
+                // 计算采购金额（含税）
+                record.totalAmount = Math.round(value * record.purchaseNumber * 100) / 100;
+                // 校验状态
+                record.isValidate = isValidate;
+                this.props.updatePoLine(record);
+            }
+        }
+    }
     /**
      * 计算采购总数量、采购总金额
      * 计算对象：未删除&&采购数量不为空
@@ -1357,24 +1436,10 @@ class PoDetail extends PureComponent {
     handleSupplierChange(value) {
         const { spId } = value;
         const { basicInfo } = this.props;
-        if (spId === '') {
-            // 供应商有值无值时，供应商地点不可编辑
-            this.setState({
-                isSupplyAdrDisabled: true,
-                isWarehouseDisabled: true,
-            }, () => {
-                this.clearSupplierAbout();
-            })
-        } else {
-            // 地点类型有值时，供应商地点可编辑
-            this.setState({
-                spId,
-                isSupplyAdrDisabled: false,
-            }, () => {
-                this.clearSupplierAbout();
-                this.props.updatePoBasicinfo(basicInfo);
-            })
+        if (spId !== '') {
+            this.props.updatePoBasicinfo(basicInfo);
         }
+        this.clearSupplierAbout();
     }
     /**
      *   1.清空供应商地点
@@ -1429,10 +1494,7 @@ class PoDetail extends PureComponent {
                     payType: record.payType,
                     // 付款条件
                     payCondition: record.payCondition,
-                    // 子公司id
-                    branchCompanyId: record.branchCompanyId,
                     applySupplierRecord: record,
-                    isWarehouseDisabled: false,
                     spAdrId: record.spAdrid
                 });
             }
@@ -1452,10 +1514,7 @@ class PoDetail extends PureComponent {
             // 付款方式
             payType: null,
             // 付款条件
-            payCondition: null,
-            // 子公司id
-            branchCompanyId: null,
-            isWarehouseDisabled: true,
+            payCondition: null
         })
     }
 
@@ -1506,7 +1565,7 @@ class PoDetail extends PureComponent {
 
     /**
      * 添加采购商品
-     *  .检查商品列表中是否存在改商品
+     *  .检查商品列表中是否存在该商品
      *    a.已存在：显示已存在
      *    b   在：添加该商品(recordStatus:new 新添加)
      */
@@ -1573,7 +1632,7 @@ class PoDetail extends PureComponent {
             spId,
             spAdrId,
         } = basicInfo;
-        const {pickerDate, ispoAddressClear} = this.state;
+        const { pickerDate, ispoAddressClear } = this.state;
 
         // 修改时数据
         const updateBasicInfo = this.props.basicInfo;
@@ -1664,7 +1723,7 @@ class PoDetail extends PureComponent {
     handleDownPDF() {
         Utils.exportExcel(
             exportProcurementPdf,
-            {purchaseOrderNo: this.props.basicInfo.purchaseOrderNo}
+            { purchaseOrderNo: this.props.basicInfo.purchaseOrderNo }
         );
     }
 
@@ -1686,7 +1745,7 @@ class PoDetail extends PureComponent {
             <Dropdown overlay={menu} placement="bottomCenter">
                 <a className="ant-dropdown-link">
                     表单操作
-          <Icon type="down" />
+                    <Icon type="down" />
                 </a>
             </Dropdown>
         )
@@ -1780,7 +1839,7 @@ class PoDetail extends PureComponent {
                                                 pageSize: params.pagination.pageSize
                                             }, 'queryProductForSelect')
                                         }
-                                        disabled={this.state.isWarehouseDisabled}
+                                        disabled={this.props.form.getFieldValue('supplier').spId === ''}
                                         addonBefore="添加商品"
                                         onChoosed={this.handleChoosedMaterialMap}
                                         renderChoosedInputRaw={(data) => (
@@ -1821,14 +1880,14 @@ class PoDetail extends PureComponent {
                             <Col span={8}>
                                 <div>
                                     <span>合计数量:</span>
-                                    <span style={{color: '#F00'}}>{totalQuantitys}</span>
+                                    <span style={{ color: '#F00' }}>{totalQuantitys}</span>
                                 </div>
 
                             </Col>
                             <Col span={8}>
                                 <div>
                                     <span>合计金额:</span>
-                                    <span style={{color: '#F00'}}>{totalAmounts}</span>
+                                    <span style={{ color: '#F00' }}>{totalAmounts}</span>
                                 </div>
                             </Col>
                         </Row>
@@ -1840,7 +1899,7 @@ class PoDetail extends PureComponent {
                                     {
                                         this.state.currentType !== 'detail'
                                         && (basicInfo.status === 0
-                                        || this.state.currentType === 'create')
+                                            || this.state.currentType === 'create')
                                         && <FormItem>
                                             <Button size="default" onClick={this.handleSave}>
                                                 保存
@@ -1850,7 +1909,7 @@ class PoDetail extends PureComponent {
                                     {
                                         this.state.currentType !== 'detail'
                                         && (basicInfo.status === 0
-                                        || this.state.currentType === 'create')
+                                            || this.state.currentType === 'create')
                                         && <FormItem>
                                             <Button size="default" onClick={this.handleSubmit}>
                                                 提交

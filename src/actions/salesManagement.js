@@ -43,15 +43,12 @@ const getExchangeGoodsList = (data) => ({
 export const getExchangeGoodsListAction = (params) => dispatch => (
     new Promise((resolve, reject) => {
         getExchangeGoodsListService(params)
-        .then(res => {
-            dispatch(
-                getExchangeGoodsList(res.data)
-            );
-            resolve(res);
-        })
-        .catch(err => {
-            reject(err);
-        });
+            .then(res => {
+                dispatch(getExchangeGoodsList(res.data));
+            })
+            .catch(err => {
+                reject(err);
+            })
     })
 )
 
