@@ -170,6 +170,7 @@ class PoDetail extends PureComponent {
                 render: (text, record, index) =>
                     (<EditableCell
                         value={this.state.purchaseOrderType === '1' ? 0 : text}
+                        max={text}
                         editable={this.state.currentType !== 'detail' && this.state.purchaseOrderType === '2'}
                         step={record.purchaseInsideNumber}
                         purchaseInsideNumber={null}
@@ -682,8 +683,7 @@ class PoDetail extends PureComponent {
                                                 >{item.value}</Option>
                                                 ))
                                         }
-                                    </Select>
-                                    )}
+                                    </Select>)}
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -712,8 +712,7 @@ class PoDetail extends PureComponent {
                                         <Supplier
                                             onChange={this.handleSupplierChange}
                                             initialValue={spDefaultValue}
-                                        />
-                                        )}
+                                        />)}
                                     {tooltipItem('修改供应商会清空仓库地点和采购商品')}
                                 </div>
                             </FormItem>
@@ -810,8 +809,7 @@ class PoDetail extends PureComponent {
                                                 >{item.value}</Option>
                                                 ))
                                         }
-                                    </Select>
-                                    )}
+                                    </Select>)}
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -965,8 +963,7 @@ class PoDetail extends PureComponent {
                                                 >{item.value}</Option>
                                                 ))
                                         }
-                                    </Select>
-                                    )}
+                                    </Select>)}
                             </FormItem>
                         </Col>
                     </Row>
@@ -1001,8 +998,7 @@ class PoDetail extends PureComponent {
                                                 >{item.value}</Option>
                                                 ))
                                         }
-                                    </Select>
-                                    )}
+                                    </Select>)}
                             </FormItem>
                         </Col>
                     </Row>
@@ -1287,7 +1283,8 @@ class PoDetail extends PureComponent {
                 prodPurchaseId,
                 productId,
                 productCode,
-                purchaseNumber
+                purchaseNumber,
+                purchasePrice
             } = item;
             return {
                 ...Utils.removeInvalid({
@@ -1295,7 +1292,8 @@ class PoDetail extends PureComponent {
                     prodPurchaseId,
                     productId,
                     productCode,
-                    purchaseNumber
+                    purchaseNumber,
+                    purchasePrice
                 })
             }
         })
@@ -1344,7 +1342,7 @@ class PoDetail extends PureComponent {
                     currencyCode,
                     purchaseOrderType: parseInt(purchaseOrderType, 10),
                     status,
-                    businessMode
+                    businessMode: parseInt(businessMode, 10)
                 },
                 pmPurchaseOrderItems
             }).then((res) => {
@@ -1368,6 +1366,7 @@ class PoDetail extends PureComponent {
     applyQuantityChange = (records, index, result) => {
         const record = records;
         const { value, isValidate } = result;
+        record.purchasePrice = this.state.purchaseOrderType === '1' ? 0 : record.purchasePrice;
         // 更新store中采购单商品
         if (record) {
             // 未输入采购数量，则清空store中采购数量，采购金额
