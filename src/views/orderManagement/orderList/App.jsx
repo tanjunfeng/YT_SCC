@@ -459,7 +459,7 @@ class OrderManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row z-up" span={8}>
+                                <Col className="gutter-row z-up search-style" span={8}>
                                     {/* 雅堂小超 */}
                                     <div>
                                         <span className="sc-form-item-label">雅堂小超</span>
@@ -470,7 +470,7 @@ class OrderManagementList extends Component {
                                         </FormItem>
                                     </div>
                                 </Col>
-                                <Col className="gutter-row" span={8}>
+                                <Col className="gutter-row search-style" span={8}>
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">子公司</span>
