@@ -15,6 +15,9 @@ import { operationState } from '../../../../constant/wrapConfigure';
 
 const FormItem = Form.Item;
 const companyData = [{
+    id: 'headquarters',
+    name: '总公司'
+}, {
     id: 'sichuan',
     name: '四川'
 }]
