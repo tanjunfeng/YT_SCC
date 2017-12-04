@@ -1319,7 +1319,7 @@ class PoDetail extends PureComponent {
                     currencyCode,
                     purchaseOrderType: parseInt(purchaseOrderType, 10),
                     status,
-                    businessMode
+                    businessMode: parseInt(businessMode, 10)
                 },
                 pmPurchaseOrderItems
             }).then((res) => {
