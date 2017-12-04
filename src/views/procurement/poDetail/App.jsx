@@ -737,7 +737,8 @@ class PoDetail extends PureComponent {
                                                 pId: this.props.form.getFieldValue('supplier').spId,
                                                 condition: params.value,
                                                 pageNum: params.pagination.current || 1,
-                                                pageSize: params.pagination.pageSize
+                                                pageSize: params.pagination.pageSize,
+                                                isContainsHeadBranchCompany: true
                                             }, 'supplierAdrSearchBox')
                                         }
                                         disabled={this.props.form.getFieldValue('supplier').spId === ''}
