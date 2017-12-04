@@ -62,8 +62,9 @@ class HomeStyle extends Component {
      * 点击搜索后的回调
      * @param {object} submitObj 上传参数
      * @param {bool} isHeadquarters 用户是否可以修改当前页面
+     * @param {bool} isChangeQuick 用户是否可以修改当前页面的快捷导航
      */
-    searchChange = (submitObj, isHeadquarters) => {
+    searchChange = (submitObj, isHeadquarters, isChangeQuick) => {
         if (submitObj) {
             const { branchCompany, homePageType } = submitObj
             const companyId = branchCompany.id
@@ -71,7 +72,8 @@ class HomeStyle extends Component {
             this.companyId = companyId
             this.setState({
                 companyId,
-                isHeadquarters
+                isHeadquarters,
+                isChangeQuick
             })
         }
         const obj = {
@@ -133,8 +135,10 @@ class HomeStyle extends Component {
                                         data: item,
                                         allLength: homeData.length,
                                         fetchAreaList: this.searchChange,
-                                        // 用户是否可以修改
-                                        headquarters: this.state.isHeadquarters
+                                        // 用户是否可以修改当前页面
+                                        isHeadquarters: this.state.isHeadquarters,
+                                        // 用户是否可以修改当前页面快捷导航
+                                        isChangeQuick: this.state.isChangeQuick
                                     }
                                     if (id.indexOf('carousel') > -1) {
                                         return <CarouselItem {...props} />

@@ -104,7 +104,7 @@ class SearchBox extends PureComponent {
         ))
         const submitObj = {
             branchCompany,
-            homePageType: homePageType || 1
+            homePageType: homePageType || '1'
         }
         let headquarters = false
         for (let i = 0; i < companyData.length; i++) {
