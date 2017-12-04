@@ -133,6 +133,21 @@ export const locType = {
     }]
 }
 
+// 经营模式值清单
+export const businessModeType = {
+    defaultValue: '',
+    data: [{
+        key: '',
+        value: '请选择'
+    }, {
+        key: '0',
+        value: '经销'
+    }, {
+        key: '1',
+        value: '代销'
+    }]
+}
+
 export const locTypeCodes = {
     warehouse: '0000',
     shop: '0001'
@@ -154,6 +169,12 @@ export const poType = {
     }, {
         key: '0',
         value: '普通采购'
+    }, {
+        key: '1',
+        value: '赠品采购'
+    }, {
+        key: '2',
+        value: '促销采购'
     }]
 }
 

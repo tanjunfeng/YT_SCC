@@ -2,8 +2,7 @@
  * @Author: tanjf
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
- * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-01 14:55:41
+ * @Last Modified by: chenghj
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -17,23 +16,15 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import {
-    getWarehouseAddressMap,
-    getShopAddressMap,
-    getSupplierMap,
-    getSupplierLocMap,
-    fetchReturnMngList,
-} from '../../../actions';
+    queryCommentHis,
+} from '../../../actions/procurement';
 
 const dateFormat = 'YYYY-MM-DD';
 
 @connect(state => ({
-    approvalInfo: state.toJS().procurement.approvalInfo
+    approvalList: state.toJS().procurement.approvalList
 }), dispatch => bindActionCreators({
-    getWarehouseAddressMap,
-    getShopAddressMap,
-    getSupplierMap,
-    getSupplierLocMap,
-    fetchReturnMngList,
+    queryCommentHis,
 }, dispatch))
 
 class ApproModal extends PureComponent {
@@ -41,24 +32,24 @@ class ApproModal extends PureComponent {
         super(props);
         this.searchParams = {};
         this.state = {
-            spId: '',   // 供应商编码
-            spAdrId: '',    // 供应商地点编码
+            spId: '', // 供应商编码
+            spAdrId: '', // 供应商地点编码
             isSupplyAdrDisabled: true, // 供应商地点禁用
-            locDisabled: true,  // 地点禁用
+            locDisabled: true, // 地点禁用
             locationData: {},
             isVisibleModal: false,
-            adrTypeCode: '',    // 地点编码
-            receivedTypeCode: ''  // 收货单状态编码
+            adrTypeCode: '', // 地点编码
+            receivedTypeCode: '' // 收货单状态编码
         };
         this.columns = [
             {
                 title: '审批人',
-                dataIndex: 'auditUser',
-                key: 'auditUser'
+                dataIndex: 'handler',
+                key: 'handler'
             }, {
                 title: '审批时间',
-                dataIndex: 'auditTime',
-                key: 'auditTime',
+                dataIndex: 'handlerDate',
+                key: 'handlerDate',
                 render: text => {
                     let res = text;
                     if (!text) {
@@ -70,12 +61,15 @@ class ApproModal extends PureComponent {
                 }
             }, {
                 title: '审批结果',
-                dataIndex: 'supplierAddress',
-                key: 'supplierAddress'
+                dataIndex: 'pass',
+                key: 'pass',
+                render: text => (
+                    text ? '通过' : '拒绝'
+                )
             }, {
                 title: '审批意见',
-                dataIndex: 'adrType',
-                key: 'adrType',
+                dataIndex: 'content',
+                key: 'content',
                 render: text => {
                     let res = text;
                     if (text === null || undefined === text || text === '') {
@@ -102,7 +96,7 @@ class ApproModal extends PureComponent {
     }
 
     render() {
-        const { approvalInfo } = this.props;
+        const { approvalList } = this.props;
         return (
             <Modal
                 title="审批意见"
@@ -112,7 +106,7 @@ class ApproModal extends PureComponent {
                 width={1200}
             >
                 <Table
-                    dataSource={approvalInfo}
+                    dataSource={approvalList}
                     columns={this.columns}
                     rowKey="id"
                     scroll={{
@@ -128,7 +122,7 @@ ApproModal.propTypes = {
     visible: PropTypes.bool,
     onOk: PropTypes.func,
     onCancel: PropTypes.func,
-    approvalInfo: PropTypes.objectOf(PropTypes.any),
+    approvalList: PropTypes.objectOf(PropTypes.any),
 };
 
 export default withRouter(Form.create()(ApproModal));

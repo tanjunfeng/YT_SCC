@@ -81,7 +81,6 @@ class UploadZip extends PureComponent {
                     </Button>
                 </Upload>
                 <Button
-                    className="upload-demo-start"
                     type="primary"
                     onClick={this.handleUpload}
                     disabled={this.state.fileList.length === 0}

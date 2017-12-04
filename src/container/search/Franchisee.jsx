@@ -18,12 +18,12 @@ import './SearchMind.scss';
 class Franchisee extends PureComponent {
     componentWillReceiveProps(nextProps) {
         if (nextProps.value.franchiseeId === '') {
-            this.defaultValue = '';
             this.searchMind.reset();
         }
+        if (nextProps.value.reset && !this.props.value.reset) {
+            this.handleClear();
+        }
     }
-
-    defaultValue = '';
 
     /**
      * 子公司-清除
@@ -45,7 +45,6 @@ class Franchisee extends PureComponent {
             <SearchMind
                 rowKey="franchiseeId"
                 compKey="search-mind-joining"
-                defaultValue={this.defaultValue}
                 disabled={this.props.disabled}
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>

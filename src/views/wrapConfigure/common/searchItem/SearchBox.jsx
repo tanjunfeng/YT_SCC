@@ -14,6 +14,13 @@ import { fetchQueryBranchCompanyInfo } from '../../../../actions/wap';
 import { operationState } from '../../../../constant/wrapConfigure';
 
 const FormItem = Form.Item;
+const companyData = [{
+    id: 'headquarters',
+    name: '总公司'
+}, {
+    id: 'sichuan',
+    name: '四川'
+}]
 
 @connect(
     state => ({
@@ -34,7 +41,7 @@ class SearchBox extends PureComponent {
     }
 
     componentDidMount() {
-        this.props.fetchQueryBranchCompanyInfo();
+        // this.props.fetchQueryBranchCompanyInfo();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -74,7 +81,7 @@ class SearchBox extends PureComponent {
      * @param {string} homePageType form中运营类型的数据
      */
     isType = (companyId, homePageType) => {
-        if (homePageType && homePageType !== '0') {
+        if (homePageType) {
             this.setState({
                 isDisabled: false
             })
@@ -90,23 +97,31 @@ class SearchBox extends PureComponent {
      */
     formSubmit = () => {
         const { companyId, homePageType } = this.props.form.getFieldsValue()
+        // const { companyData } = this.props
         // 根据选择的id获取id和name并通知父组件
-        const branchCompany = this.props.companyData.data.find(item => (
+        const branchCompany = companyData.find(item => (
             item.id === companyId
         ))
         const submitObj = {
             branchCompany,
-            homePageType
+            homePageType: homePageType || 1
         }
-        const headquarters = this.props.companyData.headquarters
-        this.props.searchChange(submitObj, headquarters)
+        let headquarters = false
+        for (let i = 0; i < companyData.length; i++) {
+            if (companyData[i].id === 'headquarters') {
+                headquarters = true
+                break
+            }
+        }
+        const isShowSwitch = !(companyId === 'headquarters')
+        this.props.searchChange(submitObj, headquarters, isShowSwitch)
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { companyData } = this.props
+        // const { companyData } = this.props
         return (
-            companyData
+            companyData.length > 0
                 ? <div className="search-box wap-search-box">
                     <Form
                         layout="inline"
@@ -115,19 +130,16 @@ class SearchBox extends PureComponent {
                         <Row gutter={40}>
                             <Col span={8}>
                                 <FormItem label="子公司">
-                                    {getFieldDecorator('companyId', {
-                                        initialValue: ''
-                                    })(
-                                        <Select style={{ width: '200px' }} size="default">
+                                    {getFieldDecorator('companyId')(
+                                        <Select style={{ width: '210px' }} size="default" allowClear placeholder="请选择">
                                             {
-                                                companyData.data.map((item) => (
+                                                companyData.map((item) => (
                                                     <Select.Option key={item.id} value={item.id}>
                                                         {item.name}
                                                     </Select.Option>
                                                 ))
                                             }
-                                        </Select>
-                                    )}
+                                        </Select>)}
                                 </FormItem>
                             </Col>
                             {
@@ -135,10 +147,8 @@ class SearchBox extends PureComponent {
                                     ? <Col span={8}>
                                         {/* 运营方式 */}
                                         <FormItem label="运营方式">
-                                            {getFieldDecorator('homePageType', {
-                                                initialValue: operationState.defaultValue
-                                            })(
-                                                <Select style={{ width: '200px' }} size="default">
+                                            {getFieldDecorator('homePageType')(
+                                                <Select style={{ width: '210px' }} size="default" allowClear placeholder="请选择">
                                                     {
                                                         operationState.data.map((item) => (
                                                             <Select.Option
@@ -149,8 +159,7 @@ class SearchBox extends PureComponent {
                                                             </Select.Option>
                                                         ))
                                                     }
-                                                </Select>
-                                            )}
+                                                </Select>)}
                                         </FormItem>
                                     </Col>
                                     : null

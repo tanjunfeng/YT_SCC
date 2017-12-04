@@ -4,7 +4,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.5);
+    background-color: white;
     width: 1000px;
     height: 500px;
     .canvas{
@@ -12,11 +12,10 @@
        top: 50%;
        left: 50%;
        transform: translate(-50%, -50%);
-    }
-    .highLight{
-        position: 'absolute';
-        border-width: 3px;
-        border-style: 'solid';
+       img{
+        max-width: 1000px;
+        max-height: 500px;
+       }
     }
     .closeBtn{
         position: relative;
@@ -24,10 +23,4 @@
         float: right;
         z-index: 99;
     }
-}
-.hide{
-    display: none;
-}
-.show{
-    display: block;
 }

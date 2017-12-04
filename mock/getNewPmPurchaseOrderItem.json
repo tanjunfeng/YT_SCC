@@ -1,0 +1,32 @@
+{
+    "timestamp": 1501308392698,
+    "code": 200,
+    "message": "请求成功",
+    "data": {
+        "id": null,
+        "purchaseOrderId": null,
+        "productId": "xprod347451",
+        "prodPurchaseId": null,
+        "productCode": "1000031",
+        "productName": "sc_test01",
+        "internationalCode": "xcd123456",
+        "packingSpecifications": "500ml",
+        "producePlace": null,
+        "purchaseInsideNumber": 2,
+        "unitExplanation": null,
+        "inputTaxRate": 12,
+        "purchasePrice": 10.23,
+        "purchaseNumber": null,
+        "totalAmount": null,
+        "receivedNumber": null,
+        "createTime": null,
+        "modifyTime": null,
+        "createUserId": null,
+        "modifyUserId": null,
+        "taxAmount": null,
+        "totalWithoutTaxAmount": null,
+        "isValid": null,
+        "inValidateReason": null
+    },
+    "success": true
+}

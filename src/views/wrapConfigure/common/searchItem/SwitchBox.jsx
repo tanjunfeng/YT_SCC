@@ -56,7 +56,7 @@ class SwitchBox extends PureComponent {
                     当前设置区域：<span>{this.props.companyName}</span>
                 </div>
                 {
-                    !this.props.headquarters
+                    this.props.isShowSwitch
                         ? <div className="mode">
                             <Switch checkedChildren="总部运营" unCheckedChildren="独立运营" onChange={this.handleChange} checked={this.state.isChecked} />
                         </div>
@@ -68,7 +68,7 @@ class SwitchBox extends PureComponent {
 }
 
 SwitchBox.propTypes = {
-    headquarters: PropTypes.bool,
+    isShowSwitch: PropTypes.bool,
     companyName: PropTypes.string,
     isChecked: PropTypes.bool
 };

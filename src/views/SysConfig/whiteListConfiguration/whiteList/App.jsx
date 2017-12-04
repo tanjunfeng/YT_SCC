@@ -23,6 +23,7 @@ import {
     onlineWhitelist,
     offlineWhitelist
 } from '../../../../actions/whiteListConfiguration';
+import { whiteListBatchExport } from '../../../../service';
 import ModalOnline from '../modalOnline';
 import ModalOffline from '../modalOffline';
 
@@ -162,11 +163,20 @@ class WhiteListConfig extends PureComponent {
         this.handlePromotionReset();
         this.param = {
             pageNo: 1,
+            pageSize: PAGE_SIZE,
             ...param
         };
         this.setState({ current: 1 }, () => {
             this.query();
         });
+    }
+
+    /**
+     * 白名单导出
+     * @param {object} param 查询参数
+     */
+    exportList = (param) => {
+        Utils.exportExcel(whiteListBatchExport, Utils.removeInvalid(param));
     }
 
     handlePromotionReset() {
@@ -264,6 +274,7 @@ class WhiteListConfig extends PureComponent {
                 <SearchForm
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
+                    onExportList={this.exportList}
                     value={{ selectListlength }}
                     onModalClick={this.onModalOnline}
                     onModalOfflineClick={this.onModalOffline}

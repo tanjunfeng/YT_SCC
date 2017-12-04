@@ -49,6 +49,7 @@ class processData extends PureComponent {
         this.handleReset();
         this.query();
     }
+
     /**
      * 分页页码改变的回调
      */
@@ -56,12 +57,11 @@ class processData extends PureComponent {
         Object.assign(this.param, { pageNum, current: pageNum });
         this.query();
     }
+
     queryFlowChart = (id, imageName) => {
-        // this.props.clearChartData();
-        this.props.queryChartData({deploymentId: id, imageName}).then(() => {
-            this.showModal();
-        });
+        this.props.queryChartData({deploymentId: id, imageName})
     }
+
     delect = (id) => {
         this.props.delectProcessData({deploymentId: id}).then((res) => {
             if (res.code === 200) {
@@ -70,31 +70,28 @@ class processData extends PureComponent {
             }
         })
     }
+
     query = () => {
         this.props.queryProcessData(this.param);
     }
+
     handleReset = () => {
         this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE
         }
     }
+
     closeCanvas = () => {
         this.props.clearChartData();
-        this.setState({
-            visible: false
-        });
     }
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
-    }
+
     handleChange = (e) => {
         this.setState({
             flowName: e.target.value
         })
     }
+
     /**
      * 表单操作删除表单
      * @param {Object} text 当前行的值
@@ -105,6 +102,7 @@ class processData extends PureComponent {
             <a href="#">删除</a>
         </Popconfirm>
     )
+
     /**
      * 表单操作查看流程图
      * @param {Object} text 当前行的值
@@ -117,6 +115,7 @@ class processData extends PureComponent {
             }}
         >查看流程图</a>
     )
+
     render() {
         const { flowName} = this.state;
         const deployProcessUrl = `${window.config.apiHost}/bpm/newdeploy`;
@@ -165,7 +164,7 @@ processData.propTypes = {
     queryChartData: PropTypes.func,
     clearChartData: PropTypes.func,
     processData: PropTypes.objectOf(PropTypes.any),
-    flowChartData: PropTypes.objectOf(PropTypes.any)
+    flowChartData: PropTypes.string
 }
 
 export default withRouter(Form.create()(processData));
