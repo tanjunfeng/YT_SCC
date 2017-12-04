@@ -9,9 +9,8 @@
         }
         .ywc-smind {
             vertical-align: middle;
-        }
-        .ywc-smind {
             width: 210px!important;
+            top: 0!important;
         }
         .sc-form-item-label {
             line-height: 42px;
@@ -24,8 +23,14 @@
         .check-item {
             padding-left: 200px;
         }
+        .search-style {
+            .ant-form-item-control {
+                line-height: 28px;
+            }
+        }
     }
 }
+
 .ant-modal {
     .order-modal-label {
         display: inline-block;

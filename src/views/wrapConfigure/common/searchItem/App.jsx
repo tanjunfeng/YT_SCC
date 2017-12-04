@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author liujinyu
  *
- * 首页样式管理条件查询区
+ * 首页样式管理、轮播管理条件查询区
  */
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
