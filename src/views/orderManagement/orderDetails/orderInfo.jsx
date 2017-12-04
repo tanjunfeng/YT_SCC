@@ -218,12 +218,12 @@ class OrderInformation extends PureComponent {
                                     <span>{orderDetailData.branchCompanyName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
-                                    <span className="details-info-lable">雅堂小超:</span>
-                                    <span>{orderDetailData.franchiseeStoreName}</span>
+                                    <span className="details-info-lable">加盟商编号:</span>
+                                    <span>{orderDetailData.franchiseeId}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
-                                    <span className="details-info-lable">出货仓:</span>
-                                    <span>{orderDetailData.branchCompanyArehouse}</span>
+                                    <span className="details-info-lable">雅堂小超:</span>
+                                    <span>{orderDetailData.franchiseeStoreName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">优惠券优惠:</span>
@@ -233,7 +233,15 @@ class OrderInformation extends PureComponent {
                                 </Col>
                             </Row>
                             <Row>
-                                <Col className="gutter-row" span={18}>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">出货仓:</span>
+                                    <span>{orderDetailData.branchCompanyArehouse}</span>
+                                </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">雅堂小超编号:</span>
+                                    <span>{orderDetailData.franchiseeStoreId}</span>
+                                </Col>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">电商单据编号:</span>
                                     <span>{orderDetailData.thirdPartOrderNo}</span>
                                 </Col>

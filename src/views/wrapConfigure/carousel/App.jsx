@@ -41,9 +41,15 @@ const columns = [
         render: (text) => {
             switch (text) {
                 case 1:
-                    return '商品链接';
+                    return '详情链接';
                 case 2:
+                    return '分类链接';
+                case 3:
+                    return '列表链接';
+                case 4:
                     return '页面链接';
+                case 5:
+                    return '外部链接';
                 default:
                     return '';
             }
@@ -115,7 +121,9 @@ class CarouselManagement extends Component {
             companyId: '',
             isChecked: false,
             // 用户能否修改当前的页面
-            isHeadquarters: true
+            isHeadquarters: true,
+            // 区域id
+            areaId: ''
         }
     }
 
@@ -142,20 +150,25 @@ class CarouselManagement extends Component {
     * @param {bool} isHeadquarters 用户是否可以修改当前页面
     */
     searchChange = (submitObj, isHeadquarters) => {
-        const { branchCompany, homePageType } = submitObj
-        const companyId = branchCompany.id
-        const obj = {
-            companyId,
-            homePageType
+        if (submitObj) {
+            const { branchCompany, homePageType } = submitObj
+            const companyId = branchCompany.id
+            this.homePageType = homePageType
+            this.companyId = companyId
+            this.setState({
+                companyId,
+                isHeadquarters
+            })
         }
-        this.setState({
-            companyId,
-            isHeadquarters
-        })
+        const obj = {
+            companyId: this.companyId,
+            homePageType: this.homePageType
+        }
         this.props.fetchCarouselArea(obj)
             .then(res => {
                 this.setState({
-                    isChecked: res.isUsingNation
+                    isChecked: res.isUsingNation,
+                    areaId: res.id
                 })
                 this.props.fetchCarouselAdList({ areaId: res.id })
                 this.props.fetchCarouselInterval({ areaId: res.id })
@@ -202,9 +215,24 @@ class CarouselManagement extends Component {
     }
 
     /**
+     * 没有修改权限的提示
+     */
+    showError = () => {
+        Modal.error({
+            title: '错误',
+            content: '您没有权限修改总部运营方式',
+        });
+    }
+
+    /**
      * “添加”模态框
      */
     showAddModal() {
+        // 当前用户是否可修改总部运营方式
+        if (!this.state.isHeadquarters) {
+            this.showError();
+            return;
+        }
         this.props.modifyModalVisible({
             isVisible: true,
             mTitle: '新增轮播广告设置'
@@ -219,10 +247,7 @@ class CarouselManagement extends Component {
     handleSelect(record, items) {
         // 当前用户是否可修改总部运营方式
         if (!this.state.isHeadquarters) {
-            Modal.error({
-                title: '错误',
-                content: '您没有权限修改总部运营方式',
-            });
+            this.showError();
             return;
         }
         const { id } = record;
@@ -242,7 +267,7 @@ class CarouselManagement extends Component {
                         removeCarouselAd({
                             carouselAdId: id
                         }).then(() => {
-                            this.props.fetchCarouselAdList();
+                            this.searchChange();
                             this.props.modifyModalVisible({ isVisible: false });
                             message.success('删除成功！');
                         })
@@ -258,7 +283,7 @@ class CarouselManagement extends Component {
                             id,
                             status: 1
                         }).then(() => {
-                            this.props.fetchCarouselAdList();
+                            this.searchChange();
                             this.props.modifyModalVisible({ isVisible: false });
                             message.success('启用成功！');
                         })
@@ -274,7 +299,7 @@ class CarouselManagement extends Component {
                             id,
                             status: 0
                         }).then(() => {
-                            this.props.fetchCarouselAdList();
+                            this.searchChange();
                             this.props.modifyModalVisible({ isVisible: false });
                             message.success('停用成功！');
                         })
@@ -343,7 +368,7 @@ class CarouselManagement extends Component {
                     isChecked={this.state.isChecked}
                 />
                 {
-                    adData.length > 0
+                    this.state.companyId
                         ? <div>
                             <span>
                                 <span className="modal-carousel-interval">
@@ -376,7 +401,10 @@ class CarouselManagement extends Component {
                 }
                 {
                     this.props.modalVisible &&
-                    <ChangeModalMessage />
+                    <ChangeModalMessage
+                        searchChange={this.searchChange}
+                        areaId={this.state.areaId}
+                    />
                 }
             </div>
         );

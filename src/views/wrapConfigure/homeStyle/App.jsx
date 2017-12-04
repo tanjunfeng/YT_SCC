@@ -17,7 +17,7 @@ import CarouselItem from './common/carousel';
 import QuickItem from './common/quick';
 import HotItem from './common/hot';
 import BannerItem from './common/banner';
-import FloorItem from './common/floor'; 
+import FloorItem from './common/floor';
 
 @connect(
     state => ({
@@ -33,6 +33,8 @@ import FloorItem from './common/floor';
 class HomeStyle extends Component {
     constructor(props) {
         super(props)
+        this.companyId = ''
+        this.homePageType = '';
         this.state = {
             companyId: '',
             isChecked: false,
@@ -60,18 +62,24 @@ class HomeStyle extends Component {
      * 点击搜索后的回调
      * @param {object} submitObj 上传参数
      * @param {bool} isHeadquarters 用户是否可以修改当前页面
+     * @param {bool} isChangeQuick 用户是否可以修改当前页面的快捷导航
      */
-    searchChange = (submitObj, isHeadquarters) => {
-        const { branchCompany, homePageType } = submitObj
-        const companyId = branchCompany.id
-        const obj = {
-            companyId,
-            homePageType
+    searchChange = (submitObj, isHeadquarters, isChangeQuick) => {
+        if (submitObj) {
+            const { branchCompany, homePageType } = submitObj
+            const companyId = branchCompany.id
+            this.homePageType = homePageType
+            this.companyId = companyId
+            this.setState({
+                companyId,
+                isHeadquarters,
+                isChangeQuick
+            })
         }
-        this.setState({
-            companyId,
-            isHeadquarters
-        })
+        const obj = {
+            companyId: this.companyId,
+            homePageType: this.homePageType
+        }
         this.props.fetchAreaList(obj);
     }
 
@@ -126,9 +134,11 @@ class HomeStyle extends Component {
                                         key: id,
                                         data: item,
                                         allLength: homeData.length,
-                                        fetchAreaList: this.props.fetchAreaList,
-                                        // 用户是否可以修改
-                                        headquarters: this.state.isHeadquarters
+                                        fetchAreaList: this.searchChange,
+                                        // 用户是否可以修改当前页面
+                                        isHeadquarters: this.state.isHeadquarters,
+                                        // 用户是否可以修改当前页面快捷导航
+                                        isChangeQuick: this.state.isChangeQuick
                                     }
                                     if (id.indexOf('carousel') > -1) {
                                         return <CarouselItem {...props} />

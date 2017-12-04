@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author liujinyu
  *
- * 首页样式管理条件查询区
+ * 首页样式管理、轮播管理条件查询区
  */
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
@@ -16,7 +16,8 @@ class SearchItem extends PureComponent {
         super(props)
         this.state = {
             companyName: '未选择',
-            headquarters: true
+            // 切换运营按钮是否显示
+            isShowSwitch: false
         }
     }
 
@@ -24,25 +25,35 @@ class SearchItem extends PureComponent {
      * 点击搜索后的回调
      * @param {object} submitObj 上传参数
      * @param {bool} headquarters 用户是否有总部权限
+     * @param {bool} isShowSwitch 切换运营按钮是否显示
      */
-    searchChange = (submitObj, headquarters) => {
+    searchChange = (submitObj, headquarters, isShowSwitch) => {
         const { branchCompany, homePageType } = submitObj
         this.setState({
             companyName: branchCompany.name,
-            headquarters
+            isShowSwitch
         })
         // 判断用户是否可以修改当前页面
         let isHeadquarters = null
+        // 判断用户是否可以修改当前快捷导航
+        let isChangeQuick = null
         if (homePageType === '1') {
             if (headquarters) {
                 isHeadquarters = true
+                isChangeQuick = true
             } else {
                 isHeadquarters = false
+                isChangeQuick = false
             }
         } else {
             isHeadquarters = true
+            if (headquarters) {
+                isChangeQuick = true
+            } else {
+                isChangeQuick = false
+            }
         }
-        this.props.searchChange(submitObj, isHeadquarters)
+        this.props.searchChange(submitObj, isHeadquarters, isChangeQuick)
     }
 
     /**
@@ -60,7 +71,7 @@ class SearchItem extends PureComponent {
                 <SwitchBox
                     switchChange={this.switchChange}
                     companyName={this.state.companyName}
-                    headquarters={this.state.headquarters}
+                    isShowSwitch={this.state.isShowSwitch}
                     isChecked={this.props.isChecked}
                 />
             </div>

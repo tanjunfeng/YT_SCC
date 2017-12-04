@@ -100,6 +100,11 @@ export const usedParticipateData = '/coupon/queryCouponRecordListExcel';
 // 促销活动 - 优惠券 - 未使用参与数据导出
 export const unusedParticipateData = '/coupon/queryCouponActivityActiveListExcel';
 
+// 下载收货单管理列表excel
+export const exportReceiptList = '/pmPurchaseReceipt/exportReceiptList';
+// 白名单导出
+export const whiteListBatchExport = 'sp/whiteListBatchExport';
+
 /**
  * 登录 Api
  */
@@ -422,7 +427,7 @@ export const queryAreas = (params) => http.get('/homeAd/queryAreas', params);
 export const switchOptWayOfHome = (params) => http.post('/homeAd/switchOptWayOfHome', params);
 
 // 获取用户子公司
-export const queryBranchCompanyInfoWap = (params) => http.post('/homeAd/queryBranchCompanyInfo', params);
+export const queryBranchCompanyInfoWap = (params) => http.get('/homeAd/queryBranchCompanyInfo', params);
 
 // 设置首页广告区域停用或者启用
 export const setAreaEnable = (params) => http.post('/homeAd/setAreaEnable', params);
@@ -917,3 +922,11 @@ export const queryProcessDefinitions = params => http.get('/pmPurchaseRefund/que
 export const approveRefund = params => http.post('/pmPurchaseRefund/approveRefund', params);
 // 取消退货单
 export const cancelRefund = params => http.get('/pmPurchaseRefund/cancel', params);
+/**
+ * 待办事项模块
+ */
+// 采购审批列表下获取高亮流程图
+export const processImage = params => http.get('/bpm/processImage', params);
+// 采购审批列表下获取审批意见的审批列表
+export const queryCommentHis = params => http.get('/bpm/queryCommentHis', params);
+

@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author liujinyu
  *
- * 首页样式运营状态切换区
+ * 首页样式管理、轮播管理运营状态切换区
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -14,6 +14,7 @@ class SwitchBox extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
+            // switch切换按钮状态
             isChecked: this.props.isChecked,
         }
     }
@@ -56,7 +57,7 @@ class SwitchBox extends PureComponent {
                     当前设置区域：<span>{this.props.companyName}</span>
                 </div>
                 {
-                    !this.props.headquarters
+                    this.props.isShowSwitch
                         ? <div className="mode">
                             <Switch checkedChildren="总部运营" unCheckedChildren="独立运营" onChange={this.handleChange} checked={this.state.isChecked} />
                         </div>
@@ -68,7 +69,7 @@ class SwitchBox extends PureComponent {
 }
 
 SwitchBox.propTypes = {
-    headquarters: PropTypes.bool,
+    isShowSwitch: PropTypes.bool,
     companyName: PropTypes.string,
     isChecked: PropTypes.bool
 };

@@ -46,7 +46,7 @@ const initState = fromJS({
     // 切换运营方式
     switchChange: {},
     // 获取用户有权限的公司信息
-    companyData: null,
+    companyData: [],
     // 获取区域id
     areaId: {},
     // 设置轮播运营方式

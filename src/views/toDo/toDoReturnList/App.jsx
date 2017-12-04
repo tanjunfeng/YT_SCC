@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
- * @Last Modified by: tanjf
- * @Last Modified time: 2017-12-04 19:20:29
+ * @Last Modified by: chenghaojie
+ * @Last Modified time: 2017-12-01 19:16:53
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -29,11 +29,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
-import {
-    locType,
-    optionStatus,
-    auditStatusOption
-} from '../../../constant/procurement';
+import { locType, auditStatusOption } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
@@ -48,12 +44,10 @@ import {
     getSupplierLocMap,
 } from '../../../actions';
 import ApproModal from './approModal';
-import OpinionSteps from '../../../components/approvalFlowSteps';
 import { Supplier } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
 
@@ -80,9 +74,7 @@ class toDoPurchaseList extends PureComponent {
         this.handleSelect = this.handleSelect.bind(this);
         this.searchParams = {};
         this.state = {
-            spId: '',   // 供应商编码
             spAdrId: '',    // 供应商地点编码
-            isSupplyAdrDisabled: true, // 供应商地点禁用
             locDisabled: true,  // 地点禁用
             locationData: {},
             isVisibleModal: false,
@@ -102,11 +94,9 @@ class toDoPurchaseList extends PureComponent {
                 title: '采购单号',
                 dataIndex: 'purchaseRefundNo',
                 key: 'purchaseRefundNo',
-                render: (text, record) => {
-                    return (
-                        <Link onClick={this.toPurDetail} to={`po/detail/${record.id}`}>{text}</Link>
-                    )
-                }
+                render: (text, record) => (
+                    <a target="_blank" onClick={this.toPurDetail} href={`po/detail/${record.id}`}>查看订单详情</a>
+                )
             }, {
                 title: '地点类型',
                 dataIndex: 'adrType',
@@ -298,9 +288,11 @@ class toDoPurchaseList extends PureComponent {
         this.searchParams = {};
         // 重置form
         this.props.form.resetFields();
-        this.handleSupplyClear();
         this.handleSupplierAddressClear();
         this.handleAddressClear();
+        this.props.form.setFieldsValue({
+            supplier: { reset: true }
+        });
     }
 
     /**
@@ -383,27 +375,6 @@ class toDoPurchaseList extends PureComponent {
             refundAdr: ''
         })
     }
-    /**
-     * Supplier供应商组件改变的回调
-     * @param {object} record 改变后值
-     */
-    handleSupplierChange = (record) => {
-        const {spId, spNo } = record;
-        if (spId === '') {
-            this.setState({
-                spNo: '',
-                spId: '',
-                isSupplyAdrDisabled: true
-            });
-            this.supplySearchMind.reset();
-        } else {
-            this.setState({
-                spNo,
-                spId,
-                isSupplyAdrDisabled: false
-            });
-        }
-    }
 
     showConfirm = (record) => {
         confirm({
@@ -413,7 +384,7 @@ class toDoPurchaseList extends PureComponent {
                 if (record.approval) {
                     message.error('该退货单不能删除。原因：只能删除制单状态且无审批记录退货单!')
                 } else {
-                    this.props.deleteBatchRefundOrder({id: record.id}).then((res) => {
+                    this.props.deleteBatchRefundOrder({ id: record.id }).then((res) => {
                         if (res.code === 200) {
                             message.success(res.message)
                         }
@@ -454,6 +425,7 @@ class toDoPurchaseList extends PureComponent {
             opinionvisible: false,
         });
     }
+
     handleOpinionCancel = () => {
         this.setState({
             opinionVisible: false,
@@ -498,7 +470,7 @@ class toDoPurchaseList extends PureComponent {
                 break;
             case 'viewApproval':
                 this.showModal();
-                this.props.queryApprovalInfo({businessId: record.purchaseRefundNo})
+                this.props.queryApprovalInfo({ businessId: record.purchaseRefundNo })
                 break;
             default:
                 break;
@@ -530,34 +502,15 @@ class toDoPurchaseList extends PureComponent {
             purchaseOrderType,
             status,
             adrType,
-            auditStatus
+            auditStatus,
+            supplier
         } = this.props.form.getFieldsValue();
-        // 流程开始时间
-        const auditDuringArr = this.props.form.getFieldValue('createTime') || [];
-        let createTimeStart;
-        let createTimeEnd;
-        if (auditDuringArr.length > 0) {
-            createTimeStart = Date.parse(auditDuringArr[0].format(dateFormat));
-        }
-        if (auditDuringArr.length > 1) {
-            createTimeEnd = Date.parse(auditDuringArr[1].format(dateFormat));
-        }
-        // 流程结束间
-        const auditDuringArrEnd = this.props.form.getFieldValue('stopTime') || [];
-        let stopTimeStart;
-        let stopTimeEnd;
-        if (auditDuringArrEnd.length > 0) {
-            stopTimeStart = Date.parse(auditDuringArrEnd[0].format(dateFormat));
-        }
-        if (auditDuringArrEnd.length > 1) {
-            stopTimeEnd = Date.parse(auditDuringArrEnd[1].format(dateFormat));
-        }
 
         // 供应商编号
-        const spId = this.state.spId;
+        const spId = supplier.spId;
 
         // 供应商地点编号
-        const spAdrId = this.state.spId;
+        const spAdrId = this.state.spAdrId;
 
         // 地点
         const adrTypeCode = this.state.refundAdr;
@@ -571,10 +524,6 @@ class toDoPurchaseList extends PureComponent {
             adrType,
             spId,
             spAdrId,
-            createTimeStart,
-            createTimeEnd,
-            stopTimeStart,
-            stopTimeEnd,
             adrTypeCode,
             auditStatus
         };
@@ -646,37 +595,33 @@ class toDoPurchaseList extends PureComponent {
                                 <FormItem>
                                     <div className="row middle">
                                         <span className="ant-form-item-label search-mind-label">供应商</span>
-                                        {getFieldDecorator('spId', {
-                                            initialValue: { spId: '', spNo: '', companyName: ''}
-                                        })(
-                                            <Supplier
-                                                onChange={this.handleSupplierChange}
-                                            />
-                                        )}
+                                        {getFieldDecorator('supplier', {
+                                            initialValue: { spId: '', spNo: '', companyName: '' }
+                                        })(<Supplier />)}
                                     </div>
                                 </FormItem>
                             </Col>
                             {/* 供应商地点 */}
                             <Col className="gutter-row" span={8}>
                                 <FormItem>
-                                    <span className="sc-form-item-label" style={{width: 70}}>供应商地点</span>
+                                    <span className="sc-form-item-label" style={{ width: 70 }}>供应商地点</span>
                                     <span className="search-box-data-pic">
                                         <SearchMind
                                             style={{ zIndex: 9, verticalAlign: 'bottom' }}
                                             compKey="providerNo"
                                             ref={ref => { this.joiningAdressMind = ref }}
                                             fetch={(params) =>
-                                            this.props.pubFetchValueList(Utils.removeInvalid({
-                                                condition: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
-                                            }), 'supplierAdrSearchBox').then((res) => {
-                                                const dataArr = res.data.data || [];
-                                                if (!dataArr || dataArr.length === 0) {
-                                                    message.warning('没有可用的数据');
-                                                }
-                                                return res;
-                                            })}
+                                                this.props.pubFetchValueList(Utils.removeInvalid({
+                                                    condition: params.value,
+                                                    pageSize: params.pagination.pageSize,
+                                                    pageNum: params.pagination.current || 1
+                                                }), 'supplierAdrSearchBox').then((res) => {
+                                                    const dataArr = res.data.data || [];
+                                                    if (!dataArr || dataArr.length === 0) {
+                                                        message.warning('没有可用的数据');
+                                                    }
+                                                    return res;
+                                                })}
                                             onChoosed={this.handleSupplierAddressChoose}
                                             onClear={this.handleSupplierAddressClear}
                                             renderChoosedInputRaw={(res) => (
@@ -749,51 +694,9 @@ class toDoPurchaseList extends PureComponent {
                                     </div>
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
-                                {/* 流程开始时间 */}
-                                <FormItem >
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">流程开始时间</span>
-                                        {getFieldDecorator('createTime', {})(
-                                            <RangePicker
-                                                className="date-range-picker"
-                                                style={{ width: 250 }}
-                                                format={dateFormat}
-                                                showTime={{
-                                                    hideDisabledOptions: true,
-                                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
-                                                }}
-                                                placeholder={['开始日期', '结束日期']}
-                                            />
-                                        )
-                                        }
-                                    </div>
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 流程结束间 */}
-                                <FormItem >
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">流程结束间</span>
-                                        {getFieldDecorator('stopTime', {})(
-                                            <RangePicker
-                                                className="date-range-picker"
-                                                style={{ width: 250 }}
-                                                format={dateFormat}
-                                                showTime={{
-                                                    hideDisabledOptions: true,
-                                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
-                                                }}
-                                                placeholder={['开始日期', '结束日期']}
-                                            />
-                                        )
-                                        }
-                                    </div>
-                                </FormItem>
-                            </Col>
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
-                            <Col className="ant-col-10 ant-col-offset-10 gutter-row" style={{ textAlign: 'right'}}>
+                            <Col className="ant-col-10 ant-col-offset-10 gutter-row" style={{ textAlign: 'right' }}>
                                 <FormItem>
                                     <Button size="default" onClick={this.handleResetValue}>
                                         重置
@@ -848,12 +751,14 @@ class toDoPurchaseList extends PureComponent {
 
 toDoPurchaseList.propTypes = {
     queryAuditPurReList: PropTypes.func,
+    approveRefund: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     auditPurReList: PropTypes.objectOf(PropTypes.any),
+    location: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     queryApprovalInfo: PropTypes.func,
     queryPoDetail: PropTypes.func,
-    deleteBatchRefundOrder: PropTypes.func,
+    deleteBatchRefundOrder: PropTypes.func
 };
 
 export default withRouter(Form.create()(toDoPurchaseList));
