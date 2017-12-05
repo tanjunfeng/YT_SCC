@@ -1,4 +1,4 @@
-$promotionAddLabelWidth: 100px;
+$promotionAddLabelWidth: 90px;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -23,7 +23,7 @@ $promotionAddLabelWidth: 100px;
 .promotion-create {
     padding-top: 60px;
     margin: 0 auto;
-    width: 800px;
+    width: 1000px;
     form .default {
         width: 78px;
     }
@@ -85,7 +85,7 @@ $promotionAddLabelWidth: 100px;
         width: 110px;
     }
     .ant-cascader-picker {
-        width: 200px;
+        width: 140px;
     }
     .tips .ant-col-16 {
         margin-left: $promotionAddLabelWidth;
@@ -102,7 +102,7 @@ $promotionAddLabelWidth: 100px;
     .promotion-add-license {
         .ant-form-item-label,
         .ant-form-item-label label {
-            width: 100px;
+            width: $promotionAddLabelWidth;
         }
     }
 }

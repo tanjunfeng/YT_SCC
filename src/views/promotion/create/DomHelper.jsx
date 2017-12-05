@@ -23,7 +23,7 @@ export const getChooseButton = (companies, handleClick) => (
 /**
  * 获取优惠方式
  */
-export const getRulesColumn = (getFieldDecorator, getFieldValue, licence = 'Default') => (<span>
+export const getRulesColumn = (getFieldDecorator, getFieldValue, licence) => (<span>
     <FormItem label="优惠方式">
         {getFieldDecorator(`rule${licence}`, {
             initialValue: '',
@@ -57,8 +57,8 @@ export const getRulesColumn = (getFieldDecorator, getFieldValue, licence = 'Defa
         : null}
 </span>)
 
-export const getRules = (getFieldDecorator, getFieldValue) => (<Row>
-    {getRulesColumn(getFieldDecorator, getFieldValue)}
+export const getRules = (getFieldDecorator, getFieldValue, licence) => (<Row>
+    {getRulesColumn(getFieldDecorator, getFieldValue, licence)}
 </Row>)
 
 /**
@@ -96,9 +96,10 @@ export const conditionType = (getFieldDecorator, getFieldValue) => (
     <span>
         <FormItem label="条件类型">
             {getFieldDecorator('conditionType', {
-                initialValue: '0'
+                initialValue: '',
+                rules: [{ required: true, message: '请选择条件类型' }]
             })(<Select size="default" className="wd-110">
-                <Option key={0} value="0">- 请选择 -</Option>
+                <Option key={0} value="">- 请选择 -</Option>
                 <Option key={1} value="1">累计商品金额</Option>
                 <Option key={2} value="2">累计商品数量</Option>
             </Select>)}

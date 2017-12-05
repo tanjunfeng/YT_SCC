@@ -178,7 +178,7 @@ class PromotionCreate extends PureComponent {
                 <Row>
                     <FormItem label="使用条件">
                         {getFieldDecorator('condition', {
-                            initialValue: 0,
+                            initialValue: 1,
                             rules: [{ required: true, message: '请选择使用条件' }]
                         })(<RadioGroup>
                             <Radio className="default" value={0}>不限制</Radio>
@@ -188,7 +188,7 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 <Row>
                     {getFieldValue('condition') === 0 ?
-                        getRules(getFieldDecorator, getFieldValue)
+                        getRules(getFieldDecorator, getFieldValue, 'NoCondition')
                         :
                         <FormItem label="优惠种类">
                             {getFieldDecorator('category', {
@@ -202,27 +202,12 @@ class PromotionCreate extends PureComponent {
                     }
                 </Row>
                 {getFieldValue('category') === '0' ?
-                    <div>
-                        <Row>
-                            {buyType(getFieldDecorator, getFieldValue)}
-                            {conditionType(getFieldDecorator, getFieldValue)}
-                        </Row>
-                        <Row>
-                            {getRulesColumn(getFieldDecorator, getFieldValue, 'category0')}
-                        </Row>
-                    </div> : null
+                    <Row>
+                        {buyType(getFieldDecorator, getFieldValue)}
+                        {conditionType(getFieldDecorator, getFieldValue)}
+                        {getRulesColumn(getFieldDecorator, getFieldValue, 'category0')}
+                    </Row> : null
                 }
-                <Row>
-                    <FormItem label="使用条件">
-                        {getFieldDecorator('condition', {
-                            initialValue: 0,
-                            rules: [{ required: true, message: '请选择使用条件' }]
-                        })(<RadioGroup>
-                            <Radio className="default" value={0}>不限制</Radio>
-                            <Radio value={1}>指定条件</Radio>
-                        </RadioGroup>)}
-                    </FormItem>
-                </Row>
                 <Row>
                     <FormItem label="使用区域">
                         {getFieldDecorator('area', {
