@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
- * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-01 19:16:53
+ * @Last Modified by: tanjf
+ * @Last Modified time: 2017-12-05 17:45:10
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -95,7 +95,7 @@ class toDoPurchaseList extends PureComponent {
                 dataIndex: 'purchaseRefundNo',
                 key: 'purchaseRefundNo',
                 render: (text, record) => (
-                    <a target="_blank" onClick={this.toPurDetail} href={`po/detail/${record.id}`}>查看订单详情</a>
+                    <a target="_blank" onClick={this.toPurDetail} href={`po/detail/${record.id}`}>{text}</a>
                 )
             }, {
                 title: '地点类型',
