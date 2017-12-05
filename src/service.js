@@ -895,8 +895,8 @@ export const returnDescriptionSave = (params) => http.post('/webReturnRequest/re
 // 销售退货退款
 export const insertRefund = (params) => http.get('/webReturnRequest/insertRefund', params);
 
-// 查询退货单审批列表
-export const queryAuditPurReList = (params) => http.get('/pmPurchaseRefund/queryAuditPurchaseRefundList', params);
+// 查询待办事项下的审批列表
+export const queryProcessMsgList = (params) => http.post('/bpm/queryProcessMsgList', params);
 /**
 
  * 直营店下单模块

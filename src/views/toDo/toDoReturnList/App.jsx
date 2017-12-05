@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-01 19:16:53
+ * @Last Modified time: 2017-12-05 18:38:32
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -12,7 +12,6 @@ import {
     Input,
     Form,
     Select,
-    DatePicker,
     Row,
     Col,
     Icon,
@@ -33,10 +32,12 @@ import { locType, auditStatusOption } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
-    queryAuditPurReList,
     queryApprovalInfo,
     queryPoDetail
 } from '../../../actions/procurement';
+import {
+    queryProcessMsgList,
+} from '../../../actions/process';
 import {
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -52,14 +53,14 @@ const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
 
 @connect(state => ({
-    auditPurReList: state.toJS().procurement.auditPurReList
+    queryPurchaseRefundList: state.toJS().procurement.queryPurchaseRefundList
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
     getShopAddressMap,
     getSupplierMap,
     getSupplierLocMap,
     pubFetchValueList,
-    queryAuditPurReList,
+    queryProcessMsgList,
     queryApprovalInfo,
     queryPoDetail
 }, dispatch))
@@ -74,18 +75,19 @@ class toDoPurchaseList extends PureComponent {
         this.handleSelect = this.handleSelect.bind(this);
         this.searchParams = {};
         this.state = {
-            spAdrId: '',    // 供应商地点编码
-            locDisabled: true,  // 地点禁用
+            spAdrId: '', // 供应商地点编码
+            locDisabled: true, // 地点禁用
             locationData: {},
             isVisibleModal: false,
             approvalVisible: false,
             opinionVisible: false,
             approvalStatus: false,
-            adrTypeCode: '',    // 地点编码
-            receivedTypeCode: '',  // 收货单状态编码
+            adrTypeCode: '', // 地点编码
+            receivedTypeCode: '', // 收货单状态编码
             refundAdr: '',
-            spNo: '',   // 供应商编码
-            spAdrNo: '',    // 供应商地点编码
+            spNo: '', // 供应商编码
+            spAdrNo: '', // 供应商地点编码
+            status: 0 // 流程状态，默认进行中
         };
         // 初始页号
         this.current = 1;
@@ -212,10 +214,13 @@ class toDoPurchaseList extends PureComponent {
      */
     onPaginate = (pageNumber) => {
         this.current = pageNumber
-        this.props.queryAuditPurReList({
-            pageSize: PAGE_SIZE,
-            pageNum: this.current,
-            ...this.searchParams
+        this.props.queryProcessMsgList({
+            map: {
+                pageSize: PAGE_SIZE,
+                pageNum: this.current,
+                status: this.state.status
+            },
+            processType: 'CGTH'
         });
     }
 
@@ -269,10 +274,13 @@ class toDoPurchaseList extends PureComponent {
 
     queryReturnMngList = (page = 1) => {
         this.current = page;
-        this.props.queryAuditPurReList({
-            pageSize: PAGE_SIZE,
-            pageNum: this.current,
-            ...this.searchParams
+        this.props.queryProcessMsgList({
+            map: {
+                pageSize: PAGE_SIZE,
+                pageNum: this.current,
+                status: this.state.status
+            },
+            processType: 'CGTH'
         });
     }
 
@@ -531,6 +539,12 @@ class toDoPurchaseList extends PureComponent {
         return this.searchParams;
     }
 
+    // 流程状态切换
+    statusChange = (value) => {
+        this.setState({
+            status: value
+        })
+    }
     renderActions(text, record, index) {
         const { id } = record;
         const { pathname } = this.props.location;
@@ -563,7 +577,7 @@ class toDoPurchaseList extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { data, total, pageNum, pageSize } = this.props.auditPurReList;
+        const { data, total, pageNum, pageSize } = this.props.queryPurchaseRefundList;
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -578,8 +592,8 @@ class toDoPurchaseList extends PureComponent {
                             <Col span={8}>
                                 {/* 流程状态 */}
                                 <FormItem label="流程状态">
-                                    {getFieldDecorator('auditStatus', { initialValue: auditStatusOption.defaultValue })(
-                                        <Select style={{ width: '153px' }} size="default">
+                                    {getFieldDecorator('auditStatus', { initialValue: '进行中' })(
+                                        <Select style={{ width: '153px' }} size="default" onChange={this.statusChange}>
                                             {
                                                 auditStatusOption.data.map((item) => (
                                                     <Option key={item.key} value={item.key}>
@@ -750,10 +764,10 @@ class toDoPurchaseList extends PureComponent {
 }
 
 toDoPurchaseList.propTypes = {
-    queryAuditPurReList: PropTypes.func,
+    queryProcessMsgList: PropTypes.func,
     approveRefund: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    auditPurReList: PropTypes.objectOf(PropTypes.any),
+    queryPurchaseRefundList: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     queryApprovalInfo: PropTypes.func,

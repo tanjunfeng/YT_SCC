@@ -14,7 +14,6 @@ import {
     queryPoDetail as queryPoDetailService,
     queryMaterialMap as svcQueryMateriMap,
     queryPurchaseOrderBrands as queryPurchaseOrderBrandsService,
-    queryAuditPurReList as queryAuditPurReListService,
     queryPoRcvMngList,
     queryPoRcvList,
     queryPoRcvDetail,
@@ -806,28 +805,6 @@ export const updateGoodsInfo = params => dispatch => (
         updateGoodsInfoService(params)
             .then(res => {
                 dispatch(updateGoodsInfoAction(res.data));
-                resolve(res);
-            })
-            .catch(err => {
-                reject(err);
-            })
-    })
-);
-
-/**
- * 查询退货单审批列表
- * @param {*} data
- */
-const queryAuditPurReListAction = (data) => ({
-    type: ActionType.QUERY_AUDIT_PUR_RE_LIST,
-    payload: data
-});
-
-export const queryAuditPurReList = (params) => dispatch => (
-    new Promise((resolve, reject) => {
-        queryAuditPurReListService(params)
-            .then(res => {
-                dispatch(queryAuditPurReListAction(res.data));
                 resolve(res);
             })
             .catch(err => {

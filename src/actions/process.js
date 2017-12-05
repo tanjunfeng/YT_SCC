@@ -9,7 +9,8 @@ import {
     queryProcessList as queryProcessListService,
     delectProcessList as delectProcessListService,
     queryChartData as queryChartDataService,
-    processImage as processImageService
+    processImage as processImageService,
+    queryProcessMsgList as queryProcessMsgListService,
 } from '../service';
 
 // 流程管理下获取所有流程信息
@@ -105,3 +106,25 @@ export const clearHighChart = () => dispatch => (dispatch({
     type: ActionType.CLEAR_HIGH_CHART_DATA,
     payload: null
 }));
+
+/**
+ * 查询待办事项下获取审批列表数据
+ * @param {*} data
+ */
+const queryProcessMsgListAction = (data) => ({
+    type: ActionType.QUERY_PROCESS_MSG_LIST,
+    payload: data
+});
+
+export const queryProcessMsgList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryProcessMsgListService(params)
+            .then(res => {
+                dispatch(queryProcessMsgListAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
