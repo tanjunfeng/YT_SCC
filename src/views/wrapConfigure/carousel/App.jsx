@@ -50,6 +50,8 @@ const columns = [
                     return '页面链接';
                 case 5:
                     return '外部链接';
+                case 6:
+                    return '活动链接';
                 default:
                     return '';
             }
@@ -129,7 +131,8 @@ class CarouselManagement extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { intervalData } = nextProps;
-        if (intervalData.carouselInterval !== this.props.intervalData.carouselInterval) {
+        if (intervalData.carouselInterval !== this.props.intervalData.carouselInterval
+            || !this.props.intervalData.id) {
             this.setState({
                 intervalData: {
                     id: intervalData.id,
@@ -207,7 +210,8 @@ class CarouselManagement extends Component {
         }).then(() => {
             this.setState({
                 intervalData: {
-                    carouselInterval: value
+                    carouselInterval: value,
+                    id: this.state.intervalData.id,
                 }
             })
             message.success('修改成功！');
