@@ -100,6 +100,8 @@ export const usedParticipateData = '/coupon/queryCouponRecordListExcel';
 // 促销活动 - 优惠券 - 未使用参与数据导出
 export const unusedParticipateData = '/coupon/queryCouponActivityActiveListExcel';
 
+// 下载收货单管理列表excel
+export const exportReceiptList = '/pmPurchaseReceipt/exportReceiptList';
 // 白名单导出
 export const whiteListBatchExport = 'sp/whiteListBatchExport';
 

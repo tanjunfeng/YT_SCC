@@ -25,7 +25,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
-import { queryPoRcvMngList } from '../../../service';
+import { exportReceiptList } from '../../../service';
 import {
     locType,
     receivedStatus,
@@ -399,7 +399,7 @@ class PoRcvMngList extends PureComponent {
     */
     handleDownload = () => {
         const searchData = this.editSearchParams();
-        Utils.exportExcel(queryPoRcvMngList, searchData);
+        Utils.exportExcel(exportReceiptList, searchData);
     }
     /**
      *

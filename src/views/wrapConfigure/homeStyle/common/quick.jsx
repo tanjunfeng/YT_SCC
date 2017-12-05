@@ -11,7 +11,6 @@ const defaultIcon = require('../../../../images/default/132x132.png');
 
 const defaultText = '标题'
 const FormItem = Form.Item;
-const Option = Select.Option;
 const imgConfig = {
     width: 132,
     height: 132,
@@ -23,10 +22,10 @@ const imgConfig = {
 class QuickItem extends Component {
     constructor(props) {
         super(props);
-        this.handleUpload = ::this.handleUpload;
-        this.handleOk = ::this.handleOk;
-        this.handleCancel = ::this.handleCancel;
-        this.saveItems = ::this.saveItems;
+        this.handleUpload = :: this.handleUpload;
+        this.handleOk = :: this.handleOk;
+        this.handleCancel = :: this.handleCancel;
+        this.saveItems = :: this.saveItems;
         this.state = {
             isShow: false,
             index: -1,
@@ -95,8 +94,18 @@ class QuickItem extends Component {
         this.setState({
             select: type
         }, () => {
-            this.props.form.setFieldsValue({navigationType: type});
+            this.props.form.setFieldsValue({ navigationType: type });
         })
+    }
+
+    /**
+     * 没有总部修改权限的提示
+     */
+    wrapClick = () => {
+        Modal.error({
+            title: '错误',
+            content: '只有总部权限才能进行快捷导航修改操作'
+        });
     }
 
     render() {
@@ -113,7 +122,7 @@ class QuickItem extends Component {
                         itemAds.map((item, index) => {
                             return (
                                 <li
-                                    className={classnames("home-style-quick-item", {'home-style-quick-item-disabled': item.status === 0})}
+                                    className={classnames('home-style-quick-item', { 'home-style-quick-item-disabled': item.status === 0 })}
                                     key={item.id}
                                 >
                                     <div
@@ -136,6 +145,11 @@ class QuickItem extends Component {
                     }
                 </ul>
                 {
+                    !this.props.isChangeQuick
+                        ? <div className="quick-nav-wrap" onClick={this.wrapClick} />
+                        : null
+                }
+                {
                     this.state.isShow &&
                     <Modal
                         title="修改快捷功能设置"
@@ -156,16 +170,15 @@ class QuickItem extends Component {
                                         required: true,
                                         message: '请输入名称'
                                     },
-                                    {max: 4, message: '最大长度4个字符'},
-                                    {min: 2, message: '最小长度2个字符'}
+                                    { max: 4, message: '最大长度4个字符' },
+                                    { min: 2, message: '最小长度2个字符' }
                                     ],
                                     initialValue: current.navigationName
                                 })(
                                     <Input
                                         className="manage-form-input"
                                         placeholder="名称"
-                                    />
-                                )}
+                                    />)}
                                 <span className="change-form-tip">（说明：2~4个汉字）</span>
                             </FormItem>
                             <FormItem className="manage-form-item">
@@ -182,11 +195,12 @@ class QuickItem extends Component {
                                     }],
                                     initialValue: {
                                         selected: current.navigationType ? `${current.navigationType}` : '1',
-                                        link: parseInt(current.navigationType, 10) === 1 ? current.goodsId : current.linkAddress
+                                        link: parseInt(current.navigationType, 10) === 1
+                                            ? current.goodsId
+                                            : current.linkAddress
                                     }
                                 })(
-                                    <LinkType />
-                                )}
+                                    <LinkType />)}
                             </FormItem>
                             <FormItem className={
                                 classnames('manage-form-item')
@@ -212,6 +226,7 @@ QuickItem.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     data: PropTypes.objectOf(PropTypes.any),
     fetchAreaList: PropTypes.func,
+    isChangeQuick: PropTypes.bool
 };
 
 export default Form.create()(QuickItem);
