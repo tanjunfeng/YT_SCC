@@ -155,9 +155,9 @@ class ModifyThePassword extends Component {
                                 <Row gutter={8}>
                                     <Col span={12}>
                                         {getFieldDecorator('newPassword', {
-                                            rules: [{ required: true, message: '您输入的密码不匹配，请重新输入!' }],
+                                            rules: [{ required: true, pattern: /^[A-Za-z0-9]{6,20}$/, message: '您输入的密码不正确，请重新输入!' }],
                                         })(
-                                            <Input style={{width: 200}} />
+                                            <Input style={{width: 200}} type="password" />
                                             )}
                                     </Col>
                                 </Row>
@@ -171,9 +171,9 @@ class ModifyThePassword extends Component {
                                 <Row gutter={8}>
                                     <Col span={12}>
                                         {getFieldDecorator('newPasswords', {
-                                            rules: [{ required: true, message: '您输入的密码不匹配，请重新输入!' }],
+                                            rules: [{ required: true, pattern: /^[A-Za-z0-9]{6,20}$/, message: '您输入的密码不正确，请重新输入!' }],
                                         })(
-                                            <Input style={{width: 200}} />
+                                            <Input style={{width: 200}} type="password" />
                                             )}
                                     </Col>
                                 </Row>
