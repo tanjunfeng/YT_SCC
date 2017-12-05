@@ -36,7 +36,6 @@ const Option = Select.Option;
 class PromotionCreate extends PureComponent {
     state = {
         areaSelectorVisible: false,
-        categorySelectorVisible: false,
         storeSelectorVisible: false,
         companies: [], // 所选区域子公司
         checkedList: []
@@ -212,8 +211,8 @@ class PromotionCreate extends PureComponent {
                 }
                 {getFieldValue('category') === '0' ?
                     <Row>
-                        {buyType(getFieldDecorator)}
-                        {conditionType(getFieldDecorator)}
+                        {buyType(getFieldDecorator, getFieldValue)}
+                        {conditionType(getFieldDecorator, getFieldValue)}
                     </Row> : null}
                 <Row>
                     <Col span={16}>

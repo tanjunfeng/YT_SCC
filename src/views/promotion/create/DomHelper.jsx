@@ -11,6 +11,7 @@ import {
 } from 'antd';
 
 import Util from '../../../util/util';
+import { Category } from '../../../container/cascader';
 import { MAX_AMOUNT_OF_ORDER } from '../../../constant';
 
 const Option = Select.Option;
@@ -68,31 +69,63 @@ export const getRules = (getFieldDecorator, getFieldValue) => (<Row>
  *
  * @param {*} getFieldDecorator
  */
-export const buyType = (getFieldDecorator) => (<Col span={16}>
-    <FormItem label="购买类型">
-        {getFieldDecorator('buyType', {
-            initialValue: '0'
-        })(<Select size="default" className="wd-90">
-            <Option key={0} value="0">全部</Option>
-            <Option key={1} value="1">按品类</Option>
-            <Option key={2} value="2">按商品</Option>
-        </Select>)}
-    </FormItem>
-</Col>)
+export const buyType = (getFieldDecorator, getFieldValue) => (
+    <Col span={6}>
+        <FormItem label="购买类型">
+            {getFieldDecorator('buyType', {
+                initialValue: '0'
+            })(<Select size="default" className="wd-90">
+                <Option key={0} value="0">全部</Option>
+                <Option key={1} value="1">按品类</Option>
+                <Option key={2} value="2">按商品</Option>
+            </Select>)}
+        </FormItem>
+        <FormItem>
+            {getFieldValue('buyType') === '1' ? <Category /> : null}
+        </FormItem>
+    </Col>
+)
 
 /**
  * 条件类型
  *
  * @param {*} getFieldDecorator
+ * @param {*} getFieldValue
  */
-export const conditionType = (getFieldDecorator) => (<Col span={16}>
-    <FormItem label="条件类型">
-        {getFieldDecorator('conditionType', {
-            initialValue: '0'
-        })(<Select size="default" className="wd-90">
-            <Option key={0} value="0">全部</Option>
-            <Option key={1} value="1">按品类</Option>
-            <Option key={2} value="2">按商品</Option>
-        </Select>)}
-    </FormItem>
-</Col>)
+export const conditionType = (getFieldDecorator, getFieldValue) => (
+    <Col span={6}>
+        <FormItem label="条件类型">
+            {getFieldDecorator('conditionType', {
+                initialValue: '0'
+            })(<Select size="default" className="wd-110">
+                <Option key={0} value="0">- 请选择 -</Option>
+                <Option key={1} value="1">累计商品金额</Option>
+                <Option key={2} value="2">累计商品数量</Option>
+            </Select>)}
+        </FormItem>
+        {getFieldValue('conditionType') === '1' ?
+            <FormItem>
+                ￥{getFieldDecorator('conditionTypeAmout', {
+                    initialValue: 0,
+                    rules: [
+                        { required: true, message: '请输入累计商品金额' },
+                        { validator: Util.limitTwoDecimalPlaces }
+                    ]
+                })(<InputNumber className="wd-60" min={0} max={MAX_AMOUNT_OF_ORDER} step={1} />)} 元
+            </FormItem>
+            : null
+        }
+        {getFieldValue('conditionType') === '2' ?
+            <FormItem>
+                {getFieldDecorator('conditionTypeCount', {
+                    initialValue: 0,
+                    rules: [
+                        { required: true, message: '请输入累计商品数量' },
+                        { validator: Util.validatePositiveInteger }
+                    ]
+                })(<InputNumber className="wd-60" min={0} max={MAX_AMOUNT_OF_ORDER} step={1} />)}
+            </FormItem>
+            : null
+        }
+    </Col>
+)

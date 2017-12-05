@@ -67,18 +67,21 @@ $promotionAddLabelWidth: 100px;
             width: 228px;
             text-overflow: ellipsis;
         }
-        .wd-50 {
-            width: 50px;
-        }
-        .wd-60 {
-            width: 60px;
-        }
-        .wd-90 {
-            width: 90px;
-        }
-        .wd-110 {
-            width: 110px;
-        }
+    }
+    .wd-50 {
+        width: 50px;
+    }
+    .wd-60 {
+        width: 60px;
+    }
+    .wd-90 {
+        width: 90px;
+    }
+    .wd-110 {
+        width: 110px;
+    }
+    .ant-cascader-picker {
+        width: 200px;
     }
     .tips .ant-col-16 {
         margin-left: $promotionAddLabelWidth;
