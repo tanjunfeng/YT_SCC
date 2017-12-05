@@ -273,8 +273,16 @@ class OrderInformation extends PureComponent {
                                     </span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
-                                    <span className="details-info-lable">实付金额:</span>
-                                    <span className="red-star">{this.getAmount(orderDetailData.total)}</span>
+                                    <div className="margin-b">
+                                        <span className="details-info-lable">会员等级优惠:</span>
+                                        <span>
+                                            {this.getAmount(orderDetailData.userDiscountAmount)}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span className="details-info-lable">实付金额:</span>
+                                        <span className="red-star">{this.getAmount(orderDetailData.total)}</span>
+                                    </div>
                                 </Col>
                             </Row>
                         </div>
@@ -336,7 +344,7 @@ class OrderInformation extends PureComponent {
                                 onClick={this.realTimeDisassembly}
                             >
                                 获取实时库存后拆单
-                                </Button>
+                            </Button>
                             : null}
                         {this.props.orderDetailData.canSplitManual
                             ? <Button
@@ -345,7 +353,7 @@ class OrderInformation extends PureComponent {
                                 onClick={this.displayInventory}
                             >
                                 基于界面显示库存拆单
-                        </Button>
+                            </Button>
                             : null}
                         {this.props.orderDetailData.canSplitByInventory
                             || this.props.orderDetailData.canSplitManual

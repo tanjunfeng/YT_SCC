@@ -226,6 +226,106 @@ class PoDetail extends PureComponent {
                 render: this.renderActions
             }
         ];
+        this.columnsOther = [
+            {
+                title: '行号',
+                dataIndex: 'rowNo',
+                key: 'rowNo',
+                render: (text, record, index) => index + 1
+            },
+            {
+                title: '商品编码',
+                dataIndex: 'productCode',
+                key: 'productCode',
+
+            },
+            {
+                title: '商品名称',
+                dataIndex: 'productName',
+                key: 'productName',
+            },
+            {
+                title: '商品条码',
+                dataIndex: 'internationalCode',
+                key: 'internationalCode',
+            },
+            {
+                title: '规格',
+                dataIndex: 'packingSpecifications',
+                key: 'packingSpecifications',
+            },
+            {
+                title: '产地',
+                dataIndex: 'producePlace',
+                key: 'producePlace',
+            }, {
+                title: '采购内装数',
+                dataIndex: 'purchaseInsideNumber',
+                key: 'purchaseInsideNumber',
+            },
+            {
+                title: '单位',
+                dataIndex: 'unitExplanation',
+                key: 'unitExplanation'
+            },
+            {
+                title: '税率(%)',
+                dataIndex: 'inputTaxRate',
+                key: 'inputTaxRate'
+            },
+            {
+                title: '采购价格（含税）',
+                dataIndex: 'purchasePrice',
+                key: 'purchasePrice'
+            },
+            {
+                title: '采购数量',
+                dataIndex: 'purchaseNumber',
+                key: 'purchaseNumber',
+                render: (text, record, index) =>
+                    (<EditableCell
+                        value={text}
+                        editable={this.state.currentType !== 'detail'}
+                        step={record.purchaseInsideNumber}
+                        purchaseInsideNumber={record.purchaseInsideNumber}
+                        onChange={value => this.applyQuantityChange(record, index, value)}
+                    />)
+            },
+            {
+                title: '采购金额（含税）',
+                dataIndex: 'totalAmount',
+                key: 'totalAmount'
+            },
+            {
+                title: '已收货数量',
+                dataIndex: 'receivedNumber',
+                key: 'receivedNumber'
+            },
+            {
+                title: '是否有效',
+                dataIndex: 'isValid',
+                key: 'isValid',
+                render: (text) => {
+                    switch (text) {
+                        case 0:
+                            return '无效';
+                        default:
+                            return '有效';
+                    }
+                }
+            },
+            {
+                title: '可用库存',
+                dataIndex: 'availableInventory',
+                key: 'availableInventory'
+            },
+            {
+                title: '操作',
+                dataIndex: 'operation',
+                key: 'operation',
+                render: this.renderActions
+            }
+        ];
         this.state = {
             totalQuantity: 0,
             totalAmount: 0,
@@ -253,10 +353,6 @@ class PoDetail extends PureComponent {
             purchaseOrderType: '0',
             // 货币类型
             currencyCode: 'CNY',
-            // 供应商编号
-            spNo: null,
-            // 供应商名称
-            spName: null,
             // 供应商id
             spId: null,
             // 供应商地点id
@@ -320,7 +416,7 @@ class PoDetail extends PureComponent {
     componentWillReceiveProps(nextProps) {
         const {
             adrType, settlementPeriod, payType, payCondition, estimatedDeliveryDate,
-            purchaseOrderType, currencyCode, id, spAdrId, businessMode, spName, spNo
+            purchaseOrderType, currencyCode, id, spAdrId, businessMode
         } = nextProps.basicInfo;
         const { basicInfo = {} } = this.props;
         const newPo = fromJS(nextProps.po.poLines);
@@ -336,8 +432,6 @@ class PoDetail extends PureComponent {
                 payType,
                 payCondition,
                 spAdrId,
-                spName,
-                spNo,
                 pickerDate: estimatedDeliveryDate
                     ? moment(parseInt(estimatedDeliveryDate, 10))
                     : null,
@@ -469,10 +563,6 @@ class PoDetail extends PureComponent {
             ? basicInfo.createdAt
             : moment().format('YYYY-MM-DD')
 
-        // 供应商
-        const spDefaultValue = basicInfo.spId
-            ? `${basicInfo.spId}-${basicInfo.spName}`
-            : ''
 
         // 供应商地点值清单回显数据
         const spAdrDefaultValue = basicInfo.spAdrId
@@ -1226,6 +1316,7 @@ class PoDetail extends PureComponent {
             message.error('无有效的商品！');
             return;
         }
+
         // 清除无效商品弹框
         if (invalidPoLines.length !== 0) {
             const invalidGoodsList = invalidPoLines.map(item =>
@@ -1274,8 +1365,7 @@ class PoDetail extends PureComponent {
             adrType,
             currencyCode,
             purchaseOrderType,
-            addressCd,
-            businessMode
+            addressCd
         } = poData.basicInfo;
         // 采购商品信息
         const pmPurchaseOrderItems = poData.poLines.map((item) => {
@@ -1318,7 +1408,6 @@ class PoDetail extends PureComponent {
                     currencyCode,
                     purchaseOrderType: parseInt(purchaseOrderType, 10),
                     status,
-                    businessMode: parseInt(businessMode, 10)
                 },
                 pmPurchaseOrderItems
             }).then((res) => {
@@ -1741,6 +1830,18 @@ class PoDetail extends PureComponent {
     }
 
     /**
+     * 可用库存
+     */
+    columnsChoose = () => {
+        const { basicInfo } = this.props;
+        if (basicInfo.adrType === 0 && (basicInfo.state === 0 || basicInfo.state === 3)) {
+            return this.columnsOther
+        } else {
+            return this.columns
+        }
+    }
+
+    /**
      * 表单操作
      * @param {*} text 行值
      * @param {*} record 行数据
@@ -1881,7 +1982,7 @@ class PoDetail extends PureComponent {
                                 !record.deleteFlg
                             )}
                             pagination={false}
-                            columns={this.columns}
+                            columns={this.columnsChoose()}
                             rowKey="productCode"
                             scroll={{
                                 x: 1300
