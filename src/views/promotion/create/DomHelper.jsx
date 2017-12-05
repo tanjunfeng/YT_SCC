@@ -62,3 +62,37 @@ export const getRulesColumn = (getFieldDecorator, getFieldValue) => (<Col span={
 export const getRules = (getFieldDecorator, getFieldValue) => (<Row>
     {getRulesColumn(getFieldDecorator, getFieldValue)}
 </Row>)
+
+/**
+ * 购买类型
+ *
+ * @param {*} getFieldDecorator
+ */
+export const buyType = (getFieldDecorator) => (<Col span={16}>
+    <FormItem label="购买类型">
+        {getFieldDecorator('buyType', {
+            initialValue: '0'
+        })(<Select size="default" className="wd-90">
+            <Option key={0} value="0">全部</Option>
+            <Option key={1} value="1">按品类</Option>
+            <Option key={2} value="2">按商品</Option>
+        </Select>)}
+    </FormItem>
+</Col>)
+
+/**
+ * 条件类型
+ *
+ * @param {*} getFieldDecorator
+ */
+export const conditionType = (getFieldDecorator) => (<Col span={16}>
+    <FormItem label="条件类型">
+        {getFieldDecorator('conditionType', {
+            initialValue: '0'
+        })(<Select size="default" className="wd-90">
+            <Option key={0} value="0">全部</Option>
+            <Option key={1} value="1">按品类</Option>
+            <Option key={2} value="2">按商品</Option>
+        </Select>)}
+    </FormItem>
+</Col>)

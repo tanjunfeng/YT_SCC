@@ -72,6 +72,14 @@ class SearchForm extends PureComponent {
         this.props.onExportList(this.getFormData());
     }
 
+    /**
+     * 白名单下载导入模板
+     */
+    handleDownload = () => {
+        // 将查询条件回传给调用页
+        this.props.onExportList(this.getFormData());
+    }
+
     handleReset = () => {
         this.props.form.resetFields(); // 清除当前查询条件
         this.props.onPromotionReset(); // 通知父页面已清空
@@ -221,6 +229,9 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                                 <FormItem>
                                     <Button type="primary" size="default" onClick={this.handleExport}>导出备份</Button>
+                                </FormItem>
+                                <FormItem>
+                                    <a onClick={this.handleDownload}>下载导入模板</a>
                                 </FormItem>
                             </Col>
                             <Col span={16} className="search-right">

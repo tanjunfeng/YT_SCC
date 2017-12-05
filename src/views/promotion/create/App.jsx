@@ -11,7 +11,7 @@ import { withRouter } from 'react-router';
 import {
     Form, Row, Col, Input, Radio,
     Button, DatePicker, Checkbox,
-    InputNumber
+    InputNumber, Select
 } from 'antd';
 
 import Util from '../../../util/util';
@@ -19,13 +19,14 @@ import { AreaSelector } from '../../../container/tree';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
-import { getChooseButton, getRules } from './DomHelper';
+import { getChooseButton, getRules, buyType, conditionType } from './DomHelper';
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const RangePicker = DatePicker.RangePicker;
 const { TextArea } = Input;
 const CheckboxGroup = Checkbox.Group;
+const Option = Select.Option;
 
 @connect(() => ({
 }), dispatch => bindActionCreators({
@@ -192,7 +193,41 @@ class PromotionCreate extends PureComponent {
                         </FormItem>
                     </Col>
                 </Row>
-                {getFieldValue('condition') === 0 ? getRules(getFieldDecorator, getFieldValue) : null}
+                {getFieldValue('condition') === 0 ?
+                    getRules(getFieldDecorator, getFieldValue)
+                    :
+                    <Row>
+                        <Col span={16}>
+                            <FormItem label="优惠种类">
+                                {getFieldDecorator('category', {
+                                    initialValue: '0'
+                                })(<Select size="default" className="wd-110">
+                                    <Option key={0} value="0">购买条件</Option>
+                                    <Option key={1} value="1">奖励列表</Option>
+                                    <Option key={2} value="2">整个购买列表</Option>
+                                </Select>)}
+                            </FormItem>
+                        </Col>
+                    </Row>
+                }
+                {getFieldValue('category') === '0' ?
+                    <Row>
+                        {buyType(getFieldDecorator)}
+                        {conditionType(getFieldDecorator)}
+                    </Row> : null}
+                <Row>
+                    <Col span={16}>
+                        <FormItem label="使用条件">
+                            {getFieldDecorator('condition', {
+                                initialValue: 0,
+                                rules: [{ required: true, message: '请选择使用条件' }]
+                            })(<RadioGroup>
+                                <Radio className="default" value={0}>不限制</Radio>
+                                <Radio value={1}>指定条件</Radio>
+                            </RadioGroup>)}
+                        </FormItem>
+                    </Col>
+                </Row>
                 <Row>
                     <Col span={16}>
                         <FormItem label="使用区域">

@@ -563,6 +563,10 @@ class PoDetail extends PureComponent {
             ? basicInfo.createdAt
             : moment().format('YYYY-MM-DD')
 
+        // 供应商
+        const spDefaultValue = basicInfo.spId
+            ? `${basicInfo.spId}-${basicInfo.spName}`
+            : ''
 
         // 供应商地点值清单回显数据
         const spAdrDefaultValue = basicInfo.spAdrId
@@ -764,7 +768,7 @@ class PoDetail extends PureComponent {
                                     rules: [{ required: true, message: '请输入采购单类型' }],
                                     initialValue: this.state.purchaseOrderType
                                 })(
-                                    <Select size="default" onChange={this.selectChange}>
+                                    <Select size="default" onChange={this.purchaseOrderTypeChange}>
                                         {
                                             poType.data.map((item) =>
                                                 (<Option
@@ -773,7 +777,8 @@ class PoDetail extends PureComponent {
                                                 >{item.value}</Option>
                                                 ))
                                         }
-                                    </Select>)}
+                                    </Select>
+                                )}
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -1080,7 +1085,7 @@ class PoDetail extends PureComponent {
                                     rules: [{ required: true, message: '请输入经营模式' }],
                                     initialValue: this.state.businessMode
                                 })(
-                                    <Select size="default">
+                                    <Select size="default" onChange={this.businessModeTypeChange}>
                                         {
                                             businessModeType.data.map((item) =>
                                                 (<Option
@@ -1338,13 +1343,20 @@ class PoDetail extends PureComponent {
         }
     }
 
-    selectChange = (value) => {
+    // 采购单类型变化
+    purchaseOrderTypeChange = (value) => {
         this.setState({
             purchaseOrderType: value,
             totalAmounts: 0
         })
     }
 
+    // 经营模式类型变化
+    businessModeTypeChange = (value) => {
+        this.setState({
+            businessMode: value
+        })
+    }
     /**
      * 新增/修改的请求
      */
@@ -1365,7 +1377,8 @@ class PoDetail extends PureComponent {
             adrType,
             currencyCode,
             purchaseOrderType,
-            addressCd
+            addressCd,
+            businessMode
         } = poData.basicInfo;
         // 采购商品信息
         const pmPurchaseOrderItems = poData.poLines.map((item) => {
@@ -1375,7 +1388,7 @@ class PoDetail extends PureComponent {
                 productId,
                 productCode,
                 purchaseNumber,
-                purchasePrice
+                purchasePrice,
             } = item;
             return {
                 ...Utils.removeInvalid({
@@ -1408,6 +1421,7 @@ class PoDetail extends PureComponent {
                     currencyCode,
                     purchaseOrderType: parseInt(purchaseOrderType, 10),
                     status,
+                    businessMode: parseInt(businessMode, 10)
                 },
                 pmPurchaseOrderItems
             }).then((res) => {
@@ -1836,9 +1850,8 @@ class PoDetail extends PureComponent {
         const { basicInfo } = this.props;
         if (basicInfo.adrType === 0 && (basicInfo.state === 0 || basicInfo.state === 3)) {
             return this.columnsOther
-        } else {
-            return this.columns
         }
+        return this.columns
     }
 
     /**
@@ -1923,8 +1936,9 @@ class PoDetail extends PureComponent {
     }
 
     render() {
-        const { totalAmounts, totalQuantitys, spAdrId } = this.state;
+        const { totalAmounts, totalQuantitys, spAdrId, businessMode } = this.state;
         const supplierInfo = spAdrId ? `${spAdrId}-1` : null;
+        const distributionStatus = businessMode;
         const { poLines, basicInfo } = this.props;
         const baiscInfoElements = this.getBaiscInfoElements(this.state.pageMode);
         if (
@@ -1948,6 +1962,7 @@ class PoDetail extends PureComponent {
                                         fetch={(params) =>
                                             this.props.pubFetchValueList({
                                                 supplierInfo,
+                                                distributionStatus,
                                                 teamText: params.value,
                                                 pageNum: params.pagination.current || 1,
                                                 pageSize: params.pagination.pageSize
