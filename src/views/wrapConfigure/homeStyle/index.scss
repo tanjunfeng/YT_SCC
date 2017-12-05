@@ -1,12 +1,12 @@
 $color-e: #f4f4f4;
 $margin: 6px;
 .ant-carousel .slick-slide {
-  text-align: center;
-  height: 160px;
-  line-height: 160px;
-  background: #364d79;
-  color: #fff;
-  overflow: hidden;
+    text-align: center;
+    height: 160px;
+    line-height: 160px;
+    background: #364d79;
+    color: #fff;
+    overflow: hidden;
 }
 
 .home-style {
@@ -15,14 +15,14 @@ $margin: 6px;
     margin: 0 auto;
     position: relative;
     img {
-        vertical-align:top;
+        vertical-align: top;
     }
     background-color: $color-e;
-    &-carousel, &-quick {
+    &-carousel,
+    &-quick {
         background-color: #fff;
     }
-    &-carousel {
-    }
+    &-carousel {}
     &-quick {
         margin-bottom: $margin;
         padding-bottom: $margin;
@@ -72,13 +72,12 @@ $margin: 6px;
             overflow: hidden;
             margin-top: $margin;
             &-item {
-               float: left;
+                float: left;
             }
             &-item2 {
                 margin: 0 $margin;
             }
         }
-
     }
     &-banner {
         margin: $margin 0;
@@ -102,7 +101,8 @@ $margin: 6px;
             position: relative;
             line-height: 50px;
         }
-        &-text, &-more {
+        &-text,
+        &-more {
             cursor: pointer;
             &:hover {
                 color: #108ee9;
@@ -144,6 +144,7 @@ $margin: 6px;
             opacity: 1;
             .home-style-common-btns {
                 right: -140px;
+                width: 162px;
             }
             &:hover {
                 .home-style-common-btns2 {
@@ -184,9 +185,11 @@ $margin: 6px;
         z-index: 100;
     }
 }
+
 .manage-form-input {
     width: initial;
 }
+
 .cut-img-warp {
     .cut-img-warp-show {
         border: 1px solid transparent;
@@ -212,7 +215,21 @@ $margin: 6px;
         }
     }
 }
-.banner-form-label, .quick-form-label {
+
+.banner-form-label,
+.quick-form-label {
     min-width: 61px;
     text-align: right;
+}
+
+.home-style-quick {
+    position: relative;
+    .quick-nav-wrap {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+    }
 }

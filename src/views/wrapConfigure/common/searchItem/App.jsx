@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author liujinyu
  *
- * 首页样式管理条件查询区
+ * 首页样式管理、轮播管理条件查询区
  */
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
@@ -35,16 +35,25 @@ class SearchItem extends PureComponent {
         })
         // 判断用户是否可以修改当前页面
         let isHeadquarters = null
+        // 判断用户是否可以修改当前快捷导航
+        let isChangeQuick = null
         if (homePageType === '1') {
             if (headquarters) {
                 isHeadquarters = true
+                isChangeQuick = true
             } else {
                 isHeadquarters = false
+                isChangeQuick = false
             }
         } else {
             isHeadquarters = true
+            if (headquarters) {
+                isChangeQuick = true
+            } else {
+                isChangeQuick = false
+            }
         }
-        this.props.searchChange(submitObj, isHeadquarters)
+        this.props.searchChange(submitObj, isHeadquarters, isChangeQuick)
     }
 
     /**

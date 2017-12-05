@@ -19,7 +19,7 @@ import { AreaSelector } from '../../../container/tree';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
-import { getChooseButton, getRuls } from './DomHelper';
+import { getChooseButton, getRules } from './DomHelper';
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -192,7 +192,7 @@ class PromotionCreate extends PureComponent {
                         </FormItem>
                     </Col>
                 </Row>
-                {getFieldValue('condition') === 0 ? getRuls(getFieldDecorator, getFieldValue) : null}
+                {getFieldValue('condition') === 0 ? getRules(getFieldDecorator, getFieldValue) : null}
                 <Row>
                     <Col span={16}>
                         <FormItem label="使用区域">

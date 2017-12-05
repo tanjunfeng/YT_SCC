@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author liujinyu
  *
- * 首页样式运营状态切换区
+ * 首页样式管理、轮播管理运营状态切换区
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -14,6 +14,7 @@ class SwitchBox extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
+            // switch切换按钮状态
             isChecked: this.props.isChecked,
         }
     }

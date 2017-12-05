@@ -401,7 +401,10 @@ class CarouselManagement extends Component {
                 }
                 {
                     this.props.modalVisible &&
-                    <ChangeModalMessage searchChange={this.searchChange} areaId={this.state.areaId} />
+                    <ChangeModalMessage
+                        searchChange={this.searchChange}
+                        areaId={this.state.areaId}
+                    />
                 }
             </div>
         );
