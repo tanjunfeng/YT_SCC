@@ -392,7 +392,7 @@ class PromotionCreate extends PureComponent {
                                                 )}
                                             {this.state.categorySelectorVisible
                                                 ? <Category
-                                                    onCategorySelect={this.handleCategorySelect}
+                                                    onChange={this.handleCategorySelect}
                                                 /> : null}
                                         </FormItem>
                                     </Col>
