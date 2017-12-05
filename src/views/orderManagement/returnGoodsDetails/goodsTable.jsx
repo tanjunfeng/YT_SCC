@@ -3,7 +3,7 @@
  * @Description: 采购管理 - 退货详情 - 列表修改
  * @CreateDate: 2017-12-01 16:03:22
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-12-04 12:05:40
+ * @Last Modified time: 2017-12-05 10:15:58
  */
 
 import React, { PureComponent } from 'react';
@@ -31,7 +31,7 @@ class GoodsTable extends PureComponent {
             Object.assign(goods, {
                 quantity: Math.floor(number)
             });
-            this.validateSalesInsideNumber(items, index, goods)
+            this.validateActualReturnQuantity(items, index, goods)
             this.noticeChanges(items, index, goods);
         }
     }
@@ -41,6 +41,7 @@ class GoodsTable extends PureComponent {
         return Math.floor(number)
     }
 
+    isSaveDisabled = false;
     /**
      * 通知父组件刷新页面
      *
@@ -60,14 +61,13 @@ class GoodsTable extends PureComponent {
         this.props.onChange([...newGoodList], [...returnQuantity], total, this.isSaveDisabled);
     }
 
-    isSaveDisabled = true;
     /**
      * 检查行状态
      */
     checkGoodsStatus = (record, errors) => {
         if (record.isMultiple) {
             this.isSaveDisabled = true;
-            errors.push('非退货数量的整数倍');
+            errors.push('非实收数量的整数倍');
         } else {
             this.isSaveDisabled = false;
             errors.splice('', errors.length)
@@ -92,11 +92,11 @@ class GoodsTable extends PureComponent {
     /**
      * 校验输入退货数量数
      */
-    validateSalesInsideNumber = (items, index, goods) => {
-        const { quantity, salesInsideNumber = 10} = goods;
+    validateActualReturnQuantity = (items, index, goods) => {
+        const { quantity, actualReturnQuantity} = goods;
         let isMultiple = true;
         // 判断当前所填数量是否是实收数量的整数倍
-        if (quantity % salesInsideNumber >= 0) {
+        if (quantity % actualReturnQuantity >= 0) {
             isMultiple = false;
         }
         Object.assign(goods, { isMultiple });
@@ -143,7 +143,6 @@ class GoodsTable extends PureComponent {
         const errors = [];
         this.checkGoodsStatus(record, errors);
         let value = +Math.floor(text)
-        console.log(value)
         if (isNaN(value)) {
             value = 0;
         }

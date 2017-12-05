@@ -3,7 +3,7 @@
  * @Description: 销售退货详情
  * @CreateDate: 2017-11-10 11:22:28
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-12-01 16:16:09
+ * @Last Modified time: 2017-12-05 10:28:44
  */
 
 import React, { PureComponent } from 'react';
@@ -154,13 +154,14 @@ class ExchangeGoodsDetail extends PureComponent {
      * @param {*array} goodsList 更新的商品列表
      * @param {*object} total 商品小计信息
      */
-    handleGoodsListChange = (goodsList, returnQuantity, total) => {
+    handleGoodsListChange = (goodsList, returnQuantity, total, isSaveDisabled) => {
         // 刷新导入商品列表，清空报错商品列表, 清空excel导入商品列表
         this.setState({
             goodsList: [...goodsList],
             returnQuantity,
             total,
-            importList: []
+            importList: [],
+            isSaveDisabled
         });
     }
 
@@ -251,7 +252,7 @@ class ExchangeGoodsDetail extends PureComponent {
                         />
                         <div className="bottom-text">
                             <div className="bt-left">共<span className="bt-left-num">{data.commodityTotal}</span>件商品</div>
-                            <div className="bt-right"><span>总金额：</span><span className="bt-right-num">￥{this.state.total.amount || data.amount}</span></div>
+                            <div className="bt-right"><span>总金额：</span><span className="bt-right-num">￥{this.state.total.amount || 0}</span></div>
                         </div>
                     </div>
                 </div>

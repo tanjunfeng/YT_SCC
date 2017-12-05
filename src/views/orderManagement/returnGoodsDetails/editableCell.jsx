@@ -8,6 +8,7 @@ import { InputNumber } from 'antd';
 import PropTypes from 'prop-types';
 
 class EditableCell extends PureComponent {
+    valueNum = 0
     handleChange = (value) => {
         this.props.onChange(+(value));
     }
@@ -22,7 +23,6 @@ class EditableCell extends PureComponent {
 
     render() {
         const { min, step, error, value, actualReturnQuantity } = this.props;
-        console.log(value)
         return (
             <div className="editable-cell">
                 <InputNumber

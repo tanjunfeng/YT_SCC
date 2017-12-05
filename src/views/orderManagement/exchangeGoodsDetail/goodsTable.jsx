@@ -1,15 +1,16 @@
 /*
  * @Author: tanjf
- * @Description: 采购管理 - 换货详情 - 列表修改
- * @CreateDate: 2017-12-01 16:03:11
+ * @Description: 采购管理 - 退货详情 - 列表修改
+ * @CreateDate: 2017-12-01 16:03:22
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-12-01 16:04:32
+ * @Last Modified time: 2017-12-05 10:19:03
  */
+
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
 import { Form, Table } from 'antd';
 import PropTypes from 'prop-types';
-import { exchangeGoodsDetailColumns as columns } from '../columns';
+import { returnGoodsTableColums as columns } from '../columns';
 import EditableCell from './editableCell';
 
 class GoodsTable extends PureComponent {
@@ -24,15 +25,23 @@ class GoodsTable extends PureComponent {
     onCellChange = productCode => quantity => {
         const items = this.props.value.items;
         const index = items.findIndex(item => item.productCode === productCode);
+        const number = quantity;
         const goods = items[index];
         if (index > -1) {
             Object.assign(goods, {
-                quantity
+                quantity: Math.floor(number)
             });
+            this.validateActualReturnQuantity(items, index, goods)
             this.noticeChanges(items, index, goods);
         }
     }
 
+    onValueChange = (quantity) => {
+        const number = quantity;
+        return Math.floor(number)
+    }
+
+    isSaveDisabled = false;
     /**
      * 通知父组件刷新页面
      *
@@ -49,15 +58,21 @@ class GoodsTable extends PureComponent {
         // 整理列表，把不合法的数据前置以及计算新的 total
         const newGoodList = this.calcTotal(items, total);
         const returnQuantity = this.CollageData(items, dataIndex);
-        this.props.onChange([...newGoodList], [...returnQuantity], total);
+        this.props.onChange([...newGoodList], [...returnQuantity], total, this.isSaveDisabled);
     }
 
     /**
      * 检查行状态
      */
-    checkGoodsStatus = () => {
-        const isValid = false;
-        return isValid;
+    checkGoodsStatus = (record, errors) => {
+        if (record.isMultiple) {
+            this.isSaveDisabled = true;
+            errors.push('非实收数量的整数倍');
+        } else {
+            this.isSaveDisabled = false;
+            errors.splice('', errors.length)
+        }
+        return errors;
     }
 
     /**
@@ -75,13 +90,13 @@ class GoodsTable extends PureComponent {
     }
 
     /**
-     * 校验销售内装数
+     * 校验输入退货数量数
      */
-    validateSalesInsideNumber = (goods) => {
-        const { quantity, actualReturnQuantity, sellFullCase } = goods;
+    validateActualReturnQuantity = (items, index, goods) => {
+        const { quantity, actualReturnQuantity} = goods;
         let isMultiple = true;
-        // 不按整箱销售时，判断当前所填数量是否是实收数量的整数倍
-        if (sellFullCase === 0 && quantity % actualReturnQuantity > 0) {
+        // 判断当前所填数量是否是实收数量的整数倍
+        if (quantity % actualReturnQuantity >= 0) {
             isMultiple = false;
         }
         Object.assign(goods, { isMultiple });
@@ -122,18 +137,22 @@ class GoodsTable extends PureComponent {
     }
 
     renderNumber = (text, record) => {
-        const { actualReturnQuantity, minNumber, sellFullCase, salesInsideNumber } = record;
+        const { actualReturnQuantity } = record;
         // https://solution.yatang.cn/jira/browse/GA-1024
-        const step = sellFullCase === 0 ? salesInsideNumber : 1;
         // 填入的数量是否是内装数量的整数倍
         const errors = [];
         this.checkGoodsStatus(record, errors);
+        let value = +Math.floor(text)
+        if (isNaN(value)) {
+            value = 0;
+        }
         return (
             <EditableCell
-                value={text}
-                min={minNumber}
+                value={value}
+                min={0}
                 max={actualReturnQuantity}
-                step={step}
+                precision={0}
+                step={1}
                 error={errors.join(', ')}
                 onChange={this.onCellChange(record.productCode)}
             />);

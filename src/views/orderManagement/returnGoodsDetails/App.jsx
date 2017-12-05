@@ -41,8 +41,7 @@ class ReturnGoodsDetails extends PureComponent {
         this.state = {
             id: '',
             returnQuantityList: [],
-            total: '',
-            isSaveDisabled: true
+            total: ''
         }
     }
 
@@ -256,7 +255,7 @@ class ReturnGoodsDetails extends PureComponent {
                         <div className="bottom-text">
                             <div className="bt-left">共<span className="bt-left-num">{data.commodityTotal}</span>件商品</div>
                             <div className="bt-right"><span>退款金额：</span><span className="bt-right-num">￥{data.refundAmount}</span></div>
-                            <div className="bt-right" style={{marginRight: 20}}><span>退货金额：</span><span className="bt-right-num">￥{this.state.total.amount || data.amount}</span></div>
+                            <div className="bt-right" style={{marginRight: 20}}><span>退货金额：</span><span className="bt-right-num">￥{this.state.total.amount || 0}</span></div>
                         </div>
                     </div>
                 </div>
