@@ -5,10 +5,7 @@
  * 抽取公共表单 Component
  */
 import React from 'react';
-import {
-    Form, Row, Col,
-    InputNumber, Select
-} from 'antd';
+import { Form, Row, InputNumber, Select } from 'antd';
 
 import Util from '../../../util/util';
 import { Category } from '../../../container/cascader';
@@ -26,9 +23,9 @@ export const getChooseButton = (companies, handleClick) => (
 /**
  * 获取优惠方式
  */
-export const getRulesColumn = (getFieldDecorator, getFieldValue) => (<Col span={16}>
+export const getRulesColumn = (getFieldDecorator, getFieldValue, licence = 'Default') => (<span>
     <FormItem label="优惠方式">
-        {getFieldDecorator('rule', {
+        {getFieldDecorator(`rule${licence}`, {
             initialValue: '',
             rules: [{ required: true, message: '请选择优惠方式' }]
         })(<Select size="default" className="wd-90">
@@ -38,7 +35,7 @@ export const getRulesColumn = (getFieldDecorator, getFieldValue) => (<Col span={
         </Select>)}
     </FormItem>
     {/* 优惠百分比 */}
-    {getFieldValue('rule') === '0' ?
+    {getFieldValue(`rule${licence}`) === '0' ?
         <FormItem>
             {getFieldDecorator('percent', {
                 initialValue: 95,
@@ -47,7 +44,7 @@ export const getRulesColumn = (getFieldDecorator, getFieldValue) => (<Col span={
             </FormItem>
         : null}
     {/* 折扣金额 */}
-    {getFieldValue('rule') === '1' ?
+    {getFieldValue(`rule${licence}`) === '1' ?
         <FormItem>
             ￥{getFieldDecorator('amout', {
                 initialValue: 0,
@@ -58,7 +55,7 @@ export const getRulesColumn = (getFieldDecorator, getFieldValue) => (<Col span={
             })(<InputNumber className="wd-60" min={0} max={MAX_AMOUNT_OF_ORDER} step={1} />)} 元
             </FormItem>
         : null}
-</Col>)
+</span>)
 
 export const getRules = (getFieldDecorator, getFieldValue) => (<Row>
     {getRulesColumn(getFieldDecorator, getFieldValue)}
@@ -70,7 +67,7 @@ export const getRules = (getFieldDecorator, getFieldValue) => (<Row>
  * @param {*} getFieldDecorator
  */
 export const buyType = (getFieldDecorator, getFieldValue) => (
-    <Col span={6}>
+    <span>
         <FormItem label="购买类型">
             {getFieldDecorator('buyType', {
                 initialValue: '0'
@@ -81,9 +78,12 @@ export const buyType = (getFieldDecorator, getFieldValue) => (
             </Select>)}
         </FormItem>
         <FormItem>
-            {getFieldValue('buyType') === '1' ? <Category /> : null}
+            {getFieldValue('buyType') === '1' ?
+                getFieldDecorator('category', {
+                    initialValue: {}
+                })(<Category />) : null}
         </FormItem>
-    </Col>
+    </span>
 )
 
 /**
@@ -93,7 +93,7 @@ export const buyType = (getFieldDecorator, getFieldValue) => (
  * @param {*} getFieldValue
  */
 export const conditionType = (getFieldDecorator, getFieldValue) => (
-    <Col span={6}>
+    <span>
         <FormItem label="条件类型">
             {getFieldDecorator('conditionType', {
                 initialValue: '0'
@@ -127,5 +127,5 @@ export const conditionType = (getFieldDecorator, getFieldValue) => (
             </FormItem>
             : null
         }
-    </Col>
+    </span>
 )
