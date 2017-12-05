@@ -6,7 +6,6 @@
 import React, { PureComponent } from 'react';
 import { InputNumber } from 'antd';
 import PropTypes from 'prop-types';
-import { MAX_AMOUNT_OF_ORDER } from '../../../constant/index';
 
 class EditableCell extends PureComponent {
     handleChange = (value) => {
