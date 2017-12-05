@@ -10,6 +10,7 @@ export default class EditableCell extends PureComponent {
     }
     state = {
         value: this.props.value,
+        max: this.props.max ? this.props.max : MAXGOODS,
         step: this.props.step,
         purchaseInsideNumber: this.props.purchaseInsideNumber,
         validateStatus: null,
@@ -55,11 +56,10 @@ export default class EditableCell extends PureComponent {
             this.setState({ validateStatus: 'success' });
             isValidate = true;
         }
-
         return isValidate;
     }
     render() {
-        const { value, step } = this.state;
+        const { value, step, max } = this.state;
         return (
             <div>
                 {
@@ -69,7 +69,7 @@ export default class EditableCell extends PureComponent {
                                 <InputNumber
                                     value={value}
                                     min={0}
-                                    max={MAXGOODS}
+                                    max={max}
                                     step={step}
                                     onChange={e => this.handleChange(e)}
                                     onBlur={e => this.handleBlur(e)}
@@ -88,6 +88,7 @@ export default class EditableCell extends PureComponent {
 
 EditableCell.propTypes = {
     value: PropTypes.number,
+    max: PropTypes.number,
     step: PropTypes.number,
     purchaseInsideNumber: PropTypes.number,
     editable: PropTypes.bool,
