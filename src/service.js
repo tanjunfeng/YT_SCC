@@ -104,6 +104,8 @@ export const unusedParticipateData = '/coupon/queryCouponActivityActiveListExcel
 export const exportReceiptList = '/pmPurchaseReceipt/exportReceiptList';
 // 白名单导出
 export const whiteListBatchExport = 'sp/whiteListBatchExport';
+// 白名单下载导入模板
+export const whiteListBatchDownload = '/sp/whiteListTemplete';
 
 /**
  * 登录 Api
