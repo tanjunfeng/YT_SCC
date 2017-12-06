@@ -25,7 +25,7 @@ import Report from '../report';
 import { downloadPDF, downloadBatchPDF } from '../../../service'
 
 @connect(state => ({
-    poPrintList: state.toJS().procurement.poPrintList,
+    poPrintInfo: state.toJS().procurement.poPrintInfo,
 }), dispatch => bindActionCreators({
     fetchPoPrintList,
 }, dispatch))
@@ -98,8 +98,8 @@ class PoPrintList extends PureComponent {
 
     render() {
         // 采购单打印列表
-        const { poPrintList = {} } = this.props;
-        const { data = [], total, pageNum } = poPrintList;
+        const { poPrintInfo = {} } = this.props;
+        const { data = [], total, pageNum } = poPrintInfo;
         const that = this;
         const list = (reportsData = []) => {
             const res = [];
@@ -139,7 +139,7 @@ class PoPrintList extends PureComponent {
 
 PoPrintList.propTypes = {
     fetchPoPrintList: PropTypes.func,
-    poPrintList: PropTypes.objectOf(PropTypes.any),
+    poPrintInfo: PropTypes.objectOf(PropTypes.any),
 }
 
 export default withRouter(Form.create()(PoPrintList));

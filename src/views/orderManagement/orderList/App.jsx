@@ -9,12 +9,12 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
     Form, Input, Button, Row, Col,
     Select, Icon, Table, Menu, Dropdown,
     message, Modal, DatePicker, Checkbox
 } from 'antd';
-import { Link } from 'react-router-dom';
 import moment from 'moment';
 import Utils from '../../../util/util';
 import { BranchCompany, Franchisee } from '../../../container/search';

@@ -163,7 +163,7 @@ export default {
 
     /* ********************procurement************************* */
     // 查询采购单管理列表
-    RECEIVE_PO_MNG_LIST: 'RECEIVE_PO_MNG_LIST',
+    RECEIVE_PO_MNG_INFO: 'RECEIVE_PO_MNG_INFO',
     // 更新采购单选中行
     CHANGE_PO_MNG_SELECTED_ROWS: 'CHANGE_PO_MNG_SELECTED_ROWS',
     // 查询采购单详情
@@ -190,8 +190,8 @@ export default {
     FETCH_GOODS_INFO: 'FETCH_GOODS_INFO',
     // 修改单个商品的信息
     UPDATE_GOODS_INFO: 'UPDATE_GOODS_INFO',
-    // 查询退货单审批列表
-    QUERY_AUDIT_PUR_RE_LIST: 'QUERY_AUDIT_PUR_RE_LIST',
+    // 待办事项下审批列表
+    QUERY_PROCESS_MSG_LIST: 'QUERY_PROCESS_MSG_LIST',
     // 提交直营店下单
     INSERT_DIRECT_ORDER: 'INSERT_DIRECT_ORDER',
     // 批量校验库存
@@ -305,7 +305,7 @@ export default {
     REPUSH_PURCHASE_RECEIPT: 'REPUSH_PURCHASE_RECEIPT',
     // 退货列表
     RECEIVE_RETURN_MNG_LIST: 'RECEIVE_RETURN_MNG_LIST',
-    // 查询退货单审批列表
+    // 查询待办事项下退货审批列表
     QUERY_AUDIT_PURCHASE_LIST: 'QUERY_AUDIT_PURCHASE_LIST',
     // 查看退货单审批意见
     QUERY_APPROVAL_INFO: 'QUERY_APPROVAL_INFO',

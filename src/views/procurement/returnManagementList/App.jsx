@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
- * @Last Modified by: tanjf
- * @Last Modified time: 2017-12-05 10:53:15
+ * @Last Modified by: chenghaojie
+ * @Last Modified time: 2017-12-06 11:22:00
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -63,8 +63,8 @@ const confirm = Modal.confirm;
 const statusTypes = { 0: '制单', 1: '已提交', 2: '已审核', 3: '已拒绝', 4: '待退货', 5: '已退货', 6: '已取消', 7: '取消失败', 8: '异常' }
 const adrTypes = { 0: '仓库', 1: '门店' }
 @connect(state => ({
-    poRcvMngList: state.toJS().procurement.poRcvMngList,
-    returnMngList: state.toJS().procurement.returnMngList,
+    poRcvMngInfo: state.toJS().procurement.poRcvMngInfo,
+    returnMngInfo: state.toJS().procurement.returnMngInfo,
     getRefundNumebr: state.toJS().procurement.getRefundNumebr,
     processDefinitions: state.toJS().procurement.processDefinitions
 }), dispatch => bindActionCreators({
@@ -613,7 +613,7 @@ class ReturnManagementList extends PureComponent {
 
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        const { data, total, pageNum, pageSize } = this.props.returnMngList;
+        const { data, total, pageNum, pageSize } = this.props.returnMngInfo;
         const rowSelection = {
             selectedRowKeys: this.state.chooseGoodsList,
             onChange: (selectedRowKeys, selectedRows) => {
@@ -861,7 +861,7 @@ ReturnManagementList.propTypes = {
     queryApprovalInfo: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
-    returnMngList: PropTypes.objectOf(PropTypes.any),
+    returnMngInfo: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,
