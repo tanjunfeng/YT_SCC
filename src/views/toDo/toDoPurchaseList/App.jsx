@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-06 11:54:09
+ * @Last Modified time: 2017-12-06 17:10:21
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -84,6 +84,7 @@ class toDoPurchaseList extends PureComponent {
         this.renderActions = this.renderActions.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.searchParams = {};
+        this.examinationAppData = {};
         this.state = {
             spAdrId: '', // 供应商地点编码
             locDisabled: true, // 地点禁用
@@ -104,27 +105,33 @@ class toDoPurchaseList extends PureComponent {
         this.columns = [
             {
                 title: '采购单号',
-                dataIndex: 'purchaseRefundNo',
-                key: 'purchaseRefundNo',
+                dataIndex: 'refundNo',
+                key: 'refundNo',
                 render: (text, record) => (
-                    <Link target="_blank" to={`po/detail/${record.id}`} onClick={this.toPurDetail}>{text}</Link>
+                    <Link target="_blank" to={`po/detail/${record.refundNo}`} onClick={this.toPurDetail}>{text}</Link>
                 )
             }, {
                 title: '地点类型',
                 dataIndex: 'adrType',
-                key: 'adrType'
+                key: 'adrType',
+                render: text => {
+                    if (text === null) {
+                        return null;
+                    }
+                    return (locType.data[text + 1].value);
+                }
             }, {
                 title: '退货地点',
-                dataIndex: 'refundAdr',
-                key: 'refundAdr'
+                dataIndex: 'refundAdrName',
+                key: 'refundAdrName'
             }, {
                 title: '供应商',
-                dataIndex: 'supplier',
-                key: 'supplier'
+                dataIndex: 'spName',
+                key: 'spName'
             }, {
                 title: '供应商地点',
-                dataIndex: 'supplierAddress',
-                key: 'supplierAddress'
+                dataIndex: 'apAdrName',
+                key: 'apAdrName'
             }, {
                 title: '退货数量',
                 dataIndex: 'totalRefundAmount',
@@ -134,17 +141,13 @@ class toDoPurchaseList extends PureComponent {
                 dataIndex: 'totalRefundCost',
                 key: 'totalRefundCost'
             }, {
-                title: '实际退货金额(含税)',
-                dataIndex: 'totalRealRefundMoney',
-                key: 'totalRealRefundMoney'
-            }, {
                 title: '退货金额(含税)',
                 dataIndex: 'totalRefundMoney',
                 key: 'totalRefundMoney'
             }, {
                 title: '创建者',
-                dataIndex: 'createUserId',
-                key: 'createUserId'
+                dataIndex: 'createUser',
+                key: 'createUser'
             }, {
                 title: '退货单创建时间',
                 dataIndex: 'createTime',
@@ -160,8 +163,8 @@ class toDoPurchaseList extends PureComponent {
                 }
             }, {
                 title: '流程开始时间',
-                dataIndex: 'processEndTime',
-                key: 'processEndTime',
+                dataIndex: 'startTime',
+                key: 'startTime',
                 render: text => {
                     let res = text;
                     if (!text) {
@@ -173,8 +176,8 @@ class toDoPurchaseList extends PureComponent {
                 }
             }, {
                 title: '流程结束时间',
-                dataIndex: 'processStartTime',
-                key: 'processStartTime',
+                dataIndex: 'endTime',
+                key: 'endTime',
                 render: text => {
                     let res = text;
                     if (!text) {
@@ -186,15 +189,17 @@ class toDoPurchaseList extends PureComponent {
                 }
             }, {
                 title: '当前节点',
-                dataIndex: 'processNodeName',
-                key: 'processNodeName',
+                dataIndex: 'currentNode',
+                key: 'currentNode',
+                width: '160px',
                 render: (text, record) => (
-                    <a onClick={() => this.nodeModal(record.id)}>{text}</a>
+                    <a onClick={() => this.nodeModal(record)}>{text}</a>
                 )
             }, {
                 title: '操作',
                 dataIndex: 'operation',
                 key: 'operation',
+                width: '80px',
                 render: this.renderActions
             }
         ]
@@ -233,6 +238,7 @@ class toDoPurchaseList extends PureComponent {
             processType: 'CG'
         });
     }
+
 
     queryReturnMngList = () => {
         this.current = 1;
@@ -413,10 +419,24 @@ class toDoPurchaseList extends PureComponent {
         });
     }
 
+    handleCommentOk = (param) => {
+        const { currentNode, taskId } = this.examinationAppData;
+        const processId = currentNode;
+        this.props.approveRefund({ ...param, processId, businessId: taskId, type: 1 })
+            .then((res) => {
+                if (res.code === 200) {
+                    message.success(res.message);
+                    this.handleOpinionOk();
+                    this.queryReturnMngList(this.current);
+                }
+            });
+    }
+
     handleSelect(record, index, items) {
         const { key } = items;
         switch (key) {
             case 'examinationApproval':
+                this.examinationAppData = record;
                 this.showOpinionModal();
                 break;
             case 'viewApproval':
@@ -669,7 +689,7 @@ class toDoPurchaseList extends PureComponent {
                         <Table
                             dataSource={data}
                             columns={this.columns}
-                            rowKey="id"
+                            rowKey="taskId"
                             scroll={{
                                 x: 1600
                             }}
@@ -691,6 +711,7 @@ class toDoPurchaseList extends PureComponent {
                             visible={this.state.opinionvisible}
                             onOk={this.handleOpinionOk}
                             onCancel={this.handleOpinionCancel}
+                            handleCommentOk={this.handleCommentOk}
                         />
                         <FlowImage data={this.props.highChartData} >
                             <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />

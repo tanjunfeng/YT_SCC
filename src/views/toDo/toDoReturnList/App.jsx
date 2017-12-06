@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-06 14:16:02
+ * @Last Modified time: 2017-12-06 17:07:23
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -114,15 +114,18 @@ class toDoReturnList extends PureComponent {
                 dataIndex: 'refundNo',
                 key: 'refundNo',
                 render: (text, record) => (
-                    <Link target="_blank" to={`po/detail/${record.id}`} onClick={this.toPurDetail}>{text}</Link>
+                    <Link target="_blank" to={`po/detail/${record.refundNo}`} onClick={this.toPurDetail}>{text}</Link>
                 )
             }, {
                 title: '地点类型',
                 dataIndex: 'adrType',
                 key: 'adrType',
-                render: text => (
-                    text === 0 ? '仓库' : '门市'
-                )
+                render: text => {
+                    if (text === null) {
+                        return null;
+                    }
+                    return (locType.data[text + 1].value);
+                }
             }, {
                 title: '退货地点',
                 dataIndex: 'refundAdrName',
@@ -494,10 +497,10 @@ class toDoReturnList extends PureComponent {
     }
 
     handleApprovalOk = () => {
-        const { processNodeId, id } = this.examinationAppData;
-        const processId = processNodeId;
+        const { currentNode, taskId } = this.examinationAppData;
+        const processId = currentNode;
         this.getFormData().then((param) => {
-            this.props.approveRefund({ ...param, processId, businessId: id, type: 1 })
+            this.props.approveRefund({ ...param, processId, businessId: taskId, type: 1 })
                 .then((res) => {
                     if (res.code === 200) {
                         message.success(res.message);
@@ -556,26 +559,6 @@ class toDoReturnList extends PureComponent {
             adrType,
             auditStatus
         } = this.props.form.getFieldsValue();
-        // 流程开始时间
-        const auditDuringArr = this.props.form.getFieldValue('createTime') || [];
-        let createTimeStart;
-        let createTimeEnd;
-        if (auditDuringArr.length > 0) {
-            createTimeStart = Date.parse(auditDuringArr[0].format(dateFormat));
-        }
-        if (auditDuringArr.length > 1) {
-            createTimeEnd = Date.parse(auditDuringArr[1].format(dateFormat));
-        }
-        // 流程结束间
-        const auditDuringArrEnd = this.props.form.getFieldValue('stopTime') || [];
-        let stopTimeStart;
-        let stopTimeEnd;
-        if (auditDuringArrEnd.length > 0) {
-            stopTimeStart = Date.parse(auditDuringArrEnd[0].format(dateFormat));
-        }
-        if (auditDuringArrEnd.length > 1) {
-            stopTimeEnd = Date.parse(auditDuringArrEnd[1].format(dateFormat));
-        }
 
         // 供应商编号
         const spId = this.state.spId;
@@ -595,10 +578,6 @@ class toDoReturnList extends PureComponent {
             adrType,
             spId,
             spAdrId,
-            createTimeStart,
-            createTimeEnd,
-            stopTimeStart,
-            stopTimeEnd,
             adrTypeCode,
             auditStatus
         };
@@ -824,7 +803,7 @@ class toDoReturnList extends PureComponent {
                         <Table
                             dataSource={data}
                             columns={this.columns}
-                            rowKey="id"
+                            rowKey="taskId"
                             scroll={{
                                 x: 1800
                             }}
