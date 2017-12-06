@@ -8,7 +8,6 @@ import React from 'react';
 import { Form, Row, InputNumber, Select } from 'antd';
 
 import Util from '../../../util/util';
-import { Category } from '../../../container/cascader';
 import { MAX_AMOUNT_OF_ORDER } from '../../../constant';
 
 const Option = Select.Option;
@@ -72,20 +71,14 @@ export const getRules = (getFieldDecorator, getFieldValue, licence) => (<Row>
 export const buyType = (getFieldDecorator, getFieldValue, licence) => (
     <span>
         <FormItem label="购买类型">
-            {/* buyTypeCategory0 */}
-            {getFieldDecorator(`buyType${licence}`, {
-                initialValue: '0'
+            {/* purchaseCondition */}
+            {getFieldDecorator(licence, {
+                initialValue: 'CATEGORY'
             })(<Select size="default" className="wd-90">
-                <Option key={0} value="0">全部</Option>
-                <Option key={1} value="1">按品类</Option>
-                <Option key={2} value="2">按商品</Option>
+                <Option key={'ALL'} value="ALL">全部</Option>
+                <Option key={'CATEGORY'} value="CATEGORY">按品类</Option>
+                <Option key={'PRODUCT'} value="PRODUCT">按商品</Option>
             </Select>)}
-        </FormItem>
-        <FormItem>
-            {getFieldValue(`buyType${licence}`) === '1' ?
-                getFieldDecorator('category', {
-                    initialValue: {}
-                })(<Category />) : null}
         </FormItem>
     </span>
 )
@@ -99,18 +92,19 @@ export const buyType = (getFieldDecorator, getFieldValue, licence) => (
 export const conditionType = (getFieldDecorator, getFieldValue, licence) => (
     <span>
         <FormItem label="条件类型">
-            {getFieldDecorator(`conditionType${licence}`, {
+            {/* purchaseConditionType */}
+            {getFieldDecorator(`${licence}Type`, {
                 initialValue: '',
                 rules: [{ required: true, message: '请选择条件类型' }]
             })(<Select size="default" className="wd-110">
-                <Option key={0} value="">- 请选择 -</Option>
-                <Option key={1} value="1">累计商品金额</Option>
-                <Option key={2} value="2">累计商品数量</Option>
+                <Option key={''} value="">- 请选择 -</Option>
+                <Option key={'AMOUNT'} value="AMOUNT">累计商品金额</Option>
+                <Option key={'QUANTITY'} value="QUANTITY">累计商品数量</Option>
             </Select>)}
         </FormItem>
-        {getFieldValue('conditionType') === '1' ?
+        {getFieldValue(`${licence}Type`) === 'AMOUNT' ?
             <FormItem>
-                ￥{getFieldDecorator(`conditionType${licence}`, {
+                ￥{getFieldDecorator(`${licence}TypeAmount`, {
                     initialValue: 0,
                     rules: [
                         { required: true, message: '请输入累计商品金额' },
@@ -120,9 +114,9 @@ export const conditionType = (getFieldDecorator, getFieldValue, licence) => (
             </FormItem>
             : null
         }
-        {getFieldValue('conditionType') === '2' ?
+        {getFieldValue(`${licence}Type`) === 'QUANTITY' ?
             <FormItem>
-                {getFieldDecorator(`conditionType${licence}`, {
+                {getFieldDecorator(`${licence}TypeQuantity`, {
                     initialValue: 0,
                     rules: [
                         { required: true, message: '请输入累计商品数量' },

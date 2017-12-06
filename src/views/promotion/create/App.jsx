@@ -15,6 +15,7 @@ import {
 } from 'antd';
 
 import Util from '../../../util/util';
+import { Category } from '../../../container/cascader';
 import { AreaSelector } from '../../../container/tree';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
@@ -38,7 +39,7 @@ class PromotionCreate extends PureComponent {
         areaSelectorVisible: false,
         storeSelectorVisible: false,
         companies: [], // 所选区域子公司
-        checkedList: []
+        categoryObj: {} // 品类
     }
 
     // 不限制条件对象拼接
@@ -68,14 +69,14 @@ class PromotionCreate extends PureComponent {
 
     // 优惠种类: 购买条件
     getPurchaseConditionsRule = (values) => {
-        const { ruleNoCondition, promoCategories } = values;
+        const { category, purchaseCondition } = values;
         const promotionRule = {
             useConditionRule: true,
-            ruleName: 'PURCHASECONDITION',
+            ruleName: category,
             purchaseConditionsRule: {
                 condition: {
-                    purchaseType: 'CATEGORY',
-                    promoCategories,
+                    purchaseType: purchaseCondition,
+                    promoCategories: this.state.categoryObj,
                     conditionType: 'QUANTITY',
                     conditionValue: 50
                 },
@@ -151,9 +152,8 @@ class PromotionCreate extends PureComponent {
                 Object.assign(dist, {
                     promotionRule: this.getNoConditionData(values)
                 });
-            }
-            // 指定条件——优惠种类——购买条件
-            if (condition === 1 && category === 0) {
+            } else if (condition === 1 && category === 'PURCHASECONDITION') {
+                // 指定条件——优惠种类——购买条件
                 Object.assign(dist, {
                     promotionRule: this.getPurchaseConditionsRule(values)
                 });
@@ -209,6 +209,10 @@ class PromotionCreate extends PureComponent {
                 break;
             default: break;
         }
+    }
+
+    handleCategorySelect = (categoryObj) => {
+        this.setState({ categoryObj });
     }
 
     /**
@@ -278,20 +282,23 @@ class PromotionCreate extends PureComponent {
                         // condition === 1
                         <FormItem label="优惠种类">
                             {getFieldDecorator('category', {
-                                initialValue: '0'
+                                initialValue: 'PURCHASECONDITION'
                             })(<Select size="default" className="wd-110">
-                                <Option key={0} value="0">购买条件</Option>
-                                <Option key={1} value="1">奖励列表</Option>
-                                <Option key={2} value="2">整个购买列表</Option>
+                                <Option key={'PURCHASECONDITION'} value="PURCHASECONDITION">购买条件</Option>
+                                <Option key={'REWARDLIST'} value="REWARDLIST">奖励列表</Option>
+                                <Option key={'TOTALPUCHASELIST'} value="TOTALPUCHASELIST">整个购买列表</Option>
                             </Select>)}
                         </FormItem>
                     }
                 </Row>
-                {getFieldValue('category') === '0' ?
+                {getFieldValue('category') === 'PURCHASECONDITION' ?
                     <Row>
-                        {buyType(getFieldDecorator, getFieldValue, 'Category0')}
-                        {conditionType(getFieldDecorator, getFieldValue, 'Category0')}
-                        {getRulesColumn(getFieldDecorator, getFieldValue, 'Category0')}
+                        {buyType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
+                        <FormItem>
+                            <Category onChange={this.handleCategorySelect} />
+                        </FormItem>
+                        {conditionType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
+                        {getRulesColumn(getFieldDecorator, getFieldValue, 'purchaseCondition')}
                     </Row> : null
                 }
                 <Row>
@@ -324,7 +331,7 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 <Row>
                     {storeSelectorVisible ?
-                        <FormItem>
+                        <FormItem className="store">
                             {getFieldDecorator('storeId', {
                                 initialValue: '',
                                 rules: [{ required: true, message: '请输入指定门店' }]
@@ -338,7 +345,7 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 <Row>
                     {storeSelectorVisible ?
-                        <span>请按照数据模板的格式准备导入数据如：A000999, A000900, A000991</span>
+                        <span className="store">请按照数据模板的格式准备导入数据如：A000999, A000900, A000991</span>
                         : null
                     }
                 </Row>
