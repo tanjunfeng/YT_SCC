@@ -149,17 +149,19 @@ export const fetchAreaList = (data) => dispatch => (
     new Promise((resolve, reject) => {
         Promise.all([queryAreas(data), queryQuickNavigationList()])
             .then((result) => {
-                const all = result[0].data;
+                const all = [...result[0].data];
                 const quick = result[1].data;
-                all.map((item, index) => {
+                all.forEach((item, index) => {
                     if (item.id.indexOf('quick-nav') > -1) {
-                        all[index].itemAds = quick;
+                        Object.assign(all[index], {
+                            itemAds: quick
+                        });
                     }
                 })
                 dispatch(
-                    receiveAreaList(result[0].data)
+                    receiveAreaList(all)
                 );
-                resolve(result[0].data);
+                resolve(all);
             }).catch((err) => {
                 if (err.data && err.data.code === 401) {
                     reject(err);
