@@ -43,25 +43,22 @@ class PromotionCreate extends PureComponent {
 
     // 不限制条件对象拼接
     getNoConditionData = (values) => {
+        const { ruleNoCondition, ruleNoConditionPercent, ruleNoConditionAmount } = values;
         const promotionRule = {
-            useConditionRule: false
+            useConditionRule: false,
+            orderRule: {
+                preferentialWay: ruleNoCondition
+            }
         };
-        const { ruleNoCondition } = values;
         switch (ruleNoCondition) {
-            case '0':
-                Object.assign(promotionRule, {
-                    orderRule: {
-                        preferentialWay: 'PERCENTAGE',
-                        preferentialValue: values.ruleNoConditionPercent
-                    }
+            case 'PERCENTAGE':
+                Object.assign(promotionRule.orderRule, {
+                    preferentialValue: ruleNoConditionPercent
                 });
                 break;
-            case '1':
-                Object.assign(promotionRule, {
-                    orderRule: {
-                        preferentialWay: 'DISCOUNTAMOUNT',
-                        preferentialValue: values.ruleNoConditionAmount
-                    }
+            case 'DISCOUNTAMOUNT':
+                Object.assign(promotionRule.orderRule, {
+                    preferentialValue: ruleNoConditionAmount
                 });
                 break;
             default: break;

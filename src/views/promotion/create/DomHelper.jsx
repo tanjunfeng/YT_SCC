@@ -31,12 +31,12 @@ export const getRulesColumn = (getFieldDecorator, getFieldValue, licence) => (<s
             rules: [{ required: true, message: '请选择优惠方式' }]
         })(<Select size="default" className="wd-90">
             <Option key={-1} value="">- 请选择 -</Option>
-            <Option key={0} value="0">折扣百分比</Option>
-            <Option key={1} value="1">折扣金额</Option>
+            <Option key={0} value="PERCENTAGE">折扣百分比</Option>
+            <Option key={1} value="DISCOUNTAMOUNT">折扣金额</Option>
         </Select>)}
     </FormItem>
     {/* 优惠百分比 */}
-    {getFieldValue(`rule${licence}`) === '0' ?
+    {getFieldValue(`rule${licence}`) === 'PERCENTAGE' ?
         <FormItem>
             {/* ruleNoConditionPercent */}
             {getFieldDecorator(`rule${licence}Percent`, {
@@ -46,7 +46,7 @@ export const getRulesColumn = (getFieldDecorator, getFieldValue, licence) => (<s
             </FormItem>
         : null}
     {/* 折扣金额 */}
-    {getFieldValue(`rule${licence}`) === '1' ?
+    {getFieldValue(`rule${licence}`) === 'DISCOUNTAMOUNT' ?
         <FormItem>
             {/* ruleNoConditionAmount */}
             ￥{getFieldDecorator(`rule${licence}Amount`, {
