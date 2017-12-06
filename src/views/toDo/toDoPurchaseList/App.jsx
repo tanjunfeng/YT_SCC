@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-05 18:36:46
+ * @Last Modified time: 2017-12-06 09:20:51
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -24,6 +24,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
@@ -106,7 +107,7 @@ class toDoPurchaseList extends PureComponent {
                 dataIndex: 'purchaseRefundNo',
                 key: 'purchaseRefundNo',
                 render: (text, record) => (
-                    <a target="_blank" onClick={this.toPurDetail} href={`po/detail/${record.id}`}>查看订单详情</a>
+                    <Link target="_blank" to={`po/detail/${record.id}`} onClick={this.toPurDetail}>{text}</Link>
                 )
             }, {
                 title: '地点类型',

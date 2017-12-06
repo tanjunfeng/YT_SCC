@@ -9,6 +9,7 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
     Form, Input, Button, Row, Col,
     Select, Icon, Table, Menu, Dropdown,
@@ -319,7 +320,7 @@ class OrderManagementList extends Component {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
                 <Menu.Item key="detail">
-                    <a target="_blank" href={`${pathname}/orderDetails/${id}`}>查看订单详情</a>
+                    <Link target="_blank" to={`${pathname}/orderDetails/${id}`}>查看订单详情</Link>
                 </Menu.Item>
                 {
                     (orderState === 'W'

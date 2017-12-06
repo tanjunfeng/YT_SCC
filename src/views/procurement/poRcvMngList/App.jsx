@@ -22,6 +22,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
@@ -477,7 +478,7 @@ class PoRcvMngList extends PureComponent {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
-                    <a target="_blank" href={`${pathname}/${id}`}>收货单详情</a>
+                    <Link target="_blank" to={`${pathname}/${id}`}>收货单详情</Link>
                 </Menu.Item>
                 {
                     // 仅待下发状态时能够点击重新推送采购收货单

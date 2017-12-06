@@ -158,7 +158,7 @@ class PoMngList extends PureComponent {
         const menu = (
             <Menu>
                 <Menu.Item key="detail">
-                    <a target="_blank" href={`${pathname}/detail/${id}`}>详情</a>
+                    <Link target="_blank" to={`${pathname}/detail/${id}`}>详情</Link>
                 </Menu.Item>
                 {status === deleteCode &&
                     <Menu.Item key="modify">
