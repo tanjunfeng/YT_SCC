@@ -72,6 +72,7 @@ export const getRules = (getFieldDecorator, getFieldValue, licence) => (<Row>
 export const buyType = (getFieldDecorator, getFieldValue, licence) => (
     <span>
         <FormItem label="购买类型">
+            {/* buyTypeCategory0 */}
             {getFieldDecorator(`buyType${licence}`, {
                 initialValue: '0'
             })(<Select size="default" className="wd-90">

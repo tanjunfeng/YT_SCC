@@ -53,7 +53,7 @@ class PromotionCreate extends PureComponent {
         switch (ruleNoCondition) {
             case 'PERCENTAGE':
                 Object.assign(promotionRule.orderRule, {
-                    preferentialValue: ruleNoConditionPercent
+                    preferentialValue: Number(ruleNoConditionPercent / 100.0).toFixed(2)
                 });
                 break;
             case 'DISCOUNTAMOUNT':
@@ -63,6 +63,41 @@ class PromotionCreate extends PureComponent {
                 break;
             default: break;
         }
+        return promotionRule;
+    }
+
+    // 优惠种类: 购买条件
+    getPurchaseConditionsRule = (values) => {
+        const { ruleNoCondition, promoCategories } = values;
+        const promotionRule = {
+            useConditionRule: true,
+            ruleName: 'PURCHASECONDITION',
+            purchaseConditionsRule: {
+                condition: {
+                    purchaseType: 'CATEGORY',
+                    promoCategories,
+                    conditionType: 'QUANTITY',
+                    conditionValue: 50
+                },
+                rule: {
+                    preferentialWay: 'PERCENTAGE',
+                    preferentialValue: 0.95
+                }
+            }
+        };
+        // switch (ruleNoCondition) {
+        //     case 'PERCENTAGE':
+        //         Object.assign(promotionRule.orderRule, {
+        //             preferentialValue: ruleNoConditionPercent
+        //         });
+        //         break;
+        //     case 'DISCOUNTAMOUNT':
+        //         Object.assign(promotionRule.orderRule, {
+        //             preferentialValue: ruleNoConditionAmount
+        //         });
+        //         break;
+        //     default: break;
+        // }
         return promotionRule;
     }
 
@@ -109,11 +144,19 @@ class PromotionCreate extends PureComponent {
                 return;
             }
             // 使用条件 0: 不限制，1: 指定条件
-            const { condition } = values;
+            const { condition, category } = values;
             const dist = this.getBasicData(values);
             // 无限制条件
             if (condition === 0) {
-                Object.assign(dist, { promotionRule: this.getNoConditionData(values) })
+                Object.assign(dist, {
+                    promotionRule: this.getNoConditionData(values)
+                });
+            }
+            // 指定条件——优惠种类——购买条件
+            if (condition === 1 && category === 0) {
+                Object.assign(dist, {
+                    promotionRule: this.getPurchaseConditionsRule(values)
+                });
             }
             if (typeof callback === 'function') {
                 callback(Util.removeInvalid(dist));
@@ -232,6 +275,7 @@ class PromotionCreate extends PureComponent {
                     {getFieldValue('condition') === 0 ?
                         getRules(getFieldDecorator, getFieldValue, 'NoCondition')
                         :
+                        // condition === 1
                         <FormItem label="优惠种类">
                             {getFieldDecorator('category', {
                                 initialValue: '0'

@@ -9,7 +9,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Cascader } from 'antd';
+
 import { getCategoriesByParentId, clearCategoriesList } from '../../actions/promotion';
+import './Category.scss';
 
 @connect(state => ({
     categories: state.toJS().promotion.categories
