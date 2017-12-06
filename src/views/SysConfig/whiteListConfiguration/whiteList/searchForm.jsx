@@ -123,8 +123,10 @@ class SearchForm extends PureComponent {
     */
     handleUpload = () => {
         const { fileList } = this.state;
-        if (fileList[0].name.indexOf('.xlsx') === -1) {
-            message.error('上传文件格式必须为03版以后的excel（*.xlsx）格式，请清除后重新尝试');
+        const fileName = fileList[0].name;
+        if (fileName.indexOf('.xlsx') === -1 && fileName.indexOf('.xls') === -1 && fileName.indexOf('.xlsm') === -1) {
+            message.error('上传文件格式必须为excel格式，请清除后重新尝试');
+            return
         }
         const formData = new FormData();
         formData.append('file', fileList[0]);
