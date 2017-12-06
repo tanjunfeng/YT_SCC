@@ -39,42 +39,45 @@ class ModifyThePassword extends Component {
                     reject(err);
                 }
                 const {
+                    oldPassword,
                     newPassword,
-                    newPasswords
+                    confirmPassword
                 } = values;
                 const dist = {
+                    oldPassword,
                     newPassword,
-                    newPasswords
+                    confirmPassword
                 };
                 if (newPassword !== null) {
                     Object.assign(dist, {
                         newPassword
                     });
                 }
-                if (newPasswords !== null) {
+                if (confirmPassword !== null) {
                     Object.assign(dist, {
-                        newPasswords
+                        confirmPassword
                     });
                 }
                 if (newPassword !== undefined) {
-                    if (newPassword !== newPasswords) {
+                    if (newPassword !== confirmPassword) {
                         this.props.form.setFields({
                             newPassword: {
-                                value: values.newPasswords,
+                                value: values.confirmPassword,
                                 errors: [new Error('两次输入密码不一致，请重新输入')],
                             },
                         });
                         this.props.form.setFields({
-                            newPasswords: {
-                                value: values.newPasswords,
+                            confirmPassword: {
+                                value: values.confirmPassword,
                                 errors: [new Error('两次输入密码不一致，请重新输入')],
                             },
                         });
                         reject();
                     } else {
                         Object.assign(dist, {
+                            oldPassword,
                             newPassword,
-                            newPasswords
+                            confirmPassword
                         });
                     }
                 }
@@ -91,7 +94,7 @@ class ModifyThePassword extends Component {
 
     handleOk = () => {
         this.getFormData().then((param) => {
-            this.props.modifypassword({newPassword: param.newPassword})
+            this.props.modifypassword(param)
             .then((res) => {
                 if (res.code === 200) {
                     this.props.onChange(false);
@@ -139,7 +142,7 @@ class ModifyThePassword extends Component {
                                 <Row gutter={8}>
                                     <Col span={12}>
                                         {getFieldDecorator('oldPassword', {
-                                            rules: [{ required: true, message: '请输入原密码!' }],
+                                            rules: [{ required: true, pattern: /^[A-Za-z0-9]{6,20}$/, message: '请正确输入原密码!' }],
                                         })(
                                             <Input style={{width: 200}} />
                                             )}
@@ -170,7 +173,7 @@ class ModifyThePassword extends Component {
                             >
                                 <Row gutter={8}>
                                     <Col span={12}>
-                                        {getFieldDecorator('newPasswords', {
+                                        {getFieldDecorator('confirmPassword', {
                                             rules: [{ required: true, pattern: /^[A-Za-z0-9]{6,20}$/, message: '您输入的格式不正确，请重新输入!' }],
                                         })(
                                             <Input style={{width: 200}} type="password" />
