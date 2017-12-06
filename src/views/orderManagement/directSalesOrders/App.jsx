@@ -159,17 +159,13 @@ class DirectSalesOrders extends PureComponent {
     /**
      * 判断当前导入商品类型是否和之前的一致
      * @param {string} couponId 当前导入商品的虚拟商品id
+     * @param {string} couponId 导入商品列表中第一条商品的虚拟商品id
      */
-    isType = (couponId) => {
-        const { goodsList } = this.state;
-        if (goodsList.length > 0) {
-            const oldCouponId = goodsList[0].couponId
-            return oldCouponId === null
-                ? oldCouponId === couponId
-                : oldCouponId && couponId
-        }
-        return true
-    }
+    isType = (couponId, firstCouponId) => (
+        firstCouponId === null
+            ? firstCouponId === couponId
+            : firstCouponId && couponId
+    )
 
     /**
      * 商品导入回调函数
@@ -179,8 +175,21 @@ class DirectSalesOrders extends PureComponent {
      */
     handleGoodsListImport = (importList, deletedGoodsList = []) => {
         // 判断当前导入商品类型是否和之前的一致
+        const { goodsList } = this.state;
         for (let i = 0; i < importList.length; i++) {
-            const flag = this.isType(importList[i].couponId);
+            // 如果之前已经有导入的商品
+            if (goodsList.length > 0) {
+                // 当前列表已经存在的商品的第一个商品的虚拟id
+                const firstCouponId1 = goodsList[0].couponId;
+                const flag1 = this.isType(importList[i].couponId, firstCouponId1);
+                if (!flag1) {
+                    this.couponIdShouldWarning()
+                    return
+                }
+            }
+            // 导入商品的第一个商品的虚拟id
+            const firstCouponId = importList[0].couponId;
+            const flag = this.isType(importList[i].couponId, firstCouponId);
             if (!flag) {
                 this.couponIdShouldWarning()
                 return
@@ -309,10 +318,14 @@ class DirectSalesOrders extends PureComponent {
             productCode, quantity, branchCompanyId, deliveryWarehouseCode
         }).then(res => {
             // 判断当前导入商品类型是否和之前的一致
-            const flag = this.isType(res.data.couponId)
-            if (!flag) {
-                this.couponIdShouldWarning()
-                return
+            if (goodsList.length > 0) {
+                const couponId = res.data.couponId
+                const firstCouponId = goodsList[0].couponId;
+                const flag = this.isType(couponId, firstCouponId)
+                if (!flag) {
+                    this.couponIdShouldWarning()
+                    return
+                }
             }
             if (typeof callback === 'function') {
                 callback(Object.assign(goods, {
