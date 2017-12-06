@@ -107,6 +107,9 @@ import stockAdjust from './stockAdjust';
 import stockListDetail from './stockListDetail';
 import storeAdList from './storeAdjustList';
 
+// 修改密码
+import modifypassword from './pub';
+
 // 促销活动
 import { getPromotionList, createPromotion,
     getPromotionDetail, fetchCouponsListAction, getCouponsDetail, cancelCoupons
@@ -271,5 +274,8 @@ export {
     insertRefund,
     // 换货列表
     getExchangeGoodsListAction,
-    cancelRefund
+    cancelRefund,
+
+    // 修改密码
+    modifypassword
 }

@@ -63,7 +63,7 @@ class Category extends PureComponent {
             categoryName: target.label,
             categoryLevel: target.level
         };
-        this.props.onCategorySelect(category);
+        this.props.onChange(category);
     }
 
     loadData(selectedOptions) {
@@ -135,7 +135,7 @@ class Category extends PureComponent {
 Category.propTypes = {
     getCategoriesByParentId: PropTypes.func,
     clearCategoriesList: PropTypes.func,
-    onCategorySelect: PropTypes.func
+    onChange: PropTypes.func
 }
 
 export default withRouter(Form.create()(Category));

@@ -16,10 +16,11 @@ const Option = Select.Option;
 
 const optionData = {
     1: { text: '详情链接', placeholder: '请输入商品id', link: '' },
-    2: { text: '分类链接', placeholder: '请选择分类', link: '' },
+    2: { text: '分类链接', placeholder: '请选择分类id', link: '' },
     3: { text: '列表链接', placeholder: '请输入查询关键字', link: '' },
     4: { text: '页面链接', placeholder: '输入页面连接', link: '' },
-    5: { text: '外部链接', placeholder: '请输入外部连接', link: '' }
+    5: { text: '外部链接', placeholder: '请输入外部连接', link: '' },
+    6: { text: '活动链接', placeholder: '请输入活动id', link: '' }
 }
 
 class LinkType extends Component {

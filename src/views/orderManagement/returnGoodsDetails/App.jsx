@@ -12,14 +12,14 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import moment from 'moment';
 import {
-    Table, Form, Select, Icon, Modal, Row,
+    Form, Select, Icon, Modal, Row,
     Col, Button, Input
 } from 'antd';
 import Utils from '../../../util/util';
-import { returnGoodsTableColums as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
 import { returnGoodsDetail, returnGoodsDetailClearData, returnGoodsOperation, returnGoodsDetailSave } from '../../../actions';
 import { DATE_FORMAT } from '../../../constant';
+import GoodsTable from './goodsTable';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -39,7 +39,9 @@ class ReturnGoodsDetails extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            id: ''
+            id: '',
+            returnQuantityList: [],
+            total: ''
         }
     }
 
@@ -58,10 +60,11 @@ class ReturnGoodsDetails extends PureComponent {
 
     getGoodsTableValues = () => {
         const {
-            items
+            items = []
         } = this.props.data;
         return {
-            items
+            items,
+            returnQuantityList: this.state.returnQuantityList
         }
     }
 
@@ -125,27 +128,41 @@ class ReturnGoodsDetails extends PureComponent {
 
     // 保存提交
     save = () => {
+        const data = this.props.data;
+        const { returnReasonType } = data;
         const {
-            returnReasonType,
             returnReason,
             description
-            } = this.props.form.getFieldsValue();
-        if (returnReasonType === 7 && returnReason === '') {
-            this.showConfirmSave()
-        } else {
-            // 提交数据
-            this.props.returnGoodsDetailSave(Utils.removeInvalid({
-                returnId: this.state.id,
-                returnReasonType,
-                returnReason,
-                description
-            }))
-                .then(res => {
-                    if (res.success) {
-                        this.showConfirmSaveSuccess()
-                    }
-                })
-        }
+        } = this.props.form.getFieldsValue();
+        // 提交数据
+        this.props.returnGoodsDetailSave(Utils.removeInvalid({
+            returnId: this.state.id,
+            returnReasonType,
+            returnReason,
+            description,
+            items: this.state.returnQuantity
+        })).then(res => {
+            if (res.success) {
+                this.showConfirmSaveSuccess()
+            }
+        })
+    }
+
+    /**
+     * 商品列表改变通知
+     *
+     * @param {*array} goodsList 更新的商品列表
+     * @param {*object} total 商品小计信息
+     */
+    handleGoodsListChange = (goodsList, returnQuantity, total, isSaveDisabled) => {
+        // 刷新导入商品列表，清空报错商品列表, 清空excel导入商品列表
+        this.setState({
+            goodsList: [...goodsList],
+            returnQuantity,
+            total,
+            importList: [],
+            isSaveDisabled
+        });
     }
 
     purchaseOrderType = () => {
@@ -231,16 +248,14 @@ class ReturnGoodsDetails extends PureComponent {
                         <Icon type="solution" className="header-icon" />商品信息
                     </div>
                     <div className="body body-table">
-                        <Table
-                            dataSource={data.items}
-                            columns={columns}
-                            rowKey="productId"
-                            pagination={false}
+                        <GoodsTable
+                            value={this.getGoodsTableValues()}
+                            onChange={this.handleGoodsListChange}
                         />
                         <div className="bottom-text">
                             <div className="bt-left">共<span className="bt-left-num">{data.commodityTotal}</span>件商品</div>
                             <div className="bt-right"><span>退款金额：</span><span className="bt-right-num">￥{data.refundAmount}</span></div>
-                            <div className="bt-right" style={{marginRight: 20}}><span>退货金额：</span><span className="bt-right-num">￥{data.amount}</span></div>
+                            <div className="bt-right" style={{marginRight: 20}}><span>退货金额：</span><span className="bt-right-num">￥{this.state.total.amount === 0 ? 0 : data.amount}</span></div>
                         </div>
                     </div>
                 </div>
@@ -296,7 +311,7 @@ class ReturnGoodsDetails extends PureComponent {
                                         {getFieldDecorator('description', {
                                             initialValue: data.description,
                                         })(
-                                            <TextArea className="input-des" autosize={{ minRows: 4, maxRows: 4 }} disabled={type === '2' ? false : true} size="default" />
+                                            <TextArea className="input-des" autosize={{ minRows: 4, maxRows: 4 }} size="default" />
                                             )}
                                     </FormItem>
                                 </Col>
@@ -305,14 +320,12 @@ class ReturnGoodsDetails extends PureComponent {
                     </div>
                 </Form>
                 <div className="bt-button">
-                    {type === '2' ? (
-                        <span>
-                            <Button size="large" onClick={this.save}>保存</Button>
-                            <Button size="large" onClick={() => this.showConfirm(1)}>确认</Button>
-                            <Button size="large" onClick={() => this.showConfirm(2)}>取消</Button>
-                        </span>
-                    ) : null}
-                    <Button size="large" onClick={this.goBack}>关闭</Button>
+                    <span>
+                        <Button size="large" onClick={this.save} disabled={this.state.isSaveDisabled}>保存</Button>
+                        <Button size="large" onClick={() => this.showConfirm(1)}>确认</Button>
+                        <Button size="large" onClick={() => this.showConfirm(2)}>取消</Button>
+                        <Button size="large" onClick={this.goBack}>关闭</Button>
+                    </span>
                 </div>
             </div>
         )

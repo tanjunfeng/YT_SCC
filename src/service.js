@@ -104,6 +104,8 @@ export const unusedParticipateData = '/coupon/queryCouponActivityActiveListExcel
 export const exportReceiptList = '/pmPurchaseReceipt/exportReceiptList';
 // 白名单导出
 export const whiteListBatchExport = 'sp/whiteListBatchExport';
+// 白名单下载导入模板
+export const whiteListBatchDownload = '/sp/whiteListTemplete';
 
 /**
  * 登录 Api
@@ -748,6 +750,9 @@ export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehousePhy
 
 // 查询供应商地点所属区域列表
 export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySupplierPlaceRegion', params);
+
+// 此接口用于修改密码
+export const modifypassword = (params) => http.post('/system/modifyPassword', params);
 
 // 此接口用于通过code和name（后端id就等于code）查询子公司信息
 export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBaseInfo', params);
