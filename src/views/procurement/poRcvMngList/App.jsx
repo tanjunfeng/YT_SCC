@@ -22,6 +22,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
@@ -51,7 +52,7 @@ const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 
 @connect(state => ({
-    poRcvMngList: state.toJS().procurement.poRcvMngList,
+    poRcvMngInfo: state.toJS().procurement.poRcvMngInfo,
     employeeCompanyId: state.toJS().user.data.user.employeeCompanyId,
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
@@ -477,7 +478,7 @@ class PoRcvMngList extends PureComponent {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
-                    <a target="_blank" href={`${pathname}/${id}`}>收货单详情</a>
+                    <Link target="_blank" to={`${pathname}/${id}`}>收货单详情</Link>
                 </Menu.Item>
                 {
                     // 仅待下发状态时能够点击重新推送采购收货单
@@ -503,7 +504,7 @@ class PoRcvMngList extends PureComponent {
 
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        const { data, total, pageNum, pageSize } = this.props.poRcvMngList;
+        const { data, total, pageNum, pageSize } = this.props.poRcvMngInfo;
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -766,7 +767,7 @@ PoRcvMngList.propTypes = {
     fetchPoRcvMngList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
-    poRcvMngList: PropTypes.objectOf(PropTypes.any),
+    poRcvMngInfo: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     repushPurchaseReceipt: PropTypes.func
 };

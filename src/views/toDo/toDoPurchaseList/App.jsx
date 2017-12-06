@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-01 19:17:05
+ * @Last Modified time: 2017-12-06 11:54:09
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -12,7 +12,6 @@ import {
     Input,
     Form,
     Select,
-    DatePicker,
     Row,
     Col,
     Icon,
@@ -25,17 +24,17 @@ import {
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import {
     locType,
-    returnStatus
+    auditStatusOption
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
-    queryAuditPurReList,
     queryCommentHis,
     queryPoDetail
 } from '../../../actions/procurement';
@@ -46,6 +45,7 @@ import {
     getSupplierLocMap,
 } from '../../../actions';
 import {
+    queryProcessMsgInfo,
     queryHighChart,
     clearHighChart
 } from '../../../actions/process';
@@ -60,7 +60,7 @@ const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
 
 @connect(state => ({
-    auditPurReList: state.toJS().procurement.auditPurReList,
+    processMsgInfo: state.toJS().procurement.processMsgInfo,
     highChartData: state.toJS().process.highChartData
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
@@ -68,7 +68,7 @@ const confirm = Modal.confirm;
     getSupplierMap,
     getSupplierLocMap,
     pubFetchValueList,
-    queryAuditPurReList,
+    queryProcessMsgInfo,
     queryCommentHis,
     queryPoDetail,
     queryHighChart,
@@ -85,8 +85,8 @@ class toDoPurchaseList extends PureComponent {
         this.handleSelect = this.handleSelect.bind(this);
         this.searchParams = {};
         this.state = {
-            spAdrId: '',    // 供应商地点编码
-            locDisabled: true,  // 地点禁用
+            spAdrId: '', // 供应商地点编码
+            locDisabled: true, // 地点禁用
             locationData: {},
             isVisibleModal: false,
             approvalVisible: false,
@@ -97,6 +97,7 @@ class toDoPurchaseList extends PureComponent {
             refundAdr: '',
             spNo: '', // 供应商编码
             spAdrNo: '', // 供应商地点编码
+            status: 0 // 流程状态，默认进行中
         };
         // 初始页号
         this.current = 1;
@@ -106,7 +107,7 @@ class toDoPurchaseList extends PureComponent {
                 dataIndex: 'purchaseRefundNo',
                 key: 'purchaseRefundNo',
                 render: (text, record) => (
-                    <a target="_blank" onClick={this.toPurDetail} href={`po/detail/${record.id}`}>查看订单详情</a>
+                    <Link target="_blank" to={`po/detail/${record.id}`} onClick={this.toPurDetail}>{text}</Link>
                 )
             }, {
                 title: '地点类型',
@@ -223,19 +224,25 @@ class toDoPurchaseList extends PureComponent {
      */
     onPaginate = (pageNumber) => {
         this.current = pageNumber
-        this.props.queryAuditPurReList({
-            pageSize: PAGE_SIZE,
-            pageNum: this.current,
-            ...this.searchParams
+        this.props.queryProcessMsgInfo({
+            map: {
+                pageSize: PAGE_SIZE,
+                pageNum: this.current,
+                status: this.state.status
+            },
+            processType: 'CG'
         });
     }
 
     queryReturnMngList = () => {
         this.current = 1;
-        this.props.queryAuditPurReList({
-            pageSize: PAGE_SIZE,
-            pageNum: this.current,
-            ...this.searchParams
+        this.props.queryProcessMsgInfo({
+            map: {
+                pageSize: PAGE_SIZE,
+                pageNum: this.current,
+                status: this.state.status
+            },
+            processType: 'CG'
         });
     }
 
@@ -472,6 +479,13 @@ class toDoPurchaseList extends PureComponent {
         return this.searchParams;
     }
 
+    // 流程状态切换
+    statusChange = (value) => {
+        this.setState({
+            status: value
+        })
+    }
+
     renderActions(text, record, index) {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
@@ -499,7 +513,7 @@ class toDoPurchaseList extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { data, total, pageNum, pageSize } = this.props.auditPurReList;
+        const { data, total, pageNum, pageSize } = this.props.processMsgInfo;
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -514,10 +528,10 @@ class toDoPurchaseList extends PureComponent {
                             <Col span={8}>
                                 {/* 流程状态 */}
                                 <FormItem label="流程状态">
-                                    {getFieldDecorator('auditStatus', { initialValue: returnStatus.defaultValue })(
-                                        <Select style={{ width: '153px' }} size="default">
+                                    {getFieldDecorator('auditStatus', { initialValue: '进行中' })(
+                                        <Select style={{ width: '153px' }} size="default" onChange={this.statusChange}>
                                             {
-                                                returnStatus.data.map((item) => (
+                                                auditStatusOption.data.map((item) => (
                                                     <Option key={item.key} value={item.key}>
                                                         {item.value}
                                                     </Option>))
@@ -689,9 +703,9 @@ class toDoPurchaseList extends PureComponent {
 }
 
 toDoPurchaseList.propTypes = {
-    queryAuditPurReList: PropTypes.func,
+    queryProcessMsgInfo: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    auditPurReList: PropTypes.objectOf(PropTypes.any),
+    processMsgInfo: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     queryCommentHis: PropTypes.func,
     queryPoDetail: PropTypes.func,
