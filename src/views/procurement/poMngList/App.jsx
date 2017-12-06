@@ -30,7 +30,7 @@ import { poMngListColumns } from '../columns';
 const columns = poMngListColumns;
 
 @connect(state => ({
-    poList: state.toJS().procurement.poList,
+    poInfo: state.toJS().procurement.poInfo,
     selectedPoMngRows: state.toJS().procurement.selectedPoMngRows
 }), dispatch => bindActionCreators({
     fetchPoMngList,
@@ -189,8 +189,8 @@ class PoMngList extends PureComponent {
 
     render() {
         columns[columns.length - 1].render = this.renderActions;
-        const { poList = {} } = this.props;
-        const { data = [], total, pageNum } = poList;
+        const { poInfo = {} } = this.props;
+        const { data = [], total, pageNum } = poInfo;
         const { auditingVisible } = this.state;
         const rowSelection = {
             getCheckboxProps: record => ({
@@ -262,7 +262,7 @@ class PoMngList extends PureComponent {
 
 PoMngList.propTypes = {
     fetchPoMngList: PropTypes.func,
-    poList: PropTypes.objectOf(PropTypes.any),
+    poInfo: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     deletePoByIds: PropTypes.func
 }

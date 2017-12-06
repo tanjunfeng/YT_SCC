@@ -594,9 +594,7 @@ export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', par
 // 查询采购单列表
 export const repushPurchaseReceipt = (params) => http.get('/pmPurchaseReceipt/rePushPurchaseReceiptToMQ', params);
 // 查询采购退货列表
-export const fetchReturnMngList = (params) => http.get('/pmPurchaseRefund/queryPurchaseRefundList', params);
-// 查询退货单审批列表
-export const queryAuditPurchaseRefundList = (params) => http.get('/pmPurchaseRefund/queryAuditPurchaseRefundList', params);
+export const fetchReturnMngInfoprocessMsgList = (params) => http.get('/pmPurchaseRefund/queryPurchaseRefundList', params);
 // 查看退货单审批意见
 export const queryApprovalInfo = (params) => http.get('/processAuditLog/queryApprovalInfo', params);
 // 查询退货流水号
@@ -617,7 +615,7 @@ export const auditPo = (params) => http.post('/provider/auditPo', params);
  * 采购相关
  */
 // 查询采购单列表
-export const fetchPurchaseOrder = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderList', params);
+export const fetchPurchaseOrderInfo = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderList', params);
 
 // 门店地点值清单
 export const getStoreInfo = (params) => http.get('/store/getStoreInfo', params);
@@ -635,7 +633,7 @@ export const queryPurchaseOrderProducts = (params) => http.get('/pmPurchaseRefun
 // 删除处于草稿状态的订单
 export const deletePurchaseList = (params) => http.get('/pmPurchaseOrder/batchDeletePmPurchaseOrderByIds', params);
 // 查询采购单打印列表
-export const queryPoPrintList = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderListInfo', params);
+export const queryPoPrintInfo = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderListInfo', params);
 // 此接口用于根据采购单号、逻辑仓编号、商品code、品牌id添加退货商品
 export const addRefundProducts = (params) => http.get('/pmPurchaseRefund/addRefundProducts', params);
 // 保存或者提交采购退货单
@@ -647,7 +645,7 @@ export const downloadBatchPDF = 'pmPurchaseOrder/exportPdfs';
 
 // 采购收货相关
 // 采购收货单管理列表
-export const queryPoRcvMngList = (params) => http.get('/pmPurchaseReceipt/queryReceiptList', params);
+export const queryPoRcvMngInfo = (params) => http.get('/pmPurchaseReceipt/queryReceiptList', params);
 
 // 采购单收货列表   采购单筛选条件：已审核、未收货
 export const queryPoRcvList = (params) => http.get('/provider/queryPoRcvList', params);
@@ -901,7 +899,7 @@ export const returnDescriptionSave = (params) => http.post('/webReturnRequest/re
 export const insertRefund = (params) => http.get('/webReturnRequest/insertRefund', params);
 
 // 查询待办事项下的审批列表
-export const queryProcessMsgList = (params) => http.post('/bpm/queryProcessMsgList', params);
+export const queryProcessMsgInfo = (params) => http.post('/bpm/queryProcessMsgList', params);
 /**
 
  * 直营店下单模块

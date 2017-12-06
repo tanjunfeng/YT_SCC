@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-06 09:20:51
+ * @Last Modified time: 2017-12-06 11:54:09
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -45,7 +45,7 @@ import {
     getSupplierLocMap,
 } from '../../../actions';
 import {
-    queryProcessMsgList,
+    queryProcessMsgInfo,
     queryHighChart,
     clearHighChart
 } from '../../../actions/process';
@@ -60,7 +60,7 @@ const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
 
 @connect(state => ({
-    processMsgList: state.toJS().procurement.processMsgList,
+    processMsgInfo: state.toJS().procurement.processMsgInfo,
     highChartData: state.toJS().process.highChartData
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
@@ -68,7 +68,7 @@ const confirm = Modal.confirm;
     getSupplierMap,
     getSupplierLocMap,
     pubFetchValueList,
-    queryProcessMsgList,
+    queryProcessMsgInfo,
     queryCommentHis,
     queryPoDetail,
     queryHighChart,
@@ -224,7 +224,7 @@ class toDoPurchaseList extends PureComponent {
      */
     onPaginate = (pageNumber) => {
         this.current = pageNumber
-        this.props.queryProcessMsgList({
+        this.props.queryProcessMsgInfo({
             map: {
                 pageSize: PAGE_SIZE,
                 pageNum: this.current,
@@ -236,7 +236,7 @@ class toDoPurchaseList extends PureComponent {
 
     queryReturnMngList = () => {
         this.current = 1;
-        this.props.queryProcessMsgList({
+        this.props.queryProcessMsgInfo({
             map: {
                 pageSize: PAGE_SIZE,
                 pageNum: this.current,
@@ -513,7 +513,7 @@ class toDoPurchaseList extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { data, total, pageNum, pageSize } = this.props.processMsgList;
+        const { data, total, pageNum, pageSize } = this.props.processMsgInfo;
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -703,9 +703,9 @@ class toDoPurchaseList extends PureComponent {
 }
 
 toDoPurchaseList.propTypes = {
-    queryProcessMsgList: PropTypes.func,
+    queryProcessMsgInfo: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    processMsgList: PropTypes.objectOf(PropTypes.any),
+    processMsgInfo: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     queryCommentHis: PropTypes.func,
     queryPoDetail: PropTypes.func,

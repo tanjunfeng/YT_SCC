@@ -163,7 +163,7 @@ export default {
 
     /* ********************procurement************************* */
     // 查询采购单管理列表
-    RECEIVE_PO_MNG_LIST: 'RECEIVE_PO_MNG_LIST',
+    RECEIVE_PO_MNG_INFO: 'RECEIVE_PO_MNG_INFO',
     // 更新采购单选中行
     CHANGE_PO_MNG_SELECTED_ROWS: 'CHANGE_PO_MNG_SELECTED_ROWS',
     // 查询采购单详情

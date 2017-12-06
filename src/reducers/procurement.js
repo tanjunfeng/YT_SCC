@@ -10,7 +10,7 @@ import ActionType from '../actions/ActionType';
 
 const initState = fromJS({
     // 采购单管理列表
-    poList: {},
+    poInfo: {},
     // 采购单管理列表选中行
     selectedPoMngRows: {},
     // 采购单详情信息
@@ -39,17 +39,17 @@ const initState = fromJS({
 
     poMaterial: {},
     // 采购单打印列表
-    poPrintList: {},
+    poPrintInfo: {},
     // 采购收货单管理列表
-    poRcvMngList: {},
+    poRcvMngInfo: {},
     // 采购单收货列表  列表内容为 已审核且未收货采购单
-    poRcvList: {},
+    poRcvInfo: {},
     // 采购收货单详情信息
     poRcv: {},
     // 新增商品信息
     newPcOdData: {},
     // 采购退货清单
-    returnMngList: {},
+    returnMngInfo: {},
     // 直营店信息
     directInfo: {},
     // 单个商品详情
@@ -58,12 +58,10 @@ const initState = fromJS({
     poReturn: {},
     // 查询退货流水号
     getRefundNumebr: '',
-    // 退货单审批列表
-    queryPurchaseRefundList: [],
     // 退货单审批意见
     approvalInfoList: [],
     // 查询待办事项下审批列表
-    processMsgList: [],
+    processMsgInfo: {},
     // 查询退货单审批流程
     processDefinitions: [],
     // 退货商品列表
@@ -82,8 +80,8 @@ export default function (state = initState, action) {
     let payload;
     switch (action.type) {
         // 查询采购单管理列表
-        case ActionType.RECEIVE_PO_MNG_LIST:
-            return state.set('poList', fromJS(action.payload));
+        case ActionType.RECEIVE_PO_MNG_INFO:
+            return state.set('poInfo', fromJS(action.payload));
 
         // 删除采购单
         case ActionType.DELETE_PO_BY_IDS:
@@ -91,7 +89,7 @@ export default function (state = initState, action) {
 
         // 获取采购单打印列表
         case ActionType.RECEIVE_PO_PRINT_LIST:
-            return state.set('poPrintList', fromJS(action.payload));
+            return state.set('poPrintInfo', fromJS(action.payload));
 
         case ActionType.CHANGE_PO_MNG_SELECTED_ROWS:// 采购单列表界面 选中采购单
             return state.set('selectedPoMngRows', fromJS(action.payload));
@@ -159,10 +157,10 @@ export default function (state = initState, action) {
             return state.set('po', fromJS(po));
 
         case ActionType.RECEIVE_PO_RCV_MNG_LIST:// 采购收货单管理列表
-            return state.set('poRcvMngList', fromJS(action.payload));
+            return state.set('poRcvMngInfo', fromJS(action.payload));
 
         case ActionType.RECEIVE_PO_RCV_LIST:// 采购单收货列表
-            return state.set('poRcvList', fromJS(action.payload));
+            return state.set('poRcvInfo', fromJS(action.payload));
 
         case ActionType.RECEIVE_PO_RCV_DETAIL:// 收货单详情
             return state.set('poRcv', fromJS(action.payload));
@@ -170,8 +168,6 @@ export default function (state = initState, action) {
             return state.set('poReturn', fromJS(action.payload));
         case ActionType.GET_REFUND_NO_ACTION:// 退货单详情
             return state.set('getRefundNumebr', fromJS(action.payload));
-        case ActionType.QUERY_AUDIT_PURCHASE_LIST:// 退货单审批列表
-            return state.set('queryPurchaseRefundList', fromJS(action.payload));
         case ActionType.QUERY_APPROVAL_INFO:// 退货单审批意见
             return state.set('approvalInfoList', fromJS(action.payload));
         case ActionType.QUERY_COMMENT_HIS:// 采购审批意见表
@@ -184,12 +180,12 @@ export default function (state = initState, action) {
             return state.set('poRcv', fromJS(action.payload));
 
         case ActionType.QUERY_PROCESS_MSG_LIST:// 采购审批列表下查询采购单审批列表
-            return state.set('processMsgList', fromJS(action.payload));
+            return state.set('processMsgInfo', fromJS(action.payload));
         case ActionType.QUERY_PRO_DEFINITIONS:// 查询退货单审批流程
             return state.set('processDefinitions', fromJS(action.payload));
         case ActionType.RECEIVE_RETURN_MNG_LIST:// 采购退货列表
             payload = action.payload || {};
-            return state.set('returnMngList', fromJS(action.payload));
+            return state.set('returnMngInfo', fromJS(action.payload));
 
         case ActionType.UPDATE_PO_RCV_LINE:// 更新收货单商品行
             poRcv = Object.assign(

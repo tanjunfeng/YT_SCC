@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
- * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-17 17:23:22
+ * @Last Modified by: chenghaojie
+ * @Last Modified time: 2017-12-06 09:55:28
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -27,7 +27,7 @@ import {
 const dateFormat = 'YYYY-MM-DD';
 
 @connect(state => ({
-    approvalInfo: state.toJS().procurement.approvalInfo
+    approvalInfoList: state.toJS().procurement.approvalInfoList
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -114,7 +114,7 @@ class ApproModal extends PureComponent {
                 width={1200}
             >
                 <Table
-                    dataSource={this.props.approvalInfo}
+                    dataSource={this.props.approvalInfoList}
                     columns={this.columns}
                     rowKey="id"
                     scroll={{
@@ -130,7 +130,7 @@ ApproModal.propTypes = {
     visible: PropTypes.bool,
     onOk: PropTypes.func,
     onCancel: PropTypes.func,
-    approvalInfo: PropTypes.objectOf(PropTypes.any),
+    approvalInfoList: PropTypes.objectOf(PropTypes.any),
 };
 
 export default withRouter(Form.create()(ApproModal));

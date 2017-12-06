@@ -6,15 +6,15 @@
  */
 import ActionType from './ActionType';
 import {
-    fetchPurchaseOrder,
+    fetchPurchaseOrderInfo,
     deletePurchaseList,
-    queryPoPrintList,
+    queryPoPrintInfo,
     createPo as svcCreatePo,
     auditPo as svcAuditPo,
     queryPoDetail as queryPoDetailService,
     queryMaterialMap as svcQueryMateriMap,
     queryPurchaseOrderBrands as queryPurchaseOrderBrandsService,
-    queryPoRcvMngList,
+    queryPoRcvMngInfo,
     queryPoRcvList,
     queryPoRcvDetail,
     createPoRcv as svcCreatePoRcv,
@@ -23,8 +23,7 @@ import {
     auditPurchaseOrderInfo,
     updatePmPurchaseOrder,
     repushPurchaseReceipt as repushPurchaseReceiptService,
-    fetchReturnMngList as queryReturnMngListService,
-    queryAuditPurchaseRefundList as queryAuditPurchaseRefundListService,
+    fetchReturnMngInfoprocessMsgList as queryReturnMngListService,
     queryApprovalInfo as queryApprovalInfoService,
     getRefundNo as getRefundNoActionService,
     queryDirectInfo as queryDirectInfoService,
@@ -85,7 +84,7 @@ const rcvPoPrintList = (data) => ({
 
 export const fetchPoPrintList = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        queryPoPrintList(params)
+        queryPoPrintInfo(params)
             .then(res => {
                 dispatch(rcvPoPrintList(res.data));
                 resolve(res);
@@ -114,13 +113,13 @@ export const changePoMngSelectedRows = (data) => ({
  * @param {*} data  Duplicate declaration
  */
 const rcvPoMngList = (data) => ({
-    type: ActionType.RECEIVE_PO_MNG_LIST,
+    type: ActionType.RECEIVE_PO_MNG_INFO,
     payload: data
 });
 
 export const fetchPoMngList = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        fetchPurchaseOrder(params)
+        fetchPurchaseOrderInfo(params)
             .then(res => {
                 dispatch(rcvPoMngList(res.data));
                 resolve(res);
@@ -290,7 +289,7 @@ const rcvPoRcvMngList = (data) => ({
 
 export const fetchPoRcvMngList = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        queryPoRcvMngList(params)
+        queryPoRcvMngInfo(params)
             .then(res => {
                 dispatch(rcvPoRcvMngList(res.data));
                 resolve(res);
@@ -518,28 +517,6 @@ export const fetchReturnMngList = (params) => dispatch => (
         queryReturnMngListService(params)
             .then(res => {
                 dispatch(returnMngListAction(res.data));
-                resolve(res);
-            })
-            .catch(err => {
-                reject(err);
-            })
-    })
-);
-
-/**
- * 查询退货单审批列表
- * @param {*} data
- */
-const queryAuditPurchaseRefundListAction = (data) => ({
-    type: ActionType.QUERY_AUDIT_PURCHASE_LIST,
-    payload: data
-});
-
-export const queryAuditPurchaseRefundList = (params) => dispatch => (
-    new Promise((resolve, reject) => {
-        queryAuditPurchaseRefundListService(params)
-            .then(res => {
-                dispatch(queryAuditPurchaseRefundListAction(res.data));
                 resolve(res);
             })
             .catch(err => {

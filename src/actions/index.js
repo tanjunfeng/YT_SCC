@@ -69,7 +69,6 @@ import {
     fetchReturnPoRcvDetail,
     getRefundNo,
     deleteBatchRefundOrder,
-    queryAuditPurchaseRefundList,
     queryApprovalInfo,
     queryAuditPurReList,
     queryProcessDefinitions,
@@ -261,8 +260,6 @@ export {
     getRefundNo,
     // 批量删除处于草稿状态的退货单
     deleteBatchRefundOrder,
-    // 查询退货单审批列表
-    queryAuditPurchaseRefundList,
     // 查看退货单审批意见
     queryApprovalInfo,
     // 查询退货单审批列表

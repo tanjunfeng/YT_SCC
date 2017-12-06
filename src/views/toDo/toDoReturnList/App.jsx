@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-06 09:45:39
+ * @Last Modified time: 2017-12-06 11:55:23
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -36,7 +36,7 @@ import {
     queryPoDetail
 } from '../../../actions/procurement';
 import {
-    queryProcessMsgList,
+    queryProcessMsgInfo,
 } from '../../../actions/process';
 import {
     getWarehouseAddressMap,
@@ -53,14 +53,14 @@ const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
 
 @connect(state => ({
-    queryPurchaseRefundList: state.toJS().procurement.queryPurchaseRefundList
+    processMsgInfo: state.toJS().procurement.processMsgInfo
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
     getShopAddressMap,
     getSupplierMap,
     getSupplierLocMap,
     pubFetchValueList,
-    queryProcessMsgList,
+    queryProcessMsgInfo,
     queryApprovalInfo,
     queryPoDetail
 }, dispatch))
@@ -214,7 +214,7 @@ class toDoPurchaseList extends PureComponent {
      */
     onPaginate = (pageNumber) => {
         this.current = pageNumber
-        this.props.queryProcessMsgList({
+        this.props.queryProcessMsgInfo({
             map: {
                 pageSize: PAGE_SIZE,
                 pageNum: this.current,
@@ -274,7 +274,7 @@ class toDoPurchaseList extends PureComponent {
 
     queryReturnMngList = (page = 1) => {
         this.current = page;
-        this.props.queryProcessMsgList({
+        this.props.queryProcessMsgInfo({
             map: {
                 pageSize: PAGE_SIZE,
                 pageNum: this.current,
@@ -577,7 +577,7 @@ class toDoPurchaseList extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { data, total, pageNum, pageSize } = this.props.queryPurchaseRefundList;
+        const { data, total, pageNum, pageSize } = this.props.processMsgInfo;
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -764,10 +764,10 @@ class toDoPurchaseList extends PureComponent {
 }
 
 toDoPurchaseList.propTypes = {
-    queryProcessMsgList: PropTypes.func,
+    queryProcessMsgInfo: PropTypes.func,
     approveRefund: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    queryPurchaseRefundList: PropTypes.objectOf(PropTypes.any),
+    processMsgInfo: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     queryApprovalInfo: PropTypes.func,

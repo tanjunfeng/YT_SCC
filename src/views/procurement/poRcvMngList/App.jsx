@@ -52,7 +52,7 @@ const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 
 @connect(state => ({
-    poRcvMngList: state.toJS().procurement.poRcvMngList,
+    poRcvMngInfo: state.toJS().procurement.poRcvMngInfo,
     employeeCompanyId: state.toJS().user.data.user.employeeCompanyId,
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
@@ -504,7 +504,7 @@ class PoRcvMngList extends PureComponent {
 
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        const { data, total, pageNum, pageSize } = this.props.poRcvMngList;
+        const { data, total, pageNum, pageSize } = this.props.poRcvMngInfo;
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -767,7 +767,7 @@ PoRcvMngList.propTypes = {
     fetchPoRcvMngList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
-    poRcvMngList: PropTypes.objectOf(PropTypes.any),
+    poRcvMngInfo: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     repushPurchaseReceipt: PropTypes.func
 };
