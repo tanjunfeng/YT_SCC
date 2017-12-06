@@ -59,11 +59,11 @@ const initState = fromJS({
     // 查询退货流水号
     getRefundNumebr: '',
     // 退货单审批列表
-    queryPurchaseRefundList: {},
+    queryPurchaseRefundList: [],
     // 退货单审批意见
-    approvalInfo: [],
+    approvalInfoList: [],
     // 查询待办事项下审批列表
-    processMsgList: {},
+    processMsgList: [],
     // 查询退货单审批流程
     processDefinitions: [],
     // 退货商品列表
@@ -173,7 +173,7 @@ export default function (state = initState, action) {
         case ActionType.QUERY_AUDIT_PURCHASE_LIST:// 退货单审批列表
             return state.set('queryPurchaseRefundList', fromJS(action.payload));
         case ActionType.QUERY_APPROVAL_INFO:// 退货单审批意见
-            return state.set('approvalInfo', fromJS(action.payload));
+            return state.set('approvalInfoList', fromJS(action.payload));
         case ActionType.QUERY_COMMENT_HIS:// 采购审批意见表
             return state.set('approvalList', fromJS(action.payload));
         case ActionType.RECEIVE_NEW_PURCHASE_ORDER:// 收货单详情

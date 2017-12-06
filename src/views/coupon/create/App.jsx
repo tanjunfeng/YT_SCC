@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import Util from '../../../util/util';
 import { createCoupons } from '../../../actions/promotion';
-import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
+import { MAX_AMOUNT_OF_ORDER, DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { AreaSelector } from '../../../container/tree';
 import { Category } from '../../../container/cascader';
 
@@ -436,7 +436,7 @@ class CouponCreate extends PureComponent {
                                                         })(
                                                             <InputNumber
                                                                 min={1}
-                                                                max={99999}
+                                                                max={MAX_AMOUNT_OF_ORDER}
                                                                 parser={value => Math.ceil(value)}
                                                                 onChange={
                                                                     this.handleQuanifyAmountChange
@@ -484,7 +484,7 @@ class CouponCreate extends PureComponent {
                                                 </RadioGroup>)}
                                             {this.state.categorySelectorVisible
                                                 ? <Category
-                                                    onCategorySelect={this.handleCategorySelect}
+                                                    onChange={this.handleCategorySelect}
                                                 /> : null}
                                         </FormItem>
                                     </Col>
