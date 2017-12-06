@@ -180,17 +180,19 @@ class DirectSalesOrders extends PureComponent {
             // 如果之前已经有导入的商品
             if (goodsList.length > 0) {
                 // 当前列表已经存在的商品的第一个商品的虚拟id
-                const firstCouponId1 = goodsList[0].couponId;
-                const flag1 = this.isType(importList[i].couponId, firstCouponId1);
-                if (!flag1) {
+                const goodsListFirstCouponId = goodsList[0].couponId;
+                const isSameTypeGoodsList = this.isType(
+                    importList[i].couponId, goodsListFirstCouponId);
+                if (!isSameTypeGoodsList) {
                     this.couponIdShouldWarning()
                     return
                 }
             }
             // 导入商品的第一个商品的虚拟id
-            const firstCouponId = importList[0].couponId;
-            const flag = this.isType(importList[i].couponId, firstCouponId);
-            if (!flag) {
+            const importListFirstCouponId = importList[0].couponId;
+            const isSameTypeImportList = this.isType(importList[i].couponId,
+                importListFirstCouponId);
+            if (!isSameTypeImportList) {
                 this.couponIdShouldWarning()
                 return
             }
@@ -321,8 +323,8 @@ class DirectSalesOrders extends PureComponent {
             if (goodsList.length > 0) {
                 const couponId = res.data.couponId
                 const firstCouponId = goodsList[0].couponId;
-                const flag = this.isType(couponId, firstCouponId)
-                if (!flag) {
+                const isSameTypeGoodsList = this.isType(couponId, firstCouponId)
+                if (!isSameTypeGoodsList) {
                     this.couponIdShouldWarning()
                     return
                 }
