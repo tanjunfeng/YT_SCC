@@ -21,17 +21,10 @@ import './Category.scss';
 }, dispatch))
 
 class Category extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            options: [],
-            isLoading: false
-        };
-        this.onChange = this.onChange.bind(this);
-        this.loadData = this.loadData.bind(this);
-        this.appendObject = this.appendObject.bind(this);
-        this.appendOption = this.appendOption.bind(this);
-    }
+    state = {
+        options: [],
+        isLoading: false
+    };
 
     componentDidMount() {
         this.props.getCategoriesByParentId({ parentId: '' }).then((res) => {
@@ -58,7 +51,7 @@ class Category extends PureComponent {
      * @param {*选中的对象} selectedOptions
      * http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/promotion/insertPromotion
      */
-    onChange(value, selectedOptions) {
+    handleChange = (value, selectedOptions) => {
         const target = selectedOptions[selectedOptions.length - 1];
         const category = {
             categoryId: target.value,
@@ -68,7 +61,7 @@ class Category extends PureComponent {
         this.props.onChange(category);
     }
 
-    loadData(selectedOptions) {
+    handleLoadData = (selectedOptions) => {
         const target = selectedOptions[selectedOptions.length - 1];
         this.setState({
             isLoading: target.loading = true
@@ -88,7 +81,7 @@ class Category extends PureComponent {
      * @param {*请求数据} res
      * @param {*子节点地址} target
      */
-    appendObject(res, target) {
+    appendObject = (res, target) => {
         const id = target.value;
         const arr = [];
         res.data.forEach((treeNode, index) => {
@@ -109,7 +102,7 @@ class Category extends PureComponent {
      * @param {*子节点地址} children
      * @param {*父节点编号} parentId
      */
-    appendOption(children, parentId) {
+    appendOption = (children, parentId) => {
         const dist = this.state.options;
         dist.forEach((obj, index) => {
             if (obj.value === parentId) {
@@ -125,8 +118,8 @@ class Category extends PureComponent {
         return (
             <Cascader
                 options={this.state.options}
-                loadData={this.loadData}
-                onChange={this.onChange}
+                loadData={this.handleLoadData}
+                onChange={this.handleChange}
                 placeholder={'请选择'}
                 changeOnSelect
             />
