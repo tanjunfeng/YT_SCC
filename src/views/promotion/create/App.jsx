@@ -41,6 +41,7 @@ class PromotionCreate extends PureComponent {
         checkedList: []
     }
 
+    // 不限制条件对象拼接
     getNoConditionData = (values) => {
         const promotionRule = {
             useConditionRule: false
@@ -68,44 +69,51 @@ class PromotionCreate extends PureComponent {
         return promotionRule;
     }
 
+    // 获取基础数据，无分支条件的数据
+    getBasicData = (values) => {
+        const {
+            promotionName,
+            dateRange,
+            store,
+            category,
+            quanifyAmount,
+            note,
+            storeId,
+            overlay,
+            priority
+        } = values;
+        const startDate = dateRange ? dateRange[0].valueOf() : '';
+        const endDate = dateRange ? dateRange[1].valueOf() : '';
+        const companies = this.state.companies;
+        // 计算打折活动叠加方式
+        let overLayNum = 0;
+        overlay.forEach(v => {
+            overLayNum += v;
+        });
+        return {
+            promotionName,
+            startDate,
+            endDate,
+            store,
+            category,
+            quanifyAmount,
+            note,
+            companiesPoList: companies.length === 0 ? '' : companies,
+            storeId,
+            priority,
+            isSuperposeProOrCouDiscount: overLayNum % 2 === 1 ? 1 : 0,
+            isSuperposeUserDiscount: overLayNum >= 2 ? 1 : 0
+        }
+    }
+
     getFormData = (callback) => {
         this.props.form.validateFields((err, values) => {
             if (err) {
                 return;
             }
-            const {
-                promotionName,
-                dateRange,
-                store,
-                category,
-                quanifyAmount,
-                note,
-                storeId,
-                overlay,
-                priority,
-                condition // 使用条件 0: 不限制，1: 指定条件
-            } = values;
-            const startDate = dateRange ? dateRange[0].valueOf() : '';
-            const endDate = dateRange ? dateRange[1].valueOf() : '';
-            const companies = this.state.companies;
-            let overLayNum = 0;
-            overlay.forEach(v => {
-                overLayNum += v;
-            });
-            const dist = {
-                promotionName,
-                startDate,
-                endDate,
-                store,
-                category,
-                quanifyAmount,
-                note,
-                companiesPoList: companies.length === 0 ? '' : companies,
-                storeId,
-                priority,
-                isSuperposeProOrCouDiscount: overLayNum % 2 === 1 ? 1 : 0,
-                isSuperposeUserDiscount: overLayNum >= 2 ? 1 : 0
-            }
+            // 使用条件 0: 不限制，1: 指定条件
+            const { condition } = values;
+            const dist = this.getBasicData(values);
             // 无限制条件
             if (condition === 0) {
                 Object.assign(dist, { promotionRule: this.getNoConditionData(values) })
