@@ -15,7 +15,8 @@ export const getRow = (goodsInfo) => {
         minUnit, // 最小销售单位
         fullCaseUnit, // 整箱单位
         salesInsideNumber, // 销售内装数
-        sellFullCase // 是否整箱销售，１:按整箱销售，0:不按整箱销售
+        sellFullCase, // 是否整箱销售，１:按整箱销售，0:不按整箱销售
+        couponId // 虚拟商品id
     } = goodsInfo;
     const record = {
         productId,
@@ -25,7 +26,8 @@ export const getRow = (goodsInfo) => {
         salePrice,
         sellFullCase,
         salesInsideNumber,
-        minNumber
+        minNumber,
+        couponId
     };
     // https://solution.yatang.cn/jira/browse/GA-1047
     // const quantity = sellFullCase === 0 ? minNumber : minNumber * salesInsideNumber;
