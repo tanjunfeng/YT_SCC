@@ -42,19 +42,22 @@ class PromotionCreate extends PureComponent {
         categoryObj: {} // 品类
     }
 
+    // 根据整数计算百分数
+    getPercent = (num) => (Number(num / 100.0).toFixed(2));
+
     // 不限制条件对象拼接
     getNoConditionData = (values) => {
-        const { ruleNoCondition, ruleNoConditionPercent, ruleNoConditionAmount } = values;
+        const { noConditionRule, noConditionRulePercent, ruleNoConditionAmount } = values;
         const promotionRule = {
             useConditionRule: false,
             orderRule: {
-                preferentialWay: ruleNoCondition
+                preferentialWay: noConditionRule
             }
         };
-        switch (ruleNoCondition) {
+        switch (noConditionRule) {
             case 'PERCENTAGE':
                 Object.assign(promotionRule.orderRule, {
-                    preferentialValue: Number(ruleNoConditionPercent / 100.0).toFixed(2)
+                    preferentialValue: this.getPercent(noConditionRulePercent)
                 });
                 break;
             case 'DISCOUNTAMOUNT':
@@ -69,7 +72,23 @@ class PromotionCreate extends PureComponent {
 
     // 优惠种类: 购买条件
     getPurchaseConditionsRule = (values) => {
-        const { category, purchaseCondition } = values;
+        const {
+            category, purchaseCondition, purchaseConditionType,
+            purchaseConditionTypeAmount, purchaseConditionTypeQuantity,
+            purchaseConditionRule, purchaseConditionRulePercent, purchaseConditionRuleAmount
+        } = values;
+        let conditionValue = '';
+        if (purchaseConditionType === 'AMOUNT') {
+            conditionValue = purchaseConditionTypeAmount;
+        } else if (purchaseConditionType === 'QUANTITY') {
+            conditionValue = purchaseConditionTypeQuantity;
+        }
+        let preferentialValue = '';
+        if (purchaseConditionRule === 'PERCENTAGE') {
+            preferentialValue = this.getPercent(purchaseConditionRulePercent);
+        } else if (purchaseConditionType === 'DISCOUNTAMOUNT') {
+            preferentialValue = purchaseConditionRuleAmount;
+        }
         const promotionRule = {
             useConditionRule: true,
             ruleName: category,
@@ -77,28 +96,15 @@ class PromotionCreate extends PureComponent {
                 condition: {
                     purchaseType: purchaseCondition,
                     promoCategories: this.state.categoryObj,
-                    conditionType: 'QUANTITY',
-                    conditionValue: 50
+                    conditionType: purchaseConditionType,
+                    conditionValue
                 },
                 rule: {
-                    preferentialWay: 'PERCENTAGE',
-                    preferentialValue: 0.95
+                    preferentialWay: purchaseConditionRule,
+                    preferentialValue
                 }
             }
         };
-        // switch (ruleNoCondition) {
-        //     case 'PERCENTAGE':
-        //         Object.assign(promotionRule.orderRule, {
-        //             preferentialValue: ruleNoConditionPercent
-        //         });
-        //         break;
-        //     case 'DISCOUNTAMOUNT':
-        //         Object.assign(promotionRule.orderRule, {
-        //             preferentialValue: ruleNoConditionAmount
-        //         });
-        //         break;
-        //     default: break;
-        // }
         return promotionRule;
     }
 
@@ -298,7 +304,7 @@ class PromotionCreate extends PureComponent {
                             <Category onChange={this.handleCategorySelect} />
                         </FormItem>
                         {conditionType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
-                        {getRulesColumn(getFieldDecorator, getFieldValue, 'purchaseCondition')}
+                        {getRulesColumn(getFieldDecorator, getFieldValue, 'PurchaseCondition')}
                     </Row> : null
                 }
                 <Row>

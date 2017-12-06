@@ -24,8 +24,8 @@ export const getChooseButton = (companies, handleClick) => (
  */
 export const getRulesColumn = (getFieldDecorator, getFieldValue, licence) => (<span>
     <FormItem label="优惠方式">
-        {/* ruleNoCondition */}
-        {getFieldDecorator(`rule${licence}`, {
+        {/* noConditionRule, purchaseConditionRule */}
+        {getFieldDecorator(`${licence}Rule`, {
             initialValue: '',
             rules: [{ required: true, message: '请选择优惠方式' }]
         })(<Select size="default" className="wd-90">
@@ -35,20 +35,20 @@ export const getRulesColumn = (getFieldDecorator, getFieldValue, licence) => (<s
         </Select>)}
     </FormItem>
     {/* 优惠百分比 */}
-    {getFieldValue(`rule${licence}`) === 'PERCENTAGE' ?
+    {getFieldValue(`${licence}Rule`) === 'PERCENTAGE' ?
         <FormItem>
-            {/* ruleNoConditionPercent */}
-            {getFieldDecorator(`rule${licence}Percent`, {
+            {/* noConditionRulePercent, purchaseConditionRulePercent */}
+            {getFieldDecorator(`${licence}RulePercent`, {
                 initialValue: 95,
                 rules: [{ required: true, message: '请输入折扣百分比' }]
             })(<InputNumber className="wd-50" min={0} max={100} step={5} />)} %
             </FormItem>
         : null}
     {/* 折扣金额 */}
-    {getFieldValue(`rule${licence}`) === 'DISCOUNTAMOUNT' ?
+    {getFieldValue(`${licence}Rule`) === 'DISCOUNTAMOUNT' ?
         <FormItem>
-            {/* ruleNoConditionAmount */}
-            ￥{getFieldDecorator(`rule${licence}Amount`, {
+            {/* ruleNoConditionAmount, purchaseConditionRuleAmount */}
+            ￥{getFieldDecorator(`${licence}RuleAmount`, {
                 initialValue: 0,
                 rules: [
                     { required: true, message: '请输入折扣金额' },
