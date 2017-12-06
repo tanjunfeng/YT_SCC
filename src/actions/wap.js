@@ -152,9 +152,8 @@ export const fetchAreaList = (data) => dispatch => (
                 const all = result[0].data;
                 const quick = result[1].data;
                 all.map((item, index) => {
-                    if (item.id === 'quick-nav') {
-                        result[0].data[index].itemAds = quick;
-                        return null;
+                    if (item.id.indexOf('quick-nav') > -1) {
+                        all[index].itemAds = quick;
                     }
                 })
                 dispatch(
