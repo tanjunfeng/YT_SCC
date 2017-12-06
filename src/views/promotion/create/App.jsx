@@ -11,7 +11,7 @@ import { withRouter } from 'react-router';
 import {
     Form, Row, Input, Radio,
     Button, DatePicker, Checkbox,
-    InputNumber, Select
+    InputNumber, Select, message
 } from 'antd';
 
 import Util from '../../../util/util';
@@ -41,6 +41,33 @@ class PromotionCreate extends PureComponent {
         checkedList: []
     }
 
+    getNoConditionData = (values) => {
+        const promotionRule = {
+            useConditionRule: false
+        };
+        const { ruleNoCondition } = values;
+        switch (ruleNoCondition) {
+            case '0':
+                Object.assign(promotionRule, {
+                    orderRule: {
+                        preferentialWay: 'PERCENTAGE',
+                        preferentialValue: values.ruleNoConditionPercent
+                    }
+                });
+                break;
+            case '1':
+                Object.assign(promotionRule, {
+                    orderRule: {
+                        preferentialWay: 'DISCOUNTAMOUNT',
+                        preferentialValue: values.ruleNoConditionAmount
+                    }
+                });
+                break;
+            default: break;
+        }
+        return promotionRule;
+    }
+
     getFormData = (callback) => {
         this.props.form.validateFields((err, values) => {
             if (err) {
@@ -55,7 +82,8 @@ class PromotionCreate extends PureComponent {
                 note,
                 storeId,
                 overlay,
-                priority
+                priority,
+                condition // 使用条件 0: 不限制，1: 指定条件
             } = values;
             const startDate = dateRange ? dateRange[0].valueOf() : '';
             const endDate = dateRange ? dateRange[1].valueOf() : '';
@@ -77,6 +105,10 @@ class PromotionCreate extends PureComponent {
                 priority,
                 isSuperposeProOrCouDiscount: overLayNum % 2 === 1 ? 1 : 0,
                 isSuperposeUserDiscount: overLayNum >= 2 ? 1 : 0
+            }
+            // 无限制条件
+            if (condition === 0) {
+                Object.assign(dist, { promotionRule: this.getNoConditionData(values) })
             }
             if (typeof callback === 'function') {
                 callback(Util.removeInvalid(dist));
@@ -143,7 +175,11 @@ class PromotionCreate extends PureComponent {
     handleSubmit = (e) => {
         e.preventDefault();
         this.getFormData(data => {
-            console.log(data);
+            this.props.createPromotion(data).then(res => {
+                if (res.code === 200) {
+                    message.success(res.message);
+                }
+            });
         });
     }
 
@@ -186,6 +222,7 @@ class PromotionCreate extends PureComponent {
                         </RadioGroup>)}
                     </FormItem>
                 </Row>
+                {/* 优惠方式 */}
                 <Row>
                     {getFieldValue('condition') === 0 ?
                         getRules(getFieldDecorator, getFieldValue, 'NoCondition')
@@ -203,9 +240,9 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 {getFieldValue('category') === '0' ?
                     <Row>
-                        {buyType(getFieldDecorator, getFieldValue)}
-                        {conditionType(getFieldDecorator, getFieldValue)}
-                        {getRulesColumn(getFieldDecorator, getFieldValue, 'category0')}
+                        {buyType(getFieldDecorator, getFieldValue, 'Category0')}
+                        {conditionType(getFieldDecorator, getFieldValue, 'Category0')}
+                        {getRulesColumn(getFieldDecorator, getFieldValue, 'Category0')}
                     </Row> : null
                 }
                 <Row>

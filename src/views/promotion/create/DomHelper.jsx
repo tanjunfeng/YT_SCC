@@ -25,6 +25,7 @@ export const getChooseButton = (companies, handleClick) => (
  */
 export const getRulesColumn = (getFieldDecorator, getFieldValue, licence) => (<span>
     <FormItem label="优惠方式">
+        {/* ruleNoCondition */}
         {getFieldDecorator(`rule${licence}`, {
             initialValue: '',
             rules: [{ required: true, message: '请选择优惠方式' }]
@@ -37,7 +38,8 @@ export const getRulesColumn = (getFieldDecorator, getFieldValue, licence) => (<s
     {/* 优惠百分比 */}
     {getFieldValue(`rule${licence}`) === '0' ?
         <FormItem>
-            {getFieldDecorator('percent', {
+            {/* ruleNoConditionPercent */}
+            {getFieldDecorator(`rule${licence}Percent`, {
                 initialValue: 95,
                 rules: [{ required: true, message: '请输入折扣百分比' }]
             })(<InputNumber className="wd-50" min={0} max={100} step={5} />)} %
@@ -46,7 +48,8 @@ export const getRulesColumn = (getFieldDecorator, getFieldValue, licence) => (<s
     {/* 折扣金额 */}
     {getFieldValue(`rule${licence}`) === '1' ?
         <FormItem>
-            ￥{getFieldDecorator('amout', {
+            {/* ruleNoConditionAmount */}
+            ￥{getFieldDecorator(`rule${licence}Amount`, {
                 initialValue: 0,
                 rules: [
                     { required: true, message: '请输入折扣金额' },
@@ -66,10 +69,10 @@ export const getRules = (getFieldDecorator, getFieldValue, licence) => (<Row>
  *
  * @param {*} getFieldDecorator
  */
-export const buyType = (getFieldDecorator, getFieldValue) => (
+export const buyType = (getFieldDecorator, getFieldValue, licence) => (
     <span>
         <FormItem label="购买类型">
-            {getFieldDecorator('buyType', {
+            {getFieldDecorator(`buyType${licence}`, {
                 initialValue: '0'
             })(<Select size="default" className="wd-90">
                 <Option key={0} value="0">全部</Option>
@@ -78,7 +81,7 @@ export const buyType = (getFieldDecorator, getFieldValue) => (
             </Select>)}
         </FormItem>
         <FormItem>
-            {getFieldValue('buyType') === '1' ?
+            {getFieldValue(`buyType${licence}`) === '1' ?
                 getFieldDecorator('category', {
                     initialValue: {}
                 })(<Category />) : null}
@@ -92,10 +95,10 @@ export const buyType = (getFieldDecorator, getFieldValue) => (
  * @param {*} getFieldDecorator
  * @param {*} getFieldValue
  */
-export const conditionType = (getFieldDecorator, getFieldValue) => (
+export const conditionType = (getFieldDecorator, getFieldValue, licence) => (
     <span>
         <FormItem label="条件类型">
-            {getFieldDecorator('conditionType', {
+            {getFieldDecorator(`conditionType${licence}`, {
                 initialValue: '',
                 rules: [{ required: true, message: '请选择条件类型' }]
             })(<Select size="default" className="wd-110">
@@ -106,7 +109,7 @@ export const conditionType = (getFieldDecorator, getFieldValue) => (
         </FormItem>
         {getFieldValue('conditionType') === '1' ?
             <FormItem>
-                ￥{getFieldDecorator('conditionTypeAmout', {
+                ￥{getFieldDecorator(`conditionType${licence}`, {
                     initialValue: 0,
                     rules: [
                         { required: true, message: '请输入累计商品金额' },
@@ -118,7 +121,7 @@ export const conditionType = (getFieldDecorator, getFieldValue) => (
         }
         {getFieldValue('conditionType') === '2' ?
             <FormItem>
-                {getFieldDecorator('conditionTypeCount', {
+                {getFieldDecorator(`conditionType${licence}`, {
                     initialValue: 0,
                     rules: [
                         { required: true, message: '请输入累计商品数量' },
