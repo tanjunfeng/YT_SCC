@@ -260,7 +260,7 @@ class CouponCreate extends PureComponent {
         }
     }
 
-    handleCategorySelect(categoryObj) {
+    handleCategorySelect(options, categoryObj) {
         this.setState({ categoryObj });
     }
 

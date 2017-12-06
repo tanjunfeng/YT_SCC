@@ -9,6 +9,7 @@ import { Form, Row, InputNumber, Select } from 'antd';
 
 import Util from '../../../util/util';
 import { MAX_AMOUNT_OF_ORDER } from '../../../constant';
+// import { Category } from '../../../container/cascader';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -79,6 +80,7 @@ export const buyType = (getFieldDecorator, getFieldValue, licence) => (
                 <Option key={'CATEGORY'} value="CATEGORY">按品类</Option>
                 <Option key={'PRODUCT'} value="PRODUCT">按商品</Option>
             </Select>)}
+            {/* <Category onChange={handleCategorySelect} /> */}
         </FormItem>
     </span>
 )

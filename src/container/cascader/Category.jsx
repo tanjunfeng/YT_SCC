@@ -30,7 +30,7 @@ class Category extends PureComponent {
         this.props.getCategoriesByParentId({ parentId: '' }).then((res) => {
             this.setState({
                 options: res.data.map((treeNode, index) => ({
-                    key: index,
+                    key: `root-${index}`,
                     label: treeNode.categoryName,
                     value: treeNode.id,
                     isLeaf: false,
@@ -52,13 +52,18 @@ class Category extends PureComponent {
      * http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/promotion/insertPromotion
      */
     handleChange = (value, selectedOptions) => {
-        const target = selectedOptions[selectedOptions.length - 1];
-        const category = {
-            categoryId: target.value,
-            categoryName: target.label,
-            categoryLevel: target.level
-        };
-        this.props.onChange(category);
+        if (selectedOptions.length === 0) {
+            //  categoryId: '', categoryName: '', categoryLevel: ''
+            this.props.onChange(selectedOptions, {});
+        } else {
+            const target = selectedOptions[selectedOptions.length - 1];
+            const category = {
+                categoryId: target.value,
+                categoryName: target.label,
+                categoryLevel: target.level
+            };
+            this.props.onChange(selectedOptions, category);
+        }
     }
 
     handleLoadData = (selectedOptions) => {
@@ -106,7 +111,9 @@ class Category extends PureComponent {
         const dist = this.state.options;
         dist.forEach((obj, index) => {
             if (obj.value === parentId) {
-                dist[index].children = children
+                Object.assign(dist[index], {
+                    children
+                });
             }
         });
         this.setState({

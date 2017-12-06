@@ -15,12 +15,12 @@ import {
 } from 'antd';
 
 import Util from '../../../util/util';
-import { Category } from '../../../container/cascader';
 import { AreaSelector } from '../../../container/tree';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
 import { getChooseButton, getRules, getRulesColumn, buyType, conditionType } from './DomHelper';
+import { Category } from '../../../container/cascader';
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -39,7 +39,7 @@ class PromotionCreate extends PureComponent {
         areaSelectorVisible: false,
         storeSelectorVisible: false,
         companies: [], // 所选区域子公司
-        categoryObj: {} // 品类
+        categoryObj: null // 品类
     }
 
     // 根据整数计算百分数
@@ -217,7 +217,8 @@ class PromotionCreate extends PureComponent {
         }
     }
 
-    handleCategorySelect = (categoryObj) => {
+    handleCategoryChange = (values, categoryObj) => {
+        // console.log(values);
         this.setState({ categoryObj });
     }
 
@@ -301,7 +302,9 @@ class PromotionCreate extends PureComponent {
                     <Row>
                         {buyType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
                         <FormItem>
-                            <Category onChange={this.handleCategorySelect} />
+                            {getFieldDecorator('categoryPo', {
+                                initialValue: []
+                            })(<Category onChange={this.handleCategoryChange} />)}
                         </FormItem>
                         {conditionType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
                         {getRulesColumn(getFieldDecorator, getFieldValue, 'PurchaseCondition')}
@@ -360,9 +363,10 @@ class PromotionCreate extends PureComponent {
                         {getFieldDecorator('priority', {
                             initialValue: 1,
                             rules: [
-                                { validator: Util.validatePositiveInteger }
+                                { validator: Util.validatePositiveInteger },
+                                { required: true, message: '请输入活动优先级' }
                             ]
-                        })(<InputNumber max={9999} className="wd-90" />)}
+                        })(<InputNumber min={1} step={1} max={9999} className="wd-90" />)}
                     </FormItem>
                 </Row>
                 <Row>
