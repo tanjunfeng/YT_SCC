@@ -42,7 +42,6 @@ class SearchForm extends PureComponent {
             paymentStateCode,
             shippingStateCode,
             franchiseeStoreId,
-            franchiseeStoreName,
             branchCompany
         } = this.props.form.getFieldsValue();
         return Util.removeInvalid({
@@ -54,7 +53,6 @@ class SearchForm extends PureComponent {
             startTime: participateTimeRange.length > 1 ? participateTimeRange[0].valueOf() : '',
             endTime: participateTimeRange.length > 1 ? participateTimeRange[1].valueOf() : '',
             franchiseeStoreId,
-            franchiseeStoreName,
             branchCompanyId: branchCompany.id
         });
     }
@@ -132,11 +130,6 @@ class SearchForm extends PureComponent {
                                     {getFieldDecorator('branchCompany', {
                                         initialValue: { id: '', name: '' }
                                     })(<BranchCompany />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="门店名称">
-                                    {getFieldDecorator('franchiseeStoreName')(<Input size="default" />)}
                                 </FormItem>
                             </Col>
                             <Col span={12}>
