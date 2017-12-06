@@ -70,12 +70,25 @@ class PromotionCreate extends PureComponent {
         return promotionRule;
     }
 
+    getPromotionCategory = (options) => {
+        if (options.length === 0) {
+            return {};
+        }
+        const target = options[options.length - 1];
+        return {
+            categoryId: target.value,
+            categoryName: target.label,
+            categoryLevel: target.level
+        }
+    }
+
     // 优惠种类: 购买条件
     getPurchaseConditionsRule = (values) => {
         const {
             category, purchaseCondition, purchaseConditionType,
             purchaseConditionTypeAmount, purchaseConditionTypeQuantity,
-            purchaseConditionRule, purchaseConditionRulePercent, purchaseConditionRuleAmount
+            purchaseConditionRule, purchaseConditionRulePercent,
+            purchaseConditionRuleAmount
         } = values;
         let conditionValue = '';
         if (purchaseConditionType === 'AMOUNT') {
@@ -89,13 +102,14 @@ class PromotionCreate extends PureComponent {
         } else if (purchaseConditionType === 'DISCOUNTAMOUNT') {
             preferentialValue = purchaseConditionRuleAmount;
         }
+        const promoCategories = this.state.categoryObj.categoryId === undefined ? '' : this.state.categoryObj;
         const promotionRule = {
             useConditionRule: true,
             ruleName: category,
             purchaseConditionsRule: {
                 condition: {
                     purchaseType: purchaseCondition,
-                    promoCategories: this.state.categoryObj,
+                    promoCategories,
                     conditionType: purchaseConditionType,
                     conditionValue
                 },
@@ -217,8 +231,7 @@ class PromotionCreate extends PureComponent {
         }
     }
 
-    handleCategoryChange = (values, categoryObj) => {
-        // console.log(values);
+    handleCategoryChange = (categoryObj) => {
         this.setState({ categoryObj });
     }
 
@@ -302,9 +315,7 @@ class PromotionCreate extends PureComponent {
                     <Row>
                         {buyType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
                         <FormItem>
-                            {getFieldDecorator('categoryPo', {
-                                initialValue: []
-                            })(<Category onChange={this.handleCategoryChange} />)}
+                            <Category onChange={this.handleCategoryChange} />
                         </FormItem>
                         {conditionType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
                         {getRulesColumn(getFieldDecorator, getFieldValue, 'PurchaseCondition')}
