@@ -30,7 +30,8 @@ import {
     queryPurchaseOrderProducts,
     queryDirectStores,
     queryPurchaseOrderBrands,
-    findCompanyBaseInfo as findCompaniesService
+    findCompanyBaseInfo as findCompaniesService,
+    modifypassword as modifypasswordActionService
 } from '../service';
 
 const pubValueList = {
@@ -121,6 +122,25 @@ export const fetchCategorys = (params) => dispatch => (
             })
     })
 )
+
+// 修改密码
+const modifypasswordAction = (data) => ({
+    type: ActionType.MODIFY_PASSWORD,
+    payload: data,
+});
+
+export const modifypassword = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        modifypasswordActionService(params)
+            .then(res => {
+                dispatch(
+                    modifypasswordAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
 
 // 全国上下架
 const receiveAvailablProducts = (data) => ({
