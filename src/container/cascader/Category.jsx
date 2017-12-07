@@ -124,6 +124,7 @@ class Category extends PureComponent {
     render() {
         return (
             <Cascader
+                disabled={this.props.disabled}
                 options={this.state.options}
                 loadData={this.handleLoadData}
                 onChange={this.handleChange}
@@ -137,7 +138,12 @@ class Category extends PureComponent {
 Category.propTypes = {
     getCategoriesByParentId: PropTypes.func,
     clearCategoriesList: PropTypes.func,
+    disabled: PropTypes.bool,
     onChange: PropTypes.func
+}
+
+Category.defaultProps = {
+    disabled: false
 }
 
 export default withRouter(Form.create()(Category));

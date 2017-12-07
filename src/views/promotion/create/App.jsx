@@ -20,7 +20,7 @@ import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
 import { getChooseButton, getRules, getRulesColumn, buyType, conditionType } from './DomHelper';
-import { CategoryControlled } from '../../../container/cascader';
+import { Category } from '../../../container/cascader';
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -39,9 +39,7 @@ class PromotionCreate extends PureComponent {
         areaSelectorVisible: false,
         storeSelectorVisible: false,
         companies: [], // 所选区域子公司
-        optionsPC: [], // 购买条件品类选择列表, PC = PURCHASECONDITION
         categoryPC: null, // 购买条件品类, PC = PURCHASECONDITION
-        selectedOptionsPC: [] // 购买条件品类选择列表, PC = PURCHASECONDITION
     }
 
     // 根据整数计算百分数
@@ -154,18 +152,31 @@ class PromotionCreate extends PureComponent {
 
     getFormData = (callback) => {
         this.props.form.validateFields((err, values) => {
+            const { condition, category, purchaseCondition } = values;
+            const { categoryPC } = this.state;
             if (err) {
+                // 指定条件——购买条件——购买类型：按品类——校验是否选择了品类
+                if (condition === 1
+                    && category === 'PURCHASECONDITION'
+                    && purchaseCondition === 'CATEGORY'
+                    && (!categoryPC || categoryPC.categoryId === undefined)
+                ) {
+                    this.props.form.setFields({
+                        purchaseCondition: {
+                            errors: [new Error('请选择品类')]
+                        }
+                    });
+                }
                 return;
             }
             // 使用条件 0: 不限制，1: 指定条件
-            const { condition, category } = values;
             const dist = this.getBasicData(values);
             // 无限制条件
             if (condition === 0) {
                 Object.assign(dist, {
                     promotionRule: this.getNoConditionData(values)
                 });
-            } else if (condition === 1 && category === 'PURCHASECONDITION') {
+            } else if (condition === 1 && category === 'PURCHASECONDITION' && purchaseCondition === 'CATEGORY') {
                 // 指定条件——优惠种类——购买条件
                 Object.assign(dist, {
                     promotionRule: this.getPurchaseConditionsRule(values)
@@ -230,11 +241,12 @@ class PromotionCreate extends PureComponent {
      * PC: PURCHASECONDITION
      */
     handlePCCategorySelect = (categoryPC) => {
+        if (categoryPC.categoryId) {
+            this.props.form.setFields({
+                purchaseCondition: {}
+            });
+        }
         this.setState({ categoryPC });
-    }
-
-    handleSelectedOptionsChange = (optionsPC) => {
-        this.setState({ optionsPC });
     }
 
     /**
@@ -259,7 +271,7 @@ class PromotionCreate extends PureComponent {
 
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        const { companies, areaSelectorVisible, storeSelectorVisible, optionsPC } = this.state;
+        const { companies, areaSelectorVisible, storeSelectorVisible } = this.state;
         return (
             <Form className="promotion-create" layout="inline" onSubmit={this.handleSubmit}>
                 <Row>
@@ -313,16 +325,15 @@ class PromotionCreate extends PureComponent {
                         </FormItem>
                     }
                 </Row>
-                {getFieldValue('category') === 'PURCHASECONDITION' ?
+                {getFieldValue('condition') === 1 && getFieldValue('category') === 'PURCHASECONDITION' ?
                     <Row>
                         {buyType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
-                        <FormItem>
-                            <CategoryControlled
-                                options={optionsPC}
-                                onChange={this.handleSelectedOptionsChange}
-                                onSelect={this.handlePCCategorySelect}
-                            />
-                        </FormItem>
+                        {getFieldValue('purchaseCondition') === 'CATEGORY' ?
+                            <FormItem>
+                                <Category
+                                    onChange={this.handlePCCategorySelect}
+                                />
+                            </FormItem> : null}
                         {conditionType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
                         {getRulesColumn(getFieldDecorator, getFieldValue, 'PurchaseCondition')}
                     </Row> : null
