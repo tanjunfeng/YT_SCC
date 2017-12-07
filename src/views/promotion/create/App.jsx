@@ -79,7 +79,6 @@ class PromotionCreate extends PureComponent {
             purchaseConditionRule, purchaseConditionRulePercent,
             purchaseConditionRuleAmount, purchaseConditionProduct
         } = values;
-        console.log(purchaseConditionProduct);
         const {
             categoryPC
         } = this.state;
@@ -92,17 +91,15 @@ class PromotionCreate extends PureComponent {
         let preferentialValue = '';
         if (purchaseConditionRule === 'PERCENTAGE') {
             preferentialValue = this.getPercent(purchaseConditionRulePercent);
-        } else if (purchaseConditionType === 'DISCOUNTAMOUNT') {
+        } else if (purchaseConditionRule === 'DISCOUNTAMOUNT') {
             preferentialValue = purchaseConditionRuleAmount;
         }
-        const promoCategories = categoryPC.categoryId === undefined ? '' : categoryPC;
         const promotionRule = {
             useConditionRule: true,
             ruleName: category,
             purchaseConditionsRule: {
                 condition: {
                     purchaseType: purchaseCondition,
-                    promoCategories,
                     conditionType: purchaseConditionType,
                     conditionValue
                 },
@@ -112,6 +109,17 @@ class PromotionCreate extends PureComponent {
                 }
             }
         };
+        if (purchaseCondition === 'CATEGORY') {
+            Object.assign(promotionRule.purchaseConditionsRule.condition, {
+                promoCategories: categoryPC
+            });
+        }
+        if (purchaseCondition === 'PRODUCT') {
+            const { productId, productName } = purchaseConditionProduct.record;
+            Object.assign(promotionRule.purchaseConditionsRule.condition, {
+                promoProduct: { productId, productName }
+            });
+        }
         return Util.removeInvalid(promotionRule);
     }
 
@@ -154,7 +162,7 @@ class PromotionCreate extends PureComponent {
 
     getFormData = (callback) => {
         this.props.form.validateFields((err, values) => {
-            const { condition, category, purchaseCondition } = values;
+            const { condition, category, purchaseCondition, purchaseConditionProduct } = values;
             const { categoryPC } = this.state;
             if (err) {
                 // 指定条件——购买条件——购买类型：按品类——校验是否选择了品类
@@ -165,7 +173,30 @@ class PromotionCreate extends PureComponent {
                 ) {
                     this.props.form.setFields({
                         purchaseCondition: {
+                            value: 'CATEGORY',
                             errors: [new Error('请选择品类')]
+                        }
+                    });
+                }
+                // 指定条件——购买条件——购买类型：按品类——校验是否选择了品类
+                if (condition === 1
+                    && category === 'PURCHASECONDITION'
+                    && purchaseCondition === 'PRODUCT'
+                    && (!purchaseConditionProduct
+                        || !purchaseConditionProduct.record
+                        || !purchaseConditionProduct.record.productId
+                    )
+                ) {
+                    this.props.form.setFields({
+                        purchaseCondition: {
+                            value: 'PRODUCT',
+                            errors: [new Error('请选择商品')]
+                        }
+                    });
+                } else {
+                    this.props.form.setFields({
+                        purchaseCondition: {
+                            value: 'PRODUCT'
                         }
                     });
                 }
@@ -249,7 +280,7 @@ class PromotionCreate extends PureComponent {
     handlePCCategorySelect = (categoryPC) => {
         if (categoryPC.categoryId) {
             this.props.form.setFields({
-                purchaseCondition: {}
+                purchaseCondition: { value: 'CATEGORY' }
             });
         }
         this.setState({ categoryPC });
@@ -340,10 +371,16 @@ class PromotionCreate extends PureComponent {
                             </FormItem> : null}
                         {getFieldValue('purchaseCondition') === 'PRODUCT' ?
                             <FormItem>
-                                <AddingGoodsByTerm onChange={this.handlePCProductChange} />
+                                {getFieldDecorator('purchaseConditionProduct', {
+                                    initialValue: {
+                                        productId: '',
+                                        productCode: '',
+                                        productName: ''
+                                    }
+                                })(<AddingGoodsByTerm />)}
                             </FormItem> : null}
                         {conditionType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
-                        {getRulesColumn(getFieldDecorator, getFieldValue, 'PurchaseCondition')}
+                        {getRulesColumn(getFieldDecorator, getFieldValue, 'purchaseCondition')}
                     </Row> : null
                 }
                 <Row>

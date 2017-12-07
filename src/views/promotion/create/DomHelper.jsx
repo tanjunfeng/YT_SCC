@@ -80,7 +80,6 @@ export const buyType = (getFieldDecorator, getFieldValue, licence) => (
                 <Option key={'CATEGORY'} value="CATEGORY">按品类</Option>
                 <Option key={'PRODUCT'} value="PRODUCT">按商品</Option>
             </Select>)}
-            {/* <Category onChange={handleCategorySelect} /> */}
         </FormItem>
     </span>
 )

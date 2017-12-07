@@ -17,7 +17,7 @@ import Utils from '../../util/util';
 
 class AddingGoodsByTerm extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        if (nextProps.value.productCode === '') {
+        if (nextProps.value.productCode === '' && this.props.value.productCode !== '') {
             this.handleClear();
         }
     }
@@ -68,7 +68,7 @@ class AddingGoodsByTerm extends PureComponent {
                     {
                         title: '商品编码',
                         dataIndex: 'productCode',
-                        width: 98
+                        width: 68
                     }, {
                         title: '商品名称',
                         dataIndex: 'productName'
