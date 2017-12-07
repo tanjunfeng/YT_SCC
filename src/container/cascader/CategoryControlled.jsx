@@ -23,21 +23,22 @@ import './Category.scss';
 
 class Category extends PureComponent {
     state = {
-        options: [],
         isLoading: false
     };
 
     componentDidMount() {
-        this.props.getCategoriesByParentId({ parentId: '' }).then((res) => {
-            this.setState({
-                options: res.data.map((treeNode, index) => ({
-                    key: `root-${index}`,
-                    label: treeNode.categoryName,
-                    value: treeNode.id,
-                    isLeaf: false,
-                    level: treeNode.level
-                }))
-            });
+        this.props.getCategoriesByParentId({ parentId: '' }).then(res => {
+            this.props.onChange(
+                res.data.map(
+                    (treeNode, index) => ({
+                        key: `root-${index}`,
+                        label: treeNode.categoryName,
+                        value: treeNode.id,
+                        isLeaf: false,
+                        level: treeNode.level
+                    }
+                )
+            ));
         });
     }
 
@@ -54,7 +55,7 @@ class Category extends PureComponent {
      */
     handleChange = (value, selectedOptions) => {
         if (selectedOptions.length === 0) {
-            this.props.onChange({}, selectedOptions);
+            this.props.onSelect({});
         } else {
             const target = selectedOptions[selectedOptions.length - 1];
             const category = {
@@ -62,7 +63,7 @@ class Category extends PureComponent {
                 categoryName: target.label,
                 categoryLevel: target.level
             };
-            this.props.onChange(category, selectedOptions);
+            this.props.onSelect(category);
         }
     }
 
@@ -108,7 +109,7 @@ class Category extends PureComponent {
      * @param {*父节点编号} parentId
      */
     appendOption = (children, parentId) => {
-        const dist = this.state.options;
+        const dist = [...this.props.options];
         dist.forEach((obj, index) => {
             if (obj.value === parentId) {
                 Object.assign(dist[index], {
@@ -116,15 +117,13 @@ class Category extends PureComponent {
                 });
             }
         });
-        this.setState({
-            options: dist
-        });
+        this.props.onChange(dist);
     }
 
     render() {
         return (
             <Cascader
-                options={this.state.options}
+                options={this.props.options}
                 loadData={this.handleLoadData}
                 onChange={this.handleChange}
                 placeholder={'请选择'}
@@ -137,7 +136,9 @@ class Category extends PureComponent {
 Category.propTypes = {
     getCategoriesByParentId: PropTypes.func,
     clearCategoriesList: PropTypes.func,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    onSelect: PropTypes.func,
+    options: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 
 export default withRouter(Form.create()(Category));

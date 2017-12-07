@@ -20,7 +20,7 @@ import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
 import { getChooseButton, getRules, getRulesColumn, buyType, conditionType } from './DomHelper';
-import { Category } from '../../../container/cascader';
+import { CategoryControlled } from '../../../container/cascader';
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -39,7 +39,9 @@ class PromotionCreate extends PureComponent {
         areaSelectorVisible: false,
         storeSelectorVisible: false,
         companies: [], // 所选区域子公司
-        categoryObj: null // 品类
+        optionsPC: [], // 购买条件品类选择列表, PC = PURCHASECONDITION
+        categoryPC: null, // 购买条件品类, PC = PURCHASECONDITION
+        selectedOptionsPC: [] // 购买条件品类选择列表, PC = PURCHASECONDITION
     }
 
     // 根据整数计算百分数
@@ -70,18 +72,6 @@ class PromotionCreate extends PureComponent {
         return promotionRule;
     }
 
-    getPromotionCategory = (options) => {
-        if (options.length === 0) {
-            return {};
-        }
-        const target = options[options.length - 1];
-        return {
-            categoryId: target.value,
-            categoryName: target.label,
-            categoryLevel: target.level
-        }
-    }
-
     // 优惠种类: 购买条件
     getPurchaseConditionsRule = (values) => {
         const {
@@ -90,6 +80,9 @@ class PromotionCreate extends PureComponent {
             purchaseConditionRule, purchaseConditionRulePercent,
             purchaseConditionRuleAmount
         } = values;
+        const {
+            categoryPC
+        } = this.state;
         let conditionValue = '';
         if (purchaseConditionType === 'AMOUNT') {
             conditionValue = purchaseConditionTypeAmount;
@@ -102,7 +95,7 @@ class PromotionCreate extends PureComponent {
         } else if (purchaseConditionType === 'DISCOUNTAMOUNT') {
             preferentialValue = purchaseConditionRuleAmount;
         }
-        const promoCategories = this.state.categoryObj.categoryId === undefined ? '' : this.state.categoryObj;
+        const promoCategories = categoryPC.categoryId === undefined ? '' : categoryPC;
         const promotionRule = {
             useConditionRule: true,
             ruleName: category,
@@ -119,7 +112,7 @@ class PromotionCreate extends PureComponent {
                 }
             }
         };
-        return promotionRule;
+        return Util.removeInvalid(promotionRule);
     }
 
     // 获取基础数据，无分支条件的数据
@@ -231,8 +224,17 @@ class PromotionCreate extends PureComponent {
         }
     }
 
-    handleCategoryChange = (categoryObj) => {
-        this.setState({ categoryObj });
+    /**
+     * 购买条件品类选择器
+     *
+     * PC: PURCHASECONDITION
+     */
+    handlePCCategorySelect = (categoryPC) => {
+        this.setState({ categoryPC });
+    }
+
+    handleSelectedOptionsChange = (optionsPC) => {
+        this.setState({ optionsPC });
     }
 
     /**
@@ -257,7 +259,7 @@ class PromotionCreate extends PureComponent {
 
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        const { companies, areaSelectorVisible, storeSelectorVisible } = this.state;
+        const { companies, areaSelectorVisible, storeSelectorVisible, optionsPC } = this.state;
         return (
             <Form className="promotion-create" layout="inline" onSubmit={this.handleSubmit}>
                 <Row>
@@ -315,7 +317,11 @@ class PromotionCreate extends PureComponent {
                     <Row>
                         {buyType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
                         <FormItem>
-                            <Category onChange={this.handleCategoryChange} />
+                            <CategoryControlled
+                                options={optionsPC}
+                                onChange={this.handleSelectedOptionsChange}
+                                onSelect={this.handlePCCategorySelect}
+                            />
                         </FormItem>
                         {conditionType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
                         {getRulesColumn(getFieldDecorator, getFieldValue, 'PurchaseCondition')}
