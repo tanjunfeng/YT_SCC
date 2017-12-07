@@ -22,8 +22,13 @@ export const getChooseButton = (companies, handleClick) => (
 
 /**
  * 获取优惠方式
+ *
+ * @param {*} getFieldDecorator
+ * @param {*} getFieldValue
+ * @param {*string} licence
+ * @param {*string} type 品类或商品 PRODUCT : CATEGORY
  */
-export const getRulesColumn = (getFieldDecorator, getFieldValue, licence) => (<span>
+export const getRulesColumn = (getFieldDecorator, getFieldValue, licence, type) => (<span>
     <FormItem label="优惠方式">
         {/* noConditionRule, purchaseConditionRule */}
         {getFieldDecorator(`${licence}Rule`, {
@@ -33,6 +38,8 @@ export const getRulesColumn = (getFieldDecorator, getFieldValue, licence) => (<s
             <Option key={-1} value="">- 请选择 -</Option>
             <Option key={0} value="PERCENTAGE">折扣百分比</Option>
             <Option key={1} value="DISCOUNTAMOUNT">折扣金额</Option>
+            {type === 'PRODUCT' ? <Option key={'FIXEDPRICE'} value="FIXEDPRICE">固定单价</Option> : null}
+            {type === 'PRODUCT' ? <Option key={'GIVESAMEPRODUCT'} value="GIVESAMEPRODUCT">赠送相同商品</Option> : null}
         </Select>)}
     </FormItem>
     {/* 优惠百分比 */}
@@ -60,8 +67,8 @@ export const getRulesColumn = (getFieldDecorator, getFieldValue, licence) => (<s
         : null}
 </span>)
 
-export const getRules = (getFieldDecorator, getFieldValue, licence) => (<Row>
-    {getRulesColumn(getFieldDecorator, getFieldValue, licence)}
+export const getRules = (getFieldDecorator, getFieldValue, licence, type = '') => (<Row>
+    {getRulesColumn(getFieldDecorator, getFieldValue, licence, type)}
 </Row>)
 
 /**
@@ -89,6 +96,7 @@ export const buyType = (getFieldDecorator, getFieldValue, licence) => (
  *
  * @param {*} getFieldDecorator
  * @param {*} getFieldValue
+ * @param {*string} licence
  */
 export const conditionType = (getFieldDecorator, getFieldValue, licence) => (
     <span>

@@ -89,10 +89,20 @@ class PromotionCreate extends PureComponent {
             conditionValue = purchaseConditionTypeQuantity;
         }
         let preferentialValue = '';
-        if (purchaseConditionRule === 'PERCENTAGE') {
-            preferentialValue = this.getPercent(purchaseConditionRulePercent);
-        } else if (purchaseConditionRule === 'DISCOUNTAMOUNT') {
-            preferentialValue = purchaseConditionRuleAmount;
+        switch (purchaseConditionType) {
+            case 'PERCENTAGE': // 折扣百分比
+                preferentialValue = this.getPercent(purchaseConditionRulePercent);
+                break;
+            case 'DISCOUNTAMOUNT': // 折扣金额
+                preferentialValue = purchaseConditionRuleAmount;
+                break;
+            case 'FIXEDPRICE': // 固定单价
+                preferentialValue = purchaseConditionRuleAmount;
+                break;
+            case 'GIVESAMEPRODUCT': // 赠送相同商品
+                preferentialValue = purchaseConditionRuleAmount;
+                break;
+            default: break;
         }
         const promotionRule = {
             useConditionRule: true,
@@ -380,7 +390,7 @@ class PromotionCreate extends PureComponent {
                                 })(<AddingGoodsByTerm />)}
                             </FormItem> : null}
                         {conditionType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
-                        {getRulesColumn(getFieldDecorator, getFieldValue, 'purchaseCondition')}
+                        {getRulesColumn(getFieldDecorator, getFieldValue, 'purchaseCondition', getFieldValue('purchaseCondition'))}
                     </Row> : null
                 }
                 <Row>
