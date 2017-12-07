@@ -1848,7 +1848,7 @@ class PoDetail extends PureComponent {
      */
     columnsChoose = () => {
         const { basicInfo } = this.props;
-        if (basicInfo.adrType === 0 && (basicInfo.state === 0 || basicInfo.state === 3)) {
+        if (basicInfo.adrType === 0 && (basicInfo.status === 0 || basicInfo.status === 3)) {
             return this.columnsOther
         }
         return this.columns
