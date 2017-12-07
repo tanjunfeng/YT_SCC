@@ -19,9 +19,7 @@ import { AreaSelector } from '../../../container/tree';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
-import { getChooseButton, getRules, getRulesColumn, buyType, conditionType } from './DomHelper';
-import { Category } from '../../../container/cascader';
-import { AddingGoodsByTerm } from '../../../container/search';
+import { getChooseButton, getRules, getRewardList } from './DomHelper';
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -92,7 +90,7 @@ class PromotionCreate extends PureComponent {
             conditionValue = purchaseConditionTypeQuantity;
         }
         let preferentialValue = '';
-        switch (purchaseConditionType) {
+        switch (purchaseConditionRule) {
             case 'PERCENTAGE': // 折扣百分比
                 preferentialValue = this.getPercent(purchaseConditionRulePercent);
                 break;
@@ -196,20 +194,14 @@ class PromotionCreate extends PureComponent {
                     && category === 'PURCHASECONDITION'
                     && purchaseCondition === 'PRODUCT'
                     && (!purchaseConditionProduct
-                        || !purchaseConditionProduct.record
-                        || !purchaseConditionProduct.record.productId
+                        || purchaseConditionProduct.productId === ''
+                        || purchaseConditionProduct.record.productId === ''
                     )
                 ) {
                     this.props.form.setFields({
                         purchaseCondition: {
                             value: 'PRODUCT',
                             errors: [new Error('请选择商品')]
-                        }
-                    });
-                } else {
-                    this.props.form.setFields({
-                        purchaseCondition: {
-                            value: 'PRODUCT'
                         }
                     });
                 }
@@ -288,14 +280,9 @@ class PromotionCreate extends PureComponent {
     /**
      * 购买条件品类选择器
      *
-     * PC: PURCHASECONDITION
+     * PC = PURCHASECONDITION
      */
     handlePCCategorySelect = (categoryPC) => {
-        if (categoryPC.categoryId) {
-            this.props.form.setFields({
-                purchaseCondition: { value: 'CATEGORY' }
-            });
-        }
         this.setState({ categoryPC });
     }
 
@@ -376,25 +363,12 @@ class PromotionCreate extends PureComponent {
                     }
                 </Row>
                 {getFieldValue('condition') === 1 && getFieldValue('category') === 'PURCHASECONDITION' ?
-                    <Row>
-                        {buyType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
-                        {getFieldValue('purchaseCondition') === 'CATEGORY' ?
-                            <FormItem>
-                                <Category onChange={this.handlePCCategorySelect} />
-                            </FormItem> : null}
-                        {getFieldValue('purchaseCondition') === 'PRODUCT' ?
-                            <FormItem className="product">
-                                {getFieldDecorator('purchaseConditionProduct', {
-                                    initialValue: {
-                                        productId: '',
-                                        productCode: '',
-                                        productName: ''
-                                    }
-                                })(<AddingGoodsByTerm />)}
-                            </FormItem> : null}
-                        {conditionType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
-                        {getRulesColumn(getFieldDecorator, getFieldValue, 'purchaseCondition', getFieldValue('purchaseCondition'))}
-                    </Row> : null
+                    getRewardList(
+                        getFieldDecorator,
+                        getFieldValue,
+                        'purchaseCondition',
+                        this.handlePCCategorySelect)
+                        : null
                 }
                 <Row>
                     <FormItem label="使用区域">

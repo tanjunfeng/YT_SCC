@@ -9,7 +9,8 @@ import { Form, Row, InputNumber, Select } from 'antd';
 
 import Util from '../../../util/util';
 import { MAX_AMOUNT_OF_ORDER } from '../../../constant';
-// import { Category } from '../../../container/cascader';
+import { Category } from '../../../container/cascader';
+import { AddingGoodsByTerm } from '../../../container/search';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -168,4 +169,35 @@ export const conditionType = (getFieldDecorator, getFieldValue, licence) => (
             : null
         }
     </span>
+)
+
+/**
+ * 抽取奖励列表内核
+ *
+ * @param {*} getFieldDecorator
+ * @param {*} getFieldValue
+ * @param {*} licence
+ * @param {*} handleCategorySelect
+ */
+export const getRewardList = (getFieldDecorator, getFieldValue, licence, handleCategorySelect) => (
+    <Row>
+        {buyType(getFieldDecorator, getFieldValue, licence)}
+        {getFieldValue(licence) === 'CATEGORY' ?
+            <FormItem>
+                <Category onChange={handleCategorySelect} />
+            </FormItem> : null}
+        {getFieldValue(licence) === 'PRODUCT' ?
+            <FormItem className="product">
+                {/* purchaseConditionProduct */}
+                {getFieldDecorator(`${licence}Product`, {
+                    initialValue: {
+                        productId: '',
+                        productCode: '',
+                        productName: ''
+                    }
+                })(<AddingGoodsByTerm />)}
+            </FormItem> : null}
+        {conditionType(getFieldDecorator, getFieldValue, licence)}
+        {getRulesColumn(getFieldDecorator, getFieldValue, licence, getFieldValue(licence))}
+    </Row>
 )
