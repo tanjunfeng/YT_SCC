@@ -129,7 +129,6 @@ class PromotionCreate extends PureComponent {
             promotionName,
             dateRange,
             store,
-            category,
             quanifyAmount,
             note,
             storeId,
@@ -149,7 +148,6 @@ class PromotionCreate extends PureComponent {
             startDate,
             endDate,
             store,
-            category,
             quanifyAmount,
             note,
             companiesPoList: companies.length === 0 ? '' : companies,
@@ -370,7 +368,7 @@ class PromotionCreate extends PureComponent {
                                 <Category onChange={this.handlePCCategorySelect} />
                             </FormItem> : null}
                         {getFieldValue('purchaseCondition') === 'PRODUCT' ?
-                            <FormItem>
+                            <FormItem className="purchase-condition-product">
                                 {getFieldDecorator('purchaseConditionProduct', {
                                     initialValue: {
                                         productId: '',

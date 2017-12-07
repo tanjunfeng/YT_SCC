@@ -1,4 +1,4 @@
-$promotionAddLabelWidth: 90px;
+$promotionAddLabelWidth: 80px;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -23,12 +23,16 @@ $promotionAddLabelWidth: 90px;
 .promotion-create {
     padding-top: 60px;
     margin: 0 auto;
-    width: 1000px;
+    width: 1010px;
     form .default {
         width: 78px;
     }
     .category .ant-cascader-picker {
         width: 260px;
+    }
+    .purchase-condition-product .ywc-smind {
+        top: 4px;
+        width: 194px;
     }
     .ant-form-item-control textarea {
         margin: 4px 0;
