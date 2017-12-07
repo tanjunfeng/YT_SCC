@@ -21,6 +21,7 @@ import {
     queryAllCategoriesWithIconByParentId,
     getStoreInfo,
     queryProductByStore,
+    queryProductByTerm,
     querycategories,
     getFranchiseeInfo,
     findCanUseCompanyInfo,
@@ -57,7 +58,10 @@ const pubValueList = {
     getWarehouseInfo1,
     // 查询门店列表
     getStoreInfo,
+    // 通过分公司编号查询商品
     queryProductByStore,
+    // 查询全量商品
+    queryProductByTerm,
     // 根据分类名字或者编码查询指定等级的分类列表
     querycategories,
     // 查询加盟商

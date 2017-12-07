@@ -21,6 +21,7 @@ import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
 import { getChooseButton, getRules, getRulesColumn, buyType, conditionType } from './DomHelper';
 import { Category } from '../../../container/cascader';
+import { AddingGoodsByTerm } from '../../../container/search';
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -76,8 +77,9 @@ class PromotionCreate extends PureComponent {
             category, purchaseCondition, purchaseConditionType,
             purchaseConditionTypeAmount, purchaseConditionTypeQuantity,
             purchaseConditionRule, purchaseConditionRulePercent,
-            purchaseConditionRuleAmount
+            purchaseConditionRuleAmount, purchaseConditionProduct
         } = values;
+        console.log(purchaseConditionProduct);
         const {
             categoryPC
         } = this.state;
@@ -178,6 +180,10 @@ class PromotionCreate extends PureComponent {
                 });
             } else if (condition === 1 && category === 'PURCHASECONDITION' && purchaseCondition === 'CATEGORY') {
                 // 指定条件——优惠种类——购买条件
+                Object.assign(dist, {
+                    promotionRule: this.getPurchaseConditionsRule(values)
+                });
+            } else if (condition === 1 && category === 'PURCHASECONDITION' && purchaseCondition === 'PRODUCT') {
                 Object.assign(dist, {
                     promotionRule: this.getPurchaseConditionsRule(values)
                 });
@@ -330,9 +336,11 @@ class PromotionCreate extends PureComponent {
                         {buyType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
                         {getFieldValue('purchaseCondition') === 'CATEGORY' ?
                             <FormItem>
-                                <Category
-                                    onChange={this.handlePCCategorySelect}
-                                />
+                                <Category onChange={this.handlePCCategorySelect} />
+                            </FormItem> : null}
+                        {getFieldValue('purchaseCondition') === 'PRODUCT' ?
+                            <FormItem>
+                                <AddingGoodsByTerm onChange={this.handlePCProductChange} />
                             </FormItem> : null}
                         {conditionType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
                         {getRulesColumn(getFieldDecorator, getFieldValue, 'PurchaseCondition')}
