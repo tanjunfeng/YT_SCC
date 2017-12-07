@@ -109,11 +109,13 @@ class PromotionCreate extends PureComponent {
                 }
             }
         };
+        // 按品类
         if (purchaseCondition === 'CATEGORY') {
             Object.assign(promotionRule.purchaseConditionsRule.condition, {
                 promoCategories: categoryPC
             });
         }
+        // 按商品
         if (purchaseCondition === 'PRODUCT') {
             const { productId, productName } = purchaseConditionProduct.record;
             Object.assign(promotionRule.purchaseConditionsRule.condition, {
@@ -176,7 +178,7 @@ class PromotionCreate extends PureComponent {
                         }
                     });
                 }
-                // 指定条件——购买条件——购买类型：按品类——校验是否选择了品类
+                // 指定条件——购买条件——购买类型：按品类——校验是否选择了商品
                 if (condition === 1
                     && category === 'PURCHASECONDITION'
                     && purchaseCondition === 'PRODUCT'
@@ -368,7 +370,7 @@ class PromotionCreate extends PureComponent {
                                 <Category onChange={this.handlePCCategorySelect} />
                             </FormItem> : null}
                         {getFieldValue('purchaseCondition') === 'PRODUCT' ?
-                            <FormItem className="purchase-condition-product">
+                            <FormItem className="product">
                                 {getFieldDecorator('purchaseConditionProduct', {
                                     initialValue: {
                                         productId: '',
