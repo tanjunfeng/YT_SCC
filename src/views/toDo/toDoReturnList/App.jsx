@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-06 17:07:23
+ * @Last Modified time: 2017-12-07 17:54:33
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -42,6 +42,8 @@ import {
 } from '../../../actions/procurement';
 import {
     queryProcessMsgInfo,
+    queryHighChart,
+    clearHighChart,
 } from '../../../actions/process';
 import {
     getWarehouseAddressMap,
@@ -50,7 +52,7 @@ import {
     getSupplierLocMap
 } from '../../../actions';
 import ApproModal from './approModal';
-import OpinionSteps from '../../../components/approvalFlowSteps';
+import FlowImage from '../../../components/flowImage';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -60,7 +62,8 @@ const { TextArea } = Input;
 
 @connect(state => ({
     processMsgInfo: state.toJS().procurement.processMsgInfo,
-    processDefinitions: state.toJS().procurement.processDefinitions
+    processDefinitions: state.toJS().procurement.processDefinitions,
+    highChartData: state.toJS().process.highChartData
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -70,7 +73,9 @@ const { TextArea } = Input;
     queryProcessMsgInfo,
     queryApprovalInfo,
     queryProcessDefinitions,
-    approveRefund
+    approveRefund,
+    queryHighChart,
+    clearHighChart,
 }, dispatch))
 
 class toDoReturnList extends PureComponent {
@@ -199,7 +204,7 @@ class toDoReturnList extends PureComponent {
                 key: 'currentNode',
                 width: '160px',
                 render: (text, record) => (
-                    <a onClick={() => this.nodeModal(record)}>{text}</a>
+                    <a onClick={() => this.nodeModal(record.taskId)}>{text}</a>
                 )
             }, {
                 title: '操作',
@@ -307,18 +312,21 @@ class toDoReturnList extends PureComponent {
     queryReturnMngList = (page = 1) => {
         this.current = page;
         this.props.queryProcessMsgInfo({
-            map: {
+            map: Object.assign({
                 pageSize: PAGE_SIZE,
                 pageNum: this.current,
                 status: this.state.status
-            },
+            }, this.searchParams),
             processType: 'CGTH'
         });
     }
 
-    nodeModal = (record) => {
-        this.showOpinionModal();
-        this.props.queryProcessDefinitions({ processType: 1, businessId: record.id });
+    nodeModal = (id) => {
+        this.props.queryHighChart({taskId: id})
+    }
+
+    closeCanvas = () => {
+        this.props.clearHighChart();
     }
 
     /**
@@ -822,18 +830,9 @@ class toDoReturnList extends PureComponent {
                             onOk={this.handleModalOk}
                             onCancel={this.handleModalCancel}
                         />
-                        {
-                            this.state.opinionVisible &&
-                            <Modal
-                                title="审批进度"
-                                visible={this.state.opinionVisible}
-                                onOk={this.handleOpinionOk}
-                                onCancel={this.handleOpinionCancel}
-                                width={1000}
-                            >
-                                <OpinionSteps />
-                            </Modal>
-                        }
+                        <FlowImage data={this.props.highChartData} closeCanvas={this.closeCanvas} >
+                            <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
+                        </FlowImage>
                         {
                             this.state.approvalVisible &&
                             <Modal
@@ -895,7 +894,6 @@ class toDoReturnList extends PureComponent {
 
 toDoReturnList.propTypes = {
     queryProcessMsgInfo: PropTypes.func,
-    queryProcessDefinitions: PropTypes.func,
     approveRefund: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     processMsgInfo: PropTypes.objectOf(PropTypes.any),
@@ -903,6 +901,9 @@ toDoReturnList.propTypes = {
     pubFetchValueList: PropTypes.func,
     queryApprovalInfo: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,
+    queryHighChart: PropTypes.func,
+    clearHighChart: PropTypes.func,
+    highChartData: PropTypes.string
 };
 
 export default withRouter(Form.create()(toDoReturnList));

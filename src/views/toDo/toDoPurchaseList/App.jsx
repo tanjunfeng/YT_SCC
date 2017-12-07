@@ -3,10 +3,10 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-06 17:10:21
+ * @Last Modified time: 2017-12-07 18:03:38
  */
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { object } from 'prop-types';
 import {
     Button,
     Input,
@@ -30,7 +30,9 @@ import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import {
     locType,
-    auditStatusOption
+    auditStatusOption,
+    businessModeType,
+    poType
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
@@ -105,11 +107,31 @@ class toDoPurchaseList extends PureComponent {
         this.columns = [
             {
                 title: '采购单号',
-                dataIndex: 'refundNo',
-                key: 'refundNo',
+                dataIndex: 'purchaseNo',
+                key: 'purchaseNo',
                 render: (text, record) => (
-                    <Link target="_blank" to={`po/detail/${record.refundNo}`} onClick={this.toPurDetail}>{text}</Link>
+                    <Link target="_blank" to={`po/detail/${record.purchaseNo}`} onClick={this.toPurDetail}>{text}</Link>
                 )
+            }, {
+                title: '经营模式',
+                dataIndex: 'businessMode',
+                key: 'businessMode',
+                render: text => {
+                    if (text === null || text === undefined) {
+                        return null;
+                    }
+                    return (businessModeType.data[text + 1].value);
+                }
+            }, {
+                title: '采购单类型',
+                dataIndex: 'purchaseType',
+                key: 'purchaseType',
+                render: text => {
+                    if (text === null || text === undefined) {
+                        return null;
+                    }
+                    return (poType.data[text + 1].value);
+                }
             }, {
                 title: '地点类型',
                 dataIndex: 'adrType',
@@ -121,9 +143,9 @@ class toDoPurchaseList extends PureComponent {
                     return (locType.data[text + 1].value);
                 }
             }, {
-                title: '退货地点',
-                dataIndex: 'refundAdrName',
-                key: 'refundAdrName'
+                title: '地点',
+                dataIndex: 'adrTypeName',
+                key: 'adrTypeName'
             }, {
                 title: '供应商',
                 dataIndex: 'spName',
@@ -133,23 +155,19 @@ class toDoPurchaseList extends PureComponent {
                 dataIndex: 'apAdrName',
                 key: 'apAdrName'
             }, {
-                title: '退货数量',
-                dataIndex: 'totalRefundAmount',
-                key: 'totalRefundAmount'
+                title: '大类',
+                dataIndex: 'category',
+                key: 'category'
             }, {
-                title: '退货成本额',
-                dataIndex: 'totalRefundCost',
-                key: 'totalRefundCost'
-            }, {
-                title: '退货金额(含税)',
-                dataIndex: 'totalRefundMoney',
-                key: 'totalRefundMoney'
+                title: '金额',
+                dataIndex: 'purchaseMoney',
+                key: 'purchaseMoney'
             }, {
                 title: '创建者',
                 dataIndex: 'createUser',
                 key: 'createUser'
             }, {
-                title: '退货单创建时间',
+                title: '采购单创建时间',
                 dataIndex: 'createTime',
                 key: 'createTime',
                 render: text => {
@@ -193,7 +211,7 @@ class toDoPurchaseList extends PureComponent {
                 key: 'currentNode',
                 width: '160px',
                 render: (text, record) => (
-                    <a onClick={() => this.nodeModal(record)}>{text}</a>
+                    <a onClick={() => this.nodeModal(record.taskId)}>{text}</a>
                 )
             }, {
                 title: '操作',
@@ -243,11 +261,11 @@ class toDoPurchaseList extends PureComponent {
     queryReturnMngList = () => {
         this.current = 1;
         this.props.queryProcessMsgInfo({
-            map: {
+            map: Object.assign({
                 pageSize: PAGE_SIZE,
                 pageNum: this.current,
                 status: this.state.status
-            },
+            }, this.searchParams),
             processType: 'CG'
         });
     }
@@ -420,16 +438,16 @@ class toDoPurchaseList extends PureComponent {
     }
 
     handleCommentOk = (param) => {
-        const { currentNode, taskId } = this.examinationAppData;
-        const processId = currentNode;
-        this.props.approveRefund({ ...param, processId, businessId: taskId, type: 1 })
-            .then((res) => {
-                if (res.code === 200) {
-                    message.success(res.message);
-                    this.handleOpinionOk();
-                    this.queryReturnMngList(this.current);
-                }
-            });
+        // const { currentNode, taskId } = this.examinationAppData;
+        // const processId = currentNode;
+        // this.props.approveRefund({ ...param, processId, businessId: taskId, type: 1 })
+        //     .then((res) => {
+        //         if (res.code === 200) {
+        //             message.success(res.message);
+        //             this.handleOpinionOk();
+        //             this.queryReturnMngList(this.current);
+        //         }
+        //     });
     }
 
     handleSelect(record, index, items) {
@@ -713,7 +731,7 @@ class toDoPurchaseList extends PureComponent {
                             onCancel={this.handleOpinionCancel}
                             handleCommentOk={this.handleCommentOk}
                         />
-                        <FlowImage data={this.props.highChartData} >
+                        <FlowImage data={this.props.highChartData} closeCanvas={this.closeCanvas} >
                             <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
                         </FlowImage>
                     </div>
