@@ -77,6 +77,7 @@ class PromotionCreate extends PureComponent {
             category, purchaseCondition, purchaseConditionType,
             purchaseConditionTypeAmount, purchaseConditionTypeQuantity,
             purchaseConditionRule, purchaseConditionRulePercent,
+            purchaseConditionRulePrice, purchaseConditionRuleGive,
             purchaseConditionRuleAmount, purchaseConditionProduct
         } = values;
         const {
@@ -84,8 +85,10 @@ class PromotionCreate extends PureComponent {
         } = this.state;
         let conditionValue = '';
         if (purchaseConditionType === 'AMOUNT') {
+            // 条件类型为累计商品金额
             conditionValue = purchaseConditionTypeAmount;
         } else if (purchaseConditionType === 'QUANTITY') {
+            // 条件类型为累计商品数量
             conditionValue = purchaseConditionTypeQuantity;
         }
         let preferentialValue = '';
@@ -97,10 +100,10 @@ class PromotionCreate extends PureComponent {
                 preferentialValue = purchaseConditionRuleAmount;
                 break;
             case 'FIXEDPRICE': // 固定单价
-                preferentialValue = purchaseConditionRuleAmount;
+                preferentialValue = purchaseConditionRulePrice;
                 break;
             case 'GIVESAMEPRODUCT': // 赠送相同商品
-                preferentialValue = purchaseConditionRuleAmount;
+                preferentialValue = purchaseConditionRuleGive;
                 break;
             default: break;
         }
