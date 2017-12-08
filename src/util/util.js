@@ -29,7 +29,6 @@ const array2string = (reg) => {
 }
 
 class Utils {
-
     /**
      * 清除所有空格
      *
@@ -319,15 +318,20 @@ class Utils {
 
     static validatePhone = (rule, value, callback) => {
         if (!/^1[34578]\d{9}$/.test(value)) {
-            callback('手机号码有误')
+            callback('手机号码有误');
         }
-        callback()
+        callback();
     }
 
     /**
      * 判断是否正整数
      */
-    static isPositiveInteger = (num) => /^[0-9]*[1-9][0-9]*$/.test(num)
+    static validatePositiveInteger = (rule, value, callback) => {
+        if (!/^[0-9]*[1-9][0-9]*$/.test(value)) {
+            callback('请输入正整数');
+        }
+        callback();
+    }
 
     /**
      * 按照唯一属性标识 p 合并数组 a b

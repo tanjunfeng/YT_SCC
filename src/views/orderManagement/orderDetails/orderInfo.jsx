@@ -218,12 +218,12 @@ class OrderInformation extends PureComponent {
                                     <span>{orderDetailData.branchCompanyName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
-                                    <span className="details-info-lable">加盟商:</span>
+                                    <span className="details-info-lable">加盟商编号:</span>
                                     <span>{orderDetailData.franchiseeId}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
-                                    <span className="details-info-lable">出货仓:</span>
-                                    <span>{orderDetailData.branchCompanyArehouse}</span>
+                                    <span className="details-info-lable">雅堂小超:</span>
+                                    <span>{orderDetailData.franchiseeStoreName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">优惠券优惠:</span>
@@ -233,7 +233,15 @@ class OrderInformation extends PureComponent {
                                 </Col>
                             </Row>
                             <Row>
-                                <Col className="gutter-row" span={18}>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">出货仓:</span>
+                                    <span>{orderDetailData.branchCompanyArehouse}</span>
+                                </Col>
+                                <Col className="gutter-row" span={6}>
+                                    <span className="details-info-lable">雅堂小超编号:</span>
+                                    <span>{orderDetailData.franchiseeStoreId}</span>
+                                </Col>
+                                <Col className="gutter-row" span={6}>
                                     <span className="details-info-lable">电商单据编号:</span>
                                     <span>{orderDetailData.thirdPartOrderNo}</span>
                                 </Col>
@@ -265,8 +273,16 @@ class OrderInformation extends PureComponent {
                                     </span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
-                                    <span className="details-info-lable">实付金额:</span>
-                                    <span className="red-star">{this.getAmount(orderDetailData.total)}</span>
+                                    <div className="margin-b">
+                                        <span className="details-info-lable">会员等级优惠:</span>
+                                        <span>
+                                            {this.getAmount(orderDetailData.userDiscountAmount)}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span className="details-info-lable">实付金额:</span>
+                                        <span className="red-star">{this.getAmount(orderDetailData.total)}</span>
+                                    </div>
                                 </Col>
                             </Row>
                         </div>
@@ -328,7 +344,7 @@ class OrderInformation extends PureComponent {
                                 onClick={this.realTimeDisassembly}
                             >
                                 获取实时库存后拆单
-                                </Button>
+                            </Button>
                             : null}
                         {this.props.orderDetailData.canSplitManual
                             ? <Button
@@ -337,7 +353,7 @@ class OrderInformation extends PureComponent {
                                 onClick={this.displayInventory}
                             >
                                 基于界面显示库存拆单
-                        </Button>
+                            </Button>
                             : null}
                         {this.props.orderDetailData.canSplitByInventory
                             || this.props.orderDetailData.canSplitManual

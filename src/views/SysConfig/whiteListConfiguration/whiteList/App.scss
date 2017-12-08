@@ -64,8 +64,22 @@ $whiteListConfigurationColWidth: 250px;
         }
     }
 }
-.white-list-data-pic{
+
+.white-list-data-pic {
     height: 30px;
     display: inline-block;
     vertical-align: bottom;
+}
+
+.upload-demo-start {
+    margin-top: 20px;
+}
+
+.search-conditions {
+    .export-left {
+        text-align: left;
+    }
+    .search-right {
+        text-align: right;
+    }
 }

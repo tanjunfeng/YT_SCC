@@ -100,6 +100,13 @@ export const usedParticipateData = '/coupon/queryCouponRecordListExcel';
 // 促销活动 - 优惠券 - 未使用参与数据导出
 export const unusedParticipateData = '/coupon/queryCouponActivityActiveListExcel';
 
+// 下载收货单管理列表excel
+export const exportReceiptList = '/pmPurchaseReceipt/exportReceiptList';
+// 白名单导出
+export const whiteListBatchExport = 'sp/whiteListBatchExport';
+// 白名单下载导入模板
+export const whiteListBatchDownload = '/sp/whiteListTemplete';
+
 /**
  * 登录 Api
  */
@@ -422,7 +429,7 @@ export const queryAreas = (params) => http.get('/homeAd/queryAreas', params);
 export const switchOptWayOfHome = (params) => http.post('/homeAd/switchOptWayOfHome', params);
 
 // 获取用户子公司
-export const queryBranchCompanyInfoWap = (params) => http.post('/homeAd/queryBranchCompanyInfo', params);
+export const queryBranchCompanyInfoWap = (params) => http.get('/homeAd/queryBranchCompanyInfo', params);
 
 // 设置首页广告区域停用或者启用
 export const setAreaEnable = (params) => http.post('/homeAd/setAreaEnable', params);
@@ -587,9 +594,7 @@ export const deletePoByIds = (params) => http.get('/provider/deletePoByIds', par
 // 查询采购单列表
 export const repushPurchaseReceipt = (params) => http.get('/pmPurchaseReceipt/rePushPurchaseReceiptToMQ', params);
 // 查询采购退货列表
-export const fetchReturnMngList = (params) => http.get('/pmPurchaseRefund/queryPurchaseRefundList', params);
-// 查询退货单审批列表
-export const queryAuditPurchaseRefundList = (params) => http.get('/pmPurchaseRefund/queryAuditPurchaseRefundList', params);
+export const fetchReturnMngInfoprocessMsgList = (params) => http.get('/pmPurchaseRefund/queryPurchaseRefundList', params);
 // 查看退货单审批意见
 export const queryApprovalInfo = (params) => http.get('/processAuditLog/queryApprovalInfo', params);
 // 查询退货流水号
@@ -610,7 +615,7 @@ export const auditPo = (params) => http.post('/provider/auditPo', params);
  * 采购相关
  */
 // 查询采购单列表
-export const fetchPurchaseOrder = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderList', params);
+export const fetchPurchaseOrderInfo = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderList', params);
 
 // 门店地点值清单
 export const getStoreInfo = (params) => http.get('/store/getStoreInfo', params);
@@ -628,7 +633,7 @@ export const queryPurchaseOrderProducts = (params) => http.get('/pmPurchaseRefun
 // 删除处于草稿状态的订单
 export const deletePurchaseList = (params) => http.get('/pmPurchaseOrder/batchDeletePmPurchaseOrderByIds', params);
 // 查询采购单打印列表
-export const queryPoPrintList = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderListInfo', params);
+export const queryPoPrintInfo = (params) => http.get('/pmPurchaseOrder/queryPurchaseOrderListInfo', params);
 // 此接口用于根据采购单号、逻辑仓编号、商品code、品牌id添加退货商品
 export const addRefundProducts = (params) => http.get('/pmPurchaseRefund/addRefundProducts', params);
 // 保存或者提交采购退货单
@@ -640,7 +645,7 @@ export const downloadBatchPDF = 'pmPurchaseOrder/exportPdfs';
 
 // 采购收货相关
 // 采购收货单管理列表
-export const queryPoRcvMngList = (params) => http.get('/pmPurchaseReceipt/queryReceiptList', params);
+export const queryPoRcvMngInfo = (params) => http.get('/pmPurchaseReceipt/queryReceiptList', params);
 
 // 采购单收货列表   采购单筛选条件：已审核、未收货
 export const queryPoRcvList = (params) => http.get('/provider/queryPoRcvList', params);
@@ -744,6 +749,9 @@ export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehousePhy
 // 查询供应商地点所属区域列表
 export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySupplierPlaceRegion', params);
 
+// 此接口用于修改密码
+export const modifypassword = (params) => http.post('/system/modifyPassword', params);
+
 // 此接口用于通过code和name（后端id就等于code）查询子公司信息
 export const findCompanyBaseInfo = (params) => http.get('/prodSell/findCompanyBaseInfo', params);
 // 此接口用于通过code和name（后端id就等于code）查询子公司信息(通过商品id过滤可用的)
@@ -784,7 +792,7 @@ export const queryOrderDetailInfo = (params) => http.get('/sorder/orderDetail', 
 export const queryPaymentDetailInfo = (params) => http.get('/sorder/paymentInfo', params);
 
 // 订单管理-查询支付信息
-export const backstageOrderBack = (params) => http.get('/webReturnRequest/insertReturn', params);
+export const backstageOrderBack = (params) => http.post('/webReturnRequest/insertReturn', params);
 
 // 订单管理-查询配送信息
 export const queryShippingDetailInfo = (params) => http.get('/sorder/shippingGroupInfo', params);
@@ -847,6 +855,7 @@ export const fetchPromotionParticipateData = (params) => http.get('/promotion/qu
 export const createPromotion = (params) => http.post('/promotion/insertPromotion', params);
 export const fetchPromotionDetail = (params) => http.get('/promotion/queryPromotionDetail', params);
 export const updatePromotionStatus = (params) => http.post('/promotion/updatePromoStatus', params);
+export const queryProductByTerm = (params) => http.get('/promotion/getPromotionItemsInfo', params);
 
 // 优惠券
 export const fetchUsedCouponParticipate = (params) => http.get('/coupon/queryCouponRecordList', params);
@@ -890,8 +899,8 @@ export const returnDescriptionSave = (params) => http.post('/webReturnRequest/re
 // 销售退货退款
 export const insertRefund = (params) => http.get('/webReturnRequest/insertRefund', params);
 
-// 查询退货单审批列表
-export const queryAuditPurReList = (params) => http.get('/pmPurchaseRefund/queryAuditPurchaseRefundList', params);
+// 查询待办事项下的审批列表
+export const queryProcessMsgInfo = (params) => http.post('/bpm/queryProcessMsgList', params);
 /**
 
  * 直营店下单模块
@@ -917,3 +926,11 @@ export const queryProcessDefinitions = params => http.get('/pmPurchaseRefund/que
 export const approveRefund = params => http.post('/pmPurchaseRefund/approveRefund', params);
 // 取消退货单
 export const cancelRefund = params => http.get('/pmPurchaseRefund/cancel', params);
+/**
+ * 待办事项模块
+ */
+// 采购审批列表下获取高亮流程图
+export const processImage = params => http.get('/bpm/processImage', params);
+// 采购审批列表下获取审批意见的审批列表
+export const queryCommentHis = params => http.get('/bpm/queryCommentHis', params);
+

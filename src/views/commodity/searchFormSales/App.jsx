@@ -51,7 +51,7 @@ class SearchForm extends Component {
      */
     handleGetValue = () => {
         this.props.onSearch(Utils.removeInvalid({
-            branchCompanyName: this.props.form.getFieldsValue().branchCompany.name,
+            branchCompanyName: this.props.form.getFieldValue('branchCompany').name,
             status: this.choose
         }))
     }
@@ -144,10 +144,15 @@ class SearchForm extends Component {
     /**
      * 重置
      */
-    handleResetValue() {
+    handleResetValue = () => {
         this.props.form.resetFields();
+        this.name = null;
         this.choose = null;
         this.props.onReset();
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
     handleSelectChange = (item) => {

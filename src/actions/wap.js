@@ -149,18 +149,19 @@ export const fetchAreaList = (data) => dispatch => (
     new Promise((resolve, reject) => {
         Promise.all([queryAreas(data), queryQuickNavigationList()])
             .then((result) => {
-                const all = result[0].data;
+                const all = [...result[0].data];
                 const quick = result[1].data;
-                all.map((item, index) => {
-                    if (item.id === 'quick-nav') {
-                        result[0].data[index].itemAds = quick;
-                        return null;
+                all.forEach((item, index) => {
+                    if (item.id.indexOf('quick-nav') > -1) {
+                        Object.assign(all[index], {
+                            itemAds: quick
+                        });
                     }
                 })
                 dispatch(
-                    receiveAreaList(result[0].data)
+                    receiveAreaList(all)
                 );
-                resolve(result[0].data);
+                resolve(all);
             }).catch((err) => {
                 if (err.data && err.data.code === 401) {
                     reject(err);
@@ -452,17 +453,8 @@ export const fetchQueryBranchCompanyInfo = (data) => dispatch => (
     new Promise((resolve, reject) => {
         queryBranchCompanyInfoWap(data)
             .then(res => {
-                // 加入字段判断用户是否有修改总公司的权限
-                res.headquarters = false
-                for (let i = 0; i < res.data.length; i++) {
-                    if (res.data[i].id === 'headquarters') {
-                        res.headquarters = true
-                        break
-                    }
-                }
-                res.data.unshift({ id: '', name: '请选择' })
-                dispatch(receiveQueryBranchCompanyInfo(res))
-                resolve(res);
+                dispatch(receiveQueryBranchCompanyInfo(res.data))
+                resolve(res.data);
             })
             .catch(err => reject(err))
     })

@@ -74,6 +74,10 @@ class SearchForm extends PureComponent {
     handleReset = () => {
         this.props.form.resetFields();  // 清除当前查询条件
         this.props.onReset();  // 通知父页面已清空
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
     handleExport = () => {
@@ -221,7 +225,7 @@ SearchForm.propTypes = {
     onReset: PropTypes.func,
     onExport: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    value: PropTypes.objectOf(PropTypes.any),
+    value: PropTypes.bool,
     match: PropTypes.objectOf(PropTypes.any)
 };
 

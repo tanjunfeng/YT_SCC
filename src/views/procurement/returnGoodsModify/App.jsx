@@ -30,6 +30,7 @@ import {
     pubFetchValueList,
 } from '../../../actions/pub';
 
+
 @connect(state => ({
     // 详情数据
     data: state.toJS().salesManagement.detail,

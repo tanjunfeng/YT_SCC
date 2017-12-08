@@ -185,6 +185,10 @@ const orderListColumns = [{
     dataIndex: 'branchCompanyName',
     key: 'branchCompanyName',
 }, {
+    title: '雅堂小超',
+    dataIndex: 'franchiseeStoreId',
+    key: 'franchiseeStoreId',
+}, {
     title: '加盟商编号',
     dataIndex: 'franchiseeId',
     key: 'franchiseeId',
@@ -415,7 +419,7 @@ const returnGoodsTableColums = [{
     dataIndex: 'internationalCodes[0].internationalCode',
     key: 'internationalCodes[0].internationalCode',
     render: (text, record) => (
-        record.internationalCodes[0].internationalCode
+        record.internationalCodes[0].internationalCode || '-'
     )
 },
 {

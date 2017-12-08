@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Button, Input } from 'antd';
+import { Table, Form, Button, Input, Popconfirm, message } from 'antd';
 import FlowImage from '../../../components/flowImage';
 import UploadZip from './uploadZip';
 
@@ -49,6 +49,7 @@ class processData extends PureComponent {
         this.handleReset();
         this.query();
     }
+
     /**
      * 分页页码改变的回调
      */
@@ -56,52 +57,52 @@ class processData extends PureComponent {
         Object.assign(this.param, { pageNum, current: pageNum });
         this.query();
     }
+
     queryFlowChart = (id, imageName) => {
-        this.props.clearChartData();
-        this.props.queryChartData({deploymentId: id, imageName}).then(() => {
-            this.showModal();
-        });
+        this.props.queryChartData({deploymentId: id, imageName})
     }
+
     delect = (id) => {
-        this.props.delectProcessData({deploymentId: id}).then(() => {
-            this.query();
-        });
+        this.props.delectProcessData({deploymentId: id}).then((res) => {
+            if (res.code === 200) {
+                message.success(res.message);
+                this.query();
+            }
+        })
     }
+
     query = () => {
-        this.props.queryProcessData(this.param)
+        this.props.queryProcessData(this.param);
     }
+
     handleReset = () => {
         this.param = {
             pageNum: 1,
             pageSize: PAGE_SIZE
         }
     }
+
     closeCanvas = () => {
         this.props.clearChartData();
-        this.setState({
-            visible: false
-        });
     }
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
-    }
+
     handleChange = (e) => {
         this.setState({
             flowName: e.target.value
         })
     }
+
     /**
      * 表单操作删除表单
      * @param {Object} text 当前行的值
      * @param {object} record 单行数据
      */
     delectOperation = (text, record) => (
-        <a
-            onClick={() => { this.delect(record.id); }}
-        >删除</a>
+        <Popconfirm title="确定删除流程？" onConfirm={() => this.delect(record.id)}>
+            <a href="#">删除</a>
+        </Popconfirm>
     )
+
     /**
      * 表单操作查看流程图
      * @param {Object} text 当前行的值
@@ -109,13 +110,16 @@ class processData extends PureComponent {
      */
     renderOperation = (text, record) => (
         <a
-            onClick={() => { this.queryFlowChart(record.id, record.diagramResourceName); }}
+            onClick={() => {
+                this.queryFlowChart(record.deploymentId, record.diagramResourceName);
+            }}
         >查看流程图</a>
     )
+
     render() {
         const { flowName} = this.state;
         const deployProcessUrl = `${window.config.apiHost}/bpm/newdeploy`;
-        const { deps, pros, total, pageNum, pageSize } = this.props.processData;
+        const { deps, pros } = this.props.processData;
         processOverview[processOverview.length - 1].render = this.delectOperation;
         processDetails[processDetails.length - 1].render = this.renderOperation;
         return (
@@ -128,14 +132,6 @@ class processData extends PureComponent {
                         x: 1400
                     }}
                     bordered
-                    pagination={{
-                        current: this.param.current,
-                        pageNum,
-                        pageSize,
-                        total,
-                        showQuickJumper: true,
-                        onChange: this.onPaginate
-                    }}
                 />
                 <Table
                     dataSource={pros}
@@ -144,18 +140,16 @@ class processData extends PureComponent {
                     scroll={{
                         x: 1400
                     }}
-                    pagination={{
-                        current: this.param.current,
-                        pageNum,
-                        pageSize,
-                        total,
-                        showQuickJumper: true,
-                        onChange: this.onPaginate
-                    }}
                 />
-                <Input size="small" placeholder="流程名称" onChange={this.handleChange} />
-                <UploadZip flowName={flowName} url={deployProcessUrl} />
-                <FlowImage data={this.props.flowChartData} >
+                <div className="uploadProcess">
+                    <Input placeholder="流程名称" onChange={this.handleChange} />
+                    <UploadZip
+                        flowName={flowName}
+                        url={deployProcessUrl}
+                        onUploadSuccess={this.query}
+                    />
+                </div>
+                <FlowImage data={this.props.flowChartData} closeCanvas={this.closeCanvas} >
                     <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
                 </FlowImage>
             </div>
@@ -170,7 +164,7 @@ processData.propTypes = {
     queryChartData: PropTypes.func,
     clearChartData: PropTypes.func,
     processData: PropTypes.objectOf(PropTypes.any),
-    flowChartData: PropTypes.objectOf(PropTypes.any)
+    flowChartData: PropTypes.string
 }
 
 export default withRouter(Form.create()(processData));

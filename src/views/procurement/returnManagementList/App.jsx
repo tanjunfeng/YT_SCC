@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
- * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-23 17:20:55
+ * @Last Modified by: chenghaojie
+ * @Last Modified time: 2017-12-06 11:22:00
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -54,18 +54,17 @@ import ApproModal from './approModal';
 import OpinionSteps from '../../../components/approvalFlowSteps';
 import { Supplier } from '../../../container/search';
 
-
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
 
-const statusTypes = { 0: "制单", 1: "已提交", 2: "已审核", 3: "已拒绝", 4: "待退货", 5: "已退货", 6: "已取消", 7: "取消失败", 8: "异常" }
-const adrTypes = {0: '仓库', 1: '门店'}
+const statusTypes = { 0: '制单', 1: '已提交', 2: '已审核', 3: '已拒绝', 4: '待退货', 5: '已退货', 6: '已取消', 7: '取消失败', 8: '异常' }
+const adrTypes = { 0: '仓库', 1: '门店' }
 @connect(state => ({
-    poRcvMngList: state.toJS().procurement.poRcvMngList,
-    returnMngList: state.toJS().procurement.returnMngList,
+    poRcvMngInfo: state.toJS().procurement.poRcvMngInfo,
+    returnMngInfo: state.toJS().procurement.returnMngInfo,
     getRefundNumebr: state.toJS().procurement.getRefundNumebr,
     processDefinitions: state.toJS().procurement.processDefinitions
 }), dispatch => bindActionCreators({
@@ -93,23 +92,20 @@ class ReturnManagementList extends PureComponent {
         this.searchParams = {};
         this.state = {
             selectedListData: [],
-            spId: '',   // 供应商编码
             spAdrId: '',    // 供应商地点编码
-            isSupplyAdrDisabled: true, // 供应商地点禁用
             locDisabled: true,  // 地点禁用
             locationData: {},
             isVisibleModal: false,
             opinionVisible: false,
-            orderType: 0,
-            orderItem: 0, // 排序字段:退货单号：0,创建日期：1,状态：2
             refundAdr: '',
             adrTypeCode: '',    // 地点编码
             receivedTypeCode: '',  // 收货单状态编码
-            spNo: '',   // 供应商编码
             spAdrNo: '',    // 供应商地点编码
         };
         // 初始页号
         this.current = 1;
+        this.orderItem = 0;
+        this.orderItem = 0;// 排序字段:退货单号：0,创建日期：1,状态：2
         this.columns = [
             {
                 title: '退货单号',
@@ -221,8 +217,8 @@ class ReturnManagementList extends PureComponent {
         });
     }
 
-    queryReturnMngList = () => {
-        this.current = 1;
+    queryReturnMngList = (current = 1) => {
+        this.current = current;
         this.props.fetchReturnMngList({
             pageSize: PAGE_SIZE,
             pageNum: this.current,
@@ -241,6 +237,9 @@ class ReturnManagementList extends PureComponent {
         this.handleSupplyClear();
         this.handleSupplierAddressClear();
         this.handleAddressClear();
+        this.props.form.setFieldsValue({
+            supplier: { reset: true }
+        });
     }
 
     /**
@@ -308,27 +307,6 @@ class ReturnManagementList extends PureComponent {
             refundAdr: ''
         })
     }
-    /**
-     * Supplier供应商组件改变的回调
-     * @param {object} record 改变后值
-     */
-    handleSupplierChange = (record) => {
-        const {spId, spNo} = record;
-        if (spId === '') {
-            this.setState({
-                spNo: '',
-                spId: '',
-                isSupplyAdrDisabled: true
-            });
-            this.supplySearchMind.reset();
-        } else {
-            this.setState({
-                spNo,
-                spId,
-                isSupplyAdrDisabled: false
-            });
-        }
-    }
 
     showConfirm = (record) => {
         confirm({
@@ -338,7 +316,7 @@ class ReturnManagementList extends PureComponent {
                 if (record.approval) {
                     message.error('该退货单不能删除。原因：只能删除制单状态且无审批记录退货单!')
                 } else {
-                    this.props.deleteBatchRefundOrder({id: record.id}).then((res) => {
+                    this.props.deleteBatchRefundOrder({ id: record.id }).then((res) => {
                         if (res.code === 200) {
                             message.success(res.message)
                         }
@@ -421,21 +399,22 @@ class ReturnManagementList extends PureComponent {
                 this.nodeModal({ businessId: record.id });
                 break;
             case 'viewApproval':
-                this.props.queryApprovalInfo({businessId: record.id});
+                this.props.queryApprovalInfo({ businessId: record.id });
                 this.showModal();
                 break;
             case 'downloadTheReturnInvoice':
-                Utils.exportExcel(exportPdf, {id: record.id})
+                Utils.exportExcel(exportPdf, { id: record.id })
                 break;
             case 'cancel':
                 this.props.cancelRefund({
                     id: record.id,
                     purchaseRefundNo: record.purchaseRefundNo,
-                    adrType: record.adrType === '仓库' ? 0 : 1,
+                    adrType: record.adrType,
                     refundAdrCode: record.refundAdrCode
                 }).then((res) => {
                     if (res.code === 200) {
                         message.success(res.message)
+                        this.queryReturnMngList(this.current);
                     }
                 })
                 break;
@@ -447,11 +426,11 @@ class ReturnManagementList extends PureComponent {
     /**
      * 查询退货单管理列表
      */
-    handleSearch() {
+    handleSearch(e, current) {
         // 编辑查询条件
         this.editSearchParams();
         // 查询收货单单列表
-        this.queryReturnMngList();
+        this.queryReturnMngList(current);
     }
 
     handleCreact = () => {
@@ -465,7 +444,7 @@ class ReturnManagementList extends PureComponent {
         selectedListData.forEach((item) => {
             pmRefundOrderIds.push(item.id)
         });
-        this.props.deleteBatchRefundOrder({pmRefundOrderIds: pmRefundOrderIds.join(',')}).then((res) => {
+        this.props.deleteBatchRefundOrder({ pmRefundOrderIds: pmRefundOrderIds.join(',') }).then((res) => {
             if (res.code === 200) {
                 message.success(res.message);
                 this.queryReturnMngList();
@@ -474,9 +453,7 @@ class ReturnManagementList extends PureComponent {
     }
 
     /**
-     *
      * 返回查询条件
-     *
      */
     editSearchParams() {
         const {
@@ -485,6 +462,7 @@ class ReturnManagementList extends PureComponent {
             adrType,
             purchaseOrderType,
             status,
+            supplier
         } = this.props.form.getFieldsValue();
         // 创建时间
         const auditDuringArr = this.props.form.getFieldValue('createTime') || [];
@@ -496,10 +474,10 @@ class ReturnManagementList extends PureComponent {
         if (auditDuringArr.length > 1) {
             createTimeEnd = Date.parse(auditDuringArr[1].format(dateFormat));
         }
-        const orderType = this.state.orderType;
-        const orderItem = this.state.orderItem;
+        const orderType = this.orderType;
+        const orderItem = this.orderItem;
         // 供应商编号
-        const spId = this.state.spId;
+        const spId = supplier.spId;
 
         // 供应商地点编号
         const spAdrId = this.state.spId;
@@ -527,32 +505,20 @@ class ReturnManagementList extends PureComponent {
 
     sortOnChange = (pagination, filters, sorter) => {
         if (sorter.order === 'descend') {
-            this.setState({
-                orderType: 1
-            })
+            this.orderType = 1
         } else {
-            this.setState({
-                orderType: 0
-            })
+            this.orderType = 0
         }
         if (sorter.columnKey === 'purchaseRefundNo') {
-            this.setState({
-                orderItem: 0
-            })
+            this.orderItem = 0
         } else if (sorter.columnKey === 'createTime') {
-            this.setState({
-                orderItem: 1
-            })
+            this.orderItem = 1
         } else if (sorter.columnKey === 'status') {
-            this.setState({
-                orderItem: 2
-            })
+            this.orderItem = 2
         } else {
-            this.setState({
-                orderItem: 0
-            })
+            this.orderItem = 0
         }
-        this.handleSearch();
+        this.handleSearch({}, pagination.current, this.orderType, this.orderItem);
     }
 
     renderActions(text, record, index) {
@@ -567,7 +533,7 @@ class ReturnManagementList extends PureComponent {
                 </Menu.Item>
                 {
                     // 状态为“制单”时可用
-                    (status === '0') ?
+                    (status === 0) ?
                         <Menu.Item key="delete">
                             <a target="_blank" rel="noopener noreferrer">
                                 删除
@@ -577,15 +543,15 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 状态为“制单”、“已拒绝”时可用；
-                    (status === '0' || status === '3') ?
+                    (status === 0 || status === 3) ?
                         <Menu.Item key="modify">
                             <Link to={`${pathname}/modify/${id}`}>修改</Link>
                         </Menu.Item>
                         : null
                 }
                 {
-                    // 状态为“已审核”、“待退货”时可用；
-                    (status === '2' || status === '4') ?
+                    // “待退货”时可用；
+                    (status === 4) ?
                         <Menu.Item key="cancel">
                             <a target="_blank" rel="noopener noreferrer">
                                 取消
@@ -595,7 +561,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 退货地点为门店且状态为“待退货”时可用
-                    (refundAdr === '1' && status === '4') ?
+                    (refundAdr === 1 && status === 4) ?
                         <Menu.Item key="returnGoods">
                             <a target="_blank" rel="noopener noreferrer">
                                 退货
@@ -615,7 +581,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 点击弹出框显示审批进度信息,按钮显示条件：状态为“已提交”
-                    (status === '1') ?
+                    (status === 1) ?
                         <Menu.Item key="viewApprovalrogress">
                             <a target="_blank" rel="noopener noreferrer">
                                 查看审批进度
@@ -625,7 +591,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 按钮显示条件：状态为“已提交”、“已审批”、“已拒绝”、“待退货”、“已退货”、“已取消”,”取消失败”
-                    (status !== '0' && status !== '8') ?
+                    (status !== 0 && status !== 8) ?
                         <Menu.Item key="viewApproval">
                             <a target="_blank" rel="noopener noreferrer">
                                 查看审批意见
@@ -646,8 +612,8 @@ class ReturnManagementList extends PureComponent {
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
-        const { data, total, pageNum, pageSize } = this.props.returnMngList;
+        const { getFieldDecorator, getFieldValue } = this.props.form;
+        const { data, total, pageNum, pageSize } = this.props.returnMngInfo;
         const rowSelection = {
             selectedRowKeys: this.state.chooseGoodsList,
             onChange: (selectedRowKeys, selectedRows) => {
@@ -656,6 +622,9 @@ class ReturnManagementList extends PureComponent {
                     selectedListData: selectedRows
                 })
             },
+            getCheckboxProps: record => ({
+                disabled: record.status !== '0', // Column configuration not to be checked
+            })
         };
         return (
             <div className="search-box">
@@ -688,24 +657,21 @@ class ReturnManagementList extends PureComponent {
                                 <FormItem>
                                     <div className="row middle">
                                         <span className="ant-form-item-label search-mind-label">供应商</span>
-                                        {getFieldDecorator('spId', {
-                                            initialValue: { spId: '', spNo: '', companyName: ''}
-                                        })(
-                                            <Supplier
-                                                onChange={this.handleSupplierChange}
-                                            />
-                                        )}
+                                        {getFieldDecorator('supplier', {
+                                            initialValue: { spId: '', spNo: '', companyName: '' }
+                                        })(<Supplier />)}
                                     </div>
                                 </FormItem>
                             </Col>
                             {/* 供应商地点 */}
                             <Col className="gutter-row" span={8}>
                                 <FormItem>
-                                    <span className="sc-form-item-label" style={{width: 70}}>供应商地点</span>
+                                    <span className="sc-form-item-label" style={{ width: 70 }}>供应商地点</span>
                                     <span className="search-box-data-pic">
                                         <SearchMind
                                             style={{ zIndex: 9, verticalAlign: 'bottom' }}
                                             compKey="providerNo"
+                                            disabled={getFieldValue('supplier').spId === ''}
                                             ref={ref => { this.supplyAddressSearchMind = ref }}
                                             fetch={(params) =>
                                                 this.props.pubFetchValueList(Utils.removeInvalid({
@@ -752,7 +718,7 @@ class ReturnManagementList extends PureComponent {
                                                 </Option>
                                             ))}
                                         </Select>
-                                    )}
+                                        )}
                                 </FormItem>
                             </Col>
                             {/* 退货地点 */}
@@ -814,7 +780,7 @@ class ReturnManagementList extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
-                            <Col className="ant-col-10 ant-col-offset-10 gutter-row" style={{ textAlign: 'right'}}>
+                            <Col className="ant-col-10 ant-col-offset-10 gutter-row" style={{ textAlign: 'right' }}>
                                 <FormItem>
                                     <Button size="default" type="primary" onClick={this.handleCreact}>
                                         新建
@@ -859,7 +825,7 @@ class ReturnManagementList extends PureComponent {
                                 pageSize,
                                 pageNum,
                                 showQuickJumper: true,
-                                onChange: this.onPaginate
+                                // onChange: this.onPaginate
                             }}
                         />
                         {
@@ -895,7 +861,7 @@ ReturnManagementList.propTypes = {
     queryApprovalInfo: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
-    returnMngList: PropTypes.objectOf(PropTypes.any),
+    returnMngInfo: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,
