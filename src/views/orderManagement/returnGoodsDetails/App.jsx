@@ -62,8 +62,11 @@ class ReturnGoodsDetails extends PureComponent {
         const {
             items = []
         } = this.props.data;
+        let newArray = [].concat(items);
+        let maxValue = [].concat(items);
         return {
-            items,
+            newArray,
+            maxValue,
             returnQuantityList: this.state.returnQuantityList
         }
     }
@@ -204,7 +207,7 @@ class ReturnGoodsDetails extends PureComponent {
                         <Row>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">退货单号：</span>{data.id}</div></Col>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">原订单号：</span>{data.orderId}</div></Col>
-                            <Col span={6} offset={2}><div className="item"><span className="item-tit">申请时间：</span>{moment(parseInt(data.creationTime, 10)).format(DATE_FORMAT)}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">申请时间：</span>{ data.creationTime ? moment(parseInt(data.creationTime, 10)).format(DATE_FORMAT) : '-'}</div></Col>
                         </Row>
                         <Row>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">子公司：</span>{data.branchCompanyName}</div></Col>
@@ -250,6 +253,7 @@ class ReturnGoodsDetails extends PureComponent {
                     <div className="body body-table">
                         <GoodsTable
                             value={this.getGoodsTableValues()}
+                            datas={data}
                             onChange={this.handleGoodsListChange}
                         />
                         <div className="bottom-text">
