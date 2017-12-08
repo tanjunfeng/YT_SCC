@@ -188,24 +188,37 @@ export const getRewardList = (form, licence, handleCategorySelect) => {
     const { getFieldDecorator, getFieldValue } = form;
     return (
         <Row>
-            {buyType(form, licence)}
-            {getFieldValue(licence) === 'CATEGORY' ?
-                <FormItem>
-                    <Category onChange={handleCategorySelect} />
-                </FormItem> : null}
-            {getFieldValue(licence) === 'PRODUCT' ?
-                <FormItem className="product">
-                    {/* purchaseConditionProduct */}
-                    {getFieldDecorator(`${licence}Product`, {
-                        initialValue: {
-                            productId: '',
-                            productCode: '',
-                            productName: ''
-                        }
-                    })(<AddingGoodsByTerm />)}
-                </FormItem> : null}
-            {conditionType(form, licence)}
-            {getRulesColumn(form, licence, getFieldValue(licence))}
+            <div className="wd-400">
+                {buyType(form, licence)}
+                {getFieldValue(licence) === 'CATEGORY' ?
+                    <FormItem>
+                        <Category onChange={handleCategorySelect} />
+                    </FormItem> : null}
+                {getFieldValue(licence) === 'PRODUCT' ?
+                    <FormItem className="product">
+                        {/* purchaseConditionProduct */}
+                        {getFieldDecorator(`${licence}Product`, {
+                            initialValue: {
+                                productId: '',
+                                productCode: '',
+                                productName: ''
+                            }
+                        })(<AddingGoodsByTerm />)}
+                    </FormItem> : null}
+            </div>
+            <div className="wd-320"> {conditionType(form, licence)}</div>
+            <div className="wd-290">
+                {getRulesColumn(form, licence, getFieldValue(licence))}
+            </div>
         </Row>
     )
 }
+
+export const getRewardListPanel = (form, licence, handleCategorySelect) => (
+    <ul className="list-panel">
+        <li><h2>奖励列表</h2></li>
+        <li>
+            {getRewardList(form, licence, handleCategorySelect)}
+        </li>
+    </ul>
+)

@@ -19,7 +19,7 @@ import { AreaSelector } from '../../../container/tree';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
-import { getChooseButton, getRules, getRewardList } from './domHelper';
+import { getChooseButton, getRules, getRewardList, getRewardListPanel } from './domHelper';
 import { getFormData } from './dataHelper';
 
 const RadioGroup = Radio.Group;
@@ -159,13 +159,14 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 {/* 优惠方式 */}
                 <Row>
+                    {/* 不限制使用条件 */}
                     {getFieldValue('condition') === 0 ?
                         getRules(this.props.form, 'noCondition')
                         :
                         // condition === 1
                         <FormItem label="优惠种类">
                             {getFieldDecorator('category', {
-                                initialValue: 'PURCHASECONDITION'
+                                initialValue: 'REWARDLIST'
                             })(<Select size="default" className="wd-110">
                                 <Option key={'PURCHASECONDITION'} value="PURCHASECONDITION">购买条件</Option>
                                 <Option key={'REWARDLIST'} value="REWARDLIST">奖励列表</Option>
@@ -174,8 +175,17 @@ class PromotionCreate extends PureComponent {
                         </FormItem>
                     }
                 </Row>
+                {/* 指定条件——购买条件 */}
                 {getFieldValue('condition') === 1 && getFieldValue('category') === 'PURCHASECONDITION' ?
                     getRewardList(
+                        this.props.form,
+                        'purchaseCondition',
+                        this.handlePCCategorySelect)
+                    : null
+                }
+                {/* 指定条件——奖励列表 */}
+                {getFieldValue('condition') === 1 && getFieldValue('category') === 'REWARDLIST' ?
+                    getRewardListPanel(
                         this.props.form,
                         'purchaseCondition',
                         this.handlePCCategorySelect)
