@@ -17,7 +17,7 @@ import './SearchMind.scss';
 
 class Franchisee extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        if (nextProps.value.franchiseeId === '') {
+        if (nextProps.value.franchiseeId === '' && this.props.value.franchiseeId !== '') {
             this.searchMind.reset();
         }
         if (nextProps.value.reset && !this.props.value.reset) {
