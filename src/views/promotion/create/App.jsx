@@ -160,7 +160,7 @@ class PromotionCreate extends PureComponent {
                 {/* 优惠方式 */}
                 <Row>
                     {getFieldValue('condition') === 0 ?
-                        getRules(getFieldDecorator, getFieldValue, 'noCondition')
+                        getRules(this.props.form, 'noCondition')
                         :
                         // condition === 1
                         <FormItem label="优惠种类">
@@ -176,8 +176,7 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 {getFieldValue('condition') === 1 && getFieldValue('category') === 'PURCHASECONDITION' ?
                     getRewardList(
-                        getFieldDecorator,
-                        getFieldValue,
+                        this.props.form,
                         'purchaseCondition',
                         this.handlePCCategorySelect)
                     : null

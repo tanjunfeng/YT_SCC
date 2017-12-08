@@ -171,7 +171,6 @@ class SaleCard extends Component {
                 className={`${prefixCls}-card-list`}
             >
                 <Card
-                    initalValue={item}
                     style={{ width: 350 }}
                     className={
                         `${prefixCls}-sale-card-${item.status}

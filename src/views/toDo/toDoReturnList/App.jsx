@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-06 14:16:02
+ * @Last Modified time: 2017-12-08 14:59:33
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -36,12 +36,14 @@ import {
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
-    queryApprovalInfo,
+    queryCommentHis,
     queryProcessDefinitions,
     approveRefund
 } from '../../../actions/procurement';
 import {
     queryProcessMsgInfo,
+    queryHighChart,
+    clearHighChart,
 } from '../../../actions/process';
 import {
     getWarehouseAddressMap,
@@ -50,7 +52,7 @@ import {
     getSupplierLocMap
 } from '../../../actions';
 import ApproModal from './approModal';
-import OpinionSteps from '../../../components/approvalFlowSteps';
+import FlowImage from '../../../components/flowImage';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -60,7 +62,8 @@ const { TextArea } = Input;
 
 @connect(state => ({
     processMsgInfo: state.toJS().procurement.processMsgInfo,
-    processDefinitions: state.toJS().procurement.processDefinitions
+    processDefinitions: state.toJS().procurement.processDefinitions,
+    highChartData: state.toJS().process.highChartData
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -68,9 +71,11 @@ const { TextArea } = Input;
     getSupplierLocMap,
     pubFetchValueList,
     queryProcessMsgInfo,
-    queryApprovalInfo,
+    queryCommentHis,
     queryProcessDefinitions,
-    approveRefund
+    approveRefund,
+    queryHighChart,
+    clearHighChart,
 }, dispatch))
 
 class toDoReturnList extends PureComponent {
@@ -114,15 +119,18 @@ class toDoReturnList extends PureComponent {
                 dataIndex: 'refundNo',
                 key: 'refundNo',
                 render: (text, record) => (
-                    <Link target="_blank" to={`po/detail/${record.id}`} onClick={this.toPurDetail}>{text}</Link>
+                    <Link target="_blank" to={`po/detail/${record.refundNo}`} onClick={this.toPurDetail}>{text}</Link>
                 )
             }, {
                 title: '地点类型',
                 dataIndex: 'adrType',
                 key: 'adrType',
-                render: text => (
-                    text === 0 ? '仓库' : '门市'
-                )
+                render: text => {
+                    if (text === null) {
+                        return null;
+                    }
+                    return (locType.data[text + 1].value);
+                }
             }, {
                 title: '退货地点',
                 dataIndex: 'refundAdrName',
@@ -196,7 +204,7 @@ class toDoReturnList extends PureComponent {
                 key: 'currentNode',
                 width: '160px',
                 render: (text, record) => (
-                    <a onClick={() => this.nodeModal(record)}>{text}</a>
+                    <a onClick={() => this.nodeModal(record.taskId)}>{text}</a>
                 )
             }, {
                 title: '操作',
@@ -304,18 +312,21 @@ class toDoReturnList extends PureComponent {
     queryReturnMngList = (page = 1) => {
         this.current = page;
         this.props.queryProcessMsgInfo({
-            map: {
+            map: Object.assign({
                 pageSize: PAGE_SIZE,
                 pageNum: this.current,
                 status: this.state.status
-            },
+            }, this.searchParams),
             processType: 'CGTH'
         });
     }
 
-    nodeModal = (record) => {
-        this.showOpinionModal();
-        this.props.queryProcessDefinitions({ processType: 1, businessId: record.id });
+    nodeModal = (id) => {
+        this.props.queryHighChart({taskId: id})
+    }
+
+    closeCanvas = () => {
+        this.props.clearHighChart();
     }
 
     /**
@@ -494,10 +505,10 @@ class toDoReturnList extends PureComponent {
     }
 
     handleApprovalOk = () => {
-        const { processNodeId, id } = this.examinationAppData;
-        const processId = processNodeId;
+        const { currentNode, taskId } = this.examinationAppData;
+        const processId = currentNode;
         this.getFormData().then((param) => {
-            this.props.approveRefund({ ...param, processId, businessId: id, type: 1 })
+            this.props.approveRefund({ ...param, processId, businessId: taskId, type: 1 })
                 .then((res) => {
                     if (res.code === 200) {
                         message.success(res.message);
@@ -526,7 +537,7 @@ class toDoReturnList extends PureComponent {
                 break;
             case 'viewApproval':
                 this.showModal();
-                this.props.queryApprovalInfo({ businessId: record.id })
+                this.props.queryCommentHis({tackId: record.taskId})
                 break;
             default:
                 break;
@@ -552,30 +563,9 @@ class toDoReturnList extends PureComponent {
             purchaseOrderNo,
             auditResult,
             purchaseOrderType,
-            status,
             adrType,
             auditStatus
         } = this.props.form.getFieldsValue();
-        // 流程开始时间
-        const auditDuringArr = this.props.form.getFieldValue('createTime') || [];
-        let createTimeStart;
-        let createTimeEnd;
-        if (auditDuringArr.length > 0) {
-            createTimeStart = Date.parse(auditDuringArr[0].format(dateFormat));
-        }
-        if (auditDuringArr.length > 1) {
-            createTimeEnd = Date.parse(auditDuringArr[1].format(dateFormat));
-        }
-        // 流程结束间
-        const auditDuringArrEnd = this.props.form.getFieldValue('stopTime') || [];
-        let stopTimeStart;
-        let stopTimeEnd;
-        if (auditDuringArrEnd.length > 0) {
-            stopTimeStart = Date.parse(auditDuringArrEnd[0].format(dateFormat));
-        }
-        if (auditDuringArrEnd.length > 1) {
-            stopTimeEnd = Date.parse(auditDuringArrEnd[1].format(dateFormat));
-        }
 
         // 供应商编号
         const spId = this.state.spId;
@@ -586,21 +576,18 @@ class toDoReturnList extends PureComponent {
         // 地点
         const adrTypeCode = this.state.refundAdr;
 
+        // 流程状态
+        const status = auditStatus === '进行中' ? 0 : 1;
         const searchParams = {
             purchaseRefundNo,
             purchaseOrderNo,
             auditResult,
             purchaseOrderType,
-            status,
             adrType,
             spId,
             spAdrId,
-            createTimeStart,
-            createTimeEnd,
-            stopTimeStart,
-            stopTimeEnd,
             adrTypeCode,
-            auditStatus
+            status
         };
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
@@ -825,7 +812,7 @@ class toDoReturnList extends PureComponent {
                         <Table
                             dataSource={data}
                             columns={this.columns}
-                            rowKey="id"
+                            rowKey="taskId"
                             scroll={{
                                 x: 1800
                             }}
@@ -843,18 +830,9 @@ class toDoReturnList extends PureComponent {
                             onOk={this.handleModalOk}
                             onCancel={this.handleModalCancel}
                         />
-                        {
-                            this.state.opinionVisible &&
-                            <Modal
-                                title="审批进度"
-                                visible={this.state.opinionVisible}
-                                onOk={this.handleOpinionOk}
-                                onCancel={this.handleOpinionCancel}
-                                width={1000}
-                            >
-                                <OpinionSteps />
-                            </Modal>
-                        }
+                        <FlowImage data={this.props.highChartData} closeCanvas={this.closeCanvas} >
+                            <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
+                        </FlowImage>
                         {
                             this.state.approvalVisible &&
                             <Modal
@@ -916,14 +894,16 @@ class toDoReturnList extends PureComponent {
 
 toDoReturnList.propTypes = {
     queryProcessMsgInfo: PropTypes.func,
-    queryProcessDefinitions: PropTypes.func,
     approveRefund: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     processMsgInfo: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
-    queryApprovalInfo: PropTypes.func,
+    queryCommentHis: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,
+    queryHighChart: PropTypes.func,
+    clearHighChart: PropTypes.func,
+    highChartData: PropTypes.string
 };
 
 export default withRouter(Form.create()(toDoReturnList));
