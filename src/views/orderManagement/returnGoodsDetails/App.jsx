@@ -41,7 +41,7 @@ class ReturnGoodsDetails extends PureComponent {
         this.state = {
             id: '',
             returnQuantityList: [],
-            total: ''
+            total: '',
         }
     }
 
@@ -53,23 +53,26 @@ class ReturnGoodsDetails extends PureComponent {
         });
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.data.items && nextProps.data.items.length > 0) {
+            const items = nextProps.data.items.map(item => ({
+                productCode: item.productCode, quantity: item.quantity
+            }));
+            this.setState({
+                returnQuantityList: items
+            });
+        }
+    }
+
     componentWillUnmount() {
         const { clearData } = this.props
         clearData()
     }
 
-    getGoodsTableValues = () => {
-        const {
-            items = []
-        } = this.props.data;
-        let newArray = [].concat(items);
-        let maxValue = [].concat(items);
-        return {
-            newArray,
-            maxValue,
-            returnQuantityList: this.state.returnQuantityList
-        }
-    }
+    getGoodsTableValues = () => ({
+        returnQuantityList: this.state.returnQuantityList,
+        data: this.props.data
+    })
 
     // 请求数据
     forData = (id) => {
@@ -157,14 +160,11 @@ class ReturnGoodsDetails extends PureComponent {
      * @param {*array} goodsList 更新的商品列表
      * @param {*object} total 商品小计信息
      */
-    handleGoodsListChange = (goodsList, returnQuantity, total, isSaveDisabled) => {
+    handleGoodsListChange = (returnQuantity, total) => {
         // 刷新导入商品列表，清空报错商品列表, 清空excel导入商品列表
         this.setState({
-            goodsList: [...goodsList],
             returnQuantity,
-            total,
-            importList: [],
-            isSaveDisabled
+            total
         });
     }
 
@@ -207,7 +207,7 @@ class ReturnGoodsDetails extends PureComponent {
                         <Row>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">退货单号：</span>{data.id}</div></Col>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">原订单号：</span>{data.orderId}</div></Col>
-                            <Col span={6} offset={2}><div className="item"><span className="item-tit">申请时间：</span>{ data.creationTime ? moment(parseInt(data.creationTime, 10)).format(DATE_FORMAT) : '-'}</div></Col>
+                            <Col span={6} offset={2}><div className="item"><span className="item-tit">申请时间：</span>{data.creationTime ? moment(parseInt(data.creationTime, 10)).format(DATE_FORMAT) : '-'}</div></Col>
                         </Row>
                         <Row>
                             <Col span={6} offset={2}><div className="item"><span className="item-tit">子公司：</span>{data.branchCompanyName}</div></Col>
@@ -253,13 +253,12 @@ class ReturnGoodsDetails extends PureComponent {
                     <div className="body body-table">
                         <GoodsTable
                             value={this.getGoodsTableValues()}
-                            datas={data}
                             onChange={this.handleGoodsListChange}
                         />
                         <div className="bottom-text">
                             <div className="bt-left">共<span className="bt-left-num">{data.commodityTotal}</span>件商品</div>
                             <div className="bt-right"><span>退款金额：</span><span className="bt-right-num">￥{data.refundAmount}</span></div>
-                            <div className="bt-right" style={{marginRight: 20}}><span>退货金额：</span><span className="bt-right-num">￥{this.state.total.amount === 0 ? 0 : data.amount}</span></div>
+                            <div className="bt-right" style={{ marginRight: 20 }}><span>退货金额：</span><span className="bt-right-num">￥{this.state.total.amount === 0 ? 0 : data.amount}</span></div>
                         </div>
                     </div>
                 </div>
@@ -287,7 +286,7 @@ class ReturnGoodsDetails extends PureComponent {
                                                         >
                                                             {item.value}
                                                         </Option>
-                                                ))}
+                                                    ))}
                                             </Select>
                                             )}
                                     </FormItem>
