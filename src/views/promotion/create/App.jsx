@@ -19,7 +19,7 @@ import { AreaSelector } from '../../../container/tree';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
-import { getChooseButton, getRules, getRewardList, getRewardListPanel } from './domHelper';
+import { getChooseButton, getRules, getPromotion, getRewardList } from './domHelper';
 import { getFormData } from './dataHelper';
 
 const RadioGroup = Radio.Group;
@@ -177,7 +177,7 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 {/* 指定条件——购买条件 */}
                 {getFieldValue('condition') === 1 && getFieldValue('category') === 'PURCHASECONDITION' ?
-                    getRewardList(
+                    getPromotion(
                         this.props.form,
                         'purchaseCondition',
                         this.handlePCCategorySelect)
@@ -185,7 +185,7 @@ class PromotionCreate extends PureComponent {
                 }
                 {/* 指定条件——奖励列表 */}
                 {getFieldValue('condition') === 1 && getFieldValue('category') === 'REWARDLIST' ?
-                    getRewardListPanel(
+                    getRewardList(
                         this.props.form,
                         'purchaseCondition',
                         this.handlePCCategorySelect)
