@@ -1,7 +1,7 @@
 /**
  * @author taoqiyu
  *
- * 促销管理 - 促销管理列表
+ * 促销管理 - 新增下单打折
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -19,7 +19,8 @@ import { AreaSelector } from '../../../container/tree';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
-import { getChooseButton, getRules, getRewardList } from './DomHelper';
+import { getChooseButton, getRules, getRewardList } from './domHelper';
+import { getFormData } from './dataHelper';
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -39,195 +40,6 @@ class PromotionCreate extends PureComponent {
         storeSelectorVisible: false,
         companies: [], // 所选区域子公司
         categoryPC: null, // 购买条件品类, PC = PURCHASECONDITION
-    }
-
-    // 根据整数计算百分数
-    getPercent = (num) => (Number(num / 100.0).toFixed(2));
-
-    // 不限制条件对象拼接
-    getNoConditionDataRule = (values) => {
-        const { noConditionRule, noConditionRulePercent, noConditionRuleAmount } = values;
-        const promotionRule = {
-            useConditionRule: false,
-            orderRule: {
-                preferentialWay: noConditionRule
-            }
-        };
-        switch (noConditionRule) {
-            case 'PERCENTAGE':
-                Object.assign(promotionRule.orderRule, {
-                    preferentialValue: this.getPercent(noConditionRulePercent)
-                });
-                break;
-            case 'DISCOUNTAMOUNT':
-                Object.assign(promotionRule.orderRule, {
-                    preferentialValue: noConditionRuleAmount
-                });
-                break;
-            default: break;
-        }
-        return promotionRule;
-    }
-
-    // 优惠种类: 购买条件
-    getPurchaseConditionsRule = (values) => {
-        const {
-            category, purchaseCondition, purchaseConditionType,
-            purchaseConditionTypeAmount, purchaseConditionTypeQuantity,
-            purchaseConditionRule, purchaseConditionRulePercent,
-            purchaseConditionRulePrice, purchaseConditionRuleGive,
-            purchaseConditionRuleAmount, purchaseConditionProduct
-        } = values;
-        const {
-            categoryPC
-        } = this.state;
-        let conditionValue = '';
-        if (purchaseConditionType === 'AMOUNT') {
-            // 条件类型为累计商品金额
-            conditionValue = purchaseConditionTypeAmount;
-        } else if (purchaseConditionType === 'QUANTITY') {
-            // 条件类型为累计商品数量
-            conditionValue = purchaseConditionTypeQuantity;
-        }
-        let preferentialValue = '';
-        switch (purchaseConditionRule) {
-            case 'PERCENTAGE': // 折扣百分比
-                preferentialValue = this.getPercent(purchaseConditionRulePercent);
-                break;
-            case 'DISCOUNTAMOUNT': // 折扣金额
-                preferentialValue = purchaseConditionRuleAmount;
-                break;
-            case 'FIXEDPRICE': // 固定单价
-                preferentialValue = purchaseConditionRulePrice;
-                break;
-            case 'GIVESAMEPRODUCT': // 赠送相同商品
-                preferentialValue = purchaseConditionRuleGive;
-                break;
-            default: break;
-        }
-        const promotionRule = {
-            useConditionRule: true,
-            ruleName: category,
-            purchaseConditionsRule: {
-                condition: {
-                    purchaseType: purchaseCondition,
-                    conditionType: purchaseConditionType,
-                    conditionValue
-                },
-                rule: {
-                    preferentialWay: purchaseConditionRule,
-                    preferentialValue
-                }
-            }
-        };
-        // 按品类
-        if (purchaseCondition === 'CATEGORY') {
-            Object.assign(promotionRule.purchaseConditionsRule.condition, {
-                promoCategories: categoryPC
-            });
-        }
-        // 按商品
-        if (purchaseCondition === 'PRODUCT') {
-            const { productId, productName } = purchaseConditionProduct.record;
-            Object.assign(promotionRule.purchaseConditionsRule.condition, {
-                promoProduct: { productId, productName }
-            });
-        }
-        return Util.removeInvalid(promotionRule);
-    }
-
-    // 获取基础数据，无分支条件的数据
-    getBasicData = (values) => {
-        const {
-            promotionName,
-            dateRange,
-            store,
-            quanifyAmount,
-            note,
-            storeId,
-            overlay,
-            priority
-        } = values;
-        const startDate = dateRange ? dateRange[0].valueOf() : '';
-        const endDate = dateRange ? dateRange[1].valueOf() : '';
-        const companies = this.state.companies;
-        // 计算打折活动叠加方式
-        let overLayNum = 0;
-        overlay.forEach(v => {
-            overLayNum += v;
-        });
-        return {
-            promotionName,
-            startDate,
-            endDate,
-            store,
-            quanifyAmount,
-            note,
-            companiesPoList: companies.length === 0 ? '' : companies,
-            storeId,
-            priority,
-            isSuperposeProOrCouDiscount: overLayNum % 2 === 1 ? 1 : 0,
-            isSuperposeUserDiscount: overLayNum >= 2 ? 1 : 0
-        }
-    }
-
-    getFormData = (callback) => {
-        this.props.form.validateFields((err, values) => {
-            const { condition, category, purchaseCondition, purchaseConditionProduct } = values;
-            const { categoryPC } = this.state;
-            if (err) {
-                // 指定条件——购买条件——购买类型：按品类——校验是否选择了品类
-                if (condition === 1
-                    && category === 'PURCHASECONDITION'
-                    && purchaseCondition === 'CATEGORY'
-                    && (!categoryPC || categoryPC.categoryId === undefined)
-                ) {
-                    this.props.form.setFields({
-                        purchaseCondition: {
-                            value: 'CATEGORY',
-                            errors: [new Error('请选择品类')]
-                        }
-                    });
-                }
-                // 指定条件——购买条件——购买类型：按品类——校验是否选择了商品
-                if (condition === 1
-                    && category === 'PURCHASECONDITION'
-                    && purchaseCondition === 'PRODUCT'
-                    && (!purchaseConditionProduct
-                        || purchaseConditionProduct.productId === ''
-                        || purchaseConditionProduct.record.productId === ''
-                    )
-                ) {
-                    this.props.form.setFields({
-                        purchaseCondition: {
-                            value: 'PRODUCT',
-                            errors: [new Error('请选择商品')]
-                        }
-                    });
-                }
-                return;
-            }
-            // 使用条件 0: 不限制，1: 指定条件
-            const dist = this.getBasicData(values);
-            // 无限制条件
-            if (condition === 0) {
-                Object.assign(dist, {
-                    promotionRule: this.getNoConditionDataRule(values)
-                });
-            } else if (condition === 1 && category === 'PURCHASECONDITION' && purchaseCondition === 'CATEGORY') {
-                // 指定条件——优惠种类——购买条件
-                Object.assign(dist, {
-                    promotionRule: this.getPurchaseConditionsRule(values)
-                });
-            } else if (condition === 1 && category === 'PURCHASECONDITION' && purchaseCondition === 'PRODUCT') {
-                Object.assign(dist, {
-                    promotionRule: this.getPurchaseConditionsRule(values)
-                });
-            }
-            if (typeof callback === 'function') {
-                callback(Util.removeInvalid(dist));
-            }
-        });
     }
 
     handleSelectorOk = (companies) => {
@@ -297,7 +109,7 @@ class PromotionCreate extends PureComponent {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.getFormData(data => {
+        getFormData({ state: this.state, form: this.props.form }, data => {
             this.props.createPromotion(data).then(res => {
                 if (res.code === 200) {
                     message.success(res.message);
@@ -368,7 +180,7 @@ class PromotionCreate extends PureComponent {
                         getFieldValue,
                         'purchaseCondition',
                         this.handlePCCategorySelect)
-                        : null
+                    : null
                 }
                 <Row>
                     <FormItem label="使用区域">
