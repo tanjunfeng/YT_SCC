@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-07 17:54:33
+ * @Last Modified time: 2017-12-07 18:31:06
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -36,7 +36,7 @@ import {
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
-    queryApprovalInfo,
+    queryCommentHis,
     queryProcessDefinitions,
     approveRefund
 } from '../../../actions/procurement';
@@ -71,7 +71,7 @@ const { TextArea } = Input;
     getSupplierLocMap,
     pubFetchValueList,
     queryProcessMsgInfo,
-    queryApprovalInfo,
+    queryCommentHis,
     queryProcessDefinitions,
     approveRefund,
     queryHighChart,
@@ -537,7 +537,7 @@ class toDoReturnList extends PureComponent {
                 break;
             case 'viewApproval':
                 this.showModal();
-                this.props.queryApprovalInfo({ businessId: record.id })
+                this.props.queryCommentHis({tackId: record.taskId})
                 break;
             default:
                 break;
@@ -899,7 +899,7 @@ toDoReturnList.propTypes = {
     processMsgInfo: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
-    queryApprovalInfo: PropTypes.func,
+    queryCommentHis: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,
     queryHighChart: PropTypes.func,
     clearHighChart: PropTypes.func,

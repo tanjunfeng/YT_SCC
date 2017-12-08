@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-07 18:03:38
+ * @Last Modified time: 2017-12-08 10:36:43
  */
 import React, { PureComponent } from 'react';
 import PropTypes, { object } from 'prop-types';
@@ -92,7 +92,6 @@ class toDoPurchaseList extends PureComponent {
             locDisabled: true, // 地点禁用
             locationData: {},
             isVisibleModal: false,
-            approvalVisible: false,
             opinionVisible: false,
             approvalStatus: false,
             adrTypeCode: '', // 地点编码
@@ -459,7 +458,7 @@ class toDoPurchaseList extends PureComponent {
                 break;
             case 'viewApproval':
                 this.showModal();
-                this.props.queryCommentHis({tackId: record.purchaseRefundNo})
+                this.props.queryCommentHis({tackId: record.taskId})
                 break;
             default:
                 break;
@@ -467,7 +466,7 @@ class toDoPurchaseList extends PureComponent {
     }
 
     toPurDetail = (record) => {
-        this.props.queryPoDetail(record.id);
+        this.props.queryPoDetail(record.purchaseNo);
     }
 
     /**
@@ -527,6 +526,9 @@ class toDoPurchaseList extends PureComponent {
     renderActions(text, record, index) {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
+                <Menu.Item key="detail">
+                    <Link to={`po/detail/${record.purchaseNo}`} >采购单详情</Link>
+                </Menu.Item>
                 <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
