@@ -1,6 +1,7 @@
 /**
  * 级联查询品类
  *
+ * 不支持修改
  * @author taoqiyu
  */
 import React, { PureComponent } from 'react';
@@ -9,7 +10,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Cascader } from 'antd';
+
 import { getCategoriesByParentId, clearCategoriesList } from '../../actions/promotion';
+import './Category.scss';
 
 @connect(state => ({
     categories: state.toJS().promotion.categories
@@ -19,23 +22,16 @@ import { getCategoriesByParentId, clearCategoriesList } from '../../actions/prom
 }, dispatch))
 
 class Category extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            options: [],
-            isLoading: false
-        };
-        this.onChange = this.onChange.bind(this);
-        this.loadData = this.loadData.bind(this);
-        this.appendObject = this.appendObject.bind(this);
-        this.appendOption = this.appendOption.bind(this);
-    }
+    state = {
+        options: [],
+        isLoading: false
+    };
 
     componentDidMount() {
         this.props.getCategoriesByParentId({ parentId: '' }).then((res) => {
             this.setState({
                 options: res.data.map((treeNode, index) => ({
-                    key: index,
+                    key: `root-${index}`,
                     label: treeNode.categoryName,
                     value: treeNode.id,
                     isLeaf: false,
@@ -56,17 +52,21 @@ class Category extends PureComponent {
      * @param {*选中的对象} selectedOptions
      * http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/promotion/insertPromotion
      */
-    onChange(value, selectedOptions) {
-        const target = selectedOptions[selectedOptions.length - 1];
-        const category = {
-            categoryId: target.value,
-            categoryName: target.label,
-            categoryLevel: target.level
-        };
-        this.props.onChange(category);
+    handleChange = (value, selectedOptions) => {
+        if (selectedOptions.length === 0) {
+            this.props.onChange({}, selectedOptions);
+        } else {
+            const target = selectedOptions[selectedOptions.length - 1];
+            const category = {
+                categoryId: target.value,
+                categoryName: target.label,
+                categoryLevel: target.level
+            };
+            this.props.onChange(category, selectedOptions);
+        }
     }
 
-    loadData(selectedOptions) {
+    handleLoadData = (selectedOptions) => {
         const target = selectedOptions[selectedOptions.length - 1];
         this.setState({
             isLoading: target.loading = true
@@ -86,7 +86,7 @@ class Category extends PureComponent {
      * @param {*请求数据} res
      * @param {*子节点地址} target
      */
-    appendObject(res, target) {
+    appendObject = (res, target) => {
         const id = target.value;
         const arr = [];
         res.data.forEach((treeNode, index) => {
@@ -107,11 +107,13 @@ class Category extends PureComponent {
      * @param {*子节点地址} children
      * @param {*父节点编号} parentId
      */
-    appendOption(children, parentId) {
+    appendOption = (children, parentId) => {
         const dist = this.state.options;
         dist.forEach((obj, index) => {
             if (obj.value === parentId) {
-                dist[index].children = children
+                Object.assign(dist[index], {
+                    children
+                });
             }
         });
         this.setState({
@@ -122,9 +124,10 @@ class Category extends PureComponent {
     render() {
         return (
             <Cascader
+                disabled={this.props.disabled}
                 options={this.state.options}
-                loadData={this.loadData}
-                onChange={this.onChange}
+                loadData={this.handleLoadData}
+                onChange={this.handleChange}
                 placeholder={'请选择'}
                 changeOnSelect
             />
@@ -135,7 +138,12 @@ class Category extends PureComponent {
 Category.propTypes = {
     getCategoriesByParentId: PropTypes.func,
     clearCategoriesList: PropTypes.func,
+    disabled: PropTypes.bool,
     onChange: PropTypes.func
+}
+
+Category.defaultProps = {
+    disabled: false
 }
 
 export default withRouter(Form.create()(Category));

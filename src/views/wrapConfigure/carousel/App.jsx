@@ -64,9 +64,19 @@ const columns = [
         render: (text = '无编号') => text
     },
     {
-        title: '链接地址',
+        title: '链接地址/活动id',
         dataIndex: 'linkAddress',
         key: 'linkAddress',
+    },
+    {
+        title: '分类',
+        dataIndex: 'linkId',
+        key: 'linkId',
+    },
+    {
+        title: '关键字',
+        dataIndex: 'linkKeyword',
+        key: 'linkKeyword',
     },
     {
         title: '图片',
