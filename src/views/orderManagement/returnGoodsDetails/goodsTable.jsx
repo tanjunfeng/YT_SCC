@@ -3,7 +3,7 @@
  * @Description: 采购管理 - 退货详情 - 列表修改
  * @CreateDate: 2017-12-01 16:03:22
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-12-05 10:15:32
+ * @Last Modified time: 2017-12-08 14:26:08
  */
 
 import React, { PureComponent } from 'react';
@@ -23,7 +23,7 @@ class GoodsTable extends PureComponent {
     }
 
     onCellChange = productCode => quantity => {
-        const items = this.props.value.items;
+        const items = this.props.value.newArray;
         const index = items.findIndex(item => item.productCode === productCode);
         const number = quantity;
         const goods = items[index];
@@ -79,7 +79,7 @@ class GoodsTable extends PureComponent {
      * 添加单个商品并校验状态，并判断商品是否应该移动到第一行
      */
     appendToList = goods => {
-        const items = this.props.value.items;
+        const items = this.props.value.newArray;
         const index = items.findIndex(
             item => item.productCode === goods.productCode);
         // 该商品不在列表中，则新增
@@ -137,7 +137,8 @@ class GoodsTable extends PureComponent {
     }
 
     renderNumber = (text, record) => {
-        const { actualReturnQuantity } = record;
+        console.log(text)
+        const { quantity } = record;
         // https://solution.yatang.cn/jira/browse/GA-1024
         // 填入的数量是否是内装数量的整数倍
         const errors = [];
@@ -150,7 +151,7 @@ class GoodsTable extends PureComponent {
             <EditableCell
                 value={value}
                 min={0}
-                max={actualReturnQuantity}
+                max={quantity}
                 precision={0}
                 step={1}
                 error={errors.join(', ')}
@@ -175,10 +176,11 @@ class GoodsTable extends PureComponent {
 
     render() {
         this.renderColumns();
+        console.log(this.props.datas)
         return (
             <Table
                 rowKey="productCode"
-                dataSource={this.props.value.items}
+                dataSource={this.props.value.newArray}
                 columns={columns}
                 scroll={{
                     x: 1400
