@@ -19,9 +19,7 @@ import { AreaSelector } from '../../../container/tree';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
-import { getChooseButton, getRules, getRulesColumn, buyType, conditionType } from './DomHelper';
-import { Category } from '../../../container/cascader';
-import { AddingGoodsByTerm } from '../../../container/search';
+import { getChooseButton, getRules, getRewardList } from './DomHelper';
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -47,8 +45,8 @@ class PromotionCreate extends PureComponent {
     getPercent = (num) => (Number(num / 100.0).toFixed(2));
 
     // 不限制条件对象拼接
-    getNoConditionData = (values) => {
-        const { noConditionRule, noConditionRulePercent, ruleNoConditionAmount } = values;
+    getNoConditionDataRule = (values) => {
+        const { noConditionRule, noConditionRulePercent, noConditionRuleAmount } = values;
         const promotionRule = {
             useConditionRule: false,
             orderRule: {
@@ -63,7 +61,7 @@ class PromotionCreate extends PureComponent {
                 break;
             case 'DISCOUNTAMOUNT':
                 Object.assign(promotionRule.orderRule, {
-                    preferentialValue: ruleNoConditionAmount
+                    preferentialValue: noConditionRuleAmount
                 });
                 break;
             default: break;
@@ -77,6 +75,7 @@ class PromotionCreate extends PureComponent {
             category, purchaseCondition, purchaseConditionType,
             purchaseConditionTypeAmount, purchaseConditionTypeQuantity,
             purchaseConditionRule, purchaseConditionRulePercent,
+            purchaseConditionRulePrice, purchaseConditionRuleGive,
             purchaseConditionRuleAmount, purchaseConditionProduct
         } = values;
         const {
@@ -84,15 +83,27 @@ class PromotionCreate extends PureComponent {
         } = this.state;
         let conditionValue = '';
         if (purchaseConditionType === 'AMOUNT') {
+            // 条件类型为累计商品金额
             conditionValue = purchaseConditionTypeAmount;
         } else if (purchaseConditionType === 'QUANTITY') {
+            // 条件类型为累计商品数量
             conditionValue = purchaseConditionTypeQuantity;
         }
         let preferentialValue = '';
-        if (purchaseConditionRule === 'PERCENTAGE') {
-            preferentialValue = this.getPercent(purchaseConditionRulePercent);
-        } else if (purchaseConditionRule === 'DISCOUNTAMOUNT') {
-            preferentialValue = purchaseConditionRuleAmount;
+        switch (purchaseConditionRule) {
+            case 'PERCENTAGE': // 折扣百分比
+                preferentialValue = this.getPercent(purchaseConditionRulePercent);
+                break;
+            case 'DISCOUNTAMOUNT': // 折扣金额
+                preferentialValue = purchaseConditionRuleAmount;
+                break;
+            case 'FIXEDPRICE': // 固定单价
+                preferentialValue = purchaseConditionRulePrice;
+                break;
+            case 'GIVESAMEPRODUCT': // 赠送相同商品
+                preferentialValue = purchaseConditionRuleGive;
+                break;
+            default: break;
         }
         const promotionRule = {
             useConditionRule: true,
@@ -109,11 +120,13 @@ class PromotionCreate extends PureComponent {
                 }
             }
         };
+        // 按品类
         if (purchaseCondition === 'CATEGORY') {
             Object.assign(promotionRule.purchaseConditionsRule.condition, {
                 promoCategories: categoryPC
             });
         }
+        // 按商品
         if (purchaseCondition === 'PRODUCT') {
             const { productId, productName } = purchaseConditionProduct.record;
             Object.assign(promotionRule.purchaseConditionsRule.condition, {
@@ -176,25 +189,19 @@ class PromotionCreate extends PureComponent {
                         }
                     });
                 }
-                // 指定条件——购买条件——购买类型：按品类——校验是否选择了品类
+                // 指定条件——购买条件——购买类型：按品类——校验是否选择了商品
                 if (condition === 1
                     && category === 'PURCHASECONDITION'
                     && purchaseCondition === 'PRODUCT'
                     && (!purchaseConditionProduct
-                        || !purchaseConditionProduct.record
-                        || !purchaseConditionProduct.record.productId
+                        || purchaseConditionProduct.productId === ''
+                        || purchaseConditionProduct.record.productId === ''
                     )
                 ) {
                     this.props.form.setFields({
                         purchaseCondition: {
                             value: 'PRODUCT',
                             errors: [new Error('请选择商品')]
-                        }
-                    });
-                } else {
-                    this.props.form.setFields({
-                        purchaseCondition: {
-                            value: 'PRODUCT'
                         }
                     });
                 }
@@ -205,7 +212,7 @@ class PromotionCreate extends PureComponent {
             // 无限制条件
             if (condition === 0) {
                 Object.assign(dist, {
-                    promotionRule: this.getNoConditionData(values)
+                    promotionRule: this.getNoConditionDataRule(values)
                 });
             } else if (condition === 1 && category === 'PURCHASECONDITION' && purchaseCondition === 'CATEGORY') {
                 // 指定条件——优惠种类——购买条件
@@ -273,14 +280,9 @@ class PromotionCreate extends PureComponent {
     /**
      * 购买条件品类选择器
      *
-     * PC: PURCHASECONDITION
+     * PC = PURCHASECONDITION
      */
     handlePCCategorySelect = (categoryPC) => {
-        if (categoryPC.categoryId) {
-            this.props.form.setFields({
-                purchaseCondition: { value: 'CATEGORY' }
-            });
-        }
         this.setState({ categoryPC });
     }
 
@@ -346,7 +348,7 @@ class PromotionCreate extends PureComponent {
                 {/* 优惠方式 */}
                 <Row>
                     {getFieldValue('condition') === 0 ?
-                        getRules(getFieldDecorator, getFieldValue, 'NoCondition')
+                        getRules(getFieldDecorator, getFieldValue, 'noCondition')
                         :
                         // condition === 1
                         <FormItem label="优惠种类">
@@ -361,25 +363,12 @@ class PromotionCreate extends PureComponent {
                     }
                 </Row>
                 {getFieldValue('condition') === 1 && getFieldValue('category') === 'PURCHASECONDITION' ?
-                    <Row>
-                        {buyType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
-                        {getFieldValue('purchaseCondition') === 'CATEGORY' ?
-                            <FormItem>
-                                <Category onChange={this.handlePCCategorySelect} />
-                            </FormItem> : null}
-                        {getFieldValue('purchaseCondition') === 'PRODUCT' ?
-                            <FormItem className="purchase-condition-product">
-                                {getFieldDecorator('purchaseConditionProduct', {
-                                    initialValue: {
-                                        productId: '',
-                                        productCode: '',
-                                        productName: ''
-                                    }
-                                })(<AddingGoodsByTerm />)}
-                            </FormItem> : null}
-                        {conditionType(getFieldDecorator, getFieldValue, 'purchaseCondition')}
-                        {getRulesColumn(getFieldDecorator, getFieldValue, 'purchaseCondition')}
-                    </Row> : null
+                    getRewardList(
+                        getFieldDecorator,
+                        getFieldValue,
+                        'purchaseCondition',
+                        this.handlePCCategorySelect)
+                        : null
                 }
                 <Row>
                     <FormItem label="使用区域">
