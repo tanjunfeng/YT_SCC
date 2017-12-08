@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-08 14:59:33
+ * @Last Modified time: 2017-12-08 17:07:20
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -579,14 +579,14 @@ class toDoReturnList extends PureComponent {
         // 流程状态
         const status = auditStatus === '进行中' ? 0 : 1;
         const searchParams = {
-            purchaseRefundNo,
+            refundNo: purchaseRefundNo,
             purchaseOrderNo,
             auditResult,
             purchaseOrderType,
             adrType,
-            spId,
-            spAdrId,
-            adrTypeCode,
+            spName: spId,
+            apAdrName: spAdrId,
+            refundAdrName: adrTypeCode,
             status
         };
         this.searchParams = Utils.removeInvalid(searchParams);
