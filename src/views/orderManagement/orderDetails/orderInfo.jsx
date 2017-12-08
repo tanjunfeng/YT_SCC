@@ -222,7 +222,7 @@ class OrderInformation extends PureComponent {
                                     <span>{orderDetailData.franchiseeId}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
-                                    <span className="details-info-lable">雅堂小超:</span>
+                                    <span className="details-info-lable">门店名称:</span>
                                     <span>{orderDetailData.franchiseeStoreName}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
@@ -238,7 +238,7 @@ class OrderInformation extends PureComponent {
                                     <span>{orderDetailData.branchCompanyArehouse}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
-                                    <span className="details-info-lable">雅堂小超编号:</span>
+                                    <span className="details-info-lable">门店编号:</span>
                                     <span>{orderDetailData.franchiseeStoreId}</span>
                                 </Col>
                                 <Col className="gutter-row" span={6}>
