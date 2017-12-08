@@ -62,7 +62,7 @@ export const getRulesColumn = (getFieldDecorator, getFieldValue, licence, type) 
     {/* 折扣金额 */}
     {getFieldValue(`${licence}Rule`) === 'DISCOUNTAMOUNT' ?
         <FormItem>
-            {/* ruleNoConditionAmount, purchaseConditionRuleAmount */}
+            {/* noConditionRuleAmount, purchaseConditionRuleAmount */}
             ￥{getFieldDecorator(`${licence}RuleAmount`, {
                 initialValue: 0,
                 rules: [

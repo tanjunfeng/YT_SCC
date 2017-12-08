@@ -45,8 +45,8 @@ class PromotionCreate extends PureComponent {
     getPercent = (num) => (Number(num / 100.0).toFixed(2));
 
     // 不限制条件对象拼接
-    getNoConditionData = (values) => {
-        const { noConditionRule, noConditionRulePercent, ruleNoConditionAmount } = values;
+    getNoConditionDataRule = (values) => {
+        const { noConditionRule, noConditionRulePercent, noConditionRuleAmount } = values;
         const promotionRule = {
             useConditionRule: false,
             orderRule: {
@@ -61,7 +61,7 @@ class PromotionCreate extends PureComponent {
                 break;
             case 'DISCOUNTAMOUNT':
                 Object.assign(promotionRule.orderRule, {
-                    preferentialValue: ruleNoConditionAmount
+                    preferentialValue: noConditionRuleAmount
                 });
                 break;
             default: break;
@@ -212,7 +212,7 @@ class PromotionCreate extends PureComponent {
             // 无限制条件
             if (condition === 0) {
                 Object.assign(dist, {
-                    promotionRule: this.getNoConditionData(values)
+                    promotionRule: this.getNoConditionDataRule(values)
                 });
             } else if (condition === 1 && category === 'PURCHASECONDITION' && purchaseCondition === 'CATEGORY') {
                 // 指定条件——优惠种类——购买条件
@@ -348,7 +348,7 @@ class PromotionCreate extends PureComponent {
                 {/* 优惠方式 */}
                 <Row>
                     {getFieldValue('condition') === 0 ?
-                        getRules(getFieldDecorator, getFieldValue, 'NoCondition')
+                        getRules(getFieldDecorator, getFieldValue, 'noCondition')
                         :
                         // condition === 1
                         <FormItem label="优惠种类">
