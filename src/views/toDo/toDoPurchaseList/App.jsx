@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-06 11:54:09
+ * @Last Modified time: 2017-12-08 15:30:57
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -30,7 +30,9 @@ import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import {
     locType,
-    auditStatusOption
+    auditStatusOption,
+    businessModeType,
+    poType
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
@@ -84,12 +86,12 @@ class toDoPurchaseList extends PureComponent {
         this.renderActions = this.renderActions.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.searchParams = {};
+        this.examinationAppData = {};
         this.state = {
             spAdrId: '', // 供应商地点编码
             locDisabled: true, // 地点禁用
             locationData: {},
             isVisibleModal: false,
-            approvalVisible: false,
             opinionVisible: false,
             approvalStatus: false,
             adrTypeCode: '', // 地点编码
@@ -104,49 +106,67 @@ class toDoPurchaseList extends PureComponent {
         this.columns = [
             {
                 title: '采购单号',
-                dataIndex: 'purchaseRefundNo',
-                key: 'purchaseRefundNo',
+                dataIndex: 'purchaseNo',
+                key: 'purchaseNo',
                 render: (text, record) => (
-                    <Link target="_blank" to={`po/detail/${record.id}`} onClick={this.toPurDetail}>{text}</Link>
+                    <Link target="_blank" to={`po/detail/${record.purchaseNo}`} onClick={this.toPurDetail}>{text}</Link>
                 )
+            }, {
+                title: '经营模式',
+                dataIndex: 'businessMode',
+                key: 'businessMode',
+                render: text => {
+                    if (text === null || text === undefined) {
+                        return null;
+                    }
+                    return (businessModeType.data[text + 1].value);
+                }
+            }, {
+                title: '采购单类型',
+                dataIndex: 'purchaseType',
+                key: 'purchaseType',
+                render: text => {
+                    if (text === null || text === undefined) {
+                        return null;
+                    }
+                    return (poType.data[text + 1].value);
+                }
             }, {
                 title: '地点类型',
                 dataIndex: 'adrType',
-                key: 'adrType'
+                key: 'adrType',
+                render: text => {
+                    if (text === null) {
+                        return null;
+                    }
+                    return (locType.data[text + 1].value);
+                }
             }, {
-                title: '退货地点',
-                dataIndex: 'refundAdr',
-                key: 'refundAdr'
+                title: '地点',
+                dataIndex: 'adrTypeName',
+                key: 'adrTypeName'
             }, {
                 title: '供应商',
-                dataIndex: 'supplier',
-                key: 'supplier'
+                dataIndex: 'spName',
+                key: 'spName'
             }, {
                 title: '供应商地点',
-                dataIndex: 'supplierAddress',
-                key: 'supplierAddress'
+                dataIndex: 'apAdrName',
+                key: 'apAdrName'
             }, {
-                title: '退货数量',
-                dataIndex: 'totalRefundAmount',
-                key: 'totalRefundAmount'
+                title: '大类',
+                dataIndex: 'category',
+                key: 'category'
             }, {
-                title: '退货成本额',
-                dataIndex: 'totalRefundCost',
-                key: 'totalRefundCost'
-            }, {
-                title: '实际退货金额(含税)',
-                dataIndex: 'totalRealRefundMoney',
-                key: 'totalRealRefundMoney'
-            }, {
-                title: '退货金额(含税)',
-                dataIndex: 'totalRefundMoney',
-                key: 'totalRefundMoney'
+                title: '金额',
+                dataIndex: 'purchaseMoney',
+                key: 'purchaseMoney'
             }, {
                 title: '创建者',
-                dataIndex: 'createUserId',
-                key: 'createUserId'
+                dataIndex: 'createUser',
+                key: 'createUser'
             }, {
-                title: '退货单创建时间',
+                title: '采购单创建时间',
                 dataIndex: 'createTime',
                 key: 'createTime',
                 render: text => {
@@ -160,8 +180,8 @@ class toDoPurchaseList extends PureComponent {
                 }
             }, {
                 title: '流程开始时间',
-                dataIndex: 'processEndTime',
-                key: 'processEndTime',
+                dataIndex: 'startTime',
+                key: 'startTime',
                 render: text => {
                     let res = text;
                     if (!text) {
@@ -173,8 +193,8 @@ class toDoPurchaseList extends PureComponent {
                 }
             }, {
                 title: '流程结束时间',
-                dataIndex: 'processStartTime',
-                key: 'processStartTime',
+                dataIndex: 'endTime',
+                key: 'endTime',
                 render: text => {
                     let res = text;
                     if (!text) {
@@ -186,15 +206,17 @@ class toDoPurchaseList extends PureComponent {
                 }
             }, {
                 title: '当前节点',
-                dataIndex: 'processNodeName',
-                key: 'processNodeName',
+                dataIndex: 'currentNode',
+                key: 'currentNode',
+                width: '160px',
                 render: (text, record) => (
-                    <a onClick={() => this.nodeModal(record.id)}>{text}</a>
+                    <a onClick={() => this.nodeModal(record.taskId)}>{text}</a>
                 )
             }, {
                 title: '操作',
                 dataIndex: 'operation',
                 key: 'operation',
+                width: '80px',
                 render: this.renderActions
             }
         ]
@@ -234,14 +256,15 @@ class toDoPurchaseList extends PureComponent {
         });
     }
 
+
     queryReturnMngList = () => {
         this.current = 1;
         this.props.queryProcessMsgInfo({
-            map: {
+            map: Object.assign({
                 pageSize: PAGE_SIZE,
                 pageNum: this.current,
                 status: this.state.status
-            },
+            }, this.searchParams),
             processType: 'CG'
         });
     }
@@ -413,15 +436,29 @@ class toDoPurchaseList extends PureComponent {
         });
     }
 
+    handleCommentOk = (param) => {
+        // const { currentNode, taskId } = this.examinationAppData;
+        // const processId = currentNode;
+        // this.props.approveRefund({ ...param, processId, businessId: taskId, type: 1 })
+        //     .then((res) => {
+        //         if (res.code === 200) {
+        //             message.success(res.message);
+        //             this.handleOpinionOk();
+        //             this.queryReturnMngList(this.current);
+        //         }
+        //     });
+    }
+
     handleSelect(record, index, items) {
         const { key } = items;
         switch (key) {
             case 'examinationApproval':
+                this.examinationAppData = record;
                 this.showOpinionModal();
                 break;
             case 'viewApproval':
                 this.showModal();
-                this.props.queryCommentHis({tackId: record.purchaseRefundNo})
+                this.props.queryCommentHis({tackId: record.taskId})
                 break;
             default:
                 break;
@@ -429,7 +466,7 @@ class toDoPurchaseList extends PureComponent {
     }
 
     toPurDetail = (record) => {
-        this.props.queryPoDetail(record.id);
+        this.props.queryPoDetail(record.purchaseNo);
     }
 
     /**
@@ -489,6 +526,9 @@ class toDoPurchaseList extends PureComponent {
     renderActions(text, record, index) {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
+                <Menu.Item key="detail">
+                    <Link to={`po/detail/${record.purchaseNo}`} >采购单详情</Link>
+                </Menu.Item>
                 <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
@@ -669,7 +709,7 @@ class toDoPurchaseList extends PureComponent {
                         <Table
                             dataSource={data}
                             columns={this.columns}
-                            rowKey="id"
+                            rowKey="taskId"
                             scroll={{
                                 x: 1600
                             }}
@@ -691,8 +731,9 @@ class toDoPurchaseList extends PureComponent {
                             visible={this.state.opinionvisible}
                             onOk={this.handleOpinionOk}
                             onCancel={this.handleOpinionCancel}
+                            handleCommentOk={this.handleCommentOk}
                         />
-                        <FlowImage data={this.props.highChartData} >
+                        <FlowImage data={this.props.highChartData} closeCanvas={this.closeCanvas} >
                             <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
                         </FlowImage>
                     </div>

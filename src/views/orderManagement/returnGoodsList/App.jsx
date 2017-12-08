@@ -227,11 +227,11 @@ class ReturnGoodsList extends PureComponent {
         const menu = (
             <Menu>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/detail/1/${record.id}`}>查看</Link>
+                    <Link target="_blank" to={`${pathname}/detail/1/${state}/${record.id}`}>查看</Link>
                 </Menu.Item>
                 {state === 1 &&
                     <Menu.Item key="edit">
-                        <Link to={`${pathname}/detail/2/${record.id}`}>编辑</Link>
+                        <Link target="_blank" to={`${pathname}/detail/2/${record.id}`}>编辑</Link>
                     </Menu.Item>
                 }
                 {state === 1 &&

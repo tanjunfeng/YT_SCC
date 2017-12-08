@@ -3,7 +3,7 @@
  * @Description: 销售换货列表
  * @CreateDate: 2017-11-10 11:22:13
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-23 10:15:42
+ * @Last Modified time: 2017-12-08 17:42:01
  */
 
 import React, { PureComponent } from 'react';
@@ -123,11 +123,11 @@ class ExchangeGoodsList extends PureComponent {
         const menu = (
             <Menu>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/detail/1/${record.id}`}>查看</Link>
+                    <Link target="_blank" to={`${pathname}/detail/1/${record.id}`}>查看</Link>
                 </Menu.Item>
                 {state === 1 &&
                     <Menu.Item key="edit">
-                        <Link to={`${pathname}/detail/2/${record.id}`}>编辑</Link>
+                        <Link target="_blank" to={`${pathname}/detail/2/${record.id}`}>编辑</Link>
                     </Menu.Item>
                 }
                 {state === 1 &&

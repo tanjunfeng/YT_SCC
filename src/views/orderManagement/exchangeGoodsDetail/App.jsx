@@ -3,7 +3,7 @@
  * @Description: 销售退货详情
  * @CreateDate: 2017-11-10 11:22:28
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-12-05 10:28:44
+ * @Last Modified time: 2017-12-08 18:15:07
  */
 
 import React, { PureComponent } from 'react';
@@ -13,16 +13,16 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import moment from 'moment';
 import {
-    Form, Select, Icon, Modal, Row,
+    Table, Form, Select, Icon, Modal, Row,
     Col, Button, Input, message
 } from 'antd';
 import Utils from '../../../util/util';
+import { exchangeGoodsDetailColumns as columns } from '../columns';
 import { reason } from '../../../constant/salesManagement';
 import { returnGoodsDetail, returnGoodsDetailClearData,
     returnGoodsOperation, returnDescriptionSave
 } from '../../../actions';
 import { DATE_FORMAT } from '../../../constant';
-import GoodsTable from './goodsTable';
 
 const FormItem = Form.Item;
 
@@ -40,8 +40,6 @@ const FormItem = Form.Item;
 class ExchangeGoodsDetail extends PureComponent {
     state = {
         id: '',
-        returnQuantityList: [],
-        total: ''
     }
 
     componentDidMount() {
@@ -55,16 +53,6 @@ class ExchangeGoodsDetail extends PureComponent {
     componentWillUnmount() {
         const { clearData } = this.props
         clearData()
-    }
-
-    getGoodsTableValues = () => {
-        const {
-            items = []
-        } = this.props.data;
-        return {
-            items,
-            returnQuantityList: this.state.returnQuantityList
-        }
     }
 
     // 请求数据
@@ -128,66 +116,28 @@ class ExchangeGoodsDetail extends PureComponent {
 
     // 保存提交
     save = () => {
-        const data = this.props.data;
-        const { returnReasonType } = data;
         const {
-            returnReason,
-            description
-        } = this.props.form.getFieldsValue();
-        // 提交数据
-        this.props.returnDescriptionSave(Utils.removeInvalid({
-            returnId: this.state.id,
             returnReasonType,
             returnReason,
-            description,
-            returnQuantity: this.state.returnQuantity
-        })).then(res => {
-            if (res.success) {
-                this.showConfirmSaveSuccess()
-            }
-        })
-    }
-
-    /**
-     * 商品列表改变通知
-     *
-     * @param {*array} goodsList 更新的商品列表
-     * @param {*object} total 商品小计信息
-     */
-    handleGoodsListChange = (goodsList, returnQuantity, total, isSaveDisabled) => {
-        // 刷新导入商品列表，清空报错商品列表, 清空excel导入商品列表
-        this.setState({
-            goodsList: [...goodsList],
-            returnQuantity,
-            total,
-            importList: [],
-            isSaveDisabled
-        });
-    }
-
-    purchaseOrderType = () => {
-        const data = this.props.data
-        switch (data.returnReasonType) {
-            case '':
-                return '请选择';
-            case 1:
-                return '包装破损';
-            case 2:
-                return '商品破损';
-            case 3:
-                return '保质期临期或过期';
-            case 4:
-                return '商品错发或漏发';
-            case 5:
-                return '订错货';
-            case 6:
-                return '商品质量问题';
-            case 7:
-                return '其他';
-            default:
-                return '';
+            description
+            } = this.props.form.getFieldsValue();
+        if (returnReasonType === '7' && returnReason === '') {
+            this.showConfirmSave()
+        } else {
+            // 提交数据
+            this.props.returnDescriptionSave(Utils.removeInvalid({
+                returnId: this.state.id,
+                returnReasonType,
+                returnReason,
+                description
+            })).then(res => {
+                if (res.success) {
+                    this.showConfirmSaveSuccess();
+                }
+            })
         }
     }
+
 
     render() {
         const { getFieldDecorator } = this.props.form
@@ -246,13 +196,15 @@ class ExchangeGoodsDetail extends PureComponent {
                         <Icon type="solution" className="header-icon" />商品信息
                     </div>
                     <div className="body body-table">
-                        <GoodsTable
-                            value={this.getGoodsTableValues()}
-                            onChange={this.handleGoodsListChange}
+                        <Table
+                            dataSource={data.items}
+                            columns={columns}
+                            rowKey="productId"
+                            pagination={false}
                         />
                         <div className="bottom-text">
                             <div className="bt-left">共<span className="bt-left-num">{data.commodityTotal}</span>件商品</div>
-                            <div className="bt-right"><span>总金额：</span><span className="bt-right-num">￥{this.state.total.amount || 0}</span></div>
+                            <div className="bt-right"><span>总金额：</span><span className="bt-right-num">￥{data.amount}</span></div>
                         </div>
                     </div>
                 </div>
@@ -269,7 +221,7 @@ class ExchangeGoodsDetail extends PureComponent {
                                 <Col span={4}>
                                     <FormItem>
                                         {getFieldDecorator('returnReasonType', {
-                                            initialValue: this.purchaseOrderType() || ''
+                                            initialValue: data.returnReasonType ? data.returnReasonType : ''
                                         })(
                                             <Select style={{ width: '153px' }} size="default" disabled>
                                                 {
@@ -309,7 +261,7 @@ class ExchangeGoodsDetail extends PureComponent {
                                         {getFieldDecorator('description', {
                                             initialValue: data.description
                                         })(
-                                            <TextArea className="input-des" autosize={{ minRows: 4, maxRows: 4 }} disabled={type === '2' ? false : true} size="default" />
+                                            <TextArea className="input-des" autosize={{ minRows: 4, maxRows: 4 }} disabled={type === '1'} size="default" />
                                             )}
                                     </FormItem>
                                 </Col>
@@ -318,12 +270,17 @@ class ExchangeGoodsDetail extends PureComponent {
                     </div>
                 </Form>
                 <div className="bt-button">
-                    <span>
-                        <Button size="large" onClick={this.save}>保存</Button>
-                        <Button size="large" onClick={() => this.showConfirm(1)}>确认</Button>
-                        <Button size="large" onClick={() => this.showConfirm(2)}>取消</Button>
+                    <div>
+                        {
+                            type === '2' &&
+                            <span>
+                                <Button size="large" onClick={this.save} disabled={this.state.isSaveDisabled}>保存</Button>
+                                <Button size="large" onClick={() => this.showConfirm(1)}>确认</Button>
+                                <Button size="large" onClick={() => this.showConfirm(2)}>取消</Button>
+                            </span>
+                        }
                         <Button size="large" onClick={this.goBack}>关闭</Button>
-                    </span>
+                    </div>
                 </div>
             </div>
         )

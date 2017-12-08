@@ -185,7 +185,7 @@ const orderListColumns = [{
     dataIndex: 'branchCompanyName',
     key: 'branchCompanyName',
 }, {
-    title: '雅堂小超',
+    title: '门店编号',
     dataIndex: 'franchiseeStoreId',
     key: 'franchiseeStoreId',
 }, {
@@ -374,7 +374,7 @@ const exchangeGoodsDetailColumns = [{
     )
 },
 {
-    title: '退货数量',
+    title: '换货数量',
     dataIndex: 'quantity',
     key: 'quantity'
 },
@@ -419,7 +419,7 @@ const returnGoodsTableColums = [{
     dataIndex: 'internationalCodes[0].internationalCode',
     key: 'internationalCodes[0].internationalCode',
     render: (text, record) => (
-        record.internationalCodes[0].internationalCode
+        record.internationalCodes[0].internationalCode || '-'
     )
 },
 {

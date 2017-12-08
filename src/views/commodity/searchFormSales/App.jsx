@@ -144,7 +144,7 @@ class SearchForm extends Component {
     /**
      * 重置
      */
-    handleResetValue() {
+    handleResetValue = () => {
         this.props.form.resetFields();
         this.name = null;
         this.choose = null;
