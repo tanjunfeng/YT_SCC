@@ -1,0 +1,64 @@
+{
+    "timestamp": 1512610426493,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 10,
+        "total": 4583,
+        "data": [
+            {
+                "productId": "xprod342632",
+                "productCode": "1002231",
+                "productName": "美洁5片装"
+            },
+            {
+                "productId": "xprod342739",
+                "productCode": "1002214",
+                "productName": "标美一分钟焗油500ml"
+            },
+            {
+                "productId": "xprod339950",
+                "productCode": "1004450",
+                "productName": "海圣老姜护发素200ml"
+            },
+            {
+                "productId": "xprod340052",
+                "productCode": "1004520",
+                "productName": "亭芳清新香座(茉莉)"
+            },
+            {
+                "productId": "xprod340193",
+                "productCode": "1004031",
+                "productName": "正林沙琪玛（椰红）240g"
+            },
+            {
+                "productId": "xprod340257",
+                "productCode": "1004679",
+                "productName": "大眼睛儿童健康洗发露(青苹果)"
+            },
+            {
+                "productId": "xprod340263",
+                "productCode": "1003685",
+                "productName": "捷荣三合一咖啡奶茶17g*10"
+            },
+            {
+                "productId": "xprod340498",
+                "productCode": "1004177",
+                "productName": "粉彩蛋形背包H277552"
+            },
+            {
+                "productId": "xprod340613",
+                "productCode": "1004174",
+                "productName": "宜而爽女罗纹领衫裤（D316/07)160"
+            },
+            {
+                "productId": "xprod340616",
+                "productCode": "1003634",
+                "productName": "正林美国葵花子100g"
+            }
+        ]
+    },
+    "success": true
+}

@@ -1,7 +1,7 @@
 /**
  * @author taoqiyu
  *
- * 促销管理 - 促销管理列表
+ * 促销管理 - 新增下单打折
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -11,7 +11,7 @@ import { withRouter } from 'react-router';
 import {
     Form, Row, Input, Radio,
     Button, DatePicker, Checkbox,
-    InputNumber, Select
+    InputNumber, Select, message
 } from 'antd';
 
 import Util from '../../../util/util';
@@ -19,7 +19,8 @@ import { AreaSelector } from '../../../container/tree';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
-import { getChooseButton, getRules, getRulesColumn, buyType, conditionType } from './DomHelper';
+import { getChooseButton, getRules, getRewardList } from './domHelper';
+import { getFormData } from './dataHelper';
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -38,50 +39,7 @@ class PromotionCreate extends PureComponent {
         areaSelectorVisible: false,
         storeSelectorVisible: false,
         companies: [], // 所选区域子公司
-        checkedList: []
-    }
-
-    getFormData = (callback) => {
-        this.props.form.validateFields((err, values) => {
-            if (err) {
-                return;
-            }
-            const {
-                promotionName,
-                dateRange,
-                store,
-                category,
-                quanifyAmount,
-                note,
-                storeId,
-                overlay,
-                priority
-            } = values;
-            const startDate = dateRange ? dateRange[0].valueOf() : '';
-            const endDate = dateRange ? dateRange[1].valueOf() : '';
-            const companies = this.state.companies;
-            let overLayNum = 0;
-            overlay.forEach(v => {
-                overLayNum += v;
-            });
-            const dist = {
-                promotionName,
-                startDate,
-                endDate,
-                store,
-                category,
-                quanifyAmount,
-                note,
-                companiesPoList: companies.length === 0 ? '' : companies,
-                storeId,
-                priority,
-                isSuperposeProOrCouDiscount: overLayNum % 2 === 1 ? 1 : 0,
-                isSuperposeUserDiscount: overLayNum >= 2 ? 1 : 0
-            }
-            if (typeof callback === 'function') {
-                callback(Util.removeInvalid(dist));
-            }
-        });
+        categoryPC: null, // 购买条件品类, PC = PURCHASECONDITION
     }
 
     handleSelectorOk = (companies) => {
@@ -132,6 +90,15 @@ class PromotionCreate extends PureComponent {
     }
 
     /**
+     * 购买条件品类选择器
+     *
+     * PC = PURCHASECONDITION
+     */
+    handlePCCategorySelect = (categoryPC) => {
+        this.setState({ categoryPC });
+    }
+
+    /**
      * 重新选择子公司列表
      */
     handleSubCompaniesRechoose = () => {
@@ -142,8 +109,12 @@ class PromotionCreate extends PureComponent {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.getFormData(data => {
-            console.log(data);
+        getFormData({ state: this.state, form: this.props.form }, data => {
+            this.props.createPromotion(data).then(res => {
+                if (res.code === 200) {
+                    message.success(res.message);
+                }
+            });
         });
     }
 
@@ -186,27 +157,30 @@ class PromotionCreate extends PureComponent {
                         </RadioGroup>)}
                     </FormItem>
                 </Row>
+                {/* 优惠方式 */}
                 <Row>
                     {getFieldValue('condition') === 0 ?
-                        getRules(getFieldDecorator, getFieldValue, 'NoCondition')
+                        getRules(getFieldDecorator, getFieldValue, 'noCondition')
                         :
+                        // condition === 1
                         <FormItem label="优惠种类">
                             {getFieldDecorator('category', {
-                                initialValue: '0'
+                                initialValue: 'PURCHASECONDITION'
                             })(<Select size="default" className="wd-110">
-                                <Option key={0} value="0">购买条件</Option>
-                                <Option key={1} value="1">奖励列表</Option>
-                                <Option key={2} value="2">整个购买列表</Option>
+                                <Option key={'PURCHASECONDITION'} value="PURCHASECONDITION">购买条件</Option>
+                                <Option key={'REWARDLIST'} value="REWARDLIST">奖励列表</Option>
+                                <Option key={'TOTALPUCHASELIST'} value="TOTALPUCHASELIST">整个购买列表</Option>
                             </Select>)}
                         </FormItem>
                     }
                 </Row>
-                {getFieldValue('category') === '0' ?
-                    <Row>
-                        {buyType(getFieldDecorator, getFieldValue)}
-                        {conditionType(getFieldDecorator, getFieldValue)}
-                        {getRulesColumn(getFieldDecorator, getFieldValue, 'category0')}
-                    </Row> : null
+                {getFieldValue('condition') === 1 && getFieldValue('category') === 'PURCHASECONDITION' ?
+                    getRewardList(
+                        getFieldDecorator,
+                        getFieldValue,
+                        'purchaseCondition',
+                        this.handlePCCategorySelect)
+                    : null
                 }
                 <Row>
                     <FormItem label="使用区域">
@@ -238,7 +212,7 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 <Row>
                     {storeSelectorVisible ?
-                        <FormItem>
+                        <FormItem className="store">
                             {getFieldDecorator('storeId', {
                                 initialValue: '',
                                 rules: [{ required: true, message: '请输入指定门店' }]
@@ -252,7 +226,7 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 <Row>
                     {storeSelectorVisible ?
-                        <span>请按照数据模板的格式准备导入数据如：A000999, A000900, A000991</span>
+                        <span className="store">请按照数据模板的格式准备导入数据如：A000999, A000900, A000991</span>
                         : null
                     }
                 </Row>
@@ -261,9 +235,10 @@ class PromotionCreate extends PureComponent {
                         {getFieldDecorator('priority', {
                             initialValue: 1,
                             rules: [
-                                { validator: Util.validatePositiveInteger }
+                                { validator: Util.validatePositiveInteger },
+                                { required: true, message: '请输入活动优先级' }
                             ]
-                        })(<InputNumber max={9999} className="wd-90" />)}
+                        })(<InputNumber min={1} step={1} max={9999} className="wd-90" />)}
                     </FormItem>
                 </Row>
                 <Row>
