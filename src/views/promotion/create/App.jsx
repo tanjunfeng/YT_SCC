@@ -1,7 +1,7 @@
 /**
  * @author taoqiyu
  *
- * 促销管理 - 促销管理列表
+ * 促销管理 - 新增下单打折
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
