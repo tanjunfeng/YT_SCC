@@ -20,6 +20,16 @@ import './buyConditionModal.scss';
 const FormItem = Form.Item;
 
 class BuyConditionModal extends PureComponent {
+    state = {
+        category: null, // 品类
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (!this.props.visible && nextProps.visible) {
+            this.props.form.resetFields();
+        }
+    }
+
     getFormData = (callback) => {
         const { validateFields } = this.props.form;
         validateFields((err, values) => {
@@ -27,6 +37,12 @@ class BuyConditionModal extends PureComponent {
             const { category } = this.state;
             if (err) {
                 return;
+            }
+            switch (buyCondition) {
+                case 'ALL': break;
+                case 'CATEGORY': break;
+                case 'PRODUCT': break;
+                default: break;
             }
             // 使用条件 0: 不限制，1: 指定条件
             const dist = {};
@@ -47,9 +63,7 @@ class BuyConditionModal extends PureComponent {
     }
 
     /**
-     * 购买条件品类选择器
-     *
-     * PC = PURCHASECONDITION
+     * 选择品类
      */
     handleCategorySelect = (category) => {
         this.setState({ category });
@@ -60,8 +74,8 @@ class BuyConditionModal extends PureComponent {
         const { getFieldValue, getFieldDecorator } = form;
         return (
             <Modal
-                className="buy-condition-modal"
                 title="购买条件"
+                className="buy-condition-modal"
                 visible={visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
