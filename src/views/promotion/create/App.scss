@@ -22,21 +22,9 @@ $promotionAddBorderCorder: #d9d9d9;
 }
 
 .promotion-create {
-    .wd-290 {
-        width: 297px;
-        float: left;
-    }
-    .wd-320 {
-        width: 316px;
-        float: left;
-    }
-    .wd-400 {
-        width: 395px;
-        float: left;
-    }
     padding-top: 60px;
     margin: 0 auto;
-    width: 1010px;
+    width: 1012px;
     form .default {
         width: 78px;
     }
@@ -48,6 +36,18 @@ $promotionAddBorderCorder: #d9d9d9;
         border: 1px solid $promotionAddBorderCorder;
         li {
             line-height: 48px;
+            .wd-297 {
+                width: 297px;
+                float: left;
+            }
+            .wd-317 {
+                width: 317px;
+                float: left;
+            }
+            .wd-396 {
+                width: 396px;
+                float: left;
+            }
             &:first-child {
                 h2 {
                     padding: 0 20px;

@@ -188,7 +188,7 @@ export const getRewardList = (form, licence, handleCategorySelect) => {
     const { getFieldDecorator, getFieldValue } = form;
     return (
         <Row>
-            <div className="wd-400">
+            <div className="wd-396">
                 {buyType(form, licence)}
                 {getFieldValue(licence) === 'CATEGORY' ?
                     <FormItem>
@@ -206,8 +206,8 @@ export const getRewardList = (form, licence, handleCategorySelect) => {
                         })(<AddingGoodsByTerm />)}
                     </FormItem> : null}
             </div>
-            <div className="wd-320"> {conditionType(form, licence)}</div>
-            <div className="wd-290">
+            <div className="wd-317"> {conditionType(form, licence)}</div>
+            <div className="wd-297">
                 {getRulesColumn(form, licence, getFieldValue(licence))}
             </div>
         </Row>
