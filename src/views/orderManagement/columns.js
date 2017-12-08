@@ -185,7 +185,7 @@ const orderListColumns = [{
     dataIndex: 'branchCompanyName',
     key: 'branchCompanyName',
 }, {
-    title: '雅堂小超',
+    title: '门店编号',
     dataIndex: 'franchiseeStoreId',
     key: 'franchiseeStoreId',
 }, {
