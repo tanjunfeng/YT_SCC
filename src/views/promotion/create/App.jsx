@@ -164,7 +164,7 @@ class PromotionCreate extends PureComponent {
             quanifyAmount,
             note,
             companiesPoList: companies.length === 0 ? '' : companies,
-            storeId,
+            stores: storeId === undefined ? '' : { storeId },
             priority,
             isSuperposeProOrCouDiscount: overLayNum % 2 === 1 ? 1 : 0,
             isSuperposeUserDiscount: overLayNum >= 2 ? 1 : 0
@@ -368,7 +368,7 @@ class PromotionCreate extends PureComponent {
                         getFieldValue,
                         'purchaseCondition',
                         this.handlePCCategorySelect)
-                        : null
+                    : null
                 }
                 <Row>
                     <FormItem label="使用区域">
