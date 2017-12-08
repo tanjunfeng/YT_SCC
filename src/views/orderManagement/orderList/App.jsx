@@ -461,9 +461,9 @@ class OrderManagementList extends Component {
                                     </FormItem>
                                 </Col>
                                 <Col className="gutter-row z-up search-style" span={8}>
-                                    {/* 雅堂小超 */}
+                                    {/* 加盟商 */}
                                     <div>
-                                        <span className="sc-form-item-label">雅堂小超</span>
+                                        <span className="sc-form-item-label">加盟商</span>
                                         <FormItem>
                                             {getFieldDecorator('franchisee', {
                                                 initialValue: { franchiseeId: '', franchiseeName: '' }
@@ -580,7 +580,21 @@ class OrderManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row check-item" offset={16} span={8}>
+                                <Col className="gutter-row" span={8}>
+                                    {/* 电商订单编号 */}
+                                    <FormItem>
+                                        <div>
+                                            <span className="sc-form-item-label">门店编号</span>
+                                            {getFieldDecorator('franchiseeStoreId')(
+                                                <Input
+                                                    className="input"
+                                                    placeholder="请输入门店编号"
+                                                />
+                                            )}
+                                        </div>
+                                    </FormItem>
+                                </Col>
+                                <Col className="gutter-row check-item" offset={8} span={8}>
                                     {/* 是否包含父订单 */}
                                     <FormItem>
                                         {getFieldDecorator('containParent', {
