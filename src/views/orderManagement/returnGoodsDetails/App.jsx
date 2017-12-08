@@ -334,7 +334,7 @@ class ReturnGoodsDetails extends PureComponent {
                                         {getFieldDecorator('description', {
                                             initialValue: data.description,
                                         })(
-                                            <TextArea className="input-des" autosize={{ minRows: 4, maxRows: 4 }} size="default" />
+                                            <TextArea className="input-des" autosize={{ minRows: 4, maxRows: 4 }} disabled={type === '1'} size="default" />
                                             )}
                                     </FormItem>
                                 </Col>
