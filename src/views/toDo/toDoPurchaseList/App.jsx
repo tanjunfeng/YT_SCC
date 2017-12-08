@@ -3,10 +3,10 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-08 10:36:43
+ * @Last Modified time: 2017-12-08 15:30:57
  */
 import React, { PureComponent } from 'react';
-import PropTypes, { object } from 'prop-types';
+import PropTypes from 'prop-types';
 import {
     Button,
     Input,
