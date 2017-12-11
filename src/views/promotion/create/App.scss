@@ -43,6 +43,12 @@ $promotionAddBorderCorder: #d9d9d9;
         width: 396px;
         float: left;
     }
+    .tr {
+        text-align: right;
+    }
+    .pr-60 {
+        padding-right: 60px;
+    }
     ul.list-panel {
         margin: 12px 0;
         border: 1px solid $promotionAddBorderCorder;

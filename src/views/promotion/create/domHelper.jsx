@@ -33,7 +33,7 @@ export const getRulesColumn = (form, licence, type = '') => {
     const { getFieldDecorator, getFieldValue } = form;
     return (<span>
         <FormItem label="优惠方式">
-            {/* noConditionRule, purchaseConditionRule */}
+            {/* noConditionRule, purchaseConditionRule, buyConditionRule */}
             {getFieldDecorator(`${licence}Rule`, {
                 initialValue: '',
                 rules: [{ required: true, message: '请选择优惠方式' }]
@@ -54,7 +54,9 @@ export const getRulesColumn = (form, licence, type = '') => {
         {/* 优惠百分比 */}
         {getFieldValue(`${licence}Rule`) === 'PERCENTAGE' ?
             <FormItem>
-                {/* noConditionRulePercent, purchaseConditionRulePercent */}
+                {/* noConditionRulePercent,
+                purchaseConditionRulePercent,
+                buyConditionRulePercent */}
                 {getFieldDecorator(`${licence}RulePercent`, {
                     initialValue: 95,
                     rules: [{ required: true, message: '请输入折扣百分比' }]
@@ -64,7 +66,7 @@ export const getRulesColumn = (form, licence, type = '') => {
         {/* 折扣金额 */}
         {getFieldValue(`${licence}Rule`) === 'DISCOUNTAMOUNT' ?
             <FormItem>
-                {/* noConditionRuleAmount, purchaseConditionRuleAmount */}
+                {/* noConditionRuleAmount, purchaseConditionRuleAmount, buyConditionRuleAmount */}
                 ￥{getFieldDecorator(`${licence}RuleAmount`, {
                     initialValue: 0,
                     rules: [
@@ -118,7 +120,7 @@ export const buyType = (form, licence) => {
             <FormItem label="购买类型">
                 {/* purchaseCondition, buyCondition */}
                 {getFieldDecorator(licence, {
-                    initialValue: 'CATEGORY'
+                    initialValue: 'ALL'
                 })(<Select size="default" className="wd-90">
                     <Option key={'ALL'} value="ALL">全部</Option>
                     <Option key={'CATEGORY'} value="CATEGORY">按品类</Option>
@@ -135,12 +137,12 @@ export const buyType = (form, licence) => {
  * @param {*object} form { getFieldDecorator, getFieldValue }
  * @param {*string} licence
  */
-export const conditionType = (form, licence) => {
+export const getConditionType = (form, licence) => {
     const { getFieldDecorator, getFieldValue } = form;
     return (
         <span>
             <FormItem label="条件类型">
-                {/* purchaseConditionType, rewardListType */}
+                {/* purchaseConditionType, buyConditionType */}
                 {getFieldDecorator(`${licence}Type`, {
                     initialValue: '',
                     rules: [{ required: true, message: '请选择条件类型' }]
@@ -152,7 +154,7 @@ export const conditionType = (form, licence) => {
             </FormItem>
             {getFieldValue(`${licence}Type`) === 'AMOUNT' ?
                 <FormItem>
-                    {/* rewardListTypeAmount */}
+                    {/* buyConditionTypeAmount */}
                     ￥{getFieldDecorator(`${licence}TypeAmount`, {
                         initialValue: 0,
                         rules: [
@@ -165,7 +167,7 @@ export const conditionType = (form, licence) => {
             }
             {getFieldValue(`${licence}Type`) === 'QUANTITY' ?
                 <FormItem>
-                    {/* rewardListTypeQuantity */}
+                    {/* buyConditionTypeQuantity */}
                     {getFieldDecorator(`${licence}TypeQuantity`, {
                         initialValue: 0,
                         rules: [
@@ -199,7 +201,7 @@ export const getPromotion = (form, licence, handleCategorySelect) => {
                     </FormItem> : null}
                 {getFieldValue(licence) === 'PRODUCT' ?
                     <FormItem className="product">
-                        {/* purchaseConditionProduct, rewardListProduct */}
+                        {/* purchaseConditionProduct, rewardListProduct, buyConditionProduct */}
                         {getFieldDecorator(`${licence}Product`, {
                             initialValue: {
                                 productId: '',
@@ -209,7 +211,7 @@ export const getPromotion = (form, licence, handleCategorySelect) => {
                         })(<AddingGoodsByTerm />)}
                     </FormItem> : null}
             </div>
-            <div className="wd-317"> {conditionType(form, licence)}</div>
+            <div className="wd-317"> {getConditionType(form, licence)}</div>
             <div className="wd-297">
                 {getRulesColumn(form, licence, getFieldValue(licence))}
             </div>
