@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-08 15:30:57
+ * @Last Modified time: 2017-12-11 09:18:55
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -487,10 +487,11 @@ class toDoPurchaseList extends PureComponent {
             purchaseRefundNo,
             purchaseOrderNo,
             approvalStatus,
-            purchaseOrderType,
-            status,
-            adrType,
             supplier
+        } = this.props.form.getFieldsValue();
+        let {
+            adrType,
+            purchaseOrderType,
         } = this.props.form.getFieldsValue();
         // 供应商编号
         const spId = supplier.spId;
@@ -500,17 +501,17 @@ class toDoPurchaseList extends PureComponent {
 
         // 地点
         const adrTypeCode = this.state.refundAdr;
-
+        adrType = parseInt(adrType, 10);
+        purchaseOrderType = parseInt(purchaseOrderType, 10)
         const searchParams = {
-            purchaseRefundNo,
+            purchaseNo: purchaseRefundNo,
             purchaseOrderNo,
             approvalStatus,
-            purchaseOrderType,
-            status,
+            purchaseType: purchaseOrderType,
             adrType,
-            spId,
-            spAdrId,
-            adrTypeCode
+            spName: spId,
+            spAdrName: spAdrId,
+            adrTypeName: adrTypeCode
         };
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
@@ -563,6 +564,21 @@ class toDoPurchaseList extends PureComponent {
                                 {/* 退货单号 */}
                                 <FormItem label="采购单号" >
                                     {getFieldDecorator('purchaseRefundNo', {})(<Input size="default" />)}
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
+                                {/* 采购单类型 */}
+                                <FormItem label="采购单类型">
+                                    {getFieldDecorator('purchaseOrderType', {initialValue: poType.defaultValue })(
+                                        <Select style={{ width: '153px' }} size="default">
+                                            {
+                                                poType.data.map((item) => (
+                                                    <Option key={item.key} value={item.key}>
+                                                        {item.value}
+                                                    </Option>))
+                                            }
+                                        </Select>
+                                    )}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
