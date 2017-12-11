@@ -4,7 +4,7 @@
  * 促销管理 - 新增下单打折 - 购买条件
  */
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import {
     Form, Row, Button
@@ -70,7 +70,8 @@ class BuyConditionList extends PureComponent {
         this.setState({ visible: true })
     }
 
-    handleModalOk = () => {
+    handleModalOk = (data) => {
+        console.log(data);
         this.setState({ visible: false });
     }
 
@@ -89,7 +90,6 @@ class BuyConditionList extends PureComponent {
                 {conditions.map(condition => this.getRow(condition))}
                 <BuyConditionModal
                     visible={visible}
-                    onCategoryChange={this.handleCategoryRLChange}
                     onOk={this.handleModalOk}
                     onCancel={this.handleModalCancel}
                 />
@@ -99,7 +99,7 @@ class BuyConditionList extends PureComponent {
 }
 
 BuyConditionList.propTypes = {
-    // form: PropTypes.objectOf(PropTypes.any)
+    // form: PropTypes.objectOf(PropTypes.any),
 }
 
 export default withRouter(Form.create()(BuyConditionList));

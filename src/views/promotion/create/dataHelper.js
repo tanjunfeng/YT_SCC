@@ -50,10 +50,9 @@ const getConditionValueOfPC = (values) => {
 const getConditionOfPC = (promotionRule, state, values) => {
     const {
         purchaseCondition,
-        purchaseConditionProduct = { record: { productId: '', productName: '' } }
+        purchaseConditionProduct
     } = values;
     const { categoryPC } = state;
-    const { productId, productName } = purchaseConditionProduct.record;
     switch (purchaseCondition) {
         case 'ALL': // 全部
             break;
@@ -64,7 +63,10 @@ const getConditionOfPC = (promotionRule, state, values) => {
             break;
         case 'PRODUCT': // 按商品
             Object.assign(promotionRule.purchaseConditionsRule.condition, {
-                promoProduct: { productId, productName }
+                promoProduct: {
+                    productId: purchaseConditionProduct.record.productId,
+                    productName: purchaseConditionProduct.record.productName
+                }
             });
             break;
         default: break;
