@@ -40,6 +40,7 @@ class PromotionCreate extends PureComponent {
         storeSelectorVisible: false,
         companies: [], // 所选区域子公司
         categoryPC: null, // 购买条件品类, PC = PURCHASECONDITION
+        categoryRL: null, // 奖励列表品类，RL = REWARDLIST
     }
 
     handleSelectorOk = (companies) => {
@@ -99,6 +100,15 @@ class PromotionCreate extends PureComponent {
     }
 
     /**
+     * 购买条件品类选择器
+     *
+     * RL = REWARDLIST
+     */
+    handleRLCategorySelect = (categoryRL) => {
+        this.setState({ categoryRL });
+    }
+
+    /**
      * 重新选择子公司列表
      */
     handleSubCompaniesRechoose = () => {
@@ -120,7 +130,9 @@ class PromotionCreate extends PureComponent {
 
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        const { companies, areaSelectorVisible, storeSelectorVisible } = this.state;
+        const {
+            companies, areaSelectorVisible, storeSelectorVisible
+        } = this.state;
         return (
             <Form className="promotion-create" layout="inline" onSubmit={this.handleSubmit}>
                 <Row>
@@ -166,7 +178,7 @@ class PromotionCreate extends PureComponent {
                         // condition === 1
                         <FormItem label="优惠种类">
                             {getFieldDecorator('category', {
-                                initialValue: 'REWARDLIST'
+                                initialValue: 'PURCHASECONDITION'
                             })(<Select size="default" className="wd-110">
                                 <Option key={'PURCHASECONDITION'} value="PURCHASECONDITION">购买条件</Option>
                                 <Option key={'REWARDLIST'} value="REWARDLIST">奖励列表</Option>
@@ -187,8 +199,8 @@ class PromotionCreate extends PureComponent {
                 {getFieldValue('condition') === 1 && getFieldValue('category') === 'REWARDLIST' ?
                     getRewardList(
                         this.props.form,
-                        'purchaseCondition',
-                        this.handlePCCategorySelect)
+                        'rewardList',
+                        this.handleRLCategorySelect)
                     : null
                 }
                 <Row>
