@@ -22,9 +22,28 @@ class BuyConditionList extends PureComponent {
         <li>
             <Row>
                 {this.getBuyType(condition)}
+                {this.getConditionType(condition)}
+                <div className="wd-297">
+                    <a href="#">编辑</a>
+                    <a href="#">删除</a>
+                </div>
             </Row>
         </li>
     )
+
+    getConditionType = (condition) => {
+        switch (condition.conditionType) {
+            case 'AMOUNT':
+                return (
+                    <div className="wd-317">累计商品金额：{condition.conditionValue}元</div>
+                );
+            case 'QUANTITY':
+                return (
+                    <div className="wd-317">累计商品数量：{condition.conditionValue}</div>
+                );
+            default: return null;
+        }
+    }
 
     getBuyType = (condition) => {
         switch (condition.purchaseType) {
