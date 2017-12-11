@@ -172,7 +172,7 @@ class GoodsInfo extends PureComponent {
                     <Icon type="picture" className="detail-message-header-icon" />
                     商品信息
                 </div>
-                <div>
+                <div className="orderDetail-message">
                     <Table
                         dataSource={this.state.goodsList}
                         columns={columns}
