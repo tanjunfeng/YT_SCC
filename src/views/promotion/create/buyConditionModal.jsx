@@ -13,47 +13,22 @@ import {
 import { Category } from '../../../container/cascader';
 import { AddingGoodsByTerm } from '../../../container/search';
 import { buyType, conditionType, getRulesColumn } from './domHelper';
-import Util from '../../../util/util';
+import { getFormData } from './dataHelper';
 
 import './buyConditionModal.scss';
 
 const FormItem = Form.Item;
 
 class BuyConditionModal extends PureComponent {
-    state = {
-        category: null, // 品类
-    }
-
     componentWillReceiveProps(nextProps) {
         if (!this.props.visible && nextProps.visible) {
             this.props.form.resetFields();
         }
     }
 
-    getFormData = (callback) => {
-        const { validateFields } = this.props.form;
-        validateFields((err, values) => {
-            const { buyCondition } = values;
-            // const { category } = this.state;
-            if (err) {
-                return;
-            }
-            switch (buyCondition) {
-                case 'ALL': break;
-                case 'CATEGORY': break;
-                case 'PRODUCT': break;
-                default: break;
-            }
-            // 使用条件 0: 不限制，1: 指定条件
-            const dist = {};
-            if (typeof callback === 'function') {
-                callback(Util.removeInvalid(dist));
-            }
-        });
-    }
-
     handleOk = () => {
-        this.getFormData(() => {
+        getFormData({ state: this.state, form: this.props.form }, data => {
+            console.log(data);
             this.props.onOk();
         });
     }
@@ -65,8 +40,8 @@ class BuyConditionModal extends PureComponent {
     /**
      * 选择品类
      */
-    handleCategorySelect = (category) => {
-        this.setState({ category });
+    handleCategorySelect = (categoryRL) => {
+        this.props.onCategoryChange(categoryRL);
     }
 
     render() {
@@ -116,6 +91,7 @@ BuyConditionModal.propTypes = {
     visible: PropTypes.bool,
     onOk: PropTypes.func,
     onCancel: PropTypes.func,
+    onCategoryChange: PropTypes.func,
 }
 
 export default withRouter(Form.create()(BuyConditionModal));

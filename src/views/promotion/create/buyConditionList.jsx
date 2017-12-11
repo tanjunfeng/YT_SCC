@@ -89,6 +89,7 @@ class BuyConditionList extends PureComponent {
                 {conditions.map(condition => this.getRow(condition))}
                 <BuyConditionModal
                     visible={visible}
+                    onCategoryChange={this.handleCategoryRLChange}
                     onOk={this.handleModalOk}
                     onCancel={this.handleModalCancel}
                 />
