@@ -55,6 +55,8 @@ const getConditionOfPC = (promotionRule, state, values) => {
     const { categoryPC } = state;
     const { productId, productName } = purchaseConditionProduct.record;
     switch (purchaseCondition) {
+        case 'ALL': // 全部
+            break;
         case 'CATEGORY': // 按品类
             Object.assign(promotionRule.purchaseConditionsRule.condition, {
                 promoCategories: categoryPC
@@ -68,6 +70,8 @@ const getConditionOfPC = (promotionRule, state, values) => {
         default: break;
     }
 }
+
+export const isCategoryExist = (category) => (category && category.categoryId !== undefined);
 
 /**
  * 优惠种类: 购买条件
@@ -95,6 +99,7 @@ const getPurchaseConditionsRule = (state, values) => {
             }
         }
     };
+    // 按全部、品类和商品拼接 condition 对象
     getConditionOfPC(promotionRule, state, values);
     return Util.removeInvalid(promotionRule);
 }
@@ -163,7 +168,6 @@ const getBasicData = (state, values) => {
     }
 }
 
-export const isCategoryExist = (category) => (category && category.categoryId !== undefined);
 
 /**
  * 获取表单数据
@@ -185,16 +189,11 @@ export const getFormData = ({ state, form }, callback) => {
             Object.assign(dist, {
                 promotionRule: getNoConditionDataRule(values)
             });
-        } else if (condition === 1 && category === 'PURCHASECONDITION' && purchaseCondition === 'CATEGORY') {
-            // 指定条件——优惠种类——购买条件
-            if (!isCategoryExist(state.categoryPC)) {
+        } else if (condition === 1 && category === 'PURCHASECONDITION') {
+            if (purchaseCondition === 'CATEGORY' && !isCategoryExist(state.categoryPC)) {
                 message.error('请选择品类');
                 return;
             }
-            Object.assign(dist, {
-                promotionRule: getPurchaseConditionsRule(state, values)
-            });
-        } else if (condition === 1 && category === 'PURCHASECONDITION' && purchaseCondition === 'PRODUCT') {
             Object.assign(dist, {
                 promotionRule: getPurchaseConditionsRule(state, values)
             });
