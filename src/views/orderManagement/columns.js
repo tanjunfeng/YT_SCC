@@ -318,7 +318,7 @@ const returnGoodsListColumns = [{
     }
 },
 {
-    title: '换货单状态',
+    title: '退货单状态',
     dataIndex: 'stateDetail',
     key: 'stateDetail'
 },
