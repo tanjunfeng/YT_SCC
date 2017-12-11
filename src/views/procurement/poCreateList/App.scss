@@ -1,0 +1,91 @@
+.po-detail {
+  margin: 10px 0;
+  .basic-box,materials {
+    margin-bottom: 30px;
+    border: 1px solid #C3C4C7;
+    color: #515151;
+    border-radius: 2px;
+    .header {
+      background-color: #F9f9f9;
+      border-bottom: 1px solid #C3C4C7;
+      padding: 8px 18px;
+      color: #242424;
+      font-size: 14px;
+      &-icon {
+        font-size: 16px;
+        margin-right: 8px;
+      }
+    } 
+  }
+
+  &-body {
+    padding: 0 18px;
+    background-color: #f00;
+
+  }
+  .ywc-smind.ywc-smind-disabled {
+    .ywc-smind-input-placeholder, {
+      .ywc-smind.ywc-smind-disabled {
+        .ywc-smind-input {
+            color: #bbb;
+        }
+      }
+    }
+  }
+  form .ant-select,
+  form .ant-cascader-picker {
+    width: 250px;
+  }
+
+  .ant-form-item-label {
+    label {
+      min-width: 80px;
+      display: inline-block;
+    }
+    .label-wrap {
+      min-width: 80px;
+      display: inline-block;
+      padding-right: 12px;
+    }
+  }
+
+  .text {
+    min-width: 80px;
+    display: inline-block;
+    line-height: 32px;
+    font-size: 12px;
+  }
+
+  .small {
+    .ywc-smind {
+      width: 250px;
+    }
+  }
+
+  .middle {
+    .ywc-smind {
+      width: 250px;
+    }
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+
+    .item-box {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .label {
+      margin-right: 8px;
+      display: inline-block;
+    }
+  }
+  .detail-tooltip-icon {
+    font-size: 15px;
+    color: #108EE9;
+    line-height: inherit;
+    margin-left: 5px; 
+  }
+}

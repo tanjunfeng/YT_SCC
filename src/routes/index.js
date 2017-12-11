@@ -48,6 +48,7 @@ import AdPlanList404 from 'bundle-loader?lazy!../views/wrapConfigure/adPlanList4
 // 采购管理
 import PoMngList from 'bundle-loader?lazy!../views/procurement/poMngList';
 import PoDetail from 'bundle-loader?lazy!../views/procurement/poDetail';
+import PoCreateList from 'bundle-loader?lazy!../views/procurement/PoCreateList';
 import PoPrintList from 'bundle-loader?lazy!../views/procurement/poPrintList';
 import PoRcvMngList from 'bundle-loader?lazy!../views/procurement/poRcvMngList';
 import PoRcvList from 'bundle-loader?lazy!../views/procurement/poRcvList';
@@ -541,7 +542,7 @@ const routes = [
                         <Route
                             path="/po/:type/:purchaseOrderNo"
                             exact
-                            render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
+                            render={() => <Bundle load={PoCreateList}>{(App) => <App />}</Bundle>}
                         />
                     </Switch>
                 )
