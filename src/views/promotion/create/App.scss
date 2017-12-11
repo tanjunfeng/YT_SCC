@@ -31,23 +31,23 @@ $promotionAddBorderCorder: #d9d9d9;
     .category .ant-cascader-picker {
         width: 260px;
     }
+    .wd-297 {
+        width: 297px;
+        float: left;
+    }
+    .wd-317 {
+        width: 317px;
+        float: left;
+    }
+    .wd-396 {
+        width: 396px;
+        float: left;
+    }
     ul.list-panel {
         margin: 12px 0;
         border: 1px solid $promotionAddBorderCorder;
         li {
             line-height: 48px;
-            .wd-297 {
-                width: 297px;
-                float: left;
-            }
-            .wd-317 {
-                width: 317px;
-                float: left;
-            }
-            .wd-396 {
-                width: 396px;
-                float: left;
-            }
             &:first-child {
                 h2 {
                     padding: 0 20px;
