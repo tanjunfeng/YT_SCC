@@ -25,12 +25,11 @@ class BuyConditionList extends PureComponent {
             <Row>
                 {this.getBuyType(condition)}
                 {this.getConditionType(condition)}
-                {this.state.conditions.length > 1 ?
-                    <div className="wd-297 tr pr-60">
-                        <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(condition.key)}>
-                            <a href="#">删除</a>
-                        </Popconfirm>
-                    </div> : null}
+                <div className="wd-297 tr pr-60">
+                    <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(condition.key)}>
+                        <a href="#">删除</a>
+                    </Popconfirm>
+                </div>
             </Row>
         </li>
     )
