@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import { Form, Icon, Table } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { goodsColumns as columns } from '../columns';
 import EditableCell from './editableCell';
 import { fetchOrderDetailInfo, clearOrderDetailInfo } from '../../../actions/order';
 
@@ -22,6 +21,141 @@ import { fetchOrderDetailInfo, clearOrderDetailInfo } from '../../../actions/ord
 )
 
 class GoodsInfo extends PureComponent {
+    constructor(props) {
+        super(props);
+
+        let className;
+        let message;
+        this.columns = [{
+            title: '商品图片',
+            dataIndex: 'productImg',
+            key: 'productImg',
+            render: (text, record) => {
+                if (record.abnormalGoods && this.props.match.params.type === 'M') {
+                    message = '毛利异常';
+                    className = 'abnormalResonse';
+                } else {
+                    className = '';
+                    message = '';
+                }
+                return (
+                    <div>
+                        <img
+                            src={text}
+                            alt="未上传"
+                            style={{ width: 50, height: 50, verticalAlign: 'middle' }}
+                        />
+                        <div className={className}>{message}</div>
+                    </div>
+                )
+            }
+        }, {
+            title: '商品编码',
+            dataIndex: 'productCode',
+            key: 'productCode',
+            render: (text, record) => {
+                if (record.abnormalGoods) {
+                    className = 'abnormalResonse-color';
+                } else {
+                    className = '';
+                }
+                return (
+                    <div>
+                        <span className={className}>{text}</span>
+                    </div>
+                )
+            }
+        }, {
+            title: '商品条码',
+            dataIndex: 'internationalCodes',
+            key: 'internationalCodes',
+            render: (item, record) => {
+                if (record.abnormalGoods) {
+                    className = 'abnormalResonse-color';
+                } else {
+                    className = '';
+                }
+                if (item instanceof Array && item.length) {
+                    return (
+                        <div>
+                            <span className={className}>{item[0].internationalCode}</span>
+                        </div>
+                    )
+                }
+            }
+        }, {
+            title: '商品名称',
+            dataIndex: 'productName',
+            key: 'productName',
+            render: (text, record) => {
+                if (record.abnormalGoods) {
+                    className = 'abnormalResonse-color';
+                } else {
+                    className = '';
+                }
+                return <span className={className}>{text}</span>;
+            }
+        }, {
+            title: '商品分类',
+            dataIndex: 'commodifyClassify',
+            key: 'commodifyClassify',
+            render: (text, record) => {
+                let after = '';
+                if (record.thirdLevelCategoryName !== null) {
+                    after = ` > ${record.thirdLevelCategoryName}`;
+                }
+                if (record.abnormalGoods) {
+                    className = 'abnormalResonse-color';
+                } else {
+                    className = '';
+                }
+                return <span className={className}>{record.secondLevelCategoryName}{after}</span>;
+            }
+        }, {
+            title: '数量',
+            dataIndex: 'quantity',
+            key: 'quantity',
+            render: (text, record) => {
+                if (record.abnormalGoods) {
+                    className = 'abnormalResonse-color';
+                } else {
+                    className = '';
+                }
+                return <span className={className}>{text}</span>;
+            }
+        }, {
+            title: '可用库存',
+            dataIndex: 'availableStock',
+            key: 'availableStock',
+            render: (text, record) => {
+                if (record.abnormalGoods) {
+                    className = 'abnormalResonse-color';
+                } else {
+                    className = '';
+                }
+                return <span className={className}>{text}</span>;
+            }
+        }, {
+            title: '单价',
+            dataIndex: 'price',
+            key: 'price',
+            render: (text, record) => {
+                if (record.abnormalGoods) {
+                    className = 'abnormalResonse-color';
+                } else {
+                    className = '';
+                }
+                return <span className={className}>￥{Number(record.itemPrice.salePrice).toFixed(2)}</span>
+            }
+        }, {
+            title: '金额',
+            dataIndex: 'money',
+            key: 'money',
+            render: (text, record) => (
+                <span className={className}>￥{Number(record.itemPrice.amount).toFixed(2)}</span>
+            )
+        }];
+    }
     state = {
         goodsList: []
     }
@@ -73,7 +207,7 @@ class GoodsInfo extends PureComponent {
      * 不传值则取最后一列
      */
     getLastSubNum = (lastIndexOf = 1) => (
-        +(columns[columns.length - lastIndexOf].dataIndex.substr(3))
+        +(this.columns[this.columns.length - lastIndexOf].dataIndex.substr(3))
     );
 
     /**
@@ -102,7 +236,7 @@ class GoodsInfo extends PureComponent {
     addSubOrders = () => {
         const goodsList = [...this.state.goodsList];
         const subNum = this.getLastSubNum() + 1;
-        columns.push({ title: `子订单${subNum}`, dataIndex: `sub${subNum}` });
+        this.columns.push({ title: `子订单${subNum}`, dataIndex: `sub${subNum}` });
         goodsList.forEach(goods => {
             const quantityUsed = goods[`sub${subNum - 2}`];  // 倒数第二列的数量应该算作占用库存
             Object.assign(goods, {
@@ -115,8 +249,8 @@ class GoodsInfo extends PureComponent {
     }
 
     removeColumns = () => {
-        if (columns[columns.length - 1].dataIndex === 'sub2') {
-            columns.splice(columns.length - 2, 2);
+        if (this.columns[this.columns.length - 1].dataIndex === 'sub2') {
+            this.columns.splice(this.columns.length - 2, 2);
         }
     }
 
@@ -134,8 +268,8 @@ class GoodsInfo extends PureComponent {
     }
 
     renderColumns = () => {
-        if (columns[columns.length - 1].dataIndex !== 'sub2') {
-            columns.push(
+        if (this.columns[this.columns.length - 1].dataIndex !== 'sub2') {
+            this.columns.push(
                 { title: '子订单1', dataIndex: 'sub1', render: this.renderReadOnlyCell },
                 { title: '子订单2', dataIndex: 'sub2', render: this.renderEditableCell }
             );
@@ -175,7 +309,7 @@ class GoodsInfo extends PureComponent {
                 <div className="orderDetail-message">
                     <Table
                         dataSource={this.state.goodsList}
-                        columns={columns}
+                        columns={this.columns}
                         pagination={false}
                         rowKey="id"
                         scroll={{ x: 1440 }}
