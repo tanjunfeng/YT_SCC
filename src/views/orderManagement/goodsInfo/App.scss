@@ -10,3 +10,16 @@
         float: right;
     }
 }
+
+.orderDetail-message{
+    .abnormalResonse{
+        height: 36px;
+        display: inline-block;
+        vertical-align: bottom;
+        margin-left: 10px;
+        color: red;
+    }
+    .abnormalResonse-color{
+        color: red;
+    }
+}
