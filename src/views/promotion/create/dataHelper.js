@@ -1,6 +1,7 @@
 /**
  * 表单数据组装工具类
  */
+import { message } from 'antd';
 import Util from '../../../util/util';
 
 // 根据整数计算百分数
@@ -162,6 +163,8 @@ const getBasicData = (state, values) => {
     }
 }
 
+export const isCategoryExist = (category) => (category && category.categoryId !== undefined);
+
 /**
  * 获取表单数据
  *
@@ -184,6 +187,10 @@ export const getFormData = ({ state, form }, callback) => {
             });
         } else if (condition === 1 && category === 'PURCHASECONDITION' && purchaseCondition === 'CATEGORY') {
             // 指定条件——优惠种类——购买条件
+            if (!isCategoryExist(state.categoryPC)) {
+                message.error('请选择品类');
+                return;
+            }
             Object.assign(dist, {
                 promotionRule: getPurchaseConditionsRule(state, values)
             });
@@ -197,5 +204,3 @@ export const getFormData = ({ state, form }, callback) => {
         }
     });
 }
-
-export const isCategoryExist = (category) => (category && category.categoryId !== undefined);
