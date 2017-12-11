@@ -44,11 +44,11 @@ export const getRulesColumn = (form, licence, type = '') => {
                 {type === 'PRODUCT' ?
                     <Option key={'FIXEDPRICE'} value="FIXEDPRICE">
                         固定单价
-                </Option> : null}
+                    </Option> : null}
                 {type === 'PRODUCT' ?
                     <Option key={'GIVESAMEPRODUCT'} value="GIVESAMEPRODUCT">
                         赠送相同商品
-                </Option> : null}
+                    </Option> : null}
             </Select>)}
         </FormItem>
         {/* 优惠百分比 */}
@@ -162,8 +162,7 @@ export const getConditionType = (form, licence) => {
                             { validator: Util.limitTwoDecimalPlaces }
                         ]
                     })(<InputNumber className="wd-60" min={0} max={MAX_AMOUNT_OF_ORDER} step={1} />)} 元
-            </FormItem>
-                : null
+                </FormItem> : null
             }
             {getFieldValue(`${licence}Type`) === 'QUANTITY' ?
                 <FormItem>
