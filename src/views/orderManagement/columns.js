@@ -30,7 +30,7 @@ const goodsColumns = [{
                     alt="未上传"
                     style={{ width: 50, height: 50, verticalAlign: 'middle' }}
                 />
-                <span className={className}>{message}</span>
+                <div className={className}>{message}</div>
             </div>
         )
     }
@@ -61,13 +61,12 @@ const goodsColumns = [{
             className = '';
         }
         if (item instanceof Array && item.length) {
-            return item[0].internationalCode;
+            return (
+                <div>
+                    <span className={className}>{item[0].internationalCode}</span>
+                </div>
+            )
         }
-        return (
-            <div>
-                <span className={className}>{item}</span>
-            </div>
-        )
     }
 }, {
     title: '商品名称',
