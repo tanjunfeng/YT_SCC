@@ -10,12 +10,7 @@ import {
     Form, Row, Button
 } from 'antd';
 
-import { Category } from '../../../container/cascader';
-import { AddingGoodsByTerm } from '../../../container/search';
-import { buyType, conditionType, getRulesColumn } from './domHelper';
 import BuyConditionModal from './buyConditionModal';
-
-const FormItem = Form.Item;
 
 class BuyConditionList extends PureComponent {
     state = {
@@ -23,54 +18,56 @@ class BuyConditionList extends PureComponent {
         conditions: [] // 购买条件
     }
 
+    getRow = (condition) => (
+        <li>
+            <Row>
+                {this.getBuyType(condition)}
+            </Row>
+        </li>
+    )
+
+    getBuyType = (condition) => {
+        switch (condition.purchaseType) {
+            case 'CATEGORY': return (
+                <div className="wd-396">
+                    购买类型：按品类，{condition.promoCategories.categoryName}
+                </div>
+            );
+            case 'PRODUCT': return (
+                <div className="wd-396">
+                    购买类型：按商品，{condition.promoProduct.productName}
+                </div>
+            );
+            case 'ALL': return (
+                <div className="wd-396">
+                    购买类型：全部
+                </div>
+            );
+            default: return null;
+        }
+    }
+
     handleAddCondition = () => {
         this.setState({ visible: true })
     }
 
     handleModalOk = () => {
-        this.setState({ visible: false});
+        this.setState({ visible: false });
     }
 
     handleModalCancel = () => {
-        this.setState({ visible: false});
+        this.setState({ visible: false });
     }
 
     render() {
-        const { form } = this.props;
-        const { getFieldValue, getFieldDecorator } = form;
-        const { visible } = this.state;
+        const { visible, conditions } = this.state;
         return (
             <ul className="list-panel">
                 <li>
                     <h2>购买条件</h2>
                     <Button type="primary" onClick={this.handleAddCondition}>添加条件</Button>
                 </li>
-                <li>
-                    <Row>
-                        <div className="wd-396">
-                            {buyType(form, 'licence')}
-                            {getFieldValue('licence') === 'CATEGORY' ?
-                                <FormItem>
-                                    <Category onChange={this.handleCategorySelect} />
-                                </FormItem> : null}
-                            {getFieldValue('licence') === 'PRODUCT' ?
-                                <FormItem className="product">
-                                    {/* purchaseConditionProduct */}
-                                    {getFieldDecorator('licenceProduct', {
-                                        initialValue: {
-                                            productId: '',
-                                            productCode: '',
-                                            productName: ''
-                                        }
-                                    })(<AddingGoodsByTerm />)}
-                                </FormItem> : null}
-                        </div>
-                        <div className="wd-317"> {conditionType(form, 'licence')}</div>
-                        <div className="wd-297">
-                            {getRulesColumn(form, 'licence', getFieldValue('licence'))}
-                        </div>
-                    </Row>
-                </li>
+                {conditions.map(condition => this.getRow(condition))}
                 <BuyConditionModal
                     visible={visible}
                     onOk={this.handleModalOk}
@@ -82,7 +79,7 @@ class BuyConditionList extends PureComponent {
 }
 
 BuyConditionList.propTypes = {
-    form: PropTypes.objectOf(PropTypes.any)
+    // form: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(Form.create()(BuyConditionList));
