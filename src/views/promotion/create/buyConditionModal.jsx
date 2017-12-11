@@ -34,7 +34,7 @@ class BuyConditionModal extends PureComponent {
         const { validateFields } = this.props.form;
         validateFields((err, values) => {
             const { buyCondition } = values;
-            const { category } = this.state;
+            // const { category } = this.state;
             if (err) {
                 return;
             }
