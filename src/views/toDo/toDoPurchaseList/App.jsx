@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-08 18:21:53
+ * @Last Modified time: 2017-12-11 09:18:55
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -570,7 +570,7 @@ class toDoPurchaseList extends PureComponent {
                                 {/* 采购单类型 */}
                                 <FormItem label="采购单类型">
                                     {getFieldDecorator('purchaseOrderType', {initialValue: poType.defaultValue })(
-                                        <Select style={{ width: '153px' }} size="default" onChange={this.statusChange}>
+                                        <Select style={{ width: '153px' }} size="default">
                                             {
                                                 poType.data.map((item) => (
                                                     <Option key={item.key} value={item.key}>
