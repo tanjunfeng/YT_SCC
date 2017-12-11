@@ -275,7 +275,10 @@ class PromotionCreate extends PureComponent {
                     <FormItem label="简易描述">
                         {getFieldDecorator('simpleDescription', {
                             initialValue: '',
-                            rules: [{ max: 20, message: '限填20字' }]
+                            rules: [
+                                { max: 20, message: '限填20字' },
+                                { required: true, message: '请输入简易描述' }
+                            ]
                         })(<TextArea placeholder="可填写简易描述，限填20字" autosize={{ minRows: 2, maxRows: 4 }} />)}
                     </FormItem>
                 </Row>
@@ -283,7 +286,10 @@ class PromotionCreate extends PureComponent {
                     <FormItem label="详细描述">
                         {getFieldDecorator('detailDescription', {
                             initialValue: '',
-                            rules: [{ max: 200, message: '限填200字' }]
+                            rules: [
+                                { max: 200, message: '限填200字' },
+                                { required: true, message: '请输入详细描述' }
+                            ]
                         })(<TextArea placeholder="可填写详细描述，限填200字" autosize={{ minRows: 4, maxRows: 6 }} />)}
                     </FormItem>
                 </Row>
