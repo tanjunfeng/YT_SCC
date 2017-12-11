@@ -149,9 +149,10 @@ class DirectSalesOrders extends PureComponent {
     /**
      * 虚拟商品和实体商品同时下单警告框
      */
-    couponIdShouldWarning = () => {
+    couponIdShouldWarning = (isClickIn) => {
+        const text = isClickIn ? '添加商品失败' : '导入失败'
         Modal.warning({
-            title: '导入失败',
+            title: text,
             content: '虚拟商品和实体商品请分开下单',
         });
     }
@@ -161,11 +162,18 @@ class DirectSalesOrders extends PureComponent {
      * @param {string} couponId 当前导入商品的虚拟商品id
      * @param {string} couponId 导入商品列表中第一条商品的虚拟商品id
      */
-    isType = (couponId, firstCouponId) => (
-        firstCouponId === null
-            ? firstCouponId === couponId
-            : firstCouponId && couponId
-    )
+    isType = (couponId, firstCouponId) => {
+        if (firstCouponId) {
+            if (couponId) {
+                return true
+            }
+            return false
+        }
+        if (couponId) {
+            return false
+        }
+        return true
+    }
 
     /**
      * 商品导入回调函数
@@ -325,7 +333,7 @@ class DirectSalesOrders extends PureComponent {
                 const firstCouponId = goodsList[0].couponId;
                 const isSameTypeGoodsList = this.isType(couponId, firstCouponId)
                 if (!isSameTypeGoodsList) {
-                    this.couponIdShouldWarning()
+                    this.couponIdShouldWarning(true)
                     return
                 }
             }
