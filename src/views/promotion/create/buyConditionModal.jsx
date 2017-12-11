@@ -12,7 +12,7 @@ import {
 
 import { Category } from '../../../container/cascader';
 import { AddingGoodsByTerm } from '../../../container/search';
-import { buyType, getConditionType, getRulesColumn } from './domHelper';
+import { buyType, getConditionType } from './domHelper';
 import { isCategoryExist } from './dataHelper';
 import Util from '../../../util/util';
 
@@ -53,14 +53,14 @@ class BuyConditionModal extends PureComponent {
     }
 
     getBuyConditionValue = (formData, values) => {
-        const { buyConditionRule, buyConditionRulePercent, buyConditionRuleAmount } = values;
+        const { buyConditionType, buyConditionTypeQuantity, buyConditionTypeAmount } = values;
         let conditionValue = '';
-        switch (buyConditionRule) {
+        switch (buyConditionType) {
             case 'QUANTITY':
-                conditionValue = buyConditionRulePercent;
+                conditionValue = buyConditionTypeQuantity;
                 break;
             case 'AMOUNT':
-                conditionValue = buyConditionRuleAmount;
+                conditionValue = buyConditionTypeAmount;
                 break;
             default: break;
         }
@@ -69,7 +69,7 @@ class BuyConditionModal extends PureComponent {
 
     getFormData = (callback) => {
         this.props.form.validateFields((err, values) => {
-            const { buyCondition, conditionType } = values;
+            const { buyCondition, buyConditionType } = values;
             const { category } = this.state;
             if (err) {
                 if (buyCondition === 'CATEGORY' && !isCategoryExist(category)) {
@@ -79,8 +79,9 @@ class BuyConditionModal extends PureComponent {
                 return;
             }
             const formData = {
+                key: String(new Date().getTime()),
                 purchaseType: buyCondition,
-                conditionType
+                conditionType: buyConditionType
             };
             this.getBuyCondition(formData, values);
             this.getBuyConditionValue(formData, values);
@@ -136,9 +137,6 @@ class BuyConditionModal extends PureComponent {
                     </Row>
                     <Row>
                         {getConditionType(form, 'buyCondition')}
-                    </Row>
-                    <Row>
-                        {getRulesColumn(form, 'buyCondition', getFieldValue('buyCondition'))}
                     </Row>
                 </Form>
             </Modal>

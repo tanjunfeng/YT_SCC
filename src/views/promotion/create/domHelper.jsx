@@ -142,7 +142,7 @@ export const getConditionType = (form, licence) => {
     return (
         <span>
             <FormItem label="条件类型">
-                {/* purchaseConditionType, rewardListType */}
+                {/* purchaseConditionType, buyConditionType */}
                 {getFieldDecorator(`${licence}Type`, {
                     initialValue: '',
                     rules: [{ required: true, message: '请选择条件类型' }]
@@ -154,7 +154,7 @@ export const getConditionType = (form, licence) => {
             </FormItem>
             {getFieldValue(`${licence}Type`) === 'AMOUNT' ?
                 <FormItem>
-                    {/* rewardListTypeAmount */}
+                    {/* buyConditionTypeAmount */}
                     ￥{getFieldDecorator(`${licence}TypeAmount`, {
                         initialValue: 0,
                         rules: [
@@ -167,7 +167,7 @@ export const getConditionType = (form, licence) => {
             }
             {getFieldValue(`${licence}Type`) === 'QUANTITY' ?
                 <FormItem>
-                    {/* rewardListTypeQuantity */}
+                    {/* buyConditionTypeQuantity */}
                     {getFieldDecorator(`${licence}TypeQuantity`, {
                         initialValue: 0,
                         rules: [
