@@ -172,22 +172,13 @@ const getBasicData = (state, values) => {
 
 // 根据优惠方式组装优惠规则
 const getPurchageWay = (formData, values, state) => {
-    const { category, purchaseCondition, buyCondition } = values;
-    switch (category) {
+    switch (values.category) {
         case 'PURCHASECONDITION': // 购买条件
-            if (purchaseCondition === 'CATEGORY' && !isCategoryExist(state.categoryPC)) {
-                message.error('请选择品类');
-                return;
-            }
             Object.assign(formData, {
                 promotionRule: getPurchaseConditionsRule(state, values)
             });
             break;
         case 'REWARDLIST': // 奖励列表
-            if (buyCondition === 'CATEGORY' && isCategoryExist(state.categoryRL)) {
-                message.error('请选择品类');
-                return;
-            }
             Object.assign(formData, {
                 rewardListRule: getPurchaseConditionsRule(state, values)
             });
@@ -205,8 +196,24 @@ const getPurchageWay = (formData, values, state) => {
 export const getFormData = ({ state, form }, callback) => {
     const { validateFields } = form;
     validateFields((err, values) => {
-        const { condition } = values;
+        const { condition, category, purchaseCondition, buyCondition } = values;
         if (err) {
+            return;
+        }
+        if (condition === 1
+            && category === 'PURCHASECONDITION'
+            && purchaseCondition === 'CATEGORY'
+            && !isCategoryExist(state.categoryPC)
+        ) {
+            message.error('请选择品类');
+            return;
+        }
+        if (condition === 1
+            && category === 'REWARDLIST'
+            && buyCondition === 'CATEGORY'
+            && !isCategoryExist(state.categoryRL)
+        ) {
+            message.error('请选择品类');
             return;
         }
         const formData = getBasicData(state, values);
