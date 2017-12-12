@@ -33,7 +33,10 @@ export const getRulesColumn = (form, licence, type = '') => {
     const { getFieldDecorator, getFieldValue } = form;
     return (<span>
         <FormItem label="优惠方式">
-            {/* noConditionRule, purchaseConditionRule, rewardListRule */}
+            {/* noConditionRule,
+            purchaseConditionRule,
+            rewardListRule,
+            totalPurchaseListRule */}
             {getFieldDecorator(`${licence}Rule`, {
                 initialValue: '',
                 rules: [{ required: true, message: '请选择优惠方式' }]
@@ -56,7 +59,8 @@ export const getRulesColumn = (form, licence, type = '') => {
             <FormItem>
                 {/* noConditionRulePercent,
                 purchaseConditionRulePercent,
-                rewardListRulePercent */}
+                rewardListRulePercent
+                totalPurchaseListRulePercent */}
                 {getFieldDecorator(`${licence}RulePercent`, {
                     initialValue: 95,
                     rules: [{ required: true, message: '请输入折扣百分比' }]
@@ -66,7 +70,10 @@ export const getRulesColumn = (form, licence, type = '') => {
         {/* 折扣金额 */}
         {getFieldValue(`${licence}Rule`) === 'DISCOUNTAMOUNT' ?
             <FormItem>
-                {/* noConditionRuleAmount, purchaseConditionRuleAmount, rewardListRuleAmount */}
+                {/* noConditionRuleAmount,
+                purchaseConditionRuleAmount,
+                rewardListRuleAmount,
+                totalPurchaseListRuleAmount */}
                 ￥{getFieldDecorator(`${licence}RuleAmount`, {
                     initialValue: 0,
                     rules: [
@@ -240,6 +247,25 @@ export const getRewardList = (params) => {
                     {getPromotion(form, licence, handleCategorySelect)}
                 </li>
             </ul>
+        </div>
+    )
+}
+
+/**
+ * 获取整个购买列表 dom
+ *
+ * @param {*} form
+ * @param {*} licence totalPurchaseList
+ * @param {*} handleCategorySelect
+ */
+export const getTotalPurchaseList = (params) => {
+    const { conditions, handleBuyConditionsChange } = params;
+    return (
+        <div>
+            <BuyConditionList
+                value={{ conditions }}
+                onChange={handleBuyConditionsChange}
+            />
         </div>
     )
 }
