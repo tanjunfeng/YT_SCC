@@ -1,4 +1,4 @@
-$promotionColWidth: 250px;
+$couponParticipateFieldWidth: 200px;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -20,7 +20,25 @@ $promotionColWidth: 250px;
     }
 }
 
-.participate {
+.coupon-participate {
+    border: 1px solid #c4c5c9;
+    padding: 40px 0 20px;
+    margin: 10px 0;
+    .ant-form-item-label {
+        width: 80px;
+        .sc-form-item-label {
+            text-align: right;
+        }
+    }
+    .ant-btn {
+        margin-right: 20px;
+    }
+    .ant-form-item-control-wrapper, .ant-select {
+        width: $couponParticipateFieldWidth;
+    }
+    .ywc-smind {
+        top: 4px;
+    }
     .ant-form-item-label {
         width: 80px;
         .sc-form-item-label {
@@ -52,9 +70,6 @@ $promotionColWidth: 250px;
             margin-right: 8px;
             display: inline-block;
         }
-    }
-    .ywc-smind {
-        width: $promotionColWidth;
     }
     .ywc-smind-search-bar {
         margin: 8px 0;
