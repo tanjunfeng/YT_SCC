@@ -83,7 +83,7 @@ class SearchForm extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form layout="inline" className="coupon">
+            <Form layout="inline" className="promotion">
                 <Row>
                     <Col span={8}>
                         <FormItem label="券ID">

@@ -89,7 +89,7 @@ class SearchForm extends PureComponent {
         const { getFieldDecorator } = form;
         const page = value.page;
         return (
-            <Form layout="inline" onSubmit={this.handleSubmit} className="coupon-participate">
+            <Form layout="inline" onSubmit={this.handleSubmit} className="promotion">
                 {page === 'used' ?
                     <Row gutter={40}>
                         <Col span={8}>
