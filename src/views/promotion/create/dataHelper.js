@@ -3,6 +3,7 @@
  */
 import { message } from 'antd';
 import Util from '../../../util/util';
+import default from '_antd@2.10.2@antd/lib/popconfirm';
 
 // 根据整数计算百分数
 const getPercent = (num) => (Number(num / 100.0).toFixed(2));
@@ -73,10 +74,12 @@ const getConditionOfPC = (promotionRule, state, values) => {
     }
 }
 
-export const isCategoryExist = (category) => (category && category.categoryId !== undefined);
+export const isCategoryExist = (category) => (
+    category && category !== null && category.categoryId !== undefined
+);
 
 /**
- * 优惠种类: 购买条件
+ * 指定条件——优惠种类——购买条件
  *
  * @param {*} state
  * @param {*} values
@@ -103,6 +106,95 @@ const getPurchaseConditionsRule = (state, values) => {
     };
     // 按全部、品类和商品拼接 condition 对象
     getConditionOfPC(promotionRule, state, values);
+    return Util.removeInvalid(promotionRule);
+}
+
+const getRewardListConditionValue = (values) => {
+    const { rewardListType, rewardListTypeAmount, rewardListTypeQuantity } = values;
+    let conditionValue = '';
+    switch (rewardListType) {
+        case 'AMOUNT':
+            conditionValue = rewardListTypeAmount
+            break;
+        case 'QUANTITY':
+            conditionValue = rewardListTypeQuantity
+            break;
+        default: break;
+    }
+    return conditionValue;
+}
+
+const getRewardListPreferentialValue = (values) => {
+    const {
+        rewardListRule, rewardListRulePercent,
+        rewardListRuleAmount, rewardListRulePrice,
+        rewardListRuleGive
+    } = values;
+    let preferentialValue = '';
+    switch (rewardListRule) {
+        case 'PERCENTAGE':
+            preferentialValue = rewardListRulePercent;
+            break;
+        case 'DISCOUNTAMOUNT':
+            preferentialValue = rewardListRuleAmount;
+            break;
+        case 'FIXEDPRICE':
+            preferentialValue = rewardListRulePrice;
+            break;
+        case 'GIVESAMEPRODUCT':
+            preferentialValue = rewardListRuleGive;
+            break;
+        default: break;
+    }
+    return preferentialValue;
+}
+
+const getCategoryOrProductOfRL = (condition, values, state) => {
+    const { rewardList, rewardListProduct } = values;
+    switch(rewardList) {
+        case 'CATEGORY':
+            Object.assign(condition, {promoCategories: state.categoryRL});
+            break;
+        case 'CATEGORY':
+            Object.assign(condition, {promoProduct: {
+                productId: rewardListProduct.record.productId,
+                productName: rewardListProduct.record.productName
+            }});
+            break;
+        default: break;
+    }
+}
+
+/**
+ * 指定条件——优惠种类——奖励列表
+ *
+ * @param {*} state
+ * @param {*} values
+ */
+const getRewardListRule = (state, values) => {
+    const { category, rewardList, rewardListType, rewardListRule } = values;
+    const { conditions } = state;
+    const promotionRule = {
+        useConditionRule: true,
+        ruleName: category,
+        rewardListRule: {
+            conditions,
+            purchaseConditionsRule: {
+                condition: {
+                    purchaseType: rewardList,
+                    // promoCategories: state.categoryRL,
+                    conditionType: rewardListType,
+                    conditionValue: getRewardListConditionValue(values)
+                },
+                rule: {
+                    preferentialWay: rewardListRule,
+                    preferentialValue: getRewardListPreferentialValue(values)
+                }
+            }
+        }
+    };
+    // 按全部、品类和商品拼接 condition 对象
+    getCategoryOrProductOfRL(promotionRule.rewardListRule.purchaseConditionsRule.condition, values, state);
     return Util.removeInvalid(promotionRule);
 }
 
@@ -172,28 +264,50 @@ const getBasicData = (state, values) => {
 
 // 根据优惠方式组装优惠规则
 const getPurchageWay = (formData, values, state) => {
-    const { category, purchaseCondition, buyCondition } = values;
-    switch (category) {
+    switch (values.category) {
         case 'PURCHASECONDITION': // 购买条件
-            if (purchaseCondition === 'CATEGORY' && !isCategoryExist(state.categoryPC)) {
-                message.error('请选择品类');
-                return;
-            }
             Object.assign(formData, {
                 promotionRule: getPurchaseConditionsRule(state, values)
             });
             break;
         case 'REWARDLIST': // 奖励列表
-            if (buyCondition === 'CATEGORY' && isCategoryExist(state.categoryRL)) {
-                message.error('请选择品类');
-                return;
-            }
             Object.assign(formData, {
-                rewardListRule: getPurchaseConditionsRule(state, values)
+                rewardListRule: getRewardListRule(state, values)
             });
             break;
         default: break;
     }
+}
+
+/**
+ * 是否禁止提交表单
+ *
+ * @param {*} state
+ * @param {*} values
+ */
+const forbidden = (state, values) => {
+    const { condition, category, purchaseCondition, rewardList } = values;
+    if (condition === 1) {
+        if (category === 'PURCHASECONDITION'
+            && purchaseCondition === 'CATEGORY'
+            && !isCategoryExist(state.categoryPC)
+        ) {
+            message.error('请选择品类');
+            return true;
+        }
+        if (category === 'REWARDLIST'
+            && rewardList === 'CATEGORY'
+            && !isCategoryExist(state.categoryRL)
+        ) {
+            message.error('请选择品类');
+            return true;
+        }
+        if (category === 'REWARDLIST' && state.conditions.length === 0) {
+            message.error('请添加购买条件');
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
@@ -206,7 +320,7 @@ export const getFormData = ({ state, form }, callback) => {
     const { validateFields } = form;
     validateFields((err, values) => {
         const { condition } = values;
-        if (err) {
+        if (err || forbidden(state, values)) {
             return;
         }
         const formData = getBasicData(state, values);
