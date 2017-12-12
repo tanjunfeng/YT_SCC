@@ -78,10 +78,10 @@ class SearchForm extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form layout="inline" onSubmit={this.handleSubmit} className="promotion-participate">
+            <Form layout="inline" onSubmit={this.handleSubmit} className="promotion">
                 <Row gutter={40}>
                     <Col span={8}>
-                        <FormItem label="订单编号" style={{ paddingRight: 10 }}>
+                        <FormItem label="订单编号">
                             {getFieldDecorator('orderId')(<Input size="default" />)}
                         </FormItem>
                     </Col>
@@ -89,7 +89,7 @@ class SearchForm extends PureComponent {
                         <FormItem label="订单状态">
                             {getFieldDecorator('orderStateCode', {
                                 initialValue: 'ALL'
-                            })(<Select style={{ width: '153px' }} size="default">
+                            })(<Select size="default">
                                 {this.getStatus('orderState')}
                             </Select>)}
                         </FormItem>
@@ -98,7 +98,7 @@ class SearchForm extends PureComponent {
                         <FormItem label="支付状态">
                             {getFieldDecorator('paymentStateCode', {
                                 initialValue: 'ALL'
-                            })(<Select style={{ width: '153px' }} size="default">
+                            })(<Select size="default">
                                 {this.getStatus('paymentState')}
                             </Select>)}
                         </FormItem>
@@ -107,7 +107,7 @@ class SearchForm extends PureComponent {
                         <FormItem label="物流状态">
                             {getFieldDecorator('shippingStateCode', {
                                 initialValue: 'ALL'
-                            })(<Select style={{ width: '153px' }} size="default">
+                            })(<Select size="default">
                                 {this.getStatus('shippingState')}
                             </Select>)}
                         </FormItem>

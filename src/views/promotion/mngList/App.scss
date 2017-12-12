@@ -1,4 +1,3 @@
-$promotionColWidth: 200px;
 $promotionFieldWidth: 180px;
 .ant-table-pagination {
     margin-right: 15px;
@@ -23,7 +22,7 @@ $promotionFieldWidth: 180px;
 
 .promotion {
     border: 1px solid #c4c5c9;
-    padding-bottom: 20px;
+    padding: 40px 0 20px;
     margin: 10px 0;
     .ant-form-item-label {
         width: 80px;
@@ -31,11 +30,21 @@ $promotionFieldWidth: 180px;
             text-align: right;
         }
     }
-    .ant-form-item-control-wrapper, .ant-select {
-        width: $promotionFieldWidth;
+    .ant-form-item {
+        float: left;
+        display: block;
+        .ant-form-item-control-wrapper, .ant-select {
+            width: $promotionFieldWidth;
+        }
+        &.double .ant-form-item-control-wrapper {
+            width: $promotionFieldWidth * 2;
+        }
     }
     .ant-btn {
         margin-right: 20px;
+    }
+    .ywc-smind {
+        width: 220px;
     }
     .search-mind-label {
         min-width: 80px;
@@ -62,9 +71,6 @@ $promotionFieldWidth: 180px;
             margin-right: 8px;
             display: inline-block;
         }
-    }
-    .ywc-smind {
-        width: $promotionColWidth;
     }
     .ywc-smind-search-bar {
         margin: 8px 0;
