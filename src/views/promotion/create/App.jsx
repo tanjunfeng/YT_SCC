@@ -19,7 +19,7 @@ import { AreaSelector } from '../../../container/tree';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
-import { getChooseButton, getRules, getRewardList } from './domHelper';
+import { getChooseButton, getRules, getPromotion, getRewardList } from './domHelper';
 import { getFormData } from './dataHelper';
 
 const RadioGroup = Radio.Group;
@@ -40,6 +40,7 @@ class PromotionCreate extends PureComponent {
         storeSelectorVisible: false,
         companies: [], // 所选区域子公司
         categoryPC: null, // 购买条件品类, PC = PURCHASECONDITION
+        categoryRL: null, // 奖励列表品类，RL = REWARDLIST
     }
 
     handleSelectorOk = (companies) => {
@@ -99,6 +100,15 @@ class PromotionCreate extends PureComponent {
     }
 
     /**
+     * 购买条件品类选择器
+     *
+     * RL = REWARDLIST
+     */
+    handleRLCategorySelect = (categoryRL) => {
+        this.setState({ categoryRL });
+    }
+
+    /**
      * 重新选择子公司列表
      */
     handleSubCompaniesRechoose = () => {
@@ -120,7 +130,9 @@ class PromotionCreate extends PureComponent {
 
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        const { companies, areaSelectorVisible, storeSelectorVisible } = this.state;
+        const {
+            companies, areaSelectorVisible, storeSelectorVisible
+        } = this.state;
         return (
             <Form className="promotion-create" layout="inline" onSubmit={this.handleSubmit}>
                 <Row>
@@ -159,13 +171,14 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 {/* 优惠方式 */}
                 <Row>
+                    {/* 不限制使用条件 */}
                     {getFieldValue('condition') === 0 ?
                         getRules(this.props.form, 'noCondition')
                         :
                         // condition === 1
                         <FormItem label="优惠种类">
                             {getFieldDecorator('category', {
-                                initialValue: 'PURCHASECONDITION'
+                                initialValue: 'REWARDLIST'
                             })(<Select size="default" className="wd-110">
                                 <Option key={'PURCHASECONDITION'} value="PURCHASECONDITION">购买条件</Option>
                                 <Option key={'REWARDLIST'} value="REWARDLIST">奖励列表</Option>
@@ -174,11 +187,20 @@ class PromotionCreate extends PureComponent {
                         </FormItem>
                     }
                 </Row>
+                {/* 指定条件——购买条件 */}
                 {getFieldValue('condition') === 1 && getFieldValue('category') === 'PURCHASECONDITION' ?
-                    getRewardList(
+                    getPromotion(
                         this.props.form,
                         'purchaseCondition',
                         this.handlePCCategorySelect)
+                    : null
+                }
+                {/* 指定条件——奖励列表 */}
+                {getFieldValue('condition') === 1 && getFieldValue('category') === 'REWARDLIST' ?
+                    getRewardList(
+                        this.props.form,
+                        'rewardList',
+                        this.handleRLCategorySelect)
                     : null
                 }
                 <Row>
@@ -253,7 +275,10 @@ class PromotionCreate extends PureComponent {
                     <FormItem label="简易描述">
                         {getFieldDecorator('simpleDescription', {
                             initialValue: '',
-                            rules: [{ max: 20, message: '限填20字' }]
+                            rules: [
+                                { max: 20, message: '限填20字' },
+                                { required: true, message: '请输入简易描述' }
+                            ]
                         })(<TextArea placeholder="可填写简易描述，限填20字" autosize={{ minRows: 2, maxRows: 4 }} />)}
                     </FormItem>
                 </Row>
@@ -261,7 +286,10 @@ class PromotionCreate extends PureComponent {
                     <FormItem label="详细描述">
                         {getFieldDecorator('detailDescription', {
                             initialValue: '',
-                            rules: [{ max: 200, message: '限填200字' }]
+                            rules: [
+                                { max: 200, message: '限填200字' },
+                                { required: true, message: '请输入详细描述' }
+                            ]
                         })(<TextArea placeholder="可填写详细描述，限填200字" autosize={{ minRows: 4, maxRows: 6 }} />)}
                     </FormItem>
                 </Row>

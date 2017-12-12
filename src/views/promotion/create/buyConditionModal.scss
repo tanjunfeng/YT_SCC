@@ -1,0 +1,31 @@
+$buyConditionModalLabelWidth: 90px;
+
+.buy-condition-modal{
+    .product .ywc-smind {
+        top: 4px;
+        width: 194px;
+    }
+    .wd-50 {
+        width: 50px;
+    }
+    .wd-60 {
+        width: 60px;
+    }
+    .wd-90 {
+        width: 90px;
+    }
+    .wd-110 {
+        width: 110px;
+    }
+    .ant-cascader-picker {
+        width: 140px;
+    }
+    .ant-form-item-label label {
+        width: $buyConditionModalLabelWidth;
+        display: inline-block;
+    }
+    .ant-form-inline .ant-form-explain {
+        width: 120px;
+        left: 0;
+    }
+}

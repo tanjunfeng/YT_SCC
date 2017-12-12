@@ -21,7 +21,7 @@ import {
     returnGoodsDetail, returnGoodsDetailClearData,
     returnGoodsOperation, returnGoodsDetailSave
 } from '../../../actions';
-import { exchangeGoodsDetailColumns as columns } from '../columns';
+import { returnGoodsTableColums as columns } from '../columns';
 import { DATE_FORMAT } from '../../../constant';
 import GoodsTable from './goodsTable';
 

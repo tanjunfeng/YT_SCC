@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-08 14:59:33
+ * @Last Modified time: 2017-12-11 18:46:27
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -109,7 +109,10 @@ class toDoReturnList extends PureComponent {
             refundAdr: '',
             spNo: '', // 供应商编码
             spAdrNo: '', // 供应商地点编码
-            status: 0 // 流程状态，默认进行中
+            status: 0, // 流程状态，默认进行中
+            spName: null, // 供应商名
+            apAdrName: null, // 供应商地点名
+            refundAdrName: null, // 地点
         };
         // 初始页号
         this.current = 1;
@@ -126,7 +129,7 @@ class toDoReturnList extends PureComponent {
                 dataIndex: 'adrType',
                 key: 'adrType',
                 render: text => {
-                    if (text === null) {
+                    if (text === null || typeof text === 'undefined') {
                         return null;
                     }
                     return (locType.data[text + 1].value);
@@ -395,7 +398,10 @@ class toDoReturnList extends PureComponent {
      * 获取供应商地点编号
      */
     handleSupplierAddressChoose = ({ record }) => {
-        this.setState({ spAdrId: record.spId });
+        this.setState({
+            spAdrId: record.spId,
+            apAdrName: record.providerName
+        });
     }
 
     /**
@@ -410,7 +416,10 @@ class toDoReturnList extends PureComponent {
     handleAddressChoose = ({ record }) => {
         const encoded = record.code;
         this.adressTypeCode = encoded;
-        this.setState({ refundAdr: record.warehouseCode });
+        this.setState({
+            refundAdr: record.warehouseCode,
+            refundAdrName: record.warehouseName
+        });
     }
 
     // 清除地点值
@@ -428,7 +437,8 @@ class toDoReturnList extends PureComponent {
         this.setState({
             spNo: record.spNo,
             spId: record.spId,
-            isSupplyAdrDisabled: false
+            isSupplyAdrDisabled: false,
+            spName: record.companyName
         });
     }
 
@@ -566,27 +576,26 @@ class toDoReturnList extends PureComponent {
             adrType,
             auditStatus
         } = this.props.form.getFieldsValue();
-
         // 供应商编号
-        const spId = this.state.spId;
+        const spName = this.state.spName;
 
         // 供应商地点编号
-        const spAdrId = this.state.spId;
+        const apAdrName = this.state.apAdrName;
 
         // 地点
-        const adrTypeCode = this.state.refundAdr;
+        const refundAdrName = this.state.refundAdrName;
 
         // 流程状态
         const status = auditStatus === '进行中' ? 0 : 1;
         const searchParams = {
-            purchaseRefundNo,
+            refundNo: purchaseRefundNo,
             purchaseOrderNo,
             auditResult,
             purchaseOrderType,
             adrType,
-            spId,
-            spAdrId,
-            adrTypeCode,
+            spName,
+            apAdrName,
+            refundAdrName,
             status
         };
         this.searchParams = Utils.removeInvalid(searchParams);
@@ -725,6 +734,7 @@ class toDoReturnList extends PureComponent {
                                             renderChoosedInputRaw={(res) => (
                                                 <div>{res.providerNo} - {res.providerName}</div>
                                             )}
+                                            rowKey="providerNo"
                                             pageSize={6}
                                             columns={[
                                                 {
