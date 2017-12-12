@@ -39,6 +39,7 @@ class PromotionCreate extends PureComponent {
         areaSelectorVisible: false,
         storeSelectorVisible: false,
         companies: [], // 所选区域子公司
+        conditions: [], // 购买条件列表
         categoryPC: null, // 购买条件品类, PC = PURCHASECONDITION
         categoryRL: null, // 奖励列表品类，RL = REWARDLIST
     }
@@ -90,6 +91,13 @@ class PromotionCreate extends PureComponent {
         }
     }
 
+    // 指定条件——奖励列表——购买条件回传
+    handleBuyConditionsChange = (list) => {
+        const conditions = [...list];
+
+        this.setState({conditions});
+    }
+
     /**
      * 购买条件品类选择器
      *
@@ -129,9 +137,10 @@ class PromotionCreate extends PureComponent {
     }
 
     render() {
-        const { getFieldDecorator, getFieldValue } = this.props.form;
+        const { form } = this.props;
+        const { getFieldDecorator, getFieldValue } = form;
         const {
-            companies, areaSelectorVisible, storeSelectorVisible
+            companies, areaSelectorVisible, storeSelectorVisible, conditions
         } = this.state;
         return (
             <Form className="promotion-create" layout="inline" onSubmit={this.handleSubmit}>
@@ -173,7 +182,7 @@ class PromotionCreate extends PureComponent {
                 <Row>
                     {/* 不限制使用条件 */}
                     {getFieldValue('condition') === 0 ?
-                        getRules(this.props.form, 'noCondition')
+                        getRules(form, 'noCondition')
                         :
                         // condition === 1
                         <FormItem label="优惠种类">
@@ -190,7 +199,7 @@ class PromotionCreate extends PureComponent {
                 {/* 指定条件——购买条件 */}
                 {getFieldValue('condition') === 1 && getFieldValue('category') === 'PURCHASECONDITION' ?
                     getPromotion(
-                        this.props.form,
+                        form,
                         'purchaseCondition',
                         this.handlePCCategorySelect)
                     : null
@@ -198,10 +207,14 @@ class PromotionCreate extends PureComponent {
                 {/* 指定条件——奖励列表 */}
                 {getFieldValue('condition') === 1 && getFieldValue('category') === 'REWARDLIST' ?
                     getRewardList(
-                        this.props.form,
-                        'rewardList',
-                        this.handleRLCategorySelect)
-                    : null
+                        {
+                            form,
+                            licence: 'rewardList',
+                            handleCategorySelect: this.handleRLCategorySelect,
+                            conditions,
+                            handleBuyConditionsChange: this.handleBuyConditionsChange
+                        }
+                    ) : null
                 }
                 <Row>
                     <FormItem label="使用区域">
