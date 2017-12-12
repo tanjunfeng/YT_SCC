@@ -1347,7 +1347,6 @@ class PoDetail extends PureComponent {
     purchaseOrderTypeChange = (value) => {
         this.setState({
             purchaseOrderType: value,
-            totalAmounts: 0
         })
     }
 

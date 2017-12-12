@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import {Form, Row, Tooltip, Col, DatePicker, Button, message, Menu, Affix} from 'antd';
+import {Form, Row, Tooltip, Col, DatePicker, Button, message, Modal, Affix} from 'antd';
 import Immutable, { fromJS } from 'immutable';
 import moment from 'moment';
 import Audit from './auditModal';
@@ -156,6 +156,34 @@ class PoCreateList extends PureComponent {
     }
 
     /**
+     * 表单操作
+     * @param {*} record 行数据
+     * @param {*} index 行下标
+     * @param {*} items 行项
+     */
+    onActionMenuSelect = (record, index, items) => {
+        const { key } = items;
+        const that = this;
+        switch (key) {
+            case 'delete':
+                Modal.confirm({
+                    title: '你确认要删除该商品？',
+                    onOk: () => {
+                        // 新添加商品(未存数据库),物理删除
+                        that.props.deletePoLine(record);
+                        that.props.updatePoLine(record);
+                        message.success('删除成功');
+                    },
+                    onCancel() {
+                    },
+                });
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
      * 根据是否存在采购单id、采购单状态返回界面可编辑状态
      * 1.采购单基本信息或采购单id 不存在。界面状态：新建(new)
      * 2.采购单状态=制单。界面状态：可编辑(update)
@@ -213,6 +241,67 @@ class PoCreateList extends PureComponent {
     }
 
     /**
+     * 商品行采购数量变化回调，做如下处理
+     *  1.更新store中该行信息（校验结果，采购数量，采购金额）
+     *  2.计算采购总数量、采购总金额并更新store
+     * result:{value:输入值,isValidate:检验结果 true/false}
+     */
+    applyQuantityChange = (records, index, result) => {
+        const record = records;
+        const { value, isValidate } = result;
+        record.purchasePrice = this.state.purchaseOrderType === '1' ? 0 : record.purchasePrice;
+        // 更新store中采购单商品
+        if (record) {
+            // 未输入采购数量，则清空store中采购数量，采购金额
+            if (!value) {
+                record.purchaseNumber = null;
+                record.totalAmount = null;
+                this.props.updatePoLine(record);
+            } else {
+                // 保存输入数据和校验状态 给submit用
+                record.purchaseNumber = value;
+                // 计算采购金额（含税）
+                record.totalAmount = Math.round(value * record.purchasePrice * 100) / 100;
+                // 校验状态
+                record.isValidate = isValidate;
+                this.props.updatePoLine(record);
+
+                // 输入采购数量合法，更新store
+                if (!isValidate) {
+                    message.error('采购数量必须为采购内装数的整数倍');
+                }
+            }
+        }
+    }
+    /**
+     * 商品行价格变化回调，做如下处理
+     *  1.更新store中该行信息（校验结果，采购价格，采购金额）
+     *  2.计算采购总金额并更新store
+     * result:{value:输入值,isValidate:检验结果 true/false}
+     */
+    applyPriceChange = (records, index, result) => {
+        const record = records;
+        const { value, isValidate } = result;
+        // 更新store中采购单商品
+        if (record) {
+            // 未输入采购价格，则清空store中采购数量，采购金额
+            if (!value) {
+                record.purchasePrice = null;
+                record.totalAmount = null;
+                this.props.updatePoLine(record);
+            } else {
+                // 保存输入数据和校验状态 给submit用
+                record.purchasePrice = value;
+                // 计算采购金额（含税）
+                record.totalAmount = Math.round(value * record.purchaseNumber * 100) / 100;
+                // 校验状态
+                record.isValidate = isValidate;
+                this.props.updatePoLine(record);
+            }
+        }
+    }
+
+    /**
      * 计算采购总数量、采购总金额
      * 计算对象：未删除&&采购数量不为空
      */
@@ -231,14 +320,235 @@ class PoCreateList extends PureComponent {
             }
         });
         totalAmounts = Math.round(totalAmounts * 100) / 100;
-        this.setState({
-            totalQuantitys,
-            totalAmounts: Math.round(totalAmounts * 100) / 100
+        if (this.state.purchaseOrderType === '1') {
+            this.setState({
+                totalQuantitys,
+                totalAmounts: 0
+            });
+        } else {
+            this.setState({
+                totalQuantitys,
+                totalAmounts: Math.round(totalAmounts * 100) / 100
+            });
+        }
+    }
+
+    /**
+     * 检查添加商品是否已经存在于采购单商品列表
+     */
+    isMaterialExists = (productCode) => {
+        let result = { exsited: true, record: null };
+        if (!productCode) {
+            result = { exsited: true, record: null };
+            return result;
+        }
+
+        const tmp = this.props.poLines;
+        // 商品行列表为空，则不存在改商品
+        if (!tmp) {
+            result = { exsited: false, record: null };
+            return result;
+        }
+
+        for (let i = 0; i < tmp.length; i++) {
+            if (tmp[i].productCode === productCode) {
+                result = { exsited: true, record: tmp[i] };
+                return result;
+            }
+        }
+        return ({ exsited: false, record: null });
+    }
+
+    /**
+     * 添加采购商品
+     *  .检查商品列表中是否存在该商品
+     *    a.已存在：显示已存在
+     *    b   在：添加该商品(recordStatus:new 新添加)
+     */
+    handleChoosedMaterialMap = ({ record }) => {
+        // 检查商品列表是否已经存在该商品
+        const result = this.isMaterialExists(record.productCode);
+        if (result.exsited) {
+            if (result.record && result.record.deleteFlg) {
+                result.record.deleteFlg = false;
+                this.props.updatePoLine(result.record);
+            } else {
+                message.error('该商品已经存在');
+            }
+        } else {
+            this.props.fetchNewPmPurchaseOrderItem({
+                // 商品id, 供应商地点id
+                productId: record.productId,
+                spAdrId: this.state.spAdrId
+            }).then(() => {
+                const { newPcOdData } = this.props;
+                const uuid = this.guid();
+                const poLine = Object.assign(
+                    {},
+                    newPcOdData,
+                    { id: uuid, recordStatus: 'new' }
+                );
+                this.props.addPoLines(poLine);
+            })
+        }
+    }
+
+    /**
+     * 删除所有商品行
+     * 1.行状态=new ,物理删除
+     * 2.行状态!=new，逻辑删除
+     */
+    deletePoLines() {
+        this.props.initPoDetail({
+            poLines: []
+        })
+    }
+
+    /**
+     * 点击保存/提交
+     * 校验内容：
+     *     1.基本信息是否正确
+     *     2.是否存在采购商品行
+     *     3.采购商品行信息是否正确
+     */
+    getAllValue = (status, isGoBack) => {
+        // 筛选出有效商品行
+        const validPoLines = this.getPoData().poLines.filter((item) =>
+            item.isValid !== 0
+        )
+        // 筛选出无效商品行
+        const invalidPoLines = this.getPoData().poLines.filter((item) =>
+            item.isValid === 0
+        )
+        // 检验基本信息
+        if (!this.validateForm()) {
+            message.error('校验失败，请检查！');
+            return;
+        }
+        // 校验商品行
+        if (this.hasInvalidateMaterial()) {
+            message.error('采购商品校验失败，请检查！');
+            return;
+        }
+        // 合法采购商品
+        const tmpPoLines = this.props.poLines.filter((record) =>
+            (!record.deleteFlg)
+        );
+
+        // 校验是否存在采购商品，无则异常
+        if (tmpPoLines.length === 0) {
+            message.error('请添加采购商品！');
+            return;
+        }
+
+        // 校验是否存在采购数量为空商品
+        if (this.hasEmptyQtyMaterial(tmpPoLines)) {
+            message.error('请输入商品采购数量！');
+            return;
+        }
+
+        // 校验有效商品数量
+        if (validPoLines.length === 0) {
+            message.error('无有效的商品！');
+            return;
+        }
+
+        // 清除无效商品弹框
+        if (invalidPoLines.length !== 0) {
+            const invalidGoodsList = invalidPoLines.map(item =>
+                (<p key={item.prodPurchaseId} >
+                    {item.productName}
+                </p>)
+            );
+            Modal.confirm({
+                title: '是否默认清除以下无效商品？',
+                content: invalidGoodsList,
+                onOk: () => {
+                    this.createPoRequest(validPoLines, status, isGoBack);
+                },
+                onCancel() {
+                },
+            });
+        } else {
+            this.createPoRequest(validPoLines, status, isGoBack);
+        }
+    }
+
+    /**
+     * 校验输入数据
+     */
+    validateForm = () => {
+        // 新增时数据
+        const basicInfo = this.getFormBasicInfo();
+        const {
+            addressId,
+            spId,
+            spAdrId,
+        } = basicInfo;
+        const { pickerDate, ispoAddressClear } = this.state;
+
+        // 修改时数据
+        const updateBasicInfo = this.props.basicInfo;
+        let isOk = true;
+        const { form } = this.props;
+        form.validateFields((err) => {
+            if (!err) {
+                if (updateBasicInfo.status === 0) {
+                    // 修改页
+                    if (
+                        !ispoAddressClear
+                        && updateBasicInfo.adrTypeCode
+                        && updateBasicInfo.spId
+                        && updateBasicInfo.spAdrId
+                        && updateBasicInfo.estimatedDeliveryDate
+                    ) {
+                        isOk = true;
+                        return isOk;
+                    }
+                    isOk = false;
+                    return isOk;
+                }
+                // 新增页
+                if (addressId && spId && spAdrId && pickerDate) {
+                    isOk = true;
+                    return isOk;
+                }
+                isOk = false;
+                return isOk;
+            }
+            isOk = false;
+            return isOk;
         });
+        return isOk;
+    }
+
+    /**
+     * 点击保存
+     */
+    handleSave = () => {
+        this.getAllValue(0, false);
+    }
+
+    /**
+     * 点击提交
+     */
+    handleSubmit = () => {
+        this.getAllValue(1, true);
+    }
+
+    S4() {
+        return (((1 + Math.random()) * 0x10000) || 0).toString(16).substring(1);
+    }
+
+    guid() {
+        return `${this.S4()}${this.S4()}-${this.S4()}-${this.S4()}-${this.S4()}-${this.S4()}${this.S4()}${this.S4()}`;
     }
 
     stateChange = (data) => {
-        this.setState(data)
+        this.setState(data);
+    }
+    purchaseOrderTypeChange = (data) => {
+        this.setState(data, () => (this.caculate(this.props.po.poLines)));
     }
     render() {
         return (
@@ -247,16 +557,21 @@ class PoCreateList extends PureComponent {
                     <BasicInfo
                         basicInfo={this.props.basicInfo}
                         stateChange={this.stateChange}
+                        purchaseOrderTypeChange={this.purchaseOrderTypeChange}
                     />
                     <AddingGoods
                         spAdrId={this.state.spAdrId}
                         businessMode={this.state.businessMode}
                         spId={this.state.spId}
+                        handleChoosedMaterialMap={this.handleChoosedMaterialMap}
                     />
                     <GoodsLists
                         basicInfo={this.props.basicInfo}
                         poLines={this.props.poLines}
                         purchaseOrderType={this.state.purchaseOrderType}
+                        applyPriceChange={this.applyPriceChange}
+                        applyQuantityChange={this.applyQuantityChange}
+                        onActionMenuSelect={this.onActionMenuSelect}
                     />
                     <div>
                         <Row type="flex">
@@ -312,11 +627,16 @@ class PoCreateList extends PureComponent {
     }
 }
 PoCreateList.propTypes = {
+    newPcOdData: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any),
     basicInfo: PropTypes.objectOf(PropTypes.any),
     poLines: PropTypes.objectOf(PropTypes.any),
     po: PropTypes.objectOf(PropTypes.any),
     initPoDetail: PropTypes.objectOf(PropTypes.any),
+    updatePoLine: PropTypes.func,
+    fetchNewPmPurchaseOrderItem: PropTypes.func,
+    addPoLines: PropTypes.func,
+    form: PropTypes.objectOf(PropTypes.any),
 }
 
 export default withRouter(Form.create()(PoCreateList));

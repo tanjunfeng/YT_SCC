@@ -32,6 +32,7 @@ class AddingGoods extends PureComponent {
                             <SearchMind
                                 style={{ zIndex: 6000, marginBottom: 5 }}
                                 compKey="productCode"
+                                rowKey="productCode"
                                 ref={ref => { this.addPo = ref }}
                                 fetch={(params) =>
                                     this.props.pubFetchValueList({
@@ -44,7 +45,7 @@ class AddingGoods extends PureComponent {
                                 }
                                 disabled={spId === ''}
                                 addonBefore="添加商品"
-                                onChoosed={this.handleChoosedMaterialMap}
+                                onChoosed={this.props.handleChoosedMaterialMap}
                                 renderChoosedInputRaw={(data) => (
                                     <div>{data.productCode} - {data.saleName}</div>
                                 )}
@@ -73,6 +74,7 @@ AddingGoods.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     spAdrId: PropTypes.string,
     businessMode: PropTypes.string,
-    spId: PropTypes.string
+    spId: PropTypes.string,
+    handleChoosedMaterialMap: PropTypes.func
 }
 export default AddingGoods;

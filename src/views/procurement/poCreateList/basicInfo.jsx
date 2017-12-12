@@ -29,6 +29,10 @@ import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModa
 import { Supplier } from '../../../container/search';
 
 @connect(state => ({
+    po: state.toJS().procurement.po || {},
+    newPcOdData: state.toJS().procurement.newPcOdData || {},
+    // 回显数据
+    basicInfo: state.toJS().procurement.po.basicInfo || {},
     // 用户信息
     data: state.toJS().user.data || {}
 }), dispatch => bindActionCreators({
@@ -141,7 +145,8 @@ class BasicInfo extends PureComponent {
             purchaseOrderType: value,
             totalAmounts: 0
         })
-        this.props.stateChange({purchaseOrderType: value});
+        console.log(value);
+        this.props.purchaseOrderTypeChange({purchaseOrderType: value});
     }
 
     /**
@@ -657,6 +662,7 @@ BasicInfo.propTypes = {
     data: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     updatePoBasicinfo: PropTypes.func,
-    stateChange: PropTypes.func
+    stateChange: PropTypes.func,
+    purchaseOrderTypeChange: PropTypes.func
 }
 export default withRouter(Form.create()(BasicInfo));

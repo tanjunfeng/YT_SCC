@@ -98,7 +98,7 @@ class GoodsLists extends PureComponent {
                         editable={this.props.purchaseOrderType === '2'}
                         step={record.purchaseInsideNumber}
                         purchaseInsideNumber={null}
-                        onChange={value => this.applyPriceChange(record, index, value)}
+                        onChange={value => this.props.applyPriceChange(record, index, value)}
                     />)
             },
             {
@@ -111,7 +111,7 @@ class GoodsLists extends PureComponent {
                         editable={true}
                         step={record.purchaseInsideNumber}
                         purchaseInsideNumber={record.purchaseInsideNumber}
-                        onChange={value => this.applyQuantityChange(record, index, value)}
+                        onChange={value => this.props.applyQuantityChange(record, index, value)}
                     />)
             },
             {
@@ -151,6 +151,7 @@ class GoodsLists extends PureComponent {
             }
         ];
     }
+
     /**
      * 可用库存
      */
@@ -161,12 +162,34 @@ class GoodsLists extends PureComponent {
         }
         return this.columns
     }
+    /**
+     * 表单操作
+     * @param {*} text 行值
+     * @param {*} record 行数据
+     * @param {*} index 行下标
+     */
+    renderActions = (text, record, index) => {
+        const menu = (
+            <Menu onClick={(item) => this.props.onActionMenuSelect(record, index, item)}>
+                <Menu.Item key="delete">
+                    <a target="_blank" rel="noopener noreferrer">删除</a>
+                </Menu.Item>
+            </Menu>
+        )
+        return (
+            <Dropdown overlay={menu} placement="bottomCenter">
+                <a className="ant-dropdown-link">
+                    表单操作
+                    <Icon type="down" />
+                </a>
+            </Dropdown>
+        )
+    }
     render() {
         return (
             <div className="poLines area-list">
                 <Table
                     dataSource={this.props.poLines.filter((record) => {
-                        console.log(record.deleteFlg);
                         return !record.deleteFlg
                     }
                     )}
@@ -200,5 +223,8 @@ GoodsLists.propTypes = {
     auditPo: PropTypes.func,
     modifyCauseModalVisible: PropTypes.func,
     purchaseOrderType: PropTypes.string,
+    applyPriceChange: PropTypes.func,
+    applyQuantityChange: PropTypes.func,
+    onActionMenuSelect: PropTypes.func
 }
 export default GoodsLists;
