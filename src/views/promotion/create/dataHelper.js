@@ -150,16 +150,19 @@ const getRewardListPreferentialValue = (values) => {
 
 const getCategoryOrProductOfRL = (condition, values, state) => {
     const { rewardList, rewardListProduct } = values;
-    switch(rewardList) {
+    switch (rewardList) {
         case 'CATEGORY':
-            Object.assign(condition, {promoCategories: state.categoryRL});
+            Object.assign(condition, { promoCategories: state.categoryRL });
             break;
-        case 'CATEGORY':
-            Object.assign(condition, {promoProduct: {
-                productId: rewardListProduct.record.productId,
-                productName: rewardListProduct.record.productName
-            }});
+        case 'PRODUCT':
+            Object.assign(condition, {
+                promoProduct: {
+                    productId: rewardListProduct.record.productId,
+                    productName: rewardListProduct.record.productName
+                }
+            });
             break;
+        case 'ALL':
         default: break;
     }
 }
@@ -193,7 +196,10 @@ const getRewardListRule = (state, values) => {
         }
     };
     // 按全部、品类和商品拼接 condition 对象
-    getCategoryOrProductOfRL(promotionRule.rewardListRule.purchaseConditionsRule.condition, values, state);
+    getCategoryOrProductOfRL(
+        promotionRule.rewardListRule.purchaseConditionsRule.condition,
+        values, state
+    );
     return Util.removeInvalid(promotionRule);
 }
 
