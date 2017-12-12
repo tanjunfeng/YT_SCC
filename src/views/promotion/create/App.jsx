@@ -171,7 +171,7 @@ class PromotionCreate extends PureComponent {
                 <Row>
                     <FormItem label="使用条件">
                         {getFieldDecorator('condition', {
-                            initialValue: 1,
+                            initialValue: 0,
                             rules: [{ required: true, message: '请选择使用条件' }]
                         })(<RadioGroup>
                             <Radio className="default" value={0}>不限制</Radio>
@@ -188,7 +188,7 @@ class PromotionCreate extends PureComponent {
                         // condition === 1
                         <FormItem label="优惠种类">
                             {getFieldDecorator('category', {
-                                initialValue: 'TOTALPUCHASELIST'
+                                initialValue: 'PURCHASECONDITION'
                             })(<Select size="default" className="wd-110">
                                 <Option key={'PURCHASECONDITION'} value="PURCHASECONDITION">购买条件</Option>
                                 <Option key={'REWARDLIST'} value="REWARDLIST">奖励列表</Option>
