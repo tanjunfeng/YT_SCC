@@ -227,6 +227,42 @@ const getNoConditionDataRule = (values) => {
     return promotionRule;
 }
 
+const getTotalPurchaseListPreferentialValue = (values) => {
+    const {
+        totalPurchaseListRule,
+        totalPurchaseListRulePercent,
+        totalPurchaseListRuleAmount
+    } = values;
+    let preferentialValue = '';
+    switch (totalPurchaseListRule) {
+        case 'PERCENTAGE':
+            preferentialValue = totalPurchaseListRulePercent;
+            break;
+        case 'DISCOUNTAMOUNT':
+            preferentialValue = totalPurchaseListRuleAmount;
+            break;
+        default: break;
+    }
+    return preferentialValue;
+}
+
+const getTotalPurchaseListRule = (state, values) => {
+    const { category, totalPurchaseListRule } = values;
+    const { conditions } = state;
+    const promotionRule = {
+        useConditionRule: true,
+        ruleName: category,
+        totalPurchaseListRule: {
+            conditions,
+            rule: {
+                preferentialWay: totalPurchaseListRule,
+                preferentialValue: getTotalPurchaseListPreferentialValue(values)
+            }
+        }
+    };
+    return Util.removeInvalid(promotionRule);
+}
+
 // 获取基础数据，无分支条件的数据
 const getBasicData = (state, values) => {
     const {
@@ -276,7 +312,12 @@ const getPurchageWay = (formData, values, state) => {
             break;
         case 'REWARDLIST': // 奖励列表
             Object.assign(formData, {
-                rewardListRule: getRewardListRule(state, values)
+                promotionRule: getRewardListRule(state, values)
+            });
+            break;
+        case 'TOTALPUCHASELIST': // 整个购买列表
+            Object.assign(formData, {
+                promotionRule: getTotalPurchaseListRule(state, values)
             });
             break;
         default: break;
@@ -306,7 +347,9 @@ const forbidden = (state, values) => {
             message.error('请选择品类');
             return true;
         }
-        if (category === 'REWARDLIST' && state.conditions.length === 0) {
+        if (category !== 'PURCHASECONDITION'
+            && state.conditions.length === 0
+        ) {
             message.error('请添加购买条件');
             return true;
         }
