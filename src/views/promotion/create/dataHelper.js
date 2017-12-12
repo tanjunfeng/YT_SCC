@@ -216,6 +216,13 @@ export const getFormData = ({ state, form }, callback) => {
             message.error('请选择品类');
             return;
         }
+        if (condition === 1
+            && category === 'REWARDLIST'
+            && state.conditions.length === 0
+        ) {
+            message.error('请添加购买条件');
+            return;
+        }
         const formData = getBasicData(state, values);
         if (condition === 0) {
             // 使用条件——不限制

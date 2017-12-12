@@ -225,14 +225,20 @@ export const getPromotion = (form, licence, handleCategorySelect) => {
  * @param {*} licence rewardList
  * @param {*} handleCategorySelect
  */
-export const getRewardList = (form, licence, handleCategorySelect) => (
-    <div>
-        <BuyConditionList />
-        <ul className="list-panel">
-            <li><h2>奖励列表</h2></li>
-            <li>
-                {getPromotion(form, licence, handleCategorySelect)}
-            </li>
-        </ul>
-    </div>
-)
+export const getRewardList = (params) => {
+    const { form, licence, handleCategorySelect, conditions, handleBuyConditionsChange } = params;
+    return (
+        <div>
+            <BuyConditionList
+                value={{ conditions }}
+                onChange={handleBuyConditionsChange}
+            />
+            <ul className="list-panel">
+                <li><h2>奖励列表</h2></li>
+                <li>
+                    {getPromotion(form, licence, handleCategorySelect)}
+                </li>
+            </ul>
+        </div>
+    )
+}
