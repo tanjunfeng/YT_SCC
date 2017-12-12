@@ -22,14 +22,20 @@ $promotionFieldWidth: 180px;
 }
 
 .promotion {
+    border: 1px solid #c4c5c9;
+    padding-bottom: 20px;
+    margin: 10px 0;
     .ant-form-item-label {
         width: 80px;
         .sc-form-item-label {
             text-align: right;
         }
     }
-    .ant-form-item-control {
+    .ant-form-item-control-wrapper, .ant-select {
         width: $promotionFieldWidth;
+    }
+    .ant-btn {
+        margin-right: 20px;
     }
     .search-mind-label {
         min-width: 80px;
