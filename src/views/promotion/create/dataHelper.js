@@ -73,7 +73,9 @@ const getConditionOfPC = (promotionRule, state, values) => {
     }
 }
 
-export const isCategoryExist = (category) => (category && category.categoryId !== undefined);
+export const isCategoryExist = (category) => (
+    category && category !== null && category.categoryId !== undefined
+);
 
 /**
  * 优惠种类: 购买条件
@@ -188,6 +190,37 @@ const getPurchageWay = (formData, values, state) => {
 }
 
 /**
+ * 是否禁止提交表单
+ *
+ * @param {*} state
+ * @param {*} values
+ */
+const forbidden = (state, values) => {
+    const { condition, category, purchaseCondition, buyCondition } = values;
+    if (condition === 1) {
+        if (category === 'PURCHASECONDITION'
+            && purchaseCondition === 'CATEGORY'
+            && !isCategoryExist(state.categoryPC)
+        ) {
+            message.error('请选择品类');
+            return true;
+        }
+        if (category === 'REWARDLIST'
+            && buyCondition === 'CATEGORY'
+            && !isCategoryExist(state.categoryRL)
+        ) {
+            message.error('请选择品类');
+            return true;
+        }
+        if (category === 'REWARDLIST' && state.conditions.length === 0) {
+            message.error('请添加购买条件');
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
  * 获取表单数据
  *
  * @param {*object} { state: this.state, form: this.props.form }
@@ -196,31 +229,8 @@ const getPurchageWay = (formData, values, state) => {
 export const getFormData = ({ state, form }, callback) => {
     const { validateFields } = form;
     validateFields((err, values) => {
-        const { condition, category, purchaseCondition, buyCondition } = values;
-        if (err) {
-            return;
-        }
-        if (condition === 1
-            && category === 'PURCHASECONDITION'
-            && purchaseCondition === 'CATEGORY'
-            && !isCategoryExist(state.categoryPC)
-        ) {
-            message.error('请选择品类');
-            return;
-        }
-        if (condition === 1
-            && category === 'REWARDLIST'
-            && buyCondition === 'CATEGORY'
-            && !isCategoryExist(state.categoryRL)
-        ) {
-            message.error('请选择品类');
-            return;
-        }
-        if (condition === 1
-            && category === 'REWARDLIST'
-            && state.conditions.length === 0
-        ) {
-            message.error('请添加购买条件');
+        const { condition } = values;
+        if (err || forbidden(state, values)) {
             return;
         }
         const formData = getBasicData(state, values);
