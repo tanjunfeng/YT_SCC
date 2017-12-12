@@ -11,6 +11,7 @@ import Util from '../../../util/util';
 import { MAX_AMOUNT_OF_ORDER } from '../../../constant';
 import { Category } from '../../../container/cascader';
 import { AddingGoodsByTerm } from '../../../container/search';
+import BuyConditionList from './buyConditionList';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -28,11 +29,11 @@ export const getChooseButton = (companies, handleClick) => (
  * @param {*string} licence
  * @param {string} type 品类或商品 PRODUCT : CATEGORY
  */
-const getRulesColumn = (form, licence, type = '') => {
+export const getRulesColumn = (form, licence, type = '') => {
     const { getFieldDecorator, getFieldValue } = form;
     return (<span>
         <FormItem label="优惠方式">
-            {/* noConditionRule, purchaseConditionRule */}
+            {/* noConditionRule, purchaseConditionRule, buyConditionRule */}
             {getFieldDecorator(`${licence}Rule`, {
                 initialValue: '',
                 rules: [{ required: true, message: '请选择优惠方式' }]
@@ -53,7 +54,9 @@ const getRulesColumn = (form, licence, type = '') => {
         {/* 优惠百分比 */}
         {getFieldValue(`${licence}Rule`) === 'PERCENTAGE' ?
             <FormItem>
-                {/* noConditionRulePercent, purchaseConditionRulePercent */}
+                {/* noConditionRulePercent,
+                purchaseConditionRulePercent,
+                buyConditionRulePercent */}
                 {getFieldDecorator(`${licence}RulePercent`, {
                     initialValue: 95,
                     rules: [{ required: true, message: '请输入折扣百分比' }]
@@ -63,12 +66,12 @@ const getRulesColumn = (form, licence, type = '') => {
         {/* 折扣金额 */}
         {getFieldValue(`${licence}Rule`) === 'DISCOUNTAMOUNT' ?
             <FormItem>
-                {/* noConditionRuleAmount, purchaseConditionRuleAmount */}
+                {/* noConditionRuleAmount, purchaseConditionRuleAmount, buyConditionRuleAmount */}
                 ￥{getFieldDecorator(`${licence}RuleAmount`, {
                     initialValue: 0,
                     rules: [
                         { required: true, message: '请输入折扣金额' },
-                        { validat: Util.limitTwoDecimalPlaces }
+                        { validator: Util.limitTwoDecimalPlaces }
                     ]
                 })(<InputNumber className="wd-60" min={0} max={MAX_AMOUNT_OF_ORDER} step={1} />)} 元
             </FormItem>
@@ -110,14 +113,14 @@ export const getRules = (form, licence) => <Row>{getRulesColumn(form, licence)}<
  * @param {*object} form { getFieldDecorator, getFieldValue }
  * @param {*string} licence
  */
-const buyType = (form, licence) => {
+export const buyType = (form, licence) => {
     const { getFieldDecorator } = form;
     return (
         <span>
             <FormItem label="购买类型">
-                {/* purchaseCondition */}
+                {/* purchaseCondition, buyCondition */}
                 {getFieldDecorator(licence, {
-                    initialValue: 'CATEGORY'
+                    initialValue: 'ALL'
                 })(<Select size="default" className="wd-90">
                     <Option key={'ALL'} value="ALL">全部</Option>
                     <Option key={'CATEGORY'} value="CATEGORY">按品类</Option>
@@ -134,12 +137,12 @@ const buyType = (form, licence) => {
  * @param {*object} form { getFieldDecorator, getFieldValue }
  * @param {*string} licence
  */
-const conditionType = (form, licence) => {
+export const getConditionType = (form, licence) => {
     const { getFieldDecorator, getFieldValue } = form;
     return (
         <span>
             <FormItem label="条件类型">
-                {/* purchaseConditionType */}
+                {/* purchaseConditionType, buyConditionType */}
                 {getFieldDecorator(`${licence}Type`, {
                     initialValue: '',
                     rules: [{ required: true, message: '请选择条件类型' }]
@@ -151,6 +154,7 @@ const conditionType = (form, licence) => {
             </FormItem>
             {getFieldValue(`${licence}Type`) === 'AMOUNT' ?
                 <FormItem>
+                    {/* buyConditionTypeAmount */}
                     ￥{getFieldDecorator(`${licence}TypeAmount`, {
                         initialValue: 0,
                         rules: [
@@ -163,6 +167,7 @@ const conditionType = (form, licence) => {
             }
             {getFieldValue(`${licence}Type`) === 'QUANTITY' ?
                 <FormItem>
+                    {/* buyConditionTypeQuantity */}
                     {getFieldDecorator(`${licence}TypeQuantity`, {
                         initialValue: 0,
                         rules: [
@@ -184,28 +189,51 @@ const conditionType = (form, licence) => {
  * @param {*} licence
  * @param {*} handleCategorySelect 品类选择器回调函数
  */
-export const getRewardList = (form, licence, handleCategorySelect) => {
+export const getPromotion = (form, licence, handleCategorySelect) => {
     const { getFieldDecorator, getFieldValue } = form;
     return (
         <Row>
-            {buyType(form, licence)}
-            {getFieldValue(licence) === 'CATEGORY' ?
-                <FormItem>
-                    <Category onChange={handleCategorySelect} />
-                </FormItem> : null}
-            {getFieldValue(licence) === 'PRODUCT' ?
-                <FormItem className="product">
-                    {/* purchaseConditionProduct */}
-                    {getFieldDecorator(`${licence}Product`, {
-                        initialValue: {
-                            productId: '',
-                            productCode: '',
-                            productName: ''
-                        }
-                    })(<AddingGoodsByTerm />)}
-                </FormItem> : null}
-            {conditionType(form, licence)}
-            {getRulesColumn(form, licence, getFieldValue(licence))}
+            <div className="wd-396">
+                {buyType(form, licence)}
+                {getFieldValue(licence) === 'CATEGORY' ?
+                    <FormItem>
+                        <Category onChange={handleCategorySelect} />
+                    </FormItem> : null}
+                {getFieldValue(licence) === 'PRODUCT' ?
+                    <FormItem className="product">
+                        {/* purchaseConditionProduct, rewardListProduct, buyConditionProduct */}
+                        {getFieldDecorator(`${licence}Product`, {
+                            initialValue: {
+                                productId: '',
+                                productCode: '',
+                                productName: ''
+                            }
+                        })(<AddingGoodsByTerm />)}
+                    </FormItem> : null}
+            </div>
+            <div className="wd-317"> {getConditionType(form, licence)}</div>
+            <div className="wd-297">
+                {getRulesColumn(form, licence, getFieldValue(licence))}
+            </div>
         </Row>
     )
 }
+
+/**
+ * 获取奖励列表 dom
+ *
+ * @param {*} form
+ * @param {*} licence rewardList
+ * @param {*} handleCategorySelect
+ */
+export const getRewardList = (form, licence, handleCategorySelect) => (
+    <div>
+        <BuyConditionList />
+        <ul className="list-panel">
+            <li><h2>奖励列表</h2></li>
+            <li>
+                {getPromotion(form, licence, handleCategorySelect)}
+            </li>
+        </ul>
+    </div>
+)

@@ -315,12 +315,12 @@ class OrderManagementList extends Component {
      * @param {object} record 单行数据
      */
     renderOperation(text, record) {
-        const { id, orderState, shippingState } = record;
+        const { id, orderState, shippingState, paymentState } = record;
         const pathname = window.location.pathname;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
                 <Menu.Item key="detail">
-                    <Link target="_blank" to={`${pathname}/orderDetails/${id}`}>查看订单详情</Link>
+                    <Link target="_blank" to={`${pathname}/orderDetails/${id}/${orderState}`}>查看订单详情</Link>
                 </Menu.Item>
                 {
                     (orderState === 'W'
@@ -344,7 +344,10 @@ class OrderManagementList extends Component {
                     </Menu.Item>
                 }
                 {
-                    (shippingState === 'WJS' || shippingState === 'WCS')
+                    ((orderState === 'A' && paymentState === 'YZF' && shippingState === 'WCS')
+                    || (orderState === 'A' && paymentState === 'YZF' && shippingState === 'WJS')
+                    || (orderState === 'A' && paymentState === 'GSN' && shippingState === 'WCS')
+                    || (orderState === 'A' && paymentState === 'GSN' && shippingState === 'WJS'))
                     && <Menu.Item key="tableRetransfer">
                         <a target="_blank" rel="noopener noreferrer">重新传送</a>
                     </Menu.Item>

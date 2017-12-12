@@ -1,35 +1,18 @@
 /**
  * 表单数据组装工具类
  */
+import { message } from 'antd';
 import Util from '../../../util/util';
-
 
 // 根据整数计算百分数
 const getPercent = (num) => (Number(num / 100.0).toFixed(2));
 
-/**
- * 优惠种类: 购买条件
- *
- * @param {*} state
- * @param {*} values
- */
-const getPurchaseConditionsRule = (state, values) => {
+const getPreferentialValueOfPC = (values) => {
     const {
-        category, purchaseCondition, purchaseConditionType,
-        purchaseConditionTypeAmount, purchaseConditionTypeQuantity,
         purchaseConditionRule, purchaseConditionRulePercent,
         purchaseConditionRulePrice, purchaseConditionRuleGive,
-        purchaseConditionRuleAmount, purchaseConditionProduct
+        purchaseConditionRuleAmount
     } = values;
-    const { categoryPC } = state;
-    let conditionValue = '';
-    if (purchaseConditionType === 'AMOUNT') {
-        // 条件类型为累计商品金额
-        conditionValue = purchaseConditionTypeAmount;
-    } else if (purchaseConditionType === 'QUANTITY') {
-        // 条件类型为累计商品数量
-        conditionValue = purchaseConditionTypeQuantity;
-    }
     let preferentialValue = '';
     switch (purchaseConditionRule) {
         case 'PERCENTAGE': // 折扣百分比
@@ -46,6 +29,63 @@ const getPurchaseConditionsRule = (state, values) => {
             break;
         default: break;
     }
+    return preferentialValue;
+}
+
+const getConditionValueOfPC = (values) => {
+    const {
+        purchaseConditionType, purchaseConditionTypeAmount, purchaseConditionTypeQuantity
+    } = values;
+    let conditionValue = '';
+    if (purchaseConditionType === 'AMOUNT') {
+        // 条件类型为累计商品金额
+        conditionValue = purchaseConditionTypeAmount;
+    } else if (purchaseConditionType === 'QUANTITY') {
+        // 条件类型为累计商品数量
+        conditionValue = purchaseConditionTypeQuantity;
+    }
+    return conditionValue;
+}
+
+const getConditionOfPC = (promotionRule, state, values) => {
+    const {
+        purchaseCondition,
+        purchaseConditionProduct
+    } = values;
+    const { categoryPC } = state;
+    switch (purchaseCondition) {
+        case 'ALL': // 全部
+            break;
+        case 'CATEGORY': // 按品类
+            Object.assign(promotionRule.purchaseConditionsRule.condition, {
+                promoCategories: categoryPC
+            });
+            break;
+        case 'PRODUCT': // 按商品
+            Object.assign(promotionRule.purchaseConditionsRule.condition, {
+                promoProduct: {
+                    productId: purchaseConditionProduct.record.productId,
+                    productName: purchaseConditionProduct.record.productName
+                }
+            });
+            break;
+        default: break;
+    }
+}
+
+export const isCategoryExist = (category) => (category && category.categoryId !== undefined);
+
+/**
+ * 优惠种类: 购买条件
+ *
+ * @param {*} state
+ * @param {*} values
+ */
+const getPurchaseConditionsRule = (state, values) => {
+    const {
+        category, purchaseCondition, purchaseConditionType,
+        purchaseConditionRule
+    } = values;
     const promotionRule = {
         useConditionRule: true,
         ruleName: category,
@@ -53,27 +93,16 @@ const getPurchaseConditionsRule = (state, values) => {
             condition: {
                 purchaseType: purchaseCondition,
                 conditionType: purchaseConditionType,
-                conditionValue
+                conditionValue: getConditionValueOfPC(values)
             },
             rule: {
                 preferentialWay: purchaseConditionRule,
-                preferentialValue
+                preferentialValue: getPreferentialValueOfPC(values)
             }
         }
     };
-    // 按品类
-    if (purchaseCondition === 'CATEGORY') {
-        Object.assign(promotionRule.purchaseConditionsRule.condition, {
-            promoCategories: categoryPC
-        });
-    }
-    // 按商品
-    if (purchaseCondition === 'PRODUCT') {
-        const { productId, productName } = purchaseConditionProduct.record;
-        Object.assign(promotionRule.purchaseConditionsRule.condition, {
-            promoProduct: { productId, productName }
-        });
-    }
+    // 按全部、品类和商品拼接 condition 对象
+    getConditionOfPC(promotionRule, state, values);
     return Util.removeInvalid(promotionRule);
 }
 
@@ -141,6 +170,32 @@ const getBasicData = (state, values) => {
     }
 }
 
+// 根据优惠方式组装优惠规则
+const getPurchageWay = (formData, values, state) => {
+    const { category, purchaseCondition, buyCondition } = values;
+    switch (category) {
+        case 'PURCHASECONDITION': // 购买条件
+            if (purchaseCondition === 'CATEGORY' && !isCategoryExist(state.categoryPC)) {
+                message.error('请选择品类');
+                return;
+            }
+            Object.assign(formData, {
+                promotionRule: getPurchaseConditionsRule(state, values)
+            });
+            break;
+        case 'REWARDLIST': // 奖励列表
+            if (buyCondition === 'CATEGORY' && isCategoryExist(state.categoryRL)) {
+                message.error('请选择品类');
+                return;
+            }
+            Object.assign(formData, {
+                rewardListRule: getPurchaseConditionsRule(state, values)
+            });
+            break;
+        default: break;
+    }
+}
+
 /**
  * 获取表单数据
  *
@@ -148,61 +203,24 @@ const getBasicData = (state, values) => {
  * @param {*function} callback 校验成功之后的回调
  */
 export const getFormData = ({ state, form }, callback) => {
-    const { validateFields, setFields } = form;
+    const { validateFields } = form;
     validateFields((err, values) => {
-        const { condition, category, purchaseCondition, purchaseConditionProduct } = values;
-        const { categoryPC } = state;
+        const { condition } = values;
         if (err) {
-            // 指定条件——购买条件——购买类型：按品类——校验是否选择了品类
-            if (condition === 1
-                && category === 'PURCHASECONDITION'
-                && purchaseCondition === 'CATEGORY'
-                && (!categoryPC || categoryPC.categoryId === undefined)
-            ) {
-                setFields({
-                    purchaseCondition: {
-                        value: 'CATEGORY',
-                        errors: [new Error('请选择品类')]
-                    }
-                });
-            }
-            // 指定条件——购买条件——购买类型：按品类——校验是否选择了商品
-            if (condition === 1
-                && category === 'PURCHASECONDITION'
-                && purchaseCondition === 'PRODUCT'
-                && (!purchaseConditionProduct
-                    || purchaseConditionProduct.productId === ''
-                    || purchaseConditionProduct.record.productId === ''
-                )
-            ) {
-                setFields({
-                    purchaseCondition: {
-                        value: 'PRODUCT',
-                        errors: [new Error('请选择商品')]
-                    }
-                });
-            }
             return;
         }
-        // 使用条件 0: 不限制，1: 指定条件
-        const dist = getBasicData(state, values);
-        // 无限制条件
+        const formData = getBasicData(state, values);
         if (condition === 0) {
-            Object.assign(dist, {
+            // 使用条件——不限制
+            Object.assign(formData, {
                 promotionRule: getNoConditionDataRule(values)
             });
-        } else if (condition === 1 && category === 'PURCHASECONDITION' && purchaseCondition === 'CATEGORY') {
-            // 指定条件——优惠种类——购买条件
-            Object.assign(dist, {
-                promotionRule: getPurchaseConditionsRule(state, values)
-            });
-        } else if (condition === 1 && category === 'PURCHASECONDITION' && purchaseCondition === 'PRODUCT') {
-            Object.assign(dist, {
-                promotionRule: getPurchaseConditionsRule(state, values)
-            });
+        } else if (condition === 1) {
+            // 使用条件——指定条件——优惠方式
+            getPurchageWay(formData, values, state);
         }
         if (typeof callback === 'function') {
-            callback(Util.removeInvalid(dist));
+            callback(Util.removeInvalid(formData));
         }
     });
 }
