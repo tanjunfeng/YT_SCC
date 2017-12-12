@@ -19,7 +19,10 @@ import { AreaSelector } from '../../../container/tree';
 import { createPromotion } from '../../../actions/promotion';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 import { overlayOptions } from '../constants';
-import { getChooseButton, getRules, getPromotion, getRewardList } from './domHelper';
+import {
+    getChooseButton, getRules, getRulesColumn,
+    getPromotion, getRewardList, getTotalPurchaseList
+} from './domHelper';
 import { getFormData } from './dataHelper';
 
 const RadioGroup = Radio.Group;
@@ -93,7 +96,7 @@ class PromotionCreate extends PureComponent {
 
     // 指定条件——奖励列表——购买条件回传
     handleBuyConditionsChange = (conditions) => {
-        this.setState({conditions});
+        this.setState({ conditions });
     }
 
     /**
@@ -193,6 +196,9 @@ class PromotionCreate extends PureComponent {
                             </Select>)}
                         </FormItem>
                     }
+                    {getFieldValue('condition') === 1 && getFieldValue('category') === 'TOTALPUCHASELIST' ?
+                        getRulesColumn(form, 'totalPurchaseList') : null
+                    }
                 </Row>
                 {/* 指定条件——购买条件 */}
                 {getFieldValue('condition') === 1 && getFieldValue('category') === 'PURCHASECONDITION' ?
@@ -214,6 +220,13 @@ class PromotionCreate extends PureComponent {
                         }
                     ) : null
                 }
+                {/* 指定条件——整个购买列表 */}
+                {getFieldValue('condition') === 1 && getFieldValue('category') === 'TOTALPUCHASELIST' ?
+                    getTotalPurchaseList(
+                        {
+                            conditions,
+                            handleBuyConditionsChange: this.handleBuyConditionsChange
+                        }) : null}
                 <Row>
                     <FormItem label="使用区域">
                         {getFieldDecorator('area', {
