@@ -194,6 +194,7 @@ export const getPromotion = (form, licence, handleCategorySelect) => {
         <Row>
             <div className="wd-396">
                 {buyType(form, licence)}
+                {/* purchaseCondition, rewardList */}
                 {getFieldValue(licence) === 'CATEGORY' ?
                     <FormItem>
                         <Category onChange={handleCategorySelect} />

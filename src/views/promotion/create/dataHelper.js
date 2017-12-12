@@ -196,7 +196,7 @@ const getPurchageWay = (formData, values, state) => {
  * @param {*} values
  */
 const forbidden = (state, values) => {
-    const { condition, category, purchaseCondition, buyCondition } = values;
+    const { condition, category, purchaseCondition, rewardList } = values;
     if (condition === 1) {
         if (category === 'PURCHASECONDITION'
             && purchaseCondition === 'CATEGORY'
@@ -206,7 +206,7 @@ const forbidden = (state, values) => {
             return true;
         }
         if (category === 'REWARDLIST'
-            && buyCondition === 'CATEGORY'
+            && rewardList === 'CATEGORY'
             && !isCategoryExist(state.categoryRL)
         ) {
             message.error('请选择品类');
