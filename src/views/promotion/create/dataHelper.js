@@ -184,7 +184,6 @@ const getRewardListRule = (state, values) => {
             purchaseConditionsRule: {
                 condition: {
                     purchaseType: rewardList,
-                    // promoCategories: state.categoryRL,
                     conditionType: rewardListType,
                     conditionValue: getRewardListConditionValue(values)
                 },
