@@ -33,7 +33,7 @@ export const getRulesColumn = (form, licence, type = '') => {
     const { getFieldDecorator, getFieldValue } = form;
     return (<span>
         <FormItem label="优惠方式">
-            {/* noConditionRule, purchaseConditionRule, buyConditionRule */}
+            {/* noConditionRule, purchaseConditionRule, rewardListRule */}
             {getFieldDecorator(`${licence}Rule`, {
                 initialValue: '',
                 rules: [{ required: true, message: '请选择优惠方式' }]
@@ -56,7 +56,7 @@ export const getRulesColumn = (form, licence, type = '') => {
             <FormItem>
                 {/* noConditionRulePercent,
                 purchaseConditionRulePercent,
-                buyConditionRulePercent */}
+                rewardListRulePercent */}
                 {getFieldDecorator(`${licence}RulePercent`, {
                     initialValue: 95,
                     rules: [{ required: true, message: '请输入折扣百分比' }]
@@ -66,7 +66,7 @@ export const getRulesColumn = (form, licence, type = '') => {
         {/* 折扣金额 */}
         {getFieldValue(`${licence}Rule`) === 'DISCOUNTAMOUNT' ?
             <FormItem>
-                {/* noConditionRuleAmount, purchaseConditionRuleAmount, buyConditionRuleAmount */}
+                {/* noConditionRuleAmount, purchaseConditionRuleAmount, rewardListRuleAmount */}
                 ￥{getFieldDecorator(`${licence}RuleAmount`, {
                     initialValue: 0,
                     rules: [
@@ -79,7 +79,7 @@ export const getRulesColumn = (form, licence, type = '') => {
         {/* 固定单价 */}
         {getFieldValue(`${licence}Rule`) === 'FIXEDPRICE' ?
             <FormItem>
-                {/* purchaseConditionRulePrice */}
+                {/* purchaseConditionRulePrice, rewardListRulePrice */}
                 ￥{getFieldDecorator(`${licence}RulePrice`, {
                     initialValue: 0,
                     rules: [
@@ -92,7 +92,7 @@ export const getRulesColumn = (form, licence, type = '') => {
         {/* 赠送相同商品 */}
         {getFieldValue(`${licence}Rule`) === 'GIVESAMEPRODUCT' ?
             <FormItem>
-                {/* purchaseConditionRuleGive */}
+                {/* purchaseConditionRuleGive, rewardListRuleGive */}
                 {getFieldDecorator(`${licence}RuleGive`, {
                     initialValue: 0,
                     rules: [
@@ -142,7 +142,7 @@ export const getConditionType = (form, licence) => {
     return (
         <span>
             <FormItem label="条件类型">
-                {/* purchaseConditionType, buyConditionType */}
+                {/* purchaseConditionType, rewardListType */}
                 {getFieldDecorator(`${licence}Type`, {
                     initialValue: '',
                     rules: [{ required: true, message: '请选择条件类型' }]
@@ -154,7 +154,7 @@ export const getConditionType = (form, licence) => {
             </FormItem>
             {getFieldValue(`${licence}Type`) === 'AMOUNT' ?
                 <FormItem>
-                    {/* buyConditionTypeAmount */}
+                    {/* rewardListTypeAmount */}
                     ￥{getFieldDecorator(`${licence}TypeAmount`, {
                         initialValue: 0,
                         rules: [
@@ -166,7 +166,7 @@ export const getConditionType = (form, licence) => {
             }
             {getFieldValue(`${licence}Type`) === 'QUANTITY' ?
                 <FormItem>
-                    {/* buyConditionTypeQuantity */}
+                    {/* rewardListTypeQuantity */}
                     {getFieldDecorator(`${licence}TypeQuantity`, {
                         initialValue: 0,
                         rules: [

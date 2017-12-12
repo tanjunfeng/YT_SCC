@@ -78,7 +78,7 @@ export const isCategoryExist = (category) => (
 );
 
 /**
- * 优惠种类: 购买条件
+ * 指定条件——优惠种类——购买条件
  *
  * @param {*} state
  * @param {*} values
@@ -105,6 +105,79 @@ const getPurchaseConditionsRule = (state, values) => {
     };
     // 按全部、品类和商品拼接 condition 对象
     getConditionOfPC(promotionRule, state, values);
+    return Util.removeInvalid(promotionRule);
+}
+
+const getRewardListConditionValue = (values) => {
+    const { rewardListType, rewardListTypeAmount, rewardListTypeQuantity } = values;
+    let conditionValue = '';
+    switch (rewardListType) {
+        case 'AMOUNT':
+            conditionValue = rewardListTypeAmount
+            break;
+        case 'QUANTITY':
+            conditionValue = rewardListTypeQuantity
+            break;
+        default: break;
+    }
+    return conditionValue;
+}
+
+const getRewardListPreferentialValue = (values) => {
+    const {
+        rewardListRule, rewardListRulePercent,
+        rewardListRuleAmount, rewardListRulePrice,
+        rewardListRuleGive
+    } = values;
+    let preferentialValue = '';
+    switch (rewardListRule) {
+        case 'PERCENTAGE':
+            preferentialValue = rewardListRulePercent;
+            break;
+        case 'DISCOUNTAMOUNT':
+            preferentialValue = rewardListRuleAmount;
+            break;
+        case 'FIXEDPRICE':
+            preferentialValue = rewardListRulePrice;
+            break;
+        case 'GIVESAMEPRODUCT':
+            preferentialValue = rewardListRuleGive;
+            break;
+        default: break;
+    }
+    return preferentialValue;
+}
+
+/**
+ * 指定条件——优惠种类——奖励列表
+ *
+ * @param {*} state
+ * @param {*} values
+ */
+const getRewardListRule = (state, values) => {
+    const { category, rewardList, rewardListType, rewardListRule } = values;
+    const { conditions } = state;
+    const promotionRule = {
+        useConditionRule: true,
+        ruleName: category,
+        rewardListRule: {
+            conditions,
+            purchaseConditionsRule: {
+                condition: {
+                    purchaseType: rewardList,
+                    promoCategories: state.categoryRL.map(category =>()),
+                    conditionType: rewardListType,
+                    conditionValue: getRewardListConditionValue(values)
+                },
+                rule: {
+                    preferentialWay: rewardListRule,
+                    preferentialValue: getRewardListPreferentialValue(values)
+                }
+            }
+        }
+    };
+    // 按全部、品类和商品拼接 condition 对象
+    // getConditionOfPC(promotionRule, state, values);
     return Util.removeInvalid(promotionRule);
 }
 
@@ -182,7 +255,7 @@ const getPurchageWay = (formData, values, state) => {
             break;
         case 'REWARDLIST': // 奖励列表
             Object.assign(formData, {
-                rewardListRule: getPurchaseConditionsRule(state, values)
+                rewardListRule: getRewardListRule(state, values)
             });
             break;
         default: break;

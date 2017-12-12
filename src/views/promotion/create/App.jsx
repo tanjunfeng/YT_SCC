@@ -92,7 +92,9 @@ class PromotionCreate extends PureComponent {
     }
 
     // 指定条件——奖励列表——购买条件回传
-    handleBuyConditionsChange = (conditions) => {
+    handleBuyConditionsChange = (list) => {
+        const conditions = [...list];
+
         this.setState({conditions});
     }
 
