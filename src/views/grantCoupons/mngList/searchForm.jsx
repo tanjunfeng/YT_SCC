@@ -92,72 +92,60 @@ class SearchForm extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div className="search-box promotion">
-                <Form layout="inline">
-                    <div className="search-conditions">
-                        <Row gutter={40}>
-                            <Col span={8}>
-                                <FormItem label="加盟商编号" style={{ paddingRight: 10 }}>
-                                    {getFieldDecorator('franchiseeId')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="加盟商名称">
-                                    {getFieldDecorator('franchinessController')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="所属子公司">
-                                    {getFieldDecorator('branchCompany', {
-                                        initialValue: { id: '', name: '' }
-                                    })(<BranchCompany />)}
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={40}>
-                            <Col span={8}>
-                                <FormItem label="门店编号" style={{ paddingRight: 10 }}>
-                                    {getFieldDecorator('storeId')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="门店名称">
-                                    {getFieldDecorator('storeName')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={40} type="flex" justify="end">
-                            <Col>
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleSearch}>
-                                        查询
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleReset}>
-                                        重置
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleQueryResults}>
-                                        查询结果发券
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" size="default" disabled={this.props.isGrantDisabled} onClick={this.handleQueryCoupons}>
-                                        发券
-                                    </Button>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <ReleaseCouponModal
-                            visible={this.state.isReleaseCouponModalVisible}
-                            onReleaseCouponModalOk={this.handleSelectOk}
-                            onReleaseCouponModalCancel={this.handleSelectCancel}
-                        />
-                    </div>
-                </Form>
-            </div >
+            <Form layout="inline" className="grant-coupons">
+                <Row gutter={40}>
+                    <Col span={8}>
+                        <FormItem label="加盟商编号">
+                            {getFieldDecorator('franchiseeId')(<Input size="default" />)}
+                        </FormItem>
+                    </Col>
+                    <Col span={8}>
+                        <FormItem label="加盟商名称">
+                            {getFieldDecorator('franchinessController')(<Input size="default" />)}
+                        </FormItem>
+                    </Col>
+                    <Col span={8}>
+                        <FormItem label="所属子公司">
+                            {getFieldDecorator('branchCompany', {
+                                initialValue: { id: '', name: '' }
+                            })(<BranchCompany />)}
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row gutter={40}>
+                    <Col span={8}>
+                        <FormItem label="门店编号" style={{ paddingRight: 10 }}>
+                            {getFieldDecorator('storeId')(<Input size="default" />)}
+                        </FormItem>
+                    </Col>
+                    <Col span={8}>
+                        <FormItem label="门店名称">
+                            {getFieldDecorator('storeName')(<Input size="default" />)}
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row gutter={40} type="flex" justify="end">
+                    <Col>
+                        <Button type="primary" size="default" onClick={this.handleSearch}>
+                            查询
+                        </Button>
+                        <Button size="default" onClick={this.handleReset}>
+                            重置
+                        </Button>
+                        <Button type="primary" size="default" onClick={this.handleQueryResults}>
+                            查询结果发券
+                        </Button>
+                        <Button type="primary" size="default" disabled={this.props.isGrantDisabled} onClick={this.handleQueryCoupons}>
+                            发券
+                        </Button>
+                    </Col>
+                </Row>
+                <ReleaseCouponModal
+                    visible={this.state.isReleaseCouponModalVisible}
+                    onReleaseCouponModalOk={this.handleSelectOk}
+                    onReleaseCouponModalCancel={this.handleSelectCancel}
+                />
+            </Form>
         );
     }
 }
