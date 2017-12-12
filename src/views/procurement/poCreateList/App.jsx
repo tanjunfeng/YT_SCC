@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import {Form} from 'antd';
+import {Form, Row, Tooltip, Col, DatePicker, Button, message, Menu, Affix} from 'antd';
 import Immutable, { fromJS } from 'immutable';
 import moment from 'moment';
 import Audit from './auditModal';
@@ -25,6 +25,7 @@ import { pubFetchValueList } from '../../../actions/pub';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import BasicInfo from './basicInfo';
 import AddingGoods from './addingGoods';
+import GoodsLists from './goodsLists';
 
 /**
  * 界面状态
@@ -34,6 +35,7 @@ const PAGE_MODE = {
     UPDATE: 'update',
     READONLY: 'readonly'
 };
+const FormItem = Form.Item;
 
 @connect(state => ({
     po: state.toJS().procurement.po || {},
@@ -75,7 +77,8 @@ class PoCreateList extends PureComponent {
             locDisabled: true,
             spAdrId: null,
             businessMode: null,
-            spId: null
+            spId: null,
+            purchaseOrderType: '0'
         }
     }
     componentDidMount() {
@@ -127,6 +130,7 @@ class PoCreateList extends PureComponent {
             adrType, settlementPeriod, payType, payCondition, estimatedDeliveryDate,
             purchaseOrderType, currencyCode, id, spAdrId, businessMode, spId
         } = nextProps.basicInfo;
+
         const { basicInfo = {} } = this.props;
         const newPo = fromJS(nextProps.po.poLines);
         const oldPo = fromJS(this.props.po.poLines);
@@ -138,7 +142,8 @@ class PoCreateList extends PureComponent {
                 locDisabled: !(adrType === 0 || adrType === 1),
                 spAdrId,
                 businessMode: businessMode === 0 || businessMode === 1 ? `${businessMode}` : '',
-                spId
+                spId,
+                purchaseOrderType: typeof purchaseOrderType === 'number' ? `${purchaseOrderType}` : ''
             })
         }
     }
@@ -233,18 +238,71 @@ class PoCreateList extends PureComponent {
     }
 
     stateChange = (data) => {
-        this.state(data)
+        this.setState(data)
     }
     render() {
         return (
             <div className="po-detail">
                 <Form layout="inline">
-                    <BasicInfo basicInfo={this.props.basicInfo} stateChange={this.stateChange} />
+                    <BasicInfo
+                        basicInfo={this.props.basicInfo}
+                        stateChange={this.stateChange}
+                    />
                     <AddingGoods
                         spAdrId={this.state.spAdrId}
                         businessMode={this.state.businessMode}
                         spId={this.state.spId}
                     />
+                    <GoodsLists
+                        basicInfo={this.props.basicInfo}
+                        poLines={this.props.poLines}
+                        purchaseOrderType={this.state.purchaseOrderType}
+                    />
+                    <div>
+                        <Row type="flex">
+                            <Col span={8}>
+                                <div>
+                                    <span>合计数量:</span>
+                                    <span style={{ color: '#F00' }}>{this.state.totalQuantitys}</span>
+                                </div>
+
+                            </Col>
+                            <Col span={8}>
+                                <div>
+                                    <span>合计金额:</span>
+                                    <span style={{ color: '#F00' }}>{this.state.totalAmounts}</span>
+                                </div>
+                            </Col>
+                        </Row>
+                    </div>
+                    <Affix offsetBottom={0}>
+                        <div className="actions">
+                            <Row gutter={40} type="flex" justify="end" >
+                                <Col>
+                                    {
+                                        this.state.currentType !== 'detail'
+                                        && (this.props.basicInfo.status === 0
+                                            || this.state.currentType === 'create')
+                                        && <FormItem>
+                                            <Button size="default" onClick={this.handleSave}>
+                                                保存
+                                            </Button>
+                                        </FormItem>
+                                    }
+                                    {
+                                        this.state.currentType !== 'detail'
+                                        && (this.props.basicInfo.status === 0
+                                            || this.state.currentType === 'create')
+                                        && <FormItem>
+                                            <Button size="default" onClick={this.handleSubmit}>
+                                                提交
+                                            </Button>
+                                        </FormItem>
+                                    }
+                                </Col>
+                            </Row>
+                        </div>
+                    </Affix>
                 </Form>
                 <div>
                     <Audit />

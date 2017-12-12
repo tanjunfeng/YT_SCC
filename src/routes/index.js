@@ -540,6 +540,11 @@ const routes = [
                             render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
                         />
                         <Route
+                            path="/po/detail/:purchaseOrderNo"
+                            exact
+                            render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
+                        />
+                        <Route
                             path="/po/:type/:purchaseOrderNo"
                             exact
                             render={() => <Bundle load={PoCreateList}>{(App) => <App />}</Bundle>}

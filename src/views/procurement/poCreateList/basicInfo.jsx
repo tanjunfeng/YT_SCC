@@ -141,6 +141,7 @@ class BasicInfo extends PureComponent {
             purchaseOrderType: value,
             totalAmounts: 0
         })
+        this.props.stateChange({purchaseOrderType: value});
     }
 
     /**
