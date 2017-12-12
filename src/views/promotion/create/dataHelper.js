@@ -3,7 +3,6 @@
  */
 import { message } from 'antd';
 import Util from '../../../util/util';
-import default from '_antd@2.10.2@antd/lib/popconfirm';
 
 // 根据整数计算百分数
 const getPercent = (num) => (Number(num / 100.0).toFixed(2));
