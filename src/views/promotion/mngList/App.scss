@@ -1,4 +1,5 @@
 $promotionColWidth: 200px;
+$promotionFieldWidth: 180px;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -26,6 +27,9 @@ $promotionColWidth: 200px;
         .sc-form-item-label {
             text-align: right;
         }
+    }
+    .ant-form-item-control {
+        width: $promotionFieldWidth;
     }
     .search-mind-label {
         min-width: 80px;

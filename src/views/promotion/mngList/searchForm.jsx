@@ -105,29 +105,22 @@ class SearchForm extends PureComponent {
                                 <FormItem label="状态">
                                     {getFieldDecorator('statusCode', {
                                         initialValue: 'all'
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus()}
-                                        </Select>
-                                        )}
+                                    })(<Select style={{ width: '153px' }} size="default">
+                                        {this.getStatus()}
+                                    </Select>)}
                                 </FormItem>
                             </Col>
-                            <Col span={12}>
-                                <FormItem>
-                                    <div className="promotion-date-range">
-                                        <span className="sc-form-item-label search-mind-label">活动时间</span>
-                                        {getFieldDecorator('promotionDateRange', {
-                                            initialValue: []
-                                        })(
-                                            <RangePicker
-                                                size="default"
-                                                className="manage-form-enterTime"
-                                                showTime={{ format: MINUTE_FORMAT }}
-                                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
-                                                placeholder={['开始时间', '结束时间']}
-                                            />
-                                            )}
-                                    </div>
+                            <Col>
+                                <FormItem label="活动时间">
+                                    {getFieldDecorator('promotionDateRange', {
+                                        initialValue: []
+                                    })(<RangePicker
+                                        size="default"
+                                        className="manage-form-enterTime"
+                                        showTime={{ format: MINUTE_FORMAT }}
+                                        format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
+                                        placeholder={['开始时间', '结束时间']}
+                                    />)}
                                 </FormItem>
                             </Col>
                         </Row>
