@@ -78,7 +78,7 @@ class SearchForm extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form layout="inline" onSubmit={this.handleSubmit} className="participate">
+            <Form layout="inline" onSubmit={this.handleSubmit} className="promotion-participate">
                 <Row gutter={40}>
                     <Col span={8}>
                         <FormItem label="订单编号" style={{ paddingRight: 10 }}>

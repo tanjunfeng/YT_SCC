@@ -1,4 +1,4 @@
-$promotionColWidth: 210px;
+$promotionParticipateFieldWidth: 180px;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -20,7 +20,22 @@ $promotionColWidth: 210px;
     }
 }
 
-.participate {
+.promotion-participate {
+    border: 1px solid #c4c5c9;
+    padding: 40px 0 20px;
+    margin: 10px 0;
+    .ant-form-item-label {
+        width: 80px;
+        .sc-form-item-label {
+            text-align: right;
+        }
+    }
+    .ant-form-item-control-wrapper, .ant-select {
+        width: $promotionParticipateFieldWidth;
+    }
+    .ant-btn {
+        margin-right: 20px;
+    }
     .ant-form-item-label {
         width: 80px;
         .sc-form-item-label {
@@ -52,9 +67,6 @@ $promotionColWidth: 210px;
             margin-right: 8px;
             display: inline-block;
         }
-    }
-    .ywc-smind {
-        width: $promotionColWidth !important;
     }
     .ywc-smind-search-bar {
         margin: 8px 0;
