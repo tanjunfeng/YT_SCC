@@ -3,6 +3,7 @@
  */
 import { message } from 'antd';
 import Util from '../../../util/util';
+import default from '_antd@2.10.2@antd/lib/popconfirm';
 
 // 根据整数计算百分数
 const getPercent = (num) => (Number(num / 100.0).toFixed(2));
@@ -148,6 +149,22 @@ const getRewardListPreferentialValue = (values) => {
     return preferentialValue;
 }
 
+const getCategoryOrProductOfRL = (condition, values, state) => {
+    const { rewardList, rewardListProduct } = values;
+    switch(rewardList) {
+        case 'CATEGORY':
+            Object.assign(condition, {promoCategories: state.categoryRL});
+            break;
+        case 'CATEGORY':
+            Object.assign(condition, {promoProduct: {
+                productId: rewardListProduct.record.productId,
+                productName: rewardListProduct.record.productName
+            }});
+            break;
+        default: break;
+    }
+}
+
 /**
  * 指定条件——优惠种类——奖励列表
  *
@@ -165,7 +182,7 @@ const getRewardListRule = (state, values) => {
             purchaseConditionsRule: {
                 condition: {
                     purchaseType: rewardList,
-                    promoCategories: state.categoryRL.map(category =>()),
+                    // promoCategories: state.categoryRL,
                     conditionType: rewardListType,
                     conditionValue: getRewardListConditionValue(values)
                 },
@@ -177,7 +194,7 @@ const getRewardListRule = (state, values) => {
         }
     };
     // 按全部、品类和商品拼接 condition 对象
-    // getConditionOfPC(promotionRule, state, values);
+    getCategoryOrProductOfRL(promotionRule.rewardListRule.purchaseConditionsRule.condition, values, state);
     return Util.removeInvalid(promotionRule);
 }
 

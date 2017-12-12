@@ -201,7 +201,7 @@ export const getPromotion = (form, licence, handleCategorySelect) => {
                     </FormItem> : null}
                 {getFieldValue(licence) === 'PRODUCT' ?
                     <FormItem className="product">
-                        {/* purchaseConditionProduct, rewardListProduct, buyConditionProduct */}
+                        {/* purchaseConditionProduct, rewardListProduct */}
                         {getFieldDecorator(`${licence}Product`, {
                             initialValue: {
                                 productId: '',
