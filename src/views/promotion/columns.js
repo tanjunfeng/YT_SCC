@@ -140,6 +140,13 @@ const detail = [{
 }, {
     title: '活动叠加',
     dataIndex: 'overlay'
+        // const arr = [];
+        // if (record.isSuperposeUserDiscount === 1) {
+        //     arr.push('会员等级');
+        // }
+        // if (record.isSuperposeProOrCouDiscount === 1) {
+        //     arr.push('优惠券');
+        // }
 }, {
     title: '活动优先级',
     dataIndex: 'priority'

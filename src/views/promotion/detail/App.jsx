@@ -34,6 +34,10 @@ class PromotionDetail extends PureComponent {
         this.props.getPromotionDetail({ promotionId: id });
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps.promotion);
+    }
+
     componentWillUnmount() {
         this.props.clearPromotionDetail();
     }
