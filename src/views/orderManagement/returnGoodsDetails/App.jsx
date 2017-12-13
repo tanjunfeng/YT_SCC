@@ -61,7 +61,7 @@ class ReturnGoodsDetails extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        let list = [];
+        const list = [];
         if (nextProps.data.items && nextProps.data.items.length > 0) {
             const items = nextProps.data.items.map(item => ({
                 id: item.id,
@@ -72,10 +72,10 @@ class ReturnGoodsDetails extends PureComponent {
                 unitQuantity: item.unitQuantity
             }));
             nextProps.data.items.forEach((element) => {
-                if (element.quantity % element.unitQuantity === 0) {
+                if (element.quantity % element.unitQuantity !== 0) {
                     list.push(1)
                 } else {
-                    list = []
+                    list.slice(0, -1)
                 }
             });
             this.setState({
