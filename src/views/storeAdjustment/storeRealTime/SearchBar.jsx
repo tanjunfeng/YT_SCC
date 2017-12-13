@@ -133,98 +133,70 @@ class Search extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const FormItem = Form.Item;
-
         return (
-            <div className="order-management">
-                <div className="manage-form">
-                    <Form layout="inline">
-                        <div className="gutter-example">
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 单据编号 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">商品编号</span>
-                                            {getFieldDecorator('productCode')(
-                                                <Input
-                                                    className="input"
-                                                    placeholder="商品编号"
-                                                />
-                                            )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 子公司 */}
-                                    <span className="sc-form-item-label">子公司</span>
-                                    <FormItem>
-                                        {getFieldDecorator('branchCompany', {
-                                            initialValue: { id: '', name: '' }
-                                        })(<BranchCompany />)}
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 所属仓库 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">所属仓库</span>
-                                            <SearchMind
-                                                compKey="search-mind-sub-company"
-                                                ref={ref => { this.WarehouseSearch = ref }}
-                                                fetch={(params) =>
-                                                    this.props.pubFetchValueList({
-                                                        param: params.value ? params.value : ''
-                                                    }, 'getWarehouseInfo1')
-                                                }
-                                                onChoosed={this.handleWarehouseChoose}
-                                                onClear={this.handleWarehouseEmpty}
-                                                renderChoosedInputRaw={(row) => (
-                                                    <div>{row.warehouseName}</div>
-                                                )}
-                                                pageSize={6}
-                                                columns={[
-                                                    {
-                                                        title: '所属仓库Code',
-                                                        dataIndex: 'warehouseCode',
-                                                        width: 98
-                                                    }, {
-                                                        title: '所属仓库名字',
-                                                        dataIndex: 'warehouseName',
-                                                        width: 140
-                                                    }
-                                                ]}
-                                            />
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16} type="flex" justify="end">
-                                <Col className="tr" span={8}>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            type="primary"
-                                            onClick={this.handleSearch}
-                                        >查询</Button>
-                                    </FormItem>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            onClick={this.handleReset}
-                                        >重置</Button>
-                                    </FormItem>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            onClick={this.handleExport}
-                                        >导出</Button>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                        </div>
-                    </Form>
-                </div>
-            </div>
+            <Form layout="inline" className="promotion">
+                <Row gutter={40}>
+                    <Col>
+                        <FormItem label="商品编号">
+                            {getFieldDecorator('productCode')(<Input className="input" />)}
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem label="子公司">
+                            {getFieldDecorator('branchCompany', {
+                                initialValue: { id: '', name: '' }
+                            })(<BranchCompany />)}
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem label="所属仓库">
+                            <SearchMind
+                                compKey="search-mind-sub-company"
+                                ref={ref => { this.WarehouseSearch = ref }}
+                                fetch={(params) =>
+                                    this.props.pubFetchValueList({
+                                        param: params.value ? params.value : ''
+                                    }, 'getWarehouseInfo1')
+                                }
+                                onChoosed={this.handleWarehouseChoose}
+                                onClear={this.handleWarehouseEmpty}
+                                renderChoosedInputRaw={(row) => (
+                                    <div>{row.warehouseName}</div>
+                                )}
+                                pageSize={6}
+                                columns={[
+                                    {
+                                        title: '所属仓库Code',
+                                        dataIndex: 'warehouseCode',
+                                        width: 98
+                                    }, {
+                                        title: '所属仓库名字',
+                                        dataIndex: 'warehouseName',
+                                        width: 140
+                                    }
+                                ]}
+                            />
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row gutter={40} type="flex" justify="end">
+                    <Col>
+                        <Button
+                            size="default"
+                            type="primary"
+                            onClick={this.handleSearch}
+                        >查询</Button>
+                        <Button
+                            size="default"
+                            onClick={this.handleReset}
+                        >重置</Button>
+                        <Button
+                            size="default"
+                            onClick={this.handleExport}
+                        >导出</Button>
+                    </Col>
+                </Row>
+            </Form>
         )
     }
 }

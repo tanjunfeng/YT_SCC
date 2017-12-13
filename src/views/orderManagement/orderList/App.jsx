@@ -499,8 +499,8 @@ class OrderManagementList extends Component {
                             </FormItem>
                         </Col>
                         <Col>
-                            <FormItem label="门店编号/名称">
-                                {getFieldDecorator('franchiseeStoreId')(<Input placeholder="请输入门店编号/名称" />)}
+                            <FormItem label="门店编号">
+                                {getFieldDecorator('franchiseeStoreId')(<Input placeholder="请输入门店编号" />)}
                             </FormItem>
                         </Col>
                         <Col>
