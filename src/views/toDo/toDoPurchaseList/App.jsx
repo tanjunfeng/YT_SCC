@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-12 09:27:43
+ * @Last Modified time: 2017-12-13 10:03:13
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -348,7 +348,10 @@ class toDoPurchaseList extends PureComponent {
      * 清空供应商地点编号
      */
     handleSupplierAddressClear = () => {
-        this.setState({ spAdrId: '' });
+        this.setState({
+            spAdrId: '',
+            spAdrName: ''
+        });
         this.joiningAdressMind.reset();
     }
 
@@ -368,7 +371,8 @@ class toDoPurchaseList extends PureComponent {
         this.adressTypeCode = '';
         this.setState({
             locDisabled: true,
-            refundAdr: ''
+            refundAdr: '',
+            adrTypeName: ''
         })
     }
 

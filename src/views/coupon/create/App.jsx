@@ -50,7 +50,7 @@ class CouponCreate extends PureComponent {
             formSelectorVisible: false,
             storeSelectorVisible: true,
             companies: [], // 所选区域子公司
-            categoryObj: {}, // 所选品类对象
+            categoryObj: null, // 所选品类对象
             checkedList: [],
         }
         this.getFormData = this.getFormData.bind(this);
@@ -143,7 +143,7 @@ class CouponCreate extends PureComponent {
                     }
                 }
                 if (category === 1) {
-                    if (promoCategoriesPo.categoryId === undefined) {
+                    if (promoCategoriesPo === null) {
                         this.props.form.setFields({
                             category: {
                                 value: category,

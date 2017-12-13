@@ -4,8 +4,7 @@
  * 促销管理 - 新增下单打折 - 购买条件
  */
 import React, { PureComponent } from 'react';
-// import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
+import PropTypes from 'prop-types';
 import {
     Form, Row, Button, Popconfirm
 } from 'antd';
@@ -16,8 +15,7 @@ const FormItem = Form.Item;
 
 class BuyConditionList extends PureComponent {
     state = {
-        visible: false, // 是否显示模态框
-        conditions: [] // 购买条件
+        visible: false // 是否显示模态框
     }
 
     getRow = (condition) => (
@@ -76,10 +74,10 @@ class BuyConditionList extends PureComponent {
     }
 
     handleDelete = (key) => {
-        const conditions = [...this.state.conditions];
+        const conditions = [...this.props.value.conditions];
         const indexToDel = conditions.findIndex(c => c.key === key);
         conditions.splice(indexToDel, 1);
-        this.setState({ conditions });
+        this.props.onChange(conditions);
     }
 
     handleAddCondition = () => {
@@ -87,9 +85,10 @@ class BuyConditionList extends PureComponent {
     }
 
     handleModalOk = (data) => {
-        const conditions = [...this.state.conditions];
+        const conditions = [...this.props.value.conditions];
         conditions.push(data);
-        this.setState({ visible: false, conditions });
+        this.setState({ visible: false });
+        this.props.onChange(conditions);
     }
 
     handleModalCancel = () => {
@@ -97,7 +96,8 @@ class BuyConditionList extends PureComponent {
     }
 
     render() {
-        const { visible, conditions } = this.state;
+        const conditions = this.props.value.conditions;
+        const { visible } = this.state;
         return (
             <ul className="list-panel">
                 <li>
@@ -116,7 +116,8 @@ class BuyConditionList extends PureComponent {
 }
 
 BuyConditionList.propTypes = {
-    // form: PropTypes.objectOf(PropTypes.any),
+    value: PropTypes.objectOf(PropTypes.any),
+    onChange: PropTypes.func
 }
 
-export default withRouter(Form.create()(BuyConditionList));
+export default BuyConditionList;
