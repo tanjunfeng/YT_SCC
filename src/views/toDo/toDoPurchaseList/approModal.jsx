@@ -11,21 +11,10 @@ import {
     Modal,
     Table
 } from 'antd';
-import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
 import moment from 'moment';
-import {
-    queryCommentHis,
-} from '../../../actions/procurement';
 
 const dateFormat = 'YYYY-MM-DD';
-
-@connect(state => ({
-    approvalList: state.toJS().procurement.approvalList
-}), dispatch => bindActionCreators({
-    queryCommentHis,
-}, dispatch))
 
 class ApproModal extends PureComponent {
     constructor(props) {
@@ -122,7 +111,7 @@ ApproModal.propTypes = {
     visible: PropTypes.bool,
     onOk: PropTypes.func,
     onCancel: PropTypes.func,
-    approvalList: PropTypes.objectOf(PropTypes.any),
+    approvalList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 };
 
 export default withRouter(Form.create()(ApproModal));
