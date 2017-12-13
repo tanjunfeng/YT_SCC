@@ -70,6 +70,11 @@ const getTextByCondition = (condition) => {
     return info;
 }
 
+const getPreferentialBuyRule = (rule) => {
+    const { preferentialWay, preferentialValue } = rule;
+    return `优惠方式：${preferentialWayStatus[preferentialWay]}，${preferentialValue}；`;
+}
+
 // 供应商列表
 export const managementList = [{
     title: '活动ID',
@@ -155,10 +160,7 @@ export const participateList = [{
     dataIndex: 'branchCompanyName'
 }];
 
-/**
- * 无限制条件详情
- */
-export const noConditions = [{
+const basicDetailBefore = [{
     title: '活动ID',
     dataIndex: 'id'
 }, {
@@ -180,17 +182,9 @@ export const noConditions = [{
     title: '使用条件',
     dataIndex: 'promotionRule.useConditionRule',
     render: rule => (rule ? '指定条件' : '不限制')
-}, {
-    title: '优惠方式',
-    dataIndex: 'promotionWay',
-    render: (text, record) => {
-        if (record.id) {
-            const { preferentialWay, preferentialValue } = record.promotionRule.orderRule;
-            return `${preferentialWayStatus[preferentialWay]} ${preferentialValue}`;
-        }
-        return null
-    }
-}, {
+}];
+
+const basicDetailAfter = [{
     title: '使用区域',
     dataIndex: 'area',
     render: readerArea
@@ -228,31 +222,23 @@ export const noConditions = [{
 }];
 
 /**
+ * 无限制条件详情
+ */
+export const noConditions = [...basicDetailBefore, {
+    title: '优惠方式',
+    dataIndex: 'promotionWay',
+    render: (text, record) => {
+        if (record.id) {
+            return getPreferentialBuyRule(record.promotionRule.orderRule);
+        }
+        return null
+    }
+}, ...basicDetailAfter];
+
+/**
  * 购买条件
  */
-export const purchageCondition = [{
-    title: '活动ID',
-    dataIndex: 'id'
-}, {
-    title: '活动名称',
-    dataIndex: 'promotionName'
-}, {
-    title: '活动状态',
-    dataIndex: 'status',
-    render: statusCode => promotionStatus[statusCode]
-}, {
-    title: '生效时间',
-    dataIndex: 'startDate',
-    render: timestamp => Util.getTime(timestamp)
-}, {
-    title: '过期时间',
-    dataIndex: 'endDate',
-    render: timestamp => Util.getTime(timestamp)
-}, {
-    title: '使用条件',
-    dataIndex: 'promotionRule.useConditionRule',
-    render: rule => (rule ? '指定条件' : '不限制')
-}, {
+export const purchageCondition = [...basicDetailBefore, {
     title: '优惠种类',
     dataIndex: 'promotionType',
     render: () => '购买条件'
@@ -261,46 +247,11 @@ export const purchageCondition = [{
     dataIndex: 'purchaseType',
     render: (text, record) => {
         if (record.id) {
-            const condition = record.promotionRule.purchaseConditionsRule.condition;
+            const { condition, rule } = record.promotionRule.purchaseConditionsRule;
             let info = getTextByCondition(condition);
-            info += '    优惠方式：';
+            info += getPreferentialBuyRule(rule);
             return info;
         }
         return null;
     }
-}, {
-    title: '使用区域',
-    dataIndex: 'area',
-    render: readerArea
-}, {
-    title: '活动叠加',
-    dataIndex: 'overlay',
-    render: (text, record) => {
-        if (record.id) {
-            const arr = [];
-            if (record.isSuperposeUserDiscount === 1) {
-                arr.push('会员等级');
-            }
-            if (record.isSuperposeProOrCouDiscount === 1) {
-                arr.push('优惠券');
-            }
-            return arr.join(', ');
-        }
-        return null;
-    }
-}, {
-    title: '活动优先级',
-    dataIndex: 'priority'
-}, {
-    title: '简易描述',
-    dataIndex: 'simpleDescription',
-    render: text => text || '无'
-}, {
-    title: '详细描述',
-    dataIndex: 'detailDescription',
-    render: text => text || '无'
-}, {
-    title: '备注',
-    dataIndex: 'note',
-    render: note => note || '无'
-}];
+}, ...basicDetailAfter];
