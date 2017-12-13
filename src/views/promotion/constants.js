@@ -53,3 +53,9 @@ export const overlayOptions = [
         value: 2
     }
 ];
+
+export const promotionRuleName = {
+    PURCHASECONDITION: '购买条件',
+    REWARDLIST: '奖励列表',
+    TOTALPUCHASELIST: '整个购买列表'
+}

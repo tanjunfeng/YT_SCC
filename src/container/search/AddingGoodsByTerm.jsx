@@ -1,5 +1,5 @@
 /**
- * 通过门店信息添加商品
+ * 通过关键词查询商品，全量查询
  *
  * @author taoqiyu
  */
@@ -15,21 +15,20 @@ import Utils from '../../util/util';
     pubFetchValueList
 }, dispatch))
 
-class AddingGoodsByStore extends PureComponent {
+class AddingGoodsByTerm extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        if (nextProps.value.branchCompanyId === '' && this.props.value.branchCompanyId !== '') {
+        if (nextProps.value.productCode === '' && this.props.value.productCode !== '') {
             this.handleClear();
         }
     }
 
     query = (params) => {
         const conditions = {
-            salesInfo: this.props.value.branchCompanyId,
             teamText: params.value,
             pageNum: params.pagination.current || 1,
             pageSize: params.pagination.pageSize
         };
-        return this.props.pubFetchValueList(Utils.removeInvalid(conditions), 'queryProductByStore');
+        return this.props.pubFetchValueList(Utils.removeInvalid(conditions), 'queryProductByTerm');
     }
 
     /**
@@ -59,8 +58,6 @@ class AddingGoodsByStore extends PureComponent {
                 rowKey="productCode"
                 ref={ref => { this.searchMind = ref }}
                 fetch={this.query}
-                disabled={this.props.value.branchCompanyId === ''}
-                addonBefore="添加商品"
                 onClear={this.handleClear}
                 onChoosed={this.handleChoose}
                 renderChoosedInputRaw={data => (
@@ -71,7 +68,7 @@ class AddingGoodsByStore extends PureComponent {
                     {
                         title: '商品编码',
                         dataIndex: 'productCode',
-                        width: 98
+                        width: 68
                     }, {
                         title: '商品名称',
                         dataIndex: 'productName'
@@ -82,10 +79,10 @@ class AddingGoodsByStore extends PureComponent {
     }
 }
 
-AddingGoodsByStore.propTypes = {
+AddingGoodsByTerm.propTypes = {
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any)
 }
 
-export default AddingGoodsByStore;
+export default AddingGoodsByTerm;

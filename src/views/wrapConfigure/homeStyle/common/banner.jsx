@@ -1,7 +1,15 @@
+/**
+ * @file App.jsx
+ * @author caoyanxuan,liujinyu
+ *
+ * 快捷导航
+ */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { message, Form, Modal, Input, Select } from 'antd';
+import { message, Form, Modal, Input } from 'antd';
 import classnames from 'classnames';
+import Utils from '../../../../util/util';
 import Common from './common';
 import FileCut from '../../fileCut';
 import { saveItemAd, uploadImageBase64Data } from '../../../../service';
@@ -10,7 +18,6 @@ import LinkType from '../../common/linkType';
 const defaultImge = require('../../../../images/default/1080x280.png');
 
 const FormItem = Form.Item;
-const Option = Select.Option;
 const imgConfig = {
     width: 1080,
     height: 240,
@@ -22,10 +29,10 @@ const imgConfig = {
 class BannerItem extends Component {
     constructor(props) {
         super(props);
-        this.handleUpload = ::this.handleUpload;
-        this.handleOk = ::this.handleOk;
-        this.handleCancel = ::this.handleCancel;
-        this.saveItems = ::this.saveItems;
+        this.handleUpload = :: this.handleUpload;
+        this.handleOk = :: this.handleOk;
+        this.handleCancel = :: this.handleCancel;
+        this.saveItems = :: this.saveItems;
         const { data = {} } = props;
         const { itemAds = [] } = data;
         this.state = {
@@ -71,15 +78,23 @@ class BannerItem extends Component {
         const { data = {} } = this.props;
         const { id, itemAds = [] } = data;
         const { url, chooseLink, ...params } = values;
+        const { selected, goodsId, linkAddress, linkId, linkKeyword } = chooseLink;
+        const submitObj = {
+            urlType: selected,
+            productNo: goodsId,
+            url: linkAddress,
+            linkId,
+            linkKeyword
+        }
+
         saveItemAd({
-            id,
-            areaId: itemAds[0].areaId,
-            adType: itemAds[0].adType,
-            icon: ImageUrl || itemAds[0].icon,
-            url: chooseLink.link,
-            productNo: parseInt(chooseLink.selected, 10) === 1 ? chooseLink.link : '',
-            urlType: chooseLink.selected,
-            ...params
+            ...Utils.removeInvalid(Object.assign({
+                id,
+                areaId: itemAds[0].areaId,
+                adType: itemAds[0].adType,
+                icon: ImageUrl || itemAds[0].icon,
+                ...params
+            }, submitObj))
         }).then(() => {
             this.setState({
                 isShow: false
@@ -98,6 +113,13 @@ class BannerItem extends Component {
         const { getFieldDecorator } = this.props.form;
         const { data = {} } = this.props;
         const { itemAds = [] } = data;
+        const {
+            urlType,
+            url,
+            productNo,
+            linkId,
+            linkKeyword
+        } = itemAds[0]
         return (
             <div
                 className="home-style-banner"
@@ -135,8 +157,7 @@ class BannerItem extends Component {
                                     <Input
                                         className="manage-form-input"
                                         placeholder="名称"
-                                    />
-                                )}
+                                    />)}
                                 <span className="change-form-tip">（说明：2~4个汉字）</span>
                             </FormItem>
                             <FormItem className="manage-form-item">
@@ -145,19 +166,24 @@ class BannerItem extends Component {
                                         required: true
                                     }, {
                                         validator: (rule, value, callback) => {
-                                            if (!value.link) {
-                                                callback('请输入链接')
+                                            if (!value.goodsId
+                                                && !value.linkAddress
+                                                && !value.linkId
+                                                && !value.linkKeyword) {
+                                                callback('请完成表单')
                                             }
                                             callback()
                                         }
                                     }],
                                     initialValue: {
-                                        selected: itemAds[0].urlType ? `${itemAds[0].urlType}` : '1',
-                                        link: parseInt(itemAds[0].urlType, 10) === 1 ? itemAds[0].productNo : itemAds[0].url
+                                        selected: urlType,
+                                        linkAddress: url,
+                                        goodsId: productNo,
+                                        linkId,
+                                        linkKeyword
                                     }
                                 })(
-                                    <LinkType />
-                                )}
+                                    <LinkType />)}
                             </FormItem>
                             <FormItem className={classnames('manage-form-item')} >
                                 <span className="manage-form-label banner-form-label">快捷icon：（说明：支持PNG，建议大小1080X240px）</span>

@@ -149,7 +149,7 @@ class processData extends PureComponent {
                         onUploadSuccess={this.query}
                     />
                 </div>
-                <FlowImage data={this.props.flowChartData} >
+                <FlowImage data={this.props.flowChartData} closeCanvas={this.closeCanvas} >
                     <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
                 </FlowImage>
             </div>

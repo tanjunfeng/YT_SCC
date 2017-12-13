@@ -1,7 +1,15 @@
+/**
+ * @file App.jsx
+ * @author caoyanxuan,liujinyu
+ *
+ * 快捷导航
+ */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { message, Form, Modal, Input, Select } from 'antd';
+import { message, Form, Modal, Input } from 'antd';
+import Utils from '../../../../util/util';
 import Common from './common';
 import FileCut from '../../fileCut';
 import { updateQuickNavigation, uploadImageBase64Data } from '../../../../service';
@@ -68,20 +76,28 @@ class QuickItem extends Component {
             } else if (!isBase64) {
                 this.saveItems(values)
             }
+            return null
         })
     }
 
     saveItems(values, url) {
         const { id, navigationPosition, picAddress } = this.current;
         const { chooseLink, ...params } = values;
+        const { selected, goodsId, linkAddress, linkId, linkKeyword } = chooseLink;
+        const submitObj = {
+            navigationType: selected,
+            goodsId,
+            linkAddress,
+            linkId,
+            linkKeyword
+        }
         updateQuickNavigation({
-            id,
-            navigationPosition,
-            picAddress: url ? url : picAddress,
-            linkAddress: chooseLink.link,
-            goodsId: parseInt(chooseLink.selected, 10) === 1 ? chooseLink.link : null,
-            navigationType: chooseLink.selected,
-            ...params
+            ...Utils.removeInvalid(Object.assign({
+                id,
+                navigationPosition,
+                picAddress: url || picAddress,
+                ...params
+            }, submitObj))
         }).then(() => {
             this.setState({
                 isShow: false
@@ -113,35 +129,39 @@ class QuickItem extends Component {
         const { index } = this.state;
         const { data = {} } = this.props;
         const { itemAds = [] } = data;
-        const current = itemAds[index];
+        const current = itemAds[index] || {};
         this.current = current;
+        const {
+            navigationType,
+            linkAddress,
+            goodsId,
+            linkId,
+            linkKeyword } = current
         return (
-            <div className="home-style-quick">
+            <div className="home-style-quick" >
                 <ul className="home-style-quick-wrap home-style-wrap-1">
                     {
-                        itemAds.map((item, index) => {
-                            return (
-                                <li
-                                    className={classnames('home-style-quick-item', { 'home-style-quick-item-disabled': item.status === 0 })}
-                                    key={item.id}
+                        itemAds.map((item, idx) => (
+                            <li
+                                className={classnames('home-style-quick-item', { 'home-style-quick-item-disabled': item.status === 0 })}
+                                key={item.id}
+                            >
+                                <div
+                                    className="home-style-quick-img-wrap"
+                                    data-index={idx}
+                                    onClick={this.handleUpload}
                                 >
-                                    <div
-                                        className="home-style-quick-img-wrap"
-                                        data-index={index}
-                                        onClick={this.handleUpload}
-                                    >
-                                        <img
-                                            data-index={index}
-                                            alt="quick"
-                                            src={item.picAddress ? item.picAddress : defaultIcon}
-                                        />
-                                    </div>
-                                    <div className="home-style-quick-text">
-                                        {item.navigationName ? item.navigationName : defaultText}
-                                    </div>
-                                </li>
-                            )
-                        })
+                                    <img
+                                        data-index={idx}
+                                        alt="quick"
+                                        src={item.picAddress ? item.picAddress : defaultIcon}
+                                    />
+                                </div>
+                                <div className="home-style-quick-text">
+                                    {item.navigationName ? item.navigationName : defaultText}
+                                </div>
+                            </li>
+                        ))
                     }
                 </ul>
                 {
@@ -187,24 +207,26 @@ class QuickItem extends Component {
                                         required: true
                                     }, {
                                         validator: (rule, value, callback) => {
-                                            if (!value.link) {
-                                                callback('请输入链接')
+                                            if (!value.goodsId
+                                                && !value.linkAddress
+                                                && !value.linkId
+                                                && !value.linkKeyword) {
+                                                callback('请完成表单')
                                             }
                                             callback()
                                         }
                                     }],
                                     initialValue: {
-                                        selected: current.navigationType ? `${current.navigationType}` : '1',
-                                        link: parseInt(current.navigationType, 10) === 1
-                                            ? current.goodsId
-                                            : current.linkAddress
+                                        selected: navigationType,
+                                        linkAddress,
+                                        goodsId,
+                                        linkId,
+                                        linkKeyword
                                     }
                                 })(
                                     <LinkType />)}
                             </FormItem>
-                            <FormItem className={
-                                classnames('manage-form-item')
-                            }>
+                            <FormItem className={classnames('manage-form-item')}>
                                 <span className="manage-form-label quick-form-label">快捷icon：（说明：支持PNG，建议大小132X132px）</span>
                                 <FileCut
                                     ref={ref => { this.imgRef = ref }}
@@ -217,7 +239,7 @@ class QuickItem extends Component {
                         </Form>
                     </Modal>
                 }
-            </div>
+            </div >
         );
     }
 }

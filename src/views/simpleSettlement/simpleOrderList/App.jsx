@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 供应商结算
  * @CreateDate: 2017-09-06 17:54:20
- * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-21 14:26:16
+ * @Last Modified by: chenghaojie
+ * @Last Modified time: 2017-12-08 11:26:25
  */
 
 import React, { Component } from 'react';
@@ -18,7 +18,7 @@ import {
 import moment from 'moment';
 import Util from '../../../util/util';
 import SearchMind from '../../../components/searchMind';
-import { BranchCompany } from '../../../container/search';
+import { BranchCompany, Supplier } from '../../../container/search';
 import {
     accountPeriod,
 } from '../../../constant/searchParams';
@@ -56,7 +56,6 @@ class SimpleOrderList extends Component {
         this.handleSupplierClear = :: this.handleSupplierClear;
         this.handlePaginationChange = :: this.handlePaginationChange;
         this.getSearchData = :: this.getSearchData;
-        this.joiningSupplierMind = null;
         this.joiningAdressMind = null;
         this.searchData = {};
         this.current = 1;
@@ -185,12 +184,12 @@ class SimpleOrderList extends Component {
                 receiveDateMax: todayDate,
             }
         });
-        this.joiningSupplierMind.reset();
         this.joiningAdressMind.reset();
         this.props.form.resetFields();
         // 点击重置时清除 seachMind 引用文本
         this.props.form.setFieldsValue({
-            branchCompany: { reset: true }
+            branchCompany: { reset: true },
+            supplier: { reset: true }
         });
     }
 
@@ -240,36 +239,11 @@ class SimpleOrderList extends Component {
                                 </Col>
                                 <Col className="gutter-row" span={8}>
                                     {/* 供应商 */}
+                                    <span className="sc-form-item-label">供应商</span>
                                     <FormItem>
-                                        <span className="sc-form-item-label">供应商</span>
-                                        <span className={`${prefixCls}-data-pic`}>
-                                            <SearchMind
-                                                style={{ zIndex: 9 }}
-                                                compKey="spNo"
-                                                ref={ref => { this.joiningSupplierMind = ref }}
-                                                onChoosed={this.handleSupplierChoose}
-                                                onClear={this.handleSupplierClear}
-                                                fetch={(params) => this.props.pubFetchValueList({
-                                                    condition: params.value,
-                                                    pageSize: params.pagination.pageSize,
-                                                    pageNum: params.pagination.current || 1
-                                                }, 'supplierSearchBox')}
-                                                renderChoosedInputRaw={(row) => (
-                                                    <div>{row.spNo} - {row.companyName}</div>
-                                                )}
-                                                pageSize={6}
-                                                columns={[
-                                                    {
-                                                        title: '供应商编码',
-                                                        dataIndex: 'spNo',
-                                                        width: 98
-                                                    }, {
-                                                        title: '供应商名称',
-                                                        dataIndex: 'companyName'
-                                                    }
-                                                ]}
-                                            />
-                                        </span>
+                                        {getFieldDecorator('supplier', {
+                                            initialValue: { spId: '', spNo: '', companyName: '' }
+                                        })(<Supplier />)}
                                     </FormItem>
                                 </Col>
                                 <Col className="gutter-row" span={8}>
@@ -282,11 +256,12 @@ class SimpleOrderList extends Component {
                                                 compKey="providerNo"
                                                 ref={ref => { this.joiningAdressMind = ref }}
                                                 fetch={(params) =>
-                                                    this.props.pubFetchValueList(Util.removeInvalid({
-                                                        condition: params.value,
-                                                        pageSize: params.pagination.pageSize,
-                                                        pageNum: params.pagination.current || 1
-                                                    }), 'supplierAdrSearchBox').then((res) => {
+                                                    this.props.pubFetchValueList(
+                                                        Util.removeInvalid({
+                                                            condition: params.value,
+                                                            pageSize: params.pagination.pageSize,
+                                                            pageNum: params.pagination.current || 1
+                                                        }), 'supplierAdrSearchBox').then((res) => {
                                                         const dataArr = res.data.data || [];
                                                         if (!dataArr || dataArr.length === 0) {
                                                             message.warning('没有可用的数据');

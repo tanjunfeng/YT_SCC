@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author taoqiyu
  *
- * 促销管理 - 促销管理列表
+ * 促销管理 - 下单打折查询列表
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
