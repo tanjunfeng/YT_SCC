@@ -11,24 +11,22 @@ import Util from '../../util/util';
 // 供应商列表
 const managementList = [{
     title: '活动ID',
-    dataIndex: 'id',
-    key: 'id'
+    dataIndex: 'id'
 }, {
     title: '活动名称',
-    dataIndex: 'promotionName',
-    key: 'promotionName'
+    dataIndex: 'promotionName'
 }, {
-    title: '优惠种类',
+    title: '指定条件',
     dataIndex: 'promotionRule.useConditionRule',
-    key: 'promotionRule.useConditionRule',
-    render: rule => {
-        const c = rule.useConditionRule ? '指定条件' : '不限制';
-        return `${c}, ${promotionRuleName[rule.ruleName]}`;
-    }
+    render: rule => (rule ? '指定条件' : '不限制')
+}, {
+    title: '优惠方式',
+    dataIndex: 'promotionRule.ruleName',
+    key: 'promotionRule.ruleName',
+    render: ruleName => promotionRuleName[ruleName]
 }, {
     title: '使用区域',
     dataIndex: 'companiesPoList',
-    key: 'companiesPoList',
     render: list => {
         if (list.length === 0) {
             return '全部区域';
@@ -41,32 +39,26 @@ const managementList = [{
 }, {
     title: '开始时间',
     dataIndex: 'startDate',
-    key: 'startDate',
     render: timestamp => Util.getTime(timestamp)
 }, {
     title: '结束时间',
     dataIndex: 'endDate',
-    key: 'endDate',
     render: timestamp => Util.getTime(timestamp)
 }, {
     title: '参与数据',
     dataIndex: 'recordsPoList',
-    key: 'recordsPoList',
-    render: list => (list ? list.length : 0)
+    render: list => list.length
 }, {
     title: '简易描述',
-    dataIndex: 'note',
-    key: 'note',
+    dataIndex: 'simpleDescription',
     render: note => note || '无'
 }, {
     title: '状态',
     dataIndex: 'status',
-    key: 'status',
     render: statusCode => promotionStatus[statusCode]
 }, {
     title: '操作',
-    dataIndex: 'operation',
-    key: 'operation'
+    dataIndex: 'operation'
 }];
 
 const participateList = [{
