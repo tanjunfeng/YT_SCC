@@ -299,7 +299,7 @@ class SellPriceModal extends Component {
                 visible
                 className={prefixCls}
                 onOk={this.handleOk}
-                width={'447px'}
+                width={'800px'}
                 onCancel={this.handleCancel}
                 maskClosable={false}
                 confirmLoading={this.isDisabled}

@@ -10,12 +10,12 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { message, Form, Select, Button, Icon } from 'antd';
+import { message, Form, Select, Button, Icon, Row, Col } from 'antd';
 import Utils from '../../../util/util';
 import { BranchCompany } from '../../../container/search';
 import { fetchAction, receiveData } from '../../../actions/classifiedList';
 import { fetchGetProductById } from '../../../actions';
-import { initiateModeOptions } from '../../../constant/searchParams';
+import { initiateModeOptions, latestPriceStateOption } from '../../../constant/searchParams';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -39,7 +39,8 @@ class SearchForm extends Component {
             img: null,
             chooseMe: {},
         }
-        this.choose = null;
+        this.chooseInitiate = null;
+        this.chooseLatest = null;
     }
 
     componentDidMount() {
@@ -52,7 +53,8 @@ class SearchForm extends Component {
     handleGetValue = () => {
         this.props.onSearch(Utils.removeInvalid({
             branchCompanyName: this.props.form.getFieldValue('branchCompany').name,
-            status: this.choose
+            status: this.chooseInitiate,
+            state: this.chooseLatest
         }))
     }
 
@@ -147,7 +149,8 @@ class SearchForm extends Component {
     handleResetValue = () => {
         this.props.form.resetFields();
         this.name = null;
-        this.choose = null;
+        this.chooseInitiate = null;
+        this.chooseLatest = null;
         this.props.onReset();
         // 点击重置时清除 seachMind 引用文本
         this.props.form.setFieldsValue({
@@ -155,8 +158,12 @@ class SearchForm extends Component {
         });
     }
 
-    handleSelectChange = (item) => {
-        this.choose = item === '-1' ? null : item;
+    handleInitiateOptionsChange = (item) => {
+        this.chooseInitiate = item === '-1' ? null : item;
+    }
+
+    handleLatestPriceChange = (item) => {
+        this.chooseLatest = item === '-1' ? null : item;
     }
 
     handleAddValue = () => {
@@ -172,56 +179,76 @@ class SearchForm extends Component {
                     <Icon type="desktop" className="css-appstore" />&nbsp;商品信息
                 </div>
                 <Form layout="inline" className={`${prefixCls}`}>
-                    <FormItem label="子公司">
-                        {getFieldDecorator('branchCompany', {
-                            initialValue: { id: '', name: '' }
-                        })(<BranchCompany />)}
-                    </FormItem>
-                    {/* 是否启用 */}
-                    <FormItem className={`${prefixCls}-qy`}>
-                        <span className={`${prefixCls}-select`}>启用</span>
-                        {getFieldDecorator('initiateModeOptions', {
-                            initialValue: '-1'
-                        })(
-                            <Select
-                                style={{ width: 90 }}
-                                className="sc-form-item-select"
+                    <Row>
+                        <FormItem label="子公司">
+                            {getFieldDecorator('branchCompany', {
+                                initialValue: { id: '', name: '' }
+                            })(<BranchCompany />)}
+                        </FormItem>
+                        {/* 是否启用 */}
+                        <FormItem label="启用">
+                            {getFieldDecorator('initiateModeOptions', {
+                                initialValue: '-1'
+                            })(
+                                <Select
+                                    size="default"
+                                    style={{width: 70}}
+                                    onChange={this.handleInitiateOptionsChange}
+                                >
+                                    {
+                                        initiateModeOptions.data.map((item) =>
+                                            (<Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Option>)
+                                        )
+                                    }
+                                </Select>
+                                )}
+                        </FormItem>
+                        {/* 是否启用 */}
+                        <FormItem label="启用">
+                            {getFieldDecorator('latestPriceStateOption', {
+                                initialValue: '-1'
+                            })(
+                                <Select
+                                    size="default"
+                                    style={{width: 70}}
+                                    onChange={this.handleLatestPriceChange}
+                                >
+                                    {
+                                        latestPriceStateOption.data.map((item) =>
+                                            (<Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Option>)
+                                        )
+                                    }
+                                </Select>
+                                )}
+                        </FormItem>
+                        <FormItem>
+                            <Button
+                                type="primary"
+                                onClick={this.handleGetValue}
                                 size="default"
-                                onChange={this.handleSelectChange}
                             >
-                                {
-                                    initiateModeOptions.data.map((item) =>
-                                        (<Option key={item.key} value={item.key}>
-                                            {item.value}
-                                        </Option>)
-                                    )
-                                }
-                            </Select>
-                            )}
-                    </FormItem>
-                    <FormItem>
-                        <Button
-                            type="primary"
-                            onClick={this.handleGetValue}
-                            size="default"
-                        >
-                            搜索
-                        </Button>
-                    </FormItem>
-                    <FormItem>
-                        <Button size="default" onClick={this.handleResetValue}>
-                            重置
-                        </Button>
-                    </FormItem>
-                    <FormItem>
-                        <Button
-                            type="primary"
-                            size="default"
-                            onClick={this.handleAddValue}
-                        >
-                            创建
-                        </Button>
-                    </FormItem>
+                                搜索
+                            </Button>
+                        </FormItem>
+                        <FormItem>
+                            <Button size="default" onClick={this.handleResetValue}>
+                                重置
+                            </Button>
+                        </FormItem>
+                        <FormItem>
+                            <Button
+                                type="primary"
+                                size="default"
+                                onClick={this.handleAddValue}
+                            >
+                                创建
+                            </Button>
+                        </FormItem>
+                    </Row>
                 </Form>
             </div>
         )
