@@ -152,7 +152,8 @@ class ReleaseCouponModal extends PureComponent {
 
     render() {
         this.renderColumns();
-        const { data, total, pageNum, pageSize } = this.props.couponsList;
+        const { couponsList, visible } = this.props;
+        const { data, total, pageNum, pageSize } = couponsList;
         const rowSelection = {
             selectedRowKeys: this.state.promoIds,
             onChange: this.onSelectChange
@@ -160,13 +161,13 @@ class ReleaseCouponModal extends PureComponent {
         return (
             <Modal
                 title="选择优惠券类型"
-                visible={this.props.visible}
+                visible={visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 width={1200}
             >
                 <SearchForm
-                    visible={this.props.visible}
+                    visible={visible}
                     onCouponSearch={this.handleCouponSearch}
                     onCouponReset={this.handleCouponReset}
                 />

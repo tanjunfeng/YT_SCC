@@ -63,8 +63,8 @@ class SearchForm extends PureComponent {
     }
 
     handleReset = () => {
-        this.props.form.resetFields();  // 清除当前查询条件
-        this.props.onParticipateReset();  // 通知父页面已清空
+        this.props.form.resetFields(); // 清除当前查询条件
+        this.props.onParticipateReset(); // 通知父页面已清空
         // 点击重置时清除 seachMind 引用文本
         this.props.form.setFieldsValue({
             branchCompany: { reset: true }
@@ -72,104 +72,86 @@ class SearchForm extends PureComponent {
     }
 
     handleExport = () => {
-        this.props.onParticipateExport(this.getSearchCondition());   // 通知父组件导出数据
+        this.props.onParticipateExport(this.getSearchCondition()); // 通知父组件导出数据
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div className="search-box participate">
-                <Form layout="inline" onSubmit={this.handleSubmit}>
-                    <div className="search-conditions">
-                        <Row gutter={40}>
-                            <Col span={8}>
-                                <FormItem label="订单编号" style={{ paddingRight: 10 }}>
-                                    {getFieldDecorator('orderId')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="订单状态">
-                                    {getFieldDecorator('orderStateCode', {
-                                        initialValue: 'ALL'
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus('orderState')}
-                                        </Select>
-                                        )}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="支付状态">
-                                    {getFieldDecorator('paymentStateCode', {
-                                        initialValue: 'ALL'
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus('paymentState')}
-                                        </Select>
-                                        )}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="物流状态">
-                                    {getFieldDecorator('shippingStateCode', {
-                                        initialValue: 'ALL'
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getStatus('shippingState')}
-                                        </Select>
-                                        )}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="门店编号">
-                                    {getFieldDecorator('franchiseeStoreId')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="所属公司">
-                                    {getFieldDecorator('branchCompany', {
-                                        initialValue: { id: '', name: '' }
-                                    })(<BranchCompany />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={12}>
-                                <FormItem label="使用时间">
-                                    {getFieldDecorator('participateTimeRange', {
-                                        initialValue: []
-                                    })(
-                                        <RangePicker
-                                            size="default"
-                                            className="manage-form-enterTime"
-                                            showTime={{ format: MINUTE_FORMAT }}
-                                            format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
-                                            placeholder={['开始时间', '结束时间']}
-                                        />
-                                        )}
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={40} type="flex" justify="end">
-                            <Col>
-                                <FormItem>
-                                    <Button type="primary" size="default" htmlType="submit">
-                                        查询
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleExport}>
-                                        导出
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleReset}>
-                                        重置
-                                    </Button>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                    </div>
-                </Form>
-            </div >
+            <Form layout="inline" onSubmit={this.handleSubmit} className="promotion">
+                <Row gutter={40}>
+                    <Col span={8}>
+                        <FormItem label="订单编号">
+                            {getFieldDecorator('orderId')(<Input size="default" />)}
+                        </FormItem>
+                    </Col>
+                    <Col span={8}>
+                        <FormItem label="订单状态">
+                            {getFieldDecorator('orderStateCode', {
+                                initialValue: 'ALL'
+                            })(<Select size="default">
+                                {this.getStatus('orderState')}
+                            </Select>)}
+                        </FormItem>
+                    </Col>
+                    <Col span={8}>
+                        <FormItem label="支付状态">
+                            {getFieldDecorator('paymentStateCode', {
+                                initialValue: 'ALL'
+                            })(<Select size="default">
+                                {this.getStatus('paymentState')}
+                            </Select>)}
+                        </FormItem>
+                    </Col>
+                    <Col span={8}>
+                        <FormItem label="物流状态">
+                            {getFieldDecorator('shippingStateCode', {
+                                initialValue: 'ALL'
+                            })(<Select size="default">
+                                {this.getStatus('shippingState')}
+                            </Select>)}
+                        </FormItem>
+                    </Col>
+                    <Col span={8}>
+                        <FormItem label="门店编号">
+                            {getFieldDecorator('franchiseeStoreId')(<Input size="default" />)}
+                        </FormItem>
+                    </Col>
+                    <Col span={8}>
+                        <FormItem label="所属公司">
+                            {getFieldDecorator('branchCompany', {
+                                initialValue: { id: '', name: '' }
+                            })(<BranchCompany />)}
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem label="使用时间">
+                            {getFieldDecorator('participateTimeRange', {
+                                initialValue: []
+                            })(<RangePicker
+                                size="default"
+                                className="manage-form-enterTime"
+                                showTime={{ format: MINUTE_FORMAT }}
+                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
+                                placeholder={['开始时间', '结束时间']}
+                            />)}
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row gutter={40} type="flex" justify="end">
+                    <Col>
+                        <Button type="primary" size="default" htmlType="submit">
+                            查询
+                        </Button>
+                        <Button size="default" onClick={this.handleExport}>
+                            导出
+                        </Button>
+                        <Button size="default" onClick={this.handleReset}>
+                            重置
+                        </Button>
+                    </Col>
+                </Row>
+            </Form>
         );
     }
 }
