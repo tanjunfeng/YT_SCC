@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-12 13:44:46
+ * @Last Modified time: 2017-12-13 13:55:38
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -49,8 +49,9 @@ import {
 import {
     queryProcessMsgInfo,
     queryHighChart,
-    clearHighChart
+    clearHighChart,
 } from '../../../actions/process';
+import {auditInfo} from '../../../service';
 import ApproModal from './approModal';
 import { Supplier } from '../../../container/search';
 import FlowImage from '../../../components/flowImage';
@@ -74,7 +75,7 @@ const confirm = Modal.confirm;
     queryCommentHis,
     queryPoDetail,
     queryHighChart,
-    clearHighChart
+    clearHighChart,
 }, dispatch))
 
 class toDoPurchaseList extends PureComponent {
@@ -139,7 +140,7 @@ class toDoPurchaseList extends PureComponent {
                 dataIndex: 'adrType',
                 key: 'adrType',
                 render: text => {
-                    if (text === null) {
+                    if (text === null || typeof text === 'undefined') {
                         return null;
                     }
                     return (locType.data[text + 1].value);
@@ -441,16 +442,18 @@ class toDoPurchaseList extends PureComponent {
     }
 
     handleCommentOk = (param) => {
-        // const { currentNode, taskId } = this.examinationAppData;
-        // const processId = currentNode;
-        // this.props.approveRefund({ ...param, processId, businessId: taskId, type: 1 })
-        //     .then((res) => {
-        //         if (res.code === 200) {
-        //             message.success(res.message);
-        //             this.handleOpinionOk();
-        //             this.queryReturnMngList(this.current);
-        //         }
-        //     });
+        const { refundNo, taskId } = this.examinationAppData;
+        auditInfo({ ...param, orderNo: refundNo, taskId, type: 0 })
+            .then((res) => {
+                if (res.code === 200) {
+                    message.success(res.message);
+                    this.setState({
+                        opinionvisible: false,
+                    });
+
+                    this.queryReturnMngList(this.current);
+                }
+            });
     }
 
     handleSelect(record, index, items) {
@@ -747,9 +750,8 @@ class toDoPurchaseList extends PureComponent {
                         />
                         <ApproComment
                             visible={this.state.opinionvisible}
-                            onOk={this.handleOpinionOk}
+                            onOk={this.handleCommentOk}
                             onCancel={this.handleOpinionCancel}
-                            handleCommentOk={this.handleCommentOk}
                         />
                         <FlowImage data={this.props.highChartData} closeCanvas={this.closeCanvas} >
                             <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
@@ -771,7 +773,7 @@ toDoPurchaseList.propTypes = {
     deleteBatchRefundOrder: PropTypes.func,
     queryHighChart: PropTypes.func,
     clearHighChart: PropTypes.func,
-    highChartData: PropTypes.string
+    highChartData: PropTypes.string,
 };
 
 export default withRouter(Form.create()(toDoPurchaseList));
