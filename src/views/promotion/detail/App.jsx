@@ -24,7 +24,6 @@ const FormItem = Form.Item;
 
 class PromotionDetail extends PureComponent {
     state = {
-        branch: -1,
         hasStoreIds: false
     }
 
@@ -35,12 +34,22 @@ class PromotionDetail extends PureComponent {
 
     componentWillReceiveProps(nextProps) {
         const { promotion } = nextProps;
-        if (promotion.promotionRule && !promotion.promotionRule.useConditionRule) {
-            // 存在门店编号的时候，显示保存按钮
-            if (promotion.stores && promotion.stores.storeId) {
-                this.setState({ hasStoreIds: true });
+        // 存在门店编号的时候，显示保存按钮
+        if (promotion.stores && promotion.stores.storeId) {
+            this.setState({ hasStoreIds: true });
+        }
+        if (promotion.promotionRule) {
+            // 不制定条件
+            if (!promotion.promotionRule.useConditionRule) {
+                this.columns = noConditions;
+            } else { // 指定条件
+                switch (promotion.promotionRule.ruleName) {
+                    case 'PURCHASECONDITION': // 购买条件
+                        this.columns = purchageCondition;
+                        break;
+                    default: break;
+                }
             }
-            this.setState({ branch: 0 });
         }
     }
 
@@ -48,7 +57,7 @@ class PromotionDetail extends PureComponent {
         this.props.clearPromotionDetail();
     }
 
-    getNoConditionsDetails = () => noConditions.map(column => {
+    getDetails = () => this.columns.map(column => {
         const { promotion, form } = this.props;
         const item = promotion[column.dataIndex];
         return (
@@ -62,12 +71,7 @@ class PromotionDetail extends PureComponent {
             </Row>);
     });
 
-    getDetails = () => {
-        switch (this.state.branch) {
-            case 0: return this.getNoConditionsDetails();
-            default: return null;
-        }
-    }
+    columns = null;
 
     render() {
         const { hasStoreIds } = this.state;
@@ -77,7 +81,7 @@ class PromotionDetail extends PureComponent {
                     <div className="promotion-add-item">
                         <div className="add-message promotion-add-license">
                             <div className="add-message-body">
-                                {this.getDetails()}
+                                {this.columns ? this.getDetails() : null}
                             </div>
                         </div>
                     </div>

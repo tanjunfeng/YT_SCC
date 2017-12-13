@@ -1,12 +1,12 @@
 {
-    "timestamp": 1512541559407,
+    "timestamp": 1512541918128,
     "code": 200,
     "message": "请求成功",
     "data": {
-        "id": "HD297",
+        "id": "HD298",
         "status": "unreleased",
         "promotionType": "order_promo",
-        "promotionName": "元旦节活动",
+        "promotionName": "春节大卖",
         "promotionDiscription": null,
         "startDate": 1504499995000,
         "endDate": 1505581202000,
@@ -15,22 +15,37 @@
         "discount": null,
         "note": "备注",
         "type": 0,
-        "isSuperposeUserDiscount": 1,
+        "isSuperposeUserDiscount": 0,
         "isSuperposeProOrCouDiscount": 1,
         "promoCategoriesPo": null,
-        "companiesPoList": null,
+        "companiesPoList": [],
         "stores": {
             "promoId": "HD298",
             "storeId": "A000992,A000902,A000993"
         },
         "promotionRule": {
-            "useConditionRule": false,
-            "ruleName": null,
-            "orderRule": {
-                "preferentialWay": "DISCOUNTAMOUNT",
-                "preferentialValue": 30
+            "useConditionRule": true,
+            "ruleName": "PURCHASECONDITION",
+            "orderRule": null,
+            "purchaseConditionsRule": {
+                "condition": {
+                    "key": "1505502000",
+                    "purchaseType": "CATEGORY",
+                    "promoCategories": {
+                        "promoId": null,
+                        "categoryId": "xxx8",
+                        "categoryName": "酒水",
+                        "categoryLevel": 3
+                    },
+                    "promoProduct": null,
+                    "conditionType": "QUANTITY",
+                    "conditionValue": 50
+                },
+                "rule": {
+                    "preferentialWay": "PERCENTAGE",
+                    "preferentialValue": 0.95
+                }
             },
-            "purchaseConditionsRule": null,
             "rewardListRule": null,
             "totalPurchaseListRule": null
         },

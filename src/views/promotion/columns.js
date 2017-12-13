@@ -6,7 +6,10 @@
  */
 import React from 'react';
 import { Input, Form } from 'antd';
-import { promotionStatus, promotionRuleName, preferentialWayStatus } from './constants';
+import {
+    promotionStatus, promotionRuleName, preferentialWayStatus,
+    purchageTypeStatus, conditionTypeStatus
+} from './constants';
 import Util from '../../util/util';
 
 const FormItem = Form.Item;
@@ -39,6 +42,32 @@ const readerArea = (text, record, form) => {
         }
     }
     return null;
+}
+
+const getTextByCondition = (condition) => {
+    let info = `购买类型：${purchageTypeStatus[condition.purchaseType]}，`;
+    // 购买类型
+    switch (condition.purchaseType) {
+        case 'CATEGORY':
+            info += `${condition.promoCategories.categoryName}；`;
+            break;
+        case 'PRODUCT':
+            info += `${condition.condition.promoProduct.productName}；`;
+            break;
+        default: break;
+    }
+    info += `条件类型：${conditionTypeStatus[condition.conditionType]}，`;
+    // 条件类型
+    switch (condition.conditionType) {
+        case 'QUANTITY':
+            info += `${condition.conditionValue}；`;
+            break;
+        case 'AMOUNT':
+            info += `${condition.conditionValue}元；`;
+            break;
+        default: break;
+    }
+    return info;
 }
 
 // 供应商列表
@@ -228,9 +257,17 @@ export const purchageCondition = [{
     dataIndex: 'promotionType',
     render: () => '购买条件'
 }, {
-    title: '购买类型',
+    title: '购买条件',
     dataIndex: 'purchaseType',
-    render: null
+    render: (text, record) => {
+        if (record.id) {
+            const condition = record.promotionRule.purchaseConditionsRule.condition;
+            let info = getTextByCondition(condition);
+            info += '    优惠方式：';
+            return info;
+        }
+        return null;
+    }
 }, {
     title: '使用区域',
     dataIndex: 'area',
