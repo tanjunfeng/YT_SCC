@@ -54,12 +54,24 @@ export const overlayOptions = [
     }
 ];
 
+// 优惠种类
 export const promotionRuleName = {
     PURCHASECONDITION: '购买条件',
     REWARDLIST: '奖励列表',
     TOTALPUCHASELIST: '整个购买列表'
 }
 
+// 购买类型
+export const purchageTypeStatus = {
+    CATEGORY: '按品类', PRODUCT: '按商品'
+}
+
+// 条件类型
+export const conditionTypeStatus = {
+    QUANTITY: '累计商品数量', AMOUNT: '累计商品金额'
+}
+
+// 优惠方式
 export const preferentialWayStatus = {
     PERCENTAGE: '折扣百分比',
     DISCOUNTAMOUNT: '折扣金额',
