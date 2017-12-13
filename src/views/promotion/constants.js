@@ -59,3 +59,10 @@ export const promotionRuleName = {
     REWARDLIST: '奖励列表',
     TOTALPUCHASELIST: '整个购买列表'
 }
+
+export const preferentialWayStatus = {
+    PERCENTAGE: '折扣百分比',
+    DISCOUNTAMOUNT: '折扣金额',
+    FIXEDPRICE: '固定单价',
+    GIVESAMEPRODUCT: '赠送相同商品',
+}

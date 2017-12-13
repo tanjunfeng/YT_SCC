@@ -5,7 +5,7 @@
  * 促销活动列表
  */
 import React from 'react';
-import { promotionStatus, promotionRuleName } from './constants';
+import { promotionStatus, promotionRuleName, preferentialWayStatus } from './constants';
 import Util from '../../util/util';
 
 // 供应商列表
@@ -117,8 +117,14 @@ const detail = [{
     render: rule => (rule ? '指定条件' : '不限制')
 }, {
     title: '优惠方式',
-    dataIndex: 'promotionRule.ruleName',
-    render: rule => promotionRuleName[rule]
+    dataIndex: 'promotionWay',
+    render: (text, record) => {
+        if (record.id) {
+            const { preferentialWay, preferentialValue } = record.promotionRule.orderRule;
+            return `${preferentialWayStatus[preferentialWay]} ${preferentialValue}`;
+        }
+        return null
+    }
 }, {
     title: '使用区域',
     dataIndex: 'companiesPoList',
@@ -139,7 +145,20 @@ const detail = [{
     }
 }, {
     title: '活动叠加',
-    dataIndex: 'overlay'
+    dataIndex: 'overlay',
+    render: (text, record) => {
+        if (record.id) {
+            const arr = [];
+            if (record.isSuperposeUserDiscount === 1) {
+                arr.push('会员等级');
+            }
+            if (record.isSuperposeProOrCouDiscount === 1) {
+                arr.push('优惠券');
+            }
+            return arr.join(', ');
+        }
+        return null;
+    }
 }, {
     title: '活动优先级',
     dataIndex: 'priority'
