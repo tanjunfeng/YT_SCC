@@ -5,7 +5,7 @@
  * 促销活动列表
  */
 import React from 'react';
-import { promotionStatus } from './constants';
+import { promotionStatus, promotionRuleName } from './constants';
 import Util from '../../util/util';
 
 // 供应商列表
@@ -18,26 +18,14 @@ const managementList = [{
     dataIndex: 'promotionName',
     key: 'promotionName'
 }, {
-    title: '使用条件',
-    colSpan: 2,
-    dataIndex: 'promotionRule',
-    key: 'promotionRule',
-    render: value => {
-        const obj = {
-            children: value,
-            props: { rowSpan: 0 }
-        };
-        return obj;
+    title: '优惠种类',
+    dataIndex: 'promotionRule.useConditionRule',
+    key: 'promotionRule.useConditionRule',
+    render: rule => {
+        const c = rule.useConditionRule ? '指定条件' : '不限制';
+        return `${c}, ${promotionRuleName[rule.ruleName]}`;
     }
 }, {
-//     title: '优惠种类',
-//     dataIndex: 'promotionRule',
-//     key: 'promotionRule',
-//     render: rule => {
-//         const c = rule.useConditionRule ? '指定条件' : '不限制';
-//         return `${c},${rule.ruleName}`;
-//     }
-// }, {
     title: '使用区域',
     dataIndex: 'companiesPoList',
     key: 'companiesPoList',
