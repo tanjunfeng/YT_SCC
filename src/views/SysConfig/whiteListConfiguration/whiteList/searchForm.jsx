@@ -65,17 +65,17 @@ class SearchForm extends PureComponent {
     }
 
     /**
-     * 白名单导出
-     */
-    handleExport = () => {
-        // 将查询条件回传给调用页
-        this.props.onExportList(this.getFormData());
-    }
-
-    /**
      * 白名单下载导入模板
      */
     handleDownload = () => {
+        // 将查询条件回传给调用页
+        this.props.onDownloadList(this.getFormData());
+    }
+
+    /**
+     * 白名单导出
+     */
+    handleExport = () => {
         // 将查询条件回传给调用页
         this.props.onExportList(this.getFormData());
     }
@@ -305,6 +305,8 @@ SearchForm.propTypes = {
     onModalClick: PropTypes.func,
     onModalOfflineClick: PropTypes.func,
     onExportList: PropTypes.func,
+    downExportList: PropTypes.func,
+    onDownloadList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.objectOf(PropTypes.any),
 };
