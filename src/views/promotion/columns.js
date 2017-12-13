@@ -11,26 +11,24 @@ import Util from '../../util/util';
 // 供应商列表
 const managementList = [{
     title: '活动ID',
-    dataIndex: 'id',
-    key: 'id'
+    dataIndex: 'id'
 }, {
     title: '活动名称',
-    dataIndex: 'promotionName',
-    key: 'promotionName'
+    dataIndex: 'promotionName'
 }, {
-    title: '优惠种类',
+    title: '指定条件',
     dataIndex: 'promotionRule.useConditionRule',
-    key: 'promotionRule.useConditionRule',
-    render: rule => {
-        const c = rule.useConditionRule ? '指定条件' : '不限制';
-        return `${c}, ${promotionRuleName[rule.ruleName]}`;
-    }
+    render: rule => (rule ? '指定条件' : '不限制')
+}, {
+    title: '优惠方式',
+    dataIndex: 'promotionRule.ruleName',
+    key: 'promotionRule.ruleName',
+    render: ruleName => promotionRuleName[ruleName]
 }, {
     title: '使用区域',
     dataIndex: 'companiesPoList',
-    key: 'companiesPoList',
     render: list => {
-        if (list.length === 0) {
+        if (!list || list.length === 0) {
             return '全部区域';
         }
         const areas = list.map(company => company.companyName).join(',');
@@ -41,153 +39,121 @@ const managementList = [{
 }, {
     title: '开始时间',
     dataIndex: 'startDate',
-    key: 'startDate',
     render: timestamp => Util.getTime(timestamp)
 }, {
     title: '结束时间',
     dataIndex: 'endDate',
-    key: 'endDate',
     render: timestamp => Util.getTime(timestamp)
 }, {
     title: '参与数据',
     dataIndex: 'recordsPoList',
-    key: 'recordsPoList',
-    render: list => (list ? list.length : 0)
+    render: list => list.length
 }, {
     title: '简易描述',
-    dataIndex: 'note',
-    key: 'note',
+    dataIndex: 'simpleDescription',
     render: note => note || '无'
 }, {
     title: '状态',
     dataIndex: 'status',
-    key: 'status',
     render: statusCode => promotionStatus[statusCode]
 }, {
     title: '操作',
-    dataIndex: 'operation',
-    key: 'operation'
+    dataIndex: 'operation'
 }];
 
 const participateList = [{
     title: '订单号',
-    dataIndex: 'orderId',
-    key: 'orderId'
+    dataIndex: 'orderId'
 }, {
     title: '订单时间',
-    dataIndex: 'submitTime',
-    key: 'submitTime'
+    dataIndex: 'submitTime'
 }, {
     title: '订单状态',
-    dataIndex: 'orderStateDesc',
-    key: 'orderStateDesc'
+    dataIndex: 'orderStateDesc'
 }, {
     title: '支付状态',
-    dataIndex: 'paymentStateDesc',
-    key: 'paymentStateDesc'
+    dataIndex: 'paymentStateDesc'
 }, {
     title: '物流状态',
-    dataIndex: 'shippingStateDesc',
-    key: 'shippingStateDesc'
+    dataIndex: 'shippingStateDesc'
 }, {
     title: '订单金额',
-    dataIndex: 'total',
-    key: 'total'
+    dataIndex: 'total'
 }, {
     title: '优惠金额',
-    dataIndex: 'discount',
-    key: 'discount'
+    dataIndex: 'discount'
 }, {
     title: '门店编号',
-    dataIndex: 'franchiseeStoreId',
-    key: 'franchiseeStoreId'
+    dataIndex: 'franchiseeStoreId'
 }, {
     title: '门店名称',
-    dataIndex: 'franchiseeStoreName',
-    key: 'franchiseeStoreName'
+    dataIndex: 'franchiseeStoreName'
 }, {
     title: '所属子公司',
-    dataIndex: 'branchCompanyName',
-    key: 'branchCompanyName'
+    dataIndex: 'branchCompanyName'
 }];
 
 const detail = [{
     title: '活动ID',
-    dataIndex: 'id',
-    key: 'id'
+    dataIndex: 'id'
 }, {
     title: '活动名称',
-    dataIndex: 'promotionName',
-    key: 'promotionName'
+    dataIndex: 'promotionName'
 }, {
     title: '活动状态',
     dataIndex: 'status',
-    key: 'status',
     render: statusCode => promotionStatus[statusCode]
-}, {
-    title: '折扣比例',
-    dataIndex: 'discount',
-    key: 'discount',
-    render: discount => `${discount}%`
 }, {
     title: '生效时间',
     dataIndex: 'startDate',
-    key: 'startDate',
     render: timestamp => Util.getTime(timestamp)
 }, {
     title: '过期时间',
     dataIndex: 'endDate',
-    key: 'endDate',
     render: timestamp => Util.getTime(timestamp)
 }, {
     title: '使用条件',
-    dataIndex: 'quanifyAmount',
-    key: 'quanifyAmount',
-    render: amount => (amount ? `满 ${amount} 元可用` : '不限制')
+    dataIndex: 'promotionRule.useConditionRule',
+    render: rule => (rule ? '指定条件' : '不限制')
+}, {
+    title: '优惠方式',
+    dataIndex: 'promotionRule.ruleName',
+    render: rule => promotionRuleName[rule]
 }, {
     title: '使用区域',
     dataIndex: 'companiesPoList',
-    key: 'companiesPoList',
     render: list => {
-        if (list.length === 0) {
+        if (!list || list.length === 0) {
             return '全部区域';
         }
         return list.map(company => company.companyName).join(',');
     }
 }, {
-    title: '使用品类',
-    dataIndex: 'promoCategoriesPo',
-    key: 'promoCategoriesPo',
-    render: category => {
-        if (!category) {
-            return '全部品类';
-        }
-        return category.categoryName
-    }
-}, {
     title: '指定门店',
     dataIndex: 'stores',
-    key: 'stores',
     render: stores => {
         if (!stores) {
-            return '未指定';
+            return '未指定门店';
         }
         return stores.storeId;
     }
 }, {
-    title: '与优惠劵叠加',
-    dataIndex: 'isSuperposeProOrCouDiscount',
-    key: 'isSuperposeProOrCouDiscount',
-    render: note => (note === 1 ? '是' : '否')
+    title: '活动叠加',
+    dataIndex: 'overlay'
 }, {
-    title: '与会员等级叠加',
-    dataIndex: 'isSuperposeUserDiscount',
-    key: 'isSuperposeUserDiscount',
-    render: note => (note === 1 ? '是' : '否')
+    title: '活动优先级',
+    dataIndex: 'priority'
+}, {
+    title: '简易描述',
+    dataIndex: 'simpleDescription',
+    render: text => text || '无'
+}, {
+    title: '详细描述',
+    dataIndex: 'detailDescription',
+    render: text => text || '无'
 }, {
     title: '备注',
     dataIndex: 'note',
-    key: 'note',
     render: note => note || '无'
 }];
 
