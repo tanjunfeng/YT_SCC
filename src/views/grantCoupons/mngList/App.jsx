@@ -114,16 +114,16 @@ class GrantCouponList extends PureComponent {
     }
 
     render() {
+        const { storeIds, current } = this.state;
         const { data = [], total, pageNum, pageSize } = this.props.franchiseeList;
         const rowSelection = {
-            selectedRowKeys: this.state.storeIds,
+            selectedRowKeys: storeIds,
             onChange: this.onSelectChange
         };
-
         return (
             <div>
                 <SearchForm
-                    isGrantDisabled={this.state.storeIds.length === 0}
+                    isGrantDisabled={storeIds.length === 0}
                     onPromotionSearch={this.handlePromotionSearch}
                     onPromotionReset={this.handlePromotionReset}
                     onPromotionReleaseAll={this.handleReleaseAll}
@@ -139,7 +139,7 @@ class GrantCouponList extends PureComponent {
                     }}
                     bordered
                     pagination={{
-                        current: this.state.current,
+                        current,
                         pageNum,
                         pageSize,
                         total,
