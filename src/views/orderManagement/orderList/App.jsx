@@ -117,7 +117,8 @@ class OrderManagementList extends Component {
             franchisee,
             transNum,
             productName,
-            containParent
+            containParent,
+            franchiseeStoreId
         } = this.props.form.getFieldsValue();
         const { submitStartTime, submitEndTime } = this.state.time;
         this.current = 1;
@@ -136,7 +137,8 @@ class OrderManagementList extends Component {
             pageSize: PAGE_SIZE,
             transNum,
             productName,
-            containParent: containParent ? 1 : 0
+            containParent: containParent ? 1 : 0,
+            franchiseeStoreId
         }
         const searchData = this.searchData;
         searchData.page = 1;
@@ -497,8 +499,8 @@ class OrderManagementList extends Component {
                             </FormItem>
                         </Col>
                         <Col>
-                            <FormItem label="门店编号">
-                                {getFieldDecorator('franchiseeStoreId')(<Input placeholder="请输入门店编号" />)}
+                            <FormItem label="门店编号/名称">
+                                {getFieldDecorator('franchiseeStoreId')(<Input placeholder="请输入门店编号/名称" />)}
                             </FormItem>
                         </Col>
                         <Col>
