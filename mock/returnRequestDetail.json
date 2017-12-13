@@ -43,15 +43,18 @@
                         "barcodeType": null
                     }
                 ],
-                "quantity": 9,
+                "sellFullCase": 1,
+                "quantity": 1,
                 "actualReturnQuantity": 1,
                 "rawTotalPrice": 500,
                 "listPrice": 500,
-                "salePrice": 500
+                "salePrice": 500,
+                "shippedQuantity": 10,
+                "unitQuantity": 5
             },
             {
-                "id": 9,
-                "productId": "xprod347937",
+                "id": 11,
+                "productId": "xprod347939",
                 "productName": "桃李吉士排面包(110g)",
                 "productImg": "http://sit.image.com/group1/M00/01/28/rB4KPVmJGrqAEZ9wAAuIIOwqkL0026.png",
                 "secondLevelCategoryName": "面包主食",
@@ -59,17 +62,20 @@
                 "productCode": "1000405",
                 "internationalCodes": [
                     {
-                        "id": "xincode329887",
-                        "productId": "xprod347937",
-                        "internationalCode": "6922222702292",
+                        "id": "xincode329889",
+                        "productId": "xprod347939",
+                        "internationalCode": "6922222702294",
                         "barcodeType": null
                     }
                 ],
-                "quantity": 8,
+                "sellFullCase": 1,
+                "quantity": 2,
                 "actualReturnQuantity": 1,
                 "rawTotalPrice": 500,
                 "listPrice": 500,
-                "salePrice": 500
+                "salePrice": 500,
+                "shippedQuantity": 10,
+                "unitQuantity": 6
             }
         ],
         "returnReason": "其他原因",

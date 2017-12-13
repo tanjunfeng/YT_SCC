@@ -207,6 +207,7 @@ class ReturnGoodsDetails extends PureComponent {
         const { TextArea } = Input
         const data = this.props.data
         const { type, state } = this.props.match.params;
+        const { amount, refundAmount } = this.state.total;
         return (
             <div className="returngoods-detail">
                 <div className="basic-box">
@@ -277,8 +278,8 @@ class ReturnGoodsDetails extends PureComponent {
                         }
                         <div className="bottom-text">
                             <div className="bt-left">共<span className="bt-left-num">{data.commodityTotal}</span>件商品</div>
-                            <div className="bt-right"><span>退款金额：</span><span className="bt-right-num">￥{this.state.total.refundAmount || data.refundAmount}</span></div>
-                            <div className="bt-right" style={{ marginRight: 20 }}><span>退货金额：</span><span className="bt-right-num">￥{this.state.total.amount || data.amount}</span></div>
+                            <div className="bt-right"><span>退款金额：</span><span className="bt-right-num">￥{refundAmount >= 0 ? refundAmount : data.refundAmount}</span></div>
+                            <div className="bt-right" style={{ marginRight: 20 }}><span>退货金额：</span><span className="bt-right-num">￥{amount >= 0 ? amount : data.amount}</span></div>
                         </div>
                     </div>
                 </div>
