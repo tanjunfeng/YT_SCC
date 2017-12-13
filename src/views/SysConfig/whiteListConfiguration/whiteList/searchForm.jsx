@@ -77,7 +77,7 @@ class SearchForm extends PureComponent {
      */
     handleDownload = () => {
         // 将查询条件回传给调用页
-        this.props.onExportList(this.getFormData());
+        this.props.downExportList(this.getFormData());
     }
 
     handleReset = () => {
@@ -305,6 +305,7 @@ SearchForm.propTypes = {
     onModalClick: PropTypes.func,
     onModalOfflineClick: PropTypes.func,
     onExportList: PropTypes.func,
+    downExportList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.objectOf(PropTypes.any),
 };

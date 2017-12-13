@@ -676,7 +676,7 @@ const routes = [
                             )}
                         />
                         <Route
-                            path="/orderList/orderDetails/:id/:type"
+                            path="/orderList/orderDetails/:id"
                             render={() => (<Bundle load={OrderManagementDetails}>
                                 {(App) => <App />}</Bundle>)}
                         />
