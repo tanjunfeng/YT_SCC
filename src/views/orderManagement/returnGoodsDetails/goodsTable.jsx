@@ -42,7 +42,7 @@ class GoodsTable extends PureComponent {
         // 整理列表，把不合法的数据前置以及计算新的 total
         const returnQuantityList = this.calcTotal(items, total);
         const returnQuantity = this.CollageData();
-        this.props.onChange([...returnQuantityList], [...returnQuantity], total);
+        this.props.onChange([...returnQuantityList], [...returnQuantity], total, this.props.value.canSave);
     }
 
     /**
@@ -106,16 +106,18 @@ class GoodsTable extends PureComponent {
         let isValid = true;
         this.validateSalesInsideNumber(goods)
         if (goods.unitQuantity === 1) {
-            console.log(11)
             isValid = true;
-        } else if (goods.unitQuantity !== 1) {
+        }
+        if (goods.unitQuantity !== 1) {
             if (goods.isMultiple) {
                 errors.push(`非内装数${goods.unitQuantity}的整数倍`);
                 isValid = false;
+                this.props.value.canSave = false;
+            } else {
+                this.props.value.canSave = true;
             }
-        } else {
-            isValid = true;
         }
+        this.props.dataState(this.props.value.canSave)
         return isValid;
     }
 
@@ -168,6 +170,7 @@ class GoodsTable extends PureComponent {
 
 GoodsTable.propTypes = {
     onChange: PropTypes.func,
+    dataState: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any)
 };
 

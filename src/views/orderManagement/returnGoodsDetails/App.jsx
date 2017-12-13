@@ -47,6 +47,7 @@ class ReturnGoodsDetails extends PureComponent {
             returnQuantityList: [],
             returnQuantity: [],
             total: '',
+            canSave: true
         }
     }
 
@@ -80,7 +81,8 @@ class ReturnGoodsDetails extends PureComponent {
 
     getGoodsTableValues = () => ({
         returnQuantityList: this.state.returnQuantityList,
-        data: this.props.data
+        data: this.props.data,
+        canSave: this.state.canSave
     })
 
     // 请求数据
@@ -160,6 +162,12 @@ class ReturnGoodsDetails extends PureComponent {
             if (res.success) {
                 this.showConfirmSaveSuccess()
             }
+        })
+    }
+
+    canSaveState = (state) => {
+        this.setState({
+            canSave: state
         })
     }
 
@@ -267,6 +275,7 @@ class ReturnGoodsDetails extends PureComponent {
                                 <GoodsTable
                                     value={this.getGoodsTableValues()}
                                     onChange={this.handleGoodsListChange}
+                                    dataState={this.canSaveState}
                                 />
                                 :
                                 <Table
@@ -348,7 +357,7 @@ class ReturnGoodsDetails extends PureComponent {
                         {
                             (state === 1 || type === '2') &&
                             <span>
-                                <Button size="large" onClick={this.save} disabled={this.state.isSaveDisabled}>保存</Button>
+                                <Button size="large" onClick={this.save} disabled={!this.state.canSave}>保存</Button>
                                 <Button size="large" onClick={() => this.showConfirm(1)}>确认</Button>
                                 <Button size="large" onClick={() => this.showConfirm(2)}>取消</Button>
                             </span>
