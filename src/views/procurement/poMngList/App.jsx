@@ -21,21 +21,35 @@ import {
     message,
     Button
 } from 'antd';
-
+import {
+    queryHighChart,
+    clearHighChart,
+} from '../../../actions/process';
+import {
+    queryCommentHis
+} from '../../../actions/procurement';
 import { fetchPoMngList, changePoMngSelectedRows, deletePoByIds } from '../../../actions';
 import SearchForm from '../../../components/poSearchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { poMngListColumns } from '../columns';
+import FlowImage from '../../../components/flowImage';
+import ApproModal from '../../../components/approModal'
 
 const columns = poMngListColumns;
 
 @connect(state => ({
     poInfo: state.toJS().procurement.poInfo,
-    selectedPoMngRows: state.toJS().procurement.selectedPoMngRows
+    selectedPoMngRows: state.toJS().procurement.selectedPoMngRows,
+    processDefinitions: state.toJS().procurement.processDefinitions,
+    highChartData: state.toJS().process.highChartData,
+    approvalList: state.toJS().procurement.approvalList,
 }), dispatch => bindActionCreators({
     fetchPoMngList,
     changePoMngSelectedRows,
-    deletePoByIds
+    deletePoByIds,
+    queryHighChart,
+    clearHighChart,
+    queryCommentHis,
 }, dispatch))
 class PoMngList extends PureComponent {
     constructor(props) {
@@ -49,7 +63,9 @@ class PoMngList extends PureComponent {
             auditingVisible: false,
             deleteListData: [],
             purchaseListRows: [],
-            failedReason: ''
+            failedReason: '',
+            approvalProgress: false,
+            isVisibleModal: false,
         }
     }
 
@@ -97,7 +113,23 @@ class PoMngList extends PureComponent {
         });
     }
 
+    // 查看审批进度
+    showApprovalProgress = (record) => {
+        this.setState({
+            approvalProgress: true,
+        }, () => (
+            this.props.queryHighChart({taskId: record.purchaseOrderNo })
+        ));
+    }
 
+    // 查看审批意见
+    showApprovalComments = (record) => {
+        this.setState({
+            isVisibleModal: true
+        }, () => (
+            this.props.queryCommentHis({taskId: record.purchaseOrderNo })
+        ));
+    }
     /**
      * 点击查询按钮回调
      * @param {object}  res
@@ -148,19 +180,35 @@ class PoMngList extends PureComponent {
         this.current = 1;
     }
 
+    handleModalOk = () => {
+        this.setState({
+            isVisibleModal: false,
+        });
+    }
+    handleModalCancel = () => {
+        this.setState({
+            isVisibleModal: false,
+        });
+    }
+
+    closeCanvas = () => {
+        this.props.clearHighChart();
+    }
 
     // table列表详情操作
     renderActions = (text, record) => {
         const { status, id } = record;
         const deleteCode = 0;
-        const refuseCOde = 3;
+        const submitCode = 1;
+        const AuditCode = 2;
+        const refuseCode = 3;
         const { pathname } = this.props.location;
         const menu = (
             <Menu>
                 <Menu.Item key="detail">
                     <Link target="_blank" to={`${pathname}/detail/${id}`}>详情</Link>
                 </Menu.Item>
-                {status === deleteCode &&
+                {(status === deleteCode || status === refuseCode) &&
                     <Menu.Item key="modify">
                         <Link to={`${pathname}/edit/${id}`}>修改</Link>
                     </Menu.Item>
@@ -170,8 +218,16 @@ class PoMngList extends PureComponent {
                         <span onClick={() => this.singleRowsDelete(record)}>删除</span>
                     </Menu.Item>
                 }
-                {status === refuseCOde && <Menu.Item key="rejected">
+                {/* {status === refuseCode && <Menu.Item key="rejected">
                     <span onClick={() => this.showAuditingModal(record)}>查看审核未通过</span>
+                </Menu.Item>
+                } */}
+                {status === submitCode && <Menu.Item key="approvalProgress">
+                    <span onClick={() => this.showApprovalProgress(record)}>查看审批进度</span>
+                </Menu.Item>
+                }
+                {(status === submitCode || status === AuditCode || status === refuseCode) && <Menu.Item key="approvalComments">
+                    <span onClick={() => this.showApprovalComments(record)}>查看审批意见</span>
                 </Menu.Item>
                 }
             </Menu>
@@ -243,6 +299,15 @@ class PoMngList extends PureComponent {
                         }}
                     />
                 </div>
+                <ApproModal
+                    visible={this.state.isVisibleModal}
+                    onOk={this.handleModalOk}
+                    onCancel={this.handleModalCancel}
+                    approvalList={this.props.approvalList}
+                />
+                <FlowImage data={this.props.highChartData} closeCanvas={this.closeCanvas} >
+                    <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
+                </FlowImage>
                 {
                     <Modal
                         title="平台审核未通过原因"
@@ -264,7 +329,12 @@ PoMngList.propTypes = {
     fetchPoMngList: PropTypes.func,
     poInfo: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
-    deletePoByIds: PropTypes.func
+    deletePoByIds: PropTypes.func,
+    queryCommentHis: PropTypes.func,
+    clearHighChart: PropTypes.func,
+    highChartData: PropTypes.string,
+    queryHighChart: PropTypes.func,
+    approvalList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 }
 
 export default withRouter(Form.create()(PoMngList));
