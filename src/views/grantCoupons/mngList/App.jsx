@@ -34,7 +34,6 @@ class GrantCouponList extends PureComponent {
         current: 1
     };
 
-
     componentDidMount() {
         this.handlePromotionReset();
         this.query();

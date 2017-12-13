@@ -7,12 +7,13 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import {
-    Form, Modal, Row
+    Form, Modal, Row, message
 } from 'antd';
 
 import { Category } from '../../../container/cascader';
 import { AddingGoodsByTerm } from '../../../container/search';
-import { buyType, conditionType, getRulesColumn } from './domHelper';
+import { buyType, getConditionType } from './domHelper';
+import { isCategoryExist } from './dataHelper';
 import Util from '../../../util/util';
 
 import './buyConditionModal.scss';
@@ -21,7 +22,7 @@ const FormItem = Form.Item;
 
 class BuyConditionModal extends PureComponent {
     state = {
-        category: null, // 品类
+        category: null
     }
 
     componentWillReceiveProps(nextProps) {
@@ -30,43 +31,78 @@ class BuyConditionModal extends PureComponent {
         }
     }
 
+    getBuyCondition = (formData, values) => {
+        const { buyCondition, buyConditionProduct } = values;
+        const { category } = this.state;
+        switch (buyCondition) {
+            case 'ALL':
+                break;
+            case 'CATEGORY':
+                Object.assign(formData, { promoCategories: category });
+                break;
+            case 'PRODUCT':
+                Object.assign(formData, {
+                    promoProduct: {
+                        productId: buyConditionProduct.record.productId,
+                        productName: buyConditionProduct.record.productName,
+                    }
+                });
+                break;
+            default: break;
+        }
+    }
+
+    getBuyConditionValue = (formData, values) => {
+        const { buyConditionType, buyConditionTypeQuantity, buyConditionTypeAmount } = values;
+        let conditionValue = '';
+        switch (buyConditionType) {
+            case 'QUANTITY':
+                conditionValue = buyConditionTypeQuantity;
+                break;
+            case 'AMOUNT':
+                conditionValue = buyConditionTypeAmount;
+                break;
+            default: break;
+        }
+        Object.assign(formData, { conditionValue });
+    }
+
     getFormData = (callback) => {
-        const { validateFields } = this.props.form;
-        validateFields((err, values) => {
-            const { buyCondition } = values;
-            // const { category } = this.state;
+        this.props.form.validateFields((err, values) => {
+            const { buyCondition, buyConditionType } = values;
+            const { category } = this.state;
             if (err) {
+                if (buyCondition === 'CATEGORY' && !isCategoryExist(category)) {
+                    message.error('请选择品类');
+                    return;
+                }
                 return;
             }
-            switch (buyCondition) {
-                case 'ALL': break;
-                case 'CATEGORY': break;
-                case 'PRODUCT': break;
-                default: break;
-            }
-            // 使用条件 0: 不限制，1: 指定条件
-            const dist = {};
+            const formData = {
+                key: String(new Date().getTime()),
+                purchaseType: buyCondition,
+                conditionType: buyConditionType
+            };
+            this.getBuyCondition(formData, values);
+            this.getBuyConditionValue(formData, values);
             if (typeof callback === 'function') {
-                callback(Util.removeInvalid(dist));
+                callback(Util.removeInvalid(formData));
             }
         });
     }
 
+    handleCategorySelect = (category) => {
+        this.setState({ category });
+    }
+
     handleOk = () => {
-        this.getFormData(() => {
-            this.props.onOk();
+        this.getFormData(data => {
+            this.props.onOk(data);
         });
     }
 
     handleCancel = () => {
         this.props.onCancel();
-    }
-
-    /**
-     * 选择品类
-     */
-    handleCategorySelect = (category) => {
-        this.setState({ category });
     }
 
     render() {
@@ -100,10 +136,7 @@ class BuyConditionModal extends PureComponent {
                             </FormItem> : null}
                     </Row>
                     <Row>
-                        {conditionType(form, 'buyCondition')}
-                    </Row>
-                    <Row>
-                        {getRulesColumn(form, 'buyCondition', getFieldValue('buyCondition'))}
+                        {getConditionType(form, 'buyCondition')}
                     </Row>
                 </Form>
             </Modal>
@@ -115,7 +148,7 @@ BuyConditionModal.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     visible: PropTypes.bool,
     onOk: PropTypes.func,
-    onCancel: PropTypes.func,
+    onCancel: PropTypes.func
 }
 
 export default withRouter(Form.create()(BuyConditionModal));
