@@ -150,16 +150,19 @@ const getRewardListPreferentialValue = (values) => {
 
 const getCategoryOrProductOfRL = (condition, values, state) => {
     const { rewardList, rewardListProduct } = values;
-    switch(rewardList) {
+    switch (rewardList) {
         case 'CATEGORY':
-            Object.assign(condition, {promoCategories: state.categoryRL});
+            Object.assign(condition, { promoCategories: state.categoryRL });
             break;
-        case 'CATEGORY':
-            Object.assign(condition, {promoProduct: {
-                productId: rewardListProduct.record.productId,
-                productName: rewardListProduct.record.productName
-            }});
+        case 'PRODUCT':
+            Object.assign(condition, {
+                promoProduct: {
+                    productId: rewardListProduct.record.productId,
+                    productName: rewardListProduct.record.productName
+                }
+            });
             break;
+        case 'ALL':
         default: break;
     }
 }
@@ -181,7 +184,6 @@ const getRewardListRule = (state, values) => {
             purchaseConditionsRule: {
                 condition: {
                     purchaseType: rewardList,
-                    // promoCategories: state.categoryRL,
                     conditionType: rewardListType,
                     conditionValue: getRewardListConditionValue(values)
                 },
@@ -193,7 +195,10 @@ const getRewardListRule = (state, values) => {
         }
     };
     // 按全部、品类和商品拼接 condition 对象
-    getCategoryOrProductOfRL(promotionRule.rewardListRule.purchaseConditionsRule.condition, values, state);
+    getCategoryOrProductOfRL(
+        promotionRule.rewardListRule.purchaseConditionsRule.condition,
+        values, state
+    );
     return Util.removeInvalid(promotionRule);
 }
 
@@ -220,6 +225,42 @@ const getNoConditionDataRule = (values) => {
         default: break;
     }
     return promotionRule;
+}
+
+const getTotalPurchaseListPreferentialValue = (values) => {
+    const {
+        totalPurchaseListRule,
+        totalPurchaseListRulePercent,
+        totalPurchaseListRuleAmount
+    } = values;
+    let preferentialValue = '';
+    switch (totalPurchaseListRule) {
+        case 'PERCENTAGE':
+            preferentialValue = totalPurchaseListRulePercent;
+            break;
+        case 'DISCOUNTAMOUNT':
+            preferentialValue = totalPurchaseListRuleAmount;
+            break;
+        default: break;
+    }
+    return preferentialValue;
+}
+
+const getTotalPurchaseListRule = (state, values) => {
+    const { category, totalPurchaseListRule } = values;
+    const { conditions } = state;
+    const promotionRule = {
+        useConditionRule: true,
+        ruleName: category,
+        totalPurchaseListRule: {
+            conditions,
+            rule: {
+                preferentialWay: totalPurchaseListRule,
+                preferentialValue: getTotalPurchaseListPreferentialValue(values)
+            }
+        }
+    };
+    return Util.removeInvalid(promotionRule);
 }
 
 // 获取基础数据，无分支条件的数据
@@ -271,7 +312,12 @@ const getPurchageWay = (formData, values, state) => {
             break;
         case 'REWARDLIST': // 奖励列表
             Object.assign(formData, {
-                rewardListRule: getRewardListRule(state, values)
+                promotionRule: getRewardListRule(state, values)
+            });
+            break;
+        case 'TOTALPUCHASELIST': // 整个购买列表
+            Object.assign(formData, {
+                promotionRule: getTotalPurchaseListRule(state, values)
             });
             break;
         default: break;
@@ -301,7 +347,9 @@ const forbidden = (state, values) => {
             message.error('请选择品类');
             return true;
         }
-        if (category === 'REWARDLIST' && state.conditions.length === 0) {
+        if (category !== 'PURCHASECONDITION'
+            && state.conditions.length === 0
+        ) {
             message.error('请添加购买条件');
             return true;
         }

@@ -49,7 +49,13 @@ export const overlayOptions = [
         value: 1
     },
     {
-        label: '会员等级',
+        label: '会员等级叠加',
         value: 2
     }
 ];
+
+export const promotionRuleName = {
+    PURCHASECONDITION: '购买条件',
+    REWARDLIST: '奖励列表',
+    TOTALPUCHASELIST: '整个购买列表'
+}
