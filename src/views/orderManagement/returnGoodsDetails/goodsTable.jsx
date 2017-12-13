@@ -3,7 +3,7 @@
  * @Description: 采购管理 - 退货详情 - 列表修改
  * @CreateDate: 2017-12-01 16:03:22
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-12-13 10:46:17
+ * @Last Modified time: 2017-12-13 19:49:25
  */
 
 import React, { PureComponent } from 'react';
@@ -16,14 +16,24 @@ import EditableCell from './editableCell';
 class GoodsTable extends PureComponent {
     onCellChange = productCode => quantity => {
         const { data } = this.props.value;
+        let { inValidList } = this.props.value;
         const { items } = data;
         const index = items.findIndex(item => item.productCode === productCode);
         const goods = items[index];
+        const list = [];
         if (index > -1) {
             Object.assign(goods, {
                 quantity
             });
-            this.noticeChanges(items);
+            items.forEach((element) => {
+                if (element.quantity % element.unitQuantity !== 0) {
+                    list.push(1)
+                } else {
+                    list.slice(0, -1);
+                }
+            });
+            inValidList = list
+            this.noticeChanges(items, goods, inValidList);
         }
     }
 
@@ -32,7 +42,7 @@ class GoodsTable extends PureComponent {
      *
      * @param {*array} items
      */
-    noticeChanges = (items) => {
+    noticeChanges = (items, goods, inValidList) => {
         const total = {
             rows: 0, // 记录行数
             quantities: 0, // 订购数量
@@ -42,7 +52,7 @@ class GoodsTable extends PureComponent {
         // 整理列表，把不合法的数据前置以及计算新的 total
         const returnQuantityList = this.calcTotal(items, total);
         const returnQuantity = this.CollageData();
-        this.props.onChange([...returnQuantityList], [...returnQuantity], total);
+        this.props.onChange([...returnQuantityList], [...returnQuantity], total, inValidList);
     }
 
     /**
@@ -106,15 +116,13 @@ class GoodsTable extends PureComponent {
         let isValid = true;
         this.validateSalesInsideNumber(goods)
         if (goods.unitQuantity === 1) {
-            console.log(11)
             isValid = true;
-        } else if (goods.unitQuantity !== 1) {
+        }
+        if (goods.unitQuantity !== 1) {
             if (goods.isMultiple) {
                 errors.push(`非内装数${goods.unitQuantity}的整数倍`);
                 isValid = false;
             }
-        } else {
-            isValid = true;
         }
         return isValid;
     }
