@@ -92,7 +92,7 @@ class SearchForm extends PureComponent {
                         </FormItem>
                     </Col>
                     <Col span={8}>
-                        <FormItem label="所属公司">
+                        <FormItem label="使用范围">
                             {getFieldDecorator('branchCompany', {
                                 initialValue: { id: '', name: '' }
                             })(<BranchCompany />)}
