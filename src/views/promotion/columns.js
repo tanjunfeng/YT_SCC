@@ -5,16 +5,35 @@
  * 促销活动列表
  */
 import React from 'react';
+import { Input, Form } from 'antd';
 import { promotionStatus, promotionRuleName, preferentialWayStatus } from './constants';
 import Util from '../../util/util';
 
-const readerArea = (text, record) => {
+const FormItem = Form.Item;
+const { TextArea } = Input;
+
+const textArea = (storeIds, form) => {
+    const { getFieldDecorator } = form;
+    return (<FormItem className="store-ids">
+        {getFieldDecorator('storeId', {
+            initialValue: storeIds,
+            rules: [{ required: true, message: '请输入指定门店' }]
+        })(<TextArea
+            placeholder="请输入指定门店"
+            autosize={{ minRows: 4, maxRows: 6 }}
+        />)}
+    </FormItem>);
+}
+
+const readerArea = (text, record, form) => {
     if (record.id) {
         const { stores, companiesPoList } = record;
         if (stores === null && companiesPoList === null) {
             return '全部区域';
         }
-        if (stores && stores.storeId) return stores.storeId;
+        if (stores && stores.storeId) {
+            return textArea(stores.storeId, form);
+        }
         if (companiesPoList && companiesPoList.length > 0) {
             return companiesPoList.map(c => c.companyName).join(', ');
         }
@@ -208,6 +227,10 @@ export const purchageCondition = [{
     title: '优惠种类',
     dataIndex: 'promotionType',
     render: () => '购买条件'
+}, {
+    title: '购买类型',
+    dataIndex: 'purchaseType',
+    render: null
 }, {
     title: '使用区域',
     dataIndex: 'area',
