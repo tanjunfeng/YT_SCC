@@ -105,9 +105,16 @@ class GoodsTable extends PureComponent {
     checkGoodsStatus = (goods, errors) => {
         let isValid = true;
         this.validateSalesInsideNumber(goods)
-        if (goods.isMultiple) {
-            errors.push(`非内装数${goods.unitQuantity}的整数倍`);
-            isValid = false;
+        if (goods.unitQuantity === 1) {
+            console.log(11)
+            isValid = true;
+        } else if (goods.unitQuantity !== 1) {
+            if (goods.isMultiple) {
+                errors.push(`非内装数${goods.unitQuantity}的整数倍`);
+                isValid = false;
+            }
+        } else {
+            isValid = true;
         }
         return isValid;
     }
