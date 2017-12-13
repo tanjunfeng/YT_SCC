@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Row, Col } from 'antd';
 import { clearPromotionDetail, getPromotionDetail } from '../../../actions/promotion';
-import { detail as columns } from '../columns';
+import { noConditions, purchageCondition } from '../columns';
 
 const FormItem = Form.Item;
 
@@ -23,16 +23,27 @@ const FormItem = Form.Item;
 }, dispatch))
 
 class PromotionDetail extends PureComponent {
+    state = {
+        branch: -1
+    }
+
     componentDidMount() {
         const { id } = this.props.match.params;
         this.props.getPromotionDetail({ promotionId: id });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { promotion } = nextProps;
+        if (promotion.promotionRule && !promotion.promotionRule.useConditionRule) {
+            this.setState({ branch: 0 });
+        }
     }
 
     componentWillUnmount() {
         this.props.clearPromotionDetail();
     }
 
-    getDetails = () => columns.map(column => {
+    getNoConditionsDetails = () => noConditions.map(column => {
         const item = this.props.promotion[column.dataIndex];
         return (
             <Row key={column.dataIndex} type="flex" justify="start">
@@ -43,6 +54,13 @@ class PromotionDetail extends PureComponent {
                 </Col>
             </Row>);
     });
+
+    getDetails = () => {
+        switch (this.state.branch) {
+            case 0: return this.getNoConditionsDetails();
+            default: return null;
+        }
+    }
 
     render() {
         return (

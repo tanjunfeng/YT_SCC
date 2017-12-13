@@ -18,19 +18,11 @@
         "isSuperposeUserDiscount": 1,
         "isSuperposeProOrCouDiscount": 1,
         "promoCategoriesPo": null,
-        "companiesPoList": [
-            {
-                "promoId": "HD297",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD297",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            }
-        ],
-        "stores": null,
+        "companiesPoList": null,
+        "stores": {
+            "promoId": "HD298",
+            "storeId": "A000992,A000902,A000993"
+        },
         "promotionRule": {
             "useConditionRule": false,
             "ruleName": null,
