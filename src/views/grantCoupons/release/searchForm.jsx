@@ -18,7 +18,6 @@ class SearchForm extends PureComponent {
     componentWillReceiveProps(nextProps) {
         if (!nextProps.visible && this.props.visible) {
             this.handleReset();
-            this.setState({ branchCompanyId: '' });
         }
     }
 
