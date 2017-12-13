@@ -467,10 +467,11 @@ class PoCreateList extends PureComponent {
      * 1.行状态=new ,物理删除
      * 2.行状态!=new，逻辑删除
      */
-    deletePoLines() {
+    deletePoLines = () => {
         this.props.initPoDetail({
             poLines: []
         })
+        console.log(this.props.po);
     }
 
     /**
@@ -557,6 +558,7 @@ class PoCreateList extends PureComponent {
                         basicInfo={this.props.basicInfo}
                         stateChange={this.stateChange}
                         purchaseOrderTypeChange={this.purchaseOrderTypeChange}
+                        deletePoLines={this.deletePoLines}
                     />
                     <AddingGoods
                         spAdrId={this.state.spAdrId}

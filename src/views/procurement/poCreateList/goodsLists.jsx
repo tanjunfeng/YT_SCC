@@ -1,40 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
-import moment from 'moment';
-import Immutable, { fromJS } from 'immutable';
 import {
-    Table, Form, Select, Icon, Dropdown, Modal, Row, Tooltip,
-    Col, DatePicker, Button, message, Menu, Affix
+    Table, Icon, Dropdown, Menu
 } from 'antd';
 import EditableCell from './EditableCell';
-import Audit from './auditModal';
-import Utils from '../../../util/util';
-import {
-    getMaterialMap,
-    initPoDetail,
-    createPo,
-    ModifyPo,
-    auditPo,
-    queryPoDetail,
-    updatePoBasicinfo,
-    addPoLines,
-    updatePoLine,
-    deletePoLine,
-    fetchNewPmPurchaseOrderItem,
-} from '../../../actions/procurement';
-import { pubFetchValueList } from '../../../actions/pub';
-import { locType, poType, poNo, poStatusCodes, businessModeType } from '../../../constant/procurement';
-import SearchMind from '../../../components/searchMind';
-import { exportProcurementPdf } from '../../../service';
-import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
-import { Supplier } from '../../../container/search';
-
-const FormItem = Form.Item;
-const Option = Select.Option;
-const dateFormat = 'YYYY-MM-DD';
 
 class GoodsLists extends PureComponent {
     constructor(props) {
@@ -189,9 +158,9 @@ class GoodsLists extends PureComponent {
         return (
             <div className="poLines area-list">
                 <Table
-                    dataSource={this.props.poLines.filter((record) => {
-                        return !record.deleteFlg
-                    }
+                    dataSource={this.props.poLines.filter((record) => (
+                        !record.deleteFlg
+                    )
                     )}
                     pagination={false}
                     columns={this.columns}
@@ -205,23 +174,8 @@ class GoodsLists extends PureComponent {
     }
 }
 GoodsLists.propTypes = {
-    match: PropTypes.objectOf(PropTypes.any),
-    newPcOdData: PropTypes.objectOf(PropTypes.any),
     basicInfo: PropTypes.objectOf(PropTypes.any),
-    poLines: PropTypes.objectOf(PropTypes.any),
-    po: PropTypes.objectOf(PropTypes.any),
-    initPoDetail: PropTypes.objectOf(PropTypes.any),
-    form: PropTypes.objectOf(PropTypes.any),
-    data: PropTypes.objectOf(PropTypes.any),
-    pubFetchValueList: PropTypes.func,
-    ModifyPo: PropTypes.func,
-    createPo: PropTypes.func,
-    updatePoLine: PropTypes.func,
-    updatePoBasicinfo: PropTypes.func,
-    fetchNewPmPurchaseOrderItem: PropTypes.func,
-    addPoLines: PropTypes.func,
-    auditPo: PropTypes.func,
-    modifyCauseModalVisible: PropTypes.func,
+    poLines: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
     purchaseOrderType: PropTypes.string,
     applyPriceChange: PropTypes.func,
     applyQuantityChange: PropTypes.func,

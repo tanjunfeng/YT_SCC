@@ -11,7 +11,6 @@ import {
 
 import {
     getMaterialMap,
-    initPoDetail,
     createPo,
     ModifyPo,
     auditPo,
@@ -37,7 +36,6 @@ import { Supplier } from '../../../container/search';
     data: state.toJS().user.data || {}
 }), dispatch => bindActionCreators({
     getMaterialMap,
-    initPoDetail,
     createPo,
     ModifyPo,
     auditPo,
@@ -153,7 +151,7 @@ class BasicInfo extends PureComponent {
      * Supplier供应商组件改变的回调
      * @param {Object} value
      */
-    handleSupplierChange(value) {
+    handleSupplierChange = (value) => {
         const { spId } = value;
         const { basicInfo } = this.props;
         if (spId !== '') {
@@ -164,22 +162,50 @@ class BasicInfo extends PureComponent {
     }
 
     /**
-     * 渲染账期
-     * @param {*} key
+     *   1.清空供应商地点
+     *   2.删除采购商品行
+     *   3.清空账期、付款方式
      */
-    renderPeriod = (key) => {
-        switch (key) {
-            case 0:
-                return '周结';
-            case 1:
-                return '半月结';
-            case 2:
-                return '月结';
-            case 3:
-                return '票到付款';
-            default:
-                return '';
+    clearSupplierAbout = () => {
+        // 1.清空供应商地点，仓库值清单
+        this.supplierLoc.reset();
+        if (this.state.localType === '0') {
+            this.poAddress.reset();
         }
+        // 2.删除所有商品行
+        this.props.deletePoLines();
+        // 3.清空账期、付款方式、付款条件
+        const basicInfo = this.props.basicInfo;
+        basicInfo.settlementPeriod = null;
+        basicInfo.payType = null;
+        basicInfo.payCondition = null;
+    }
+
+    /**
+     * 供应商/供应商地点tooltip组件
+     * @param {string} title 提示的文本
+     */
+    tooltipItem = (title) => (
+        <Tooltip title={title}>
+            <Icon type="question-circle-o" className="detail-tooltip-icon" />
+        </Tooltip>
+    )
+
+    /**
+     * 清空供应商地点事件
+     */
+    applySupplierLocClear() {
+        if (this.state.localType === '0') {
+            this.poAddress.reset();
+        }
+        this.setState({
+            // 账期
+            settlementPeriod: null,
+            // 付款方式
+            payType: null,
+            // 付款条件
+            payCondition: null
+        })
     }
 
     /**
@@ -221,19 +247,25 @@ class BasicInfo extends PureComponent {
     }
 
     /**
-     * 供应商/供应商地点tooltip组件
-     * @param {string} title 提示的文本
+     * 渲染账期
+     * @param {*} key
      */
-    tooltipItem = (title) => (
-        <Tooltip title={title}>
-            <Icon type="question-circle-o" className="detail-tooltip-icon" />
-        </Tooltip>
-    )
+    renderPeriod = (key) => {
+        switch (key) {
+            case 0:
+                return '周结';
+            case 1:
+                return '半月结';
+            case 2:
+                return '月结';
+            case 3:
+                return '票到付款';
+            default:
+                return '';
+        }
+    }
 
     render() {
-        if (Object.keys(this.props.basicInfo).length === 0) {
-            return null
-        }
         const FormItem = Form.Item;
         const Option = Select.Option;
         const dateFormat = 'YYYY-MM-DD';
@@ -274,7 +306,7 @@ class BasicInfo extends PureComponent {
                         <Col span={8}>
                             {/* 采购单号 */}
                             <FormItem label="采购单号">
-                                <span className="text">{this.props.basicInfo.purchaseOrderNo}</span>
+                                <span className="text">{this.state.purchaseOrderNo}</span>
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -307,7 +339,7 @@ class BasicInfo extends PureComponent {
                             {/* 状态 */}
                             <FormItem label="状态">
                                 <span className="text">
-                                    {this.props.basicInfo.poStatusName ? this.props.basicInfo.poStatusName : '制单'}
+                                    {this.state.poStatusName ? this.state.poStatusName : '制单'}
                                 </span>
                             </FormItem>
                         </Col>
@@ -324,7 +356,7 @@ class BasicInfo extends PureComponent {
                                         </span>
                                     </span>
                                     {getFieldDecorator('supplier', {
-                                        initialValue: { spId: basicInfo.spId || '', spNo: basicInfo.spNo || '', companyName: basicInfo.spName || '' }
+                                        initialValue: { spId: this.state.spId || '', spNo: this.state.spNo || '', companyName: this.state.spName || '' }
                                     })(
                                         <Supplier
                                             onChange={this.handleSupplierChange}
@@ -558,7 +590,7 @@ class BasicInfo extends PureComponent {
                             {/* 账期 */}
                             <FormItem label="账期">
                                 <span>
-                                    {this.renderPeriod(this.props.basicInfo.settlementPeriod)}
+                                    {this.renderPeriod(this.state.settlementPeriod)}
                                 </span>
                             </FormItem>
                         </Col>
@@ -566,7 +598,7 @@ class BasicInfo extends PureComponent {
                             {/* 付款方式 */}
                             <FormItem label="付款方式">
                                 <span>
-                                    {this.renderPayType(this.props.basicInfo.payType)}
+                                    {this.renderPayType(this.state.payType)}
                                 </span>
                             </FormItem>
                         </Col>
@@ -594,7 +626,7 @@ class BasicInfo extends PureComponent {
                             {/* 付款条件 */}
                             <FormItem label="付款条件">
                                 <span>
-                                    {this.renderPayCondition(this.props.basicInfo.payCondition)}
+                                    {this.renderPayCondition(this.state.payCondition)}
                                 </span>
                             </FormItem>
                         </Col>
@@ -663,6 +695,7 @@ BasicInfo.propTypes = {
     pubFetchValueList: PropTypes.func,
     updatePoBasicinfo: PropTypes.func,
     stateChange: PropTypes.func,
-    purchaseOrderTypeChange: PropTypes.func
+    purchaseOrderTypeChange: PropTypes.func,
+    deletePoLines: PropTypes.func,
 }
 export default withRouter(Form.create()(BasicInfo));
