@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import {Form, Row, Tooltip, Col, DatePicker, Button, message, Modal, Affix} from 'antd';
+import {Form, Row, Col, Button, message, Modal, Affix} from 'antd';
 import Immutable, { fromJS } from 'immutable';
-import moment from 'moment';
 import Audit from './auditModal';
 import {
     getMaterialMap,
@@ -20,7 +19,7 @@ import {
     deletePoLine,
     fetchNewPmPurchaseOrderItem,
 } from '../../../actions/procurement';
-import { locType, poType, poNo, poStatusCodes, businessModeType } from '../../../constant/procurement';
+import { poStatusCodes} from '../../../constant/procurement';
 import { pubFetchValueList } from '../../../actions/pub';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import BasicInfo from './basicInfo';
@@ -180,6 +179,76 @@ class PoCreateList extends PureComponent {
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * 点击保存/提交
+     * 校验内容：
+     *     1.基本信息是否正确
+     *     2.是否存在采购商品行
+     *     3.采购商品行信息是否正确
+     */
+    getAllValue = (status, isGoBack) => {
+        // 筛选出有效商品行
+        const validPoLines = this.getPoData().poLines.filter((item) =>
+            item.isValid !== 0
+        )
+        // 筛选出无效商品行
+        const invalidPoLines = this.getPoData().poLines.filter((item) =>
+            item.isValid === 0
+        )
+        // 检验基本信息
+        if (!this.validateForm()) {
+            message.error('校验失败，请检查！');
+            return;
+        }
+        // 校验商品行
+        if (this.hasInvalidateMaterial()) {
+            message.error('采购商品校验失败，请检查！');
+            return;
+        }
+        // 合法采购商品
+        const tmpPoLines = this.props.poLines.filter((record) =>
+            (!record.deleteFlg)
+        );
+
+        // 校验是否存在采购商品，无则异常
+        if (tmpPoLines.length === 0) {
+            message.error('请添加采购商品！');
+            return;
+        }
+
+        // 校验是否存在采购数量为空商品
+        if (this.hasEmptyQtyMaterial(tmpPoLines)) {
+            message.error('请输入商品采购数量！');
+            return;
+        }
+
+        // 校验有效商品数量
+        if (validPoLines.length === 0) {
+            message.error('无有效的商品！');
+            return;
+        }
+
+        // 清除无效商品弹框
+        if (invalidPoLines.length !== 0) {
+            const invalidGoodsList = invalidPoLines.map(item =>
+                (<p key={item.prodPurchaseId} >
+                    {item.productName}
+                </p>)
+            );
+            Modal.confirm({
+                title: '是否默认清除以下无效商品？',
+                content: invalidGoodsList,
+                onOk: () => {
+                    this.createPoRequest(validPoLines, status, isGoBack);
+                },
+                onCancel() {
+                },
+            });
+        } else {
+            this.createPoRequest(validPoLines, status, isGoBack);
         }
     }
 
@@ -402,76 +471,6 @@ class PoCreateList extends PureComponent {
         this.props.initPoDetail({
             poLines: []
         })
-    }
-
-    /**
-     * 点击保存/提交
-     * 校验内容：
-     *     1.基本信息是否正确
-     *     2.是否存在采购商品行
-     *     3.采购商品行信息是否正确
-     */
-    getAllValue = (status, isGoBack) => {
-        // 筛选出有效商品行
-        const validPoLines = this.getPoData().poLines.filter((item) =>
-            item.isValid !== 0
-        )
-        // 筛选出无效商品行
-        const invalidPoLines = this.getPoData().poLines.filter((item) =>
-            item.isValid === 0
-        )
-        // 检验基本信息
-        if (!this.validateForm()) {
-            message.error('校验失败，请检查！');
-            return;
-        }
-        // 校验商品行
-        if (this.hasInvalidateMaterial()) {
-            message.error('采购商品校验失败，请检查！');
-            return;
-        }
-        // 合法采购商品
-        const tmpPoLines = this.props.poLines.filter((record) =>
-            (!record.deleteFlg)
-        );
-
-        // 校验是否存在采购商品，无则异常
-        if (tmpPoLines.length === 0) {
-            message.error('请添加采购商品！');
-            return;
-        }
-
-        // 校验是否存在采购数量为空商品
-        if (this.hasEmptyQtyMaterial(tmpPoLines)) {
-            message.error('请输入商品采购数量！');
-            return;
-        }
-
-        // 校验有效商品数量
-        if (validPoLines.length === 0) {
-            message.error('无有效的商品！');
-            return;
-        }
-
-        // 清除无效商品弹框
-        if (invalidPoLines.length !== 0) {
-            const invalidGoodsList = invalidPoLines.map(item =>
-                (<p key={item.prodPurchaseId} >
-                    {item.productName}
-                </p>)
-            );
-            Modal.confirm({
-                title: '是否默认清除以下无效商品？',
-                content: invalidGoodsList,
-                onOk: () => {
-                    this.createPoRequest(validPoLines, status, isGoBack);
-                },
-                onCancel() {
-                },
-            });
-        } else {
-            this.createPoRequest(validPoLines, status, isGoBack);
-        }
     }
 
     /**
