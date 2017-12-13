@@ -77,7 +77,7 @@ class ReturnGoodsList extends PureComponent {
             dataIndex: 'orderId',
             key: 'orderId',
             render: (text, record) => (<a onClick={() => {
-                this.props.history.push(`/orderList/orderDetails/${record.orderId}`);
+                window.open(`/orderList/orderDetails/${record.orderId}`);
             }}
             >{text}</a>
             )
