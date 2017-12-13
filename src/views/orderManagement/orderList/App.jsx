@@ -9,12 +9,12 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
     Form, Input, Button, Row, Col,
     Select, Icon, Table, Menu, Dropdown,
     message, Modal, DatePicker, Checkbox
 } from 'antd';
-import { Link } from 'react-router-dom';
 import moment from 'moment';
 import Utils from '../../../util/util';
 import { BranchCompany, Franchisee } from '../../../container/search';
@@ -315,12 +315,12 @@ class OrderManagementList extends Component {
      * @param {object} record 单行数据
      */
     renderOperation(text, record) {
-        const { id, orderState, shippingState } = record;
+        const { id, orderState, shippingState, paymentState } = record;
         const pathname = window.location.pathname;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
                 <Menu.Item key="detail">
-                    <Link target="_blank" to={`${pathname}/orderDetails/${id}`}>查看订单详情</Link>
+                    <Link target="_blank" to={`${pathname}/orderDetails/${id}/${orderState}`}>查看订单详情</Link>
                 </Menu.Item>
                 {
                     (orderState === 'W'
@@ -344,7 +344,10 @@ class OrderManagementList extends Component {
                     </Menu.Item>
                 }
                 {
-                    (shippingState === 'WJS' || shippingState === 'WCS')
+                    ((orderState === 'A' && paymentState === 'YZF' && shippingState === 'WCS')
+                    || (orderState === 'A' && paymentState === 'YZF' && shippingState === 'WJS')
+                    || (orderState === 'A' && paymentState === 'GSN' && shippingState === 'WCS')
+                    || (orderState === 'A' && paymentState === 'GSN' && shippingState === 'WJS'))
                     && <Menu.Item key="tableRetransfer">
                         <a target="_blank" rel="noopener noreferrer">重新传送</a>
                     </Menu.Item>
@@ -460,10 +463,10 @@ class OrderManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row z-up" span={8}>
-                                    {/* 雅堂小超 */}
+                                <Col className="gutter-row z-up search-style" span={8}>
+                                    {/* 加盟商 */}
                                     <div>
-                                        <span className="sc-form-item-label">雅堂小超</span>
+                                        <span className="sc-form-item-label">加盟商</span>
                                         <FormItem>
                                             {getFieldDecorator('franchisee', {
                                                 initialValue: { franchiseeId: '', franchiseeName: '' }
@@ -471,7 +474,7 @@ class OrderManagementList extends Component {
                                         </FormItem>
                                     </div>
                                 </Col>
-                                <Col className="gutter-row" span={8}>
+                                <Col className="gutter-row search-style" span={8}>
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">子公司</span>
@@ -580,7 +583,21 @@ class OrderManagementList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row check-item" offset={16} span={8}>
+                                <Col className="gutter-row" span={8}>
+                                    {/* 电商订单编号 */}
+                                    <FormItem>
+                                        <div>
+                                            <span className="sc-form-item-label">门店编号</span>
+                                            {getFieldDecorator('franchiseeStoreId')(
+                                                <Input
+                                                    className="input"
+                                                    placeholder="请输入门店编号"
+                                                />
+                                            )}
+                                        </div>
+                                    </FormItem>
+                                </Col>
+                                <Col className="gutter-row check-item" offset={8} span={8}>
                                     {/* 是否包含父订单 */}
                                     <FormItem>
                                         {getFieldDecorator('containParent', {

@@ -56,6 +56,7 @@ class Supplier extends PureComponent {
                     }, 'querySuppliersList')
                 }
                 disabled={this.props.disabled}
+                defaultValue={this.props.initialValue}
                 addonBefore=""
                 onChoosed={this.handleChoose}
                 onClear={this.handleClear}
@@ -83,7 +84,8 @@ Supplier.propTypes = {
     disabled: PropTypes.bool,
     pubFetchValueList: PropTypes.func,
     onChange: PropTypes.func,
-    value: PropTypes.objectOf(PropTypes.any)
+    value: PropTypes.objectOf(PropTypes.any),
+    initialValue: PropTypes.string
 }
 
 export default Supplier;

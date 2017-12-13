@@ -1,4 +1,5 @@
-$promotionAddLabelWidth: 100px;
+$promotionAddLabelWidth: 80px;
+$promotionAddBorderCorder: #d9d9d9;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -22,60 +23,108 @@ $promotionAddLabelWidth: 100px;
 
 .promotion-create {
     padding-top: 60px;
-    margin: 0 62px;
+    margin: 0 auto;
+    width: 1012px;
     form .default {
         width: 78px;
     }
     .category .ant-cascader-picker {
         width: 260px;
     }
+    .wd-297 {
+        width: 297px;
+        float: left;
+    }
+    .wd-317 {
+        width: 317px;
+        float: left;
+    }
+    .wd-396 {
+        width: 396px;
+        float: left;
+    }
+    .tr {
+        text-align: right;
+    }
+    .pr-60 {
+        padding-right: 60px;
+    }
+    ul.list-panel {
+        margin: 12px 0;
+        border: 1px solid $promotionAddBorderCorder;
+        li {
+            line-height: 48px;
+            &:first-child {
+                h2 {
+                    padding: 0 20px;
+                    font-size: 14px;
+                    display: inline-block;
+                }
+                line-height: 34px;
+                border-bottom: 1px solid $promotionAddBorderCorder;
+            }
+        }
+    }
+    .product .ywc-smind {
+        top: 4px;
+        width: 194px;
+    }
+    .ant-form-item-control textarea {
+        margin: 4px 0;
+    }
+    .center {
+        text-align: center;
+    }
     .store {
         margin-left: $promotionAddLabelWidth;
     }
-    .ant-col-16 {
-        word-break: break-all;
-        .ant-form-item-label label {
-            width: $promotionAddLabelWidth;
-            display: inline-block;
-        }
-        &.few-line {
-            .ant-form-item-label {
-                line-height: 48px;
-                label {
-                    top: -10px;
-                }
+    .ant-form-item-label label {
+        width: $promotionAddLabelWidth;
+        display: inline-block;
+    }
+    &.few-line {
+        .ant-form-item-label {
+            line-height: 48px;
+            label {
+                top: -10px;
             }
         }
-        &.multi-line {
-            .ant-form-item-label {
-                line-height: 98px;
-                label {
-                    top: -30px;
-                }
+    }
+    &.multi-line {
+        .ant-form-item-label {
+            line-height: 98px;
+            label {
+                top: -30px;
             }
         }
-        .promotion-date-range .ant-calendar-picker {
-            width: 288px !important;
+    }
+    .promotion-date-range .ant-calendar-picker {
+        width: 288px !important;
+    }
+    span.sub-companies {
+        a {
+            margin-left: 2px;
         }
-        span.sub-companies {
-            a {
-                margin-left: 2px;
-            }
-            margin-left: 10px;
-        }
-        #companies {
-            width: 228px;
-            text-overflow: ellipsis;
-        }
-        .wd-50 {
-            width: 50px;
-        }
-        .wd-60 {
-            width: 60px;
-        }
-        .wd-90 {
-            width: 90px;
-        }
+        margin-left: 10px;
+    }
+    #companies {
+        width: 228px;
+        text-overflow: ellipsis;
+    }
+    .wd-50 {
+        width: 50px;
+    }
+    .wd-60 {
+        width: 60px;
+    }
+    .wd-90 {
+        width: 90px;
+    }
+    .wd-110 {
+        width: 110px;
+    }
+    .ant-cascader-picker {
+        width: 140px;
     }
     .tips .ant-col-16 {
         margin-left: $promotionAddLabelWidth;
@@ -92,7 +141,7 @@ $promotionAddLabelWidth: 100px;
     .promotion-add-license {
         .ant-form-item-label,
         .ant-form-item-label label {
-            width: 100px;
+            width: $promotionAddLabelWidth;
         }
     }
 }

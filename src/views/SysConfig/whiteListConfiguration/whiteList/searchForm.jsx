@@ -72,6 +72,14 @@ class SearchForm extends PureComponent {
         this.props.onExportList(this.getFormData());
     }
 
+    /**
+     * 白名单下载导入模板
+     */
+    handleDownload = () => {
+        // 将查询条件回传给调用页
+        this.props.onExportList(this.getFormData());
+    }
+
     handleReset = () => {
         this.props.form.resetFields(); // 清除当前查询条件
         this.props.onPromotionReset(); // 通知父页面已清空
@@ -115,8 +123,10 @@ class SearchForm extends PureComponent {
     */
     handleUpload = () => {
         const { fileList } = this.state;
-        if (fileList[0].name.indexOf('.xlsx') === -1) {
-            message.error('上传文件格式必须为03版以后的excel（*.xlsx）格式，请清除后重新尝试');
+        const fileName = fileList[0].name;
+        if (fileName.indexOf('.xlsx') === -1 && fileName.indexOf('.xls') === -1 && fileName.indexOf('.xlsm') === -1) {
+            message.error('上传文件格式必须为excel格式，请清除后重新尝试');
+            return
         }
         const formData = new FormData();
         formData.append('file', fileList[0]);
@@ -221,6 +231,9 @@ class SearchForm extends PureComponent {
                                 </FormItem>
                                 <FormItem>
                                     <Button type="primary" size="default" onClick={this.handleExport}>导出备份</Button>
+                                </FormItem>
+                                <FormItem>
+                                    <a onClick={this.handleDownload}>下载导入模板</a>
                                 </FormItem>
                             </Col>
                             <Col span={16} className="search-right">

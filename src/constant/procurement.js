@@ -154,13 +154,6 @@ export const locTypeCodes = {
 }
 
 // 采购单类型值清单
-// , {
-//     key: '1',
-//     value: '赠品采购'
-// }, {
-//     key: '2',
-//     value: '促销采购'
-// }
 export const poType = {
     defaultValue: '',
     data: [{

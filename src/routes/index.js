@@ -676,7 +676,7 @@ const routes = [
                             )}
                         />
                         <Route
-                            path="/orderList/orderDetails/:id"
+                            path="/orderList/orderDetails/:id/:type"
                             render={() => (<Bundle load={OrderManagementDetails}>
                                 {(App) => <App />}</Bundle>)}
                         />
@@ -703,6 +703,13 @@ const routes = [
                         />
                         <Route
                             path="/returnGoodsList/detail/:type/:id"
+                            exact
+                            render={() => (<Bundle load={ReturnGoodsDetails}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
+                        <Route
+                            path="/returnGoodsList/detail/:type/:state/:id"
                             exact
                             render={() => (<Bundle load={ReturnGoodsDetails}>
                                 {(App) => <App />}

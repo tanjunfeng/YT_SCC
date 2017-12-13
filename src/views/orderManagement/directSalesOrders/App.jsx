@@ -147,12 +147,64 @@ class DirectSalesOrders extends PureComponent {
     }
 
     /**
+     * 虚拟商品和实体商品同时下单警告框
+     */
+    couponIdShouldWarning = (isClickIn) => {
+        const text = isClickIn ? '添加商品失败' : '导入失败'
+        Modal.warning({
+            title: text,
+            content: '虚拟商品和实体商品请分开下单',
+        });
+    }
+
+    /**
+     * 判断当前导入商品类型是否和之前的一致
+     * @param {string} couponId 当前导入商品的虚拟商品id
+     * @param {string} couponId 导入商品列表中第一条商品的虚拟商品id
+     */
+    isType = (couponId, firstCouponId) => {
+        if (firstCouponId) {
+            if (couponId) {
+                return true
+            }
+            return false
+        }
+        if (couponId) {
+            return false
+        }
+        return true
+    }
+
+    /**
      * 商品导入回调函数
      *
      * @param {*array} importList 导入成功商品列表
      * @param {*array} deletedGoodsList 导入出错商品列表
      */
     handleGoodsListImport = (importList, deletedGoodsList = []) => {
+        // 判断当前导入商品类型是否和之前的一致
+        const { goodsList } = this.state;
+        for (let i = 0; i < importList.length; i++) {
+            // 如果之前已经有导入的商品
+            if (goodsList.length > 0) {
+                // 当前列表已经存在的商品的第一个商品的虚拟id
+                const goodsListFirstCouponId = goodsList[0].couponId;
+                const isSameTypeGoodsList = this.isType(
+                    importList[i].couponId, goodsListFirstCouponId);
+                if (!isSameTypeGoodsList) {
+                    this.couponIdShouldWarning()
+                    return
+                }
+            }
+            // 导入商品的第一个商品的虚拟id
+            const importListFirstCouponId = importList[0].couponId;
+            const isSameTypeImportList = this.isType(importList[i].couponId,
+                importListFirstCouponId);
+            if (!isSameTypeImportList) {
+                this.couponIdShouldWarning()
+                return
+            }
+        }
         if (deletedGoodsList.length > 0) {
             const msg = deletedGoodsList.map(goods => (`${goods.productName} - ${goods.productCode}`)).join(',');
             // 存在导入出错商品时，显示弹窗
@@ -269,12 +321,22 @@ class DirectSalesOrders extends PureComponent {
 
     updateGoods = (goods, callback) => {
         const { productCode, quantity } = goods;
-        const { branchCompanyId, deliveryWarehouseCode } = this.state;
+        const { branchCompanyId, deliveryWarehouseCode, goodsList } = this.state;
         this.setState({ loading: true });
         // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/directStore/updateItem
         this.props.updateGoodsInfo({
             productCode, quantity, branchCompanyId, deliveryWarehouseCode
         }).then(res => {
+            // 判断当前导入商品类型是否和之前的一致
+            if (goodsList.length > 0) {
+                const couponId = res.data.couponId
+                const firstCouponId = goodsList[0].couponId;
+                const isSameTypeGoodsList = this.isType(couponId, firstCouponId)
+                if (!isSameTypeGoodsList) {
+                    this.couponIdShouldWarning(true)
+                    return
+                }
+            }
             if (typeof callback === 'function') {
                 callback(Object.assign(goods, {
                     enough: res.data.enough,
