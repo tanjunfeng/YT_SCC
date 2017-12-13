@@ -1,4 +1,5 @@
 $promotionAddLabelWidth: 80px;
+$promotionAddBorderCorder: #d9d9d9;
 .ant-table-pagination {
     margin-right: 15px;
 }
@@ -23,12 +24,46 @@ $promotionAddLabelWidth: 80px;
 .promotion-create {
     padding-top: 60px;
     margin: 0 auto;
-    width: 1010px;
+    width: 1012px;
     form .default {
         width: 78px;
     }
     .category .ant-cascader-picker {
         width: 260px;
+    }
+    .wd-297 {
+        width: 297px;
+        float: left;
+    }
+    .wd-317 {
+        width: 317px;
+        float: left;
+    }
+    .wd-396 {
+        width: 396px;
+        float: left;
+    }
+    .tr {
+        text-align: right;
+    }
+    .pr-60 {
+        padding-right: 60px;
+    }
+    ul.list-panel {
+        margin: 12px 0;
+        border: 1px solid $promotionAddBorderCorder;
+        li {
+            line-height: 48px;
+            &:first-child {
+                h2 {
+                    padding: 0 20px;
+                    font-size: 14px;
+                    display: inline-block;
+                }
+                line-height: 34px;
+                border-bottom: 1px solid $promotionAddBorderCorder;
+            }
+        }
     }
     .product .ywc-smind {
         top: 4px;

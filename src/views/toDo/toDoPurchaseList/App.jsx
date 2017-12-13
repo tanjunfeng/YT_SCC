@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-08 15:30:57
+ * @Last Modified time: 2017-12-12 13:44:46
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -99,7 +99,10 @@ class toDoPurchaseList extends PureComponent {
             refundAdr: '',
             spNo: '', // 供应商编码
             spAdrNo: '', // 供应商地点编码
-            status: 0 // 流程状态，默认进行中
+            status: 0, // 流程状态，默认进行中
+            spName: null, // 供应商名
+            spAdrName: null, // 供应商地点名
+            adrTypeName: null, // 地点
         };
         // 初始页号
         this.current = 1;
@@ -293,13 +296,6 @@ class toDoPurchaseList extends PureComponent {
     }
 
     /**
-     * 获取供应商地点编号
-     */
-    handleSupplierAddressChoose = ({ record }) => {
-        this.setState({ spAdrNo: record.providerNo });
-    }
-
-    /**
      * 清空供应商地点编号
      */
     handleSupplierAddressClear = () => {
@@ -342,17 +338,20 @@ class toDoPurchaseList extends PureComponent {
     }
 
     /**
-     * 获取供应商地点编号
+     * 获取供应商地点
      */
     handleSupplierAddressChoose = ({ record }) => {
-        this.setState({ spAdrId: record.spId });
+        this.setState({ spAdrName: record.providerName });
     }
 
     /**
      * 清空供应商地点编号
      */
     handleSupplierAddressClear = () => {
-        this.setState({ spAdrId: '' });
+        this.setState({
+            spAdrId: '',
+            spAdrName: ''
+        });
         this.joiningAdressMind.reset();
     }
 
@@ -360,7 +359,10 @@ class toDoPurchaseList extends PureComponent {
     handleAddressChoose = ({ record }) => {
         const encoded = record.code;
         this.adressTypeCode = encoded;
-        this.setState({ refundAdr: record.warehouseCode });
+        this.setState({
+            refundAdr: record.warehouseCode,
+            adrTypeName: record.warehouseName
+        });
     }
 
     // 清除地点值
@@ -369,7 +371,8 @@ class toDoPurchaseList extends PureComponent {
         this.adressTypeCode = '';
         this.setState({
             locDisabled: true,
-            refundAdr: ''
+            refundAdr: '',
+            adrTypeName: ''
         })
     }
 
@@ -377,7 +380,8 @@ class toDoPurchaseList extends PureComponent {
      * Supplier供应商组件改变的回调
      * @param {object} record 改变后值
      */
-    handleSupplierChange = () => {
+    handleSupplierChange = (record) => {
+        this.setState({spName: record.companyName})
         this.handleSupplierAddressClear();
     }
 
@@ -487,30 +491,28 @@ class toDoPurchaseList extends PureComponent {
             purchaseRefundNo,
             purchaseOrderNo,
             approvalStatus,
-            purchaseOrderType,
-            status,
+        } = this.props.form.getFieldsValue();
+        let {
             adrType,
-            supplier
+            purchaseOrderType,
         } = this.props.form.getFieldsValue();
         // 供应商编号
-        const spId = supplier.spId;
-
+        const spName = this.state.spName;
         // 供应商地点编号
-        const spAdrId = this.state.spAdrId;
-
+        const spAdrName = this.state.spAdrName;
         // 地点
-        const adrTypeCode = this.state.refundAdr;
-
+        const adrTypeName = this.state.adrTypeName;
+        adrType = parseInt(adrType, 10);
+        purchaseOrderType = parseInt(purchaseOrderType, 10)
         const searchParams = {
-            purchaseRefundNo,
+            purchaseNo: purchaseRefundNo,
             purchaseOrderNo,
             approvalStatus,
-            purchaseOrderType,
-            status,
+            purchaseType: purchaseOrderType,
             adrType,
-            spId,
-            spAdrId,
-            adrTypeCode
+            spName,
+            spAdrName,
+            adrTypeName
         };
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
@@ -566,6 +568,21 @@ class toDoPurchaseList extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
+                                {/* 采购单类型 */}
+                                <FormItem label="采购单类型">
+                                    {getFieldDecorator('purchaseOrderType', {initialValue: poType.defaultValue })(
+                                        <Select style={{ width: '153px' }} size="default">
+                                            {
+                                                poType.data.map((item) => (
+                                                    <Option key={item.key} value={item.key}>
+                                                        {item.value}
+                                                    </Option>))
+                                            }
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
                                 {/* 流程状态 */}
                                 <FormItem label="流程状态">
                                     {getFieldDecorator('auditStatus', { initialValue: '进行中' })(
@@ -617,6 +634,7 @@ class toDoPurchaseList extends PureComponent {
                                                     }
                                                     return res;
                                                 })}
+                                            rowKey="providerNo"
                                             onChoosed={this.handleSupplierAddressChoose}
                                             onClear={this.handleSupplierAddressClear}
                                             renderChoosedInputRaw={(res) => (
