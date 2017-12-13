@@ -49,7 +49,7 @@ export const overlayOptions = [
         value: 1
     },
     {
-        label: '会员等级',
+        label: '会员等级叠加',
         value: 2
     }
 ];

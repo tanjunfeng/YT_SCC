@@ -42,7 +42,7 @@ class PromotionDetail extends PureComponent {
         return columns.map(column => {
             const item = this.props.promotion[column.dataIndex];
             return (
-                <Row key={column.key} type="flex" justify="start">
+                <Row key={column.dataIndex} type="flex" justify="start">
                     <Col span={16}>
                         <FormItem label={column.title} >
                             {column.render ? column.render(item) : item}

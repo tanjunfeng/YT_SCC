@@ -28,7 +28,7 @@ const managementList = [{
     title: '使用区域',
     dataIndex: 'companiesPoList',
     render: list => {
-        if (list.length === 0) {
+        if (!list || list.length === 0) {
             return '全部区域';
         }
         const areas = list.map(company => company.companyName).join(',');
@@ -116,40 +116,41 @@ const detail = [{
     dataIndex: 'promotionRule.useConditionRule',
     render: rule => (rule ? '指定条件' : '不限制')
 }, {
+    title: '优惠方式',
+    dataIndex: 'promotionRule.ruleName',
+    render: rule => promotionRuleName[rule]
+}, {
     title: '使用区域',
     dataIndex: 'companiesPoList',
     render: list => {
-        if (list.length === 0) {
+        if (!list || list.length === 0) {
             return '全部区域';
         }
         return list.map(company => company.companyName).join(',');
-    }
-}, {
-    title: '使用品类',
-    dataIndex: 'promoCategoriesPo',
-    render: category => {
-        if (!category) {
-            return '全部品类';
-        }
-        return category.categoryName
     }
 }, {
     title: '指定门店',
     dataIndex: 'stores',
     render: stores => {
         if (!stores) {
-            return '未指定';
+            return '未指定门店';
         }
         return stores.storeId;
     }
 }, {
-    title: '与优惠劵叠加',
-    dataIndex: 'isSuperposeProOrCouDiscount',
-    render: note => (note === 1 ? '是' : '否')
+    title: '活动叠加',
+    dataIndex: 'overlay'
 }, {
-    title: '与会员等级叠加',
-    dataIndex: 'isSuperposeUserDiscount',
-    render: note => (note === 1 ? '是' : '否')
+    title: '活动优先级',
+    dataIndex: 'priority'
+}, {
+    title: '简易描述',
+    dataIndex: 'simpleDescription',
+    render: text => text || '无'
+}, {
+    title: '详细描述',
+    dataIndex: 'detailDescription',
+    render: text => text || '无'
 }, {
     title: '备注',
     dataIndex: 'note',
