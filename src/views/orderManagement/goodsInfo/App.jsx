@@ -31,7 +31,7 @@ class GoodsInfo extends PureComponent {
             dataIndex: 'productImg',
             key: 'productImg',
             render: (text, record) => {
-                if (record.abnormalGoods && this.props.match.params.type === 'M') {
+                if (record.abnormalGoods) {
                     message = '毛利异常';
                     className = 'abnormalResonse';
                 } else {
