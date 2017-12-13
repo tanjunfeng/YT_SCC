@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-06 09:56:10
+ * @Last Modified time: 2017-12-13 15:57:24
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -12,29 +12,10 @@ import {
     Modal,
     Table
 } from 'antd';
-import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
 import moment from 'moment';
-import {
-    getWarehouseAddressMap,
-    getShopAddressMap,
-    getSupplierMap,
-    getSupplierLocMap,
-    fetchReturnMngList,
-} from '../../../actions';
 
 const dateFormat = 'YYYY-MM-DD';
-
-@connect(state => ({
-    approvalInfoList: state.toJS().procurement.approvalInfoList
-}), dispatch => bindActionCreators({
-    getWarehouseAddressMap,
-    getShopAddressMap,
-    getSupplierMap,
-    getSupplierLocMap,
-    fetchReturnMngList,
-}, dispatch))
 
 class ApproModal extends PureComponent {
     constructor(props) {
@@ -53,12 +34,12 @@ class ApproModal extends PureComponent {
         this.columns = [
             {
                 title: '审批人',
-                dataIndex: 'auditUser',
-                key: 'auditUser'
+                dataIndex: 'handler',
+                key: 'handler'
             }, {
                 title: '审批时间',
-                dataIndex: 'auditTime',
-                key: 'auditTime',
+                dataIndex: 'handlerDate',
+                key: 'handlerDate',
                 render: text => {
                     let res = text;
                     if (!text) {
@@ -70,22 +51,22 @@ class ApproModal extends PureComponent {
                 }
             }, {
                 title: '审批结果',
-                dataIndex: 'auditResult',
-                key: 'auditResult',
-                render: (text) => {
-                    switch (text) {
-                        case 0:
-                            return '拒绝';
-                        case 1:
-                            return '通过';
-                        default:
-                            return '';
-                    }
-                }
+                dataIndex: 'pass',
+                key: 'pass',
+                render: text => (
+                    text ? '通过' : '拒绝'
+                )
             }, {
                 title: '审批意见',
                 dataIndex: 'auditOpinion',
-                key: 'auditOpinion'
+                key: 'auditOpinion',
+                render: text => {
+                    let res = text;
+                    if (text === null || undefined === text || text === '') {
+                        res = '-';
+                    }
+                    return res;
+                }
             }
         ]
     }
@@ -105,7 +86,7 @@ class ApproModal extends PureComponent {
     }
 
     render() {
-        const { approvalInfoList } = this.props;
+        const { approvalList } = this.props;
         return (
             <Modal
                 title="审批意见"
@@ -115,7 +96,7 @@ class ApproModal extends PureComponent {
                 width={1200}
             >
                 <Table
-                    dataSource={approvalInfoList}
+                    dataSource={approvalList}
                     columns={this.columns}
                     rowKey="id"
                     scroll={{
@@ -131,7 +112,7 @@ ApproModal.propTypes = {
     visible: PropTypes.bool,
     onOk: PropTypes.func,
     onCancel: PropTypes.func,
-    approvalInfoList: PropTypes.objectOf(PropTypes.any),
+    approvalList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 };
 
 export default withRouter(Form.create()(ApproModal));

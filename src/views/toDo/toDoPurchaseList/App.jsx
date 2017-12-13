@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-13 13:55:38
+ * @Last Modified time: 2017-12-13 15:51:20
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -64,7 +64,8 @@ const confirm = Modal.confirm;
 
 @connect(state => ({
     processMsgInfo: state.toJS().procurement.processMsgInfo,
-    highChartData: state.toJS().process.highChartData
+    highChartData: state.toJS().process.highChartData,
+    approvalList: state.toJS().procurement.approvalList,
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -465,7 +466,7 @@ class toDoPurchaseList extends PureComponent {
                 break;
             case 'viewApproval':
                 this.showModal();
-                this.props.queryCommentHis({tackId: record.taskId})
+                this.props.queryCommentHis({taskId: record.taskId})
                 break;
             default:
                 break;
@@ -747,6 +748,7 @@ class toDoPurchaseList extends PureComponent {
                             visible={this.state.isVisibleModal}
                             onOk={this.handleModalOk}
                             onCancel={this.handleModalCancel}
+                            approvalList={this.props.approvalList}
                         />
                         <ApproComment
                             visible={this.state.opinionvisible}
@@ -767,6 +769,7 @@ toDoPurchaseList.propTypes = {
     queryProcessMsgInfo: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     processMsgInfo: PropTypes.objectOf(PropTypes.any),
+    approvalList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
     pubFetchValueList: PropTypes.func,
     queryCommentHis: PropTypes.func,
     queryPoDetail: PropTypes.func,
