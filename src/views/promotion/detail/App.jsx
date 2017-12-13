@@ -11,7 +11,10 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Row, Col, Button } from 'antd';
 import { clearPromotionDetail, getPromotionDetail } from '../../../actions/promotion';
-import { noConditions, purchageCondition, rewardListCondition } from '../columns';
+import {
+    noConditions, purchageCondition,
+    rewardListCondition, totalPurchaseCondition
+} from '../columns';
 
 const FormItem = Form.Item;
 
@@ -50,6 +53,9 @@ class PromotionDetail extends PureComponent {
                     case 'REWARDLIST': // 奖励条件
                         this.columns = rewardListCondition;
                         break;
+                    case 'TOTALPUCHASELIST': // 整个购买列表
+                        this.columns = totalPurchaseCondition;
+                        break;
                     default: break;
                 }
             }
@@ -66,10 +72,19 @@ class PromotionDetail extends PureComponent {
         return (
             <Row key={column.dataIndex} type="flex" justify="start">
                 <Col span={16}>
-                    <FormItem label={column.title} >
-                        {column.render ? column.render(
-                            item, promotion, form) : item}
-                    </FormItem>
+                    {column.render ?
+                        <FormItem
+                            label={column.title}
+                        // dangerouslySetInnerHTML={{
+                        //     __html: column.render(
+                        //         item, promotion, form)
+                        // }}
+                        >
+                            {column.render(item, promotion, form)}
+                        </FormItem>
+                        :
+                        <FormItem label={column.title}>{item}</FormItem>
+                    }
                 </Col>
             </Row>);
     });

@@ -52,7 +52,7 @@ const getTextByCondition = (condition) => {
             info += `${condition.promoCategories.categoryName}；`;
             break;
         case 'PRODUCT':
-            info += `${condition.condition.promoProduct.productName}；`;
+            info += `${condition.promoProduct.productName}；`;
             break;
         default: break;
     }
@@ -269,7 +269,7 @@ export const rewardListCondition = [...basicDetailBefore, {
     render: (text, record) => {
         if (record.id) {
             const { conditions } = record.promotionRule.rewardListRule;
-            return conditions.map(c => getTextByCondition(c));
+            return conditions.map(c => (`${getTextByCondition(c)}`));
         }
         return null;
     }
@@ -282,6 +282,33 @@ export const rewardListCondition = [...basicDetailBefore, {
             let info = getTextByCondition(condition);
             info += getPreferentialBuyRule(rule);
             return info;
+        }
+        return null;
+    }
+}, ...basicDetailAfter];
+
+/**
+ * 整个购买列表
+ */
+export const totalPurchaseCondition = [...basicDetailBefore, {
+    title: '优惠种类',
+    dataIndex: 'promotionType',
+    render: (text, record) => {
+        if (record.id) {
+            let info = '整个购买列表；';
+            const { rule } = record.promotionRule.totalPurchaseListRule;
+            info += getPreferentialBuyRule(rule);
+            return info;
+        }
+        return null;
+    }
+}, {
+    title: '购买条件',
+    dataIndex: 'purchaseCondition',
+    render: (text, record) => {
+        if (record.id) {
+            const { conditions } = record.promotionRule.totalPurchaseListRule;
+            return conditions.map(c => (`${getTextByCondition(c)}`));
         }
         return null;
     }
