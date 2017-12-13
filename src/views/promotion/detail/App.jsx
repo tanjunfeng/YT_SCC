@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Row, Col, Button } from 'antd';
 import { clearPromotionDetail, getPromotionDetail } from '../../../actions/promotion';
-import { noConditions, purchageCondition } from '../columns';
+import { noConditions, purchageCondition, rewardListCondition } from '../columns';
 
 const FormItem = Form.Item;
 
@@ -46,6 +46,9 @@ class PromotionDetail extends PureComponent {
                 switch (promotion.promotionRule.ruleName) {
                     case 'PURCHASECONDITION': // 购买条件
                         this.columns = purchageCondition;
+                        break;
+                    case 'REWARDLIST': // 奖励条件
+                        this.columns = rewardListCondition;
                         break;
                     default: break;
                 }
