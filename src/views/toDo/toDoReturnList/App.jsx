@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-14 14:27:32
+ * @Last Modified time: 2017-12-14 14:57:32
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -50,7 +50,7 @@ import {
     getSupplierMap,
     getSupplierLocMap
 } from '../../../actions';
-import ApproModal from './approModal';
+import ApproModal from '../../../components/approModal'
 import FlowImage from '../../../components/flowImage';
 import {auditInfo} from '../../../service';
 
