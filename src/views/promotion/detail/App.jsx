@@ -11,9 +11,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Form, Row, Col, Button, Input } from 'antd';
 import { clearPromotionDetail, getPromotionDetail } from '../../../actions/promotion';
-import {
-    basicDetailBefore, basicDetailAfter
-} from '../columns';
+import { basicDetailBefore, basicDetailAfter } from '../columns';
+import { promotionRuleStatus } from '../constants';
 import { getPreferentialBuyRule } from './domHelper';
 
 const FormItem = Form.Item;
@@ -32,6 +31,10 @@ class PromotionDetail extends PureComponent {
         area: '', // 使用区域显示：全部区域；所选区域；指定门店
         storesVisible: false, // 门店编辑框是否可见
         submitVisible: false // 保存按钮是否可见
+    }
+
+    componentWillMount() {
+        this.props.clearPromotionDetail();
     }
 
     componentDidMount() {
@@ -120,6 +123,7 @@ class PromotionDetail extends PureComponent {
                         <div className="add-message promotion-add-license">
                             <div className="add-message-body">
                                 {this.getRowFromFields(basicDetailBefore)}
+                                {/* 不指定条件 */}
                                 {branch === 'NOCONDITIONS' ?
                                     <Row type="flex" justify="start">
                                         <Col span={16}>
@@ -128,6 +132,25 @@ class PromotionDetail extends PureComponent {
                                             </FormItem>
                                         </Col>
                                     </Row> : null
+                                }
+                                {/* 购买类型 */}
+                                {branch === 'PURCHASECONDITION' ?
+                                    <div>
+                                        <Row type="flex" justify="start">
+                                            <Col span={16}>
+                                                <FormItem label="优惠种类">
+                                                    {promotionRuleStatus[promotionRule.ruleName]}
+                                                </FormItem>
+                                            </Col>
+                                        </Row>
+                                        <Row type="flex" justify="start">
+                                            <Col span={16}>
+                                                <FormItem label="优惠方式">
+                                                    {getPreferentialBuyRule(promotionRule.purchaseConditionsRule.rule)}
+                                                </FormItem>
+                                            </Col>
+                                        </Row>
+                                    </div> : null
                                 }
                                 <Row key="area" type="flex" justify="start">
                                     <Col span={16}>

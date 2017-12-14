@@ -6,7 +6,7 @@
  */
 import React from 'react';
 import {
-    promotionStatus, promotionRuleName, preferentialWayStatus,
+    promotionStatus, promotionRuleStatus, preferentialWayStatus,
     purchageTypeStatus, conditionTypeStatus
 } from './constants';
 import Util from '../../util/util';
@@ -57,7 +57,7 @@ export const managementList = [{
     title: '优惠方式',
     dataIndex: 'promotionRule.ruleName',
     key: 'promotionRule.ruleName',
-    render: ruleName => promotionRuleName[ruleName]
+    render: ruleName => promotionRuleStatus[ruleName]
 }, {
     title: '使用区域',
     dataIndex: 'companiesPoList',
