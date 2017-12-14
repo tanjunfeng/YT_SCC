@@ -1,12 +1,12 @@
 {
-    "timestamp": 1512541918128,
+    "timestamp": 1512542097235,
     "code": 200,
     "message": "请求成功",
     "data": {
-        "id": "HD298",
+        "id": "HD300",
         "status": "unreleased",
         "promotionType": "order_promo",
-        "promotionName": "春节大卖",
+        "promotionName": "圣诞节大促",
         "promotionDiscription": null,
         "startDate": 1504499995000,
         "endDate": 1505581202000,
@@ -20,33 +20,61 @@
         "promoCategoriesPo": null,
         "companiesPoList": [],
         "stores": {
-            "promoId": "HD298",
+            "promoId": "HD300",
             "storeId": "A000992,A000902,A000993"
         },
         "promotionRule": {
             "useConditionRule": true,
-            "ruleName": "PURCHASECONDITION",
+            "ruleName": "REWARDLIST",
             "orderRule": null,
-            "purchaseConditionsRule": {
-                "condition": {
-                    "key":"1505502000",
-                    "purchaseType": "CATEGORY",
-                    "promoCategories": {
-                        "promoId": null,
-                        "categoryId": "xxx8",
-                        "categoryName": "酒水",
-                        "categoryLevel": 3
+            "purchaseConditionsRule": null,
+            "rewardListRule": {
+                "conditions": [
+                    {
+                        "key":"1505000",
+                        "purchaseType": "CATEGORY",
+                        "promoCategories": {
+                            "promoId": null,
+                            "categoryId": "xx99",
+                            "categoryName": "日 化",
+                            "categoryLevel": 2
+                        },
+                        "promoProduct": null,
+                        "conditionType": "AMOUNT",
+                        "conditionValue": 50
                     },
-                    "promoProduct": null,
-                    "conditionType": "QUANTITY",
-                    "conditionValue": 50
-                },
-                "rule": {
-                    "preferentialWay": "PERCENTAGE",
-                    "preferentialValue": 0.95
+                    {
+                        "key":"15464564500",
+                        "purchaseType": "PRODUCT",
+                        "promoCategories": null,
+                        "promoProduct": {
+                            "productId": "3",
+                            "productName": "可乐"
+                        },
+                        "conditionType": "QUANTITY",
+                        "conditionValue": 100
+                    }
+                ],
+                "purchaseConditionsRule": {
+                    "condition": {
+                        "key":"15345345000",
+                        "purchaseType": "CATEGORY",
+                        "promoCategories": {
+                            "promoId": null,
+                            "categoryId": "xj29",
+                            "categoryName": "生鲜",
+                            "categoryLevel": 2
+                        },
+                        "promoProduct": null,
+                        "conditionType": "AMOUNT",
+                        "conditionValue": 10
+                    },
+                    "rule": {
+                        "preferentialWay": "PERCENTAGE",
+                        "preferentialValue": 0.95
+                    }
                 }
             },
-            "rewardListRule": null,
             "totalPurchaseListRule": null
         },
         "priority": 1,

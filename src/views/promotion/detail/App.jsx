@@ -12,7 +12,9 @@ import { withRouter } from 'react-router';
 import { Form, Row, Col, Button, Input } from 'antd';
 import { clearPromotionDetail, getPromotionDetail } from '../../../actions/promotion';
 import { basicDetailBefore, basicDetailAfter } from '../columns';
-import { getRowFromFields, getNoConditions, getPurchaseCondition } from './domHelper';
+import {
+    getRowFromFields, getNoConditions, getPurchaseCondition, getRewardList
+} from './domHelper';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -100,9 +102,11 @@ class PromotionDetail extends PureComponent {
                 {branch === 'NOCONDITIONS' ?
                     getNoConditions(promotionRule) : null
                 }
-                {/* 购买类型 */}
                 {branch === 'PURCHASECONDITION' ?
                     getPurchaseCondition(promotionRule) : null
+                }
+                {branch === 'REWARDLIST' ?
+                    getRewardList(promotionRule) : null
                 }
                 <Row key="area" type="flex" justify="start">
                     <Col span={16}>

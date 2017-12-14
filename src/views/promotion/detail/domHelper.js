@@ -7,7 +7,7 @@ import {
 
 const FormItem = Form.Item;
 
-const getPreferentialBuyRule = (rule) => {
+const getPreferentialBuyRule = rule => {
     const { preferentialWay, preferentialValue } = rule;
     let value = preferentialValue;
     if (preferentialWay === 'DISCOUNTAMOUNT' || preferentialWay === 'FIXEDPRICE') {
@@ -21,7 +21,7 @@ const getPreferentialBuyRule = (rule) => {
  *
  * @param {*object} condition
  */
-const getPurchaseType = (condition) => {
+const getPurchaseType = condition => {
     const { purchaseType, promoCategories, promoProduct } = condition;
     let info = `${purchageTypeStatus[purchaseType]} `;
     // 购买类型
@@ -42,7 +42,7 @@ const getPurchaseType = (condition) => {
  *
  * @param {*object} condition
  */
-const getConditionType = (condition) => {
+const getConditionType = condition => {
     const { conditionType, conditionValue } = condition;
     let info = `${conditionTypeStatus[conditionType]} `;
     // 条件类型
@@ -51,12 +51,77 @@ const getConditionType = (condition) => {
             info += `${conditionValue}`;
             break;
         case 'AMOUNT':
-            info += `${conditionValue}元`;
+            info += `￥${conditionValue}元`;
             break;
         default: break;
     }
     return info;
 }
+
+/**
+ * 购买条件列表
+ *
+ * promotionRule.rewardListRule.conditions
+ */
+const getPurchaseConditionList = conditions =>
+    (<ul className="list-panel">
+        <li><h2>购买条件</h2></li>
+        {conditions.map(condition => (
+            <li key={condition.key}>
+                <Row>
+                    <div className="wd-396">
+                        <Col span={16}>
+                            <FormItem label="购买类型">
+                                {getPurchaseType(condition)}
+                            </FormItem>
+                        </Col>
+                    </div>
+                    <div className="wd-317">
+                        <Col span={16}>
+                            <FormItem label="条件类型">
+                                {getConditionType(condition)}
+                            </FormItem>
+                        </Col>
+                    </div>
+                </Row>
+            </li>
+        ))}
+    </ul>)
+
+/**
+ * 奖励列表
+ *
+ * promotionRule.rewardListRule.purchaseConditionsRule
+ */
+const getRewardListConditionList = (purchaseConditionsRule) =>
+    (<ul className="list-panel">
+        <li><h2>奖励列表</h2></li>
+        <li>
+            <Row>
+                <div className="wd-396">
+                    <Col span={16}>
+                        <FormItem label="购买类型">
+                            {getPurchaseType(purchaseConditionsRule.condition)}
+                        </FormItem>
+                    </Col>
+                </div>
+                <div className="wd-317">
+                    <Col span={16}>
+                        <FormItem label="条件类型">
+                            {getConditionType(purchaseConditionsRule.condition)}
+                        </FormItem>
+                    </Col>
+                </div>
+                <div className="wd-297">
+                    <Col span={16}>
+                        <FormItem label="优惠方式">
+                            {getPreferentialBuyRule(purchaseConditionsRule.rule)}
+                        </FormItem>
+                    </Col>
+                </div>
+            </Row>
+        </li>
+    </ul>)
 
 /**
  * 获得基础数据行
@@ -85,7 +150,7 @@ export const getRowFromFields = (promotion, columns) => columns.map(column => {
 /**
  * 不指定条件
  */
-export const getNoConditions = (promotionRule) =>
+export const getNoConditions = promotionRule =>
     (<Row type="flex" justify="start">
         <Col span={16}>
             <FormItem label="优惠方式">
@@ -135,4 +200,21 @@ export const getPurchaseCondition = promotionRule =>
                 </Col>
             </div>
         </Row>
+    </div>)
+
+export const getRewardList = (promotionRule) =>
+    (<div>
+        <Row type="flex" justify="start">
+            <Col span={16}>
+                <FormItem label="优惠种类">
+                    {promotionRuleStatus[promotionRule.ruleName]}
+                </FormItem>
+            </Col>
+        </Row>
+        {getPurchaseConditionList(
+            promotionRule.rewardListRule.conditions
+        )}
+        {getRewardListConditionList(
+            promotionRule.rewardListRule.purchaseConditionsRule
+        )}
     </div>)
