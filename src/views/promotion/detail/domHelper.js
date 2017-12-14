@@ -2,29 +2,49 @@ import { preferentialWayStatus, purchageTypeStatus, conditionTypeStatus } from '
 
 export const getPreferentialBuyRule = (rule) => {
     const { preferentialWay, preferentialValue } = rule;
-    return `优惠方式：${preferentialWayStatus[preferentialWay]}，${preferentialValue}；`;
+    let value = preferentialValue;
+    if (preferentialWay === 'DISCOUNTAMOUNT' || preferentialWay === 'FIXEDPRICE') {
+        value = `￥${preferentialValue}元`;
+    }
+    return `${preferentialWayStatus[preferentialWay]} ${value}`;
 }
 
-export const getTextByCondition = (condition) => {
-    let info = `购买类型：${purchageTypeStatus[condition.purchaseType]}，`;
+/**
+ * 获取购买类型
+ *
+ * @param {*object} condition
+ */
+export const getPurchaseType = (condition) => {
+    const { purchaseType, promoCategories, promoProduct } = condition;
+    let info = `${purchageTypeStatus[purchaseType]} `;
     // 购买类型
-    switch (condition.purchaseType) {
+    switch (purchaseType) {
         case 'CATEGORY':
-            info += `${condition.promoCategories.categoryName}；`;
+            info += `${promoCategories.categoryName}`;
             break;
         case 'PRODUCT':
-            info += `${condition.promoProduct.productName}；`;
+            info += `${promoProduct.productName}`;
             break;
         default: break;
     }
-    info += `条件类型：${conditionTypeStatus[condition.conditionType]}，`;
+    return info;
+}
+
+/**
+ * 获取条件类型
+ *
+ * @param {*object} condition
+ */
+export const getConditionType = (condition) => {
+    const { conditionType, conditionValue } = condition;
+    let info = `${conditionTypeStatus[conditionType]} `;
     // 条件类型
-    switch (condition.conditionType) {
+    switch (conditionType) {
         case 'QUANTITY':
-            info += `${condition.conditionValue}；`;
+            info += `${conditionValue}`;
             break;
         case 'AMOUNT':
-            info += `${condition.conditionValue}元；`;
+            info += `${conditionValue}元`;
             break;
         default: break;
     }

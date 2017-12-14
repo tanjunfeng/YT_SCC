@@ -12,10 +12,9 @@ import { withRouter } from 'react-router';
 import { Form, Row, Col, Button, Input } from 'antd';
 import { clearPromotionDetail, getPromotionDetail } from '../../../actions/promotion';
 import {
-    basicDetailBefore, basicDetailAfter,
-    noConditions, purchageCondition,
-    rewardListCondition, totalPurchaseCondition
+    basicDetailBefore, basicDetailAfter
 } from '../columns';
+import { getPreferentialBuyRule } from './domHelper';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -29,6 +28,7 @@ const { TextArea } = Input;
 
 class PromotionDetail extends PureComponent {
     state = {
+        branch: '', // 四类页面现实分支
         area: '', // 使用区域显示：全部区域；所选区域；指定门店
         storesVisible: false, // 门店编辑框是否可见
         submitVisible: false // 保存按钮是否可见
@@ -53,22 +53,12 @@ class PromotionDetail extends PureComponent {
         }
         this.setState({ area: this.getArea(promotion) });
         if (promotionRule) {
-            // 不制定条件
+            // 不指定条件
             if (!promotionRule.useConditionRule) {
-                this.columns = noConditions;
-            } else { // 指定条件
-                switch (promotionRule.ruleName) {
-                    case 'PURCHASECONDITION': // 购买条件
-                        this.columns = purchageCondition;
-                        break;
-                    case 'REWARDLIST': // 奖励条件
-                        this.columns = rewardListCondition;
-                        break;
-                    case 'TOTALPUCHASELIST': // 整个购买列表
-                        this.columns = totalPurchaseCondition;
-                        break;
-                    default: break;
-                }
+                this.setState({ branch: 'NOCONDITIONS' });
+            } else {
+                // 指定条件
+                this.setState({ branch: promotionRule.ruleName });
             }
         }
     }
@@ -118,7 +108,7 @@ class PromotionDetail extends PureComponent {
     render() {
         const { form, promotion } = this.props;
         const { getFieldDecorator } = form;
-        const { submitVisible, area, storesVisible } = this.state;
+        const { submitVisible, area, storesVisible, branch } = this.state;
         const { promotionRule, stores } = promotion;
         return (
             <div className="promotion-form">
@@ -127,11 +117,15 @@ class PromotionDetail extends PureComponent {
                         <div className="add-message promotion-add-license">
                             <div className="add-message-body">
                                 {this.getRowFromFields(basicDetailBefore)}
-                                <Row type="flex" justify="start">
-                                    <Col span={16}>
-                                        <FormItem label="优惠方式">{promotionRule}</FormItem>
-                                    </Col>
-                                </Row>
+                                {branch === 'NOCONDITIONS' ?
+                                    <Row type="flex" justify="start">
+                                        <Col span={16}>
+                                            <FormItem label="优惠方式">
+                                                {getPreferentialBuyRule(promotionRule.orderRule)}
+                                            </FormItem>
+                                        </Col>
+                                    </Row> : null
+                                }
                                 <Row key="area" type="flex" justify="start">
                                     <Col span={16}>
                                         <FormItem label="使用区域">{area}</FormItem>
