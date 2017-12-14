@@ -15,7 +15,11 @@
         "discount": null,
         "note": "备注",
         "type": 0,
+<<<<<<< HEAD
         "isSuperposeUserDiscount": 0,
+=======
+        "isSuperposeUserDiscount": 1,
+>>>>>>> 6c115e0fafeceeeeb485c49703c6a7e5a396a8a7
         "isSuperposeProOrCouDiscount": 1,
         "promoCategoriesPo": null,
         "companiesPoList": [
