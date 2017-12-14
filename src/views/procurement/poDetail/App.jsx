@@ -2047,15 +2047,6 @@ class PoDetail extends PureComponent {
                                     }
                                     {
                                         this.state.currentType === 'detail'
-                                        && basicInfo.status === 1
-                                        && <FormItem>
-                                            <Button size="default" onClick={this.handleAudit}>
-                                                审批
-                                            </Button>
-                                        </FormItem>
-                                    }
-                                    {
-                                        this.state.currentType === 'detail'
                                         && <FormItem>
                                             <Button size="default" onClick={this.handleDownPDF}>
                                                 下载PDF
