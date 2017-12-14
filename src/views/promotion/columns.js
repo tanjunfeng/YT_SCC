@@ -5,44 +5,11 @@
  * 促销活动列表
  */
 import React from 'react';
-import { Input, Form } from 'antd';
 import {
     promotionStatus, promotionRuleName, preferentialWayStatus,
     purchageTypeStatus, conditionTypeStatus
 } from './constants';
 import Util from '../../util/util';
-
-const FormItem = Form.Item;
-const { TextArea } = Input;
-
-const textArea = (storeIds, form) => {
-    const { getFieldDecorator } = form;
-    return (<FormItem className="store-ids">
-        {getFieldDecorator('storeId', {
-            initialValue: storeIds,
-            rules: [{ required: true, message: '请输入指定门店' }]
-        })(<TextArea
-            placeholder="请输入指定门店"
-            autosize={{ minRows: 4, maxRows: 6 }}
-        />)}
-    </FormItem>);
-}
-
-const readerArea = (text, record, form) => {
-    if (record.id) {
-        const { stores, companiesPoList } = record;
-        if (stores === null && companiesPoList === null) {
-            return '全部区域';
-        }
-        if (stores && stores.storeId) {
-            return textArea(stores.storeId, form);
-        }
-        if (companiesPoList && companiesPoList.length > 0) {
-            return companiesPoList.map(c => c.companyName).join(', ');
-        }
-    }
-    return null;
-}
 
 const getTextByCondition = (condition) => {
     let info = `购买类型：${purchageTypeStatus[condition.purchaseType]}，`;
@@ -160,7 +127,7 @@ export const participateList = [{
     dataIndex: 'branchCompanyName'
 }];
 
-const basicDetailBefore = [{
+export const basicDetailBefore = [{
     title: '活动ID',
     dataIndex: 'id'
 }, {
@@ -184,11 +151,11 @@ const basicDetailBefore = [{
     render: rule => (rule ? '指定条件' : '不限制')
 }];
 
-const basicDetailAfter = [{
-    title: '使用区域',
-    dataIndex: 'area',
-    render: readerArea
-}, {
+export const basicDetailAfter = [{
+//     title: '使用区域',
+//     dataIndex: 'area',
+//     render: readerArea
+// }, {
     title: '活动叠加',
     dataIndex: 'overlay',
     render: (text, record) => {
