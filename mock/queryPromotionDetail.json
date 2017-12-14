@@ -29,7 +29,7 @@
             "orderRule": null,
             "purchaseConditionsRule": {
                 "condition": {
-                    "key": "1505502000",
+                    "key":"1505502000",
                     "purchaseType": "CATEGORY",
                     "promoCategories": {
                         "promoId": null,

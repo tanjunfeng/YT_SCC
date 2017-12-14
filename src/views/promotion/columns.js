@@ -161,8 +161,8 @@ export const basicDetailAfter = [{
     title: '活动叠加',
     dataIndex: 'overlay',
     render: (text, record) => {
+        const arr = [];
         if (record.id) {
-            const arr = [];
             if (record.isSuperposeUserDiscount === 1) {
                 arr.push('会员等级');
             }
@@ -170,6 +170,9 @@ export const basicDetailAfter = [{
                 arr.push('优惠券');
             }
             return arr.join(', ');
+        }
+        if (arr.length === 0) {
+            return '无叠加';
         }
         return null;
     }

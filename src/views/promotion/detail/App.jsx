@@ -12,8 +12,7 @@ import { withRouter } from 'react-router';
 import { Form, Row, Col, Button, Input } from 'antd';
 import { clearPromotionDetail, getPromotionDetail } from '../../../actions/promotion';
 import { basicDetailBefore, basicDetailAfter } from '../columns';
-import { promotionRuleStatus } from '../constants';
-import { getPreferentialBuyRule, getPurchaseType, getConditionType } from './domHelper';
+import { getRowFromFields, getNoConditions, getPurchaseCondition } from './domHelper';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -90,27 +89,6 @@ class PromotionDetail extends PureComponent {
         return null;
     }
 
-    getRowFromFields = (columns) => columns.map(column => {
-        const { promotion, form } = this.props;
-        const item = promotion[column.dataIndex];
-        return (
-            <Row key={column.dataIndex} type="flex" justify="start">
-                <Col span={16}>
-                    {column.render ?
-                        <FormItem
-                            label={column.title}
-                        >
-                            {column.render(item, promotion, form)}
-                        </FormItem>
-                        :
-                        <FormItem label={column.title}>{item}</FormItem>
-                    }
-                </Col>
-            </Row>);
-    });
-
-    columns = null;
-
     render() {
         const { form, promotion } = this.props;
         const { getFieldDecorator } = form;
@@ -118,57 +96,13 @@ class PromotionDetail extends PureComponent {
         const { promotionRule, stores } = promotion;
         return (
             <Form layout="inline" onSubmit={this.handleSubmit} className="promotion-form">
-                {this.getRowFromFields(basicDetailBefore)}
-                {/* 不指定条件 */}
+                {getRowFromFields(promotion, basicDetailBefore)}
                 {branch === 'NOCONDITIONS' ?
-                    <Row type="flex" justify="start">
-                        <Col span={16}>
-                            <FormItem label="优惠方式">
-                                {getPreferentialBuyRule(promotionRule.orderRule)}
-                            </FormItem>
-                        </Col>
-                    </Row> : null
+                    getNoConditions(promotionRule) : null
                 }
                 {/* 购买类型 */}
                 {branch === 'PURCHASECONDITION' ?
-                    <div>
-                        <Row type="flex" justify="start">
-                            <Col span={16}>
-                                <FormItem label="优惠种类">
-                                    {promotionRuleStatus[promotionRule.ruleName]}
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <div className="wd-396">
-                                <Col span={16}>
-                                    <FormItem label="购买类型">
-                                        {getPurchaseType(
-                                            promotionRule.purchaseConditionsRule.condition
-                                        )}
-                                    </FormItem>
-                                </Col>
-                            </div>
-                            <div className="wd-317">
-                                <Col span={16}>
-                                    <FormItem label="条件类型">
-                                        {getConditionType(
-                                            promotionRule.purchaseConditionsRule.condition
-                                        )}
-                                    </FormItem>
-                                </Col>
-                            </div>
-                            <div className="wd-297">
-                                <Col span={16}>
-                                    <FormItem label="优惠方式">
-                                        {getPreferentialBuyRule(
-                                            promotionRule.purchaseConditionsRule.rule
-                                        )}
-                                    </FormItem>
-                                </Col>
-                            </div>
-                        </Row>
-                    </div> : null
+                    getPurchaseCondition(promotionRule) : null
                 }
                 <Row key="area" type="flex" justify="start">
                     <Col span={16}>
@@ -191,7 +125,7 @@ class PromotionDetail extends PureComponent {
                         </Col>
                     </Row> : null
                 }
-                {this.getRowFromFields(basicDetailAfter)}
+                {getRowFromFields(promotion, basicDetailAfter)}
                 {submitVisible ?
                     <Row className="center" >
                         <Button type="primary" size="default" htmlType="submit">保存</Button>
