@@ -298,7 +298,7 @@ class SellPriceModal extends Component {
                 visible
                 className={prefixCls}
                 onOk={this.handleOk}
-                width={'1000px'}
+                style={{minWidth: '950px'}}
                 onCancel={this.handleCancel}
                 maskClosable={false}
                 confirmLoading={this.isDisabled}
@@ -315,8 +315,8 @@ class SellPriceModal extends Component {
                 }
             >
                 <div>
-                    <span style={{width: '50%', display: 'inline-block'}}>修改前:</span>
-                    <span style={{width: '50%', display: 'inline-block'}}>修改后:</span>
+                    <span style={{width: '54%', display: 'inline-block'}}>修改前:</span>
+                    <span style={{width: '45%', display: 'inline-block'}}>修改后:</span>
                 </div>
                 <div className={`${prefixCls}-body-wrap`}>
                     <Form layout="inline" onSubmit={this.handleSubmit}>
@@ -426,7 +426,7 @@ class SellPriceModal extends Component {
                                 </FormItem>
                             </div>
                         </div>
-                        <div className={`${prefixCls}-item`}>
+                        <div className={`${prefixCls}-item item-max-height`}>
                             <div className={`${prefixCls}-item-title`}>
                                 添加阶梯价格
                                 <span className={`${prefixCls}-item-tip`}>

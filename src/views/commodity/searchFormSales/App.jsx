@@ -206,8 +206,8 @@ class SearchForm extends Component {
                                 )}
                         </FormItem>
                         {/* 是否启用 */}
-                        <FormItem label="启用">
-                            {getFieldDecorator('latestPriceStateOption', {
+                        <FormItem label="最新售价状态：">
+                            {getFieldDecorator('LatestPriceOptions', {
                                 initialValue: '-1'
                             })(
                                 <Select

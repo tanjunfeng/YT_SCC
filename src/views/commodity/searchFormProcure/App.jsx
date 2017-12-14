@@ -301,15 +301,13 @@ class SearchForm extends Component {
                             </FormItem>
                         </Col>
                         {/* 子公司 */}
-                        <Col span={8}>
+                        <Col>
                             <FormItem label="所属公司">
                                 {getFieldDecorator('branchCompany', {
                                     initialValue: { id: '', name: '' }
                                 })(<BranchCompany />)}
                             </FormItem>
                         </Col>
-                    </Row>
-                    <Row>
                         {/* 是否启用 */}
                         <FormItem className="sc-form-item">
                             <span className={`${prefixCls}-select`}>启用</span>

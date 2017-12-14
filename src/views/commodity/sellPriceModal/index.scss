@@ -39,12 +39,17 @@
     }
     .sell-modal-item{
         width: 425px;
+        overflow-y: auto;
     }
     .sell-modal-body-wrap{
         display: inline-block;
+        vertical-align: top;
     }
     .sell-modal-body-wrap:last-child{
-        margin-left: 100px;
+        margin-left: 65px;
+    }
+    .item-max-height{
+        max-height: 250px;
     }
 }
 .ant-message-warning{
