@@ -59,9 +59,9 @@ class GoodsTable extends PureComponent {
      * 根据 goods 和已有 total 计算新的 total
      */
     CollageData = () => {
-        const { returnQuantityList } = this.props.value;
+        const { data } = this.props.value;
         const arr = [];
-        returnQuantityList.forEach((goods) => {
+        data.items.forEach((goods) => {
             arr.push({
                 id: goods.id,
                 returnQuantity: goods.quantity

@@ -52,7 +52,7 @@ import {
     clearHighChart,
 } from '../../../actions/process';
 import {auditInfo} from '../../../service';
-import ApproModal from './approModal';
+import ApproModal from '../../../components/approModal'
 import { Supplier } from '../../../container/search';
 import FlowImage from '../../../components/flowImage';
 import ApproComment from './approComment';
