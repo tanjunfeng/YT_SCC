@@ -3,7 +3,7 @@
  * @Description: 采购管理 - 退货详情 - 列表修改
  * @CreateDate: 2017-12-01 16:03:22
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-12-08 16:57:14
+ * @Last Modified time: 2017-12-13 10:46:17
  */
 
 import React, { PureComponent } from 'react';
@@ -15,14 +15,15 @@ import EditableCell from './editableCell';
 
 class GoodsTable extends PureComponent {
     onCellChange = productCode => quantity => {
-        const { returnQuantityList } = this.props.value;
-        const index = returnQuantityList.findIndex(item => item.productCode === productCode);
-        const goods = returnQuantityList[index];
+        const { data } = this.props.value;
+        const { items } = data;
+        const index = items.findIndex(item => item.productCode === productCode);
+        const goods = items[index];
         if (index > -1) {
             Object.assign(goods, {
                 quantity
             });
-            this.noticeChanges(returnQuantityList);
+            this.noticeChanges(items);
         }
     }
 
@@ -85,15 +86,54 @@ class GoodsTable extends PureComponent {
         return items;
     }
 
-    renderNumber = (text, record) => (
-        <EditableCell
-            value={text}
-            min={0}
-            max={record.quantity}
-            step={1}
-            onChange={this.onCellChange(record.productCode)}
-        />
-    );
+    /**
+     * 校验销售内装数
+     */
+    validateSalesInsideNumber = (goods) => {
+        const { quantity, sellFullCase, unitQuantity } = goods;
+        let isMultiple = true;
+        // 不按整箱销售时，判断当前所填数量是否是内装数量的整数倍
+        if (sellFullCase === 1 && quantity % unitQuantity === 0) {
+            isMultiple = false;
+        }
+        Object.assign(goods, { isMultiple });
+    }
+
+    /**
+     * 检查行状态
+     */
+    checkGoodsStatus = (goods, errors) => {
+        let isValid = true;
+        this.validateSalesInsideNumber(goods)
+        if (goods.unitQuantity === 1) {
+            console.log(11)
+            isValid = true;
+        } else if (goods.unitQuantity !== 1) {
+            if (goods.isMultiple) {
+                errors.push(`非内装数${goods.unitQuantity}的整数倍`);
+                isValid = false;
+            }
+        } else {
+            isValid = true;
+        }
+        return isValid;
+    }
+
+    renderNumber = (text, record) => {
+        // 填入的数量是否是内装数量的整数倍
+        const errors = [];
+        this.checkGoodsStatus(record, errors);
+        return (
+            <EditableCell
+                value={text}
+                min={0}
+                max={record.shippedQuantity}
+                step={1}
+                error={errors.join(', ')}
+                onChange={this.onCellChange(record.productCode)}
+            />
+        );
+    }
 
     /**
      * 计算金额小计

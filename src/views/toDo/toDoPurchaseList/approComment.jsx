@@ -12,13 +12,6 @@ const FormItem = Form.Item;
 const { TextArea } = Input;
 
 class ApproComment extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            selectValue: null,
-            textareaValue: null,
-        }
-    }
     getFormData() {
         return new Promise((resolve, reject) => {
             this.props.form.validateFields((err, values) => {
@@ -26,16 +19,16 @@ class ApproComment extends PureComponent {
                     reject(err);
                 }
                 const {
-                    auditResult,
-                    auditOpinion
+                    outcome,
+                    comment
                 } = values;
                 const dist = {
-                    auditResult,
-                    auditOpinion
+                    outcome,
+                    comment
                 };
-                if (auditResult === '') {
+                if (outcome === '') {
                     this.props.form.setFields({
-                        auditResult: {
+                        outcome: {
                             value: values.area,
                             errors: [new Error('未选择审批状态')],
                         },
@@ -43,21 +36,21 @@ class ApproComment extends PureComponent {
                     reject();
                 } else {
                     Object.assign(dist, {
-                        auditResult
+                        outcome
                     });
                 }
-                if (auditResult === '0') {
-                    if (auditOpinion === '') {
+                if (outcome === '0') {
+                    if (comment === '') {
                         this.props.form.setFields({
-                            auditOpinion: {
-                                value: auditOpinion,
+                            comment: {
+                                value: comment,
                                 errors: [new Error('请输入审批意见!')]
                             }
                         });
                         reject();
                     } else {
                         Object.assign(dist, {
-                            auditOpinion
+                            comment
                         });
                     }
                 }
@@ -66,20 +59,12 @@ class ApproComment extends PureComponent {
         });
     }
     handleOk = () => {
-        this.getFormData().then((param) => this.props.handleCommentOk(param))
-    }
-    selectChange = (value) => {
-        this.setState({
-            selectValue: value
-        })
-    }
-    textareaChange = (event) => {
-        this.setState({
-            textareaValue: event.target.value
-        })
+        this.getFormData().then((param) => this.props.onOk(param));
+        this.props.form.resetFields();
     }
     handleCancel = () => {
         this.props.onCancel();
+        this.props.form.resetFields();
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -90,25 +75,13 @@ class ApproComment extends PureComponent {
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
             >
-                {/* <div>
-                    <span>审批：</span>
-                    <Select defaultValue="请选择" onChange={this.selectChange}>
-                        <Option value="请选择">请选择</Option>
-                        <Option value="通过">通过</Option>
-                        <Option value="拒绝">拒绝</Option>
-                    </Select>
-                </div>
-                <div className="comment">
-                    <span>审批意见：</span>
-                    <textarea onChange={this.textareaChange} />
-                </div> */}
                 <Form onSubmit={(e) => {
                     e.preventDefault()
                 }}
                 >
                     {/* 审批意见 */}
                     <FormItem label="审批意见" style={{ display: 'flex' }}>
-                        {getFieldDecorator('auditResult', {
+                        {getFieldDecorator('outcome', {
                             initialValue: optionStatus.defaultValue,
                             rules: [{ required: true, message: '请选择审批意见!' }]
                         })(
@@ -122,7 +95,7 @@ class ApproComment extends PureComponent {
                             </Select>)}
                     </FormItem>
                     <FormItem label="意见" style={{ display: 'flex' }}>
-                        {getFieldDecorator('auditOpinion', {
+                        {getFieldDecorator('comment', {
                             initialValue: '',
                             rules: [
                                 { required: false, message: '请填写审批意见!' },
@@ -146,8 +119,8 @@ class ApproComment extends PureComponent {
 ApproComment.propTypes = {
     visible: PropTypes.bool,
     onCancel: PropTypes.func,
-    handleCommentOk: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
+    onOk: PropTypes.func
 }
 
 export default withRouter(Form.create()(ApproComment));

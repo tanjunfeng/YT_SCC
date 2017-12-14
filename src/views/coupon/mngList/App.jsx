@@ -104,7 +104,7 @@ class CouponList extends PureComponent {
                     this.query();
                 });
                 break;
-            case 'close':   // 关闭
+            case 'close': // 关闭
                 this.props.updatePromotionStatus({
                     id,
                     status: 'closed'
@@ -132,10 +132,10 @@ class CouponList extends PureComponent {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/detail/${id}`}>活动详情</Link>
+                    <Link target="_blank" to={`${pathname}/detail/${id}`}>活动详情</Link>
                 </Menu.Item>
                 <Menu.Item key="participate">
-                    <Link to={`${pathname}/participate/${id}/${promotionName}`}>参与数据</Link>
+                    <Link target="_blank" to={`${pathname}/participate/${id}/${promotionName}`}>参与数据</Link>
                 </Menu.Item>
                 {
                     // 未发布的可发布
@@ -143,7 +143,7 @@ class CouponList extends PureComponent {
                         <Menu.Item key="publish">
                             <a target="_blank" rel="noopener noreferrer">
                                 发布
-                        </a>
+                            </a>
                         </Menu.Item>
                         : null
                 }
@@ -153,7 +153,7 @@ class CouponList extends PureComponent {
                         <Menu.Item key="close">
                             <a target="_blank" rel="noopener noreferrer">
                                 关闭
-                        </a>
+                            </a>
                         </Menu.Item>
                         : null
                 }

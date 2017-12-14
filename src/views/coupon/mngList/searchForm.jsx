@@ -83,93 +83,72 @@ class SearchForm extends PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <div className="search-box promotion">
-                <Form layout="inline">
-                    <div className="search-conditions">
-                        <Row>
-                            <Col span={8}>
-                                <FormItem label="券ID" style={{ paddingRight: 10 }}>
-                                    {getFieldDecorator('id')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="券名称">
-                                    {getFieldDecorator('promotionName')(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                <FormItem label="使用区域">
-                                    {getFieldDecorator('branchCompany', {
-                                        initialValue: { id: '', name: '' }
-                                    })(<BranchCompany />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 状态 */}
-                                <FormItem label="状态">
-                                    {getFieldDecorator('statusCode', {
-                                        initialValue: 'all'
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getPromotionStatus()}
-                                        </Select>
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 类型 */}
-                                <FormItem label="类型">
-                                    {getFieldDecorator('couponType', {
-                                        initialValue: ''
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {this.getCouponTypeStatus()}
-                                        </Select>
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col>
-                                <FormItem>
-                                    <div className="promotion-date-range">
-                                        <span className="sc-form-item-label search-mind-label">有效日期</span>
-                                        {getFieldDecorator('promotionDateRange', {
-                                            initialValue: '',
-                                            rules: [{ required: true, message: '请选择有效日期' }]
-                                        })(
-                                            <RangePicker
-                                                style={{ width: '250px' }}
-                                                className="manage-form-enterTime"
-                                                showTime={{ format: MINUTE_FORMAT }}
-                                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
-                                                placeholder={['开始时间', '结束时间']}
-                                            />
-                                        )}
-                                    </div>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row type="flex" justify="end">
-                            <Col>
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.handleSearch}>
-                                        查询
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleReset}>
-                                        重置
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleCreate}>
-                                        新增
-                                    </Button>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                    </div>
-                </Form>
-            </div >
+            <Form layout="inline" className="promotion">
+                <Row>
+                    <Col span={8}>
+                        <FormItem label="券ID">
+                            {getFieldDecorator('id')(<Input size="default" />)}
+                        </FormItem>
+                    </Col>
+                    <Col span={8}>
+                        <FormItem label="券名称">
+                            {getFieldDecorator('promotionName')(<Input size="default" />)}
+                        </FormItem>
+                    </Col>
+                    <Col span={8}>
+                        <FormItem label="使用区域">
+                            {getFieldDecorator('branchCompany', {
+                                initialValue: { id: '', name: '' }
+                            })(<BranchCompany />)}
+                        </FormItem>
+                    </Col>
+                    <Col span={8}>
+                        {/* 状态 */}
+                        <FormItem label="状态">
+                            {getFieldDecorator('statusCode', {
+                                initialValue: 'all'
+                            })(<Select size="default">
+                                {this.getPromotionStatus()}
+                            </Select>)}
+                        </FormItem>
+                    </Col>
+                    <Col span={8}>
+                        {/* 类型 */}
+                        <FormItem label="类型">
+                            {getFieldDecorator('couponType', {
+                                initialValue: ''
+                            })(<Select size="default">
+                                {this.getCouponTypeStatus()}
+                            </Select>)}
+                        </FormItem>
+                    </Col>
+                    <Col span={16}>
+                        <FormItem label="有效日期">
+                            {getFieldDecorator('promotionDateRange', {
+                                initialValue: ''
+                            })(<RangePicker
+                                className="manage-form-enterTime"
+                                showTime={{ format: MINUTE_FORMAT }}
+                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
+                                placeholder={['开始时间', '结束时间']}
+                            />)}
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row type="flex" justify="end">
+                    <Col>
+                        <Button type="primary" size="default" onClick={this.handleSearch}>
+                            查询
+                        </Button>
+                        <Button size="default" onClick={this.handleReset}>
+                            重置
+                        </Button>
+                        <Button size="default" onClick={this.handleCreate}>
+                            新增
+                        </Button>
+                    </Col>
+                </Row>
+            </Form>
         );
     }
 }

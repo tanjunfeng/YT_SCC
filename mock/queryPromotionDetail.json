@@ -1,222 +1,50 @@
 {
-    "timestamp": 1505115612074,
+    "timestamp": 1512541559407,
     "code": 200,
     "message": "请求成功",
-    "exception": null,
     "data": {
-        "id": "HD1710001",
+        "id": "HD297",
         "status": "unreleased",
         "promotionType": "order_promo",
-        "promotionName": "111促销",
+        "promotionName": "元旦节活动",
         "promotionDiscription": null,
         "startDate": 1504499995000,
         "endDate": 1505581202000,
         "discountType": "percentage",
-        "quanifyAmount": 500,
-        "discount": 95,
-        "note": "个梵蒂冈",
-        "promoCategoriesPo": {
-            "promoId": "HD1710001",
-            "categoryId": "1001",
-            "categoryName": "饮料",
-            "categoryLevel": 2
-        },
+        "quanifyAmount": null,
+        "discount": null,
+        "note": "备注",
+        "type": 0,
+        "isSuperposeUserDiscount": 1,
+        "isSuperposeProOrCouDiscount": 1,
+        "promoCategoriesPo": null,
         "companiesPoList": [
             {
-                "promoId": "HD1710001",
+                "promoId": "HD297",
                 "companyId": "10000",
                 "companyName": "成都子公司"
             },
             {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            },
-            {
-                "promoId": "HD1710001",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD1710001",
+                "promoId": "HD297",
                 "companyId": "10003",
                 "companyName": "四川雅堂小超总部"
             }
         ],
-        "stores": {
-            "promoId": "HD1710001",
-            "storeId": "A000992,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993,A000902,A000993"
-        }
+        "stores": null,
+        "promotionRule": {
+            "useConditionRule": false,
+            "ruleName": null,
+            "orderRule": {
+                "preferentialWay": "DISCOUNTAMOUNT",
+                "preferentialValue": 30
+            },
+            "purchaseConditionsRule": null,
+            "rewardListRule": null,
+            "totalPurchaseListRule": null
+        },
+        "priority": 1,
+        "simpleDescription": "简易描述，限填20字",
+        "detailDescription": "详细描述，限填100字"
     },
     "success": true
 }
