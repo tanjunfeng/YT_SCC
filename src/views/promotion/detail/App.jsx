@@ -94,7 +94,7 @@ class PromotionDetail extends PureComponent {
     render() {
         const { hasStoreIds } = this.state;
         return (
-            <div className="promotion-create">
+            <div className="promotion-form">
                 <Form layout="inline" onSubmit={this.handleSubmit}>
                     <div className="promotion-add-item">
                         <div className="add-message promotion-add-license">
