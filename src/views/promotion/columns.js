@@ -161,18 +161,18 @@ export const basicDetailAfter = [{
     title: '活动叠加',
     dataIndex: 'overlay',
     render: (text, record) => {
-        const arr = [];
         if (record.id) {
+            const arr = [];
             if (record.isSuperposeUserDiscount === 1) {
                 arr.push('会员等级');
             }
             if (record.isSuperposeProOrCouDiscount === 1) {
                 arr.push('优惠券');
             }
+            if (arr.length === 0) {
+                return '无叠加';
+            }
             return arr.join(', ');
-        }
-        if (arr.length === 0) {
-            return '无叠加';
         }
         return null;
     }
@@ -192,30 +192,3 @@ export const basicDetailAfter = [{
     dataIndex: 'note',
     render: note => note || '无'
 }];
-
-/**
- * 整个购买列表
- */
-export const totalPurchaseCondition = [...basicDetailBefore, {
-    title: '优惠种类',
-    dataIndex: 'promotionType',
-    render: (text, record) => {
-        if (record.id) {
-            let info = '整个购买列表；';
-            const { rule } = record.promotionRule.totalPurchaseListRule;
-            info += getPreferentialBuyRule(rule);
-            return info;
-        }
-        return null;
-    }
-}, {
-    title: '购买条件',
-    dataIndex: 'purchaseCondition',
-    render: (text, record) => {
-        if (record.id) {
-            const { conditions } = record.promotionRule.totalPurchaseListRule;
-            return conditions.map(c => (`${getTextByCondition(c)}`));
-        }
-        return null;
-    }
-}, ...basicDetailAfter];
