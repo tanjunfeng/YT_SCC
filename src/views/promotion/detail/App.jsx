@@ -42,6 +42,7 @@ class PromotionDetail extends PureComponent {
     componentWillReceiveProps(nextProps) {
         const { promotion } = nextProps;
         const { stores, promotionRule, status } = promotion;
+
         // 存在门店编号的时候，门店编辑框可见
         if (stores && stores.storeId) {
             this.setState({ storesVisible: true }, () => {
@@ -52,6 +53,8 @@ class PromotionDetail extends PureComponent {
             });
         }
         this.setState({ area: this.getArea(promotion) });
+
+        // 区分四种页面分支
         if (promotionRule) {
             // 不指定条件
             if (!promotionRule.useConditionRule) {

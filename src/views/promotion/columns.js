@@ -127,6 +127,9 @@ export const participateList = [{
     dataIndex: 'branchCompanyName'
 }];
 
+/**
+ * 下单打折详情基础字段 前部分
+ */
 export const basicDetailBefore = [{
     title: '活动ID',
     dataIndex: 'id'
@@ -151,11 +154,10 @@ export const basicDetailBefore = [{
     render: rule => (rule ? '指定条件' : '不限制')
 }];
 
+/**
+ * 下单打折详情基础字段 后部分
+ */
 export const basicDetailAfter = [{
-//     title: '使用区域',
-//     dataIndex: 'area',
-//     render: readerArea
-// }, {
     title: '活动叠加',
     dataIndex: 'overlay',
     render: (text, record) => {
@@ -187,20 +189,6 @@ export const basicDetailAfter = [{
     dataIndex: 'note',
     render: note => note || '无'
 }];
-
-/**
- * 无限制条件详情
- */
-export const noConditions = [...basicDetailBefore, {
-    title: '优惠方式',
-    dataIndex: 'promotionWay',
-    render: (text, record) => {
-        if (record.id) {
-            return getPreferentialBuyRule(record.promotionRule.orderRule);
-        }
-        return null
-    }
-}, ...basicDetailAfter];
 
 /**
  * 购买条件
