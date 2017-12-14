@@ -78,6 +78,9 @@ $promotionAddBorderCorder: #d9d9d9;
     .store {
         margin-left: $promotionAddLabelWidth;
     }
+    .store-ids {
+        margin-bottom: 0 !important;
+    }
     .ant-form-item-label label {
         width: $promotionAddLabelWidth;
         display: inline-block;

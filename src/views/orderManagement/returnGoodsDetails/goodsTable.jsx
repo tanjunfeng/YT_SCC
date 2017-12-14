@@ -3,7 +3,7 @@
  * @Description: 采购管理 - 退货详情 - 列表修改
  * @CreateDate: 2017-12-01 16:03:22
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-12-13 19:00:32
+ * @Last Modified time: 2017-12-13 19:49:25
  */
 
 import React, { PureComponent } from 'react';
@@ -20,13 +20,19 @@ class GoodsTable extends PureComponent {
         const { items } = data;
         const index = items.findIndex(item => item.productCode === productCode);
         const goods = items[index];
+        const list = [];
         if (index > -1) {
             Object.assign(goods, {
                 quantity
             });
-            if (goods.quantity % goods.unitQuantity === 0) {
-                inValidList = []
-            }
+            items.forEach((element) => {
+                if (element.quantity % element.unitQuantity !== 0) {
+                    list.push(1)
+                } else {
+                    list.slice(0, -1);
+                }
+            });
+            inValidList = list
             this.noticeChanges(items, goods, inValidList);
         }
     }
@@ -170,7 +176,6 @@ class GoodsTable extends PureComponent {
 
 GoodsTable.propTypes = {
     onChange: PropTypes.func,
-    onDataState: PropTypes.func,
     value: PropTypes.objectOf(PropTypes.any)
 };
 
