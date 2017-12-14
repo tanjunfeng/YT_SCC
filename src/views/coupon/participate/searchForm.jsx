@@ -205,7 +205,7 @@ SearchForm.propTypes = {
     onReset: PropTypes.func,
     onExport: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    value: PropTypes.bool,
+    value: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any)
 };
 

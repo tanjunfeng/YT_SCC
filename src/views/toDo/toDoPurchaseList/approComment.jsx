@@ -36,7 +36,7 @@ class ApproComment extends PureComponent {
                     reject();
                 } else {
                     Object.assign(dist, {
-                        outcome
+                        outcome: outcome.toString() === '0' ? 'reject' : 'pass'
                     });
                 }
                 if (outcome === '0') {

@@ -1,12 +1,12 @@
 {
-    "timestamp": 1512541559407,
+    "timestamp": 1512542174245,
     "code": 200,
     "message": "请求成功",
     "data": {
-        "id": "HD297",
+        "id": "HD301",
         "status": "unreleased",
         "promotionType": "order_promo",
-        "promotionName": "元旦节活动",
+        "promotionName": "元宵节打折",
         "promotionDiscription": null,
         "startDate": 1504499995000,
         "endDate": 1505581202000,
@@ -15,32 +15,52 @@
         "discount": null,
         "note": "备注",
         "type": 0,
-        "isSuperposeUserDiscount": 1,
+        "isSuperposeUserDiscount": 0,
         "isSuperposeProOrCouDiscount": 1,
         "promoCategoriesPo": null,
-        "companiesPoList": [
-            {
-                "promoId": "HD297",
-                "companyId": "10000",
-                "companyName": "成都子公司"
-            },
-            {
-                "promoId": "HD297",
-                "companyId": "10003",
-                "companyName": "四川雅堂小超总部"
-            }
-        ],
-        "stores": null,
+        "companiesPoList": [],
+        "stores": {
+            "promoId": "HD301",
+            "storeId": "A000992,A000902,A000993"
+        },
         "promotionRule": {
-            "useConditionRule": false,
-            "ruleName": null,
-            "orderRule": {
-                "preferentialWay": "DISCOUNTAMOUNT",
-                "preferentialValue": 30
-            },
+            "useConditionRule": true,
+            "ruleName": "TOTALPUCHASELIST",
+            "orderRule": null,
             "purchaseConditionsRule": null,
             "rewardListRule": null,
-            "totalPurchaseListRule": null
+            "totalPurchaseListRule": {
+                "conditions": [
+                    {
+                        "key":"15345000",
+                        "purchaseType": "CATEGORY",
+                        "promoCategories": {
+                            "promoId": null,
+                            "categoryId": "xx99",
+                            "categoryName": "日化",
+                            "categoryLevel": 2
+                        },
+                        "promoProduct": null,
+                        "conditionType": "AMOUNT",
+                        "conditionValue": 50
+                    },
+                    {
+                        "key":"1535000",
+                        "purchaseType": "PRODUCT",
+                        "promoCategories": null,
+                        "promoProduct": {
+                            "productId": "3",
+                            "productName": "可乐"
+                        },
+                        "conditionType": "QUANTITY",
+                        "conditionValue": 100
+                    }
+                ],
+                "rule": {
+                    "preferentialWay": "PERCENTAGE",
+                    "preferentialValue": 0.95
+                }
+            }
         },
         "priority": 1,
         "simpleDescription": "简易描述，限填20字",
