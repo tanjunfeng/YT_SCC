@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-13 15:52:46
+ * @Last Modified time: 2017-12-14 14:27:32
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -288,7 +288,7 @@ class toDoReturnList extends PureComponent {
                     reject();
                 } else {
                     Object.assign(dist, {
-                        outcome
+                        outcome: outcome.toString() === '0' ? 'reject' : 'pass'
                     });
                 }
                 if (outcome === '0') {
