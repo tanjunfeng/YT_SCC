@@ -22,12 +22,11 @@ import {
     Button
 } from 'antd';
 import {
-    queryHighChart,
-    clearHighChart,
+    processImageBusi,
+    clearprocessImageBusi,
+    queryCommentHisBusi
 } from '../../../actions/process';
-import {
-    queryCommentHis
-} from '../../../actions/procurement';
+
 import { fetchPoMngList, changePoMngSelectedRows, deletePoByIds } from '../../../actions';
 import SearchForm from '../../../components/poSearchForm';
 import { PAGE_SIZE } from '../../../constant';
@@ -41,15 +40,15 @@ const columns = poMngListColumns;
     poInfo: state.toJS().procurement.poInfo,
     selectedPoMngRows: state.toJS().procurement.selectedPoMngRows,
     processDefinitions: state.toJS().procurement.processDefinitions,
-    highChartData: state.toJS().process.highChartData,
-    approvalList: state.toJS().procurement.approvalList,
+    processImageBusiData: state.toJS().process.processImageByBusi,
+    commentHisBusiList: state.toJS().process.commentHisByBusi,
 }), dispatch => bindActionCreators({
     fetchPoMngList,
     changePoMngSelectedRows,
     deletePoByIds,
-    queryHighChart,
-    clearHighChart,
-    queryCommentHis,
+    processImageBusi,
+    clearprocessImageBusi,
+    queryCommentHisBusi,
 }, dispatch))
 class PoMngList extends PureComponent {
     constructor(props) {
@@ -118,7 +117,7 @@ class PoMngList extends PureComponent {
         this.setState({
             approvalProgress: true,
         }, () => (
-            this.props.queryHighChart({taskId: record.purchaseOrderNo })
+            this.props.processImageBusi({id: record.purchaseOrderNo, processType: 'CG' })
         ));
     }
 
@@ -127,7 +126,7 @@ class PoMngList extends PureComponent {
         this.setState({
             isVisibleModal: true
         }, () => (
-            this.props.queryCommentHis({taskId: record.purchaseOrderNo })
+            this.props.queryCommentHisBusi({id: record.purchaseOrderNo, processType: 'CG' })
         ));
     }
     /**
@@ -192,7 +191,7 @@ class PoMngList extends PureComponent {
     }
 
     closeCanvas = () => {
-        this.props.clearHighChart();
+        this.props.clearprocessImageBusi();
     }
 
     // table列表详情操作
@@ -303,9 +302,9 @@ class PoMngList extends PureComponent {
                     visible={this.state.isVisibleModal}
                     onOk={this.handleModalOk}
                     onCancel={this.handleModalCancel}
-                    approvalList={this.props.approvalList}
+                    approvalList={this.props.commentHisBusiList}
                 />
-                <FlowImage data={this.props.highChartData} closeCanvas={this.closeCanvas} >
+                <FlowImage data={this.props.processImageBusiData} closeCanvas={this.closeCanvas} >
                     <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
                 </FlowImage>
                 {
@@ -330,11 +329,11 @@ PoMngList.propTypes = {
     poInfo: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     deletePoByIds: PropTypes.func,
-    queryCommentHis: PropTypes.func,
-    clearHighChart: PropTypes.func,
-    highChartData: PropTypes.string,
-    queryHighChart: PropTypes.func,
-    approvalList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+    processImageBusi: PropTypes.func,
+    clearprocessImageBusi: PropTypes.func,
+    queryCommentHisBusi: PropTypes.func,
+    processImageBusiData: PropTypes.string,
+    commentHisBusiList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 }
 
 export default withRouter(Form.create()(PoMngList));

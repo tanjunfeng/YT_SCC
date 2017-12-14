@@ -935,3 +935,7 @@ export const processImage = params => http.get('/bpm/processImage', params);
 export const queryCommentHis = params => http.get('/bpm/queryCommentHis', params);
 // 审批代办事项
 export const auditInfo = params => http.get('/bpm/audit', params);
+// 查看流程进度(业务中)
+export const processImageByBusi = params => http.get('/bpm/processImageByBusi', params);
+// 查看审批记录（业务中）
+export const queryCommentHisByBusi = params => http.get('/bpm/queryCommentHisByBusi', params);
