@@ -47,6 +47,8 @@ class ReturnGoodsDetails extends PureComponent {
             returnQuantityList: [],
             returnQuantity: [],
             total: '',
+            canSave: true,
+            inValidList: []
         }
     }
 
@@ -59,16 +61,26 @@ class ReturnGoodsDetails extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
+        const list = [];
         if (nextProps.data.items && nextProps.data.items.length > 0) {
             const items = nextProps.data.items.map(item => ({
                 id: item.id,
                 productCode: item.productCode,
                 quantity: item.quantity,
                 salePrice: item.salePrice,
-                listPrice: item.listPrice
+                listPrice: item.listPrice,
+                unitQuantity: item.unitQuantity
             }));
+            nextProps.data.items.forEach((element) => {
+                if (element.quantity % element.unitQuantity !== 0) {
+                    list.push(1)
+                } else {
+                    list.slice(0, -1)
+                }
+            });
             this.setState({
-                returnQuantityList: items
+                returnQuantityList: items,
+                inValidList: list
             });
         }
     }
@@ -80,7 +92,8 @@ class ReturnGoodsDetails extends PureComponent {
 
     getGoodsTableValues = () => ({
         returnQuantityList: this.state.returnQuantityList,
-        data: this.props.data
+        data: this.props.data,
+        inValidList: this.state.inValidList
     })
 
     // 请求数据
@@ -169,12 +182,13 @@ class ReturnGoodsDetails extends PureComponent {
      * @param {*array} goodsList 更新的商品列表
      * @param {*object} total 商品小计信息
      */
-    handleGoodsListChange = (returnQuantityList, returnQuantity, total) => {
+    handleGoodsListChange = (returnQuantityList, returnQuantity, total, inValidList) => {
         // 刷新导入商品列表，清空报错商品列表, 清空excel导入商品列表
         this.setState({
             returnQuantityList,
             total,
-            returnQuantity
+            returnQuantity,
+            inValidList
         });
     }
 
@@ -208,6 +222,7 @@ class ReturnGoodsDetails extends PureComponent {
         const data = this.props.data
         const { type, state } = this.props.match.params;
         const { amount, refundAmount } = this.state.total;
+        const { inValidList } = this.state;
         return (
             <div className="returngoods-detail">
                 <div className="basic-box">
@@ -278,7 +293,7 @@ class ReturnGoodsDetails extends PureComponent {
                         }
                         <div className="bottom-text">
                             <div className="bt-left">共<span className="bt-left-num">{data.commodityTotal}</span>件商品</div>
-                            <div className="bt-right"><span>退款金额：</span><span className="bt-right-num">￥{refundAmount >= 0 ? refundAmount : data.refundAmount}</span></div>
+                            <div className="bt-right"><span>退款金额：</span><span className="bt-right-num">￥{data.refundAmount}</span></div>
                             <div className="bt-right" style={{ marginRight: 20 }}><span>退货金额：</span><span className="bt-right-num">￥{amount >= 0 ? amount : data.amount}</span></div>
                         </div>
                     </div>
@@ -348,7 +363,7 @@ class ReturnGoodsDetails extends PureComponent {
                         {
                             (state === 1 || type === '2') &&
                             <span>
-                                <Button size="large" onClick={this.save} disabled={this.state.isSaveDisabled}>保存</Button>
+                                <Button size="large" onClick={this.save} disabled={inValidList.length > 0 ? 'true' : false}>保存</Button>
                                 <Button size="large" onClick={() => this.showConfirm(1)}>确认</Button>
                                 <Button size="large" onClick={() => this.showConfirm(2)}>取消</Button>
                             </span>
