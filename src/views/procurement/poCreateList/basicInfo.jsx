@@ -54,7 +54,6 @@ class BasicInfo extends PureComponent {
         super(props);
         this.state = {
             totalQuantity: 0,
-            totalAmount: 0,
             // new:新建 update:编辑 readonly 只读
             pageMode: '',
             // 操作权限
@@ -90,17 +89,24 @@ class BasicInfo extends PureComponent {
             // 修改页，仓库是否被清空的标志
             ispoAddressClear: false,
             // 经营模式
-            businessMode: null
+            businessMode: null,
+            status: 0,
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        const {
-            adrType, settlementPeriod, payType, payCondition, estimatedDeliveryDate,
-            purchaseOrderType, currencyCode, id, spAdrId, businessMode
-        } = nextProps.basicInfo;
-        const { basicInfo = {} } = this.props;
-        if (basicInfo.id !== id) {
+        const {isCheck } = nextProps;
+        if (this.props.isCheck !== isCheck && isCheck === true) {
+            this.checkReturn();
+        }
+        if (Object.keys(this.props.basicInfo).length === 0 &&
+           Object.keys(nextProps.basicInfo).length !== 0) {
+            const {
+                adrType, settlementPeriod, payType, payCondition, estimatedDeliveryDate,
+                purchaseOrderType, currencyCode, spAdrId, spAdrName, businessMode,
+                createdByName, createdAt, spId, spName, adrTypeCode, adrTypeName,
+                status,
+            } = nextProps.basicInfo;
             this.setState({
                 locDisabled: !(adrType === 0 || adrType === 1),
                 isSupplyAdrDisabled: false,
@@ -108,6 +114,7 @@ class BasicInfo extends PureComponent {
                 payType,
                 payCondition,
                 spAdrId,
+                spAdrName,
                 pickerDate: estimatedDeliveryDate
                     ? moment(parseInt(estimatedDeliveryDate, 10))
                     : null,
@@ -115,9 +122,17 @@ class BasicInfo extends PureComponent {
                 localType: adrType === 0 || adrType === 1 ? `${adrType}` : '',
                 currencyCode: currencyCode === 'CNY' ? `${currencyCode}` : 'CNY',
                 businessMode: businessMode === 0 || businessMode === 1 ? `${businessMode}` : '',
+                createdByName,
+                createdAt,
+                spId,
+                spName,
+                adrTypeCode,
+                adrTypeName,
+                status
             })
         }
     }
+
     /**
      * 地点类型改变时，做如下处理
      * 1.控制地点值清单是否可编辑
@@ -137,13 +152,122 @@ class BasicInfo extends PureComponent {
             this.setState({ locDisabled: true });
         }
     }
+
+    /**
+     * 返回采购单基本信息
+     */
+    getFormBasicInfo = () => {
+        const formValues = this.props.form.getFieldsValue();
+        // 地点---仓库/门店
+        let addressId;
+        let addressCd;
+        let address;
+        if (this.state.localType === '0') {
+            const selectedAddressRawData = this.poAddress.state.selectedRawData;
+            if (selectedAddressRawData) {
+                addressId = selectedAddressRawData.id;
+                addressCd = selectedAddressRawData.warehouseCode;
+                address = selectedAddressRawData.warehouseName;
+            }
+        } else if (this.state.localType === '1') {
+            const selectedAddressRawData = this.poStore.state.selectedRawData;
+            if (selectedAddressRawData) {
+                addressId = selectedAddressRawData.id;
+                addressCd = selectedAddressRawData.id;
+                address = selectedAddressRawData.name;
+            }
+        }
+
+        // 供应商
+        const { spId, spNo, companyName } = this.props.form.getFieldValue('supplier');
+        // 供应商地点
+        let spAdrId;
+        let spAdrNo;
+        let spAdrName;
+        const selectedSupplierLocRawData = this.supplierLoc.state.selectedRawData;
+        if (selectedSupplierLocRawData) {
+            spAdrId = selectedSupplierLocRawData.spAdrid;
+            spAdrNo = selectedSupplierLocRawData.providerNo;
+            spAdrName = selectedSupplierLocRawData.providerName;
+        }
+
+        const mapValues = {
+            addressId,
+            addressCd,
+            address,
+            spId,
+            spNo,
+            spName: companyName,
+            spAdrId,
+            spAdrNo,
+            spAdrName,
+        };
+        const { applySupplierRecord } = this.state;
+        const basicInfo = Object.assign({}, formValues, mapValues, applySupplierRecord);
+        return basicInfo;
+    }
+
+    /**
+     * 校验输入数据
+     */
+    validateForm = () => {
+        // 新增时数据
+        const basicInfoNew = this.getFormBasicInfo();
+        const {
+            addressId,
+            spId,
+            spAdrId,
+        } = basicInfoNew;
+        const { pickerDate } = this.state;
+
+        // 修改时数据
+        const basicInfoModify = this.state;
+        let isOk = true;
+        const { form } = this.props;
+        form.validateFields((err) => {
+            if (!err) {
+                if (basicInfoModify.status === 0 || basicInfoModify.status === 3) {
+                    // 修改页
+                    if (
+                        basicInfoModify.localType
+                        && basicInfoModify.adrTypeCode
+                        && basicInfoModify.spId
+                        && basicInfoModify.spAdrId
+                        && basicInfoModify.pickerDate
+                    ) {
+                        isOk = true;
+                        return isOk;
+                    }
+                    isOk = false;
+                    return isOk;
+                }
+                // 新增页
+                if (addressId && spId && spAdrId && pickerDate) {
+                    isOk = true;
+                    return isOk;
+                }
+                isOk = false;
+                return isOk;
+            }
+            isOk = false;
+            return isOk;
+        });
+        return isOk;
+    }
+
+    // 进行校验后返回校验结果和数据
+    checkReturn = () => {
+        const isSuccess = this.validateForm();
+        // 基本信息，商品行均校验通过,获取有效值
+        const basicInfo = isSuccess ?
+            Object.assign({}, this.props.basicInfo, this.getFormBasicInfo()) : {};
+        this.props.checkResult(isSuccess, basicInfo)
+    }
     // 采购单类型变化
     purchaseOrderTypeChange = (value) => {
         this.setState({
             purchaseOrderType: value,
-            totalAmounts: 0
         })
-        console.log(value);
         this.props.purchaseOrderTypeChange({purchaseOrderType: value});
     }
 
@@ -270,30 +394,29 @@ class BasicInfo extends PureComponent {
         const Option = Select.Option;
         const dateFormat = 'YYYY-MM-DD';
         const { getFieldDecorator } = this.props.form;
-        const { basicInfo } = this.props;
         // 创建者
-        const createdByName = basicInfo.createdByName
-            ? this.basicInfo.createdByName
+        const createdByName = this.state.createdByName
+            ? this.state.createdByName
             : this.props.data.user.employeeName
 
         // 创建日期
-        const createdAt = basicInfo.createdAt
-            ? basicInfo.createdAt
+        const createdAt = this.state.createdAt
+            ? this.state.createdAt
             : moment().format('YYYY-MM-DD')
 
         // 供应商
-        const spDefaultValue = basicInfo.spId
-            ? `${basicInfo.spId}-${basicInfo.spName}`
+        const spDefaultValue = this.state.spId
+            ? `${this.state.spId}-${this.state.spName}`
             : ''
 
         // 供应商地点值清单回显数据
-        const spAdrDefaultValue = basicInfo.spAdrId
-            ? `${basicInfo.spAdrId}-${basicInfo.spAdrName}`
+        const spAdrDefaultValue = this.state.spAdrId
+            ? `${this.state.spAdrId}-${this.state.spAdrName}`
             : ''
 
         // 地点值清单回显数据
-        const adresssDefaultValue = basicInfo.adrTypeCode
-            ? `${basicInfo.adrTypeCode}-${basicInfo.adrTypeName}`
+        const adresssDefaultValue = this.state.adrTypeCode
+            ? `${this.state.adrTypeCode}-${this.state.adrTypeName}`
             : ''
 
         return (
@@ -697,5 +820,8 @@ BasicInfo.propTypes = {
     stateChange: PropTypes.func,
     purchaseOrderTypeChange: PropTypes.func,
     deletePoLines: PropTypes.func,
+    isCheck: PropTypes.bool,
+    value: PropTypes.objectOf(PropTypes.any),
+    checkResult: PropTypes.func,
 }
 export default withRouter(Form.create()(BasicInfo));

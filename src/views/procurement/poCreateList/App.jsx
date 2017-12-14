@@ -77,7 +77,10 @@ class PoCreateList extends PureComponent {
             spAdrId: null,
             businessMode: null,
             spId: null,
-            purchaseOrderType: '0'
+            purchaseOrderType: '0',
+            isCheck: false, // 是否进行校验
+            basicInfoCheck: false, // 基本信息框校验结果
+            basicInfo: {}, // 基本信息框内容
         }
     }
     componentDidMount() {
@@ -129,7 +132,6 @@ class PoCreateList extends PureComponent {
             adrType, settlementPeriod, payType, payCondition, estimatedDeliveryDate,
             purchaseOrderType, currencyCode, id, spAdrId, businessMode, spId
         } = nextProps.basicInfo;
-
         const { basicInfo = {} } = this.props;
         const newPo = fromJS(nextProps.po.poLines);
         const oldPo = fromJS(this.props.po.poLines);
@@ -190,6 +192,11 @@ class PoCreateList extends PureComponent {
      *     3.采购商品行信息是否正确
      */
     getAllValue = (status, isGoBack) => {
+        this.setState({
+            isCheck: true
+        }, () => {
+        })
+
         // 筛选出有效商品行
         const validPoLines = this.getPoData().poLines.filter((item) =>
             item.isValid !== 0
@@ -307,6 +314,19 @@ class PoCreateList extends PureComponent {
             actionAuth = { downloadPDF: true };
         }
         return actionAuth;
+    }
+
+    /**
+     * 点击保存/提交
+     * 基本信息框校验
+     * 校验内容：基本信息是否正确
+     * 返回校验结果和基本信息
+     */
+    basicInfoResult = (isCheck, basicInfo) => {
+        this.setState({
+            basicInfoCheck: isCheck,
+            basicInfo
+        })
     }
 
     /**
@@ -471,7 +491,6 @@ class PoCreateList extends PureComponent {
         this.props.initPoDetail({
             poLines: []
         })
-        console.log(this.props.po);
     }
 
     /**
@@ -559,6 +578,8 @@ class PoCreateList extends PureComponent {
                         stateChange={this.stateChange}
                         purchaseOrderTypeChange={this.purchaseOrderTypeChange}
                         deletePoLines={this.deletePoLines}
+                        isCheck={this.state.isCheck}
+                        checkResult={this.basicInfoResult}
                     />
                     <AddingGoods
                         spAdrId={this.state.spAdrId}
