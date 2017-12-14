@@ -13,7 +13,7 @@ import { Form, Row, Col, Button, Input } from 'antd';
 import { clearPromotionDetail, getPromotionDetail } from '../../../actions/promotion';
 import { basicDetailBefore, basicDetailAfter } from '../columns';
 import { promotionRuleStatus } from '../constants';
-import { getPreferentialBuyRule } from './domHelper';
+import { getPreferentialBuyRule, getPurchaseType, getConditionType } from './domHelper';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -117,72 +117,86 @@ class PromotionDetail extends PureComponent {
         const { submitVisible, area, storesVisible, branch } = this.state;
         const { promotionRule, stores } = promotion;
         return (
-            <div className="promotion-form">
-                <Form layout="inline" onSubmit={this.handleSubmit}>
-                    <div className="promotion-add-item">
-                        <div className="add-message promotion-add-license">
-                            <div className="add-message-body">
-                                {this.getRowFromFields(basicDetailBefore)}
-                                {/* 不指定条件 */}
-                                {branch === 'NOCONDITIONS' ?
-                                    <Row type="flex" justify="start">
-                                        <Col span={16}>
-                                            <FormItem label="优惠方式">
-                                                {getPreferentialBuyRule(promotionRule.orderRule)}
-                                            </FormItem>
-                                        </Col>
-                                    </Row> : null
-                                }
-                                {/* 购买类型 */}
-                                {branch === 'PURCHASECONDITION' ?
-                                    <div>
-                                        <Row type="flex" justify="start">
-                                            <Col span={16}>
-                                                <FormItem label="优惠种类">
-                                                    {promotionRuleStatus[promotionRule.ruleName]}
-                                                </FormItem>
-                                            </Col>
-                                        </Row>
-                                        <Row type="flex" justify="start">
-                                            <Col span={16}>
-                                                <FormItem label="优惠方式">
-                                                    {getPreferentialBuyRule(promotionRule.purchaseConditionsRule.rule)}
-                                                </FormItem>
-                                            </Col>
-                                        </Row>
-                                    </div> : null
-                                }
-                                <Row key="area" type="flex" justify="start">
-                                    <Col span={16}>
-                                        <FormItem label="使用区域">{area}</FormItem>
-                                    </Col>
-                                </Row>
-                                {storesVisible ?
-                                    <Row type="flex" justify="start">
-                                        <Col span={16}>
-                                            <FormItem className="store">
-                                                {getFieldDecorator('storeId', {
-                                                    initialValue: stores.storeId,
-                                                    rules: [{ required: true, message: '请输入指定门店' }]
-                                                })(<TextArea
-                                                    disabled={!submitVisible}
-                                                    placeholder="请输入指定门店"
-                                                    autosize={{ minRows: 4, maxRows: 6 }}
-                                                />)}
-                                            </FormItem>
-                                        </Col>
-                                    </Row> : null
-                                }
-                                {this.getRowFromFields(basicDetailAfter)}
+            <Form layout="inline" onSubmit={this.handleSubmit} className="promotion-form">
+                {this.getRowFromFields(basicDetailBefore)}
+                {/* 不指定条件 */}
+                {branch === 'NOCONDITIONS' ?
+                    <Row type="flex" justify="start">
+                        <Col span={16}>
+                            <FormItem label="优惠方式">
+                                {getPreferentialBuyRule(promotionRule.orderRule)}
+                            </FormItem>
+                        </Col>
+                    </Row> : null
+                }
+                {/* 购买类型 */}
+                {branch === 'PURCHASECONDITION' ?
+                    <div>
+                        <Row type="flex" justify="start">
+                            <Col span={16}>
+                                <FormItem label="优惠种类">
+                                    {promotionRuleStatus[promotionRule.ruleName]}
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <div className="wd-396">
+                                <Col span={16}>
+                                    <FormItem label="购买类型">
+                                        {getPurchaseType(
+                                            promotionRule.purchaseConditionsRule.condition
+                                        )}
+                                    </FormItem>
+                                </Col>
                             </div>
-                        </div>
-                    </div>
-                    {submitVisible ?
-                        <Row className="center" >
-                            <Button type="primary" size="default" htmlType="submit">保存</Button>
-                        </Row> : null}
-                </Form>
-            </div>
+                            <div className="wd-317">
+                                <Col span={16}>
+                                    <FormItem label="条件类型">
+                                        {getConditionType(
+                                            promotionRule.purchaseConditionsRule.condition
+                                        )}
+                                    </FormItem>
+                                </Col>
+                            </div>
+                            <div className="wd-297">
+                                <Col span={16}>
+                                    <FormItem label="优惠方式">
+                                        {getPreferentialBuyRule(
+                                            promotionRule.purchaseConditionsRule.rule
+                                        )}
+                                    </FormItem>
+                                </Col>
+                            </div>
+                        </Row>
+                    </div> : null
+                }
+                <Row key="area" type="flex" justify="start">
+                    <Col span={16}>
+                        <FormItem label="使用区域">{area}</FormItem>
+                    </Col>
+                </Row>
+                {storesVisible ?
+                    <Row type="flex" justify="start">
+                        <Col span={16}>
+                            <FormItem className="store">
+                                {getFieldDecorator('storeId', {
+                                    initialValue: stores.storeId,
+                                    rules: [{ required: true, message: '请输入指定门店' }]
+                                })(<TextArea
+                                    disabled={!submitVisible}
+                                    placeholder="请输入指定门店"
+                                    autosize={{ minRows: 4, maxRows: 6 }}
+                                />)}
+                            </FormItem>
+                        </Col>
+                    </Row> : null
+                }
+                {this.getRowFromFields(basicDetailAfter)}
+                {submitVisible ?
+                    <Row className="center" >
+                        <Button type="primary" size="default" htmlType="submit">保存</Button>
+                    </Row> : null}
+            </Form>
         );
     }
 }
