@@ -202,6 +202,11 @@ export const getPurchaseCondition = promotionRule =>
         </Row>
     </div>)
 
+/**
+ * 奖励列表 dom 拼接
+ *
+ * @param {*object} promotionRule
+ */
 export const getRewardList = (promotionRule) =>
     (<div>
         <Row type="flex" justify="start">
@@ -216,5 +221,34 @@ export const getRewardList = (promotionRule) =>
         )}
         {getRewardListConditionList(
             promotionRule.rewardListRule.purchaseConditionsRule
+        )}
+    </div>)
+
+/**
+ * 整个购买列表 dom 拼接
+ *
+ * promotionRule.totalPurchaseListRule
+ * @param {*object} promotionRule
+ */
+export const getTotalPurchaseList = (promotionRule) =>
+    (<div>
+        <Row type="flex" justify="start">
+            <div className="wd-396">
+                <Col span={16}>
+                    <FormItem label="优惠种类">
+                        {promotionRuleStatus[promotionRule.ruleName]}
+                    </FormItem>
+                </Col>
+            </div>
+            <div className="wd-317">
+                <Col span={16}>
+                    <FormItem label="优惠方式">
+                        {getPreferentialBuyRule(promotionRule.totalPurchaseListRule.rule)}
+                    </FormItem>
+                </Col>
+            </div>
+        </Row>
+        {getPurchaseConditionList(
+            promotionRule.totalPurchaseListRule.conditions
         )}
     </div>)

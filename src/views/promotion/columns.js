@@ -194,58 +194,6 @@ export const basicDetailAfter = [{
 }];
 
 /**
- * 购买条件
- */
-export const purchageCondition = [...basicDetailBefore, {
-    title: '优惠种类',
-    dataIndex: 'promotionType',
-    render: () => '购买条件'
-}, {
-    title: '购买条件',
-    dataIndex: 'purchaseType',
-    render: (text, record) => {
-        if (record.id) {
-            const { condition, rule } = record.promotionRule.purchaseConditionsRule;
-            let info = getTextByCondition(condition);
-            info += getPreferentialBuyRule(rule);
-            return info;
-        }
-        return null;
-    }
-}, ...basicDetailAfter];
-
-/**
- * 奖励条件
- */
-export const rewardListCondition = [...basicDetailBefore, {
-    title: '优惠种类',
-    dataIndex: 'promotionType',
-    render: () => '奖励条件'
-}, {
-    title: '购买条件',
-    dataIndex: 'purchaseCondition',
-    render: (text, record) => {
-        if (record.id) {
-            const { conditions } = record.promotionRule.rewardListRule;
-            return conditions.map(c => (`${getTextByCondition(c)}`));
-        }
-        return null;
-    }
-}, {
-    title: '奖励列表',
-    dataIndex: 'rewardList',
-    render: (text, record) => {
-        if (record.id) {
-            const { condition, rule } = record.promotionRule.rewardListRule.purchaseConditionsRule;
-            let info = getTextByCondition(condition);
-            info += getPreferentialBuyRule(rule);
-            return info;
-        }
-        return null;
-    }
-}, ...basicDetailAfter];
-
-/**
  * 整个购买列表
  */
 export const totalPurchaseCondition = [...basicDetailBefore, {

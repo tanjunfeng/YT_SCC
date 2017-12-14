@@ -1,12 +1,12 @@
 {
-    "timestamp": 1512542097235,
+    "timestamp": 1512542174245,
     "code": 200,
     "message": "请求成功",
     "data": {
-        "id": "HD300",
+        "id": "HD301",
         "status": "unreleased",
         "promotionType": "order_promo",
-        "promotionName": "圣诞节大促",
+        "promotionName": "元宵节打折",
         "promotionDiscription": null,
         "startDate": 1504499995000,
         "endDate": 1505581202000,
@@ -20,23 +20,24 @@
         "promoCategoriesPo": null,
         "companiesPoList": [],
         "stores": {
-            "promoId": "HD300",
+            "promoId": "HD301",
             "storeId": "A000992,A000902,A000993"
         },
         "promotionRule": {
             "useConditionRule": true,
-            "ruleName": "REWARDLIST",
+            "ruleName": "TOTALPUCHASELIST",
             "orderRule": null,
             "purchaseConditionsRule": null,
-            "rewardListRule": {
+            "rewardListRule": null,
+            "totalPurchaseListRule": {
                 "conditions": [
                     {
-                        "key":"1505000",
+                        "key":"15345000",
                         "purchaseType": "CATEGORY",
                         "promoCategories": {
                             "promoId": null,
                             "categoryId": "xx99",
-                            "categoryName": "日 化",
+                            "categoryName": "日化",
                             "categoryLevel": 2
                         },
                         "promoProduct": null,
@@ -44,7 +45,7 @@
                         "conditionValue": 50
                     },
                     {
-                        "key":"15464564500",
+                        "key":"1535000",
                         "purchaseType": "PRODUCT",
                         "promoCategories": null,
                         "promoProduct": {
@@ -55,27 +56,11 @@
                         "conditionValue": 100
                     }
                 ],
-                "purchaseConditionsRule": {
-                    "condition": {
-                        "key":"15345345000",
-                        "purchaseType": "CATEGORY",
-                        "promoCategories": {
-                            "promoId": null,
-                            "categoryId": "xj29",
-                            "categoryName": "生鲜",
-                            "categoryLevel": 2
-                        },
-                        "promoProduct": null,
-                        "conditionType": "AMOUNT",
-                        "conditionValue": 10
-                    },
-                    "rule": {
-                        "preferentialWay": "PERCENTAGE",
-                        "preferentialValue": 0.95
-                    }
+                "rule": {
+                    "preferentialWay": "PERCENTAGE",
+                    "preferentialValue": 0.95
                 }
-            },
-            "totalPurchaseListRule": null
+            }
         },
         "priority": 1,
         "simpleDescription": "简易描述，限填20字",

@@ -13,7 +13,8 @@ import { Form, Row, Col, Button, Input } from 'antd';
 import { clearPromotionDetail, getPromotionDetail } from '../../../actions/promotion';
 import { basicDetailBefore, basicDetailAfter } from '../columns';
 import {
-    getRowFromFields, getNoConditions, getPurchaseCondition, getRewardList
+    getRowFromFields, getNoConditions, getPurchaseCondition,
+    getRewardList, getTotalPurchaseList
 } from './domHelper';
 
 const FormItem = Form.Item;
@@ -107,6 +108,9 @@ class PromotionDetail extends PureComponent {
                 }
                 {branch === 'REWARDLIST' ?
                     getRewardList(promotionRule) : null
+                }
+                {branch === 'TOTALPUCHASELIST' ?
+                    getTotalPurchaseList(promotionRule) : null
                 }
                 <Row key="area" type="flex" justify="start">
                     <Col span={16}>
