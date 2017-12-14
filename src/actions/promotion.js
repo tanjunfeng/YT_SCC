@@ -21,7 +21,8 @@ import {
     fetchPromotionParticipateData as fetchPromotionParticipateDataService,
     grantCoupon as grantCouponService,
     garbageCouponParticipate as invalidRecordService,
-    cancelCoupons as cancelCouponsService
+    cancelCoupons as cancelCouponsService,
+    updateStoreId as updateStoreIdService
 } from '../service';
 
 /**
@@ -284,6 +285,24 @@ export const getPromotionDetail = (params) => dispatch => (
             .then(res => {
                 dispatch(
                     fetchPromotionDetailAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
+const updateStoreIdAction = (data) => ({
+    type: ActionType.UPDATE_STORE_ID,
+    payload: data
+});
+
+export const updateStoreId = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        updateStoreIdService(params)
+            .then(res => {
+                dispatch(
+                    updateStoreIdAction(res.data)
                 );
                 resolve(res);
             })

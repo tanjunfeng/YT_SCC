@@ -55,7 +55,7 @@ export const overlayOptions = [
 ];
 
 // 优惠种类
-export const promotionRuleName = {
+export const promotionRuleStatus = {
     PURCHASECONDITION: '购买条件',
     REWARDLIST: '奖励列表',
     TOTALPUCHASELIST: '整个购买列表'
