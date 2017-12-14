@@ -11,7 +11,7 @@ const getPreferentialBuyRule = rule => {
     const { preferentialWay, preferentialValue } = rule;
     let value = preferentialValue;
     if (preferentialWay === 'DISCOUNTAMOUNT' || preferentialWay === 'FIXEDPRICE') {
-        value = `￥${preferentialValue}元`;
+        value = `${preferentialValue}元`;
     }
     return `${preferentialWayStatus[preferentialWay]} ${value}`;
 }
@@ -51,7 +51,7 @@ const getConditionType = condition => {
             info += `${conditionValue}`;
             break;
         case 'AMOUNT':
-            info += `￥${conditionValue}元`;
+            info += `${conditionValue}元`;
             break;
         default: break;
     }
