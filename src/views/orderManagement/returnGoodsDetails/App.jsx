@@ -293,7 +293,7 @@ class ReturnGoodsDetails extends PureComponent {
                         }
                         <div className="bottom-text">
                             <div className="bt-left">共<span className="bt-left-num">{data.commodityTotal}</span>件商品</div>
-                            <div className="bt-right"><span>退款金额：</span><span className="bt-right-num">￥{refundAmount >= 0 ? refundAmount : data.refundAmount}</span></div>
+                            <div className="bt-right"><span>退款金额：</span><span className="bt-right-num">￥{data.refundAmount}</span></div>
                             <div className="bt-right" style={{ marginRight: 20 }}><span>退货金额：</span><span className="bt-right-num">￥{amount >= 0 ? amount : data.amount}</span></div>
                         </div>
                     </div>
