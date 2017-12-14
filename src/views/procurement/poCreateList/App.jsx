@@ -157,34 +157,6 @@ class PoCreateList extends PureComponent {
     }
 
     /**
-     * 表单操作
-     * @param {*} record 行数据
-     * @param {*} index 行下标
-     * @param {*} items 行项
-     */
-    onActionMenuSelect = (record, index, items) => {
-        const { key } = items;
-        const that = this;
-        switch (key) {
-            case 'delete':
-                Modal.confirm({
-                    title: '你确认要删除该商品？',
-                    onOk: () => {
-                        // 新添加商品(未存数据库),物理删除
-                        that.props.deletePoLine(record);
-                        that.props.updatePoLine(record);
-                        message.success('删除成功');
-                    },
-                    onCancel() {
-                    },
-                });
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
      * 点击保存/提交
      * 校验内容：
      *     1.基本信息是否正确
@@ -195,68 +167,68 @@ class PoCreateList extends PureComponent {
         this.setState({
             isCheck: true
         }, () => {
-        })
+            // 检验基本信息
+            if (!this.state.isCheck) {
+                message.error('校验失败，请检查！');
+                return;
+            }
+            // 筛选出有效商品行
+            const validPoLines = this.getPoData().poLines.filter((item) =>
+                item.isValid !== 0
+            )
+            // 筛选出无效商品行
+            const invalidPoLines = this.getPoData().poLines.filter((item) =>
+                item.isValid === 0
+            )
 
-        // 筛选出有效商品行
-        const validPoLines = this.getPoData().poLines.filter((item) =>
-            item.isValid !== 0
-        )
-        // 筛选出无效商品行
-        const invalidPoLines = this.getPoData().poLines.filter((item) =>
-            item.isValid === 0
-        )
-        // 检验基本信息
-        if (!this.validateForm()) {
-            message.error('校验失败，请检查！');
-            return;
-        }
-        // 校验商品行
-        if (this.hasInvalidateMaterial()) {
-            message.error('采购商品校验失败，请检查！');
-            return;
-        }
-        // 合法采购商品
-        const tmpPoLines = this.props.poLines.filter((record) =>
-            (!record.deleteFlg)
-        );
-
-        // 校验是否存在采购商品，无则异常
-        if (tmpPoLines.length === 0) {
-            message.error('请添加采购商品！');
-            return;
-        }
-
-        // 校验是否存在采购数量为空商品
-        if (this.hasEmptyQtyMaterial(tmpPoLines)) {
-            message.error('请输入商品采购数量！');
-            return;
-        }
-
-        // 校验有效商品数量
-        if (validPoLines.length === 0) {
-            message.error('无有效的商品！');
-            return;
-        }
-
-        // 清除无效商品弹框
-        if (invalidPoLines.length !== 0) {
-            const invalidGoodsList = invalidPoLines.map(item =>
-                (<p key={item.prodPurchaseId} >
-                    {item.productName}
-                </p>)
+            // 校验商品行
+            if (this.hasInvalidateMaterial()) {
+                message.error('采购商品校验失败，请检查！');
+                return;
+            }
+            // 合法采购商品
+            const tmpPoLines = this.props.poLines.filter((record) =>
+                (!record.deleteFlg)
             );
-            Modal.confirm({
-                title: '是否默认清除以下无效商品？',
-                content: invalidGoodsList,
-                onOk: () => {
-                    this.createPoRequest(validPoLines, status, isGoBack);
-                },
-                onCancel() {
-                },
-            });
-        } else {
-            this.createPoRequest(validPoLines, status, isGoBack);
-        }
+
+            // 校验是否存在采购商品，无则异常
+            if (tmpPoLines.length === 0) {
+                message.error('请添加采购商品！');
+                return;
+            }
+
+            // 校验是否存在采购数量为空商品
+            if (this.hasEmptyQtyMaterial(tmpPoLines)) {
+                message.error('请输入商品采购数量！');
+                return;
+            }
+
+            // 校验有效商品数量
+            if (validPoLines.length === 0) {
+                message.error('无有效的商品！');
+                return;
+            }
+
+            // 清除无效商品弹框
+            if (invalidPoLines.length !== 0) {
+                const invalidGoodsList = invalidPoLines.map(item =>
+                    (<p key={item.prodPurchaseId} >
+                        {item.productName}
+                    </p>)
+                );
+                Modal.confirm({
+                    title: '是否默认清除以下无效商品？',
+                    content: invalidGoodsList,
+                    onOk: () => {
+                        this.createPoRequest(validPoLines, status, isGoBack);
+                    },
+                    onCancel() {
+                    },
+                });
+            } else {
+                this.createPoRequest(validPoLines, status, isGoBack);
+            }
+        })
     }
 
     /**
@@ -327,67 +299,6 @@ class PoCreateList extends PureComponent {
             basicInfoCheck: isCheck,
             basicInfo
         })
-    }
-
-    /**
-     * 商品行采购数量变化回调，做如下处理
-     *  1.更新store中该行信息（校验结果，采购数量，采购金额）
-     *  2.计算采购总数量、采购总金额并更新store
-     * result:{value:输入值,isValidate:检验结果 true/false}
-     */
-    applyQuantityChange = (records, index, result) => {
-        const record = records;
-        const { value, isValidate } = result;
-        record.purchasePrice = this.state.purchaseOrderType === '1' ? 0 : record.purchasePrice;
-        // 更新store中采购单商品
-        if (record) {
-            // 未输入采购数量，则清空store中采购数量，采购金额
-            if (!value) {
-                record.purchaseNumber = null;
-                record.totalAmount = null;
-                this.props.updatePoLine(record);
-            } else {
-                // 保存输入数据和校验状态 给submit用
-                record.purchaseNumber = value;
-                // 计算采购金额（含税）
-                record.totalAmount = Math.round(value * record.purchasePrice * 100) / 100;
-                // 校验状态
-                record.isValidate = isValidate;
-                this.props.updatePoLine(record);
-
-                // 输入采购数量合法，更新store
-                if (!isValidate) {
-                    message.error('采购数量必须为采购内装数的整数倍');
-                }
-            }
-        }
-    }
-    /**
-     * 商品行价格变化回调，做如下处理
-     *  1.更新store中该行信息（校验结果，采购价格，采购金额）
-     *  2.计算采购总金额并更新store
-     * result:{value:输入值,isValidate:检验结果 true/false}
-     */
-    applyPriceChange = (records, index, result) => {
-        const record = records;
-        const { value, isValidate } = result;
-        // 更新store中采购单商品
-        if (record) {
-            // 未输入采购价格，则清空store中采购数量，采购金额
-            if (!value) {
-                record.purchasePrice = null;
-                record.totalAmount = null;
-                this.props.updatePoLine(record);
-            } else {
-                // 保存输入数据和校验状态 给submit用
-                record.purchasePrice = value;
-                // 计算采购金额（含税）
-                record.totalAmount = Math.round(value * record.purchaseNumber * 100) / 100;
-                // 校验状态
-                record.isValidate = isValidate;
-                this.props.updatePoLine(record);
-            }
-        }
     }
 
     /**
@@ -593,7 +504,6 @@ class PoCreateList extends PureComponent {
                         purchaseOrderType={this.state.purchaseOrderType}
                         applyPriceChange={this.applyPriceChange}
                         applyQuantityChange={this.applyQuantityChange}
-                        onActionMenuSelect={this.onActionMenuSelect}
                     />
                     <div>
                         <Row type="flex">
