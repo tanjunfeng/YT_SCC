@@ -9,8 +9,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Form, Row, Col, Button, Input } from 'antd';
-import { clearPromotionDetail, getPromotionDetail } from '../../../actions/promotion';
+import { Form, Row, Col, Button, Input, message } from 'antd';
+import { clearPromotionDetail, getPromotionDetail, updateStoreId } from '../../../actions/promotion';
 import { basicDetailBefore, basicDetailAfter } from '../columns';
 import {
     getRowFromFields, getNoConditions, getPurchaseCondition,
@@ -24,7 +24,8 @@ const { TextArea } = Input;
     promotion: state.toJS().promotion.promotionDetail
 }), dispatch => bindActionCreators({
     clearPromotionDetail,
-    getPromotionDetail
+    getPromotionDetail,
+    updateStoreId
 }, dispatch))
 
 class PromotionDetail extends PureComponent {
@@ -32,7 +33,8 @@ class PromotionDetail extends PureComponent {
         branch: '', // 四类页面现实分支
         area: '', // 使用区域显示：全部区域；所选区域；指定门店
         storesVisible: false, // 门店编辑框是否可见
-        submitVisible: false // 保存按钮是否可见
+        submitVisible: false, // 保存按钮是否可见
+        submitDisabled: false // 保存按钮是否禁用
     }
 
     componentWillMount() {
@@ -57,7 +59,7 @@ class PromotionDetail extends PureComponent {
                 }
             });
         }
-        this.setState({ area: this.getArea(promotion) });
+        this.setState({ area: this.getArea() });
 
         // 区分四种页面分支
         if (promotionRule) {
@@ -78,8 +80,8 @@ class PromotionDetail extends PureComponent {
     /**
      * 根据回传数据判断用户所选区域
      */
-    getArea = (promotion) => {
-        const { stores, companiesPoList } = promotion;
+    getArea = () => {
+        const { stores, companiesPoList } = this.props.promotion;
         if (stores === null && companiesPoList === null) {
             return '全部区域';
         }
@@ -92,10 +94,34 @@ class PromotionDetail extends PureComponent {
         return null;
     }
 
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const { form, promotion } = this.props;
+        form.validateFields((err, values) => {
+            if (err) {
+                return;
+            }
+            this.setState({ submitDisabled: true })
+            const { storeId } = values;
+            this.props.updateStoreId({
+                stores: {
+                    promoId: promotion.id,
+                    storeId
+                }
+            }).then(res => {
+                if (res.code === 200) {
+                    message.success('保存门店信息成功！');
+                }
+            }).catch(() => {
+                this.setState({ submitDisabled: false })
+            });
+        });
+    }
+
     render() {
         const { form, promotion } = this.props;
         const { getFieldDecorator } = form;
-        const { submitVisible, area, storesVisible, branch } = this.state;
+        const { submitVisible, area, storesVisible, submitDisabled, branch } = this.state;
         const { promotionRule, stores } = promotion;
         return (
             <Form layout="inline" onSubmit={this.handleSubmit} className="promotion-form">
@@ -136,7 +162,12 @@ class PromotionDetail extends PureComponent {
                 {getRowFromFields(promotion, basicDetailAfter)}
                 {submitVisible ?
                     <Row className="center" >
-                        <Button type="primary" size="default" htmlType="submit">保存</Button>
+                        <Button
+                            type="primary"
+                            size="default"
+                            htmlType="submit"
+                            disabled={submitDisabled}
+                        >保存</Button>
                     </Row> : null}
             </Form>
         );
@@ -146,6 +177,7 @@ class PromotionDetail extends PureComponent {
 PromotionDetail.propTypes = {
     clearPromotionDetail: PropTypes.func,
     getPromotionDetail: PropTypes.func,
+    updateStoreId: PropTypes.func,
     match: PropTypes.objectOf(PropTypes.any),
     form: PropTypes.objectOf(PropTypes.any),
     promotion: PropTypes.objectOf(PropTypes.any)
