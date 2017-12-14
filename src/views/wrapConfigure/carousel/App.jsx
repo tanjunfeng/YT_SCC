@@ -41,9 +41,17 @@ const columns = [
         render: (text) => {
             switch (text) {
                 case 1:
-                    return '商品链接';
+                    return '详情链接';
                 case 2:
+                    return '分类链接';
+                case 3:
+                    return '列表链接';
+                case 4:
                     return '页面链接';
+                case 5:
+                    return '外部链接';
+                case 6:
+                    return '活动链接';
                 default:
                     return '';
             }
@@ -56,9 +64,19 @@ const columns = [
         render: (text = '无编号') => text
     },
     {
-        title: '链接地址',
+        title: '链接地址/活动id',
         dataIndex: 'linkAddress',
         key: 'linkAddress',
+    },
+    {
+        title: '分类',
+        dataIndex: 'linkId',
+        key: 'linkId',
+    },
+    {
+        title: '关键字',
+        dataIndex: 'linkKeyword',
+        key: 'linkKeyword',
     },
     {
         title: '图片',
@@ -115,13 +133,16 @@ class CarouselManagement extends Component {
             companyId: '',
             isChecked: false,
             // 用户能否修改当前的页面
-            isHeadquarters: true
+            isHeadquarters: true,
+            // 区域id
+            areaId: ''
         }
     }
 
     componentWillReceiveProps(nextProps) {
         const { intervalData } = nextProps;
-        if (intervalData.carouselInterval !== this.props.intervalData.carouselInterval) {
+        if (intervalData.carouselInterval !== this.props.intervalData.carouselInterval
+            || !this.props.intervalData.id) {
             this.setState({
                 intervalData: {
                     id: intervalData.id,
@@ -159,7 +180,8 @@ class CarouselManagement extends Component {
         this.props.fetchCarouselArea(obj)
             .then(res => {
                 this.setState({
-                    isChecked: res.isUsingNation
+                    isChecked: res.isUsingNation,
+                    areaId: res.id
                 })
                 this.props.fetchCarouselAdList({ areaId: res.id })
                 this.props.fetchCarouselInterval({ areaId: res.id })
@@ -198,7 +220,8 @@ class CarouselManagement extends Component {
         }).then(() => {
             this.setState({
                 intervalData: {
-                    carouselInterval: value
+                    carouselInterval: value,
+                    id: this.state.intervalData.id,
                 }
             })
             message.success('修改成功！');
@@ -206,9 +229,24 @@ class CarouselManagement extends Component {
     }
 
     /**
+     * 没有修改权限的提示
+     */
+    showError = () => {
+        Modal.error({
+            title: '错误',
+            content: '您没有权限修改总部运营方式',
+        });
+    }
+
+    /**
      * “添加”模态框
      */
     showAddModal() {
+        // 当前用户是否可修改总部运营方式
+        if (!this.state.isHeadquarters) {
+            this.showError();
+            return;
+        }
         this.props.modifyModalVisible({
             isVisible: true,
             mTitle: '新增轮播广告设置'
@@ -223,10 +261,7 @@ class CarouselManagement extends Component {
     handleSelect(record, items) {
         // 当前用户是否可修改总部运营方式
         if (!this.state.isHeadquarters) {
-            Modal.error({
-                title: '错误',
-                content: '您没有权限修改总部运营方式',
-            });
+            this.showError();
             return;
         }
         const { id } = record;
@@ -347,7 +382,7 @@ class CarouselManagement extends Component {
                     isChecked={this.state.isChecked}
                 />
                 {
-                    adData.length > 0
+                    this.state.companyId
                         ? <div>
                             <span>
                                 <span className="modal-carousel-interval">
@@ -380,7 +415,10 @@ class CarouselManagement extends Component {
                 }
                 {
                     this.props.modalVisible &&
-                    <ChangeModalMessage searchChange={this.searchChange} />
+                    <ChangeModalMessage
+                        searchChange={this.searchChange}
+                        areaId={this.state.areaId}
+                    />
                 }
             </div>
         );

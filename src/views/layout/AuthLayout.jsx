@@ -13,6 +13,7 @@ import Breadcrumb from '../../common/breadcrumb/Breadcrumb';
 import AuthRoute from '../../Route';
 import { CODE } from '../../constant';
 import { logout } from '../../service';
+import ModifyThePassword from './modifyThePassword';
 import './layout.scss';
 
 const { Header, Content, Sider } = Layout;
@@ -27,18 +28,25 @@ const { Header, Content, Sider } = Layout;
 class AuthLayout extends PureComponent {
     constructor(props) {
         super(props);
-        this.handleClick = ::this.handleClick;
-        this.handleSelect = ::this.handleSelect;
+        this.handleClick = :: this.handleClick;
+        this.handleSelect = :: this.handleSelect;
+
+        this.state = {
+            visible: false
+        }
 
         this.menu = (
             <Menu onClick={this.handleSelect}>
+                <Menu.Item key="modifyThePassword">
+                    <a rel="noopener noreferrer">修改密码</a>
+                </Menu.Item>
                 <Menu.Item key="logout">
                     <a rel="noopener noreferrer">退出登录</a>
                 </Menu.Item>
             </Menu>
         );
 
-        const { initData} = props;
+        const { initData } = props;
         const { topMenus } = initData;
         this.defaultSelect = topMenus.menu.find((item) => item.code === CODE)
     }
@@ -52,9 +60,20 @@ class AuthLayout extends PureComponent {
         /* eslint-enable */
     }
 
+    visibleChange = (visible) => {
+        this.setState({
+            visible
+        })
+    }
+
     handleSelect(item) {
         const { key } = item;
         switch (key) {
+            case 'modifyThePassword':
+                this.setState({
+                    visible: true
+                })
+                break;
             case 'logout':
                 logout()
                     .then(() => {
@@ -125,6 +144,7 @@ class AuthLayout extends PureComponent {
                         </div>
                     </Content>
                 </Layout>
+                <ModifyThePassword visible={this.state.visible} onChange={this.visibleChange} />
             </Layout>
         );
     }

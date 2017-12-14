@@ -708,6 +708,13 @@ const routes = [
                                 {(App) => <App />}
                             </Bundle>)}
                         />
+                        <Route
+                            path="/returnGoodsList/detail/:type/:state/:id"
+                            exact
+                            render={() => (<Bundle load={ReturnGoodsDetails}>
+                                {(App) => <App />}
+                            </Bundle>)}
+                        />
                     </Switch>
                 )
             },

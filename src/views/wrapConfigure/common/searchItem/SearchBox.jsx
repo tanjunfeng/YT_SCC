@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author liujinyu
  *
- * 首页样式管理条件查询区
+ * 首页样式管理、轮播管理条件查询区
  */
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
@@ -14,13 +14,6 @@ import { fetchQueryBranchCompanyInfo } from '../../../../actions/wap';
 import { operationState } from '../../../../constant/wrapConfigure';
 
 const FormItem = Form.Item;
-const companyData = [{
-    id: 'headquarters',
-    name: '总公司'
-}, {
-    id: 'sichuan',
-    name: '四川'
-}]
 
 @connect(
     state => ({
@@ -41,7 +34,7 @@ class SearchBox extends PureComponent {
     }
 
     componentDidMount() {
-        // this.props.fetchQueryBranchCompanyInfo();
+        this.props.fetchQueryBranchCompanyInfo();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -81,7 +74,7 @@ class SearchBox extends PureComponent {
      * @param {string} homePageType form中运营类型的数据
      */
     isType = (companyId, homePageType) => {
-        if (homePageType && homePageType !== '0') {
+        if (homePageType) {
             this.setState({
                 isDisabled: false
             })
@@ -97,15 +90,16 @@ class SearchBox extends PureComponent {
      */
     formSubmit = () => {
         const { companyId, homePageType } = this.props.form.getFieldsValue()
-        // const { companyData } = this.props
+        const { companyData } = this.props
         // 根据选择的id获取id和name并通知父组件
         const branchCompany = companyData.find(item => (
             item.id === companyId
         ))
         const submitObj = {
             branchCompany,
-            homePageType: homePageType || 1
+            homePageType: homePageType || '1'
         }
+        // 是否有总部权限
         let headquarters = false
         for (let i = 0; i < companyData.length; i++) {
             if (companyData[i].id === 'headquarters') {
@@ -113,13 +107,14 @@ class SearchBox extends PureComponent {
                 break
             }
         }
+        // 是否显示运行方式切换按钮
         const isShowSwitch = !(companyId === 'headquarters')
         this.props.searchChange(submitObj, headquarters, isShowSwitch)
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        // const { companyData } = this.props
+        const { companyData } = this.props
         return (
             companyData.length > 0
                 ? <div className="search-box wap-search-box">

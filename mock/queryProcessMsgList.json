@@ -1,0 +1,34 @@
+{
+    "timestamp": 1512464459110,
+    "code": 200,
+    "message": {},
+    "exception": null,
+    "data": {
+      "pageNum": 0,
+      "pageSize": 10,
+      "total": 1,
+      "data": [
+        {
+          "refundAdrName": "深圳仓深圳(广东子公司直营)常温正常仓",
+          "spName": "四川福仁缘农业开发有限公司",
+          "totalRefundCost": "298.80",
+          "adrType": 0,
+          "GM": "10000_22",
+          "CGTH": "10000_382",
+          "FM": "10000_407",
+          "currentNode": "子公司采购主管",
+          "refundNo": "17112800009",
+          "createTime": 1511840257000,
+          "totalRefundMoney": "331.65",
+          "createUser": "yaomuming",
+          "startTime": 1512463879415,
+          "totalRefundAmount": 5,
+          "endTime": 1512464424861,
+          "PM": "10000_382",
+          "apAdrName": "全国-四川福仁缘农业开发有限公司",
+          "taskId": "50046"
+        }
+      ]
+    },
+    "success": true
+  }

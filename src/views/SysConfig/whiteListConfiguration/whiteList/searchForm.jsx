@@ -11,7 +11,6 @@ import reqwest from 'reqwest';
 import Utils from '../../../../util/util';
 import { promotionStatus } from '.././constants';
 import { BranchCompany } from '../../../../container/search';
-import { PAGE_SIZE } from '../../../../constant';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -47,7 +46,6 @@ class SearchForm extends PureComponent {
             branchCompany
         } = this.props.form.getFieldsValue();
         let status = scPurchaseFlag;
-        const pageSize = PAGE_SIZE;
         if (scPurchaseFlag === 'all') {
             status = '';
         }
@@ -57,9 +55,7 @@ class SearchForm extends PureComponent {
             storeId,
             storeName,
             scPurchaseFlag: status,
-            branchCompanyId: branchCompany.id,
-            pageSize,
-            pageNo: 1,
+            branchCompanyId: branchCompany.id
         });
     }
 
@@ -68,9 +64,25 @@ class SearchForm extends PureComponent {
         this.props.onPromotionSearch(this.getFormData());
     }
 
+    /**
+     * 白名单下载导入模板
+     */
+    handleDownload = () => {
+        // 将查询条件回传给调用页
+        this.props.onDownloadList(this.getFormData());
+    }
+
+    /**
+     * 白名单导出
+     */
+    handleExport = () => {
+        // 将查询条件回传给调用页
+        this.props.onExportList(this.getFormData());
+    }
+
     handleReset = () => {
-        this.props.form.resetFields();  // 清除当前查询条件
-        this.props.onPromotionReset();  // 通知父页面已清空
+        this.props.form.resetFields(); // 清除当前查询条件
+        this.props.onPromotionReset(); // 通知父页面已清空
         // 点击重置时清除 seachMind 引用文本
         this.props.form.setFieldsValue({
             branchCompany: { reset: true }
@@ -111,46 +123,47 @@ class SearchForm extends PureComponent {
     */
     handleUpload = () => {
         const { fileList } = this.state;
-        if (fileList[0].name.indexOf('.xlsx') !== -1) {
-            const formData = new FormData();
-            formData.append('file', fileList[0]);
-            this.setState({
-                uploading: true,
-            });
-            reqwest({
-                url: '/sc/sp/whiteListBatchImport',
-                method: 'post',
-                processData: false,
-                data: formData,
-                success: (res) => {
-                    if (res.success) {
-                        message.success('上传成功');
-                        this.handleSearch()
-                        this.hideModalUpload()
-                    } else {
-                        this.setState({
-                            uploading: false
-                        });
-                        message.error(res.errorMessage);
-                    }
-                },
-                error: () => {
+        const fileName = fileList[0].name;
+        if (fileName.indexOf('.xlsx') === -1 && fileName.indexOf('.xls') === -1 && fileName.indexOf('.xlsm') === -1) {
+            message.error('上传文件格式必须为excel格式，请清除后重新尝试');
+            return
+        }
+        const formData = new FormData();
+        formData.append('file', fileList[0]);
+        this.setState({
+            uploading: true,
+        });
+        reqwest({
+            url: `${window.config.apiHost}sp/whiteListBatchImport`,
+            method: 'post',
+            processData: false,
+            data: formData,
+            success: (res) => {
+                if (res.code === 200) {
+                    message.success('上传成功');
+                    this.handleSearch()
+                    this.hideModalUpload()
+                } else {
                     this.setState({
                         uploading: false
                     });
-                    message.error('上传失败,请检查格式并清除后重新尝试');
-                },
-            });
-        } else {
-            message.error('上传文件格式必须为03版以后的excel（*.xlsx）格式，请清除后重新尝试');
-        }
+                    message.error(res.message);
+                }
+            },
+            error: () => {
+                this.setState({
+                    uploading: false
+                });
+                message.error('服务异常，请重新尝试');
+            },
+        });
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         const { uploading } = this.state;
         const props = {
-            action: '/sc/sp/whiteListBatchImport',
+            action: `${window.config.apiHost}sp/whiteListBatchImport`,
             onRemove: () => {
                 this.setState({
                     fileList: []
@@ -207,13 +220,23 @@ class SearchForm extends PureComponent {
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
                                             {this.getStatus()}
-                                        </Select>
-                                    )}
+                                        </Select>)}
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
-                            <Col>
+                            <Col span={8} className="export-left">
+                                <FormItem>
+                                    <Button type="primary" size="default" onClick={this.showModalUpload}>导入</Button>
+                                </FormItem>
+                                <FormItem>
+                                    <Button type="primary" size="default" onClick={this.handleExport}>导出备份</Button>
+                                </FormItem>
+                                <FormItem>
+                                    <a onClick={this.handleDownload}>下载导入模板</a>
+                                </FormItem>
+                            </Col>
+                            <Col span={16} className="search-right">
                                 <FormItem>
                                     <Button type="primary" size="default" onClick={this.handleSearch}>
                                         查询
@@ -243,12 +266,6 @@ class SearchForm extends PureComponent {
                                     >
                                         下线
                                     </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.showModalUpload}>导入</Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" size="default">导出</Button>
                                 </FormItem>
                             </Col>
                         </Row>
@@ -287,6 +304,9 @@ SearchForm.propTypes = {
     onPromotionReset: PropTypes.func,
     onModalClick: PropTypes.func,
     onModalOfflineClick: PropTypes.func,
+    onExportList: PropTypes.func,
+    downExportList: PropTypes.func,
+    onDownloadList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.objectOf(PropTypes.any),
 };

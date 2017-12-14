@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
- * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-29 15:02:59
+ * @Last Modified by: chenghaojie
+ * @Last Modified time: 2017-12-06 11:22:00
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -63,8 +63,8 @@ const confirm = Modal.confirm;
 const statusTypes = { 0: '制单', 1: '已提交', 2: '已审核', 3: '已拒绝', 4: '待退货', 5: '已退货', 6: '已取消', 7: '取消失败', 8: '异常' }
 const adrTypes = { 0: '仓库', 1: '门店' }
 @connect(state => ({
-    poRcvMngList: state.toJS().procurement.poRcvMngList,
-    returnMngList: state.toJS().procurement.returnMngList,
+    poRcvMngInfo: state.toJS().procurement.poRcvMngInfo,
+    returnMngInfo: state.toJS().procurement.returnMngInfo,
     getRefundNumebr: state.toJS().procurement.getRefundNumebr,
     processDefinitions: state.toJS().procurement.processDefinitions
 }), dispatch => bindActionCreators({
@@ -533,7 +533,7 @@ class ReturnManagementList extends PureComponent {
                 </Menu.Item>
                 {
                     // 状态为“制单”时可用
-                    (status === '0') ?
+                    (status === 0) ?
                         <Menu.Item key="delete">
                             <a target="_blank" rel="noopener noreferrer">
                                 删除
@@ -543,7 +543,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 状态为“制单”、“已拒绝”时可用；
-                    (status === '0' || status === '3') ?
+                    (status === 0 || status === 3) ?
                         <Menu.Item key="modify">
                             <Link to={`${pathname}/modify/${id}`}>修改</Link>
                         </Menu.Item>
@@ -551,7 +551,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // “待退货”时可用；
-                    (status === '4') ?
+                    (status === 4) ?
                         <Menu.Item key="cancel">
                             <a target="_blank" rel="noopener noreferrer">
                                 取消
@@ -561,7 +561,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 退货地点为门店且状态为“待退货”时可用
-                    (refundAdr === '1' && status === '4') ?
+                    (refundAdr === 1 && status === 4) ?
                         <Menu.Item key="returnGoods">
                             <a target="_blank" rel="noopener noreferrer">
                                 退货
@@ -581,7 +581,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 点击弹出框显示审批进度信息,按钮显示条件：状态为“已提交”
-                    (status === '1') ?
+                    (status === 1) ?
                         <Menu.Item key="viewApprovalrogress">
                             <a target="_blank" rel="noopener noreferrer">
                                 查看审批进度
@@ -591,7 +591,7 @@ class ReturnManagementList extends PureComponent {
                 }
                 {
                     // 按钮显示条件：状态为“已提交”、“已审批”、“已拒绝”、“待退货”、“已退货”、“已取消”,”取消失败”
-                    (status !== '0' && status !== '8') ?
+                    (status !== 0 && status !== 8) ?
                         <Menu.Item key="viewApproval">
                             <a target="_blank" rel="noopener noreferrer">
                                 查看审批意见
@@ -613,7 +613,7 @@ class ReturnManagementList extends PureComponent {
 
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        const { data, total, pageNum, pageSize } = this.props.returnMngList;
+        const { data, total, pageNum, pageSize } = this.props.returnMngInfo;
         const rowSelection = {
             selectedRowKeys: this.state.chooseGoodsList,
             onChange: (selectedRowKeys, selectedRows) => {
@@ -861,7 +861,7 @@ ReturnManagementList.propTypes = {
     queryApprovalInfo: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
-    returnMngList: PropTypes.objectOf(PropTypes.any),
+    returnMngInfo: PropTypes.objectOf(PropTypes.any),
     history: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,

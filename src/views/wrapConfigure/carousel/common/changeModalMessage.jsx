@@ -1,6 +1,6 @@
 /**
  * @file App.jsx
- * @author caoyanxuan
+ * @author caoyanxuan,liujinyu
  *
  * 轮播广告管理--子组件--模态框
  */
@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Modal, Form, Input, message, InputNumber, Radio, Select } from 'antd';
+import { Modal, Form, message, InputNumber, Radio } from 'antd';
 import Utils from '../../../../util/util';
 import { uploadImageBase64Data } from '../../../../service';
 import LinkType from '../../common/linkType';
@@ -24,7 +24,6 @@ import FileCut from '../../fileCut';
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 @connect(
     state => ({
@@ -53,11 +52,12 @@ class ChangeMessage extends PureComponent {
 
     handleSortBlur() {
         const { sorting } = this.props.form.getFieldsValue();
-        const { modalTitle, visibleData } = this.props;
+        const { modalTitle, visibleData, areaId } = this.props;
         const sortData = {
             sorting,
             queryType: modalTitle === '新增轮播广告设置' ? 0 : 1,
-            carouselAdId: visibleData.id
+            carouselAdId: visibleData.id,
+            areaId
         }
         fetchCarouselAdBySorting({
             ...Utils.removeInvalid(sortData)
@@ -94,7 +94,7 @@ class ChangeMessage extends PureComponent {
      * 关闭模态框
      */
     handleModalCancel() {
-        this.props.modifyModalVisible({isVisible: false});
+        this.props.modifyModalVisible({ isVisible: false });
     }
 
     /**
@@ -131,26 +131,27 @@ class ChangeMessage extends PureComponent {
             status,
             chooseLink
         } = this.props.form.getFieldsValue();
-
-        const linkType = chooseLink.selected;
-        const linkAddress = chooseLink.link;
-        const goodsId = parseInt(linkType, 10) === 1 ? chooseLink.link : '';
-
-        const { modalTitle } = this.props;
+        const { selected, goodsId, linkAddress, linkId, linkKeyword } = chooseLink;
+        const submitObj = {
+            linkType: selected,
+            goodsId,
+            linkAddress,
+            linkId,
+            linkKeyword
+        }
+        const { modalTitle, areaId } = this.props;
         const { id } = this.props.visibleData;
         switch (modalTitle) {
             case '新增轮播广告设置':
                 this.props.form.validateFields((err) => {
                     if (!err) {
                         addCarouselAd({
-                            ...Utils.removeInvalid({
+                            ...Utils.removeInvalid(Object.assign({
                                 sorting,
                                 status: parseInt(status, 10),
-                                linkType,
-                                goodsId,
-                                linkAddress: linkAddress ? encodeURI(linkAddress) : null,
                                 picAddress,
-                            })
+                                areaId
+                            }, submitObj))
                         }).then(() => {
                             this.props.searchChange();
                             this.props.modifyModalVisible({
@@ -165,15 +166,13 @@ class ChangeMessage extends PureComponent {
                 this.props.form.validateFields((err) => {
                     if (!err) {
                         modifyCarouselAd({
-                            ...Utils.removeInvalid({
+                            ...Utils.removeInvalid(Object.assign({
                                 id,
                                 sorting,
                                 status: parseInt(status, 10),
-                                linkType,
-                                goodsId,
-                                linkAddress: linkAddress ? encodeURI(linkAddress) : null,
-                                picAddress
-                            })
+                                picAddress,
+                                areaId
+                            }, submitObj))
                         }).then(() => {
                             this.props.searchChange();
                             this.props.modifyModalVisible({
@@ -193,10 +192,12 @@ class ChangeMessage extends PureComponent {
         const {
             sorting,
             linkType,
-            goodsId,
-            linkAddress,
             picAddress,
             status,
+            linkAddress,
+            goodsId,
+            linkId,
+            linkKeyword
         } = this.props.visibleData;
         const { getFieldDecorator } = this.props.form;
         const mtitle = this.props.modalTitle;
@@ -214,7 +215,7 @@ class ChangeMessage extends PureComponent {
                 <Form>
                     <FormItem className="modal-form-item">
                         <span className="modal-form-item-title">
-                            <span style={{color: '#f00' }}>*</span>
+                            <span style={{ color: '#f00' }}>*</span>
                             排序
                         </span>
                         {getFieldDecorator('sorting', {
@@ -229,12 +230,11 @@ class ChangeMessage extends PureComponent {
                                 min={0}
                                 placeholder="排序"
                                 onBlur={this.handleSortBlur}
-                            />
-                        )}
+                            />)}
                     </FormItem>
                     <FormItem className="modal-form-item">
                         <span className="modal-form-item-title">
-                            <span style={{color: '#f00' }}>*</span>
+                            <span style={{ color: '#f00' }}>*</span>
                             状态
                         </span>
                         {getFieldDecorator('status', {
@@ -243,8 +243,7 @@ class ChangeMessage extends PureComponent {
                             <RadioGroup onChange={this.onRadioChange}>
                                 <RadioButton value="1">启用</RadioButton>
                                 <RadioButton value="0">禁用</RadioButton>
-                            </RadioGroup>
-                        )}
+                            </RadioGroup>)}
                     </FormItem>
                     <FormItem className="modal-form-item">
                         {getFieldDecorator('chooseLink', {
@@ -252,23 +251,28 @@ class ChangeMessage extends PureComponent {
                                 required: true
                             }, {
                                 validator: (rule, value, callback) => {
-                                    if (!value.link) {
-                                        callback('请输入链接')
+                                    if (!value.goodsId
+                                        && !value.linkAddress
+                                        && !value.linkId
+                                        && !value.linkKeyword) {
+                                        callback('请完成表单')
                                     }
                                     callback()
                                 }
                             }],
                             initialValue: {
                                 selected: linkType,
-                                link: parseInt(linkType, 10) === 1 ? goodsId : linkAddress
+                                linkAddress,
+                                goodsId,
+                                linkId,
+                                linkKeyword
                             }
                         })(
-                            <LinkType />
-                        )}
+                            <LinkType />)}
                     </FormItem>
                     <FormItem className="modal-form-item">
                         <span className="modal-form-item-title">
-                            <span style={{color: '#f00' }}>*</span>
+                            <span style={{ color: '#f00' }}>*</span>
                             轮播图片
                         </span>
                         <span>（说明：支持PNG、JPG，建议大小1080X510px，1M以内）</span>
@@ -294,6 +298,7 @@ ChangeMessage.propTypes = {
     visibleData: PropTypes.objectOf(PropTypes.any),
     modalTitle: PropTypes.objectOf(PropTypes.any),
     modalVisible: PropTypes.bool,
+    areaId: PropTypes.string,
 }
 
 export default withRouter(Form.create()(ChangeMessage));

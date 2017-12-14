@@ -169,12 +169,114 @@ class PoDetail extends PureComponent {
                 key: 'purchasePrice',
                 render: (text, record, index) =>
                     (<EditableCell
-                        value={text}
+                        value={this.state.purchaseOrderType === '1' ? 0 : text}
+                        max={text}
                         editable={this.state.currentType !== 'detail' && this.state.purchaseOrderType === '2'}
                         step={record.purchaseInsideNumber}
                         purchaseInsideNumber={null}
                         onChange={value => this.applyPriceChange(record, index, value)}
                     />)
+            },
+            {
+                title: '采购数量',
+                dataIndex: 'purchaseNumber',
+                key: 'purchaseNumber',
+                render: (text, record, index) =>
+                    (<EditableCell
+                        value={text}
+                        editable={this.state.currentType !== 'detail'}
+                        step={record.purchaseInsideNumber}
+                        purchaseInsideNumber={record.purchaseInsideNumber}
+                        onChange={value => this.applyQuantityChange(record, index, value)}
+                    />)
+            },
+            {
+                title: '采购金额（含税）',
+                dataIndex: 'totalAmount',
+                key: 'totalAmount',
+                render: (text) => {
+                    if (this.state.purchaseOrderType === '1') {
+                        return 0
+                    }
+                    return text
+                }
+            },
+            {
+                title: '已收货数量',
+                dataIndex: 'receivedNumber',
+                key: 'receivedNumber'
+            },
+            {
+                title: '是否有效',
+                dataIndex: 'isValid',
+                key: 'isValid',
+                render: (text) => {
+                    switch (text) {
+                        case 0:
+                            return '无效';
+                        default:
+                            return '有效';
+                    }
+                }
+            },
+            {
+                title: '操作',
+                dataIndex: 'operation',
+                key: 'operation',
+                render: this.renderActions
+            }
+        ];
+        this.columnsOther = [
+            {
+                title: '行号',
+                dataIndex: 'rowNo',
+                key: 'rowNo',
+                render: (text, record, index) => index + 1
+            },
+            {
+                title: '商品编码',
+                dataIndex: 'productCode',
+                key: 'productCode',
+
+            },
+            {
+                title: '商品名称',
+                dataIndex: 'productName',
+                key: 'productName',
+            },
+            {
+                title: '商品条码',
+                dataIndex: 'internationalCode',
+                key: 'internationalCode',
+            },
+            {
+                title: '规格',
+                dataIndex: 'packingSpecifications',
+                key: 'packingSpecifications',
+            },
+            {
+                title: '产地',
+                dataIndex: 'producePlace',
+                key: 'producePlace',
+            }, {
+                title: '采购内装数',
+                dataIndex: 'purchaseInsideNumber',
+                key: 'purchaseInsideNumber',
+            },
+            {
+                title: '单位',
+                dataIndex: 'unitExplanation',
+                key: 'unitExplanation'
+            },
+            {
+                title: '税率(%)',
+                dataIndex: 'inputTaxRate',
+                key: 'inputTaxRate'
+            },
+            {
+                title: '采购价格（含税）',
+                dataIndex: 'purchasePrice',
+                key: 'purchasePrice'
             },
             {
                 title: '采购数量',
@@ -211,6 +313,11 @@ class PoDetail extends PureComponent {
                             return '有效';
                     }
                 }
+            },
+            {
+                title: '可用库存',
+                dataIndex: 'availableInventory',
+                key: 'availableInventory'
             },
             {
                 title: '操作',
@@ -456,6 +563,10 @@ class PoDetail extends PureComponent {
             ? basicInfo.createdAt
             : moment().format('YYYY-MM-DD')
 
+        // 供应商
+        const spDefaultValue = basicInfo.spId
+            ? `${basicInfo.spId}-${basicInfo.spName}`
+            : ''
 
         // 供应商地点值清单回显数据
         const spAdrDefaultValue = basicInfo.spAdrId
@@ -657,7 +768,7 @@ class PoDetail extends PureComponent {
                                     rules: [{ required: true, message: '请输入采购单类型' }],
                                     initialValue: this.state.purchaseOrderType
                                 })(
-                                    <Select size="default">
+                                    <Select size="default" onChange={this.purchaseOrderTypeChange}>
                                         {
                                             poType.data.map((item) =>
                                                 (<Option
@@ -667,7 +778,7 @@ class PoDetail extends PureComponent {
                                                 ))
                                         }
                                     </Select>
-                                    )}
+                                )}
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -695,8 +806,8 @@ class PoDetail extends PureComponent {
                                     })(
                                         <Supplier
                                             onChange={this.handleSupplierChange}
-                                        />
-                                        )}
+                                            initialValue={spDefaultValue}
+                                        />)}
                                     {tooltipItem('修改供应商会清空仓库地点和采购商品')}
                                 </div>
                             </FormItem>
@@ -721,7 +832,8 @@ class PoDetail extends PureComponent {
                                                 pId: this.props.form.getFieldValue('supplier').spId,
                                                 condition: params.value,
                                                 pageNum: params.pagination.current || 1,
-                                                pageSize: params.pagination.pageSize
+                                                pageSize: params.pagination.pageSize,
+                                                isContainsHeadBranchCompany: true
                                             }, 'supplierAdrSearchBox')
                                         }
                                         disabled={this.props.form.getFieldValue('supplier').spId === ''}
@@ -793,8 +905,7 @@ class PoDetail extends PureComponent {
                                                 >{item.value}</Option>
                                                 ))
                                         }
-                                    </Select>
-                                    )}
+                                    </Select>)}
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -948,8 +1059,7 @@ class PoDetail extends PureComponent {
                                                 >{item.value}</Option>
                                                 ))
                                         }
-                                    </Select>
-                                    )}
+                                    </Select>)}
                             </FormItem>
                         </Col>
                     </Row>
@@ -975,7 +1085,7 @@ class PoDetail extends PureComponent {
                                     rules: [{ required: true, message: '请输入经营模式' }],
                                     initialValue: this.state.businessMode
                                 })(
-                                    <Select size="default">
+                                    <Select size="default" onChange={this.businessModeTypeChange}>
                                         {
                                             businessModeType.data.map((item) =>
                                                 (<Option
@@ -984,8 +1094,7 @@ class PoDetail extends PureComponent {
                                                 >{item.value}</Option>
                                                 ))
                                         }
-                                    </Select>
-                                    )}
+                                    </Select>)}
                             </FormItem>
                         </Col>
                     </Row>
@@ -1234,6 +1343,20 @@ class PoDetail extends PureComponent {
         }
     }
 
+    // 采购单类型变化
+    purchaseOrderTypeChange = (value) => {
+        this.setState({
+            purchaseOrderType: value,
+            totalAmounts: 0
+        })
+    }
+
+    // 经营模式类型变化
+    businessModeTypeChange = (value) => {
+        this.setState({
+            businessMode: value
+        })
+    }
     /**
      * 新增/修改的请求
      */
@@ -1254,7 +1377,8 @@ class PoDetail extends PureComponent {
             adrType,
             currencyCode,
             purchaseOrderType,
-            addressCd
+            addressCd,
+            businessMode
         } = poData.basicInfo;
         // 采购商品信息
         const pmPurchaseOrderItems = poData.poLines.map((item) => {
@@ -1263,7 +1387,8 @@ class PoDetail extends PureComponent {
                 prodPurchaseId,
                 productId,
                 productCode,
-                purchaseNumber
+                purchaseNumber,
+                purchasePrice,
             } = item;
             return {
                 ...Utils.removeInvalid({
@@ -1271,7 +1396,8 @@ class PoDetail extends PureComponent {
                     prodPurchaseId,
                     productId,
                     productCode,
-                    purchaseNumber
+                    purchaseNumber,
+                    purchasePrice
                 })
             }
         })
@@ -1295,6 +1421,7 @@ class PoDetail extends PureComponent {
                     currencyCode,
                     purchaseOrderType: parseInt(purchaseOrderType, 10),
                     status,
+                    businessMode: parseInt(businessMode, 10)
                 },
                 pmPurchaseOrderItems
             }).then((res) => {
@@ -1319,6 +1446,7 @@ class PoDetail extends PureComponent {
                     currencyCode,
                     purchaseOrderType: parseInt(purchaseOrderType, 10),
                     status,
+                    businessMode: parseInt(businessMode, 10)
                 },
                 pmPurchaseOrderItems
             }).then((res) => {
@@ -1342,6 +1470,7 @@ class PoDetail extends PureComponent {
     applyQuantityChange = (records, index, result) => {
         const record = records;
         const { value, isValidate } = result;
+        record.purchasePrice = this.state.purchaseOrderType === '1' ? 0 : record.purchasePrice;
         // 更新store中采购单商品
         if (record) {
             // 未输入采购数量，则清空store中采购数量，采购金额
@@ -1715,6 +1844,17 @@ class PoDetail extends PureComponent {
     }
 
     /**
+     * 可用库存
+     */
+    columnsChoose = () => {
+        const { basicInfo } = this.props;
+        if (basicInfo.adrType === 0 && (basicInfo.status === 0 || basicInfo.status === 3)) {
+            return this.columnsOther
+        }
+        return this.columns
+    }
+
+    /**
      * 表单操作
      * @param {*} text 行值
      * @param {*} record 行数据
@@ -1796,8 +1936,9 @@ class PoDetail extends PureComponent {
     }
 
     render() {
-        const { totalAmounts, totalQuantitys, spAdrId } = this.state;
+        const { totalAmounts, totalQuantitys, spAdrId, businessMode } = this.state;
         const supplierInfo = spAdrId ? `${spAdrId}-1` : null;
+        const distributionStatus = businessMode;
         const { poLines, basicInfo } = this.props;
         const baiscInfoElements = this.getBaiscInfoElements(this.state.pageMode);
         if (
@@ -1821,6 +1962,7 @@ class PoDetail extends PureComponent {
                                         fetch={(params) =>
                                             this.props.pubFetchValueList({
                                                 supplierInfo,
+                                                distributionStatus,
                                                 teamText: params.value,
                                                 pageNum: params.pagination.current || 1,
                                                 pageSize: params.pagination.pageSize
@@ -1855,7 +1997,7 @@ class PoDetail extends PureComponent {
                                 !record.deleteFlg
                             )}
                             pagination={false}
-                            columns={this.columns}
+                            columns={this.columnsChoose()}
                             rowKey="productCode"
                             scroll={{
                                 x: 1300
