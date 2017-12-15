@@ -101,7 +101,7 @@ class toDoPurchaseList extends PureComponent {
             refundAdr: '',
             spNo: '', // 供应商编码
             spAdrNo: '', // 供应商地点编码
-            status: '0', // 流程状态，默认进行中
+            status: 0, // 流程状态，默认进行中
             spName: null, // 供应商名
             spAdrName: null, // 供应商地点名
             adrTypeName: null, // 地点
@@ -295,6 +295,9 @@ class toDoPurchaseList extends PureComponent {
         this.props.form.setFieldsValue({
             supplier: { reset: true }
         });
+        this.setState({
+            status: 0
+        })
     }
 
     /**
@@ -525,7 +528,7 @@ class toDoPurchaseList extends PureComponent {
     // 流程状态切换
     statusChange = (value) => {
         this.setState({
-            status: value
+            status: parseInt(value, 10)
         })
     }
 
@@ -535,7 +538,7 @@ class toDoPurchaseList extends PureComponent {
                 <Menu.Item key="detail">
                     <Link to={`po/detail/${record.purchaseNo}`} >采购单详情</Link>
                 </Menu.Item>
-                {this.state.status === '0' && <Menu.Item key="examinationApproval">
+                {this.state.status === 0 && <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
                     </a>

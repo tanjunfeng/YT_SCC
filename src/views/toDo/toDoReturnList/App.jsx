@@ -109,7 +109,7 @@ class toDoReturnList extends PureComponent {
             refundAdr: '',
             spNo: '', // 供应商编码
             spAdrNo: '', // 供应商地点编码
-            status: '0', // 流程状态，默认进行中
+            status: 0, // 流程状态，默认进行中
             spName: null, // 供应商名
             apAdrName: null, // 供应商地点名
             refundAdrName: null, // 地点
@@ -343,6 +343,9 @@ class toDoReturnList extends PureComponent {
         this.handleSupplyClear();
         this.handleSupplierAddressClear();
         this.handleAddressClear();
+        this.setState({
+            status: 0
+        })
     }
 
     /**
@@ -577,8 +580,7 @@ class toDoReturnList extends PureComponent {
             purchaseOrderNo,
             outcome,
             purchaseOrderType,
-            adrType,
-            auditStatus
+            adrType
         } = this.props.form.getFieldsValue();
         // 供应商编号
         const spName = this.state.spName;
@@ -590,7 +592,7 @@ class toDoReturnList extends PureComponent {
         const refundAdrName = this.state.refundAdrName;
 
         // 流程状态
-        const status = auditStatus === '进行中' ? 0 : 1;
+        const status = parseInt(this.state.status, 10);
         const searchParams = {
             refundNo: purchaseRefundNo,
             purchaseOrderNo,
@@ -609,7 +611,7 @@ class toDoReturnList extends PureComponent {
     // 流程状态切换
     statusChange = (value) => {
         this.setState({
-            status: value
+            status: parseInt(value, 10)
         })
     }
 
@@ -621,7 +623,7 @@ class toDoReturnList extends PureComponent {
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/returnManagementDetail/${taskId}`}>退货单详情</Link>
                 </Menu.Item>
-                {this.state.status === '0' && <Menu.Item key="examinationApproval">
+                {this.state.status === 0 && <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
                     </a>
