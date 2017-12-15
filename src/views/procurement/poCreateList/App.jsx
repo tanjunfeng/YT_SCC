@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import {Form, Row, Col, Button, message, Modal, Affix} from 'antd';
+import {Form, Row, Col, Button, message, Affix} from 'antd';
 import Immutable, { fromJS } from 'immutable';
 import Audit from './auditModal';
+import Utils from '../../../util/util';
 import {
     getMaterialMap,
     initPoDetail,
@@ -78,10 +79,13 @@ class PoCreateList extends PureComponent {
             businessMode: null,
             spId: null,
             purchaseOrderType: '0',
-            isCheck: false, // 是否进行校验
+            isInfoCheck: false, // 是否对基本信息框进行校验
+            isGoodsCheck: false, // 是否对商品列表进行校验
             basicInfoCheck: false, // 基本信息框校验结果
             basicInfo: {}, // 基本信息框内容
+            operatType: 0 // 0保存，1提交 默认保存
         }
+        this.checkedInfo = null;
     }
     componentDidMount() {
         const that = this;
@@ -129,8 +133,7 @@ class PoCreateList extends PureComponent {
     }
     componentWillReceiveProps(nextProps) {
         const {
-            adrType, settlementPeriod, payType, payCondition, estimatedDeliveryDate,
-            purchaseOrderType, currencyCode, id, spAdrId, businessMode, spId
+            adrType, purchaseOrderType, id, spAdrId, businessMode, spId
         } = nextProps.basicInfo;
         const { basicInfo = {} } = this.props;
         const newPo = fromJS(nextProps.po.poLines);
@@ -153,81 +156,6 @@ class PoCreateList extends PureComponent {
         this.props.initPoDetail({
             basicInfo: {},
             poLines: []
-        })
-    }
-
-    /**
-     * 点击保存/提交
-     * 校验内容：
-     *     1.基本信息是否正确
-     *     2.是否存在采购商品行
-     *     3.采购商品行信息是否正确
-     */
-    getAllValue = (status, isGoBack) => {
-        this.setState({
-            isCheck: true
-        }, () => {
-            // 检验基本信息
-            if (!this.state.isCheck) {
-                message.error('校验失败，请检查！');
-                return;
-            }
-            // 筛选出有效商品行
-            const validPoLines = this.getPoData().poLines.filter((item) =>
-                item.isValid !== 0
-            )
-            // 筛选出无效商品行
-            const invalidPoLines = this.getPoData().poLines.filter((item) =>
-                item.isValid === 0
-            )
-
-            // 校验商品行
-            if (this.hasInvalidateMaterial()) {
-                message.error('采购商品校验失败，请检查！');
-                return;
-            }
-            // 合法采购商品
-            const tmpPoLines = this.props.poLines.filter((record) =>
-                (!record.deleteFlg)
-            );
-
-            // 校验是否存在采购商品，无则异常
-            if (tmpPoLines.length === 0) {
-                message.error('请添加采购商品！');
-                return;
-            }
-
-            // 校验是否存在采购数量为空商品
-            if (this.hasEmptyQtyMaterial(tmpPoLines)) {
-                message.error('请输入商品采购数量！');
-                return;
-            }
-
-            // 校验有效商品数量
-            if (validPoLines.length === 0) {
-                message.error('无有效的商品！');
-                return;
-            }
-
-            // 清除无效商品弹框
-            if (invalidPoLines.length !== 0) {
-                const invalidGoodsList = invalidPoLines.map(item =>
-                    (<p key={item.prodPurchaseId} >
-                        {item.productName}
-                    </p>)
-                );
-                Modal.confirm({
-                    title: '是否默认清除以下无效商品？',
-                    content: invalidGoodsList,
-                    onOk: () => {
-                        this.createPoRequest(validPoLines, status, isGoBack);
-                    },
-                    onCancel() {
-                    },
-                });
-            } else {
-                this.createPoRequest(validPoLines, status, isGoBack);
-            }
         })
     }
 
@@ -293,12 +221,18 @@ class PoCreateList extends PureComponent {
      * 基本信息框校验
      * 校验内容：基本信息是否正确
      * 返回校验结果和基本信息
+     * 如果基本信息框校验成功则校验商品列表
      */
-    basicInfoResult = (isCheck, basicInfo) => {
-        this.setState({
-            basicInfoCheck: isCheck,
-            basicInfo
-        })
+    basicInfoResult = (isInfoCheck, basicInfo) => {
+        this.checkedInfo = basicInfo;
+        if (isInfoCheck) {
+            this.setState({
+                isGoodsCheck: true
+            })
+        } else {
+            // 检验基本信息
+            message.error('校验失败，请检查！');
+        }
     }
 
     /**
@@ -405,65 +339,129 @@ class PoCreateList extends PureComponent {
     }
 
     /**
-     * 校验输入数据
+     * 新增/修改的请求
      */
-    validateForm = () => {
-        // 新增时数据
-        const basicInfo = this.getFormBasicInfo();
+    createPoRequest = (validPoLines) => {
+        // 基本信息，商品行均校验通过,获取有效值
+        // const basicInfo = Object.assign({}, this.getPoData().basicInfo, this.getFormBasicInfo());
+        const basicInfo = this.checkedInfo;
+        const CId = basicInfo.id;
+        const poData = {
+            basicInfo,
+            poLines: validPoLines
+        }
+        // 基本信息
         const {
-            addressId,
-            spId,
             spAdrId,
-        } = basicInfo;
-        const { pickerDate, ispoAddressClear } = this.state;
-
-        // 修改时数据
-        const updateBasicInfo = this.props.basicInfo;
-        let isOk = true;
-        const { form } = this.props;
-        form.validateFields((err) => {
-            if (!err) {
-                if (updateBasicInfo.status === 0) {
-                    // 修改页
-                    if (
-                        !ispoAddressClear
-                        && updateBasicInfo.adrTypeCode
-                        && updateBasicInfo.spId
-                        && updateBasicInfo.spAdrId
-                        && updateBasicInfo.estimatedDeliveryDate
-                    ) {
-                        isOk = true;
-                        return isOk;
-                    }
-                    isOk = false;
-                    return isOk;
-                }
-                // 新增页
-                if (addressId && spId && spAdrId && pickerDate) {
-                    isOk = true;
-                    return isOk;
-                }
-                isOk = false;
-                return isOk;
+            payType,
+            settlementPeriod,
+            adrType,
+            currencyCode,
+            purchaseOrderType,
+            addressCd,
+            businessMode
+        } = poData.basicInfo;
+        // 采购商品信息
+        const pmPurchaseOrderItems = poData.poLines.map((item) => {
+            const {
+                id,
+                prodPurchaseId,
+                productId,
+                productCode,
+                purchaseNumber,
+                purchasePrice,
+            } = item;
+            return {
+                ...Utils.removeInvalid({
+                    id,
+                    prodPurchaseId,
+                    productId,
+                    productCode,
+                    purchaseNumber,
+                    purchasePrice
+                })
             }
-            isOk = false;
-            return isOk;
-        });
-        return isOk;
+        })
+
+        // 预计送货日期
+        const estimatedDeliveryDate = basicInfo.estimatedDeliveryDate
+            ? basicInfo.estimatedDeliveryDate.valueOf().toString()
+            : null;
+
+        // 付款条件
+        const payCondition = settlementPeriod;
+        if (CId) {
+            // 修改页
+            this.props.ModifyPo({
+                pmPurchaseOrder: {
+                    id: CId,
+                    spAdrId: `${spAdrId || this.props.basicInfo.spAdrId}`,
+                    estimatedDeliveryDate,
+                    payType,
+                    payCondition,
+                    adrType: parseInt(adrType, 10),
+                    adrTypeCode: addressCd || this.props.basicInfo.adrTypeCode,
+                    currencyCode,
+                    purchaseOrderType: parseInt(purchaseOrderType, 10),
+                    status: this.state.operatType,
+                    businessMode: parseInt(businessMode, 10)
+                },
+                pmPurchaseOrderItems
+            }).then((res) => {
+                // 如果创建成功，刷新界面数据
+                if (res.success) {
+                    message.success('提交成功！');
+                    this.props.history.goBack();
+                } else {
+                    message.error('提交失败，请检查！');
+                }
+            });
+        } else {
+            // 新增页
+            this.props.createPo({
+                pmPurchaseOrder: {
+                    spAdrId: `${spAdrId || this.props.basicInfo.spAdrId}`,
+                    estimatedDeliveryDate,
+                    payType,
+                    payCondition,
+                    adrType: parseInt(adrType, 10),
+                    adrTypeCode: addressCd || this.props.basicInfo.adrTypeCode,
+                    currencyCode,
+                    purchaseOrderType: parseInt(purchaseOrderType, 10),
+                    status: this.state.operatType,
+                    businessMode: parseInt(businessMode, 10)
+                },
+                pmPurchaseOrderItems
+            }).then((res) => {
+                // 如果创建成功，刷新界面数据
+                if (res.success) {
+                    message.success('提交成功！');
+                    this.props.history.goBack();
+                } else {
+                    message.error('提交失败，请检查！');
+                }
+            });
+        }
     }
 
     /**
      * 点击保存
      */
     handleSave = () => {
-        this.getAllValue(0, false);
+        this.setState({
+            operatType: 0,
+            isInfoCheck: true
+        })
     }
 
     /**
      * 点击提交
      */
     handleSubmit = () => {
-        this.getAllValue(1, true);
+        this.setState({
+            operatType: 1,
+            isInfoCheck: true
+        })
     }
 
     S4() {
@@ -489,7 +487,7 @@ class PoCreateList extends PureComponent {
                         stateChange={this.stateChange}
                         purchaseOrderTypeChange={this.purchaseOrderTypeChange}
                         deletePoLines={this.deletePoLines}
-                        isCheck={this.state.isCheck}
+                        isCheck={this.state.isInfoCheck}
                         checkResult={this.basicInfoResult}
                     />
                     <AddingGoods
@@ -504,6 +502,8 @@ class PoCreateList extends PureComponent {
                         purchaseOrderType={this.state.purchaseOrderType}
                         applyPriceChange={this.applyPriceChange}
                         applyQuantityChange={this.applyQuantityChange}
+                        isCheck={this.state.isGoodsCheck}
+                        createPoRequest={this.createPoRequest}
                     />
                     <div>
                         <Row type="flex">
@@ -568,7 +568,8 @@ PoCreateList.propTypes = {
     updatePoLine: PropTypes.func,
     fetchNewPmPurchaseOrderItem: PropTypes.func,
     addPoLines: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any),
+    ModifyPo: PropTypes.func,
+    createPo: PropTypes.func,
 }
 
 export default withRouter(Form.create()(PoCreateList));

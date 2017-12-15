@@ -104,6 +104,7 @@ class GoodsLists extends PureComponent {
                         max={text}
                         editable={this.props.purchaseOrderType === '2'}
                         step={record.purchaseInsideNumber}
+                        type={'price'}
                         purchaseInsideNumber={null}
                         onChange={value => this.applyPriceChange(record, index, value)}
                     />)
@@ -115,8 +116,9 @@ class GoodsLists extends PureComponent {
                 render: (text, record, index) =>
                     (<EditableCell
                         value={text}
-                        editable={true}
+                        editable={'true'}
                         step={record.purchaseInsideNumber}
+                        type={'number'}
                         purchaseInsideNumber={record.purchaseInsideNumber}
                         onChange={value => this.applyQuantityChange(record, index, value)}
                     />)
@@ -159,6 +161,13 @@ class GoodsLists extends PureComponent {
         ];
     }
 
+    componentWillReceiveProps(nextProps) {
+        const {isCheck } = nextProps;
+        if (this.props.isCheck !== isCheck && isCheck === true) {
+            this.checkQuery();
+        }
+    }
+
     /**
      * 表单操作
      * @param {*} record 行数据
@@ -187,6 +196,37 @@ class GoodsLists extends PureComponent {
     }
 
     /**
+     * 返回采购单商品列表数据
+     * 格式如下
+     *  {
+     *    poLines:[采购商品信息]
+     *   }
+     *   采购商品信息说明：
+     *       行状态(recordStatus):.new(新添加)  其他情况：既存
+     *       行删除标志(deleteFlg):true(已删除) 其他情况:未删除
+     */
+    getPoData = () => {
+        // 整理poLines数据,删除无用属性
+        const poLinesTmp = this.props.poLines || [];
+        const clearedPoLines = poLinesTmp.map((i) => {
+            const item = i;
+            // 新建商品删除id属性
+            if (item.recordStatus === 'new') {
+                if ('id' in item) {
+                    delete item.id
+                }
+            }
+            // 删除校验状态属性
+            if ('isValidate' in item) {
+                delete item.isValidate
+            }
+            return item;
+        });
+        const poData = { poLines: clearedPoLines };
+        return poData;
+    }
+
+    /**
      * 商品行采购数量变化回调，做如下处理
      *  1.更新store中该行信息（校验结果，采购数量，采购金额）
      *  2.计算采购总数量、采购总金额并更新store
@@ -194,7 +234,7 @@ class GoodsLists extends PureComponent {
      */
     applyQuantityChange = (records, index, result) => {
         const record = records;
-        const { value, isValidate } = result;
+        const { value } = result;
         record.purchasePrice = this.props.purchaseOrderType === '1' ? 0 : record.purchasePrice;
         // 更新store中采购单商品
         if (record) {
@@ -209,13 +249,12 @@ class GoodsLists extends PureComponent {
                 // 计算采购金额（含税）
                 record.totalAmount = Math.round(value * record.purchasePrice * 100) / 100;
                 // 校验状态
-                record.isValidate = isValidate;
                 this.props.updatePoLine(record);
 
                 // 输入采购数量合法，更新store
-                if (!isValidate) {
-                    message.error('采购数量必须为采购内装数的整数倍');
-                }
+                // if (!isValidate) {
+                //     message.error('采购数量必须为采购内装数的整数倍');
+                // }
             }
         }
     }
@@ -244,6 +283,89 @@ class GoodsLists extends PureComponent {
                 record.isValidate = isValidate;
                 this.props.updatePoLine(record);
             }
+        }
+    }
+
+    /**
+     * 返回商品行中是否存在检验失败记录
+     */
+    hasInvalidateMaterial = () => (
+        this.props.poLines.some((element) => {
+            if (!element.isValidate) {
+                return false;
+            }
+            return (!element.isValidate);
+        })
+    )
+
+    /**
+     * 商品行是否有未输入采购数量商品
+     */
+    hasEmptyQtyMaterial = (poLines = []) => {
+        if (poLines.length === 0) {
+            return false;
+        }
+        return poLines.some((element) =>
+            !element.purchaseNumber
+        )
+    }
+
+    checkQuery = () => {
+        // 筛选出有效商品行
+        const validPoLines = this.getPoData().poLines.filter((item) =>
+            item.isValid !== 0
+        )
+        // 筛选出无效商品行
+        const invalidPoLines = this.getPoData().poLines.filter((item) =>
+            item.isValid === 0
+        )
+
+        // 校验商品行
+        if (this.hasInvalidateMaterial()) {
+            message.error('采购商品校验失败，请检查！');
+            return;
+        }
+        // 合法采购商品
+        const tmpPoLines = this.props.poLines.filter((record) =>
+            (!record.deleteFlg)
+        );
+
+        // 校验是否存在采购商品，无则异常
+        if (tmpPoLines.length === 0) {
+            message.error('请添加采购商品！');
+            return;
+        }
+
+        // 校验是否存在采购数量为空商品
+        if (this.hasEmptyQtyMaterial(tmpPoLines)) {
+            message.error('请输入商品采购数量！');
+            return;
+        }
+
+        // 校验有效商品数量
+        if (validPoLines.length === 0) {
+            message.error('无有效的商品！');
+            return;
+        }
+
+        // 清除无效商品弹框
+        if (invalidPoLines.length !== 0) {
+            const invalidGoodsList = invalidPoLines.map(item =>
+                (<p key={item.prodPurchaseId} >
+                    {item.productName}
+                </p>)
+            );
+            Modal.confirm({
+                title: '是否默认清除以下无效商品？',
+                content: invalidGoodsList,
+                onOk: () => {
+                    this.props.createPoRequest(validPoLines);
+                },
+                onCancel() {
+                },
+            });
+        } else {
+            this.props.createPoRequest(validPoLines);
         }
     }
 
@@ -280,6 +402,7 @@ class GoodsLists extends PureComponent {
             </Dropdown>
         )
     }
+
     render() {
         return (
             <div className="poLines area-list">
@@ -305,5 +428,7 @@ GoodsLists.propTypes = {
     purchaseOrderType: PropTypes.string,
     deletePoLine: PropTypes.func,
     updatePoLine: PropTypes.func,
+    createPoRequest: PropTypes.func,
+    isCheck: PropTypes.bool,
 }
 export default GoodsLists;

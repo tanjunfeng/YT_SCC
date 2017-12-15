@@ -3,6 +3,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { MAXGOODS } from '../../../constant/index';
 
+const FormItem = Form.Item;
+
 export default class EditableCell extends PureComponent {
     constructor(props) {
         super(props);
@@ -14,7 +16,8 @@ export default class EditableCell extends PureComponent {
         step: this.props.step,
         purchaseInsideNumber: this.props.purchaseInsideNumber,
         validateStatus: null,
-        editable: this.props.editable
+        editable: this.props.editable,
+        message: ''
     }
 
     componentWillReceiveProps(nextProps) {
@@ -24,19 +27,19 @@ export default class EditableCell extends PureComponent {
 
     onPressEnter() {
         const { onChange } = this.props;
-        const validateResult = this.validate(this.state.value);
+        this.validate(this.state.value);
         // call 回调函数
         if (onChange) {
-            onChange({ value: this.state.value, isValidate: validateResult });
+            onChange({ value: this.state.value});
         }
     }
 
     handleBlur() {
         const { onChange } = this.props;
-        const validateResult = this.validate(this.state.value);
+        this.validate(this.state.value);
         // call 回调函数
         if (onChange) {
-            onChange({ value: this.state.value, isValidate: validateResult });
+            onChange({ value: this.state.value});
         }
     }
 
@@ -45,18 +48,30 @@ export default class EditableCell extends PureComponent {
     }
 
     validate(value) {
-        let isValidate;
         // 采购数量未输入、不为采购内装数整数倍
-        if (!value || (value > 0 &&
+        if (!value && this.props.type === 'price') {
+            this.setState({
+                validateStatus: 'error',
+                message: '采购价格必须为正数'
+            });
+        } else if (!value && this.props.type === 'number') {
+            this.setState({
+                validateStatus: 'error',
+                message: '采购数量必须为正整数'
+            });
+        } else if ((value > 0 &&
             (this.state.purchaseInsideNumber) &&
             (value % this.state.purchaseInsideNumber !== 0))) {
-            this.setState({ validateStatus: 'error' });
-            isValidate = false;
+            this.setState({
+                validateStatus: 'error',
+                message: '采购数量必须为采购内装数的整数倍'
+            });
         } else {
-            this.setState({ validateStatus: 'success' });
-            isValidate = true;
+            this.setState({
+                validateStatus: 'success',
+                message: ''
+            });
         }
-        return isValidate;
     }
     render() {
         const { value, step, max } = this.state;
@@ -65,7 +80,10 @@ export default class EditableCell extends PureComponent {
                 {
                     <div>
                         {this.state.editable
-                            && <Form.Item validateStatus={this.state.validateStatus}>
+                            && <FormItem
+                                validateStatus={this.state.validateStatus}
+                                help={this.state.message}
+                            >
                                 <InputNumber
                                     value={value}
                                     min={0}
@@ -75,7 +93,7 @@ export default class EditableCell extends PureComponent {
                                     onBlur={e => this.handleBlur(e)}
                                     onPressEnter={e => this.onPressEnter(e)}
                                 />
-                            </Form.Item>
+                            </FormItem>
                         }
                         {!this.state.editable && <span>{value}</span>
                         }
@@ -92,5 +110,6 @@ EditableCell.propTypes = {
     step: PropTypes.number,
     purchaseInsideNumber: PropTypes.number,
     editable: PropTypes.bool,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    type: PropTypes.string,
 }

@@ -15,7 +15,7 @@
         font-size: 16px;
         margin-right: 8px;
       }
-    } 
+    }
   }
 
   &-body {
@@ -86,6 +86,12 @@
     font-size: 15px;
     color: #108EE9;
     line-height: inherit;
-    margin-left: 5px; 
+    margin-left: 5px;
   }
+}
+.ant-table {
+    .ant-form-explain{
+        max-width: 200px;
+        white-space: nowrap;
+    }
 }

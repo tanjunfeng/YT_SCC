@@ -27,6 +27,8 @@ import SearchMind from '../../../components/searchMind';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { Supplier } from '../../../container/search';
 
+const FormItem = Form.Item;
+
 @connect(state => ({
     po: state.toJS().procurement.po || {},
     newPcOdData: state.toJS().procurement.newPcOdData || {},
@@ -318,7 +320,7 @@ class BasicInfo extends PureComponent {
     /**
      * 清空供应商地点事件
      */
-    applySupplierLocClear() {
+    applySupplierLocClear = () => {
         if (this.state.localType === '0') {
             this.poAddress.reset();
         }
@@ -390,7 +392,6 @@ class BasicInfo extends PureComponent {
     }
 
     render() {
-        const FormItem = Form.Item;
         const Option = Select.Option;
         const dateFormat = 'YYYY-MM-DD';
         const { getFieldDecorator } = this.props.form;
@@ -821,7 +822,6 @@ BasicInfo.propTypes = {
     purchaseOrderTypeChange: PropTypes.func,
     deletePoLines: PropTypes.func,
     isCheck: PropTypes.bool,
-    value: PropTypes.objectOf(PropTypes.any),
     checkResult: PropTypes.func,
 }
 export default withRouter(Form.create()(BasicInfo));
