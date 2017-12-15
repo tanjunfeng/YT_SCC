@@ -124,7 +124,7 @@ class SearchForm extends PureComponent {
     handleUpload = () => {
         const { fileList } = this.state;
         const fileName = fileList[0].name;
-        if (fileName.indexOf('.xlsx') === -1 && fileName.indexOf('.xls') === -1 && fileName.indexOf('.xlsm') === -1) {
+        if (fileName.indexOf('.xls') === -1) {
             message.error('上传文件格式必须为excel格式，请清除后重新尝试');
             return
         }
@@ -139,15 +139,33 @@ class SearchForm extends PureComponent {
             processData: false,
             data: formData,
             success: (res) => {
-                if (res.code === 200) {
-                    message.success('上传成功');
-                    this.handleSearch()
-                    this.hideModalUpload()
-                } else {
-                    this.setState({
-                        uploading: false
-                    });
-                    message.error(res.message);
+                switch (res.code) {
+                    case 200:
+                        message.success('上传成功');
+                        this.handleSearch();
+                        this.hideModalUpload();
+                        break;
+                    case 10004:
+                        this.setState({
+                            uploading: false
+                        });
+                        message.error(res.message);
+                        break;
+                    case 10024:
+                        Modal.error({
+                            title: '部分导入失败',
+                            content: (
+                                <div>
+                                    {res.data.map(d => <p>{d.storeId} - {d.errorMsg}</p>)}
+                                </div>
+                            ),
+                            onOk() { },
+                        });
+                        this.setState({
+                            uploading: false
+                        });
+                        break;
+                    default: break;
                 }
             },
             error: () => {

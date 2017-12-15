@@ -5,75 +5,10 @@
  * 促销活动列表
  */
 import React from 'react';
-import { Input, Form } from 'antd';
 import {
-    promotionStatus, promotionRuleName, preferentialWayStatus,
-    purchageTypeStatus, conditionTypeStatus
+    promotionStatus, promotionRuleStatus
 } from './constants';
 import Util from '../../util/util';
-
-const FormItem = Form.Item;
-const { TextArea } = Input;
-
-const textArea = (storeIds, form) => {
-    const { getFieldDecorator } = form;
-    return (<FormItem className="store-ids">
-        {getFieldDecorator('storeId', {
-            initialValue: storeIds,
-            rules: [{ required: true, message: '请输入指定门店' }]
-        })(<TextArea
-            placeholder="请输入指定门店"
-            autosize={{ minRows: 4, maxRows: 6 }}
-        />)}
-    </FormItem>);
-}
-
-const readerArea = (text, record, form) => {
-    if (record.id) {
-        const { stores, companiesPoList } = record;
-        if (stores === null && companiesPoList === null) {
-            return '全部区域';
-        }
-        if (stores && stores.storeId) {
-            return textArea(stores.storeId, form);
-        }
-        if (companiesPoList && companiesPoList.length > 0) {
-            return companiesPoList.map(c => c.companyName).join(', ');
-        }
-    }
-    return null;
-}
-
-const getTextByCondition = (condition) => {
-    let info = `购买类型：${purchageTypeStatus[condition.purchaseType]}，`;
-    // 购买类型
-    switch (condition.purchaseType) {
-        case 'CATEGORY':
-            info += `${condition.promoCategories.categoryName}；`;
-            break;
-        case 'PRODUCT':
-            info += `${condition.promoProduct.productName}；`;
-            break;
-        default: break;
-    }
-    info += `条件类型：${conditionTypeStatus[condition.conditionType]}，`;
-    // 条件类型
-    switch (condition.conditionType) {
-        case 'QUANTITY':
-            info += `${condition.conditionValue}；`;
-            break;
-        case 'AMOUNT':
-            info += `${condition.conditionValue}元；`;
-            break;
-        default: break;
-    }
-    return info;
-}
-
-const getPreferentialBuyRule = (rule) => {
-    const { preferentialWay, preferentialValue } = rule;
-    return `优惠方式：${preferentialWayStatus[preferentialWay]}，${preferentialValue}；`;
-}
 
 // 供应商列表
 export const managementList = [{
@@ -89,8 +24,7 @@ export const managementList = [{
 }, {
     title: '优惠方式',
     dataIndex: 'promotionRule.ruleName',
-    key: 'promotionRule.ruleName',
-    render: ruleName => promotionRuleName[ruleName]
+    render: ruleName => promotionRuleStatus[ruleName]
 }, {
     title: '使用区域',
     dataIndex: 'companiesPoList',
@@ -160,7 +94,10 @@ export const participateList = [{
     dataIndex: 'branchCompanyName'
 }];
 
-const basicDetailBefore = [{
+/**
+ * 下单打折详情基础字段 前部分
+ */
+export const basicDetailBefore = [{
     title: '活动ID',
     dataIndex: 'id'
 }, {
@@ -180,15 +117,14 @@ const basicDetailBefore = [{
     render: timestamp => Util.getTime(timestamp)
 }, {
     title: '使用条件',
-    dataIndex: 'promotionRule.useConditionRule',
-    render: rule => (rule ? '指定条件' : '不限制')
+    dataIndex: 'promotionRule',
+    render: rule => (rule && rule.useConditionRule ? '指定条件' : '不限制')
 }];
 
-const basicDetailAfter = [{
-    title: '使用区域',
-    dataIndex: 'area',
-    render: readerArea
-}, {
+/**
+ * 下单打折详情基础字段 后部分
+ */
+export const basicDetailAfter = [{
     title: '活动叠加',
     dataIndex: 'overlay',
     render: (text, record) => {
@@ -199,6 +135,9 @@ const basicDetailAfter = [{
             }
             if (record.isSuperposeProOrCouDiscount === 1) {
                 arr.push('优惠券');
+            }
+            if (arr.length === 0) {
+                return '无叠加';
             }
             return arr.join(', ');
         }
@@ -220,96 +159,3 @@ const basicDetailAfter = [{
     dataIndex: 'note',
     render: note => note || '无'
 }];
-
-/**
- * 无限制条件详情
- */
-export const noConditions = [...basicDetailBefore, {
-    title: '优惠方式',
-    dataIndex: 'promotionWay',
-    render: (text, record) => {
-        if (record.id) {
-            return getPreferentialBuyRule(record.promotionRule.orderRule);
-        }
-        return null
-    }
-}, ...basicDetailAfter];
-
-/**
- * 购买条件
- */
-export const purchageCondition = [...basicDetailBefore, {
-    title: '优惠种类',
-    dataIndex: 'promotionType',
-    render: () => '购买条件'
-}, {
-    title: '购买条件',
-    dataIndex: 'purchaseType',
-    render: (text, record) => {
-        if (record.id) {
-            const { condition, rule } = record.promotionRule.purchaseConditionsRule;
-            let info = getTextByCondition(condition);
-            info += getPreferentialBuyRule(rule);
-            return info;
-        }
-        return null;
-    }
-}, ...basicDetailAfter];
-
-/**
- * 奖励条件
- */
-export const rewardListCondition = [...basicDetailBefore, {
-    title: '优惠种类',
-    dataIndex: 'promotionType',
-    render: () => '奖励条件'
-}, {
-    title: '购买条件',
-    dataIndex: 'purchaseCondition',
-    render: (text, record) => {
-        if (record.id) {
-            const { conditions } = record.promotionRule.rewardListRule;
-            return conditions.map(c => (`${getTextByCondition(c)}`));
-        }
-        return null;
-    }
-}, {
-    title: '奖励列表',
-    dataIndex: 'rewardList',
-    render: (text, record) => {
-        if (record.id) {
-            const { condition, rule } = record.promotionRule.rewardListRule.purchaseConditionsRule;
-            let info = getTextByCondition(condition);
-            info += getPreferentialBuyRule(rule);
-            return info;
-        }
-        return null;
-    }
-}, ...basicDetailAfter];
-
-/**
- * 整个购买列表
- */
-export const totalPurchaseCondition = [...basicDetailBefore, {
-    title: '优惠种类',
-    dataIndex: 'promotionType',
-    render: (text, record) => {
-        if (record.id) {
-            let info = '整个购买列表；';
-            const { rule } = record.promotionRule.totalPurchaseListRule;
-            info += getPreferentialBuyRule(rule);
-            return info;
-        }
-        return null;
-    }
-}, {
-    title: '购买条件',
-    dataIndex: 'purchaseCondition',
-    render: (text, record) => {
-        if (record.id) {
-            const { conditions } = record.promotionRule.totalPurchaseListRule;
-            return conditions.map(c => (`${getTextByCondition(c)}`));
-        }
-        return null;
-    }
-}, ...basicDetailAfter];

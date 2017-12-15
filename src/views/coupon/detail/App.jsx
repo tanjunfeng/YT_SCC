@@ -57,7 +57,7 @@ class CouponDetail extends PureComponent {
 
     render() {
         return (
-            <div className="coupons-create">
+            <div className="coupons-form">
                 <Form layout="inline">
                     <div className="coupons-add-item">
                         <div className="add-message coupons-add-license">
