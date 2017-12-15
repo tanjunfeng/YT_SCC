@@ -6,41 +6,9 @@
  */
 import React from 'react';
 import {
-    promotionStatus, promotionRuleStatus, preferentialWayStatus,
-    purchageTypeStatus, conditionTypeStatus
+    promotionStatus, promotionRuleStatus
 } from './constants';
 import Util from '../../util/util';
-
-const getTextByCondition = (condition) => {
-    let info = `购买类型：${purchageTypeStatus[condition.purchaseType]}，`;
-    // 购买类型
-    switch (condition.purchaseType) {
-        case 'CATEGORY':
-            info += `${condition.promoCategories.categoryName}；`;
-            break;
-        case 'PRODUCT':
-            info += `${condition.promoProduct.productName}；`;
-            break;
-        default: break;
-    }
-    info += `条件类型：${conditionTypeStatus[condition.conditionType]}，`;
-    // 条件类型
-    switch (condition.conditionType) {
-        case 'QUANTITY':
-            info += `${condition.conditionValue}；`;
-            break;
-        case 'AMOUNT':
-            info += `${condition.conditionValue}元；`;
-            break;
-        default: break;
-    }
-    return info;
-}
-
-const getPreferentialBuyRule = (rule) => {
-    const { preferentialWay, preferentialValue } = rule;
-    return `优惠方式：${preferentialWayStatus[preferentialWay]}，${preferentialValue}；`;
-}
 
 // 供应商列表
 export const managementList = [{
@@ -56,7 +24,6 @@ export const managementList = [{
 }, {
     title: '优惠方式',
     dataIndex: 'promotionRule.ruleName',
-    key: 'promotionRule.ruleName',
     render: ruleName => promotionRuleStatus[ruleName]
 }, {
     title: '使用区域',
@@ -150,8 +117,8 @@ export const basicDetailBefore = [{
     render: timestamp => Util.getTime(timestamp)
 }, {
     title: '使用条件',
-    dataIndex: 'promotionRule.useConditionRule',
-    render: rule => (rule ? '指定条件' : '不限制')
+    dataIndex: 'promotionRule',
+    render: rule => (rule && rule.useConditionRule ? '指定条件' : '不限制')
 }];
 
 /**
