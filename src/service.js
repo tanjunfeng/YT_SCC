@@ -741,10 +741,10 @@ export const updateSupplierAddressInfo = (params) => http.post('/supplier/update
 export const queryProviderPlaceInfo = (params) => http.get('/supplier/queryProviderPlaceInfo', params);
 
 // 此接口用于根据条件查询仓库信息列表,条件查询范围为仓库编码和仓库名称(应该用get)
-export const getWarehouseInfo1 = (params) => http.get('/warehouse/getWarehouseLogicInfo', params);
+export const getWarehouseLogic = (params) => http.get('/warehouse/getWarehouseLogicInfo', params);
 
 // 此接口用于根据仓库ID查询仓库的详细信息
-export const getWarehouseInfo = (params) => http.get('/warehouse/getWarehousePhysicalInfo', params);
+export const getWarehousePhysical = (params) => http.get('/warehouse/getWarehousePhysicalInfo', params);
 
 // 查询供应商地点所属区域列表
 export const querySupplierPlaceRegion = (params) => http.get('/supplier/querySupplierPlaceRegion', params);
