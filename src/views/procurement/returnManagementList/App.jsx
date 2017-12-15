@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-14 17:24:43
+ * @Last Modified time: 2017-12-15 16:15:06
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -67,7 +67,7 @@ const statusTypes = { 0: '制单', 1: '已提交', 2: '已审核', 3: '已拒绝
 const adrTypes = { 0: '仓库', 1: '门店' }
 @connect(state => ({
     returnMngInfo: state.toJS().procurement.returnMngInfo,
-    processImageBusiData: state.toJS().process.processImageByBusi,
+    processImageBusiData: state.toJS().process.processImageBusiData,
     commentHisBusiList: state.toJS().process.commentHisByBusi,
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
@@ -368,7 +368,7 @@ class ReturnManagementList extends PureComponent {
 
     nodeModal = (record) => {
         this.showOpinionModal();
-        this.props.processImageBusi({id: record.purchaseRefundNo, processType: 'CGTH' });
+        this.props.processImageBusi({id: record.id, processType: 'CGTH' });
     }
 
     handleOpinionOk = () => {
@@ -399,10 +399,10 @@ class ReturnManagementList extends PureComponent {
                 this.showConfirm(record);
                 break;
             case 'viewApprovalrogress':
-                this.nodeModal({ purchaseRefundNo: record.purchaseRefundNo });
+                this.nodeModal({ id: record.id });
                 break;
             case 'viewApproval':
-                this.props.queryCommentHisBusi({id: record.purchaseRefundNo, processType: 'CGTH' });
+                this.props.queryCommentHisBusi({id: record.id, processType: 'CGTH' });
                 this.showModal();
                 break;
             case 'downloadTheReturnInvoice':
