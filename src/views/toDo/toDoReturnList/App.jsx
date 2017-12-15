@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-14 14:57:32
+ * @Last Modified time: 2017-12-15 16:49:07
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -109,7 +109,7 @@ class toDoReturnList extends PureComponent {
             refundAdr: '',
             spNo: '', // 供应商编码
             spAdrNo: '', // 供应商地点编码
-            status: 0, // 流程状态，默认进行中
+            status: '0', // 流程状态，默认进行中
             spName: null, // 供应商名
             apAdrName: null, // 供应商地点名
             refundAdrName: null, // 地点
@@ -621,11 +621,11 @@ class toDoReturnList extends PureComponent {
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/returnManagementDetail/${taskId}`}>退货单详情</Link>
                 </Menu.Item>
-                <Menu.Item key="examinationApproval">
+                {this.state.status === '0' && <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
                     </a>
-                </Menu.Item>
+                </Menu.Item>}
                 <Menu.Item key="viewApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         查看审批意见

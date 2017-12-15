@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-13 15:51:20
+ * @Last Modified time: 2017-12-15 17:06:25
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -101,7 +101,7 @@ class toDoPurchaseList extends PureComponent {
             refundAdr: '',
             spNo: '', // 供应商编码
             spAdrNo: '', // 供应商地点编码
-            status: 0, // 流程状态，默认进行中
+            status: '0', // 流程状态，默认进行中
             spName: null, // 供应商名
             spAdrName: null, // 供应商地点名
             adrTypeName: null, // 地点
@@ -529,17 +529,17 @@ class toDoPurchaseList extends PureComponent {
         })
     }
 
-    renderActions(text, record, index) {
+    renderActions = (text, record, index) => {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
                     <Link to={`po/detail/${record.purchaseNo}`} >采购单详情</Link>
                 </Menu.Item>
-                <Menu.Item key="examinationApproval">
+                {this.state.status === '0' && <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
                     </a>
-                </Menu.Item>
+                </Menu.Item>}
                 <Menu.Item key="viewApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         查看审批意见
