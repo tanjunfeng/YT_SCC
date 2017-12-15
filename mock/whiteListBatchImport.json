@@ -1,0 +1,25 @@
+{
+    "timestamp": 1507789738783,
+    "code": 10024,
+    "message": "请求成功",
+    "exception": null,
+    "data": [
+        {
+            "storeId": "A00132",
+            "errorMsg": "这个门店已经在白名单啦"
+        },
+        {
+            "storeId": "A00131",
+            "errorMsg": "这个门店已经在黑名单啦"
+        },
+        {
+            "storeId": "A00139",
+            "errorMsg": "这个门店已经在白名单啦"
+        },
+        {
+            "storeId": "A00138",
+            "errorMsg": "这个门店已经在黑名单啦"
+        }
+    ],
+    "success": false
+}
