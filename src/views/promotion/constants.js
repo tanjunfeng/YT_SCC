@@ -63,7 +63,7 @@ export const promotionRuleStatus = {
 
 // 购买类型
 export const purchageTypeStatus = {
-    CATEGORY: '按品类', PRODUCT: '按商品'
+    ALL: '全部', CATEGORY: '按品类', PRODUCT: '按商品'
 }
 
 // 条件类型
