@@ -103,21 +103,20 @@ class SearchForm extends PureComponent {
     */
     handleUpload = (fileList) => {
         this.setState({
-            isBtnDisabled: true
+            isBtnDisabled: true,
+            uploading: true
         })
         const fileName = fileList[0].name;
         if (fileName.indexOf('.xls') === -1) {
-            message.error('上传文件格式必须为excel格式，请清除后重新尝试');
+            message.error('上传文件格式必须为excel格式，请重新尝试');
+            this.setState({
+                uploading: false,
+                isBtnDisabled: false
+            });
             return;
         }
-        this.setState({
-            uploading: true,
-        });
         const formData = new FormData();
         formData.append('file', fileList[0]);
-        this.setState({
-            uploading: true,
-        });
         reqwest({
             url: `${window.config.apiHost}sp/whiteListBatchImport`,
             method: 'post',
@@ -125,15 +124,13 @@ class SearchForm extends PureComponent {
             data: formData,
             success: (res) => {
                 this.setState({
-                    uploading: false
+                    uploading: false,
+                    isBtnDisabled: false
                 });
                 switch (res.code) {
                     case 200:
                         message.success('上传成功');
                         this.handleSearch();
-                        this.setState({
-                            isBtnDisabled: false
-                        })
                         break;
                     case 10004:
                         message.error(res.message);
