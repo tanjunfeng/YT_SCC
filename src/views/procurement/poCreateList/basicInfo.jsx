@@ -55,10 +55,6 @@ class BasicInfo extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            // 采购单单号
-            purchaseOrderNo: null,
-            // 操作权限
-            actionAuth: {},
             // 地点是否可编辑
             locDisabled: true,
             // 地点类型
@@ -81,8 +77,8 @@ class BasicInfo extends PureComponent {
             spId: null,
             // 供应商地点id
             spAdrId: null,
-            // 修改页，仓库是否被清空的标志
-            ispoAddressClear: false,
+            // 供应商地点名
+            spAdrName: null,
             // 经营模式
             businessMode: null,
             status: 0,
@@ -97,13 +93,12 @@ class BasicInfo extends PureComponent {
         if (Object.keys(this.props.basicInfo).length === 0 &&
            Object.keys(nextProps.basicInfo).length !== 0) {
             const {
-                purchaseOrderNo, adrType, settlementPeriod, payType, payCondition,
+                adrType, settlementPeriod, payType, payCondition,
                 estimatedDeliveryDate, purchaseOrderType, currencyCode, spAdrId, spAdrName,
                 businessMode, createdByName, createdAt, spId, spName, adrTypeCode, adrTypeName,
                 status,
             } = nextProps.basicInfo;
             this.setState({
-                purchaseOrderNo,
                 locDisabled: !(adrType === 0 || adrType === 1),
                 settlementPeriod,
                 payType,
@@ -267,6 +262,51 @@ class BasicInfo extends PureComponent {
     }
 
     /**
+     * 供应商地点变更时，做如下处理
+     *  1.删除采购商品行
+     *  2.清空账期、付款方式、付款条件
+     * @param {*} res
+     */
+    applySupplierLocChoosed = (res) => {
+        if (res) {
+            const record = res.record;
+            if (this.state.localType === '0') {
+                this.poAddress.reset();
+            }
+            if (res.record) {
+                // 1.删除所有商品行
+                this.props.deletePoLines();
+                // 2.清空账期、付款方式、付款条件
+                const basicInfo = this.props.basicInfo;
+                basicInfo.settlementPeriod = null;
+                basicInfo.payType = null;
+                basicInfo.payCondition = null;
+                this.props.updatePoBasicinfo(basicInfo);
+                // 设置预计收货日期为：now + 提前期
+                this.setState({
+                    pickerDate: moment().add(record.goodsArrivalCycle, 'days'),
+                    // 账期
+                    settlementPeriod: record.settlementPeriod,
+                    // 付款方式
+                    payType: record.payType,
+                    // 付款条件
+                    payCondition: record.payCondition,
+                    applySupplierRecord: record,
+                    spAdrId: record.spAdrid,
+                    spAdrName: record.providerName
+                });
+                this.props.stateChange({spAdrId: record.spAdrId})
+            }
+        }
+    }
+
+    /**
+     * 经营模式改变通知父组件
+     */
+    businessModeTypeChange = (value) => {
+        this.props.stateChange({businessMode: value})
+    }
+    /**
      * Supplier供应商组件改变的回调
      * @param {Object} value
      */
@@ -275,6 +315,7 @@ class BasicInfo extends PureComponent {
         const { basicInfo } = this.props;
         if (spId !== '') {
             this.props.updatePoBasicinfo(basicInfo);
+            this.props.stateChange({spId})
         }
         this.clearSupplierAbout();
     }
@@ -310,6 +351,19 @@ class BasicInfo extends PureComponent {
     )
 
     /**
+     * 地点改变事件
+     */
+    locChange = (res) => {
+        const record = res.record;
+        if (record) {
+            this.setState({
+                adrTypeCode: record.warehouseCode,
+                adrTypeName: record.warehouseName
+            })
+        }
+    }
+
+    /**
      * 清空供应商地点事件
      */
     applySupplierLocClear = () => {
@@ -317,6 +371,10 @@ class BasicInfo extends PureComponent {
             this.poAddress.reset();
         }
         this.setState({
+            adrTypeCode: null,
+            adrTypeName: null,
+            spAdrId: null,
+            spAdrName: null,
             // 账期
             settlementPeriod: null,
             // 付款方式
@@ -422,7 +480,7 @@ class BasicInfo extends PureComponent {
                         <Col span={8}>
                             {/* 采购单号 */}
                             <FormItem label="采购单号">
-                                <span className="text">{this.state.purchaseOrderNo}</span>
+                                <span className="text">{this.props.basicInfo.purchaseOrderNo}</span>
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -603,11 +661,7 @@ class BasicInfo extends PureComponent {
                                                     pageSize: params.pagination.pageSize
                                                 }, 'getWarehouseInfo1')
                                             }
-                                            onChoosed={() => {
-                                                this.setState({
-                                                    ispoAddressClear: false
-                                                })
-                                            }}
+                                            onChoosed={this.locChange}
                                             disabled={this.props.form.getFieldValue('supplier').spId === '' || this.state.localType !== '0'}
                                             defaultValue={adresssDefaultValue}
                                             renderChoosedInputRaw={(data) => (
@@ -759,7 +813,7 @@ class BasicInfo extends PureComponent {
                                     rules: [{ required: true, message: '请输入经营模式' }],
                                     initialValue: this.state.businessMode
                                 })(
-                                    <Select size="default">
+                                    <Select size="default" onChange={this.businessModeTypeChange}>
                                         {
                                             businessModeType.data.map((item) =>
                                                 (<Option
@@ -814,5 +868,6 @@ BasicInfo.propTypes = {
     deletePoLines: PropTypes.func,
     isCheck: PropTypes.bool,
     checkResult: PropTypes.func,
+    stateChange: PropTypes.func
 }
 export default withRouter(Form.create()(BasicInfo));

@@ -71,7 +71,6 @@ class AddingGoods extends PureComponent {
 }
 AddingGoods.propTypes = {
     pubFetchValueList: PropTypes.func,
-    form: PropTypes.objectOf(PropTypes.any),
     spAdrId: PropTypes.string,
     businessMode: PropTypes.string,
     spId: PropTypes.string,

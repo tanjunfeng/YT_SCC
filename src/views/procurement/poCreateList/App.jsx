@@ -6,12 +6,9 @@ import { withRouter } from 'react-router';
 import {Form, Row, Col, Button, message, Affix} from 'antd';
 import Immutable, { fromJS } from 'immutable';
 import Audit from './auditModal';
-import Utils from '../../../util/util';
 import {
     getMaterialMap,
     initPoDetail,
-    createPo,
-    ModifyPo,
     auditPo,
     queryPoDetail,
     updatePoBasicinfo,
@@ -48,8 +45,6 @@ const FormItem = Form.Item;
 }), dispatch => bindActionCreators({
     getMaterialMap,
     initPoDetail,
-    createPo,
-    ModifyPo,
     auditPo,
     queryPoDetail,
     updatePoBasicinfo,
@@ -72,9 +67,6 @@ class PoCreateList extends PureComponent {
             // 操作权限
             actionAuth: {},
             // 审核弹出框是否可见
-            auditModalVisible: false,
-            editable: false,
-            locDisabled: true,
             spAdrId: null,
             businessMode: null,
             spId: null,
@@ -82,7 +74,6 @@ class PoCreateList extends PureComponent {
             isInfoCheck: false, // 是否对基本信息框进行校验
             isGoodsCheck: false, // 是否对商品列表进行校验
             basicInfoCheck: false, // 基本信息框校验结果
-            basicInfo: {}, // 基本信息框内容
             operatType: 0 // 0保存，1提交 默认保存
         }
         this.checkedInfo = null;
@@ -106,12 +97,6 @@ class PoCreateList extends PureComponent {
                 const tmpPageMode = that.getPageMode();
                 that.setState({ pageMode: tmpPageMode });
                 that.setState({ actionAuth: that.getActionAuth() });
-                // 计算采购总数量、采购总金额
-                if (tmpPageMode !== PAGE_MODE.READONLY) {
-                    that.setState({ editable: true });
-                } else {
-                    that.setState({ editable: false });
-                }
             });
         } else {
             // 1.采购单id存在，查询采购单详情
@@ -123,17 +108,12 @@ class PoCreateList extends PureComponent {
                 const tmpPageMode = that.getPageMode();
                 that.setState({ pageMode: tmpPageMode });
                 that.setState({ actionAuth: that.getActionAuth() });
-                if (tmpPageMode !== PAGE_MODE.READONLY) {
-                    that.setState({ editable: true });
-                } else {
-                    that.setState({ editable: false });
-                }
             });
         }
     }
     componentWillReceiveProps(nextProps) {
         const {
-            adrType, purchaseOrderType, id, spAdrId, businessMode, spId
+            purchaseOrderType, id, spAdrId, businessMode, spId
         } = nextProps.basicInfo;
         const { basicInfo = {} } = this.props;
         const newPo = fromJS(nextProps.po.poLines);
@@ -143,7 +123,6 @@ class PoCreateList extends PureComponent {
         }
         if (basicInfo.id !== id) {
             this.setState({
-                locDisabled: !(adrType === 0 || adrType === 1),
                 spAdrId,
                 businessMode: businessMode === 0 || businessMode === 1 ? `${businessMode}` : '',
                 spId,
@@ -230,6 +209,9 @@ class PoCreateList extends PureComponent {
                 isGoodsCheck: true
             })
         } else {
+            this.setState({
+                isInfoCheck: false
+            })
             // 检验基本信息
             message.error('校验失败，请检查！');
         }
@@ -265,6 +247,13 @@ class PoCreateList extends PureComponent {
                 totalAmounts: Math.round(totalAmounts * 100) / 100
             });
         }
+    }
+
+    /**
+     * 子组件更新父组件state
+     */
+    stateChange = (state) => {
+        this.setState(state)
     }
 
     /**
@@ -339,112 +328,6 @@ class PoCreateList extends PureComponent {
     }
 
     /**
-     * 新增/修改的请求
-     */
-    createPoRequest = (validPoLines) => {
-        // 基本信息，商品行均校验通过,获取有效值
-        // const basicInfo = Object.assign({}, this.getPoData().basicInfo, this.getFormBasicInfo());
-        const basicInfo = this.checkedInfo;
-        const CId = basicInfo.id;
-        const poData = {
-            basicInfo,
-            poLines: validPoLines
-        }
-        // 基本信息
-        const {
-            spAdrId,
-            payType,
-            settlementPeriod,
-            adrType,
-            currencyCode,
-            purchaseOrderType,
-            addressCd,
-            businessMode
-        } = poData.basicInfo;
-        // 采购商品信息
-        const pmPurchaseOrderItems = poData.poLines.map((item) => {
-            const {
-                id,
-                prodPurchaseId,
-                productId,
-                productCode,
-                purchaseNumber,
-                purchasePrice,
-            } = item;
-            return {
-                ...Utils.removeInvalid({
-                    id,
-                    prodPurchaseId,
-                    productId,
-                    productCode,
-                    purchaseNumber,
-                    purchasePrice
-                })
-            }
-        })
-
-        // 预计送货日期
-        const estimatedDeliveryDate = basicInfo.estimatedDeliveryDate
-            ? basicInfo.estimatedDeliveryDate.valueOf().toString()
-            : null;
-
-        // 付款条件
-        const payCondition = settlementPeriod;
-        if (CId) {
-            // 修改页
-            this.props.ModifyPo({
-                pmPurchaseOrder: {
-                    id: CId,
-                    spAdrId: `${spAdrId || this.props.basicInfo.spAdrId}`,
-                    estimatedDeliveryDate,
-                    payType,
-                    payCondition,
-                    adrType: parseInt(adrType, 10),
-                    adrTypeCode: addressCd || this.props.basicInfo.adrTypeCode,
-                    currencyCode,
-                    purchaseOrderType: parseInt(purchaseOrderType, 10),
-                    status: this.state.operatType,
-                    businessMode: parseInt(businessMode, 10)
-                },
-                pmPurchaseOrderItems
-            }).then((res) => {
-                // 如果创建成功，刷新界面数据
-                if (res.success) {
-                    message.success('提交成功！');
-                    this.props.history.goBack();
-                } else {
-                    message.error('提交失败，请检查！');
-                }
-            });
-        } else {
-            // 新增页
-            this.props.createPo({
-                pmPurchaseOrder: {
-                    spAdrId: `${spAdrId || this.props.basicInfo.spAdrId}`,
-                    estimatedDeliveryDate,
-                    payType,
-                    payCondition,
-                    adrType: parseInt(adrType, 10),
-                    adrTypeCode: addressCd || this.props.basicInfo.adrTypeCode,
-                    currencyCode,
-                    purchaseOrderType: parseInt(purchaseOrderType, 10),
-                    status: this.state.operatType,
-                    businessMode: parseInt(businessMode, 10)
-                },
-                pmPurchaseOrderItems
-            }).then((res) => {
-                // 如果创建成功，刷新界面数据
-                if (res.success) {
-                    message.success('提交成功！');
-                    this.props.history.goBack();
-                } else {
-                    message.error('提交失败，请检查！');
-                }
-            });
-        }
-    }
-
-    /**
      * 点击保存
      */
     handleSave = () => {
@@ -485,6 +368,7 @@ class PoCreateList extends PureComponent {
                         deletePoLines={this.deletePoLines}
                         isCheck={this.state.isInfoCheck}
                         checkResult={this.basicInfoResult}
+                        stateChange={this.stateChange}
                     />
                     <AddingGoods
                         spAdrId={this.state.spAdrId}
@@ -564,8 +448,6 @@ PoCreateList.propTypes = {
     updatePoLine: PropTypes.func,
     fetchNewPmPurchaseOrderItem: PropTypes.func,
     addPoLines: PropTypes.func,
-    ModifyPo: PropTypes.func,
-    createPo: PropTypes.func,
 }
 
 export default withRouter(Form.create()(PoCreateList));
