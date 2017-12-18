@@ -55,16 +55,15 @@ class BasicInfo extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            totalQuantity: 0,
-            // new:新建 update:编辑 readonly 只读
-            pageMode: '',
+            // 采购单单号
+            purchaseOrderNo: null,
             // 操作权限
             actionAuth: {},
-            // 审核弹出框是否可见
-            auditModalVisible: false,
-            editable: false,
+            // 地点是否可编辑
             locDisabled: true,
+            // 地点类型
             localType: '',
+            // 日期
             pickerDate: null,
             // 账期
             settlementPeriod: null,
@@ -72,8 +71,6 @@ class BasicInfo extends PureComponent {
             payType: null,
             // 付款条件
             payCondition: null,
-            // 详细收货地点
-            adrName: null,
             // 供应商地点附带信息
             applySupplierRecord: {},
             // 采购单类型
@@ -84,10 +81,6 @@ class BasicInfo extends PureComponent {
             spId: null,
             // 供应商地点id
             spAdrId: null,
-            // 当前状态
-            currentType: '',
-            // nextProps里的polings
-            nextPoLines: [],
             // 修改页，仓库是否被清空的标志
             ispoAddressClear: false,
             // 经营模式
@@ -104,14 +97,14 @@ class BasicInfo extends PureComponent {
         if (Object.keys(this.props.basicInfo).length === 0 &&
            Object.keys(nextProps.basicInfo).length !== 0) {
             const {
-                adrType, settlementPeriod, payType, payCondition, estimatedDeliveryDate,
-                purchaseOrderType, currencyCode, spAdrId, spAdrName, businessMode,
-                createdByName, createdAt, spId, spName, adrTypeCode, adrTypeName,
+                purchaseOrderNo, adrType, settlementPeriod, payType, payCondition,
+                estimatedDeliveryDate, purchaseOrderType, currencyCode, spAdrId, spAdrName,
+                businessMode, createdByName, createdAt, spId, spName, adrTypeCode, adrTypeName,
                 status,
             } = nextProps.basicInfo;
             this.setState({
+                purchaseOrderNo,
                 locDisabled: !(adrType === 0 || adrType === 1),
-                isSupplyAdrDisabled: false,
                 settlementPeriod,
                 payType,
                 payCondition,
@@ -283,7 +276,6 @@ class BasicInfo extends PureComponent {
         if (spId !== '') {
             this.props.updatePoBasicinfo(basicInfo);
         }
-        this.props.stateChange({spId});
         this.clearSupplierAbout();
     }
 
@@ -767,7 +759,7 @@ class BasicInfo extends PureComponent {
                                     rules: [{ required: true, message: '请输入经营模式' }],
                                     initialValue: this.state.businessMode
                                 })(
-                                    <Select size="default" onChange={this.businessModeTypeChange}>
+                                    <Select size="default">
                                         {
                                             businessModeType.data.map((item) =>
                                                 (<Option
@@ -818,7 +810,6 @@ BasicInfo.propTypes = {
     data: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     updatePoBasicinfo: PropTypes.func,
-    stateChange: PropTypes.func,
     purchaseOrderTypeChange: PropTypes.func,
     deletePoLines: PropTypes.func,
     isCheck: PropTypes.bool,

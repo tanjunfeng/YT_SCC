@@ -472,9 +472,6 @@ class PoCreateList extends PureComponent {
         return `${this.S4()}${this.S4()}-${this.S4()}-${this.S4()}-${this.S4()}-${this.S4()}${this.S4()}${this.S4()}`;
     }
 
-    stateChange = (data) => {
-        this.setState(data);
-    }
     purchaseOrderTypeChange = (data) => {
         this.setState(data, () => (this.caculate(this.props.po.poLines)));
     }
@@ -484,7 +481,6 @@ class PoCreateList extends PureComponent {
                 <Form layout="inline">
                     <BasicInfo
                         basicInfo={this.props.basicInfo}
-                        stateChange={this.stateChange}
                         purchaseOrderTypeChange={this.purchaseOrderTypeChange}
                         deletePoLines={this.deletePoLines}
                         isCheck={this.state.isInfoCheck}
