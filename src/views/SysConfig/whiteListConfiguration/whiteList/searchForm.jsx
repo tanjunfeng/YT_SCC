@@ -23,7 +23,7 @@ class SearchForm extends PureComponent {
         warehouseVisible: false,
         companyVisible: false,
         supplyChoose: {},
-        visibleUpload: false,
+        isBtnDisabled: false,
         fileList: []
     }
 
@@ -99,35 +99,20 @@ class SearchForm extends PureComponent {
 
     /**
     *
-    * 上传文件模态框显示隐藏
-    */
-    showModalUpload = () => {
-        this.setState({
-            visibleUpload: true,
-        });
-    }
-
-    hideModalUpload = () => {
-        this.props.form.resetFields()
-        this.versionExplain = ''
-        this.setState({
-            visibleUpload: false,
-            fileList: [],
-            uploading: false
-        })
-    }
-
-    /**
-    *
     * 上传
     */
-    handleUpload = () => {
-        const { fileList } = this.state;
+    handleUpload = (fileList) => {
+        this.setState({
+            isBtnDisabled: true
+        })
         const fileName = fileList[0].name;
-        if (fileName.indexOf('.xlsx') === -1 && fileName.indexOf('.xls') === -1 && fileName.indexOf('.xlsm') === -1) {
+        if (fileName.indexOf('.xls') === -1) {
             message.error('上传文件格式必须为excel格式，请清除后重新尝试');
-            return
+            return;
         }
+        this.setState({
+            uploading: true,
+        });
         const formData = new FormData();
         formData.append('file', fileList[0]);
         this.setState({
@@ -139,15 +124,32 @@ class SearchForm extends PureComponent {
             processData: false,
             data: formData,
             success: (res) => {
-                if (res.code === 200) {
-                    message.success('上传成功');
-                    this.handleSearch()
-                    this.hideModalUpload()
-                } else {
-                    this.setState({
-                        uploading: false
-                    });
-                    message.error(res.message);
+                this.setState({
+                    uploading: false
+                });
+                switch (res.code) {
+                    case 200:
+                        message.success('上传成功');
+                        this.handleSearch();
+                        this.setState({
+                            isBtnDisabled: false
+                        })
+                        break;
+                    case 10004:
+                        message.error(res.message);
+                        break;
+                    case 10024:
+                        Modal.error({
+                            title: '部分导入失败',
+                            content: (
+                                <div>
+                                    {res.data.map(d => <p>{d.storeId} - {d.errorMsg}</p>)}
+                                </div>
+                            ),
+                            onOk() { },
+                        });
+                        break;
+                    default: break;
                 }
             },
             error: () => {
@@ -163,16 +165,20 @@ class SearchForm extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { uploading } = this.state;
         const props = {
+            name: 'file',
             action: `${window.config.apiHost}sp/whiteListBatchImport`,
             onRemove: () => {
                 this.setState({
-                    fileList: []
+                    fileList: [],
+                    isBtnDisabled: false
                 });
             },
             beforeUpload: (file) => {
+                const fileList = [file]
                 this.setState({
-                    fileList: [file]
+                    fileList
                 });
+                this.handleUpload(fileList)
                 return false;
             },
             fileList: this.state.fileList
@@ -225,9 +231,13 @@ class SearchForm extends PureComponent {
                             </Col>
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
-                            <Col span={8} className="export-left">
-                                <FormItem>
-                                    <Button type="primary" size="default" onClick={this.showModalUpload}>导入</Button>
+                            <Col span={12} className="export-left">
+                                <FormItem className="upload">
+                                    <Upload {...props}>
+                                        <Button disabled={this.state.isBtnDisabled}>
+                                            <Icon type="upload" /> {uploading ? '上传中' : '点击上传'}
+                                        </Button>
+                                    </Upload>
                                 </FormItem>
                                 <FormItem>
                                     <Button type="primary" size="default" onClick={this.handleExport}>导出备份</Button>
@@ -236,7 +246,7 @@ class SearchForm extends PureComponent {
                                     <a onClick={this.handleDownload}>下载导入模板</a>
                                 </FormItem>
                             </Col>
-                            <Col span={16} className="search-right">
+                            <Col span={12} className="search-right">
                                 <FormItem>
                                     <Button type="primary" size="default" onClick={this.handleSearch}>
                                         查询
@@ -271,29 +281,6 @@ class SearchForm extends PureComponent {
                         </Row>
                     </div>
                 </Form>
-                <Modal
-                    title="模板导入"
-                    visible={this.state.visibleUpload}
-                    onCancel={this.hideModalUpload}
-                    footer={null}
-                >
-                    <div>
-                        <Upload {...props}>
-                            <Button disabled={this.state.fileList.length > 0}>
-                                <Icon type="upload" /> 选择文件
-                            </Button>
-                        </Upload>
-                        <Button
-                            className="upload-demo-start"
-                            type="primary"
-                            onClick={this.handleUpload}
-                            disabled={this.state.fileList.length === 0}
-                            loading={uploading}
-                        >
-                            {uploading ? '上传中' : '点击上传'}
-                        </Button>
-                    </div>
-                </Modal>
             </div >
         );
     }

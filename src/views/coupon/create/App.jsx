@@ -339,7 +339,7 @@ class CouponCreate extends PureComponent {
             subCompanies.push(company.companyName);
         });
         return (
-            <div className="coupons-create">
+            <div className="coupons-form">
                 <Form layout="inline" onSubmit={this.handleSubmit}>
                     <div className="coupon-add-item">
                         <div className="add-message coupon-add-license">

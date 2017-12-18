@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-06 11:22:00
+ * @Last Modified time: 2017-12-15 16:15:06
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -38,10 +38,13 @@ import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
     deleteBatchRefundOrder,
-    queryApprovalInfo,
-    queryProcessDefinitions,
     cancelRefund
 } from '../../../actions/procurement';
+import {
+    processImageBusi,
+    clearprocessImageBusi,
+    queryCommentHisBusi
+} from '../../../actions/process';
 import { exportPurchaseRefundList, exportPdf } from '../../../service';
 import {
     getWarehouseAddressMap,
@@ -50,9 +53,9 @@ import {
     getSupplierLocMap,
     fetchReturnMngList,
 } from '../../../actions';
-import ApproModal from './approModal';
-import OpinionSteps from '../../../components/approvalFlowSteps';
+import ApproModal from '../../../components/approModal';
 import { Supplier } from '../../../container/search';
+import FlowImage from '../../../components/flowImage';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -63,10 +66,9 @@ const confirm = Modal.confirm;
 const statusTypes = { 0: '制单', 1: '已提交', 2: '已审核', 3: '已拒绝', 4: '待退货', 5: '已退货', 6: '已取消', 7: '取消失败', 8: '异常' }
 const adrTypes = { 0: '仓库', 1: '门店' }
 @connect(state => ({
-    poRcvMngInfo: state.toJS().procurement.poRcvMngInfo,
     returnMngInfo: state.toJS().procurement.returnMngInfo,
-    getRefundNumebr: state.toJS().procurement.getRefundNumebr,
-    processDefinitions: state.toJS().procurement.processDefinitions
+    processImageBusiData: state.toJS().process.processImageBusiData,
+    commentHisBusiList: state.toJS().process.commentHisByBusi,
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -75,10 +77,11 @@ const adrTypes = { 0: '仓库', 1: '门店' }
     fetchReturnMngList,
     pubFetchValueList,
     deleteBatchRefundOrder,
-    queryApprovalInfo,
-    queryProcessDefinitions,
+    queryCommentHisBusi,
+    processImageBusi,
     locTypeCodes,
-    cancelRefund
+    cancelRefund,
+    clearprocessImageBusi,
 }, dispatch))
 
 class ReturnManagementList extends PureComponent {
@@ -92,15 +95,15 @@ class ReturnManagementList extends PureComponent {
         this.searchParams = {};
         this.state = {
             selectedListData: [],
-            spAdrId: '',    // 供应商地点编码
-            locDisabled: true,  // 地点禁用
+            spAdrId: '', // 供应商地点编码
+            locDisabled: true, // 地点禁用
             locationData: {},
             isVisibleModal: false,
             opinionVisible: false,
             refundAdr: '',
-            adrTypeCode: '',    // 地点编码
-            receivedTypeCode: '',  // 收货单状态编码
-            spAdrNo: '',    // 供应商地点编码
+            adrTypeCode: '', // 地点编码
+            receivedTypeCode: '', // 收货单状态编码
+            spAdrNo: '', // 供应商地点编码
         };
         // 初始页号
         this.current = 1;
@@ -365,7 +368,7 @@ class ReturnManagementList extends PureComponent {
 
     nodeModal = (record) => {
         this.showOpinionModal();
-        this.props.queryProcessDefinitions({ processType: 1, businessId: record.businessId });
+        this.props.processImageBusi({id: record.id, processType: 'CGTH' });
     }
 
     handleOpinionOk = () => {
@@ -396,10 +399,10 @@ class ReturnManagementList extends PureComponent {
                 this.showConfirm(record);
                 break;
             case 'viewApprovalrogress':
-                this.nodeModal({ businessId: record.id });
+                this.nodeModal({ id: record.id });
                 break;
             case 'viewApproval':
-                this.props.queryApprovalInfo({ businessId: record.id });
+                this.props.queryCommentHisBusi({id: record.id, processType: 'CGTH' });
                 this.showModal();
                 break;
             case 'downloadTheReturnInvoice':
@@ -519,6 +522,10 @@ class ReturnManagementList extends PureComponent {
             this.orderItem = 0
         }
         this.handleSearch({}, pagination.current, this.orderType, this.orderItem);
+    }
+
+    closeCanvas = () => {
+        this.props.clearprocessImageBusi();
     }
 
     renderActions(text, record, index) {
@@ -834,21 +841,16 @@ class ReturnManagementList extends PureComponent {
                                 visible={this.state.isVisibleModal}
                                 onOk={this.handleModalOk}
                                 onCancel={this.handleModalCancel}
+                                approvalList={this.props.commentHisBusiList}
                             />
                         }
-                    </div>
-                    {
-                        this.state.opinionVisible &&
-                        <Modal
-                            title="审批进度"
-                            visible={this.state.opinionVisible}
-                            onOk={this.handleOpinionOk}
-                            onCancel={this.handleOpinionCancel}
-                            width={1000}
+                        <FlowImage
+                            data={this.props.processImageBusiData}
+                            closeCanvas={this.closeCanvas}
                         >
-                            <OpinionSteps />
-                        </Modal>
-                    }
+                            <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
+                        </FlowImage>
+                    </div>
                 </Form>
             </div >
         );
@@ -857,8 +859,8 @@ class ReturnManagementList extends PureComponent {
 
 ReturnManagementList.propTypes = {
     fetchReturnMngList: PropTypes.func,
-    queryProcessDefinitions: PropTypes.func,
-    queryApprovalInfo: PropTypes.func,
+    processImageBusi: PropTypes.func,
+    queryCommentHisBusi: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any),
     returnMngInfo: PropTypes.objectOf(PropTypes.any),
@@ -866,6 +868,9 @@ ReturnManagementList.propTypes = {
     pubFetchValueList: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,
     cancelRefund: PropTypes.func,
+    clearprocessImageBusi: PropTypes.func,
+    processImageBusiData: PropTypes.string,
+    commentHisBusiList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 };
 
 export default withRouter(Form.create()(ReturnManagementList));
