@@ -40,7 +40,7 @@ const columns = poMngListColumns;
     poInfo: state.toJS().procurement.poInfo,
     selectedPoMngRows: state.toJS().procurement.selectedPoMngRows,
     processDefinitions: state.toJS().procurement.processDefinitions,
-    processImageBusiData: state.toJS().process.processImageByBusi,
+    processImageBusiData: state.toJS().process.processImageBusiData,
     commentHisBusiList: state.toJS().process.commentHisByBusi,
 }), dispatch => bindActionCreators({
     fetchPoMngList,
@@ -117,7 +117,7 @@ class PoMngList extends PureComponent {
         this.setState({
             approvalProgress: true,
         }, () => (
-            this.props.processImageBusi({id: record.purchaseOrderNo, processType: 'CG' })
+            this.props.processImageBusi({id: record.id, processType: 'CG' })
         ));
     }
 
@@ -126,7 +126,7 @@ class PoMngList extends PureComponent {
         this.setState({
             isVisibleModal: true
         }, () => (
-            this.props.queryCommentHisBusi({id: record.purchaseOrderNo, processType: 'CG' })
+            this.props.queryCommentHisBusi({id: record.id, processType: 'CG' })
         ));
     }
     /**

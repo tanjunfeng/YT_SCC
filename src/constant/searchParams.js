@@ -294,6 +294,24 @@ export const initiateModeOptions = {
     }]
 }
 
+// 最新售价状态
+export const latestPriceStateOption = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '0',
+        value: '已提交'
+    }, {
+        key: '1',
+        value: '已审核'
+    }, {
+        key: '2',
+        value: '已拒绝'
+    }]
+}
+
 // 采购模式
 export const preHarvestPinStatus = {
     defaultValue: '0',

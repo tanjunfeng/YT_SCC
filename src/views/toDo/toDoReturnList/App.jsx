@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-14 14:57:32
+ * @Last Modified time: 2017-12-15 16:49:07
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -343,6 +343,9 @@ class toDoReturnList extends PureComponent {
         this.handleSupplyClear();
         this.handleSupplierAddressClear();
         this.handleAddressClear();
+        this.setState({
+            status: 0
+        })
     }
 
     /**
@@ -577,8 +580,7 @@ class toDoReturnList extends PureComponent {
             purchaseOrderNo,
             outcome,
             purchaseOrderType,
-            adrType,
-            auditStatus
+            adrType
         } = this.props.form.getFieldsValue();
         // 供应商编号
         const spName = this.state.spName;
@@ -590,7 +592,7 @@ class toDoReturnList extends PureComponent {
         const refundAdrName = this.state.refundAdrName;
 
         // 流程状态
-        const status = auditStatus === '进行中' ? 0 : 1;
+        const status = parseInt(this.state.status, 10);
         const searchParams = {
             refundNo: purchaseRefundNo,
             purchaseOrderNo,
@@ -609,7 +611,7 @@ class toDoReturnList extends PureComponent {
     // 流程状态切换
     statusChange = (value) => {
         this.setState({
-            status: value
+            status: parseInt(value, 10)
         })
     }
 
@@ -621,11 +623,11 @@ class toDoReturnList extends PureComponent {
                 <Menu.Item key="detail">
                     <Link to={`${pathname}/returnManagementDetail/${taskId}`}>退货单详情</Link>
                 </Menu.Item>
-                <Menu.Item key="examinationApproval">
+                {this.state.status === 0 && <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
                     </a>
-                </Menu.Item>
+                </Menu.Item>}
                 <Menu.Item key="viewApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         查看审批意见

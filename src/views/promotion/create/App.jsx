@@ -144,7 +144,7 @@ class PromotionCreate extends PureComponent {
             companies, areaSelectorVisible, storeSelectorVisible, conditions
         } = this.state;
         return (
-            <Form className="promotion-create" layout="inline" onSubmit={this.handleSubmit}>
+            <Form className="promotion-form" layout="inline" onSubmit={this.handleSubmit}>
                 <Row>
                     <FormItem label="活动名称" >
                         {getFieldDecorator('promotionName', {
