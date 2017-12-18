@@ -467,50 +467,9 @@ class SellPriceModal extends Component {
                                             </FormItem>
                                         </div>
                                     </div>
-                                    <div className={`${prefixCls}-item`}>
-                                        <FormItem label="子公司:">
-                                            {
-                                                isEdit ?
-                                                    <Input defaultValue={`${newDates.branchCompanyId}-${newDates.branchCompanyName}`} readOnly />
-                                                : <span className={`${prefixCls}-data-pic`}>
-                                                    <SearchMind
-                                                        compKey="search-mind-key1"
-                                                        ref={ref => { this.searchMind = ref }}
-                                                        fetch={(param) => this.props.pubFetchValueList({
-                                                            branchCompanyName: param.value,
-                                                            productId: newDates.productId || newDates.id
-                                                        }, 'queryBranchCompanyInfo')}
-                                                        placeholder="请输入公司名"
-                                                        onChoosed={this.handleChoose}
-                                                        disabled={isEdit}
-                                                        defaultValue={
-                                                            newDates.branchCompanyId ?
-                                                                `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` :
-                                                                undefined}
-                                                        onClear={this.handleClear}
-                                                        renderChoosedInputRaw={(data) => (
-                                                            <div>{data.id} - {data.name}</div>
-                                                        )}
-                                                        pageSize={6}
-                                                        columns={[
-                                                            {
-                                                                title: '公司编号',
-                                                                dataIndex: 'id',
-                                                                width: 98
-                                                            }, {
-                                                                title: '公司名',
-                                                                dataIndex: 'name',
-                                                                width: 140
-                                                            }
-                                                        ]}
-                                                    />
-                                                </span>
-                                            }
-                                        </FormItem>
-                                    </div>
                                 </Form>
                             </div>
-                            <div className={`${prefixCls}-body-wrap`}>
+                            <div className={`${prefixCls}-body-wrap`} style={{ float: 'right'}}>
                                 <Form layout="inline" onSubmit={this.handleSubmit}>
                                     <div className={`${prefixCls}-item`}>
                                         <div className={`${prefixCls}-item-title`}>货运条件</div>
@@ -659,6 +618,47 @@ class SellPriceModal extends Component {
                                     </div>
                                 </Form>
                             </div>
+                            <div className={`${prefixCls}-item edit-input`}>
+                                <FormItem label="子公司:" className="edit-input">
+                                    {
+                                        isEdit ?
+                                            <Input defaultValue={`${newDates.branchCompanyId}-${newDates.branchCompanyName}`} readOnly />
+                                        : <span className={`${prefixCls}-data-pic`}>
+                                            <SearchMind
+                                                compKey="search-mind-key1"
+                                                ref={ref => { this.searchMind = ref }}
+                                                fetch={(param) => this.props.pubFetchValueList({
+                                                    branchCompanyName: param.value,
+                                                    productId: newDates.productId || newDates.id
+                                                }, 'queryBranchCompanyInfo')}
+                                                placeholder="请输入公司名"
+                                                onChoosed={this.handleChoose}
+                                                disabled={isEdit}
+                                                defaultValue={
+                                                    newDates.branchCompanyId ?
+                                                        `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` :
+                                                        undefined}
+                                                onClear={this.handleClear}
+                                                renderChoosedInputRaw={(data) => (
+                                                    <div>{data.id} - {data.name}</div>
+                                                )}
+                                                pageSize={6}
+                                                columns={[
+                                                    {
+                                                        title: '公司编号',
+                                                        dataIndex: 'id',
+                                                        width: 98
+                                                    }, {
+                                                        title: '公司名',
+                                                        dataIndex: 'name',
+                                                        width: 140
+                                                    }
+                                                ]}
+                                            />
+                                        </span>
+                                    }
+                                </FormItem>
+                            </div>
                         </div>
                     : <div className={`${prefixCls}-body-wrap`}>
                         <Form layout="inline" onSubmit={this.handleSubmit}>
@@ -679,8 +679,7 @@ class SellPriceModal extends Component {
                                             )}
                                         </span>
                                     </FormItem>
-                                    <FormItem>
-                                        <span>*起订量：</span>
+                                    <FormItem label="*起订量：">
                                         <span>
                                             {getFieldDecorator('minNumber', {
                                                 rules: [
@@ -807,7 +806,7 @@ class SellPriceModal extends Component {
                                     </FormItem>
                                 </div>
                             </div>
-                            <div className={`${prefixCls}-item`}>
+                            <div className={`${prefixCls}-item`} style={{display: 'flex'}}>
                                 <FormItem label="子公司:">
                                     {
                                         isEdit ?
