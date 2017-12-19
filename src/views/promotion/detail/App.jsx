@@ -59,7 +59,7 @@ class PromotionDetail extends PureComponent {
                 }
             });
         }
-        this.setState({ area: this.getArea() });
+        this.setState({ area: this.getArea(nextProps) });
 
         // 区分四种页面分支
         if (promotionRule) {
@@ -80,8 +80,8 @@ class PromotionDetail extends PureComponent {
     /**
      * 根据回传数据判断用户所选区域
      */
-    getArea = () => {
-        const { stores, companiesPoList } = this.props.promotion;
+    getArea = (props) => {
+        const { stores = null, companiesPoList = [] } = props.promotion;
         if (stores === null && companiesPoList.length === 0) {
             return '全部区域';
         }
