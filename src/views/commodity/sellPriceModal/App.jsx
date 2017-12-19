@@ -290,6 +290,7 @@ class SellPriceModal extends Component {
         const { getFieldDecorator } = form;
         const { currentInside, startNumber, price, hasZero } = this.state;
         const newDates = JSON.parse(JSON.stringify(datas));
+        console.log(newDates)
         const preHarvestPinStatusChange =
             (newDates.preHarvestPinStatus === 1 ? '1' : '0');
         return (
@@ -464,7 +465,7 @@ class SellPriceModal extends Component {
                                             </FormItem>
                                             <FormItem>
                                                 <span>最新售价状态：</span>
-                                                <span>{newDates.state || '-'}</span>
+                                                <span><i className={`new-price-state-${newDates.state}`} />{newDates.state || '-'}</span>
                                             </FormItem>
                                         </div>
                                         <div>
@@ -513,24 +514,7 @@ class SellPriceModal extends Component {
                                             {/* 采购模式 */}
                                             <FormItem className={`${prefixCls}-qy`}>
                                                 <span className={`${prefixCls}-select`}> 采购模式 : </span>
-                                                {getFieldDecorator('preHarvestPinStatus', {
-                                                    initialValue: isEdit ? preHarvestPinStatusChange : '0'
-                                                })(
-                                                    <Select
-                                                        style={{ width: 90 }}
-                                                        className="sc-form-item-select"
-                                                        size="default"
-                                                        onChange={this.handleSelectChange}
-                                                    >
-                                                        {
-                                                            preHarvestPinStatus.data.map((item) =>
-                                                                (<Option key={item.key} value={item.key}>
-                                                                    {item.value}
-                                                                </Option>)
-                                                            )
-                                                        }
-                                                    </Select>
-                                                )}
+                                                <span>{preHarvestPinStatusChange === '0' ? '先销后采' : '先采后销'}</span>
                                             </FormItem>
                                         </div>
                                     </div>
@@ -566,7 +550,7 @@ class SellPriceModal extends Component {
                                             </FormItem>
                                             <FormItem>
                                                 <span>最新售价状态：</span>
-                                                <span>{newDates.state || '-'}</span>
+                                                <span><i className={`new-price-state-${newDates.state}`} />{newDates.state || '-'}</span>
                                             </FormItem>
                                         </div>
                                         <div>

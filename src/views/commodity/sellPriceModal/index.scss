@@ -39,7 +39,7 @@
         width: 160px;
     }
     .sell-modal-item{
-        width: 425px;
+        width: 453px;
         overflow-y: auto;
     }
     .sell-modal-item:last-child{
@@ -62,6 +62,32 @@
     .edit-input{
         display: flex;
         margin: 0 auto;
+    }
+}
+.new-price-state{
+    &-sub{
+        width: 5px;
+        height: 5px;
+        background: #5397E8;
+        border-radius: 50%;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    &-success{
+        width: 5px;
+        height: 5px;
+        background: #71E135;
+        border-radius: 50%;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    &-sub{
+        width: 5px;
+        height: 5px;
+        background: red;
+        border-radius: 50%;
+        display: inline-block;
+        vertical-align: middle;
     }
 }
 .createCls{

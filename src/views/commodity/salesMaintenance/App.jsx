@@ -237,6 +237,7 @@ class ProcurementMaintenance extends PureComponent {
                 {
                     this.state.show &&
                     <SellPriceModal
+                        initalValue={stepPriceList.sellPriceInfoVos || {}}
                         datas={this.state.datas}
                         handleClose={this.handleClose}
                         handleAdd={this.handleAdd}
