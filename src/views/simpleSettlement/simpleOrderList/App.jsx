@@ -215,8 +215,7 @@ class SimpleOrderList extends Component {
                     <Col span={8}>
                         <FormItem label="收货日期">
                             {getFieldDecorator('receiveDate', {
-                                initialValue: '',
-                                rules: [{ required: true, message: '请选择收货日期' }]
+                                initialValue: ''
                             })(
                                 <RangePicker
                                     style={{ width: '240px' }}
@@ -277,8 +276,7 @@ class SimpleOrderList extends Component {
                     <Col span={8}>
                         <FormItem label="账期">
                             {getFieldDecorator('settlementPeriod', {
-                                initialValue: accountPeriod.defaultValue,
-                                rules: [{ required: true, message: '请选择账期' }]
+                                initialValue: accountPeriod.defaultValue
                             })(<Select
                                 size="default"
                             >
