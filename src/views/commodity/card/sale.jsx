@@ -254,6 +254,10 @@ class SaleCard extends Component {
                             <span>建议零售价(元) : </span>
                             <span>{item.suggestPrice}</span>
                         </p>
+                        <p>
+                            <span>最新售价状态 : </span>
+                            <span><i className={`new-price-state-${item.state}`} />已提交</span>
+                        </p>
                     </div>
                     <div
                         className={`${prefixCls}-checkboxGroup`}
