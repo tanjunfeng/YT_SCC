@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, InputNumber, message, Select, Button, Input } from 'antd';
+import { Modal, Form, InputNumber, message, Select, Button, Input, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import SteppedPrice from '../steppedPrice';
@@ -325,107 +325,111 @@ class SellPriceModal extends Component {
                                     <div className={`${prefixCls}-item`}>
                                         <div className={`${prefixCls}-item-title`}>货运条件</div>
                                         <div className={`${prefixCls}-item-content`}>
-                                            <FormItem>
-                                                <span>*销售内装数：</span>
-                                                <span>
-                                                    {getFieldDecorator('salesInsideNumber', {
-                                                        rules: [{ required: true, message: '请输入销售内装数' }],
-                                                        initialValue: newDates.salesInsideNumber
-                                                    })(
-                                                        <InputNumber
-                                                            min={0}
-                                                            onChange={this.handleInsideChange}
-                                                        />
-                                                    )}
-                                                </span>
-                                            </FormItem>
-                                            <FormItem>
-                                                <span>*起订量：</span>
-                                                <span>
-                                                    {getFieldDecorator('minNumber', {
-                                                        rules: [
-                                                            { required: true, message: '请输入最小起订量!' },
-                                                            {
-                                                                validator: (rule, value, callback) => {
-                                                                    const { getFieldValue } = this.props.form
-                                                                    if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0) {
-                                                                        callback('起订量需为内装数整数倍！')
-                                                                    }
+                                            <Row>
+                                                <Col>
+                                                    <FormItem>
+                                                        <span>*销售内装数：</span>
+                                                        <span>
+                                                            {getFieldDecorator('salesInsideNumber', {
+                                                                rules: [{ required: true, message: '请输入销售内装数' }],
+                                                                initialValue: newDates.salesInsideNumber
+                                                            })(
+                                                                <InputNumber
+                                                                    min={0}
+                                                                    onChange={this.handleInsideChange}
+                                                                />
+                                                            )}
+                                                        </span>
+                                                    </FormItem>
+                                                    <FormItem>
+                                                        <span>*起订量：</span>
+                                                        <span>
+                                                            {getFieldDecorator('minNumber', {
+                                                                rules: [
+                                                                    { required: true, message: '请输入最小起订量!' },
+                                                                    {
+                                                                        validator: (rule, value, callback) => {
+                                                                            const { getFieldValue } = this.props.form
+                                                                            if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0) {
+                                                                                callback('起订量需为内装数整数倍！')
+                                                                            }
 
-                                                                    callback()
+                                                                            callback()
+                                                                        }
+                                                                    }
+                                                                ],
+                                                                initialValue: newDates.minNumber
+                                                            })(
+                                                                <InputNumber
+                                                                    min={0}
+                                                                    onChange={this.handleMinChange}
+                                                                    step={currentInside || newDates.salesInsideNumber}
+                                                                />
+                                                            )}
+                                                        </span>
+                                                    </FormItem>
+                                                    <FormItem>
+                                                        <span>*最大销售数量：</span>
+                                                        <span>
+                                                            {getFieldDecorator('maxNumber', {
+                                                                initialValue: newDates.maxNumber
+                                                            })(
+                                                                <InputNumber
+                                                                    min={0}
+                                                                    onChange={this.handleMaxChange}
+                                                                    step={currentInside || newDates.salesInsideNumber}
+                                                                />
+                                                            )}
+                                                        </span>
+                                                    </FormItem>
+                                                    <FormItem>
+                                                        <span>*承诺发货时间：下单后</span>
+                                                        <span className={`${prefixCls}-day-input`}>
+                                                            {getFieldDecorator('deliveryDay', {
+                                                                rules: [{ required: true, message: '请输入承诺发货时间!' }],
+                                                                initialValue: newDates.deliveryDay
+                                                            })(
+                                                                <InputNumber min={0} />
+                                                            )}
+                                                        </span>
+                                                        天内发货
+                                                    </FormItem>
+                                                    <FormItem>
+                                                        <span>是否整箱销售:</span>
+                                                        <span className={`${prefixCls}-day-input`}>
+                                                            {getProductById.sellFullCase === 1 ? '是' : '否'}
+                                                        </span>
+                                                    </FormItem>
+                                                    <FormItem>
+                                                        <span>整箱销售单位:</span>
+                                                        <span className={`${prefixCls}-day-input`}>
+                                                            {getProductById.fullCaseUnit || '-'}
+                                                        </span>
+                                                    </FormItem>
+                                                    {/* 采购模式 */}
+                                                    <FormItem className={`${prefixCls}-qy`}>
+                                                        <span className={`${prefixCls}-select`}> 采购模式 : </span>
+                                                        {getFieldDecorator('preHarvestPinStatus', {
+                                                            initialValue: isEdit ? preHarvestPinStatusChange : '0'
+                                                        })(
+                                                            <Select
+                                                                style={{ width: 90 }}
+                                                                className="sc-form-item-select"
+                                                                size="default"
+                                                                onChange={this.handleSelectChange}
+                                                            >
+                                                                {
+                                                                    preHarvestPinStatus.data.map((item) =>
+                                                                        (<Option key={item.key} value={item.key}>
+                                                                            {item.value}
+                                                                        </Option>)
+                                                                    )
                                                                 }
-                                                            }
-                                                        ],
-                                                        initialValue: newDates.minNumber
-                                                    })(
-                                                        <InputNumber
-                                                            min={0}
-                                                            onChange={this.handleMinChange}
-                                                            step={currentInside || newDates.salesInsideNumber}
-                                                        />
-                                                    )}
-                                                </span>
-                                            </FormItem>
-                                            <FormItem>
-                                                <span>*最大销售数量：</span>
-                                                <span>
-                                                    {getFieldDecorator('maxNumber', {
-                                                        initialValue: newDates.maxNumber
-                                                    })(
-                                                        <InputNumber
-                                                            min={0}
-                                                            onChange={this.handleMaxChange}
-                                                            step={currentInside || newDates.salesInsideNumber}
-                                                        />
-                                                    )}
-                                                </span>
-                                            </FormItem>
-                                            <FormItem>
-                                                <span>*承诺发货时间：下单后</span>
-                                                <span className={`${prefixCls}-day-input`}>
-                                                    {getFieldDecorator('deliveryDay', {
-                                                        rules: [{ required: true, message: '请输入承诺发货时间!' }],
-                                                        initialValue: newDates.deliveryDay
-                                                    })(
-                                                        <InputNumber min={0} />
-                                                    )}
-                                                </span>
-                                                天内发货
-                                            </FormItem>
-                                            <FormItem>
-                                                <span>是否整箱销售:</span>
-                                                <span className={`${prefixCls}-day-input`}>
-                                                    {getProductById.sellFullCase === 1 ? '是' : '否'}
-                                                </span>
-                                            </FormItem>
-                                            <FormItem>
-                                                <span>整箱销售单位:</span>
-                                                <span className={`${prefixCls}-day-input`}>
-                                                    {getProductById.fullCaseUnit || '-'}
-                                                </span>
-                                            </FormItem>
-                                            {/* 采购模式 */}
-                                            <FormItem className={`${prefixCls}-qy`}>
-                                                <span className={`${prefixCls}-select`}> 采购模式 : </span>
-                                                {getFieldDecorator('preHarvestPinStatus', {
-                                                    initialValue: isEdit ? preHarvestPinStatusChange : '0'
-                                                })(
-                                                    <Select
-                                                        style={{ width: 90 }}
-                                                        className="sc-form-item-select"
-                                                        size="default"
-                                                        onChange={this.handleSelectChange}
-                                                    >
-                                                        {
-                                                            preHarvestPinStatus.data.map((item) =>
-                                                                (<Option key={item.key} value={item.key}>
-                                                                    {item.value}
-                                                                </Option>)
-                                                            )
-                                                        }
-                                                    </Select>
-                                                )}
-                                            </FormItem>
+                                                            </Select>
+                                                        )}
+                                                    </FormItem>
+                                                </Col>
+                                            </Row>
                                         </div>
                                     </div>
                                     <div className={`${prefixCls}-item item-max-height`}>
@@ -455,15 +459,22 @@ class SellPriceModal extends Component {
                                         </div>
                                         <div>
                                             <FormItem>
-                                                <span>* 建议零售价(元)：</span>
-                                                <span>
-                                                    {getFieldDecorator('suggestPrice', {
-                                                        rules: [{ required: true, message: '请输入建议零售价!' }],
-                                                        initialValue: newDates.suggestPrice
-                                                    })(
-                                                        <InputNumber min={0} />
-                                                    )}
-                                                </span>
+                                                <span>*建议零售价(元)：</span>
+                                                <span>{newDates.suggestPrice}</span>
+                                            </FormItem>
+                                            <FormItem>
+                                                <span>最新售价状态：</span>
+                                                <span>{newDates.state || '-'}</span>
+                                            </FormItem>
+                                        </div>
+                                        <div>
+                                            <FormItem>
+                                                <span>提交人：</span>
+                                                <span>{newDates.submit || '-'}</span>
+                                            </FormItem>
+                                            <FormItem>
+                                                <span>审核人：</span>
+                                                <span>{newDates.examine || '-'}</span>
                                             </FormItem>
                                         </div>
                                     </div>
@@ -471,87 +482,33 @@ class SellPriceModal extends Component {
                             </div>
                             <div className={`${prefixCls}-body-wrap`} style={{ float: 'right'}}>
                                 <Form layout="inline" onSubmit={this.handleSubmit}>
-                                    <div className={`${prefixCls}-item`}>
+                                    <div className={`${prefixCls}-item`} style={{ minHeight: '211px' }}>
                                         <div className={`${prefixCls}-item-title`}>货运条件</div>
                                         <div className={`${prefixCls}-item-content`}>
                                             <FormItem>
                                                 <span>*销售内装数：</span>
-                                                <span>
-                                                    {getFieldDecorator('salesInsideNumber', {
-                                                        rules: [{ required: true, message: '请输入销售内装数' }],
-                                                        initialValue: newDates.salesInsideNumber
-                                                    })(
-                                                        <InputNumber
-                                                            min={0}
-                                                            onChange={this.handleInsideChange}
-                                                        />
-                                                    )}
-                                                </span>
+                                                <span>{newDates.salesInsideNumber}</span>
                                             </FormItem>
                                             <FormItem>
                                                 <span>*起订量：</span>
-                                                <span>
-                                                    {getFieldDecorator('minNumber', {
-                                                        rules: [
-                                                            { required: true, message: '请输入最小起订量!' },
-                                                            {
-                                                                validator: (rule, value, callback) => {
-                                                                    const { getFieldValue } = this.props.form
-                                                                    if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0) {
-                                                                        callback('起订量需为内装数整数倍！')
-                                                                    }
-
-                                                                    callback()
-                                                                }
-                                                            }
-                                                        ],
-                                                        initialValue: newDates.minNumber
-                                                    })(
-                                                        <InputNumber
-                                                            min={0}
-                                                            onChange={this.handleMinChange}
-                                                            step={currentInside || newDates.salesInsideNumber}
-                                                        />
-                                                    )}
-                                                </span>
+                                                <span>{newDates.minNumber}</span>
                                             </FormItem>
                                             <FormItem>
                                                 <span>*最大销售数量：</span>
-                                                <span>
-                                                    {getFieldDecorator('maxNumber', {
-                                                        initialValue: newDates.maxNumber
-                                                    })(
-                                                        <InputNumber
-                                                            min={0}
-                                                            onChange={this.handleMaxChange}
-                                                            step={currentInside || newDates.salesInsideNumber}
-                                                        />
-                                                    )}
-                                                </span>
+                                                <span>{newDates.maxNumber}</span>
                                             </FormItem>
                                             <FormItem>
                                                 <span>*承诺发货时间：下单后</span>
-                                                <span className={`${prefixCls}-day-input`}>
-                                                    {getFieldDecorator('deliveryDay', {
-                                                        rules: [{ required: true, message: '请输入承诺发货时间!' }],
-                                                        initialValue: newDates.deliveryDay
-                                                    })(
-                                                        <InputNumber min={0} />
-                                                    )}
-                                                </span>
+                                                <span>{newDates.deliveryDay}</span>
                                                 天内发货
                                             </FormItem>
                                             <FormItem>
                                                 <span>是否整箱销售:</span>
-                                                <span className={`${prefixCls}-day-input`}>
-                                                    {getProductById.sellFullCase === 1 ? '是' : '否'}
-                                                </span>
+                                                <span>{getProductById.sellFullCase === 1 ? '是' : '否'}</span>
                                             </FormItem>
                                             <FormItem>
                                                 <span>整箱销售单位:</span>
-                                                <span className={`${prefixCls}-day-input`}>
-                                                    {getProductById.fullCaseUnit || '-'}
-                                                </span>
+                                                <span>{getProductById.fullCaseUnit || '-'}</span>
                                             </FormItem>
                                             {/* 采购模式 */}
                                             <FormItem className={`${prefixCls}-qy`}>
@@ -604,15 +561,22 @@ class SellPriceModal extends Component {
                                         </div>
                                         <div>
                                             <FormItem>
-                                                <span>* 建议零售价(元)：</span>
-                                                <span>
-                                                    {getFieldDecorator('suggestPrice', {
-                                                        rules: [{ required: true, message: '请输入建议零售价!' }],
-                                                        initialValue: newDates.suggestPrice
-                                                    })(
-                                                        <InputNumber min={0} />
-                                                    )}
-                                                </span>
+                                                <span>*建议零售价(元)：</span>
+                                                <span>{newDates.suggestPrice}</span>
+                                            </FormItem>
+                                            <FormItem>
+                                                <span>最新售价状态：</span>
+                                                <span>{newDates.state || '-'}</span>
+                                            </FormItem>
+                                        </div>
+                                        <div>
+                                            <FormItem>
+                                                <span>提交人：</span>
+                                                <span>{newDates.submit || '-'}</span>
+                                            </FormItem>
+                                            <FormItem>
+                                                <span>审核人：</span>
+                                                <span>{newDates.examine || '-'}</span>
                                             </FormItem>
                                         </div>
                                     </div>
@@ -622,7 +586,7 @@ class SellPriceModal extends Component {
                                 <FormItem label="子公司:" className="edit-input">
                                     {
                                         isEdit ?
-                                            <Input defaultValue={`${newDates.branchCompanyId}-${newDates.branchCompanyName}`} readOnly />
+                                            <span>{`${newDates.branchCompanyId}-${newDates.branchCompanyName}`}</span>
                                         : <span className={`${prefixCls}-data-pic`}>
                                             <SearchMind
                                                 compKey="search-mind-key1"
