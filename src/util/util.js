@@ -334,6 +334,16 @@ class Utils {
     }
 
     /**
+     * 判断是否正整数或者不填写
+     */
+    static validatePositiveIntegerOrBlank = (rule, value, callback) => {
+        if (Utils.trim(value) === '') {
+            callback();
+        }
+        Utils.validatePositiveInteger(rule, value, callback);
+    }
+
+    /**
      * 按照唯一属性标识 p 合并数组 a b
      *
      * b 会覆盖 a
