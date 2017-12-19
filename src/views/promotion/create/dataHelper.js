@@ -363,25 +363,28 @@ const forbidden = (state, values) => {
  * @param {*object} { state: this.state, form: this.props.form }
  * @param {*function} callback 校验成功之后的回调
  */
-export const getFormData = ({ state, form }, callback) => {
+export const getFormData = ({ state, form }, callback, reject) => {
     const { validateFields } = form;
     validateFields((err, values) => {
         const { condition } = values;
         if (err || forbidden(state, values)) {
-            return;
-        }
-        const formData = getBasicData(state, values);
-        if (condition === 0) {
-            // 使用条件——不限制
-            Object.assign(formData, {
-                promotionRule: getNoConditionDataRule(values)
-            });
-        } else if (condition === 1) {
-            // 使用条件——指定条件——优惠方式
-            getPurchageWay(formData, values, state);
-        }
-        if (typeof callback === 'function') {
-            callback(Util.removeInvalid(formData));
+            if (typeof callback === 'function') {
+                reject();
+            }
+        } else {
+            const formData = getBasicData(state, values);
+            if (condition === 0) {
+                // 使用条件——不限制
+                Object.assign(formData, {
+                    promotionRule: getNoConditionDataRule(values)
+                });
+            } else if (condition === 1) {
+                // 使用条件——指定条件——优惠方式
+                getPurchageWay(formData, values, state);
+            }
+            if (typeof callback === 'function') {
+                callback(Util.removeInvalid(formData));
+            }
         }
     });
 }

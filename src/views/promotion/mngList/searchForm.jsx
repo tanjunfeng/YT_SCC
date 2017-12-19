@@ -73,7 +73,8 @@ class SearchForm extends PureComponent {
 
     handleCreate() {
         const { pathname } = this.props.location;
-        this.props.history.push(`${pathname}/create`);
+        const win = window.open(`${pathname}/create`, '_blank');
+        win.focus();
     }
 
     render() {

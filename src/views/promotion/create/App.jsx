@@ -41,6 +41,7 @@ class PromotionCreate extends PureComponent {
     state = {
         areaSelectorVisible: false,
         storeSelectorVisible: false,
+        submitDisabled: false,
         companies: [], // 所选区域子公司
         conditions: [], // 购买条件列表
         categoryPC: null, // 购买条件品类, PC = PURCHASECONDITION
@@ -128,20 +129,36 @@ class PromotionCreate extends PureComponent {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        getFormData({ state: this.state, form: this.props.form }, data => {
-            this.props.createPromotion(data).then(res => {
-                if (res.code === 200) {
-                    message.success(res.message);
-                }
-            });
-        });
+        this.setState({ submitDisabled: true });
+        getFormData(
+            {
+                state: this.state,
+                form: this.props.form
+            },
+            data => {
+                this.props.createPromotion(data).then(res => {
+                    if (res.code === 200) {
+                        this.setState({ submitDisabled: true });
+                        message.success(res.message);
+                    } else {
+                        this.setState({ submitDisabled: false });
+                    }
+                }).catch(() => {
+                    this.setState({ submitDisabled: false });
+                });
+            },
+            () => {
+                this.setState({ submitDisabled: false });
+            }
+        );
     }
 
     render() {
         const { form } = this.props;
         const { getFieldDecorator, getFieldValue } = form;
         const {
-            companies, areaSelectorVisible, storeSelectorVisible, conditions
+            companies, areaSelectorVisible, storeSelectorVisible,
+            conditions, submitDisabled
         } = this.state;
         return (
             <Form className="promotion-form" layout="inline" onSubmit={this.handleSubmit}>
@@ -282,7 +299,7 @@ class PromotionCreate extends PureComponent {
                             rules: [
                                 { validator: Util.validatePositiveIntegerOrBlank }
                             ]
-                        })(<Input size="default" />)}
+                        })(<InputNumber max={99999} />)}
                     </FormItem>
                 </Row>
                 <Row>
@@ -325,7 +342,12 @@ class PromotionCreate extends PureComponent {
                     </FormItem>
                 </Row>
                 <Row className="center" >
-                    <Button type="primary" size="default" htmlType="submit">保存</Button>
+                    <Button
+                        type="primary"
+                        size="default"
+                        htmlType="submit"
+                        disabled={submitDisabled}
+                    >保存</Button>
                 </Row>
             </Form>
         );
