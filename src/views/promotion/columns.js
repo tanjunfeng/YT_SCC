@@ -28,14 +28,19 @@ export const managementList = [{
 }, {
     title: '使用区域',
     dataIndex: 'companiesPoList',
-    render: list => {
-        if (!list || list.length === 0) {
+    render: (text, record) => {
+        const { stores = null, companiesPoList = [] } = record;
+        if (stores === null && companiesPoList.length === 0) {
             return '全部区域';
         }
-        const areas = list.map(company => company.companyName).join(',');
-        return (
-            <span title={areas} alt={areas}>所选区域</span>
-        );
+        if (companiesPoList.length > 0) {
+            const hover = companiesPoList.map(c => c.companyName).join(', ');
+            return (<span title={hover} alt={hover}>指定区域</span>);
+        }
+        if (stores && stores.storeId) {
+            return (<span title={stores.storeId} alt={stores.storeId}>指定门店</span>);
+        }
+        return null;
     }
 }, {
     title: '开始时间',

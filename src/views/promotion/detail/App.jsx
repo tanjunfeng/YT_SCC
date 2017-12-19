@@ -59,7 +59,7 @@ class PromotionDetail extends PureComponent {
                 }
             });
         }
-        this.setState({ area: this.getArea(nextProps) });
+        this.setState({ area: this.getArea(promotion) });
 
         // 区分四种页面分支
         if (promotionRule) {
@@ -80,8 +80,8 @@ class PromotionDetail extends PureComponent {
     /**
      * 根据回传数据判断用户所选区域
      */
-    getArea = (props) => {
-        const { stores = null, companiesPoList = [] } = props.promotion;
+    getArea = (record) => {
+        const { stores = null, companiesPoList = [] } = record;
         if (stores === null && companiesPoList.length === 0) {
             return '全部区域';
         }
@@ -90,9 +90,6 @@ class PromotionDetail extends PureComponent {
         }
         if (stores && stores.storeId) {
             return '指定门店';
-        }
-        if (companiesPoList && companiesPoList.length > 0) {
-            return companiesPoList.map(c => c.companyName).join(', ');
         }
         return null;
     }
