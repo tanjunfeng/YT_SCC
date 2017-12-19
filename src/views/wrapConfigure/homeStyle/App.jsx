@@ -47,8 +47,15 @@ class HomeStyle extends Component {
         // 判断当前是否设置为总部运营方式
         const { homeData } = nextProps;
         if (homeData.length > 0) {
+            let isChecked = this.state.isChecked;
+            for (let i = 0; i < homeData.length; i++) {
+                if (homeData[i].areaType !== 3) {
+                    isChecked = homeData[0].isUsingNation;
+                    break;
+                }
+            }
             this.setState({
-                isChecked: homeData[0].isUsingNation
+                isChecked
             })
         }
     }

@@ -99,7 +99,7 @@ class PoSearchForm extends PureComponent {
         const storeCode = '1';
         let locationTypeParam = '';
         if (locTypeCode === libraryCode) {
-            locationTypeParam = 'getWarehouseInfo1';
+            locationTypeParam = 'getWarehouseLogic';
             this.setState({
                 locationData: {
                     code: 'warehouseCode',

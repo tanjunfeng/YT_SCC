@@ -1,4 +1,5 @@
 .sell-modal{
+    min-width: 950px;
     .ant-modal-body{
         min-height: 400px;
         overflow-y: auto;
@@ -38,17 +39,110 @@
         width: 160px;
     }
     .sell-modal-item{
-        width: 425px;
+        width: 453px;
+        overflow-y: auto;
+    }
+    .sell-modal-item:last-child{
+        width: 100%;
+        max-height: 250px;
         overflow-y: auto;
     }
     .sell-modal-body-wrap{
         display: inline-block;
         vertical-align: top;
     }
-    .sell-modal-body-wrap:last-child{
-        margin-left: 65px;
+    .sell-modal-body-wrap::after{
+        clear: both;
+        overflow: hidden;
     }
     .item-max-height{
+        overflow-y: auto;
+        max-height: 250px;
+    }
+    .edit-input{
+        display: flex;
+        margin: 0 auto;
+    }
+}
+.new-price-state{
+    &-sub{
+        width: 5px;
+        height: 5px;
+        background: #5397E8;
+        border-radius: 50%;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    &-success{
+        width: 5px;
+        height: 5px;
+        background: #71E135;
+        border-radius: 50%;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    &-sub{
+        width: 5px;
+        height: 5px;
+        background: red;
+        border-radius: 50%;
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+.createCls{
+    min-width: 950px;
+    .ant-modal-body{
+        min-height: 700px;
+        overflow-y: auto;
+    }
+    form .ant-input-number{
+        margin-right: 0;
+    }
+    &-item{
+        border: 1px solid #eee;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+    &-item-title{
+        font-size: 14px;
+    }
+    &-item-content{
+        padding: 0 10px;
+    }
+    &-day-input{
+        margin: 0 4px;
+    }
+    &-label{
+        vertical-align: middle;
+    }
+    &-data-pic{
+        vertical-align: middle;
+        display: inline-block;
+        height: 30px;
+    }
+    &.ant-modal{
+        .ant-form-inline .ant-form-explain {
+            left: 30px;
+        }
+    }
+    .ant-form-explain{
+        width: 160px;
+    }
+    .sell-modal-item{
+        width: 850px;
+    }
+    .sell-modal-body-wrap{
+        display: inline-block;
+        vertical-align: top;
+    }
+    .sell-modal-body-wrap::after{
+        clear: both;
+        overflow: hidden;
+    }
+    .item-max-height{
+        overflow-y: auto;
         max-height: 250px;
     }
 }
