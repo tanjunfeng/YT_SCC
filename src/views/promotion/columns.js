@@ -24,7 +24,7 @@ export const managementList = [{
 }, {
     title: '优惠方式',
     dataIndex: 'promotionRule.ruleName',
-    render: ruleName => promotionRuleStatus[ruleName]
+    render: ruleName => promotionRuleStatus[ruleName] || '-'
 }, {
     title: '使用区域',
     dataIndex: 'companiesPoList',

@@ -276,7 +276,7 @@ class PromotionCreate extends PureComponent {
                     }
                 </Row>
                 <Row>
-                    <FormItem label="活动优先级">
+                    <FormItem label="活动优先级" className="wd-83">
                         {getFieldDecorator('priority', {
                             initialValue: 1,
                             rules: [

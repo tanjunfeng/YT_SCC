@@ -86,7 +86,7 @@ class PromotionDetail extends PureComponent {
             return '全部区域';
         }
         if (companiesPoList.length > 0) {
-            return '指定区域';
+            return companiesPoList.map(c => c.companyName).join(', ');
         }
         if (stores && stores.storeId) {
             return '指定门店';
