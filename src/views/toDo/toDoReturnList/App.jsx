@@ -373,7 +373,7 @@ class toDoReturnList extends PureComponent {
         const storeCode = '1';
         let locationTypeParam = '';
         if (adrType === libraryCode) {
-            locationTypeParam = 'getWarehouseInfo1';
+            locationTypeParam = 'getWarehouseLogic';
             this.setState({
                 locationData: {
                     code: 'warehouseCode',

@@ -387,7 +387,7 @@ class ProdPurchaseModal extends Component {
                                                 condition: params.value,
                                                 pageSize: params.pagination.pageSize,
                                                 pageNum: params.pagination.current || 1
-                                            }, 'getWarehouseInfo1')}
+                                            }, 'getWarehouseLogic')}
                                             onChoosed={this.handleHouseChoose}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>
