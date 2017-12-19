@@ -73,7 +73,8 @@ class SearchForm extends PureComponent {
 
     handleCreate() {
         const { pathname } = this.props.location;
-        this.props.history.push(`${pathname}/create`);
+        const win = window.open(`${pathname}/create`, '_blank');
+        win.focus();
     }
 
     render() {
@@ -144,12 +145,7 @@ SearchForm.propTypes = {
     onPromotionSearch: PropTypes.func,
     onPromotionReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    history: PropTypes.objectOf(PropTypes.any),
     location: PropTypes.objectOf(PropTypes.any)
 };
-
-SearchForm.defaultProps = {
-    prefixCls: 'PromotionList'
-}
 
 export default withRouter(Form.create()(SearchForm));

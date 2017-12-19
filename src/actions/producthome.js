@@ -29,7 +29,7 @@ import {
     fetchChangeSupType,
     updateProdPurchase,
     changeProPurchaseStatus,
-    getWarehouseInfo1
+    getWarehouseLogic
 } from '../service';
 import ActionType from './ActionType';
 
@@ -464,7 +464,7 @@ const receiveGetWarehouseInfo1 = (data) => ({
 
 export const GetWarehouseInfo1 = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        getWarehouseInfo1(params)
+        getWarehouseLogic(params)
             .then(res => {
                 dispatch(receiveGetWarehouseInfo1(res.data));
                 resolve(res);

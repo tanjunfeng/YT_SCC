@@ -85,6 +85,11 @@ $promotionFormBorderCorder: #d9d9d9;
         width: $promotionFormLabelWidth;
         display: inline-block;
     }
+    .ant-form-item.wd-83 {
+        .ant-form-item-label, .ant-form-item-label label {
+            width: 83px;
+        }
+    }
     &.few-line {
         .ant-form-item-label {
             line-height: 48px;
