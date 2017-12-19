@@ -57,6 +57,7 @@ class BasicInfo extends PureComponent {
         this.state = {
             // 地点是否可编辑
             locDisabled: true,
+            adrTypeCode: null,
             // 地点类型
             localType: '',
             // 日期
@@ -70,7 +71,7 @@ class BasicInfo extends PureComponent {
             // 供应商地点附带信息
             applySupplierRecord: {},
             // 采购单类型
-            purchaseOrderType: '0',
+            purchaseOrderType: '',
             // 货币类型
             currencyCode: 'CNY',
             // 供应商id
@@ -80,7 +81,7 @@ class BasicInfo extends PureComponent {
             // 供应商地点名
             spAdrName: null,
             // 经营模式
-            businessMode: null,
+            businessMode: '',
             status: 0,
         }
     }
@@ -93,8 +94,8 @@ class BasicInfo extends PureComponent {
         if (Object.keys(this.props.basicInfo).length === 0 &&
            Object.keys(nextProps.basicInfo).length !== 0) {
             const {
-                adrType, settlementPeriod, payType, payCondition,
-                estimatedDeliveryDate, purchaseOrderType, currencyCode, spAdrId, spAdrName,
+                adrType, settlementPeriod, payType, payCondition, spAdrId, spAdrName,
+                estimatedDeliveryDate, purchaseOrderType, currencyCode,
                 businessMode, createdByName, createdAt, spId, spName, adrTypeCode, adrTypeName,
                 status,
             } = nextProps.basicInfo;
@@ -295,7 +296,7 @@ class BasicInfo extends PureComponent {
                     spAdrId: record.spAdrid,
                     spAdrName: record.providerName
                 });
-                this.props.stateChange({spAdrId: record.spAdrId})
+                this.props.stateChange({spAdrId: record.spAdrid.toString()})
             }
         }
     }
@@ -312,10 +313,8 @@ class BasicInfo extends PureComponent {
      */
     handleSupplierChange = (value) => {
         const { spId } = value;
-        const { basicInfo } = this.props;
         if (spId !== '') {
-            this.props.updatePoBasicinfo(basicInfo);
-            this.props.stateChange({spId})
+            this.props.stateChange({spId});
         }
         this.clearSupplierAbout();
     }
@@ -328,16 +327,34 @@ class BasicInfo extends PureComponent {
     clearSupplierAbout = () => {
         // 1.清空供应商地点，仓库值清单
         this.supplierLoc.reset();
-        if (this.state.localType === '0') {
-            this.poAddress.reset();
-        }
         // 2.删除所有商品行
         this.props.deletePoLines();
-        // 3.清空账期、付款方式、付款条件
-        const basicInfo = this.props.basicInfo;
-        basicInfo.settlementPeriod = null;
-        basicInfo.payType = null;
-        basicInfo.payCondition = null;
+        this.setState({
+            localType: '',
+            adrTypeCode: null,
+            // 日期
+            pickerDate: null,
+            // 账期
+            settlementPeriod: null,
+            // 付款方式
+            payType: null,
+            // 付款条件
+            payCondition: null,
+            // 供应商地点附带信息
+            applySupplierRecord: {},
+            // 采购单类型
+            purchaseOrderType: '',
+            // 货币类型
+            currencyCode: 'CNY',
+            // 供应商id
+            spId: null,
+            // 供应商地点id
+            spAdrId: null,
+            // 供应商地点名
+            spAdrName: null,
+            // 经营模式
+            businessMode: '',
+        })
     }
 
     /**
@@ -384,6 +401,52 @@ class BasicInfo extends PureComponent {
         })
     }
 
+    /**
+     * 获取供应商地点列表
+     */
+    querySupplierLoc = (params) => (
+        this.props.pubFetchValueList({
+            orgId: this.props.data.user.employeeCompanyId,
+            pId: this.props.form.getFieldValue('supplier').spId,
+            condition: params.value,
+            pageNum: params.pagination.current || 1,
+            pageSize: params.pagination.pageSize,
+            isContainsHeadBranchCompany: true
+        }, 'supplierAdrSearchBox')
+    )
+
+    /**
+     * 获取仓库地点列表
+     */
+    querywarehouse = (params) => (
+        this.props.pubFetchValueList({
+            supplierAddressId: this.state.spAdrId,
+            param: params.value,
+            pageNum: params.pagination.current || 1,
+            pageSize: params.pagination.pageSize
+        }, 'getWarehouseInfo1')
+    )
+
+    /**
+     * 获取门店地点列表
+     */
+    querystores = (params) => (
+        this.props.pubFetchValueList({
+            param: params.value,
+            pageNum: params.pagination.current || 1,
+            pageSize: params.pagination.pageSize
+        }, 'getStoreInfo')
+    )
+
+    /**
+     * 获取大类列表
+     */
+    queryBigClass = (params) => (
+        this.props.pubFetchValueList({
+            param: params.value,
+            level: '2'
+        }, 'queryCategorysByLevel')
+    )
     /**
      * 渲染付款方式
      * @param {*} key
@@ -485,13 +548,7 @@ class BasicInfo extends PureComponent {
                         </Col>
                         <Col span={8}>
                             {/* 采购单类型 */}
-                            <FormItem>
-                                <span className="ant-form-item-label">
-                                    <span className="label-wrap">
-                                        <span style={{ color: '#F00' }}>*</span>
-                                        采购单类型:
-                                    </span>
-                                </span>
+                            <FormItem label="采购单类型">
                                 {getFieldDecorator('purchaseOrderType', {
                                     rules: [{ required: true, message: '请输入采购单类型' }],
                                     initialValue: this.state.purchaseOrderType
@@ -521,28 +578,21 @@ class BasicInfo extends PureComponent {
                     <Row >
                         <Col span={8}>
                             {/* 供应商 */}
-                            <FormItem formItemLayout >
-                                <div className="row middle">
-                                    <span className="ant-form-item-label">
-                                        <span className="label-wrap">
-                                            <span style={{ color: '#F00' }}>*</span>
-                                            供应商:
-                                        </span>
-                                    </span>
-                                    {getFieldDecorator('supplier', {
-                                        initialValue: { spId: this.state.spId || '', spNo: this.state.spNo || '', companyName: this.state.spName || '' }
-                                    })(
-                                        <Supplier
-                                            onChange={this.handleSupplierChange}
-                                            initialValue={spDefaultValue}
-                                        />)}
-                                    {this.tooltipItem('修改供应商会清空仓库地点和采购商品')}
-                                </div>
+                            <FormItem label="供应商" >
+                                {getFieldDecorator('supplier', {
+                                    rules: [{ required: true, message: '请输入供应商' }],
+                                    initialValue: { spId: this.state.spId || '', spNo: this.state.spNo || '', companyName: this.state.spName || '' }
+                                })(
+                                    <Supplier
+                                        onChange={this.handleSupplierChange}
+                                        initialValue={spDefaultValue}
+                                    />)}
+                                {this.tooltipItem('修改供应商会清空仓库地点和采购商品')}
                             </FormItem>
                         </Col>
                         <Col span={8}>
                             {/* 供应商地点 */}
-                            <FormItem formItemLayout >
+                            <FormItem >
                                 <div className="row middle">
                                     <span className="ant-form-item-label">
                                         <span className="label-wrap">
@@ -553,17 +603,9 @@ class BasicInfo extends PureComponent {
                                     <SearchMind
                                         style={{ zIndex: 9000 }}
                                         compKey="providerNo"
+                                        rowKey="providerNo"
                                         ref={ref => { this.supplierLoc = ref }}
-                                        fetch={(params) =>
-                                            this.props.pubFetchValueList({
-                                                orgId: this.props.data.user.employeeCompanyId,
-                                                pId: this.props.form.getFieldValue('supplier').spId,
-                                                condition: params.value,
-                                                pageNum: params.pagination.current || 1,
-                                                pageSize: params.pagination.pageSize,
-                                                isContainsHeadBranchCompany: true
-                                            }, 'supplierAdrSearchBox')
-                                        }
+                                        fetch={this.querySupplierLoc}
                                         disabled={this.props.form.getFieldValue('supplier').spId === ''}
                                         defaultValue={spAdrDefaultValue}
                                         onChoosed={this.applySupplierLocChoosed}
@@ -590,7 +632,7 @@ class BasicInfo extends PureComponent {
                         </Col>
                         <Col span={8}>
                             {/* 预计送货日期 */}
-                            <FormItem formItemLayout>
+                            <FormItem >
                                 <span className="ant-form-item-label">
                                     <span className="label-wrap">
                                         <span style={{ color: '#F00' }}>*</span>
@@ -652,15 +694,9 @@ class BasicInfo extends PureComponent {
                                         && <SearchMind
                                             style={{ zIndex: 8000 }}
                                             compKey="warehouseCode"
+                                            rowKey="warehouseCode"
                                             ref={ref => { this.poAddress = ref }}
-                                            fetch={(params) =>
-                                                this.props.pubFetchValueList({
-                                                    supplierAddressId: this.state.spAdrId,
-                                                    param: params.value,
-                                                    pageNum: params.pagination.current || 1,
-                                                    pageSize: params.pagination.pageSize
-                                                }, 'getWarehouseInfo1')
-                                            }
+                                            fetch={this.querywarehouse}
                                             onChoosed={this.locChange}
                                             disabled={this.props.form.getFieldValue('supplier').spId === '' || this.state.localType !== '0'}
                                             defaultValue={adresssDefaultValue}
@@ -688,14 +724,10 @@ class BasicInfo extends PureComponent {
                                             style={{ zIndex: 8000 }}
                                             disabled={this.state.locDisabled}
                                             compKey="id"
+                                            rowKey="id"
                                             ref={ref => { this.poStore = ref }}
-                                            fetch={(params) =>
-                                                this.props.pubFetchValueList({
-                                                    param: params.value,
-                                                    pageNum: params.pagination.current || 1,
-                                                    pageSize: params.pagination.pageSize
-                                                }, 'getStoreInfo')
-                                            }
+                                            fetch={this.querystores}
+                                            onChoosed={this.locChange}
                                             defaultValue={adresssDefaultValue}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.id} - {data.name}</div>
@@ -728,13 +760,9 @@ class BasicInfo extends PureComponent {
                                         disabled
                                         style={{ zIndex: 7000 }}
                                         compKey="id"
+                                        rowKey="id"
                                         ref={ref => { this.bigClass = ref }}
-                                        fetch={(params) =>
-                                            this.props.pubFetchValueList({
-                                                param: params.value,
-                                                level: '2'
-                                            }, 'queryCategorysByLevel')
-                                        }
+                                        fetch={this.queryBigClass}
                                         renderChoosedInputRaw={(data) => (
                                             <div>{data.id} - {data.categoryName}</div>
                                         )}
@@ -774,7 +802,7 @@ class BasicInfo extends PureComponent {
                         </Col>
                         <Col span={8}>
                             {/* 货币类型 */}
-                            <FormItem label="货币类型" formItemLayout>
+                            <FormItem label="货币类型">
                                 {getFieldDecorator('currencyCode', {
                                     initialValue: this.state.currencyCode
                                 })(

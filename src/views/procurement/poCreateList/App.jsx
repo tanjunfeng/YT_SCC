@@ -9,29 +9,22 @@ import Audit from './auditModal';
 import {
     getMaterialMap,
     initPoDetail,
+    ModifyPo,
+    createPo,
     auditPo,
     queryPoDetail,
-    updatePoBasicinfo,
     addPoLines,
     updatePoLine,
     deletePoLine,
     fetchNewPmPurchaseOrderItem,
 } from '../../../actions/procurement';
-import { poStatusCodes} from '../../../constant/procurement';
 import { pubFetchValueList } from '../../../actions/pub';
+import Utils from '../../../util/util';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import BasicInfo from './basicInfo';
 import AddingGoods from './addingGoods';
 import GoodsLists from './goodsLists';
 
-/**
- * 界面状态
- */
-const PAGE_MODE = {
-    NEW: 'new',
-    UPDATE: 'update',
-    READONLY: 'readonly'
-};
 const FormItem = Form.Item;
 
 @connect(state => ({
@@ -46,8 +39,9 @@ const FormItem = Form.Item;
     getMaterialMap,
     initPoDetail,
     auditPo,
+    createPo,
+    ModifyPo,
     queryPoDetail,
-    updatePoBasicinfo,
     addPoLines,
     updatePoLine,
     deletePoLine,
@@ -62,11 +56,6 @@ class PoCreateList extends PureComponent {
         this.state = {
             totalQuantitys: 0,
             totalAmounts: 0,
-            // new:新建 update:编辑 readonly 只读
-            pageMode: '',
-            // 操作权限
-            actionAuth: {},
-            // 审核弹出框是否可见
             spAdrId: null,
             businessMode: null,
             spId: null,
@@ -93,21 +82,12 @@ class PoCreateList extends PureComponent {
             that.props.initPoDetail({
                 basicInfo: {},
                 poLines: []
-            }).then(() => {
-                const tmpPageMode = that.getPageMode();
-                that.setState({ pageMode: tmpPageMode });
-                that.setState({ actionAuth: that.getActionAuth() });
             });
         } else {
             // 1.采购单id存在，查询采购单详情
             // 2.设置界面状态，操作按钮状态
             that.props.queryPoDetail({
                 id: poId
-            }).then(() => {
-                // 获取采购单状态：编辑/只读
-                const tmpPageMode = that.getPageMode();
-                that.setState({ pageMode: tmpPageMode });
-                that.setState({ actionAuth: that.getActionAuth() });
             });
         }
     }
@@ -139,63 +119,6 @@ class PoCreateList extends PureComponent {
     }
 
     /**
-     * 根据是否存在采购单id、采购单状态返回界面可编辑状态
-     * 1.采购单基本信息或采购单id 不存在。界面状态：新建(new)
-     * 2.采购单状态=制单。界面状态：可编辑(update)
-     * 3.采购单状态=已提交、已审核、已拒绝、已关闭。界面状态：只读(readonly)
-     */
-    getPageMode = () => {
-        const basicInfo = this.props.basicInfo;
-        let pageMode;
-        // 基本信息新不存在或采购单id不存在
-        if (!basicInfo || !basicInfo.id) {
-            pageMode = PAGE_MODE.NEW;
-            return pageMode;
-        }
-        // 根据采购单状态 判断界面状态
-        const poStatus = basicInfo.status;
-        if (poStatus === 0) {
-            pageMode = PAGE_MODE.UPDATE;
-        } else if ((poStatus === 1)
-            || (poStatus === 2)
-            || (poStatus === 3)
-            || (poStatus === 4)) {
-            pageMode = PAGE_MODE.READONLY;
-        }
-        return pageMode;
-    }
-
-    /**
-     * 根据是否存在采购单id、根据采购单状态返回操作按钮状态
-     * 1.采购单基本信息或采购单id 不存在。按钮状态：保存、提交可用
-     * 2.采购单状态=制单。按钮状态：保存、提交、下载PDF可用
-     * 3.采购单状态=已提交。按钮状态：审核、下载PDF可用
-     * 4.采购单状态=已审核、已拒绝、已关闭。按钮状态：下载PDF可用
-     */
-    getActionAuth = () => {
-        const basicInfo = this.props.basicInfo;
-        let actionAuth = {};
-        // 基本信息新不存在或采购单id不存在
-        if (!basicInfo || !basicInfo.id) {
-            actionAuth = { save: true, submit: true };
-            return actionAuth;
-        }
-
-        // 根据采购单状态 判断按钮可用状态
-        const poStatus = basicInfo.status;
-        if (poStatus === poStatusCodes.draft) {
-            actionAuth = { save: true, submit: true, downloadPDF: true };
-        } else if (poStatus === poStatusCodes.submited) {
-            actionAuth = { approve: true, downloadPDF: true };
-        } else if ((poStatus === poStatusCodes.approved)
-            || (poStatus === poStatusCodes.rejected)
-            || (poStatus === poStatusCodes.closed)) {
-            actionAuth = { downloadPDF: true };
-        }
-        return actionAuth;
-    }
-
-    /**
      * 点击保存/提交
      * 基本信息框校验
      * 校验内容：基本信息是否正确
@@ -214,6 +137,114 @@ class PoCreateList extends PureComponent {
             })
             // 检验基本信息
             message.error('校验失败，请检查！');
+        }
+    }
+
+    /**
+     * 新增/修改的请求
+     */
+    /**
+     * 新增/修改的请求
+     */
+    createPoRequest = (validPoLines) => {
+        // 基本信息，商品行均校验通过,获取有效值
+        const basicInfo = this.checkedInfo;
+        const CId = basicInfo.id;
+        const poData = {
+            basicInfo,
+            poLines: validPoLines
+        }
+        // 基本信息
+        const {
+            spAdrId,
+            payType,
+            settlementPeriod,
+            adrType,
+            currencyCode,
+            purchaseOrderType,
+            addressCd,
+            businessMode
+        } = poData.basicInfo;
+        // 采购商品信息
+        const pmPurchaseOrderItems = poData.poLines.map((item) => {
+            const {
+                id,
+                prodPurchaseId,
+                productId,
+                productCode,
+                purchaseNumber,
+                purchasePrice,
+            } = item;
+            return {
+                ...Utils.removeInvalid({
+                    id,
+                    prodPurchaseId,
+                    productId,
+                    productCode,
+                    purchaseNumber,
+                    purchasePrice
+                })
+            }
+        })
+
+        // 预计送货日期
+        const estimatedDeliveryDate = basicInfo.estimatedDeliveryDate
+            ? basicInfo.estimatedDeliveryDate.valueOf().toString()
+            : null;
+
+        // 付款条件
+        const payCondition = settlementPeriod;
+        if (CId) {
+            // 修改页
+            this.props.ModifyPo({
+                pmPurchaseOrder: {
+                    id: CId,
+                    spAdrId: `${spAdrId || this.props.basicInfo.spAdrId}`,
+                    estimatedDeliveryDate,
+                    payType,
+                    payCondition,
+                    adrType: parseInt(adrType, 10),
+                    adrTypeCode: addressCd || this.props.basicInfo.adrTypeCode,
+                    currencyCode,
+                    purchaseOrderType: parseInt(purchaseOrderType, 10),
+                    status: this.state.operatType,
+                    businessMode: parseInt(businessMode, 10)
+                },
+                pmPurchaseOrderItems
+            }).then((res) => {
+                // 如果创建成功，刷新界面数据
+                if (res.success) {
+                    message.success('提交成功！');
+                    this.props.history.goBack();
+                } else {
+                    message.error('提交失败，请检查！');
+                }
+            });
+        } else {
+            // 新增页
+            this.props.createPo({
+                pmPurchaseOrder: {
+                    spAdrId: `${spAdrId || this.props.basicInfo.spAdrId}`,
+                    estimatedDeliveryDate,
+                    payType,
+                    payCondition,
+                    adrType: parseInt(adrType, 10),
+                    adrTypeCode: addressCd || this.props.basicInfo.adrTypeCode,
+                    currencyCode,
+                    purchaseOrderType: parseInt(purchaseOrderType, 10),
+                    status: this.state.operatType,
+                    businessMode: parseInt(businessMode, 10)
+                },
+                pmPurchaseOrderItems
+            }).then((res) => {
+                // 如果创建成功，刷新界面数据
+                if (res.success) {
+                    message.success('提交成功！');
+                    this.props.history.goBack();
+                } else {
+                    message.error('提交失败，请检查！');
+                }
+            });
         }
     }
 
@@ -359,11 +390,12 @@ class PoCreateList extends PureComponent {
         this.setState(data, () => (this.caculate(this.props.po.poLines)));
     }
     render() {
+        const {basicInfo} = this.props;
         return (
             <div className="po-detail">
                 <Form layout="inline">
                     <BasicInfo
-                        basicInfo={this.props.basicInfo}
+                        basicInfo={basicInfo}
                         purchaseOrderTypeChange={this.purchaseOrderTypeChange}
                         deletePoLines={this.deletePoLines}
                         isCheck={this.state.isInfoCheck}
@@ -377,7 +409,7 @@ class PoCreateList extends PureComponent {
                         handleChoosedMaterialMap={this.handleChoosedMaterialMap}
                     />
                     <GoodsLists
-                        basicInfo={this.props.basicInfo}
+                        basicInfo={basicInfo}
                         poLines={this.props.poLines}
                         purchaseOrderType={this.state.purchaseOrderType}
                         applyPriceChange={this.applyPriceChange}
@@ -406,26 +438,16 @@ class PoCreateList extends PureComponent {
                         <div className="actions">
                             <Row gutter={40} type="flex" justify="end" >
                                 <Col>
-                                    {
-                                        this.state.currentType !== 'detail'
-                                        && (this.props.basicInfo.status === 0
-                                            || this.state.currentType === 'create')
-                                        && <FormItem>
-                                            <Button size="default" onClick={this.handleSave}>
-                                                保存
-                                            </Button>
-                                        </FormItem>
-                                    }
-                                    {
-                                        this.state.currentType !== 'detail'
-                                        && (this.props.basicInfo.status === 0
-                                            || this.state.currentType === 'create')
-                                        && <FormItem>
-                                            <Button size="default" onClick={this.handleSubmit}>
-                                                提交
-                                            </Button>
-                                        </FormItem>
-                                    }
+                                    <FormItem>
+                                        <Button size="default" onClick={this.handleSave}>
+                                            保存
+                                        </Button>
+                                    </FormItem>
+                                    <FormItem>
+                                        <Button size="default" onClick={this.handleSubmit}>
+                                            提交
+                                        </Button>
+                                    </FormItem>
                                 </Col>
                             </Row>
                         </div>
@@ -445,6 +467,9 @@ PoCreateList.propTypes = {
     poLines: PropTypes.objectOf(PropTypes.any),
     po: PropTypes.objectOf(PropTypes.any),
     initPoDetail: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
+    ModifyPo: PropTypes.func,
+    createPo: PropTypes.func,
     updatePoLine: PropTypes.func,
     fetchNewPmPurchaseOrderItem: PropTypes.func,
     addPoLines: PropTypes.func,

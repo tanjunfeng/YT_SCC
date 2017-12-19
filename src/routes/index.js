@@ -49,6 +49,7 @@ import AdPlanList404 from 'bundle-loader?lazy!../views/wrapConfigure/adPlanList4
 import PoMngList from 'bundle-loader?lazy!../views/procurement/poMngList';
 import PoDetail from 'bundle-loader?lazy!../views/procurement/poDetail';
 import PoCreateList from 'bundle-loader?lazy!../views/procurement/PoCreateList';
+import PoDetailList from 'bundle-loader?lazy!../views/procurement/PoDetailList';
 import PoPrintList from 'bundle-loader?lazy!../views/procurement/poPrintList';
 import PoRcvMngList from 'bundle-loader?lazy!../views/procurement/poRcvMngList';
 import PoRcvList from 'bundle-loader?lazy!../views/procurement/poRcvList';
@@ -535,21 +536,15 @@ const routes = [
                         />
                         {/* /po/create */}
                         <Route
-                            path="/po/:type"
-                            exact
-                            render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
-                        />
-                        <Route
                             path="/po/detail/:purchaseOrderNo"
                             exact
-                            render={() => <Bundle load={PoDetail}>{(App) => <App />}</Bundle>}
+                            render={() => <Bundle load={PoDetailList}>{(App) => <App />}</Bundle>}
                         />
                         <Route
                             path="/po/:type/:purchaseOrderNo"
                             exact
                             render={() => <Bundle load={PoCreateList}>{(App) => <App />}</Bundle>}
                         />
-                        {/* PoCreateList */}
                     </Switch>
                 )
             },

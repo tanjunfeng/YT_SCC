@@ -9,15 +9,15 @@ export default class EditableCell extends PureComponent {
     constructor(props) {
         super(props);
         this.validate = ::this.validate;
-    }
-    state = {
-        value: this.props.value,
-        max: this.props.max ? this.props.max : MAXGOODS,
-        step: this.props.step,
-        purchaseInsideNumber: this.props.purchaseInsideNumber,
-        validateStatus: null,
-        editable: this.props.editable,
-        message: ''
+        this.state = {
+            value: this.props.value,
+            max: this.props.max ? this.props.max : MAXGOODS,
+            step: this.props.step,
+            purchaseInsideNumber: this.props.purchaseInsideNumber,
+            validateStatus: null,
+            editable: this.props.editable,
+            message: ''
+        }
     }
 
     componentWillReceiveProps(nextProps) {

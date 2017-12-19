@@ -46,6 +46,7 @@ import {
 class GoodsLists extends PureComponent {
     constructor(props) {
         super(props)
+        const editable = true;
         // 采购单商品行信息
         this.columns = [
             {
@@ -116,7 +117,7 @@ class GoodsLists extends PureComponent {
                 render: (text, record, index) =>
                     (<EditableCell
                         value={text}
-                        editable={'true'}
+                        editable={editable}
                         step={record.purchaseInsideNumber}
                         type={'number'}
                         purchaseInsideNumber={record.purchaseInsideNumber}
