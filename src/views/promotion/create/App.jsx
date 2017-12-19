@@ -278,10 +278,9 @@ class PromotionCreate extends PureComponent {
                 <Row>
                     <FormItem label="活动优先级" className="wd-83">
                         {getFieldDecorator('priority', {
-                            initialValue: 1,
+                            initialValue: '',
                             rules: [
-                                { validator: Util.validatePositiveInteger },
-                                { required: true, message: '请输入活动优先级' }
+                                { validator: Util.validatePositiveInteger }
                             ]
                         })(<InputNumber min={1} step={1} max={9999} className="wd-90" />)}
                     </FormItem>
