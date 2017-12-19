@@ -82,8 +82,11 @@ class PromotionDetail extends PureComponent {
      */
     getArea = () => {
         const { stores, companiesPoList } = this.props.promotion;
-        if (!stores && (!companiesPoList || companiesPoList.length === 0)) {
+        if (stores === null && companiesPoList.length === 0) {
             return '全部区域';
+        }
+        if (companiesPoList.length > 0) {
+            return '指定区域';
         }
         if (stores && stores.storeId) {
             return '指定门店';
