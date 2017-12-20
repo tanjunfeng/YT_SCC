@@ -90,6 +90,7 @@ class SellPriceModal extends Component {
                     this.successPost = false;
                 }
             })
+            return null;
         })
     }
 
@@ -194,10 +195,7 @@ class SellPriceModal extends Component {
     }
 
     hasZero(items) {
-        const filter = items.filter((item) => {
-            return item.price === 0;
-        })
-
+        const filter = items.filter(item => item.price === 0)
         return !!filter.length;
     }
 
@@ -297,9 +295,8 @@ class SellPriceModal extends Component {
     render() {
         const { prefixCls, form, datas, isEdit, getProductById } = this.props;
         const { getFieldDecorator } = form;
-        const { currentInside, startNumber, price, hasZero } = this.state;
+        const { currentInside, hasZero } = this.state;
         const newDates = JSON.parse(JSON.stringify(datas));
-        console.log(newDates)
         const preHarvestPinStatusChange =
             (newDates.preHarvestPinStatus === 1 ? '1' : '0');
         return (
