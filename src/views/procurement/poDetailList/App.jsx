@@ -170,27 +170,27 @@ class PoDetail extends PureComponent {
                         <Col span={8}>
                             {/* 采购单号 */}
                             <FormItem label="采购单号">
-                                <span>{this.props.basicInfo.purchaseOrderNo}</span>
+                                <span>{basicInfo.purchaseOrderNo}</span>
                             </FormItem>
                         </Col>
                         <Col span={3}>
                             {/* 经营模式 */}
                             <FormItem label="经营模式">
-                                <span>{businessMode(this.props.basicInfo.businessMode)}</span>
+                                <span>{businessMode(basicInfo.businessMode)}</span>
                             </FormItem>
                         </Col>
                         <Col span={5}>
                             {/* 采购单类型 */}
                             <FormItem label="采购单类型">
                                 <span>{
-                                    purchaseOrderType(this.props.basicInfo.purchaseOrderType)
+                                    purchaseOrderType(basicInfo.purchaseOrderType)
                                 }</span>
                             </FormItem>
                         </Col>
                         <Col span={8}>
                             {/* 状态 */}
                             <FormItem label="状态">
-                                <span>{purchaseOrderState(this.props.basicInfo.status)}</span>
+                                <span>{purchaseOrderState(basicInfo.status)}</span>
                             </FormItem>
                         </Col>
                     </Row>
@@ -199,8 +199,8 @@ class PoDetail extends PureComponent {
                             {/* 供应商 */}
                             <FormItem label="供应商">
                                 <span>
-                                    {this.props.basicInfo.spNo}
-                                    -{this.props.basicInfo.spName}
+                                    {basicInfo.spNo}
+                                    -{basicInfo.spName}
                                 </span>
                             </FormItem>
                         </Col>
@@ -208,8 +208,8 @@ class PoDetail extends PureComponent {
                             {/* 供应商地点 */}
                             <FormItem label="供应商地点">
                                 <span>
-                                    {this.props.basicInfo.spAdrNo}
-                                    -{this.props.basicInfo.spAdrName}
+                                    {basicInfo.spAdrNo}
+                                    -{basicInfo.spAdrName}
                                 </span>
                             </FormItem>
                         </Col>
@@ -225,22 +225,22 @@ class PoDetail extends PureComponent {
                         <Col span={8}>
                             {/* 地点类型 */}
                             <FormItem label="地点类型">
-                                <span>{purchaseOrderAdrType(this.props.basicInfo.adrType)}</span>
+                                <span>{purchaseOrderAdrType(basicInfo.adrType)}</span>
                             </FormItem>
                         </Col>
                         <Col span={8}>
                             {/* 地点 */}
                             <FormItem label="地点">
                                 <span>
-                                    {this.props.basicInfo.adrTypeCode}
-                                    -{this.props.basicInfo.adrTypeName}
+                                    {basicInfo.adrTypeCode}
+                                    -{basicInfo.adrTypeName}
                                 </span>
                             </FormItem>
                         </Col>
                         <Col span={8}>
                             {/* 大类 */}
                             <FormItem label="大类">
-                                <span>{this.props.basicInfo.secondCategoryName}</span>
+                                <span>{basicInfo.secondCategoryName}</span>
                             </FormItem>
                         </Col>
                     </Row>
@@ -249,20 +249,20 @@ class PoDetail extends PureComponent {
                             {/* 账期 */}
                             <FormItem label="账期">
                                 <span>
-                                    {renderPeriod(this.props.basicInfo.settlementPeriod)}
+                                    {renderPeriod(basicInfo.settlementPeriod)}
                                 </span>
                             </FormItem>
                         </Col>
                         <Col span={8}>
                             {/* 付款方式 */}
                             <FormItem label="付款方式">
-                                <span>{renderPayType(this.props.basicInfo.payType)}</span>
+                                <span>{renderPayType(basicInfo.payType)}</span>
                             </FormItem>
                         </Col>
                         <Col span={8}>
                             {/* 货币类型 */}
                             <FormItem label="货币类型">
-                                <span>{this.props.basicInfo.currencyCode}</span>
+                                <span>{basicInfo.currencyCode}</span>
                             </FormItem>
                         </Col>
                     </Row>
@@ -271,7 +271,7 @@ class PoDetail extends PureComponent {
                             {/* 付款条件 */}
                             <FormItem label="付款条件">
                                 <span>
-                                    {renderPayCondition(this.props.basicInfo.payCondition)}
+                                    {renderPayCondition(basicInfo.payCondition)}
                                 </span>
                             </FormItem>
                         </Col>
@@ -280,7 +280,7 @@ class PoDetail extends PureComponent {
                         <Col span={8}>
                             {/* 创建者 */}
                             <FormItem label="创建者">
-                                <span>{this.props.basicInfo.createUserName}</span>
+                                <span>{basicInfo.createUserName}</span>
                             </FormItem>
                         </Col>
                         <Col span={4}>
@@ -292,7 +292,7 @@ class PoDetail extends PureComponent {
                         <Col span={8}>
                             {/* 审核人 */}
                             <FormItem label="审核人">
-                                <span>{this.props.basicInfo.auditUserName}</span>
+                                <span>{basicInfo.auditUserName}</span>
                             </FormItem>
                         </Col>
                         <Col span={4}>
