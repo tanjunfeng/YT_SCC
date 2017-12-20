@@ -48,8 +48,8 @@ import AdPlanList404 from 'bundle-loader?lazy!../views/wrapConfigure/adPlanList4
 // 采购管理
 import PoMngList from 'bundle-loader?lazy!../views/procurement/poMngList';
 import PoDetail from 'bundle-loader?lazy!../views/procurement/poDetail';
-import PoCreateList from 'bundle-loader?lazy!../views/procurement/PoCreateList';
-import PoDetailList from 'bundle-loader?lazy!../views/procurement/PoDetailList';
+import PoCreateList from 'bundle-loader?lazy!../views/procurement/poCreateList';
+import PoDetailList from 'bundle-loader?lazy!../views/procurement/poDetailList';
 import PoPrintList from 'bundle-loader?lazy!../views/procurement/poPrintList';
 import PoRcvMngList from 'bundle-loader?lazy!../views/procurement/poRcvMngList';
 import PoRcvList from 'bundle-loader?lazy!../views/procurement/poRcvList';
