@@ -104,8 +104,7 @@ class InputItem extends Component {
             index,
             allLength
         } = this.props
-
-        const { firstValue, secondValue, defaultValue } = this.state;
+        const { firstValue, secondValue, defaultValue, isAfterList } = this.state;
         return (
             <li className={`${prefixCls}-item`}>
                 <span className={`${prefixCls}-item-first`}>
@@ -143,24 +142,29 @@ class InputItem extends Component {
                         onKeyDown={this.handleKeyDown}
                     />
                 </span>
-                <span>
-                    {
-                        index === allLength - 1 &&
-                        <Icon
-                            type="plus"
-                            className={`${prefixCls}-icon-plus`}
-                            onClick={this.handleAddClick}
-                        />
-                    }
-                    {
-                        index !== 0 &&
-                        <Icon
-                            type="minus"
-                            className={`${prefixCls}-icon-minus`}
-                            onClick={this.handleDeleteClick}
-                        />
-                    }
-                </span>
+                <span style={{ paddingLeft: '35px'}}>12.23%</span>
+                {
+                    !isAfterList &&
+                    <span>
+                        {
+                            index === allLength - 1 &&
+                            <Icon
+                                type="plus"
+                                className={`${prefixCls}-icon-plus`}
+                                onClick={this.handleAddClick}
+                            />
+                        }
+                        {
+                            index !== 0 &&
+                            <Icon
+                                type="minus"
+                                className={`${prefixCls}-icon-minus`}
+                                onClick={this.handleDeleteClick}
+                            />
+                        }
+                    </span>
+                }
+
             </li>
         );
     }
