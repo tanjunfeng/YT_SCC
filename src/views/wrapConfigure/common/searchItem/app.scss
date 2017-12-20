@@ -1,0 +1,22 @@
+.switch-box {
+    display: flex;
+    flex-direction: row;
+    margin: 10px 20px 20px;
+    justify-content: space-between;
+    .ant-switch {
+        background-color: #108ee9;
+    }
+}
+
+.wap-search-box {
+    margin-bottom: 0px!important;
+    .ant-form-item {
+        margin-bottom: 5px;
+    }
+    .search-btn {
+        margin-top: 9px;
+    }
+    .ywc-smind {
+        display: block;
+    }
+}
