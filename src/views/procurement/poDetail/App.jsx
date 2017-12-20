@@ -1756,7 +1756,7 @@ class PoDetail extends PureComponent {
         const { form } = this.props;
         form.validateFields((err) => {
             if (!err) {
-                if (updateBasicInfo.status === 0) {
+                if (updateBasicInfo.status === 0 || updateBasicInfo.status === 3) {
                     // 修改页
                     if (
                         !ispoAddressClear
