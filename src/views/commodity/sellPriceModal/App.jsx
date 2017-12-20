@@ -44,7 +44,6 @@ class SellPriceModal extends Component {
         } : {};
 
         this.state = {
-            stepPrice: [],
             isEditPrice: false,
             currentInside: null,
             insideValue: null,
@@ -96,10 +95,10 @@ class SellPriceModal extends Component {
     }
 
     getEditableTableValues = () => {
-        const { isEdit } = this.props;
+        const { isEdit, datas } = this.props;
         const { startNumber } = this.state;
         return {
-            isEdit, startNumber
+            isEdit, startNumber, data: datas.sellSectionPrices || []
         };
     }
 
