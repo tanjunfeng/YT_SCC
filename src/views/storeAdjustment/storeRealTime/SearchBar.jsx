@@ -154,7 +154,7 @@ class Search extends Component {
                                 fetch={(params) =>
                                     this.props.pubFetchValueList({
                                         param: params.value ? params.value : ''
-                                    }, 'getWarehouseInfo1')
+                                    }, 'getWarehouseLogic')
                                 }
                                 onChoosed={this.handleWarehouseChoose}
                                 onClear={this.handleWarehouseEmpty}

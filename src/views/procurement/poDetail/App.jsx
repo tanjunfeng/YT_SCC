@@ -931,7 +931,7 @@ class PoDetail extends PureComponent {
                                                     param: params.value,
                                                     pageNum: params.pagination.current || 1,
                                                     pageSize: params.pagination.pageSize
-                                                }, 'getWarehouseInfo1')
+                                                }, 'getWarehouseLogic')
                                             }
                                             onChoosed={() => {
                                                 this.setState({
