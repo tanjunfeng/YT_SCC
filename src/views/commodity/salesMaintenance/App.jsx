@@ -212,7 +212,7 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     render() {
-        const { prefixCls, getProductById, stepPriceList = {}} = this.props;
+        const { prefixCls, getProductById, stepPriceList = {}, match} = this.props;
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm
@@ -223,6 +223,7 @@ class ProcurementMaintenance extends PureComponent {
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
                     handleAdd={this.handleAdd}
+                    value={match.params.id}
                 />
                 <div>
                     <Cardline.SaleCard

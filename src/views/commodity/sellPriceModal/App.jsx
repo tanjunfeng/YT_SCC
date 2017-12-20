@@ -551,16 +551,20 @@ class SellPriceModal extends Component {
                                     </div>
                                 </Form>
                             </div>
-                            <Row>
-                                <Col>
+                            <Form className="edit-state-list">
+                                <FormItem>
                                     <span>提交人：</span>
                                     <span>{newDates.submit || '-'}</span>
-                                </Col>
-                                <Col>
+                                </FormItem>
+                                <FormItem>
                                     <span>审核人：</span>
                                     <span>{newDates.examine || '-'}</span>
-                                </Col>
-                            </Row>
+                                </FormItem>
+                                <FormItem>
+                                    <span>售价状态：</span>
+                                    <span><i className={`new-price-state-${newDates.state}`} />{newDates.state || '-'}</span>
+                                </FormItem>
+                            </Form>
                         </div>
                     : <div className={`${prefixCls}-body-wrap`}>
                         <Form layout="inline" onSubmit={this.handleSubmit}>

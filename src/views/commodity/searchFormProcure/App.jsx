@@ -308,72 +308,82 @@ class SearchForm extends Component {
                                 })(<BranchCompany />)}
                             </FormItem>
                         </Col>
-                        {/* 是否启用 */}
-                        <FormItem className="sc-form-item">
-                            <span className={`${prefixCls}-select`}>启用</span>
-                            {getFieldDecorator('initiateModeOptions', {
-                                initialValue: initiateModeOptions.defaultValue
-                            })(
-                                <Select
-                                    style={{ width: 90 }}
-                                    className="sc-form-item-select"
+                        <Col>
+                            {/* 是否启用 */}
+                            <FormItem className="sc-form-item">
+                                <span className={`${prefixCls}-select`}>启用</span>
+                                {getFieldDecorator('initiateModeOptions', {
+                                    initialValue: initiateModeOptions.defaultValue
+                                })(
+                                    <Select
+                                        style={{ width: 90 }}
+                                        className="sc-form-item-select"
+                                        size="default"
+                                        disabled={this.state.supplierType === '-1'}
+                                    >
+                                        {
+                                            initiateModeOptions.data.map((item) =>
+                                                (<Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>)
+                                            )
+                                        }
+                                    </Select>
+                                    )}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 是否为主供应商 */}
+                            <FormItem className="sc-form-item">
+                                <span className={`${prefixCls}-select`}>主供应商</span>
+                                {getFieldDecorator('mainSupplierOptions', {
+                                    initialValue: mainSupplierOptions.defaultValue
+                                })(
+                                    <Select
+                                        style={{ width: 90 }}
+                                        className="sc-form-item-select"
+                                        size="default"
+                                        disabled={this.state.supplierType === '-1'}
+                                    >
+                                        {
+                                            mainSupplierOptions.data.map((item) =>
+                                                (<Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>)
+                                            )
+                                        }
+                                    </Select>
+                                    )}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem>
+                                <Button
+                                    type="primary"
+                                    onClick={this.handleGetValue}
                                     size="default"
-                                    disabled={this.state.supplierType === '-1'}
                                 >
-                                    {
-                                        initiateModeOptions.data.map((item) =>
-                                            (<Option key={item.key} value={item.key}>
-                                                {item.value}
-                                            </Option>)
-                                        )
-                                    }
-                                </Select>
-                                )}
-                        </FormItem>
-                        {/* 是否为主供应商 */}
-                        <FormItem className="sc-form-item">
-                            <span className={`${prefixCls}-select`}>主供应商</span>
-                            {getFieldDecorator('mainSupplierOptions', {
-                                initialValue: mainSupplierOptions.defaultValue
-                            })(
-                                <Select
-                                    style={{ width: 90 }}
-                                    className="sc-form-item-select"
+                                    搜索
+                            </Button>
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem>
+                                <Button
                                     size="default"
-                                    disabled={this.state.supplierType === '-1'}
+                                    onClick={this.props.handleAdd}
                                 >
-                                    {
-                                        mainSupplierOptions.data.map((item) =>
-                                            (<Option key={item.key} value={item.key}>
-                                                {item.value}
-                                            </Option>)
-                                        )
-                                    }
-                                </Select>
-                                )}
-                        </FormItem>
-                        <FormItem>
-                            <Button
-                                type="primary"
-                                onClick={this.handleGetValue}
-                                size="default"
-                            >
-                                搜索
+                                    创建
                             </Button>
-                        </FormItem>
-                        <FormItem>
-                            <Button
-                                size="default"
-                                onClick={this.props.handleAdd}
-                            >
-                                创建
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem>
+                                <Button size="default" onClick={this.handleResetValue}>
+                                    重置
                             </Button>
-                        </FormItem>
-                        <FormItem>
-                            <Button size="default" onClick={this.handleResetValue}>
-                                重置
-                            </Button>
-                        </FormItem>
+                            </FormItem>
+                        </Col>
                     </Row>
                 </Form>
             </div>

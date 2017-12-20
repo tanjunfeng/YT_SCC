@@ -63,6 +63,12 @@
         display: flex;
         margin: 0 auto;
     }
+    .edit-state-list{
+        display: flex;
+        .ant-form-item{
+            margin: 0 auto;
+        }
+    }
 }
 .new-price-state{
     &-sub{
