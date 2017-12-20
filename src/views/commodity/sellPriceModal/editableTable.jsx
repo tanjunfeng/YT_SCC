@@ -9,6 +9,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'antd';
 
+import { stepPriceColumns as columns } from './columns';
+
 class EditableTable extends PureComponent {
     state = {
         prices: []
@@ -23,8 +25,9 @@ class EditableTable extends PureComponent {
     render() {
         // const { isEdit, startNumber } = this.props.value;
         const { prices } = this.state;
+        console.log(prices);
         return (
-            <Table columns={[]} dataSource={prices} />
+            <Table columns={columns} dataSource={prices} />
         )
     }
 }

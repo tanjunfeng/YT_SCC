@@ -260,7 +260,7 @@ ProcurementMaintenance.propTypes = {
     fetchPriceInfo: PropTypes.func,
     postSellPrice: PropTypes.func,
     updatePriceStatus: PropTypes.func,
-    stepPriceList: PropTypes.func,
+    stepPriceList: PropTypes.objectOf(PropTypes.any),
     updateSellPrice: PropTypes.func
 }
 

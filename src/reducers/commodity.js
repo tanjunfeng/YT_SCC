@@ -75,7 +75,7 @@ const initState = Immutable.fromJS({
     getProductById: {},
 
     // 阶梯价格列表
-    stepPriceList: [],
+    stepPriceList: {},
 
     // 更新商品信息
     updateProdRecord: {},
