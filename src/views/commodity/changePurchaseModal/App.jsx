@@ -257,7 +257,7 @@ class ProdModal extends Component {
                 visible
                 className={prefixCls}
                 onOk={this.handleOk}
-                width={'500px'}
+                width={'700px'}
                 onCancel={this.handleCancel}
                 maskClosable={false}
             >
@@ -265,7 +265,7 @@ class ProdModal extends Component {
                     <Form layout="inline" onSubmit={this.handleSubmit}>
                         <div className={`${prefixCls}-item`}>
                             <div className={`${prefixCls}-item-title`}>货运条件</div>
-                            <div className={`${prefixCls}-item-content`}>
+                            <div>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*采购内装数：</span>
                                     <span className={`${prefixCls}-barcode-input`}>
@@ -319,7 +319,7 @@ class ProdModal extends Component {
                             </div>
                         </div>
                         <div className={`${prefixCls}-item`}>
-                            <div className={`${prefixCls}-item-content`}>
+                            <div>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*供应商：</span>
                                     <span className={`${prefixCls}-data-pic`}>
@@ -498,7 +498,7 @@ ProdModal.propTypes = {
 };
 
 ProdModal.defaultProps = {
-    prefixCls: 'prod-modal',
+    prefixCls: 'purchase-modal',
     goto: () => { },
     data: {}
 }

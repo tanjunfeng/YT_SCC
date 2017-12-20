@@ -39,7 +39,7 @@
         width: 160px;
     }
     .sell-modal-item{
-        width: 453px;
+        width: 461px;
         overflow-y: auto;
     }
     .sell-modal-item:last-child{
@@ -62,6 +62,12 @@
     .edit-input{
         display: flex;
         margin: 0 auto;
+    }
+    .edit-state-list{
+        display: flex;
+        .ant-form-item{
+            margin: 0 auto;
+        }
     }
 }
 .new-price-state{
@@ -90,11 +96,15 @@
         vertical-align: middle;
     }
 }
+.ant-modal-content{
+    width: 1000px;
+}
 .createCls{
     min-width: 950px;
     .ant-modal-body{
         min-height: 700px;
         overflow-y: auto;
+        margin-left: 60px;
     }
     form .ant-input-number{
         margin-right: 0;

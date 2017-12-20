@@ -467,18 +467,11 @@ class SellPriceModal extends Component {
                                                 <span>{newDates.suggestPrice}</span>
                                             </FormItem>
                                             <FormItem>
-                                                <span>最新售价状态：</span>
+                                                <span>商品采购价格：</span>
                                                 <span><i className={`new-price-state-${newDates.state}`} />{newDates.state || '-'}</span>
                                             </FormItem>
-                                        </div>
-                                        <div>
-                                            <FormItem>
-                                                <span>提交人：</span>
-                                                <span>{newDates.submit || '-'}</span>
-                                            </FormItem>
-                                            <FormItem>
-                                                <span>审核人：</span>
-                                                <span>{newDates.examine || '-'}</span>
+                                            <FormItem label="子公司:" className="edit-input">
+                                                <span>{newDates.branchCompanyId} - {newDates.branchCompanyName}</span>
                                             </FormItem>
                                         </div>
                                     </div>
@@ -555,64 +548,30 @@ class SellPriceModal extends Component {
                                                 <span>{newDates.suggestPrice}</span>
                                             </FormItem>
                                             <FormItem>
-                                                <span>最新售价状态：</span>
+                                                <span>商品采购价格：</span>
                                                 <span><i className={`new-price-state-${newDates.state}`} />{newDates.state || '-'}</span>
                                             </FormItem>
-                                        </div>
-                                        <div>
-                                            <FormItem>
-                                                <span>提交人：</span>
-                                                <span>{newDates.submit || '-'}</span>
-                                            </FormItem>
-                                            <FormItem>
-                                                <span>审核人：</span>
-                                                <span>{newDates.examine || '-'}</span>
+                                            <FormItem label="子公司:" className="edit-input">
+                                                <span>{newDates.branchCompanyId} - {newDates.branchCompanyName}</span>
                                             </FormItem>
                                         </div>
                                     </div>
                                 </Form>
                             </div>
-                            <div className={`${prefixCls}-item edit-input`}>
-                                <FormItem label="子公司:" className="edit-input">
-                                    {
-                                        isEdit ?
-                                            <span>{`${newDates.branchCompanyId}-${newDates.branchCompanyName}`}</span>
-                                            : <span className={`${prefixCls}-data-pic`}>
-                                                <SearchMind
-                                                    compKey="search-mind-key1"
-                                                    ref={ref => { this.searchMind = ref }}
-                                                    fetch={(param) => this.props.pubFetchValueList({
-                                                        branchCompanyName: param.value,
-                                                        productId: newDates.productId || newDates.id
-                                                    }, 'queryBranchCompanyInfo')}
-                                                    placeholder="请输入公司名"
-                                                    onChoosed={this.handleChoose}
-                                                    disabled={isEdit}
-                                                    defaultValue={
-                                                        newDates.branchCompanyId ?
-                                                            `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` :
-                                                            undefined}
-                                                    onClear={this.handleClear}
-                                                    renderChoosedInputRaw={(data) => (
-                                                        <div>{data.id} - {data.name}</div>
-                                                    )}
-                                                    pageSize={6}
-                                                    columns={[
-                                                        {
-                                                            title: '公司编号',
-                                                            dataIndex: 'id',
-                                                            width: 98
-                                                        }, {
-                                                            title: '公司名',
-                                                            dataIndex: 'name',
-                                                            width: 140
-                                                        }
-                                                    ]}
-                                                />
-                                            </span>
-                                    }
+                            <Form className="edit-state-list">
+                                <FormItem>
+                                    <span>提交人：</span>
+                                    <span>{newDates.submit || '-'}</span>
                                 </FormItem>
-                            </div>
+                                <FormItem>
+                                    <span>审核人：</span>
+                                    <span>{newDates.examine || '-'}</span>
+                                </FormItem>
+                                <FormItem>
+                                    <span>售价状态：</span>
+                                    <span><i className={`new-price-state-${newDates.state}`} />{newDates.state || '-'}</span>
+                                </FormItem>
+                            </Form>
                         </div>
                         : <div className={`${prefixCls}-body-wrap`}>
                             <Form layout="inline" onSubmit={this.handleSubmit}>

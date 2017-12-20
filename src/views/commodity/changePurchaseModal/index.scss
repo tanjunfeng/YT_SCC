@@ -1,4 +1,4 @@
-.prod-modal {
+.purchase-modal {
     .ant-modal-body {
         max-height: 400px;
         overflow-y: auto;
@@ -15,9 +15,6 @@
     &-item-title {
         font-size: 14px;
     }
-    &-item-content {
-        padding: 0 10px;
-    }
     &-barcode-input {
         display: inline-block;
         .ant-input-number {
@@ -33,7 +30,7 @@
         text-align: right;
         margin-right: 10px;
         vertical-align: middle;
-        
+
     }
     .ant-form-item {
         margin-bottom: 10px;
@@ -54,7 +51,7 @@
         right: -90px;
     }
 }
-.prod-modal-data-disable {
+.purchase-modal-data-disable {
     input.ywc-smind-input {
         color: #666 !important;
     }
