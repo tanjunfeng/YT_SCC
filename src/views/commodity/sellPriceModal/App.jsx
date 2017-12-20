@@ -44,6 +44,7 @@ class SellPriceModal extends Component {
         } : {};
 
         this.state = {
+            stepPrice: [],
             isEditPrice: false,
             currentInside: null,
             insideValue: null,
@@ -245,7 +246,6 @@ class SellPriceModal extends Component {
         }, () => {
             this.props.form.setFieldsValue({ minNumber: null })
         })
-
         this.steppedPrice.reset();
     }
 
@@ -272,18 +272,11 @@ class SellPriceModal extends Component {
             currentInside: num
         }, () => {
             this.props.form.setFieldsValue({ maxNumber: null })
-        })
-
-        // this.steppedPrice.reset();
+        });
     }
 
     handleMaxChange = (num) => {
-        // this.setState({
-        //     startNumber: num
-        // }, () => {
         this.props.form.setFieldsValue({ maxNumber: num });
-        // this.steppedPrice.reset();
-        // })
     }
 
     handleConfirm = () => {
@@ -448,9 +441,9 @@ class SellPriceModal extends Component {
                                         </div>
                                         <div className={`${prefixCls}-item-content`}>
                                             <FormItem>
-                                                <EditableTable
-                                                    value={this.getEditableTableValues()}
-                                                />
+                                                {getFieldDecorator('sellSectionPrices', {
+                                                    initialValue: this.getEditableTableValues()
+                                                })(<EditableTable />)}
                                                 {/* {getFieldDecorator('sellSectionPrices', {
                                                 })(
                                                     <SteppedPrice
@@ -459,7 +452,8 @@ class SellPriceModal extends Component {
                                                         ref={node => { this.steppedPrice = node }}
                                                         handleChange={this.handlePriceChange}
                                                         startNumber={startNumber}
-                                                        defaultValue={isEdit ? newDates.sellSectionPrices : []}
+                                                        defaultValue={isEdit
+                                                            ? newDates.sellSectionPrices : []}
                                                         inputSize="default"
                                                         initvalue={getProductById.minUnit}
                                                         price={price}
@@ -536,9 +530,9 @@ class SellPriceModal extends Component {
                                         </div>
                                         <div className={`${prefixCls}-item-content`}>
                                             <FormItem>
-                                                <EditableTable
-                                                    value={this.getEditableTableValues()}
-                                                />
+                                                {getFieldDecorator('sellSectionPrices', {
+                                                    initialValue: this.getEditableTableValues()
+                                                })(<EditableTable />)}
                                                 {/* {getFieldDecorator('sellSectionPrices', {
                                                 })(
                                                     <SteppedPrice
@@ -731,14 +725,14 @@ class SellPriceModal extends Component {
                                     <div className={`${prefixCls}-item-title`}>
                                         添加阶梯价格
                                     <span className={`${prefixCls}-item-tip`}>
-                                        &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
+                                            &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
                                     </span>
                                     </div>
                                     <div className={`${prefixCls}-item-content`}>
                                         <FormItem>
-                                            <EditableTable
-                                                value={this.getEditableTableValues()}
-                                            />
+                                            {getFieldDecorator('sellSectionPrices', {
+                                                initialValue: this.getEditableTableValues()
+                                            })(<EditableTable />)}
                                             {/* {getFieldDecorator('sellSectionPrices', {
                                             })(
                                                 <SteppedPrice
@@ -747,7 +741,8 @@ class SellPriceModal extends Component {
                                                     ref={node => { this.steppedPrice = node }}
                                                     handleChange={this.handlePriceChange}
                                                     startNumber={startNumber}
-                                                    defaultValue={isEdit ? newDates.sellSectionPrices : []}
+                                                    defaultValue={isEdit ?
+                                                    newDates.sellSectionPrices : []}
                                                     inputSize="default"
                                                     initvalue={getProductById.minUnit}
                                                     price={price}
