@@ -201,3 +201,74 @@ export const goodsColumns = [{
     dataIndex: 'operation',
     width: 50
 }];
+
+// 进价审核列表
+export const purchaseListColumns = [
+    {
+        title: '变价类型',
+        dataIndex: 'purchaseOrderNo',
+        key: 'purchaseOrderNo',
+    },
+    {
+        title: '状态',
+        dataIndex: 'purchaseOrderType',
+        key: 'purchaseOrderType',
+        render: text => (purchase[text])
+    },
+    {
+        title: '供应商编号',
+        dataIndex: 'spNo',
+        key: 'spNo',
+    },
+    {
+        title: '供应商名称',
+        dataIndex: 'spName',
+        key: 'spName',
+    },
+    {
+        title: '供应商地点编号',
+        dataIndex: 'spAdrNo',
+        key: 'spAdrNo',
+    }, {
+        title: '供应商地点名称',
+        dataIndex: 'spAdrName',
+        key: 'spAdrName',
+    },
+    {
+        title: '商品编号',
+        dataIndex: 'estimatedDeliveryDate',
+        key: 'estimatedDeliveryDate',
+        render: (text) => (
+            <span>
+                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+            </span>
+        )
+    },
+    {
+        title: '商品名称',
+        dataIndex: 'adrType',
+        key: 'adrType',
+        render: (text) => {
+            if (text === null) {
+                return null;
+            }
+            return (locType.data[text + 1].value);
+        }
+    },
+    {
+        title: '变更日期',
+        dataIndex: 'adrTypeName',
+        key: 'adrTypeName'
+    },
+    {
+        title: '当前节点',
+        dataIndex: 'secondCategoryId',
+        key: 'secondCategoryId'
+
+    },
+    {
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation'
+    }
+]
