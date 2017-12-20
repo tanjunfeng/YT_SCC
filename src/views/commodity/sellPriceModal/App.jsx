@@ -96,9 +96,10 @@ class SellPriceModal extends Component {
 
     getEditableTableValues = () => {
         const { isEdit, datas } = this.props;
+        // console.log(datas);
         const { startNumber } = this.state;
         return {
-            isEdit, startNumber, data: datas.sellSectionPrices || []
+            isEdit, startNumber, data: datas.sellSectionPrices
         };
     }
 

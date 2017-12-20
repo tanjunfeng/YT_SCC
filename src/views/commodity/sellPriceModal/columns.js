@@ -7,4 +7,7 @@ export const stepPriceColumns = [{
 }, {
     dataIndex: 'price',
     title: '最新售价/元'
+}, {
+    dataIndex: 'operation',
+    title: '操作'
 }];

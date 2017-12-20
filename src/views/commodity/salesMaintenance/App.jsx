@@ -43,7 +43,7 @@ import {
         getProdPurchaseById: state.toJS().commodity.getProdPurchaseById,
         queryProdPurchases: state.toJS().commodity.queryProdPurchases,
         getProductById: state.toJS().commodity.getProductById,
-        stepPriceList: state.toJS().commodity.stepPriceList,
+        stepPriceDetail: state.toJS().commodity.stepPriceDetail,
     }),
     dispatch => bindActionCreators({
         modifyAuditVisible,
@@ -212,7 +212,7 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     render() {
-        const { prefixCls, getProductById, stepPriceList = {}} = this.props;
+        const { prefixCls, getProductById, stepPriceDetail = {}} = this.props;
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm
@@ -226,7 +226,7 @@ class ProcurementMaintenance extends PureComponent {
                 />
                 <div>
                     <Cardline.SaleCard
-                        initalValue={stepPriceList.sellPriceInfoVos || {}}
+                        initalValue={stepPriceDetail.sellPriceInfoVos || {}}
                         minUnit={getProductById.minUnit}
                         handleDelete={this.handleDelete}
                         handleCardClick={this.handleCardClick}
@@ -237,7 +237,7 @@ class ProcurementMaintenance extends PureComponent {
                 {
                     this.state.show &&
                     <SellPriceModal
-                        initalValue={stepPriceList.sellPriceInfoVos || {}}
+                        initalValue={stepPriceDetail.sellPriceInfoVos || {}}
                         datas={this.state.datas}
                         handleClose={this.handleClose}
                         handleAdd={this.handleAdd}
@@ -260,7 +260,7 @@ ProcurementMaintenance.propTypes = {
     fetchPriceInfo: PropTypes.func,
     postSellPrice: PropTypes.func,
     updatePriceStatus: PropTypes.func,
-    stepPriceList: PropTypes.objectOf(PropTypes.any),
+    stepPriceDetail: PropTypes.objectOf(PropTypes.any),
     updateSellPrice: PropTypes.func
 }
 
