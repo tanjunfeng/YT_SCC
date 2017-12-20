@@ -50,7 +50,7 @@ class HomeStyle extends Component {
             let isChecked = this.state.isChecked;
             for (let i = 0; i < homeData.length; i++) {
                 if (homeData[i].areaType !== 3) {
-                    isChecked = homeData[0].isUsingNation;
+                    isChecked = homeData[i].isUsingNation;
                     break;
                 }
             }
