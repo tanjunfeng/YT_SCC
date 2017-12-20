@@ -41,7 +41,7 @@ const columns = poMngListColumns;
     selectedPoMngRows: state.toJS().procurement.selectedPoMngRows,
     processDefinitions: state.toJS().procurement.processDefinitions,
     processImageBusiData: state.toJS().process.processImageBusiData,
-    commentHisBusiList: state.toJS().process.commentHisByBusi,
+    commentHisBusiList: state.toJS().process.commentHisBusiList,
 }), dispatch => bindActionCreators({
     fetchPoMngList,
     changePoMngSelectedRows,
