@@ -103,7 +103,7 @@
                 "currencyCode": "CNY",
                 "branchCompanyId": "10000",
                 "purchaseOrderType": 2,
-                "status": 0,
+                "status": 3,
                 "failedReason": null,
                 "auditUserId": null,
                 "createTime": 1504008592000,

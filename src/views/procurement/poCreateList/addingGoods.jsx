@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {Row, Col} from 'antd';
+import { Row, Col} from 'antd';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
 
@@ -20,7 +20,7 @@ import { pubFetchValueList } from '../../../actions/pub';
 
 class AddingGoods extends PureComponent {
     render() {
-        const {spAdrId, businessMode, spId } = this.props;
+        const { spAdrId, businessMode, spId } = this.props;
         const supplierInfo = spAdrId ? `${spAdrId}-1` : null;
         const distributionStatus = businessMode;
         return (
