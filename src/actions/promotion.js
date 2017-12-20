@@ -22,6 +22,7 @@ import {
     grantCoupon as grantCouponService,
     garbageCouponParticipate as invalidRecordService,
     cancelCoupons as cancelCouponsService,
+    updateStoreId as updateStoreIdService
 } from '../service';
 
 /**
@@ -291,6 +292,24 @@ export const getPromotionDetail = (params) => dispatch => (
     })
 );
 
+const updateStoreIdAction = (data) => ({
+    type: ActionType.UPDATE_STORE_ID,
+    payload: data
+});
+
+export const updateStoreId = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        updateStoreIdService(params)
+            .then(res => {
+                dispatch(
+                    updateStoreIdAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
+
 // 新增促销活动 - 优惠券详情
 const fetchCouponsDetailAction = (data) => ({
     type: ActionType.FETCH_COUPONS_DETAIL,
@@ -420,4 +439,11 @@ export const clearCompaniesList = () => dispatch => (dispatch({
 export const clearFranchiseeList = () => dispatch => (dispatch({
     type: ActionType.CLEAR_FRANCHISEE_LIST,
     payload: []
+}));
+/**
+ * 清空流程管理列表
+ */
+export const clearProcessList = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_COUPONS_LIST,
+    payload: {}
 }));

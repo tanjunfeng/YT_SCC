@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author taoqiyu
  *
- * 促销管理 - 促销管理列表
+ * 促销管理 - 下单打折查询列表
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -134,10 +134,10 @@ class PromotionManagementList extends PureComponent {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/detail/${id}`}>活动详情</Link>
+                    <Link target="_blank" to={`${pathname}/detail/${id}`}>活动详情</Link>
                 </Menu.Item>
                 <Menu.Item key="participate">
-                    <Link to={`${pathname}/participate/${id}`}>参与数据</Link>
+                    <Link target="_blank" to={`${pathname}/participate/${id}`}>参与数据</Link>
                 </Menu.Item>
                 {
                     // 未发布的可发布

@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Form, Row, Col, Button } from 'antd';
+import { Form, Row, Col } from 'antd';
 import { clearCouponsDetail, getCouponsDetail } from '../../../actions/promotion';
 import { couponsDetail as columns } from '../columns';
 
@@ -57,21 +57,12 @@ class CouponDetail extends PureComponent {
 
     render() {
         return (
-            <div className="coupons-create">
+            <div className="coupons-form">
                 <Form layout="inline">
                     <div className="coupons-add-item">
                         <div className="add-message coupons-add-license">
                             <div className="add-message-body">
                                 {this.getDetails()}
-                                <Row gutter={40} type="flex" justify="center">
-                                    <Col>
-                                        <FormItem>
-                                            <Button size="default" onClick={this.handleBack}>
-                                                返回
-                                            </Button>
-                                        </FormItem>
-                                    </Col>
-                                </Row>
                             </div>
                         </div>
                     </div>

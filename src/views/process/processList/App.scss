@@ -1,0 +1,22 @@
+.processBox{
+    .ant-input {
+        width: 200px;
+        margin: 0 8px 8px 0;
+    }
+    .uploadProcess:after{
+        content: "";
+        height: 0;
+        clear: both;
+        visibility: hidden;
+        }
+    .uploadProcess input{
+        float: left;
+    }
+    .uploadZip {
+        display: inline-block;
+        span {
+            float: left;
+            margin-right: 10px;
+        }
+    }
+}

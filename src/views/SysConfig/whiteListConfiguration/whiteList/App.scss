@@ -63,9 +63,30 @@ $whiteListConfigurationColWidth: 250px;
             margin: 8px 0;
         }
     }
+    .upload {
+        line-height: 0!important;
+        margin-top: 7px;
+    }
+    .ant-upload-list-item-info {
+        padding-right: 20px!important;
+    }
 }
-.white-list-data-pic{
+
+.white-list-data-pic {
     height: 30px;
     display: inline-block;
     vertical-align: bottom;
+}
+
+.upload-demo-start {
+    margin-top: 20px;
+}
+
+.search-conditions {
+    .export-left {
+        text-align: left;
+    }
+    .search-right {
+        text-align: right;
+    }
 }

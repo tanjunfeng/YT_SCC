@@ -69,3 +69,13 @@
     }
   }
 }
+.editable-cell {
+    position: relative;
+    .error-message {
+        color: red;
+        margin-left: 1em;
+    }
+    &:hover {
+        display: inline-block;
+    }
+}

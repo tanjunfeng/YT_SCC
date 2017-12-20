@@ -1,16 +1,16 @@
 /**
  * 促销管理查询条件
  *
- * @author taoqiyu,tanjf
+ * @author taoqiyu,tanjf,liujinyu
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, Form, Select, Row, Col } from 'antd';
+import { Button, Input, Form, Select, Row, Col, Upload, Icon, Modal, message } from 'antd';
 import { withRouter } from 'react-router';
+import reqwest from 'reqwest';
 import Utils from '../../../../util/util';
 import { promotionStatus } from '.././constants';
 import { BranchCompany } from '../../../../container/search';
-import { PAGE_SIZE } from '../../../../constant';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -23,6 +23,8 @@ class SearchForm extends PureComponent {
         warehouseVisible: false,
         companyVisible: false,
         supplyChoose: {},
+        isBtnDisabled: false,
+        fileList: []
     }
 
     getStatus = () => {
@@ -44,7 +46,6 @@ class SearchForm extends PureComponent {
             branchCompany
         } = this.props.form.getFieldsValue();
         let status = scPurchaseFlag;
-        const pageSize = PAGE_SIZE;
         if (scPurchaseFlag === 'all') {
             status = '';
         }
@@ -54,9 +55,7 @@ class SearchForm extends PureComponent {
             storeId,
             storeName,
             scPurchaseFlag: status,
-            branchCompanyId: branchCompany.id,
-            pageSize,
-            pageNo: 1,
+            branchCompanyId: branchCompany.id
         });
     }
 
@@ -65,9 +64,29 @@ class SearchForm extends PureComponent {
         this.props.onPromotionSearch(this.getFormData());
     }
 
+    /**
+     * 白名单下载导入模板
+     */
+    handleDownload = () => {
+        // 将查询条件回传给调用页
+        this.props.onDownloadList(this.getFormData());
+    }
+
+    /**
+     * 白名单导出
+     */
+    handleExport = () => {
+        // 将查询条件回传给调用页
+        this.props.onExportList(this.getFormData());
+    }
+
     handleReset = () => {
-        this.props.form.resetFields();  // 清除当前查询条件
-        this.props.onPromotionReset();  // 通知父页面已清空
+        this.props.form.resetFields(); // 清除当前查询条件
+        this.props.onPromotionReset(); // 通知父页面已清空
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
     }
 
     handleGoOnline = () => {
@@ -78,8 +97,90 @@ class SearchForm extends PureComponent {
         this.props.onModalOfflineClick();
     }
 
+    /**
+    *
+    * 上传
+    */
+    handleUpload = (fileList) => {
+        this.setState({
+            isBtnDisabled: true,
+            uploading: true
+        })
+        const fileName = fileList[0].name;
+        if (fileName.indexOf('.xls') === -1) {
+            message.error('上传文件格式必须为excel格式，请重新尝试');
+            this.setState({
+                uploading: false,
+                isBtnDisabled: false
+            });
+            return;
+        }
+        const formData = new FormData();
+        formData.append('file', fileList[0]);
+        reqwest({
+            url: `${window.config.apiHost}sp/whiteListBatchImport`,
+            method: 'post',
+            processData: false,
+            data: formData,
+            success: (res) => {
+                this.setState({
+                    uploading: false,
+                    isBtnDisabled: false
+                });
+                switch (res.code) {
+                    case 200:
+                        message.success('上传成功');
+                        this.handleSearch();
+                        break;
+                    case 10004:
+                        message.error(res.message);
+                        break;
+                    case 10024:
+                        Modal.error({
+                            title: '部分导入失败',
+                            content: (
+                                <div>
+                                    {res.data.map(d => <p>{d.storeId} - {d.errorMsg}</p>)}
+                                </div>
+                            ),
+                            onOk() { },
+                        });
+                        break;
+                    default: break;
+                }
+            },
+            error: () => {
+                this.setState({
+                    uploading: false
+                });
+                message.error('服务异常，请重新尝试');
+            },
+        });
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
+        const { uploading } = this.state;
+        const props = {
+            name: 'file',
+            action: `${window.config.apiHost}sp/whiteListBatchImport`,
+            onRemove: () => {
+                this.setState({
+                    fileList: [],
+                    isBtnDisabled: false
+                });
+            },
+            beforeUpload: (file) => {
+                const fileList = [file]
+                this.setState({
+                    fileList
+                });
+                this.handleUpload(fileList)
+                return false;
+            },
+            fileList: this.state.fileList
+        };
+
         return (
             <div className="search-box white-list">
                 <Form layout="inline">
@@ -122,13 +223,27 @@ class SearchForm extends PureComponent {
                                     })(
                                         <Select style={{ width: '153px' }} size="default">
                                             {this.getStatus()}
-                                        </Select>
-                                        )}
+                                        </Select>)}
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
-                            <Col>
+                            <Col span={12} className="export-left">
+                                <FormItem className="upload">
+                                    <Upload {...props}>
+                                        <Button disabled={this.state.isBtnDisabled}>
+                                            <Icon type="upload" /> {uploading ? '上传中' : '点击上传'}
+                                        </Button>
+                                    </Upload>
+                                </FormItem>
+                                <FormItem>
+                                    <Button type="primary" size="default" onClick={this.handleExport}>导出备份</Button>
+                                </FormItem>
+                                <FormItem>
+                                    <a onClick={this.handleDownload}>下载导入模板</a>
+                                </FormItem>
+                            </Col>
+                            <Col span={12} className="search-right">
                                 <FormItem>
                                     <Button type="primary" size="default" onClick={this.handleSearch}>
                                         查询
@@ -173,6 +288,9 @@ SearchForm.propTypes = {
     onPromotionReset: PropTypes.func,
     onModalClick: PropTypes.func,
     onModalOfflineClick: PropTypes.func,
+    onExportList: PropTypes.func,
+    downExportList: PropTypes.func,
+    onDownloadList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     value: PropTypes.objectOf(PropTypes.any),
 };

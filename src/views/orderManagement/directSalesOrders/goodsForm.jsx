@@ -9,7 +9,7 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Row, Button } from 'antd';
+import { Form, Row, Button, message } from 'antd';
 import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -36,6 +36,10 @@ class GoodsForm extends PureComponent {
         this.props.queryGoodsInfo(Utils.removeInvalid({
             productCode, branchCompanyId, deliveryWarehouseCode, quantity: 0
         })).then(res => {
+            if (res.data.available === false) {
+                message.error(res.data.message);
+                return
+            }
             this.props.onChange(getRow(res.data));
         });
     }
