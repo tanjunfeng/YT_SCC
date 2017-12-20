@@ -8,7 +8,7 @@ const FormItem = Form.Item;
 export default class EditableCell extends PureComponent {
     constructor(props) {
         super(props);
-        this.validate = ::this.validate;
+        this.validate = :: this.validate;
         this.state = {
             value: this.props.value,
             max: this.props.max ? this.props.max : MAXGOODS,
@@ -30,7 +30,7 @@ export default class EditableCell extends PureComponent {
         this.validate(this.state.value);
         // call 回调函数
         if (onChange) {
-            onChange({ value: this.state.value});
+            onChange({ value: this.state.value });
         }
     }
 
@@ -39,7 +39,7 @@ export default class EditableCell extends PureComponent {
         this.validate(this.state.value);
         // call 回调函数
         if (onChange) {
-            onChange({ value: this.state.value});
+            onChange({ value: this.state.value });
         }
     }
 
@@ -77,27 +77,23 @@ export default class EditableCell extends PureComponent {
         const { value, step, max } = this.state;
         return (
             <div>
-                {
-                    <div>
-                        {this.state.editable
-                            && <FormItem
-                                validateStatus={this.state.validateStatus}
-                                help={this.state.message}
-                            >
-                                <InputNumber
-                                    value={value}
-                                    min={0}
-                                    max={max}
-                                    step={step}
-                                    onChange={e => this.handleChange(e)}
-                                    onBlur={e => this.handleBlur(e)}
-                                    onPressEnter={e => this.onPressEnter(e)}
-                                />
-                            </FormItem>
-                        }
-                        {!this.state.editable && <span>{value}</span>
-                        }
-                    </div>
+                {this.state.editable
+                    && <FormItem
+                        validateStatus={this.state.validateStatus}
+                        help={this.state.message}
+                    >
+                        <InputNumber
+                            value={value}
+                            min={0}
+                            max={max}
+                            step={step}
+                            onChange={e => this.handleChange(e)}
+                            onBlur={e => this.handleBlur(e)}
+                            onPressEnter={e => this.onPressEnter(e)}
+                        />
+                    </FormItem>
+                }
+                {!this.state.editable && <span>{value}</span>
                 }
             </div>
         );
