@@ -453,29 +453,31 @@ class BasicInfo extends PureComponent {
         const Option = Select.Option;
         const dateFormat = 'YYYY-MM-DD';
         const { getFieldDecorator } = this.props.form;
+        const state = this.state;
+        const props = this.props;
         // 创建者
-        const createdByName = this.state.createdByName
-            ? this.state.createdByName
-            : this.props.data.user.employeeName
+        const createdByName = state.createdByName
+            ? state.createdByName
+            : props.data.user.employeeName
 
         // 创建日期
-        const createdAt = this.state.createdAt
-            ? this.state.createdAt
+        const createdAt = state.createdAt
+            ? state.createdAt
             : moment().format('YYYY-MM-DD')
 
         // 供应商
-        const spDefaultValue = this.state.spId
-            ? `${this.state.spId}-${this.state.spName}`
+        const spDefaultValue = state.spId
+            ? `${state.spId}-${state.spName}`
             : ''
 
         // 供应商地点值清单回显数据
-        const spAdrDefaultValue = this.state.spAdrId
-            ? `${this.state.spAdrId}-${this.state.spAdrName}`
+        const spAdrDefaultValue = state.spAdrId
+            ? `${state.spAdrId}-${state.spAdrName}`
             : ''
 
         // 地点值清单回显数据
-        const adresssDefaultValue = this.state.adrTypeCode
-            ? `${this.state.adrTypeCode}-${this.state.adrTypeName}`
+        const adresssDefaultValue = state.adrTypeCode
+            ? `${state.adrTypeCode}-${state.adrTypeName}`
             : ''
 
         return (
@@ -488,7 +490,7 @@ class BasicInfo extends PureComponent {
                         <Col span={8}>
                             {/* 采购单号 */}
                             <FormItem label="采购单号">
-                                <span className="text">{this.props.basicInfo.purchaseOrderNo}</span>
+                                <span className="text">{props.basicInfo.purchaseOrderNo}</span>
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -496,7 +498,7 @@ class BasicInfo extends PureComponent {
                             <FormItem label="采购单类型">
                                 {getFieldDecorator('purchaseOrderType', {
                                     rules: [{ required: true, message: '请输入采购单类型' }],
-                                    initialValue: this.state.purchaseOrderType
+                                    initialValue: state.purchaseOrderType
                                 })(
                                     <Select size="default" onChange={this.purchaseOrderTypeChange}>
                                         {
@@ -515,7 +517,7 @@ class BasicInfo extends PureComponent {
                             {/* 状态 */}
                             <FormItem label="状态">
                                 <span className="text">
-                                    {this.state.poStatusName ? this.state.poStatusName : '制单'}
+                                    {state.poStatusName ? state.poStatusName : '制单'}
                                 </span>
                             </FormItem>
                         </Col>
@@ -526,7 +528,7 @@ class BasicInfo extends PureComponent {
                             <FormItem label="供应商" >
                                 {getFieldDecorator('supplier', {
                                     rules: [{ required: true, message: '请输入供应商' }],
-                                    initialValue: { spId: this.state.spId || '', spNo: this.state.spNo || '', companyName: this.state.spName || '' }
+                                    initialValue: { spId: state.spId || '', spNo: state.spNo || '', companyName: state.spName || '' }
                                 })(
                                     <Supplier
                                         onChange={this.handleSupplierChange}
@@ -551,7 +553,7 @@ class BasicInfo extends PureComponent {
                                         rowKey="providerNo"
                                         ref={ref => { this.supplierLoc = ref }}
                                         fetch={this.querySupplierLoc}
-                                        disabled={this.props.form.getFieldValue('supplier').spId === ''}
+                                        disabled={props.form.getFieldValue('supplier').spId === ''}
                                         defaultValue={spAdrDefaultValue}
                                         onChoosed={this.applySupplierLocChoosed}
                                         onClear={this.applySupplierLocClear}
@@ -587,7 +589,7 @@ class BasicInfo extends PureComponent {
                                 <DatePicker
                                     style={{ width: 241 }}
                                     format={dateFormat}
-                                    value={this.state.pickerDate}
+                                    value={state.pickerDate}
                                     onChange={(e) => {
                                         this.setState({
                                             pickerDate: e
@@ -609,7 +611,7 @@ class BasicInfo extends PureComponent {
                                 </span>
                                 {getFieldDecorator('adrType', {
                                     rules: [{ required: true, message: '请输入地点类型' }],
-                                    initialValue: this.state.localType,
+                                    initialValue: state.localType,
                                 })(
                                     <Select size="default" onChange={this.onLocTypeChange}>
                                         {
@@ -635,7 +637,7 @@ class BasicInfo extends PureComponent {
                                     </span>
                                     {
                                         // 仓库
-                                        this.state.localType === '0'
+                                        state.localType === '0'
                                         && <SearchMind
                                             style={{ zIndex: 8000 }}
                                             compKey="warehouseCode"
@@ -643,7 +645,7 @@ class BasicInfo extends PureComponent {
                                             ref={ref => { this.poAddress = ref }}
                                             fetch={this.querywarehouse}
                                             onChoosed={this.locChange}
-                                            disabled={this.props.form.getFieldValue('supplier').spId === '' || this.state.localType !== '0'}
+                                            disabled={props.form.getFieldValue('supplier').spId === '' || state.localType !== '0'}
                                             defaultValue={adresssDefaultValue}
                                             renderChoosedInputRaw={(data) => (
                                                 <div>{data.warehouseCode}-{data.warehouseName}</div>
@@ -664,10 +666,10 @@ class BasicInfo extends PureComponent {
                                     }
                                     {
                                         // 门店
-                                        this.state.localType !== '0'
+                                        state.localType !== '0'
                                         && <SearchMind
                                             style={{ zIndex: 8000 }}
-                                            disabled={this.state.locDisabled}
+                                            disabled={state.locDisabled}
                                             compKey="id"
                                             rowKey="id"
                                             ref={ref => { this.poStore = ref }}
@@ -733,7 +735,7 @@ class BasicInfo extends PureComponent {
                             {/* 账期 */}
                             <FormItem label="账期">
                                 <span>
-                                    {renderPeriod(this.state.settlementPeriod)}
+                                    {renderPeriod(state.settlementPeriod)}
                                 </span>
                             </FormItem>
                         </Col>
@@ -741,7 +743,7 @@ class BasicInfo extends PureComponent {
                             {/* 付款方式 */}
                             <FormItem label="付款方式">
                                 <span>
-                                    {renderPayType(this.state.payType)}
+                                    {renderPayType(state.payType)}
                                 </span>
                             </FormItem>
                         </Col>
@@ -749,7 +751,7 @@ class BasicInfo extends PureComponent {
                             {/* 货币类型 */}
                             <FormItem label="货币类型">
                                 {getFieldDecorator('currencyCode', {
-                                    initialValue: this.state.currencyCode
+                                    initialValue: state.currencyCode
                                 })(
                                     <Select size="default">
                                         {
@@ -769,7 +771,7 @@ class BasicInfo extends PureComponent {
                             {/* 付款条件 */}
                             <FormItem label="付款条件">
                                 <span>
-                                    {renderPayCondition(this.state.payCondition)}
+                                    {renderPayCondition(state.payCondition)}
                                 </span>
                             </FormItem>
                         </Col>
@@ -784,7 +786,7 @@ class BasicInfo extends PureComponent {
                                 </span>
                                 {getFieldDecorator('businessMode', {
                                     rules: [{ required: true, message: '请输入经营模式' }],
-                                    initialValue: this.state.businessMode
+                                    initialValue: state.businessMode
                                 })(
                                     <Select size="default" onChange={this.businessModeTypeChange}>
                                         {
@@ -815,13 +817,13 @@ class BasicInfo extends PureComponent {
                         <Col span={8}>
                             {/* 审核人 */}
                             <FormItem label="审核人">
-                                <span>{this.props.basicInfo.approvedByName}</span>
+                                <span>{props.basicInfo.approvedByName}</span>
                             </FormItem>
                         </Col>
                         <Col span={4}>
                             {/* 审核日期 */}
                             <FormItem label="审核日期">
-                                <span>{this.props.basicInfo.approvedAt}</span>
+                                <span>{props.basicInfo.approvedAt}</span>
                             </FormItem>
                         </Col>
                     </Row>

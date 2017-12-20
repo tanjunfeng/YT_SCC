@@ -8,24 +8,32 @@ const FormItem = Form.Item;
 export default class EditableCell extends PureComponent {
     constructor(props) {
         super(props);
-        this.validate = :: this.validate;
         this.state = {
-            value: this.props.value,
-            max: this.props.max ? this.props.max : MAXGOODS,
-            step: this.props.step,
-            purchaseInsideNumber: this.props.purchaseInsideNumber,
+            value: '',
+            max: MAXGOODS,
+            step: '',
+            purchaseInsideNumber: '',
             validateStatus: null,
-            editable: this.props.editable,
-            message: ''
+            editable: false
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ value: nextProps.value, editable: nextProps.editable });
+        let max = MAXGOODS;
+        if (typeof nextProps.max !== 'undefined') {
+            max = nextProps.max
+        }
+        this.setState({
+            value: nextProps.value,
+            max,
+            step: nextProps.step,
+            purchaseInsideNumber: nextProps.purchaseInsideNumber,
+            editable: nextProps.editable,
+        });
         this.validate(nextProps.value);
     }
 
-    onPressEnter() {
+    onPressEnter = () => {
         const { onChange } = this.props;
         this.validate(this.state.value);
         // call 回调函数
@@ -34,7 +42,7 @@ export default class EditableCell extends PureComponent {
         }
     }
 
-    handleBlur() {
+    handleBlur = () => {
         const { onChange } = this.props;
         this.validate(this.state.value);
         // call 回调函数
@@ -43,11 +51,11 @@ export default class EditableCell extends PureComponent {
         }
     }
 
-    handleChange(value) {
+    handleChange = (value) => {
         this.setState({ value });
     }
 
-    validate(value) {
+    validate = (value) => {
         // 采购数量未输入、不为采购内装数整数倍
         if (!value && this.props.type === 'price') {
             this.setState({
