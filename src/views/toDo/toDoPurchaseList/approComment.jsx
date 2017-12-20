@@ -59,8 +59,12 @@ class ApproComment extends PureComponent {
         });
     }
     handleOk = () => {
-        this.getFormData().then((param) => this.props.onOk(param));
-        this.props.form.resetFields();
+        this.getFormData().then((param) => {
+            this.props.onOk(param);
+            this.props.form.resetFields();
+        }).catch(() => {
+            console.error('未输入审批意见');
+        });
     }
     handleCancel = () => {
         this.props.onCancel();

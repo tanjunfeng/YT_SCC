@@ -2028,6 +2028,7 @@ class PoDetail extends PureComponent {
                                     {
                                         this.state.currentType !== 'detail'
                                         && (basicInfo.status === 0
+                                            || basicInfo.status === 3
                                             || this.state.currentType === 'create')
                                         && <FormItem>
                                             <Button size="default" onClick={this.handleSave}>
@@ -2038,6 +2039,7 @@ class PoDetail extends PureComponent {
                                     {
                                         this.state.currentType !== 'detail'
                                         && (basicInfo.status === 0
+                                            || basicInfo.status === 3
                                             || this.state.currentType === 'create')
                                         && <FormItem>
                                             <Button size="default" onClick={this.handleSubmit}>
