@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, Form, InputNumber, message, Select, Button, Input, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import SteppedPrice from '../steppedPrice';
+// import SteppedPrice from '../steppedPrice';
 import SearchMind from '../../../components/searchMind';
 import {
     pubFetchValueList
@@ -14,6 +14,7 @@ import { fetchAddProdPurchase } from '../../../actions';
 import {
     preHarvestPinStatus,
 } from '../../../constant/searchParams';
+import EditableTable from './editableTable';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -89,7 +90,16 @@ class SellPriceModal extends Component {
                     this.successPost = false;
                 }
             })
+            return null;
         })
+    }
+
+    getEditableTableValues = () => {
+        const { isEdit } = this.props;
+        const { startNumber } = this.state;
+        return {
+            isEdit, startNumber
+        };
     }
 
     handleOk() {
@@ -185,10 +195,7 @@ class SellPriceModal extends Component {
     }
 
     hasZero(items) {
-        const filter = items.filter((item) => {
-            return item.price === 0;
-        })
-
+        const filter = items.filter(item => item.price === 0)
         return !!filter.length;
     }
 
@@ -288,9 +295,8 @@ class SellPriceModal extends Component {
     render() {
         const { prefixCls, form, datas, isEdit, getProductById } = this.props;
         const { getFieldDecorator } = form;
-        const { currentInside, startNumber, price, hasZero } = this.state;
+        const { currentInside, hasZero } = this.state;
         const newDates = JSON.parse(JSON.stringify(datas));
-        console.log(newDates)
         const preHarvestPinStatusChange =
             (newDates.preHarvestPinStatus === 1 ? '1' : '0');
         return (
@@ -318,8 +324,8 @@ class SellPriceModal extends Component {
                     isEdit ?
                         <div>
                             <div>
-                                <span style={{width: '54%', display: 'inline-block'}}>修改前:</span>
-                                <span style={{width: '45%', display: 'inline-block'}}>修改后:</span>
+                                <span style={{ width: '54%', display: 'inline-block' }}>修改前:</span>
+                                <span style={{ width: '45%', display: 'inline-block' }}>修改后:</span>
                             </div>
                             <div className={`${prefixCls}-body-wrap`}>
                                 <Form layout="inline" onSubmit={this.handleSubmit}>
@@ -339,7 +345,7 @@ class SellPriceModal extends Component {
                                                                     min={0}
                                                                     onChange={this.handleInsideChange}
                                                                 />
-                                                            )}
+                                                                )}
                                                         </span>
                                                     </FormItem>
                                                     <FormItem>
@@ -366,7 +372,7 @@ class SellPriceModal extends Component {
                                                                     onChange={this.handleMinChange}
                                                                     step={currentInside || newDates.salesInsideNumber}
                                                                 />
-                                                            )}
+                                                                )}
                                                         </span>
                                                     </FormItem>
                                                     <FormItem>
@@ -380,7 +386,7 @@ class SellPriceModal extends Component {
                                                                     onChange={this.handleMaxChange}
                                                                     step={currentInside || newDates.salesInsideNumber}
                                                                 />
-                                                            )}
+                                                                )}
                                                         </span>
                                                     </FormItem>
                                                     <FormItem>
@@ -391,7 +397,7 @@ class SellPriceModal extends Component {
                                                                 initialValue: newDates.deliveryDay
                                                             })(
                                                                 <InputNumber min={0} />
-                                                            )}
+                                                                )}
                                                         </span>
                                                         天内发货
                                                     </FormItem>
@@ -427,7 +433,7 @@ class SellPriceModal extends Component {
                                                                     )
                                                                 }
                                                             </Select>
-                                                        )}
+                                                            )}
                                                     </FormItem>
                                                 </Col>
                                             </Row>
@@ -442,7 +448,10 @@ class SellPriceModal extends Component {
                                         </div>
                                         <div className={`${prefixCls}-item-content`}>
                                             <FormItem>
-                                                {getFieldDecorator('sellSectionPrices', {
+                                                <EditableTable
+                                                    value={this.getEditableTableValues()}
+                                                />
+                                                {/* {getFieldDecorator('sellSectionPrices', {
                                                 })(
                                                     <SteppedPrice
                                                         isEditor={this.state.isEditPrice}
@@ -455,7 +464,7 @@ class SellPriceModal extends Component {
                                                         initvalue={getProductById.minUnit}
                                                         price={price}
                                                     />
-                                                )}
+                                                )} */}
                                             </FormItem>
                                         </div>
                                         <div>
@@ -481,7 +490,7 @@ class SellPriceModal extends Component {
                                     </div>
                                 </Form>
                             </div>
-                            <div className={`${prefixCls}-body-wrap`} style={{ float: 'right'}}>
+                            <div className={`${prefixCls}-body-wrap`} style={{ float: 'right' }}>
                                 <Form layout="inline" onSubmit={this.handleSubmit}>
                                     <div className={`${prefixCls}-item`} style={{ minHeight: '211px' }}>
                                         <div className={`${prefixCls}-item-title`}>货运条件</div>
@@ -527,7 +536,10 @@ class SellPriceModal extends Component {
                                         </div>
                                         <div className={`${prefixCls}-item-content`}>
                                             <FormItem>
-                                                {getFieldDecorator('sellSectionPrices', {
+                                                <EditableTable
+                                                    value={this.getEditableTableValues()}
+                                                />
+                                                {/* {getFieldDecorator('sellSectionPrices', {
                                                 })(
                                                     <SteppedPrice
                                                         isEditor={this.state.isEditPrice}
@@ -540,7 +552,7 @@ class SellPriceModal extends Component {
                                                         initvalue={getProductById.minUnit}
                                                         price={price}
                                                     />
-                                                )}
+                                                )} */}
                                             </FormItem>
                                         </div>
                                         <div>
@@ -571,232 +583,235 @@ class SellPriceModal extends Component {
                                     {
                                         isEdit ?
                                             <span>{`${newDates.branchCompanyId}-${newDates.branchCompanyName}`}</span>
-                                        : <span className={`${prefixCls}-data-pic`}>
-                                            <SearchMind
-                                                compKey="search-mind-key1"
-                                                ref={ref => { this.searchMind = ref }}
-                                                fetch={(param) => this.props.pubFetchValueList({
-                                                    branchCompanyName: param.value,
-                                                    productId: newDates.productId || newDates.id
-                                                }, 'queryBranchCompanyInfo')}
-                                                placeholder="请输入公司名"
-                                                onChoosed={this.handleChoose}
-                                                disabled={isEdit}
-                                                defaultValue={
-                                                    newDates.branchCompanyId ?
-                                                        `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` :
-                                                        undefined}
-                                                onClear={this.handleClear}
-                                                renderChoosedInputRaw={(data) => (
-                                                    <div>{data.id} - {data.name}</div>
-                                                )}
-                                                pageSize={6}
-                                                columns={[
-                                                    {
-                                                        title: '公司编号',
-                                                        dataIndex: 'id',
-                                                        width: 98
-                                                    }, {
-                                                        title: '公司名',
-                                                        dataIndex: 'name',
-                                                        width: 140
-                                                    }
-                                                ]}
-                                            />
-                                        </span>
+                                            : <span className={`${prefixCls}-data-pic`}>
+                                                <SearchMind
+                                                    compKey="search-mind-key1"
+                                                    ref={ref => { this.searchMind = ref }}
+                                                    fetch={(param) => this.props.pubFetchValueList({
+                                                        branchCompanyName: param.value,
+                                                        productId: newDates.productId || newDates.id
+                                                    }, 'queryBranchCompanyInfo')}
+                                                    placeholder="请输入公司名"
+                                                    onChoosed={this.handleChoose}
+                                                    disabled={isEdit}
+                                                    defaultValue={
+                                                        newDates.branchCompanyId ?
+                                                            `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` :
+                                                            undefined}
+                                                    onClear={this.handleClear}
+                                                    renderChoosedInputRaw={(data) => (
+                                                        <div>{data.id} - {data.name}</div>
+                                                    )}
+                                                    pageSize={6}
+                                                    columns={[
+                                                        {
+                                                            title: '公司编号',
+                                                            dataIndex: 'id',
+                                                            width: 98
+                                                        }, {
+                                                            title: '公司名',
+                                                            dataIndex: 'name',
+                                                            width: 140
+                                                        }
+                                                    ]}
+                                                />
+                                            </span>
                                     }
                                 </FormItem>
                             </div>
                         </div>
-                    : <div className={`${prefixCls}-body-wrap`}>
-                        <Form layout="inline" onSubmit={this.handleSubmit}>
-                            <div className={`${prefixCls}-item`}>
-                                <div className={`${prefixCls}-item-title`}>货运条件</div>
-                                <div className={`${prefixCls}-item-content`}>
-                                    <FormItem>
-                                        <span>*销售内装数：</span>
-                                        <span>
-                                            {getFieldDecorator('salesInsideNumber', {
-                                                rules: [{ required: true, message: '请输入销售内装数' }],
-                                                initialValue: newDates.salesInsideNumber
-                                            })(
-                                                <InputNumber
-                                                    min={0}
-                                                    onChange={this.handleInsideChange}
-                                                />
-                                            )}
-                                        </span>
-                                    </FormItem>
-                                    <FormItem label="*起订量：">
-                                        <span>
-                                            {getFieldDecorator('minNumber', {
-                                                rules: [
-                                                    { required: true, message: '请输入最小起订量!' },
-                                                    {
-                                                        validator: (rule, value, callback) => {
-                                                            const { getFieldValue } = this.props.form
-                                                            if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0) {
-                                                                callback('起订量需为内装数整数倍！')
-                                                            }
+                        : <div className={`${prefixCls}-body-wrap`}>
+                            <Form layout="inline" onSubmit={this.handleSubmit}>
+                                <div className={`${prefixCls}-item`}>
+                                    <div className={`${prefixCls}-item-title`}>货运条件</div>
+                                    <div className={`${prefixCls}-item-content`}>
+                                        <FormItem>
+                                            <span>*销售内装数：</span>
+                                            <span>
+                                                {getFieldDecorator('salesInsideNumber', {
+                                                    rules: [{ required: true, message: '请输入销售内装数' }],
+                                                    initialValue: newDates.salesInsideNumber
+                                                })(
+                                                    <InputNumber
+                                                        min={0}
+                                                        onChange={this.handleInsideChange}
+                                                    />
+                                                    )}
+                                            </span>
+                                        </FormItem>
+                                        <FormItem label="*起订量：">
+                                            <span>
+                                                {getFieldDecorator('minNumber', {
+                                                    rules: [
+                                                        { required: true, message: '请输入最小起订量!' },
+                                                        {
+                                                            validator: (rule, value, callback) => {
+                                                                const { getFieldValue } = this.props.form
+                                                                if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0) {
+                                                                    callback('起订量需为内装数整数倍！')
+                                                                }
 
-                                                            callback()
+                                                                callback()
+                                                            }
                                                         }
+                                                    ],
+                                                    initialValue: newDates.minNumber
+                                                })(
+                                                    <InputNumber
+                                                        min={0}
+                                                        onChange={this.handleMinChange}
+                                                        step={currentInside || newDates.salesInsideNumber}
+                                                    />
+                                                    )}
+                                            </span>
+                                        </FormItem>
+                                        <FormItem>
+                                            <span>*最大销售数量：</span>
+                                            <span>
+                                                {getFieldDecorator('maxNumber', {
+                                                    initialValue: newDates.maxNumber
+                                                })(
+                                                    <InputNumber
+                                                        min={0}
+                                                        onChange={this.handleMaxChange}
+                                                        step={currentInside || newDates.salesInsideNumber}
+                                                    />
+                                                    )}
+                                            </span>
+                                        </FormItem>
+                                        <FormItem>
+                                            <span>*承诺发货时间：下单后</span>
+                                            <span className={`${prefixCls}-day-input`}>
+                                                {getFieldDecorator('deliveryDay', {
+                                                    rules: [{ required: true, message: '请输入承诺发货时间!' }],
+                                                    initialValue: newDates.deliveryDay
+                                                })(
+                                                    <InputNumber min={0} />
+                                                    )}
+                                            </span>
+                                            天内发货
+                                    </FormItem>
+                                        <FormItem>
+                                            <span>是否整箱销售:</span>
+                                            <span className={`${prefixCls}-day-input`}>
+                                                {getProductById.sellFullCase === 1 ? '是' : '否'}
+                                            </span>
+                                        </FormItem>
+                                        <FormItem>
+                                            <span>整箱销售单位:</span>
+                                            <span className={`${prefixCls}-day-input`}>
+                                                {getProductById.fullCaseUnit || '-'}
+                                            </span>
+                                        </FormItem>
+                                        {/* 采购模式 */}
+                                        <FormItem className={`${prefixCls}-qy`}>
+                                            <span className={`${prefixCls}-select`}> 采购模式 : </span>
+                                            {getFieldDecorator('preHarvestPinStatus', {
+                                                initialValue: isEdit ? preHarvestPinStatusChange : '0'
+                                            })(
+                                                <Select
+                                                    style={{ width: 90 }}
+                                                    className="sc-form-item-select"
+                                                    size="default"
+                                                    onChange={this.handleSelectChange}
+                                                >
+                                                    {
+                                                        preHarvestPinStatus.data.map((item) =>
+                                                            (<Option key={item.key} value={item.key}>
+                                                                {item.value}
+                                                            </Option>)
+                                                        )
                                                     }
-                                                ],
-                                                initialValue: newDates.minNumber
-                                            })(
-                                                <InputNumber
-                                                    min={0}
-                                                    onChange={this.handleMinChange}
-                                                    step={currentInside || newDates.salesInsideNumber}
-                                                />
-                                            )}
-                                        </span>
-                                    </FormItem>
-                                    <FormItem>
-                                        <span>*最大销售数量：</span>
-                                        <span>
-                                            {getFieldDecorator('maxNumber', {
-                                                initialValue: newDates.maxNumber
-                                            })(
-                                                <InputNumber
-                                                    min={0}
-                                                    onChange={this.handleMaxChange}
-                                                    step={currentInside || newDates.salesInsideNumber}
-                                                />
-                                            )}
-                                        </span>
-                                    </FormItem>
-                                    <FormItem>
-                                        <span>*承诺发货时间：下单后</span>
-                                        <span className={`${prefixCls}-day-input`}>
-                                            {getFieldDecorator('deliveryDay', {
-                                                rules: [{ required: true, message: '请输入承诺发货时间!' }],
-                                                initialValue: newDates.deliveryDay
-                                            })(
-                                                <InputNumber min={0} />
-                                            )}
-                                        </span>
-                                        天内发货
-                                    </FormItem>
-                                    <FormItem>
-                                        <span>是否整箱销售:</span>
-                                        <span className={`${prefixCls}-day-input`}>
-                                            {getProductById.sellFullCase === 1 ? '是' : '否'}
-                                        </span>
-                                    </FormItem>
-                                    <FormItem>
-                                        <span>整箱销售单位:</span>
-                                        <span className={`${prefixCls}-day-input`}>
-                                            {getProductById.fullCaseUnit || '-'}
-                                        </span>
-                                    </FormItem>
-                                    {/* 采购模式 */}
-                                    <FormItem className={`${prefixCls}-qy`}>
-                                        <span className={`${prefixCls}-select`}> 采购模式 : </span>
-                                        {getFieldDecorator('preHarvestPinStatus', {
-                                            initialValue: isEdit ? preHarvestPinStatusChange : '0'
-                                        })(
-                                            <Select
-                                                style={{ width: 90 }}
-                                                className="sc-form-item-select"
-                                                size="default"
-                                                onChange={this.handleSelectChange}
-                                            >
-                                                {
-                                                    preHarvestPinStatus.data.map((item) =>
-                                                        (<Option key={item.key} value={item.key}>
-                                                            {item.value}
-                                                        </Option>)
-                                                    )
-                                                }
-                                            </Select>
-                                        )}
-                                    </FormItem>
+                                                </Select>
+                                                )}
+                                        </FormItem>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className={`${prefixCls}-item item-max-height`}>
-                                <div className={`${prefixCls}-item-title`}>
-                                    添加阶梯价格
+                                <div className={`${prefixCls}-item item-max-height`}>
+                                    <div className={`${prefixCls}-item-title`}>
+                                        添加阶梯价格
                                     <span className={`${prefixCls}-item-tip`}>
                                         &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
                                     </span>
-                                </div>
-                                <div className={`${prefixCls}-item-content`}>
-                                    <FormItem>
-                                        {getFieldDecorator('sellSectionPrices', {
-                                        })(
-                                            <SteppedPrice
-                                                isEditor={this.state.isEditPrice}
-                                                isEdit={isEdit}
-                                                ref={node => { this.steppedPrice = node }}
-                                                handleChange={this.handlePriceChange}
-                                                startNumber={startNumber}
-                                                defaultValue={isEdit ? newDates.sellSectionPrices : []}
-                                                inputSize="default"
-                                                initvalue={getProductById.minUnit}
-                                                price={price}
+                                    </div>
+                                    <div className={`${prefixCls}-item-content`}>
+                                        <FormItem>
+                                            <EditableTable
+                                                value={this.getEditableTableValues()}
                                             />
-                                        )}
-                                    </FormItem>
-                                </div>
-                                <div>
-                                    <FormItem>
-                                        <span>* 建议零售价(元)：</span>
-                                        <span>
-                                            {getFieldDecorator('suggestPrice', {
-                                                rules: [{ required: true, message: '请输入建议零售价!' }],
-                                                initialValue: newDates.suggestPrice
+                                            {/* {getFieldDecorator('sellSectionPrices', {
                                             })(
-                                                <InputNumber min={0} />
-                                            )}
-                                        </span>
+                                                <SteppedPrice
+                                                    isEditor={this.state.isEditPrice}
+                                                    isEdit={isEdit}
+                                                    ref={node => { this.steppedPrice = node }}
+                                                    handleChange={this.handlePriceChange}
+                                                    startNumber={startNumber}
+                                                    defaultValue={isEdit ? newDates.sellSectionPrices : []}
+                                                    inputSize="default"
+                                                    initvalue={getProductById.minUnit}
+                                                    price={price}
+                                                />
+                                                )} */}
+                                        </FormItem>
+                                    </div>
+                                    <div>
+                                        <FormItem>
+                                            <span>* 建议零售价(元)：</span>
+                                            <span>
+                                                {getFieldDecorator('suggestPrice', {
+                                                    rules: [{ required: true, message: '请输入建议零售价!' }],
+                                                    initialValue: newDates.suggestPrice
+                                                })(
+                                                    <InputNumber min={0} />
+                                                    )}
+                                            </span>
+                                        </FormItem>
+                                    </div>
+                                </div>
+                                <div className={`${prefixCls}-item`} style={{ display: 'flex' }}>
+                                    <FormItem label="子公司:">
+                                        {
+                                            isEdit ?
+                                                <Input defaultValue={`${newDates.branchCompanyId}-${newDates.branchCompanyName}`} readOnly />
+                                                : <span className={`${prefixCls}-data-pic`}>
+                                                    <SearchMind
+                                                        compKey="search-mind-key1"
+                                                        ref={ref => { this.searchMind = ref }}
+                                                        fetch={(param) => this.props.pubFetchValueList({
+                                                            branchCompanyName: param.value,
+                                                            productId: newDates.productId || newDates.id
+                                                        }, 'queryBranchCompanyInfo')}
+                                                        placeholder="请输入公司名"
+                                                        onChoosed={this.handleChoose}
+                                                        disabled={isEdit}
+                                                        defaultValue={
+                                                            newDates.branchCompanyId ?
+                                                                `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` :
+                                                                undefined}
+                                                        onClear={this.handleClear}
+                                                        renderChoosedInputRaw={(data) => (
+                                                            <div>{data.id} - {data.name}</div>
+                                                        )}
+                                                        pageSize={6}
+                                                        columns={[
+                                                            {
+                                                                title: '公司编号',
+                                                                dataIndex: 'id',
+                                                                width: 98
+                                                            }, {
+                                                                title: '公司名',
+                                                                dataIndex: 'name',
+                                                                width: 140
+                                                            }
+                                                        ]}
+                                                    />
+                                                </span>
+                                        }
                                     </FormItem>
                                 </div>
-                            </div>
-                            <div className={`${prefixCls}-item`} style={{display: 'flex'}}>
-                                <FormItem label="子公司:">
-                                    {
-                                        isEdit ?
-                                            <Input defaultValue={`${newDates.branchCompanyId}-${newDates.branchCompanyName}`} readOnly />
-                                        : <span className={`${prefixCls}-data-pic`}>
-                                            <SearchMind
-                                                compKey="search-mind-key1"
-                                                ref={ref => { this.searchMind = ref }}
-                                                fetch={(param) => this.props.pubFetchValueList({
-                                                    branchCompanyName: param.value,
-                                                    productId: newDates.productId || newDates.id
-                                                }, 'queryBranchCompanyInfo')}
-                                                placeholder="请输入公司名"
-                                                onChoosed={this.handleChoose}
-                                                disabled={isEdit}
-                                                defaultValue={
-                                                    newDates.branchCompanyId ?
-                                                        `${newDates.branchCompanyId} - ${newDates.branchCompanyName}` :
-                                                        undefined}
-                                                onClear={this.handleClear}
-                                                renderChoosedInputRaw={(data) => (
-                                                    <div>{data.id} - {data.name}</div>
-                                                )}
-                                                pageSize={6}
-                                                columns={[
-                                                    {
-                                                        title: '公司编号',
-                                                        dataIndex: 'id',
-                                                        width: 98
-                                                    }, {
-                                                        title: '公司名',
-                                                        dataIndex: 'name',
-                                                        width: 140
-                                                    }
-                                                ]}
-                                            />
-                                        </span>
-                                    }
-                                </FormItem>
-                            </div>
-                        </Form>
-                    </div>
+                            </Form>
+                        </div>
                 }
             </Modal>
         );
