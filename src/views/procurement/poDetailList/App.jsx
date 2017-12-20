@@ -23,6 +23,8 @@ import {
 } from '../../../actions/procurement';
 import { pubFetchValueList } from '../../../actions/pub';
 import { exportProcurementPdf } from '../../../service';
+import { renderPayType, renderPayCondition, renderPeriod, purchaseOrderType,
+    businessMode, purchaseOrderState, purchaseOrderAdrType} from '../constants'
 
 const FormItem = Form.Item;
 
@@ -147,54 +149,6 @@ class PoDetail extends PureComponent {
      * 根据状态渲染对应的页面
      */
     getBaiscInfoElements = () => {
-        const purchaseOrderType = () => {
-            switch (this.props.basicInfo.purchaseOrderType) {
-                case 0:
-                    return '普通采购单';
-                case 1:
-                    return '赠品采购单';
-                case 2:
-                    return '促销采购单';
-                default:
-                    return '';
-            }
-        }
-        const businessMode = () => {
-            switch (this.props.basicInfo.businessMode) {
-                case 0:
-                    return '经销';
-                case 1:
-                    return '代销';
-                default:
-                    return '';
-            }
-        }
-        const purchaseOrderState = () => {
-            switch (this.props.basicInfo.status) {
-                case 0:
-                    return '制单';
-                case 1:
-                    return '已提交';
-                case 2:
-                    return '已审核';
-                case 3:
-                    return '已拒绝';
-                case 4:
-                    return '已关闭';
-                default:
-                    return '';
-            }
-        }
-        const purchaseOrderAdrType = () => {
-            switch (this.props.basicInfo.adrType) {
-                case 0:
-                    return '仓库';
-                case 1:
-                    return '门店';
-                default:
-                    return '';
-            }
-        }
         const { basicInfo } = this.props;
 
         // 回显预期送货日期
@@ -222,19 +176,21 @@ class PoDetail extends PureComponent {
                         <Col span={3}>
                             {/* 经营模式 */}
                             <FormItem label="经营模式">
-                                <span>{businessMode()}</span>
+                                <span>{businessMode(this.props.basicInfo.businessMode)}</span>
                             </FormItem>
                         </Col>
                         <Col span={5}>
                             {/* 采购单类型 */}
                             <FormItem label="采购单类型">
-                                <span>{purchaseOrderType()}</span>
+                                <span>{
+                                    purchaseOrderType(this.props.basicInfo.purchaseOrderType)
+                                }</span>
                             </FormItem>
                         </Col>
                         <Col span={8}>
                             {/* 状态 */}
                             <FormItem label="状态">
-                                <span>{purchaseOrderState()}</span>
+                                <span>{purchaseOrderState(this.props.basicInfo.status)}</span>
                             </FormItem>
                         </Col>
                     </Row>
@@ -269,7 +225,7 @@ class PoDetail extends PureComponent {
                         <Col span={8}>
                             {/* 地点类型 */}
                             <FormItem label="地点类型">
-                                <span>{purchaseOrderAdrType()}</span>
+                                <span>{purchaseOrderAdrType(this.props.basicInfo.adrType)}</span>
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -293,14 +249,14 @@ class PoDetail extends PureComponent {
                             {/* 账期 */}
                             <FormItem label="账期">
                                 <span>
-                                    {this.renderPeriod(this.props.basicInfo.settlementPeriod)}
+                                    {renderPeriod(this.props.basicInfo.settlementPeriod)}
                                 </span>
                             </FormItem>
                         </Col>
                         <Col span={8}>
                             {/* 付款方式 */}
                             <FormItem label="付款方式">
-                                <span>{this.renderPayType(this.props.basicInfo.payType)}</span>
+                                <span>{renderPayType(this.props.basicInfo.payType)}</span>
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -315,7 +271,7 @@ class PoDetail extends PureComponent {
                             {/* 付款条件 */}
                             <FormItem label="付款条件">
                                 <span>
-                                    {this.renderPayCondition(this.props.basicInfo.payCondition)}
+                                    {renderPayCondition(this.props.basicInfo.payCondition)}
                                 </span>
                             </FormItem>
                         </Col>
@@ -359,63 +315,6 @@ class PoDetail extends PureComponent {
             exportProcurementPdf,
             { purchaseOrderNo: this.props.basicInfo.purchaseOrderNo }
         );
-    }
-
-    /**
-     * 渲染账期
-     * @param {*} key
-     */
-    renderPeriod = (key) => {
-        switch (key) {
-            case 0:
-                return '周结';
-            case 1:
-                return '半月结';
-            case 2:
-                return '月结';
-            case 3:
-                return '票到付款';
-            default:
-                return '';
-        }
-    }
-
-    /**
-     * 渲染付款方式
-     * @param {*} key
-     */
-    renderPayType = (key) => {
-        switch (key) {
-            case 0:
-                return '网银';
-            case 1:
-                return '银行转账';
-            case 2:
-                return '现金';
-            case 3:
-                return '支票';
-            default:
-                return '';
-        }
-    }
-
-    /**
-     * 渲染付款条件
-     * @param {*} key
-     */
-    renderPayCondition = (key) => {
-        switch (key) {
-            case 1:
-                return '票到七天';
-            case 2:
-                return '票到十五天';
-            case 3:
-                return '票到三十天';
-            case 4:
-                return '票到付款';
-            default:
-                return '';
-        }
     }
 
     render() {

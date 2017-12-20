@@ -8,7 +8,6 @@ import React from 'react';
 import moment from 'moment';
 import { locType, poStatus, businessModeType, poType } from '../../constant/procurement';
 
-const purchase = ['普通采购单'];
 // 供应商列表
 export const poMngListColumns = [
     {

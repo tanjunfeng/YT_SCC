@@ -26,6 +26,7 @@ import { locType, poType, poNo, businessModeType } from '../../../constant/procu
 import SearchMind from '../../../components/searchMind';
 import { modifyCauseModalVisible } from '../../../actions/modify/modifyAuditModalVisible';
 import { Supplier } from '../../../container/search';
+import { renderPayType, renderPayCondition, renderPeriod} from '../constants'
 
 const FormItem = Form.Item;
 
@@ -447,62 +448,6 @@ class BasicInfo extends PureComponent {
             level: '2'
         }, 'queryCategorysByLevel')
     )
-    /**
-     * 渲染付款方式
-     * @param {*} key
-     */
-    renderPayType = (key) => {
-        switch (key) {
-            case 0:
-                return '网银';
-            case 1:
-                return '银行转账';
-            case 2:
-                return '现金';
-            case 3:
-                return '支票';
-            default:
-                return '';
-        }
-    }
-
-    /**
-     * 渲染付款条件
-     * @param {*} key
-     */
-    renderPayCondition = (key) => {
-        switch (key) {
-            case 1:
-                return '票到七天';
-            case 2:
-                return '票到十五天';
-            case 3:
-                return '票到三十天';
-            case 4:
-                return '票到付款';
-            default:
-                return '';
-        }
-    }
-
-    /**
-     * 渲染账期
-     * @param {*} key
-     */
-    renderPeriod = (key) => {
-        switch (key) {
-            case 0:
-                return '周结';
-            case 1:
-                return '半月结';
-            case 2:
-                return '月结';
-            case 3:
-                return '票到付款';
-            default:
-                return '';
-        }
-    }
 
     render() {
         const Option = Select.Option;
@@ -788,7 +733,7 @@ class BasicInfo extends PureComponent {
                             {/* 账期 */}
                             <FormItem label="账期">
                                 <span>
-                                    {this.renderPeriod(this.state.settlementPeriod)}
+                                    {renderPeriod(this.state.settlementPeriod)}
                                 </span>
                             </FormItem>
                         </Col>
@@ -796,7 +741,7 @@ class BasicInfo extends PureComponent {
                             {/* 付款方式 */}
                             <FormItem label="付款方式">
                                 <span>
-                                    {this.renderPayType(this.state.payType)}
+                                    {renderPayType(this.state.payType)}
                                 </span>
                             </FormItem>
                         </Col>
@@ -824,7 +769,7 @@ class BasicInfo extends PureComponent {
                             {/* 付款条件 */}
                             <FormItem label="付款条件">
                                 <span>
-                                    {this.renderPayCondition(this.state.payCondition)}
+                                    {renderPayCondition(this.state.payCondition)}
                                 </span>
                             </FormItem>
                         </Col>

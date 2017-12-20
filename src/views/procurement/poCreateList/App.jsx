@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import {Form, Row, Col, Button, message, Affix} from 'antd';
 import Immutable, { fromJS } from 'immutable';
-import Audit from './auditModal';
 import {
     getMaterialMap,
     initPoDetail,
@@ -378,13 +377,13 @@ class PoCreateList extends PureComponent {
         })
     }
 
-    S4() {
-        return (((1 + Math.random()) * 0x10000) || 0).toString(16).substring(1);
-    }
+    S4 = () => (
+        (((1 + Math.random()) * 0x10000) || 0).toString(16).substring(1)
+    )
 
-    guid() {
-        return `${this.S4()}${this.S4()}-${this.S4()}-${this.S4()}-${this.S4()}-${this.S4()}${this.S4()}${this.S4()}`;
-    }
+    guid = () => (
+        `${this.S4()}${this.S4()}-${this.S4()}-${this.S4()}-${this.S4()}-${this.S4()}${this.S4()}${this.S4()}`
+    )
 
     purchaseOrderTypeChange = (data) => {
         this.setState(data, () => (this.caculate(this.props.po.poLines)));
@@ -453,9 +452,6 @@ class PoCreateList extends PureComponent {
                         </div>
                     </Affix>
                 </Form>
-                <div>
-                    <Audit />
-                </div>
             </div>
         )
     }
