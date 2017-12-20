@@ -272,3 +272,63 @@ export const purchaseListColumns = [
         key: 'operation'
     }
 ]
+
+// 售价审核列表
+export const priceListColumns = [
+    {
+        title: '变价类型',
+        dataIndex: 'purchaseOrderNo',
+        key: 'purchaseOrderNo',
+    },
+    {
+        title: '状态',
+        dataIndex: 'purchaseOrderType',
+        key: 'purchaseOrderType',
+        render: text => (purchase[text])
+    },
+    {
+        title: '子公司编号',
+        dataIndex: 'spNo',
+        key: 'spNo',
+    },
+    {
+        title: '子公司名称',
+        dataIndex: 'spName',
+        key: 'spName',
+    },
+    {
+        title: '商品编码',
+        dataIndex: 'spAdrNo',
+        key: 'spAdrNo',
+    }, {
+        title: '商品名称',
+        dataIndex: 'spAdrName',
+        key: 'spAdrName',
+    },
+    {
+        title: '变更日期',
+        dataIndex: 'estimatedDeliveryDate',
+        key: 'estimatedDeliveryDate',
+        render: (text) => (
+            <span>
+                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+            </span>
+        )
+    },
+    {
+        title: '当前节点',
+        dataIndex: 'adrType',
+        key: 'adrType',
+        render: (text) => {
+            if (text === null) {
+                return null;
+            }
+            return (locType.data[text + 1].value);
+        }
+    },
+    {
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation'
+    }
+]

@@ -1,5 +1,5 @@
 /**
- * 进价审核 - 查询条件
+ * 售价审核 - 查询条件
  *
  * @author liujinyu
  */
@@ -9,7 +9,7 @@ import { Button, Form, Select, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 import Util from '../../../util/util';
 import { purchaseStatus } from '../constants';
-import { Supplier, SupplierAdderss, AddingGoodsByTerm } from '../../../container/search';
+import { BranchCompany, AddingGoodsByTerm } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -28,14 +28,12 @@ class SearchForm extends PureComponent {
     getFormData() {
         const {
             zt,
-            gys,
-            gysdd,
+            zgs,
             sp,
         } = this.props.form.getFieldsValue();
         return Util.removeInvalid({
             zt,
-            gys: gys.spId,
-            gysdd: gysdd.providerNo,
+            zgs: zgs.id,
             sp: sp.id
         });
     }
@@ -80,17 +78,10 @@ class SearchForm extends PureComponent {
                         </FormItem>
                     </Col>
                     <Col span={8}>
-                        <FormItem label="供应商">
-                            {getFieldDecorator('gys', {
+                        <FormItem label="子公司">
+                            {getFieldDecorator('zgs', {
                                 initialValue: { id: '', name: '' }
-                            })(<Supplier />)}
-                        </FormItem>
-                    </Col>
-                    <Col span={8}>
-                        <FormItem label="供应商地点">
-                            {getFieldDecorator('gysdd', {
-                                initialValue: { id: '', name: '' }
-                            })(<SupplierAdderss />)}
+                            })(<BranchCompany />)}
                         </FormItem>
                     </Col>
                     <Col span={8}>

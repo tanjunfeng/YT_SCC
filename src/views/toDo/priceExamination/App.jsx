@@ -2,7 +2,7 @@
  * @file App.jsx
  * @author liujinyu
  *
- * 进价审核列表
+ * 售价审核列表
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -13,7 +13,7 @@ import { Table, Form, Icon, Menu, Dropdown } from 'antd';
 import { queryProcessMsgInfo } from '../../../actions/process';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { purchaseListColumns as columns } from '../columns';
+import { priceListColumns as columns } from '../columns';
 
 @connect(state => ({
     processMsgInfo: state.toJS().procurement.processMsgInfo,
@@ -21,7 +21,7 @@ import { purchaseListColumns as columns } from '../columns';
     queryProcessMsgInfo
 }, dispatch))
 
-class PurchaseExamination extends PureComponent {
+class PriceExamination extends PureComponent {
     constructor(props) {
         super(props);
         this.param = {};
@@ -162,9 +162,12 @@ class PurchaseExamination extends PureComponent {
     }
 }
 
-PurchaseExamination.propTypes = {
+PriceExamination.propTypes = {
     queryProcessMsgInfo: PropTypes.func,
-    processMsgInfo: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
+    // clearPromotionList: PropTypes.func,
+    updatePromotionStatus: PropTypes.func,
+    processMsgInfo: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+    location: PropTypes.objectOf(PropTypes.any)
 }
 
-export default withRouter(Form.create()(PurchaseExamination));
+export default withRouter(Form.create()(PriceExamination));
