@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {
     Table, Icon, Dropdown, Menu, Modal, message,
 } from 'antd';
-import EditableCell from './EditableCell';
+import EditableCell from './editableCell';
 
 import {
     getMaterialMap,
