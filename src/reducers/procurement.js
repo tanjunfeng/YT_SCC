@@ -60,7 +60,7 @@ const initState = fromJS({
     getRefundNumebr: '',
     // 退货单审批意见
     approvalInfoList: [],
-    // 查询待办事项下审批列表
+    // 查询审批列表
     processMsgInfo: {},
     // 查询退货单审批流程
     processDefinitions: [],
