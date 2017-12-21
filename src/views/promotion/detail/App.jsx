@@ -153,6 +153,7 @@ class PromotionDetail extends PureComponent {
                                 })(<TextArea
                                     disabled={!submitVisible}
                                     placeholder="请输入指定门店"
+                                    style={{ width: '300px'}}
                                     autosize={{ minRows: 4, maxRows: 6 }}
                                 />)}
                             </FormItem>
