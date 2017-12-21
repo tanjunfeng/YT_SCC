@@ -142,7 +142,6 @@ class InputItem extends Component {
                         onKeyDown={this.handleKeyDown}
                     />
                 </span>
-                <span style={{ paddingLeft: '35px'}}>12.23%</span>
                 {
                     !isAfterList &&
                     <span>
@@ -164,7 +163,7 @@ class InputItem extends Component {
                         }
                     </span>
                 }
-
+                <span style={{ paddingLeft: '35px'}}>12.23%</span>
             </li>
         );
     }
