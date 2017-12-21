@@ -77,14 +77,14 @@ const getPurchaseConditionList = conditions =>
             <li key={condition.key}>
                 <Row>
                     <div className="wd-396">
-                        <Col span={16}>
+                        <Col>
                             <FormItem label="购买类型">
                                 {getPurchaseType(condition)}
                             </FormItem>
                         </Col>
                     </div>
                     <div className="wd-317">
-                        <Col span={16}>
+                        <Col>
                             <FormItem label="条件类型">
                                 {getConditionType(condition)}
                             </FormItem>
@@ -106,21 +106,21 @@ const getRewardListConditionList = (purchaseConditionsRule) =>
         <li>
             <Row>
                 <div className="wd-396">
-                    <Col span={16}>
+                    <Col>
                         <FormItem label="购买类型">
                             {getPurchaseType(purchaseConditionsRule.condition)}
                         </FormItem>
                     </Col>
                 </div>
                 <div className="wd-317">
-                    <Col span={16}>
+                    <Col>
                         <FormItem label="条件类型">
                             {getConditionType(purchaseConditionsRule.condition)}
                         </FormItem>
                     </Col>
                 </div>
                 <div className="wd-297">
-                    <Col span={16}>
+                    <Col>
                         <FormItem label="优惠方式">
                             {getPreferentialBuyRule(purchaseConditionsRule.rule)}
                         </FormItem>
@@ -140,7 +140,7 @@ export const getRowFromFields = (promotion, columns) => columns.map(column => {
     const item = promotion[column.dataIndex];
     return (
         <Row key={column.dataIndex} type="flex" justify="start">
-            <Col span={16}>
+            <Col>
                 {column.render ?
                     <FormItem
                         label={column.title}
@@ -159,7 +159,7 @@ export const getRowFromFields = (promotion, columns) => columns.map(column => {
  */
 export const getNoConditions = promotionRule =>
     (<Row type="flex" justify="start">
-        <Col span={16}>
+        <Col>
             <FormItem label="优惠方式">
                 {getPreferentialBuyRule(promotionRule.orderRule)}
             </FormItem>
@@ -172,7 +172,7 @@ export const getNoConditions = promotionRule =>
 export const getPurchaseCondition = promotionRule =>
     (<div>
         <Row type="flex" justify="start">
-            <Col span={16}>
+            <Col>
                 <FormItem label="优惠种类">
                     {promotionRuleStatus[promotionRule.ruleName]}
                 </FormItem>
@@ -180,7 +180,7 @@ export const getPurchaseCondition = promotionRule =>
         </Row>
         <Row>
             <div className="wd-396">
-                <Col span={16}>
+                <Col>
                     <FormItem label="购买类型">
                         {getPurchaseType(
                             promotionRule.purchaseConditionsRule.condition
@@ -189,7 +189,7 @@ export const getPurchaseCondition = promotionRule =>
                 </Col>
             </div>
             <div className="wd-317">
-                <Col span={16}>
+                <Col>
                     <FormItem label="条件类型">
                         {getConditionType(
                             promotionRule.purchaseConditionsRule.condition
@@ -198,7 +198,7 @@ export const getPurchaseCondition = promotionRule =>
                 </Col>
             </div>
             <div className="wd-297">
-                <Col span={16}>
+                <Col>
                     <FormItem label="优惠方式">
                         {getPreferentialBuyRule(
                             promotionRule.purchaseConditionsRule.rule
@@ -217,7 +217,7 @@ export const getPurchaseCondition = promotionRule =>
 export const getRewardList = (promotionRule) =>
     (<div>
         <Row type="flex" justify="start">
-            <Col span={16}>
+            <Col>
                 <FormItem label="优惠种类">
                     {promotionRuleStatus[promotionRule.ruleName]}
                 </FormItem>
@@ -241,14 +241,14 @@ export const getTotalPurchaseList = (promotionRule) =>
     (<div>
         <Row type="flex" justify="start">
             <div className="wd-396">
-                <Col span={16}>
+                <Col>
                     <FormItem label="优惠种类">
                         {promotionRuleStatus[promotionRule.ruleName]}
                     </FormItem>
                 </Col>
             </div>
             <div className="wd-317">
-                <Col span={16}>
+                <Col>
                     <FormItem label="优惠方式">
                         {getPreferentialBuyRule(promotionRule.totalPurchaseListRule.rule)}
                     </FormItem>
