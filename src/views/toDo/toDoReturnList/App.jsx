@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-12-22 04:35:39
+ * @Last Modified time: 2017-12-22 04:48:29
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -122,7 +122,7 @@ class toDoReturnList extends PureComponent {
                 dataIndex: 'refundNo',
                 key: 'refundNo',
                 render: (text, record) => (
-                    <Link target="_blank" to={`/returnManagementList/returnManagementDetail/${record.refundNo}`}>{text}</Link>
+                    <Link target="_blank" to={`/returnManagementList/returnManagementDetail/${record.id}`}>{text}</Link>
                 )
             }, {
                 title: '地点类型',
