@@ -46,7 +46,7 @@ class LinkType extends Component {
             selected: selected ? String(selected) : '1',
             linkAddress,
             goodsId,
-            linkId,
+            linkId: linkId || undefined,
             linkKeyword,
             categories: [],
             isClassification,
