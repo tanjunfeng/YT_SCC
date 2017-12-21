@@ -466,6 +466,9 @@ export const orderTypeOptions = {
     }, {
         key: 'DSXS',
         value: '电商销售'
+    }, {
+        key: 'XCC',
+        value: '小超C端'
     }]
 }
 
