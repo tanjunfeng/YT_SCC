@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-15 17:06:25
+ * @Last Modified time: 2017-12-20 14:29:02
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -114,7 +114,7 @@ class toDoPurchaseList extends PureComponent {
                 dataIndex: 'purchaseNo',
                 key: 'purchaseNo',
                 render: (text, record) => (
-                    <Link target="_blank" to={`po/detail/${record.purchaseNo}`} onClick={this.toPurDetail}>{text}</Link>
+                    <Link target="_blank" to={`po/detail/${record.id}`} onClick={this.toPurDetail}>{text}</Link>
                 )
             }, {
                 title: '经营模式',
@@ -536,7 +536,7 @@ class toDoPurchaseList extends PureComponent {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`po/detail/${record.purchaseNo}`} >采购单详情</Link>
+                    <Link to={`po/detail/${record.id}`} >采购单详情</Link>
                 </Menu.Item>
                 {this.state.status === 0 && <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">

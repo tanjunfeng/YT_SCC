@@ -10,8 +10,15 @@ const FormItem = Form.Item;
 const getPreferentialBuyRule = rule => {
     const { preferentialWay, preferentialValue } = rule;
     let value = preferentialValue;
-    if (preferentialWay === 'DISCOUNTAMOUNT' || preferentialWay === 'FIXEDPRICE') {
-        value = `${preferentialValue}元`;
+    switch (preferentialWay) {
+        case 'PERCENTAGE':
+            value = `${preferentialValue}%`;
+            break;
+        case 'DISCOUNTAMOUNT':
+        case 'FIXEDPRICE':
+            value = `${preferentialValue}元`;
+            break;
+        default: break;
     }
     return `${preferentialWayStatus[preferentialWay]} ${value}`;
 }
