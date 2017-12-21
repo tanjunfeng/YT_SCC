@@ -274,7 +274,7 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 <Row>
                     {storeSelectorVisible ?
-                        <FormItem className="store">
+                        <FormItem className="store whole-field">
                             {getFieldDecorator('storeId', {
                                 initialValue: '',
                                 rules: [{ required: true, message: '请输入指定门店' }]
