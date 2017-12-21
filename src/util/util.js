@@ -316,6 +316,16 @@ class Utils {
         callback();
     }
 
+    /**
+     * 限制输入两位小数校验且不能为零
+     */
+    static limitTwoDecimalPlacesAndNotZero = (rule, value, callback) => {
+        if (value === 0) {
+            callback('不能为零');
+        }
+        Utils.limitTwoDecimalPlaces(rule, value, callback);
+    }
+
     static validatePhone = (rule, value, callback) => {
         if (!/^1[34578]\d{9}$/.test(value)) {
             callback('手机号码有误');
