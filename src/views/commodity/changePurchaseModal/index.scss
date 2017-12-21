@@ -1,6 +1,9 @@
 .purchase-modal {
+    .ant-modal-content{
+        width: 450px;
+    }
     .ant-modal-body {
-        max-height: 400px;
+        height: 580px;
         overflow-y: auto;
     }
     form .ant-input-number {
