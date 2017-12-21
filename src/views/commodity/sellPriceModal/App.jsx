@@ -188,7 +188,7 @@ class SellPriceModal extends Component {
         const filter = items.filter((item) => {
             return item.price === 0;
         })
-  
+
         return !!filter.length;
     }
 

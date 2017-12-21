@@ -1,39 +1,51 @@
-.order-management {
-    .manage-form {
-        .ant-input {
-            width: 240px;
-            padding: 0 10px;
-        }
-        .ant-select {
-            width: 240px;
-        }
-        .ywc-smind {
-            vertical-align: middle;
-        }
-        .ywc-smind {
-            width: 240px;
-        }
-    }
+.ant-table-pagination {
+    margin-right: 15px;
 }
-.ant-modal {
-    .order-modal-label {
-        display: inline-block;
-        min-width: 90px;
-        margin-right: 8px;
+
+.order-list {
+    &-form {
+        border: 1px solid #c4c5c9;
+        padding: 40px 0 20px;
+        margin: 10px 0;
+        .ant-form-item-label {
+            width: 110px;
+            .sc-form-item-label {
+                text-align: right;
+            }
+        }
+        .ant-form-item {
+            float: left;
+            display: block;
+            height: 42px;
+            .ywc-smind {
+                top: 4px;
+            }
+            @media screen and (min-width: 0px) and (max-width: 1400px) {
+                .ant-form-item-control-wrapper, .ant-select, .ywc-smind {
+                    width: 220px;
+                }
+            }
+            @media screen and (min-width: 1401px) and (max-width: 1600px) {
+                .ant-form-item-control-wrapper, .ant-select, .ywc-smind {
+                    width: 240px;
+                }
+            }
+            @media screen and (min-width: 1601px) and (max-width: 1920px) {
+                .ant-form-item-control-wrapper, .ant-select, .ywc-smind {
+                    width: 200px;
+                }
+            }
+            @media screen and (min-width: 1921px) {
+                .ant-form-item-control-wrapper, .ant-select, .ywc-smind {
+                    width: 260px;
+                }
+            }
+        }
     }
-    .ant-select {
-        width: 100px;
+    .button-group {
+        padding: 20px;
     }
-    textarea.ant-input {
-        width: 300px;
-        vertical-align: text-top;
-    }
-    .audit-pass {
-        display: inline-block;
-        margin: 50px 200px 0;
-        color: #f00;
-    }
-    .ant-form-inline .ant-form-explain {
-        left: 100px;
+    .ant-btn {
+        margin-right: 20px;
     }
 }

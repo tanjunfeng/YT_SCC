@@ -339,7 +339,6 @@ class List extends Component {
 
     numberRender = (text, record) => {
         const { purchaseOrderNo, productCode } = record;
-
         return (
             <InputNumber
                 defaultValue={text || 0}
@@ -354,7 +353,6 @@ class List extends Component {
     typeRender = (text, record) => {
         const keys = Object.keys(reason);
         const { purchaseOrderNo, productCode } = record;
-
         return (
             <Select
                 defaultValue={reason[text] || '其他'}

@@ -128,11 +128,6 @@ class ProcurementMaintenance extends PureComponent {
             showModal: true,
             isEdit: false
         })
-        // this.props.productAddPriceVisible({isVisible: true});
-        // this.props.fetchCheckMainSupplier({
-        //     supplierType: 1,
-        //     productId: match.params.id
-        // })
     }
 
     /**
@@ -143,14 +138,13 @@ class ProcurementMaintenance extends PureComponent {
             initData: record,
             showModal: true,
             isEdit: true
-        })
-        // this.props.UpdateProdPurchase({isVisible: true, record});
+        });
     }
 
     handleCloseModal = () => {
         this.setState({
             showModal: false
-        })
+        });
     }
 
     /**

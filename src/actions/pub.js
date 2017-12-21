@@ -17,10 +17,11 @@ import {
     availablProducts,
     supplierSearchBox,
     supplierAdrSearchBox,
-    getWarehouseInfo1,
+    getWarehouseLogic,
     queryAllCategoriesWithIconByParentId,
     getStoreInfo,
     queryProductByStore,
+    queryProductByTerm,
     querycategories,
     getFranchiseeInfo,
     findCanUseCompanyInfo,
@@ -30,7 +31,8 @@ import {
     queryPurchaseOrderProducts,
     queryDirectStores,
     queryPurchaseOrderBrands,
-    findCompanyBaseInfo as findCompaniesService
+    findCompanyBaseInfo as findCompaniesService,
+    modifypassword as modifypasswordActionService
 } from '../service';
 
 const pubValueList = {
@@ -53,10 +55,13 @@ const pubValueList = {
     // 供应商地点选择组件
     supplierAdrSearchBox,
     // 查询逻辑仓库列表
-    getWarehouseInfo1,
+    getWarehouseLogic,
     // 查询门店列表
     getStoreInfo,
+    // 通过分公司编号查询商品
     queryProductByStore,
+    // 查询全量商品
+    queryProductByTerm,
     // 根据分类名字或者编码查询指定等级的分类列表
     querycategories,
     // 查询加盟商
@@ -121,6 +126,25 @@ export const fetchCategorys = (params) => dispatch => (
             })
     })
 )
+
+// 修改密码
+const modifypasswordAction = (data) => ({
+    type: ActionType.MODIFY_PASSWORD,
+    payload: data,
+});
+
+export const modifypassword = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        modifypasswordActionService(params)
+            .then(res => {
+                dispatch(
+                    modifypasswordAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+);
 
 // 全国上下架
 const receiveAvailablProducts = (data) => ({

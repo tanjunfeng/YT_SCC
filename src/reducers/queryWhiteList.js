@@ -17,7 +17,6 @@ export default function (state = initState, action) {
     switch (action.type) {
         case ActionType.QUERY_WHITE_LIST:
             return state.set('data', action.payload);
-
         default:
             return state;
     }

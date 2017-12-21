@@ -1,453 +1,955 @@
 {
-    "timestamp": 1505369185859,
+    "timestamp": 1513670683064,
     "code": 200,
     "message": "请求成功",
     "exception": null,
     "data": {
         "pageNum": 1,
-        "pageSize": 4,
-        "total": 13,
+        "pageSize": 15,
+        "total": 206,
         "data": [
             {
-                "id": "HD1710069",
+                "id": "HD527",
                 "status": "unreleased",
                 "promotionType": "order_promo",
-                "promotionName": "bbb",
+                "promotionName": "   asdfasdfsafad     ",
                 "promotionDiscription": null,
-                "startDate": 1505270709000,
-                "endDate": 1506134709000,
+                "startDate": 1512113232000,
+                "endDate": 1516174032000,
                 "discountType": "percentage",
-                "quanifyAmount": 5,
-                "discount": 7,
+                "quanifyAmount": null,
+                "discount": null,
                 "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "createDate": 1513668896000,
+                "createUserId": "10027",
+                "publishDate": null,
+                "publishUserId": null,
                 "stores": null,
                 "promoCategoriesPo": null,
                 "companiesPoList": [],
-                "recordsPoList": []
-            },
-            {
-                "id": "HD1710067",
-                "status": "unreleased",
-                "promotionType": "order_promo",
-                "promotionName": "000促销",
-                "promotionDiscription": null,
-                "startDate": 1504499995000,
-                "endDate": 1505581202000,
-                "discountType": "percentage",
-                "quanifyAmount": null,
-                "discount": 95,
-                "note": "个地方根饭店",
-                "stores": null,
-                "promoCategoriesPo": {
-                    "promoId": "HD1710067",
-                    "categoryId": "1001",
-                    "categoryName": "饮料",
-                    "categoryLevel": 2
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": false,
+                    "ruleName": null,
+                    "orderRule": {
+                        "preferentialWay": "PERCENTAGE",
+                        "preferentialValue": 0.95
+                    },
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": null
                 },
-                "companiesPoList": [
-                    {
-                        "promoId": "HD1710067",
-                        "companyId": "10000",
-                        "companyName": "成都子公司"
-                    },
-                    {
-                        "promoId": "HD1710067",
-                        "companyId": "10003",
-                        "companyName": "四川雅堂小超总部"
-                    }
-                ],
-                "recordsPoList": []
+                "priority": 1,
+                "simpleDescription": "简易描述",
+                "detailDescription": "细描述"
             },
             {
-                "id": "HD1710066",
+                "id": "HD526",
                 "status": "unreleased",
                 "promotionType": "order_promo",
-                "promotionName": "999促销",
+                "promotionName": "asdfasfsdf",
                 "promotionDiscription": null,
-                "startDate": 1504499995000,
-                "endDate": 1505581202000,
+                "startDate": 1512112426000,
+                "endDate": 1516950826000,
                 "discountType": "percentage",
                 "quanifyAmount": null,
-                "discount": 95,
-                "note": "个地方根饭店",
-                "stores": null,
-                "promoCategoriesPo": {
-                    "promoId": "HD1710066",
-                    "categoryId": "1001",
-                    "categoryName": "饮料",
-                    "categoryLevel": 2
-                },
-                "companiesPoList": [
-                    {
-                        "promoId": "HD1710066",
-                        "companyId": "10000",
-                        "companyName": "成都子公司"
-                    },
-                    {
-                        "promoId": "HD1710066",
-                        "companyId": "10003",
-                        "companyName": "四川雅堂小超总部"
-                    },
-                    {
-                        "promoId": "HD1710066",
-                        "companyId": "10004",
-                        "companyName": "湖南子公司"
-                    }
-                ],
-                "recordsPoList": []
-            },
-            {
-                "id": "HD1710056",
-                "status": "unreleased",
-                "promotionType": "order_promo",
-                "promotionName": "sl活动",
-                "promotionDiscription": null,
-                "startDate": 1505442858000,
-                "endDate": 1505442858000,
-                "discountType": "percentage",
-                "quanifyAmount": null,
-                "discount": 90,
+                "discount": null,
                 "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "createDate": 1513667780000,
+                "createUserId": "10027",
+                "publishDate": null,
+                "publishUserId": null,
                 "stores": null,
                 "promoCategoriesPo": null,
                 "companiesPoList": [],
-                "recordsPoList": []
-            },
-            {
-                "id": "HD1710054",
-                "status": "unreleased",
-                "promotionType": "order_promo",
-                "promotionName": "test091310",
-                "promotionDiscription": null,
-                "startDate": 1505183623000,
-                "endDate": 1505788423000,
-                "discountType": "percentage",
-                "quanifyAmount": null,
-                "discount": 85,
-                "note": null,
-                "stores": null,
-                "promoCategoriesPo": {
-                    "promoId": "HD1710054",
-                    "categoryId": "xcate60",
-                    "categoryName": "饼干",
-                    "categoryLevel": 3
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": false,
+                    "ruleName": null,
+                    "orderRule": {
+                        "preferentialWay": "PERCENTAGE",
+                        "preferentialValue": 0.95
+                    },
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": null
                 },
-                "companiesPoList": [
-                    {
-                        "promoId": "HD1710054",
-                        "companyId": "10000",
-                        "companyName": "成都子公司"
-                    }
-                ],
-                "recordsPoList": []
+                "priority": 1,
+                "simpleDescription": " ",
+                "detailDescription": " "
             },
             {
-                "id": "HD1710053",
-                "status": "unreleased",
-                "promotionType": "order_promo",
-                "promotionName": "888促销",
-                "promotionDiscription": null,
-                "startDate": 1504499995000,
-                "endDate": 1505581202000,
-                "discountType": "percentage",
-                "quanifyAmount": null,
-                "discount": 95,
-                "note": "个地方根饭店",
-                "stores": null,
-                "promoCategoriesPo": {
-                    "promoId": "HD1710053",
-                    "categoryId": "1001",
-                    "categoryName": "饮料",
-                    "categoryLevel": 2
-                },
-                "companiesPoList": [
-                    {
-                        "promoId": "HD1710053",
-                        "companyId": "10000",
-                        "companyName": "成都子公司"
-                    },
-                    {
-                        "promoId": "HD1710053",
-                        "companyId": "10003",
-                        "companyName": "四川雅堂小超总部"
-                    },
-                    {
-                        "promoId": "HD1710053",
-                        "companyId": "10004",
-                        "companyName": "湖南子公司"
-                    }
-                ],
-                "recordsPoList": []
-            },
-            {
-                "id": "HD1710051",
-                "status": "unreleased",
-                "promotionType": "order_promo",
-                "promotionName": "777促销",
-                "promotionDiscription": null,
-                "startDate": 1504499995000,
-                "endDate": 1505581202000,
-                "discountType": "percentage",
-                "quanifyAmount": null,
-                "discount": 95,
-                "note": "个地方根饭店",
-                "stores": null,
-                "promoCategoriesPo": {
-                    "promoId": "HD1710051",
-                    "categoryId": "1001",
-                    "categoryName": "饮料",
-                    "categoryLevel": 2
-                },
-                "companiesPoList": [
-                    {
-                        "promoId": "HD1710051",
-                        "companyId": "10000",
-                        "companyName": "成都子公司"
-                    },
-                    {
-                        "promoId": "HD1710051",
-                        "companyId": "10003",
-                        "companyName": "四川雅堂小超总部"
-                    },
-                    {
-                        "promoId": "HD1710051",
-                        "companyId": "10004",
-                        "companyName": "湖南子公司"
-                    }
-                ],
-                "recordsPoList": []
-            },
-            {
-                "id": "HD1710050",
-                "status": "unreleased",
-                "promotionType": "order_promo",
-                "promotionName": "asdfasdfasfdf",
-                "promotionDiscription": null,
-                "startDate": 1504232928000,
-                "endDate": 1504924128000,
-                "discountType": "percentage",
-                "quanifyAmount": null,
-                "discount": 2,
-                "note": null,
-                "stores": null,
-                "promoCategoriesPo": null,
-                "companiesPoList": [],
-                "recordsPoList": []
-            },
-            {
-                "id": "HD1710033",
-                "status": "unreleased",
-                "promotionType": "order_promo",
-                "promotionName": "555促销",
-                "promotionDiscription": null,
-                "startDate": 1504499995000,
-                "endDate": 1505581202000,
-                "discountType": "percentage",
-                "quanifyAmount": 200,
-                "discount": 90,
-                "note": "你嘎哈呢分割后",
-                "stores": null,
-                "promoCategoriesPo": {
-                    "promoId": "HD1710033",
-                    "categoryId": "1001",
-                    "categoryName": "饮料",
-                    "categoryLevel": 2
-                },
-                "companiesPoList": [
-                    {
-                        "promoId": "HD1710033",
-                        "companyId": "10000",
-                        "companyName": "成都子公司"
-                    },
-                    {
-                        "promoId": "HD1710033",
-                        "companyId": "10003",
-                        "companyName": "四川雅堂小超总部"
-                    },
-                    {
-                        "promoId": "HD1710033",
-                        "companyId": "10004",
-                        "companyName": "湖南子公司"
-                    }
-                ],
-                "recordsPoList": [
-                    {
-                        "id": 7,
-                        "promoId": "HD1710033",
-                        "orderId": "100001708088014",
-                        "discount": 250
-                    }
-                ]
-            },
-            {
-                "id": "HD1710032",
-                "status": "ended",
-                "promotionType": "order_promo",
-                "promotionName": "444促销",
-                "promotionDiscription": null,
-                "startDate": 1505709595000,
-                "endDate": 1506358802000,
-                "discountType": "percentage",
-                "quanifyAmount": 100,
-                "discount": 98,
-                "note": "和规范化股份",
-                "stores": null,
-                "promoCategoriesPo": {
-                    "promoId": "HD1710032",
-                    "categoryId": "1001",
-                    "categoryName": "饮料",
-                    "categoryLevel": 2
-                },
-                "companiesPoList": [
-                    {
-                        "promoId": "HD1710032",
-                        "companyId": "10000",
-                        "companyName": "成都子公司"
-                    },
-                    {
-                        "promoId": "HD1710032",
-                        "companyId": "10003",
-                        "companyName": "四川雅堂小超总部"
-                    },
-                    {
-                        "promoId": "HD1710032",
-                        "companyId": "10004",
-                        "companyName": "湖南子公司"
-                    }
-                ],
-                "recordsPoList": [
-                    {
-                        "id": 4,
-                        "promoId": "HD1710032",
-                        "orderId": "100001708087968",
-                        "discount": 1000
-                    },
-                    {
-                        "id": 5,
-                        "promoId": "HD1710032",
-                        "orderId": "100001708087983",
-                        "discount": 100
-                    },
-                    {
-                        "id": 6,
-                        "promoId": "HD1710032",
-                        "orderId": "100001708087998",
-                        "discount": 600
-                    }
-                ]
-            },
-            {
-                "id": "HD1710031",
-                "status": "closed",
-                "promotionType": "order_promo",
-                "promotionName": "333促销",
-                "promotionDiscription": null,
-                "startDate": 1504499995000,
-                "endDate": 1505581202000,
-                "discountType": "percentage",
-                "quanifyAmount": 500,
-                "discount": 90,
-                "note": "很高很高分和",
-                "stores": null,
-                "promoCategoriesPo": null,
-                "companiesPoList": [
-                    {
-                        "promoId": "HD1710031",
-                        "companyId": "10000",
-                        "companyName": "成都子公司"
-                    },
-                    {
-                        "promoId": "HD1710031",
-                        "companyId": "10003",
-                        "companyName": "四川雅堂小超总部"
-                    },
-                    {
-                        "promoId": "HD1710031",
-                        "companyId": "10004",
-                        "companyName": "湖南子公司"
-                    }
-                ],
-                "recordsPoList": [
-                    {
-                        "id": 3,
-                        "promoId": "HD1710031",
-                        "orderId": "100001708087922",
-                        "discount": 300
-                    }
-                ]
-            },
-            {
-                "id": "HD1710030",
+                "id": "HD525",
                 "status": "released",
                 "promotionType": "order_promo",
-                "promotionName": "222促销",
+                "promotionName": "000427购买条件121904",
                 "promotionDiscription": null,
-                "startDate": 1505277595000,
-                "endDate": 1505408402000,
+                "startDate": 1513666966000,
+                "endDate": 1513839766000,
                 "discountType": "percentage",
-                "quanifyAmount": 200,
-                "discount": 85,
-                "note": "地方个地方",
-                "stores": null,
-                "promoCategoriesPo": {
-                    "promoId": "HD1710030",
-                    "categoryId": "1001",
-                    "categoryName": "饮料",
-                    "categoryLevel": 2
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "createDate": 1513667460000,
+                "createUserId": "10027",
+                "publishDate": 1513667464000,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD525",
+                    "storeId": "A000427"
                 },
+                "promoCategoriesPo": null,
                 "companiesPoList": [],
-                "recordsPoList": []
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "PURCHASECONDITION",
+                    "orderRule": null,
+                    "purchaseConditionsRule": {
+                        "condition": {
+                            "key": null,
+                            "purchaseType": "CATEGORY",
+                            "promoCategories": {
+                                "promoId": null,
+                                "categoryId": "xcate11",
+                                "categoryName": "冲调保健1",
+                                "categoryLevel": 2
+                            },
+                            "promoProduct": null,
+                            "conditionType": "AMOUNT",
+                            "conditionValue": 500
+                        },
+                        "rule": {
+                            "preferentialWay": "DISCOUNTAMOUNT",
+                            "preferentialValue": 501
+                        }
+                    },
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "000427购买条件121904",
+                "detailDescription": "000427购买条件121904"
             },
             {
-                "id": "HD1710029",
-                "status": "unreleased",
+                "id": "HD524",
+                "status": "ended",
                 "promotionType": "order_promo",
-                "promotionName": "111促销",
+                "promotionName": "测试门店的活动",
                 "promotionDiscription": null,
                 "startDate": 1504499995000,
                 "endDate": 1505581202000,
                 "discountType": "percentage",
-                "quanifyAmount": 50,
-                "discount": 95,
-                "note": "恢复换个",
-                "stores": null,
-                "promoCategoriesPo": {
-                    "promoId": "HD1710029",
-                    "categoryId": "1001",
-                    "categoryName": "饮料",
-                    "categoryLevel": 2
+                "quanifyAmount": null,
+                "discount": null,
+                "note": "备注",
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 1,
+                "createDate": 1513666741000,
+                "createUserId": "10086",
+                "publishDate": null,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD524",
+                    "storeId": "A000992,A000902,A000993"
                 },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "PURCHASECONDITION",
+                    "orderRule": null,
+                    "purchaseConditionsRule": {
+                        "condition": {
+                            "key": "1504499995000",
+                            "purchaseType": "CATEGORY",
+                            "promoCategories": {
+                                "promoId": null,
+                                "categoryId": "xxx8",
+                                "categoryName": "酒水",
+                                "categoryLevel": 3
+                            },
+                            "promoProduct": null,
+                            "conditionType": "QUANTITY",
+                            "conditionValue": 50
+                        },
+                        "rule": {
+                            "preferentialWay": "PERCENTAGE",
+                            "preferentialValue": 0.95
+                        }
+                    },
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "简易描述，限填20字",
+                "detailDescription": "详细描述，限填100字"
+            },
+            {
+                "id": "HD523",
+                "status": "released",
+                "promotionType": "order_promo",
+                "promotionName": "测试1219两个商品条件",
+                "promotionDiscription": null,
+                "startDate": 1513565700000,
+                "endDate": 1513738500000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "createDate": 1513666443000,
+                "createUserId": "10027",
+                "publishDate": 1513666453000,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD523",
+                    "storeId": "A002916"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "TOTALPUCHASELIST",
+                    "orderRule": null,
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513655002461",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "xprod347938",
+                                    "productName": "桃李吉士排面包(110g)"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 5
+                            },
+                            {
+                                "key": "1513666303212",
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate26",
+                                    "categoryName": "面包主食",
+                                    "categoryLevel": 2
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 500
+                            }
+                        ],
+                        "rule": {
+                            "preferentialWay": "PERCENTAGE",
+                            "preferentialValue": 20
+                        }
+                    }
+                },
+                "priority": 1,
+                "simpleDescription": "测试商品数量达到基准是否能生效",
+                "detailDescription": "测试商品数量达到基准是否能生效"
+            },
+            {
+                "id": "HD522",
+                "status": "closed",
+                "promotionType": "order_promo",
+                "promotionName": "测试1219两个商品条件",
+                "promotionDiscription": null,
+                "startDate": 1513565700000,
+                "endDate": 1513738500000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "createDate": 1513666335000,
+                "createUserId": "10027",
+                "publishDate": 1513666447000,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD522",
+                    "storeId": "A002916"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "TOTALPUCHASELIST",
+                    "orderRule": null,
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513655002461",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "xprod347938",
+                                    "productName": "桃李吉士排面包(110g)"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 5
+                            },
+                            {
+                                "key": "1513666303212",
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate26",
+                                    "categoryName": "面包主食",
+                                    "categoryLevel": 2
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 500
+                            }
+                        ],
+                        "rule": {
+                            "preferentialWay": "PERCENTAGE",
+                            "preferentialValue": 10
+                        }
+                    }
+                },
+                "priority": 1,
+                "simpleDescription": "测试商品数量达到基准是否能生效",
+                "detailDescription": "测试商品数量达到基准是否能生效"
+            },
+            {
+                "id": "HD521",
+                "status": "unreleased",
+                "promotionType": "order_promo",
+                "promotionName": "测试1219两个商品条件",
+                "promotionDiscription": null,
+                "startDate": 1513565700000,
+                "endDate": 1513738500000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "createDate": 1513666334000,
+                "createUserId": "10027",
+                "publishDate": null,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD521",
+                    "storeId": "A002916"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "TOTALPUCHASELIST",
+                    "orderRule": null,
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513655002461",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "xprod347938",
+                                    "productName": "桃李吉士排面包(110g)"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 5
+                            },
+                            {
+                                "key": "1513666303212",
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate26",
+                                    "categoryName": "面包主食",
+                                    "categoryLevel": 2
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 500
+                            }
+                        ],
+                        "rule": {
+                            "preferentialWay": "PERCENTAGE",
+                            "preferentialValue": 10
+                        }
+                    }
+                },
+                "priority": 1,
+                "simpleDescription": "测试商品数量达到基准是否能生效",
+                "detailDescription": "测试商品数量达到基准是否能生效"
+            },
+            {
+                "id": "HD520",
+                "status": "unreleased",
+                "promotionType": "order_promo",
+                "promotionName": "测试使用区域 所选门店",
+                "promotionDiscription": null,
+                "startDate": 1514875748000,
+                "endDate": 1517035748000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "createDate": 1513666178000,
+                "createUserId": "10027",
+                "publishDate": null,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD520",
+                    "storeId": "A000999, A000900, A000991"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": false,
+                    "ruleName": null,
+                    "orderRule": {
+                        "preferentialWay": "PERCENTAGE",
+                        "preferentialValue": 0.95
+                    },
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "简易描述",
+                "detailDescription": "详细描述"
+            },
+            {
+                "id": "HD519",
+                "status": "unreleased",
+                "promotionType": "order_promo",
+                "promotionName": "测试使用区域 所选门店",
+                "promotionDiscription": null,
+                "startDate": 1514875748000,
+                "endDate": 1517035748000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "createDate": 1513666174000,
+                "createUserId": "10027",
+                "publishDate": null,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD519",
+                    "storeId": "A000999, A000900, A000991"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": false,
+                    "ruleName": null,
+                    "orderRule": {
+                        "preferentialWay": "PERCENTAGE",
+                        "preferentialValue": 0.95
+                    },
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "简易描述",
+                "detailDescription": "详细描述"
+            },
+            {
+                "id": "HD518",
+                "status": "closed",
+                "promotionType": "order_promo",
+                "promotionName": "测试使用区域 taoqy",
+                "promotionDiscription": null,
+                "startDate": 1512110826000,
+                "endDate": 1516690026000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "createDate": 1513666064000,
+                "createUserId": "10027",
+                "publishDate": 1513666667000,
+                "publishUserId": null,
+                "stores": null,
+                "promoCategoriesPo": null,
                 "companiesPoList": [
                     {
-                        "promoId": "HD1710029",
+                        "promoId": "HD518",
                         "companyId": "10000",
                         "companyName": "成都子公司"
                     },
                     {
-                        "promoId": "HD1710029",
-                        "companyId": "10003",
-                        "companyName": "四川雅堂小超总部"
-                    },
-                    {
-                        "promoId": "HD1710029",
-                        "companyId": "10004",
-                        "companyName": "湖南子公司"
+                        "promoId": "HD518",
+                        "companyId": "100028",
+                        "companyName": "雅堂小超"
                     }
                 ],
                 "recordsPoList": [
                     {
-                        "id": 1,
-                        "promoId": "HD1710029",
-                        "orderId": "100001708087877",
-                        "discount": 200
-                    },
-                    {
-                        "id": 2,
-                        "promoId": "HD1710029",
-                        "orderId": "100001708087892",
-                        "discount": 500
+                        "id": 315,
+                        "promoId": "HD518",
+                        "orderId": "100002017121900038",
+                        "discount": 7.13
                     }
-                ]
+                ],
+                "promotionRule": {
+                    "useConditionRule": false,
+                    "ruleName": null,
+                    "orderRule": {
+                        "preferentialWay": "PERCENTAGE",
+                        "preferentialValue": 0.95
+                    },
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "简易描述",
+                "detailDescription": "详细描述"
+            },
+            {
+                "id": "HD517",
+                "status": "closed",
+                "promotionType": "order_promo",
+                "promotionName": "测试1219两个商品条件",
+                "promotionDiscription": null,
+                "startDate": 1513565700000,
+                "endDate": 1513738500000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 0,
+                "isSuperposeProOrCouDiscount": 0,
+                "createDate": 1513666054000,
+                "createUserId": "10027",
+                "publishDate": 1513666350000,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD517",
+                    "storeId": "A002916"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "TOTALPUCHASELIST",
+                    "orderRule": null,
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": null,
+                    "totalPurchaseListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513655002461",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "xprod347938",
+                                    "productName": "桃李吉士排面包(110g)"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 5
+                            },
+                            {
+                                "key": "1513665359768",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "xprod347927",
+                                    "productName": "桃李"
+                                },
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 600
+                            }
+                        ],
+                        "rule": {
+                            "preferentialWay": "PERCENTAGE",
+                            "preferentialValue": 10
+                        }
+                    }
+                },
+                "priority": 1,
+                "simpleDescription": "测试商品数量达到基准是否能生效",
+                "detailDescription": "测试商品数量达到基准是否能生效"
+            },
+            {
+                "id": "HD516",
+                "status": "closed",
+                "promotionType": "order_promo",
+                "promotionName": "奖励列表-折扣blff",
+                "promotionDiscription": null,
+                "startDate": 1513665634000,
+                "endDate": 1514702434000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 1,
+                "isSuperposeProOrCouDiscount": 1,
+                "createDate": 1513665993000,
+                "createUserId": "10027",
+                "publishDate": 1513666683000,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD516",
+                    "storeId": "A000521"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [
+                    {
+                        "id": 316,
+                        "promoId": "HD516",
+                        "orderId": "100042017121900039",
+                        "discount": 1782
+                    }
+                ],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "REWARDLIST",
+                    "orderRule": null,
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513665735807",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "60000117016",
+                                    "productName": "金龙鱼清香稻5KG"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 12
+                            },
+                            {
+                                "key": "1513665754783",
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 500
+                            }
+                        ],
+                        "purchaseConditionsRule": {
+                            "condition": {
+                                "key": null,
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 12
+                            },
+                            "rule": {
+                                "preferentialWay": "PERCENTAGE",
+                                "preferentialValue": 54
+                            }
+                        }
+                    },
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "奖励列表-折扣金额-fxh",
+                "detailDescription": "奖励列表-折扣金额-fxh"
+            },
+            {
+                "id": "HD515",
+                "status": "unreleased",
+                "promotionType": "order_promo",
+                "promotionName": "奖励列表-折扣金额",
+                "promotionDiscription": null,
+                "startDate": 1513665634000,
+                "endDate": 1514702434000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 1,
+                "isSuperposeProOrCouDiscount": 1,
+                "createDate": 1513665934000,
+                "createUserId": "10018",
+                "publishDate": null,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD515",
+                    "storeId": "A000521"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "REWARDLIST",
+                    "orderRule": null,
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513665735807",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "60000117016",
+                                    "productName": "金龙鱼清香稻5KG"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 12
+                            },
+                            {
+                                "key": "1513665754783",
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 500
+                            }
+                        ],
+                        "purchaseConditionsRule": {
+                            "condition": {
+                                "key": null,
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 12
+                            },
+                            "rule": {
+                                "preferentialWay": "PERCENTAGE",
+                                "preferentialValue": 54
+                            }
+                        }
+                    },
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "奖励列表-折扣金额-fxh",
+                "detailDescription": "奖励列表-折扣金额-fxh"
+            },
+            {
+                "id": "HD514",
+                "status": "unreleased",
+                "promotionType": "order_promo",
+                "promotionName": "奖励列表-折扣金额",
+                "promotionDiscription": null,
+                "startDate": 1513665634000,
+                "endDate": 1514702434000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 1,
+                "isSuperposeProOrCouDiscount": 1,
+                "createDate": 1513665921000,
+                "createUserId": "10018",
+                "publishDate": null,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD514",
+                    "storeId": "A000521"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "REWARDLIST",
+                    "orderRule": null,
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513665735807",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "60000117016",
+                                    "productName": "金龙鱼清香稻5KG"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 12
+                            },
+                            {
+                                "key": "1513665754783",
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 500
+                            }
+                        ],
+                        "purchaseConditionsRule": {
+                            "condition": {
+                                "key": null,
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 12
+                            },
+                            "rule": {
+                                "preferentialWay": "DISCOUNTAMOUNT",
+                                "preferentialValue": 126
+                            }
+                        }
+                    },
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "奖励列表-折扣金额-fxh",
+                "detailDescription": "奖励列表-折扣金额-fxh"
+            },
+            {
+                "id": "HD513",
+                "status": "unreleased",
+                "promotionType": "order_promo",
+                "promotionName": "奖励列表-折扣金额",
+                "promotionDiscription": null,
+                "startDate": 1513665634000,
+                "endDate": 1514702434000,
+                "discountType": "percentage",
+                "quanifyAmount": null,
+                "discount": null,
+                "note": null,
+                "type": 0,
+                "isSuperposeUserDiscount": 1,
+                "isSuperposeProOrCouDiscount": 1,
+                "createDate": 1513665906000,
+                "createUserId": "10018",
+                "publishDate": null,
+                "publishUserId": null,
+                "stores": {
+                    "promoId": "HD513",
+                    "storeId": "A000521"
+                },
+                "promoCategoriesPo": null,
+                "companiesPoList": [],
+                "recordsPoList": [],
+                "promotionRule": {
+                    "useConditionRule": true,
+                    "ruleName": "REWARDLIST",
+                    "orderRule": null,
+                    "purchaseConditionsRule": null,
+                    "rewardListRule": {
+                        "conditions": [
+                            {
+                                "key": "1513665735807",
+                                "purchaseType": "PRODUCT",
+                                "promoCategories": null,
+                                "promoProduct": {
+                                    "productId": "60000117016",
+                                    "productName": "金龙鱼清香稻5KG"
+                                },
+                                "conditionType": "QUANTITY",
+                                "conditionValue": 12
+                            },
+                            {
+                                "key": "1513665754783",
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 500
+                            }
+                        ],
+                        "purchaseConditionsRule": {
+                            "condition": {
+                                "key": null,
+                                "purchaseType": "CATEGORY",
+                                "promoCategories": {
+                                    "promoId": null,
+                                    "categoryId": "xcate4",
+                                    "categoryName": "生鲜日配",
+                                    "categoryLevel": 1
+                                },
+                                "promoProduct": null,
+                                "conditionType": "AMOUNT",
+                                "conditionValue": 1000
+                            },
+                            "rule": {
+                                "preferentialWay": "DISCOUNTAMOUNT",
+                                "preferentialValue": 126
+                            }
+                        }
+                    },
+                    "totalPurchaseListRule": null
+                },
+                "priority": 1,
+                "simpleDescription": "奖励列表-折扣金额-fxh",
+                "detailDescription": "奖励列表-折扣金额-fxh"
             }
         ]
     },

@@ -42,7 +42,8 @@
                 "barCodeUrl": "group1/M00/01/47/rB4KPVmlEcaAJViWAAABOApAlY4972.png",
                 "totalTaxAmount": 69.74,
                 "totalWithoutTaxAmount": 410.26,
-                "totalAmount": 480.00
+                "totalAmount": 480.00,
+                "businessMode": 0
             },
             {
                 "id": 59,
@@ -64,8 +65,8 @@
                 "secondCategoryName": null,
                 "currencyCode": "CNY",
                 "branchCompanyId": "10000",
-                "purchaseOrderType": 0,
-                "status": 2,
+                "purchaseOrderType": 1,
+                "status": 3,
                 "failedReason": null,
                 "auditUserId": "10018",
                 "createTime": 1504072342000,
@@ -78,7 +79,8 @@
                 "barCodeUrl": "group1/M00/01/47/rB4KPVmmUreAN6CRAAABJ-Gl2rY967.png",
                 "totalTaxAmount": 0.99,
                 "totalWithoutTaxAmount": 99.01,
-                "totalAmount": 100.00
+                "totalAmount": 100.00,
+                "businessMode": 0
             },
             {
                 "id": 58,
@@ -100,7 +102,7 @@
                 "secondCategoryName": null,
                 "currencyCode": "CNY",
                 "branchCompanyId": "10000",
-                "purchaseOrderType": 0,
+                "purchaseOrderType": 2,
                 "status": 0,
                 "failedReason": null,
                 "auditUserId": null,
@@ -114,7 +116,8 @@
                 "barCodeUrl": "group1/M00/01/48/rB4KPFmlWauAPzg9AAABT4Fa9bM911.png",
                 "totalTaxAmount": 348.37,
                 "totalWithoutTaxAmount": 2049.23,
-                "totalAmount": 2397.60
+                "totalAmount": 2397.60,
+                "businessMode": 1
             },
             {
                 "id": 57,
@@ -150,7 +153,8 @@
                 "barCodeUrl": "group1/M00/01/47/rB4KPVmlWF-AZaUWAAABSNhemyI418.png",
                 "totalTaxAmount": 0.00,
                 "totalWithoutTaxAmount": 0.00,
-                "totalAmount": 0.00
+                "totalAmount": 0.00,
+                "businessMode": 0
             },
             {
                 "id": 56,
@@ -186,7 +190,8 @@
                 "barCodeUrl": "group1/M00/01/47/rB4KPlmlVkeAMbk1AAABTlcTtbw849.png",
                 "totalTaxAmount": 0.00,
                 "totalWithoutTaxAmount": 0.00,
-                "totalAmount": 0.00
+                "totalAmount": 0.00,
+                "businessMode": 1
             },
             {
                 "id": 55,
@@ -222,7 +227,8 @@
                 "barCodeUrl": "group1/M00/01/48/rB4KPFmlVhqAe7dOAAABTpELdDs590.png",
                 "totalTaxAmount": 0.00,
                 "totalWithoutTaxAmount": 0.00,
-                "totalAmount": 0.00
+                "totalAmount": 0.00,
+                "businessMode": 0
             },
             {
                 "id": 54,
@@ -258,7 +264,8 @@
                 "barCodeUrl": "group1/M00/01/46/rB4KPlmlQCiAOwXcAAABTNb5DhE266.png",
                 "totalTaxAmount": 99.47,
                 "totalWithoutTaxAmount": 9947.33,
-                "totalAmount": 10046.80
+                "totalAmount": 10046.80,
+                "businessMode": 0
             },
             {
                 "id": 53,
@@ -294,7 +301,8 @@
                 "barCodeUrl": "group1/M00/01/47/rB4KPFmlOIKAP2J1AAABSSeWu1k616.png",
                 "totalTaxAmount": 58.12,
                 "totalWithoutTaxAmount": 341.88,
-                "totalAmount": 400.00
+                "totalAmount": 400.00,
+                "businessMode": 1
             },
             {
                 "id": 52,
@@ -330,7 +338,8 @@
                 "barCodeUrl": "group1/M00/01/47/rB4KPVmlJ2SAZTuYAAABTu7JCjU277.png",
                 "totalTaxAmount": 581.20,
                 "totalWithoutTaxAmount": 3418.80,
-                "totalAmount": 4000.00
+                "totalAmount": 4000.00,
+                "businessMode": 0
             },
             {
                 "id": 51,
@@ -366,7 +375,8 @@
                 "barCodeUrl": "group1/M00/01/46/rB4KPlmlEpCAc9AmAAABRm7ThM0860.png",
                 "totalTaxAmount": 581.20,
                 "totalWithoutTaxAmount": 3418.80,
-                "totalAmount": 4000.00
+                "totalAmount": 4000.00,
+                "businessMode": 0
             },
             {
                 "id": 48,
@@ -402,7 +412,8 @@
                 "barCodeUrl": "group1/M00/01/47/rB4KPFmlD0-AWihSAAABSKUTrOM145.png",
                 "totalTaxAmount": 581.20,
                 "totalWithoutTaxAmount": 3418.80,
-                "totalAmount": 4000.00
+                "totalAmount": 4000.00,
+                "businessMode": 0
             },
             {
                 "id": 47,
@@ -438,7 +449,8 @@
                 "barCodeUrl": "group1/M00/01/46/rB4KPVmlCWeAHdYgAAABK4kL-3g860.png",
                 "totalTaxAmount": 0.00,
                 "totalWithoutTaxAmount": 0.00,
-                "totalAmount": 0.00
+                "totalAmount": 0.00,
+                "businessMode": 0
             },
             {
                 "id": 45,
@@ -474,7 +486,8 @@
                 "barCodeUrl": "group1/M00/01/46/rB4KPVmlBcGAANyLAAABSPQyfw4816.png",
                 "totalTaxAmount": 581.20,
                 "totalWithoutTaxAmount": 3418.80,
-                "totalAmount": 4000.00
+                "totalAmount": 4000.00,
+                "businessMode": 0
             },
             {
                 "id": 43,
@@ -510,7 +523,8 @@
                 "barCodeUrl": "group1/M00/01/47/rB4KPFmlAbOABBIIAAABScYyPqY595.png",
                 "totalTaxAmount": 5.23,
                 "totalWithoutTaxAmount": 47.57,
-                "totalAmount": 52.80
+                "totalAmount": 52.80,
+                "businessMode": 0
             },
             {
                 "id": 42,
@@ -546,7 +560,8 @@
                 "barCodeUrl": "group1/M00/01/46/rB4KPlmlAReAC2LRAAABSCuCmw0900.png",
                 "totalTaxAmount": 581.20,
                 "totalWithoutTaxAmount": 3418.80,
-                "totalAmount": 4000.00
+                "totalAmount": 4000.00,
+                "businessMode": 0
             },
             {
                 "id": 41,
@@ -582,7 +597,8 @@
                 "barCodeUrl": "group1/M00/01/46/rB4KPVmk3y-AfWf3AAABRS0Edko023.png",
                 "totalTaxAmount": 668.38,
                 "totalWithoutTaxAmount": 3931.62,
-                "totalAmount": 4600.00
+                "totalAmount": 4600.00,
+                "businessMode": 0
             },
             {
                 "id": 40,
@@ -618,7 +634,8 @@
                 "barCodeUrl": "group1/M00/01/46/rB4KPFmk0TGAVLnQAAABQORXOj8362.png",
                 "totalTaxAmount": 581.20,
                 "totalWithoutTaxAmount": 3418.80,
-                "totalAmount": 4000.00
+                "totalAmount": 4000.00,
+                "businessMode": 0
             },
             {
                 "id": 39,
@@ -654,7 +671,8 @@
                 "barCodeUrl": "group1/M00/01/46/rB4KPFmkyOuAOXWMAAABRJ-msks234.png",
                 "totalTaxAmount": 581.20,
                 "totalWithoutTaxAmount": 3418.80,
-                "totalAmount": 4000.00
+                "totalAmount": 4000.00,
+                "businessMode": 0
             },
             {
                 "id": 38,
@@ -690,7 +708,8 @@
                 "barCodeUrl": "group1/M00/01/45/rB4KPlmkxkCAE8iMAAABStkPZB8981.png",
                 "totalTaxAmount": 0.00,
                 "totalWithoutTaxAmount": 0.00,
-                "totalAmount": 0.00
+                "totalAmount": 0.00,
+                "businessMode": 0
             },
             {
                 "id": 37,
@@ -726,7 +745,8 @@
                 "barCodeUrl": "group1/M00/01/44/rB4KPlmkxHOAU8BlAAABOWB7Z3s015.png",
                 "totalTaxAmount": 0.00,
                 "totalWithoutTaxAmount": 0.00,
-                "totalAmount": 0.00
+                "totalAmount": 0.00,
+                "businessMode": 0
             }
         ]
     },

@@ -1,0 +1,39 @@
+{
+    "timestamp": 1511319986998,
+    "code": 200,
+    "message": {},
+    "exception": null,
+    "data": {
+        "id": "60000484352",
+        "name": "资生堂洗颜专科清柔洁面乳（成都UAT）",
+        "invoiceLimit": 0,
+        "firstLevelCategoryName": "休闲食品",
+        "secondLevelCategoryName": "糖果",
+        "thirdLevelCategoryName": "麦片餐糊",
+        "fourthLevelCategoryName": null,
+        "saleName": "资生堂洗颜专科清柔洁面乳",
+        "inputTaxRate": 12,
+        "deductibleTaxRate": 12,
+        "brandName": "Aji威化",
+        "supplyChainStatus": 2,
+        "purchaseInsideNumber": 1,
+        "salesInsideNumber": 1,
+        "productCode": "1000000",
+        "internationalCodes": [
+            {
+                "id": "60000484352",
+                "productId": "60000484352",
+                "internationalCode": "4901872818310",
+                "barcodeType": null
+            }
+        ],
+        "minUnit": "瓶",
+        "purchasePrice": 12.00,
+        "suggestPrice": 45.00,
+        "deliveryDay": 12,
+        "sellFullCase": 0,
+        "fullCaseUnit": null,
+        "fullCaseUnitId": null
+    },
+    "success": true
+}
