@@ -98,7 +98,7 @@ class FloorItem extends Component {
                     title,
                     url: encodeURI(url),
                     adType,
-                    urlType: 2
+                    urlType: 5
                 }).then(() => {
                     this.setState({
                         titleVisible: false
