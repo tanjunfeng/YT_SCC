@@ -72,7 +72,8 @@ export const participateList = [{
     dataIndex: 'orderId'
 }, {
     title: '订单时间',
-    dataIndex: 'submitTime'
+    dataIndex: 'submitTime',
+    render: timestamp => Util.getTime(timestamp)
 }, {
     title: '订单状态',
     dataIndex: 'orderStateDesc'
