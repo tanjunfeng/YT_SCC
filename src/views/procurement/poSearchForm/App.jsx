@@ -231,15 +231,15 @@ class PoSearchForm extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { auth } = this.props;
         return (
-            <Form layout="inline" className="po-search-form">
+            <Form layout="inline" className="po-mng-list">
                 <Row gutter={40}>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="采购单号" >
                             {getFieldDecorator('purchaseNumber', {
                             })(<Input size="default" />)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="地点类型">
                             {getFieldDecorator('locTypeCode', {
                                 initialValue: locType.defaultValue
@@ -253,7 +253,7 @@ class PoSearchForm extends PureComponent {
                                 </Select>)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="地点">
                             <SearchMind
                                 style={{ zIndex: 101 }}
@@ -284,9 +284,7 @@ class PoSearchForm extends PureComponent {
                             />
                         </FormItem>
                     </Col>
-                </Row>
-                <Row gutter={40}>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="采购单类型">
                             {getFieldDecorator('purchaseTypeCode', {
                                 initialValue: poType.defaultValue
@@ -303,7 +301,7 @@ class PoSearchForm extends PureComponent {
                                 )}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="状态">
                             {getFieldDecorator('statusCode', {
                                 initialValue: poStatus.defaultValue
@@ -319,7 +317,7 @@ class PoSearchForm extends PureComponent {
                                 </Select>)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="大类">
                             <SearchMind
                                 compKey="comBigClass"
@@ -349,9 +347,7 @@ class PoSearchForm extends PureComponent {
                             />
                         </FormItem>
                     </Col>
-                </Row>
-                <Row gutter={40}>
-                    <Col span={8}>
+                    <Col>
                         {/* 供应商 */}
                         <FormItem label="供应商">
                             <SearchMind
@@ -382,7 +378,7 @@ class PoSearchForm extends PureComponent {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="供应商地点">
                             <SearchMind
                                 compKey="comSupplierLoc"
@@ -415,7 +411,7 @@ class PoSearchForm extends PureComponent {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="经营模式">
                             {getFieldDecorator('businessModeCode', {
                                 initialValue: businessModeType.defaultValue
@@ -429,9 +425,7 @@ class PoSearchForm extends PureComponent {
                                 </Select>)}
                         </FormItem>
                     </Col>
-                </Row>
-                <Row gutter={40}>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="创建日期">
                             {getFieldDecorator('createTime')(
                                 <RangePicker
@@ -448,7 +442,7 @@ class PoSearchForm extends PureComponent {
                             )}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="审批日期">
                             {getFieldDecorator('auditTime')(
                                 <RangePicker
