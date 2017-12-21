@@ -199,7 +199,7 @@ class RefundModal extends PureComponent {
                                             退款金额:
                                         </span>
                                         {getFieldDecorator('inputNumber', {
-                                            initialValue: this.props.totalPaidAmount
+                                            initialValue: this.props.value
                                         })(
                                             <InputNumber
                                                 min={0.00}
@@ -247,7 +247,8 @@ RefundModal.propTypes = {
     payAuditModalVisible: PropTypes.bool,
     modifyCauseModalVisible: PropTypes.func,
     totalAmount: PropTypes.number,
-    totalPaidAmount: PropTypes.number
+    totalPaidAmount: PropTypes.number,
+    value: PropTypes.number,
 }
 
 RefundModal.defaultProps = {

@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { pubFetchValueList } from '../../actions/pub';
 import SearchMind from '../../components/searchMind';
-import './BranchCompany.scss';
+import './SearchMind.scss';
 
 @connect(() => ({}), dispatch => bindActionCreators({
     pubFetchValueList
@@ -17,18 +17,18 @@ import './BranchCompany.scss';
 
 class BranchCompany extends PureComponent {
     componentWillReceiveProps(nextProps) {
-        if (nextProps.value.id === '') {
-            this.defaultValue = '';
+        if (this.props.value.id !== '' && nextProps.value.id === '') {
             this.searchMind.reset();
         }
+        if (nextProps.value.reset && !this.props.value.reset) {
+            this.handleClear();
+        }
     }
-
-    defaultValue = '';
 
     /**
      * 子公司-清除
      */
-    handleSubCompanyClear = () => {
+    handleClear = () => {
         this.searchMind.reset();
         this.props.onChange({ id: '', name: '' });
     }
@@ -36,7 +36,7 @@ class BranchCompany extends PureComponent {
     /**
      * 子公司-值清单
      */
-    handleSubCompanyChoose = ({ record }) => {
+    handleChoose = ({ record }) => {
         this.props.onChange(record);
     }
 
@@ -44,7 +44,6 @@ class BranchCompany extends PureComponent {
         return (
             <SearchMind
                 compKey="spId"
-                defaultValue={this.defaultValue}
                 ref={ref => { this.searchMind = ref }}
                 fetch={(params) =>
                     // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodSell/findCompanyBaseInfo
@@ -54,8 +53,8 @@ class BranchCompany extends PureComponent {
                     }, 'findCompanyBaseInfo')
                 }
                 disabled={this.props.disabled}
-                onChoosed={this.handleSubCompanyChoose}
-                onClear={this.handleSubCompanyClear}
+                onChoosed={this.handleChoose}
+                onClear={this.handleClear}
                 renderChoosedInputRaw={(row) => (
                     <div>{row.id} - {row.name}</div>
                 )}

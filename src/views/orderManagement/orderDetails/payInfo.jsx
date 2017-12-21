@@ -35,6 +35,10 @@ class PayInformation extends PureComponent {
     constructor(props) {
         super(props);
 
+        this.state = {
+            amount: null
+        }
+
         this.columns = [{
             title: '序号',
             dataIndex: 'sort',
@@ -145,6 +149,9 @@ class PayInformation extends PureComponent {
      */
     handleAuditRefund = (record) => {
         this.props.modifyCauseModalVisible({ isVisible: true, record })
+        this.setState({
+            amount: record.amount
+        })
     }
 
     /**
@@ -231,26 +238,12 @@ class PayInformation extends PureComponent {
                         </div>
                     </div>
                 </div>
-                <div className="order-details-btns">
-                    <Row>
-                        <Col
-                            className="gutter-row"
-                            span={14}
-                            offset={10}
-                        >
-                            <Button
-                                size="default"
-                                onClick={() => {
-                                    this.props.history.replace('/orderList');
-                                }}
-                            >
-                                返回
-                            </Button>
-                        </Col>
-                    </Row>
-                </div>
                 <div>
-                    <RefundModal totalAmount={totalAmount} totalPaidAmount={totalPaidAmount} />
+                    <RefundModal
+                        totalAmount={totalAmount}
+                        totalPaidAmount={totalPaidAmount}
+                        value={this.state.amount}
+                    />
                 </div>
                 <div>
                     <PayModal totalAmount={totalAmount} />
@@ -262,7 +255,6 @@ class PayInformation extends PureComponent {
 
 PayInformation.propTypes = {
     paymentDetailData: PropTypes.objectOf(PropTypes.any),
-    history: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
     modifyPayModalVisible: PropTypes.func,
     fetchPaymentDetailInfo: PropTypes.func,

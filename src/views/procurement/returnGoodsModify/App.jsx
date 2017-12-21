@@ -11,10 +11,7 @@ import classnames from 'classnames';
 import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-    Row, Col, Select, DatePicker,
-    Input, Table, Button, Modal
-} from 'antd';
+import { Modal } from 'antd';
 import FormContent from './FormContent';
 import List from './List';
 import OpinionSteps from '../../../components/approvalFlowSteps';
@@ -25,15 +22,13 @@ import {
     clearReturnInfo,
     fetchReturnPoRcvDetail,
     putRefundProducts,
-    queryProcessDefinitions
+    queryProcessDefinitions,
+    clearList
 } from '../../../actions/procurement';
 
 import {
     pubFetchValueList,
 } from '../../../actions/pub';
-
-const Option = Select.Option;
-const { TextArea } = Input;
 
 
 @connect(state => ({
@@ -55,6 +50,8 @@ const { TextArea } = Input;
     clearRefundNo,
     // 清除新增编辑采购退货单数据
     clearReturnInfo,
+    // 清除lists
+    clearList,
     putRefundProducts,
     queryProcessDefinitions
 }, dispatch))
@@ -69,6 +66,7 @@ class ReturnGoodsModify extends PureComponent {
         poReturn: PropTypes.objectOf(PropTypes.any),
         history: PropTypes.objectOf(PropTypes.any),
         queryProcessDefinitions: PropTypes.func,
+        clearList: PropTypes.func,
     }
 
     static defaultProps = {
@@ -179,6 +177,7 @@ class ReturnGoodsModify extends PureComponent {
                     returnLists={this.props.returnLists}
                     clearReturnInfo={this.props.clearReturnInfo}
                     onShowModal={this.nodeModal}
+                    clearList={this.props.clearList}
                 />
                 {
                     this.state.opinionVisible
@@ -196,6 +195,12 @@ class ReturnGoodsModify extends PureComponent {
             </div>
         )
     }
+}
+
+ReturnGoodsModify.propTypes = {
+    clearReturnInfo: PropTypes.func,
+    putRefundProducts: PropTypes.objectOf(PropTypes.any),
+    returnLists: PropTypes.objectOf(PropTypes.any)
 }
 
 export default withRouter(ReturnGoodsModify)

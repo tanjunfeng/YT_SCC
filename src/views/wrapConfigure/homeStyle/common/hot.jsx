@@ -1,6 +1,12 @@
+/**
+ * @file App.jsx
+ * @author caoyanxuan,liujinyu
+ *
+ * 快捷导航
+ */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Carousel, Icon } from 'antd';
 import Common from './common';
 import { format } from './utils';
 
@@ -51,7 +57,6 @@ const colums = [
 
 @Common
 class HotItem extends Component {
-
     handleUpload(item, i) {
         this.props.handleUpload(item, i);
     }
@@ -70,7 +75,7 @@ class HotItem extends Component {
                 subTitle: null,
                 url: null,
                 icon: null,
-                adType: "FLOOR"
+                adType: 'FLOOR'
             };
             this.colums.push(item);
         }
@@ -84,9 +89,10 @@ class HotItem extends Component {
                         <img
                             src={
                                 this.colums[0].icon
-                                ? this.colums[0].icon
-                                : require(`../../../../images/default/${colums[0].width}x${colums[0].height}.png`)
+                                    ? this.colums[0].icon
+                                    : require(`../../../../images/default/${colums[0].width}x${colums[0].height}.png`)
                             }
+                            alt="热门推荐"
                             width={colums[0].imgWidth}
                             height={colums[0].imgHeight}
                         />
@@ -94,14 +100,15 @@ class HotItem extends Component {
                     <div className="home-style-hot-top-right">
                         <div
                             className="home-style-hot-item home-style-hot-item1"
-                            onClick={(e) => this.handleUpload(this.colums[1], colums[1], e)}    
+                            onClick={(e) => this.handleUpload(this.colums[1], colums[1], e)}
                         >
                             <img
                                 src={
                                     this.colums[1].icon
-                                    ? this.colums[1].icon
-                                    : require(`../../../../images/default/${colums[1].width}x${colums[1].height}.png`)
+                                        ? this.colums[1].icon
+                                        : require(`../../../../images/default/${colums[1].width}x${colums[1].height}.png`)
                                 }
+                                alt="热门推荐"
                                 width={colums[1].imgWidth}
                                 height={colums[1].imgHeight}
                             />
@@ -113,9 +120,10 @@ class HotItem extends Component {
                             <img
                                 src={
                                     this.colums[2].icon
-                                    ? this.colums[2].icon
-                                    : require(`../../../../images/default/${colums[2].width}x${colums[2].height}.png`)
+                                        ? this.colums[2].icon
+                                        : require(`../../../../images/default/${colums[2].width}x${colums[2].height}.png`)
                                 }
+                                alt="热门推荐"
                                 width={colums[2].imgWidth}
                                 height={colums[2].imgHeight}
                             />
@@ -130,9 +138,10 @@ class HotItem extends Component {
                         <img
                             src={
                                 this.colums[3].icon
-                                ? this.colums[3].icon
-                                : require(`../../../../images/default/${colums[3].width}x${colums[3].height}.png`)
+                                    ? this.colums[3].icon
+                                    : require(`../../../../images/default/${colums[3].width}x${colums[3].height}.png`)
                             }
+                            alt="热门推荐"
                             width={colums[3].imgWidth}
                             height={colums[3].imgHeight}
                         />
@@ -144,9 +153,10 @@ class HotItem extends Component {
                         <img
                             src={
                                 this.colums[4].icon
-                                ? this.colums[4].icon
-                                : require(`../../../../images/default/${colums[4].width}x${colums[4].height}.png`)
+                                    ? this.colums[4].icon
+                                    : require(`../../../../images/default/${colums[4].width}x${colums[4].height}.png`)
                             }
+                            alt="热门推荐"
                             width={colums[4].imgWidth}
                             height={colums[4].imgHeight}
                         />
@@ -158,9 +168,10 @@ class HotItem extends Component {
                         <img
                             src={
                                 this.colums[5].icon
-                                ? this.colums[5].icon
-                                : require(`../../../../images/default/${colums[5].width}x${colums[5].height}.png`)
+                                    ? this.colums[5].icon
+                                    : require(`../../../../images/default/${colums[5].width}x${colums[5].height}.png`)
                             }
+                            alt="热门推荐"
                             width={colums[5].imgWidth}
                             height={colums[5].imgHeight}
                         />

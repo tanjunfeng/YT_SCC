@@ -162,7 +162,11 @@ export const getConditionType = (form, licence) => {
             {getFieldValue(`${licence}Type`) === 'AMOUNT' ?
                 <FormItem>
                     {/* rewardListTypeAmount */}
+<<<<<<< HEAD
                     ￥{getFieldDecorator(`${licence}TypeAmount`, {
+=======
+                    {getFieldDecorator(`${licence}TypeAmount`, {
+>>>>>>> 08e793c89a9cbff7f7978722e4e1ee61ebd1cd4b
                         initialValue: 0,
                         rules: [
                             { required: true, message: '请输入累计商品金额' },

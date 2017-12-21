@@ -9,7 +9,140 @@ import moment from 'moment';
 import { TIME_FORMAT } from '../../constant/index';
 
 // 订单详情商品列表
+let message;
+let className;
 const goodsColumns = [{
+    title: '商品图片',
+    dataIndex: 'productImg',
+    key: 'productImg',
+    render: (text, record) => {
+        if (record.abnormalGoods) {
+            message = <span>{record.abnormalResonse}</span>;
+            className = 'abnormalResonse';
+        } else {
+            message = null
+            className = '';
+        }
+        return (
+            <div>
+                <img
+                    src={text}
+                    alt="未上传"
+                    style={{ width: 50, height: 50, verticalAlign: 'middle' }}
+                />
+                <div className={className}>{message}</div>
+            </div>
+        )
+    }
+}, {
+    title: '商品编码',
+    dataIndex: 'productCode',
+    key: 'productCode',
+    render: (text, record) => {
+        if (record.abnormalGoods) {
+            className = 'abnormalResonse-color';
+        } else {
+            className = '';
+        }
+        return (
+            <div>
+                <span className={className}>{text}</span>
+            </div>
+        )
+    }
+}, {
+    title: '商品条码',
+    dataIndex: 'internationalCodes',
+    key: 'internationalCodes',
+    render: (item, record) => {
+        if (record.abnormalGoods) {
+            className = 'abnormalResonse-color';
+        } else {
+            className = '';
+        }
+        if (item instanceof Array && item.length) {
+            return (
+                <div>
+                    <span className={className}>{item[0].internationalCode}</span>
+                </div>
+            )
+        }
+    }
+}, {
+    title: '商品名称',
+    dataIndex: 'productName',
+    key: 'productName',
+    render: (text, record) => {
+        if (record.abnormalGoods) {
+            className = 'abnormalResonse-color';
+        } else {
+            className = '';
+        }
+        return <span className={className}>{text}</span>;
+    }
+}, {
+    title: '商品分类',
+    dataIndex: 'commodifyClassify',
+    key: 'commodifyClassify',
+    render: (text, record) => {
+        let after = '';
+        if (record.thirdLevelCategoryName !== null) {
+            after = ` > ${record.thirdLevelCategoryName}`;
+        }
+        if (record.abnormalGoods) {
+            className = 'abnormalResonse-color';
+        } else {
+            className = '';
+        }
+        return <span className={className}>{record.secondLevelCategoryName}{after}</span>;
+    }
+}, {
+    title: '数量',
+    dataIndex: 'quantity',
+    key: 'quantity',
+    render: (text, record) => {
+        if (record.abnormalGoods) {
+            className = 'abnormalResonse-color';
+        } else {
+            className = '';
+        }
+        return <span className={className}>{text}</span>;
+    }
+}, {
+    title: '可用库存',
+    dataIndex: 'availableStock',
+    key: 'availableStock',
+    render: (text, record) => {
+        if (record.abnormalGoods) {
+            className = 'abnormalResonse-color';
+        } else {
+            className = '';
+        }
+        return <span className={className}>{text}</span>;
+    }
+}, {
+    title: '单价',
+    dataIndex: 'price',
+    key: 'price',
+    render: (text, record) => {
+        if (record.abnormalGoods) {
+            className = 'abnormalResonse-color';
+        } else {
+            className = '';
+        }
+        return <span className={className}>￥{Number(record.itemPrice.salePrice).toFixed(2)}</span>
+    }
+}, {
+    title: '金额',
+    dataIndex: 'money',
+    key: 'money',
+    render: (text, record) => (
+        <span className={className}>￥{Number(record.itemPrice.amount).toFixed(2)}</span>
+    )
+}];
+
+// 后台退货商品列表
+const goodsReturnsColumns = [{
     title: '商品图片',
     dataIndex: 'productImg',
     key: 'productImg',
@@ -50,13 +183,13 @@ const goodsColumns = [{
         return <span>{record.secondLevelCategoryName}{after}</span>;
     }
 }, {
-    title: '数量',
+    title: '订单数量',
     dataIndex: 'quantity',
     key: 'quantity',
 }, {
-    title: '可用库存',
-    dataIndex: 'availableStock',
-    key: 'availableStock',
+    title: '退货数量',
+    dataIndex: 'returnQuantity',
+    key: 'returnQuantity',
 }, {
     title: '单价',
     dataIndex: 'price',
@@ -120,6 +253,10 @@ const orderListColumns = [{
     dataIndex: 'branchCompanyName',
     key: 'branchCompanyName',
 }, {
+    title: '门店编号',
+    dataIndex: 'franchiseeStoreId',
+    key: 'franchiseeStoreId',
+}, {
     title: '加盟商编号',
     dataIndex: 'franchiseeId',
     key: 'franchiseeId',
@@ -180,7 +317,7 @@ const returnGoodsListColumns = [{
     }
 },
 {
-    title: '换货单状态',
+    title: '退货单状态',
     dataIndex: 'stateDetail',
     key: 'stateDetail'
 },
@@ -350,7 +487,7 @@ const returnGoodsTableColums = [{
     dataIndex: 'internationalCodes[0].internationalCode',
     key: 'internationalCodes[0].internationalCode',
     render: (text, record) => (
-        record.internationalCodes[0].internationalCode
+        record.internationalCodes[0].internationalCode || '-'
     )
 },
 {
@@ -420,7 +557,7 @@ const directSalesgoodsColumns = [{
 }, {
     title: '数量',
     dataIndex: 'quantity',
-    width: 120
+    width: 130
 }, {
     title: '单价',
     dataIndex: 'salePrice',
@@ -493,5 +630,6 @@ const distributionInformationColumns = [{
 export {
     goodsColumns, orderListColumns, returnGoodsListColumns,
     exchangeGoodsDetailColumns, directSalesgoodsColumns, exchangeGoodsListColumns,
-    distributionInformationColumns, returnGoodsTableColums
+    distributionInformationColumns, returnGoodsTableColums,
+    goodsReturnsColumns
 };

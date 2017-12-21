@@ -11,8 +11,8 @@ import {
     insertSupplierSettlementInfo,
     findAuditFailedReason,
     queryAllLargerRegionProvince,
-    getWarehouseInfo1,
-    getWarehouseInfo,
+    getWarehouseLogic,
+    getWarehousePhysical,
     insertSupplierAddressInfo
 } from '../service';
 
@@ -88,7 +88,7 @@ const receiveWarehouse = (data) => ({
 
 export const getWarehouse = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        getWarehouseInfo1(params)
+        getWarehouseLogic(params)
             .then(res => {
                 dispatch(
                     receiveWarehouse(res.data)
@@ -109,7 +109,7 @@ const receiveWarehouseInfo = (data) => ({
 
 export const fetchWarehouseInfo = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        getWarehouseInfo(params)
+        getWarehousePhysical(params)
             .then(res => {
                 dispatch(
                     receiveWarehouseInfo(res.data)

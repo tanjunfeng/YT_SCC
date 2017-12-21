@@ -1,57 +1,127 @@
 {
-  "timestamp": 1496629586173,
+  "timestamp": 1513146214227,
   "code": 200,
-  "message": null,
+  "message": "请求成功",
+  "exception": null,
   "data": {
-    "goodsPriceInfoVos": [
-      {
-        "id": 7,
-        "price1": 123.3,
-        "startNumber1": 10,
-        "endNumber1": 10,
-        "pricingId": 12,
-        "price2": 123.46,
-        "startNumber2": 10,
-        "endNumber2": 10,
-        "price3": 123,
-        "startNumber3": 10,
-        "endNumber3": 10,
-        "state": 0,
-        "cityCodes": null,
-        "provinceCodes": null,
-        "cityNames": "重庆,成都"
-      },
-      {
-        "id": 8,
-        "price1": 108,
-        "startNumber1": 10,
-        "endNumber1": 10,
-        "pricingId": 12,
-        "price2": 120,
-        "startNumber2": 10,
-        "endNumber2": 10,
-        "price3": 180,
-        "startNumber3": 10,
-        "endNumber3": 10,
-        "state": 0,
-        "cityCodes": null,
-        "provinceCodes": null,
-        "cityNames": "广州,成都"
-      }
-    ],
-    "provinceCityListVos": null,
-    "productVo": {
-      "id": "100",
-      "name": "黑人超白矿物盐牙膏90G",
-      "invoiceLimit": 0,
-      "firstLevelCategoryName": "家用清洁",
-      "secondLevelCategoryName": null,
-      "thirdLevelCategoryName": null,
-      "saleName": null,
-      "inputTaxRate": null,
-      "deductibleTaxRate": null,
-      "brandName": "三合"
+    "sellPriceInfoVos": {
+      "pageNum": 1,
+      "pageSize": 15,
+      "total": 3,
+      "data": [
+        {
+          "id": 606,
+          "productId": "60000117016",
+          "lowestPrice": 0.00,
+          "createTime": 1511516970000,
+          "modifyTime": 1511849320000,
+          "status": 1,
+          "branchCompanyId": "10003",
+          "branchCompanyName": "四川雅堂小超总部",
+          "suggestPrice": 42.00,
+          "deliveryDay": 7,
+          "salesInsideNumber": 1,
+          "minNumber": 3,
+          "deleteStatus": 0,
+          "modifyUserId": "10027",
+          "createUserId": "10027",
+          "sellSectionPrices": [
+            {
+              "id": 1327,
+              "price": 25.00,
+              "startNumber": 12,
+              "endNumber": 30,
+              "sellPriceId": 606,
+              "deleteStatus": 0
+            },
+            {
+              "id": 1328,
+              "price": 25.00,
+              "startNumber": 12,
+              "endNumber": 30,
+              "sellPriceId": 606,
+              "deleteStatus": 0
+            },
+            {
+              "id": 1329,
+              "price": 25.00,
+              "startNumber": 12,
+              "endNumber": 30,
+              "sellPriceId": 606,
+              "deleteStatus": 0
+            },
+            {
+              "id": 1330,
+              "price": 25.00,
+              "startNumber": 12,
+              "endNumber": 30,
+              "sellPriceId": 606,
+              "deleteStatus": 0
+            }
+          ],
+          "maxNumber": 323,
+          "preHarvestPinStatus": 0
+        },
+        {
+          "id": 635,
+          "productId": "60000117016",
+          "lowestPrice": 111.00,
+          "createTime": 1512625929000,
+          "modifyTime": null,
+          "status": 1,
+          "branchCompanyId": "10000",
+          "branchCompanyName": "成都子公司",
+          "suggestPrice": 42.00,
+          "deliveryDay": 7,
+          "salesInsideNumber": 1,
+          "minNumber": 1,
+          "deleteStatus": 0,
+          "modifyUserId": null,
+          "createUserId": "10027",
+          "sellSectionPrices": [
+            {
+              "id": 1356,
+              "price": 25.00,
+              "startNumber": 12,
+              "endNumber": 30,
+              "sellPriceId": 635,
+              "deleteStatus": 0
+            }
+          ],
+          "maxNumber": 1,
+          "preHarvestPinStatus": 0
+        },
+        {
+          "id": 645,
+          "productId": "60000117016",
+          "lowestPrice": 2.00,
+          "createTime": 1513132564000,
+          "modifyTime": null,
+          "status": 1,
+          "branchCompanyId": "10004",
+          "branchCompanyName": "湖南子公司",
+          "suggestPrice": 42.00,
+          "deliveryDay": 7,
+          "salesInsideNumber": 1,
+          "minNumber": 2,
+          "deleteStatus": 0,
+          "modifyUserId": null,
+          "createUserId": "10027",
+          "sellSectionPrices": [
+            {
+              "id": 1372,
+              "price": 25.00,
+              "startNumber": 12,
+              "endNumber": 30,
+              "sellPriceId": 645,
+              "deleteStatus": 0
+            }
+          ],
+          "maxNumber": null,
+          "preHarvestPinStatus": 0
+        }
+      ]
     }
   },
-  "success": false
+  "success": true
 }

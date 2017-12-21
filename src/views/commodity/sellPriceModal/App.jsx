@@ -41,11 +41,13 @@ class SellPriceModal extends Component {
             branchCompanyId: props.datas.branchCompanyId,
             branchCompanyName: props.datas.branchCompanyName
         } : {};
+
         this.state = {
             isEditPrice: false,
             currentInside: null,
             insideValue: null,
-            confirmVisible: false
+            confirmVisible: false,
+            hasZero: this.hasZero(props.datas.sellSectionPrices || [])
         }
         this.choose = 0;
         this.isDisabled = false;
@@ -66,6 +68,7 @@ class SellPriceModal extends Component {
             results.forEach((item) => (
                 priceList.push(item.price)
             ))
+
             priceList.forEach((obj) => {
                 if (obj === null || obj === undefined) {
                     this.successPost = true;
@@ -76,16 +79,11 @@ class SellPriceModal extends Component {
                     })
                     return;
                 }
+
                 if (obj === 0) {
                     this.messageAlert = true;
-                    this.setState({
-                        confirmVisible: true
-                    })
                 } else {
                     this.messageAlert = false;
-                    this.setState({
-                        confirmVisible: false
-                    })
                 }
                 if (obj >= 0) {
                     this.successPost = false;
@@ -186,13 +184,26 @@ class SellPriceModal extends Component {
         })
     }
 
+    hasZero(items) {
+        const filter = items.filter((item) => {
+            return item.price === 0;
+        })
+
+        return !!filter.length;
+    }
+
     handleCancel() {
         this.props.handleClose();
     }
 
     handlePriceChange(result) {
         const { setFields, getFieldError } = this.props.form;
-        const { isContinuity } = result;
+        const { isContinuity, results } = result;
+
+        this.setState({
+            hasZero: this.hasZero(results)
+        })
+
         if (isContinuity && getFieldError('sellSectionPrices')) {
             setFields({
                 sellSectionPrices: {
@@ -270,17 +281,18 @@ class SellPriceModal extends Component {
 
     handleConfirm = () => {
         this.setState({
-            confirmVisible: false
+            confirmVisible: true
         })
     }
 
     render() {
         const { prefixCls, form, datas, isEdit, getProductById } = this.props;
         const { getFieldDecorator } = form;
-        const { currentInside, startNumber, price } = this.state;
+        const { currentInside, startNumber, price, hasZero } = this.state;
         const newDates = JSON.parse(JSON.stringify(datas));
         const preHarvestPinStatusChange =
-            (newDates.preHarvestPinStatus === 1 ? '1' : '0')
+            (newDates.preHarvestPinStatus === 1 ? '1' : '0');
+
         return (
             <Modal
                 title={isEdit ? '编辑销售价格' : '新增销售价格'}
@@ -292,13 +304,12 @@ class SellPriceModal extends Component {
                 maskClosable={false}
                 confirmLoading={this.isDisabled}
                 footer={
-                    this.state.confirmVisible ?
-                        [
+                    !this.state.confirmVisible && hasZero
+                        ? [
                             <Button key="confirm" size="large" type="danger" onClick={this.handleConfirm}>确认价格为0提交</Button>,
                             <Button key="handleCancel" size="large" onClick={this.handleCancel}>取消</Button>
                         ]
-                        :
-                        [
+                        : [
                             <Button key="handleOk" size="large" type="primary" onClick={this.handleOk}>确认</Button>,
                             <Button key="handleCancel" size="large" onClick={this.handleCancel}>取消</Button>
                         ]

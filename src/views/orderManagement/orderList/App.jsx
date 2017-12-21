@@ -1,6 +1,6 @@
 /**
  * @file App.jsx
- * @author caoyanxuan
+ * @author caoyanxuan,liujinyu, taoqiyu
  *
  * 订单管理列表
  */
@@ -13,12 +13,11 @@ import { Link } from 'react-router-dom';
 import {
     Form, Input, Button, Row, Col,
     Select, Icon, Table, Menu, Dropdown,
-    message, Modal, DatePicker
+    message, Modal, DatePicker, Checkbox
 } from 'antd';
 import moment from 'moment';
 import Utils from '../../../util/util';
-import SearchMind from '../../../components/searchMind';
-import { BranchCompany } from '../../../container/search';
+import { BranchCompany, Franchisee } from '../../../container/search';
 import {
     orderTypeOptions,
     orderStatusOptions,
@@ -34,18 +33,16 @@ import {
     modifyResendOrder,
     modifyApprovalOrder
 } from '../../../actions/order';
-import { pubFetchValueList } from '../../../actions/pub';
 import { DATE_FORMAT, PAGE_SIZE } from '../../../constant/index';
 import { orderListColumns as columns } from '../columns';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const confirm = Modal.confirm;
-const orderML = 'order-management';
 const { RangePicker } = DatePicker;
-const yesterdayDate = moment().subtract(1, 'days').valueOf().toString();
+const yesterdayDate = moment().subtract(6, 'days').valueOf().toString();
 const todayDate = moment().valueOf().toString();
-const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
+const yesterdayrengeDate = [moment().subtract(6, 'days'), moment()];
 
 @connect(
     state => ({
@@ -53,26 +50,13 @@ const yesterdayrengeDate = [moment().subtract(1, 'days'), moment()];
     }),
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
-        fetchOrderList,
-        pubFetchValueList
+        fetchOrderList
     }, dispatch)
 )
 class OrderManagementList extends Component {
     constructor(props) {
         super(props);
-        this.onEnterTimeChange = ::this.onEnterTimeChange;
-        this.handleOrderBatchReview = ::this.handleOrderBatchReview;
-        this.handleOrderBatchCancel = ::this.handleOrderBatchCancel;
-        this.handleOrderSearch = ::this.handleOrderSearch;
-        this.handleOrderReset = ::this.handleOrderReset;
-        this.handleOrderOutput = ::this.handleOrderOutput;
-        this.handleJoiningChoose = ::this.handleJoiningChoose;
-        this.handleJoiningClear = ::this.handleJoiningClear;
-        this.handlePaginationChange = ::this.handlePaginationChange;
-        this.orderTypeSelect = ::this.orderTypeSelect;
-        this.getSearchData = ::this.getSearchData;
         this.joiningSearchMind = null;
-        this.renderOperation = ::this.renderOperation;
         this.searchData = {};
         this.current = 1;
         this.state = {
@@ -97,7 +81,7 @@ class OrderManagementList extends Component {
      * 订单日期选择
      * @param {array} result [moment, moment]
      */
-    onEnterTimeChange(result) {
+    onEnterTimeChange = (result) => {
         let start = yesterdayDate;
         let end = todayDate;
         if (result.length === 2) {
@@ -120,7 +104,7 @@ class OrderManagementList extends Component {
     /**
     * 获取表单信息,并查询列表
     */
-    getSearchData() {
+    getSearchData = () => {
         const {
             id,
             orderType,
@@ -129,10 +113,13 @@ class OrderManagementList extends Component {
             cellphone,
             shippingState,
             thirdPartOrderNo,
-            branchCompany
+            branchCompany,
+            franchisee,
+            transNum,
+            productName,
+            containParent,
+            franchiseeStoreId
         } = this.props.form.getFieldsValue();
-
-        const { franchiseeId } = this.state;
         const { submitStartTime, submitEndTime } = this.state.time;
         this.current = 1;
         this.searchData = {
@@ -142,12 +129,16 @@ class OrderManagementList extends Component {
             paymentState: paymentState === 'ALL' ? null : paymentState,
             cellphone,
             shippingState: shippingState === 'ALL' ? null : shippingState,
-            franchiseeId,
+            franchiseeId: franchisee.franchiseeId,
             branchCompanyId: branchCompany.id,
             submitStartTime,
             thirdPartOrderNo,
             submitEndTime,
             pageSize: PAGE_SIZE,
+            transNum,
+            productName,
+            containParent: containParent ? 1 : 0,
+            franchiseeStoreId
         }
         const searchData = this.searchData;
         searchData.page = 1;
@@ -159,7 +150,7 @@ class OrderManagementList extends Component {
     /**
      * 订单类型
      */
-    orderTypeSelect(value) {
+    orderTypeSelect = (value) => {
         if (value === 'ZYYH') {
             this.setState({
                 isPayDisabled: true
@@ -175,7 +166,7 @@ class OrderManagementList extends Component {
      * 分页查询
      * @param {number} goto 跳转页码
      */
-    handlePaginationChange(goto) {
+    handlePaginationChange = (goto) => {
         this.current = goto;
         const searchData = this.searchData;
         searchData.page = goto;
@@ -196,27 +187,9 @@ class OrderManagementList extends Component {
     }
 
     /**
-     * 加盟商-值清单
-     */
-    handleJoiningChoose = ({ record }) => {
-        this.setState({
-            franchiseeId: record.franchiseeId,
-        });
-    }
-
-    /**
-     * 加盟商-清除
-     */
-    handleJoiningClear() {
-        this.setState({
-            franchiseeId: null,
-        });
-    }
-
-    /**
      * 批量审核
      */
-    handleOrderBatchReview() {
+    handleOrderBatchReview = () => {
         confirm({
             title: '批量审核',
             content: '确认批量审核通过？',
@@ -236,7 +209,7 @@ class OrderManagementList extends Component {
     /**
      * 批量取消
      */
-    handleOrderBatchCancel() {
+    handleOrderBatchCancel = () => {
         const { choose } = this.state;
         this.props.modifyCauseModalVisible({ isShow: true, choose });
     }
@@ -244,14 +217,14 @@ class OrderManagementList extends Component {
     /**
      * 查询
      */
-    handleOrderSearch() {
+    handleOrderSearch = () => {
         this.getSearchData();
     }
 
     /**
      * 重置
      */
-    handleOrderReset() {
+    handleOrderReset = () => {
         this.setState({
             rengeTime: yesterdayrengeDate,
             isPayDisabled: false,
@@ -260,14 +233,20 @@ class OrderManagementList extends Component {
                 submitEndTime: todayDate,
             }
         });
-        this.joiningSearchMind.handleClear();
         this.props.form.resetFields();
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
+        });
+        this.props.form.setFieldsValue({
+            franchisee: { reset: true }
+        });
     }
 
     /**
      * 导出
      */
-    handleOrderOutput() {
+    handleOrderOutput = () => {
         const searchData = this.searchData;
         searchData.page = this.current;
         Utils.exportExcel(exportOrderList, Utils.removeInvalid(searchData));
@@ -294,7 +273,7 @@ class OrderManagementList extends Component {
                 });
                 break;
             case 'tableCancel':
-                this.props.modifyCauseModalVisible({ isShow: true, id });
+                this.props.modifyCauseModalVisible({ isShow: true, id })
                 break;
             case 'tableRetransfer':
                 modifyResendOrder({
@@ -326,37 +305,40 @@ class OrderManagementList extends Component {
      * @param {Object} text 当前行的值
      * @param {object} record 单行数据
      */
-    renderOperation(text, record) {
-        const { id, orderStateDesc, shippingStateDesc } = record;
+    renderOperation = (text, record) => {
+        const { id, orderState, shippingState, paymentState } = record;
         const pathname = window.location.pathname;
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, item)}>
                 <Menu.Item key="detail">
-                    <Link to={`${pathname}/orderDetails/${id}`}>查看订单详情</Link>
+                    <Link target="_blank" to={`${pathname}/orderDetails/${id}`}>查看订单详情</Link>
                 </Menu.Item>
                 {
-                    (orderStateDesc === '待审核'
-                        || orderStateDesc === '待人工审核')
+                    (orderState === 'W'
+                        || orderState === 'M')
                     && <Menu.Item key="tableAudit">
                         <a target="_blank" rel="noopener noreferrer">审核</a>
                     </Menu.Item>
                 }
                 {
-                    shippingStateDesc !== '待收货'
-                    && shippingStateDesc !== '已签收'
-                    && orderStateDesc !== '已取消'
+                    shippingState !== 'DSH'
+                    && shippingState !== 'YQS'
+                    && orderState !== 'Q'
                     && <Menu.Item key="tableCancel">
                         <a target="_blank" rel="noopener noreferrer">取消</a>
                     </Menu.Item>
                 }
                 {
-                    orderStateDesc === '已取消'
+                    orderState === 'Q'
                     && <Menu.Item key="tableShowFailure">
                         <a target="_blank" rel="noopener noreferrer">查看取消原因</a>
                     </Menu.Item>
                 }
                 {
-                    (shippingStateDesc === '仓库拒收')
+                    ((orderState === 'A' && paymentState === 'YZF' && shippingState === 'WCS')
+                        || (orderState === 'A' && paymentState === 'YZF' && shippingState === 'WJS')
+                        || (orderState === 'A' && paymentState === 'GSN' && shippingState === 'WCS')
+                        || (orderState === 'A' && paymentState === 'GSN' && shippingState === 'WJS'))
                     && <Menu.Item key="tableRetransfer">
                         <a target="_blank" rel="noopener noreferrer">重新传送</a>
                     </Menu.Item>
@@ -376,277 +358,184 @@ class OrderManagementList extends Component {
         const { orderListData } = this.props;
         columns[columns.length - 1].render = this.renderOperation;
         return (
-            <div className={orderML}>
-                <div className="manage-form">
-                    <Form layout="inline">
-                        <div className="gutter-example">
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 订单编号 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">订单编号</span>
-                                            {getFieldDecorator('id')(
-                                                <Input
-                                                    className="input"
-                                                    placeholder="订单编号"
-                                                />
-                                            )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 订单类型 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">订单类型</span>
-                                            {getFieldDecorator('orderType', {
-                                                initialValue: orderTypeOptions.defaultValue
-                                            })(
-                                                <Select
-                                                    size="default"
-                                                    onChange={this.orderTypeSelect}
+            <div className="order-list">
+                <Form layout="inline" className="order-list-form">
+                    <Row>
+                        <Col>
+                            <FormItem label="订单编号">
+                                {getFieldDecorator('id')(<Input placeholder="订单编号" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="订单类型">
+                                {getFieldDecorator('orderType', {
+                                    initialValue: orderTypeOptions.defaultValue
+                                })(<Select
+                                    size="default"
+                                    onChange={this.orderTypeSelect}
+                                >
+                                    {
+                                        orderTypeOptions.data.map((item) =>
+                                            (<Option
+                                                key={item.key}
+                                                value={item.key}
+                                            >
+                                                {item.value}
+                                            </Option>)
+                                        )
+                                    }
+                                </Select>)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="订单状态">
+                                {getFieldDecorator('orderState', {
+                                    initialValue: orderStatusOptions.defaultValue
+                                })(
+                                    <Select
+                                        size="default"
+                                    >
+                                        {
+                                            orderStatusOptions.data.map((item) =>
+                                                (<Option
+                                                    key={item.key}
+                                                    value={item.key}
                                                 >
-                                                    {
-                                                        orderTypeOptions.data.map((item) =>
-                                                            (<Option
-                                                                key={item.key}
-                                                                value={item.key}
-                                                            >
-                                                                {item.value}
-                                                            </Option>)
-                                                        )
-                                                    }
-                                                </Select>
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 订单状态 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">订单状态</span>
-                                            {getFieldDecorator('orderState', {
-                                                initialValue: orderStatusOptions.defaultValue
-                                            })(
-                                                <Select
-                                                    size="default"
+                                                    {item.value}
+                                                </Option>)
+                                            )
+                                        }
+                                    </Select>)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 支付状态 */}
+                            <FormItem label="支付状态">
+                                {getFieldDecorator('paymentState', {
+                                    initialValue: payStatusOptions.defaultValue
+                                })(
+                                    <Select
+                                        size="default"
+                                        disabled={this.state.isPayDisabled}
+                                    >
+                                        {
+                                            payStatusOptions.data.map((item) =>
+                                                (<Option
+                                                    key={item.key}
+                                                    value={item.key}
                                                 >
-                                                    {
-                                                        orderStatusOptions.data.map((item) =>
-                                                            (<Option
-                                                                key={item.key}
-                                                                value={item.key}
-                                                            >
-                                                                {item.value}
-                                                            </Option>)
-                                                        )
-                                                    }
-                                                </Select>
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 支付状态 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">支付状态</span>
-                                            {getFieldDecorator('paymentState', {
-                                                initialValue: payStatusOptions.defaultValue
-                                            })(
-                                                <Select
-                                                    size="default"
-                                                    disabled={this.state.isPayDisabled}
+                                                    {item.value}
+                                                </Option>)
+                                            )
+                                        }
+                                    </Select>)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="加盟商">
+                                {getFieldDecorator('franchisee', {
+                                    initialValue: { franchiseeId: '', franchiseeName: '' }
+                                })(<Franchisee />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="子公司">
+                                {getFieldDecorator('branchCompany', {
+                                    initialValue: { id: '', name: '' }
+                                })(<BranchCompany />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="收货人电话">
+                                {getFieldDecorator('cellphone', {
+                                    rules: [{ validator: Utils.validatePhone }]
+                                })(<Input placeholder="收货人电话" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="物流状态">
+                                {getFieldDecorator('shippingState', {
+                                    initialValue: logisticsStatusOptions.defaultValue
+                                })(
+                                    <Select
+                                        size="default"
+                                    >
+                                        {
+                                            logisticsStatusOptions.data.map((item) =>
+                                                (<Option
+                                                    key={item.key}
+                                                    value={item.key}
                                                 >
-                                                    {
-                                                        payStatusOptions.data.map((item) =>
-                                                            (<Option
-                                                                key={item.key}
-                                                                value={item.key}
-                                                            >
-                                                                {item.value}
-                                                            </Option>)
-                                                        )
-                                                    }
-                                                </Select>
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 加盟商 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">加盟商</span>
-                                            <SearchMind
-                                                rowKey="franchiseeId"
-                                                compKey="search-mind-joining"
-                                                ref={ref => { this.joiningSearchMind = ref }}
-                                                fetch={(params) =>
-                                                    this.props.pubFetchValueList({
-                                                        param: params.value,
-                                                        pageNum: params.pagination.current || 1,
-                                                        pageSize: params.pagination.pageSize
-                                                    }, 'getFranchiseeInfo')
-                                                }
-                                                onChoosed={this.handleJoiningChoose}
-                                                onClear={this.handleJoiningClear}
-                                                renderChoosedInputRaw={(row) => (
-                                                    <div>
-                                                        {row.franchiseeId} - {row.franchiseeName}
-                                                    </div>
-                                                )}
-                                                pageSize={6}
-                                                columns={[
-                                                    {
-                                                        title: '加盟商id',
-                                                        dataIndex: 'franchiseeId',
-                                                        width: 98
-                                                    }, {
-                                                        title: '加盟商名字',
-                                                        dataIndex: 'franchiseeName',
-                                                        width: 140
-                                                    }
-                                                ]}
-                                            />
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">子公司</span>
-                                            {getFieldDecorator('branchCompany', {
-                                                initialValue: { id: '', name: '' }
-                                            })(<BranchCompany />)}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 收货人电话 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">收货人电话</span>
-                                            {getFieldDecorator('cellphone', {
-                                                rules: [{ validator: Utils.validatePhone }]
-                                            })(
-                                                <Input
-                                                    className="input"
-                                                    placeholder="收货人电话"
-                                                />
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 物流状态 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">物流状态</span>
-                                            {getFieldDecorator('shippingState', {
-                                                initialValue: logisticsStatusOptions.defaultValue
-                                            })(
-                                                <Select
-                                                    size="default"
-                                                >
-                                                    {
-                                                        logisticsStatusOptions.data.map((item) =>
-                                                            (<Option
-                                                                key={item.key}
-                                                                value={item.key}
-                                                            >
-                                                                {item.value}
-                                                            </Option>)
-                                                        )
-                                                    }
-                                                </Select>
-                                                )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 订单日期 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">订单日期</span>
-                                            <RangePicker
-                                                style={{ width: '240px' }}
-                                                className="manage-form-enterTime"
-                                                value={this.state.rengeTime}
-                                                format={DATE_FORMAT}
-                                                placeholder={['开始时间', '结束时间']}
-                                                onChange={this.onEnterTimeChange}
-
-                                            />
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    {/* 电商订单编号 */}
-                                    <FormItem>
-                                        <div>
-                                            <span className="sc-form-item-label">电商订单编号</span>
-                                            {getFieldDecorator('thirdPartOrderNo')(
-                                                <Input
-                                                    className="input"
-                                                    placeholder="请输入电商订单编号"
-                                                />
-                                            )}
-                                        </div>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8}>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            disabled={this.state.choose.length === 0}
-                                            onClick={this.handleOrderBatchReview}
-                                        >批量审核</Button>
-                                    </FormItem>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            disabled={this.state.choose.length === 0}
-                                            onClick={this.handleOrderBatchCancel}
-                                        >批量取消</Button>
-                                    </FormItem>
-                                </Col>
-                                <Col className="gutter-row" span={8} offset={8}>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            type="primary"
-                                            onClick={this.handleOrderSearch}
-                                        >查询</Button>
-                                    </FormItem>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            onClick={this.handleOrderReset}
-                                        >重置</Button>
-                                    </FormItem>
-                                    <FormItem>
-                                        <Button
-                                            size="default"
-                                            onClick={this.handleOrderOutput}
-                                        >导出</Button>
-                                    </FormItem>
-                                </Col>
-                            </Row>
-                        </div>
-                    </Form>
-                </div>
+                                                    {item.value}
+                                                </Option>)
+                                            )
+                                        }
+                                    </Select>)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="订单日期">
+                                <RangePicker
+                                    value={this.state.rengeTime}
+                                    format={DATE_FORMAT}
+                                    placeholder={['开始时间', '结束时间']}
+                                    onChange={this.onEnterTimeChange}
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="电商订单编号">
+                                {getFieldDecorator('thirdPartOrderNo')(<Input placeholder="请输入电商订单编号" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="参考号/凭证号">
+                                {getFieldDecorator('transNum')(<Input placeholder="请输入参考号/凭证号" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="商品名称">
+                                {getFieldDecorator('productName')(<Input placeholder="请输入商品名称" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="门店编号">
+                                {getFieldDecorator('franchiseeStoreId')(<Input placeholder="请输入门店编号" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="是否包含父订单">
+                                {getFieldDecorator('containParent', {
+                                    valuePropName: 'checked',
+                                })(<Checkbox />)}
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row type="flex" justify="end">
+                        <Col>
+                            <Button size="default" type="primary" onClick={this.handleOrderSearch}>查询</Button>
+                            <Button size="default" onClick={this.handleOrderReset}>重置</Button>
+                            <Button size="default" onClick={this.handleOrderOutput}>导出</Button>
+                        </Col>
+                    </Row>
+                </Form>
                 <div className="area-list">
+                    <div className="button-group">
+                        <Button
+                            size="default"
+                            disabled={this.state.choose.length === 0}
+                            onClick={this.handleOrderBatchReview}
+                        >
+                            批量审核
+                        </Button>
+                        <Button
+                            size="default"
+                            disabled={this.state.choose.length === 0}
+                            onClick={this.handleOrderBatchCancel}
+                        >
+                            批量取消
+                        </Button>
+                    </div>
                     <Table
                         dataSource={orderListData.data}
                         columns={columns}
@@ -661,9 +550,7 @@ class OrderManagementList extends Component {
                         }}
                     />
                 </div>
-                <div>
-                    <CauseModal getSearchData={this.getSearchData} />
-                </div>
+                <CauseModal getSearchData={this.getSearchData} />
             </div>
         );
     }
@@ -673,11 +560,7 @@ OrderManagementList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     orderListData: PropTypes.objectOf(PropTypes.any),
     modifyCauseModalVisible: PropTypes.func,
-    fetchOrderList: PropTypes.func,
-    pubFetchValueList: PropTypes.func
-}
-
-OrderManagementList.defaultProps = {
+    fetchOrderList: PropTypes.func
 }
 
 export default withRouter(Form.create()(OrderManagementList));

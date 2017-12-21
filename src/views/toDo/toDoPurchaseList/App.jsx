@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
- * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-11 21:32:20
+ * @Last Modified by: chenghaojie
+ * @Last Modified time: 2017-12-20 14:29:02
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -12,7 +12,6 @@ import {
     Input,
     Form,
     Select,
-    DatePicker,
     Row,
     Col,
     Icon,
@@ -22,22 +21,23 @@ import {
     Modal,
     message
 } from 'antd';
-import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import {
     locType,
-    returnStatus
+    auditStatusOption,
+    businessModeType,
+    poType
 } from '../../../constant/procurement';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
-    queryAuditPurReList,
-    queryApprovalInfo,
+    queryCommentHis,
     queryPoDetail
 } from '../../../actions/procurement';
 import {
@@ -46,25 +46,37 @@ import {
     getSupplierMap,
     getSupplierLocMap,
 } from '../../../actions';
-import ApproModal from './approModal';
+import {
+    queryProcessMsgInfo,
+    queryHighChart,
+    clearHighChart,
+} from '../../../actions/process';
+import {auditInfo} from '../../../service';
+import ApproModal from '../../../components/approModal'
+import { Supplier } from '../../../container/search';
+import FlowImage from '../../../components/flowImage';
+import ApproComment from './approComment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const confirm = Modal.confirm;
 
 @connect(state => ({
-    auditPurReList: state.toJS().procurement.auditPurReList
+    processMsgInfo: state.toJS().procurement.processMsgInfo,
+    highChartData: state.toJS().process.highChartData,
+    approvalList: state.toJS().procurement.approvalList,
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
     getShopAddressMap,
     getSupplierMap,
     getSupplierLocMap,
     pubFetchValueList,
-    queryAuditPurReList,
-    queryApprovalInfo,
-    queryPoDetail
+    queryProcessMsgInfo,
+    queryCommentHis,
+    queryPoDetail,
+    queryHighChart,
+    clearHighChart,
 }, dispatch))
 
 class toDoPurchaseList extends PureComponent {
@@ -76,72 +88,90 @@ class toDoPurchaseList extends PureComponent {
         this.renderActions = this.renderActions.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.searchParams = {};
+        this.examinationAppData = {};
         this.state = {
-            spId: '',   // 供应商编码
-            spAdrId: '',    // 供应商地点编码
-            isSupplyAdrDisabled: true, // 供应商地点禁用
-            locDisabled: true,  // 地点禁用
+            spAdrId: '', // 供应商地点编码
+            locDisabled: true, // 地点禁用
             locationData: {},
             isVisibleModal: false,
-            approvalVisible: false,
             opinionVisible: false,
             approvalStatus: false,
-            adrTypeCode: '',    // 地点编码
-            receivedTypeCode: '',  // 收货单状态编码
+            adrTypeCode: '', // 地点编码
+            receivedTypeCode: '', // 收货单状态编码
             refundAdr: '',
-            spNo: '',   // 供应商编码
-            spAdrNo: '',    // 供应商地点编码
+            spNo: '', // 供应商编码
+            spAdrNo: '', // 供应商地点编码
+            status: 0, // 流程状态，默认进行中
+            spName: null, // 供应商名
+            spAdrName: null, // 供应商地点名
+            adrTypeName: null, // 地点
         };
         // 初始页号
         this.current = 1;
         this.columns = [
             {
                 title: '采购单号',
-                dataIndex: 'purchaseRefundNo',
-                key: 'purchaseRefundNo',
-                render: (text, record) => {
-                    return (
-                        <Link onClick={this.toPurDetail} to={`po/detail/${record.id}`}>{text}</Link>
-                    )
+                dataIndex: 'purchaseNo',
+                key: 'purchaseNo',
+                render: (text, record) => (
+                    <Link target="_blank" to={`po/detail/${record.id}`} onClick={this.toPurDetail}>{text}</Link>
+                )
+            }, {
+                title: '经营模式',
+                dataIndex: 'businessMode',
+                key: 'businessMode',
+                render: text => {
+                    if (text === null || text === undefined) {
+                        return null;
+                    }
+                    return (businessModeType.data[text + 1].value);
+                }
+            }, {
+                title: '采购单类型',
+                dataIndex: 'purchaseType',
+                key: 'purchaseType',
+                render: text => {
+                    if (text === null || text === undefined) {
+                        return null;
+                    }
+                    return (poType.data[text + 1].value);
                 }
             }, {
                 title: '地点类型',
                 dataIndex: 'adrType',
-                key: 'adrType'
+                key: 'adrType',
+                render: text => {
+                    if (text === null || typeof text === 'undefined') {
+                        return null;
+                    }
+                    return (locType.data[text + 1].value);
+                }
             }, {
-                title: '退货地点',
-                dataIndex: 'refundAdr',
-                key: 'refundAdr'
+                title: '地点',
+                dataIndex: 'adrTypeName',
+                key: 'adrTypeName'
             }, {
                 title: '供应商',
-                dataIndex: 'supplier',
-                key: 'supplier'
+                dataIndex: 'spName',
+                key: 'spName'
             }, {
                 title: '供应商地点',
-                dataIndex: 'supplierAddress',
-                key: 'supplierAddress'
+                dataIndex: 'apAdrName',
+                key: 'apAdrName'
             }, {
-                title: '退货数量',
-                dataIndex: 'totalRefundAmount',
-                key: 'totalRefundAmount'
+                title: '大类',
+                dataIndex: 'category',
+                key: 'category'
             }, {
-                title: '退货成本额',
-                dataIndex: 'totalRefundCost',
-                key: 'totalRefundCost'
-            }, {
-                title: '实际退货金额(含税)',
-                dataIndex: 'totalRealRefundMoney',
-                key: 'totalRealRefundMoney'
-            }, {
-                title: '退货金额(含税)',
-                dataIndex: 'totalRefundMoney',
-                key: 'totalRefundMoney'
+                title: '金额',
+                dataIndex: 'purchaseMoney',
+                key: 'purchaseMoney'
             }, {
                 title: '创建者',
-                dataIndex: 'createUserId',
-                key: 'createUserId'
+                dataIndex: 'createUser',
+                key: 'createUser'
             }, {
-                title: '退货单创建时间',
+                title: '采购单创建时间',
                 dataIndex: 'createTime',
                 key: 'createTime',
                 render: text => {
@@ -155,8 +185,8 @@ class toDoPurchaseList extends PureComponent {
                 }
             }, {
                 title: '流程开始时间',
-                dataIndex: 'processEndTime',
-                key: 'processEndTime',
+                dataIndex: 'startTime',
+                key: 'startTime',
                 render: text => {
                     let res = text;
                     if (!text) {
@@ -168,8 +198,8 @@ class toDoPurchaseList extends PureComponent {
                 }
             }, {
                 title: '流程结束时间',
-                dataIndex: 'processStartTime',
-                key: 'processStartTime',
+                dataIndex: 'endTime',
+                key: 'endTime',
                 render: text => {
                     let res = text;
                     if (!text) {
@@ -181,15 +211,17 @@ class toDoPurchaseList extends PureComponent {
                 }
             }, {
                 title: '当前节点',
-                dataIndex: 'processNodeName',
-                key: 'processNodeName',
-                render: (text) => (
-                    <a onClick={this.nodeModal}>{text}</a>
+                dataIndex: 'currentNode',
+                key: 'currentNode',
+                width: '160px',
+                render: (text, record) => (
+                    <a onClick={() => this.nodeModal(record.taskId)}>{text}</a>
                 )
             }, {
                 title: '操作',
                 dataIndex: 'operation',
                 key: 'operation',
+                width: '80px',
                 render: this.renderActions
             }
         ]
@@ -219,24 +251,35 @@ class toDoPurchaseList extends PureComponent {
      */
     onPaginate = (pageNumber) => {
         this.current = pageNumber
-        this.props.queryAuditPurReList({
-            pageSize: PAGE_SIZE,
-            pageNum: this.current,
-            ...this.searchParams
+        this.props.queryProcessMsgInfo({
+            map: {
+                pageSize: PAGE_SIZE,
+                pageNum: this.current,
+                status: this.state.status
+            },
+            processType: 'CG'
         });
     }
+
 
     queryReturnMngList = () => {
         this.current = 1;
-        this.props.queryAuditPurReList({
-            pageSize: PAGE_SIZE,
-            pageNum: this.current,
-            ...this.searchParams
+        this.props.queryProcessMsgInfo({
+            map: Object.assign({
+                pageSize: PAGE_SIZE,
+                pageNum: this.current,
+                status: this.state.status
+            }, this.searchParams),
+            processType: 'CG'
         });
     }
 
-    nodeModal = () => {
+    nodeModal = (id) => {
+        this.props.queryHighChart({taskId: id})
+    }
 
+    closeCanvas = () => {
+        this.props.clearHighChart();
     }
 
     /**
@@ -247,16 +290,14 @@ class toDoPurchaseList extends PureComponent {
         this.searchParams = {};
         // 重置form
         this.props.form.resetFields();
-        this.handleSupplyClear();
         this.handleSupplierAddressClear();
         this.handleAddressClear();
-    }
-
-    /**
-     * 获取供应商地点编号
-     */
-    handleSupplierAddressChoose = ({ record }) => {
-        this.setState({ spAdrNo: record.providerNo });
+        this.props.form.setFieldsValue({
+            supplier: { reset: true }
+        });
+        this.setState({
+            status: 0
+        })
     }
 
     /**
@@ -277,7 +318,7 @@ class toDoPurchaseList extends PureComponent {
         const storeCode = '1';
         let locationTypeParam = '';
         if (adrType === libraryCode) {
-            locationTypeParam = 'getWarehouseInfo1';
+            locationTypeParam = 'getWarehouseLogic';
             this.setState({
                 locationData: {
                     code: 'warehouseCode',
@@ -302,17 +343,20 @@ class toDoPurchaseList extends PureComponent {
     }
 
     /**
-     * 获取供应商地点编号
+     * 获取供应商地点
      */
     handleSupplierAddressChoose = ({ record }) => {
-        this.setState({ spAdrId: record.spId });
+        this.setState({ spAdrName: record.providerName });
     }
 
     /**
      * 清空供应商地点编号
      */
     handleSupplierAddressClear = () => {
-        this.setState({ spAdrId: '' });
+        this.setState({
+            spAdrId: '',
+            spAdrName: ''
+        });
         this.joiningAdressMind.reset();
     }
 
@@ -320,7 +364,10 @@ class toDoPurchaseList extends PureComponent {
     handleAddressChoose = ({ record }) => {
         const encoded = record.code;
         this.adressTypeCode = encoded;
-        this.setState({ refundAdr: record.warehouseCode });
+        this.setState({
+            refundAdr: record.warehouseCode,
+            adrTypeName: record.warehouseName
+        });
     }
 
     // 清除地点值
@@ -329,27 +376,18 @@ class toDoPurchaseList extends PureComponent {
         this.adressTypeCode = '';
         this.setState({
             locDisabled: true,
-            refundAdr: ''
+            refundAdr: '',
+            adrTypeName: ''
         })
     }
 
-    // 获取供应商编号
-    handleSupplyChoose = ({ record }) => {
-        this.setState({
-            spNo: record.spNo,
-            spId: record.spId,
-            isSupplyAdrDisabled: false
-        });
-    }
-
-    // 供应商值清单-清除
-    handleSupplyClear = () => {
-        this.setState({
-            spNo: '',
-            spId: '',
-            isSupplyAdrDisabled: true
-        });
-        this.supplySearchMind.reset();
+    /**
+     * Supplier供应商组件改变的回调
+     * @param {object} record 改变后值
+     */
+    handleSupplierChange = (record) => {
+        this.setState({spName: record.companyName})
+        this.handleSupplierAddressClear();
     }
 
     showConfirm = (record) => {
@@ -360,7 +398,7 @@ class toDoPurchaseList extends PureComponent {
                 if (record.approval) {
                     message.error('该退货单不能删除。原因：只能删除制单状态且无审批记录退货单!')
                 } else {
-                    this.props.deleteBatchRefundOrder({id: record.id}).then((res) => {
+                    this.props.deleteBatchRefundOrder({ id: record.id }).then((res) => {
                         if (res.code === 200) {
                             message.success(res.message)
                         }
@@ -407,15 +445,31 @@ class toDoPurchaseList extends PureComponent {
         });
     }
 
+    handleCommentOk = (param) => {
+        const { refundNo, taskId } = this.examinationAppData;
+        auditInfo({ ...param, orderNo: refundNo, taskId, type: 0 })
+            .then((res) => {
+                if (res.code === 200) {
+                    message.success(res.message);
+                    this.setState({
+                        opinionvisible: false,
+                    });
+
+                    this.queryReturnMngList(this.current);
+                }
+            });
+    }
+
     handleSelect(record, index, items) {
         const { key } = items;
         switch (key) {
             case 'examinationApproval':
+                this.examinationAppData = record;
                 this.showOpinionModal();
                 break;
             case 'viewApproval':
                 this.showModal();
-                this.props.queryApprovalInfo({businessId: record.purchaseRefundNo})
+                this.props.queryCommentHis({taskId: record.taskId})
                 break;
             default:
                 break;
@@ -423,7 +477,7 @@ class toDoPurchaseList extends PureComponent {
     }
 
     toPurDetail = (record) => {
-        this.props.queryPoDetail(record.id);
+        this.props.queryPoDetail(record.purchaseNo);
     }
 
     /**
@@ -444,67 +498,51 @@ class toDoPurchaseList extends PureComponent {
             purchaseRefundNo,
             purchaseOrderNo,
             approvalStatus,
-            purchaseOrderType,
-            status,
-            adrType
         } = this.props.form.getFieldsValue();
-        // 流程开始时间
-        const auditDuringArr = this.props.form.getFieldValue('createTime') || [];
-        let createTimeStart;
-        let createTimeEnd;
-        if (auditDuringArr.length > 0) {
-            createTimeStart = Date.parse(auditDuringArr[0].format(dateFormat));
-        }
-        if (auditDuringArr.length > 1) {
-            createTimeEnd = Date.parse(auditDuringArr[1].format(dateFormat));
-        }
-        // 流程结束间
-        const auditDuringArrEnd = this.props.form.getFieldValue('stopTime') || [];
-        let stopTimeStart;
-        let stopTimeEnd;
-        if (auditDuringArrEnd.length > 0) {
-            stopTimeStart = Date.parse(auditDuringArrEnd[0].format(dateFormat));
-        }
-        if (auditDuringArrEnd.length > 1) {
-            stopTimeEnd = Date.parse(auditDuringArrEnd[1].format(dateFormat));
-        }
-
+        let {
+            adrType,
+            purchaseOrderType,
+        } = this.props.form.getFieldsValue();
         // 供应商编号
-        const spId = this.state.spId;
-
+        const spName = this.state.spName;
         // 供应商地点编号
-        const spAdrId = this.state.spId;
-
+        const spAdrName = this.state.spAdrName;
         // 地点
-        const adrTypeCode = this.state.refundAdr;
-
+        const adrTypeName = this.state.adrTypeName;
+        adrType = parseInt(adrType, 10);
+        purchaseOrderType = parseInt(purchaseOrderType, 10)
         const searchParams = {
-            purchaseRefundNo,
+            purchaseNo: purchaseRefundNo,
             purchaseOrderNo,
             approvalStatus,
-            purchaseOrderType,
-            status,
+            purchaseType: purchaseOrderType,
             adrType,
-            spId,
-            spAdrId,
-            createTimeStart,
-            createTimeEnd,
-            stopTimeStart,
-            stopTimeEnd,
-            adrTypeCode
+            spName,
+            spAdrName,
+            adrTypeName
         };
         this.searchParams = Utils.removeInvalid(searchParams);
         return this.searchParams;
     }
 
-    renderActions(text, record, index) {
+    // 流程状态切换
+    statusChange = (value) => {
+        this.setState({
+            status: parseInt(value, 10)
+        })
+    }
+
+    renderActions = (text, record, index) => {
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
-                <Menu.Item key="examinationApproval">
+                <Menu.Item key="detail">
+                    <Link to={`po/detail/${record.id}`} >采购单详情</Link>
+                </Menu.Item>
+                {this.state.status === 0 && <Menu.Item key="examinationApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         审批
                     </a>
-                </Menu.Item>
+                </Menu.Item>}
                 <Menu.Item key="viewApproval">
                     <a target="_blank" rel="noopener noreferrer">
                         查看审批意见
@@ -524,7 +562,7 @@ class toDoPurchaseList extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { data, total, pageNum, pageSize } = this.props.auditPurReList;
+        const { data, total, pageNum, pageSize } = this.props.processMsgInfo;
         return (
             <div className="search-box">
                 <Form layout="inline">
@@ -537,12 +575,27 @@ class toDoPurchaseList extends PureComponent {
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                {/* 流程状态 */}
-                                <FormItem label="流程状态">
-                                    {getFieldDecorator('auditStatus', { initialValue: returnStatus.defaultValue })(
+                                {/* 采购单类型 */}
+                                <FormItem label="采购单类型">
+                                    {getFieldDecorator('purchaseOrderType', {initialValue: poType.defaultValue })(
                                         <Select style={{ width: '153px' }} size="default">
                                             {
-                                                returnStatus.data.map((item) => (
+                                                poType.data.map((item) => (
+                                                    <Option key={item.key} value={item.key}>
+                                                        {item.value}
+                                                    </Option>))
+                                            }
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
+                                {/* 流程状态 */}
+                                <FormItem label="流程状态">
+                                    {getFieldDecorator('auditStatus', { initialValue: '进行中' })(
+                                        <Select style={{ width: '153px' }} size="default" onChange={this.statusChange}>
+                                            {
+                                                auditStatusOption.data.map((item) => (
                                                     <Option key={item.key} value={item.key}>
                                                         {item.value}
                                                     </Option>))
@@ -556,62 +609,39 @@ class toDoPurchaseList extends PureComponent {
                                 <FormItem>
                                     <div className="row middle">
                                         <span className="ant-form-item-label search-mind-label">供应商</span>
-                                        <SearchMind
-                                            style={{
-                                                zIndex: 101
-                                            }}
-                                            compKey="search-mind-supply"
-                                            ref={ref => {
-                                                this.supplySearchMind = ref
-                                            }}
-                                            fetch={(params) => this.props.pubFetchValueList({
-                                                condition: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
-                                            }, 'querySuppliersList')}
-                                            addonBefore=""
-                                            onChoosed={this.handleSupplyChoose}
-                                            onClear={this.handleSupplyClear}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>{row.spNo}-{row.companyName}</div>
-                                            )}
-                                            rowKey="spId"
-                                            pageSize={5}
-                                            columns={[
-                                                {
-                                                    title: '供应商',
-                                                    dataIndex: 'spNo',
-                                                    width: 80
-                                                }, {
-                                                    title: '供应商名称',
-                                                    dataIndex: 'companyName'
-                                                }
-                                            ]}
-                                        />
+                                        {getFieldDecorator('supplier', {
+                                            initialValue: { spId: '', spNo: '', companyName: '' }
+                                        })(
+                                            <Supplier
+                                                onChange={this.handleSupplierChange}
+                                            />
+                                        )}
                                     </div>
                                 </FormItem>
                             </Col>
                             {/* 供应商地点 */}
                             <Col className="gutter-row" span={8}>
                                 <FormItem>
-                                    <span className="sc-form-item-label" style={{width: 70}}>供应商地点</span>
+                                    <span className="sc-form-item-label" style={{ width: 70 }}>供应商地点</span>
                                     <span className="search-box-data-pic">
                                         <SearchMind
                                             style={{ zIndex: 9, verticalAlign: 'bottom' }}
                                             compKey="providerNo"
                                             ref={ref => { this.joiningAdressMind = ref }}
+                                            disabled={this.props.form.getFieldValue('supplier').spId === ''}
                                             fetch={(params) =>
-                                            this.props.pubFetchValueList(Utils.removeInvalid({
-                                                condition: params.value,
-                                                pageSize: params.pagination.pageSize,
-                                                pageNum: params.pagination.current || 1
-                                            }), 'supplierAdrSearchBox').then((res) => {
-                                                const dataArr = res.data.data || [];
-                                                if (!dataArr || dataArr.length === 0) {
-                                                    message.warning('没有可用的数据');
-                                                }
-                                                return res;
-                                            })}
+                                                this.props.pubFetchValueList(Utils.removeInvalid({
+                                                    condition: params.value,
+                                                    pageSize: params.pagination.pageSize,
+                                                    pageNum: params.pagination.current || 1
+                                                }), 'supplierAdrSearchBox').then((res) => {
+                                                    const dataArr = res.data.data || [];
+                                                    if (!dataArr || dataArr.length === 0) {
+                                                        message.warning('没有可用的数据');
+                                                    }
+                                                    return res;
+                                                })}
+                                            rowKey="providerNo"
                                             onChoosed={this.handleSupplierAddressChoose}
                                             onClear={this.handleSupplierAddressClear}
                                             renderChoosedInputRaw={(res) => (
@@ -645,7 +675,7 @@ class toDoPurchaseList extends PureComponent {
                                                 </Option>
                                             ))}
                                         </Select>
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
                             {/* 退货地点 */}
@@ -684,51 +714,9 @@ class toDoPurchaseList extends PureComponent {
                                     </div>
                                 </FormItem>
                             </Col>
-                            <Col span={8}>
-                                {/* 流程开始时间 */}
-                                <FormItem >
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">流程开始时间</span>
-                                        {getFieldDecorator('createTime', {})(
-                                            <RangePicker
-                                                className="date-range-picker"
-                                                style={{ width: 250 }}
-                                                format={dateFormat}
-                                                showTime={{
-                                                    hideDisabledOptions: true,
-                                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
-                                                }}
-                                                placeholder={['开始日期', '结束日期']}
-                                            />
-                                        )
-                                        }
-                                    </div>
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 流程结束间 */}
-                                <FormItem >
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">流程结束间</span>
-                                        {getFieldDecorator('stopTime', {})(
-                                            <RangePicker
-                                                className="date-range-picker"
-                                                style={{ width: 250 }}
-                                                format={dateFormat}
-                                                showTime={{
-                                                    hideDisabledOptions: true,
-                                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
-                                                }}
-                                                placeholder={['开始日期', '结束日期']}
-                                            />
-                                        )
-                                        }
-                                    </div>
-                                </FormItem>
-                            </Col>
                         </Row>
                         <Row gutter={40} type="flex" justify="end">
-                            <Col className="ant-col-10 ant-col-offset-10 gutter-row" style={{ textAlign: 'right'}}>
+                            <Col className="ant-col-10 ant-col-offset-10 gutter-row" style={{ textAlign: 'right' }}>
                                 <FormItem>
                                     <Button size="default" onClick={this.handleResetValue}>
                                         重置
@@ -746,7 +734,7 @@ class toDoPurchaseList extends PureComponent {
                         <Table
                             dataSource={data}
                             columns={this.columns}
-                            rowKey="id"
+                            rowKey="taskId"
                             scroll={{
                                 x: 1600
                             }}
@@ -763,17 +751,16 @@ class toDoPurchaseList extends PureComponent {
                             visible={this.state.isVisibleModal}
                             onOk={this.handleModalOk}
                             onCancel={this.handleModalCancel}
+                            approvalList={this.props.approvalList}
                         />
-                        <Modal
-                            title="Basic Modal"
+                        <ApproComment
                             visible={this.state.opinionvisible}
-                            onOk={this.handleOpinionOk}
+                            onOk={this.handleCommentOk}
                             onCancel={this.handleOpinionCancel}
-                        >
-                            <p>Some contents...</p>
-                            <p>Some contents...</p>
-                            <p>Some contents...</p>
-                        </Modal>
+                        />
+                        <FlowImage data={this.props.highChartData} closeCanvas={this.closeCanvas} >
+                            <Button type="primary" shape="circle" icon="close" className="closeBtn" onClick={this.closeCanvas} />
+                        </FlowImage>
                     </div>
                 </Form>
             </div >
@@ -782,14 +769,17 @@ class toDoPurchaseList extends PureComponent {
 }
 
 toDoPurchaseList.propTypes = {
-    employeeCompanyId: PropTypes.string,
-    queryAuditPurReList: PropTypes.func,
+    queryProcessMsgInfo: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
-    auditPurReList: PropTypes.objectOf(PropTypes.any),
+    processMsgInfo: PropTypes.objectOf(PropTypes.any),
+    approvalList: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
     pubFetchValueList: PropTypes.func,
-    queryApprovalInfo: PropTypes.func,
+    queryCommentHis: PropTypes.func,
     queryPoDetail: PropTypes.func,
     deleteBatchRefundOrder: PropTypes.func,
+    queryHighChart: PropTypes.func,
+    clearHighChart: PropTypes.func,
+    highChartData: PropTypes.string,
 };
 
 export default withRouter(Form.create()(toDoPurchaseList));

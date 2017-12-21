@@ -120,7 +120,6 @@ class ChangeMessage extends PureComponent {
                         })(
                             <Input
                                 placeholder="参数内容"
-                                maxLength={11}
                             />
                         )}
                     </FormItem>

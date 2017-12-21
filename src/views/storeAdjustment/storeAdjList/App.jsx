@@ -82,18 +82,18 @@ const columns = [{
 class StoreAdjList extends Component {
     constructor(props) {
         super(props);
-        this.onEnterTimeChange = ::this.onEnterTimeChange;
-        this.onEnterTime = ::this.onEnterTime;
-        this.renderOperation = ::this.renderOperation;
-        this.handleOrderSearch = ::this.handleOrderSearch;
-        this.handleOrderReset = ::this.handleOrderReset;
-        this.handleOrderOutput = ::this.handleOrderOutput;
-        this.handleJoiningChoose = ::this.handleJoiningChoose;
-        this.handleSubCompanyChoose = ::this.handleSubCompanyChoose;
-        this.handleJoiningClear = ::this.handleJoiningClear;
-        this.handleSubCompanyClear = ::this.handleSubCompanyClear;
-        this.handlePaginationChange = ::this.handlePaginationChange;
-        this.getSearchData = ::this.getSearchData;
+        this.onEnterTimeChange = :: this.onEnterTimeChange;
+        this.onEnterTime = :: this.onEnterTime;
+        this.renderOperation = :: this.renderOperation;
+        this.handleOrderSearch = :: this.handleOrderSearch;
+        this.handleOrderReset = :: this.handleOrderReset;
+        this.handleOrderOutput = :: this.handleOrderOutput;
+        this.handleJoiningChoose = :: this.handleJoiningChoose;
+        this.handleSubCompanyChoose = :: this.handleSubCompanyChoose;
+        this.handleJoiningClear = :: this.handleJoiningClear;
+        this.handleSubCompanyClear = :: this.handleSubCompanyClear;
+        this.handlePaginationChange = :: this.handlePaginationChange;
+        this.getSearchData = :: this.getSearchData;
         this.joiningSearchMind = null;
         this.subCompanySearchMind = null;
         this.searchData = {};
@@ -139,12 +139,12 @@ class StoreAdjList extends Component {
             }
         });
     }
-      /**
-    * 调整日期
-    *
-    * @param {moment} data 日期的moment对象
-    * @param {string} dateString 格式化后的日期
-    */
+    /**
+  * 调整日期
+  *
+  * @param {moment} data 日期的moment对象
+  * @param {string} dateString 格式化后的日期
+  */
     onEnterTime(date) {
         this.setState({
             setTime: date,
@@ -295,12 +295,14 @@ class StoreAdjList extends Component {
                                     <FormItem>
                                         <div>
                                             <span className="sc-form-item-label">单据编号</span>
-                                            {getFieldDecorator('id')(
+                                            {getFieldDecorator('id', {
+                                                rules: [{ max: 10, message: '不能输入超过10个字' }]
+                                            })(
                                                 <Input
                                                     className="input"
                                                     placeholder="单据编号"
                                                 />
-                                            )}
+                                                )}
                                         </div>
                                     </FormItem>
                                 </Col>
@@ -385,7 +387,7 @@ class StoreAdjList extends Component {
                                                         param: params.value,
                                                         pageNum: params.pagination.current || 1,
                                                         pageSize: params.pagination.pageSize
-                                                    }, 'getWarehouseInfo1')
+                                                    }, 'getWarehouseLogic')
                                                 }
                                                 onChoosed={this.handleJoiningChoose}
                                                 onClear={this.handleJoiningClear}
@@ -462,11 +464,11 @@ class StoreAdjList extends Component {
                                         </div>
                                     </FormItem>
                                 </Col>
-                                <Col className="gutter-row" span={8}>
+                                <Col className="gutter-row" span={16}>
                                     {/* 调整日期 */}
                                     <FormItem>
                                         <div>
-                                            <span className="sc-form-item-label">调整日期起止</span>
+                                            <span className="sc-form-item-label">调整日期</span>
                                             <RangePicker
                                                 style={{ width: '240px' }}
                                                 className="manage-form-enterTime"
@@ -479,8 +481,8 @@ class StoreAdjList extends Component {
                                     </FormItem>
                                 </Col>
                             </Row>
-                            <Row gutter={16}>
-                                <Col className="gutter-row" span={8} offset={16}>
+                            <Row gutter={16} type="flex" justify="end">
+                                <Col className="tr" span={8}>
                                     <FormItem>
                                         <Button
                                             size="default"
@@ -494,12 +496,6 @@ class StoreAdjList extends Component {
                                             onClick={this.handleOrderReset}
                                         >重置</Button>
                                     </FormItem>
-                                    {/* <FormItem>
-                                        <Button
-                                            size="default"
-                                            onClick={this.handleOrderOutput}
-                                        >导出</Button>
-                                    </FormItem> */}
                                 </Col>
                             </Row>
                         </div>

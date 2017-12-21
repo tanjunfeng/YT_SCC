@@ -466,12 +466,15 @@ export const orderTypeOptions = {
     }, {
         key: 'DSXS',
         value: '电商销售'
+    }, {
+        key: 'XCC',
+        value: '小超C端'
     }]
 }
 
 // 订单管理-订单状态
 export const orderStatusOptions = {
-    defaultValue: 'W',
+    defaultValue: 'ALL',
     data: [{
         key: 'ALL',
         value: '全部'
@@ -577,9 +580,6 @@ export const logisticsStatusOptions = {
     }, {
         key: 'YQS',
         value: '已签收'
-    }, {
-        key: 'WSD',
-        value: '未送达'
     }, {
         key: 'QX',
         value: '取消送货'

@@ -96,5 +96,9 @@
         border-right: none;
         border-radius: 4px 0 0 4px;
     }
+
+    .ant-tree li .ant-tree-node-content-wrapper {
+        position: static !important;
+    }
 }
 

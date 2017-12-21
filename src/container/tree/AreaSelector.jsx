@@ -39,9 +39,10 @@ class AreaSelector extends PureComponent {
         this.props.getAllCompanies();
     }
 
-    // 当弹框隐藏时，通知本组件
+    // 当接受到清空状态时，清空选中子公司列表
     componentWillReceiveProps(nextProps) {
-        if (!nextProps.isSelectorVisible) {
+        const { reset } = nextProps;
+        if (!this.props.reset && reset) {
             this.setState({
                 checkedCompanies: []
             });
@@ -81,18 +82,21 @@ class AreaSelector extends PureComponent {
     }
 
     render() {
+        const { isSelectorVisible, companies } = this.props;
+        const { checkedCompanies } = this.state;
+        const checkedKeys = checkedCompanies.map(company => company.companyId);
         return (
             <div>
                 <Modal
                     title="选择区域"
                     maskClosable={false}
-                    visible={this.props.isSelectorVisible}
+                    visible={isSelectorVisible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                 >
                     <CheckedTree
-                        list={this.props.companies}
-                        isEmpty={!this.props.isSelectorVisible}
+                        checkedKeys={checkedKeys}
+                        list={companies}
                         onCheckTreeOk={this.handleChecked}
                     />
                 </Modal>
@@ -107,6 +111,7 @@ AreaSelector.propTypes = {
     onSelectorCancel: PropTypes.func,
     getAllCompanies: PropTypes.func,
     clearCompaniesList: PropTypes.func,
+    reset: PropTypes.bool,
     companies: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 

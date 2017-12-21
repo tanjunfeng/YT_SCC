@@ -40,6 +40,9 @@ class CouponsParticipate extends PureComponent {
         pageSize: PAGE_SIZE
     }
 
+    PROMOTION_ID = this.props.match.params.id;
+    PROMOTION_NAME = this.props.match.params.promotionName;
+
     /**
      * 表单选择的查询条件
      */
@@ -88,6 +91,19 @@ class CouponsParticipate extends PureComponent {
     handleExport = (param) => {
         const condition = {
             promoId: this.PROMOTION_ID,
+            ...this.param,
+            ...param
+        };
+        const conditionUnused = {
+            promoId: this.PROMOTION_ID,
+            ...this.param,
+            queryType: 1,
+            ...param
+        };
+        const conditionGarbage = {
+            promoId: this.PROMOTION_ID,
+            ...this.param,
+            queryType: 2,
             ...param
         };
         switch (this.state.page) {
@@ -95,10 +111,10 @@ class CouponsParticipate extends PureComponent {
                 Util.exportExcel(usedParticipateData, condition);
                 break;
             case 'unused':
-                Util.exportExcel(unusedParticipateData, { condition, queryType: 1 });
+                Util.exportExcel(unusedParticipateData, conditionUnused);
                 break;
             case 'garbage':
-                Util.exportExcel(unusedParticipateData, { condition, queryType: 2 });
+                Util.exportExcel(unusedParticipateData, conditionGarbage);
                 break;
             default: break;
         }

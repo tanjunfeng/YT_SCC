@@ -1,13 +1,13 @@
- /**
- * @file App.jsx
- * @author zhao zhi jian
- *
- */
-import React, {Component} from 'react';
+/**
+* @file App.jsx
+* @author zhao zhi jian
+*
+*/
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Table } from 'antd';
 import SearchBar from './SearchBar';
 import {
@@ -44,12 +44,10 @@ class App extends Component {
 
         this.onPageChanges = this.onPageChanges.bind(this);
         this.setCurrentPage = this.setCurrentPage.bind(this);
-        this.saveSearchData = this.saveSearchData.bind(this);
         this.fetchListData = this.fetchListData.bind(this);
 
         this.state = {
-            currentPage: 1, // 分页当前状态
-            searchData: {} // 保存搜索参数
+            currentPage: 1 // 分页当前状态
         }
     }
 
@@ -58,13 +56,12 @@ class App extends Component {
     }
 
     componentWillUnmount() {
-        this.saveSearchData();
         this.props.getListDataEmpty();
     }
 
     // 翻页事件
     onPageChanges(pageNumber) {
-        const {searchData} = this.state;
+        const { searchData } = this.state;
         const params = {
             pageNum: pageNumber,
             pageSize: PAGE_SIZE,
@@ -86,16 +83,6 @@ class App extends Component {
         });
     }
 
-    /**
-     * 保存或清空搜索参数
-     * @param {object} params
-     */
-    saveSearchData(params = {}) {
-        this.setState({
-            searchData: params
-        })
-    }
-
     // 请求列表数据
     fetchListData() {
         const params = {
@@ -115,12 +102,11 @@ class App extends Component {
             <div>
                 <SearchBar
                     setCurrentPage={this.setCurrentPage}
-                    saveParams={this.saveSearchData}
                 />
                 <div className="area-list">
                     <Table
                         columns={TableHeader}
-                        scroll={{x: 2000}}
+                        scroll={{ x: 1400 }}
                         dataSource={listData.data}
                         rowKey={(record) => (Object.values(record).join('.'))}
                         pagination={{

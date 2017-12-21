@@ -23,7 +23,11 @@
         "currencyCode": "CNY",
         "branchCompanyId": "10000",
         "purchaseOrderType": 1,
+<<<<<<< HEAD
         "status": 4,
+=======
+        "status": 3,
+>>>>>>> 08e793c89a9cbff7f7978722e4e1ee61ebd1cd4b
         "failedReason": "超期关闭",
         "auditUserId": "10018",
         "createTime": 1505459025000,
