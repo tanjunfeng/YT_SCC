@@ -41,7 +41,7 @@ const initState = fromJS({
     aaplData: [],
     // 轮播广告管理-查询轮播间隔时间(cyx)
     intervalData: {
-        carouselInterval: 3
+        carouselInterval: 5
     },
     // 切换运营方式
     switchChange: {},
