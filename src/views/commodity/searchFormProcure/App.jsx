@@ -87,6 +87,10 @@ class SearchForm extends Component {
      * 搜索
      */
     handleGetValue() {
+        this.handleSearch()
+    }
+
+    handleSearch = () => {
         const { validateFields } = this.props.form;
         validateFields((err, values) => {
             const status = values.initiateModeOptions === '-1'
@@ -230,74 +234,74 @@ class SearchForm extends Component {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls } = this.props;
         return (
-            <div className={`${prefixCls}-content manage-form`}>
+            <div className={`${prefixCls}-manage-form`}>
                 <div style={{ fontSize: 16, fontWeight: 900 }}>
                     <Icon type="desktop" className="css-appstore" />&nbsp;价格明细
                 </div>
-                <Form layout="inline" className={`${prefixCls}-content`}>
-                    <Row type="flex" justify="start" className={`${prefixCls}-flex`}>
+                <Form
+                    layout="inline"
+                    className={`${prefixCls}-form`}
+                    onSubmit={this.handleSearch}
+                >
+                    <Row>
                         {/* 供应商 */}
                         <Col>
                             <FormItem label="供应商">
-                                <span className="value-list-input">
-                                    <SearchMind
-                                        compKey="search-mind-supply1"
-                                        ref={ref => { this.supplySearchMind = ref }}
-                                        fetch={(params) => this.props.pubFetchValueList({
-                                            condition: params.value,
-                                            pageSize: params.pagination.pageSize,
-                                            pageNum: params.pagination.current || 1
-                                        }, 'supplierSearchBox')}
-                                        onChoosed={this.handleSupplyChoose}
-                                        onClear={this.handleSupplyClear}
-                                        renderChoosedInputRaw={(data) => (
-                                            <div>{data.spNo} - {data.companyName}</div>
-                                        )}
-                                        pageSize={6}
-                                        columns={[
-                                            {
-                                                title: '供应商编码',
-                                                dataIndex: 'spNo',
-                                                width: 68
-                                            }, {
-                                                title: '供应商名称',
-                                                dataIndex: 'companyName'
-                                            }
-                                        ]}
-                                    />
-                                </span>
+                                <SearchMind
+                                    compKey="search-mind-supply1"
+                                    ref={ref => { this.supplySearchMind = ref }}
+                                    fetch={(params) => this.props.pubFetchValueList({
+                                        condition: params.value,
+                                        pageSize: params.pagination.pageSize,
+                                        pageNum: params.pagination.current || 1
+                                    }, 'supplierSearchBox')}
+                                    onChoosed={this.handleSupplyChoose}
+                                    onClear={this.handleSupplyClear}
+                                    renderChoosedInputRaw={(data) => (
+                                        <div>{data.spNo} - {data.companyName}</div>
+                                    )}
+                                    pageSize={6}
+                                    columns={[
+                                        {
+                                            title: '供应商编码',
+                                            dataIndex: 'spNo',
+                                            width: 68
+                                        }, {
+                                            title: '供应商名称',
+                                            dataIndex: 'companyName'
+                                        }
+                                    ]}
+                                />
                             </FormItem>
                         </Col>
                         {/* 地点 */}
                         <Col>
                             <FormItem label="地点">
-                                <span className="value-list-input">
-                                    <SearchMind
-                                        compKey="search-mind-supply2"
-                                        ref={ref => { this.addressSearchMind = ref }}
-                                        fetch={(params) => this.props.pubFetchValueList({
-                                            condition: params.value,
-                                            pageSize: params.pagination.pageSize,
-                                            pageNum: params.pagination.current || 1
-                                        }, 'supplierAdrSearchBox')}
-                                        onChoosed={this.handleAdressChoose}
-                                        onClear={this.handleAdressClear}
-                                        renderChoosedInputRaw={(data) => (
-                                            <div>{data.providerNo} - {data.providerName}</div>
-                                        )}
-                                        pageSize={6}
-                                        columns={[
-                                            {
-                                                title: '供应商地点编码',
-                                                dataIndex: 'providerNo',
-                                                width: 68
-                                            }, {
-                                                title: '供应商地点名称',
-                                                dataIndex: 'providerName'
-                                            }
-                                        ]}
-                                    />
-                                </span>
+                                <SearchMind
+                                    compKey="search-mind-supply2"
+                                    ref={ref => { this.addressSearchMind = ref }}
+                                    fetch={(params) => this.props.pubFetchValueList({
+                                        condition: params.value,
+                                        pageSize: params.pagination.pageSize,
+                                        pageNum: params.pagination.current || 1
+                                    }, 'supplierAdrSearchBox')}
+                                    onChoosed={this.handleAdressChoose}
+                                    onClear={this.handleAdressClear}
+                                    renderChoosedInputRaw={(data) => (
+                                        <div>{data.providerNo} - {data.providerName}</div>
+                                    )}
+                                    pageSize={6}
+                                    columns={[
+                                        {
+                                            title: '供应商地点编码',
+                                            dataIndex: 'providerNo',
+                                            width: 68
+                                        }, {
+                                            title: '供应商地点名称',
+                                            dataIndex: 'providerName'
+                                        }
+                                    ]}
+                                />
                             </FormItem>
                         </Col>
                         {/* 子公司 */}
@@ -310,8 +314,7 @@ class SearchForm extends Component {
                         </Col>
                         <Col>
                             {/* 是否启用 */}
-                            <FormItem className="sc-form-item">
-                                <span className={`${prefixCls}-select`}>启用</span>
+                            <FormItem label="启用">
                                 {getFieldDecorator('initiateModeOptions', {
                                     initialValue: initiateModeOptions.defaultValue
                                 })(
@@ -334,8 +337,7 @@ class SearchForm extends Component {
                         </Col>
                         <Col>
                             {/* 是否为主供应商 */}
-                            <FormItem className="sc-form-item">
-                                <span className={`${prefixCls}-select`}>主供应商</span>
+                            <FormItem label="主供应商">
                                 {getFieldDecorator('mainSupplierOptions', {
                                     initialValue: mainSupplierOptions.defaultValue
                                 })(
@@ -356,33 +358,23 @@ class SearchForm extends Component {
                                     )}
                             </FormItem>
                         </Col>
-                        <Col>
-                            <FormItem>
-                                <Button
-                                    type="primary"
-                                    onClick={this.handleGetValue}
-                                    size="default"
-                                >
-                                    搜索
+                        <Col style={{display: 'inline-block', lineHeight: '42px'}}>
+                            <Button
+                                type="primary"
+                                onClick={this.handleGetValue}
+                                size="default"
+                            >
+                                搜索
                             </Button>
-                            </FormItem>
-                        </Col>
-                        <Col>
-                            <FormItem>
-                                <Button
-                                    size="default"
-                                    onClick={this.props.handleAdd}
-                                >
-                                    创建
+                            <Button
+                                size="default"
+                                onClick={this.props.handleAdd}
+                            >
+                                创建
                             </Button>
-                            </FormItem>
-                        </Col>
-                        <Col>
-                            <FormItem>
-                                <Button size="default" onClick={this.handleResetValue}>
+                            <Button size="default" onClick={this.handleResetValue}>
                                     重置
                             </Button>
-                            </FormItem>
                         </Col>
                     </Row>
                 </Form>
