@@ -18,7 +18,7 @@ import {
 } from 'antd';
 import { PAGE_SIZE } from '../../../constant';
 import { fetchPoPrintList } from '../../../actions';
-import SearchForm from '../../../components/poSearchForm';
+import SearchForm from '../poSearchForm';
 import Utils from '../../../util/util';
 import Report from '../report';
 

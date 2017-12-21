@@ -28,7 +28,7 @@ import {
 } from '../../../actions/process';
 
 import { fetchPoMngList, changePoMngSelectedRows, deletePoByIds } from '../../../actions';
-import SearchForm from '../../../components/poSearchForm';
+import SearchForm from '../poSearchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { poMngListColumns } from '../columns';
 import FlowImage from '../../../components/flowImage';
@@ -217,10 +217,6 @@ class PoMngList extends PureComponent {
                         <span onClick={() => this.singleRowsDelete(record)}>删除</span>
                     </Menu.Item>
                 }
-                {/* {status === refuseCode && <Menu.Item key="rejected">
-                    <span onClick={() => this.showAuditingModal(record)}>查看审核未通过</span>
-                </Menu.Item>
-                } */}
                 {status === submitCode && <Menu.Item key="approvalProgress">
                     <span onClick={() => this.showApprovalProgress(record)}>查看审批进度</span>
                 </Menu.Item>
