@@ -27,27 +27,7 @@ const getCompaniesTree = (companies) => companies.map((item) => {
 });
 
 class CheckedTree extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            checkedKeys: []
-        }
-        this.handleCheck = this.handleCheck.bind(this);
-    }
-
-    // 当父容器需要清空选择框时，通知本组件
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.isEmpty) {
-            this.setState({
-                checkedKeys: []
-            });
-        }
-    }
-
-    handleCheck(checkedKeys) {
-        this.setState({
-            checkedKeys
-        });
+    handleCheck = (checkedKeys) => {
         this.props.onCheckTreeOk(checkedKeys);
     }
 
@@ -55,7 +35,7 @@ class CheckedTree extends PureComponent {
         return (
             <Tree
                 checkable
-                checkedKeys={this.state.checkedKeys}
+                checkedKeys={this.props.checkedKeys}
                 onCheck={this.handleCheck}
             >
                 {getCompaniesTree(this.props.list)}
@@ -66,8 +46,8 @@ class CheckedTree extends PureComponent {
 
 CheckedTree.propTypes = {
     onCheckTreeOk: PropTypes.func,
-    isEmpty: PropTypes.bool,
-    list: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
+    checkedKeys: PropTypes.arrayOf(PropTypes.string),
+    list: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
 }
 
 export default withRouter(Form.create()(CheckedTree));

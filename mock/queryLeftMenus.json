@@ -226,7 +226,7 @@
                 {
                     "authorityId": 278,
                     "authorityCode": "cxxddz",
-                    "displayName": "下单打折",
+                    "displayName": "促销活动",
                     "menuList": []
                 },
                 {
@@ -258,6 +258,19 @@
                     "authorityId": 281,
                     "authorityCode": "jmsjs",
                     "displayName": "加盟商结算",
+                    "menuList": []
+                }
+            ]
+        },
+        {
+            "authorityId": 305,
+            "authorityCode": "lcgl",
+            "displayName": "流程管理",
+            "menuList": [
+                {
+                    "authorityId": 306,
+                    "authorityCode": "lclb",
+                    "displayName": "流程列表",
                     "menuList": []
                 }
             ]

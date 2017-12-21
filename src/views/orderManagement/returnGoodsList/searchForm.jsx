@@ -8,9 +8,7 @@ import { connect } from 'react-redux';
 import Utils from '../../../util/util';
 import { returnGoodsStatus, goodsReceiptStatus, returnType } from '../../../constant/salesManagement';
 import { returnGoodsList } from '../../../actions';
-import { pubFetchValueList } from '../../../actions/pub';
-import SearchMind from '../../../components/searchMind';
-import { BranchCompany } from '../../../container/search';
+import { BranchCompany, Franchisee } from '../../../container/search';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -20,8 +18,7 @@ const dateFormat = 'YYYY-MM-DD';
     () => ({
     }),
     dispatch => bindActionCreators({
-        returnGoodsList,
-        pubFetchValueList,
+        returnGoodsList
     }, dispatch)
 )
 
@@ -29,8 +26,7 @@ class SearchForm extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
-            franchiseeId: '',
+            data: []
         }
     }
 
@@ -45,6 +41,7 @@ class SearchForm extends PureComponent {
     getSearchParams = () => {
         const {
             branchCompany,
+            franchisee,
             id,
             orderId,
             shippingState,
@@ -54,7 +51,7 @@ class SearchForm extends PureComponent {
             } = this.props.form.getFieldsValue();
         const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
         const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
-        const franchiseeId = this.state.franchiseeId;
+        const franchiseeId = franchisee.franchiseeId;
         const searchParams = {
             franchiseeId,
             branchCompanyId: branchCompany.id,
@@ -79,26 +76,15 @@ class SearchForm extends PureComponent {
 
     // 重置
     handleReset = () => {
-        this.handleJoiningClear();
-        this.joiningSearchMind.reset();
         this.props.form.resetFields();
         this.branchCompany = { id: '', name: '' }
         this.props.onPromotionReset();  // 通知父页面已清空
-    }
-
-    // 加盟商-值清单
-    handleJoiningChoose = ({ record }) => {
-        this.setState({
-            franchiseeId: record.franchiseeId,
-            franchiseeIdName: `${record.franchiseeId} - ${record.franchiseeName}`
+        // 点击重置时清除 seachMind 引用文本
+        this.props.form.setFieldsValue({
+            branchCompany: { reset: true }
         });
-    }
-
-
-    // 加盟商-清除
-    handleJoiningClear = () => {
-        this.setState({
-            franchiseeId: ''
+        this.props.form.setFieldsValue({
+            franchisee: { reset: true }
         });
     }
 
@@ -153,38 +139,9 @@ class SearchForm extends PureComponent {
                             <FormItem>
                                 <div>
                                     <span className="sc-form-item-label">雅堂小超:</span>
-                                    <SearchMind
-                                        defaultValue={this.state.franchiseeIdName}
-                                        rowKey="franchiseeId"
-                                        compKey="search-mind-joining"
-                                        ref={ref => { this.joiningSearchMind = ref }}
-                                        fetch={(params) =>
-                                            this.props.pubFetchValueList({
-                                                param: params.value,
-                                                pageNum: params.pagination.current || 1,
-                                                pageSize: params.pagination.pageSize
-                                            }, 'getFranchiseeInfo')
-                                        }
-                                        onChoosed={this.handleJoiningChoose}
-                                        onClear={this.handleJoiningClear}
-                                        renderChoosedInputRaw={(row) => (
-                                            <div>
-                                                {row.franchiseeId} - {row.franchiseeName}
-                                            </div>
-                                        )}
-                                        pageSize={6}
-                                        columns={[
-                                            {
-                                                title: '加盟商id',
-                                                dataIndex: 'franchiseeId',
-                                                width: 98
-                                            }, {
-                                                title: '加盟商名字',
-                                                dataIndex: 'franchiseeName',
-                                                width: 140
-                                            }
-                                        ]}
-                                    />
+                                    {getFieldDecorator('franchisee', {
+                                        initialValue: { franchiseeId: '', franchiseeName: '' }
+                                    })(<Franchisee />)}
                                 </div>
                             </FormItem>
                         </Col>
@@ -270,7 +227,6 @@ class SearchForm extends PureComponent {
 
 SearchForm.propTypes = {
     onPromotionSearch: PropTypes.func,
-    pubFetchValueList: PropTypes.func,
     onPromotionReset: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     upDate: PropTypes.bool,

@@ -3,7 +3,7 @@
  * @Description: 销售退货详情
  * @CreateDate: 2017-11-10 11:22:28
  * @Last Modified by: tanjf
- * @Last Modified time: 2017-11-15 17:42:02
+ * @Last Modified time: 2017-12-08 18:15:07
  */
 
 import React, { PureComponent } from 'react';
@@ -138,29 +138,6 @@ class ExchangeGoodsDetail extends PureComponent {
         }
     }
 
-    purchaseOrderType = () => {
-        const data = this.props.data
-        switch (data.returnReasonType) {
-            case '':
-                return '请选择';
-            case 1:
-                return '包装破损';
-            case 2:
-                return '商品破损';
-            case 3:
-                return '保质期临期或过期';
-            case 4:
-                return '商品错发或漏发';
-            case 5:
-                return '订错货';
-            case 6:
-                return '商品质量问题';
-            case 7:
-                return '其他';
-            default:
-                return '';
-        }
-    }
 
     render() {
         const { getFieldDecorator } = this.props.form
@@ -244,7 +221,7 @@ class ExchangeGoodsDetail extends PureComponent {
                                 <Col span={4}>
                                     <FormItem>
                                         {getFieldDecorator('returnReasonType', {
-                                            initialValue: this.purchaseOrderType() || ''
+                                            initialValue: data.returnReasonType ? data.returnReasonType : ''
                                         })(
                                             <Select style={{ width: '153px' }} size="default" disabled>
                                                 {
@@ -284,7 +261,7 @@ class ExchangeGoodsDetail extends PureComponent {
                                         {getFieldDecorator('description', {
                                             initialValue: data.description
                                         })(
-                                            <TextArea className="input-des" autosize={{ minRows: 4, maxRows: 4 }} disabled={type === '2' ? false : true} size="default" />
+                                            <TextArea className="input-des" autosize={{ minRows: 4, maxRows: 4 }} disabled={type === '1'} size="default" />
                                             )}
                                     </FormItem>
                                 </Col>
@@ -293,14 +270,17 @@ class ExchangeGoodsDetail extends PureComponent {
                     </div>
                 </Form>
                 <div className="bt-button">
-                    {type === '2' ? (
-                        <span>
-                            <Button size="large" onClick={this.save}>保存</Button>
-                            <Button size="large" onClick={() => this.showConfirm(1)}>确认</Button>
-                            <Button size="large" onClick={() => this.showConfirm(2)}>取消</Button>
-                        </span>
-                    ) : null}
-                    <Button size="large" onClick={this.goBack}>关闭</Button>
+                    <div>
+                        {
+                            type === '2' &&
+                            <span>
+                                <Button size="large" onClick={this.save} disabled={this.state.isSaveDisabled}>保存</Button>
+                                <Button size="large" onClick={() => this.showConfirm(1)}>确认</Button>
+                                <Button size="large" onClick={() => this.showConfirm(2)}>取消</Button>
+                            </span>
+                        }
+                        <Button size="large" onClick={this.goBack}>关闭</Button>
+                    </div>
                 </div>
             </div>
         )

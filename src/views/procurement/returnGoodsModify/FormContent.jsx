@@ -164,7 +164,7 @@ class FormContent extends PureComponent {
         const { spaceType } = this.state;
         let locationTypeParam = '';
         if (spaceType === '0') {
-            locationTypeParam = 'getWarehouseInfo1';
+            locationTypeParam = 'getWarehouseLogic';
             this.setState({
                 locationData: {
                     code: 'warehouseCode',

@@ -1,6 +1,13 @@
+/**
+ * @file App.jsx
+ * @author caoyanxuan,liujinyu
+ *
+ * 快捷导航
+ */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Modal, Input, Form, Button } from 'antd';
+import { Icon, Modal, Input, Form } from 'antd';
 import classnames from 'classnames';
 import Common from './common';
 import { format } from './utils';
@@ -56,10 +63,10 @@ const colums = [
 class FloorItem extends Component {
     constructor(props) {
         super(props);
-        this.handleTitleClick = ::this.handleTitleClick;
-        this.handleTitleOk = ::this.handleTitleOk;
-        this.handleTitleCancel = ::this.handleTitleCancel;
-        this.handleUpload = ::this.handleUpload;
+        this.handleTitleClick = :: this.handleTitleClick;
+        this.handleTitleOk = :: this.handleTitleOk;
+        this.handleTitleCancel = :: this.handleTitleCancel;
+        this.handleUpload = :: this.handleUpload;
 
         this.state = {
             titleVisible: false,
@@ -79,10 +86,10 @@ class FloorItem extends Component {
 
     handleTitleOk() {
         const { handleSaveItem } = this.props;
-        const { validateFields, getFieldsValue, getFieldError } = this.props.form;
+        const { validateFields, getFieldsValue } = this.props.form;
         validateFields((err) => {
             if (!err) {
-                const { areaId, id, adType, name  } = this.selectData;
+                const { areaId, id, adType, name } = this.selectData;
                 const { title, url } = getFieldsValue();
                 handleSaveItem({
                     id,
@@ -91,7 +98,7 @@ class FloorItem extends Component {
                     title,
                     url: encodeURI(url),
                     adType,
-                    urlType: 2
+                    urlType: 5
                 }).then(() => {
                     this.setState({
                         titleVisible: false
@@ -135,12 +142,12 @@ class FloorItem extends Component {
                                     subTitle: null,
                                     url: null,
                                     icon: null,
-                                    adType: "FLOOR"
+                                    adType: 'FLOOR'
                                 };
                                 return (<div
-                                    className={classnames("home-style-floor-item", {
-                                        "home-style-floor-item1": index % 3 === 0,
-                                        "home-style-floor-item2": index === 1 || index === 2 || index === 4 || index === 5,
+                                    className={classnames('home-style-floor-item', {
+                                        'home-style-floor-item1': index % 3 === 0,
+                                        'home-style-floor-item2': index === 1 || index === 2 || index === 4 || index === 5,
                                     })}
                                     key={i.prefex}
                                     onClick={(e) => this.handleUpload(item, i, e)}
@@ -165,13 +172,12 @@ class FloorItem extends Component {
                                 <FormItem className="home-style-modal-input-item">
                                     {getFieldDecorator('title', {
                                         rules: [
-                                            {required: true, message: '请输入标题'},
-                                            {max: 10, message: '最大长度10个字'}
+                                            { required: true, message: '请输入标题' },
+                                            { max: 10, message: '最大长度10个字' }
                                         ],
                                         initialValue: formatData[`${data.id}-title`].title
                                     })(
-                                        <Input type="text" placeholder="请输入标题" />
-                                    )}
+                                        <Input type="text" placeholder="请输入标题" />)}
                                 </FormItem>
                             </div>
                             <div>
@@ -179,13 +185,11 @@ class FloorItem extends Component {
                                 <FormItem className="home-style-modal-input-item">
                                     {getFieldDecorator('url', {
                                         rules: [
-                                            {required: true, message: '请输入链接'},
-                                            {/* {pattern: /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/, message: '请输入正确的url地址'} */}
+                                            { required: true, message: '请输入链接' },
                                         ],
                                         initialValue: decodeURI(formatData[`${data.id}-title`].url)
                                     })(
-                                        <Input type="textarea" rows={2} placeholder="请输入链接" />
-                                    )}
+                                        <Input type="textarea" rows={2} placeholder="请输入链接" />)}
                                 </FormItem>
                             </div>
                         </Form>
@@ -200,13 +204,12 @@ FloorItem.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     data: PropTypes.objectOf(PropTypes.any),
     handleSaveItem: PropTypes.func,
-    saveBase64: PropTypes.func,
     handleUpload: PropTypes.func,
 };
 
 FloorItem.defaultProps = {
-    handleSaveItem: () => {},
-    handleUpload: () => {}
+    handleSaveItem: () => { },
+    handleUpload: () => { }
 }
 
 export default Form.create()(FloorItem);

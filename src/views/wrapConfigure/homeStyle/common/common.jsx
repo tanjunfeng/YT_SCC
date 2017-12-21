@@ -1,33 +1,39 @@
+/**
+ * @file App.jsx
+ * @author shijh,liujinyu
+ *
+ * 快捷导航
+ */
+
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Modal, Input, Form, Button, message, Select } from 'antd';
+import { Modal, Input, Form, Button, message } from 'antd';
 import classnames from 'classnames';
+import Utils from '../../../../util/util';
 import {
     setAreaEnable, moveArea, saveItemAd,
     uploadImageBase64Data, batchUpdateQuickNavigation
 } from '../../../../service';
-import ImageUploader from '../../../../common/preImage';
 import FileCut from '../../fileCut';
 import LinkType from '../../common/linkType';
 
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 function Common(WrappedComponent) {
     @Form.create()
     class HOC extends PureComponent {
         constructor(props) {
             super(props);
-            this.handleDisable = ::this.handleDisable;
-            this.handleEnable = ::this.handleEnable;
-            this.handleUp = ::this.handleUp;
-            this.handleDown = ::this.handleDown;
-            this.handleSaveItem = ::this.handleSaveItem;
-            this.handleUpOk = ::this.handleUpOk;
-            this.handleUpCancel = ::this.handleUpCancel;
-            this.handleUpload = ::this.handleUpload;
-            this.hideEditModal = ::this.hideEditModal;
-            this.saveItems = ::this.saveItems;
+            this.handleDisable = :: this.handleDisable;
+            this.handleEnable = :: this.handleEnable;
+            this.handleUp = :: this.handleUp;
+            this.handleDown = :: this.handleDown;
+            this.handleSaveItem = :: this.handleSaveItem;
+            this.handleUpOk = :: this.handleUpOk;
+            this.handleUpCancel = :: this.handleUpCancel;
+            this.handleUpload = :: this.handleUpload;
+            this.hideEditModal = :: this.hideEditModal;
+            this.saveItems = :: this.saveItems;
             this.state = {
                 img: '',
                 isEdit: true,
@@ -110,17 +116,24 @@ function Common(WrappedComponent) {
             const { current } = this.state;
             const { areaId, id, adType, name } = current;
             const { title, subTitle, chooseLink } = values;
+            const { selected, goodsId, linkAddress, linkId, linkKeyword } = chooseLink;
+            const submitObj = {
+                urlType: selected,
+                productNo: goodsId,
+                url: linkAddress,
+                linkId,
+                linkKeyword
+            }
             saveItemAd({
-                id,
-                areaId,
-                name,
-                title,
-                subTitle,
-                url: chooseLink.link,
-                adType,
-                productNo: parseInt(chooseLink.selected, 10) === 1 ? chooseLink.link : '',
-                urlType: chooseLink.selected,
-                icon: imgUrl
+                ...Utils.removeInvalid(Object.assign({
+                    id,
+                    areaId,
+                    name,
+                    title,
+                    subTitle,
+                    adType,
+                    icon: imgUrl
+                }, submitObj))
             }).then(() => {
                 this.props.fetchAreaList();
                 this.setState({
@@ -218,7 +231,13 @@ function Common(WrappedComponent) {
             const { data = {}, type } = this.props;
             const { isEnabled } = data;
             const { getFieldDecorator } = this.props.form;
-            const { current } = this.state;
+            const { current = {} } = this.state;
+            const {
+                urlType,
+                url,
+                productNo,
+                linkId,
+                linkKeyword } = current
             return (
                 <div
                     className={classnames(
@@ -235,89 +254,93 @@ function Common(WrappedComponent) {
                         handleUpload={this.handleUpload}
                         saveBase64={this.saveBase64}
                     />
-                    <ul className="home-style-common-btns">
-                        {
-                            type !== 'quick' &&
-                            <li className="home-style-common-btns1">
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    onClick={this.handleEnable}
-                                >
-                                    启用
-                                </Button>
-                            </li>
-                        }
-                        {
-                            type !== 'quick' &&
-                            <li className="home-style-common-btns2">
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    onClick={this.handleDisable}
-                                >
-                                    停用
-                                </Button>
-                            </li>
-                        }
-                        {
-                            type === 'quick' &&
-                            <li className="home-style-common-btns2">
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    onClick={this.handleDisableFirst}
-                                >
-                                    {
-                                        data.itemAds[4].status === 0
-                                            ? '启用第一栏'
-                                            : '停用第一栏'
-                                    }
-                                </Button>
-                            </li>
+                    {
+                        this.props.isHeadquarters
+                            ? <ul className="home-style-common-btns">
+                                {
+                                    type !== 'quick' &&
+                                    <li className="home-style-common-btns1">
+                                        <Button
+                                            type="primary"
+                                            size="large"
+                                            onClick={this.handleEnable}
+                                        >
+                                            启用
+                                        </Button>
+                                    </li>
+                                }
+                                {
+                                    type !== 'quick' &&
+                                    <li className="home-style-common-btns2">
+                                        <Button
+                                            type="primary"
+                                            size="large"
+                                            onClick={this.handleDisable}
+                                        >
+                                            停用
+                                        </Button>
+                                    </li>
+                                }
+                                {
+                                    type === 'quick' && this.props.isChangeQuick &&
+                                    <li className="home-style-common-btns2">
+                                        <Button
+                                            type="primary"
+                                            size="large"
+                                            onClick={this.handleDisableFirst}
+                                        >
+                                            {
+                                                data.itemAds[4].status === 0
+                                                    ? '启用第一栏'
+                                                    : '停用第一栏'
+                                            }
+                                        </Button>
+                                    </li>
 
-                        }
-                        {
-                            type === 'quick' &&
-                            <li className="home-style-common-btns2">
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    onClick={this.handleDisablSecond}
-                                >
-                                    {
-                                        data.itemAds[5].status === 0
-                                            ? '启用第二栏'
-                                            : '停用第二栏'
-                                    }
-                                </Button>
-                            </li>
-                        }
-                        {
-                            this.props.index !== 0 &&
-                            <li className="home-style-common-btns2">
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    onClick={this.handleUp}
-                                >
-                                    上移
-                                </Button>
-                            </li>
-                        }
-                        {
-                            this.props.index < (this.props.allLength - 1) &&
-                            <li className="home-style-common-btns2">
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    onClick={this.handleDown}
-                                >
-                                    下移
-                                </Button>
-                            </li>
-                        }
-                    </ul>
+                                }
+                                {
+                                    type === 'quick' && this.props.isChangeQuick &&
+                                    <li className="home-style-common-btns2">
+                                        <Button
+                                            type="primary"
+                                            size="large"
+                                            onClick={this.handleDisablSecond}
+                                        >
+                                            {
+                                                data.itemAds[5].status === 0
+                                                    ? '启用第二栏'
+                                                    : '停用第二栏'
+                                            }
+                                        </Button>
+                                    </li>
+                                }
+                                {
+                                    this.props.index !== 0 &&
+                                    <li className="home-style-common-btns2">
+                                        <Button
+                                            type="primary"
+                                            size="large"
+                                            onClick={this.handleUp}
+                                        >
+                                            上移
+                                        </Button>
+                                    </li>
+                                }
+                                {
+                                    this.props.index < (this.props.allLength - 1) &&
+                                    <li className="home-style-common-btns2">
+                                        <Button
+                                            type="primary"
+                                            size="large"
+                                            onClick={this.handleDown}
+                                        >
+                                            下移
+                                        </Button>
+                                    </li>
+                                }
+                            </ul>
+                            : null
+                    }
                     {
                         this.state.uploadVisible &&
                         <Modal
@@ -341,8 +364,7 @@ function Common(WrappedComponent) {
                                             ],
                                             initialValue: current.title
                                         })(
-                                            <Input type="text" placeholder="请输入主标题" />
-                                        )}
+                                            <Input type="text" placeholder="请输入主标题" />)}
                                     </FormItem>
                                 </div>
                                 <div>
@@ -355,8 +377,7 @@ function Common(WrappedComponent) {
                                             ],
                                             initialValue: current.subTitle
                                         })(
-                                            <Input type="text" placeholder="请输入副标题" />
-                                        )}
+                                            <Input type="text" placeholder="请输入副标题" />)}
                                     </FormItem>
                                 </div>
                                 <div>
@@ -366,19 +387,24 @@ function Common(WrappedComponent) {
                                                 required: true
                                             }, {
                                                 validator: (rule, value, callback) => {
-                                                    if (!value.link) {
-                                                        callback('请输入链接')
+                                                    if (!value.goodsId
+                                                        && !value.linkAddress
+                                                        && !value.linkId
+                                                        && !value.linkKeyword) {
+                                                        callback('请完成表单')
                                                     }
                                                     callback()
                                                 }
                                             }],
                                             initialValue: {
-                                                selected: current.urlType ? `${current.urlType}` : '1',
-                                                link: parseInt(current.urlType, 10) === 1 ? current.productNo : current.url
+                                                selected: urlType,
+                                                linkAddress: url,
+                                                goodsId: productNo,
+                                                linkId,
+                                                linkKeyword
                                             }
                                         })(
-                                            <LinkType />
-                                        )}
+                                            <LinkType />)}
                                     </FormItem>
                                 </div>
                                 <div>
@@ -405,7 +431,9 @@ function Common(WrappedComponent) {
         fetchAreaList: PropTypes.func,
         type: PropTypes.string,
         index: PropTypes.number,
-        allLength: PropTypes.number
+        allLength: PropTypes.number,
+        isHeadquarters: PropTypes.bool,
+        isChangeQuick: PropTypes.bool
     }
     return HOC;
 }
