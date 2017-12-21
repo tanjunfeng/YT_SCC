@@ -85,7 +85,8 @@ const participateList = [{
 }, {
     title: '订单时间',
     dataIndex: 'submitTime',
-    key: 'submitTime'
+    key: 'submitTime',
+    render: timestamp => Util.getTime(timestamp)
 }, {
     title: '订单状态',
     dataIndex: 'orderStateDesc',
