@@ -92,6 +92,8 @@ import StoreRealTime from 'bundle-loader?lazy!../views/storeAdjustment/storeReal
 import ToDoPurchaseList from 'bundle-loader?lazy!../views/toDo/toDoPurchaseList';
 // 退货单审批列表
 import ToDoReturnList from 'bundle-loader?lazy!../views/toDo/toDoReturnList';
+// 价格变更记录列表
+import toDoPriceChangeList from 'bundle-loader?lazy!../views/toDo/toDoPriceChangeList';
 
 // 简易结算支持
 import SimpleOrderList from 'bundle-loader?lazy!../views/simpleSettlement/simpleOrderList';
@@ -775,6 +777,22 @@ const routes = [
                             path="/toDoPurchaseList"
                             exact
                             render={() => (<Bundle load={ToDoPurchaseList}>
+                                {(App) => <App />}</Bundle>
+                            )}
+                        />
+                    </Switch>
+                )
+            },
+            // 价格变更记录列表
+            {
+                path: '/toDoPriceChangeList',
+                parent: 'dbsx',
+                key: 'jgbgjllb',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/toDoPriceChangeList"
+                            render={() => (<Bundle load={toDoPriceChangeList}>
                                 {(App) => <App />}</Bundle>
                             )}
                         />
