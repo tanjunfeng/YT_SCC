@@ -20,6 +20,7 @@ class SearchForm extends PureComponent {
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
         this.getFormData = this.getFormData.bind(this);
+        this.selectMap = this.selectMap.bind(this);
     }
 
     /**
@@ -27,16 +28,17 @@ class SearchForm extends PureComponent {
      */
     getFormData() {
         const {
-            zt,
-            gys,
-            gysdd,
-            sp,
+            status,
+            spId,
+            spAdrId,
+            productId,
         } = this.props.form.getFieldsValue();
+        const prRecord = productId.record;
         return Util.removeInvalid({
-            zt,
-            gys: gys.spId,
-            gysdd: gysdd.providerNo,
-            sp: sp.id
+            status,
+            spId: spId.spId,
+            spAdrId: spAdrId.providerNo,
+            productId: prRecord ? prRecord.productId : ''
         });
     }
 
@@ -54,10 +56,16 @@ class SearchForm extends PureComponent {
     handleReset() {
         this.props.form.resetFields(); // 清除当前查询条件
         this.props.handlePurchaseReset(); // 通知查询条件已清除
-        // 点击重置时清除 seachMind 引用文本
-        this.props.form.setFieldsValue({
-            branchCompany: { reset: true }
-        });
+    }
+
+    /**
+     * 遍历select框选项
+     */
+    selectMap() {
+        return purchaseStatus.data.map(item => (
+            <Option key={item.key} value={item.key}>
+                {item.value}
+            </Option>))
     }
 
     render() {
@@ -67,36 +75,31 @@ class SearchForm extends PureComponent {
                 <Row gutter={40}>
                     <Col span={8}>
                         <FormItem label="状态">
-                            {getFieldDecorator('zt', { initialValue: purchaseStatus.defaultValue })(
+                            {getFieldDecorator('status', { initialValue: purchaseStatus.defaultValue })(
                                 <Select size="default" onChange={this.statusChange}>
-                                    {
-                                        purchaseStatus.data.map((item) => (
-                                            <Option key={item.key} value={item.key}>
-                                                {item.value}
-                                            </Option>))
-                                    }
+                                    {this.selectMap()}
                                 </Select>
                             )}
                         </FormItem>
                     </Col>
                     <Col span={8}>
                         <FormItem label="供应商">
-                            {getFieldDecorator('gys', {
-                                initialValue: { id: '', name: '' }
+                            {getFieldDecorator('spId', {
+                                initialValue: { spId: '', spNo: '', companyName: '' }
                             })(<Supplier />)}
                         </FormItem>
                     </Col>
                     <Col span={8}>
                         <FormItem label="供应商地点">
-                            {getFieldDecorator('gysdd', {
-                                initialValue: { id: '', name: '' }
+                            {getFieldDecorator('spAdrId', {
+                                initialValue: { providerNo: '', providerName: '' }
                             })(<SupplierAdderss />)}
                         </FormItem>
                     </Col>
                     <Col span={8}>
                         <FormItem label="商品">
-                            {getFieldDecorator('sp', {
-                                initialValue: { id: '', name: '' }
+                            {getFieldDecorator('productId', {
+                                initialValue: { productId: '', productCode: '', productName: '' }
                             })(<AddingGoodsByTerm />)}
                         </FormItem>
                     </Col>

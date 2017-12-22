@@ -27,7 +27,7 @@ class SupplierAdderss extends PureComponent {
     }
 
     /**
-     * 子公司-清除
+     * 清除
      */
     handleClear = () => {
         this.searchMind.reset();
@@ -35,7 +35,7 @@ class SupplierAdderss extends PureComponent {
     }
 
     /**
-     * 子公司-值清单
+     * 值清单
      */
     handleChoose = ({ record }) => {
         this.props.onChange(record);

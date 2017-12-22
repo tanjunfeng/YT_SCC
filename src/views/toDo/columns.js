@@ -7,6 +7,7 @@
 import React from 'react';
 import moment from 'moment';
 import { locType, poStatus } from '../../constant/procurement';
+import { purchaseStatus } from './constants';
 
 const purchase = ['普通采购单'];
 // 供应商列表
@@ -206,19 +207,24 @@ export const goodsColumns = [{
 export const purchaseListColumns = [
     {
         title: '变价类型',
-        dataIndex: 'purchaseOrderNo',
-        key: 'purchaseOrderNo',
+        dataIndex: 'processType',
+        key: 'processType',
     },
     {
         title: '状态',
-        dataIndex: 'purchaseOrderType',
-        key: 'purchaseOrderType',
-        render: text => (purchase[text])
+        dataIndex: 'status',
+        key: 'status',
+        render: text => {
+            const statusItem = purchaseStatus.data.find(val => (
+                val.key === text.toString()
+            ))
+            return statusItem.value
+        }
     },
     {
         title: '供应商编号',
-        dataIndex: 'spNo',
-        key: 'spNo',
+        dataIndex: 'spId',
+        key: 'spId',
     },
     {
         title: '供应商名称',
@@ -227,8 +233,8 @@ export const purchaseListColumns = [
     },
     {
         title: '供应商地点编号',
-        dataIndex: 'spAdrNo',
-        key: 'spAdrNo',
+        dataIndex: 'spAdrId',
+        key: 'spAdrId',
     }, {
         title: '供应商地点名称',
         dataIndex: 'spAdrName',
@@ -236,8 +242,18 @@ export const purchaseListColumns = [
     },
     {
         title: '商品编号',
-        dataIndex: 'estimatedDeliveryDate',
-        key: 'estimatedDeliveryDate',
+        dataIndex: 'productId',
+        key: 'productId',
+    },
+    {
+        title: '商品名称',
+        dataIndex: 'productName',
+        key: 'productName',
+    },
+    {
+        title: '变更日期',
+        dataIndex: 'createTime',
+        key: 'createTime',
         render: (text) => (
             <span>
                 {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
@@ -245,25 +261,9 @@ export const purchaseListColumns = [
         )
     },
     {
-        title: '商品名称',
-        dataIndex: 'adrType',
-        key: 'adrType',
-        // render: (text) => {
-        //     if (text === null) {
-        //         return null;
-        //     }
-        //     return (locType.data[text + 1].value);
-        // }
-    },
-    {
-        title: '变更日期',
-        dataIndex: 'adrTypeName',
-        key: 'adrTypeName'
-    },
-    {
         title: '当前节点',
-        dataIndex: 'secondCategoryId',
-        key: 'secondCategoryId'
+        dataIndex: 'currentNode',
+        key: 'currentNode'
 
     },
     {
@@ -277,38 +277,44 @@ export const purchaseListColumns = [
 export const priceListColumns = [
     {
         title: '变价类型',
-        dataIndex: 'purchaseOrderNo',
-        key: 'purchaseOrderNo',
+        dataIndex: 'processType',
+        key: 'processType',
     },
     {
         title: '状态',
-        dataIndex: 'purchaseOrderType',
-        key: 'purchaseOrderType',
-        render: text => (purchase[text])
+        dataIndex: 'status',
+        key: 'status',
+        render: text => {
+            const statusItem = purchaseStatus.data.find(val => (
+                val.key === text.toString()
+            ))
+            return statusItem.value
+        }
     },
     {
         title: '子公司编号',
-        dataIndex: 'spNo',
-        key: 'spNo',
+        dataIndex: 'branchCompanyId',
+        key: 'branchCompanyId',
     },
     {
         title: '子公司名称',
-        dataIndex: 'spName',
-        key: 'spName',
+        dataIndex: 'branchCompanyName',
+        key: 'branchCompanyName',
     },
     {
-        title: '商品编码',
-        dataIndex: 'spAdrNo',
-        key: 'spAdrNo',
-    }, {
+        title: '商品编号',
+        dataIndex: 'productId',
+        key: 'productId',
+    },
+    {
         title: '商品名称',
-        dataIndex: 'spAdrName',
-        key: 'spAdrName',
+        dataIndex: 'productName',
+        key: 'productName',
     },
     {
         title: '变更日期',
-        dataIndex: 'estimatedDeliveryDate',
-        key: 'estimatedDeliveryDate',
+        dataIndex: 'createTime',
+        key: 'createTime',
         render: (text) => (
             <span>
                 {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
@@ -317,14 +323,9 @@ export const priceListColumns = [
     },
     {
         title: '当前节点',
-        dataIndex: 'adrType',
-        key: 'adrType',
-        render: (text) => {
-            if (text === null) {
-                return null;
-            }
-            return (locType.data[text + 1].value);
-        }
+        dataIndex: 'currentNode',
+        key: 'currentNode'
+
     },
     {
         title: '操作',

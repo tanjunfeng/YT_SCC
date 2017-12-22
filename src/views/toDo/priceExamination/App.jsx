@@ -48,7 +48,11 @@ class PriceExamination extends PureComponent {
      * 请求列表数据
      */
     query = () => {
-        this.props.queryProcessMsgInfo(this.param).then(data => {
+        const searchObj = {
+            map: this.param,
+            processType: 'SPXS'
+        }
+        this.props.queryProcessMsgInfo(searchObj).then(data => {
             const { pageNum, pageSize } = data.data;
             Object.assign(this.param, { pageNum, pageSize });
         });
@@ -143,7 +147,7 @@ class PriceExamination extends PureComponent {
                 <Table
                     dataSource={data}
                     columns={columns}
-                    rowKey="id"
+                    rowKey="taskId"
                     scroll={{
                         x: 1400
                     }}

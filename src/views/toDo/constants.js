@@ -6,18 +6,18 @@
 
 // 下单打折活动状态
 export const purchaseStatus = {
-    defaultValue: '1',
+    defaultValue: '',
     data: [{
-        key: '1',
+        key: '',
         value: '全部'
     }, {
-        key: '2',
+        key: '0',
         value: '已提交'
     }, {
-        key: '3',
+        key: '1',
         value: '已审核'
     }, {
-        key: '4',
+        key: '2',
         value: '已拒绝'
     }]
 }

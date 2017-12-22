@@ -19,7 +19,9 @@
         "productName": "商品名称",
         "createTime": "xxx",
         "currentNode": "子公司采购主管",
-        "taskId": "50046"
+        "taskId": "50046",
+        "branchCompanyId": "子公司编号",
+        "branchCompanyName": "子公司名称"
       }
     ]
   },
