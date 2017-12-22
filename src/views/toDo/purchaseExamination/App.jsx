@@ -14,6 +14,7 @@ import { queryProcessMsgInfo } from '../../../actions/process';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { purchaseListColumns as columns } from '../columns';
+import ExamineModal from '../common/ExamineModal'
 
 @connect(state => ({
     processMsgInfo: state.toJS().procurement.processMsgInfo,
@@ -25,6 +26,9 @@ class PurchaseExamination extends PureComponent {
     constructor(props) {
         super(props);
         this.param = {};
+        this.state = {
+            visible: false
+        }
     }
 
     componentDidMount() {
@@ -82,6 +86,15 @@ class PurchaseExamination extends PureComponent {
     }
 
     /**
+     * 关闭审核弹框的回调
+     */
+    closeModal = () => {
+        this.setState({
+            visible: false
+        })
+    }
+
+    /**
      * 促销活动表单操作
     *
     * @param {Object} record 传值所有数据对象
@@ -93,6 +106,9 @@ class PurchaseExamination extends PureComponent {
         switch (key) {
             case 'Examine':
                 // 审核
+                this.setState({
+                    visible: true
+                })
                 break;
             case 'see':
                 // 查看
@@ -160,6 +176,10 @@ class PurchaseExamination extends PureComponent {
                         showQuickJumper: true,
                         onChange: this.onPaginate
                     }}
+                />
+                <ExamineModal
+                    visible={this.state.visible}
+                    closeModal={this.closeModal}
                 />
             </div>
         );
