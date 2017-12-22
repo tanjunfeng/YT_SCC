@@ -1,42 +1,22 @@
-$poRcvMngListColWidth: 250px;
-.search {
-    &-box {
-        background: #ffffff;
-        border: 1px solid #c4c5c9;
+
+.po-rcv-mng-list{
+    padding: 20px 0;
+    margin: 10px 0;
+    form {
+        padding: 20px 0;
         margin: 10px 0;
-        padding: 5px 18px;
+    }
+    .ant-form {
+        border: 1px solid #c4c5c9;
+    }
+    .po-rcv-search-box {
         display: flex;
-        flex-direction: column;
-        .small {
-            .ywc-smind {
-                width: 200px;
-            }
-        }
-        .middle {
-            .ywc-smind {
-                width: $poRcvMngListColWidth;
-            }
-        }
-        .row {
-            display: flex;
-            line-height: 46px;
-            justify-content: space-between;
-            .item-box {
-                display: flex;
-                flex-direction: row;
-            }
-            .label {
-                margin-right: 8px;
-                display: inline-block;
-            }
-        }
+        flex-wrap: wrap;
+        align-content: space-between;
+        flex-direction: row;
         .ant-form-item-label label {
-            min-width: 80px;
+            min-width: 100px;
             display: inline-block;
-        }
-        .date-range-picker {
-            width: $poRcvMngListColWidth;
-            padding: 2px 0;
         }
         .search-mind-label {
             min-width: 80px;
@@ -46,6 +26,42 @@ $poRcvMngListColWidth: 250px;
                 margin: 0 8px 0 2px;
                 position: relative;
                 top: -0.5px;
+            }
+        }
+        .ywc-smind {
+            top: 5px;
+        }
+        @media screen and (min-width: 0px) and (max-width: 1400px) {
+            .ant-form-item {
+                flex: 33%
+            }
+        }
+        @media screen and (min-width: 0px) and (max-width: 1400px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind {
+                width: 220px;
+            }
+        }
+        @media screen and (min-width: 1401px) and (max-width: 1600px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind {
+                width: 230px;
+            }
+        }
+        @media screen and (min-width: 1601px) and (max-width: 1920px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind {
+                width: 200px;
+            }
+        }
+        @media screen and (min-width: 1921px) {
+            .ant-form-item-control-wrapper,
+            .ant-select,
+            .ywc-smind {
+                width: 260px;
             }
         }
     }
