@@ -248,12 +248,12 @@ export const purchaseListColumns = [
         title: '商品名称',
         dataIndex: 'adrType',
         key: 'adrType',
-        render: (text) => {
-            if (text === null) {
-                return null;
-            }
-            return (locType.data[text + 1].value);
-        }
+        // render: (text) => {
+        //     if (text === null) {
+        //         return null;
+        //     }
+        //     return (locType.data[text + 1].value);
+        // }
     },
     {
         title: '变更日期',

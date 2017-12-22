@@ -48,6 +48,7 @@ class PurchaseExamination extends PureComponent {
      * 请求列表数据
      */
     query = () => {
+        console.log(this.param)
         this.props.queryProcessMsgInfo(this.param).then(data => {
             const { pageNum, pageSize } = data.data;
             Object.assign(this.param, { pageNum, pageSize });

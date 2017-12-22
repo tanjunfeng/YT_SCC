@@ -12,8 +12,11 @@
         "status": 0,
         "processType": "SPCG",
         "spId": "1234",
+        "spName": "供应商名称",
         "spAdrId": "1234",
+        "spAdrName": "供应商地点名称",
         "productId": "1234",
+        "productName": "商品名称",
         "createTime": "xxx",
         "currentNode": "子公司采购主管",
         "taskId": "50046"
