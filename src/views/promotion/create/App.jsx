@@ -127,6 +127,13 @@ class PromotionCreate extends PureComponent {
         });
     }
 
+    /**
+     * 选择优惠种类的回调函数
+     */
+    handleCategoryChange = () => {
+        this.setState({ conditions: [] });
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
         this.setState({ submitDisabled: true });
@@ -206,7 +213,11 @@ class PromotionCreate extends PureComponent {
                         <FormItem label="优惠种类">
                             {getFieldDecorator('category', {
                                 initialValue: 'PURCHASECONDITION'
-                            })(<Select size="default" className="wd-110">
+                            })(<Select
+                                size="default"
+                                className="wd-110"
+                                onChange={this.handleCategoryChange}
+                            >
                                 <Option key={'PURCHASECONDITION'} value="PURCHASECONDITION">购买条件</Option>
                                 <Option key={'REWARDLIST'} value="REWARDLIST">奖励列表</Option>
                                 <Option key={'TOTALPUCHASELIST'} value="TOTALPUCHASELIST">整个购买列表</Option>
