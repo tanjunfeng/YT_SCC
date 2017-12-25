@@ -314,7 +314,7 @@ class ProdModal extends Component {
                                                     <InputNumber min={0} step={0.01} placeholder="最新采购价" />
                                                     )}
                                             </span>
-                                            <span>调价百分比：10%</span>
+                                            <span className={`${prefixCls}-adjustment`}>调价百分比：10%</span>
                                         </FormItem>
                                         : null
                                 }
