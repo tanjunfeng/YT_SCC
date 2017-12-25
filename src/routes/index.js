@@ -22,6 +22,8 @@ import ClassifiedList from 'bundle-loader?lazy!../views/commodity/classifiedList
 // 商品管理列表
 import ManagementList from 'bundle-loader?lazy!../views/commodity/managementList';
 import CommodifyDetail from 'bundle-loader?lazy!../views/commodity/commodifyDetail';
+// 采购进价批量导入
+import importPurchasePriceList from 'bundle-loader?lazy!../views/commodity/importPurchasePriceList';
 // 分类列表页商品排序管理
 import CateListGoodsSortManage from 'bundle-loader?lazy!../views/SysConfig/CateListGoodsSortManage';
 // 数据字典
@@ -260,6 +262,25 @@ const routes = [
                         <Route
                             path="/classifiedList/:id"
                             render={() => <Bundle load={ClassifiedList}>{(App) => <App />}</Bundle>}
+                        />
+                    </Switch>
+                )
+            },
+            // 采购进价批量导入
+            {
+                path: '/importPurchasePrice',
+                parent: 'gylspgl',
+                key: 'importPurchasePrice',
+                component: () => (
+                    <Switch>
+                        <Route
+                            path="/importPurchasePrice"
+                            exact
+                            render={() => (
+                                <Bundle load={importPurchasePriceList}>
+                                    {(App) => <App />}
+                                </Bundle>
+                            )}
                         />
                     </Switch>
                 )

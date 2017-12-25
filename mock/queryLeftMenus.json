@@ -20,6 +20,12 @@
                     "authorityCode": "goodsClassification",
                     "displayName": "商品分类列表",
                     "menuList": []
+                },
+                {
+                    "authorityId": 234,
+                    "authorityCode": "importPurchasePrice",
+                    "displayName": "采购进价批量导入",
+                    "menuList": []
                 }
             ]
         },
