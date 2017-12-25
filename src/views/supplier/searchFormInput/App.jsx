@@ -22,7 +22,7 @@ const Option = Select.Option;
 class SearchForm extends Component {
     state = {
         // 控制DatePicker的value
-        rengeTime: null,
+        rangeTime: null,
         // DatePicker选取后返回的格式化后的日期
         settledDate: null,
         supplierLevel: null,
@@ -38,7 +38,7 @@ class SearchForm extends Component {
     */
     onEnterTimeChange = (date) => {
         this.setState({
-            rengeTime: date,
+            rangeTime: date,
             settledDate: date ? date._d * 1 : null,
         });
     }
@@ -153,7 +153,7 @@ class SearchForm extends Component {
         this.setState({
             supplierType: 0,
         });
-        this.setState({ rengeTime: null, settledDate: null });
+        this.setState({ rangeTime: null, settledDate: null });
         onReset(this.searchData);
     }
 
@@ -338,7 +338,7 @@ class SearchForm extends Component {
                                         className="sc-form-item-date-picker gyl-form-item-date-picker"
                                         showToday
                                         onChange={this.onEnterTimeChange}
-                                        value={this.state.rengeTime}
+                                        value={this.state.rangeTime}
                                         format="YYYY/MM/DD"
                                         placeholder="入驻日期"
                                     />
