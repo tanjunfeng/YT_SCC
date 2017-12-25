@@ -113,6 +113,9 @@ class PurchaseExamination extends PureComponent {
             case 'see':
                 // 查看
                 break;
+            case 'results':
+                // 审批意见
+                break;
             default:
                 break;
         }
@@ -135,6 +138,9 @@ class PurchaseExamination extends PureComponent {
                 </Menu.Item>
                 <Menu.Item key="see">
                     查看
+                </Menu.Item>
+                <Menu.Item key="results">
+                    审批意见
                 </Menu.Item>
             </Menu>
         );

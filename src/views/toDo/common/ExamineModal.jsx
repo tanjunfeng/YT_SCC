@@ -29,7 +29,9 @@ class ExamineModal extends PureComponent {
         }
     }
 
-    // 点击确定
+    /**
+     * 点击确定
+     */
     handleOk = () => {
         this.setState({
             ModalText: 'The modal will be closed after two seconds',
@@ -43,7 +45,9 @@ class ExamineModal extends PureComponent {
         }, 2000);
     }
 
-    // 点击取消
+    /**
+     * 点击取消
+     */
     handleCancel = () => {
         this.props.closeModal()
     }
@@ -72,7 +76,7 @@ class ExamineModal extends PureComponent {
                         <FormItem label="审批" {...formItemLayout}>
                             {getFieldDecorator('modifier', {
                                 initialValue: '0',
-                                rules: [{ required: true, message: 'Please input the title of collection!' }],
+                                rules: [{ required: true, message: '此项必选' }],
                             })(
                                 <Radio.Group>
                                     <Radio value="1">通过</Radio>
@@ -81,7 +85,14 @@ class ExamineModal extends PureComponent {
                         </FormItem>
                         <FormItem label="审批意见" {...formItemLayout}>
                             {getFieldDecorator('title', {
-                                rules: [{ required: true, message: 'Please input the title of collection!' }],
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: '此项必填'
+                                    }, {
+                                        min: 5,
+                                        message: '审批意见不少于5个字'
+                                    }],
                             })(
                                 <TextArea rows={4} placeholder="请输入审批意见（不少于5个字）" />)}
                         </FormItem>
