@@ -13,6 +13,7 @@ import {
     queryProcessMsgInfo as queryProcessMsgInfoService,
     processImageByBusi as processImageByBusiService,
     queryCommentHisByBusi as queryCommentHisByBusiService,
+    queryProdPriceChangeList as queryProdPriceChangeListService
 } from '../service';
 
 // 流程管理下获取所有流程信息
@@ -130,6 +131,39 @@ export const queryProcessMsgInfo = (params) => dispatch => (
             })
     })
 )
+
+/**
+ * 查询待办事项下价格变更记录列表数据
+ * @param {*} data
+ */
+
+ const queryPriceChangeListAction = data => ({
+    type: ActionType.QUERY_PRICE_CHANGE_LIST,
+    payload: data
+ });
+
+ export const queryPriceChangeList = params => async dispatch => {
+     try {
+        const res = await queryProdPriceChangeListService(params);
+        dispatch(queryPriceChangeListAction(res.data));
+        return res;
+     } catch(err) {
+         return err
+     }
+ };
+
+// export const queryPriceChangeList = (params) => dispatch => (
+//     new Promise((resolve, reject) => {
+//         queryProdPriceChangeListService(params)
+//             .then(res => {
+//                 dispatch(queryPriceChangeListAction(res.data));
+//                 resolve(res);
+//             })
+//             .catch(err => {
+//                 reject(err);
+//             })
+//     })
+// )
 
 // 业务中获取高亮流程图数据
 const processImageBusiAction = (data) => ({

@@ -1,19 +1,13 @@
-// export const changePriceType = {
-//     all: '全部',
-//     purchasePriceChange: '采购进价变更',
-//     salePriceChange: '售价变更'
-// };
-
 export const changePriceType = {
-    defaultValue: '0',
+    defaultValue: '-1',
     data: [{
-        key: '0',
+        key: '-1',
         value: '全部'
     }, {
-        key: '1',
+        key: '0',
         value: '采购进价变更'
     }, {
-        key: '2',
+        key: '1',
         value: '售价变更'
     }]
 };

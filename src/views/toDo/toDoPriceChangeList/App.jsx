@@ -7,59 +7,22 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import {
-    Button,
-    Input,
     Form,
-    Select,
-    Row,
-    Col,
-    Icon,
     Table,
-    Menu,
-    Dropdown,
-    Modal,
     message,
 } from 'antd';
-import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
-import {
-    locType,
-    optionStatus,
-    auditStatusOption
-} from '../../../constant/procurement';
-import SearchMind from '../../../components/searchMind';
+import { exportSupplierEnterList } from '../../../service';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
-    queryCommentHis,
-    queryProcessDefinitions
-} from '../../../actions/procurement';
-import {
-    queryProcessMsgInfo,
-    queryHighChart,
-    clearHighChart,
+    queryPriceChangeList,
 } from '../../../actions/process';
-import {
-    getWarehouseAddressMap,
-    getShopAddressMap,
-    getSupplierMap,
-    getSupplierLocMap
-} from '../../../actions';
-import ApproModal from '../../../components/approModal'
-import FlowImage from '../../../components/flowImage';
-import {auditInfo} from '../../../service';
 
 import SearchFormInput from './searchFormInput';
-
-const FormItem = Form.Item;
-const Option = Select.Option;
-const dateFormat = 'YYYY-MM-DD';
-const confirm = Modal.confirm;
-const { TextArea } = Input;
 
 const columns = [
     {
@@ -131,63 +94,82 @@ const columns = [
         title: '商品毛利率',
         dataIndex: 'grossProfitMargin',
         key: 'grossProfitMargin',
+        render: text => (
+            <span className={ parseFloat(text) < 0 ? 'decrease' : '' }>{text}</span>
+        )
     },
     {
         title: '调价百分比',
         dataIndex: 'percentage',
         key: 'percentage',
+        render: text => (
+            <span className={ parseFloat(text) < 0 ? 'decrease' : '' }>{text}</span>
+        )
     }
 ];
 
-const data = [
-    {
-        "id":6,
-        "changeType":0,
-        "changeTypeName":"采购进价变更",
-        "spCodeAndName":"10008-四川白家食品产业有限公司",
-        "spAdrCodeAndName":"1000009-四川-四川白家食品产业有限公司",
-        "branchCompanyCodeAndName":null,
-        "firstLevelCategoryName":"粮油副食",
-        "secondLevelCategoryName":"粮食类",
-        "thirdLevelCategoryName":"奶粉/辅食",
-        "fourthLevelCategoryName":"长粒香",
-        "productCodeAndDesc":"1000042-",
-        "createUserId":null,
-        "createUserName":null,
-        "createTime":1512616488000,
-        "price":3.45,
-        "newestPrice":3.45,
-        "percentage":"0.00%",
-        "grossProfitMargin":null
-    },
-    {
-        "id":7,
-        "changeType":0,
-        "changeTypeName":"采购进价变更",
-        "spCodeAndName":"10008-四川白家食品产业有限公司",
-        "spAdrCodeAndName":"1000009-四川-四川白家食品产业有限公司",
-        "branchCompanyCodeAndName":null,
-        "firstLevelCategoryName":"粮油副食",
-        "secondLevelCategoryName":"粮食类",
-        "thirdLevelCategoryName":"奶粉/辅食",
-        "fourthLevelCategoryName":"长粒香",
-        "productCodeAndDesc":"1000042-",
-        "createUserId":null,
-        "createUserName":null,
-        "createTime":1512619755000,
-        "price":null,
-        "newestPrice":3.45,
-        "percentage":"0.00%",
-        "grossProfitMargin":null
-    }
-];
-
+@connect(
+    state => ({
+        priceChangeList: state.toJS().procurement.priceChangeList
+    }),
+    dispatch => bindActionCreators({
+        queryPriceChangeList,
+        pubFetchValueList
+    }, dispatch))
 class toDoPriceChangeList extends PureComponent {
+
+    /**
+     * props数据类型约束
+     */
+    static propTypes = {
+        queryPriceChangeList: PropTypes.func,
+        pubFetchValueList: PropTypes.func,
+        priceChangeList: PropTypes.objectOf(PropTypes.any)
+    }
+    
+    /**
+     * 导出
+     */
+    handleDownLoad(data) {
+        Utils.exportExcel(exportSupplierEnterList, data);
+    }
+
+    /**
+     * 分页查询价格变更列表
+     */
+    handlePaginationChange = pageIndex => {
+        this.queryParams.pageNum = pageIndex;
+        this.handleQueryPriceChangeList(this.queryParams);
+    }
+
+    /**
+     * 查询价格变更列表
+     */
+    handleQueryPriceChangeList = queryParams => {
+        this.queryParams = queryParams;
+        this.props.queryPriceChangeList(queryParams);
+    }
+
     render () {
+        const { queryPriceChangeList, pubFetchValueList } = this.props;
+        const { data, pageNum, pageSize, total } = this.props.priceChangeList;
         return (
             <div className="foo">
-                <SearchFormInput></SearchFormInput>
-                <Table columns={columns} dataSource={data} />
+                <SearchFormInput 
+                    onExcel={ this.handleDownLoad } 
+                    onQueryList = { this.handleQueryPriceChangeList } 
+                    pubFetchValueList={ pubFetchValueList }>
+                </SearchFormInput>
+                <Table columns={ columns } 
+                    rowKey={ record => record.id } 
+                    dataSource={ data } 
+                    pagination={{
+                        current: pageNum,
+                        total,
+                        pageSize: PAGE_SIZE,
+                        showQuickJumper: true,
+                        onChange: this.handlePaginationChange
+                    }}/>
             </div>
         );
     }

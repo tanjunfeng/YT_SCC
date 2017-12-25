@@ -940,3 +940,5 @@ export const auditInfo = params => http.get('/bpm/audit', params);
 export const processImageByBusi = params => http.get('/bpm/processImageByBusi', params);
 // 查看审批记录（业务中）
 export const queryCommentHisByBusi = params => http.get('/bpm/queryCommentHisByBusi', params);
+// 价格变更记录模块
+export const queryProdPriceChangeList = params => http.get('/prodSell/queryProdPriceChangeList', params);
