@@ -32,7 +32,6 @@ import columns from './columns';
     }, dispatch))
 
 class toDoPriceChangeList extends PureComponent {
-
     /**
      * 导出
      */
@@ -83,13 +82,10 @@ class toDoPriceChangeList extends PureComponent {
     }
 }
 
-    /**
-     * props数据类型约束
-     */
-    toDoPriceChangeList.propTypes = {
-        queryPriceChangeList: PropTypes.func,
-        pubFetchValueList: PropTypes.func,
-        priceChangeList: PropTypes.objectOf(PropTypes.any)
-    }
+toDoPriceChangeList.propTypes = {
+    queryPriceChangeList: PropTypes.func,
+    pubFetchValueList: PropTypes.func,
+    priceChangeList: PropTypes.objectOf(PropTypes.any)
+}
 
 export default withRouter(Form.create()(toDoPriceChangeList));

@@ -1,7 +1,7 @@
 export const changePriceType = {
-    defaultValue: '-1',
+    defaultValue: '',
     data: [{
-        key: '-1',
+        key: '',
         value: '全部'
     }, {
         key: '0',

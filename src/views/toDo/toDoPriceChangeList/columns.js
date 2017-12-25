@@ -3,7 +3,8 @@ const columns = [
     {
         title: '变价类型',
         dataIndex: 'changeType',
-        key: 'changeType'
+        key: 'changeType',
+        render: text => text == 0 ? '采购进价变更' : '售价变更'
     },
     {
         title: '供应商',
