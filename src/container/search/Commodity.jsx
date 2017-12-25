@@ -44,6 +44,7 @@ class Commodity extends PureComponent {
     render() {
         return (
             <SearchMind
+                style={{ zIndex: 10000 }}
                 compKey="productId"
                 ref={ref => { this.productSearchMind = ref }}
                 fetch={(params) =>

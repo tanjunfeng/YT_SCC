@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Button, Select, DatePicker, message, Row, Col } from 'antd';
+import { Form, Button, Select, DatePicker, Row, Col } from 'antd';
 import { changePriceType } from '../constants';
 import { Supplier, BranchCompany, SupplierAdderss, Commodity } from '../../../../container/search';
-import SearchMind from '../../../../components/searchMind';
 import Utils from '../../../../util/util';
 import { DATE_FORMAT, PAGE_SIZE } from '../../../../constant/index';
 
@@ -21,7 +20,6 @@ const formItemLayout = {
 };
 
 class SearchFormInput extends PureComponent {
-    
     state = {
         pageNum: 1,
         pageSize: PAGE_SIZE
@@ -30,13 +28,17 @@ class SearchFormInput extends PureComponent {
     componentDidMount() {
         this.handleSearch();
     }
-
-    queryParams = {};
-
     getQueryParams = () => {
-        const { changeType, rangeTime, branchCompany, supplier, supplierAddr, commodity } = this.props.form.getFieldsValue();
-        const queryParams = { 
-            ...this.state, 
+        const {
+            changeType,
+            rangeTime,
+            branchCompany,
+            supplier,
+            supplierAddr,
+            commodity
+        } = this.props.form.getFieldsValue();
+        const queryParams = {
+            ...this.state,
             changeType: parseInt(changeType, 10),
             startTime: rangeTime.length > 1 ? rangeTime[0].valueOf() : '',
             endTime: rangeTime.length > 1 ? rangeTime[1].valueOf() : '',
@@ -44,9 +46,11 @@ class SearchFormInput extends PureComponent {
             spId: supplier.spId,
             spAdrId: supplierAddr.spAdrid,
             productId: commodity.productId
-         };
-         this.queryParams = Utils.removeInvalid(queryParams);
+        };
+        this.queryParams = Utils.removeInvalid(queryParams);
     }
+
+    queryParams = {};
 
     handleSearch = () => {
         this.getQueryParams();
@@ -76,7 +80,7 @@ class SearchFormInput extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { pubFetchValueList } = this.props;
+        // const { pubFetchValueList } = this.props;
         return (
             <div className="manage-form" id="prize-change-search-form">
                 <Form layout="inline">
@@ -99,7 +103,7 @@ class SearchFormInput extends PureComponent {
                                             ))
                                         }
                                     </Select>
-                                    )}
+                                )}
                             </FormItem>
                         </Col>
                         <Col span={8}>
@@ -107,17 +111,17 @@ class SearchFormInput extends PureComponent {
                                 {getFieldDecorator('supplier', {
                                     initialValue: { spId: '', spNo: '', companyName: '' }
                                 })(
-                                    <Supplier/>
-                                    )}
+                                    <Supplier />
+                                )}
                             </FormItem>
                         </Col>
                         <Col span={8}>
                             <FormItem {...formItemLayout} label="供应商地点" className="sc-form-item">
-                            {getFieldDecorator('supplierAddr', { initialValue: { 
-                                providerNo: '',
-                                providerName: '',
-                                spAdrid: ''
-                            }})(<SupplierAdderss disabled={this.props.form.getFieldValue('supplier').spId === ''}/>)}
+                                {getFieldDecorator('supplierAddr', { initialValue: {
+                                    providerNo: '',
+                                    providerName: '',
+                                    spAdrid: ''
+                                }})(<SupplierAdderss disabled={this.props.form.getFieldValue('supplier').spId === ''} />)}
                             </FormItem>
                         </Col>
                     </Row>
@@ -127,28 +131,27 @@ class SearchFormInput extends PureComponent {
                             <FormItem {...formItemLayout} label="子公司" className="sc-form-item">
                                 {getFieldDecorator('branchCompany', {
                                     initialValue: { id: '', name: '' }
-                                })(<BranchCompany/>)}
+                                })(<BranchCompany />)}
                             </FormItem>
                         </Col>
                         <Col span={8}>
                             <FormItem {...formItemLayout} label="商品" className="sc-form-item">
-                            {getFieldDecorator('commodity', { initialValue: { 
-                                productId: '', saleName: '' }})(
-                                    <Commodity/>
-                                )}
+                                {getFieldDecorator('commodity', { initialValue: {
+                                    productId: '', saleName: '' }})(<Commodity />)
+                                }
                             </FormItem>
                         </Col>
                         <Col span={8}>
                             <FormItem {...formItemLayout} label="选择日期" className="sc-form-item">
                                 {getFieldDecorator('rangeTime', {
-                                        initialValue: []
-                                    })(
-                                        <RangePicker
-                                            className="rangeTime"
-                                            format={DATE_FORMAT}
-                                            placeholder={['开始时间', '结束时间']}
-                                        />
-                                    )
+                                    initialValue: []
+                                })(
+                                    <RangePicker
+                                        className="rangeTime"
+                                        format={DATE_FORMAT}
+                                        placeholder={['开始时间', '结束时间']}
+                                    />
+                                )
                                 }
                             </FormItem>
                         </Col>
@@ -182,7 +185,7 @@ SearchFormInput.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     onExcel: PropTypes.func,
     onQueryList: PropTypes.func,
-    pubFetchValueList: PropTypes.func
+    // pubFetchValueList: PropTypes.func
 };
 
 export default Form.create()(SearchFormInput);
