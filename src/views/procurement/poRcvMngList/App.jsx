@@ -696,22 +696,16 @@ class PoRcvMngList extends PureComponent {
                         </Col>
                     </Row>
                     <Row gutter={40} type="flex" justify="end">
-                        <Col className="tr">
-                            <FormItem>
-                                <Button type="primary" onClick={this.handleDownload} size="default">
-                                    导出EXCEL
-                                </Button>
-                            </FormItem>
-                            <FormItem>
-                                <Button size="default" onClick={this.handleResetValue}>
-                                    重置
-                                </Button>
-                            </FormItem>
-                            <FormItem>
-                                <Button type="primary" onClick={this.handleSearch} size="default">
-                                    搜索
-                                </Button>
-                            </FormItem>
+                        <Col>
+                            <Button type="primary" onClick={this.handleDownload} size="default">
+                                导出EXCEL
+                            </Button>
+                            <Button size="default" onClick={this.handleResetValue}>
+                                重置
+                            </Button>
+                            <Button type="primary" onClick={this.handleSearch} size="default">
+                                搜索
+                            </Button>
                         </Col>
                     </Row>
                 </Form>
