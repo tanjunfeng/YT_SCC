@@ -64,7 +64,6 @@ class HotItem extends Component {
         const { data } = this.props;
         this.formatData = format(data);
         const formatData = this.formatData;
-        console.log(formatData)
         this.colums = [];
         for (let i = 0; i < colums.length; i++) {
             const id = `${data.id}-${colums[i].prefex}`;
@@ -80,7 +79,6 @@ class HotItem extends Component {
             };
             this.colums.push(item);
         }
-        console.log(this.colums)
         return (
             <div className="home-style-hot">
                 <div className="home-style-hot-top">
