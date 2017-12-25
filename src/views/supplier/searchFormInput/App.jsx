@@ -151,7 +151,7 @@ class SearchForm extends Component {
         this.setState({
             supplierType: 0,
         });
-        this.setState({ rengeTime: null });
+        this.setState({ settledDate: null, rengeTime: null });
         onReset(this.searchData);
     }
 
