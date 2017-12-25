@@ -22,11 +22,12 @@ const Option = Select.Option;
 class SearchForm extends Component {
     state = {
         // 控制DatePicker的value
-        rengeTime: null,
+        rangeTime: null,
         // DatePicker选取后返回的格式化后的日期
         settledDate: null,
+        supplierLevel: null,
         // 供应商类型
-        supplierType: '0',
+        supplierType: '0'
     }
 
     /**
@@ -37,7 +38,7 @@ class SearchForm extends Component {
     */
     onEnterTimeChange = (date) => {
         this.setState({
-            rengeTime: date,
+            rangeTime: date,
             settledDate: date ? date._d * 1 : null,
         });
     }
@@ -46,23 +47,26 @@ class SearchForm extends Component {
     * 获取form的值，赋给this.searchDate
     */
     getValue() {
+        const { supplierType } = this.state;
+        let { grade, gradeAdr } = this.props.form.getFieldsValue();
         const {
             providerName,
             providerNo,
             registLicenceNumber,
             providerType,
-            status,
-            grade,
-            gradeAdr,
+            status
         } = this.props.form.getFieldsValue();
+        if (grade === '0' || gradeAdr === '0') {
+            grade = null;
+            gradeAdr = null;
+        }
         const searchData = {
             providerName,
             providerNo,
             registLicenceNumber,
             providerType: providerType === '0' ? null : providerType,
             status: status === '0' ? null : status,
-            grade: grade === '0' ? null : grade,
-            gradeAdr: gradeAdr === '0' ? null : gradeAdr,
+            grade: supplierType === '1' ? grade : gradeAdr,
             settledDate: this.state.settledDate
         };
         this.searchData = Utils.removeInvalid(searchData);
@@ -151,7 +155,7 @@ class SearchForm extends Component {
         this.setState({
             supplierType: 0,
         });
-        this.setState({ settledDate: null, rengeTime: null });
+        this.setState({ rangeTime: null, settledDate: null });
         onReset(this.searchData);
     }
 
@@ -334,7 +338,7 @@ class SearchForm extends Component {
                                         className="sc-form-item-date-picker gyl-form-item-date-picker"
                                         showToday
                                         onChange={this.onEnterTimeChange}
-                                        value={this.state.rengeTime}
+                                        value={this.state.rangeTime}
                                         format="YYYY/MM/DD"
                                         placeholder="入驻日期"
                                     />

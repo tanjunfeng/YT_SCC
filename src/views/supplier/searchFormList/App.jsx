@@ -27,7 +27,7 @@ class SearchForm extends PureComponent {
         this.searchData = {};
         this.state = {
             // 控制DatePicker的value
-            rengeTime: null,
+            rangeTime: null,
             // DatePicker选取后返回的格式化后的日期
             settledDate: null,
             // 供应商类型
@@ -44,7 +44,7 @@ class SearchForm extends PureComponent {
     */
     onEnterTimeChange = (date) => {
         this.setState({
-            rengeTime: date,
+            rangeTime: date,
             settledDate: date ? date._d * 1 : null,
         });
     }
@@ -53,25 +53,28 @@ class SearchForm extends PureComponent {
     * 获取form的值，赋给this.searchDate
     */
     getValue() {
+        const { supplierType } = this.state;
+        let { grade, gradeAdr } = this.props.form.getFieldsValue();
         const {
             providerName,
             providerNo,
             registLicenceNumber,
             providerType,
-            status,
-            grade,
-            gradeAdr
+            status
         } = this.props.form.getFieldsValue();
+        if (grade === '0' || gradeAdr === '0') {
+            grade = null;
+            gradeAdr = null;
+        }
         const searchData = {
             providerName,
             providerNo,
             registLicenceNumber,
             providerType: providerType === '0' ? null : providerType,
             status: status === '-1' ? null : status,
-            grade: grade === '0' ? null : grade,
-            gradeAdr: gradeAdr === '0' ? null : gradeAdr,
+            grade: supplierType === '1' ? grade : gradeAdr,
             settledDate: this.state.settledDate,
-            rengeTime: this.state.rengeTime
+            rangeTime: this.state.rangeTime
         };
         this.searchData = Utils.removeInvalid(searchData);
     }
@@ -158,7 +161,7 @@ class SearchForm extends PureComponent {
         this.setState({
             supplierType: 0,
         });
-        this.setState({ rengeTime: null, settledDate: null });
+        this.setState({ rangeTime: null, settledDate: null });
         onReset(this.searchData);
     }
 
@@ -341,7 +344,7 @@ class SearchForm extends PureComponent {
                                         className="sc-form-item-date-picker gyl-form-item-date-picker"
                                         showToday
                                         onChange={this.onEnterTimeChange}
-                                        value={this.state.rengeTime}
+                                        value={this.state.rangeTime}
                                         format="YYYY/MM/DD"
                                         placeholder="入驻日期"
                                     />

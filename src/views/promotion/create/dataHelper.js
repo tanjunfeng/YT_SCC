@@ -15,11 +15,7 @@ const getPreferentialValueOfPC = (values) => {
         case 'PERCENTAGE': // 折扣百分比
             preferentialValue = purchaseConditionRulePercent;
             break;
-        case 'DISCOUNTAMOUNT': // 折扣金额
-            preferentialValue = purchaseConditionRuleAmount;
-            break;
         case 'FIXEDPRICE': // 固定单价
-            preferentialValue = purchaseConditionRulePrice;
             break;
         case 'GIVESAMEPRODUCT': // 赠送相同商品
             preferentialValue = purchaseConditionRuleGive;
