@@ -1,5 +1,8 @@
 .sell-modal{
     min-width: 950px;
+    .ant-modal-content{
+        width: 1000px;
+    }
     .ant-modal-body{
         min-height: 400px;
         overflow-y: auto;
@@ -95,9 +98,6 @@
         display: inline-block;
         vertical-align: middle;
     }
-}
-.ant-modal-content{
-    width: 1000px;
 }
 .createCls{
     min-width: 950px;
