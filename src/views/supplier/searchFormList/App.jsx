@@ -53,6 +53,7 @@ class SearchForm extends PureComponent {
     * 获取form的值，赋给this.searchDate
     */
     getValue() {
+        const { supplierType } = this.state;
         const {
             providerName,
             providerNo,
@@ -68,8 +69,7 @@ class SearchForm extends PureComponent {
             registLicenceNumber,
             providerType: providerType === '0' ? null : providerType,
             status: status === '-1' ? null : status,
-            grade: grade === '0' ? null : grade,
-            gradeAdr: gradeAdr === '0' ? null : gradeAdr,
+            grade: supplierType === '1' ? grade : gradeAdr,
             settledDate: this.state.settledDate
         };
         this.searchData = Utils.removeInvalid(searchData);
@@ -157,7 +157,7 @@ class SearchForm extends PureComponent {
         this.setState({
             supplierType: 0,
         });
-        this.setState({ rengeTime: null });
+        this.setState({ rengeTime: null, settledDate: null });
         onReset(this.searchData);
     }
 

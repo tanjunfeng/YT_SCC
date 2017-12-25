@@ -25,6 +25,7 @@ class SearchForm extends Component {
         rengeTime: null,
         // DatePicker选取后返回的格式化后的日期
         settledDate: null,
+        supplierLevel: null,
         // 供应商类型
         supplierType: '0',
     }
@@ -46,6 +47,7 @@ class SearchForm extends Component {
     * 获取form的值，赋给this.searchDate
     */
     getValue() {
+        const { supplierType } = this.state;
         const {
             providerName,
             providerNo,
@@ -53,7 +55,7 @@ class SearchForm extends Component {
             providerType,
             status,
             grade,
-            gradeAdr,
+            gradeAdr
         } = this.props.form.getFieldsValue();
         const searchData = {
             providerName,
@@ -61,11 +63,11 @@ class SearchForm extends Component {
             registLicenceNumber,
             providerType: providerType === '0' ? null : providerType,
             status: status === '0' ? null : status,
-            grade: grade === '0' ? null : grade,
-            gradeAdr: gradeAdr === '0' ? null : gradeAdr,
+            grade: supplierType === '1' ? grade : gradeAdr,
             settledDate: this.state.settledDate
         };
         this.searchData = Utils.removeInvalid(searchData);
+        console.log(this.searchData)
     }
 
     searchData = {};
@@ -151,7 +153,7 @@ class SearchForm extends Component {
         this.setState({
             supplierType: 0,
         });
-        this.setState({ rengeTime: null });
+        this.setState({ rengeTime: null, settledDate: null });
         onReset(this.searchData);
     }
 
@@ -287,6 +289,7 @@ class SearchForm extends Component {
                                             disabled={this.state.supplierType === '-1'}
                                             className="sc-form-item-select"
                                             size="default"
+                                            onChange={this.supplierLevelChange}
                                         >
                                             {
                                                 supplierLevelOptions.data.map((item) =>
@@ -312,6 +315,7 @@ class SearchForm extends Component {
                                             disabled={this.state.handleUsed}
                                             className="sc-form-item-select"
                                             size="default"
+                                            onChange={this.supplierPlaceLevelChange}
                                         >
                                             {
                                                 supplierPlaceLevelOptions.data.map((item) =>
