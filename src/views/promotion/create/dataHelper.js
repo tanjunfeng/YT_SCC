@@ -4,12 +4,6 @@
 import { message } from 'antd';
 import Util from '../../../util/util';
 
-<<<<<<< HEAD
-// 根据整数计算百分数
-const getPercent = (num) => (Number(num / 100.0).toFixed(2));
-
-=======
->>>>>>> 08e793c89a9cbff7f7978722e4e1ee61ebd1cd4b
 const getPreferentialValueOfPC = (values) => {
     const {
         purchaseConditionRule, purchaseConditionRulePercent,
@@ -19,17 +13,9 @@ const getPreferentialValueOfPC = (values) => {
     let preferentialValue = '';
     switch (purchaseConditionRule) {
         case 'PERCENTAGE': // 折扣百分比
-<<<<<<< HEAD
-            preferentialValue = getPercent(purchaseConditionRulePercent);
-=======
             preferentialValue = purchaseConditionRulePercent;
->>>>>>> 08e793c89a9cbff7f7978722e4e1ee61ebd1cd4b
-            break;
-        case 'DISCOUNTAMOUNT': // 折扣金额
-            preferentialValue = purchaseConditionRuleAmount;
             break;
         case 'FIXEDPRICE': // 固定单价
-            preferentialValue = purchaseConditionRulePrice;
             break;
         case 'GIVESAMEPRODUCT': // 赠送相同商品
             preferentialValue = purchaseConditionRuleGive;
@@ -221,11 +207,7 @@ const getNoConditionDataRule = (values) => {
     switch (noConditionRule) {
         case 'PERCENTAGE':
             Object.assign(promotionRule.orderRule, {
-<<<<<<< HEAD
-                preferentialValue: getPercent(noConditionRulePercent)
-=======
                 preferentialValue: noConditionRulePercent
->>>>>>> 08e793c89a9cbff7f7978722e4e1ee61ebd1cd4b
             });
             break;
         case 'DISCOUNTAMOUNT':
