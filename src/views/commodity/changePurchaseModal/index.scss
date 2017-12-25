@@ -1,6 +1,6 @@
 .purchase-modal {
     .ant-modal-content{
-        width: 450px;
+        width: 485px;
     }
     .ant-modal-body {
         height: 580px;
@@ -8,6 +8,9 @@
     }
     form .ant-input-number {
         margin-right: 0;
+    }
+    .purchase-modal-adjustment{
+        margin-left: 60px;
     }
     &-item {
         border: 1px solid #eee;
@@ -29,7 +32,7 @@
     }
     &-label {
         display: inline-block;
-        width: 80px;
+        width: 100px;
         text-align: right;
         margin-right: 10px;
         vertical-align: middle;

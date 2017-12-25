@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Modal, Form, InputNumber, message, Select, Button, Input, Row, Col } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-// import SteppedPrice from '../steppedPrice';
 import SearchMind from '../../../components/searchMind';
 import {
     pubFetchValueList
@@ -59,17 +58,11 @@ class SellPriceModal extends Component {
     componentDidMount() {
         const { datas } = this.props;
         const { validateFields, setFields } = this.props.form;
-        const { results } = this.steppedPrice.getValue();
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
-            result.sellSectionPrices = results;
             result.productId = datas.id || datas.productId;
             const priceList = [];
-            results.forEach((item) => (
-                priceList.push(item.price)
-            ))
-
             priceList.forEach((obj) => {
                 if (obj === null || obj === undefined) {
                     this.successPost = true;
@@ -106,23 +99,13 @@ class SellPriceModal extends Component {
     handleOk() {
         const { datas, handlePostAdd, isEdit } = this.props;
         const { validateFields, setFields } = this.props.form;
-        const { isContinuity, results } = this.steppedPrice.getValue();
         const choose = this.choose;
-        if (!isContinuity) {
-            setFields({
-                sellSectionPrices: {
-                    errors: [new Error('价格区间不连续，无法提交')],
-                },
-            })
-            return;
-        }
         if (!this.childCompany) {
             message.error('请选择子公司');
         }
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
-            result.sellSectionPrices = results;
             result.productId = datas.id || datas.productId;
             const { branchCompanyId, branchCompanyName } = this.childCompany;
             if (!isEdit && (!branchCompanyId || !branchCompanyName)) {
@@ -137,9 +120,6 @@ class SellPriceModal extends Component {
                 })
             }
             const priceList = [];
-            results.forEach((item) => (
-                priceList.push(item.price)
-            ))
             if (priceList.length === 0) {
                 setFields({
                     sellSectionPrices: {
@@ -246,21 +226,17 @@ class SellPriceModal extends Component {
         }, () => {
             this.props.form.setFieldsValue({ minNumber: null })
         })
-        this.steppedPrice.reset();
     }
 
     /**
      * 最小起订数量
      */
     handleMinChange = (num) => {
-        const { results } = this.steppedPrice.getValue();
         this.setState({
             startNumber: num,
             isEditPrice: true,
-            price: results[0].price
         }, () => {
             this.props.form.setFieldsValue({ minNumber: num });
-            this.steppedPrice.reset();
         })
     }
 
@@ -444,21 +420,6 @@ class SellPriceModal extends Component {
                                                 {getFieldDecorator('sellSectionPrices', {
                                                     initialValue: this.getEditableTableValues()
                                                 })(<EditableTable />)}
-                                                {/* {getFieldDecorator('sellSectionPrices', {
-                                                })(
-                                                    <SteppedPrice
-                                                        isEditor={this.state.isEditPrice}
-                                                        isEdit={isEdit}
-                                                        ref={node => { this.steppedPrice = node }}
-                                                        handleChange={this.handlePriceChange}
-                                                        startNumber={startNumber}
-                                                        defaultValue={isEdit
-                                                            ? newDates.sellSectionPrices : []}
-                                                        inputSize="default"
-                                                        initvalue={getProductById.minUnit}
-                                                        price={price}
-                                                    />
-                                                )} */}
                                             </FormItem>
                                         </div>
                                         <div>
@@ -526,20 +487,6 @@ class SellPriceModal extends Component {
                                                 {getFieldDecorator('sellSectionPrices', {
                                                     initialValue: this.getEditableTableValues()
                                                 })(<EditableTable />)}
-                                                {/* {getFieldDecorator('sellSectionPrices', {
-                                                })(
-                                                    <SteppedPrice
-                                                        isEditor={this.state.isEditPrice}
-                                                        isEdit={isEdit}
-                                                        ref={node => { this.steppedPrice = node }}
-                                                        handleChange={this.handlePriceChange}
-                                                        startNumber={startNumber}
-                                                        defaultValue={isEdit ? newDates.sellSectionPrices : []}
-                                                        inputSize="default"
-                                                        initvalue={getProductById.minUnit}
-                                                        price={price}
-                                                    />
-                                                )} */}
                                             </FormItem>
                                         </div>
                                         <div>
@@ -692,21 +639,6 @@ class SellPriceModal extends Component {
                                             {getFieldDecorator('sellSectionPrices', {
                                                 initialValue: this.getEditableTableValues()
                                             })(<EditableTable />)}
-                                            {/* {getFieldDecorator('sellSectionPrices', {
-                                            })(
-                                                <SteppedPrice
-                                                    isEditor={this.state.isEditPrice}
-                                                    isEdit={isEdit}
-                                                    ref={node => { this.steppedPrice = node }}
-                                                    handleChange={this.handlePriceChange}
-                                                    startNumber={startNumber}
-                                                    defaultValue={isEdit ?
-                                                    newDates.sellSectionPrices : []}
-                                                    inputSize="default"
-                                                    initvalue={getProductById.minUnit}
-                                                    price={price}
-                                                />
-                                                )} */}
                                         </FormItem>
                                     </div>
                                     <div>
