@@ -7,6 +7,7 @@
 import React from 'react';
 import moment from 'moment';
 import { locType, poStatus } from '../../constant/procurement';
+import { purchaseStatus } from './constants';
 
 const purchase = ['普通采购单'];
 // 供应商列表
@@ -201,3 +202,134 @@ export const goodsColumns = [{
     dataIndex: 'operation',
     width: 50
 }];
+
+// 进价审核列表
+export const purchaseListColumns = [
+    {
+        title: '变价类型',
+        dataIndex: 'processType',
+        key: 'processType',
+    },
+    {
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
+        render: text => {
+            const statusItem = purchaseStatus.data.find(val => (
+                val.key === text.toString()
+            ))
+            return statusItem.value
+        }
+    },
+    {
+        title: '供应商编号',
+        dataIndex: 'spId',
+        key: 'spId',
+    },
+    {
+        title: '供应商名称',
+        dataIndex: 'spName',
+        key: 'spName',
+    },
+    {
+        title: '供应商地点编号',
+        dataIndex: 'spAdrId',
+        key: 'spAdrId',
+    }, {
+        title: '供应商地点名称',
+        dataIndex: 'spAdrName',
+        key: 'spAdrName',
+    },
+    {
+        title: '商品编号',
+        dataIndex: 'productId',
+        key: 'productId',
+    },
+    {
+        title: '商品名称',
+        dataIndex: 'productName',
+        key: 'productName',
+    },
+    {
+        title: '变更日期',
+        dataIndex: 'createTime',
+        key: 'createTime',
+        render: (text) => (
+            <span>
+                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+            </span>
+        )
+    },
+    {
+        title: '当前节点',
+        dataIndex: 'currentNode',
+        key: 'currentNode'
+
+    },
+    {
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation'
+    }
+]
+
+// 售价审核列表
+export const priceListColumns = [
+    {
+        title: '变价类型',
+        dataIndex: 'processType',
+        key: 'processType',
+    },
+    {
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
+        render: text => {
+            const statusItem = purchaseStatus.data.find(val => (
+                val.key === text.toString()
+            ))
+            return statusItem.value
+        }
+    },
+    {
+        title: '子公司编号',
+        dataIndex: 'branchCompanyId',
+        key: 'branchCompanyId',
+    },
+    {
+        title: '子公司名称',
+        dataIndex: 'branchCompanyName',
+        key: 'branchCompanyName',
+    },
+    {
+        title: '商品编号',
+        dataIndex: 'productId',
+        key: 'productId',
+    },
+    {
+        title: '商品名称',
+        dataIndex: 'productName',
+        key: 'productName',
+    },
+    {
+        title: '变更日期',
+        dataIndex: 'createTime',
+        key: 'createTime',
+        render: (text) => (
+            <span>
+                {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
+            </span>
+        )
+    },
+    {
+        title: '当前节点',
+        dataIndex: 'currentNode',
+        key: 'currentNode'
+
+    },
+    {
+        title: '操作',
+        dataIndex: 'operation',
+        key: 'operation'
+    }
+]

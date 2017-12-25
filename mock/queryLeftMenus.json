@@ -147,6 +147,18 @@
                     "authorityCode": "thsplb",
                     "displayName": "退货审批列表",
                     "menuList": []
+                },
+                {
+                    "authorityId": 366,
+                    "authorityCode": "jjsh",
+                    "displayName": "进价审核",
+                    "menuList": []
+                },
+                {
+                    "authorityId": 367,
+                    "authorityCode": "sjsh",
+                    "displayName": "售价审核",
+                    "menuList": []
                 }
             ]
         },
