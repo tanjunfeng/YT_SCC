@@ -196,7 +196,7 @@ export const clearprocessImageBusi = () => dispatch => (dispatch({
  * @param {*} data
  */
 const queryCommentHisBusiAction = (data) => ({
-    type: ActionType.QUERY_PROCESS_MSG_LIST,
+    type: ActionType.QUERY_COMMENT_HIS_BUSI,
     payload: data
 });
 

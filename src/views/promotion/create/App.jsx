@@ -127,6 +127,13 @@ class PromotionCreate extends PureComponent {
         });
     }
 
+    /**
+     * 选择优惠种类的回调函数
+     */
+    handleCategoryChange = () => {
+        this.setState({ conditions: [] });
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
         this.setState({ submitDisabled: true });
@@ -163,7 +170,7 @@ class PromotionCreate extends PureComponent {
         return (
             <Form className="promotion-form" layout="inline" onSubmit={this.handleSubmit}>
                 <Row>
-                    <FormItem label="活动名称" >
+                    <FormItem label="活动名称" className="whole-field">
                         {getFieldDecorator('promotionName', {
                             rules: [
                                 { required: true, message: '请输入促销活动名称!' },
@@ -206,7 +213,11 @@ class PromotionCreate extends PureComponent {
                         <FormItem label="优惠种类">
                             {getFieldDecorator('category', {
                                 initialValue: 'PURCHASECONDITION'
-                            })(<Select size="default" className="wd-110">
+                            })(<Select
+                                size="default"
+                                className="wd-110"
+                                onChange={this.handleCategoryChange}
+                            >
                                 <Option key={'PURCHASECONDITION'} value="PURCHASECONDITION">购买条件</Option>
                                 <Option key={'REWARDLIST'} value="REWARDLIST">奖励列表</Option>
                                 <Option key={'TOTALPUCHASELIST'} value="TOTALPUCHASELIST">整个购买列表</Option>
@@ -274,7 +285,7 @@ class PromotionCreate extends PureComponent {
                 </Row>
                 <Row>
                     {storeSelectorVisible ?
-                        <FormItem className="store">
+                        <FormItem className="store whole-field">
                             {getFieldDecorator('storeId', {
                                 initialValue: '',
                                 rules: [{ required: true, message: '请输入指定门店' }]
@@ -312,7 +323,7 @@ class PromotionCreate extends PureComponent {
                     </FormItem>
                 </Row>
                 <Row>
-                    <FormItem label="简易描述">
+                    <FormItem label="简易描述" className="whole-field">
                         {getFieldDecorator('simpleDescription', {
                             initialValue: '',
                             rules: [
@@ -323,7 +334,7 @@ class PromotionCreate extends PureComponent {
                     </FormItem>
                 </Row>
                 <Row>
-                    <FormItem label="详细描述">
+                    <FormItem label="详细描述" className="whole-field">
                         {getFieldDecorator('detailDescription', {
                             initialValue: '',
                             rules: [
@@ -334,7 +345,7 @@ class PromotionCreate extends PureComponent {
                     </FormItem>
                 </Row>
                 <Row>
-                    <FormItem label="备注">
+                    <FormItem label="备注" className="whole-field">
                         {getFieldDecorator('note', {
                             initialValue: '',
                             rules: [{ max: 200, message: '限填200字' }]

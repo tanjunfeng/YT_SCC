@@ -50,20 +50,23 @@ $promotionFormBorderCorder: #d9d9d9;
         padding-right: 60px;
     }
     ul.list-panel {
-        margin: 12px 0;
-        border: 1px solid $promotionFormBorderCorder;
+        // margin: 12px 0;
+        // border-bottom: 1px solid $promotionFormBorderCorder;
         li {
             line-height: 48px;
             &:first-child {
                 h2 {
                     padding: 0 20px;
-                    font-size: 14px;
+                    font-size: 12px;
+                    font-weight: bold;
                     display: inline-block;
                 }
                 line-height: 34px;
-                border-bottom: 1px solid $promotionFormBorderCorder;
             }
         }
+    }
+    .whole-field .ant-form-item-control-wrapper {
+        width: 288px;
     }
     .product .ywc-smind {
         top: 4px;
@@ -86,7 +89,8 @@ $promotionFormBorderCorder: #d9d9d9;
         display: inline-block;
     }
     .ant-form-item.wd-83 {
-        .ant-form-item-label, .ant-form-item-label label {
+        .ant-form-item-label,
+        .ant-form-item-label label {
             width: 83px;
         }
     }

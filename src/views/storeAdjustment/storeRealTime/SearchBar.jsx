@@ -97,6 +97,7 @@ class Search extends Component {
                 // 搜索参数
                 const searchData = Util.removeInvalid({
                     productCode: value.productCode,
+                    branchCompanyId: value.branchCompany.id,
                     ...this.state
                 });
                 if (JSON.stringify(searchData) === '{}') {
