@@ -6,14 +6,11 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import {
-    Form,
-    Table,
-    message,
-} from 'antd';
+import { Form, Table } from 'antd';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
 import { exportSupplierEnterList } from '../../../service';
@@ -29,17 +26,17 @@ const columns = [
         title: '变价类型',
         dataIndex: 'changeType',
         key: 'changeType'
-    }, 
+    },
     {
         title: '供应商',
         dataIndex: 'spCodeAndName',
         key: 'spCodeAndName',
-    }, 
+    },
     {
         title: '供应商地点',
         dataIndex: 'spAdrCodeAndName',
         key: 'spAdrCodeAndName',
-    }, 
+    },
     {
         title: '子公司',
         dataIndex: 'branchCompanyCodeAndName',
@@ -95,7 +92,7 @@ const columns = [
         dataIndex: 'grossProfitMargin',
         key: 'grossProfitMargin',
         render: text => (
-            <span className={ parseFloat(text) < 0 ? 'decrease' : '' }>{text}</span>
+            <span className={parseFloat(text) < 0 ? 'decrease' : ''}>{text}</span>
         )
     },
     {
@@ -103,7 +100,7 @@ const columns = [
         dataIndex: 'percentage',
         key: 'percentage',
         render: text => (
-            <span className={ parseFloat(text) < 0 ? 'decrease' : '' }>{text}</span>
+            <span className={parseFloat(text) < 0 ? 'decrease' : ''}>{text}</span>
         )
     }
 ];
@@ -116,6 +113,7 @@ const columns = [
         queryPriceChangeList,
         pubFetchValueList
     }, dispatch))
+
 class toDoPriceChangeList extends PureComponent {
 
     /**
@@ -123,10 +121,10 @@ class toDoPriceChangeList extends PureComponent {
      */
     static propTypes = {
         queryPriceChangeList: PropTypes.func,
-        pubFetchValueList: PropTypes.func,
+        // pubFetchValueList: PropTypes.func,
         priceChangeList: PropTypes.objectOf(PropTypes.any)
     }
-    
+
     /**
      * 导出
      */
@@ -150,26 +148,27 @@ class toDoPriceChangeList extends PureComponent {
         this.props.queryPriceChangeList(queryParams);
     }
 
-    render () {
-        const { queryPriceChangeList, pubFetchValueList } = this.props;
-        const { data, pageNum, pageSize, total } = this.props.priceChangeList;
+    render() {
+        const { data, pageNum, total } = this.props.priceChangeList;
         return (
             <div className="foo">
-                <SearchFormInput 
-                    onExcel={ this.handleDownLoad } 
-                    onQueryList = { this.handleQueryPriceChangeList } 
-                    pubFetchValueList={ pubFetchValueList }>
-                </SearchFormInput>
-                <Table columns={ columns } 
-                    rowKey={ record => record.id } 
-                    dataSource={ data } 
+                <SearchFormInput
+                    onExcel={this.handleDownLoad}
+                    onQueryList={this.handleQueryPriceChangeList}
+                    pubFetchValueList={pubFetchValueList}
+                />
+                <Table
+                    columns={columns}
+                    rowKey={record => record.id}
+                    dataSource={data}
                     pagination={{
                         current: pageNum,
                         total,
                         pageSize: PAGE_SIZE,
                         showQuickJumper: true,
                         onChange: this.handlePaginationChange
-                    }}/>
+                    }}
+                />
             </div>
         );
     }

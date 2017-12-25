@@ -1,20 +1,21 @@
-import React, { Component, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Button, Input, Select, DatePicker, message, Row, Col} from 'antd';
+import { Form, Button, Select, DatePicker, message, Row, Col } from 'antd';
 import { changePriceType } from '../constants';
 import { Supplier, BranchCompany } from '../../../../container/search';
 import SearchMind from '../../../../components/searchMind';
 import Utils from '../../../../util/util';
 import { DATE_FORMAT, PAGE_SIZE } from '../../../../constant/index';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 
 const formItemLayout = {
-    labelCol: { 
-        span: 6 
+    labelCol: {
+        span: 6
     },
-    wrapperCol: { 
+    wrapperCol: {
         span: 14
     }
 };
@@ -31,7 +32,6 @@ class SearchFormInput extends PureComponent {
         pubFetchValueList: PropTypes.func
     };
 
-    queryParams = {};
     state = {
         changeType: '',
         spId: '',
@@ -44,10 +44,38 @@ class SearchFormInput extends PureComponent {
         pageSize: PAGE_SIZE
     }
 
+    componentDidMount() {
+        this.handleSearch();
+    }
+
+    /**
+     * 价格变更记录日期选择
+     * @param {array} result [moment, moment]
+     */
+    onEnterTimeChange = (result) => {
+        let startTime = '';
+        let endTime = '';
+
+        if (result.length === 2) {
+            startTime = result[0].valueOf().toString();
+            endTime = result[1].valueOf().toString();
+        }
+
+        if (result.length === 0) {
+            startTime = '';
+            endTime = '';
+        }
+
+        this.setState({
+            startTime,
+            endTime
+        });
+    }
+
     /**
      * 供应商选择
      */
-    handleSupplierChange = ({spId}) => {
+    handleSupplierChange = ({ spId }) => {
         this.setState({
             spId
         });
@@ -56,15 +84,15 @@ class SearchFormInput extends PureComponent {
     /**
      * 供应商地址选择
      */
-    handleSupplierAddrSelect = ({record}) => {
+    handleSupplierAddrSelect = ({ record }) => {
         this.setState({
             spAdrId: record.spAdrid
         });
     }
 
-     /**
-     * 清空选择的供应商地址
-     */
+    /**
+    * 清空选择的供应商地址
+    */
     handleSupplierAddrClear = () => {
         this.setState({
             spAdrId: ''
@@ -101,9 +129,9 @@ class SearchFormInput extends PureComponent {
         });
     }
 
-       /**
-     * 商品-清除
-     */
+    /**
+  * 商品-清除
+  */
     handleProductClear = () => {
         this.setState({
             productId: null,
@@ -111,33 +139,11 @@ class SearchFormInput extends PureComponent {
         this.productSearchMind.reset();
     }
 
-    /**
-     * 价格变更记录日期选择
-     * @param {array} result [moment, moment]
-     */
-    onEnterTimeChange = (result) => {
-        let startTime = '';
-        let endTime = '';
-        
-        if (result.length === 2) {
-            startTime = result[0].valueOf().toString();
-            endTime = result[1].valueOf().toString();
-        }
-
-        if (result.length === 0) {
-            startTime = '';
-            endTime = '';
-        }
-
-        this.setState({
-            startTime,
-            endTime
-        });
-    }
+    queryParams = {};
 
     handleSearch = () => {
         const { changeType } = this.props.form.getFieldsValue();
-        this.queryParams = {...this.state, changeType: parseInt(changeType, 10)};
+        this.queryParams = { ...this.state, changeType: parseInt(changeType, 10) };
         this.handleQueryList();
     }
 
@@ -164,27 +170,24 @@ class SearchFormInput extends PureComponent {
     handleQueryList = () => {
         this.props.onQueryList(this.queryParams);
     }
-    
-    componentDidMount() {
-        this.handleSearch();
-    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         const { pubFetchValueList } = this.props;
         return (
             <div className="manage-form" id="prize-change-search-form">
-                <Form  layout="inline">
-                    <Row gutter = {40}>
+                <Form layout="inline">
+                    <Row gutter={40}>
                         <Col span={8}>
                             <FormItem {...formItemLayout} label="价格类型" className="sc-form-item">
                                 {getFieldDecorator('changeType', {
                                     initialValue: changePriceType.defaultValue
                                 })(
                                     <Select
-                                        className="sc-form-item-select price-type"                                             
+                                        className="sc-form-item-select price-type"
                                         size="large"
-                                        onChange={this.handleChange}>
+                                        onChange={this.handleChange}
+                                    >
                                         {
                                             changePriceType.data.map(item => (
                                                 <Option key={item.key} value={item.key}>
@@ -193,17 +196,17 @@ class SearchFormInput extends PureComponent {
                                             ))
                                         }
                                     </Select>
-                                )}
+                                    )}
                             </FormItem>
                         </Col>
                         <Col span={8}>
-                             <FormItem {...formItemLayout} label="供应商" className="sc-form-item">
-                                    {getFieldDecorator('supplier', {
-                                        initialValue: { spId: '', spNo: '', companyName: '' }
-                                    })(
-                                        <Supplier
-                                            onChange={this.handleSupplierChange}
-                                        />
+                            <FormItem {...formItemLayout} label="供应商" className="sc-form-item">
+                                {getFieldDecorator('supplier', {
+                                    initialValue: { spId: '', spNo: '', companyName: '' }
+                                })(
+                                    <Supplier
+                                        onChange={this.handleSupplierChange}
+                                    />
                                     )}
                             </FormItem>
                         </Col>
@@ -214,7 +217,7 @@ class SearchFormInput extends PureComponent {
                                     ref={ref => { this.adressMind = ref }}
                                     disabled={this.props.form.getFieldValue('supplier').spId === ''}
                                     fetch={(params) =>
-                                            pubFetchValueList(Utils.removeInvalid({
+                                        pubFetchValueList(Utils.removeInvalid({
                                             condition: params.value,
                                             pageSize: params.pagination.pageSize,
                                             pageNum: params.pagination.current || 1
@@ -245,10 +248,10 @@ class SearchFormInput extends PureComponent {
                                 />
                             </FormItem>
                         </Col>
-                        
+
                     </Row>
 
-                    <Row  gutter = {40}>
+                    <Row gutter={40}>
                         <Col span={8}>
                             <FormItem {...formItemLayout} label="子公司" className="sc-form-item">
                                 {getFieldDecorator('branchCompany', {
@@ -257,12 +260,12 @@ class SearchFormInput extends PureComponent {
                             </FormItem>
                         </Col>
                         <Col span={8}>
-                            <FormItem  {...formItemLayout} label="商品" className="sc-form-item">
+                            <FormItem {...formItemLayout} label="商品" className="sc-form-item">
                                 <SearchMind
                                     compKey="search-mind-sub-company"
                                     ref={ref => { this.productSearchMind = ref }}
                                     fetch={(params) =>
-                                            pubFetchValueList({
+                                        pubFetchValueList({
                                             teamText: params.value,
                                             pageNum: params.pagination.current || 1,
                                             pageSize: params.pagination.pageSize
@@ -290,17 +293,17 @@ class SearchFormInput extends PureComponent {
                             </FormItem>
                         </Col>
                         <Col span={8}>
-                            <FormItem  {...formItemLayout} label="选择日期" className="sc-form-item">
-                            {
-                                getFieldDecorator('rengeTime', {})(
-                                    <RangePicker
-                                        className="rengeTime"
-                                        format={DATE_FORMAT}
-                                        placeholder={['开始时间', '结束时间']}
-                                        onChange={this.onEnterTimeChange}
-                                    />
-                                )
-                            }
+                            <FormItem {...formItemLayout} label="选择日期" className="sc-form-item">
+                                {
+                                    getFieldDecorator('rengeTime', {})(
+                                        <RangePicker
+                                            className="rengeTime"
+                                            format={DATE_FORMAT}
+                                            placeholder={['开始时间', '结束时间']}
+                                            onChange={this.onEnterTimeChange}
+                                        />
+                                    )
+                                }
                             </FormItem>
                         </Col>
                     </Row>
@@ -311,24 +314,21 @@ class SearchFormInput extends PureComponent {
                                 <Button
                                     type="primary"
                                     onClick={this.handleSearch}
-                                    size="default">
-                                        搜索
-                                    </Button>
+                                    size="default"
+                                >搜索</Button>
                             </FormItem>
                             <FormItem>
-                                <Button 
-                                    size="default" 
-                                    onClick={this.handleReset}>
-                                        重置
-                                    </Button>
+                                <Button
+                                    size="default"
+                                    onClick={this.handleReset}
+                                >重置</Button>
                             </FormItem>
                             <FormItem>
-                                <Button 
+                                <Button
                                     onClick={this.handleExport}
                                     type="primary"
-                                    size="default">
-                                        导出供应商列表
-                                    </Button>
+                                    size="default"
+                                >导出供应商列表</Button>
                             </FormItem>
                         </Col>
                     </Row>
@@ -337,5 +337,5 @@ class SearchFormInput extends PureComponent {
         );
     }
 }
-  
+
 export default Form.create()(SearchFormInput);
