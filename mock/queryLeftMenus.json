@@ -159,6 +159,12 @@
                     "authorityCode": "sjsh",
                     "displayName": "售价审核",
                     "menuList": []
+                },
+                {
+                    "authorityId": 368,
+                    "authorityCode": "jgbgjllb",
+                    "displayName": "价格变更记录",
+                    "menuList": []
                 }
             ]
         },

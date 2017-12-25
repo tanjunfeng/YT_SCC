@@ -21,17 +21,7 @@ const formItemLayout = {
 };
 
 class SearchFormInput extends PureComponent {
-    /**
-     * props数据类型约束
-     */
-
-    static propTypes = {
-        form: PropTypes.objectOf(PropTypes.any),
-        onExcel: PropTypes.func,
-        onQueryList: PropTypes.func,
-        pubFetchValueList: PropTypes.func
-    };
-
+    
     state = {
         changeType: '',
         spId: '',
@@ -309,7 +299,7 @@ class SearchFormInput extends PureComponent {
                     </Row>
 
                     <Row gutter={40} type="flex" justify="end">
-                        <Col span={8} className="tr">
+                        <Col span={8}>
                             <FormItem>
                                 <Button
                                     type="primary"
@@ -337,5 +327,12 @@ class SearchFormInput extends PureComponent {
         );
     }
 }
+
+SearchFormInput.propTypes = {
+    form: PropTypes.objectOf(PropTypes.any),
+    onExcel: PropTypes.func,
+    onQueryList: PropTypes.func,
+    pubFetchValueList: PropTypes.func
+};
 
 export default Form.create()(SearchFormInput);
