@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import {processResult} from '../../../constant/procurement';
 // 供应商列表
-export const poMngListColumns = [
+export const purchasePriceColumns = [
     {
         title: '上传ID',
         dataIndex: 'importsId',
@@ -58,55 +58,26 @@ export const poMngListColumns = [
         key: 'productInformation',
     },
     {
+        title: '最新进价',
+        dataIndex: 'newestPrice',
+        key: 'newestPrice',
+    },
+    {
+        title: '供应商编号',
+        dataIndex: 'spNo',
+        key: 'spNo',
+    }, {
+        title: '供应商名称',
+        dataIndex: 'spName',
+        key: 'spName',
+    },
+    {
         title: '供应商地点编号',
         dataIndex: 'spAdrNo',
         key: 'spAdrNo',
     }, {
-        title: '供应商地点名称',
+        title: '供应商地点',
         dataIndex: 'spAdrName',
         key: 'spAdrName',
-    },
-    {
-        title: '地点类型',
-        dataIndex: 'adrType',
-        key: 'adrType',
-        render: (text) => {
-            if (text === null) {
-                return null;
-            }
-            return (locType.data[text + 1].value);
-        }
-    },
-    {
-        title: '地点',
-        dataIndex: 'adrTypeName',
-        key: 'adrTypeName'
-    },
-    {
-        title: '大类编号',
-        dataIndex: 'secondCategoryId',
-        key: 'secondCategoryId'
-
-    },
-    {
-        title: '大类名称',
-        dataIndex: 'secondCategoryName',
-        key: 'secondCategoryName'
-    },
-    {
-        title: '状态',
-        dataIndex: 'status',
-        key: 'status',
-        render: (text) => {
-            if (text === null) {
-                return null;
-            }
-            return (poStatus.data[text + 1].value);
-        }
-    },
-    {
-        title: '操作',
-        dataIndex: 'operation',
-        key: 'operation'
     }
 ]

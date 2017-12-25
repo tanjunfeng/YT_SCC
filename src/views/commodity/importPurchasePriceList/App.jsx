@@ -15,6 +15,8 @@ import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
 import Utils from '../../../util/util';
 import {processResult} from '../../../constant/procurement';
+import { purchasePriceColumns } from './columns';
+import { PAGE_SIZE } from '../../../constant';
 
 const FormItem = Form.Item;
 const dateFormat = 'YYYY-MM-DD';
@@ -60,6 +62,8 @@ class importPurchasePriceList extends PureComponent {
         const { spAdrId, businessMode, spId } = this.state;
         const supplierInfo = spAdrId ? `${spAdrId}-1` : null;
         const distributionStatus = businessMode;
+        const { purchasePriceList = {} } = this.props;
+        const { data = [], total, pageNum } = purchasePriceList;
         return (
             <div className="purchase-Price-list">
                 <Form>
@@ -213,7 +217,7 @@ class importPurchasePriceList extends PureComponent {
                 <div>
                     <Table
                         dataSource={data}
-                        columns={this.columns}
+                        columns={purchasePriceColumns}
                         rowKey="id"
                         scroll={{
                             x: 1600
@@ -221,7 +225,7 @@ class importPurchasePriceList extends PureComponent {
                         pagination={{
                             current: pageNum,
                             total,
-                            pageSize,
+                            pageSize: PAGE_SIZE,
                             showQuickJumper: true,
                             onChange: this.onPaginate
                         }}
@@ -234,5 +238,6 @@ class importPurchasePriceList extends PureComponent {
 importPurchasePriceList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
+    purchasePriceList: PropTypes.objectOf(PropTypes.any),
 }
 export default withRouter(Form.create()(importPurchasePriceList));
