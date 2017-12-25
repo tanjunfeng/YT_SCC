@@ -62,9 +62,8 @@ export const getRulesColumn = (form, licence, type = '') => {
                 rewardListRulePercent
                 totalPurchaseListRulePercent */}
                 {getFieldDecorator(`${licence}RulePercent`, {
-                    initialValue: 95,
                     rules: [{ required: true, message: '请输入折扣百分比' }]
-                })(<InputNumber className="wd-50" min={0} max={100} step={5} />)} %
+                })(<InputNumber className="wd-50" min={0} max={100} step={1} />)} %
             </FormItem>
             : null}
         {/* 折扣金额 */}
@@ -74,13 +73,13 @@ export const getRulesColumn = (form, licence, type = '') => {
                 purchaseConditionRuleAmount,
                 rewardListRuleAmount,
                 totalPurchaseListRuleAmount */}
-                ￥{getFieldDecorator(`${licence}RuleAmount`, {
+                {getFieldDecorator(`${licence}RuleAmount`, {
                     initialValue: 0,
                     rules: [
                         { required: true, message: '请输入折扣金额' },
-                        { validator: Util.limitTwoDecimalPlaces }
+                        { validator: Util.limitTwoDecimalPlacesAndNotZero }
                     ]
-                })(<InputNumber className="wd-60" min={0} max={MAX_AMOUNT_OF_ORDER} step={1} />)} 元
+                })(<InputNumber className="wd-60 wd-61" min={0} max={MAX_AMOUNT_OF_ORDER} step={1} />)} 元
             </FormItem>
             : null}
         {/* 固定单价 */}
@@ -162,7 +161,7 @@ export const getConditionType = (form, licence) => {
             {getFieldValue(`${licence}Type`) === 'AMOUNT' ?
                 <FormItem>
                     {/* rewardListTypeAmount */}
-                    ￥{getFieldDecorator(`${licence}TypeAmount`, {
+                    {getFieldDecorator(`${licence}TypeAmount`, {
                         initialValue: 0,
                         rules: [
                             { required: true, message: '请输入累计商品金额' },

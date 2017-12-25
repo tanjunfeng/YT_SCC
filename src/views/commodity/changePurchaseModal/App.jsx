@@ -265,7 +265,7 @@ class ProdModal extends Component {
                     <Form layout="inline" onSubmit={this.handleSubmit}>
                         <div className={`${prefixCls}-item`}>
                             <div className={`${prefixCls}-item-title`}>货运条件</div>
-                            <div className={`${prefixCls}-item-content`}>
+                            <div>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*采购内装数：</span>
                                     <span className={`${prefixCls}-barcode-input`}>
@@ -277,17 +277,47 @@ class ProdModal extends Component {
                                             )}
                                     </span>
                                 </FormItem>
-                                <FormItem>
-                                    <span className={`${prefixCls}-label`}>*采购价(元)：</span>
-                                    <span className={`${prefixCls}-barcode-input`}>
-                                        {getFieldDecorator('purchasePrice', {
-                                            rules: [{ required: true, message: '请输入采购价!' }],
-                                            initialValue: initValue.purchasePrice
-                                        })(
-                                            <InputNumber min={0} step={0.01} placeholder="采购价" />
-                                            )}
-                                    </span>
-                                </FormItem>
+                                {
+                                    isEdit ?
+                                        <FormItem>
+                                            <span className={`${prefixCls}-label`}>*当前采购价(元)：</span>
+                                            <span className={`${prefixCls}-barcode-input`}>
+                                                {getFieldDecorator('purchasePrice', {
+                                                    rules: [{ required: true, message: '请输入当前采购价!' }],
+                                                    initialValue: initValue.purchasePrice
+                                                })(
+                                                    <InputNumber min={0} step={0.01} placeholder="当前采购价" />
+                                                    )}
+                                            </span>
+                                        </FormItem>
+                                        : <FormItem>
+                                            <span className={`${prefixCls}-label`}>*采购价(元)：</span>
+                                            <span className={`${prefixCls}-barcode-input`}>
+                                                {getFieldDecorator('purchasePrice', {
+                                                    rules: [{ required: true, message: '请输入采购价!' }],
+                                                    initialValue: initValue.purchasePrice
+                                                })(
+                                                    <InputNumber min={0} step={0.01} placeholder="采购价" />
+                                                    )}
+                                            </span>
+                                        </FormItem>
+                                }
+                                {
+                                    isEdit ?
+                                        <FormItem>
+                                            <span className={`${prefixCls}-label`}>*最新采购价(元)：</span>
+                                            <span className={`${prefixCls}-barcode-input`}>
+                                                {getFieldDecorator('purchasePrice', {
+                                                    rules: [{ required: true, message: '请输入最新采购价!' }],
+                                                    initialValue: initValue.purchasePrice
+                                                })(
+                                                    <InputNumber min={0} step={0.01} placeholder="最新采购价" />
+                                                    )}
+                                            </span>
+                                            <span>调价百分比：10%</span>
+                                        </FormItem>
+                                        : null
+                                }
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*条  码：</span>
                                     <span className={`${prefixCls}-barcode-input`}>
@@ -319,7 +349,7 @@ class ProdModal extends Component {
                             </div>
                         </div>
                         <div className={`${prefixCls}-item`}>
-                            <div className={`${prefixCls}-item-content`}>
+                            <div>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*供应商：</span>
                                     <span className={`${prefixCls}-data-pic`}>
@@ -498,7 +528,7 @@ ProdModal.propTypes = {
 };
 
 ProdModal.defaultProps = {
-    prefixCls: 'prod-modal',
+    prefixCls: 'purchase-modal',
     goto: () => { },
     data: {}
 }

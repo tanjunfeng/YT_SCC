@@ -192,6 +192,8 @@ export default {
     UPDATE_GOODS_INFO: 'UPDATE_GOODS_INFO',
     // 待办事项下审批列表
     QUERY_PROCESS_MSG_LIST: 'QUERY_PROCESS_MSG_LIST',
+    // 待办事项下价格变更记录列表
+    QUERY_PRICE_CHANGE_LIST: 'QUERY_PRICE_CHANGE_LIST',
     // 提交直营店下单
     INSERT_DIRECT_ORDER: 'INSERT_DIRECT_ORDER',
     // 批量校验库存

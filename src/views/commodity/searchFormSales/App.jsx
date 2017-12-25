@@ -170,6 +170,10 @@ class SearchForm extends Component {
         this.props.handleAdd();
     }
 
+    handlePriceImport = () => {
+        window.open(`/orderList/orderDetails/${this.props.value}`)
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const { prefixCls } = this.props;
@@ -247,6 +251,9 @@ class SearchForm extends Component {
                             >
                                 创建
                             </Button>
+                        </FormItem>
+                        <FormItem>
+                            <a onClick={this.handlePriceImport}>售价批量导入</a>
                         </FormItem>
                     </Row>
                 </Form>
