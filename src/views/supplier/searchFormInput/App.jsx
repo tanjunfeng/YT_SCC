@@ -48,15 +48,18 @@ class SearchForm extends Component {
     */
     getValue() {
         const { supplierType } = this.state;
+        let { grade, gradeAdr } = this.props.form.getFieldsValue();
         const {
             providerName,
             providerNo,
             registLicenceNumber,
             providerType,
-            status,
-            grade,
-            gradeAdr
+            status
         } = this.props.form.getFieldsValue();
+        if (grade === '0' || gradeAdr === '0') {
+            grade = null;
+            gradeAdr = null;
+        }
         const searchData = {
             providerName,
             providerNo,
