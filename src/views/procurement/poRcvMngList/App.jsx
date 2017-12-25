@@ -506,258 +506,227 @@ class PoRcvMngList extends PureComponent {
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const { data, total, pageNum, pageSize } = this.props.poRcvMngInfo;
         return (
-            <div className="search-box">
+            <div className="po-rcv-mng-list">
                 <Form layout="inline">
-                    <div className="">
-                        <Row gutter={40}>
-                            <Col span={8}>
-                                {/* 采购单号 */}
-                                <FormItem label="采购单号" >
-                                    {getFieldDecorator('purchaseOrderNo', {})(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 收货单号 */}
-                                <FormItem label="收货单号" >
-                                    {getFieldDecorator('purchaseReceiptNo', {})(<Input size="default" />)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 收货日期 */}
-                                <FormItem >
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">收货日期</span>
-                                        {getFieldDecorator('receivedDuring', {})(
-                                            <RangePicker
-                                                className="date-range-picker"
-                                                style={{ width: 250 }}
-                                                onChange={this.onEnterTimeChange}
-                                                format={dateFormat}
-                                                showTime={{
-                                                    hideDisabledOptions: true,
-                                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
-                                                }}
-                                                placeholder={['开始日期', '结束日期']}
-                                            />
-                                        )
-                                        }
-                                    </div>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={40}>
-                            <Col span={8}>
-                                {/* 采购单类型 */}
-                                <FormItem label="采购单类型">
-                                    {getFieldDecorator('purchaseOrderType', { initialValue: poType.defaultValue })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {
-                                                poType.data.map((item) => (
-                                                    <Option key={item.key} value={item.key}>
-                                                        {item.value}
-                                                    </Option>))
-                                            }
-                                        </Select>
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 供应商 */}
-                                <FormItem>
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">供应商</span>
-                                        {getFieldDecorator('supplier', {
-                                            initialValue: { spId: '', spNo: '', companyName: '' }
-                                        })(<Supplier
-                                            onChange={this.handleSupplierChange}
-                                        />)}
-                                    </div>
-                                </FormItem>
-                            </Col>
-                            {/* 供应商地点 */}
-                            <Col span={8}>
-                                <FormItem className="">
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">供应商地点</span>
-                                        <SearchMind
-                                            rowKey="providerNo"
-                                            compKey="search-mind-supply-address"
-                                            ref={ref => {
-                                                this.supplyAddressSearchMind = ref
-                                            }}
-                                            fetch={(params) => this.props.pubFetchValueList({
-                                                orgId: this.props.employeeCompanyId,
-                                                pId: getFieldValue('supplier').spId,
-                                                condition: params.value,
-                                                pageNum: params.pagination.current || 1,
-                                                pageSize: params.pagination.pageSize
-                                            }, 'supplierAdrSearchBox')}
-                                            onChoosed={this.handleSupplierAddressChoose}
-                                            onClear={this.handleSupplierAddressClear}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>{row.providerNo} - {row.providerName}</div>
-                                            )}
-                                            disabled={getFieldValue('supplier').spId === ''}
-                                            pageSize={6}
-                                            columns={[{
-                                                title: '供应商地点编码',
-                                                dataIndex: 'providerNo',
-                                                width: 98
-                                            }, {
-                                                title: '供应商地点名称',
-                                                dataIndex: 'providerName'
-                                            }
-                                            ]}
-                                        />
-                                    </div>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={40}>
-                            <Col span={8}>
-                                {/* 收货单状态 */}
-                                <FormItem label="收货单状态">
-                                    {getFieldDecorator('status', { initialValue: receivedStatus.defaultValue })(
-                                        <Select style={{ width: '153px' }} size="default">
-                                            {
-                                                receivedStatus.data.map((item) => (
-                                                    <Option key={item.key} value={item.key}>
-                                                        {item.value}
-                                                    </Option>))
-                                            }
-                                        </Select>
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 地点类型 */}
-                                <FormItem label="地点类型">
-                                    {getFieldDecorator('adrType', {
-                                        initialValue: locType.defaultValue
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default" onChange={this.onLocTypeChange}>
-                                            {locType.data.map((item) => (
-                                                <Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Option>
-                                            ))}
-                                        </Select>)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 地点 */}
-                                <FormItem>
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">地点</span>
-                                        <SearchMind
-                                            style={{ zIndex: 7 }}
-                                            compKey="search-mind-key1"
-                                            rowKey="id"
-                                            ref={ref => { this.poAddress = ref }}
-                                            fetch={this.handleGetAddressMap}
-                                            onChoosed={this.handleAddressChoose}
-                                            onClear={this.handleAddressClear}
-                                            disabled={this.state.locDisabled}
-                                            renderChoosedInputRaw={(row) => (
-                                                <div>
-                                                    {row[this.state.locationData.code]} -
-                                                    {row[this.state.locationData.name]}
-                                                </div>
-                                            )}
-                                            pageSize={3}
-                                            columns={[
-                                                {
-                                                    title: '编码',
-                                                    dataIndex: this.state.locationData.code,
-                                                    width: 80
-                                                }, {
-                                                    title: '名称',
-                                                    dataIndex: this.state.locationData.name
-                                                }
-                                            ]}
-                                        />
-                                    </div>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={40}>
-                            <Col span={8}>
-                                {/* 经营模式 */}
-                                <FormItem label="经营模式">
-                                    {getFieldDecorator('businessMode', {
-                                        initialValue: businessModeType.defaultValue
-                                    })(
-                                        <Select style={{ width: '153px' }} size="default" >
-                                            {businessModeType.data.map((item) => (
-                                                <Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Option>
-                                            ))}
-                                        </Select>)}
-                                </FormItem>
-                            </Col>
-                            <Col span={8}>
-                                {/* 审批日期 */}
-                                <FormItem>
-                                    <div className="row middle">
-                                        <span className="ant-form-item-label search-mind-label">审批日期</span>
+                    <Row gutter={40} className="po-rcv-search-box">
+                        <Col>
+                            {/* 采购单号 */}
+                            <FormItem label="采购单号" >
+                                {getFieldDecorator('purchaseOrderNo', {})(<Input size="default" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 收货单号 */}
+                            <FormItem label="收货单号" >
+                                {getFieldDecorator('purchaseReceiptNo', {})(<Input size="default" />)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 采购单类型 */}
+                            <FormItem label="采购单类型">
+                                {getFieldDecorator('purchaseOrderType', { initialValue: poType.defaultValue })(
+                                    <Select size="default">
                                         {
-                                            getFieldDecorator('auditDuring', {})(
-                                                <RangePicker
-                                                    className="date-range-picker"
-                                                    style={{ width: 250 }}
-                                                    format={dateFormat}
-                                                    showTime={{
-                                                        hideDisabledOptions: true,
-                                                        defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
-                                                    }}
-                                                    placeholder={['开始日期', '结束日期']}
-                                                />
-                                            )
+                                            poType.data.map((item) => (
+                                                <Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>))
                                         }
-                                    </div>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={40} type="flex" justify="end">
-                            <Col className="tr">
-                                <FormItem>
-                                    <Button type="primary" onClick={this.handleDownload} size="default">
-                                        导出EXCEL
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button size="default" onClick={this.handleResetValue}>
-                                        重置
-                                    </Button>
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" onClick={this.handleSearch} size="default">
-                                        搜索
-                                    </Button>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                    </div>
-                    <div >
-                        <Table
-                            dataSource={data}
-                            columns={this.columns}
-                            rowKey="id"
-                            scroll={{
-                                x: 1600
-                            }}
-                            pagination={{
-                                current: pageNum,
-                                total,
-                                pageSize,
-                                showQuickJumper: true,
-                                onChange: this.onPaginate
-                            }}
-                        />
-                    </div>
+                                    </Select>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 供应商 */}
+                            <FormItem label="供应商">
+                                {getFieldDecorator('supplier', {
+                                    initialValue: { spId: '', spNo: '', companyName: '' }
+                                })(<Supplier
+                                    onChange={this.handleSupplierChange}
+                                />)}
+                            </FormItem>
+                        </Col>
+                        {/* 供应商地点 */}
+                        <Col>
+                            <FormItem label="供应商地点">
+                                <SearchMind
+                                    rowKey="providerNo"
+                                    compKey="search-mind-supply-address"
+                                    ref={ref => {
+                                        this.supplyAddressSearchMind = ref
+                                    }}
+                                    fetch={(params) => this.props.pubFetchValueList({
+                                        orgId: this.props.employeeCompanyId,
+                                        pId: getFieldValue('supplier').spId,
+                                        condition: params.value,
+                                        pageNum: params.pagination.current || 1,
+                                        pageSize: params.pagination.pageSize
+                                    }, 'supplierAdrSearchBox')}
+                                    onChoosed={this.handleSupplierAddressChoose}
+                                    onClear={this.handleSupplierAddressClear}
+                                    renderChoosedInputRaw={(row) => (
+                                        <div>{row.providerNo} - {row.providerName}</div>
+                                    )}
+                                    disabled={getFieldValue('supplier').spId === ''}
+                                    pageSize={6}
+                                    columns={[{
+                                        title: '供应商地点编码',
+                                        dataIndex: 'providerNo',
+                                        width: 98
+                                    }, {
+                                        title: '供应商地点名称',
+                                        dataIndex: 'providerName'
+                                    }
+                                    ]}
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 收货单状态 */}
+                            <FormItem label="收货单状态">
+                                {getFieldDecorator('status', { initialValue: receivedStatus.defaultValue })(
+                                    <Select size="default">
+                                        {
+                                            receivedStatus.data.map((item) => (
+                                                <Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>))
+                                        }
+                                    </Select>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 地点类型 */}
+                            <FormItem label="地点类型">
+                                {getFieldDecorator('adrType', {
+                                    initialValue: locType.defaultValue
+                                })(
+                                    <Select size="default" onChange={this.onLocTypeChange}>
+                                        {locType.data.map((item) => (
+                                            <Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Option>
+                                        ))}
+                                    </Select>)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 地点 */}
+                            <FormItem label="地点">
+                                <SearchMind
+                                    style={{ zIndex: 7 }}
+                                    compKey="search-mind-key1"
+                                    rowKey="id"
+                                    ref={ref => { this.poAddress = ref }}
+                                    fetch={this.handleGetAddressMap}
+                                    onChoosed={this.handleAddressChoose}
+                                    onClear={this.handleAddressClear}
+                                    disabled={this.state.locDisabled}
+                                    renderChoosedInputRaw={(row) => (
+                                        <div>
+                                            {row[this.state.locationData.code]} -
+                                            {row[this.state.locationData.name]}
+                                        </div>
+                                    )}
+                                    pageSize={3}
+                                    columns={[
+                                        {
+                                            title: '编码',
+                                            dataIndex: this.state.locationData.code,
+                                            width: 80
+                                        }, {
+                                            title: '名称',
+                                            dataIndex: this.state.locationData.name
+                                        }
+                                    ]}
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 经营模式 */}
+                            <FormItem label="经营模式">
+                                {getFieldDecorator('businessMode', {
+                                    initialValue: businessModeType.defaultValue
+                                })(
+                                    <Select size="default" >
+                                        {businessModeType.data.map((item) => (
+                                            <Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Option>
+                                        ))}
+                                    </Select>)}
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 收货日期 */}
+                            <FormItem label="收货日期">
+                                {getFieldDecorator('receivedDuring', {})(
+                                    <RangePicker
+                                        style={{ width: 250 }}
+                                        onChange={this.onEnterTimeChange}
+                                        format={dateFormat}
+                                        showTime={{
+                                            hideDisabledOptions: true,
+                                            defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                        }}
+                                        placeholder={['开始日期', '结束日期']}
+                                    />
+                                )
+                                }
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 审批日期 */}
+                            <FormItem label="审核日期">
+                                {
+                                    getFieldDecorator('auditDuring', {})(
+                                        <RangePicker
+                                            style={{ width: 250 }}
+                                            format={dateFormat}
+                                            showTime={{
+                                                hideDisabledOptions: true,
+                                                defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                            }}
+                                            placeholder={['开始日期', '结束日期']}
+                                        />
+                                    )
+                                }
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={40} type="flex" justify="end">
+                        <Col>
+                            <Button type="primary" onClick={this.handleDownload} size="default">
+                                导出EXCEL
+                            </Button>
+                            <Button size="default" onClick={this.handleResetValue}>
+                                重置
+                            </Button>
+                            <Button type="primary" onClick={this.handleSearch} size="default">
+                                搜索
+                            </Button>
+                        </Col>
+                    </Row>
                 </Form>
-            </div >
+                <div>
+                    <Table
+                        dataSource={data}
+                        columns={this.columns}
+                        rowKey="id"
+                        scroll={{
+                            x: 1600
+                        }}
+                        pagination={{
+                            current: pageNum,
+                            total,
+                            pageSize,
+                            showQuickJumper: true,
+                            onChange: this.onPaginate
+                        }}
+                    />
+                </div>
+            </div>
         );
     }
 }
