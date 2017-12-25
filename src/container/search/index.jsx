@@ -5,6 +5,7 @@ import AddingGoodsByStore from './AddingGoodsByStore';
 import AddingGoodsByTerm from './AddingGoodsByTerm';
 import Supplier from './Supplier';
 import SupplierAdderss from './SupplierAddress';
+import Commodity from './Commodity';
 
 export {
     BranchCompany,
@@ -13,5 +14,6 @@ export {
     AddingGoodsByStore,
     AddingGoodsByTerm,
     Supplier,
-    SupplierAdderss
+    SupplierAdderss,
+    Commodity
 };

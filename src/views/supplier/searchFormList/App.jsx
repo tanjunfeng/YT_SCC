@@ -70,7 +70,8 @@ class SearchForm extends PureComponent {
             status: status === '-1' ? null : status,
             grade: grade === '0' ? null : grade,
             gradeAdr: gradeAdr === '0' ? null : gradeAdr,
-            settledDate: this.state.settledDate
+            settledDate: this.state.settledDate,
+            rengeTime: this.state.rengeTime
         };
         this.searchData = Utils.removeInvalid(searchData);
     }
@@ -157,7 +158,7 @@ class SearchForm extends PureComponent {
         this.setState({
             supplierType: 0,
         });
-        this.setState({ rengeTime: null });
+        this.setState({ rengeTime: null, settledDate: null });
         onReset(this.searchData);
     }
 
