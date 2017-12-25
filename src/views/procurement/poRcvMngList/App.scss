@@ -35,12 +35,10 @@
             .ant-form-item {
                 flex: 33%
             }
-        }
-        @media screen and (min-width: 0px) and (max-width: 1400px) {
             .ant-form-item-control-wrapper,
             .ant-select,
             .ywc-smind {
-                width: 220px;
+                width: 200px;
             }
         }
         @media screen and (min-width: 1401px) and (max-width: 1600px) {
