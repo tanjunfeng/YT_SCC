@@ -24,13 +24,13 @@ const { RangePicker } = DatePicker;
 const Option = Select.Option;
 
 @connect(state => ({
-    purchasePriceInfo: state.toJS().purchasePrice.purchasePriceInfo,
+    // purchasePriceInfo: state.toJS().purchasePrice.purchasePriceInfo,
 }), dispatch => bindActionCreators({
     pubFetchValueList,
     queryPurchasePriceInfo
 }, dispatch))
 
-class importPurchasePriceList extends PureComponent {
+class ImportPurchasePriceList extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -91,7 +91,7 @@ class importPurchasePriceList extends PureComponent {
                         </Col>
                         <Col>
                             {/* 供应商 */}
-                            <FormItem label="供应商">
+                            <FormItem label="供应商" className="label-top">
                                 {getFieldDecorator('supplier', {
                                     initialValue: { spId: '', spNo: '', companyName: '' }
                                 })(<Supplier />)}
@@ -99,7 +99,7 @@ class importPurchasePriceList extends PureComponent {
                         </Col>
                         <Col>
                             {/* 供应商地点 */}
-                            <FormItem label="供应商地点">
+                            <FormItem label="供应商地点" className="label-top">
                                 <SearchMind
                                     compKey="providerNo"
                                     disabled={getFieldValue('supplier').spId === ''}
@@ -137,7 +137,7 @@ class importPurchasePriceList extends PureComponent {
                         </Col>
                         <Col>
                             {/* 商品 */}
-                            <FormItem className="product-search">
+                            <FormItem className="product-search" className="">
                                 <SearchMind
                                     style={{ zIndex: 6000, marginBottom: 5 }}
                                     compKey="productCode"
@@ -249,10 +249,10 @@ class importPurchasePriceList extends PureComponent {
         )
     }
 }
-importPurchasePriceList.propTypes = {
+ImportPurchasePriceList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
     queryPurchasePriceInfo: PropTypes.func,
     purchasePriceInfo: PropTypes.objectOf(PropTypes.any),
 }
-export default withRouter(Form.create()(importPurchasePriceList));
+export default withRouter(Form.create()(ImportPurchasePriceList));

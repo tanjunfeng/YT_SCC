@@ -1,4 +1,4 @@
-import importPurchasePriceList from './App';
+import ImportPurchasePriceList from './App';
 import './App.scss';
 
-export default importPurchasePriceList;
+export default ImportPurchasePriceList;
