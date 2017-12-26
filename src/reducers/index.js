@@ -40,6 +40,7 @@ import stockAdjust from './stockAdjust';
 import stockListDetail from './stockListDetail';
 import storeAdjustList from './storeAdjustList';
 import promotion from './promotion';
+import purchasePrice from './purchasePrice';
 import process from './process';
 import storeRealTime from './storeRealTime';
 
@@ -54,7 +55,6 @@ import salesManagement from './salesManagement'
 export default Immutable.fromJS({
     pub,
     user,
-//
     /**
      * Others Reducers
      */
@@ -82,4 +82,5 @@ export default Immutable.fromJS({
     queryWhiteList,
     // 销售管理
     salesManagement,
+    purchasePrice
 });
