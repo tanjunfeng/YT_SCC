@@ -13,6 +13,9 @@ import { fetchAddProdPurchase } from '../../../actions';
 import {
     preHarvestPinStatus,
 } from '../../../constant/searchParams';
+import {
+    getSellPriceInfoByIdAction
+} from '../../../actions/commodity';
 import EditableTable from './editableTable';
 
 const FormItem = Form.Item;
@@ -27,6 +30,7 @@ const Option = Select.Option;
         productAddPriceVisible,
         fetchAddProdPurchase,
         pubFetchValueList,
+        getSellPriceInfoByIdAction
     }, dispatch)
 )
 class SellPriceModal extends Component {
@@ -89,7 +93,6 @@ class SellPriceModal extends Component {
 
     getEditableTableValues = () => {
         const { isEdit, datas } = this.props;
-        // console.log(datas);
         const { startNumber } = this.state;
         return {
             isEdit, startNumber, data: datas.sellSectionPrices
@@ -486,7 +489,8 @@ class SellPriceModal extends Component {
                                             <FormItem>
                                                 {getFieldDecorator('sellSectionPrices', {
                                                     initialValue: this.getEditableTableValues()
-                                                })(<EditableTable />)}
+                                                })(
+                                                    <EditableTable />)}
                                             </FormItem>
                                         </div>
                                         <div>
