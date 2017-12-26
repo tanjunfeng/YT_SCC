@@ -51,10 +51,12 @@ import queryWhiteList from './queryWhiteList';
 /* ********************销售管理************************* */
 import salesManagement from './salesManagement'
 
+// 商品管理售价导入
+import priceImport from './priceImport'
+
 export default Immutable.fromJS({
     pub,
     user,
-//
     /**
      * Others Reducers
      */
@@ -82,4 +84,6 @@ export default Immutable.fromJS({
     queryWhiteList,
     // 销售管理
     salesManagement,
+    // 售价导入
+    priceImport
 });
