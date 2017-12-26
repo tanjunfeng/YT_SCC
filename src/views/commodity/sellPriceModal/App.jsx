@@ -425,7 +425,7 @@ class SellPriceModal extends Component {
                                             <FormItem>
                                                 {getFieldDecorator('sellSectionPrices', {
                                                     initialValue: this.getEditableTableValues()
-                                                })(<EditableTable value={sellsObj} />)}
+                                                })(<EditableTable datas={sellsObj} />)}
                                             </FormItem>
                                         </div>
                                         <div>
@@ -493,7 +493,7 @@ class SellPriceModal extends Component {
                                                 {getFieldDecorator('sellSectionPrices', {
                                                     initialValue: this.getEditableTableValues()
                                                 })(
-                                                    <EditableTable value={sellsObj} />)}
+                                                    <EditableTable datas={sellsObj} />)}
                                             </FormItem>
                                         </div>
                                         <div>
@@ -645,7 +645,7 @@ class SellPriceModal extends Component {
                                         <FormItem>
                                             {getFieldDecorator('sellSectionPrices', {
                                                 initialValue: this.getEditableTableValues()
-                                            })(<EditableTable value={sellsObj} />)}
+                                            })(<EditableTable datas={sellsObj} />)}
                                         </FormItem>
                                     </div>
                                     <div>
