@@ -29,7 +29,7 @@ class EditableTable extends PureComponent {
         }, {
             dataIndex: 'price',
             title: '最新售价/元',
-            render: (text, record) => this.renderColumnsNum(text, record, 'price')
+            render: (text, record) => this.renderColumnsPrice(text, record, 'price')
         }, {
             dataIndex: 'operation',
             title: '操作',
@@ -47,18 +47,18 @@ class EditableTable extends PureComponent {
             : this.columns
     }
 
-    edit = (key) => {
+    edit = (id) => {
         const newData = [...this.state.prices];
-        const target = newData.filter(item => key === item.key)[0];
+        const target = newData.filter(item => id === item.id)[0];
         if (target) {
             target.editable = true;
             this.setState({ prices: newData });
         }
     }
 
-    save = (key) => {
+    save = (id) => {
         const newData = [...this.state.prices];
-        const target = newData.filter(item => key === item.key)[0];
+        const target = newData.filter(item => id === item.id)[0];
         if (target) {
             delete target.editable;
             this.setState({ prices: newData });
@@ -66,19 +66,19 @@ class EditableTable extends PureComponent {
         }
     }
 
-    cancel = (key) => {
+    cancel = (id) => {
         const newData = [...this.state.prices];
-        const target = newData.filter(item => key === item.key)[0];
+        const target = newData.filter(item => id === item.id)[0];
         if (target) {
-            Object.assign(target, this.cacheData.filter(item => key === item.key)[0]);
+            Object.assign(target, this.cacheData.filter(item => id === item.id)[0]);
             delete target.editable;
             this.setState({ prices: newData });
         }
     }
 
-    handleChange = (value, key, column) => {
+    handleChange = (value, id, column) => {
         const newData = [...this.state.prices];
-        const target = newData.filter(item => key === item.key)[0];
+        const target = newData.filter(item => id === item.id)[0];
         if (target) {
             target[column] = value;
             this.setState({ prices: newData });
@@ -88,16 +88,16 @@ class EditableTable extends PureComponent {
     renderColumnsNum = (text, record, column) => (
         <EditableCell
             editable={record.editable}
-            value={text}
-            onChange={value => this.handleChange(value, record.key, column)}
+            value={Math.floor(text)}
+            onChange={value => this.handleChange(value, record.id, column)}
         />
     );
 
-    renderColumnsPrice = (text, record, column) => (
+    renderColumnsPrice = (text = 0, record, column) => (
         <EditableCell
             editable={record.editable}
-            value={text}
-            onChange={value => this.handleChange(value, record.key, column)}
+            value={+(text).toFixed(2)}
+            onChange={value => this.handleChange(value, record.id, column)}
         />
     );
 
@@ -108,16 +108,16 @@ class EditableTable extends PureComponent {
                 {
                     editable ?
                         <span>
-                            <a onClick={() => this.save(record.key)}>保存</a>
+                            <a onClick={() => this.save(record.id)}>保存</a>
                             &nbsp;
                             <Popconfirm
                                 title="确定不保存?"
-                                onConfirm={() => this.cancel(record.key)}
+                                onConfirm={() => this.cancel(record.id)}
                             >
                                 <a>取消</a>
                             </Popconfirm>
                         </span>
-                        : <a onClick={() => this.edit(record.key)}>编辑</a>
+                        : <a onClick={() => this.edit(record.id)}>编辑</a>
                 }
             </div>
         );
