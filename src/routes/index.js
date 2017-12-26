@@ -22,6 +22,8 @@ import ClassifiedList from 'bundle-loader?lazy!../views/commodity/classifiedList
 // 商品管理列表
 import ManagementList from 'bundle-loader?lazy!../views/commodity/managementList';
 import CommodifyDetail from 'bundle-loader?lazy!../views/commodity/commodifyDetail';
+// 售价导入
+import PriceImport from 'bundle-loader?lazy!../views/commodity/priceImport';
 // 分类列表页商品排序管理
 import CateListGoodsSortManage from 'bundle-loader?lazy!../views/SysConfig/CateListGoodsSortManage';
 // 数据字典
@@ -96,7 +98,7 @@ import ToDoReturnList from 'bundle-loader?lazy!../views/toDo/toDoReturnList';
 // 进价审核列表
 import PurchaseExamination from 'bundle-loader?lazy!../views/toDo/purchaseExamination';
 // 售价审核列表
-import PriceExamination from 'bundle-loader?lazy!../views/toDo/PriceExamination';
+import PriceExamination from 'bundle-loader?lazy!../views/toDo/priceExamination';
 // 价格变更记录列表
 import toDoPriceChangeList from 'bundle-loader?lazy!../views/toDo/toDoPriceChangeList';
 
@@ -263,6 +265,19 @@ const routes = [
                         />
                     </Switch>
                 )
+            },
+            // 售价导入
+            {
+                path: '/priceImport',
+                parent: 'gylspgl',
+                key: 'priceImport',
+                component: () => (
+                    <Route
+                        path="/priceImport"
+                        exact
+                        render={() => <Bundle load={PriceImport}>{(App) => <App />}</Bundle>}
+                    />
+                ),
             }
         ]
     },

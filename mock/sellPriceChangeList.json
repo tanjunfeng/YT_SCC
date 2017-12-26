@@ -1,0 +1,27 @@
+{
+    "timestamp": 1513239506873,
+    "code": 200,
+    "message": "请求成功",
+    "exception": null,
+    "data": {
+        "pageNum": 1,
+        "pageSize": 10,
+        "total": 20,
+        "data": [
+            {
+                "importsId": "10000001",
+                "lineNumber": 0,
+                "handleResult": 0,
+                "handleInformation": null,
+                "uploadDate": 1513069229000,
+                "productCode": null,
+                "productInformation": null,
+                "startNumber": 100,
+                "endNumber": 200,
+                "newestPrice": 100,
+                "branchCompanyName": null
+            }
+        ]
+    },
+    "success": true
+}
