@@ -106,6 +106,10 @@ export const exportReceiptList = '/pmPurchaseReceipt/exportReceiptList';
 export const whiteListBatchExport = 'sp/whiteListBatchExport';
 // 白名单下载导入模板
 export const whiteListBatchDownload = '/sp/whiteListTemplete';
+// 导入采购价格变更申请Excel
+export const purchasePriceChangeUpload = '/prodPurchase/purchasePriceChangeUpload';
+// 导出采购价格变更申请Excel
+export const purchasePriceChangeExport = '/prodPurchase/purchasePriceChangeExport';
 
 /**
  * 登录 Api
