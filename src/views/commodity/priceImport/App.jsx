@@ -10,18 +10,18 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Table, Form, Icon, Menu, Dropdown } from 'antd';
-import { queryProcessMsgInfo } from '../../../actions/process';
+import { getPriceImportList } from '../../../actions';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
-import { priceListColumns as columns } from '../columns';
+import { priceListColumns as columns } from './columns';
 
 @connect(state => ({
-    processMsgInfo: state.toJS().procurement.processMsgInfo,
+    priceImportlist: state.toJS().priceImport.priceImportlist,
 }), dispatch => bindActionCreators({
-    queryProcessMsgInfo
+    getPriceImportList
 }, dispatch))
 
-class PriceExamination extends PureComponent {
+class PriceImport extends PureComponent {
     constructor(props) {
         super(props);
         this.param = {};
@@ -48,11 +48,12 @@ class PriceExamination extends PureComponent {
      * 请求列表数据
      */
     query = () => {
+        console.log(this.props.getPriceImportList)
         const searchObj = {
             map: this.param,
             processType: 'SPXS'
         }
-        this.props.queryProcessMsgInfo(searchObj).then(data => {
+        this.props.getPriceImportList(searchObj).then(data => {
             const { pageNum, pageSize } = data.data;
             Object.assign(this.param, { pageNum, pageSize });
         });
@@ -136,7 +137,7 @@ class PriceExamination extends PureComponent {
     }
 
     render() {
-        const { data, total, pageNum, pageSize } = this.props.processMsgInfo;
+        const { data, total, pageNum, pageSize } = this.props.priceImportlist;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
@@ -166,9 +167,12 @@ class PriceExamination extends PureComponent {
     }
 }
 
-PriceExamination.propTypes = {
-    queryProcessMsgInfo: PropTypes.func,
-    processMsgInfo: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
+PriceImport.propTypes = {
+    getPriceImportList: PropTypes.func,
+    // clearPromotionList: PropTypes.func,
+    // updatePromotionStatus: PropTypes.func,
+    priceImportlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+    // location: PropTypes.objectOf(PropTypes.any)
 }
 
-export default withRouter(Form.create()(PriceExamination));
+export default withRouter(Form.create()(PriceImport));

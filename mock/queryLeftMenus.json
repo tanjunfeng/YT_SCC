@@ -26,6 +26,12 @@
                     "authorityCode": "importPurchasePrice",
                     "displayName": "采购进价批量导入",
                     "menuList": []
+                },
+                {
+                    "authorityId": 235,
+                    "authorityCode": "priceImport",
+                    "displayName": "售价导入",
+                    "menuList": []
                 }
             ]
         },

@@ -110,7 +110,8 @@ import storeAdList from './storeAdjustList';
 import modifypassword from './pub';
 
 // 促销活动
-import { getPromotionList, createPromotion,
+import {
+    getPromotionList, createPromotion,
     getPromotionDetail, fetchCouponsListAction, getCouponsDetail, cancelCoupons
 } from './promotion';
 
@@ -119,6 +120,9 @@ import getSellPriceInfoByIdAction from './commodity';
 
 // 根据条件分页查询商品清单，并排序
 import queryCommodityList from './queryCommodityList';
+
+// 售价导入列表
+import getPriceImportList from './priceImport'
 
 // 根据条件分页查询白名单列表, 上线下线
 import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './whiteListConfiguration';
@@ -241,6 +245,8 @@ export {
 
     // 商品管理
     syncProductByManualAction,
+    // 售价导入列表查询
+    getPriceImportList,
     getSellPriceInfoByIdAction,
 
     // 订单

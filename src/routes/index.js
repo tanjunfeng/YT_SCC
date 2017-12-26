@@ -24,6 +24,8 @@ import ManagementList from 'bundle-loader?lazy!../views/commodity/managementList
 import CommodifyDetail from 'bundle-loader?lazy!../views/commodity/commodifyDetail';
 // 采购进价批量导入
 import importPurchasePriceList from 'bundle-loader?lazy!../views/commodity/importPurchasePriceList';
+// 售价导入
+import PriceImport from 'bundle-loader?lazy!../views/commodity/priceImport';
 // 分类列表页商品排序管理
 import CateListGoodsSortManage from 'bundle-loader?lazy!../views/SysConfig/CateListGoodsSortManage';
 // 数据字典
@@ -284,6 +286,19 @@ const routes = [
                         />
                     </Switch>
                 )
+            },
+            // 售价导入
+            {
+                path: '/priceImport',
+                parent: 'gylspgl',
+                key: 'priceImport',
+                component: () => (
+                    <Route
+                        path="/priceImport"
+                        exact
+                        render={() => <Bundle load={PriceImport}>{(App) => <App />}</Bundle>}
+                    />
+                ),
             }
         ]
     },
