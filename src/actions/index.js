@@ -116,6 +116,8 @@ import {
 } from './promotion';
 
 // 商品管理列表
+import getSellPriceInfoByIdAction from './commodity';
+
 // 根据条件分页查询商品清单，并排序
 import queryCommodityList from './queryCommodityList';
 
@@ -245,6 +247,8 @@ export {
     syncProductByManualAction,
     // 售价导入列表查询
     getPriceImportList,
+    getSellPriceInfoByIdAction,
+
     // 订单
     splitorderbyinventory,
     interfaceInventory,

@@ -1,16 +1,13 @@
 .purchase-modal {
-    .ant-modal-content{
-        width: 485px;
-    }
     .ant-modal-body {
-        height: 580px;
+        height: 750px;
         overflow-y: auto;
     }
     form .ant-input-number {
         margin-right: 0;
     }
     .purchase-modal-adjustment{
-        margin-left: 60px;
+        margin-left: 35px;
     }
     &-item {
         border: 1px solid #eee;
@@ -32,7 +29,7 @@
     }
     &-label {
         display: inline-block;
-        width: 100px;
+        width: 110px;
         text-align: right;
         margin-right: 10px;
         vertical-align: middle;
@@ -55,6 +52,11 @@
     &-barcode-input{
         top: 7px;
         right: -90px;
+    }
+    &-sub-state{
+        .ant-form-item{
+            width: 260px;
+        }
     }
 }
 .purchase-modal-data-disable {

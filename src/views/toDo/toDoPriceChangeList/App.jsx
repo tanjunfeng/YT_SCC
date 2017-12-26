@@ -20,7 +20,7 @@ import {
 } from '../../../actions/process';
 
 import SearchFormInput from './searchFormInput';
-import columns from './columns';
+import { priceChangeColumns } from '../columns';
 
 @connect(
     state => ({
@@ -66,7 +66,7 @@ class toDoPriceChangeList extends PureComponent {
                     pubFetchValueList={pubFetchValueList}
                 />
                 <Table
-                    columns={columns}
+                    columns={priceChangeColumns}
                     rowKey={record => record.id}
                     dataSource={data}
                     pagination={{
