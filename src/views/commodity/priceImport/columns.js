@@ -83,8 +83,8 @@ export const priceListColumns = [
 
     },
     {
-        title: '操作',
-        dataIndex: 'operation',
-        key: 'operation'
+        title: '子公司',
+        dataIndex: 'branchCompanyName',
+        key: 'branchCompanyName'
     }
 ]

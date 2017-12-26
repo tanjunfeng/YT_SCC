@@ -14,6 +14,9 @@ import { getPriceImportList } from '../../../actions';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { priceListColumns as columns } from './columns';
+import Utils from '../../../util/util';
+// 导出
+import { sellPriceChangeExport } from '../../../service'
 
 @connect(state => ({
     priceImportlist: state.toJS().priceImport.priceImportlist,
@@ -48,12 +51,7 @@ class PriceImport extends PureComponent {
      * 请求列表数据
      */
     query = () => {
-        console.log(this.props.getPriceImportList)
-        const searchObj = {
-            map: this.param,
-            processType: 'SPXS'
-        }
-        this.props.getPriceImportList(searchObj).then(data => {
+        this.props.getPriceImportList(this.param).then(data => {
             const { pageNum, pageSize } = data.data;
             Object.assign(this.param, { pageNum, pageSize });
         });
@@ -83,57 +81,16 @@ class PriceImport extends PureComponent {
     }
 
     /**
-     * 促销活动表单操作
-    *
-    * @param {Object} record 传值所有数据对象
-    * @param {number} index 下标
-    * @param {Object} items 方法属性
+     * 下载导入结果的回调
+     * @param {object} param 查询参数
     */
-    handleSelect(record, index, items) {
-        const { key } = items;
-        switch (key) {
-            case 'Examine':
-                // 审核
-                break;
-            case 'see':
-                // 查看
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * 列表页操作下拉菜单
-     *
-     * @param {string} text 文本内容
-     * @param {Object} record 模态框状态
-     * @param {string} index 下标
-     *
-     * return 列表页操作下拉菜单
-     */
-    renderOperations = (text, record, index) => {
-        const menu = (
-            <Menu onClick={(item) => this.handleSelect(record, index, item)}>
-                <Menu.Item key="Examine">
-                    审核
-                </Menu.Item>
-                <Menu.Item key="see">
-                    查看
-                </Menu.Item>
-            </Menu>
-        );
-
-        return (
-            <Dropdown
-                overlay={menu}
-                placement="bottomCenter"
-            >
-                <a className="ant-dropdown-link">
-                    表单操作 <Icon type="down" />
-                </a>
-            </Dropdown>
-        )
+    exportList = (param) => {
+        this.handlePurchaseReset();
+        Object.assign(this.param, {
+            current: 1,
+            ...param
+        });
+        Utils.exportExcel(sellPriceChangeExport, Utils.removeInvalid(param));
     }
 
     render() {
@@ -144,11 +101,12 @@ class PriceImport extends PureComponent {
                 <SearchForm
                     handlePurchaseSearch={this.handlePurchaseSearch}
                     handlePurchaseReset={this.handlePurchaseReset}
+                    exportList={this.exportList}
                 />
                 <Table
                     dataSource={data}
                     columns={columns}
-                    rowKey="taskId"
+                    rowKey="importsId"
                     scroll={{
                         x: 1400
                     }}

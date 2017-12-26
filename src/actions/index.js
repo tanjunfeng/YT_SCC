@@ -122,7 +122,7 @@ import getSellPriceInfoByIdAction from './commodity';
 import queryCommodityList from './queryCommodityList';
 
 // 售价导入列表
-import getPriceImportList from './priceImport'
+import { getPriceImportList } from './priceImport'
 
 // 根据条件分页查询白名单列表, 上线下线
 import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './whiteListConfiguration';

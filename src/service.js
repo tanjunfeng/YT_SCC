@@ -584,6 +584,8 @@ export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPa
 
 // 查询销售价格变更申请列表
 export const sellPriceChangeList = (params) => http.get('/prodSell/sellPriceChangeList', params);
+// 售价导入下载导入结果
+export const sellPriceChangeExport = (params) => http.get('/sc/prodSell/sellPriceChangeExport', params);
 
 /* **************procurement*********** */
 
