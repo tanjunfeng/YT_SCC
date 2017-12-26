@@ -37,6 +37,9 @@ class EditableTable extends PureComponent {
         }];
     }
 
+    /**
+     * 只读表格去除操作列，可编辑表格显示操作列
+     */
     getColumns = () => {
         const { readOnly } = this.props.value;
         return readOnly
