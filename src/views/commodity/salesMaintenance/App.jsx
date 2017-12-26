@@ -12,7 +12,6 @@ import { withRouter } from 'react-router';
 import {
     Form,
 } from 'antd';
-
 import {
     modifyAuditVisible,
     modifyCheckReasonVisible,
@@ -30,7 +29,8 @@ import SellPriceModal from '../sellPriceModal'
 import {
     postSellPrice,
     updateSellPrice,
-    updatePriceStatus
+    updatePriceStatus,
+    getSellPriceInfoByIdAction
 } from '../../../actions/commodity';
 
 @connect(
@@ -44,6 +44,7 @@ import {
         queryProdPurchases: state.toJS().commodity.queryProdPurchases,
         getProductById: state.toJS().commodity.getProductById,
         stepPriceDetail: state.toJS().commodity.stepPriceDetail,
+        getSellPriceInfoById: state.toJS().commodity.getSellPriceInfoById,
     }),
     dispatch => bindActionCreators({
         modifyAuditVisible,
@@ -52,7 +53,8 @@ import {
         fetchPriceInfo,
         postSellPrice,
         updateSellPrice,
-        updatePriceStatus
+        updatePriceStatus,
+        getSellPriceInfoByIdAction
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
@@ -171,10 +173,18 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     handleCardClick = (data) => {
-        this.setState({
-            datas: data,
-            isEdit: true,
-            show: true,
+        this.props.getSellPriceInfoByIdAction({id: data.id}).then((res) => {
+            if (res.code === 200) {
+                this.setState({
+                    datas: res,
+                    isEdit: true,
+                    show: true,
+                })
+            }
+        }).catch(() => {
+            this.setState({
+                show: false,
+            })
         })
     }
 
@@ -261,6 +271,7 @@ ProcurementMaintenance.propTypes = {
     fetchPriceInfo: PropTypes.func,
     postSellPrice: PropTypes.func,
     updatePriceStatus: PropTypes.func,
+    getSellPriceInfoByIdAction: PropTypes.func,
     stepPriceDetail: PropTypes.objectOf(PropTypes.any),
     updateSellPrice: PropTypes.func
 }

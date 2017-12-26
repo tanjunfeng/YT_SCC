@@ -10,7 +10,8 @@ import ActionType from './ActionType';
 import {
     addStepSellPrice,
     updateStepSellPrice,
-    updateSellPriceStatus
+    updateSellPriceStatus,
+    getSellPriceInfoByIdAction as getSellPriceInfoByIdService,
 } from '../service';
 
 /**
@@ -59,6 +60,29 @@ export const updateSellPrice = (params) => dispatch => (
             .catch(err => reject(err))
     })
 )
+
+/**
+ * 跳转到修改页面
+ * @param {Object} params 传参
+ */
+
+const receiveGetSellPriceInfoById = (data) => ({
+    type: ActionType.RECEIVE_GET_SELL_PRICE,
+    payload: data
+});
+
+export const getSellPriceInfoByIdAction = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        getSellPriceInfoByIdService(params)
+            .then(res => {
+                dispatch(
+                    receiveGetSellPriceInfoById(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
 
 /**
  * 价格起停用
