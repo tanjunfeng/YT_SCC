@@ -576,6 +576,9 @@ export const queryProdPurchaseExtByCondition = (params) => http.get('/prodPurcha
 // 查询商品信息
 export const getProductById = (params) => http.get('/prodPurchase/getProductById', params);
 
+// 跳转到修改页面
+export const getSellPriceInfoByIdAction = (params) => http.get('/prodSell/getSellPriceInfoById', params);
+
 // 根据品牌名称分页查询品牌列表
 export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPages', params);
 

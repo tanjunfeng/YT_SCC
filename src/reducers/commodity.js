@@ -84,7 +84,10 @@ const initState = Immutable.fromJS({
     getWarehouseLogicInfo: {},
 
     // 删除当前关系
-    deleteProd: {}
+    deleteProd: {},
+
+    // 跳转到修改页面
+    getSellPriceInfoById: {}
 
 });
 
@@ -167,6 +170,10 @@ export default function (state = initState, action) {
 
         case ActionType.CHECK_MAIN_SUPPLIER:
             return state.set('checkMainSupplier', action.payload);
+
+        case ActionType.RECEIVE_GET_SELL_PRICE: {
+            return state.set('getSellPriceInfoById', action.payload);
+        }
 
         case ActionType.GET_PRODPURCHASE_BYID:
             return state.set('getProdPurchaseByIds', action.payload);
