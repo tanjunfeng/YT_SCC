@@ -37,25 +37,72 @@ class ImportPurchasePriceList extends PureComponent {
             spAdrId: '',
             spId: '',
             businessMode: '',
+            productId: ''
         }
+        this.param = {};
+    }
+    componentDidMount() {
+        this.handleReset();
+        this.queryPurchasePrice();
     }
     /**
      * 点击翻页
      * @param {pageNumber}    pageNumber
      */
-    onPaginate = (pageNumber) => {
-        this.current = pageNumber
-        this.queryPoList({
-            pageSize: PAGE_SIZE,
-            pageNum: this.current,
-            ...this.searchParams
-        });
+    onPaginate = (pageNum) => {
+        Object.assign(this.param, { pageNum});
+        this.queryPurchasePrice();
+    }
+
+    /**
+     * 获取查询参数
+     */
+    getSearchParam = () => {
+        const formValues = this.props.form.getFieldsValue();
+        const {id, importTime, result, supplier} = formValues;
+        const spId = supplier.spId;
+        const uploadStartDate = importTime ? importTime[0].valueOf().toString() : null;
+        const uploadEndDate = importTime ? importTime[1].valueOf().toString() : null;
+        return {
+            ...Utils.removeInvalid({
+                importsId: id,
+                spId,
+                handleResult: result,
+                spAdrId: this.state.spAdrId,
+                productId: this.state.productId,
+                uploadStartDate,
+                uploadEndDate
+            })
+        }
+    }
+    queryPurchasePrice = () => {
+        this.props.queryPurchasePriceInfo(this.param);
+    }
+
+    handleReset = () => {
+        this.param = {
+            pageNum: 1,
+            pageSize: PAGE_SIZE
+        }
+    }
+    handleResetFields = () => {
+        this.props.form.resetFields();
+        this.supplyAddressSearchMind.reset();
+        this.product.reset();
+    }
+    /**
+     * 获取搜索框参数，进行采购进价表查询
+     */
+    handleQuery = () => {
+        this.handleReset();
+        const data = this.getSearchParam();
+        this.props.queryPurchasePriceInfo(Object.assign({}, data, this.param));
     }
     /**
      * 获取供应商地点编号
      */
     handleSupplierAddressChoose = ({ record }) => {
-        this.setState({ spAdrId: record.spId });
+        this.setState({ spAdrId: record.spAdrid });
     }
 
     /**
@@ -69,7 +116,7 @@ class ImportPurchasePriceList extends PureComponent {
      * 获取商品id
      */
     handleProductChoosed = (record) => {
-        this.setState({})
+        this.setState({productId: record.productId})
     }
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -77,6 +124,9 @@ class ImportPurchasePriceList extends PureComponent {
         const supplierInfo = spAdrId ? `${spAdrId}-1` : null;
         const distributionStatus = businessMode;
         const { purchasePriceInfo = {} } = this.props;
+        if (!purchasePriceInfo) {
+            return null;
+        }
         const { data = [], total, pageNum } = purchasePriceInfo;
         return (
             <div className="purchase-Price-list">
@@ -137,12 +187,12 @@ class ImportPurchasePriceList extends PureComponent {
                         </Col>
                         <Col>
                             {/* 商品 */}
-                            <FormItem className="product-search" className="">
+                            <FormItem className="product-search">
                                 <SearchMind
                                     style={{ zIndex: 6000, marginBottom: 5 }}
                                     compKey="productCode"
                                     rowKey="productCode"
-                                    ref={ref => { this.addPo = ref }}
+                                    ref={ref => { this.product = ref }}
                                     fetch={(params) =>
                                         this.props.pubFetchValueList({
                                             supplierInfo,
@@ -210,7 +260,7 @@ class ImportPurchasePriceList extends PureComponent {
                             <Button size="default" type="primary" onClick={this.handleQuery}>
                                 查询
                             </Button>
-                            <Button size="default" type="danger" onClick={this.handleResetValue}>
+                            <Button size="default" type="danger" onClick={this.handleResetFields}>
                                 重置
                             </Button>
                             <a onClick={this.handleDown}>
@@ -219,10 +269,10 @@ class ImportPurchasePriceList extends PureComponent {
                             <Button size="default" onClick={this.handleExport}>
                                 导入Excel
                             </Button>
-                            <Button size="default" onClick={this.handleResetValue}>
+                            <Button size="default" onClick={this.handleDownResult}>
                                 下载导入结果
                             </Button>
-                            <Button type="primary" onClick={this.handleSearch} size="default">
+                            <Button type="primary" onClick={this.handleCreate} size="default">
                                 创建变价单
                             </Button>
                         </Col>
