@@ -72,9 +72,13 @@
             margin: 0 auto;
         }
     }
+    .sell-modal-border{
+        border: 1px solid red;
+        padding: 5px 10px;
+    }
 }
 .new-price-state{
-    &-sub{
+    &-1{
         width: 5px;
         height: 5px;
         background: #5397E8;
@@ -82,7 +86,7 @@
         display: inline-block;
         vertical-align: middle;
     }
-    &-success{
+    &-2{
         width: 5px;
         height: 5px;
         background: #71E135;
@@ -90,7 +94,7 @@
         display: inline-block;
         vertical-align: middle;
     }
-    &-sub{
+    &-3{
         width: 5px;
         height: 5px;
         background: red;

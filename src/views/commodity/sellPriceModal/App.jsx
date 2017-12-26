@@ -274,6 +274,19 @@ class SellPriceModal extends Component {
         sellsObj.sellPricesInReview.push(newDates.sellPricesInReview.sellSectionPrices);
         const preHarvestPinStatusChange =
             (newDates.preHarvestPinStatus === 1 ? '1' : '0');
+        const auditStatus = () => {
+            switch (newDates.auditStatus) {
+                case 1:
+                    return '已提交';
+                case 2:
+                    return '已审核';
+                case 3:
+                    return '已拒绝';
+                default:
+                    return '';
+            }
+        }
+        const isSub = newDates.auditStatus === 1;
         return (
             <Modal
                 title={isEdit ? '编辑销售价格' : '新增销售价格'}
@@ -319,6 +332,7 @@ class SellPriceModal extends Component {
                                                                 <InputNumber
                                                                     min={0}
                                                                     onChange={this.handleInsideChange}
+                                                                    disabled={isSub}
                                                                 />
                                                                 )}
                                                         </span>
@@ -344,6 +358,7 @@ class SellPriceModal extends Component {
                                                             })(
                                                                 <InputNumber
                                                                     min={0}
+                                                                    disabled={isSub}
                                                                     onChange={this.handleMinChange}
                                                                     step={currentInside || newDates.salesInsideNumber}
                                                                 />
@@ -358,6 +373,7 @@ class SellPriceModal extends Component {
                                                             })(
                                                                 <InputNumber
                                                                     min={0}
+                                                                    disabled={isSub}
                                                                     onChange={this.handleMaxChange}
                                                                     step={currentInside || newDates.salesInsideNumber}
                                                                 />
@@ -366,13 +382,14 @@ class SellPriceModal extends Component {
                                                     </FormItem>
                                                     <FormItem>
                                                         <span>*承诺发货时间：下单后</span>
-                                                        <span className={`${prefixCls}-day-input`}>
+                                                        <span>
                                                             {getFieldDecorator('deliveryDay', {
                                                                 rules: [{ required: true, message: '请输入承诺发货时间!' }],
                                                                 initialValue: newDates.deliveryDay
-                                                            })(
-                                                                <InputNumber min={0} />
-                                                                )}
+                                                            })(<InputNumber
+                                                                min={0}
+                                                                disabled={isSub}
+                                                            />)}
                                                         </span>
                                                         天内发货
                                                     </FormItem>
@@ -398,6 +415,7 @@ class SellPriceModal extends Component {
                                                                 style={{ width: 90 }}
                                                                 className="sc-form-item-select"
                                                                 size="default"
+                                                                disabled={isSub}
                                                                 onChange={this.handleSelectChange}
                                                             >
                                                                 {
@@ -451,19 +469,31 @@ class SellPriceModal extends Component {
                                         <div className={`${prefixCls}-item-content`}>
                                             <FormItem>
                                                 <span>*销售内装数：</span>
-                                                <span>{newDates.salesInsideNumber}</span>
+                                                <span className={
+                                                    newDates.sellPricesInReview.salesInsideNumber !== newDates.salesInsideNumber ?
+                                                    'sell-modal-border' : null}
+                                                >{newDates.sellPricesInReview.salesInsideNumber}</span>
                                             </FormItem>
                                             <FormItem>
                                                 <span>*起订量：</span>
-                                                <span>{newDates.minNumber}</span>
+                                                <span className={
+                                                    newDates.sellPricesInReview.minNumber !== newDates.minNumber ?
+                                                    'sell-modal-border' : null}
+                                                >{newDates.sellPricesInReview.minNumber}</span>
                                             </FormItem>
                                             <FormItem>
                                                 <span>*最大销售数量：</span>
-                                                <span>{newDates.maxNumber}</span>
+                                                <span className={
+                                                    newDates.sellPricesInReview.maxNumber !== newDates.maxNumber ?
+                                                    'sell-modal-border' : null}
+                                                >{newDates.sellPricesInReview.maxNumber}</span>
                                             </FormItem>
                                             <FormItem>
                                                 <span>*承诺发货时间：下单后</span>
-                                                <span>{newDates.deliveryDay}</span>
+                                                <span className={
+                                                    newDates.sellPricesInReview.deliveryDay !== newDates.deliveryDay ?
+                                                    'sell-modal-border' : null}
+                                                >{newDates.sellPricesInReview.deliveryDay}</span>
                                                 天内发货
                                             </FormItem>
                                             <FormItem>
@@ -499,14 +529,23 @@ class SellPriceModal extends Component {
                                         <div>
                                             <FormItem>
                                                 <span>*建议零售价(元)：</span>
-                                                <span>{newDates.suggestPrice}</span>
+                                                <span className={
+                                                    newDates.sellPricesInReview.suggestPrice !== newDates.suggestPrice ?
+                                                    'sell-modal-border' : null}
+                                                >{newDates.sellPricesInReview.suggestPrice}</span>
                                             </FormItem>
                                             <FormItem>
                                                 <span>商品采购价格：</span>
-                                                <span><i className={`new-price-state-${newDates.state}`} />{newDates.state || '-'}</span>
+                                                <span className={
+                                                    newDates.sellPricesInReview.purchasePrice !== newDates.purchasePrice ?
+                                                    'sell-modal-border' : null}
+                                                >{newDates.sellPricesInReview.state || '-'}</span>
                                             </FormItem>
                                             <FormItem label="子公司:" className="edit-input">
-                                                <span>{newDates.branchCompanyId} - {newDates.branchCompanyName}</span>
+                                                <span className={
+                                                    newDates.sellPricesInReview.branchCompanyId !== newDates.branchCompanyId ?
+                                                    'sell-modal-border' : null}
+                                                >{newDates.sellPricesInReview.branchCompanyId} - {newDates.sellPricesInReview.branchCompanyName}</span>
                                             </FormItem>
                                         </div>
                                     </div>
@@ -523,7 +562,7 @@ class SellPriceModal extends Component {
                                 </FormItem>
                                 <FormItem>
                                     <span>售价状态：</span>
-                                    <span><i className={`new-price-state-${newDates.state}`} />{newDates.state || '-'}</span>
+                                    <span><i className={`new-price-state-${newDates.auditStatus}`} />{auditStatus() || '-'}</span>
                                 </FormItem>
                             </Form>
                         </div>
@@ -588,7 +627,7 @@ class SellPriceModal extends Component {
                                         </FormItem>
                                         <FormItem>
                                             <span>*承诺发货时间：下单后</span>
-                                            <span className={`${prefixCls}-day-input`}>
+                                            <span>
                                                 {getFieldDecorator('deliveryDay', {
                                                     rules: [{ required: true, message: '请输入承诺发货时间!' }],
                                                     initialValue: newDates.deliveryDay
