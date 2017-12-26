@@ -106,8 +106,12 @@ export const exportReceiptList = '/pmPurchaseReceipt/exportReceiptList';
 export const whiteListBatchExport = 'sp/whiteListBatchExport';
 // 白名单下载导入模板
 export const whiteListBatchDownload = '/sp/whiteListTemplete';
-// 价格变更记录数据导出excel
+// 价格变更记录数据导出Excel
 export const exportProdPriceChangeList = '/prodSell/exportProdPriceChangeList';
+// 导入采购价格变更申请Excel
+export const purchasePriceChangeUpload = '/prodPurchase/purchasePriceChangeUpload';
+// 导出采购价格变更申请Excel
+export const purchasePriceChangeExport = '/prodPurchase/purchasePriceChangeExport';
 
 /**
  * 登录 Api
@@ -584,6 +588,9 @@ export const getSellPriceInfoByIdAction = (params) => http.get('/prodSell/getSel
 // 根据品牌名称分页查询品牌列表
 export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPages', params);
 
+// 查询销售价格变更申请列表
+export const sellPriceChangeList = (params) => http.get('/prodSell/sellPriceChangeList', params);
+
 /* **************procurement*********** */
 
 // 查询采购单详情
@@ -729,6 +736,9 @@ export const prodBatchPutAway = (params) => http.post('prodSell/prodBatchPutaway
 export const prodBatchUpdate = (params) => http.post('prodSell/prodBatchUpdate', params);
 // 批量全国上下架
 export const availablProducts = (params) => http.post('product/availablProducts', params);
+
+// 商品管理，导入采购进价，查询采购价格变更申请列表
+export const queryPurchasePriceInfo = (params) => http.get('/prodPurchase/purchasePriceChangeList', params);
 
 // 新增供应商信息
 export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);

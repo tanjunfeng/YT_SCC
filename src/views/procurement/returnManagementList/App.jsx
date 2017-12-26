@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-22 18:07:14
+ * @Last Modified time: 2017-12-26 16:59:09
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -68,7 +68,7 @@ const adrTypes = { 0: '仓库', 1: '门店' }
 @connect(state => ({
     returnMngInfo: state.toJS().procurement.returnMngInfo,
     processImageBusiData: state.toJS().process.processImageBusiData,
-    commentHisBusiList: state.toJS().process.commentHisByBusi,
+    commentHisBusiList: state.toJS().process.commentHisBusiList,
 }), dispatch => bindActionCreators({
     getWarehouseAddressMap,
     getShopAddressMap,
@@ -113,7 +113,7 @@ class ReturnManagementList extends PureComponent {
             {
                 title: '退货单号',
                 dataIndex: 'purchaseRefundNo',
-                key: 'purchaseRefundNo',
+                key: 'id',
                 sorter: (a, b) => a.age - b.age,
             }, {
                 title: '供应商',
@@ -659,7 +659,6 @@ class ReturnManagementList extends PureComponent {
                             </FormItem>
                         </Col>
                         <Col>
-                            {/* 供应商 */}
                             <FormItem label="供应商类型">
                                 {getFieldDecorator('supplier', {
                                     initialValue: { spId: '', spNo: '', companyName: '' }
@@ -796,7 +795,7 @@ class ReturnManagementList extends PureComponent {
                         dataSource={data}
                         columns={this.columns}
                         onChange={this.sortOnChange}
-                        rowKey="purchaseRefundNo"
+                        rowKey="id"
                         scroll={{
                             x: 1600
                         }}

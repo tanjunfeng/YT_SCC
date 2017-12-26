@@ -54,15 +54,18 @@ class SearchForm extends PureComponent {
     */
     getValue() {
         const { supplierType } = this.state;
+        let { grade, gradeAdr } = this.props.form.getFieldsValue();
         const {
             providerName,
             providerNo,
             registLicenceNumber,
             providerType,
-            status,
-            grade,
-            gradeAdr
+            status
         } = this.props.form.getFieldsValue();
+        if (grade === '0' || gradeAdr === '0') {
+            grade = null;
+            gradeAdr = null;
+        }
         const searchData = {
             providerName,
             providerNo,
@@ -70,7 +73,8 @@ class SearchForm extends PureComponent {
             providerType: providerType === '0' ? null : providerType,
             status: status === '-1' ? null : status,
             grade: supplierType === '1' ? grade : gradeAdr,
-            settledDate: this.state.settledDate
+            settledDate: this.state.settledDate,
+            rangeTime: this.state.rangeTime
         };
         this.searchData = Utils.removeInvalid(searchData);
     }

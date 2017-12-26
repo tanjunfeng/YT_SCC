@@ -52,14 +52,14 @@ export default function (state = initState, action) {
         case ActionType.UPDATE_STATIC_PAGESBASE:
             Object.assign(data, action.payload)
             return state.set('visibleData')
-            .set('updatestaticpagebase', Immutable.fromJS(data));
+                .set('updatestaticpagebase', Immutable.fromJS(data));
 
         case ActionType.PRODUCT_TO_ADD_CATEGORY: {
             const { isVisible, toAddMediaTitle } = action.payload;
             return state.set(
                 'toAddCategory',
                 isVisible
-                ).set('visibleData').set('toAddMediaTitle', toAddMediaTitle);
+            ).set('visibleData').set('toAddMediaTitle', toAddMediaTitle);
         }
 
         case ActionType.MODIFY_MEDIAADD_VISIBLE: {
@@ -67,7 +67,7 @@ export default function (state = initState, action) {
             return state.set(
                 'toAddPriceVisible',
                 isVisible
-                ).set('visibleData', record).set('toAddMediaTitle', toAddMediaTitle);
+            ).set('visibleData', record).set('toAddMediaTitle', toAddMediaTitle);
         }
         case ActionType.MODIFY_DELETE_ORDER_NUM:
             Object.assign(data, action.payload)
