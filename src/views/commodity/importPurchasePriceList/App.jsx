@@ -3,7 +3,6 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import {
     Form, Input, Button, Row, Col, Select,
     Icon, Table, Menu, Dropdown, message, Modal,
@@ -13,6 +12,7 @@ import moment from 'moment';
 import { Supplier } from '../../../container/search';
 import SearchMind from '../../../components/searchMind';
 import { pubFetchValueList } from '../../../actions/pub';
+import { queryPurchasePriceInfo } from '../../../actions/purchasePrice';
 import Utils from '../../../util/util';
 import {processResult} from '../../../constant/procurement';
 import { purchasePriceColumns } from './columns';
@@ -24,8 +24,10 @@ const { RangePicker } = DatePicker;
 const Option = Select.Option;
 
 @connect(state => ({
+    purchasePriceInfo: state.toJS().purchasePrice.purchasePriceInfo,
 }), dispatch => bindActionCreators({
     pubFetchValueList,
+    queryPurchasePriceInfo
 }, dispatch))
 
 class importPurchasePriceList extends PureComponent {
@@ -36,6 +38,18 @@ class importPurchasePriceList extends PureComponent {
             spId: '',
             businessMode: '',
         }
+    }
+    /**
+     * 点击翻页
+     * @param {pageNumber}    pageNumber
+     */
+    onPaginate = (pageNumber) => {
+        this.current = pageNumber
+        this.queryPoList({
+            pageSize: PAGE_SIZE,
+            pageNum: this.current,
+            ...this.searchParams
+        });
     }
     /**
      * 获取供应商地点编号
@@ -62,8 +76,8 @@ class importPurchasePriceList extends PureComponent {
         const { spAdrId, businessMode, spId } = this.state;
         const supplierInfo = spAdrId ? `${spAdrId}-1` : null;
         const distributionStatus = businessMode;
-        const { purchasePriceList = {} } = this.props;
-        const { data = [], total, pageNum } = purchasePriceList;
+        const { purchasePriceInfo = {} } = this.props;
+        const { data = [], total, pageNum } = purchasePriceInfo;
         return (
             <div className="purchase-Price-list">
                 <Form>
@@ -238,6 +252,7 @@ class importPurchasePriceList extends PureComponent {
 importPurchasePriceList.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     pubFetchValueList: PropTypes.func,
-    purchasePriceList: PropTypes.objectOf(PropTypes.any),
+    queryPurchasePriceInfo: PropTypes.func,
+    purchasePriceInfo: PropTypes.objectOf(PropTypes.any),
 }
 export default withRouter(Form.create()(importPurchasePriceList));

@@ -725,6 +725,9 @@ export const prodBatchUpdate = (params) => http.post('prodSell/prodBatchUpdate',
 // 批量全国上下架
 export const availablProducts = (params) => http.post('product/availablProducts', params);
 
+// 商品管理，导入采购进价，查询采购价格变更申请列表
+export const queryPurchasePriceInfo = (params) => http.get('/prodPurchase/purchasePriceChangeList', params);
+
 // 新增供应商信息
 export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);
 
