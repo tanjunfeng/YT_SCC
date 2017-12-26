@@ -24,7 +24,7 @@ const { RangePicker } = DatePicker;
 const Option = Select.Option;
 
 @connect(state => ({
-    purchasePriceInfo: state.toJS().purchasePrice.purchasePriceInfo,
+    purchasePriceInfo: state.toJS().purchasePrice.purchasePriceInfo
 }), dispatch => bindActionCreators({
     pubFetchValueList,
     queryPurchasePriceInfo
