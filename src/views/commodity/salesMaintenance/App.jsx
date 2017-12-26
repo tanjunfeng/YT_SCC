@@ -12,7 +12,6 @@ import { withRouter } from 'react-router';
 import {
     Form,
 } from 'antd';
-
 import {
     modifyAuditVisible,
     modifyCheckReasonVisible,
@@ -30,7 +29,8 @@ import SellPriceModal from '../sellPriceModal'
 import {
     postSellPrice,
     updateSellPrice,
-    updatePriceStatus
+    updatePriceStatus,
+    getSellPriceInfoByIdAction
 } from '../../../actions/commodity';
 
 @connect(
@@ -44,6 +44,7 @@ import {
         queryProdPurchases: state.toJS().commodity.queryProdPurchases,
         getProductById: state.toJS().commodity.getProductById,
         stepPriceDetail: state.toJS().commodity.stepPriceDetail,
+        getSellPriceInfoById: state.toJS().commodity.getSellPriceInfoById,
     }),
     dispatch => bindActionCreators({
         modifyAuditVisible,
@@ -52,7 +53,8 @@ import {
         fetchPriceInfo,
         postSellPrice,
         updateSellPrice,
-        updatePriceStatus
+        updatePriceStatus,
+        getSellPriceInfoByIdAction
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
@@ -171,6 +173,7 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     handleCardClick = (data) => {
+        this.props.getSellPriceInfoByIdAction({id: data.id})
         this.setState({
             datas: data,
             isEdit: true,

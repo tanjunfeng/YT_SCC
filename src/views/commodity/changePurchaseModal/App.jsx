@@ -255,9 +255,9 @@ class ProdModal extends Component {
             <Modal
                 title={isEdit ? '修改采购价格' : '新增采购价格'}
                 visible
-                className={prefixCls}
+                className={isEdit ? prefixCls : 'creat-prod'}
                 onOk={this.handleOk}
-                width={'500px'}
+                width={'480px'}
                 onCancel={this.handleCancel}
                 maskClosable={false}
             >
@@ -346,6 +346,23 @@ class ProdModal extends Component {
                                             )}
                                     </span>
                                 </FormItem>
+                                {
+                                    isEdit &&
+                                    <div className={`${prefixCls}-sub-state`}>
+                                        <FormItem>
+                                            <span className={`${prefixCls}-label`}>最新采购价格状态：</span>
+                                            <span><i className={`new-price-state-${initValue.state}`} />{initValue.state || '-'}</span>
+                                        </FormItem>
+                                        <FormItem>
+                                            <span className={`${prefixCls}-label`}>提交人：</span>
+                                            <span>{initValue.submit || '-'}</span>
+                                        </FormItem>
+                                        <FormItem>
+                                            <span className={`${prefixCls}-label`}>审核人：</span>
+                                            <span>{initValue.examine || '-'}</span>
+                                        </FormItem>
+                                    </div>
+                                }
                             </div>
                         </div>
                         <div className={`${prefixCls}-item`}>

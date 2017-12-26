@@ -243,7 +243,7 @@ class ProdPurchaseModal extends Component {
                 visible={this.props.toAddPriceVisible}
                 className={prefixCls}
                 onOk={this.handleOk}
-                width={'500px'}
+                width={'480px'}
                 onCancel={this.handleCancel}
                 maskClosable={false}
             >
