@@ -96,7 +96,7 @@ import ToDoReturnList from 'bundle-loader?lazy!../views/toDo/toDoReturnList';
 // 进价审核列表
 import PurchaseExamination from 'bundle-loader?lazy!../views/toDo/purchaseExamination';
 // 售价审核列表
-import PriceExamination from 'bundle-loader?lazy!../views/toDo/PriceExamination';
+import PriceExamination from 'bundle-loader?lazy!../views/toDo/priceExamination';
 // 价格变更记录列表
 import toDoPriceChangeList from 'bundle-loader?lazy!../views/toDo/toDoPriceChangeList';
 
