@@ -95,8 +95,11 @@ class SellPriceModal extends Component {
         const { isEdit, datas } = this.props;
         const { startNumber } = this.state;
         return {
-            isEdit, startNumber, data: datas.sellSectionPrices
-        }
+            isEdit,
+            startNumber,
+            data: datas.sellSectionPrices,
+            readOnly: false
+        };
     }
 
     handleOk() {

@@ -1,0 +1,28 @@
+{
+    "timestamp":1513236535101,
+    "code":200,
+    "message":"请求成功",
+    "exception":null,
+    "data":{
+        "pageNum":2,
+        "pageSize":10,
+        "total":21,
+        "data":[
+            {
+                "importsId":"10000019",
+                "lineNumber":4,
+                "handleResult":0,
+                "handleInformation":"此商品和供应商没有采购关系，请检查",
+                "uploadDate":1513133232000,
+                "productCode":null,
+                "productInformation":"益而高EG-005 液体胶",
+                "newestPrice":1,
+                "spNo":null,
+                "spName":"红太阳",
+                "spAdrNo":null,
+                "spAdrName":"天津 - 红太阳"
+            }
+        ]
+    },
+    "success":true
+}
