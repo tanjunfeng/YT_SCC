@@ -80,7 +80,6 @@ class SearchFormInput extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        // const { pubFetchValueList } = this.props;
         return (
             <div className="manage-form" id="prize-change-search-form">
                 <Form layout="inline">
@@ -184,8 +183,7 @@ class SearchFormInput extends PureComponent {
 SearchFormInput.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     onExcel: PropTypes.func,
-    onQueryList: PropTypes.func,
-    // pubFetchValueList: PropTypes.func
+    onQueryList: PropTypes.func
 };
 
 export default Form.create()(SearchFormInput);
