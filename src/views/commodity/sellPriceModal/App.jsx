@@ -272,6 +272,9 @@ class SellPriceModal extends Component {
         const { getFieldDecorator } = form;
         const { currentInside, hasZero } = this.state;
         const newDates = JSON.parse(JSON.stringify(datas));
+        const sellsObj = { sellSectionPrices: [], sellPricesInReview: []};
+        sellsObj.sellSectionPrices.push(newDates.sellSectionPrices);
+        sellsObj.sellPricesInReview.push(newDates.sellPricesInReview.sellSectionPrices);
         const preHarvestPinStatusChange =
             (newDates.preHarvestPinStatus === 1 ? '1' : '0');
         return (
@@ -425,7 +428,7 @@ class SellPriceModal extends Component {
                                             <FormItem>
                                                 {getFieldDecorator('sellSectionPrices', {
                                                     initialValue: this.getEditableTableValues()
-                                                })(<EditableTable />)}
+                                                })(<EditableTable datas={sellsObj} />)}
                                             </FormItem>
                                         </div>
                                         <div>
@@ -493,7 +496,7 @@ class SellPriceModal extends Component {
                                                 {getFieldDecorator('sellSectionPrices', {
                                                     initialValue: this.getEditableTableValues()
                                                 })(
-                                                    <EditableTable />)}
+                                                    <EditableTable datas={sellsObj} />)}
                                             </FormItem>
                                         </div>
                                         <div>
@@ -645,7 +648,7 @@ class SellPriceModal extends Component {
                                         <FormItem>
                                             {getFieldDecorator('sellSectionPrices', {
                                                 initialValue: this.getEditableTableValues()
-                                            })(<EditableTable />)}
+                                            })(<EditableTable datas={sellsObj} />)}
                                         </FormItem>
                                     </div>
                                     <div>
