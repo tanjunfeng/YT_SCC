@@ -106,6 +106,8 @@ export const exportReceiptList = '/pmPurchaseReceipt/exportReceiptList';
 export const whiteListBatchExport = 'sp/whiteListBatchExport';
 // 白名单下载导入模板
 export const whiteListBatchDownload = '/sp/whiteListTemplete';
+// 价格变更记录数据导出excel
+export const exportProdPriceChangeList = '/prodSell/exportProdPriceChangeList';
 
 /**
  * 登录 Api
@@ -945,3 +947,4 @@ export const processImageByBusi = params => http.get('/bpm/processImageByBusi', 
 export const queryCommentHisByBusi = params => http.get('/bpm/queryCommentHisByBusi', params);
 // 价格变更记录模块
 export const queryProdPriceChangeList = params => http.get('/prodSell/queryProdPriceChangeList', params);
+
