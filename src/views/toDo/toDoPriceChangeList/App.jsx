@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 
 import { PAGE_SIZE } from '../../../constant';
 import Utils from '../../../util/util';
-import { exportSupplierEnterList } from '../../../service';
+import { exportProdPriceChangeList } from '../../../service';
 import { pubFetchValueList } from '../../../actions/pub';
 import {
     queryPriceChangeList,
@@ -35,8 +35,8 @@ class toDoPriceChangeList extends PureComponent {
     /**
      * 导出
      */
-    handleDownLoad(data) {
-        Utils.exportExcel(exportSupplierEnterList, data);
+    handleDownLoad = data => {
+        Utils.exportExcel(exportProdPriceChangeList, data);
     }
 
     /**

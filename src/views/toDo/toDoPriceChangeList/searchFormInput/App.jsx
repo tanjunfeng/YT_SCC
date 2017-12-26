@@ -70,8 +70,12 @@ class SearchFormInput extends PureComponent {
     }
 
     handleExport = () => {
+        this.getQueryParams();
         const { onExcel } = this.props;
-        onExcel(this.queryParams);
+        const queryParams = {...this.queryParams};
+        queryParams.pageNum = null;
+        queryParams.pageSize = null;
+        onExcel(Utils.removeInvalid(queryParams));
     }
 
     handleQueryList = () => {
@@ -171,7 +175,7 @@ class SearchFormInput extends PureComponent {
                                 onClick={this.handleExport}
                                 type="primary"
                                 size="default"
-                            >导出供应商列表</Button>
+                            >导出Excel</Button>
                         </Col>
                     </Row>
                 </Form>
