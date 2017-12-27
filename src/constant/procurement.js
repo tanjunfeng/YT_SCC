@@ -211,13 +211,13 @@ export const processResult = {
         key: '',
         value: '全部'
     }, {
+        key: '0',
+        value: '错误'
+    }, {
         key: '1',
         value: '已提交'
     }, {
         key: '2',
         value: '已验证'
-    }, {
-        key: '3',
-        value: '错误'
     }]
 }

@@ -7,6 +7,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form, Select, DatePicker, message, Row, Col } from 'antd';
+import { BranchCompany } from '../../../container/search';
 import Utils from '../../../util/util';
 import {
     supplierTypeOptions,
@@ -54,7 +55,8 @@ class SearchForm extends Component {
             providerNo,
             registLicenceNumber,
             providerType,
-            status
+            status,
+            branchCompany
         } = this.props.form.getFieldsValue();
         if (grade === '0' || gradeAdr === '0') {
             grade = null;
@@ -67,7 +69,8 @@ class SearchForm extends Component {
             providerType: providerType === '0' ? null : providerType,
             status: status === '0' ? null : status,
             grade: supplierType === '1' ? grade : gradeAdr,
-            settledDate: this.state.settledDate
+            settledDate: this.state.settledDate,
+            orgId: branchCompany ? branchCompany.id : ''
         };
         this.searchData = Utils.removeInvalid(searchData);
     }
@@ -275,33 +278,29 @@ class SearchForm extends Component {
                                 </Select>)}
                             </FormItem>
                         </Col>
-                        <Col span={8}>
-                            {
-                                supplierType === '1' &&
-                                <FormItem className="sc-form-item">
-                                    <span className="sc-form-item-label">供应商等级</span>
-                                    {getFieldDecorator('grade', {
-                                        initialValue: supplierLevelOptions.defaultValue
-                                    })(<Select
-                                        disabled={this.state.supplierType === '-1'}
-                                        className="sc-form-item-select"
-                                        size="default"
-                                        onChange={this.supplierLevelChange}
-                                    >
-                                        {
-                                            supplierLevelOptions.data.map((item) =>
-                                                (<Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Option>)
-                                            )
-                                        }
-                                    </Select>)}
-                                </FormItem>
-                            }
-                        </Col>
-                        <Col span={8}>
-                            {
-                                supplierType === '2' &&
+                        { supplierType === '1' && <Col span={8}>
+                            <FormItem className="sc-form-item">
+                                <span className="sc-form-item-label">供应商等级</span>
+                                {getFieldDecorator('grade', {
+                                    initialValue: supplierLevelOptions.defaultValue
+                                })(<Select
+                                    disabled={this.state.supplierType === '-1'}
+                                    className="sc-form-item-select"
+                                    size="default"
+                                    onChange={this.supplierLevelChange}
+                                >
+                                    {
+                                        supplierLevelOptions.data.map((item) =>
+                                            (<Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Option>)
+                                        )
+                                    }
+                                </Select>)}
+                            </FormItem>
+                        </Col>}
+                        { supplierType === '2' && (
+                            <Col span={8}>
                                 <FormItem className="sc-form-item">
                                     <span className="sc-form-item-label">供应商地点等级</span>
                                     {getFieldDecorator('gradeAdr', {
@@ -321,8 +320,8 @@ class SearchForm extends Component {
                                         }
                                     </Select>)}
                                 </FormItem>
-                            }
-                        </Col>
+                            </Col>)
+                        }
                         <Col span={8}>
                             {/* 供应商入驻日期 */}
                             <FormItem className="sc-form-item">
@@ -339,6 +338,16 @@ class SearchForm extends Component {
                                 </div>
                             </FormItem>
                         </Col>
+                        { supplierType === '2' && (
+                            <Col span={8}>
+                                <FormItem className="sc-form-item">
+                                    <span className="sc-form-item-label">子公司</span>
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: { id: '', name: '' }
+                                    })(<BranchCompany />)}
+                                </FormItem>
+                            </Col>)
+                        }
                     </Row>
                     <Row gutter={40} type="flex" justify="end">
                         <Col span={8} className="tr">

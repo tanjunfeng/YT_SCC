@@ -11,7 +11,7 @@
             {
                 "importsId":"10000019",
                 "lineNumber":4,
-                "handleResult":0,
+                "handleResult":1,
                 "handleInformation":"此商品和供应商没有采购关系，请检查",
                 "uploadDate":1513133232000,
                 "productCode":null,
