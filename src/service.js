@@ -106,12 +106,13 @@ export const exportReceiptList = '/pmPurchaseReceipt/exportReceiptList';
 export const whiteListBatchExport = 'sp/whiteListBatchExport';
 // 白名单下载导入模板
 export const whiteListBatchDownload = '/sp/whiteListTemplete';
+
 // 价格变更记录数据导出Excel
 export const exportProdPriceChangeList = '/prodSell/exportProdPriceChangeList';
-// 导入采购价格变更申请Excel
-export const purchasePriceChangeUpload = '/prodPurchase/purchasePriceChangeUpload';
 // 导出采购价格变更申请Excel
 export const purchasePriceChangeExport = '/prodPurchase/purchasePriceChangeExport';
+// 导出采购价格变更申请Excel
+export const purchasePriceChangeExcelTemplate = '/prodPurchase/purchasePriceChangeExcelTemplate';
 
 /**
  * 登录 Api
@@ -746,7 +747,10 @@ export const availablProducts = (params) => http.post('product/availablProducts'
 
 // 商品管理，导入采购进价，查询采购价格变更申请列表
 export const queryPurchasePriceInfo = (params) => http.get('/prodPurchase/purchasePriceChangeList', params);
-
+// 导入采购价格变更申请Excel
+export const purchasePriceChangeUpload = (params) => http.post('/prodPurchase/purchasePriceChangeUpload', params);
+// 创建采购进价变价单
+export const createPurchase = () => http.get('/prodPurchase/createPurchase');
 // 新增供应商信息
 export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);
 
