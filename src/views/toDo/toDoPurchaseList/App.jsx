@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-20 14:29:02
+ * @Last Modified time: 2017-12-27 10:29:36
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -50,8 +50,8 @@ import {
     queryProcessMsgInfo,
     queryHighChart,
     clearHighChart,
+    returnAuditInfo,
 } from '../../../actions/process';
-import {auditInfo} from '../../../service';
 import ApproModal from '../../../components/approModal'
 import { Supplier } from '../../../container/search';
 import FlowImage from '../../../components/flowImage';
@@ -77,6 +77,7 @@ const confirm = Modal.confirm;
     queryPoDetail,
     queryHighChart,
     clearHighChart,
+    returnAuditInfo,
 }, dispatch))
 
 class toDoPurchaseList extends PureComponent {
@@ -447,7 +448,7 @@ class toDoPurchaseList extends PureComponent {
 
     handleCommentOk = (param) => {
         const { refundNo, taskId } = this.examinationAppData;
-        auditInfo({ ...param, orderNo: refundNo, taskId, type: 0 })
+        this.props.returnAuditInfo({ ...param, orderNo: refundNo, taskId, type: 0 })
             .then((res) => {
                 if (res.code === 200) {
                     message.success(res.message);
@@ -457,7 +458,7 @@ class toDoPurchaseList extends PureComponent {
 
                     this.queryReturnMngList(this.current);
                 }
-            });
+            })
     }
 
     handleSelect(record, index, items) {
@@ -780,6 +781,7 @@ toDoPurchaseList.propTypes = {
     queryHighChart: PropTypes.func,
     clearHighChart: PropTypes.func,
     highChartData: PropTypes.string,
+    returnAuditInfo: PropTypes.string,
 };
 
 export default withRouter(Form.create()(toDoPurchaseList));

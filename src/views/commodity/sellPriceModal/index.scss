@@ -1,7 +1,7 @@
 .sell-modal{
     min-width: 950px;
     .ant-modal-content{
-        width: 1000px;
+        width: 1020px;
     }
     .ant-modal-body{
         min-height: 400px;
@@ -71,6 +71,9 @@
         .ant-form-item{
             margin: 0 auto;
         }
+    }
+    .editable-cell .ant-input-number {
+        width: 60px;
     }
 }
 .new-price-state{
