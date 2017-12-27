@@ -13,7 +13,8 @@ import {
     queryProcessMsgInfo as queryProcessMsgInfoService,
     processImageByBusi as processImageByBusiService,
     queryCommentHisByBusi as queryCommentHisByBusiService,
-    queryProdPriceChangeList as queryProdPriceChangeListService
+    queryProdPriceChangeList as queryProdPriceChangeListService,
+    auditInfo as auditInfoService,
 } from '../service';
 
 // 流程管理下获取所有流程信息
@@ -136,34 +137,23 @@ export const queryProcessMsgInfo = (params) => dispatch => (
  * 查询待办事项下价格变更记录列表数据
  * @param {*} data
  */
-
- const queryPriceChangeListAction = data => ({
+const queryPriceChangeListAction = data => ({
     type: ActionType.QUERY_PRICE_CHANGE_LIST,
     payload: data
- });
+});
 
- export const queryPriceChangeList = params => async dispatch => {
-     try {
-        const res = await queryProdPriceChangeListService(params);
-        dispatch(queryPriceChangeListAction(res.data));
-        return res;
-     } catch(err) {
-         return err
-     }
- };
-
-// export const queryPriceChangeList = (params) => dispatch => (
-//     new Promise((resolve, reject) => {
-//         queryProdPriceChangeListService(params)
-//             .then(res => {
-//                 dispatch(queryPriceChangeListAction(res.data));
-//                 resolve(res);
-//             })
-//             .catch(err => {
-//                 reject(err);
-//             })
-//     })
-// )
+export const queryPriceChangeList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryProdPriceChangeListService(params)
+            .then(res => {
+                dispatch(queryPriceChangeListAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
 
 // 业务中获取高亮流程图数据
 const processImageBusiAction = (data) => ({
@@ -205,6 +195,28 @@ export const queryCommentHisBusi = (params) => dispatch => (
         queryCommentHisByBusiService(params)
             .then(res => {
                 dispatch(queryCommentHisBusiAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+/**
+ * 审批代办事项
+ * @param {*} data
+ */
+const returnAuditInfoAction = (data) => ({
+    type: ActionType.RETURN_AUDIT_INFO,
+    payload: data
+});
+
+export const returnAuditInfo = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        auditInfoService(params)
+            .then(res => {
+                dispatch(returnAuditInfoAction(res));
                 resolve(res);
             })
             .catch(err => {

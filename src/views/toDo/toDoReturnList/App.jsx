@@ -2,8 +2,8 @@
  * @Author: tanjf
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
- * @Last Modified by: tanjf
- * @Last Modified time: 2017-12-22 04:48:29
+ * @Last Modified by: chenghaojie
+ * @Last Modified time: 2017-12-27 10:30:05
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -43,6 +43,7 @@ import {
     queryProcessMsgInfo,
     queryHighChart,
     clearHighChart,
+    returnAuditInfo,
 } from '../../../actions/process';
 import {
     getWarehouseAddressMap,
@@ -52,7 +53,6 @@ import {
 } from '../../../actions';
 import ApproModal from '../../../components/approModal'
 import FlowImage from '../../../components/flowImage';
-import {auditInfo} from '../../../service';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -76,6 +76,7 @@ const { TextArea } = Input;
     queryProcessDefinitions,
     queryHighChart,
     clearHighChart,
+    returnAuditInfo,
 }, dispatch))
 
 class toDoReturnList extends PureComponent {
@@ -525,7 +526,7 @@ class toDoReturnList extends PureComponent {
     handleApprovalOk = () => {
         const { refundNo, taskId } = this.examinationAppData;
         this.getFormData().then((param) => {
-            auditInfo({ ...param, orderNo: refundNo, taskId, type: 1 })
+            this.props.returnAuditInfo({ ...param, orderNo: refundNo, taskId, type: 1 })
                 .then((res) => {
                     if (res.code === 200) {
                         message.success(res.message);
@@ -535,7 +536,7 @@ class toDoReturnList extends PureComponent {
 
                         this.queryReturnMngList(this.current);
                     }
-                });
+                })
         });
     }
 
@@ -920,7 +921,8 @@ toDoReturnList.propTypes = {
     deleteBatchRefundOrder: PropTypes.func,
     queryHighChart: PropTypes.func,
     clearHighChart: PropTypes.func,
-    highChartData: PropTypes.string
+    highChartData: PropTypes.string,
+    returnAuditInfo: PropTypes.func,
 };
 
 export default withRouter(Form.create()(toDoReturnList));
