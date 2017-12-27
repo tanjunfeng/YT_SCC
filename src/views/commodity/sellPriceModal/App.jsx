@@ -94,7 +94,6 @@ class SellPriceModal extends Component {
     getEditableTableValues = () => {
         const { isEdit, datas } = this.props;
         const { startNumber } = this.state;
-        const sellsObj = { sellSectionPrices: [], sellPricesInReview: []};
         return {
             isEdit,
             startNumber,
@@ -647,7 +646,7 @@ class SellPriceModal extends Component {
                                     </div>
                                     <div className={`${prefixCls}-item-content`}>
                                         <FormItem>
-                                            {getFieldDecorator('sellSectionPrices', {
+                                            {getFieldDecorator('sellPrices', {
                                                 initialValue: this.getEditableTableValues()
                                             })(<EditableTable datas={sellsObj} />)}
                                         </FormItem>
