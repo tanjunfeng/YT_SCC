@@ -30,7 +30,7 @@ const { TextArea } = Input;
 
 @connect(
     state => ({
-        orderDetailData: state.toJS().order.orderDetailData
+        orderDetailData: state.toJS().order.orderDetailData,
     }),
     dispatch => bindActionCreators({
         modifyCauseModalVisible,
