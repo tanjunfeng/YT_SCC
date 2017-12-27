@@ -14,7 +14,8 @@ import { queryProcessMsgInfo } from '../../../actions/process';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { purchaseListColumns as columns } from '../columns';
-import ExamineModal from '../common/ExamineModal'
+import ExamineModal from '../common/ExamineModal';
+import SeeModal from '../common/SeeModal';
 
 @connect(state => ({
     processMsgInfo: state.toJS().procurement.processMsgInfo,
@@ -25,12 +26,16 @@ import ExamineModal from '../common/ExamineModal'
 class PurchaseExamination extends PureComponent {
     constructor(props) {
         super(props);
-        this.param = {};
         this.state = {
-            visible: false
+            visible: false,
+            seeModelvisible: false
         }
+        // 搜索参数
+        this.param = {};
+        // 传递到审核弹窗的参数
+        this.taskId = '';
+        this.type = '2';
     }
-
     componentDidMount() {
         this.handlePurchaseReset();
         this.query();
@@ -95,6 +100,15 @@ class PurchaseExamination extends PureComponent {
     }
 
     /**
+     * 关闭查看审核意见弹框
+     */
+    closeSeeModal = () => {
+        this.setState({
+            seeModelvisible: false
+        })
+    }
+
+    /**
      * 促销活动表单操作
     *
     * @param {Object} record 传值所有数据对象
@@ -103,18 +117,24 @@ class PurchaseExamination extends PureComponent {
     */
     handleSelect(record, index, items) {
         const { key } = items;
+        const { taskId } = record
         switch (key) {
             case 'Examine':
                 // 审核
                 this.setState({
                     visible: true
                 })
+                this.taskId = taskId;
                 break;
             case 'see':
                 // 查看
                 break;
             case 'results':
                 // 审批意见
+                this.setState({
+                    seeModelvisible: true
+                })
+                this.taskId = taskId
                 break;
             default:
                 break;
@@ -131,17 +151,21 @@ class PurchaseExamination extends PureComponent {
      * return 列表页操作下拉菜单
      */
     renderOperations = (text, record, index) => {
+        const { status } = record
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
-                <Menu.Item key="Examine">
-                    审核
-                </Menu.Item>
                 <Menu.Item key="see">
                     查看
                 </Menu.Item>
-                <Menu.Item key="results">
-                    审批意见
-                </Menu.Item>
+                {
+                    status !== 0 ?
+                        <Menu.Item key="results">
+                            审批意见
+                        </Menu.Item>
+                        : <Menu.Item key="Examine">
+                            审核
+                        </Menu.Item>
+                }
             </Menu>
         );
 
@@ -186,6 +210,13 @@ class PurchaseExamination extends PureComponent {
                 <ExamineModal
                     visible={this.state.visible}
                     closeModal={this.closeModal}
+                    taskId={this.taskId}
+                    type={this.type}
+                />
+                <SeeModal
+                    seeModelvisible={this.state.seeModelvisible}
+                    closeSeeModal={this.closeSeeModal}
+                    taskId={this.taskId}
                 />
             </div>
         );
