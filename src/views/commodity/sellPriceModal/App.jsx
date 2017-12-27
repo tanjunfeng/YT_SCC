@@ -53,7 +53,7 @@ class SellPriceModal extends Component {
             insideValue: null,
             confirmVisible: false,
         }
-        this.isAfter = true;
+        this.isSub = false; // 判断是否为已提交状态(true为已提交)
         this.choose = 0;
         this.isDisabled = false;
         this.successPost = true;
@@ -95,12 +95,15 @@ class SellPriceModal extends Component {
     getEditableTableValues = (list) => {
         const { isEdit, datas } = this.props;
         const { startNumber } = this.state;
+        const newDates = JSON.parse(JSON.stringify(datas.data));
+        const { auditStatus } = newDates;
         return {
             isEdit,
             list,
             startNumber,
             data: datas.sellSectionPrices,
-            readOnly: false
+            readOnly: false,
+            auditStatus: newDates.auditStatus === 1 ? true : false
         };
     }
 
@@ -280,7 +283,6 @@ class SellPriceModal extends Component {
                     return '';
             }
         }
-        const isSub = newDates.auditStatus === 1;
         const isAfter = this.isAfter === true;
         return (
             <Modal
