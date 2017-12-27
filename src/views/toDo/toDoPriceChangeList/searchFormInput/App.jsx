@@ -28,6 +28,9 @@ class SearchFormInput extends PureComponent {
     componentDidMount() {
         this.handleSearch();
     }
+    /**
+     * 获取搜索条件
+     */
     getQueryParams = () => {
         const {
             changeType,
@@ -51,12 +54,16 @@ class SearchFormInput extends PureComponent {
     }
 
     queryParams = {};
-
+    /**
+     * 查询价格变更记录
+     */
     handleSearch = () => {
         this.getQueryParams();
         this.handleQueryList();
     }
-
+    /**
+     * 重置搜索条件
+     */
     handleReset = () => {
         this.queryParams = {};
         this.props.form.resetFields();
@@ -68,7 +75,9 @@ class SearchFormInput extends PureComponent {
             branchCompany: { reset: true }
         });
     }
-
+    /**
+     * 导出价格变更记录Excel
+     */
     handleExport = () => {
         this.getQueryParams();
         const { onExcel } = this.props;
@@ -77,7 +86,9 @@ class SearchFormInput extends PureComponent {
         queryParams.pageSize = null;
         onExcel(Utils.removeInvalid(queryParams));
     }
-
+    /**
+     * 查询价格变更记录
+     */
     handleQueryList = () => {
         this.props.onQueryList(this.queryParams);
     }
