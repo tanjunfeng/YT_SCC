@@ -1,10 +1,19 @@
 .sell-modal {
     min-width: 950px;
+    .changeBefore{
+        width: 49%;
+        display: inline-block;
+    }
+    .changeAfter{
+        width: 49%;
+        margin-left: 1%;
+        display: inline-block;
+    }
     .ant-modal-content {
         width: 1020px;
     }
     .ant-modal-body {
-        min-height: 400px;
+        min-height: 700px;
         overflow-y: auto;
     }
     form .ant-input-number {
@@ -54,6 +63,12 @@
         display: inline-block;
         vertical-align: top;
     }
+    .sell-modal-body-width {
+        width: 50%;
+    }
+    .sell-modal-body-width:last-child{
+        float: right;
+    }
     .sell-modal-body-wrap::after {
         clear: both;
         overflow: hidden;
@@ -61,10 +76,6 @@
     .item-max-height {
         overflow-y: auto;
         max-height: 250px;
-    }
-    .edit-input {
-        display: flex;
-        margin: 0 auto;
     }
     .edit-state-list {
         display: flex;
