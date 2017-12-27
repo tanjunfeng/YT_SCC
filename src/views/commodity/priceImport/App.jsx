@@ -9,30 +9,48 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Icon, Menu, Dropdown } from 'antd';
-import { getPriceImportList } from '../../../actions';
+import { Table, Form, Modal, message } from 'antd';
+import { getPriceImportList, getIsSellVaild, getCreateSell } from '../../../actions';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { priceListColumns as columns } from './columns';
 import Utils from '../../../util/util';
 // 导出
-import { sellPriceChangeExport } from '../../../service'
+import { sellPriceChangeExport, sellPriceChangeExcelTemplate } from '../../../service'
+
+const pageSize = PAGE_SIZE
 
 @connect(state => ({
     priceImportlist: state.toJS().priceImport.priceImportlist,
 }), dispatch => bindActionCreators({
-    getPriceImportList
+    getPriceImportList,
+    getIsSellVaild,
+    getCreateSell
 }, dispatch))
 
 class PriceImport extends PureComponent {
     constructor(props) {
         super(props);
         this.param = {};
+        this.pageNum = 1;
+        this.state = {
+            exportBtnDisabled: true
+        }
     }
 
-    componentDidMount() {
-        this.handlePurchaseReset();
-        this.query();
+    componentWillReceiveProps(nextProps) {
+        if (!nextProps.priceImportlist.data) {
+            return;
+        }
+        if (nextProps.priceImportlist.data.length === 0) {
+            this.setState({
+                exportBtnDisabled: true
+            })
+        } else {
+            this.setState({
+                exportBtnDisabled: false
+            })
+        }
     }
 
     /**
@@ -40,21 +58,31 @@ class PriceImport extends PureComponent {
      * @param {number} pageNum 页码
      */
     onPaginate = (pageNum = 1) => {
-        Object.assign(this.param, {
-            pageNum,
-            current: pageNum
-        });
+        this.pageNum = pageNum
         this.query();
+    }
+
+    /**
+    * 创建变价单
+    */
+    getCreateChange = () => {
+        this.props.getCreateSell()
+            .then(res => {
+                if (res.success) {
+                    message.success('变价成功');
+                    this.query();
+                } else {
+                    message.error(res.message);
+                }
+            })
     }
 
     /**
      * 请求列表数据
      */
     query = () => {
-        this.props.getPriceImportList(this.param).then(data => {
-            const { pageNum, pageSize } = data.data;
-            Object.assign(this.param, { pageNum, pageSize });
-        });
+        const pageNum = this.pageNum;
+        this.props.getPriceImportList(Object.assign({}, this.param, { pageNum, pageSize }))
     }
 
     /**
@@ -63,10 +91,8 @@ class PriceImport extends PureComponent {
      */
     handlePurchaseSearch = (param) => {
         this.handlePurchaseReset();
-        Object.assign(this.param, {
-            current: 1,
-            ...param
-        });
+        this.param = param;
+        this.pageNum = 1;
         this.query();
     }
 
@@ -74,27 +100,50 @@ class PriceImport extends PureComponent {
      * 点击重置的回调
      */
     handlePurchaseReset = () => {
-        this.param = {
-            pageNum: 1,
-            pageSize: PAGE_SIZE
-        }
+        this.pageNum = 1
     }
 
     /**
      * 下载导入结果的回调
-     * @param {object} param 查询参数
     */
-    exportList = (param) => {
-        this.handlePurchaseReset();
-        Object.assign(this.param, {
-            current: 1,
-            ...param
+    exportList = () => {
+        Utils.exportExcel(sellPriceChangeExport, Utils.removeInvalid(this.param));
+    }
+
+    /**
+     * 下载导入模板的回调
+    */
+    exportTemplate = () => {
+        Utils.exportExcel(sellPriceChangeExcelTemplate);
+    }
+
+    /**
+     * 创建变价单按钮不可用时的提示
+    */
+    showCreateChangeError = () => {
+        Modal.error({
+            title: '错误',
+            content: '变价单存在错误，请检查',
+            okText: '确定'
         });
-        Utils.exportExcel(sellPriceChangeExport, Utils.removeInvalid(param));
+    }
+
+    /**
+     * 创建变价单按钮是否可用
+    */
+    createChange = () => {
+        this.props.getIsSellVaild()
+            .then(res => {
+                if (res.data) {
+                    this.getCreateChange()
+                } else {
+                    this.showCreateChangeError()
+                }
+            })
     }
 
     render() {
-        const { data, total, pageNum, pageSize } = this.props.priceImportlist;
+        const { data, total, pageNum } = this.props.priceImportlist;
         columns[columns.length - 1].render = this.renderOperations;
         return (
             <div>
@@ -102,6 +151,9 @@ class PriceImport extends PureComponent {
                     handlePurchaseSearch={this.handlePurchaseSearch}
                     handlePurchaseReset={this.handlePurchaseReset}
                     exportList={this.exportList}
+                    exportTemplate={this.exportTemplate}
+                    exportBtnDisabled={this.state.exportBtnDisabled}
+                    createChange={this.createChange}
                 />
                 <Table
                     dataSource={data}
@@ -112,8 +164,7 @@ class PriceImport extends PureComponent {
                     }}
                     bordered
                     pagination={{
-                        current: this.param.current,
-                        pageNum,
+                        current: pageNum,
                         pageSize,
                         total,
                         showQuickJumper: true,
@@ -127,10 +178,9 @@ class PriceImport extends PureComponent {
 
 PriceImport.propTypes = {
     getPriceImportList: PropTypes.func,
-    // clearPromotionList: PropTypes.func,
-    // updatePromotionStatus: PropTypes.func,
-    priceImportlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
-    // location: PropTypes.objectOf(PropTypes.any)
+    getIsSellVaild: PropTypes.func,
+    getCreateSell: PropTypes.func,
+    priceImportlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 
 export default withRouter(Form.create()(PriceImport));

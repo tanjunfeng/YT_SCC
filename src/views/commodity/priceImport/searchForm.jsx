@@ -110,8 +110,9 @@ class SearchForm extends PureComponent {
                     uploading: false,
                     isBtnDisabled: false
                 });
-                if (res.code) {
+                if (res.code === 200) {
                     message.success('上传成功');
+                    this.props.form.setFieldsValue({ importsId: res.data })
                     this.handleSearch();
                 } else {
                     message.error(res.message);
@@ -127,11 +128,24 @@ class SearchForm extends PureComponent {
     }
 
     /**
+     * 下载模板
+     */
+    handleDownload = () => {
+        this.props.exportTemplate();
+    }
+
+    /**
      * 下载导入结果
      */
     handleExport = () => {
-        // 将查询条件回传给调用页
-        this.props.exportList(this.getFormData());
+        this.props.exportList();
+    }
+
+    /**
+     * 创建变价单
+     */
+    handleCreateChange = () => {
+        this.props.createChange();
     }
 
     render() {
@@ -226,12 +240,12 @@ class SearchForm extends PureComponent {
                             </Upload>
                         </FormItem>
                         <FormItem className="upload">
-                            <Button size="default" onClick={this.handleExport}>
+                            <Button size="default" onClick={this.handleExport} disabled={this.props.exportBtnDisabled}>
                                 下载导入结果
                             </Button>
                         </FormItem>
                         <FormItem>
-                            <Button size="default" onClick={this.handleReset}>
+                            <Button size="default" onClick={this.handleCreateChange}>
                                 创建变价单
                             </Button>
                         </FormItem>
@@ -246,6 +260,9 @@ SearchForm.propTypes = {
     handlePurchaseSearch: PropTypes.func,
     handlePurchaseReset: PropTypes.func,
     exportList: PropTypes.func,
+    exportTemplate: PropTypes.func,
+    createChange: PropTypes.func,
+    exportBtnDisabled: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
 };
 

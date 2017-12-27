@@ -48,8 +48,7 @@ class PriceExamination extends PureComponent {
      */
     onPaginate = (pageNum = 1) => {
         Object.assign(this.param, {
-            pageNum,
-            current: pageNum
+            pageNum
         });
         this.query();
     }
@@ -75,7 +74,7 @@ class PriceExamination extends PureComponent {
     handlePurchaseSearch = (param) => {
         this.handlePurchaseReset();
         Object.assign(this.param, {
-            current: 1,
+            pageNum: 1,
             ...param
         });
         this.query();
@@ -161,7 +160,7 @@ class PriceExamination extends PureComponent {
                 {
                     status !== 0 ?
                         <Menu.Item key="results">
-                            审批意见
+                            {status === 1 ? '审批意见' : '拒绝原因'}
                         </Menu.Item>
                         : <Menu.Item key="Examine">
                             审核
@@ -200,8 +199,7 @@ class PriceExamination extends PureComponent {
                     }}
                     bordered
                     pagination={{
-                        current: this.param.current,
-                        pageNum,
+                        current: pageNum,
                         pageSize,
                         total,
                         showQuickJumper: true,
