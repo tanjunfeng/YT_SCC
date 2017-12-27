@@ -340,7 +340,7 @@ class SearchForm extends Component {
                         </Col>
                         { supplierType === '2' && (
                             <Col span={8}>
-                                <FormItem className="sc-form-item">
+                                <FormItem className="sc-form-item supplier-branch-company">
                                     <span className="sc-form-item-label">子公司</span>
                                     {getFieldDecorator('branchCompany', {
                                         initialValue: { id: '', name: '' }
