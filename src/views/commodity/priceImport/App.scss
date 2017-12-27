@@ -1,5 +1,5 @@
 $promotionFieldWidth: 220px;
-.purchase {
+.price-import {
     border: 1px solid #c4c5c9;
     padding: 40px 0 20px;
     margin: 10px 0;
@@ -12,7 +12,9 @@ $promotionFieldWidth: 220px;
     .ant-form-item {
         float: left;
         display: block;
-        .ant-form-item-control-wrapper, .ant-select-selection, .ywc-smind {
+        .ant-form-item-control-wrapper,
+        .ant-select-selection,
+        .ywc-smind {
             width: $promotionFieldWidth;
         }
         &.double .ant-form-item-control-wrapper {
@@ -22,11 +24,20 @@ $promotionFieldWidth: 220px;
             top: 4px;
         }
     }
-    .ant-btn {
-        margin-right: 20px;
-    }
+    // .ant-btn {
+    //     margin-right: 20px;
+    // }
     .search-mind-label {
         text-align: right;
         width: 80px;
+    }
+    .price-import-btn {
+        .ant-form-item-control-wrapper {
+            width: auto!important;
+        }
+    }
+    .upload {
+        line-height: 0!important;
+        margin-top: 7px;
     }
 }

@@ -589,9 +589,16 @@ export const getSellPriceInfoByIdAction = (params) => http.get('/prodSell/getSel
 // 根据品牌名称分页查询品牌列表
 export const queryBrandsByPages = (params) => http.get('/product/queryBrandsByPages', params);
 
-// 查询销售价格变更申请列表
+// 查询售价变更申请列表
 export const sellPriceChangeList = (params) => http.get('/prodSell/sellPriceChangeList', params);
-
+// 查询售价变更创建变价单是否可用
+export const isSellVaild = (params) => http.get('/prodPurchase/isSellVaild', params);
+// 创建变价单
+export const createSell = (params) => http.get('/prodPurchase/createSell', params);
+// 售价导入下载导入结果
+export const sellPriceChangeExport = (params) => http.get('/sc/prodSell/sellPriceChangeExport', params);
+// 售价导入下载导入模板
+export const sellPriceChangeExcelTemplate = (params) => http.get('/sc/prodSell/sellPriceChangeExcelTemplate', params);
 /* **************procurement*********** */
 
 // 查询采购单详情
