@@ -13,6 +13,7 @@ import {
     queryProcessMsgInfo as queryProcessMsgInfoService,
     processImageByBusi as processImageByBusiService,
     queryCommentHisByBusi as queryCommentHisByBusiService,
+    auditInfo as auditInfoService,
 } from '../service';
 
 // 流程管理下获取所有流程信息
@@ -171,6 +172,27 @@ export const queryCommentHisBusi = (params) => dispatch => (
         queryCommentHisByBusiService(params)
             .then(res => {
                 dispatch(queryCommentHisBusiAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
+/**
+ * 审批代办事项
+ * @param {*} data
+ */
+const returnAuditInfoAction = (data) => ({
+    type: ActionType.RETURN_AUDIT_INFO,
+    payload: data
+});
+export const returnAuditInfo = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        auditInfoService(params)
+            .then(res => {
+                dispatch(returnAuditInfoAction(res));
                 resolve(res);
             })
             .catch(err => {

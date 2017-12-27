@@ -394,5 +394,5 @@ export default {
     // 待办事项 商品审批意见列表
     QUERY_COMMENT_HIS: 'QUERY_COMMENT_HIS',
     // 待办事项 审批代办任务
-    AUDIT_INFO: 'AUDIT_INFO',
+    RETURN_AUDIT_INFO: 'RETURN_AUDIT_INFO',
 }

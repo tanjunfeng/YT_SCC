@@ -14,6 +14,7 @@ const initState = fromJS({
     highChartData: null, // 高亮流程图数据
     commentHisBusiList: [], // 审批详情数据-业务中
     processImageBusiData: null, // 高亮流程图数据-业务中
+    auditResultInfo: null, // 审核结果
 });
 
 export default function (state = initState, action) {
@@ -33,6 +34,8 @@ export default function (state = initState, action) {
         case ActionType.PROCESS_IMAGE_BY_BUSI:
         case ActionType.CLEAR_PROCESS_IMAGE_BUSI:
             return state.set('processImageBusiData', fromJS(action.payload));
+        case ActionType.RETURN_AUDIT_INFO:
+            return state.set('auditResultInfo', fromJS(action.payload));
         default:
             return state;
     }
