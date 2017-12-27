@@ -33,7 +33,7 @@ import { priceChangeColumns } from '../columns';
 
 class toDoPriceChangeList extends PureComponent {
     /**
-     * 导出
+     * 导出Excel
      */
     handleDownLoad = data => {
         Utils.exportExcel(exportProdPriceChangeList, data);
