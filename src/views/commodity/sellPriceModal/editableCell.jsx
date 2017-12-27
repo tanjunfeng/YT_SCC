@@ -17,7 +17,7 @@ class EditableCell extends PureComponent {
     render() {
         const { editable, value } = this.props;
         return (
-            <div>
+            <div className="editable-cell">
                 {editable ?
                     <InputNumber
                         style={{ margin: '-5px 0' }}

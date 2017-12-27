@@ -31,6 +31,10 @@ class EditableTable extends PureComponent {
             title: '最新售价/元',
             render: (text, record) => this.renderColumnsPrice(text, record, 'price')
         }, {
+            dataIndex: 'rate',
+            title: '商品毛利率',
+            render: (text, record) => '20%'
+        }, {
             dataIndex: 'operation',
             title: '操作',
             render: (text, record) => this.renderOptions(text, record)
@@ -43,7 +47,7 @@ class EditableTable extends PureComponent {
     getColumns = () => {
         const { readOnly } = this.props.value;
         return readOnly
-            ? this.columns.filter((c, index) => index < 3)
+            ? this.columns.filter((c, index) => index < 4)
             : this.columns
     }
 
@@ -61,6 +65,7 @@ class EditableTable extends PureComponent {
         const target = newData.filter(item => id === item.id)[0];
         if (target) {
             delete target.editable;
+            this.props.onChange(newData);
             this.setState({ prices: newData });
             this.cacheData = newData.map(item => ({ ...item }));
         }
@@ -137,7 +142,8 @@ class EditableTable extends PureComponent {
 }
 
 EditableTable.propTypes = {
-    value: PropTypes.objectOf(PropTypes.any)
+    value: PropTypes.objectOf(PropTypes.any),
+    onChange: PropTypes.func
 };
 
 export default EditableTable;
