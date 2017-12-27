@@ -91,17 +91,14 @@ class SellPriceModal extends Component {
         })
     }
 
-    getEditableTableValues = (newDates) => {
+    getEditableTableValues = () => {
         const { isEdit, datas } = this.props;
         const { startNumber } = this.state;
         const sellsObj = { sellSectionPrices: [], sellPricesInReview: []};
-        sellsObj.sellSectionPrices.push(newDates.sellSectionPrices);
-        sellsObj.sellPricesInReview.push(newDates.sellPricesInReview.sellSectionPrices);
         return {
             isEdit,
             startNumber,
             data: datas.sellSectionPrices,
-            sellsObj,
             readOnly: false
         };
     }
@@ -431,7 +428,7 @@ class SellPriceModal extends Component {
                                         <div className={`${prefixCls}-item-content`}>
                                             <FormItem>
                                                 {getFieldDecorator('sellSectionPrices', {
-                                                    initialValue: this.getEditableTableValues(newDates)
+                                                    initialValue: this.getEditableTableValues()
                                                 })(<EditableTable />)}
                                             </FormItem>
                                         </div>
