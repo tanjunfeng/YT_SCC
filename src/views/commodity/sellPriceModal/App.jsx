@@ -91,11 +91,12 @@ class SellPriceModal extends Component {
         })
     }
 
-    getEditableTableValues = () => {
+    getEditableTableValues = (list) => {
         const { isEdit, datas } = this.props;
         const { startNumber } = this.state;
         return {
             isEdit,
+            list,
             startNumber,
             data: datas.sellSectionPrices,
             readOnly: false
@@ -272,9 +273,8 @@ class SellPriceModal extends Component {
         const { getFieldDecorator } = form;
         const { currentInside, hasZero } = this.state;
         const newDates = JSON.parse(JSON.stringify(datas));
-        const sellsObj = { sellSectionPrices: [], sellPricesInReview: []};
-        sellsObj.sellSectionPrices.push(newDates.sellSectionPrices);
-        sellsObj.sellPricesInReview.push(newDates.sellPricesInReview.sellSectionPrices);
+        const sellSectionPrices = [];
+        sellSectionPrices.push(newDates.sellSectionPrices);
         const preHarvestPinStatusChange =
             (newDates.preHarvestPinStatus === 1 ? '1' : '0');
         const auditStatus = () => {
@@ -445,8 +445,8 @@ class SellPriceModal extends Component {
                                         <div className={`${prefixCls}-item-content`}>
                                             <FormItem>
                                                 {getFieldDecorator('sellSectionPrices', {
-                                                    initialValue: this.getEditableTableValues()
-                                                })(<EditableTable datas={sellsObj} />)}
+                                                    initialValue: this.getEditableTableValues(sellSectionPrices)
+                                                })(<EditableTable />)}
                                             </FormItem>
                                         </div>
                                         <div>
@@ -524,9 +524,9 @@ class SellPriceModal extends Component {
                                         <div className={`${prefixCls}-item-content`}>
                                             <FormItem>
                                                 {getFieldDecorator('sellSectionPrices', {
-                                                    initialValue: this.getEditableTableValues()
+                                                    initialValue: this.getEditableTableValues(sellSectionPrices)
                                                 })(
-                                                    <EditableTable datas={sellsObj} />)}
+                                                    <EditableTable />)}
                                             </FormItem>
                                         </div>
                                         <div>
@@ -686,8 +686,8 @@ class SellPriceModal extends Component {
                                     <div className={`${prefixCls}-item-content`}>
                                         <FormItem>
                                             {getFieldDecorator('sellSectionPrices', {
-                                                initialValue: this.getEditableTableValues()
-                                            })(<EditableTable datas={sellsObj} />)}
+                                                initialValue: this.getEditableTableValues(sellSectionPrices)
+                                            })(<EditableTable />)}
                                         </FormItem>
                                     </div>
                                     <div>

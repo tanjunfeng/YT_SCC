@@ -28,6 +28,7 @@ import {
     QueryProdPurchaseExtByCondition,
     UpdateProdPurchase
 } from '../../../actions/producthome';
+import getProdPurchaseById from '../../../actions/fetch/fetchGetProdPurchaseById';
 
 
 @connect(
@@ -45,7 +46,8 @@ import {
         productAddPriceVisible,
         modifyAuditVisible,
         UpdateProdPurchase,
-        fetchCheckMainSupplier
+        fetchCheckMainSupplier,
+        getProdPurchaseById
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
@@ -134,6 +136,7 @@ class ProcurementMaintenance extends PureComponent {
      * 修改关系
      */
     handleChange(record) {
+        this.props.getProdPurchaseById({id: record.id})
         this.setState({
             initData: record,
             showModal: true,
@@ -202,6 +205,7 @@ class ProcurementMaintenance extends PureComponent {
 ProcurementMaintenance.propTypes = {
     fetchGetProductById: PropTypes.objectOf(PropTypes.any),
     QueryProdPurchaseExtByCondition: PropTypes.func,
+    getProdPurchaseById: PropTypes.func,
     prefixCls: PropTypes.string,
     getProductByIds: PropTypes.objectOf(PropTypes.any),
     match: PropTypes.objectOf(PropTypes.any),

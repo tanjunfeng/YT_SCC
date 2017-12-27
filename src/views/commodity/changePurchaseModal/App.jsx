@@ -31,7 +31,7 @@ const { Option } = Select;
 @connect(
     state => ({
         prodPurchase: state.toJS().commodity.prodPurchase,
-        getProductById: state.toJS().commodity.getProductById,
+        getProductByIds: state.toJS().commodity.getProductById,
         getProdPurchaseByIds: state.toJS().commodity.getProdPurchaseById,
         toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
         updateProdPurchase: state.toJS().commodity.updateProdPurchase,
@@ -245,12 +245,26 @@ class ProdModal extends Component {
     }
 
     render() {
-        const { prefixCls, form, initValue = {}, isEdit, data, hasMainSupplier } = this.props;
+        const {
+            prefixCls, form, initValue = {},
+            isEdit, data, hasMainSupplier, getProductByIds
+        } = this.props;
         const { getFieldDecorator } = form;
         const { prodPurchase = {} } = this.props;
         const { warehouseCode, warehouseName } = this.state.supplyChoose;
         const { spNo, companyName } = this.state;
         const { internationalCodes = [] } = data;
+        const { internationalCode } = getProductByIds.internationalCodes[0];
+        const firstCreated = () => {
+            switch (initValue.firstCreated) {
+                case 0:
+                    return getProductByIds.modifyUserName;
+                case 1:
+                    return getProductByIds.createUserName;
+                default:
+                    return null;
+            }
+        }
         return (
             <Modal
                 title={isEdit ? '修改采购价格' : '新增采购价格'}
@@ -271,7 +285,7 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('purchaseInsideNumber', {
                                             rules: [{ required: true, message: '采购内装数' }],
-                                            initialValue: initValue.purchaseInsideNumber
+                                            initialValue: getProductByIds.purchaseInsideNumber
                                         })(
                                             <InputNumber min={0} placeholder="内装数" />
                                             )}
@@ -284,7 +298,7 @@ class ProdModal extends Component {
                                             <span className={`${prefixCls}-barcode-input`}>
                                                 {getFieldDecorator('purchasePrice', {
                                                     rules: [{ required: true, message: '请输入当前采购价!' }],
-                                                    initialValue: initValue.purchasePrice
+                                                    initialValue: getProductByIds.purchasePrice
                                                 })(
                                                     <InputNumber min={0} step={0.01} placeholder="当前采购价" />
                                                     )}
@@ -295,7 +309,7 @@ class ProdModal extends Component {
                                             <span className={`${prefixCls}-barcode-input`}>
                                                 {getFieldDecorator('purchasePrice', {
                                                     rules: [{ required: true, message: '请输入采购价!' }],
-                                                    initialValue: initValue.purchasePrice
+                                                    initialValue: getProductByIds.purchasePrice
                                                 })(
                                                     <InputNumber min={0} step={0.01} placeholder="采购价" />
                                                     )}
@@ -307,14 +321,16 @@ class ProdModal extends Component {
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>*最新采购价(元)：</span>
                                             <span className={`${prefixCls}-barcode-input`}>
-                                                {getFieldDecorator('purchasePrice', {
+                                                {getFieldDecorator('newestPrice', {
                                                     rules: [{ required: true, message: '请输入最新采购价!' }],
-                                                    initialValue: initValue.purchasePrice
+                                                    initialValue: getProductByIds.newestPrice
                                                 })(
                                                     <InputNumber min={0} step={0.01} placeholder="最新采购价" />
                                                     )}
                                             </span>
-                                            <span className={`${prefixCls}-adjustment`}>调价百分比：10%</span>
+                                            <span className={`${prefixCls}-adjustment`}>
+                                                调价百分比：{getProductByIds.percentage}%
+                                            </span>
                                         </FormItem>
                                         : null
                                 }
@@ -323,9 +339,8 @@ class ProdModal extends Component {
                                     <span className={`${prefixCls}-barcode-input`}>
                                         {getFieldDecorator('internationalCode', {
                                             rules: [{ required: true, message: '输入商品条码!' }],
-                                            initialValue: isEdit ?
-                                                initValue.internationalCode :
-                                                internationalCodes[0].internationalCode
+                                            initialValue: isEdit ? internationalCode :
+                                            internationalCodes[0].internationalCode
                                         })(
                                             <Select
                                                 placeholder="请选择商品条码"
@@ -351,15 +366,15 @@ class ProdModal extends Component {
                                     <div className={`${prefixCls}-sub-state`}>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>最新采购价格状态：</span>
-                                            <span><i className={`new-price-state-${initValue.state}`} />{initValue.state || '-'}</span>
+                                            <span><i className={`new-price-state-${getProductByIds.auditStatus}`} />{getProductByIds.newestPrice || '-'}</span>
                                         </FormItem>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>提交人：</span>
-                                            <span>{initValue.submit || '-'}</span>
+                                            <span>{firstCreated() || '-'}</span>
                                         </FormItem>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>审核人：</span>
-                                            <span>{initValue.examine || '-'}</span>
+                                            <span>{getProductByIds.auditUserName || '-'}</span>
                                         </FormItem>
                                     </div>
                                 }
@@ -535,6 +550,7 @@ ProdModal.propTypes = {
     pubFetchValueList: PropTypes.func,
     ChangeUpdateProd: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
+    getProductByIds: PropTypes.objectOf(PropTypes.any),
     handleClose: PropTypes.func,
     prodPurchase: PropTypes.objectOf(PropTypes.any),
     initValue: PropTypes.objectOf(PropTypes.any),
