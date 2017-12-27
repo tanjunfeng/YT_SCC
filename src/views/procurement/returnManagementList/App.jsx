@@ -659,7 +659,6 @@ class ReturnManagementList extends PureComponent {
                             </FormItem>
                         </Col>
                         <Col>
-                            {/* 供应商 */}
                             <FormItem label="供应商类型">
                                 {getFieldDecorator('supplier', {
                                     initialValue: { spId: '', spNo: '', companyName: '' }
