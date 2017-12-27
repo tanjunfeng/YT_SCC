@@ -19,3 +19,19 @@
         color: red;
     }
 }
+.errorTip {
+    border-top: 30px solid #ea7373;
+    border-right: 30px solid transparent;
+    position: relative;
+    top: 30px;
+    left: 52px;
+    width: 30px;
+    height: 30px;
+    span{
+        position: absolute;
+        top: -30px;
+        left: 0px;
+        color: #fff;
+        font-size: 12px;
+    }
+}
