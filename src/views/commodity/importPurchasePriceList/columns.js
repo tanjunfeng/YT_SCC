@@ -29,7 +29,12 @@ export const purchasePriceColumns = [
             if (text === null || typeof text === 'undefined') {
                 return null;
             }
-            return (processResult.data[text + 1].value);
+            return (
+                <div>
+                    <span className={text === 0 ? 'errorResult' : 'sucResult'} />
+                    {processResult.data[text + 1].value}
+                </div>
+            );
         }
     },
     {
