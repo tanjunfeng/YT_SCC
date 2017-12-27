@@ -1,6 +1,6 @@
 .purchase-modal {
     .ant-modal-body {
-        height: 750px;
+        height: 700px;
         overflow-y: auto;
     }
     form .ant-input-number {
@@ -34,9 +34,6 @@
         margin-right: 10px;
         vertical-align: middle;
 
-    }
-    .ant-form-item {
-        margin-bottom: 10px;
     }
     .has-error .ant-form-explain, .has-error .ant-form-split {
         margin-left: 92px;

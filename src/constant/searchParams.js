@@ -365,6 +365,24 @@ export const mainSupplierOptions = {
     }]
 }
 
+// 最新采购价状态
+export const auditStatusOptions = {
+    defaultValue: '-1',
+    data: [{
+        key: '-1',
+        value: '全部'
+    }, {
+        key: '1',
+        value: '已提交'
+    }, {
+        key: '2',
+        value: '已审核'
+    }, {
+        key: '3',
+        value: '已拒绝'
+    }]
+}
+
 // 供货状态
 export const deliveryStatusOptions = {
     defaultValue: '',

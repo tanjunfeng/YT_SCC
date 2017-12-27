@@ -17,7 +17,7 @@ class EditableTable extends PureComponent {
         this.state = {
             prices: props.value.data
         }
-        this.cacheData = props.value.data.map(item => ({ ...item }));
+        this.cacheData = props.value.list.map(item => ({ ...item }));
         this.columns = [{
             dataIndex: 'startNumber',
             title: '起始数量',

@@ -19,7 +19,7 @@ import { BranchCompany } from '../../../container/search';
 import { fetchAction, receiveData, } from '../../../actions/classifiedList';
 import { QueryProdPurchaseExtByCondition } from '../../../actions/producthome';
 import { fetchAddProdPurchase } from '../../../actions';
-import { initiateModeOptions, mainSupplierOptions } from '../../../constant/searchParams';
+import { initiateModeOptions, mainSupplierOptions, auditStatusOptions } from '../../../constant/searchParams';
 import { pubFetchValueList } from '../../../actions/pub';
 
 const FormItem = Form.Item;
@@ -99,12 +99,16 @@ class SearchForm extends Component {
             const supplierType = values.mainSupplierOptions === '-1'
                 ? null
                 : values.mainSupplierOptions;
+            const auditStatus = values.auditStatusOptions === '-1'
+                ? null
+                : values.auditStatusOptions;
             this.props.onSearch(Utils.removeInvalid({
                 spId: this.state.supplyChoose.spId,
                 spAdrId: this.state.supplyChoose1.spAdrid,
                 branchCompanyId: values.branchCompany.id,
                 supplierType,
-                status
+                status,
+                auditStatus
             }))
         })
     }
@@ -228,6 +232,10 @@ class SearchForm extends Component {
         this.setState({
             supplyChoose1: {},
         })
+    }
+
+    handlePurchasing = () => {
+        window.open('/orderList/orderDetails')
     }
 
     render() {
@@ -358,23 +366,36 @@ class SearchForm extends Component {
                                     )}
                             </FormItem>
                         </Col>
-                        <Col style={{display: 'inline-block', lineHeight: '42px'}}>
-                            <Button
-                                type="primary"
-                                onClick={this.handleGetValue}
-                                size="default"
-                            >
-                                搜索
-                            </Button>
-                            <Button
-                                size="default"
-                                onClick={this.props.handleAdd}
-                            >
-                                创建
-                            </Button>
-                            <Button size="default" onClick={this.handleResetValue}>
-                                    重置
-                            </Button>
+                        <Col>
+                            {/* 最新采购价状态 */}
+                            <FormItem label="最新采购价状态：">
+                                {getFieldDecorator('auditStatusOptions', {
+                                    initialValue: auditStatusOptions.defaultValue
+                                })(
+                                    <Select
+                                        style={{ width: 90 }}
+                                        className="sc-form-item-select"
+                                        size="default"
+                                        disabled={this.state.supplierType === '-1'}
+                                    >
+                                        {
+                                            auditStatusOptions.data.map((item) =>
+                                                (<Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>)
+                                            )
+                                        }
+                                    </Select>
+                                    )}
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row type="flex" justify="end">
+                        <Col>
+                            <a type="primary" onClick={this.handlePurchasing} size="default">采购进价批量导入</a>
+                            <Button type="primary" onClick={this.handleGetValue} size="default">搜索</Button>
+                            <Button size="default" onClick={this.props.handleAdd}>创建</Button>
+                            <Button size="default" onClick={this.handleResetValue}>重置</Button>
                         </Col>
                     </Row>
                 </Form>
