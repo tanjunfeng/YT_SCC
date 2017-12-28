@@ -34,11 +34,9 @@ const FormItem = Form.Item;
 class SellPriceModal extends Component {
     constructor(props) {
         super(props);
-        this.handleOk = this.handleOk.bind(this);
         this.handlePriceChange = this.handlePriceChange.bind(this);
         this.handleMaxChange = this.handleMaxChange.bind(this);
         this.handleMinChange = this.handleMinChange.bind(this);
-        this.handleCancel = this.handleCancel.bind(this);
         this.childCompany = props.datas.branchCompanyId ? {
             branchCompanyId: props.datas.branchCompanyId,
             branchCompanyName: props.datas.branchCompanyName
@@ -104,7 +102,7 @@ class SellPriceModal extends Component {
         };
     }
 
-    handleOk() {
+    handleOk = () => {
         const { datas, handlePostAdd, isEdit } = this.props;
         const { validateFields, setFields } = this.props.form;
         const choose = this.choose;
@@ -127,63 +125,12 @@ class SellPriceModal extends Component {
                     productId: datas.productId
                 })
             }
-            const priceList = [];
-            if (priceList.length === 0) {
-                setFields({
-                    sellSectionPrices: {
-                        errors: [new Error('价格不能为空，无法提交')],
-                    },
-                })
-                return false;
-            }
-            priceList.forEach((obj) => {
-                if (obj === null || obj === undefined) {
-                    this.successPost = true;
-                    setFields({
-                        sellSectionPrices: {
-                            errors: [new Error('价格不能为空，无法提交')],
-                        },
-                    })
-                    return;
-                }
-                if (obj === 0) {
-                    this.messageAlert = true;
-                } else {
-                    this.messageAlert = false;
-                }
-                if (obj >= 0) {
-                    this.successPost = false;
-                }
-            })
-            if (this.successPost) {
-                this.isDisabled = true;
-                if (this.messageAlert) {
-                    message.error('请仔细核对销售价格，确认为当前显示的价格!')
-                }
-                if (!this.isDisabled) {
-                    handlePostAdd(result, isEdit, choose).then((res) => {
-                        if (res.code === 200) {
-                            this.isDisabled = false;
-                        }
-                    }).catch(() => {
-                        this.isDisabled = false;
-                    })
-                }
-            }
-            if (this.successPost === false) {
-                if (this.messageAlert) {
-                    message.error('请仔细核对销售价格，确认为当前显示的价格!', 2, () => {
-                        handlePostAdd(result, isEdit, choose);
-                    })
-                } else {
-                    handlePostAdd(result, isEdit, choose);
-                }
-            }
+            this.props.handleClose();
             return null;
         })
     }
 
-    handleCancel() {
+    handleCancel = () => {
         this.props.handleClose();
     }
 

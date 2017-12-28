@@ -49,53 +49,17 @@ class FreightConditions extends Component {
     componentDidMount() {
         const { datas } = this.props;
         const { validateFields, setFields } = this.props.form;
-        const { results } = this.steppedPrice.getValue();
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
-            result.sellSectionPrices = results;
             result.productId = datas.id || datas.productId;
-            const priceList = [];
-            results.forEach((item) => (
-                priceList.push(item.price)
-            ))
-
-            priceList.forEach((obj) => {
-                if (obj === null || obj === undefined) {
-                    this.successPost = true;
-                    setFields({
-                        sellSectionPrices: {
-                            errors: [new Error('价格不能为空，无法提交')],
-                        },
-                    })
-                    return;
-                }
-
-                if (obj === 0) {
-                    this.messageAlert = true;
-                } else {
-                    this.messageAlert = false;
-                }
-                if (obj >= 0) {
-                    this.successPost = false;
-                }
-            })
         })
     }
 
     handleOk() {
         const { datas, handlePostAdd, isEdit } = this.props;
         const { validateFields, setFields } = this.props.form;
-        const { isContinuity, results } = this.steppedPrice.getValue();
         const choose = this.choose;
-        if (!isContinuity) {
-            setFields({
-                sellSectionPrices: {
-                    errors: [new Error('价格区间不连续，无法提交')],
-                },
-            })
-            return;
-        }
         if (!this.childCompany) {
             message.error('请选择子公司');
         }
@@ -116,81 +80,14 @@ class FreightConditions extends Component {
                     productId: datas.productId
                 })
             }
-            const priceList = [];
-            results.forEach((item) => (
-                priceList.push(item.price)
-            ))
-            if (priceList.length === 0) {
-                setFields({
-                    sellSectionPrices: {
-                        errors: [new Error('价格不能为空，无法提交')],
-                    },
-                })
-                return false;
-            }
-            priceList.forEach((obj) => {
-                if (obj === null || obj === undefined) {
-                    this.successPost = true;
-                    setFields({
-                        sellSectionPrices: {
-                            errors: [new Error('价格不能为空，无法提交')],
-                        },
-                    })
-                    return;
-                }
-                if (obj === 0) {
-                    this.messageAlert = true;
-                } else {
-                    this.messageAlert = false;
-                }
-                if (obj >= 0) {
-                    this.successPost = false;
-                }
-            })
-            if (this.successPost) {
-                this.isDisabled = true;
-                if (this.messageAlert) {
-                    message.error('请仔细核对销售价格，确认为当前显示的价格!')
-                }
-                if (!this.isDisabled) {
-                    handlePostAdd(result, isEdit, choose).then((res) => {
-                        if (res.code === 200) {
-                            this.isDisabled = false;
-                        }
-                    }).catch(() => {
-                        this.isDisabled = false;
-                    })
-                }
-            }
-            if (this.successPost === false) {
-                if (this.messageAlert) {
-                    message.error('请仔细核对销售价格，确认为当前显示的价格!', 2, () => {
-                        handlePostAdd(result, isEdit, choose);
-                    })
-                } else {
-                    handlePostAdd(result, isEdit, choose);
-                }
-            }
+            this.props.onCancel();
             return null;
         })
     }
 
     handleCancel() {
-        this.props.handleClose();
-    }
-
-    handlePriceChange(result) {
-        const { setFields, getFieldError } = this.props.form;
-        const { isContinuity, results } = result;
-
-        if (isContinuity && getFieldError('sellSectionPrices')) {
-            setFields({
-                sellSectionPrices: {
-                    errors: null,
-                },
-            })
-        }
-        this.isDisabled = false;
+        console.log(111)
+        this.props.onCancel();
     }
 
     handleChoose = ({ record }) => {
@@ -276,7 +173,7 @@ class FreightConditions extends Component {
             <div className={`${prefixCls}-body-wrap`}>
                 <Form layout="inline" onSubmit={this.handleSubmit}>
                     {
-                        isEdit && isAfter ?
+                        isEdit && !isAfter ?
                             <div className={`${prefixCls}-item`}>
                                 <div className={`${prefixCls}-item-title`}>货运条件</div>
                                 <div className={`${prefixCls}-item-content`}>
