@@ -44,7 +44,6 @@ class ImportPurchasePriceList extends PureComponent {
         this.state = {
             spAdrId: '',
             spId: '',
-            businessMode: '',
             productId: ''
         }
         this.param = {};
@@ -52,9 +51,6 @@ class ImportPurchasePriceList extends PureComponent {
             name: 'excel',
             action: '/prodPurchase/purchasePriceChangeUpload',
             onChange(info) {
-                if (info.file.status !== 'uploading') {
-                    console.log(info.file, info.fileList);
-                }
                 if (info.file.status === 'done') {
                     message.success(`${info.file.name} 导入成功`);
                 } else if (info.file.status === 'error') {
@@ -146,6 +142,12 @@ class ImportPurchasePriceList extends PureComponent {
     }
 
     /**
+     * 获取供应商
+     */
+    handleSupplierChange = (record) => {
+        this.setState({spId: record.spId});
+    }
+    /**
      * 清空供应商地点编号
      */
     handleSupplierAddressClear = () => {
@@ -156,7 +158,7 @@ class ImportPurchasePriceList extends PureComponent {
      * 获取商品id
      */
     handleProductChoosed = (record) => {
-        this.setState({productId: record.productId})
+        this.setState({productId: record.record.productId})
     }
     /**
      * 创建变价单
@@ -170,10 +172,9 @@ class ImportPurchasePriceList extends PureComponent {
             })
     }
     render() {
-        const { getFieldDecorator, getFieldValue } = this.props.form;
-        const { spAdrId, businessMode, spId } = this.state;
+        const { getFieldDecorator} = this.props.form;
+        const { spAdrId, spId } = this.state;
         const supplierInfo = spAdrId ? `${spAdrId}-1` : null;
-        const distributionStatus = businessMode;
         const { purchasePriceInfo = {} } = this.props;
         if (!purchasePriceInfo) {
             return null;
@@ -201,7 +202,7 @@ class ImportPurchasePriceList extends PureComponent {
                             <FormItem label="供应商" className="label-top">
                                 {getFieldDecorator('supplier', {
                                     initialValue: { spId: '', spNo: '', companyName: '' }
-                                })(<Supplier />)}
+                                })(<Supplier onChange={this.handleSupplierChange} />)}
                             </FormItem>
                         </Col>
                         <Col>
@@ -209,7 +210,8 @@ class ImportPurchasePriceList extends PureComponent {
                             <FormItem label="供应商地点" className="label-top">
                                 <SearchMind
                                     compKey="providerNo"
-                                    disabled={getFieldValue('supplier').spId === ''}
+                                    rowKey="providerNo"
+                                    disabled={spId === ''}
                                     ref={ref => { this.supplyAddressSearchMind = ref }}
                                     fetch={(params) =>
                                         this.props.pubFetchValueList(Utils.removeInvalid({
@@ -253,13 +255,12 @@ class ImportPurchasePriceList extends PureComponent {
                                     fetch={(params) =>
                                         this.props.pubFetchValueList({
                                             supplierInfo,
-                                            distributionStatus,
                                             teamText: params.value,
                                             pageNum: params.pagination.current || 1,
                                             pageSize: params.pagination.pageSize
                                         }, 'queryProductForSelect')
                                     }
-                                    disabled={spId !== ''}
+                                    disabled={spId === ''}
                                     addonBefore="商品"
                                     onChoosed={this.handleProductChoosed}
                                     renderChoosedInputRaw={(product) => (
@@ -341,7 +342,7 @@ class ImportPurchasePriceList extends PureComponent {
                     <Table
                         dataSource={data}
                         columns={purchasePriceColumns}
-                        rowKey="id"
+                        rowKey="list"
                         scroll={{
                             x: 1600
                         }}

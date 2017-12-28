@@ -743,7 +743,7 @@ export const queryPurchasePriceInfo = (params) => http.get('/prodPurchase/purcha
 // 导入采购价格变更申请Excel
 export const purchasePriceChangeUpload = (params) => http.post('/prodPurchase/purchasePriceChangeUpload', params);
 // 创建采购进价变价单
-export const createPurchase = () => http.get('/prodPurchase/createPurchase');
+export const createPurchase = () => http.post('/prodPurchase/createPurchase');
 // 新增供应商信息
 export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);
 

@@ -3,7 +3,7 @@
  * @Description: 采购退货
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-27 10:30:05
+ * @Last Modified time: 2017-12-28 17:47:30
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -112,7 +112,7 @@ class toDoReturnList extends PureComponent {
             spAdrNo: '', // 供应商地点编码
             status: 0, // 流程状态，默认进行中
             spName: null, // 供应商名
-            apAdrName: null, // 供应商地点名
+            spAdrName: null, // 供应商地点名
             refundAdrName: null, // 地点
         };
         // 初始页号
@@ -404,7 +404,7 @@ class toDoReturnList extends PureComponent {
     handleSupplierAddressChoose = ({ record }) => {
         this.setState({
             spAdrId: record.spId,
-            apAdrName: record.providerName
+            spAdrName: record.providerName
         });
     }
 
@@ -414,7 +414,7 @@ class toDoReturnList extends PureComponent {
     handleSupplierAddressClear = () => {
         this.setState({
             spAdrId: '',
-            apAdrName: ''
+            spAdrName: ''
         });
         this.joiningAdressMind.reset();
     }
@@ -587,7 +587,7 @@ class toDoReturnList extends PureComponent {
         const spName = this.state.spName;
 
         // 供应商地点编号
-        const apAdrName = this.state.apAdrName;
+        const spAdrName = this.state.spAdrName;
 
         // 地点
         const refundAdrName = this.state.refundAdrName;
@@ -601,7 +601,7 @@ class toDoReturnList extends PureComponent {
             purchaseOrderType,
             adrType,
             spName,
-            apAdrName,
+            spAdrName,
             refundAdrName,
             status
         };
