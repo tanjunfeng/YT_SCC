@@ -29,14 +29,14 @@ class SearchForm extends PureComponent {
     getFormData() {
         const {
             status,
-            branchCompanyId,
-            productId,
+            companyId,
+            productNo,
         } = this.props.form.getFieldsValue();
-        const prRecord = productId.record;
+        const prRecord = productNo.record;
         return Util.removeInvalid({
             status,
-            branchCompanyId: branchCompanyId.id,
-            productId: prRecord ? prRecord.productId : ''
+            companyId: companyId.id,
+            productNo: prRecord ? prRecord.productCode : ''
         });
     }
 
@@ -82,14 +82,14 @@ class SearchForm extends PureComponent {
                     </Col>
                     <Col span={8}>
                         <FormItem label="子公司">
-                            {getFieldDecorator('branchCompanyId', {
+                            {getFieldDecorator('companyId', {
                                 initialValue: { id: '', name: '' }
                             })(<BranchCompany />)}
                         </FormItem>
                     </Col>
                     <Col span={8}>
                         <FormItem label="商品">
-                            {getFieldDecorator('productId', {
+                            {getFieldDecorator('productNo', {
                                 initialValue: { productId: '', productCode: '', productName: '' }
                             })(<AddingGoodsByTerm />)}
                         </FormItem>

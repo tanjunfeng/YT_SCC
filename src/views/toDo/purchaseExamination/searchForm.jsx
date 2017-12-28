@@ -23,21 +23,25 @@ class SearchForm extends PureComponent {
         this.selectMap = this.selectMap.bind(this);
     }
 
+    // componentDidMount() {
+    //     this.props.handlePurchaseSearch(this.getFormData());
+    // }
+
     /**
      * 获取表单数据
      */
     getFormData() {
         const {
             status,
-            spId,
-            spAdrId,
+            spNo,
+            spAdrNo,
             productId,
         } = this.props.form.getFieldsValue();
         const prRecord = productId.record;
         return Util.removeInvalid({
             status,
-            spId: spId.spId,
-            spAdrId: spAdrId.providerNo,
+            spNo: spNo.spNo,
+            spAdrNo: spAdrNo.providerNo,
             productId: prRecord ? prRecord.productId : ''
         });
     }
@@ -84,14 +88,14 @@ class SearchForm extends PureComponent {
                     </Col>
                     <Col span={8}>
                         <FormItem label="供应商">
-                            {getFieldDecorator('spId', {
+                            {getFieldDecorator('spNo', {
                                 initialValue: { spId: '', spNo: '', companyName: '' }
                             })(<Supplier />)}
                         </FormItem>
                     </Col>
                     <Col span={8}>
                         <FormItem label="供应商地点">
-                            {getFieldDecorator('spAdrId', {
+                            {getFieldDecorator('spAdrNo', {
                                 initialValue: { providerNo: '', providerName: '' }
                             })(<SupplierAdderss />)}
                         </FormItem>

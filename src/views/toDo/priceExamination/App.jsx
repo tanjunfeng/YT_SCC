@@ -28,7 +28,9 @@ class PriceExamination extends PureComponent {
         super(props);
         this.state = {
             visible: false,
-            seeModelvisible: false
+            seeModelvisible: false,
+            // 默认未完成
+            isComplete: '0'
         }
         // 搜索参数
         this.param = {};
@@ -39,6 +41,7 @@ class PriceExamination extends PureComponent {
 
     componentDidMount() {
         this.handlePurchaseReset();
+        Object.assign(this.param, { status: '0' })
         this.query();
     }
 
@@ -57,6 +60,9 @@ class PriceExamination extends PureComponent {
      * 请求列表数据
      */
     query = () => {
+        this.setState({
+            isComplete: this.param.status
+        })
         const searchObj = {
             map: this.param,
             processType: 'SPXS'
@@ -97,6 +103,7 @@ class PriceExamination extends PureComponent {
         this.setState({
             visible: false
         })
+        this.query()
     }
 
     /**
@@ -151,16 +158,15 @@ class PriceExamination extends PureComponent {
      * return 列表页操作下拉菜单
      */
     renderOperations = (text, record, index) => {
-        const { status } = record
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="see">
                     查看
                 </Menu.Item>
                 {
-                    status !== 0 ?
+                    this.state.isComplete !== '0' ?
                         <Menu.Item key="results">
-                            {status === 1 ? '审批意见' : '拒绝原因'}
+                            查看审核意见
                         </Menu.Item>
                         : <Menu.Item key="Examine">
                             审核

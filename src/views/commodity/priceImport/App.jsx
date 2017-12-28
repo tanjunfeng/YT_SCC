@@ -158,7 +158,9 @@ class PriceImport extends PureComponent {
                 <Table
                     dataSource={data}
                     columns={columns}
-                    rowKey="importsId"
+                    rowKey={record => (
+                        record.importsId + record.lineNumber
+                    )}
                     scroll={{
                         x: 1400
                     }}

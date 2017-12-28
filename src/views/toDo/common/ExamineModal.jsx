@@ -22,17 +22,7 @@ class ExamineModal extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            visible: false,
             confirmLoading: false,
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const visible = nextProps.visible;
-        if (visible !== this.props.visible) {
-            this.setState({
-                visible
-            })
         }
     }
 
@@ -74,7 +64,8 @@ class ExamineModal extends PureComponent {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { visible, confirmLoading } = this.state;
+        const { confirmLoading } = this.state;
+        const { visible } = this.props;
         // 样式配置
         const formItemLayout = {
             labelCol: {
