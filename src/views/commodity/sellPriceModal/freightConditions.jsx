@@ -86,7 +86,6 @@ class FreightConditions extends Component {
     }
 
     handleCancel() {
-        console.log(111)
         this.props.onCancel();
     }
 
@@ -311,7 +310,7 @@ class FreightConditions extends Component {
                                                 'sell-modal-border' : null}
                                         >{datas.sellPricesInReview.deliveryDay}</span>
                                         天内发货
-                        </FormItem>
+                                    </FormItem>
                                     <FormItem>
                                         <span>是否整箱销售:</span>
                                         <span>{getProductById.sellFullCase === 1 ? '是' : '否'}</span>
@@ -339,7 +338,6 @@ FreightConditions.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     getProductById: PropTypes.objectOf(PropTypes.any),
     handlePostAdd: PropTypes.func,
-    handleClose: PropTypes.func,
     datas: PropTypes.objectOf(PropTypes.any),
     isEdit: PropTypes.bool,
 };

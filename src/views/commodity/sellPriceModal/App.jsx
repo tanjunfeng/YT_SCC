@@ -34,7 +34,6 @@ const FormItem = Form.Item;
 class SellPriceModal extends Component {
     constructor(props) {
         super(props);
-        this.handlePriceChange = this.handlePriceChange.bind(this);
         this.handleMaxChange = this.handleMaxChange.bind(this);
         this.handleMinChange = this.handleMinChange.bind(this);
         this.childCompany = props.datas.branchCompanyId ? {
@@ -134,35 +133,6 @@ class SellPriceModal extends Component {
         this.props.handleClose();
     }
 
-    handlePriceChange(result) {
-        const { setFields, getFieldError } = this.props.form;
-        const { isContinuity, results } = result;
-
-        if (isContinuity && getFieldError('sellSectionPrices')) {
-            setFields({
-                sellSectionPrices: {
-                    errors: null,
-                },
-            })
-        }
-        this.isDisabled = false;
-    }
-
-    handleChoose = ({ record }) => {
-        this.childCompany = {
-            branchCompanyId: record.id,
-            branchCompanyName: record.name
-        };
-    }
-
-    handleClear = () => {
-        this.childCompany = null;
-    }
-
-    handleSelectChange = (item) => {
-        this.choose = item === '-1' ? null : item;
-    }
-
     /**
      * 销售内装数
      */
@@ -201,12 +171,6 @@ class SellPriceModal extends Component {
         this.props.form.setFieldsValue({ maxNumber: num });
     }
 
-    handleConfirm = () => {
-        this.setState({
-            confirmVisible: true
-        })
-    }
-
     catchAuditstate = () => {
         const { datas } = this.props;
         const newDates = JSON.parse(JSON.stringify(datas.data));
@@ -226,7 +190,7 @@ class SellPriceModal extends Component {
         const { prefixCls, form, datas, isEdit } = this.props;
         const { getFieldDecorator } = form;
         const newDates = JSON.parse(JSON.stringify(datas.data));
-        const { sellSectionPrices } = newDates;
+        const { sellSectionPrices = [] } = newDates;
         const isAfter = this.isAfter === true;
         return (
             <Modal

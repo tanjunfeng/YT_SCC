@@ -166,6 +166,7 @@ class ProcurementMaintenance extends PureComponent {
 
     handleAdd = () => {
         const { getProductById } = this.props
+        console.log(getProductById)
         this.setState({
             datas: getProductById,
             show: true,
@@ -247,7 +248,6 @@ class ProcurementMaintenance extends PureComponent {
                         initalValue={stepPriceDetail.sellPriceInfoVos || {}}
                         datas={this.state.datas}
                         handleClose={this.handleClose}
-                        handleAdd={this.handleAdd}
                         handlePostAdd={this.handlePostAdd}
                         isEdit={this.state.isEdit}
                     />
