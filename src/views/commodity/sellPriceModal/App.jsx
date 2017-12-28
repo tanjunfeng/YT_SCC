@@ -6,8 +6,7 @@ import { connect } from 'react-redux';
 import {
     pubFetchValueList
 } from '../../../actions/pub';
-import { MAXGOODS } from '../../../constant'
-import { productAddPriceVisible } from '../../../actions/producthome';
+import { productAddPriceVisible, toAddSellPrice } from '../../../actions/producthome';
 import { fetchAddProdPurchase } from '../../../actions';
 import {
 } from '../../../constant/searchParams';
@@ -15,9 +14,8 @@ import {
     getSellPriceInfoByIdAction
 } from '../../../actions/commodity';
 import FreightConditions from './freightConditions';
-import EditableTable from './editableTable';
-
-const FormItem = Form.Item;
+import OnlyReadModal from './onlyReadModal';
+import EditModal from './editModal';
 
 @connect(
     state => ({
@@ -28,7 +26,8 @@ const FormItem = Form.Item;
         productAddPriceVisible,
         fetchAddProdPurchase,
         pubFetchValueList,
-        getSellPriceInfoByIdAction
+        getSellPriceInfoByIdAction,
+        toAddSellPrice
     }, dispatch)
 )
 class SellPriceModal extends Component {
@@ -86,21 +85,6 @@ class SellPriceModal extends Component {
         })
     }
 
-    getEditableTableValues = (list) => {
-        const { isEdit, datas } = this.props;
-        const { startNumber } = this.state;
-        const newDates = JSON.parse(JSON.stringify(datas.data));
-        const { auditStatus } = newDates;
-        return {
-            isEdit,
-            list,
-            startNumber,
-            data: datas.sellSectionPrices,
-            readOnly: false,
-            isSub: auditStatus === 1
-        };
-    }
-
     handleOk = () => {
         const { datas, handlePostAdd, isEdit } = this.props;
         const { validateFields, setFields } = this.props.form;
@@ -124,7 +108,11 @@ class SellPriceModal extends Component {
                     productId: datas.productId
                 })
             }
-            this.props.handleClose();
+            this.props.toAddSellPrice(this.getFormData()).then((res) => {
+                if (res.code === 200) {
+                    this.props.onCancel();
+                }
+            })
             return null;
         })
     }
@@ -167,14 +155,20 @@ class SellPriceModal extends Component {
         });
     }
 
+    handleChange = (data) => {
+        this.setState({
+            branchCompanyId: data
+        })
+    }
+
     handleMaxChange = (num) => {
         this.props.form.setFieldsValue({ maxNumber: num });
     }
 
     catchAuditstate = () => {
         const { datas } = this.props;
-        const newDates = JSON.parse(JSON.stringify(datas.data));
-        switch (newDates.auditStatus) {
+        const newDatas = JSON.parse(JSON.stringify(datas.data));
+        switch (newDatas.auditStatus) {
             case 1:
                 return '已提交';
             case 2:
@@ -187,10 +181,8 @@ class SellPriceModal extends Component {
     }
 
     render() {
-        const { prefixCls, form, datas, isEdit } = this.props;
-        const { getFieldDecorator } = form;
-        const newDates = JSON.parse(JSON.stringify(datas.data));
-        const { sellSectionPrices = [] } = newDates;
+        const { prefixCls, form, datas, isEdit, values } = this.props;
+        const newDatas = datas.data;
         const isAfter = this.isAfter === true;
         return (
             <Modal
@@ -205,94 +197,76 @@ class SellPriceModal extends Component {
                 {
                     isEdit &&
                     <div>
+                        <span className="changeBefore">修改前:</span>
+                        <span className="changeAfter">修改后:</span>
+                    </div>
+                }
+                {
+                    isEdit ?
                         <div>
-                            <span className="changeBefore">修改前:</span>
-                            <span className="changeAfter">修改后:</span>
-                        </div>
-                        <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
-                            <Form layout="inline" onSubmit={this.handleSubmit}>
-                                <FreightConditions isEdit={isEdit} isAfter={isAfter} isSub={newDates.auditStatus === 1} newDates={newDates} />
-                                <div className={`${prefixCls}-item item-max-height`}>
-                                    <div className={`${prefixCls}-item-title`}>
-                                        添加阶梯价格
-                                            <span className={`${prefixCls}-item-tip`}>
-                                            &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
-                                            </span>
-                                    </div>
-                                    <div className={`${prefixCls}-item-content`}>
-                                        <FormItem>
-                                            {getFieldDecorator('sellSectionPrices', {
-                                                initialValue: this.getEditableTableValues(sellSectionPrices)
-                                            })(<EditableTable />)}
-                                        </FormItem>
-                                    </div>
-                                    <Row>
-                                        <Col>
-                                            <FormItem label="*建议零售价(元)：">
-                                                <span>{newDates.suggestPrice}</span>
-                                            </FormItem>
-                                            <FormItem label="商品采购价格：">
-                                                <span><i className={`new-price-state-${newDates.state}`} />{newDates.state || '-'}</span>
-                                            </FormItem>
-                                            <FormItem label="子公司:" className="edit-input">
-                                                <span>{newDates.branchCompanyId} - {newDates.branchCompanyName}</span>
-                                            </FormItem>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Form>
-                        </div>
-                        <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
-                            <FreightConditions isEdit={isEdit} isAfter={!isAfter} isSub={newDates.auditStatus === 1} newDates={newDates} />
-                            <div className={`${prefixCls}-item`}>
-                                <div className={`${prefixCls}-item-title`}>
-                                    添加阶梯价格
-                                            <span className={`${prefixCls}-item-tip`}>
-                                        &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
-                                            </span>
-                                </div>
-                                <div className={`${prefixCls}-item-content`}>
-                                    <FormItem>
-                                        {getFieldDecorator('sellSectionPrices', {
-                                            initialValue: this.getEditableTableValues(sellSectionPrices)
-                                        })(
-                                            <EditableTable />)}
-                                    </FormItem>
-                                </div>
-                                <div>
-                                    <span>*建议零售价(元):</span>
-                                    <span className={
-                                        newDates.sellPricesInReview.suggestPrice !== newDates.suggestPrice ?
-                                            'sell-modal-border' : null}
-                                    >{newDates.sellPricesInReview.suggestPrice}</span>
-                                    <span>商品采购价格：</span>
-                                    <span className={
-                                        newDates.sellPricesInReview.purchasePrice !== newDates.purchasePrice ?
-                                            'sell-modal-border' : null}
-                                    >{newDates.sellPricesInReview.state || '-'}</span>
-                                    <span className="edit-input">子公司:</span>
-                                    <span className={
-                                        newDates.sellPricesInReview.branchCompanyId !== newDates.branchCompanyId ?
-                                            'sell-modal-border' : null}
-                                    >{newDates.sellPricesInReview.branchCompanyId} - {newDates.sellPricesInReview.branchCompanyName}</span>
-                                </div>
+                            <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
+                                <Form layout="inline" onSubmit={this.handleSubmit}>
+                                    <FreightConditions
+                                        isEdit={isEdit}
+                                        isAfter={isAfter}
+                                        isSub={newDatas.auditStatus === 1}
+                                        newDatas={newDatas}
+                                    />
+                                    <EditModal
+                                        newDatas={newDatas}
+                                        startNumber={this.state.startNumber}
+                                    />
+                                </Form>
+                            </div>
+                            <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
+                                <FreightConditions
+                                    isEdit={isEdit}
+                                    isAfter={!isAfter}
+                                    isSub={newDatas.auditStatus === 1}
+                                    newDatas={newDatas}
+                                />
+                                <OnlyReadModal
+                                    newDatas={newDatas}
+                                    startNumber={this.state.startNumber}
+                                />
+                            </div >
+                            <Row className="edit-state-list">
+                                <Col>
+                                    <span>提交人：</span>
+                                    <span>{newDatas.firstCreated === 1 ?
+                                        newDatas.createUserName :
+                                        newDatas.modifyUserName || '-'}</span>
+                                </Col>
+                                <Col>
+                                    <span>审核人：</span>
+                                    <span>{newDatas.auditUserName || '-'}</span>
+                                </Col>
+                                <Col>
+                                    <span>售价状态：</span>
+                                    <span>
+                                        <i className={`new-price-state-${newDatas.auditStatus}`} />
+                                        {this.catchAuditstate() || '-'}
+                                    </span>
+                                </Col>
+                            </Row>
+                        </div > :
+                        <div>
+                            <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
+                                <Form layout="inline" onSubmit={this.handleSubmit}>
+                                    <FreightConditions
+                                        isEdit={isEdit}
+                                        values={values}
+                                        newDatas={newDatas}
+                                        isAfter={isAfter}
+                                    />
+                                    <EditModal
+                                        startNumber={this.state.startNumber}
+                                        onchange={this.handleChange}
+                                        values={values}
+                                    />
+                                </Form>
                             </div>
                         </div>
-                        <Row className="edit-state-list">
-                            <Col>
-                                <span>提交人：</span>
-                                <span>{newDates.submit || '-'}</span>
-                            </Col>
-                            <Col>
-                                <span>审核人：</span>
-                                <span>{newDates.examine || '-'}</span>
-                            </Col>
-                            <Col>
-                                <span>售价状态：</span>
-                                <span><i className={`new-price-state-${newDates.auditStatus}`} />{this.catchAuditstate() || '-'}</span>
-                            </Col>
-                        </Row>
-                    </div >
                 }
             </Modal>
         );
@@ -304,8 +278,7 @@ SellPriceModal.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     handlePostAdd: PropTypes.func,
     handleClose: PropTypes.func,
-    datas: PropTypes.objectOf(PropTypes.any),
-    isEdit: PropTypes.bool,
+    datas: PropTypes.objectOf(PropTypes.any)
 };
 
 SellPriceModal.defaultProps = {

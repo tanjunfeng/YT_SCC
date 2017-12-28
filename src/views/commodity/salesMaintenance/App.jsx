@@ -67,6 +67,10 @@ class ProcurementMaintenance extends PureComponent {
         this.searchForm = {};
         this.current = 1;
         this.state = {
+            // 新建modal
+            values: {},
+            // 修改modal
+            datas: {},
             // 控制当前操作card下标
             index: 0,
             // 默认值
@@ -165,10 +169,9 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     handleAdd = () => {
-        const { getProductById } = this.props
-        console.log(getProductById)
+        const { getProductById } = this.props;
         this.setState({
-            datas: getProductById,
+            values: getProductById,
             show: true,
         })
     }
@@ -247,6 +250,7 @@ class ProcurementMaintenance extends PureComponent {
                     <SellPriceModal
                         initalValue={stepPriceDetail.sellPriceInfoVos || {}}
                         datas={this.state.datas}
+                        values={this.state.values}
                         handleClose={this.handleClose}
                         handlePostAdd={this.handlePostAdd}
                         isEdit={this.state.isEdit}

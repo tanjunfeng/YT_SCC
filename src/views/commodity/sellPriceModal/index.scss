@@ -4,6 +4,9 @@
         width: 49%;
         display: inline-block;
     }
+    .last-freightConditions{
+        min-height: 211px;
+    }
     .changeAfter{
         width: 49%;
         margin-left: 1%;
@@ -56,7 +59,6 @@
     }
     .sell-modal-item:last-child {
         width: 100%;
-        max-height: 250px;
         overflow-y: auto;
     }
     .sell-modal-body-wrap {
@@ -75,12 +77,14 @@
     }
     .item-max-height {
         overflow-y: auto;
-        max-height: 250px;
     }
     .edit-state-list {
         display: flex;
-        .ant-form-item {
-            margin: 0 auto;
+        div{
+            width: 30%;
+        }
+        div:first-child{
+            margin-left: 10%;
         }
     }
     .sell-modal-border {
@@ -170,7 +174,6 @@
         }
         .item-max-height {
             overflow-y: auto;
-            max-height: 250px;
         }
     }
     .ant-message-warning {
