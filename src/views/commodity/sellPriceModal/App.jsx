@@ -306,7 +306,7 @@ class SellPriceModal extends Component {
                                         newDates.sellPricesInReview.purchasePrice !== newDates.purchasePrice ?
                                             'sell-modal-border' : null}
                                     >{newDates.sellPricesInReview.state || '-'}</span>
-                                    <span className="edit-input">商品采购价格：</span>
+                                    <span className="edit-input">子公司:</span>
                                     <span className={
                                         newDates.sellPricesInReview.branchCompanyId !== newDates.branchCompanyId ?
                                             'sell-modal-border' : null}
