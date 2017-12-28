@@ -181,10 +181,6 @@ class ProcurementMaintenance extends PureComponent {
                     show: true,
                 })
             }
-        }).catch(() => {
-            this.setState({
-                show: false,
-            })
         })
     }
 

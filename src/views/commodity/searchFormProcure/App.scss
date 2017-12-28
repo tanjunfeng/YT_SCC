@@ -7,9 +7,15 @@
         padding: 40px 0 20px;
         margin: 10px 0;
         .ant-form-item-label {
-            width: 70px;
+            width: 100px;
             .sc-form-item-label {
                 text-align: right;
+            }
+        }
+        .ant-row-flex-end{
+            margin-top: 10px;
+            a{
+                margin-right: 20px;
             }
         }
         .ant-form-item {

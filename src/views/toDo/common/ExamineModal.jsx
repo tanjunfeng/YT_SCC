@@ -5,11 +5,18 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Modal, Radio, Input } from 'antd';
+import { Form, Modal, Radio, Input, message } from 'antd';
 import { withRouter } from 'react-router';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { returnAuditInfo } from '../../../actions/process';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
+
+@connect(() => ({}), dispatch => bindActionCreators({
+    returnAuditInfo
+}, dispatch))
 
 class ExamineModal extends PureComponent {
     constructor(props) {
@@ -33,16 +40,28 @@ class ExamineModal extends PureComponent {
      * 点击确定
      */
     handleOk = () => {
-        this.setState({
-            ModalText: 'The modal will be closed after two seconds',
-            confirmLoading: true,
-        });
-        setTimeout(() => {
-            this.setState({
-                visible: false,
-                confirmLoading: false,
-            });
-        }, 2000);
+        // 表单校验
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                this.setState({
+                    confirmLoading: true,
+                });
+                const { taskId, type } = this.props;
+                const submitObj = Object.assign(values, { taskId, type })
+                this.props.returnAuditInfo(submitObj)
+                    .then(res => {
+                        if (res.code === 200) {
+                            message.success('保存成功');
+                            this.setState({
+                                confirmLoading: false
+                            });
+                            this.handleCancel();
+                        } else {
+                            message.success(res.message);
+                        }
+                    })
+            }
+        })
     }
 
     /**
@@ -50,11 +69,13 @@ class ExamineModal extends PureComponent {
      */
     handleCancel = () => {
         this.props.closeModal()
+        this.props.form.resetFields();
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         const { visible, confirmLoading } = this.state;
+        // 样式配置
         const formItemLayout = {
             labelCol: {
                 span: 6
@@ -74,17 +95,17 @@ class ExamineModal extends PureComponent {
                 >
                     <Form layout="vertical">
                         <FormItem label="审批" {...formItemLayout}>
-                            {getFieldDecorator('modifier', {
-                                initialValue: '0',
+                            {getFieldDecorator('outcome', {
+                                initialValue: 'reject',
                                 rules: [{ required: true, message: '此项必选' }],
                             })(
                                 <Radio.Group>
-                                    <Radio value="1">通过</Radio>
-                                    <Radio value="0">拒绝</Radio>
+                                    <Radio value="pass">通过</Radio>
+                                    <Radio value="reject">拒绝</Radio>
                                 </Radio.Group>)}
                         </FormItem>
                         <FormItem label="审批意见" {...formItemLayout}>
-                            {getFieldDecorator('title', {
+                            {getFieldDecorator('comment', {
                                 rules: [
                                     {
                                         required: true,
@@ -107,8 +128,11 @@ ExamineModal.propTypes = {
     handlePurchaseSearch: PropTypes.func,
     handlePurchaseReset: PropTypes.func,
     closeModal: PropTypes.func,
+    returnAuditInfo: PropTypes.func,
     visible: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
+    taskId: PropTypes.string,
+    type: PropTypes.string
 };
 
 export default withRouter(Form.create()(ExamineModal));

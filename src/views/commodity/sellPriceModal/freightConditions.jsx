@@ -39,7 +39,6 @@ class FreightConditions extends Component {
             currentInside: null,
             insideValue: null,
             confirmVisible: false,
-            hasZero: this.hasZero(props.datas.sellSectionPrices || [])
         }
         this.choose = 0;
         this.isDisabled = false;
@@ -50,53 +49,17 @@ class FreightConditions extends Component {
     componentDidMount() {
         const { datas } = this.props;
         const { validateFields, setFields } = this.props.form;
-        const { results } = this.steppedPrice.getValue();
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
-            result.sellSectionPrices = results;
             result.productId = datas.id || datas.productId;
-            const priceList = [];
-            results.forEach((item) => (
-                priceList.push(item.price)
-            ))
-
-            priceList.forEach((obj) => {
-                if (obj === null || obj === undefined) {
-                    this.successPost = true;
-                    setFields({
-                        sellSectionPrices: {
-                            errors: [new Error('价格不能为空，无法提交')],
-                        },
-                    })
-                    return;
-                }
-
-                if (obj === 0) {
-                    this.messageAlert = true;
-                } else {
-                    this.messageAlert = false;
-                }
-                if (obj >= 0) {
-                    this.successPost = false;
-                }
-            })
         })
     }
 
     handleOk() {
         const { datas, handlePostAdd, isEdit } = this.props;
         const { validateFields, setFields } = this.props.form;
-        const { isContinuity, results } = this.steppedPrice.getValue();
         const choose = this.choose;
-        if (!isContinuity) {
-            setFields({
-                sellSectionPrices: {
-                    errors: [new Error('价格区间不连续，无法提交')],
-                },
-            })
-            return;
-        }
         if (!this.childCompany) {
             message.error('请选择子公司');
         }
@@ -117,85 +80,14 @@ class FreightConditions extends Component {
                     productId: datas.productId
                 })
             }
-            const priceList = [];
-            results.forEach((item) => (
-                priceList.push(item.price)
-            ))
-            if (priceList.length === 0) {
-                setFields({
-                    sellSectionPrices: {
-                        errors: [new Error('价格不能为空，无法提交')],
-                    },
-                })
-                return false;
-            }
-            priceList.forEach((obj) => {
-                if (obj === null || obj === undefined) {
-                    this.successPost = true;
-                    setFields({
-                        sellSectionPrices: {
-                            errors: [new Error('价格不能为空，无法提交')],
-                        },
-                    })
-                    return;
-                }
-                if (obj === 0) {
-                    this.messageAlert = true;
-                } else {
-                    this.messageAlert = false;
-                }
-                if (obj >= 0) {
-                    this.successPost = false;
-                }
-            })
-            if (this.successPost) {
-                this.isDisabled = true;
-                if (this.messageAlert) {
-                    message.error('请仔细核对销售价格，确认为当前显示的价格!')
-                }
-                if (!this.isDisabled) {
-                    handlePostAdd(result, isEdit, choose).then((res) => {
-                        if (res.code === 200) {
-                            this.isDisabled = false;
-                        }
-                    }).catch(() => {
-                        this.isDisabled = false;
-                    })
-                }
-            }
-            if (this.successPost === false) {
-                if (this.messageAlert) {
-                    message.error('请仔细核对销售价格，确认为当前显示的价格!', 2, () => {
-                        handlePostAdd(result, isEdit, choose);
-                    })
-                } else {
-                    handlePostAdd(result, isEdit, choose);
-                }
-            }
+            this.props.onCancel();
             return null;
         })
     }
 
     handleCancel() {
-        this.props.handleClose();
-    }
-
-    handlePriceChange(result) {
-        const { setFields, getFieldError } = this.props.form;
-        const { isContinuity, results } = result;
-
-        this.setState({
-            hasZero: this.hasZero(results)
-        })
-
-        if (isContinuity && getFieldError('sellSectionPrices')) {
-            setFields({
-                sellSectionPrices: {
-                    errors: null,
-                },
-            })
-        }
-        this.isDisabled = false;
+        console.log(111)
+        this.props.onCancel();
     }
 
     handleChoose = ({ record }) => {
@@ -270,123 +162,172 @@ class FreightConditions extends Component {
     }
 
     render() {
-        const { prefixCls, form, datas, isEdit, getProductById } = this.props;
+        const { prefixCls, form, getProductById, newDates, isAfter, isEdit } = this.props;
         const { getFieldDecorator } = form;
         const { currentInside } = this.state;
-        const newDates = JSON.parse(JSON.stringify(datas));
+        const data = newDates;
+        const datas = JSON.parse(JSON.stringify(data));
         const preHarvestPinStatusChange =
-            (newDates.preHarvestPinStatus === 1 ? '1' : '0');
-
+            (datas.preHarvestPinStatus === 1 ? '1' : '0');
         return (
             <div className={`${prefixCls}-body-wrap`}>
                 <Form layout="inline" onSubmit={this.handleSubmit}>
-                    <div className={`${prefixCls}-item`}>
-                        <div className={`${prefixCls}-item-title`}>货运条件</div>
-                        <FreightConditions />
-                        <div className={`${prefixCls}-item-content`}>
-                            <FormItem>
-                                <span>*销售内装数：</span>
-                                <span>
-                                    {getFieldDecorator('salesInsideNumber', {
-                                        rules: [{ required: true, message: '请输入销售内装数' }],
-                                        initialValue: newDates.salesInsideNumber
-                                    })(
-                                        <InputNumber
-                                            min={0}
-                                            onChange={this.handleInsideChange}
-                                        />
-                                    )}
-                                </span>
-                            </FormItem>
-                            <FormItem>
-                                <span>*起订量：</span>
-                                <span>
-                                    {getFieldDecorator('minNumber', {
-                                        rules: [
-                                            { required: true, message: '请输入最小起订量!' },
-                                            {
-                                                validator: (rule, value, callback) => {
-                                                    const { getFieldValue } = this.props.form
-                                                    if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0) {
-                                                        callback('起订量需为内装数整数倍！')
-                                                    }
+                    {
+                        isEdit && !isAfter ?
+                            <div className={`${prefixCls}-item`}>
+                                <div className={`${prefixCls}-item-title`}>货运条件</div>
+                                <div className={`${prefixCls}-item-content`}>
+                                    <FormItem>
+                                        <span>*销售内装数：</span>
+                                        <span>
+                                            {getFieldDecorator('salesInsideNumber', {
+                                                rules: [{ required: true, message: '请输入销售内装数' }],
+                                                initialValue: datas.salesInsideNumber
+                                            })(
+                                                <InputNumber
+                                                    min={0}
+                                                    onChange={this.handleInsideChange}
+                                                />
+                                                )}
+                                        </span>
+                                    </FormItem>
+                                    <FormItem>
+                                        <span>*起订量：</span>
+                                        <span>
+                                            {getFieldDecorator('minNumber', {
+                                                rules: [
+                                                    { required: true, message: '请输入最小起订量!' },
+                                                    {
+                                                        validator: (rule, value, callback) => {
+                                                            const { getFieldValue } = this.props.form
+                                                            if ((value / getFieldValue('salesInsideNumber')) % 1 !== 0) {
+                                                                callback('起订量需为内装数整数倍！')
+                                                            }
 
-                                                    callback()
+                                                            callback()
+                                                        }
+                                                    }
+                                                ],
+                                                initialValue: datas.minNumber
+                                            })(
+                                                <InputNumber
+                                                    min={0}
+                                                    onChange={this.handleMinChange}
+                                                    step={currentInside || datas.salesInsideNumber}
+                                                />
+                                                )}
+                                        </span>
+                                    </FormItem>
+                                    <FormItem>
+                                        <span>*最大销售数量：</span>
+                                        <span>
+                                            {getFieldDecorator('maxNumber', {
+                                                initialValue: datas.maxNumber
+                                            })(
+                                                <InputNumber
+                                                    min={0}
+                                                    onChange={this.handleMaxChange}
+                                                    step={currentInside || datas.salesInsideNumber}
+                                                />
+                                                )}
+                                        </span>
+                                    </FormItem>
+                                    <FormItem>
+                                        <span>*承诺发货时间：下单后</span>
+                                        <span className={`${prefixCls}-day-input`}>
+                                            {getFieldDecorator('deliveryDay', {
+                                                rules: [{ required: true, message: '请输入承诺发货时间!' }],
+                                                initialValue: datas.deliveryDay
+                                            })(
+                                                <InputNumber min={0} />
+                                                )}
+                                        </span>
+                                        天内发货
+                                    </FormItem>
+                                    <FormItem>
+                                        <span>是否整箱销售:</span>
+                                        <span className={`${prefixCls}-day-input`}>
+                                            {getProductById.sellFullCase === 1 ? '是' : '否'}
+                                        </span>
+                                    </FormItem>
+                                    <FormItem>
+                                        <span>整箱销售单位:</span>
+                                        <span className={`${prefixCls}-day-input`}>
+                                            {getProductById.fullCaseUnit || '-'}
+                                        </span>
+                                    </FormItem>
+                                    {/* 采购模式 */}
+                                    <FormItem className={`${prefixCls}-qy`}>
+                                        <span className={`${prefixCls}-select`}> 采购模式 : </span>
+                                        {getFieldDecorator('preHarvestPinStatus', {
+                                            initialValue: isEdit ? preHarvestPinStatusChange : '0'
+                                        })(
+                                            <Select
+                                                style={{ width: 90 }}
+                                                className="sc-form-item-select"
+                                                size="default"
+                                                onChange={this.handleSelectChange}
+                                            >
+                                                {
+                                                    preHarvestPinStatus.data.map((item) =>
+                                                        (<Option key={item.key} value={item.key}>
+                                                            {item.value}
+                                                        </Option>)
+                                                    )
                                                 }
-                                            }
-                                        ],
-                                        initialValue: newDates.minNumber
-                                    })(
-                                        <InputNumber
-                                            min={0}
-                                            onChange={this.handleMinChange}
-                                            step={currentInside || newDates.salesInsideNumber}
-                                        />
-                                    )}
-                                </span>
-                            </FormItem>
-                            <FormItem>
-                                <span>*最大销售数量：</span>
-                                <span>
-                                    {getFieldDecorator('maxNumber', {
-                                        initialValue: newDates.maxNumber
-                                    })(
-                                        <InputNumber
-                                            min={0}
-                                            onChange={this.handleMaxChange}
-                                            step={currentInside || newDates.salesInsideNumber}
-                                        />
-                                    )}
-                                </span>
-                            </FormItem>
-                            <FormItem>
-                                <span>*承诺发货时间：下单后</span>
-                                <span className={`${prefixCls}-day-input`}>
-                                    {getFieldDecorator('deliveryDay', {
-                                        rules: [{ required: true, message: '请输入承诺发货时间!' }],
-                                        initialValue: newDates.deliveryDay
-                                    })(
-                                        <InputNumber min={0} />
-                                    )}
-                                </span>
-                                天内发货
-                            </FormItem>
-                            <FormItem>
-                                <span>是否整箱销售:</span>
-                                <span className={`${prefixCls}-day-input`}>
-                                    {getProductById.sellFullCase === 1 ? '是' : '否'}
-                                </span>
-                            </FormItem>
-                            <FormItem>
-                                <span>整箱销售单位:</span>
-                                <span className={`${prefixCls}-day-input`}>
-                                    {getProductById.fullCaseUnit || '-'}
-                                </span>
-                            </FormItem>
-                            {/* 采购模式 */}
-                            <FormItem className={`${prefixCls}-qy`}>
-                                <span className={`${prefixCls}-select`}> 采购模式 : </span>
-                                {getFieldDecorator('preHarvestPinStatus', {
-                                    initialValue: isEdit ? preHarvestPinStatusChange : '0'
-                                })(
-                                    <Select
-                                        style={{ width: 90 }}
-                                        className="sc-form-item-select"
-                                        size="default"
-                                        onChange={this.handleSelectChange}
-                                    >
-                                        {
-                                            preHarvestPinStatus.data.map((item) =>
-                                                (<Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Option>)
-                                            )
-                                        }
-                                    </Select>
-                                )}
-                            </FormItem>
-                        </div>
-                    </div>
+                                            </Select>
+                                            )}
+                                    </FormItem>
+                                </div>
+                            </div>
+                            : <div className={`${prefixCls}-item`} style={{ minHeight: '211px' }}>
+                                <div className={`${prefixCls}-item-title`}>货运条件</div>
+                                <div className={`${prefixCls}-item-content`}>
+                                    <FormItem>
+                                        <span>*销售内装数：</span>
+                                        <span className={
+                                            datas.sellPricesInReview.salesInsideNumber !== datas.salesInsideNumber ?
+                                                'sell-modal-border' : null}
+                                        >{datas.sellPricesInReview.salesInsideNumber}</span>
+                                    </FormItem>
+                                    <FormItem>
+                                        <span>*起订量：</span>
+                                        <span className={
+                                            datas.sellPricesInReview.minNumber !== datas.minNumber ?
+                                                'sell-modal-border' : null}
+                                        >{datas.sellPricesInReview.minNumber}</span>
+                                    </FormItem>
+                                    <FormItem>
+                                        <span>*最大销售数量：</span>
+                                        <span className={
+                                            datas.sellPricesInReview.maxNumber !== datas.maxNumber ?
+                                                'sell-modal-border' : null}
+                                        >{datas.sellPricesInReview.maxNumber}</span>
+                                    </FormItem>
+                                    <FormItem>
+                                        <span>*承诺发货时间：下单后</span>
+                                        <span className={
+                                            datas.sellPricesInReview.deliveryDay !== datas.deliveryDay ?
+                                                'sell-modal-border' : null}
+                                        >{datas.sellPricesInReview.deliveryDay}</span>
+                                        天内发货
+                        </FormItem>
+                                    <FormItem>
+                                        <span>是否整箱销售:</span>
+                                        <span>{getProductById.sellFullCase === 1 ? '是' : '否'}</span>
+                                    </FormItem>
+                                    <FormItem>
+                                        <span>整箱销售单位:</span>
+                                        <span>{getProductById.fullCaseUnit || '-'}</span>
+                                    </FormItem>
+                                    {/* 采购模式 */}
+                                    <FormItem className={`${prefixCls}-qy`}>
+                                        <span className={`${prefixCls}-select`}> 采购模式 : </span>
+                                        <span>{preHarvestPinStatusChange === '0' ? '先销后采' : '先采后销'}</span>
+                                    </FormItem>
+                                </div>
+                            </div>
+                    }
                 </Form>
             </div>
         )
