@@ -14,8 +14,8 @@ import {
     getSellPriceInfoByIdAction
 } from '../../../actions/commodity';
 import FreightConditions from './freightConditions';
-import OnlyReadModal from './onlyReadModal';
-import EditModal from './editModal';
+import OnlyReadSteps from './onlyReadSteps';
+import EditSteps from './editSteps';
 
 @connect(
     state => ({
@@ -34,20 +34,17 @@ class SellPriceModal extends Component {
     constructor(props) {
         super(props);
         this.handleMaxChange = this.handleMaxChange.bind(this);
-        this.handleMinChange = this.handleMinChange.bind(this);
-        this.childCompany = props.datas.branchCompanyId ? {
-            branchCompanyId: props.datas.branchCompanyId,
-            branchCompanyName: props.datas.branchCompanyName
-        } : {};
 
         this.state = {
             isEditPrice: false,
             currentInside: null,
             insideValue: null,
             confirmVisible: false,
+            branchCompanyId: '',
+            branchCompanyName: '',
+            CretFreConditObj: {}
         }
         this.isSub = false; // 判断是否为已提交状态(true为已提交)
-        this.choose = 0;
         this.isDisabled = false;
         this.successPost = true;
         this.messageAlert = true;
@@ -86,17 +83,14 @@ class SellPriceModal extends Component {
     }
 
     handleOk = () => {
-        const { datas, handlePostAdd, isEdit } = this.props;
+        const { datas, isEdit } = this.props;
         const { validateFields, setFields } = this.props.form;
-        const choose = this.choose;
-        if (!this.childCompany) {
-            message.error('请选择子公司');
-        }
+        const { branchCompanyId, branchCompanyName, CretFreConditObj } = this.state;
+        const data = {}
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
             result.productId = datas.id || datas.productId;
-            const { branchCompanyId, branchCompanyName } = this.childCompany;
             if (!isEdit && (!branchCompanyId || !branchCompanyName)) {
                 message.error('请选择子公司！');
                 return null;
@@ -108,11 +102,12 @@ class SellPriceModal extends Component {
                     productId: datas.productId
                 })
             }
-            this.props.toAddSellPrice(this.getFormData()).then((res) => {
-                if (res.code === 200) {
-                    this.props.onCancel();
-                }
+            Object.assign(data, {
+                branchCompanyId: this.state.branchCompanyId,
+                branchCompanyName: this.state.branchCompanyName,
+                ...CretFreConditObj
             })
+            this.props.onChange(data, isEdit)
             return null;
         })
     }
@@ -121,43 +116,10 @@ class SellPriceModal extends Component {
         this.props.handleClose();
     }
 
-    /**
-     * 销售内装数
-     */
-    handleInsideChange = (num) => {
-        this.setState({
-            currentInside: num
-        }, () => {
-            this.props.form.setFieldsValue({ minNumber: null })
-        })
-    }
-
-    /**
-     * 最小起订数量
-     */
-    handleMinChange = (num) => {
-        this.setState({
-            startNumber: num,
-            isEditPrice: true,
-        }, () => {
-            this.props.form.setFieldsValue({ minNumber: num });
-        })
-    }
-
-    /**
-     * 最大销售数量
-     */
-    handleInsideChange = (num) => {
-        this.setState({
-            currentInside: num
-        }, () => {
-            this.props.form.setFieldsValue({ maxNumber: null })
-        });
-    }
-
     handleChange = (data) => {
         this.setState({
-            branchCompanyId: data
+            branchCompanyId: data.id,
+            branchCompanyName: data.name,
         })
     }
 
@@ -178,6 +140,24 @@ class SellPriceModal extends Component {
             default:
                 return null;
         }
+    }
+
+    handleEditSteps = (record) => {
+        this.setState({
+            branchCompanyId: record.id,
+            branchCompanyName: record.name
+        })
+    }
+
+    handleonFreConditChange = (data) => {
+        console.log(data)
+    }
+
+    handleonCretFreConditChange = (data) => {
+        // console.log(data)
+        // this.setState({
+        //     CretFreConditObj: data
+        // })
     }
 
     render() {
@@ -205,18 +185,20 @@ class SellPriceModal extends Component {
                     isEdit ?
                         <div>
                             <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
-                                <Form layout="inline" onSubmit={this.handleSubmit}>
+                                <div>
                                     <FreightConditions
                                         isEdit={isEdit}
                                         isAfter={isAfter}
                                         isSub={newDatas.auditStatus === 1}
                                         newDatas={newDatas}
+                                        onFreConditChange={this.handleonFreConditChange}
                                     />
-                                    <EditModal
+                                    <EditSteps
                                         newDatas={newDatas}
                                         startNumber={this.state.startNumber}
+                                        onEditChange={this.handleEditSteps}
                                     />
-                                </Form>
+                                </div>
                             </div>
                             <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
                                 <FreightConditions
@@ -225,7 +207,7 @@ class SellPriceModal extends Component {
                                     isSub={newDatas.auditStatus === 1}
                                     newDatas={newDatas}
                                 />
-                                <OnlyReadModal
+                                <OnlyReadSteps
                                     newDatas={newDatas}
                                     startNumber={this.state.startNumber}
                                 />
@@ -252,19 +234,21 @@ class SellPriceModal extends Component {
                         </div > :
                         <div>
                             <div className={`${prefixCls}-body-wrap sell-modal-body-width`}>
-                                <Form layout="inline" onSubmit={this.handleSubmit}>
+                                <div>
                                     <FreightConditions
                                         isEdit={isEdit}
                                         values={values}
                                         newDatas={newDatas}
                                         isAfter={isAfter}
+                                        onDataChange={this.handleonCretFreConditChange}
                                     />
-                                    <EditModal
+                                    <EditSteps
+                                        newDatas={newDatas}
                                         startNumber={this.state.startNumber}
-                                        onchange={this.handleChange}
+                                        onEditChange={this.handleChange}
                                         values={values}
                                     />
-                                </Form>
+                                </div>
                             </div>
                         </div>
                 }

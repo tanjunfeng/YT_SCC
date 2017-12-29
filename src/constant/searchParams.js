@@ -324,6 +324,18 @@ export const preHarvestPinStatus = {
     }]
 }
 
+// 采购退货
+export const supportReturnOption = {
+    defaultValue: 0,
+    data: [{
+        key: 0,
+        value: '否'
+    }, {
+        key: 1,
+        value: '是'
+    }]
+}
+
 // 商品状态
 export const commodityStatusOptions = {
     defaultValue: '-1',

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import immutable from 'immutable';
 import PropTypes from 'prop-types';
 import { Form, InputNumber, message, Select } from 'antd';
 import { bindActionCreators } from 'redux';
@@ -31,31 +32,46 @@ const Option = Select.Option;
 class FreightConditions extends Component {
     constructor(props) {
         super(props);
-        this.childCompany = props.datas.branchCompanyId ? {
-            branchCompanyId: props.datas.branchCompanyId,
-            branchCompanyName: props.datas.branchCompanyName
-        } : {};
 
         this.state = {
             isEditPrice: false,
             currentInside: null,
-            insideValue: null,
             confirmVisible: false,
+            salesInsideNumber: null
         }
         this.choose = 0;
-        this.isDisabled = false;
-        this.successPost = true;
-        this.messageAlert = true;
     }
 
     componentDidMount() {
-        const { datas } = this.props;
+        const { newDatas = {}, isEdit } = this.props;
         const { validateFields, setFields } = this.props.form;
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
-            result.productId = datas.id || datas.productId;
+            result.productId = newDatas.id || newDatas.productId;
+            if (!isEdit && (!branchCompanyId || !branchCompanyName)) {
+                message.error('请选择子公司！');
+                return null;
+            }
+            Object.assign(result, this.childCompany);
+            if (isEdit) {
+                Object.assign(result, {
+                    id: datas.id,
+                    productId: datas.productId
+                })
+            }
+            Object.assign(data, {
+                branchCompanyId: this.state.branchCompanyId,
+                branchCompanyName: this.state.branchCompanyName,
+                ...CretFreConditObj
+            })
+            this.props.onChange(data, isEdit)
+            return null;
         })
+    }
+
+    componentWillReceiveProps() {
+        this.props.onDataChange(this.getFormData())
     }
 
     /**
@@ -90,8 +106,6 @@ class FreightConditions extends Component {
         }, () => {
             this.props.form.setFieldsValue({ minNumber: null })
         })
-
-        this.steppedPrice.reset();
     }
 
     /**
@@ -109,7 +123,7 @@ class FreightConditions extends Component {
     /**
      * 最大销售数量
      */
-    handleInsideChange = (num) => {
+    handleMaxChange = (num) => {
         this.setState({
             currentInside: num
         }, () => {
@@ -118,7 +132,11 @@ class FreightConditions extends Component {
     }
 
     handleMaxChange = (num) => {
-        this.props.form.setFieldsValue({ maxNumber: num });
+        this.setState({
+            startNumber: num
+        }, () => {
+            this.props.form.setFieldsValue({ maxNumber: num });
+        })
     }
 
     handleConfirm = () => {
@@ -138,7 +156,10 @@ class FreightConditions extends Component {
             <div className={`${prefixCls}-body-wrap`}>
                 {
                     ((isEdit && !isAfter) || !isEdit) &&
-                    <Form layout="inline" onSubmit={this.handleSubmit}>
+                    <Form
+                        layout="inline"
+                        onSubmit={this.handleSubmit}
+                    >
                         <div className={`${prefixCls}-item`}>
                             <div className={`${prefixCls}-item-title`}>货运条件</div>
                             <div className={`${prefixCls}-item-content`}>
@@ -187,6 +208,7 @@ class FreightConditions extends Component {
                                     <span>*最大销售数量：</span>
                                     <span>
                                         {getFieldDecorator('maxNumber', {
+                                            rules: [{ required: true, message: '请输入最大销售数量' }],
                                             initialValue: data.maxNumber
                                         })(
                                             <InputNumber
@@ -268,13 +290,6 @@ class FreightConditions extends Component {
                                     >{newDatas.sellPricesInReview.minNumber}</span>
                                 </FormItem>
                                 <FormItem>
-                                    <span>*最大销售数量：</span>
-                                    <span className={
-                                        newDatas.sellPricesInReview.maxNumber !== newDatas.maxNumber ?
-                                            'sell-modal-border' : null}
-                                    >{newDatas.sellPricesInReview.maxNumber}</span>
-                                </FormItem>
-                                <FormItem>
                                     <span>*承诺发货时间：下单后</span>
                                     <span className={
                                         newDatas.sellPricesInReview.deliveryDay !== newDatas.deliveryDay ?
@@ -306,11 +321,14 @@ class FreightConditions extends Component {
 
 FreightConditions.propTypes = {
     prefixCls: PropTypes.string,
+    isAfter: PropTypes.bool,
+    isEdit: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
+    values: PropTypes.objectOf(PropTypes.any),
     getProductById: PropTypes.objectOf(PropTypes.any),
-    handlePostAdd: PropTypes.func,
     datas: PropTypes.objectOf(PropTypes.any),
-};
+    onChange: PropTypes.func
+}
 
 FreightConditions.defaultProps = {
     prefixCls: 'sell-modal',

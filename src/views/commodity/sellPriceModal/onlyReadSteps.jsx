@@ -24,7 +24,7 @@ const FormItem = Form.Item;
         pubFetchValueList,
     }, dispatch)
 )
-class FreightConditions extends Component {
+class OnlyReadSteps extends Component {
     constructor(props) {
         super(props);
         this.childCompany = props.datas.branchCompanyId ? {
@@ -88,17 +88,17 @@ class FreightConditions extends Component {
     }
 }
 
-FreightConditions.propTypes = {
+OnlyReadSteps.propTypes = {
     prefixCls: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
     datas: PropTypes.objectOf(PropTypes.any),
 };
 
-FreightConditions.defaultProps = {
+OnlyReadSteps.defaultProps = {
     prefixCls: 'sell-modal',
     handleClose: () => { },
     datas: {},
     isEdit: false
 }
 
-export default Form.create()(FreightConditions);
+export default Form.create()(OnlyReadSteps);

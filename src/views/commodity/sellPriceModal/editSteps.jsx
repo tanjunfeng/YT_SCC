@@ -26,7 +26,7 @@ const FormItem = Form.Item;
         pubFetchValueList,
     }, dispatch)
 )
-class FreightConditions extends Component {
+class EditSteps extends Component {
     constructor(props) {
         super(props);
     }
@@ -34,7 +34,6 @@ class FreightConditions extends Component {
     getEditableTableValues = (list) => {
         const { isEdit, newDatas = {}, startNumber } = this.props;
         const { auditStatus = 0 } = newDatas;
-        // this.getFormData();
         return {
             isEdit,
             list,
@@ -42,21 +41,20 @@ class FreightConditions extends Component {
             data: newDatas.sellSectionPrices,
             readOnly: false,
             isSub: auditStatus === 1,
-            // branchCompanyId: this.getFormData()
         };
     }
 
+    /**
+     * 获取表单数据
+     */
     getFormData = () => {
+        const { newDatas = {} } = this.props;
         const {
-            branchCompanyId,
+            newestPrice,
         } = this.props.form.getFieldsValue();
         return Util.removeInvalid({
-            branchCompanyId: branchCompanyId.id
+            newestPrice,
         });
-    }
-
-    returnChangeComP = () => {
-        // this.props.onchange(this.getFormData());
     }
 
     handlePressEnter = (event) => {
@@ -67,10 +65,15 @@ class FreightConditions extends Component {
         }
     }
 
+    handleBranchCompanyChange = (record) => {
+        this.props.onEditChange(record);
+    }
+
     render() {
-        const { prefixCls, form, newDatas = {} } = this.props;
+        const { prefixCls, form, newDatas = {}, values = {} } = this.props;
         const { getFieldDecorator } = form;
         const { sellSectionPrices = [] } = newDatas;
+        this.getEditableTableValues()
         return (
             <div className={`${prefixCls}-item item-max-height`}>
                 <div className={`${prefixCls}-item-title`}>
@@ -87,13 +90,12 @@ class FreightConditions extends Component {
                     </FormItem>
                 </div>
                 <Row>
-                    <Col>
+                    <Col className="sell-prigce-edit-footer">
                         <FormItem label="建议零售价(元)：">
-                            <span>{newDatas.suggestPrice}</span>
                             <span className={`${prefixCls}-day-input`}>
                                 {getFieldDecorator('newestPrice', {
                                     rules: [{ required: true, message: '请输入建议零售价(元)!' }],
-                                    initialValue: newDatas.suggestPrice || 0
+                                    initialValue: values.suggestPrice || null
                                 })(
                                     <InputNumber
                                         min={0}
@@ -108,10 +110,12 @@ class FreightConditions extends Component {
                         <FormItem label="商品采购价格：">
                             <span><i className={`new-price-state-${newDatas.state}`} />{newDatas.state || '-'}</span>
                         </FormItem>
-                        <FormItem label="子公司:" className="edit-input">
-                            {getFieldDecorator('branchCompanyId', {
+                        <FormItem label="子公司">
+                            {getFieldDecorator('branchCompany', {
                                 initialValue: { id: '', name: '' }
-                            })(<BranchCompany onChange={this.returnChangeComP} />)}
+                            })(<BranchCompany
+                                onChange={this.handleBranchCompanyChange}
+                            />)}
                         </FormItem>
                     </Col>
                 </Row>
@@ -120,18 +124,19 @@ class FreightConditions extends Component {
     }
 }
 
-FreightConditions.propTypes = {
+EditSteps.propTypes = {
     prefixCls: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
     newDatas: PropTypes.objectOf(PropTypes.any),
     startNumber: PropTypes.number,
+    onEditChange: PropTypes.func
 };
 
-FreightConditions.defaultProps = {
+EditSteps.defaultProps = {
     prefixCls: 'sell-modal',
     handleClose: () => { },
     datas: {},
     isEdit: false
 }
 
-export default Form.create()(FreightConditions);
+export default Form.create()(EditSteps);
