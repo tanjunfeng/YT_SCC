@@ -9,7 +9,7 @@ import { Button, Form, Select, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 import Util from '../../../util/util';
 import { purchaseStatus } from '../constants';
-import { Supplier, SupplierAdderss, AddingGoodsByTerm } from '../../../container/search';
+import { Supplier, SupplierAdderss, Commodity } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -22,10 +22,6 @@ class SearchForm extends PureComponent {
         this.getFormData = this.getFormData.bind(this);
         this.selectMap = this.selectMap.bind(this);
     }
-
-    // componentDidMount() {
-    //     this.props.handlePurchaseSearch(this.getFormData());
-    // }
 
     /**
      * 获取表单数据
@@ -103,23 +99,11 @@ class SearchForm extends PureComponent {
                     <Col span={8}>
                         <FormItem label="商品">
                             {getFieldDecorator('product', {
-                                initialValue: { productId: '', productCode: '', productName: '' }
-                            })(<AddingGoodsByTerm />)}
+                                initialValue: { productId: '', saleName: '' }
+                            })(<Commodity />)
+                            }
                         </FormItem>
                     </Col>
-                    {/* <Col span={16}>
-                        <FormItem label="活动时间">
-                            {getFieldDecorator('promotionDateRange', {
-                                initialValue: []
-                            })(<RangePicker
-                                size="default"
-                                className="manage-form-enterTime"
-                                showTime={{ format: MINUTE_FORMAT }}
-                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
-                                placeholder={['开始时间', '结束时间']}
-                            />)}
-                        </FormItem>
-                    </Col> */}
                 </Row>
                 <Row gutter={40} type="flex" justify="end">
                     <Col>

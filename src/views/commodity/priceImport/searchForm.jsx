@@ -10,7 +10,7 @@ import { withRouter } from 'react-router';
 import reqwest from 'reqwest';
 import Util from '../../../util/util';
 import { priceResult } from './constants';
-import { BranchCompany, AddingGoodsByTerm } from '../../../container/search';
+import { BranchCompany, Commodity } from '../../../container/search';
 import { DATE_FORMAT, MINUTE_FORMAT } from '../../../constant';
 
 const { RangePicker } = DatePicker;
@@ -190,8 +190,9 @@ class SearchForm extends PureComponent {
                     <Col span={8}>
                         <FormItem label="商品">
                             {getFieldDecorator('product', {
-                                initialValue: { productId: '', productCode: '', productName: '' }
-                            })(<AddingGoodsByTerm />)}
+                                initialValue: { productId: '', saleName: '' }
+                            })(<Commodity />)
+                            }
                         </FormItem>
                     </Col>
                     <Col span={8}>

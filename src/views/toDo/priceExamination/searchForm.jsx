@@ -9,7 +9,7 @@ import { Button, Form, Select, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 import Util from '../../../util/util';
 import { purchaseStatus } from '../constants';
-import { BranchCompany, AddingGoodsByTerm } from '../../../container/search';
+import { BranchCompany, Commodity } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -90,8 +90,9 @@ class SearchForm extends PureComponent {
                     <Col span={8}>
                         <FormItem label="商品">
                             {getFieldDecorator('product', {
-                                initialValue: { productId: '', productCode: '', productName: '' }
-                            })(<AddingGoodsByTerm />)}
+                                initialValue: { productId: '', saleName: '' }
+                            })(<Commodity />)
+                            }
                         </FormItem>
                     </Col>
                 </Row>
