@@ -13,6 +13,7 @@ import {
     queryProcessMsgInfo as queryProcessMsgInfoService,
     processImageByBusi as processImageByBusiService,
     queryCommentHisByBusi as queryCommentHisByBusiService,
+    queryProdPriceChangeList as queryProdPriceChangeListService,
     auditInfo as auditInfoService,
 } from '../service';
 
@@ -132,6 +133,28 @@ export const queryProcessMsgInfo = (params) => dispatch => (
     })
 )
 
+/**
+ * 查询待办事项下价格变更记录列表数据
+ * @param {*} data
+ */
+const queryPriceChangeListAction = data => ({
+    type: ActionType.QUERY_PRICE_CHANGE_LIST,
+    payload: data
+});
+
+export const queryPriceChangeList = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        queryProdPriceChangeListService(params)
+            .then(res => {
+                dispatch(queryPriceChangeListAction(res.data));
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+)
+
 // 业务中获取高亮流程图数据
 const processImageBusiAction = (data) => ({
     type: ActionType.PROCESS_IMAGE_BY_BUSI,
@@ -188,6 +211,7 @@ const returnAuditInfoAction = (data) => ({
     type: ActionType.RETURN_AUDIT_INFO,
     payload: data
 });
+
 export const returnAuditInfo = (params) => dispatch => (
     new Promise((resolve, reject) => {
         auditInfoService(params)

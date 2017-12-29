@@ -32,20 +32,22 @@ class GoodsInfo extends PureComponent {
             key: 'productImg',
             render: (text, record) => {
                 if (record.abnormalGoods) {
-                    message = '毛利异常';
-                    className = 'abnormalResonse';
+                    message = '异';
+                    className = 'errorTip';
                 } else {
                     className = '';
                     message = '';
                 }
+                const imgUrl = text || '../../../images/default/noPic.png'
                 return (
                     <div>
+                        <p className={className}><span>{message}</span></p>
                         <img
-                            src={text}
+                            src={imgUrl}
                             alt="未上传"
                             style={{ width: 50, height: 50, verticalAlign: 'middle' }}
                         />
-                        <div className={className}>{message}</div>
+                        {/* <div className={className}>{message}</div> */}
                     </div>
                 )
             }

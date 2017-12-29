@@ -3,7 +3,7 @@
  * @Description: 采购单审批列表
  * @CreateDate: 2017-10-27 11:23:06
  * @Last Modified by: chenghaojie
- * @Last Modified time: 2017-12-27 10:29:36
+ * @Last Modified time: 2017-12-28 17:46:31
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -157,8 +157,8 @@ class toDoPurchaseList extends PureComponent {
                 key: 'spName'
             }, {
                 title: '供应商地点',
-                dataIndex: 'apAdrName',
-                key: 'apAdrName'
+                dataIndex: 'spAdrName',
+                key: 'spAdrName'
             }, {
                 title: '大类',
                 dataIndex: 'category',

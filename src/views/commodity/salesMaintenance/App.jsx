@@ -12,7 +12,6 @@ import { withRouter } from 'react-router';
 import {
     Form,
 } from 'antd';
-
 import {
     modifyAuditVisible,
     modifyCheckReasonVisible,
@@ -30,7 +29,8 @@ import SellPriceModal from '../sellPriceModal'
 import {
     postSellPrice,
     updateSellPrice,
-    updatePriceStatus
+    updatePriceStatus,
+    getSellPriceInfoByIdAction
 } from '../../../actions/commodity';
 
 @connect(
@@ -43,7 +43,8 @@ import {
         getProdPurchaseById: state.toJS().commodity.getProdPurchaseById,
         queryProdPurchases: state.toJS().commodity.queryProdPurchases,
         getProductById: state.toJS().commodity.getProductById,
-        stepPriceList: state.toJS().commodity.stepPriceList,
+        stepPriceDetail: state.toJS().commodity.stepPriceDetail,
+        getSellPriceInfoById: state.toJS().commodity.getSellPriceInfoById,
     }),
     dispatch => bindActionCreators({
         modifyAuditVisible,
@@ -52,7 +53,8 @@ import {
         fetchPriceInfo,
         postSellPrice,
         updateSellPrice,
-        updatePriceStatus
+        updatePriceStatus,
+        getSellPriceInfoByIdAction
     }, dispatch)
 )
 class ProcurementMaintenance extends PureComponent {
@@ -171,10 +173,14 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     handleCardClick = (data) => {
-        this.setState({
-            datas: data,
-            isEdit: true,
-            show: true,
+        this.props.getSellPriceInfoByIdAction({id: data.id}).then((res) => {
+            if (res.code === 200) {
+                this.setState({
+                    datas: res,
+                    isEdit: true,
+                    show: true,
+                })
+            }
         })
     }
 
@@ -212,7 +218,7 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     render() {
-        const { prefixCls, getProductById, stepPriceList = {}} = this.props;
+        const { prefixCls, getProductById, stepPriceDetail = {}, match} = this.props;
         return (
             <div className={`${prefixCls}-min-width application`}>
                 <ShowForm
@@ -223,10 +229,11 @@ class ProcurementMaintenance extends PureComponent {
                     onSearch={this.handleFormSearch}
                     onReset={this.handleFormReset}
                     handleAdd={this.handleAdd}
+                    value={match.params.id}
                 />
                 <div>
                     <Cardline.SaleCard
-                        initalValue={stepPriceList.sellPriceInfoVos || {}}
+                        initalValue={stepPriceDetail.sellPriceInfoVos || {}}
                         minUnit={getProductById.minUnit}
                         handleDelete={this.handleDelete}
                         handleCardClick={this.handleCardClick}
@@ -237,6 +244,7 @@ class ProcurementMaintenance extends PureComponent {
                 {
                     this.state.show &&
                     <SellPriceModal
+                        initalValue={stepPriceDetail.sellPriceInfoVos || {}}
                         datas={this.state.datas}
                         handleClose={this.handleClose}
                         handleAdd={this.handleAdd}
@@ -259,7 +267,8 @@ ProcurementMaintenance.propTypes = {
     fetchPriceInfo: PropTypes.func,
     postSellPrice: PropTypes.func,
     updatePriceStatus: PropTypes.func,
-    stepPriceList: PropTypes.func,
+    getSellPriceInfoByIdAction: PropTypes.func,
+    stepPriceDetail: PropTypes.objectOf(PropTypes.any),
     updateSellPrice: PropTypes.func
 }
 

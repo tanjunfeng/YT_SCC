@@ -1,6 +1,19 @@
 .sell-modal {
+    min-width: 950px;
+    .changeBefore{
+        width: 49%;
+        display: inline-block;
+    }
+    .changeAfter{
+        width: 49%;
+        margin-left: 1%;
+        display: inline-block;
+    }
+    .ant-modal-content {
+        width: 1020px;
+    }
     .ant-modal-body {
-        max-height: 400px;
+        min-height: 700px;
         overflow-y: auto;
     }
     form .ant-input-number {
@@ -34,10 +47,133 @@
             left: 30px;
         }
     }
-    .ant-form-explain{
+    .ant-form-explain {
         width: 160px;
     }
-}
-.ant-message-warning{
-    color: red;
+    .sell-modal-item {
+        width: 461px;
+        overflow-y: auto;
+    }
+    .sell-modal-item:last-child {
+        width: 100%;
+        max-height: 250px;
+        overflow-y: auto;
+    }
+    .sell-modal-body-wrap {
+        display: inline-block;
+        vertical-align: top;
+    }
+    .sell-modal-body-width {
+        width: 50%;
+    }
+    .sell-modal-body-width:last-child{
+        float: right;
+    }
+    .sell-modal-body-wrap::after {
+        clear: both;
+        overflow: hidden;
+    }
+    .item-max-height {
+        overflow-y: auto;
+        max-height: 250px;
+    }
+    .edit-state-list {
+        display: flex;
+        .ant-form-item {
+            margin: 0 auto;
+        }
+    }
+    .sell-modal-border {
+        border: 1px solid red;
+        padding: 5px 10px;
+        .editable-cell .ant-input-number {
+            width: 60px;
+        }
+    }
+    .new-price-state {
+        &-1 {
+            width: 5px;
+            height: 5px;
+            background: #5397E8;
+            border-radius: 50%;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        &-2 {
+            width: 5px;
+            height: 5px;
+            background: #71E135;
+            border-radius: 50%;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        &-3 {
+            width: 5px;
+            height: 5px;
+            background: red;
+            border-radius: 50%;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+    .createCls {
+        min-width: 950px;
+        .ant-modal-body {
+            min-height: 700px;
+            overflow-y: auto;
+            margin-left: 60px;
+        }
+        form .ant-input-number {
+            margin-right: 0;
+        }
+        &-item {
+            border: 1px solid #eee;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        &-item-title {
+            font-size: 14px;
+        }
+        &-item-content {
+            padding: 0 10px;
+        }
+        &-day-input {
+            margin: 0 4px;
+        }
+        &-label {
+            vertical-align: middle;
+        }
+        &-data-pic {
+            vertical-align: middle;
+            display: inline-block;
+            height: 30px;
+        }
+        &.ant-modal {
+            .ant-form-inline .ant-form-explain {
+                left: 30px;
+            }
+        }
+        .ant-form-explain {
+            width: 160px;
+        }
+        .sell-modal-item {
+            width: 850px;
+        }
+        .sell-modal-body-wrap {
+            display: inline-block;
+            vertical-align: top;
+        }
+        .sell-modal-body-wrap::after {
+            clear: both;
+            overflow: hidden;
+        }
+        .item-max-height {
+            overflow-y: auto;
+            max-height: 250px;
+        }
+    }
+    .ant-message-warning {
+        color: red;
+    }
 }
