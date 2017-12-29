@@ -23,21 +23,25 @@ class SearchForm extends PureComponent {
         this.selectMap = this.selectMap.bind(this);
     }
 
+    // componentDidMount() {
+    //     this.props.handlePurchaseSearch(this.getFormData());
+    // }
+
     /**
      * 获取表单数据
      */
     getFormData() {
         const {
             status,
-            spId,
-            spAdrId,
-            productId,
+            supplier,
+            spAdr,
+            product,
         } = this.props.form.getFieldsValue();
-        const prRecord = productId.record;
+        const prRecord = product.record;
         return Util.removeInvalid({
             status,
-            spId: spId.spId,
-            spAdrId: spAdrId.providerNo,
+            spNo: supplier.spNo,
+            spAdrNo: spAdr.providerNo,
             productId: prRecord ? prRecord.productId : ''
         });
     }
@@ -84,21 +88,21 @@ class SearchForm extends PureComponent {
                     </Col>
                     <Col span={8}>
                         <FormItem label="供应商">
-                            {getFieldDecorator('spId', {
+                            {getFieldDecorator('supplier', {
                                 initialValue: { spId: '', spNo: '', companyName: '' }
                             })(<Supplier />)}
                         </FormItem>
                     </Col>
                     <Col span={8}>
                         <FormItem label="供应商地点">
-                            {getFieldDecorator('spAdrId', {
+                            {getFieldDecorator('spAdr', {
                                 initialValue: { providerNo: '', providerName: '' }
                             })(<SupplierAdderss />)}
                         </FormItem>
                     </Col>
                     <Col span={8}>
                         <FormItem label="商品">
-                            {getFieldDecorator('productId', {
+                            {getFieldDecorator('product', {
                                 initialValue: { productId: '', productCode: '', productName: '' }
                             })(<AddingGoodsByTerm />)}
                         </FormItem>

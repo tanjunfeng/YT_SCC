@@ -5,16 +5,14 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Modal, Radio, Input } from 'antd';
+import { Form, Modal, Table } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
     queryCommentHis
 } from '../../../actions/procurement';
-
-const FormItem = Form.Item;
-const { TextArea } = Input;
+import { seeModalColumns as columns } from '../columns';
 
 @connect(state => ({
     approvalList: state.toJS().procurement.approvalList,
@@ -23,23 +21,9 @@ const { TextArea } = Input;
 }, dispatch))
 
 class SeeModal extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            seeModelvisible: false
-        }
-    }
-
-    componentDidMount() {
-        this.props.queryCommentHis({ taskId: this.props.taskId })
-    }
-
     componentWillReceiveProps(nextProps) {
-        const seeModelvisible = nextProps.seeModelvisible;
-        if (seeModelvisible !== this.props.seeModelvisible) {
-            this.setState({
-                seeModelvisible
-            })
+        if (nextProps.seeModelvisible && nextProps.seeModelvisible !== this.props.seeModelvisible) {
+            this.props.queryCommentHis({ taskId: nextProps.taskId })
         }
     }
 
@@ -51,36 +35,24 @@ class SeeModal extends PureComponent {
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
-        const { seeModelvisible } = this.state;
-        const { approvalList } = this.props
-        const formItemLayout = {
-            labelCol: {
-                span: 6
-            },
-            wrapperCol: {
-                span: 18
-            },
-        };
+        const { approvalList, seeModelvisible } = this.props
         return (
-            this.props.approvalList.length > 0
+            approvalList.length > 0
                 ? <div>
                     <Modal
                         title="采购进价/售价审批"
                         visible={seeModelvisible}
                         onOk={this.handleCancel}
                         onCancel={this.handleCancel}
+                        width={1000}
                     >
-                        <Form layout="vertical">
-                            <FormItem label="审批人" {...formItemLayout}>
-                                {getFieldDecorator('handler', { initialValue: approvalList[0].handler })(
-                                    <Input rows={4} disabled />)}
-                            </FormItem>
-                            <FormItem label="审批意见" {...formItemLayout}>
-                                {getFieldDecorator('content', { initialValue: approvalList[0].content })(
-                                    <TextArea rows={4} disabled />)}
-                            </FormItem>
-                        </Form>
+                        <Table
+                            dataSource={approvalList}
+                            columns={columns}
+                            rowKey="id"
+                            bordered
+                            pagination={false}
+                        />
                     </Modal>
                 </div>
                 : null
@@ -89,15 +61,10 @@ class SeeModal extends PureComponent {
 }
 
 SeeModal.propTypes = {
-    handlePurchaseSearch: PropTypes.func,
-    handlePurchaseReset: PropTypes.func,
     queryCommentHis: PropTypes.func,
-    closeModal: PropTypes.func,
     closeSeeModal: PropTypes.func,
     seeModelvisible: PropTypes.bool,
-    form: PropTypes.objectOf(PropTypes.any),
     taskId: PropTypes.string,
-    type: PropTypes.string,
     approvalList: PropTypes.objectOf(PropTypes.any)
 };
 

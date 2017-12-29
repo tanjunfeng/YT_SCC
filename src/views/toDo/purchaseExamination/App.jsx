@@ -28,7 +28,9 @@ class PurchaseExamination extends PureComponent {
         super(props);
         this.state = {
             visible: false,
-            seeModelvisible: false
+            seeModelvisible: false,
+            // 默认未完成
+            isComplete: '0'
         }
         // 搜索参数
         this.param = {};
@@ -36,8 +38,10 @@ class PurchaseExamination extends PureComponent {
         this.taskId = '';
         this.type = '2';
     }
+
     componentDidMount() {
         this.handlePurchaseReset();
+        Object.assign(this.param, { status: '0' })
         this.query();
     }
 
@@ -56,6 +60,9 @@ class PurchaseExamination extends PureComponent {
      * 请求列表数据
      */
     query = () => {
+        this.setState({
+            isComplete: this.param.status
+        })
         const searchObj = {
             map: this.param,
             processType: 'SPCG'
@@ -85,7 +92,7 @@ class PurchaseExamination extends PureComponent {
     handlePurchaseReset = () => {
         this.param = {
             pageNum: 1,
-            pageSize: PAGE_SIZE
+            pageSize: PAGE_SIZE,
         }
     }
 
@@ -96,6 +103,7 @@ class PurchaseExamination extends PureComponent {
         this.setState({
             visible: false
         })
+        this.query()
     }
 
     /**
@@ -120,20 +128,20 @@ class PurchaseExamination extends PureComponent {
         switch (key) {
             case 'Examine':
                 // 审核
+                this.taskId = taskId;
                 this.setState({
                     visible: true
                 })
-                this.taskId = taskId;
                 break;
             case 'see':
                 // 查看
                 break;
             case 'results':
                 // 审批意见
+                this.taskId = taskId
                 this.setState({
                     seeModelvisible: true
                 })
-                this.taskId = taskId
                 break;
             default:
                 break;
@@ -150,16 +158,15 @@ class PurchaseExamination extends PureComponent {
      * return 列表页操作下拉菜单
      */
     renderOperations = (text, record, index) => {
-        const { status } = record
         const menu = (
             <Menu onClick={(item) => this.handleSelect(record, index, item)}>
                 <Menu.Item key="see">
                     查看
                 </Menu.Item>
                 {
-                    status !== 0 ?
+                    this.state.isComplete !== '0' ?
                         <Menu.Item key="results">
-                            {status === 1 ? '审批意见' : '拒绝原因'}
+                            查看审核意见
                         </Menu.Item>
                         : <Menu.Item key="Examine">
                             审核
