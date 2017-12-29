@@ -61,7 +61,7 @@ class ImportPurchasePriceList extends PureComponent {
     }
     componentDidMount() {
         this.handleReset();
-        this.queryPurchasePrice();
+        // this.queryPurchasePrice();
     }
     /**
      * 点击翻页
@@ -176,15 +176,14 @@ class ImportPurchasePriceList extends PureComponent {
         const { spAdrId, spId } = this.state;
         const supplierInfo = spAdrId ? `${spAdrId}-1` : null;
         const { purchasePriceInfo = {} } = this.props;
-        if (!purchasePriceInfo) {
-            return null;
-        }
-        const { data = [], total, pageNum } = purchasePriceInfo;
         let errorResult = false;
-        for (let i = 0; i < data.length; i++) {
-            if (data[i].handleResult === 0) {
-                errorResult = true;
-            }
+        let data = [];
+        let total = null;
+        let pageNum = null;
+        if (purchasePriceInfo) {
+            data = purchasePriceInfo.data;
+            total = purchasePriceInfo.total;
+            pageNum = purchasePriceInfo.pageNum;
         }
         return (
             <div className="purchase-Price-list">
