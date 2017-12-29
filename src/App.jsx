@@ -48,20 +48,17 @@ const findIdByCode = (code, data) => {
     if (!data || !code) {
         return;
     }
-    let id = null;
-    data.forEach((value) => {
-        if (value.submenu.length > 0) {
+    let id = -1;
+    data.forEach(value => {
+        if (value.submenu.length === 0) {
             return value.submenu.forEach((subMenu) => {
                 if (subMenu.code === code) {
                     id = subMenu.id;
                 }
             });
         }
-        return false;
     });
-    if (id) {
-        return id;
-    }
+    return id;
 }
 
 @connect(
