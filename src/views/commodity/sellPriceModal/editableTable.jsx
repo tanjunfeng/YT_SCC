@@ -115,13 +115,18 @@ class EditableTable extends PureComponent {
         }
     }
 
-    renderColumnsNum = (text, record, column, index = -1) => (
-        <EditableCell
-            editable={record.editable && index > 0}
-            value={text}
-            onChange={value => this.handleChange(value, record.id, column)}
-        />
-    );
+    renderColumnsNum = (text, record, column, index) => {
+        let editable = record.editable;
+        if (column === 'startNumber' && index === 0) {
+            editable = false;
+        }
+        return (
+            <EditableCell
+                editable={editable}
+                value={text}
+                onChange={value => this.handleChange(value, record.id, column)}
+            />);
+    }
 
     renderColumnsPrice = (text = 0, record, column) => (
         <EditableCell
