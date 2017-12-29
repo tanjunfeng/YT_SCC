@@ -4,20 +4,13 @@
  * @author liujinyu
  */
 
-// 下单打折活动状态
 export const purchaseStatus = {
-    defaultValue: '',
+    defaultValue: '0',
     data: [{
-        key: '',
-        value: '全部'
-    }, {
         key: '0',
-        value: '已提交'
+        value: '未完成'
     }, {
         key: '1',
-        value: '已审核'
-    }, {
-        key: '2',
-        value: '已拒绝'
+        value: '已完成'
     }]
 }
