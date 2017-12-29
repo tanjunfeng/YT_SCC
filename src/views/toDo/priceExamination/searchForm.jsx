@@ -29,14 +29,14 @@ class SearchForm extends PureComponent {
     getFormData() {
         const {
             status,
-            branchCompanyId,
-            productId,
+            company,
+            product,
         } = this.props.form.getFieldsValue();
-        const prRecord = productId.record;
+        const prRecord = product.record;
         return Util.removeInvalid({
             status,
-            branchCompanyId: branchCompanyId.id,
-            productId: prRecord ? prRecord.productId : ''
+            companyId: company.id,
+            productNo: prRecord ? prRecord.productCode : ''
         });
     }
 
@@ -82,31 +82,18 @@ class SearchForm extends PureComponent {
                     </Col>
                     <Col span={8}>
                         <FormItem label="子公司">
-                            {getFieldDecorator('branchCompanyId', {
+                            {getFieldDecorator('company', {
                                 initialValue: { id: '', name: '' }
                             })(<BranchCompany />)}
                         </FormItem>
                     </Col>
                     <Col span={8}>
                         <FormItem label="商品">
-                            {getFieldDecorator('productId', {
+                            {getFieldDecorator('product', {
                                 initialValue: { productId: '', productCode: '', productName: '' }
                             })(<AddingGoodsByTerm />)}
                         </FormItem>
                     </Col>
-                    {/* <Col span={16}>
-                        <FormItem label="活动时间">
-                            {getFieldDecorator('promotionDateRange', {
-                                initialValue: []
-                            })(<RangePicker
-                                size="default"
-                                className="manage-form-enterTime"
-                                showTime={{ format: MINUTE_FORMAT }}
-                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
-                                placeholder={['开始时间', '结束时间']}
-                            />)}
-                        </FormItem>
-                    </Col> */}
                 </Row>
                 <Row gutter={40} type="flex" justify="end">
                     <Col>
