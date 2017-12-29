@@ -52,7 +52,7 @@ class ImportPurchasePriceList extends PureComponent {
         this.param = {};
         this.uploadProps = {
             name: 'excel',
-            action: `${window.config.apiHost}/prodPurchase/purchasePriceChangeUpload`,
+            action: `${window.config.apiHost}prodPurchase/purchasePriceChangeUpload`,
             beforeUpload: (file) => {
                 this.handleUpload(file)
             },
@@ -117,6 +117,7 @@ class ImportPurchasePriceList extends PureComponent {
         if (fileName.indexOf('.xls') === -1) {
             message.error('上传文件格式必须为excel格式，请重新尝试');
         }
+        console.log(file);
     }
 
     queryPurchasePrice = () => {
