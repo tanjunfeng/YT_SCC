@@ -33,6 +33,11 @@ class SearchForm extends PureComponent {
         this.selectMap = this.selectMap.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        const nextImportsId = nextProps.form.getFieldValue('importsId')
+        this.props.isCreateChange(nextImportsId)
+    }
+
     /**
      * 获取表单数据
      */
@@ -44,11 +49,10 @@ class SearchForm extends PureComponent {
             pariceDateRange,
             handleResult
         } = this.props.form.getFieldsValue();
-        const prRecord = product.record;
         return Util.removeInvalid({
             importsId,
             branchCompanyId: company.id,
-            productId: prRecord ? prRecord.productId : '',
+            productId: product.productId,
             uploadStartDate: pariceDateRange.length > 1 ? pariceDateRange[0].valueOf() : '',
             uploadEndDate: pariceDateRange.length > 1 ? pariceDateRange[1].valueOf() : '',
             handleResult
@@ -114,6 +118,7 @@ class SearchForm extends PureComponent {
                     message.success('上传成功');
                     this.props.form.setFieldsValue({ importsId: res.data })
                     this.handleSearch();
+                    // this.props.isCreateChange();
                 } else {
                     message.error(res.message);
                 }
@@ -145,7 +150,7 @@ class SearchForm extends PureComponent {
      * 创建变价单
      */
     handleCreateChange = () => {
-        this.props.createChange();
+        this.props.getCreateChange();
     }
 
     render() {
@@ -246,7 +251,7 @@ class SearchForm extends PureComponent {
                             </Button>
                         </FormItem>
                         <FormItem>
-                            <Button size="default" onClick={this.handleCreateChange}>
+                            <Button size="default" onClick={this.handleCreateChange} disabled={this.props.changeBtnDisabled}>
                                 创建变价单
                             </Button>
                         </FormItem>
@@ -262,8 +267,10 @@ SearchForm.propTypes = {
     handlePurchaseReset: PropTypes.func,
     exportList: PropTypes.func,
     exportTemplate: PropTypes.func,
-    createChange: PropTypes.func,
+    getCreateChange: PropTypes.func,
+    isCreateChange: PropTypes.func,
     exportBtnDisabled: PropTypes.bool,
+    changeBtnDisabled: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
 };
 

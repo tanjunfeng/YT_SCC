@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Table, Form, Modal, message } from 'antd';
+import { Table, Form, message } from 'antd';
 import { getPriceImportList, getIsSellVaild, getCreateSell } from '../../../actions';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
@@ -24,7 +24,7 @@ const pageSize = PAGE_SIZE
     priceImportlist: state.toJS().priceImport.priceImportlist,
 }), dispatch => bindActionCreators({
     getPriceImportList,
-    getIsSellVaild,
+    // getIsSellVaild,
     getCreateSell
 }, dispatch))
 
@@ -34,9 +34,14 @@ class PriceImport extends PureComponent {
         this.param = {};
         this.pageNum = 1;
         this.state = {
-            exportBtnDisabled: true
+            exportBtnDisabled: true,
+            changeBtnDisabled: true
         }
     }
+
+    // componentDidMount() {
+    //     this.isCreateChange()
+    // }
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.priceImportlist.data) {
@@ -66,7 +71,7 @@ class PriceImport extends PureComponent {
     * 创建变价单
     */
     getCreateChange = () => {
-        this.props.getCreateSell()
+        this.props.getCreateSell({ importsId: this.nextImportsId })
             .then(res => {
                 if (res.success) {
                     message.success('变价成功');
@@ -75,6 +80,20 @@ class PriceImport extends PureComponent {
                     message.error(res.message);
                 }
             })
+    }
+
+    /**
+    * 创建变价单按钮是否可用
+    */
+    isCreateChange = (nextImportsId) => {
+        this.nextImportsId = nextImportsId
+        const changeBtnDisabled = this.state.changeBtnDisabled
+        const nextChangeBtnDisabled = nextImportsId ? false : true
+        if (nextChangeBtnDisabled !== changeBtnDisabled) {
+            this.setState({
+                changeBtnDisabled: nextChangeBtnDisabled
+            })
+        }
     }
 
     /**
@@ -117,43 +136,20 @@ class PriceImport extends PureComponent {
         Utils.exportExcel(sellPriceChangeExcelTemplate);
     }
 
-    /**
-     * 创建变价单按钮不可用时的提示
-    */
-    showCreateChangeError = () => {
-        Modal.error({
-            title: '错误',
-            content: '变价单存在错误，请检查',
-            okText: '确定'
-        });
-    }
-
-    /**
-     * 创建变价单按钮是否可用
-    */
-    createChange = () => {
-        this.props.getIsSellVaild()
-            .then(res => {
-                if (res.data) {
-                    this.getCreateChange()
-                } else {
-                    this.showCreateChangeError()
-                }
-            })
-    }
-
     render() {
         const { data, total, pageNum } = this.props.priceImportlist;
         columns[columns.length - 1].render = this.renderOperations;
         return (
-            <div>
+            <div className="price-import-wrap">
                 <SearchForm
                     handlePurchaseSearch={this.handlePurchaseSearch}
                     handlePurchaseReset={this.handlePurchaseReset}
                     exportList={this.exportList}
                     exportTemplate={this.exportTemplate}
                     exportBtnDisabled={this.state.exportBtnDisabled}
-                    createChange={this.createChange}
+                    changeBtnDisabled={this.state.changeBtnDisabled}
+                    getCreateChange={this.getCreateChange}
+                    isCreateChange={this.isCreateChange}
                 />
                 <Table
                     dataSource={data}

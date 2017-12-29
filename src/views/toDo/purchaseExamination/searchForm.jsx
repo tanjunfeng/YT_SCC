@@ -7,12 +7,25 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, Select, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import Util from '../../../util/util';
 import { purchaseStatus } from '../constants';
-import { Supplier, SupplierAdderss, Commodity } from '../../../container/search';
+import { Commodity } from '../../../container/search';
+import SearchMind from '../../../components/searchMind';
+import { pubFetchValueList } from '../../../actions/pub';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+
+@connect(
+    state => ({
+        employeeCompanyId: state.toJS().user.data.user.employeeCompanyId
+    }),
+    dispatch => bindActionCreators({
+        pubFetchValueList
+    }, dispatch)
+)
 
 class SearchForm extends PureComponent {
     constructor(props) {
@@ -21,6 +34,10 @@ class SearchForm extends PureComponent {
         this.handleReset = this.handleReset.bind(this);
         this.getFormData = this.getFormData.bind(this);
         this.selectMap = this.selectMap.bind(this);
+        this.state = {
+            spId: '', // 供应商ID
+            isSupplyAdrDisabled: true, // 供应商地点禁用
+        }
     }
 
     /**
@@ -29,16 +46,13 @@ class SearchForm extends PureComponent {
     getFormData() {
         const {
             status,
-            supplier,
-            spAdr,
             product,
         } = this.props.form.getFieldsValue();
-        const prRecord = product.record;
         return Util.removeInvalid({
             status,
-            spNo: supplier.spNo,
-            spAdrNo: spAdr.providerNo,
-            productId: prRecord ? prRecord.productId : ''
+            spNo: this.supplierEncoded,
+            spAdrNo: this.supplierAdressId,
+            productNo: product.productCode
         });
     }
 
@@ -55,7 +69,51 @@ class SearchForm extends PureComponent {
      */
     handleReset() {
         this.props.form.resetFields(); // 清除当前查询条件
+        this.handleSupplyClear(); // 清除供应商
         this.props.handlePurchaseReset(); // 通知查询条件已清除
+    }
+
+    /**
+     * 选择供应商回调
+     * @param {object} record 表单值
+     */
+    handleSupplyChoose = ({ record }) => {
+        this.setState({
+            spId: record.spId,
+            orgId: this.props.employeeCompanyId,
+            isSupplyAdrDisabled: false
+        });
+        this.supplierEncoded = record.spNo;
+        this.handleSupplierAddressClear();
+    }
+
+    /**
+     * 清除供应商值
+     */
+    handleSupplyClear = () => {
+        this.supplier.reset();
+        this.supplierEncoded = '';
+        this.setState({
+            spId: '',
+            isSupplyAdrDisabled: true
+        });
+        this.handleSupplierAddressClear();
+    }
+
+    /**
+     * 选择供应商地点回调
+     * @param {object} record 表单值
+     */
+    handleSupplierAdressChoose = ({ record }) => {
+        this.supplierAdressId = record.providerNo;
+    }
+
+    /**
+     * 清空供应商地点编号
+     */
+    handleSupplierAddressClear = () => {
+        this.supplierLoc.reset();
+        this.supplierAdressId = '';
     }
 
     /**
@@ -84,16 +142,65 @@ class SearchForm extends PureComponent {
                     </Col>
                     <Col span={8}>
                         <FormItem label="供应商">
-                            {getFieldDecorator('supplier', {
-                                initialValue: { spId: '', spNo: '', companyName: '' }
-                            })(<Supplier />)}
+                            <SearchMind
+                                compKey="comSupplier"
+                                ref={ref => { this.supplier = ref }}
+                                fetch={(param) => this.props.pubFetchValueList({
+                                    condition: param.value,
+                                    pageNum: param.pagination.current || 1,
+                                    pageSize: param.pagination.pageSize
+                                }, 'supplierSearchBox')}
+                                onChoosed={this.handleSupplyChoose}
+                                onClear={this.handleSupplyClear}
+                                renderChoosedInputRaw={(row) => (
+                                    <div>{row.spNo}-{row.companyName}</div>
+                                )}
+                                rowKey="spId"
+                                pageSize={6}
+                                columns={[
+                                    {
+                                        title: '供应商编号',
+                                        dataIndex: 'spNo',
+                                        width: 80
+                                    }, {
+                                        title: '供应商名称',
+                                        dataIndex: 'companyName'
+                                    }
+                                ]}
+                            />
                         </FormItem>
                     </Col>
                     <Col span={8}>
                         <FormItem label="供应商地点">
-                            {getFieldDecorator('spAdr', {
-                                initialValue: { providerNo: '', providerName: '' }
-                            })(<SupplierAdderss />)}
+                            <SearchMind
+                                compKey="comSupplierLoc"
+                                ref={ref => { this.supplierLoc = ref }}
+                                fetch={(param) => this.props.pubFetchValueList({
+                                    orgId: this.props.employeeCompanyId,
+                                    pId: this.state.spId,
+                                    condition: param.value,
+                                    pageNum: param.pagination.current || 1,
+                                    pageSize: param.pagination.pageSize
+                                }, 'supplierAdrSearchBox')}
+                                onChoosed={this.handleSupplierAdressChoose}
+                                onClear={this.handleSupplierAddressClear}
+                                renderChoosedInputRaw={(row) => (
+                                    <div>{row.providerNo} - {row.providerName}</div>
+                                )}
+                                disabled={this.state.isSupplyAdrDisabled}
+                                rowKey="providerNo"
+                                pageSize={5}
+                                columns={[
+                                    {
+                                        title: '供应商地点编码',
+                                        dataIndex: 'providerNo',
+                                        width: 68
+                                    }, {
+                                        title: '供应商地点名称',
+                                        dataIndex: 'providerName'
+                                    }
+                                ]}
+                            />
                         </FormItem>
                     </Col>
                     <Col span={8}>
@@ -123,7 +230,9 @@ class SearchForm extends PureComponent {
 SearchForm.propTypes = {
     handlePurchaseSearch: PropTypes.func,
     handlePurchaseReset: PropTypes.func,
+    pubFetchValueList: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
+    employeeCompanyId: PropTypes.string
 };
 
 export default withRouter(Form.create()(SearchForm));

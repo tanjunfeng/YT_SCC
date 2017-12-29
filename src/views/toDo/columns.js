@@ -294,17 +294,6 @@ export const purchaseListColumns = [
         dataIndex: 'processType',
         key: 'processType',
     },
-    // {
-    //     title: '状态',
-    //     dataIndex: 'status',
-    //     key: 'status',
-    //     render: text => {
-    //         const statusItem = purchaseStatus.data.find(val => (
-    //             val.key === text.toString()
-    //         ))
-    //         return statusItem.value
-    //     }
-    // },
     {
         title: '供应商编号',
         dataIndex: 'spNo',
