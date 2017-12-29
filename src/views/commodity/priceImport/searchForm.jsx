@@ -39,15 +39,15 @@ class SearchForm extends PureComponent {
     getFormData() {
         const {
             importsId,
-            branchCompanyId,
-            productId,
+            company,
+            product,
             pariceDateRange,
             handleResult
         } = this.props.form.getFieldsValue();
-        const prRecord = productId.record;
+        const prRecord = product.record;
         return Util.removeInvalid({
             importsId,
-            branchCompanyId: branchCompanyId.id,
+            branchCompanyId: company.id,
             productId: prRecord ? prRecord.productId : '',
             uploadStartDate: pariceDateRange.length > 1 ? pariceDateRange[0].valueOf() : '',
             uploadEndDate: pariceDateRange.length > 1 ? pariceDateRange[1].valueOf() : '',
@@ -182,14 +182,14 @@ class SearchForm extends PureComponent {
                     </Col>
                     <Col span={8}>
                         <FormItem label="子公司">
-                            {getFieldDecorator('branchCompanyId', {
+                            {getFieldDecorator('company', {
                                 initialValue: { id: '', name: '' }
                             })(<BranchCompany />)}
                         </FormItem>
                     </Col>
                     <Col span={8}>
                         <FormItem label="商品">
-                            {getFieldDecorator('productId', {
+                            {getFieldDecorator('product', {
                                 initialValue: { productId: '', productCode: '', productName: '' }
                             })(<AddingGoodsByTerm />)}
                         </FormItem>
