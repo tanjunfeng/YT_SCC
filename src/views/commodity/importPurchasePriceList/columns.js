@@ -30,7 +30,7 @@ export const purchasePriceColumns = [
                 return null;
             }
             return (
-                <div>
+                <div className="priceResult">
                     <span className={text === 0 ? 'errorResult' : 'sucResult'} />
                     {processResult.data[text + 1].value}
                 </div>
