@@ -1,13 +1,12 @@
 /**
  * @file formColumns.js
- * @author shijh
+ * @author shijh,liujinyu
  *
  * 定义列表数据
  */
 import React from 'react';
 import moment from 'moment';
 import { locType, poStatus } from '../../constant/procurement';
-import { purchaseStatus } from './constants';
 
 const purchase = ['普通采购单'];
 // 供应商列表
@@ -295,21 +294,21 @@ export const purchaseListColumns = [
         dataIndex: 'processType',
         key: 'processType',
     },
-    {
-        title: '状态',
-        dataIndex: 'status',
-        key: 'status',
-        render: text => {
-            const statusItem = purchaseStatus.data.find(val => (
-                val.key === text.toString()
-            ))
-            return statusItem.value
-        }
-    },
+    // {
+    //     title: '状态',
+    //     dataIndex: 'status',
+    //     key: 'status',
+    //     render: text => {
+    //         const statusItem = purchaseStatus.data.find(val => (
+    //             val.key === text.toString()
+    //         ))
+    //         return statusItem.value
+    //     }
+    // },
     {
         title: '供应商编号',
-        dataIndex: 'spId',
-        key: 'spId',
+        dataIndex: 'spNo',
+        key: 'spNo',
     },
     {
         title: '供应商名称',
@@ -318,8 +317,8 @@ export const purchaseListColumns = [
     },
     {
         title: '供应商地点编号',
-        dataIndex: 'spAdrId',
-        key: 'spAdrId',
+        dataIndex: 'spAdrNo',
+        key: 'spAdrNo',
     }, {
         title: '供应商地点名称',
         dataIndex: 'spAdrName',
@@ -327,8 +326,8 @@ export const purchaseListColumns = [
     },
     {
         title: '商品编号',
-        dataIndex: 'productId',
-        key: 'productId',
+        dataIndex: 'productNo',
+        key: 'productNo',
     },
     {
         title: '商品名称',
@@ -337,8 +336,8 @@ export const purchaseListColumns = [
     },
     {
         title: '变更日期',
-        dataIndex: 'createTime',
-        key: 'createTime',
+        dataIndex: 'modifyTime',
+        key: 'modifyTime',
         render: (text) => (
             <span>
                 {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
@@ -349,7 +348,6 @@ export const purchaseListColumns = [
         title: '当前节点',
         dataIndex: 'currentNode',
         key: 'currentNode'
-
     },
     {
         title: '操作',
@@ -366,30 +364,19 @@ export const priceListColumns = [
         key: 'processType',
     },
     {
-        title: '状态',
-        dataIndex: 'status',
-        key: 'status',
-        render: text => {
-            const statusItem = purchaseStatus.data.find(val => (
-                val.key === text.toString()
-            ))
-            return statusItem.value
-        }
-    },
-    {
         title: '子公司编号',
-        dataIndex: 'branchCompanyId',
-        key: 'branchCompanyId',
+        dataIndex: 'companyId',
+        key: 'companyId',
     },
     {
         title: '子公司名称',
-        dataIndex: 'branchCompanyName',
-        key: 'branchCompanyName',
+        dataIndex: 'companyName',
+        key: 'companyName',
     },
     {
         title: '商品编号',
-        dataIndex: 'productId',
-        key: 'productId',
+        dataIndex: 'productNo',
+        key: 'productNo',
     },
     {
         title: '商品名称',
@@ -398,8 +385,8 @@ export const priceListColumns = [
     },
     {
         title: '变更日期',
-        dataIndex: 'createTime',
-        key: 'createTime',
+        dataIndex: 'modifyTime',
+        key: 'modifyTime',
         render: (text) => (
             <span>
                 {moment(parseInt(text, 10)).format('YYYY-MM-DD')}
@@ -418,3 +405,36 @@ export const priceListColumns = [
         key: 'operation'
     }
 ]
+
+// 查看审核意见弹窗表格
+export const seeModalColumns = [
+    {
+        title: '审批人',
+        dataIndex: 'handler',
+        key: 'handler',
+    },
+    {
+        title: '审批时间',
+        dataIndex: 'handlerDate',
+        key: 'handlerDate',
+        render: (text) => (
+            <span>
+                {moment(parseInt(text, 10)).format('YYYY-MM-DD HH:mm:ss')}
+            </span>
+        )
+    },
+    {
+        title: '审批结果',
+        dataIndex: 'pass',
+        key: 'pass',
+        render: text => (
+            text ? '通过' : '拒绝'
+        )
+    },
+    {
+        title: '审批意见',
+        dataIndex: 'content',
+        key: 'content'
+    }
+]
+

@@ -9,7 +9,7 @@ import { Button, Form, Select, Row, Col } from 'antd';
 import { withRouter } from 'react-router';
 import Util from '../../../util/util';
 import { purchaseStatus } from '../constants';
-import { Supplier, SupplierAdderss, AddingGoodsByTerm } from '../../../container/search';
+import { Supplier, SupplierAdderss, Commodity } from '../../../container/search';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -29,15 +29,15 @@ class SearchForm extends PureComponent {
     getFormData() {
         const {
             status,
-            spId,
-            spAdrId,
-            productId,
+            supplier,
+            spAdr,
+            product,
         } = this.props.form.getFieldsValue();
-        const prRecord = productId.record;
+        const prRecord = product.record;
         return Util.removeInvalid({
             status,
-            spId: spId.spId,
-            spAdrId: spAdrId.providerNo,
+            spNo: supplier.spNo,
+            spAdrNo: spAdr.providerNo,
             productId: prRecord ? prRecord.productId : ''
         });
     }
@@ -84,38 +84,26 @@ class SearchForm extends PureComponent {
                     </Col>
                     <Col span={8}>
                         <FormItem label="供应商">
-                            {getFieldDecorator('spId', {
+                            {getFieldDecorator('supplier', {
                                 initialValue: { spId: '', spNo: '', companyName: '' }
                             })(<Supplier />)}
                         </FormItem>
                     </Col>
                     <Col span={8}>
                         <FormItem label="供应商地点">
-                            {getFieldDecorator('spAdrId', {
+                            {getFieldDecorator('spAdr', {
                                 initialValue: { providerNo: '', providerName: '' }
                             })(<SupplierAdderss />)}
                         </FormItem>
                     </Col>
                     <Col span={8}>
                         <FormItem label="商品">
-                            {getFieldDecorator('productId', {
-                                initialValue: { productId: '', productCode: '', productName: '' }
-                            })(<AddingGoodsByTerm />)}
+                            {getFieldDecorator('product', {
+                                initialValue: { productId: '', saleName: '' }
+                            })(<Commodity />)
+                            }
                         </FormItem>
                     </Col>
-                    {/* <Col span={16}>
-                        <FormItem label="活动时间">
-                            {getFieldDecorator('promotionDateRange', {
-                                initialValue: []
-                            })(<RangePicker
-                                size="default"
-                                className="manage-form-enterTime"
-                                showTime={{ format: MINUTE_FORMAT }}
-                                format={`${DATE_FORMAT} ${MINUTE_FORMAT}`}
-                                placeholder={['开始时间', '结束时间']}
-                            />)}
-                        </FormItem>
-                    </Col> */}
                 </Row>
                 <Row gutter={40} type="flex" justify="end">
                     <Col>
