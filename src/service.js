@@ -751,6 +751,8 @@ export const queryPurchasePriceInfo = (params) => http.get('/prodPurchase/purcha
 export const purchasePriceChangeUpload = (params) => http.post('/prodPurchase/purchasePriceChangeUpload', params);
 // 创建采购进价变价单
 export const createPurchase = () => http.post('/prodPurchase/createPurchase');
+// 采购进价验证创建变价单是否可用
+export const isPurchaseVaild = () => http.get('/prodPurchase/isPurchaseVaild');
 // 新增供应商信息
 export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);
 

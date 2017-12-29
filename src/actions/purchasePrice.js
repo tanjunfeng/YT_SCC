@@ -8,6 +8,7 @@ import ActionType from './ActionType';
 import {
     queryPurchasePriceInfo as queryPurchasePriceInfoService,
     createPurchase as createPurchaseService,
+    isPurchaseVaild as isPurchaseVaildService,
 } from '../service';
 
 const queryPurchasePriceAction = (data) => ({
@@ -36,6 +37,22 @@ export const createPurchase = (params) => dispatch => (
         createPurchaseService(params)
             .then(res => {
                 dispatch(createPurchaseAction(res.data));
+                resolve(res);
+            })
+            .catch(err => reject(err));
+    })
+)
+
+const isPurchaseVaildAction = (data) => ({
+    type: ActionType.IS_PURCHASE_VAILD,
+    payload: data
+});
+
+export const isPurchaseVaild = (params) => dispatch => (
+    new Promise((resolve, reject) => {
+        isPurchaseVaildService(params)
+            .then(res => {
+                dispatch(isPurchaseVaildAction(res.data));
                 resolve(res);
             })
             .catch(err => reject(err));

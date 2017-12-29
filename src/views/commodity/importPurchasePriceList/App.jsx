@@ -15,6 +15,7 @@ import { pubFetchValueList } from '../../../actions/pub';
 import {
     queryPurchasePriceInfo,
     createPurchase,
+    isPurchaseVaild,
 } from '../../../actions/purchasePrice';
 import Utils from '../../../util/util';
 import {processResult} from '../../../constant/procurement';
@@ -32,10 +33,12 @@ const Option = Select.Option;
 
 @connect(state => ({
     purchasePriceInfo: state.toJS().purchasePrice.purchasePriceInfo,
+    purchaseVaild: state.toJS().purchasePrice.isPurchaseVaild,
 }), dispatch => bindActionCreators({
     pubFetchValueList,
     queryPurchasePriceInfo,
-    createPurchase
+    createPurchase,
+    isPurchaseVaild,
 }, dispatch))
 
 class ImportPurchasePriceList extends PureComponent {
@@ -49,20 +52,32 @@ class ImportPurchasePriceList extends PureComponent {
         this.param = {};
         this.uploadProps = {
             name: 'excel',
-            action: '/prodPurchase/purchasePriceChangeUpload',
-            onChange(info) {
+            action: `${window.config.apiHost}/prodPurchase/purchasePriceChangeUpload`,
+            beforeUpload: (file) => {
+                this.handleUpload(file)
+            },
+            onChange: (info) => {
                 if (info.file.status === 'done') {
-                    message.success(`${info.file.name} 导入成功`);
+                    const res = info.file.response;
+                    if (res.code === 200) {
+                        message.success('上传成功');
+                        this.props.form.setFieldsValue({ id: res.data })
+                        this.handleQuery();
+                        this.props.isPurchaseVaild();
+                    } else {
+                        message.error(res.message);
+                    }
                 } else if (info.file.status === 'error') {
-                    message.error(`${info.file.name} 导入失败`);
+                    message.error(`${info.file.name} 上传失败.`);
                 }
             },
         };
     }
     componentDidMount() {
         this.handleReset();
-        // this.queryPurchasePrice();
+        this.props.isPurchaseVaild();
     }
+
     /**
      * 点击翻页
      * @param {pageNumber}    pageNumber
@@ -93,6 +108,17 @@ class ImportPurchasePriceList extends PureComponent {
             })
         }
     }
+
+    /**
+    * 上传
+    */
+    handleUpload = (file) => {
+        const fileName = file.name;
+        if (fileName.indexOf('.xls') === -1) {
+            message.error('上传文件格式必须为excel格式，请重新尝试');
+        }
+    }
+
     queryPurchasePrice = () => {
         this.props.queryPurchasePriceInfo(this.param);
     }
@@ -173,10 +199,8 @@ class ImportPurchasePriceList extends PureComponent {
     }
     render() {
         const { getFieldDecorator} = this.props.form;
-        const { spAdrId, spId } = this.state;
-        const supplierInfo = spAdrId ? `${spAdrId}-1` : null;
+        const { spId } = this.state;
         const { purchasePriceInfo = {} } = this.props;
-        let errorResult = false;
         let data = [];
         let total = null;
         let pageNum = null;
@@ -214,6 +238,7 @@ class ImportPurchasePriceList extends PureComponent {
                                     ref={ref => { this.supplyAddressSearchMind = ref }}
                                     fetch={(params) =>
                                         this.props.pubFetchValueList(Utils.removeInvalid({
+                                            pId: this.state.spId,
                                             condition: params.value,
                                             pageSize: params.pagination.pageSize,
                                             pageNum: params.pagination.current || 1
@@ -253,13 +278,12 @@ class ImportPurchasePriceList extends PureComponent {
                                     ref={ref => { this.product = ref }}
                                     fetch={(params) =>
                                         this.props.pubFetchValueList({
-                                            supplierInfo,
                                             teamText: params.value,
                                             pageNum: params.pagination.current || 1,
                                             pageSize: params.pagination.pageSize
                                         }, 'queryProductForSelect')
                                     }
-                                    disabled={spId === ''}
+                                    // disabled={spId === ''}
                                     addonBefore="商品"
                                     onChoosed={this.handleProductChoosed}
                                     renderChoosedInputRaw={(product) => (
@@ -331,7 +355,7 @@ class ImportPurchasePriceList extends PureComponent {
                             <Button type="primary" size="default" onClick={this.handleDownResult} disabled={data.length === 0}>
                                 下载导入结果
                             </Button>
-                            <Button type="primary" onClick={this.handleCreate} size="default" disabled={data.length === 0 || errorResult}>
+                            <Button type="primary" onClick={this.handleCreate} size="default" disabled={!this.props.purchaseVaild}>
                                 创建变价单
                             </Button>
                         </Col>
@@ -364,5 +388,7 @@ ImportPurchasePriceList.propTypes = {
     queryPurchasePriceInfo: PropTypes.func,
     purchasePriceInfo: PropTypes.objectOf(PropTypes.any),
     createPurchase: PropTypes.func,
+    isPurchaseVaild: PropTypes.func,
+    purchaseVaild: PropTypes.bool,
 }
 export default withRouter(Form.create()(ImportPurchasePriceList));
