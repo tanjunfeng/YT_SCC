@@ -132,6 +132,7 @@ class EditableTable extends PureComponent {
         <EditableCell
             editable={record.editable}
             value={text}
+            type="price"
             onChange={value => this.handleChange(value, record.id, column)}
         />
     );
