@@ -34,7 +34,7 @@ class Commodity extends PureComponent {
         this.props.onChange({ productId: '', saleName: '' });
     }
 
-     /**
+    /**
      * 值清单
      */
     handleChoose = ({ record }) => {
