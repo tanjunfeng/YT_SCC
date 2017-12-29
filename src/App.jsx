@@ -50,7 +50,7 @@ const findIdByCode = (code, data) => {
     }
     let id = -1;
     data.forEach(value => {
-        if (value.submenu.length === 0) {
+        if (value.submenu.length > 0) {
             return value.submenu.forEach((subMenu) => {
                 if (subMenu.code === code) {
                     id = subMenu.id;
