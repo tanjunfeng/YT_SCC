@@ -52,32 +52,48 @@ class EditableTable extends PureComponent {
     }
 
     edit = (id) => {
-        const newData = [...this.state.prices];
-        const target = newData.filter(item => id === item.id)[0];
+        const prices = [...this.state.prices];
+        const target = prices.filter(item => id === item.id)[0];
         if (target) {
             target.editable = true;
-            this.setState({ prices: newData });
+            this.setState({ prices });
         }
     }
 
+    isContinue = (prices) => {
+        const len = prices.length;
+        for (let i = 0; i < len - 1; i++) {
+            const price = prices[i];
+            const nextPrice = prices[i + 1];
+            if (price.endNumber !== nextPrice.startNumber - 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    notify = (prices) => {
+        this.props.onChange(prices, this.isContinue(prices));
+    }
+
     save = (id) => {
-        const newData = [...this.state.prices];
-        const target = newData.filter(item => id === item.id)[0];
+        const prices = [...this.state.prices];
+        const target = prices.filter(item => id === item.id)[0];
         if (target) {
             delete target.editable;
-            this.props.onChange(newData);
-            this.setState({ prices: newData });
-            this.cacheData = newData.map(item => ({ ...item }));
+            this.setState({ prices });
+            this.cacheData = prices.map(item => ({ ...item }));
+            this.notify(prices);
         }
     }
 
     cancel = (id) => {
-        const newData = [...this.state.prices];
-        const target = newData.filter(item => id === item.id)[0];
+        const prices = [...this.state.prices];
+        const target = prices.filter(item => id === item.id)[0];
         if (target) {
             Object.assign(target, this.cacheData.filter(item => id === item.id)[0]);
             delete target.editable;
-            this.setState({ prices: newData });
+            this.setState({ prices });
         }
     }
 
@@ -92,11 +108,11 @@ class EditableTable extends PureComponent {
     }
 
     handleChange = (value, id, column) => {
-        const newData = [...this.state.prices];
-        const target = newData.filter(item => id === item.id)[0];
+        const prices = [...this.state.prices];
+        const target = prices.filter(item => id === item.id)[0];
         if (target) {
             target[column] = value;
-            this.setState({ prices: newData });
+            this.setState({ prices });
         }
     }
 
