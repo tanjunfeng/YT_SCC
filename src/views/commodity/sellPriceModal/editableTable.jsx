@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import { Table, Popconfirm, Button } from 'antd';
 
 import EditableCell from './editableCell';
+import { stepPriceColumns as columns } from './columns';
 
 class EditableTable extends PureComponent {
     constructor(props) {
@@ -18,27 +19,11 @@ class EditableTable extends PureComponent {
             prices: props.value.list
         }
         this.cacheData = props.value.list.map(item => ({ ...item }));
-        this.columns = [{
-            dataIndex: 'startNumber',
-            title: '起始数量',
-            render: (text, record, index) => this.renderColumnsNum(text, record, 'startNumber', index)
-        }, {
-            dataIndex: 'endNumber',
-            title: '终止数量',
-            render: (text, record) => this.renderColumnsNum(text, record, 'endNumber')
-        }, {
-            dataIndex: 'price',
-            title: '最新售价/元',
-            render: (text, record) => this.renderColumnsPrice(text, record, 'price')
-        }, {
-            dataIndex: 'rate',
-            title: '商品毛利率',
-            render: () => '20%'
-        }, {
-            dataIndex: 'operation',
-            title: '操作',
-            render: (text, record, index) => this.renderOptions(text, record, index)
-        }];
+        columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, 'startNumber', index)
+        columns[1].render = (text, record) => this.renderColumnsNum(text, record, 'endNumber')
+        columns[2].render = (text, record) => this.renderColumnsPrice(text, record, 'price')
+        columns[3].render = () => '20%'
+        columns[4].render = (text, record, index) => this.renderOptions(text, record, index)
     }
 
     /**
@@ -47,8 +32,8 @@ class EditableTable extends PureComponent {
     getColumns = () => {
         const { readOnly } = this.props.value;
         return readOnly
-            ? this.columns.filter((c, index) => index < 4)
-            : this.columns
+            ? columns.filter((c, index) => index < 4)
+            : columns
     }
 
     edit = (id) => {
@@ -60,12 +45,29 @@ class EditableTable extends PureComponent {
         }
     }
 
+    /**
+     * 起始数量比终止数量还大
+     */
+    isPriceInvalid = price => (price.startNumber >= price.endNumber)
+
+    /**
+     * 价格区间是否连续
+     *
+     * 如果最后一条价格的起始数量大于等于终止数量，则价格区间一定不连续
+     * 本条的起始数量不是上一条的终止数量的后继，则不连续，起始数量大于等于种植数量也不连续
+     */
     isContinue = (prices) => {
         const len = prices.length;
+        if (this.isPriceInvalid(prices[len - 1])) {
+            return false;
+        }
         for (let i = 0; i < len - 1; i++) {
             const price = prices[i];
             const nextPrice = prices[i + 1];
             if (price.endNumber !== nextPrice.startNumber - 1) {
+                return false;
+            }
+            if (this.isPriceInvalid(price)) {
                 return false;
             }
         }
@@ -122,13 +124,23 @@ class EditableTable extends PureComponent {
             // 取出最后一个字段的起步价
             const { endNumber, price, rate } = prices[prices.length - 1];
             prices.push({
+                id: String(new Date().getTime()),
                 startNumber: endNumber + 1,
                 endNumber: endNumber + 2,
                 price,
                 rate
             });
-            this.setState({ prices });
+        } else {
+            const { startNumber = 1, price = 100.00, rate } = this.props.value;
+            prices.push({
+                id: String(new Date().getTime()),
+                startNumber,
+                endNumber: startNumber + 1,
+                price,
+                rate
+            });
         }
+        this.setState({ prices });
     }
 
     renderColumnsNum = (text, record, column, index) => {
