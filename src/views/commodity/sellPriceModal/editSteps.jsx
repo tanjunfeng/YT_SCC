@@ -44,36 +44,16 @@ class EditSteps extends Component {
         };
     }
 
-    /**
-     * 获取表单数据
-     */
-    getFormData = () => {
-        const { newDatas = {} } = this.props;
-        const {
-            newestPrice,
-        } = this.props.form.getFieldsValue();
-        return Util.removeInvalid({
-            newestPrice,
-        });
-    }
-
-    handlePressEnter = (event) => {
-        const value = +(event.target.value) || 0;
-        // 回车操作时保存数量
-        if (event.keyCode === 13) {
-            this.handleChange(value);
-        }
-    }
-
-    handleBranchCompanyChange = (record) => {
-        this.props.onEditChange(record);
+    handleNewestPriceChange = (num) => {
+        const { isEdit } = this.props;
+        const service = isEdit ? this.props.onEditChange : this.props.onCreateChange;
+        service(num);
     }
 
     render() {
-        const { prefixCls, form, newDatas = {}, values = {} } = this.props;
+        const { prefixCls, form, newDatas = {}, values = {}, isEdit, startNumber } = this.props;
         const { getFieldDecorator } = form;
         const { sellSectionPrices = [] } = newDatas;
-        this.getEditableTableValues()
         return (
             <div className={`${prefixCls}-item item-max-height`}>
                 <div className={`${prefixCls}-item-title`}>
@@ -86,7 +66,7 @@ class EditSteps extends Component {
                     <FormItem>
                         {getFieldDecorator('sellSectionPrices', {
                             initialValue: this.getEditableTableValues(sellSectionPrices)
-                        })(<EditableTable />)}
+                        })(<EditableTable startNumber={startNumber || newDatas.minNumber} />)}
                     </FormItem>
                 </div>
                 <Row>
@@ -102,21 +82,25 @@ class EditSteps extends Component {
                                         step={0.01}
                                         formatter={text => Math.floor(text * 100) / 100}
                                         parser={text => Math.floor(text * 100) / 100}
-                                        onKeyUp={this.handlePressEnter}
+                                        onChange={this.handleNewestPriceChange}
                                     />
                                     )}
                             </span>
                         </FormItem>
                         <FormItem label="商品采购价格：">
-                            <span><i className={`new-price-state-${newDatas.state}`} />{newDatas.state || '-'}</span>
+                            <span>{newDatas.suggestPrice || '-'}</span>
                         </FormItem>
-                        <FormItem label="子公司">
-                            {getFieldDecorator('branchCompany', {
-                                initialValue: { id: '', name: '' }
-                            })(<BranchCompany
-                                onChange={this.handleBranchCompanyChange}
-                            />)}
-                        </FormItem>
+                        {
+                            isEdit ?
+                                <FormItem label="子公司：">
+                                    <span>{newDatas.branchCompanyId} - {newDatas.branchCompanyName}</span>
+                                </FormItem> :
+                                <FormItem label="子公司：">
+                                    {getFieldDecorator('branchCompany', {
+                                        initialValue: { id: '', name: '' }
+                                    })(<BranchCompany />)}
+                                </FormItem>
+                        }
                     </Col>
                 </Row>
             </div>

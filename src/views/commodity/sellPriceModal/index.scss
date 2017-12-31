@@ -5,7 +5,7 @@
         display: inline-block;
     }
     .last-freightConditions{
-        min-height: 211px;
+        min-height: 235px;
     }
     .changeAfter{
         width: 49%;
@@ -93,6 +93,10 @@
         .editable-cell .ant-input-number {
             width: 60px;
         }
+    }
+    .read-only-footer{
+        height: 32px;
+        line-height: 32px;
     }
     .new-price-state {
         &-1 {
@@ -182,7 +186,7 @@
 }
 .sell-prigce-edit-footer{
     .ant-row{
-        display: flex;
+        display: inline-flex;
         margin-bottom: 0;
     }
 }

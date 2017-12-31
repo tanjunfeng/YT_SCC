@@ -66,7 +66,7 @@ class OnlyReadSteps extends Component {
                             <EditableTable />)}
                     </FormItem>
                 </div>
-                <div>
+                <div className="read-only-footer">
                     <span>*建议零售价(元):</span>
                     <span className={
                         newDatas.sellPricesInReview.suggestPrice !== newDatas.suggestPrice ?
@@ -74,7 +74,7 @@ class OnlyReadSteps extends Component {
                     >{newDatas.sellPricesInReview.suggestPrice}</span>
                     <span>商品采购价格：</span>
                     <span className={
-                        newDatas.sellPricesInReview.purchasePrice !== newDatas.purchasePrice ?
+                        newDatas.sellPricesInReview.suggestPrice !== newDatas.suggestPrice ?
                             'sell-modal-border' : null}
                     >{newDatas.sellPricesInReview.state || '-'}</span>
                     <span className="edit-input">子公司:</span>

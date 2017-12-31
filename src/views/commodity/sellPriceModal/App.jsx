@@ -30,19 +30,19 @@ import EditSteps from './editSteps';
         toAddSellPrice
     }, dispatch)
 )
+
 class SellPriceModal extends Component {
     constructor(props) {
         super(props);
         this.handleMaxChange = this.handleMaxChange.bind(this);
 
         this.state = {
-            isEditPrice: false,
-            currentInside: null,
-            insideValue: null,
-            confirmVisible: false,
-            branchCompanyId: '',
-            branchCompanyName: '',
-            CretFreConditObj: {}
+            newestPrice: null,
+            branchCompanyId: null,
+            branchCompanyName: null,
+            isContinue: false,
+            CretFreConditObj: {},
+            FreCondit: {}
         }
         this.isSub = false; // 判断是否为已提交状态(true为已提交)
         this.isDisabled = false;
@@ -83,10 +83,11 @@ class SellPriceModal extends Component {
     }
 
     handleOk = () => {
-        const { datas, isEdit } = this.props;
+        const { datas, isEdit, values = {} } = this.props;
         const { validateFields, setFields } = this.props.form;
-        const { branchCompanyId, branchCompanyName, CretFreConditObj } = this.state;
-        const data = {}
+        const { branchCompanyId, branchCompanyName, CretFreConditObj, FreCondit, isContinue } = this.state;
+        const newDatas = datas.data;
+        const data = {};
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
@@ -95,7 +96,18 @@ class SellPriceModal extends Component {
                 message.error('请选择子公司！');
                 return null;
             }
-            Object.assign(result, this.childCompany);
+            if (!isEdit && !CretFreConditObj.minNumber) {
+                message.error('请输入最小起订量！');
+                return null;
+            }
+            if (!isEdit && !CretFreConditObj.maxNumber) {
+                message.error('请输入最大销售数量！');
+                return null;
+            }
+            if (isContinue) {
+                message.error('阶梯价格不连续!');
+                return null;
+            }
             if (isEdit) {
                 Object.assign(result, {
                     id: datas.id,
@@ -103,11 +115,14 @@ class SellPriceModal extends Component {
                 })
             }
             Object.assign(data, {
-                branchCompanyId: this.state.branchCompanyId,
-                branchCompanyName: this.state.branchCompanyName,
-                ...CretFreConditObj
+                branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
+                branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
+                newestPrice: this.state.newestPrice,
+                productId: values.id,
+                ...CretFreConditObj,
+                ...FreCondit
             })
-            this.props.onChange(data, isEdit)
+            this.props.handlePostAdd(data, isEdit)
             return null;
         })
     }
@@ -116,8 +131,9 @@ class SellPriceModal extends Component {
         this.props.handleClose();
     }
 
-    handleChange = (data) => {
+    handleCompyChange = (object, data) => {
         this.setState({
+            newestPrice: object.newestPrice,
             branchCompanyId: data.id,
             branchCompanyName: data.name,
         })
@@ -142,22 +158,22 @@ class SellPriceModal extends Component {
         }
     }
 
-    handleEditSteps = (record) => {
+    handleEditSteps = (num) => {
         this.setState({
-            branchCompanyId: record.id,
-            branchCompanyName: record.name
+            newestPrice: num
         })
     }
 
-    handleonFreConditChange = (data) => {
-        console.log(data)
+    handleOnFreConditChange = (data) => {
+        this.setState({
+            FreCondit: data
+        })
     }
 
     handleonCretFreConditChange = (data) => {
-        // console.log(data)
-        // this.setState({
-        //     CretFreConditObj: data
-        // })
+        this.setState({
+            CretFreConditObj: data
+        })
     }
 
     render() {
@@ -191,11 +207,12 @@ class SellPriceModal extends Component {
                                         isAfter={isAfter}
                                         isSub={newDatas.auditStatus === 1}
                                         newDatas={newDatas}
-                                        onFreConditChange={this.handleonFreConditChange}
+                                        onFreConditChange={this.handleOnFreConditChange}
                                     />
                                     <EditSteps
                                         newDatas={newDatas}
-                                        startNumber={this.state.startNumber}
+                                        isEdit={isEdit}
+                                        startNumber={this.state.CretFreConditObj.minNumber}
                                         onEditChange={this.handleEditSteps}
                                     />
                                 </div>
@@ -209,7 +226,7 @@ class SellPriceModal extends Component {
                                 />
                                 <OnlyReadSteps
                                     newDatas={newDatas}
-                                    startNumber={this.state.startNumber}
+                                    startNumber={this.state.CretFreConditObj.minNumber}
                                 />
                             </div >
                             <Row className="edit-state-list">
@@ -239,13 +256,13 @@ class SellPriceModal extends Component {
                                         isEdit={isEdit}
                                         values={values}
                                         newDatas={newDatas}
-                                        isAfter={isAfter}
                                         onDataChange={this.handleonCretFreConditChange}
                                     />
                                     <EditSteps
                                         newDatas={newDatas}
-                                        startNumber={this.state.startNumber}
-                                        onEditChange={this.handleChange}
+                                        isEdit={isEdit}
+                                        startNumber={this.state.CretFreConditObj.minNumber}
+                                        onCreateChange={this.handleCompyChange}
                                         values={values}
                                     />
                                 </div>

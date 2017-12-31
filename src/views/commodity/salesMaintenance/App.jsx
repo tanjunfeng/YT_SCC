@@ -195,10 +195,6 @@ class ProcurementMaintenance extends PureComponent {
         })
     }
 
-    handleStepChange = (data, isEdit) => {
-        console.log(data, isEdit)
-    }
-
     handlePostAdd = (data, isEdit) => {
         const { getProductById = {} } = this.props;
         const service = isEdit ? this.props.updateSellPrice : this.props.postSellPrice;
@@ -258,7 +254,6 @@ class ProcurementMaintenance extends PureComponent {
                         handleClose={this.handleClose}
                         handlePostAdd={this.handlePostAdd}
                         isEdit={this.state.isEdit}
-                        onChange={this.handleStepChange}
                     />
                 }
             </div>

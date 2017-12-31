@@ -313,7 +313,7 @@ export const latestPriceStateOption = {
 }
 
 // 采购模式
-export const preHarvestPinStatus = {
+export const preHarvestPinStatusOption = {
     defaultValue: '0',
     data: [{
         key: '0',

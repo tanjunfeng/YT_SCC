@@ -11,7 +11,7 @@ import Util from '../../../util/util';
 import { productAddPriceVisible, toAddSellPrice } from '../../../actions/producthome';
 import { fetchAddProdPurchase } from '../../../actions';
 import {
-    preHarvestPinStatus,
+    preHarvestPinStatusOption,
 } from '../../../constant/searchParams';
 
 const FormItem = Form.Item;
@@ -40,38 +40,18 @@ class FreightConditions extends Component {
             salesInsideNumber: null
         }
         this.choose = 0;
+        this.minNumber = null;
+        this.maxNumber = null;
     }
 
     componentDidMount() {
-        const { newDatas = {}, isEdit } = this.props;
+        const { datas } = this.props;
         const { validateFields, setFields } = this.props.form;
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
-            result.productId = newDatas.id || newDatas.productId;
-            if (!isEdit && (!branchCompanyId || !branchCompanyName)) {
-                message.error('请选择子公司！');
-                return null;
-            }
-            Object.assign(result, this.childCompany);
-            if (isEdit) {
-                Object.assign(result, {
-                    id: datas.id,
-                    productId: datas.productId
-                })
-            }
-            Object.assign(data, {
-                branchCompanyId: this.state.branchCompanyId,
-                branchCompanyName: this.state.branchCompanyName,
-                ...CretFreConditObj
-            })
-            this.props.onChange(data, isEdit)
-            return null;
+            result.productId = datas.id || datas.productId;
         })
-    }
-
-    componentWillReceiveProps() {
-        this.props.onDataChange(this.getFormData())
     }
 
     /**
@@ -82,61 +62,64 @@ class FreightConditions extends Component {
             salesInsideNumber,
             minNumber,
             maxNumber,
-            deliveryDay
+            deliveryDay,
+            preHarvestPinStatus
         } = this.props.form.getFieldsValue();
         return Util.removeInvalid({
-            salesInsideNumber,
-            minNumber,
-            maxNumber,
+            salesInsideNumber: this.salesInsideNumber || salesInsideNumber,
+            minNumber: this.minNumber || minNumber,
+            maxNumber: this.maxNumber || maxNumber,
             deliveryDay,
-            preHarvestPinStatus: this.choose
+            preHarvestPinStatus: this.choose || preHarvestPinStatus
         });
+    }
+
+    handlePropsValues = () => {
+        const { isEdit } = this.props;
+        const service = isEdit ? this.props.onFreConditChange : this.props.onDataChange;
+        service(this.getFormData());
     }
 
     handleSelectChange = (item) => {
         this.choose = item === '-1' ? null : item;
+        this.handlePropsValues();
     }
 
     /**
      * 销售内装数
      */
     handleInsideChange = (num) => {
+        this.salesInsideNumber = num;
         this.setState({
-            currentInside: num
+            currentInside: num,
         }, () => {
-            this.props.form.setFieldsValue({ minNumber: null })
+            this.props.form.setFieldsValue({ minNumber: null });
         })
+        this.minNumber = null;
+        this.handlePropsValues();
     }
 
     /**
      * 最小起订数量
      */
     handleMinChange = (num) => {
+        this.minNumber = num;
         this.setState({
             startNumber: num,
             isEditPrice: true,
         }, () => {
             this.props.form.setFieldsValue({ minNumber: num });
         })
+        this.handlePropsValues();
     }
 
     /**
      * 最大销售数量
      */
     handleMaxChange = (num) => {
-        this.setState({
-            currentInside: num
-        }, () => {
-            this.props.form.setFieldsValue({ maxNumber: null })
-        })
-    }
-
-    handleMaxChange = (num) => {
-        this.setState({
-            startNumber: num
-        }, () => {
-            this.props.form.setFieldsValue({ maxNumber: num });
-        })
+        this.maxNumber = num;
+        this.props.form.setFieldsValue({ maxNumber: num });
+        this.handlePropsValues();
     }
 
     handleConfirm = () => {
@@ -256,7 +239,7 @@ class FreightConditions extends Component {
                                             onChange={this.handleSelectChange}
                                         >
                                             {
-                                                preHarvestPinStatus.data.map((item) =>
+                                                preHarvestPinStatusOption.data.map((item) =>
                                                     (<Option key={item.key} value={item.key}>
                                                         {item.value}
                                                     </Option>)
@@ -326,8 +309,9 @@ FreightConditions.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     values: PropTypes.objectOf(PropTypes.any),
     getProductById: PropTypes.objectOf(PropTypes.any),
+    newDatas: PropTypes.objectOf(PropTypes.any),
     datas: PropTypes.objectOf(PropTypes.any),
-    onChange: PropTypes.func
+    onDataChange: PropTypes.func
 }
 
 FreightConditions.defaultProps = {
