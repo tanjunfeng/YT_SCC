@@ -23,15 +23,16 @@ class EditableCell extends PureComponent {
     }
 
     render() {
-        const { editable, value } = this.props;
+        const { editable, value, type } = this.props;
         return (
             <div className="editable-cell">
                 {editable ?
                     <InputNumber
                         style={{ margin: '-5px 0' }}
                         value={value}
-                        formatter={text => Math.floor(text)}
-                        parser={text => Math.floor(text)}
+                        formatter={this.handleValueFormat}
+                        parser={this.handleValueFormat}
+                        step={type === 'price' ? 0.01 : 1}
                         onChange={this.handleChange}
                     />
                     : value
