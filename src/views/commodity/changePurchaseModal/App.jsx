@@ -266,7 +266,7 @@ class ProdModal extends Component {
         } = this.props;
         const { getFieldDecorator } = form;
         const { prodPurchase = {}, createUserName } = this.props;
-        console.log(createUserName)
+        console.log(initValue)
         const { warehouseCode, warehouseName } = this.state.supplyChoose;
         const { spNo, companyName } = this.state;
         const { internationalCodes = [] } = data;
@@ -339,7 +339,7 @@ class ProdModal extends Component {
                                             <span className={`${prefixCls}-barcode-input`}>
                                                 {getFieldDecorator('newestPrice', {
                                                     rules: [{ required: true, message: '请输入最新采购价!' }],
-                                                    initialValue: getProductByIds.newestPrice
+                                                    initialValue: initValue.newestPrice
                                                 })(
                                                     <InputNumber min={0} step={0.01} placeholder="最新采购价" />
                                                     )}
@@ -406,7 +406,7 @@ class ProdModal extends Component {
                                     <div className={`${prefixCls}-sub-state`}>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>最新采购价格状态：</span>
-                                            <span><i className={`new-price-state-${getProductByIds.auditStatus}`} />{getProductByIds.newestPrice || '-'}</span>
+                                            <span>{getProductByIds.newestPrice || '-'}</span>
                                         </FormItem>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>提交人：</span>
