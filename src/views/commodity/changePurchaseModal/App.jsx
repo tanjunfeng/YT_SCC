@@ -169,10 +169,12 @@ class ProdModal extends Component {
     */
     getFormData = () => {
         const {
-            supportReturn
+            supportReturn,
+            newestPrice
         } = this.props.form.getFieldsValue();
         return Util.removeInvalid({
-            supportReturn
+            supportReturn,
+            newestPrice
         });
     }
 
@@ -217,13 +219,14 @@ class ProdModal extends Component {
                 // 供应商类型:0：一般供应商,1:主供应商
                 supplierType: this.state.checked ? 1 : 0,
                 purchaseInsideNumber: values.purchaseInsideNumber,
-                newestPrice: parseFloat(values.newestPrice),
                 internationalCode: values.internationalCode,
                 // 仓库ID
                 distributeWarehouseId: this.ids.warehouseId,
                 supportReturn: this.getFormData().supportReturn,
+                newestPrice: isEdit ? this.getFormData().newestPrice : values.newestPrice,
                 productCode: getProductByIds.productCode
             })
+            console.log(this.getFormData())
             subPost(subData).then((res) => {
                 message.success(res.message)
                 this.handleCancel();
@@ -265,8 +268,7 @@ class ProdModal extends Component {
             isEdit, data, hasMainSupplier, getProductByIds
         } = this.props;
         const { getFieldDecorator } = form;
-        const { prodPurchase = {}, createUserName } = this.props;
-        console.log(initValue)
+        const { prodPurchase = {} } = this.props;
         const { warehouseCode, warehouseName } = this.state.supplyChoose;
         const { spNo, companyName } = this.state;
         const { internationalCodes = [] } = data;
@@ -345,7 +347,7 @@ class ProdModal extends Component {
                                                     )}
                                             </span>
                                             <span className={`${prefixCls}-adjustment`}>
-                                                调价百分比：{getProductByIds.percentage}%
+                                                调价百分比：{initValue.percentage}%
                                             </span>
                                         </FormItem>
                                         : null
@@ -406,7 +408,7 @@ class ProdModal extends Component {
                                     <div className={`${prefixCls}-sub-state`}>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>最新采购价格状态：</span>
-                                            <span>{getProductByIds.newestPrice || '-'}</span>
+                                            <span>{initValue.newestPrice || '-'}</span>
                                         </FormItem>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>提交人：</span>
@@ -414,7 +416,7 @@ class ProdModal extends Component {
                                         </FormItem>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>审核人：</span>
-                                            <span>{getProductByIds.auditUserName || '-'}</span>
+                                            <span>{initValue.auditUserName || '-'}</span>
                                         </FormItem>
                                     </div>
                                 }
