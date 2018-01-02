@@ -36,6 +36,7 @@ class EditSteps extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { newDatas, isEdit } = nextProps;
+        console.log()
         console.log(newDatas);
     }
 
@@ -62,7 +63,9 @@ class EditSteps extends Component {
     }
 
     handleCompanyChange = (record) => {
-        console.log(record)
+        const { isEdit } = this.props;
+        const service = isEdit ? this.props.onEditChange : this.props.onCreateChange;
+        service(record);
     }
 
     render() {
