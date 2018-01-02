@@ -29,7 +29,7 @@ class PriceTable extends PureComponent {
         // 当用户手工修改 startNumber 时，更新 prices 第一条记录并通知父组件更新
         const { startNumber } = nextProps.value;
         const prices = [...this.state.prices];
-        if (prices.length > 0) {
+        if (prices.length > 0 && this.props.value.startNumber !== startNumber) {
             prices[0].startNumber = startNumber;
             this.setState({ prices });
             this.notify(prices);
