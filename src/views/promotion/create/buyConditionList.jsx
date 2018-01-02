@@ -85,10 +85,13 @@ class BuyConditionList extends PureComponent {
     }
 
     handleModalOk = (data) => {
+        const { conditionType, conditionValue } = data;
         const conditions = [...this.props.value.conditions];
         conditions.push(data);
-        this.setState({ visible: false });
-        this.props.onChange(conditions);
+        if (conditionType !== undefined && conditionValue !== undefined) {
+            this.setState({ visible: false });
+            this.props.onChange(conditions);
+        }
     }
 
     handleModalCancel = () => {
