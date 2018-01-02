@@ -7,7 +7,7 @@ import Util from '../../../util/util';
 import {
     pubFetchValueList
 } from '../../../actions/pub';
-import EditableTable from './editableTable';
+import PriceTable from './priceTable';
 import { productAddPriceVisible } from '../../../actions/producthome';
 import { fetchAddProdPurchase } from '../../../actions';
 import { MAXGOODS } from '../../../constant'
@@ -31,12 +31,14 @@ class EditSteps extends Component {
         super(props);
     }
 
-    getEditableTableValues = (list) => {
+    getEditableTableValues = () => {
         const { isEdit, newDatas = {}, startNumber } = this.props;
+        const { sellSectionPrices = [] } = newDatas;
+        const sellSectionPricesObj = { sellSectionPrices };
         const { auditStatus = 0 } = newDatas;
         return {
             isEdit,
-            list,
+            list: sellSectionPricesObj.sellSectionPrices,
             startNumber,
             data: newDatas.sellSectionPrices,
             readOnly: false,
@@ -50,10 +52,13 @@ class EditSteps extends Component {
         service(num);
     }
 
+    handlePricesChange = (prices, data) => {
+        console.log(prices, data)
+    }
+
     render() {
-        const { prefixCls, form, newDatas = {}, values = {}, isEdit, startNumber } = this.props;
+        const { prefixCls, form, newDatas = {}, values = {}, isEdit } = this.props;
         const { getFieldDecorator } = form;
-        const { sellSectionPrices = [] } = newDatas;
         return (
             <div className={`${prefixCls}-item item-max-height`}>
                 <div className={`${prefixCls}-item-title`}>
@@ -64,9 +69,10 @@ class EditSteps extends Component {
                 </div>
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem>
-                        {getFieldDecorator('sellSectionPrices', {
-                            initialValue: this.getEditableTableValues(sellSectionPrices)
-                        })(<EditableTable startNumber={startNumber || newDatas.minNumber} />)}
+                        <PriceTable
+                            value={this.getEditableTableValues()}
+                            onChange={this.handlePricesChange}
+                        />
                     </FormItem>
                 </div>
                 <Row>
