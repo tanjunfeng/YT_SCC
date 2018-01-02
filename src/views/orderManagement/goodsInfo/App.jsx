@@ -13,6 +13,8 @@ import { bindActionCreators } from 'redux';
 import EditableCell from './editableCell';
 import { fetchOrderDetailInfo, clearOrderDetailInfo } from '../../../actions/order';
 
+const noImage = require('../../../images/default/noPic.png');
+
 @connect(
     () => ({}),
     dispatch => bindActionCreators({
@@ -23,7 +25,6 @@ import { fetchOrderDetailInfo, clearOrderDetailInfo } from '../../../actions/ord
 class GoodsInfo extends PureComponent {
     constructor(props) {
         super(props);
-
         let className;
         let message;
         this.columns = [{
@@ -31,23 +32,28 @@ class GoodsInfo extends PureComponent {
             dataIndex: 'productImg',
             key: 'productImg',
             render: (text, record) => {
+                let tip = null;
                 if (record.abnormalGoods) {
-                    message = '异';
-                    className = 'errorTip';
+                    message = '毛利异常';
+                    className = 'abnormalResonse';
+                    tip = <div className={className}>{message}</div>;
+                } else if (record.type === 'promotion') {
+                    message = '赠';
+                    className = 'giftsTip';
+                    tip = <p className={className}><span>{message}</span></p>;
                 } else {
                     className = '';
                     message = '';
                 }
-                const imgUrl = text || '../../../images/default/noPic.png'
+                const imgUrl = text || noImage;
                 return (
                     <div>
-                        <p className={className}><span>{message}</span></p>
                         <img
                             src={imgUrl}
                             alt="未上传"
                             style={{ width: 50, height: 50, verticalAlign: 'middle' }}
                         />
-                        {/* <div className={className}>{message}</div> */}
+                        {tip}
                     </div>
                 )
             }
