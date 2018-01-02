@@ -15,7 +15,7 @@ class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            prices: props.value.list
+            prices: [...props.value.list]
         }
         this.cacheData = props.value.list.map(item => ({ ...item }));
         columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, 'startNumber', index)
@@ -28,7 +28,7 @@ class PriceTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
         // 当用户手工修改 startNumber 时，更新 prices 第一条记录并通知父组件更新
         const { startNumber } = nextProps.value;
-        const { prices } = this.state;
+        const prices = [...this.state.prices];
         if (prices.length > 0) {
             prices[0].startNumber = startNumber;
             this.setState({ prices });
