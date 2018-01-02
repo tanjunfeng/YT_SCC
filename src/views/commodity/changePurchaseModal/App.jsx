@@ -226,7 +226,6 @@ class ProdModal extends Component {
                 newestPrice: isEdit ? this.getFormData().newestPrice : values.newestPrice,
                 productCode: getProductByIds.productCode
             })
-            console.log(this.getFormData())
             subPost(subData).then((res) => {
                 message.success(res.message)
                 this.handleCancel();
@@ -264,7 +263,7 @@ class ProdModal extends Component {
 
     render() {
         const {
-            prefixCls, form, initValue = {},
+            prefixCls, form, initValue = {}, userNames,
             isEdit, data, hasMainSupplier, getProductByIds
         } = this.props;
         const { getFieldDecorator } = form;
@@ -274,11 +273,11 @@ class ProdModal extends Component {
         const { internationalCodes = [] } = data;
         const { internationalCode } = getProductByIds.internationalCodes[0];
         const firstCreated = () => {
-            switch (initValue.firstCreated) {
+            switch (userNames.firstCreated) {
                 case 0:
-                    return initValue.modifyUserName;
+                    return userNames.createUserName;
                 case 1:
-                    return initValue.createUserName;
+                    return userNames.modifyUserName;
                 default:
                     return null;
             }
@@ -408,15 +407,15 @@ class ProdModal extends Component {
                                     <div className={`${prefixCls}-sub-state`}>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>最新采购价格状态：</span>
-                                            <span>{initValue.newestPrice || '-'}</span>
+                                            <span>{userNames.newestPrice || '-'}</span>
                                         </FormItem>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>提交人：</span>
-                                            <span>{firstCreated() || '-'}</span>
+                                            <span className="submit-user">{firstCreated() || '-'}</span>
                                         </FormItem>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>审核人：</span>
-                                            <span>{initValue.auditUserName || '-'}</span>
+                                            <span>{userNames.auditUserName || '-'}</span>
                                         </FormItem>
                                     </div>
                                 }
