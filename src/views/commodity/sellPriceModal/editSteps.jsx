@@ -29,6 +29,10 @@ const FormItem = Form.Item;
 class EditSteps extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            pricesList: []
+        }
     }
 
     getEditableTableValues = () => {
@@ -52,8 +56,8 @@ class EditSteps extends Component {
         service(num);
     }
 
-    handlePricesChange = (prices, data) => {
-        console.log(prices, data)
+    handlePricesChange = (data, value) => {
+        console.log(data, value)
     }
 
     render() {
@@ -70,8 +74,9 @@ class EditSteps extends Component {
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem>
                         <PriceTable
+
                             value={this.getEditableTableValues()}
-                            onChange={this.handlePricesChange}
+                            onPricesChange={this.handlePricesChange}
                         />
                     </FormItem>
                 </div>

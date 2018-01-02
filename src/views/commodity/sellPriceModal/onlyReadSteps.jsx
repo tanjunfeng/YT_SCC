@@ -27,18 +27,16 @@ const FormItem = Form.Item;
 class OnlyReadSteps extends Component {
     constructor(props) {
         super(props);
-        this.childCompany = props.datas.branchCompanyId ? {
-            branchCompanyId: props.datas.branchCompanyId,
-            branchCompanyName: props.datas.branchCompanyName
-        } : {};
     }
 
-    getEditableTableValues = (list) => {
+    getEditableTableValues = () => {
         const { isEdit, newDatas, startNumber } = this.props;
+        const { sellSectionPrices = [] } = newDatas;
+        const sellSectionPricesObj = { sellSectionPrices };
         const { auditStatus = 0 } = newDatas;
         return {
             isEdit,
-            list,
+            list: sellSectionPricesObj.sellSectionPrices,
             startNumber,
             data: newDatas.sellSectionPrices,
             readOnly: true,
@@ -47,9 +45,7 @@ class OnlyReadSteps extends Component {
     }
 
     render() {
-        const { prefixCls, form, newDatas } = this.props;
-        const { getFieldDecorator } = form;
-        const { sellSectionPrices = [] } = newDatas;
+        const { prefixCls, newDatas, isReadOnly } = this.props;
         return (
             <div className={`${prefixCls}-item`}>
                 <div className={`${prefixCls}-item-title`}>
@@ -61,7 +57,8 @@ class OnlyReadSteps extends Component {
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem>
                         <PriceTable
-                            value={this.getEditableTableValues(sellSectionPrices)}
+                            isReadOnly={isReadOnly}
+                            value={this.getEditableTableValues()}
                         />
                     </FormItem>
                 </div>
@@ -89,8 +86,7 @@ class OnlyReadSteps extends Component {
 
 OnlyReadSteps.propTypes = {
     prefixCls: PropTypes.string,
-    form: PropTypes.objectOf(PropTypes.any),
-    datas: PropTypes.objectOf(PropTypes.any),
+    isReadOnly: PropTypes.bool,
 };
 
 OnlyReadSteps.defaultProps = {
