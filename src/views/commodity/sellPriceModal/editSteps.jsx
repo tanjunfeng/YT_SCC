@@ -29,24 +29,20 @@ const FormItem = Form.Item;
 class EditSteps extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            pricesList: []
+            prices: [...props.newDatas.sellSectionPrices]
         }
     }
 
     getEditableTableValues = () => {
         const { isEdit, newDatas = {}, startNumber } = this.props;
         const { sellSectionPrices = [] } = newDatas;
-        const sellSectionPricesObj = { sellSectionPrices };
-        const { auditStatus = 0 } = newDatas;
+        const { prices } = this.state;
         return {
             isEdit,
-            list: sellSectionPricesObj.sellSectionPrices,
+            list: prices,
             startNumber,
-            data: newDatas.sellSectionPrices,
-            readOnly: false,
-            isSub: auditStatus === 1,
+            readOnly: false
         };
     }
 
@@ -56,8 +52,8 @@ class EditSteps extends Component {
         service(num);
     }
 
-    handlePricesChange = (data, value) => {
-        console.log(data, value)
+    handlePricesChange = (prices, isContinue) => {
+        this.setState({ prices });
     }
 
     render() {
@@ -74,9 +70,8 @@ class EditSteps extends Component {
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem>
                         <PriceTable
-
                             value={this.getEditableTableValues()}
-                            onPricesChange={this.handlePricesChange}
+                            onChange={this.handlePricesChange}
                         />
                     </FormItem>
                 </div>

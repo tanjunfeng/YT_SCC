@@ -28,7 +28,7 @@ class PriceTable extends PureComponent {
     componentWillReceiveProps(nextProps) {
         // 当用户手工修改 startNumber 时，更新 prices 第一条记录并通知父组件更新
         const { startNumber } = nextProps.value;
-        const { prices } = this.state;
+        const prices = [...this.state.prices];
         if (prices.length > 0) {
             prices[0].startNumber = startNumber;
             this.setState({ prices });
@@ -214,7 +214,7 @@ class PriceTable extends PureComponent {
 
     render() {
         const { prices } = this.state;
-        const { isReadOnly } = this.props;
+        const { isReadOnly } = this.props.value;
         return (
             <div>
                 {
@@ -234,7 +234,7 @@ class PriceTable extends PureComponent {
 
 PriceTable.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
-    onPricesChange: PropTypes.func
+    onChange: PropTypes.func
 };
 
 export default PriceTable;
