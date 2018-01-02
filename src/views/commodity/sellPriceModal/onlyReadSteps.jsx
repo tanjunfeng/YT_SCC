@@ -25,10 +25,6 @@ const FormItem = Form.Item;
     }, dispatch)
 )
 class OnlyReadSteps extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     getEditableTableValues = () => {
         const { isEdit, newDatas, startNumber } = this.props;
         const { sellSectionPrices = [] } = newDatas;
@@ -45,7 +41,7 @@ class OnlyReadSteps extends Component {
     }
 
     render() {
-        const { prefixCls, newDatas, isReadOnly } = this.props;
+        const { prefixCls, newDatas } = this.props;
         return (
             <div className={`${prefixCls}-item`}>
                 <div className={`${prefixCls}-item-title`}>
@@ -57,7 +53,6 @@ class OnlyReadSteps extends Component {
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem>
                         <PriceTable
-                            isReadOnly={isReadOnly}
                             value={this.getEditableTableValues()}
                         />
                     </FormItem>
@@ -85,8 +80,7 @@ class OnlyReadSteps extends Component {
 }
 
 OnlyReadSteps.propTypes = {
-    prefixCls: PropTypes.string,
-    isReadOnly: PropTypes.bool,
+    prefixCls: PropTypes.string
 };
 
 OnlyReadSteps.defaultProps = {

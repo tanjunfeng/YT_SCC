@@ -229,7 +229,6 @@ class SellPriceModal extends Component {
                                 />
                                 <OnlyReadSteps
                                     newDatas={this.referenceDatas}
-                                    isReadOnly={isReadOnly}
                                     startNumber={freCondit.minNumber || this.newDatas.minNumber}
                                 />
                             </div >

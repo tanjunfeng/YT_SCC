@@ -214,7 +214,7 @@ class PriceTable extends PureComponent {
 
     render() {
         const { prices } = this.state;
-        const { isReadOnly } = this.props;
+        const { isReadOnly } = this.props.value;
         return (
             <div>
                 {
@@ -234,7 +234,7 @@ class PriceTable extends PureComponent {
 
 PriceTable.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
-    onPricesChange: PropTypes.func
+    onChange: PropTypes.func
 };
 
 export default PriceTable;
