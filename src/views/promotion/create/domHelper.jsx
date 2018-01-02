@@ -130,7 +130,7 @@ export const buyType = (form, licence) => {
     const { getFieldDecorator } = form;
     return (
         <span>
-            <FormItem label="购买类型">
+            <FormItem label={licence === 'rewardList' || licence === 'eachConditionGivenOne' ? '奖励类型' : '购买类型'}>
                 {/* purchaseCondition, buyCondition */}
                 {getFieldDecorator(licence, {
                     initialValue: 'ALL'
@@ -227,8 +227,7 @@ export const getPromotion = (form, licence, handleCategorySelect) => {
                                 productId: '',
                                 productCode: '',
                                 productName: ''
-                            },
-                            rules: [{ required: true, message: '请选择商品' }]
+                            }
                         })(<AddingGoodsByTerm />)}
                     </FormItem> : null}
             </div>
