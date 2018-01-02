@@ -103,21 +103,6 @@ const getPurchaseConditionsRule = (state, values) => {
     return Util.removeInvalid(promotionRule);
 }
 
-// const getRewardListConditionValue = (values) => {
-//     const { rewardListType, rewardListTypeAmount, rewardListTypeQuantity } = values;
-//     let conditionValue = '';
-//     switch (rewardListType) {
-//         case 'AMOUNT':
-//             conditionValue = rewardListTypeAmount
-//             break;
-//         case 'QUANTITY':
-//             conditionValue = rewardListTypeQuantity
-//             break;
-//         default: break;
-//     }
-//     return conditionValue;
-// }
-
 const getRewardListPreferentialValue = (values) => {
     const {
         rewardListRule, rewardListRulePercent,
@@ -187,15 +172,9 @@ const getEachGiveOncePreferentialValue = values => {
     return preferentialValue;
 }
 
-const getCategoryOrProductOfECGO = (condition, values, state) => {
+const getProductOfECGO = (condition, values) => {
     const { eachConditionGivenOne, eachConditionGivenOneProduct } = values;
-    const { categoryECGO } = state;
     switch (eachConditionGivenOne) {
-        case 'CATEGORY':
-            Object.assign(condition, {
-                promoCategories: categoryECGO
-            });
-            break;
         case 'PRODUCT':
             Object.assign(condition, {
                 promoProduct: {
@@ -216,7 +195,7 @@ const getCategoryOrProductOfECGO = (condition, values, state) => {
  * @param {*} values
  */
 const getRewardListRule = (state, values) => {
-    const { category, rewardList, rewardListType, rewardListRule } = values;
+    const { category, rewardList, rewardListRule } = values;
     const { conditions } = state;
     const promotionRule = {
         useConditionRule: true,
@@ -225,9 +204,7 @@ const getRewardListRule = (state, values) => {
             conditions,
             purchaseConditionsRule: {
                 condition: {
-                    purchaseType: rewardList,
-                    conditionType: rewardListType,
-                    // conditionValue: getRewardListConditionValue(values)
+                    purchaseType: rewardList
                 },
                 rule: {
                     preferentialWay: rewardListRule,
@@ -274,9 +251,9 @@ const getEacheachConditionGiveOnce = (state, values) => {
 
     const giveRuleCondition = promotionRule.eachConditionGiveOnce.giveRuleCondition;
     // 按全部、品类和商品拼接 condition 对象
-    getCategoryOrProductOfECGO(
+    getProductOfECGO(
         giveRuleCondition,
-        values, state
+        values
     );
     return Util.removeInvalid(promotionRule);
 }

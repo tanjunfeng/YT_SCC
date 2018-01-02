@@ -45,8 +45,7 @@ class PromotionCreate extends PureComponent {
         companies: [], // 所选区域子公司
         conditions: [], // 购买条件列表
         categoryPC: null, // 购买条件品类, PC = PURCHASECONDITION
-        categoryRL: null, // 奖励列表品类，RL = REWARDLIST
-        categoryECGO: null // 每满品类，EGO = EACHCONDITIONGIVEONCE
+        categoryRL: null // 奖励列表品类，RL = REWARDLIST
     }
 
     handleSelectorOk = (companies) => {
@@ -117,15 +116,6 @@ class PromotionCreate extends PureComponent {
      */
     handleRLCategorySelect = (categoryRL) => {
         this.setState({ categoryRL });
-    }
-
-    /** 
-     * 购买条件品类选择器
-     * 
-     * ECGO = EACHCONDITIONGIVEONCE
-    */
-    handleECGOCategorySelect = (categoryECGO) => {
-        this.setState({ categoryECGO });
     }
 
     /**
@@ -272,7 +262,6 @@ class PromotionCreate extends PureComponent {
                         {
                             form,
                             licence: 'eachConditionGivenOne',
-                            handleCategorySelect: this.handleECGOCategorySelect,
                             conditions,
                             handleBuyConditionsChange: this.handleBuyConditionsChange
                         }

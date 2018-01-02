@@ -65,7 +65,7 @@ export const getRulesColumn = (form, licence, type = '') => {
                 eachConditionGivenOneRulePercent */}
                 {getFieldDecorator(`${licence}RulePercent`, {
                     rules: [{ required: true, message: '请输入折扣百分比' }]
-                })(<InputNumber className="wd-50" min={0} max={100} step={1} />)} %
+                })(<InputNumber className="wd-50" min={0} max={100} step={1} />) } %
             </FormItem>
             : null}
         {/* 折扣金额 */}
@@ -91,13 +91,13 @@ export const getRulesColumn = (form, licence, type = '') => {
                 {/* purchaseConditionRulePrice,
                 rewardListRulePrice,
                 eachConditionGivenOneRulePrice */}
-                ￥{getFieldDecorator(`${licence}RulePrice`, {
+                {getFieldDecorator(`${licence}RulePrice`, {
                     initialValue: 0,
                     rules: [
                         { required: true, message: '请输入固定单价' },
                         { validator: Util.limitTwoDecimalPlaces }
                     ]
-                })(<InputNumber className="wd-60" min={0} max={MAX_AMOUNT_OF_ORDER} step={1} />)} 元
+                })(<InputNumber formatter={val => `￥${val}`} className="wd-60" min={0} max={MAX_AMOUNT_OF_ORDER} step={1} />)} 元
             </FormItem>
             : null}
         {/* 赠送相同商品 */}
@@ -211,7 +211,7 @@ export const getPromotion = (form, licence, handleCategorySelect) => {
         <Row>
             <div className="wd-396">
                 {buyType(form, licence)}
-                {/* purchaseCondition, rewardList, eachConditionGivenOne */}
+                {/* purchaseCondition, rewardList */}
                 {getFieldValue(licence) === 'CATEGORY' ?
                     <FormItem>
                         <Category onChange={handleCategorySelect} />
@@ -274,7 +274,7 @@ export const getRewardList = (params) => {
  * @param {*} handleCategorySelect
  */
 export const getEachConditionGivenOne = (params) => {
-    const { form, licence, handleCategorySelect, conditions, handleBuyConditionsChange } = params;
+    const { form, licence, conditions, handleBuyConditionsChange } = params;
     return (
         <div>
             <BuyConditionList
@@ -284,7 +284,7 @@ export const getEachConditionGivenOne = (params) => {
             <ul className="list-panel">
                 <li><h2>奖励列表</h2></li>
                 <li>
-                    {getPromotion(form, licence, handleCategorySelect)}
+                    {getPromotion(form, licence)}
                 </li>
             </ul>
         </div>
