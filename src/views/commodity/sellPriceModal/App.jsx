@@ -89,7 +89,27 @@ class SellPriceModal extends Component {
         const { validateFields, setFields } = this.props.form;
         const { branchCompanyId, branchCompanyName, cretFreConditObj, freCondit, isContinue } = this.state;
         const newDatas = datas.data;
-        const data = {};
+        const createData = {};
+        const editData = {};
+        Object.assign(createData, {
+            branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
+            branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
+            suggestPrice: this.state.suggestPrice || values.suggestPrice,
+            productId: values.id,
+            ...cretFreConditObj,
+            ...freCondit
+        })
+        console.log(this.newDatas)
+        Object.assign(editData, {
+            branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
+            branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
+            suggestPrice: this.state.suggestPrice || values.suggestPrice,
+            productId: this.newDatas.productId,
+            auditStatus: this.newDatas.auditStatus,
+            id: this.newDatas.id,
+            ...cretFreConditObj,
+            ...freCondit
+        })
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
@@ -116,15 +136,7 @@ class SellPriceModal extends Component {
                     productId: datas.productId
                 })
             }
-            Object.assign(data, {
-                branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
-                branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
-                suggestPrice: this.state.suggestPrice,
-                productId: values.id,
-                ...cretFreConditObj,
-                ...freCondit
-            })
-            this.props.handlePostAdd(data, isEdit)
+            this.props.handlePostAdd(editData, isEdit);
             return null;
         })
     }
@@ -133,19 +145,17 @@ class SellPriceModal extends Component {
         this.props.handleClose();
     }
 
-    handleCompyChange = (object, data) => {
-        if (!data) {
-            this.setState({
-                branchCompanyId: object.id,
-                branchCompanyName: object.name,
-            })
-        } else {
-            this.setState({
-                suggestPrice: object.suggestPrice,
-                branchCompanyId: data.id,
-                branchCompanyName: data.name,
-            })
-        }
+    handleCreatPrice = (num) => {
+        this.setState({
+            suggestPrice: num
+        })
+    }
+
+    handleCompyChange = (record) => {
+        this.setState({
+            branchCompanyId: record.id,
+            branchCompanyName: record.name,
+        })
     }
 
     handleMaxChange = (num) => {
@@ -273,7 +283,8 @@ class SellPriceModal extends Component {
                                         newDatas={this.newDatas}
                                         isEdit={isEdit}
                                         startNumber={cretFreConditObj.minNumber || values.minNumber}
-                                        onCreateChange={this.handleCompyChange}
+                                        onCreateChange={this.handleCreatPrice}
+                                        onCreateComChange={this.handleCompyChange}
                                         values={values}
                                     />
                                 </div>

@@ -61,14 +61,10 @@ class EditSteps extends Component {
         };
     }
 
-    handlePropsback = () => {
+    handleNewestPriceChange = (num) => {
         const { isEdit } = this.props;
         const service = isEdit ? this.props.onEditChange : this.props.onCreateChange;
-        return service();
-    }
-
-    handleNewestPriceChange = (num) => {
-        this.handlePropsback(num)
+        service(num)
     }
 
     handlePricesChange = (prices, isContinue) => {
@@ -77,7 +73,7 @@ class EditSteps extends Component {
     }
 
     handleCompanyChange = (record) => {
-        this.handlePropsback(record)
+        this.props.onCreateComChange(record);
     }
 
     handleValueFormat = (text) => {
@@ -150,6 +146,7 @@ EditSteps.propTypes = {
     startNumber: PropTypes.number,
     isEdit: PropTypes.bool,
     onEditChange: PropTypes.func,
+    onCreateComChange: PropTypes.func,
     onCreateChange: PropTypes.func
 };
 
