@@ -16,11 +16,19 @@ import { PAGE_SIZE } from '../../../constant';
 import { purchaseListColumns as columns } from '../columns';
 import ExamineModal from '../common/ExamineModal';
 import SeeModal from '../common/SeeModal';
+import ProdModal from './changePurchaseModal';
+import getProdPurchaseById from '../../../actions/fetch/fetchGetProdPurchaseById';
+import {
+    fetchGetProductById
+} from '../../../actions';
 
 @connect(state => ({
     processMsgInfo: state.toJS().procurement.processMsgInfo,
+    getProductByIds: state.toJS().commodity.getProductById
 }), dispatch => bindActionCreators({
-    queryProcessMsgInfo
+    queryProcessMsgInfo,
+    getProdPurchaseById,
+    fetchGetProductById
 }, dispatch))
 
 class PurchaseExamination extends PureComponent {
@@ -30,7 +38,10 @@ class PurchaseExamination extends PureComponent {
             visible: false,
             seeModelvisible: false,
             // 默认未完成
-            isComplete: '0'
+            isComplete: '0',
+            showModal: false,
+            initData: {},
+            getProdPurchaseByIds: {}
         }
         // 搜索参数
         this.param = {};
@@ -115,6 +126,12 @@ class PurchaseExamination extends PureComponent {
         })
     }
 
+    handleCloseModal = () => {
+        this.setState({
+            showModal: false
+        });
+    }
+
     /**
      * 促销活动表单操作
     *
@@ -135,6 +152,21 @@ class PurchaseExamination extends PureComponent {
                 break;
             case 'see':
                 // 查看
+                this.props.getProdPurchaseById({ id: record.id })
+                    .then(res => {
+                        this.setState({
+                            getProdPurchaseByIds: res,
+                            initData: record,
+                            showModal: true
+                        })
+                    })
+                // this.props.fetchGetProductById({ productId: '60000117016' })
+                //     .then(res => {
+                //         this.setState({
+                //             initData: record,
+                //             showModal: true
+                //         })
+                //     })
                 break;
             case 'results':
                 // 审批意见
@@ -223,6 +255,13 @@ class PurchaseExamination extends PureComponent {
                     closeSeeModal={this.closeSeeModal}
                     taskId={this.taskId}
                 />
+                {
+                    this.state.showModal &&
+                    <ProdModal
+                        handleClose={this.handleCloseModal}
+                        getProdPurchaseByIds={this.state.getProdPurchaseByIds}
+                    />
+                }
             </div>
         );
     }
@@ -230,6 +269,7 @@ class PurchaseExamination extends PureComponent {
 
 PurchaseExamination.propTypes = {
     queryProcessMsgInfo: PropTypes.func,
+    getProdPurchaseById: PropTypes.func,
     processMsgInfo: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }
 
