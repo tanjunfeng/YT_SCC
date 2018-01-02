@@ -31,9 +31,9 @@ class PriceTable extends PureComponent {
         const { prices } = this.state;
         if (prices.length > 0) {
             prices[0].startNumber = startNumber;
+            this.setState({ prices });
+            this.notify(prices);
         }
-        this.setState({ prices });
-        this.notify(prices);
     }
 
     /**
