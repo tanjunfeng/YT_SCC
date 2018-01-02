@@ -30,7 +30,7 @@ class EditSteps extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            prices: [...props.newDatas.sellSectionPrices]
+            prices: props.isEdit ? [...props.newDatas.sellSectionPrices] : [...props.values.sellSectionPrices]
         }
     }
 
