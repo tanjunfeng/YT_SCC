@@ -31,12 +31,14 @@ class EditSteps extends Component {
         super(props);
     }
 
-    getEditableTableValues = (list) => {
+    getEditableTableValues = () => {
         const { isEdit, newDatas = {}, startNumber } = this.props;
+        const { sellSectionPrices = [] } = newDatas;
+        const sellSectionPricesObj = {sellSectionPrices};
         const { auditStatus = 0 } = newDatas;
         return {
             isEdit,
-            list,
+            list: sellSectionPricesObj.sellSectionPrices,
             startNumber,
             data: newDatas.sellSectionPrices,
             readOnly: false,
@@ -50,10 +52,13 @@ class EditSteps extends Component {
         service(num);
     }
 
+    handlePricesChange = (prices, data) => {
+        console.log(prices, data)
+    }
+
     render() {
         const { prefixCls, form, newDatas = {}, values = {}, isEdit, startNumber } = this.props;
         const { getFieldDecorator } = form;
-        const { sellSectionPrices = [] } = newDatas;
         return (
             <div className={`${prefixCls}-item item-max-height`}>
                 <div className={`${prefixCls}-item-title`}>
@@ -64,9 +69,10 @@ class EditSteps extends Component {
                 </div>
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem>
-                        {getFieldDecorator('sellSectionPrices', {
-                            initialValue: this.getEditableTableValues(sellSectionPrices)
-                        })(<EditableTable startNumber={startNumber || newDatas.minNumber} />)}
+                        <EditableTable
+                            value={this.getEditableTableValues()}
+                            onChange={this.handlePricesChange}
+                        />
                     </FormItem>
                 </div>
                 <Row>
