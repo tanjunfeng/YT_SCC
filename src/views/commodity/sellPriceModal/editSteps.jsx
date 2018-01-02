@@ -57,7 +57,7 @@ class EditSteps extends Component {
     }
 
     render() {
-        const { prefixCls, form, newDatas = {}, values = {}, isEdit, startNumber } = this.props;
+        const { prefixCls, form, newDatas = {}, values = {}, isEdit } = this.props;
         const { getFieldDecorator } = form;
         return (
             <div className={`${prefixCls}-item item-max-height`}>
