@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import {
     pubFetchValueList
 } from '../../../actions/pub';
-import EditableTable from './editableTable';
+import PriceTable from './priceTable';
 import { productAddPriceVisible } from '../../../actions/producthome';
 import { fetchAddProdPurchase } from '../../../actions';
 import { MAXGOODS } from '../../../constant'
@@ -63,7 +63,7 @@ class OnlyReadSteps extends Component {
                         {getFieldDecorator('sellSectionPrices', {
                             initialValue: this.getEditableTableValues(sellSectionPrices)
                         })(
-                            <EditableTable />)}
+                            <PriceTable />)}
                     </FormItem>
                 </div>
                 <div className="read-only-footer">

@@ -7,7 +7,7 @@ import Util from '../../../util/util';
 import {
     pubFetchValueList
 } from '../../../actions/pub';
-import EditableTable from './editableTable';
+import PriceTable from './priceTable';
 import { productAddPriceVisible } from '../../../actions/producthome';
 import { fetchAddProdPurchase } from '../../../actions';
 import { MAXGOODS } from '../../../constant'
@@ -34,7 +34,7 @@ class EditSteps extends Component {
     getEditableTableValues = () => {
         const { isEdit, newDatas = {}, startNumber } = this.props;
         const { sellSectionPrices = [] } = newDatas;
-        const sellSectionPricesObj = {sellSectionPrices};
+        const sellSectionPricesObj = { sellSectionPrices };
         const { auditStatus = 0 } = newDatas;
         return {
             isEdit,
@@ -69,7 +69,7 @@ class EditSteps extends Component {
                 </div>
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem>
-                        <EditableTable
+                        <PriceTable
                             value={this.getEditableTableValues()}
                             onChange={this.handlePricesChange}
                         />
