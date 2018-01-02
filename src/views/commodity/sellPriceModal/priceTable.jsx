@@ -85,7 +85,10 @@ class PriceTable extends PureComponent {
     }
 
     notify = (prices) => {
-        this.props.onPricesChange(prices, this.isContinue(prices));
+        const { onChange } = this.props;
+        if (typeof onChange === 'function') {
+            onChange(prices, this.isContinue(prices));
+        }
     }
 
     save = (id) => {
