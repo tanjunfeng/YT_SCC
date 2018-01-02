@@ -35,19 +35,14 @@ class EditSteps extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { newDatas, isEdit, values } = nextProps;
+        const { newDatas, isEdit } = nextProps;
         if (isEdit) {
+            const arrEidt = [];
+            newDatas.sellSectionPrices.map((element) => (
+                arrEidt.push(element)
+            ))
             this.setState({
-                prices: newDatas.sellSectionPrices
-            })
-        } else {
-            const arr = [];
-            values.sellSectionPrices.forEach((element) => {
-                console.log(element)
-                arr.push(element)
-            }, this);
-            this.setState({
-                prices: arr
+                prices: arrEidt
             })
         }
     }
@@ -66,20 +61,23 @@ class EditSteps extends Component {
         };
     }
 
-    handleNewestPriceChange = (num) => {
+    handlePropsback = () => {
         const { isEdit } = this.props;
         const service = isEdit ? this.props.onEditChange : this.props.onCreateChange;
-        service(num);
+        return service();
+    }
+
+    handleNewestPriceChange = (num) => {
+        this.handlePropsback(num)
     }
 
     handlePricesChange = (prices, isContinue) => {
+        this.handlePropsback(prices, isContinue)
         this.setState({ prices });
     }
 
     handleCompanyChange = (record) => {
-        const { isEdit } = this.props;
-        const service = isEdit ? this.props.onEditChange : this.props.onCreateChange;
-        service(record);
+        this.handlePropsback(record)
     }
 
     handleValueFormat = (text) => {
@@ -151,7 +149,8 @@ EditSteps.propTypes = {
     values: PropTypes.objectOf(PropTypes.any),
     startNumber: PropTypes.number,
     isEdit: PropTypes.bool,
-    onEditChange: PropTypes.func
+    onEditChange: PropTypes.func,
+    onCreateChange: PropTypes.func
 };
 
 EditSteps.defaultProps = {
