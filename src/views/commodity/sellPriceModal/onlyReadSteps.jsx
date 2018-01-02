@@ -41,7 +41,7 @@ class OnlyReadSteps extends Component {
             list,
             startNumber,
             data: newDatas.sellSectionPrices,
-            readOnly: false,
+            readOnly: true,
             isSub: auditStatus === 1
         };
     }
@@ -54,16 +54,15 @@ class OnlyReadSteps extends Component {
             <div className={`${prefixCls}-item`}>
                 <div className={`${prefixCls}-item-title`}>
                     添加阶梯价格
-                            <span className={`${prefixCls}-item-tip`}>
-                        &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
-                            </span>
+                    <span className={`${prefixCls}-item-tip`}>
+                    &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
+                    </span>
                 </div>
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem>
-                        {getFieldDecorator('sellSectionPrices', {
-                            initialValue: this.getEditableTableValues(sellSectionPrices)
-                        })(
-                            <PriceTable />)}
+                        <PriceTable
+                            value={this.getEditableTableValues(sellSectionPrices)}
+                        />
                     </FormItem>
                 </div>
                 <div className="read-only-footer">
