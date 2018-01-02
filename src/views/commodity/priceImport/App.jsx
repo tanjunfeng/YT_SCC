@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Table, Form, message } from 'antd';
-import { getPriceImportList, getIsSellVaild, getCreateSell } from '../../../actions';
+import { getPriceImportList, getCreateSell } from '../../../actions';
 import SearchForm from './searchForm';
 import { PAGE_SIZE } from '../../../constant';
 import { priceListColumns as columns } from './columns';
@@ -24,7 +24,6 @@ const pageSize = PAGE_SIZE
     priceImportlist: state.toJS().priceImport.priceImportlist,
 }), dispatch => bindActionCreators({
     getPriceImportList,
-    // getIsSellVaild,
     getCreateSell
 }, dispatch))
 
@@ -88,7 +87,7 @@ class PriceImport extends PureComponent {
     isCreateChange = (nextImportsId) => {
         this.nextImportsId = nextImportsId
         const changeBtnDisabled = this.state.changeBtnDisabled
-        const nextChangeBtnDisabled = nextImportsId ? false : true
+        const nextChangeBtnDisabled = nextImportsId === ''
         if (nextChangeBtnDisabled !== changeBtnDisabled) {
             this.setState({
                 changeBtnDisabled: nextChangeBtnDisabled
@@ -176,7 +175,6 @@ class PriceImport extends PureComponent {
 
 PriceImport.propTypes = {
     getPriceImportList: PropTypes.func,
-    getIsSellVaild: PropTypes.func,
     getCreateSell: PropTypes.func,
     priceImportlist: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any))
 }

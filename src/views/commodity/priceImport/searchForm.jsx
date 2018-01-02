@@ -118,7 +118,6 @@ class SearchForm extends PureComponent {
                     message.success('上传成功');
                     this.props.form.setFieldsValue({ importsId: res.data })
                     this.handleSearch();
-                    // this.props.isCreateChange();
                 } else {
                     message.error(res.message);
                 }
