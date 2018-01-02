@@ -30,8 +30,14 @@ class EditSteps extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            prices: props.isEdit ? [...props.newDatas.sellSectionPrices] : [...props.values.sellSectionPrices]
+            prices: []
         }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { newDatas, isEdit } = nextProps;
+        console.log()
+        console.log(newDatas);
     }
 
     getEditableTableValues = () => {
