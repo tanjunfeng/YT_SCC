@@ -41,8 +41,8 @@ class SellPriceModal extends Component {
             branchCompanyId: null,
             branchCompanyName: null,
             isContinue: false,
-            CretFreConditObj: {},
-            FreCondit: {}
+            cretFreConditObj: {},
+            freCondit: {}
         }
         this.isSub = false; // 判断是否为已提交状态(true为已提交)
         this.isDisabled = false;
@@ -85,7 +85,7 @@ class SellPriceModal extends Component {
     handleOk = () => {
         const { datas, isEdit, values = {} } = this.props;
         const { validateFields, setFields } = this.props.form;
-        const { branchCompanyId, branchCompanyName, CretFreConditObj, FreCondit, isContinue } = this.state;
+        const { branchCompanyId, branchCompanyName, cretFreConditObj, freCondit, isContinue } = this.state;
         const newDatas = datas.data;
         const data = {};
         validateFields((err, values) => {
@@ -96,11 +96,11 @@ class SellPriceModal extends Component {
                 message.error('请选择子公司！');
                 return null;
             }
-            if (!isEdit && !CretFreConditObj.minNumber) {
+            if (!isEdit && !cretFreConditObj.minNumber) {
                 message.error('请输入最小起订量！');
                 return null;
             }
-            if (!isEdit && !CretFreConditObj.maxNumber) {
+            if (!isEdit && !cretFreConditObj.maxNumber) {
                 message.error('请输入最大销售数量！');
                 return null;
             }
@@ -119,8 +119,8 @@ class SellPriceModal extends Component {
                 branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
                 newestPrice: this.state.newestPrice,
                 productId: values.id,
-                ...CretFreConditObj,
-                ...FreCondit
+                ...cretFreConditObj,
+                ...freCondit
             })
             this.props.handlePostAdd(data, isEdit)
             return null;
@@ -166,13 +166,13 @@ class SellPriceModal extends Component {
 
     handleOnFreConditChange = (data) => {
         this.setState({
-            FreCondit: data
+            freCondit: data
         })
     }
 
     handleonCretFreConditChange = (data) => {
         this.setState({
-            CretFreConditObj: data
+            cretFreConditObj: data
         })
     }
 
@@ -180,6 +180,7 @@ class SellPriceModal extends Component {
         const { prefixCls, form, datas, isEdit, values } = this.props;
         const newDatas = datas.data;
         const isAfter = this.isAfter === true;
+        const { freCondit, cretFreConditObj } = this.state;
         return (
             <Modal
                 title={isEdit ? '编辑销售价格' : '新增销售价格'}
@@ -212,7 +213,7 @@ class SellPriceModal extends Component {
                                     <EditSteps
                                         newDatas={newDatas}
                                         isEdit={isEdit}
-                                        startNumber={this.state.CretFreConditObj.minNumber}
+                                        startNumber={freCondit.minNumber || newDatas.minNumber}
                                         onEditChange={this.handleEditSteps}
                                     />
                                 </div>
@@ -226,7 +227,7 @@ class SellPriceModal extends Component {
                                 />
                                 <OnlyReadSteps
                                     newDatas={newDatas}
-                                    startNumber={this.state.CretFreConditObj.minNumber}
+                                    startNumber={this.state.cretFreConditObj.minNumber}
                                 />
                             </div >
                             <Row className="edit-state-list">
@@ -261,7 +262,7 @@ class SellPriceModal extends Component {
                                     <EditSteps
                                         newDatas={newDatas}
                                         isEdit={isEdit}
-                                        startNumber={this.state.CretFreConditObj.minNumber}
+                                        startNumber={cretFreConditObj.minNumber || values.minNumber}
                                         onCreateChange={this.handleCompyChange}
                                         values={values}
                                     />
