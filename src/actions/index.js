@@ -98,7 +98,8 @@ import {
     getProductById,
     queryProdPurchaseExtByCondition,
     ChangeProPurchaseStatus,
-    GetWarehouseInfo1
+    GetWarehouseInfo1,
+    toAddSellPriceAction
 } from './producthome';
 
 // 库存调整
@@ -245,6 +246,7 @@ export {
 
     // 商品管理
     syncProductByManualAction,
+    toAddSellPriceAction,
     // 售价导入列表查询
     getPriceImportList,
     getIsSellVaild,

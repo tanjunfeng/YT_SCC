@@ -342,7 +342,7 @@ export const addPurchasement = (params) => http.post('/price/addPurchasementPric
 export const updateOffShelfProducts = (params) => http.post('/product/updateOffShelfProducts', params);
 
 // 新增销售价格
-export const addSellPrice = (params) => http.post('/price/addSellPrice', params);
+export const toAddSellPrice = (params) => http.post('/price/addSellPrice', params);
 
 // 修改采购价格
 export const updatePurchasePrice = (params) => http.post('/price/updatePurchasePrice', params);

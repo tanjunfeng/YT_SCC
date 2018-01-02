@@ -313,7 +313,7 @@ export const latestPriceStateOption = {
 }
 
 // 采购模式
-export const preHarvestPinStatus = {
+export const preHarvestPinStatusOption = {
     defaultValue: '0',
     data: [{
         key: '0',
@@ -321,6 +321,18 @@ export const preHarvestPinStatus = {
     }, {
         key: '1',
         value: '先采后销'
+    }]
+}
+
+// 采购退货
+export const supportReturnOption = {
+    defaultValue: 0,
+    data: [{
+        key: 0,
+        value: '否'
+    }, {
+        key: 1,
+        value: '是'
     }]
 }
 
