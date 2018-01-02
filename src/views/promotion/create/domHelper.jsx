@@ -227,7 +227,8 @@ export const getPromotion = (form, licence, handleCategorySelect) => {
                                 productId: '',
                                 productCode: '',
                                 productName: ''
-                            }
+                            },
+                            rules: [{ required: true, message: '请选择商品' }]
                         })(<AddingGoodsByTerm />)}
                     </FormItem> : null}
             </div>

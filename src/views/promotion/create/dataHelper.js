@@ -174,6 +174,12 @@ const getEachGiveOncePreferentialValue = values => {
 
 const getProductOfECGO = (condition, values) => {
     const { eachConditionGivenOne, eachConditionGivenOneProduct } = values;
+    // console.log(eachConditionGivenOneProduct.record);
+    // if (!eachConditionGivenOneProduct.record) {
+    //     eachConditionGivenOneProduct.record = {};
+    //     message.error('请选商品');
+    //     return;
+    // }
     switch (eachConditionGivenOne) {
         case 'PRODUCT':
             Object.assign(condition, {
@@ -392,7 +398,15 @@ const getPurchageWay = (formData, values, state) => {
  * @param {*} values
  */
 const forbidden = (state, values) => {
-    const { condition, category, purchaseCondition, rewardList } = values;
+    const {
+        condition,
+        category,
+        purchaseCondition,
+        rewardList,
+        eachConditionGivenOne,
+        purchaseConditionProduct,
+        rewardListProduct,
+        eachConditionGivenOneProduct } = values;
     if (condition === 1) {
         if (category === 'PURCHASECONDITION'
             && purchaseCondition === 'CATEGORY'
@@ -412,6 +426,24 @@ const forbidden = (state, values) => {
             && state.conditions.length === 0
         ) {
             message.error('请添加购买条件');
+            return true;
+        }
+        if (category === 'EACHCONDITIONGIVEONCE'
+            && eachConditionGivenOne === 'PRODUCT'
+            && !eachConditionGivenOneProduct.record) {
+            message.error('请选择商品');
+            return true;
+        }
+        if (category === 'REWARDLIST'
+            && rewardList === 'PRODUCT'
+            && !rewardListProduct.record) {
+            message.error('请选择商品');
+            return true;
+        }
+        if (category === 'PURCHASECONDITION'
+            && purchaseCondition === 'PRODUCT'
+            && !purchaseConditionProduct.record) {
+            message.error('请选择商品');
             return true;
         }
     }
