@@ -342,7 +342,7 @@ export const addPurchasement = (params) => http.post('/price/addPurchasementPric
 export const updateOffShelfProducts = (params) => http.post('/product/updateOffShelfProducts', params);
 
 // 新增销售价格
-export const addSellPrice = (params) => http.post('/price/addSellPrice', params);
+export const toAddSellPrice = (params) => http.post('/price/addSellPrice', params);
 
 // 修改采购价格
 export const updatePurchasePrice = (params) => http.post('/price/updatePurchasePrice', params);
@@ -750,7 +750,9 @@ export const queryPurchasePriceInfo = (params) => http.get('/prodPurchase/purcha
 // 导入采购价格变更申请Excel
 export const purchasePriceChangeUpload = (params) => http.post('/prodPurchase/purchasePriceChangeUpload', params);
 // 创建采购进价变价单
-export const createPurchase = () => http.post('/prodPurchase/createPurchase');
+export const createPurchase = (params) => http.post('/prodPurchase/createPurchase', params);
+// 采购进价验证创建变价单是否可用
+export const isPurchaseVaild = () => http.get('/prodPurchase/isPurchaseVaild');
 // 新增供应商信息
 export const insertSupplierInfo = (params) => http.post('/supplier/insertSupplierInfo', params);
 

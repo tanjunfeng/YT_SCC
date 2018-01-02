@@ -78,8 +78,9 @@
                     }
                 ],
                 "availableStock": 9995273,
-                "abnormalGoods": true,
-                "abnormalResonse": "哈哈哈哈"
+                "abnormalGoods": false,
+                "abnormalResonse": "",
+                "type": "promotion"
             },
             {
                 "id": "1002853",
@@ -123,7 +124,8 @@
                 ],
                 "availableStock": 9995273,
                 "abnormalGoods": false,
-                "abnormalResonse": ""
+                "abnormalResonse": "",
+                "type": "promotion"
             }
         ],
         "rawSubtotal": 850.0,

@@ -17,7 +17,9 @@ import {
 import {
     pubFetchValueList,
 } from '../../../actions/pub';
-
+import {
+    supportReturnOption
+} from '../../../constant/searchParams';
 import {
     AddProdPurchase,
     UpdateProdPurchase,
@@ -163,11 +165,25 @@ class ProdModal extends Component {
     }
 
     /**
+    * 获取表单数据
+    */
+    getFormData = () => {
+        const {
+            supportReturn,
+            newestPrice
+        } = this.props.form.getFieldsValue();
+        return Util.removeInvalid({
+            supportReturn,
+            newestPrice
+        });
+    }
+
+    /**
      * 创建弹框OK事件 (当没有改变时)
      */
     handleOk() {
         const { validateFields } = this.props.form;
-        const { initValue, isEdit } = this.props;
+        const { initValue, isEdit, getProductByIds } = this.props;
         const subPost = isEdit ? this.props.ChangeUpdateProd : this.props.AddProdPurchase;
         const { spId, supplierAddressId, warehouseId } = this.ids;
         if (!spId) {
@@ -200,15 +216,17 @@ class ProdModal extends Component {
                 // 商品id
                 productId: isEdit ? initValue.productId : initValue.id,
                 // 子公司id
-                branchCompanyId: this.ids.childCompanyId,
                 // 供应商类型:0：一般供应商,1:主供应商
                 supplierType: this.state.checked ? 1 : 0,
                 purchaseInsideNumber: values.purchaseInsideNumber,
-                purchasePrice: parseFloat(values.purchasePrice),
                 internationalCode: values.internationalCode,
                 // 仓库ID
                 distributeWarehouseId: this.ids.warehouseId,
+                supportReturn: this.getFormData().supportReturn,
+                newestPrice: isEdit ? this.getFormData().newestPrice : values.newestPrice,
+                productCode: getProductByIds.productCode
             })
+            console.log(this.getFormData())
             subPost(subData).then((res) => {
                 message.success(res.message)
                 this.handleCancel();
@@ -258,9 +276,9 @@ class ProdModal extends Component {
         const firstCreated = () => {
             switch (initValue.firstCreated) {
                 case 0:
-                    return getProductByIds.modifyUserName;
+                    return initValue.modifyUserName;
                 case 1:
-                    return getProductByIds.createUserName;
+                    return initValue.createUserName;
                 default:
                     return null;
             }
@@ -307,9 +325,9 @@ class ProdModal extends Component {
                                         : <FormItem>
                                             <span className={`${prefixCls}-label`}>*采购价(元)：</span>
                                             <span className={`${prefixCls}-barcode-input`}>
-                                                {getFieldDecorator('purchasePrice', {
+                                                {getFieldDecorator('newestPrice', {
                                                     rules: [{ required: true, message: '请输入采购价!' }],
-                                                    initialValue: getProductByIds.purchasePrice
+                                                    initialValue: getProductByIds.newestPrice
                                                 })(
                                                     <InputNumber min={0} step={0.01} placeholder="采购价" />
                                                     )}
@@ -323,13 +341,13 @@ class ProdModal extends Component {
                                             <span className={`${prefixCls}-barcode-input`}>
                                                 {getFieldDecorator('newestPrice', {
                                                     rules: [{ required: true, message: '请输入最新采购价!' }],
-                                                    initialValue: getProductByIds.newestPrice
+                                                    initialValue: initValue.newestPrice
                                                 })(
                                                     <InputNumber min={0} step={0.01} placeholder="最新采购价" />
                                                     )}
                                             </span>
                                             <span className={`${prefixCls}-adjustment`}>
-                                                调价百分比：{getProductByIds.percentage}%
+                                                调价百分比：{initValue.percentage}%
                                             </span>
                                         </FormItem>
                                         : null
@@ -361,12 +379,36 @@ class ProdModal extends Component {
                                             )}
                                     </span>
                                 </FormItem>
+                                {/* 是否支持退货 */}
+                                <FormItem>
+                                    <span className={`${prefixCls}-label`}>*是否支持退货：</span>
+                                    <span className={`${prefixCls}-barcode-input`}>
+                                        {getFieldDecorator('supportReturn', {
+                                            rules: [{ required: true, message: '请选择是否支持退货!' }],
+                                            initialValue: supportReturnOption.defaultValue
+                                        })(
+                                            <Select
+                                                className="sc-form-item-select"
+                                                style={{ width: '150px' }}
+                                                onChange={this.handleSelectChange}
+                                            >
+                                                {
+                                                    supportReturnOption.data.map((item) =>
+                                                        (<Option key={item.key} value={item.key}>
+                                                            {item.value}
+                                                        </Option>)
+                                                    )
+                                                }
+                                            </Select>
+                                            )}
+                                    </span>
+                                </FormItem>
                                 {
                                     isEdit &&
                                     <div className={`${prefixCls}-sub-state`}>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>最新采购价格状态：</span>
-                                            <span><i className={`new-price-state-${getProductByIds.auditStatus}`} />{getProductByIds.newestPrice || '-'}</span>
+                                            <span>{initValue.newestPrice || '-'}</span>
                                         </FormItem>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>提交人：</span>
@@ -374,7 +416,7 @@ class ProdModal extends Component {
                                         </FormItem>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>审核人：</span>
-                                            <span>{getProductByIds.auditUserName || '-'}</span>
+                                            <span>{initValue.auditUserName || '-'}</span>
                                         </FormItem>
                                     </div>
                                 }
