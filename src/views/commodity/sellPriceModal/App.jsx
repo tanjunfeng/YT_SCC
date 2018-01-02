@@ -40,7 +40,7 @@ class SellPriceModal extends Component {
             newestPrice: null,
             branchCompanyId: null,
             branchCompanyName: null,
-            isContinue: false,
+            isContinue: true,
             cretFreConditObj: {},
             freCondit: {}
         }
@@ -48,6 +48,8 @@ class SellPriceModal extends Component {
         this.isDisabled = false;
         this.successPost = true;
         this.messageAlert = true;
+        this.newDatas = {...props.datas.data};
+        this.referenceDatas = {...props.datas.data};
     }
 
     componentDidMount() {
@@ -104,7 +106,7 @@ class SellPriceModal extends Component {
                 message.error('请输入最大销售数量！');
                 return null;
             }
-            if (isContinue) {
+            if (!isContinue) {
                 message.error('阶梯价格不连续!');
                 return null;
             }
@@ -178,8 +180,8 @@ class SellPriceModal extends Component {
 
     render() {
         const { prefixCls, form, datas, isEdit, values } = this.props;
-        const newDatas = datas.data;
         const isAfter = this.isAfter === true;
+        const isReadOnly = true;
         const { freCondit, cretFreConditObj } = this.state;
         return (
             <Modal
@@ -206,14 +208,14 @@ class SellPriceModal extends Component {
                                     <FreightConditions
                                         isEdit={isEdit}
                                         isAfter={isAfter}
-                                        isSub={newDatas.auditStatus === 1}
-                                        newDatas={newDatas}
+                                        isSub={this.newDatas.auditStatus === 1}
+                                        newDatas={this.newDatas}
                                         onFreConditChange={this.handleOnFreConditChange}
                                     />
                                     <EditSteps
-                                        newDatas={newDatas}
+                                        newDatas={this.newDatas}
                                         isEdit={isEdit}
-                                        startNumber={freCondit.minNumber || newDatas.minNumber}
+                                        startNumber={freCondit.minNumber || this.newDatas.minNumber}
                                         onEditChange={this.handleEditSteps}
                                     />
                                 </div>
@@ -222,29 +224,30 @@ class SellPriceModal extends Component {
                                 <FreightConditions
                                     isEdit={isEdit}
                                     isAfter={!isAfter}
-                                    isSub={newDatas.auditStatus === 1}
-                                    newDatas={newDatas}
+                                    isSub={this.newDatas.auditStatus === 1}
+                                    newDatas={this.newDatas}
                                 />
                                 <OnlyReadSteps
-                                    newDatas={newDatas}
-                                    startNumber={this.state.cretFreConditObj.minNumber}
+                                    newDatas={this.referenceDatas}
+                                    isReadOnly={isReadOnly}
+                                    startNumber={freCondit.minNumber || this.newDatas.minNumber}
                                 />
                             </div >
                             <Row className="edit-state-list">
                                 <Col>
                                     <span>提交人：</span>
-                                    <span>{newDatas.firstCreated === 1 ?
-                                        newDatas.createUserName :
-                                        newDatas.modifyUserName || '-'}</span>
+                                    <span>{this.newDatas.firstCreated === 1 ?
+                                        this.newDatas.createUserName :
+                                        this.newDatas.modifyUserName || '-'}</span>
                                 </Col>
                                 <Col>
                                     <span>审核人：</span>
-                                    <span>{newDatas.auditUserName || '-'}</span>
+                                    <span>{this.newDatas.auditUserName || '-'}</span>
                                 </Col>
                                 <Col>
                                     <span>售价状态：</span>
                                     <span>
-                                        <i className={`new-price-state-${newDatas.auditStatus}`} />
+                                        <i className={`new-price-state-${this.newDatas.auditStatus}`} />
                                         {this.catchAuditstate() || '-'}
                                     </span>
                                 </Col>
@@ -256,11 +259,11 @@ class SellPriceModal extends Component {
                                     <FreightConditions
                                         isEdit={isEdit}
                                         values={values}
-                                        newDatas={newDatas}
+                                        newDatas={this.newDatas}
                                         onDataChange={this.handleonCretFreConditChange}
                                     />
                                     <EditSteps
-                                        newDatas={newDatas}
+                                        newDatas={this.newDatas}
                                         isEdit={isEdit}
                                         startNumber={cretFreConditObj.minNumber || values.minNumber}
                                         onCreateChange={this.handleCompyChange}

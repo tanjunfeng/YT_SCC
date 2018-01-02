@@ -214,9 +214,13 @@ class PriceTable extends PureComponent {
 
     render() {
         const { prices } = this.state;
+        const { isReadOnly } = this.props;
         return (
             <div>
-                <Button onClick={this.handleAdd}>添加阶梯价格</Button>
+                {
+                    !isReadOnly &&
+                    <Button onClick={this.handleAdd}>添加阶梯价格</Button>
+                }
                 <Table
                     rowKey="id"
                     columns={this.getColumns()}
@@ -230,7 +234,7 @@ class PriceTable extends PureComponent {
 
 PriceTable.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
-    onChange: PropTypes.func
+    onPricesChange: PropTypes.func
 };
 
 export default PriceTable;
