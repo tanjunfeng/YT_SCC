@@ -106,6 +106,7 @@ class EditableTable extends PureComponent {
             prices.splice(index, 1);
             this.cacheData = prices.map(item => ({ ...item }));
             this.setState({ prices });
+            this.notify(prices);
         }
     }
 
@@ -141,6 +142,7 @@ class EditableTable extends PureComponent {
             });
         }
         this.setState({ prices });
+        this.notify(prices);
     }
 
     renderColumnsNum = (text, record, column, index) => {
