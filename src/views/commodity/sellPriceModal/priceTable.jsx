@@ -15,7 +15,7 @@ class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            prices: props.value.list
+            prices: [...props.value.list]
         }
         this.cacheData = props.value.list.map(item => ({ ...item }));
         columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, 'startNumber', index)
@@ -85,7 +85,7 @@ class PriceTable extends PureComponent {
     }
 
     notify = (prices) => {
-        this.props.onChange(prices, this.isContinue(prices));
+        this.props.onPricesChange(prices, this.isContinue(prices));
     }
 
     save = (id) => {
@@ -211,9 +211,13 @@ class PriceTable extends PureComponent {
 
     render() {
         const { prices } = this.state;
+        const { isReadOnly } = this.props;
         return (
             <div>
-                <Button onClick={this.handleAdd}>添加阶梯价格</Button>
+                {
+                    !isReadOnly &&
+                    <Button onClick={this.handleAdd}>添加阶梯价格</Button>
+                }
                 <Table
                     rowKey="id"
                     columns={this.getColumns()}
@@ -227,7 +231,7 @@ class PriceTable extends PureComponent {
 
 PriceTable.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
-    onChange: PropTypes.func
+    onPricesChange: PropTypes.func
 };
 
 export default PriceTable;
