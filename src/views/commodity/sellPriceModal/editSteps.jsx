@@ -56,6 +56,10 @@ class EditSteps extends Component {
         this.setState({ prices });
     }
 
+    handleCompanyChange = (record) => {
+        console.log(record)
+    }
+
     render() {
         const { prefixCls, form, newDatas = {}, values = {}, isEdit } = this.props;
         const { getFieldDecorator } = form;
@@ -79,9 +83,9 @@ class EditSteps extends Component {
                     <Col className="sell-prigce-edit-footer">
                         <FormItem label="建议零售价(元)：">
                             <span className={`${prefixCls}-day-input`}>
-                                {getFieldDecorator('newestPrice', {
+                                {getFieldDecorator('suggestPrice', {
                                     rules: [{ required: true, message: '请输入建议零售价(元)!' }],
-                                    initialValue: values.suggestPrice || null
+                                    initialValue: values.suggestPrice || newDatas.suggestPrice
                                 })(
                                     <InputNumber
                                         min={0}
@@ -94,7 +98,7 @@ class EditSteps extends Component {
                             </span>
                         </FormItem>
                         <FormItem label="商品采购价格：">
-                            <span>{newDatas.suggestPrice || '-'}</span>
+                            <span>{newDatas.purchasePrice || '-'}</span>
                         </FormItem>
                         {
                             isEdit ?
@@ -104,7 +108,7 @@ class EditSteps extends Component {
                                 <FormItem label="子公司：">
                                     {getFieldDecorator('branchCompany', {
                                         initialValue: { id: '', name: '' }
-                                    })(<BranchCompany />)}
+                                    })(<BranchCompany onChange={this.handleCompanyChange} />)}
                                 </FormItem>
                         }
                     </Col>

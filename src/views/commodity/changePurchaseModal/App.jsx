@@ -261,6 +261,20 @@ class ProdModal extends Component {
         })
     }
 
+    catchAuditstate = () => {
+        const { userNames } = this.props;
+        switch (userNames.auditStatus) {
+            case 1:
+                return '已提交';
+            case 2:
+                return '已审核';
+            case 3:
+                return '已拒绝';
+            default:
+                return null;
+        }
+    }
+
     render() {
         const {
             prefixCls, form, initValue = {}, userNames,
@@ -407,7 +421,10 @@ class ProdModal extends Component {
                                     <div className={`${prefixCls}-sub-state`}>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>最新采购价格状态：</span>
-                                            <span>{userNames.newestPrice || '-'}</span>
+                                            <span>
+                                                <i className={`new-price-state-${userNames.auditStatus}`} />
+                                                {this.catchAuditstate() || '-'}
+                                            </span>
                                         </FormItem>
                                         <FormItem>
                                             <span className={`${prefixCls}-label`}>提交人：</span>
@@ -592,6 +609,7 @@ ProdModal.propTypes = {
     ChangeUpdateProd: PropTypes.func,
     form: PropTypes.objectOf(PropTypes.any),
     getProductByIds: PropTypes.objectOf(PropTypes.any),
+    userNames: PropTypes.objectOf(PropTypes.any),
     handleClose: PropTypes.func,
     prodPurchase: PropTypes.objectOf(PropTypes.any),
     initValue: PropTypes.objectOf(PropTypes.any),

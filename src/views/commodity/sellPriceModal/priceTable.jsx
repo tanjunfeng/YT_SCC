@@ -234,7 +234,8 @@ class PriceTable extends PureComponent {
 
 PriceTable.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    isReadOnly: PropTypes.bool
 };
 
 export default PriceTable;

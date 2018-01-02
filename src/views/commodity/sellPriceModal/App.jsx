@@ -37,7 +37,7 @@ class SellPriceModal extends Component {
         this.handleMaxChange = this.handleMaxChange.bind(this);
 
         this.state = {
-            newestPrice: null,
+            suggestPrice: null,
             branchCompanyId: null,
             branchCompanyName: null,
             isContinue: true,
@@ -119,7 +119,7 @@ class SellPriceModal extends Component {
             Object.assign(data, {
                 branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
                 branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
-                newestPrice: this.state.newestPrice,
+                suggestPrice: this.state.suggestPrice,
                 productId: values.id,
                 ...cretFreConditObj,
                 ...freCondit
@@ -135,7 +135,7 @@ class SellPriceModal extends Component {
 
     handleCompyChange = (object, data) => {
         this.setState({
-            newestPrice: object.newestPrice,
+            suggestPrice: object.suggestPrice,
             branchCompanyId: data.id,
             branchCompanyName: data.name,
         })
@@ -160,9 +160,9 @@ class SellPriceModal extends Component {
         }
     }
 
-    handleEditSteps = (num) => {
+    handleEditSteps = (num, record, data) => {
         this.setState({
-            newestPrice: num
+            suggestPrice: num
         })
     }
 
@@ -179,7 +179,7 @@ class SellPriceModal extends Component {
     }
 
     render() {
-        const { prefixCls, form, datas, isEdit, values } = this.props;
+        const { prefixCls, isEdit, values } = this.props;
         const isAfter = this.isAfter === true;
         const isReadOnly = true;
         const { freCondit, cretFreConditObj } = this.state;
@@ -229,6 +229,7 @@ class SellPriceModal extends Component {
                                 />
                                 <OnlyReadSteps
                                     newDatas={this.referenceDatas}
+                                    isReadOnly={isReadOnly}
                                     startNumber={freCondit.minNumber || this.newDatas.minNumber}
                                 />
                             </div >
@@ -244,7 +245,7 @@ class SellPriceModal extends Component {
                                     <span>{this.newDatas.auditUserName || '-'}</span>
                                 </Col>
                                 <Col>
-                                    <span>售价状态：</span>
+                                    <span>审核状态：</span>
                                     <span>
                                         <i className={`new-price-state-${this.newDatas.auditStatus}`} />
                                         {this.catchAuditstate() || '-'}
