@@ -269,7 +269,7 @@ class ImportPurchasePriceList extends PureComponent {
                         </Col>
                         <Col>
                             {/* 商品 */}
-                            <FormItem className="product-search">
+                            <FormItem className="label-top" label="商品">
                                 <SearchMind
                                     style={{ zIndex: 6000, marginBottom: 5 }}
                                     compKey="productCode"
@@ -282,7 +282,6 @@ class ImportPurchasePriceList extends PureComponent {
                                             pageSize: params.pagination.pageSize
                                         }, 'queryProductForSelect')
                                     }
-                                    addonBefore="商品"
                                     onChoosed={this.handleProductChoosed}
                                     renderChoosedInputRaw={(product) => (
                                         <div>{product.productCode} - {product.saleName}</div>
@@ -303,21 +302,6 @@ class ImportPurchasePriceList extends PureComponent {
                             </FormItem>
                         </Col>
                         <Col>
-                            {/* 处理结果 */}
-                            <FormItem label="处理结果">
-                                {getFieldDecorator('result', { initialValue: processResult.defaultValue })(
-                                    <Select size="default">
-                                        {
-                                            processResult.data.map((item) => (
-                                                <Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Option>))
-                                        }
-                                    </Select>
-                                )}
-                            </FormItem>
-                        </Col>
-                        <Col>
                             {/* 上传日期 */}
                             <FormItem label="上传日期">
                                 {getFieldDecorator('importTime', {})(
@@ -331,6 +315,21 @@ class ImportPurchasePriceList extends PureComponent {
                                     />
                                 )
                                 }
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 处理结果 */}
+                            <FormItem label="处理结果">
+                                {getFieldDecorator('result', { initialValue: processResult.defaultValue })(
+                                    <Select size="default">
+                                        {
+                                            processResult.data.map((item) => (
+                                                <Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>))
+                                        }
+                                    </Select>
+                                )}
                             </FormItem>
                         </Col>
                     </Row>
