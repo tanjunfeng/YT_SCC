@@ -35,20 +35,34 @@ class EditSteps extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { newDatas, isEdit } = nextProps;
-        console.log()
-        console.log(newDatas);
+        const { newDatas, isEdit, values } = nextProps;
+        if (isEdit) {
+            this.setState({
+                prices: newDatas.sellSectionPrices
+            })
+        } else {
+            const arr = [];
+            values.sellSectionPrices.forEach((element) => {
+                console.log(element)
+                arr.push(element)
+            }, this);
+            this.setState({
+                prices: arr
+            })
+        }
     }
 
     getEditableTableValues = () => {
         const { isEdit, newDatas = {}, startNumber } = this.props;
-        const { sellSectionPrices = [] } = newDatas;
+        const { sellSectionPrices = [], sellPricesInReview = {}, auditStatus } = newDatas;
         const { prices } = this.state;
         return {
             isEdit,
             list: prices,
+            sellPricesInReview,
             startNumber,
-            readOnly: false
+            readOnly: false,
+            auditStatus
         };
     }
 
@@ -66,6 +80,10 @@ class EditSteps extends Component {
         const { isEdit } = this.props;
         const service = isEdit ? this.props.onEditChange : this.props.onCreateChange;
         service(record);
+    }
+
+    handleValueFormat = (text) => {
+        return Number(text).toFixed(2);
     }
 
     render() {
@@ -98,8 +116,8 @@ class EditSteps extends Component {
                                     <InputNumber
                                         min={0}
                                         step={0.01}
-                                        formatter={text => Math.floor(text * 100) / 100}
-                                        parser={text => Math.floor(text * 100) / 100}
+                                        formatter={this.handleValueFormat}
+                                        parser={this.handleValueFormat}
                                         onChange={this.handleNewestPriceChange}
                                     />
                                     )}
@@ -130,7 +148,9 @@ EditSteps.propTypes = {
     prefixCls: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
     newDatas: PropTypes.objectOf(PropTypes.any),
+    values: PropTypes.objectOf(PropTypes.any),
     startNumber: PropTypes.number,
+    isEdit: PropTypes.bool,
     onEditChange: PropTypes.func
 };
 

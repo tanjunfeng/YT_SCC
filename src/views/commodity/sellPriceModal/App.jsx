@@ -134,11 +134,18 @@ class SellPriceModal extends Component {
     }
 
     handleCompyChange = (object, data) => {
-        this.setState({
-            suggestPrice: object.suggestPrice,
-            branchCompanyId: data.id,
-            branchCompanyName: data.name,
-        })
+        if (!data) {
+            this.setState({
+                branchCompanyId: object.id,
+                branchCompanyName: object.name,
+            })
+        } else {
+            this.setState({
+                suggestPrice: object.suggestPrice,
+                branchCompanyId: data.id,
+                branchCompanyName: data.name,
+            })
+        }
     }
 
     handleMaxChange = (num) => {

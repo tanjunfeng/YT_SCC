@@ -88,9 +88,9 @@ class OnlyReadSteps extends Component {
                     >{newDatas.sellPricesInReview.suggestPrice}</span>
                     <span>商品采购价格：</span>
                     <span className={
-                        newDatas.sellPricesInReview.suggestPrice !== newDatas.suggestPrice ?
+                        newDatas.sellPricesInReview.purchasePrice !== newDatas.purchasePrice ?
                             'sell-modal-border' : null}
-                    >{newDatas.sellPricesInReview.state || '-'}</span>
+                    >{newDatas.sellPricesInReview.purchasePrice || '-'}</span>
                     <span className="edit-input">子公司:</span>
                     <span className={
                         newDatas.sellPricesInReview.branchCompanyId !== newDatas.branchCompanyId ?
