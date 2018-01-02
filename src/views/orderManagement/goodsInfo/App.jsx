@@ -32,18 +32,26 @@ class GoodsInfo extends PureComponent {
             dataIndex: 'productImg',
             key: 'productImg',
             render: (text, record) => {
-                let tip = null;
+                let errorTip = null;
+                let arrowTip = null;
+
                 if (record.abnormalGoods) {
-                    message = '毛利异常';
+                    message = record.abnormalResonse || '毛利异常';
                     className = 'abnormalResonse';
-                    tip = <div className={className}>{message}</div>;
-                } else if (record.type === 'promotion') {
-                    message = '赠';
-                    className = 'giftsTip';
-                    tip = <p className={className}><span>{message}</span></p>;
+                    errorTip = <div className={className}>{message}</div>;
                 } else {
                     className = '';
-                    message = '';
+                    errorTip = '';
+                }
+
+                if (record.type === 'promotion') {
+                    message = '赠';
+                    className = 'arrowTip giftColor';
+                    arrowTip = <p className={className}><span>{message}</span></p>;
+                } else if (record.type === 'bundle') {
+                    message = '套';
+                    className = 'arrowTip packageColor';
+                    arrowTip = <p className={className}><span>{message}</span></p>;
                 }
                 const imgUrl = text || noImage;
                 return (
@@ -53,7 +61,8 @@ class GoodsInfo extends PureComponent {
                             alt="未上传"
                             style={{ width: 50, height: 50, verticalAlign: 'middle' }}
                         />
-                        {tip}
+                        {arrowTip}
+                        {errorTip}
                     </div>
                 )
             }
@@ -153,7 +162,7 @@ class GoodsInfo extends PureComponent {
                 } else {
                     className = '';
                 }
-                return <span className={className}>￥{Number(record.itemPrice.salePrice).toFixed(2)}</span>
+                return <span className={className}>{`￥${Number(record.itemPrice.salePrice).toFixed(2)}`}</span>
             }
         }, {
             title: '金额',
@@ -246,7 +255,7 @@ class GoodsInfo extends PureComponent {
         const subNum = this.getLastSubNum() + 1;
         this.columns.push({ title: `子订单${subNum}`, dataIndex: `sub${subNum}` });
         goodsList.forEach(goods => {
-            const quantityUsed = goods[`sub${subNum - 2}`];  // 倒数第二列的数量应该算作占用库存
+            const quantityUsed = goods[`sub${subNum - 2}`]; // 倒数第二列的数量应该算作占用库存
             Object.assign(goods, {
                 [`sub${subNum}`]: 0,
                 quantityLeft: goods.quantityLeft - quantityUsed
