@@ -55,6 +55,35 @@
             width: 260px;
         }
     }
+    .submit-user{
+        vertical-align: middle;
+    }
+    .new-price-state {
+        &-1 {
+            width: 5px;
+            height: 5px;
+            background: #5397E8;
+            border-radius: 50%;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        &-2 {
+            width: 5px;
+            height: 5px;
+            background: #71E135;
+            border-radius: 50%;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        &-3 {
+            width: 5px;
+            height: 5px;
+            background: red;
+            border-radius: 50%;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
 }
 .purchase-modal-data-disable {
     input.ywc-smind-input {

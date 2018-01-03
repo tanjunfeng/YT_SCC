@@ -107,9 +107,7 @@ class FreightConditions extends Component {
         this.setState({
             startNumber: num,
             isEditPrice: true,
-        }, () => {
-            this.props.form.setFieldsValue({ minNumber: num });
-        })
+        });
         this.handlePropsValues();
     }
 
@@ -118,7 +116,6 @@ class FreightConditions extends Component {
      */
     handleMaxChange = (num) => {
         this.maxNumber = num;
-        this.props.form.setFieldsValue({ maxNumber: num });
         this.handlePropsValues();
     }
 

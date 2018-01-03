@@ -53,6 +53,7 @@ class Category extends PureComponent {
      * http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/promotion/insertPromotion
      */
     handleChange = (value, selectedOptions) => {
+        console.log(value, selectedOptions);
         if (selectedOptions.length === 0) {
             this.props.onChange(null, selectedOptions);
         } else {

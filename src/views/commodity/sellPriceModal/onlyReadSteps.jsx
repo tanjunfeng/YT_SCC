@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, InputNumber, message, Select } from 'antd';
+import { Form, InputNumber, message, Select, Table } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
     pubFetchValueList
 } from '../../../actions/pub';
-import EditableTable from './editableTable';
+import PriceTable from './priceTable';
 import { productAddPriceVisible } from '../../../actions/producthome';
 import { fetchAddProdPurchase } from '../../../actions';
 import { MAXGOODS } from '../../../constant'
@@ -26,44 +26,58 @@ const FormItem = Form.Item;
 )
 class OnlyReadSteps extends Component {
     constructor(props) {
-        super(props);
-        this.childCompany = props.datas.branchCompanyId ? {
-            branchCompanyId: props.datas.branchCompanyId,
-            branchCompanyName: props.datas.branchCompanyName
-        } : {};
+        super(props)
+
+        this.columns = [{
+            title: '起始数量',
+            dataIndex: 'startNumber',
+            key: 'startNumber',
+        }, {
+            title: '终止数量',
+            dataIndex: 'endNumber',
+            key: 'endNumber',
+        }, {
+            title: '最新售价/元',
+            dataIndex: 'price',
+            key: 'price',
+        }, {
+            title: '商品毛利率',
+            dataIndex: 'percentage',
+            key: 'percentage',
+        }];
     }
 
-    getEditableTableValues = (list) => {
-        const { isEdit, newDatas, startNumber } = this.props;
+    getEditableTableValues = () => {
+        const { isEdit, newDatas, startNumber, isReadOnly } = this.props;
+        const { sellSectionPrices = [] } = newDatas;
+        const sellSectionPricesObj = { sellSectionPrices };
         const { auditStatus = 0 } = newDatas;
         return {
             isEdit,
-            list,
+            list: sellSectionPricesObj.sellSectionPrices,
             startNumber,
             data: newDatas.sellSectionPrices,
-            readOnly: false,
+            isReadOnly,
             isSub: auditStatus === 1
         };
     }
 
     render() {
-        const { prefixCls, form, newDatas } = this.props;
-        const { getFieldDecorator } = form;
-        const { sellSectionPrices = [] } = newDatas;
+        const { prefixCls, newDatas = {} } = this.props;
         return (
             <div className={`${prefixCls}-item`}>
                 <div className={`${prefixCls}-item-title`}>
                     添加阶梯价格
-                            <span className={`${prefixCls}-item-tip`}>
-                        &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
-                            </span>
+                    <span className={`${prefixCls}-item-tip`}>
+                    &nbsp;(请按从小到大的顺序，最大值为{MAXGOODS})
+                    </span>
                 </div>
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem>
-                        {getFieldDecorator('sellSectionPrices', {
-                            initialValue: this.getEditableTableValues(sellSectionPrices)
-                        })(
-                            <EditableTable />)}
+                        <Table dataSource={this.getEditableTableValues().list} columns={this.columns} pagination={false} />
+                        {/* <PriceTable
+                            value={this.getEditableTableValues()}
+                        /> */}
                     </FormItem>
                 </div>
                 <div className="read-only-footer">
@@ -74,9 +88,9 @@ class OnlyReadSteps extends Component {
                     >{newDatas.sellPricesInReview.suggestPrice}</span>
                     <span>商品采购价格：</span>
                     <span className={
-                        newDatas.sellPricesInReview.suggestPrice !== newDatas.suggestPrice ?
+                        newDatas.sellPricesInReview.purchasePrice !== newDatas.purchasePrice ?
                             'sell-modal-border' : null}
-                    >{newDatas.sellPricesInReview.state || '-'}</span>
+                    >{newDatas.sellPricesInReview.purchasePrice || '-'}</span>
                     <span className="edit-input">子公司:</span>
                     <span className={
                         newDatas.sellPricesInReview.branchCompanyId !== newDatas.branchCompanyId ?
@@ -89,9 +103,7 @@ class OnlyReadSteps extends Component {
 }
 
 OnlyReadSteps.propTypes = {
-    prefixCls: PropTypes.string,
-    form: PropTypes.objectOf(PropTypes.any),
-    datas: PropTypes.objectOf(PropTypes.any),
+    prefixCls: PropTypes.string
 };
 
 OnlyReadSteps.defaultProps = {
