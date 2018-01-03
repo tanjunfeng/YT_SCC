@@ -87,8 +87,10 @@ const initState = Immutable.fromJS({
     deleteProd: {},
 
     // 跳转到修改页面
-    getSellPriceInfoById: {}
+    getSellPriceInfoById: {},
 
+    // 成本价
+    costPrice: -100.00
 });
 
 export default function (state = initState, action) {
@@ -123,8 +125,7 @@ export default function (state = initState, action) {
                 .set('visibleData', id)
                 .set('isEdit', isEdit)
                 .set('pricingId', pricingId)
-                .set('id', id)
-                ;
+                .set('id', id);
         }
 
         // 新增采购价格弹窗
@@ -137,8 +138,7 @@ export default function (state = initState, action) {
                 .set('id', id)
                 .set('supplierId', supplierId)
                 .set('companyName', companyName)
-                .set('pricingId', pricingId)
-                ;
+                .set('pricingId', pricingId);
         }
 
         // 修改采购价格弹窗
@@ -198,6 +198,10 @@ export default function (state = initState, action) {
 
         case ActionType.GER_WARE_HOUSE_LOGIC_INFO:
             return state.set('getWarehouseLogicInfo', action.payload);
+
+        case ActionType.GET_COST_PRICE:
+        case ActionType.CLEAR_COST_PRICE:
+            return state.set('costPrice', action.payload);
 
         default:
             return state;

@@ -171,7 +171,7 @@ class SearchForm extends Component {
     }
 
     handlePriceImport = () => {
-        window.open(`/orderList/orderDetails/${this.props.value}`)
+        window.open('/priceExamination')
     }
 
     render() {

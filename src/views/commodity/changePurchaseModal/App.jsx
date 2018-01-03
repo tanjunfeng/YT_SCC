@@ -84,6 +84,22 @@ class ProdModal extends Component {
     }
 
     /**
+    * 获取表单数据
+    */
+    getFormData = () => {
+        const {
+            supportReturn,
+            newestPrice,
+            purchasePrice
+        } = this.props.form.getFieldsValue();
+        return Util.removeInvalid({
+            supportReturn,
+            newestPrice,
+            purchasePrice
+        });
+    }
+
+    /**
      * 仓库-值清单
      */
     handleHouseChoose = ({ record }) => {
@@ -165,20 +181,6 @@ class ProdModal extends Component {
     }
 
     /**
-    * 获取表单数据
-    */
-    getFormData = () => {
-        const {
-            supportReturn,
-            newestPrice
-        } = this.props.form.getFieldsValue();
-        return Util.removeInvalid({
-            supportReturn,
-            newestPrice
-        });
-    }
-
-    /**
      * 创建弹框OK事件 (当没有改变时)
      */
     handleOk() {
@@ -223,13 +225,16 @@ class ProdModal extends Component {
                 // 仓库ID
                 distributeWarehouseId: this.ids.warehouseId,
                 supportReturn: this.getFormData().supportReturn,
+                purchasePrice: this.getFormData().purchasePrice,
                 newestPrice: isEdit ? this.getFormData().newestPrice : values.newestPrice,
                 productCode: getProductByIds.productCode
             })
             subPost(subData).then((res) => {
-                message.success(res.message)
-                this.handleCancel();
-                this.props.goto()
+                if (res.code === 200) {
+                    message.success(res.message)
+                    this.handleCancel();
+                    this.props.goto()
+                }
             }).catch(() => {
                 message.error('操作失败')
             })
@@ -275,6 +280,13 @@ class ProdModal extends Component {
         }
     }
 
+    handleNewsPricChange = (newestPrice) => {
+        if (newestPrice) {
+            const result = ((newestPrice - this.getFormData().purchasePrice) / this.getFormData().purchasePrice) * 100
+            return result.toFixed(2)
+        }
+    }
+
     render() {
         const {
             prefixCls, form, initValue = {}, userNames,
@@ -289,9 +301,9 @@ class ProdModal extends Component {
         const firstCreated = () => {
             switch (userNames.firstCreated) {
                 case 0:
-                    return userNames.createUserName;
-                case 1:
                     return userNames.modifyUserName;
+                case 1:
+                    return userNames.createUserName;
                 default:
                     return null;
             }
@@ -338,7 +350,7 @@ class ProdModal extends Component {
                                             <span className={`${prefixCls}-barcode-input`}>
                                                 {getFieldDecorator('newestPrice', {
                                                     rules: [{ required: true, message: '请输入采购价!' }],
-                                                    initialValue: getProductByIds.newestPrice
+                                                    initialValue: getProductByIds.purchasePrice
                                                 })(
                                                     <InputNumber min={0} step={0.01} placeholder="采购价" />)}
                                             </span>
@@ -352,11 +364,16 @@ class ProdModal extends Component {
                                                 {getFieldDecorator('newestPrice', {
                                                     rules: [{ required: true, message: '请输入最新采购价!' }],
                                                     initialValue: initValue.newestPrice
-                                                })(
-                                                    <InputNumber min={0} step={0.01} placeholder="最新采购价" />)}
+                                                })(<InputNumber
+                                                    min={0}
+                                                    step={0.01}
+                                                    placeholder="最新采购价"
+                                                    onChange={this.handleNewsPricChange}
+                                                />)}
                                             </span>
                                             <span className={`${prefixCls}-adjustment`}>
-                                                调价百分比：{initValue.percentage}%
+                                                调价百分比：
+                                                <span>{this.handleNewsPricChange(this.getFormData().newestPrice) || initValue.percentage}%</span>
                                             </span>
                                         </FormItem>
                                         : null
