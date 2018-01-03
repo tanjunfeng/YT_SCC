@@ -76,13 +76,17 @@ class FreightConditions extends Component {
 
     handlePropsValues = () => {
         const { isEdit } = this.props;
-        const service = isEdit ? this.props.onFreConditChange : this.props.onDataChange;
+        const service = isEdit ? this.props.onFreConditChange : this.props.onReactChange;
         service(this.getFormData());
     }
 
     handleSelectChange = (item) => {
         this.choose = item === '-1' ? null : item;
         this.handlePropsValues();
+    }
+
+    handleDelayChange = () => {
+        this.handlePropsValues()
     }
 
     /**
@@ -207,9 +211,11 @@ class FreightConditions extends Component {
                                         {getFieldDecorator('deliveryDay', {
                                             rules: [{ required: true, message: '请输入承诺发货时间!' }],
                                             initialValue: isEdit ? data.deliveryDay : values.deliveryDay
-                                        })(
-                                            <InputNumber min={0} disabled={isSub} />
-                                            )}
+                                        })(<InputNumber
+                                            min={0}
+                                            disabled={isSub}
+                                            onChange={this.handleDelayChange}
+                                        />)}
                                     </span>
                                     天内发货
                                     </FormItem>
@@ -318,7 +324,8 @@ FreightConditions.propTypes = {
     getProductById: PropTypes.objectOf(PropTypes.any),
     newDatas: PropTypes.objectOf(PropTypes.any),
     datas: PropTypes.objectOf(PropTypes.any),
-    onDataChange: PropTypes.func
+    onReactChange: PropTypes.func,
+    onFreConditChange: PropTypes.func
 }
 
 FreightConditions.defaultProps = {

@@ -238,10 +238,9 @@ class PriceTable extends PureComponent {
                             &nbsp;
                             {index > 0 ? <Popconfirm
                                 title="确定删除?"
-                                disabled={isSub}
                                 onConfirm={() => this.delete(record.id)}
                             >
-                                <a>删除</a>
+                                <a disabled={isSub}>删除</a>
                             </Popconfirm> : null}
                         </span>
                 }
