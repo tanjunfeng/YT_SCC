@@ -112,11 +112,24 @@ class PriceTable extends PureComponent {
         }
     }
 
+    /**
+     * 格式化数据
+     */
+    formatData = (record) => {
+        const { startNumber, endNumber, price } = record;
+        Object.assign(record, {
+            startNumber: Math.ceil(startNumber),
+            endNumber: Math.ceil(endNumber),
+            price: Number(price).toFixed(2)
+        })
+    }
+
     save = (id) => {
         const prices = [...this.state.prices];
         const target = prices.filter(item => id === item.id)[0];
         if (target) {
             delete target.editable;
+            this.formatData(target); // 保存时，数据格式化
             this.setState({ prices });
             this.cacheData = prices.map(item => ({ ...item }));
             this.notify(prices);
@@ -187,15 +200,15 @@ class PriceTable extends PureComponent {
         return (
             <EditableCell
                 editable={editable}
-                value={text}
+                value={String(text)}
                 onChange={value => this.handleChange(value, record.id, column)}
             />);
     }
 
-    renderColumnsPrice = (text = 0, record, column) => (
+    renderColumnsPrice = (text, record, column) => (
         <EditableCell
             editable={record.editable}
-            value={text}
+            value={String(text)}
             type="price"
             onChange={value => this.handleChange(value, record.id, column)}
         />
@@ -224,6 +237,7 @@ class PriceTable extends PureComponent {
                             &nbsp;
                             {index > 0 ? <Popconfirm
                                 title="确定删除?"
+                                disabled={isSub}
                                 onConfirm={() => this.delete(record.id)}
                             >
                                 <a>删除</a>
@@ -239,8 +253,11 @@ class PriceTable extends PureComponent {
      */
     renderGrossProfit = (text, record) => {
         const { costPrice } = this.props;
+        if (costPrice < 0) {
+            return (<span className="red">-</span>);
+        }
         const { price } = record;
-        const rate = (price - costPrice) / costPrice;
+        const rate = (price - costPrice) * 100 / costPrice;
         return (<span className="red">{rate.toFixed(2)}%</span>);
     }
 
