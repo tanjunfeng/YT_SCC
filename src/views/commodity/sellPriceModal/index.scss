@@ -50,6 +50,11 @@
             left: 30px;
         }
     }
+    .sell-modal-body-width{
+        .sell-modal-item{
+            min-height: 260px;
+        }
+    }
     .ant-form-explain {
         width: 160px;
     }
@@ -97,6 +102,9 @@
     .read-only-footer{
         height: 32px;
         line-height: 32px;
+        span{
+            padding: 0 5px;
+        }
     }
     .new-price-state {
         &-1 {

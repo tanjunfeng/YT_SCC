@@ -62,6 +62,7 @@ class ProcurementMaintenance extends PureComponent {
         this.searchForm = {};
         this.current = 1;
         this.state = {
+            userNames: {},
             createUserName: '',
             // 控制当前操作card下标
             index: 0,
@@ -140,6 +141,7 @@ class ProcurementMaintenance extends PureComponent {
         this.props.getProdPurchaseById({id: record.id}).then((res) => {
             this.setState({
                 createUserName: res.createUserName,
+                userNames: res
             });
         })
         this.setState({
@@ -197,6 +199,7 @@ class ProcurementMaintenance extends PureComponent {
                     <ProdModal
                         data={getProductByIds}
                         initValue={this.state.initData}
+                        userNames={this.state.userNames}
                         createUserName={this.state.createUserName}
                         isEdit={this.state.isEdit}
                         goto={this.getCardData}

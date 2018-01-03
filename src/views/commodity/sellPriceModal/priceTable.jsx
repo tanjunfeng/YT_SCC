@@ -1,6 +1,5 @@
 /**
- * @file App.jsx
- * @author shijh
+ * @author taoqiyu
  *
  * 价格区间选择组件
  */
@@ -12,11 +11,11 @@ import { Table, Popconfirm, Button } from 'antd';
 import EditableCell from './editableCell';
 import { stepPriceColumns as columns } from './columns';
 
-class EditableTable extends PureComponent {
+class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            prices: props.value.list
+            prices: [...props.value.list]
         }
         this.cacheData = props.value.list.map(item => ({ ...item }));
         columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, 'startNumber', index)
@@ -24,6 +23,17 @@ class EditableTable extends PureComponent {
         columns[2].render = (text, record) => this.renderColumnsPrice(text, record, 'price')
         columns[3].render = () => '20%'
         columns[4].render = (text, record, index) => this.renderOptions(text, record, index)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        // 当用户手工修改 startNumber 时，更新 prices 第一条记录并通知父组件更新
+        const { startNumber } = nextProps.value;
+        const prices = [...this.state.prices];
+        if (prices.length > 0 && this.props.value.startNumber !== startNumber) {
+            prices[0].startNumber = startNumber;
+            this.setState({ prices });
+            this.notify(prices);
+        }
     }
 
     /**
@@ -75,7 +85,10 @@ class EditableTable extends PureComponent {
     }
 
     notify = (prices) => {
-        this.props.onChange(prices, this.isContinue(prices));
+        const { onChange } = this.props;
+        if (typeof onChange === 'function') {
+            onChange(prices, this.isContinue(prices));
+        }
     }
 
     save = (id) => {
@@ -201,9 +214,13 @@ class EditableTable extends PureComponent {
 
     render() {
         const { prices } = this.state;
+        const { isReadOnly } = this.props.value;
         return (
             <div>
-                <Button onClick={this.handleAdd}>添加阶梯价格</Button>
+                {
+                    !isReadOnly &&
+                    <Button onClick={this.handleAdd}>添加阶梯价格</Button>
+                }
                 <Table
                     rowKey="id"
                     columns={this.getColumns()}
@@ -215,9 +232,10 @@ class EditableTable extends PureComponent {
     }
 }
 
-EditableTable.propTypes = {
+PriceTable.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    isReadOnly: PropTypes.bool
 };
 
-export default EditableTable;
+export default PriceTable;

@@ -7,7 +7,7 @@ import Util from '../../../util/util';
 import {
     pubFetchValueList
 } from '../../../actions/pub';
-import EditableTable from './editableTable';
+import PriceTable from './priceTable';
 import { productAddPriceVisible } from '../../../actions/producthome';
 import { fetchAddProdPurchase } from '../../../actions';
 import { MAXGOODS } from '../../../constant'
@@ -29,31 +29,64 @@ const FormItem = Form.Item;
 class EditSteps extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            prices: []
+        }
     }
 
-    getEditableTableValues = (list) => {
+    componentWillReceiveProps(nextProps) {
+        const { newDatas, isEdit } = nextProps;
+        if (isEdit) {
+            const arrEidt = [];
+            newDatas.sellSectionPrices.map((element) => (
+                arrEidt.push(element)
+            ))
+            this.setState({
+                prices: arrEidt
+            })
+        }
+    }
+
+    getEditableTableValues = () => {
         const { isEdit, newDatas = {}, startNumber } = this.props;
-        const { auditStatus = 0 } = newDatas;
+        const { sellSectionPrices = [], sellPricesInReview = {}, auditStatus } = newDatas;
+        const { prices } = this.state;
         return {
             isEdit,
-            list,
+            list: prices,
+            sellPricesInReview,
             startNumber,
-            data: newDatas.sellSectionPrices,
             readOnly: false,
-            isSub: auditStatus === 1,
+            auditStatus
         };
     }
 
-    handleNewestPriceChange = (num) => {
+    handlePropsback = () => {
         const { isEdit } = this.props;
         const service = isEdit ? this.props.onEditChange : this.props.onCreateChange;
-        service(num);
+        return service();
+    }
+
+    handleNewestPriceChange = (num) => {
+        this.handlePropsback(num)
+    }
+
+    handlePricesChange = (prices, isContinue) => {
+        this.handlePropsback(prices, isContinue)
+        this.setState({ prices });
+    }
+
+    handleCompanyChange = (record) => {
+        this.handlePropsback(record)
+    }
+
+    handleValueFormat = (text) => {
+        return Number(text).toFixed(2);
     }
 
     render() {
-        const { prefixCls, form, newDatas = {}, values = {}, isEdit, startNumber } = this.props;
+        const { prefixCls, form, newDatas = {}, values = {}, isEdit } = this.props;
         const { getFieldDecorator } = form;
-        const { sellSectionPrices = [] } = newDatas;
         return (
             <div className={`${prefixCls}-item item-max-height`}>
                 <div className={`${prefixCls}-item-title`}>
@@ -64,31 +97,32 @@ class EditSteps extends Component {
                 </div>
                 <div className={`${prefixCls}-item-content`}>
                     <FormItem>
-                        {getFieldDecorator('sellSectionPrices', {
-                            initialValue: this.getEditableTableValues(sellSectionPrices)
-                        })(<EditableTable startNumber={startNumber || newDatas.minNumber} />)}
+                        <PriceTable
+                            value={this.getEditableTableValues()}
+                            onChange={this.handlePricesChange}
+                        />
                     </FormItem>
                 </div>
                 <Row>
                     <Col className="sell-prigce-edit-footer">
                         <FormItem label="建议零售价(元)：">
                             <span className={`${prefixCls}-day-input`}>
-                                {getFieldDecorator('newestPrice', {
+                                {getFieldDecorator('suggestPrice', {
                                     rules: [{ required: true, message: '请输入建议零售价(元)!' }],
-                                    initialValue: values.suggestPrice || null
+                                    initialValue: values.suggestPrice || newDatas.suggestPrice
                                 })(
                                     <InputNumber
                                         min={0}
                                         step={0.01}
-                                        formatter={text => Math.floor(text * 100) / 100}
-                                        parser={text => Math.floor(text * 100) / 100}
+                                        formatter={this.handleValueFormat}
+                                        parser={this.handleValueFormat}
                                         onChange={this.handleNewestPriceChange}
                                     />
                                     )}
                             </span>
                         </FormItem>
                         <FormItem label="商品采购价格：">
-                            <span>{newDatas.suggestPrice || '-'}</span>
+                            <span>{newDatas.purchasePrice || '-'}</span>
                         </FormItem>
                         {
                             isEdit ?
@@ -98,7 +132,7 @@ class EditSteps extends Component {
                                 <FormItem label="子公司：">
                                     {getFieldDecorator('branchCompany', {
                                         initialValue: { id: '', name: '' }
-                                    })(<BranchCompany />)}
+                                    })(<BranchCompany onChange={this.handleCompanyChange} />)}
                                 </FormItem>
                         }
                     </Col>
@@ -112,8 +146,11 @@ EditSteps.propTypes = {
     prefixCls: PropTypes.string,
     form: PropTypes.objectOf(PropTypes.any),
     newDatas: PropTypes.objectOf(PropTypes.any),
+    values: PropTypes.objectOf(PropTypes.any),
     startNumber: PropTypes.number,
-    onEditChange: PropTypes.func
+    isEdit: PropTypes.bool,
+    onEditChange: PropTypes.func,
+    onCreateChange: PropTypes.func
 };
 
 EditSteps.defaultProps = {
