@@ -11,7 +11,7 @@ import { fetchAddProdPurchase } from '../../../actions';
 import {
 } from '../../../constant/searchParams';
 import {
-    getSellPriceInfoByIdAction
+    getCostPrice
 } from '../../../actions/commodity';
 import FreightConditions from './freightConditions';
 import OnlyReadSteps from './onlyReadSteps';
@@ -19,15 +19,11 @@ import EditSteps from './editSteps';
 
 @connect(
     state => ({
-        toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
-        getProductById: state.toJS().commodity.getProductById
+        productId: state.toJS().commodity.getProductById.id,
+        costPrice: state.toJS().commodity.costPrice
     }),
     dispatch => bindActionCreators({
-        productAddPriceVisible,
-        fetchAddProdPurchase,
-        pubFetchValueList,
-        getSellPriceInfoByIdAction,
-        toAddSellPrice
+        getCostPrice
     }, dispatch)
 )
 
@@ -49,8 +45,8 @@ class SellPriceModal extends Component {
         this.isDisabled = false;
         this.successPost = true;
         this.messageAlert = true;
-        this.newDatas = {...props.datas.data};
-        this.referenceDatas = {...props.datas.data};
+        this.newDatas = { ...props.datas.data };
+        this.referenceDatas = { ...props.datas.data };
     }
 
     componentDidMount() {
@@ -158,10 +154,16 @@ class SellPriceModal extends Component {
     }
 
     handleCompyChange = (record) => {
+        const { productId } = this.props;
+        const branchCompanyId = record.id;
         this.setState({
-            branchCompanyId: record.id,
+            branchCompanyId,
             branchCompanyName: record.name,
-        })
+        });
+        // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodPurchase/queryPurchasePriceForSellPrice
+        this.props.getCostPrice({
+            productId, branchCompanyId
+        });2
     }
 
     handleMaxChange = (num) => {
@@ -216,7 +218,7 @@ class SellPriceModal extends Component {
     }
 
     render() {
-        const { prefixCls, isEdit, values } = this.props;
+        const { prefixCls, isEdit, values, costPrice } = this.props;
         const isAfter = this.isAfter === true;
         const isReadOnly = true;
         const { freCondit, cretFreConditObj } = this.state;
@@ -252,6 +254,7 @@ class SellPriceModal extends Component {
                                     <EditSteps
                                         newDatas={this.newDatas}
                                         isEdit={isEdit}
+                                        isSub={this.newDatas.auditStatus === 1}
                                         startNumber={freCondit.minNumber || this.newDatas.minNumber}
                                         onEditChange={this.handleEditSteps}
                                         onEditPriceChange={this.handleEditPriceChange}
