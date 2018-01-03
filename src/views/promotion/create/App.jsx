@@ -381,6 +381,5 @@ PromotionCreate.propTypes = {
     form: PropTypes.objectOf(PropTypes.any),
     createPromotion: PropTypes.func
 }
-// test
 
 export default withRouter(Form.create()(PromotionCreate));
