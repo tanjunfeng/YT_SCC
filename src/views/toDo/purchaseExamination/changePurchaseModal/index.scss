@@ -55,4 +55,25 @@
             width: 260px;
         }
     }
+    .new-price-state {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        display: inline-block;
+        position: relative;
+        top: -2px;
+        margin-right: 5px;
+        &-1 {
+            background: #5397E8;
+        }
+        &-2 {
+            background: #71E135;
+        }
+        &-3 {
+            background: red;
+        }
+    }
+    .purchase-modal-label {
+        vertical-align: top;
+    }
 }
