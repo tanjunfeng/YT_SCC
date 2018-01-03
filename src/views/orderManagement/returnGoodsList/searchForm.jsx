@@ -99,12 +99,12 @@ class SearchForm extends PureComponent {
                     onSubmit={this.handleSearch}
                 >
                     <Row gutter={40}>
-                        <Col span={8}>
+                        <Col>
                             <FormItem label="退货单类型">
                                 {getFieldDecorator('returnRequestType', {
                                     initialValue: data.state ? data.state : ''
                                 })(
-                                    <Select style={{ width: '200px' }} size="default">
+                                    <Select>
                                         {
                                             returnType.data.map((item) => (
                                                 <Select.Option key={item.key} value={item.key}>
@@ -116,7 +116,7 @@ class SearchForm extends PureComponent {
                                     )}
                             </FormItem>
                         </Col>
-                        <Col span={8}>
+                        <Col>
                             <FormItem label="原订单号">
                                 {getFieldDecorator('orderId', {
                                     initialValue: data.orderId
@@ -125,27 +125,22 @@ class SearchForm extends PureComponent {
                                     )}
                             </FormItem>
                         </Col>
-                        <Col span={8} className="company-time">
+                        <Col>
                             {/* 子公司 */}
-                            <FormItem label="分公司">
+                            <FormItem label="分公司" className="itemTop">
                                 {getFieldDecorator('branchCompany', {
                                     initialValue: { id: '', name: '' }
                                 })(<BranchCompany />)}
                             </FormItem>
                         </Col>
-                    </Row>
-                    <Row gutter={40}>
-                        <Col span={8} className="franchisee-item">
-                            <FormItem>
-                                <div>
-                                    <span className="sc-form-item-label">雅堂小超:</span>
-                                    {getFieldDecorator('franchisee', {
-                                        initialValue: { franchiseeId: '', franchiseeName: '' }
-                                    })(<Franchisee />)}
-                                </div>
+                        <Col>
+                            <FormItem label="雅堂小超" className="itemTop">
+                                {getFieldDecorator('franchisee', {
+                                    initialValue: { franchiseeId: '', franchiseeName: '' }
+                                })(<Franchisee />)}
                             </FormItem>
                         </Col>
-                        <Col span={8}>
+                        <Col>
                             <FormItem label="退货单号">
                                 {getFieldDecorator('id', {
                                     initialValue: data.id
@@ -154,12 +149,12 @@ class SearchForm extends PureComponent {
                                     )}
                             </FormItem>
                         </Col>
-                        <Col span={8}>
+                        <Col>
                             <FormItem label="退货单状态">
                                 {getFieldDecorator('state', {
                                     initialValue: data.state ? data.state : ''
                                 })(
-                                    <Select style={{ width: '200px' }} size="default">
+                                    <Select size="default">
                                         {
                                             returnGoodsStatus.data.map((item) => (
                                                 <Select.Option key={item.key} value={item.key}>
@@ -171,14 +166,12 @@ class SearchForm extends PureComponent {
                                     )}
                             </FormItem>
                         </Col>
-                    </Row>
-                    <Row gutter={40}>
-                        <Col span={8}>
+                        <Col>
                             <FormItem label="收货状态">
                                 {getFieldDecorator('shippingState', {
                                     initialValue: data.shippingState ? data.shippingState : ''
                                 })(
-                                    <Select style={{ width: '200px' }} size="default">
+                                    <Select size="default">
                                         {
                                             goodsReceiptStatus.data.map((item) => (
                                                 <Select.Option key={item.key} value={item.key}>
@@ -190,33 +183,28 @@ class SearchForm extends PureComponent {
                                     )}
                             </FormItem>
                         </Col>
-                        <Col span={8}>
-                            <FormItem >
-                                <div className="row middle">
-                                    <span className="ant-form-item-label search-mind-label">退货日期</span>
-                                    {getFieldDecorator('createTime', {
-                                        initialValue: data.startCreateTime ? [moment(data.startCreateTime), moment(data.endCreateTime)] : null
-                                    })(
-                                        <RangePicker
-                                            className="date-range-picker"
-                                            style={{ width: 250 }}
-                                            format={dateFormat}
-                                            showTime={{
-                                                hideDisabledOptions: true,
-                                                defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
-                                            }}
-                                            placeholder={['开始日期', '结束日期']}
-                                            onChange={this.chooseCreateDate}
-                                        />
-                                        )}
-                                </div>
+                        <Col >
+                            <FormItem label="退货日期">
+                                {getFieldDecorator('createTime', {
+                                    initialValue: data.startCreateTime ? [moment(data.startCreateTime), moment(data.endCreateTime)] : null
+                                })(
+                                    <RangePicker
+                                        className="date-range-picker"
+                                        format={dateFormat}
+                                        showTime={{
+                                            hideDisabledOptions: true,
+                                            defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                        }}
+                                        placeholder={['开始日期', '结束日期']}
+                                        onChange={this.chooseCreateDate}
+                                    />)}
                             </FormItem>
                         </Col>
                     </Row>
-                    <Row gutter={40}>
-                        <Col span={24} style={{ textAlign: 'right' }}>
+                    <Row gutter={40} type="flex" justify="end">
+                        <Col>
                             <Button type="primary" htmlType="submit">搜索</Button>
-                            <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>重置</Button>
+                            <Button onClick={this.handleReset}>重置</Button>
                         </Col>
                     </Row>
                 </Form>

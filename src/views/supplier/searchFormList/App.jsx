@@ -268,7 +268,7 @@ class SearchForm extends PureComponent {
                         {
                             supplierType === '1' ?
                                 <Col>
-                                    <FormItem label=""供应商等级>
+                                    <FormItem label="供应商等级">
                                         {getFieldDecorator('grade', {
                                             initialValue: supplierLevelOptions.defaultValue
                                         })(
