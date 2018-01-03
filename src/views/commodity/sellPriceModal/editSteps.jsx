@@ -26,6 +26,7 @@ const FormItem = Form.Item;
         pubFetchValueList,
     }, dispatch)
 )
+
 class EditSteps extends Component {
     constructor(props) {
         super(props);
