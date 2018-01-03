@@ -99,7 +99,6 @@ class SellPriceModal extends Component {
             ...cretFreConditObj,
             ...freCondit
         })
-        console.log(this.newDatas)
         Object.assign(editData, {
             branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
             branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
