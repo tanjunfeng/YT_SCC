@@ -33,6 +33,11 @@ class SearchForm extends PureComponent {
         this.selectMap = this.selectMap.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        const nextImportsId = nextProps.form.getFieldValue('importsId')
+        this.props.isCreateChange(nextImportsId)
+    }
+
     /**
      * 获取表单数据
      */
@@ -44,11 +49,10 @@ class SearchForm extends PureComponent {
             pariceDateRange,
             handleResult
         } = this.props.form.getFieldsValue();
-        const prRecord = product.record;
         return Util.removeInvalid({
             importsId,
             branchCompanyId: company.id,
-            productId: prRecord ? prRecord.productId : '',
+            productId: product.productId,
             uploadStartDate: pariceDateRange.length > 1 ? pariceDateRange[0].valueOf() : '',
             uploadEndDate: pariceDateRange.length > 1 ? pariceDateRange[1].valueOf() : '',
             handleResult
@@ -145,7 +149,7 @@ class SearchForm extends PureComponent {
      * 创建变价单
      */
     handleCreateChange = () => {
-        this.props.createChange();
+        this.props.getCreateChange();
     }
 
     render() {
@@ -173,21 +177,21 @@ class SearchForm extends PureComponent {
         return (
             <Form layout="inline" className="price-import">
                 <Row gutter={40}>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="上传ID">
                             {getFieldDecorator('importsId')(
                                 <Input size="default" placeholder="请输入上传ID" />
                             )}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="子公司">
                             {getFieldDecorator('company', {
                                 initialValue: { id: '', name: '' }
                             })(<BranchCompany />)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="商品">
                             {getFieldDecorator('product', {
                                 initialValue: { productId: '', saleName: '' }
@@ -195,7 +199,7 @@ class SearchForm extends PureComponent {
                             }
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="上传日期">
                             {getFieldDecorator('pariceDateRange', {
                                 initialValue: []
@@ -208,7 +212,7 @@ class SearchForm extends PureComponent {
                             />)}
                         </FormItem>
                     </Col>
-                    <Col span={8}>
+                    <Col>
                         <FormItem label="处理结果">
                             {getFieldDecorator('handleResult', { initialValue: priceResult.defaultValue })(
                                 <Select size="default" onChange={this.statusChange}>
@@ -220,36 +224,29 @@ class SearchForm extends PureComponent {
                 </Row>
                 <Row gutter={40} type="flex" justify="end">
                     <Col className="price-import-btn">
-                        <FormItem>
-                            <Button type="primary" size="default" onClick={this.handleSearch}>
-                                查询
+                        <Button type="primary" size="default" onClick={this.handleSearch}>
+                            查询
+                        </Button>
+
+                        <Button size="default" onClick={this.handleReset}>
+                            重置
+                        </Button>
+
+                        <a onClick={this.handleDownload}>下载导入模板</a>
+
+                        <Upload {...props}>
+                            <Button disabled={isBtnDisabled}>
+                                <Icon type="upload" /> {uploading ? '上传中' : '点击上传'}
                             </Button>
-                        </FormItem>
-                        <FormItem>
-                            <Button size="default" onClick={this.handleReset}>
-                                重置
-                            </Button>
-                        </FormItem>
-                        <FormItem>
-                            <a onClick={this.handleDownload}>下载导入模板</a>
-                        </FormItem>
-                        <FormItem className="upload">
-                            <Upload {...props}>
-                                <Button disabled={isBtnDisabled}>
-                                    <Icon type="upload" /> {uploading ? '上传中' : '点击上传'}
-                                </Button>
-                            </Upload>
-                        </FormItem>
-                        <FormItem className="upload">
-                            <Button size="default" onClick={this.handleExport} disabled={this.props.exportBtnDisabled}>
-                                下载导入结果
-                            </Button>
-                        </FormItem>
-                        <FormItem>
-                            <Button size="default" onClick={this.handleCreateChange}>
-                                创建变价单
-                            </Button>
-                        </FormItem>
+                        </Upload>
+
+                        <Button size="default" onClick={this.handleExport} disabled={this.props.exportBtnDisabled}>
+                            下载导入结果
+                        </Button>
+
+                        <Button size="default" onClick={this.handleCreateChange} disabled={this.props.changeBtnDisabled}>
+                            创建变价单
+                        </Button>
                     </Col>
                 </Row>
             </Form >
@@ -262,8 +259,10 @@ SearchForm.propTypes = {
     handlePurchaseReset: PropTypes.func,
     exportList: PropTypes.func,
     exportTemplate: PropTypes.func,
-    createChange: PropTypes.func,
+    getCreateChange: PropTypes.func,
+    isCreateChange: PropTypes.func,
     exportBtnDisabled: PropTypes.bool,
+    changeBtnDisabled: PropTypes.bool,
     form: PropTypes.objectOf(PropTypes.any),
 };
 

@@ -8,9 +8,6 @@ export const stepPriceColumns = [{
     dataIndex: 'price',
     title: '最新售价/元'
 }, {
-    dataIndex: 'rate',
+    dataIndex: 'percentage',
     title: '商品毛利率'
-}, {
-    dataIndex: 'operation',
-    title: '操作'
 }];

@@ -309,7 +309,6 @@ ReturnGoodsList.propTypes = {
     returnGoodsList: PropTypes.func,
     location: PropTypes.objectOf(PropTypes.any),
     listData: PropTypes.objectOf(PropTypes.any),
-    history: PropTypes.objectOf(PropTypes.any),
 }
 
 export default withRouter(Form.create()(ReturnGoodsList));

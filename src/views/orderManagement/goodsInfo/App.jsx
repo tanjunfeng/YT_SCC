@@ -13,6 +13,8 @@ import { bindActionCreators } from 'redux';
 import EditableCell from './editableCell';
 import { fetchOrderDetailInfo, clearOrderDetailInfo } from '../../../actions/order';
 
+const noImage = require('../../../images/default/noPic.png');
+
 @connect(
     () => ({}),
     dispatch => bindActionCreators({
@@ -23,7 +25,6 @@ import { fetchOrderDetailInfo, clearOrderDetailInfo } from '../../../actions/ord
 class GoodsInfo extends PureComponent {
     constructor(props) {
         super(props);
-
         let className;
         let message;
         this.columns = [{
@@ -31,23 +32,37 @@ class GoodsInfo extends PureComponent {
             dataIndex: 'productImg',
             key: 'productImg',
             render: (text, record) => {
+                let errorTip = null;
+                let arrowTip = null;
+
                 if (record.abnormalGoods) {
-                    message = '异';
-                    className = 'errorTip';
+                    message = record.abnormalResonse || '毛利异常';
+                    className = 'abnormalResonse';
+                    errorTip = <div className={className}>{message}</div>;
                 } else {
                     className = '';
-                    message = '';
+                    errorTip = '';
                 }
-                const imgUrl = text || '../../../images/default/noPic.png'
+
+                if (record.type === 'promotion') {
+                    message = '赠';
+                    className = 'arrowTip giftColor';
+                    arrowTip = <p className={className}><span>{message}</span></p>;
+                } else if (record.type === 'bundle') {
+                    message = '套';
+                    className = 'arrowTip packageColor';
+                    arrowTip = <p className={className}><span>{message}</span></p>;
+                }
+                const imgUrl = text || noImage;
                 return (
                     <div>
-                        <p className={className}><span>{message}</span></p>
                         <img
                             src={imgUrl}
                             alt="未上传"
                             style={{ width: 50, height: 50, verticalAlign: 'middle' }}
                         />
-                        {/* <div className={className}>{message}</div> */}
+                        {arrowTip}
+                        {errorTip}
                     </div>
                 )
             }
@@ -147,7 +162,7 @@ class GoodsInfo extends PureComponent {
                 } else {
                     className = '';
                 }
-                return <span className={className}>￥{Number(record.itemPrice.salePrice).toFixed(2)}</span>
+                return <span className={className}>{`￥${Number(record.itemPrice.salePrice).toFixed(2)}`}</span>
             }
         }, {
             title: '金额',
@@ -240,7 +255,7 @@ class GoodsInfo extends PureComponent {
         const subNum = this.getLastSubNum() + 1;
         this.columns.push({ title: `子订单${subNum}`, dataIndex: `sub${subNum}` });
         goodsList.forEach(goods => {
-            const quantityUsed = goods[`sub${subNum - 2}`];  // 倒数第二列的数量应该算作占用库存
+            const quantityUsed = goods[`sub${subNum - 2}`]; // 倒数第二列的数量应该算作占用库存
             Object.assign(goods, {
                 [`sub${subNum}`]: 0,
                 quantityLeft: goods.quantityLeft - quantityUsed

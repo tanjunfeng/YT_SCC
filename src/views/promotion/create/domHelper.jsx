@@ -36,7 +36,8 @@ export const getRulesColumn = (form, licence, type = '') => {
             {/* noConditionRule,
             purchaseConditionRule,
             rewardListRule,
-            totalPurchaseListRule */}
+            totalPurchaseListRule,
+            eachConditionGivenOneRule */}
             {getFieldDecorator(`${licence}Rule`, {
                 initialValue: '',
                 rules: [{ required: true, message: '请选择优惠方式' }]
@@ -59,11 +60,12 @@ export const getRulesColumn = (form, licence, type = '') => {
             <FormItem>
                 {/* noConditionRulePercent,
                 purchaseConditionRulePercent,
-                rewardListRulePercent
-                totalPurchaseListRulePercent */}
+                rewardListRulePercent,
+                totalPurchaseListRulePercent,
+                eachConditionGivenOneRulePercent */}
                 {getFieldDecorator(`${licence}RulePercent`, {
                     rules: [{ required: true, message: '请输入折扣百分比' }]
-                })(<InputNumber className="wd-50" min={0} max={100} step={1} />)} %
+                })(<InputNumber className="wd-50" min={0} max={100} step={1} />) } %
             </FormItem>
             : null}
         {/* 折扣金额 */}
@@ -72,7 +74,8 @@ export const getRulesColumn = (form, licence, type = '') => {
                 {/* noConditionRuleAmount,
                 purchaseConditionRuleAmount,
                 rewardListRuleAmount,
-                totalPurchaseListRuleAmount */}
+                totalPurchaseListRuleAmount,
+                eachConditionGivenOneRuleAmount */}
                 {getFieldDecorator(`${licence}RuleAmount`, {
                     initialValue: 0,
                     rules: [
@@ -85,20 +88,24 @@ export const getRulesColumn = (form, licence, type = '') => {
         {/* 固定单价 */}
         {getFieldValue(`${licence}Rule`) === 'FIXEDPRICE' ?
             <FormItem>
-                {/* purchaseConditionRulePrice, rewardListRulePrice */}
-                ￥{getFieldDecorator(`${licence}RulePrice`, {
+                {/* purchaseConditionRulePrice,
+                rewardListRulePrice,
+                eachConditionGivenOneRulePrice */}
+                {getFieldDecorator(`${licence}RulePrice`, {
                     initialValue: 0,
                     rules: [
                         { required: true, message: '请输入固定单价' },
                         { validator: Util.limitTwoDecimalPlaces }
                     ]
-                })(<InputNumber className="wd-60" min={0} max={MAX_AMOUNT_OF_ORDER} step={1} />)} 元
+                })(<InputNumber formatter={val => `￥${val}`} className="wd-60" min={0} max={MAX_AMOUNT_OF_ORDER} step={1} />)} 元
             </FormItem>
             : null}
         {/* 赠送相同商品 */}
         {getFieldValue(`${licence}Rule`) === 'GIVESAMEPRODUCT' ?
             <FormItem>
-                {/* purchaseConditionRuleGive, rewardListRuleGive */}
+                {/* purchaseConditionRuleGive,
+                rewardListRuleGive,
+                eachConditionGivenOneRuleGive  */}
                 {getFieldDecorator(`${licence}RuleGive`, {
                     initialValue: 0,
                     rules: [
@@ -123,13 +130,17 @@ export const buyType = (form, licence) => {
     const { getFieldDecorator } = form;
     return (
         <span>
-            <FormItem label="购买类型">
+            <FormItem label={licence === 'rewardList' || licence === 'eachConditionGivenOne' ? '奖励类型' : '购买类型'}>
                 {/* purchaseCondition, buyCondition */}
                 {getFieldDecorator(licence, {
                     initialValue: 'ALL'
                 })(<Select size="default" className="wd-90">
                     <Option key={'ALL'} value="ALL">全部</Option>
-                    <Option key={'CATEGORY'} value="CATEGORY">按品类</Option>
+                    {/* 每满类型不能按品类添加 */}
+                    {
+                        licence !== 'eachConditionGivenOne' &&
+                        <Option key={'CATEGORY'} value="CATEGORY">按品类</Option>
+                    }
                     <Option key={'PRODUCT'} value="PRODUCT">按商品</Option>
                 </Select>)}
             </FormItem>
@@ -207,7 +218,10 @@ export const getPromotion = (form, licence, handleCategorySelect) => {
                     </FormItem> : null}
                 {getFieldValue(licence) === 'PRODUCT' ?
                     <FormItem className="product">
-                        {/* purchaseConditionProduct, rewardListProduct */}
+                        {/*
+                            purchaseConditionProduct,
+                            rewardListProduct,
+                            eachConditionGivenOneProduct */}
                         {getFieldDecorator(`${licence}Product`, {
                             initialValue: {
                                 productId: '',
@@ -217,7 +231,9 @@ export const getPromotion = (form, licence, handleCategorySelect) => {
                         })(<AddingGoodsByTerm />)}
                     </FormItem> : null}
             </div>
-            <div className="wd-317"> {getConditionType(form, licence)}</div>
+            {licence === 'purchaseCondition' &&
+                <div className="wd-317"> {getConditionType(form, licence)}</div>
+            }
             <div className="wd-297">
                 {getRulesColumn(form, licence, getFieldValue(licence))}
             </div>
@@ -244,6 +260,31 @@ export const getRewardList = (params) => {
                 <li><h2>奖励列表</h2></li>
                 <li>
                     {getPromotion(form, licence, handleCategorySelect)}
+                </li>
+            </ul>
+        </div>
+    )
+}
+
+/**
+ * 获取每满 dom
+ *
+ * @param {*} form
+ * @param {*} licence eachConditionGivenOne
+ * @param {*} handleCategorySelect
+ */
+export const getEachConditionGivenOne = (params) => {
+    const { form, licence, conditions, handleBuyConditionsChange } = params;
+    return (
+        <div>
+            <BuyConditionList
+                value={{ conditions }}
+                onChange={handleBuyConditionsChange}
+            />
+            <ul className="list-panel">
+                <li><h2>奖励列表</h2></li>
+                <li>
+                    {getPromotion(form, licence)}
                 </li>
             </ul>
         </div>

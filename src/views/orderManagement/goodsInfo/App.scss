@@ -13,25 +13,32 @@
 
 .orderDetail-message{
     .abnormalResonse{
+        margin-top: -25px;
         color: red;
     }
     .abnormalResonse-color{
         color: red;
     }
 }
-.errorTip {
-    border-top: 30px solid #f74046;
+.arrowTip {
     border-right: 30px solid transparent;
     position: relative;
-    top: 30px;
-    left: 52px;
+    top: -50px;
+    left: 76px;
     width: 30px;
     height: 30px;
     span{
         position: absolute;
         top: -30px;
-        left: 0px;
+        left: 2px;
         color: #fff;
         font-size: 12px;
     }
+}
+
+.giftColor {
+    border-top: 30px solid #fd9f2e;
+}
+.packageColor {
+    border-top: 30px solid #38c34c;
 }

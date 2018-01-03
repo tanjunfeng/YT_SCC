@@ -69,13 +69,21 @@ class BuyConditionModal extends PureComponent {
 
     getFormData = (callback) => {
         this.props.form.validateFields((err, values) => {
-            const { buyCondition, buyConditionType } = values;
+            const { buyCondition, buyConditionType, buyConditionProduct } = values;
             const { category } = this.state;
-            if (err) {
-                if (buyCondition === 'CATEGORY' && !isCategoryExist(category)) {
-                    message.error('请选择品类');
-                    return;
-                }
+            // if (err) {
+            //     if (buyCondition === 'CATEGORY' && !isCategoryExist(category)) {
+            //         message.error('请选择品类');
+            //         return;
+            //     }
+            //     return;
+            // }
+            if (buyCondition === 'CATEGORY' && !isCategoryExist(category)) {
+                message.error('请选择品类');
+                return;
+            }
+            if (buyCondition === 'PRODUCT' && !buyConditionProduct.record) {
+                message.error('请选择商品');
                 return;
             }
             const formData = {

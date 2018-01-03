@@ -32,11 +32,10 @@ class SearchForm extends PureComponent {
             company,
             product,
         } = this.props.form.getFieldsValue();
-        const prRecord = product.record;
         return Util.removeInvalid({
             status,
             companyId: company.id,
-            productNo: prRecord ? prRecord.productCode : ''
+            productNo: product.productCode
         });
     }
 

@@ -98,7 +98,8 @@ import {
     getProductById,
     queryProdPurchaseExtByCondition,
     ChangeProPurchaseStatus,
-    GetWarehouseInfo1
+    GetWarehouseInfo1,
+    toAddSellPriceAction
 } from './producthome';
 
 // 库存调整
@@ -122,7 +123,7 @@ import getSellPriceInfoByIdAction from './commodity';
 import queryCommodityList from './queryCommodityList';
 
 // 售价导入列表
-import { getPriceImportList, getIsSellVaild, getCreateSell } from './priceImport'
+import { getPriceImportList, getCreateSell } from './priceImport'
 
 // 根据条件分页查询白名单列表, 上线下线
 import { queryWhiteListAction, onlineWhitelist, offlineWhitelist } from './whiteListConfiguration';
@@ -245,9 +246,9 @@ export {
 
     // 商品管理
     syncProductByManualAction,
+    toAddSellPriceAction,
     // 售价导入列表查询
     getPriceImportList,
-    getIsSellVaild,
     getCreateSell,
     getSellPriceInfoByIdAction,
 

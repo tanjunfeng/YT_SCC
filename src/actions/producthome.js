@@ -15,7 +15,7 @@ import {
     purchasePriceDetail,
     addPurchasement,
     updateOffShelfProducts,
-    addSellPrice,
+    toAddSellPrice as toAddSellPriceAction,
     getPurchasePrice,
     queryAllSupplier,
     toUpdateSellPrice,
@@ -208,9 +208,9 @@ const receiveAddSellPrice = (data) => ({
     payload: data,
 });
 
-export const AddSellPrice = (params) => dispatch => (
+export const toAddSellPrice = (params) => dispatch => (
     new Promise((resolve, reject) => {
-        addSellPrice(params)
+        toAddSellPriceAction(params)
             .then(res => {
                 dispatch(receiveAddSellPrice(res.data));
                 resolve(res);

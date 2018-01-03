@@ -1,13 +1,13 @@
-.sell-modal {
+.sell-examination-modal {
     min-width: 950px;
-    .changeBefore{
+    .changeBefore {
         width: 49%;
         display: inline-block;
     }
-    .last-freightConditions{
+    .last-freightConditions {
         min-height: 235px;
     }
-    .changeAfter{
+    .changeAfter {
         width: 49%;
         margin-left: 1%;
         display: inline-block;
@@ -16,7 +16,7 @@
         width: 1020px;
     }
     .ant-modal-body {
-        min-height: 700px;
+        // min-height: 700px;
         overflow-y: auto;
     }
     form .ant-input-number {
@@ -50,11 +50,6 @@
             left: 30px;
         }
     }
-    .sell-modal-body-width{
-        .sell-modal-item{
-            min-height: 260px;
-        }
-    }
     .ant-form-explain {
         width: 160px;
     }
@@ -71,9 +66,10 @@
         vertical-align: top;
     }
     .sell-modal-body-width {
-        width: 50%;
+        width: 49%;
+        margin: 0 0.5%;
     }
-    .sell-modal-body-width:last-child{
+    .sell-modal-body-width:last-child {
         float: right;
     }
     .sell-modal-body-wrap::after {
@@ -85,10 +81,10 @@
     }
     .edit-state-list {
         display: flex;
-        div{
+        div {
             width: 30%;
         }
-        div:first-child{
+        div:first-child {
             margin-left: 10%;
         }
     }
@@ -99,12 +95,9 @@
             width: 60px;
         }
     }
-    .read-only-footer{
+    .read-only-footer {
         height: 32px;
         line-height: 32px;
-        span{
-            padding: 0 5px;
-        }
     }
     .new-price-state {
         &-1 {
@@ -113,7 +106,8 @@
             background: #5397E8;
             border-radius: 50%;
             display: inline-block;
-            vertical-align: middle;
+            position: relative;
+            top: -2px;
         }
         &-2 {
             width: 5px;
@@ -121,7 +115,8 @@
             background: #71E135;
             border-radius: 50%;
             display: inline-block;
-            vertical-align: middle;
+            position: relative;
+            top: -2px;
         }
         &-3 {
             width: 5px;
@@ -129,72 +124,18 @@
             background: red;
             border-radius: 50%;
             display: inline-block;
-            vertical-align: middle;
-        }
-    }
-    .createCls {
-        min-width: 950px;
-        .ant-modal-body {
-            min-height: 700px;
-            overflow-y: auto;
-            margin-left: 60px;
-        }
-        form .ant-input-number {
-            margin-right: 0;
-        }
-        &-item {
-            border: 1px solid #eee;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            padding: 10px;
-        }
-        &-item-title {
-            font-size: 14px;
-        }
-        &-item-content {
-            padding: 0 10px;
-        }
-        &-day-input {
-            margin: 0 4px;
-        }
-        &-label {
-            vertical-align: middle;
-        }
-        &-data-pic {
-            vertical-align: middle;
-            display: inline-block;
-            height: 30px;
-        }
-        &.ant-modal {
-            .ant-form-inline .ant-form-explain {
-                left: 30px;
-            }
-        }
-        .ant-form-explain {
-            width: 160px;
-        }
-        .sell-modal-item {
-            width: 850px;
-        }
-        .sell-modal-body-wrap {
-            display: inline-block;
-            vertical-align: top;
-        }
-        .sell-modal-body-wrap::after {
-            clear: both;
-            overflow: hidden;
-        }
-        .item-max-height {
-            overflow-y: auto;
+            position: relative;
+            top: -2px;
         }
     }
     .ant-message-warning {
         color: red;
     }
-}
-.sell-prigce-edit-footer{
-    .ant-row{
-        display: inline-flex;
-        margin-bottom: 0;
+    .sell-prigce-edit-footer {
+        .ant-row {
+            display: inline-flex;
+            margin-bottom: 0;
+            margin-right: 15px;
+        }
     }
 }

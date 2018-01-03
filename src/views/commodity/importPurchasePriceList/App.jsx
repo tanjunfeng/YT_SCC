@@ -35,7 +35,7 @@ const Option = Select.Option;
 }), dispatch => bindActionCreators({
     pubFetchValueList,
     queryPurchasePriceInfo,
-    createPurchase
+    createPurchase,
 }, dispatch))
 
 class ImportPurchasePriceList extends PureComponent {
@@ -48,21 +48,31 @@ class ImportPurchasePriceList extends PureComponent {
         }
         this.param = {};
         this.uploadProps = {
-            name: 'excel',
-            action: '/prodPurchase/purchasePriceChangeUpload',
-            onChange(info) {
+            name: 'file',
+            action: `${window.config.apiHost}prodPurchase/purchasePriceChangeUpload`,
+            beforeUpload: (file) => {
+                this.handleUpload(file)
+            },
+            onChange: (info) => {
                 if (info.file.status === 'done') {
-                    message.success(`${info.file.name} 导入成功`);
+                    const res = info.file.response;
+                    if (res.code === 200) {
+                        message.success('上传成功');
+                        this.props.form.setFieldsValue({ id: res.data })
+                        this.handleQuery();
+                    } else {
+                        message.error(res.message);
+                    }
                 } else if (info.file.status === 'error') {
-                    message.error(`${info.file.name} 导入失败`);
+                    message.error(`${info.file.name} 上传失败.`);
                 }
             },
         };
     }
     componentDidMount() {
         this.handleReset();
-        this.queryPurchasePrice();
     }
+
     /**
      * 点击翻页
      * @param {pageNumber}    pageNumber
@@ -93,6 +103,17 @@ class ImportPurchasePriceList extends PureComponent {
             })
         }
     }
+
+    /**
+    * 上传
+    */
+    handleUpload = (file) => {
+        const fileName = file.name;
+        if (fileName.indexOf('.xls') === -1) {
+            message.error('上传文件格式必须为excel格式，请重新尝试');
+        }
+    }
+
     queryPurchasePrice = () => {
         this.props.queryPurchasePriceInfo(this.param);
     }
@@ -164,27 +185,26 @@ class ImportPurchasePriceList extends PureComponent {
      * 创建变价单
      */
     handleCreate = () => {
-        this.props.createPurchase()
+        const param = this.props.form.getFieldValue('id');
+        this.props.createPurchase({importsId: param})
             .then(res => {
                 if (res.code === 200) {
                     message.success(res.message);
                 }
             })
     }
+
     render() {
-        const { getFieldDecorator} = this.props.form;
-        const { spAdrId, spId } = this.state;
-        const supplierInfo = spAdrId ? `${spAdrId}-1` : null;
+        const { getFieldDecorator, getFieldValue} = this.props.form;
+        const { spId } = this.state;
         const { purchasePriceInfo = {} } = this.props;
-        if (!purchasePriceInfo) {
-            return null;
-        }
-        const { data = [], total, pageNum } = purchasePriceInfo;
-        let errorResult = false;
-        for (let i = 0; i < data.length; i++) {
-            if (data[i].handleResult === 0) {
-                errorResult = true;
-            }
+        let data = [];
+        let total = null;
+        let pageNum = null;
+        if (purchasePriceInfo) {
+            data = purchasePriceInfo.data;
+            total = purchasePriceInfo.total;
+            pageNum = purchasePriceInfo.pageNum;
         }
         return (
             <div className="purchase-Price-list">
@@ -194,7 +214,9 @@ class ImportPurchasePriceList extends PureComponent {
                             {/* 上传ID */}
                             <FormItem label="上传ID">
                                 {getFieldDecorator('id', {
-                                })(<Input size="default" />)}
+                                })(<Input
+                                    size="default"
+                                />)}
                             </FormItem>
                         </Col>
                         <Col>
@@ -215,6 +237,7 @@ class ImportPurchasePriceList extends PureComponent {
                                     ref={ref => { this.supplyAddressSearchMind = ref }}
                                     fetch={(params) =>
                                         this.props.pubFetchValueList(Utils.removeInvalid({
+                                            pId: this.state.spId,
                                             condition: params.value,
                                             pageSize: params.pagination.pageSize,
                                             pageNum: params.pagination.current || 1
@@ -246,7 +269,7 @@ class ImportPurchasePriceList extends PureComponent {
                         </Col>
                         <Col>
                             {/* 商品 */}
-                            <FormItem className="product-search">
+                            <FormItem className="label-top" label="商品">
                                 <SearchMind
                                     style={{ zIndex: 6000, marginBottom: 5 }}
                                     compKey="productCode"
@@ -254,14 +277,11 @@ class ImportPurchasePriceList extends PureComponent {
                                     ref={ref => { this.product = ref }}
                                     fetch={(params) =>
                                         this.props.pubFetchValueList({
-                                            supplierInfo,
                                             teamText: params.value,
                                             pageNum: params.pagination.current || 1,
                                             pageSize: params.pagination.pageSize
                                         }, 'queryProductForSelect')
                                     }
-                                    disabled={spId === ''}
-                                    addonBefore="商品"
                                     onChoosed={this.handleProductChoosed}
                                     renderChoosedInputRaw={(product) => (
                                         <div>{product.productCode} - {product.saleName}</div>
@@ -282,21 +302,6 @@ class ImportPurchasePriceList extends PureComponent {
                             </FormItem>
                         </Col>
                         <Col>
-                            {/* 处理结果 */}
-                            <FormItem label="处理结果">
-                                {getFieldDecorator('result', { initialValue: processResult.defaultValue })(
-                                    <Select size="default">
-                                        {
-                                            processResult.data.map((item) => (
-                                                <Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Option>))
-                                        }
-                                    </Select>
-                                )}
-                            </FormItem>
-                        </Col>
-                        <Col>
                             {/* 上传日期 */}
                             <FormItem label="上传日期">
                                 {getFieldDecorator('importTime', {})(
@@ -310,6 +315,21 @@ class ImportPurchasePriceList extends PureComponent {
                                     />
                                 )
                                 }
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            {/* 处理结果 */}
+                            <FormItem label="处理结果">
+                                {getFieldDecorator('result', { initialValue: processResult.defaultValue })(
+                                    <Select size="default">
+                                        {
+                                            processResult.data.map((item) => (
+                                                <Option key={item.key} value={item.key}>
+                                                    {item.value}
+                                                </Option>))
+                                        }
+                                    </Select>
+                                )}
                             </FormItem>
                         </Col>
                     </Row>
@@ -332,7 +352,7 @@ class ImportPurchasePriceList extends PureComponent {
                             <Button type="primary" size="default" onClick={this.handleDownResult} disabled={data.length === 0}>
                                 下载导入结果
                             </Button>
-                            <Button type="primary" onClick={this.handleCreate} size="default" disabled={data.length === 0 || errorResult}>
+                            <Button type="primary" onClick={this.handleCreate} size="default" disabled={getFieldValue('id') === ''}>
                                 创建变价单
                             </Button>
                         </Col>
@@ -365,5 +385,6 @@ ImportPurchasePriceList.propTypes = {
     queryPurchasePriceInfo: PropTypes.func,
     purchasePriceInfo: PropTypes.objectOf(PropTypes.any),
     createPurchase: PropTypes.func,
+    purchaseVaild: PropTypes.bool,
 }
 export default withRouter(Form.create()(ImportPurchasePriceList));
