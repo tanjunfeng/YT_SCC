@@ -425,7 +425,7 @@ class BasicInfo extends PureComponent {
             param: params.value,
             pageNum: params.pagination.current || 1,
             pageSize: params.pagination.pageSize
-        }, 'getWarehouseInfo1')
+        }, 'getWarehouseLogic')
     )
 
     /**
