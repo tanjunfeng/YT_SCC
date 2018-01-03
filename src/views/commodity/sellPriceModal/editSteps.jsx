@@ -26,32 +26,25 @@ const FormItem = Form.Item;
         pubFetchValueList,
     }, dispatch)
 )
+
 class EditSteps extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            prices: []
-        }
-    }
 
-    componentWillReceiveProps(nextProps) {
-        const { newDatas, isEdit } = nextProps;
-        if (isEdit) {
-            const arrEidt = [];
-            newDatas.sellSectionPrices.map((element) => (
-                arrEidt.push(element)
-            ))
-            this.setState({
-                prices: arrEidt
-            })
+        const { isEdit = false, newDatas = {} } = props;
+        const { sellSectionPrices = [] } = newDatas;
+
+        this.state = {
+            prices: isEdit ? sellSectionPrices : []
         }
     }
 
     getEditableTableValues = () => {
-        const { isEdit, newDatas = {}, startNumber } = this.props;
-        const { sellSectionPrices = [], sellPricesInReview = {}, auditStatus } = newDatas;
+        const { isEdit, newDatas = {}, startNumber, isSub } = this.props;
+        const { sellPricesInReview = {}, auditStatus } = newDatas;
         const { prices } = this.state;
         return {
+            isSub,
             isEdit,
             list: prices,
             sellPricesInReview,
@@ -61,23 +54,21 @@ class EditSteps extends Component {
         };
     }
 
-    handlePropsback = () => {
+    handleNewestPriceChange = (num) => {
         const { isEdit } = this.props;
         const service = isEdit ? this.props.onEditChange : this.props.onCreateChange;
-        return service();
-    }
-
-    handleNewestPriceChange = (num) => {
-        this.handlePropsback(num)
+        service(num)
     }
 
     handlePricesChange = (prices, isContinue) => {
-        this.handlePropsback(prices, isContinue)
+        const { isEdit } = this.props;
+        const service = isEdit ? this.props.onEditPriceChange : this.props.onCreatPriceChange;
+        service(prices, isContinue)
         this.setState({ prices });
     }
 
     handleCompanyChange = (record) => {
-        this.handlePropsback(record)
+        this.props.onCreateComChange(record);
     }
 
     handleValueFormat = (text) => {
@@ -85,7 +76,7 @@ class EditSteps extends Component {
     }
 
     render() {
-        const { prefixCls, form, newDatas = {}, values = {}, isEdit } = this.props;
+        const { prefixCls, form, newDatas = {}, values = {}, isEdit, isSub } = this.props;
         const { getFieldDecorator } = form;
         return (
             <div className={`${prefixCls}-item item-max-height`}>
@@ -114,6 +105,7 @@ class EditSteps extends Component {
                                     <InputNumber
                                         min={0}
                                         step={0.01}
+                                        disabled={isSub}
                                         formatter={this.handleValueFormat}
                                         parser={this.handleValueFormat}
                                         onChange={this.handleNewestPriceChange}
@@ -132,7 +124,7 @@ class EditSteps extends Component {
                                 <FormItem label="子公司：">
                                     {getFieldDecorator('branchCompany', {
                                         initialValue: { id: '', name: '' }
-                                    })(<BranchCompany onChange={this.handleCompanyChange} />)}
+                                    })(<BranchCompany onChange={this.handleCompanyChange} disabled={isSub} />)}
                                 </FormItem>
                         }
                     </Col>
@@ -150,6 +142,9 @@ EditSteps.propTypes = {
     startNumber: PropTypes.number,
     isEdit: PropTypes.bool,
     onEditChange: PropTypes.func,
+    onCreatPriceChange: PropTypes.func,
+    onEditPriceChange: PropTypes.func,
+    onCreateComChange: PropTypes.func,
     onCreateChange: PropTypes.func
 };
 

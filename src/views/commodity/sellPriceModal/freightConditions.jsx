@@ -126,7 +126,7 @@ class FreightConditions extends Component {
     }
 
     render() {
-        const { prefixCls, form, getProductById, newDatas = {}, isAfter, isEdit, values = {} } = this.props;
+        const { prefixCls, form, getProductById, newDatas = {}, isAfter, isEdit, values = {}, isSub } = this.props;
         const { getFieldDecorator } = form;
         const { currentInside } = this.state;
         const data = newDatas;
@@ -152,6 +152,7 @@ class FreightConditions extends Component {
                                         })(
                                             <InputNumber
                                                 min={0}
+                                                disabled={isSub}
                                                 onChange={this.handleInsideChange}
                                             />
                                             )}
@@ -178,6 +179,7 @@ class FreightConditions extends Component {
                                         })(
                                             <InputNumber
                                                 min={0}
+                                                disabled={isSub}
                                                 onChange={this.handleMinChange}
                                                 step={currentInside || data.salesInsideNumber}
                                             />
@@ -193,6 +195,7 @@ class FreightConditions extends Component {
                                         })(
                                             <InputNumber
                                                 min={0}
+                                                disabled={isSub}
                                                 onChange={this.handleMaxChange}
                                                 step={currentInside || data.salesInsideNumber}
                                             />
@@ -206,7 +209,7 @@ class FreightConditions extends Component {
                                             rules: [{ required: true, message: '请输入承诺发货时间!' }],
                                             initialValue: isEdit ? data.deliveryDay : values.deliveryDay
                                         })(
-                                            <InputNumber min={0} />
+                                            <InputNumber min={0} disabled={isSub} />
                                             )}
                                     </span>
                                     天内发货
@@ -233,6 +236,7 @@ class FreightConditions extends Component {
                                             style={{ width: 90 }}
                                             className="sc-form-item-select"
                                             size="default"
+                                            disabled={isSub}
                                             onChange={this.handleSelectChange}
                                         >
                                             {
