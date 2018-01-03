@@ -12,6 +12,7 @@ import {
     updateStepSellPrice,
     updateSellPriceStatus,
     getSellPriceInfoByIdAction as getSellPriceInfoByIdService,
+    getCostPrice as getCostPriceService
 } from '../service';
 
 /**
@@ -99,3 +100,31 @@ export const updatePriceStatus = (params) => dispatch => (
             .catch(err => reject(err))
     })
 )
+
+/**
+ * 获取成本价
+ *
+ * @param {Object} params 传参
+ */
+const getCostPriceAction = data => ({
+    type: ActionType.GET_COST_PRICE,
+    payload: data
+});
+
+export const getCostPrice = params => dispatch => (
+    new Promise((resolve, reject) => {
+        getCostPriceService(params)
+            .then(res => {
+                dispatch(
+                    getCostPriceAction(res.data)
+                );
+                resolve(res);
+            })
+            .catch(err => reject(err))
+    })
+);
+
+export const clearCostPrice = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_COST_PRICE,
+    payload: -100.00
+}));

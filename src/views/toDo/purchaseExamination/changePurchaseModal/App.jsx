@@ -1,6 +1,6 @@
 /**
  * @file app.jsx
- * @author liujinyu
+ * @author tangjunfeng liujinyu
  * 商品采购关系维护
  */
 import React, { Component } from 'react';
@@ -13,6 +13,8 @@ class ProdModal extends Component {
     constructor(props) {
         super(props);
         this.handleCancel = this.handleCancel.bind(this);
+        this.firstCreated = this.firstCreated.bind(this);
+        this.catchAuditstate = this.catchAuditstate.bind(this);
         this.state = {
             checked: props.getProdPurchaseByIds.supplierType === 1
         }
@@ -25,25 +27,48 @@ class ProdModal extends Component {
         this.props.handleClose();
     }
 
+    /**
+     * 判断提交人
+     */
+    firstCreated = () => {
+        const { getProdPurchaseByIds } = this.props;
+        switch (getProdPurchaseByIds.firstCreated) {
+            case 0:
+                return getProdPurchaseByIds.modifyUserName;
+            case 1:
+                return getProdPurchaseByIds.createUserName;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * 判断状态
+     */
+    catchAuditstate = () => {
+        const { getProdPurchaseByIds } = this.props;
+        switch (getProdPurchaseByIds.auditStatus) {
+            case 1:
+                return '已提交';
+            case 2:
+                return '已审核';
+            case 3:
+                return '已拒绝';
+            default:
+                return null;
+        }
+    }
+
     render() {
         const {
-            prefixCls, getProdPurchaseByIds
+            getProdPurchaseByIds
         } = this.props;
-        const firstCreated = () => {
-            switch (getProdPurchaseByIds.firstCreated) {
-                case 0:
-                    return getProdPurchaseByIds.modifyUserName;
-                case 1:
-                    return getProdPurchaseByIds.createUserName;
-                default:
-                    return null;
-            }
-        }
+        const prefixCls = 'purchase-modal'
         return (
             <Modal
-                title="采购关系"
+                title="采购价格"
                 visible
-                className={prefixCls}
+                className="purchase-examination-modal"
                 onOk={this.handleCancel}
                 width={'480px'}
                 onCancel={this.handleCancel}
@@ -57,38 +82,38 @@ class ProdModal extends Component {
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*采购内装数：</span>
                                     <span className={`${prefixCls}-barcode-input`}>
-                                        <InputNumber min={0} placeholder="内装数" defaultValue={getProdPurchaseByIds.purchaseInsideNumber} readOnly />
+                                        <InputNumber defaultValue={getProdPurchaseByIds.purchaseInsideNumber || '-'} readOnly />
                                     </span>
                                 </FormItem>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*当前采购价(元)：</span>
                                     <span className={`${prefixCls}-barcode-input`}>
-                                        <InputNumber min={0} step={0.01} placeholder="当前采购价" defaultValue={getProdPurchaseByIds.purchasePrice} readOnly />
+                                        <InputNumber placeholder="当前采购价" defaultValue={getProdPurchaseByIds.purchasePrice || '-'} readOnly />
                                     </span>
                                 </FormItem>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*最新采购价(元)：</span>
                                     <span className={`${prefixCls}-barcode-input`}>
-                                        <InputNumber min={0} step={0.01} placeholder="最新采购价" defaultValue={getProdPurchaseByIds.newestPrice} readOnly />
+                                        <InputNumber defaultValue={getProdPurchaseByIds.newestPrice || '-'} readOnly />
                                     </span>
                                     <span className={`${prefixCls}-adjustment`}>
-                                        调价百分比：{getProdPurchaseByIds.percentage}%
+                                        调价百分比：{getProdPurchaseByIds.percentage || '-'}%
                                     </span>
                                 </FormItem>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*条  码：</span>
                                     <span className={`${prefixCls}-barcode-input`}>
-                                        <Input placeholder="商品条码" defaultValue={getProdPurchaseByIds.internationalCode} readOnly />
+                                        <Input defaultValue={getProdPurchaseByIds.internationalCode || '-'} readOnly />
                                     </span>
                                 </FormItem>
                                 <div className={`${prefixCls}-sub-state`}>
                                     <FormItem>
                                         <span className={`${prefixCls}-label`}>最新采购价格状态：</span>
-                                        <span><i className={`new-price-state-${getProdPurchaseByIds.auditStatus}`} />{getProdPurchaseByIds.newestPrice || '-'}</span>
+                                        <span><i className={`new-price-state new-price-state-${getProdPurchaseByIds.auditStatus}`} />{this.catchAuditstate() || '-'}</span>
                                     </FormItem>
                                     <FormItem>
                                         <span className={`${prefixCls}-label`}>提交人：</span>
-                                        <span>{firstCreated() || '-'}</span>
+                                        <span>{this.firstCreated() || '-'}</span>
                                     </FormItem>
                                     <FormItem>
                                         <span className={`${prefixCls}-label`}>审核人：</span>
@@ -155,15 +180,8 @@ class ProdModal extends Component {
 }
 
 ProdModal.propTypes = {
-    prefixCls: PropTypes.string,
     handleClose: PropTypes.func,
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any)
 };
 
-ProdModal.defaultProps = {
-    prefixCls: 'purchase-modal',
-    goto: () => { },
-    data: {}
-}
-
-export default Form.create()(ProdModal);
+export default ProdModal;

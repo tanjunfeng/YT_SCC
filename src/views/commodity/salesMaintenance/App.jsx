@@ -196,14 +196,12 @@ class ProcurementMaintenance extends PureComponent {
     }
 
     handlePostAdd = (data, isEdit) => {
-        const { getProductById = {} } = this.props;
         const service = isEdit ? this.props.updateSellPrice : this.props.postSellPrice;
         service(data).then(() => {
             this.props.fetchPriceInfo({
                 pageNum: this.current,
                 pageSize: PAGE_SIZE,
-                productId: getProductById.id,
-                ...this.data
+                ...data
             });
             this.handleClose()
         })

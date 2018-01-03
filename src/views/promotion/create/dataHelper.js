@@ -8,9 +8,7 @@ const getPreferentialValueOfPC = (values) => {
     const {
         purchaseConditionRule,
         purchaseConditionRulePercent,
-        purchaseConditionRuleGive,
-        // purchaseConditionRulePrice,
-        // purchaseConditionRuleAmount
+        purchaseConditionRuleGive
     } = values;
     let preferentialValue = '';
     switch (purchaseConditionRule) {

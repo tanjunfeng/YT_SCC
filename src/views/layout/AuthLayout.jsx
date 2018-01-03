@@ -10,6 +10,7 @@ import { withRouter } from 'react-router';
 import { Menu, Dropdown, Layout, Icon } from 'antd';
 import SiderMenu from '../../common/siderMenu/SiderMenu';
 import Breadcrumb from '../../common/breadcrumb/Breadcrumb';
+import TopMenu from '../../common/topMenu/TopMenu';
 import AuthRoute from '../../Route';
 import { CODE } from '../../constant';
 import { logout } from '../../service';
@@ -28,7 +29,6 @@ const { Header, Content, Sider } = Layout;
 class AuthLayout extends PureComponent {
     constructor(props) {
         super(props);
-        this.handleClick = :: this.handleClick;
         this.handleSelect = :: this.handleSelect;
 
         this.state = {
@@ -49,15 +49,6 @@ class AuthLayout extends PureComponent {
         const { initData } = props;
         const { topMenus } = initData;
         this.defaultSelect = topMenus.menu.find((item) => item.code === CODE)
-    }
-
-    handleClick(e) {
-        if (parseInt(e.key, 10) === this.defaultSelect.id) {
-            return;
-        }
-        /* eslint-disable */
-        window.open(`${config.topMenusLink}${e.key}.htm`, '_self');
-        /* eslint-enable */
     }
 
     visibleChange = (visible) => {
@@ -98,7 +89,8 @@ class AuthLayout extends PureComponent {
                 <Header>
                     <div className="ant-layout-header-left">
                         <div className="ant-layout-sider-logo">Logo</div>
-                        <Menu
+                        <TopMenu topMenus={topMenus}/>
+                        {/* <Menu
                             onClick={this.handleClick}
                             selectedKeys={[`${this.defaultSelect.id}`]}
                             mode="horizontal"
@@ -110,7 +102,7 @@ class AuthLayout extends PureComponent {
                                     </Menu.Item>
                                 ))
                             }
-                        </Menu>
+                        </Menu> */}
                     </div>
                     <div className="ant-layout-header-right">
                         <div className="ant-layout-header-user">
@@ -120,7 +112,7 @@ class AuthLayout extends PureComponent {
                                 placement="bottomCenter"
                             >
                                 <a className="ant-layout-header-drop">
-                                    {user.employeeName} <Icon type="down" />
+                                    <span className="ant-layout-header-username" alt={user.loginName}>{user.loginName}</span><Icon type="down" />
                                 </a>
                             </Dropdown>
                         </div>
