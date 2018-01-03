@@ -26,6 +26,7 @@ const FormItem = Form.Item;
         pubFetchValueList,
     }, dispatch)
 )
+
 class EditSteps extends Component {
     constructor(props) {
         super(props);
@@ -39,10 +40,11 @@ class EditSteps extends Component {
     }
 
     getEditableTableValues = () => {
-        const { isEdit, newDatas = {}, startNumber } = this.props;
+        const { isEdit, newDatas = {}, startNumber, isSub } = this.props;
         const { sellPricesInReview = {}, auditStatus } = newDatas;
         const { prices } = this.state;
         return {
+            isSub,
             isEdit,
             list: prices,
             sellPricesInReview,
@@ -74,7 +76,7 @@ class EditSteps extends Component {
     }
 
     render() {
-        const { prefixCls, form, newDatas = {}, values = {}, isEdit } = this.props;
+        const { prefixCls, form, newDatas = {}, values = {}, isEdit, isSub } = this.props;
         const { getFieldDecorator } = form;
         return (
             <div className={`${prefixCls}-item item-max-height`}>
@@ -103,6 +105,7 @@ class EditSteps extends Component {
                                     <InputNumber
                                         min={0}
                                         step={0.01}
+                                        disabled={isSub}
                                         formatter={this.handleValueFormat}
                                         parser={this.handleValueFormat}
                                         onChange={this.handleNewestPriceChange}
@@ -121,7 +124,7 @@ class EditSteps extends Component {
                                 <FormItem label="子公司：">
                                     {getFieldDecorator('branchCompany', {
                                         initialValue: { id: '', name: '' }
-                                    })(<BranchCompany onChange={this.handleCompanyChange} />)}
+                                    })(<BranchCompany onChange={this.handleCompanyChange} disabled={isSub} />)}
                                 </FormItem>
                         }
                     </Col>

@@ -26,6 +26,7 @@ import {
     ChangeUpdateProd,
     GetWarehouseInfo1
 } from '../../../actions/producthome';
+import { getProductById } from '../../../service';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -81,6 +82,22 @@ class ProdModal extends Component {
             branchCompanyId: '',
             checked: props.initValue.supplierType === 1
         }
+    }
+
+    /**
+    * 获取表单数据
+    */
+    getFormData = () => {
+        const {
+            supportReturn,
+            newestPrice,
+            purchasePrice
+        } = this.props.form.getFieldsValue();
+        return Util.removeInvalid({
+            supportReturn,
+            newestPrice,
+            purchasePrice
+        });
     }
 
     /**
@@ -165,20 +182,6 @@ class ProdModal extends Component {
     }
 
     /**
-    * 获取表单数据
-    */
-    getFormData = () => {
-        const {
-            supportReturn,
-            newestPrice
-        } = this.props.form.getFieldsValue();
-        return Util.removeInvalid({
-            supportReturn,
-            newestPrice
-        });
-    }
-
-    /**
      * 创建弹框OK事件 (当没有改变时)
      */
     handleOk() {
@@ -223,6 +226,7 @@ class ProdModal extends Component {
                 // 仓库ID
                 distributeWarehouseId: this.ids.warehouseId,
                 supportReturn: this.getFormData().supportReturn,
+                purchasePrice: this.getFormData().purchasePrice,
                 newestPrice: isEdit ? this.getFormData().newestPrice : values.newestPrice,
                 productCode: getProductByIds.productCode
             })
@@ -272,6 +276,13 @@ class ProdModal extends Component {
                 return '已拒绝';
             default:
                 return null;
+        }
+    }
+
+    handleNewsPricChange = (newestPrice) => {
+        if (newestPrice) {
+            const result = (newestPrice - this.getFormData().purchasePrice) / this.getFormData().purchasePrice
+            return result.toFixed(2)
         }
     }
 
@@ -356,11 +367,17 @@ class ProdModal extends Component {
                                                     rules: [{ required: true, message: '请输入最新采购价!' }],
                                                     initialValue: initValue.newestPrice
                                                 })(
-                                                    <InputNumber min={0} step={0.01} placeholder="最新采购价" />
+                                                    <InputNumber
+                                                        min={0}
+                                                        step={0.01}
+                                                        placeholder="最新采购价"
+                                                        onChange={this.handleNewsPricChange}
+                                                    />
                                                     )}
                                             </span>
                                             <span className={`${prefixCls}-adjustment`}>
-                                                调价百分比：{initValue.percentage}%
+                                                调价百分比：
+                                                <span>{this.handleNewsPricChange(this.getFormData().newestPrice) || initValue.percentage}%</span>
                                             </span>
                                         </FormItem>
                                         : null

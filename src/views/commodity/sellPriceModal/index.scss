@@ -131,6 +131,9 @@
             display: inline-block;
             vertical-align: middle;
         }
+        .editable-row-operations-true{
+            display: none;
+        }
     }
     .createCls {
         min-width: 950px;
