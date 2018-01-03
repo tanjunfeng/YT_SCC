@@ -121,9 +121,9 @@
                     }
                 ],
                 "availableStock": 9995273,
-                "abnormalGoods": false,
+                "abnormalGoods": true,
                 "abnormalResonse": "",
-                "type": "promotion"
+                "type": "default"
             }
         ],
         "rawSubtotal": 850.0,
