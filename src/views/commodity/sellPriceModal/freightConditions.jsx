@@ -187,10 +187,9 @@ class FreightConditions extends Component {
                                     </span>
                                 </FormItem>
                                 <FormItem>
-                                    <span>*最大销售数量：</span>
+                                    <span>最大销售数量：</span>
                                     <span>
                                         {getFieldDecorator('maxNumber', {
-                                            rules: [{ required: true, message: '请输入最大销售数量' }],
                                             initialValue: data.maxNumber
                                         })(
                                             <InputNumber
@@ -274,7 +273,7 @@ class FreightConditions extends Component {
                                     >{newDatas.sellPricesInReview.minNumber}</span>
                                 </FormItem>
                                 <FormItem>
-                                    <span>*最大销售数量：</span>
+                                    <span>最大销售数量：</span>
                                     <span className={
                                         newDatas.sellPricesInReview.maxNumber !== newDatas.maxNumber ?
                                             'sell-modal-border' : null}

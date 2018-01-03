@@ -134,12 +134,14 @@ class SellPriceModal extends Component {
                     productId: datas.productId
                 })
             }
-            if (isEdit && this.newDatas.auditStatus !== 1) {
+            if (isEdit) {
                 this.props.handlePostAdd(editData, isEdit);
-            } else if (!isEdit && this.newDatas.auditStatus !== 1) {
-                this.props.handlePostAdd(createData, isEdit);
             } else {
-                this.props.handleClose()
+                this.props.handlePostAdd(createData, isEdit);
+            }
+            if (this.newDatas.auditStatus === 1) {
+                message.error('已提交状态不可以进行编辑，请点击取消退出!');
+                return null;
             }
             return null;
         })
