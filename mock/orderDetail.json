@@ -62,7 +62,6 @@
                 },
                 "returnQuantity": 0,
                 "selected": true,
-                "type": "default",
                 "shippedQuantity": 0,
                 "completedQuantity": 0,
                 "creationTime": null,
@@ -78,9 +77,9 @@
                     }
                 ],
                 "availableStock": 9995273,
-                "abnormalGoods": false,
-                "abnormalResonse": "",
-                "type": "promotion"
+                "abnormalGoods": true,
+                "abnormalResonse": "套餐商品异常",
+                "type": "bundle"
             },
             {
                 "id": "1002853",
@@ -107,7 +106,6 @@
                 },
                 "returnQuantity": 0,
                 "selected": true,
-                "type": "default",
                 "shippedQuantity": 0,
                 "completedQuantity": 0,
                 "creationTime": null,
