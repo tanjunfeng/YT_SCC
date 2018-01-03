@@ -226,7 +226,6 @@ class SellPriceModal extends Component {
                     startNumber: item.startNumber
                 })
             })
-            console.log(priceArrMore)
             this.setState({
                 sellSectionPrices: priceArrMore,
                 editIsContinue: isContinue
