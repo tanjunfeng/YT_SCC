@@ -200,7 +200,7 @@ class PriceTable extends PureComponent {
         return (
             <EditableCell
                 editable={editable}
-                value={text}
+                value={String(text)}
                 onChange={value => this.handleChange(value, record.id, column)}
             />);
     }
@@ -208,7 +208,7 @@ class PriceTable extends PureComponent {
     renderColumnsPrice = (text, record, column) => (
         <EditableCell
             editable={record.editable}
-            value={text}
+            value={String(text)}
             type="price"
             onChange={value => this.handleChange(value, record.id, column)}
         />
@@ -252,8 +252,11 @@ class PriceTable extends PureComponent {
      */
     renderGrossProfit = (text, record) => {
         const { costPrice } = this.props;
+        if (costPrice < 0) {
+            return (<span className="red">-</span>);
+        }
         const { price } = record;
-        const rate = (price - costPrice) / costPrice;
+        const rate = (price - costPrice) * 100 / costPrice;
         return (<span className="red">{rate.toFixed(2)}%</span>);
     }
 

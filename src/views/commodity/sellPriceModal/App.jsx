@@ -11,7 +11,7 @@ import { fetchAddProdPurchase } from '../../../actions';
 import {
 } from '../../../constant/searchParams';
 import {
-    getCostPrice
+    getCostPrice, clearCostPrice
 } from '../../../actions/commodity';
 import FreightConditions from './freightConditions';
 import OnlyReadSteps from './onlyReadSteps';
@@ -23,7 +23,7 @@ import EditSteps from './editSteps';
         costPrice: state.toJS().commodity.costPrice
     }),
     dispatch => bindActionCreators({
-        getCostPrice
+        getCostPrice, clearCostPrice
     }, dispatch)
 )
 
@@ -160,10 +160,14 @@ class SellPriceModal extends Component {
             branchCompanyId,
             branchCompanyName: record.name,
         });
-        // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodPurchase/queryPurchasePriceForSellPrice
-        this.props.getCostPrice({
-            productId, branchCompanyId
-        });2
+        if (branchCompanyId !== '') {
+            // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodPurchase/queryPurchasePriceForSellPrice
+            this.props.getCostPrice({
+                productId, branchCompanyId
+            });
+        } else {
+            this.props.clearCostPrice();
+        }
     }
 
     handleMaxChange = (num) => {
