@@ -34,6 +34,7 @@ class BuyConditionModal extends PureComponent {
     getBuyCondition = (formData, values) => {
         const { buyCondition, buyConditionProduct } = values;
         const { category } = this.state;
+        console.log(category);
         switch (buyCondition) {
             case 'ALL':
                 break;
@@ -103,14 +104,26 @@ class BuyConditionModal extends PureComponent {
         this.setState({ category });
     }
 
+    handClearCategory = () => {
+        this.setState({ category: null });
+    }
+
     handleOk = () => {
         this.getFormData(data => {
             this.props.onOk(data);
+            /**
+             * 关闭窗口清除选中的category
+             */
+            this.handClearCategory();
         });
     }
 
     handleCancel = () => {
         this.props.onCancel();
+        /**
+         * 关闭窗口清除选中的category
+         */
+        this.handClearCategory();
     }
 
     render() {
