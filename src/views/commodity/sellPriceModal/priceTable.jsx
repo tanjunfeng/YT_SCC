@@ -7,21 +7,42 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Table, Popconfirm, Button } from 'antd';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
+import {
+    getCostPrice
+} from '../../../actions/commodity';
 import EditableCell from './editableCell';
 import { stepPriceColumns as columns } from './columns';
+
+function getNewData(old) {
+    return JSON.parse(JSON.stringify(old));
+}
+
+@connect(
+    state => ({
+        costPrice: state.toJS().commodity.costPrice
+    }),
+    dispatch => bindActionCreators({
+        getCostPrice
+    }, dispatch)
+)
 
 class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
+        const newData = getNewData(props.value.list)
+
         this.state = {
-            prices: [...props.value.list]
+            prices: newData
         }
-        this.cacheData = props.value.list.map(item => ({ ...item }));
+
+        this.cacheData = newData.map(item => ({ ...item }));
         columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, 'startNumber', index)
         columns[1].render = (text, record) => this.renderColumnsNum(text, record, 'endNumber')
         columns[2].render = (text, record) => this.renderColumnsPrice(text, record, 'price')
-        columns[3].render = () => '20%'
+        columns[3].render = (text, record) => this.renderGrossProfit(text, record)
         columns[4].render = (text, record, index) => this.renderOptions(text, record, index)
     }
 
@@ -182,6 +203,7 @@ class PriceTable extends PureComponent {
 
     renderOptions = (text, record, index) => {
         const { editable } = record;
+        const { isSub } = this.props.value;
         return (
             <div className="editable-row-operations">
                 {
@@ -198,7 +220,7 @@ class PriceTable extends PureComponent {
                         </span>
                         :
                         <span>
-                            <a onClick={() => this.edit(record.id)}>编辑</a>
+                            <a disabled={isSub} onClick={() => this.edit(record.id)}>编辑</a>
                             &nbsp;
                             {index > 0 ? <Popconfirm
                                 title="确定删除?"
@@ -212,14 +234,24 @@ class PriceTable extends PureComponent {
         );
     }
 
+    /**
+     * 获取毛利率看
+     */
+    renderGrossProfit = (text, record) => {
+        const { costPrice } = this.props;
+        const { price } = record;
+        const rate = (price - costPrice) / costPrice;
+        return (<span className="red">{rate.toFixed(2)}%</span>);
+    }
+
     render() {
         const { prices } = this.state;
-        const { isReadOnly } = this.props.value;
+        const { isReadOnly, isSub } = this.props.value;
         return (
             <div>
                 {
                     !isReadOnly &&
-                    <Button onClick={this.handleAdd}>添加阶梯价格</Button>
+                    <Button disabled={isSub} onClick={this.handleAdd}>添加阶梯价格</Button>
                 }
                 <Table
                     rowKey="id"
@@ -235,7 +267,9 @@ class PriceTable extends PureComponent {
 PriceTable.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
     onChange: PropTypes.func,
-    isReadOnly: PropTypes.bool
+    isSub: PropTypes.bool,
+    isReadOnly: PropTypes.bool,
+    costPrice: PropTypes.number
 };
 
 export default PriceTable;

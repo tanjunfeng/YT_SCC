@@ -11,7 +11,7 @@ import { fetchAddProdPurchase } from '../../../actions';
 import {
 } from '../../../constant/searchParams';
 import {
-    getSellPriceInfoByIdAction
+    getCostPrice
 } from '../../../actions/commodity';
 import FreightConditions from './freightConditions';
 import OnlyReadSteps from './onlyReadSteps';
@@ -19,15 +19,11 @@ import EditSteps from './editSteps';
 
 @connect(
     state => ({
-        toAddPriceVisible: state.toJS().commodity.toAddPriceVisible,
-        getProductById: state.toJS().commodity.getProductById
+        productId: state.toJS().commodity.getProductById.id,
+        costPrice: state.toJS().commodity.costPrice
     }),
     dispatch => bindActionCreators({
-        productAddPriceVisible,
-        fetchAddProdPurchase,
-        pubFetchValueList,
-        getSellPriceInfoByIdAction,
-        toAddSellPrice
+        getCostPrice
     }, dispatch)
 )
 
@@ -40,16 +36,17 @@ class SellPriceModal extends Component {
             suggestPrice: null,
             branchCompanyId: null,
             branchCompanyName: null,
-            isContinue: true,
+            editIsContinue: true,
             cretFreConditObj: {},
-            freCondit: {}
+            freCondit: {},
+            sellSectionPrices: []
         }
         this.isSub = false; // 判断是否为已提交状态(true为已提交)
         this.isDisabled = false;
         this.successPost = true;
         this.messageAlert = true;
-        this.newDatas = {...props.datas.data};
-        this.referenceDatas = {...props.datas.data};
+        this.newDatas = { ...props.datas.data };
+        this.referenceDatas = { ...props.datas.data };
     }
 
     componentDidMount() {
@@ -86,10 +83,31 @@ class SellPriceModal extends Component {
 
     handleOk = () => {
         const { datas, isEdit, values = {} } = this.props;
-        const { validateFields, setFields } = this.props.form;
-        const { branchCompanyId, branchCompanyName, cretFreConditObj, freCondit, isContinue } = this.state;
+        const { validateFields } = this.props.form;
+        const { branchCompanyId, branchCompanyName, cretFreConditObj, freCondit, editIsContinue, sellSectionPrices } = this.state;
         const newDatas = datas.data;
-        const data = {};
+        const createData = {};
+        const editData = {};
+        Object.assign(createData, {
+            branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
+            branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
+            suggestPrice: this.state.suggestPrice || values.suggestPrice,
+            productId: values.id,
+            sellSectionPrices,
+            ...cretFreConditObj,
+            ...freCondit
+        })
+        Object.assign(editData, {
+            branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
+            branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
+            suggestPrice: this.state.suggestPrice || values.suggestPrice,
+            productId: this.newDatas.productId,
+            auditStatus: this.newDatas.auditStatus,
+            sellSectionPrices,
+            id: this.newDatas.id,
+            ...cretFreConditObj,
+            ...freCondit
+        })
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
@@ -106,7 +124,7 @@ class SellPriceModal extends Component {
                 message.error('请输入最大销售数量！');
                 return null;
             }
-            if (!isContinue) {
+            if (!editIsContinue) {
                 message.error('阶梯价格不连续!');
                 return null;
             }
@@ -116,15 +134,11 @@ class SellPriceModal extends Component {
                     productId: datas.productId
                 })
             }
-            Object.assign(data, {
-                branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
-                branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
-                suggestPrice: this.state.suggestPrice,
-                productId: values.id,
-                ...cretFreConditObj,
-                ...freCondit
-            })
-            this.props.handlePostAdd(data, isEdit)
+            if (isEdit) {
+                this.props.handlePostAdd(editData, isEdit);
+            } else {
+                this.props.handlePostAdd(createData, isEdit);
+            }
             return null;
         })
     }
@@ -133,19 +147,23 @@ class SellPriceModal extends Component {
         this.props.handleClose();
     }
 
-    handleCompyChange = (object, data) => {
-        if (!data) {
-            this.setState({
-                branchCompanyId: object.id,
-                branchCompanyName: object.name,
-            })
-        } else {
-            this.setState({
-                suggestPrice: object.suggestPrice,
-                branchCompanyId: data.id,
-                branchCompanyName: data.name,
-            })
-        }
+    handleCreatPrice = (num) => {
+        this.setState({
+            suggestPrice: num
+        })
+    }
+
+    handleCompyChange = (record) => {
+        const { productId } = this.props;
+        const branchCompanyId = record.id;
+        this.setState({
+            branchCompanyId,
+            branchCompanyName: record.name,
+        });
+        // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodPurchase/queryPurchasePriceForSellPrice
+        this.props.getCostPrice({
+            productId, branchCompanyId
+        });2
     }
 
     handleMaxChange = (num) => {
@@ -167,9 +185,23 @@ class SellPriceModal extends Component {
         }
     }
 
-    handleEditSteps = (num, record, data) => {
+    handleEditSteps = (num) => {
         this.setState({
             suggestPrice: num
+        })
+    }
+
+    handleEditPriceChange = (prices, isContinue) => {
+        this.setState({
+            sellSectionPrices: prices,
+            editIsContinue: isContinue
+        })
+    }
+
+    handleCreatPriceChange = (prices, isContinue) => {
+        this.setState({
+            sellSectionPrices: prices,
+            editIsContinue: isContinue
         })
     }
 
@@ -186,7 +218,7 @@ class SellPriceModal extends Component {
     }
 
     render() {
-        const { prefixCls, isEdit, values } = this.props;
+        const { prefixCls, isEdit, values, costPrice } = this.props;
         const isAfter = this.isAfter === true;
         const isReadOnly = true;
         const { freCondit, cretFreConditObj } = this.state;
@@ -222,8 +254,10 @@ class SellPriceModal extends Component {
                                     <EditSteps
                                         newDatas={this.newDatas}
                                         isEdit={isEdit}
+                                        isSub={this.newDatas.auditStatus === 1}
                                         startNumber={freCondit.minNumber || this.newDatas.minNumber}
                                         onEditChange={this.handleEditSteps}
+                                        onEditPriceChange={this.handleEditPriceChange}
                                     />
                                 </div>
                             </div>
@@ -273,7 +307,9 @@ class SellPriceModal extends Component {
                                         newDatas={this.newDatas}
                                         isEdit={isEdit}
                                         startNumber={cretFreConditObj.minNumber || values.minNumber}
-                                        onCreateChange={this.handleCompyChange}
+                                        onCreateChange={this.handleCreatPrice}
+                                        onCreateComChange={this.handleCompyChange}
+                                        onCreatPriceChange={this.handleCreatPriceChange}
                                         values={values}
                                     />
                                 </div>
