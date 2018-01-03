@@ -26,7 +26,6 @@ import {
     ChangeUpdateProd,
     GetWarehouseInfo1
 } from '../../../actions/producthome';
-import { getProductById } from '../../../service';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -300,9 +299,9 @@ class ProdModal extends Component {
         const firstCreated = () => {
             switch (userNames.firstCreated) {
                 case 0:
-                    return userNames.createUserName;
-                case 1:
                     return userNames.modifyUserName;
+                case 1:
+                    return userNames.createUserName;
                 default:
                     return null;
             }
