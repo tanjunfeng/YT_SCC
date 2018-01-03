@@ -40,7 +40,6 @@ class PurchaseExamination extends PureComponent {
             // 默认未完成
             isComplete: '0',
             showModal: false,
-            initData: {},
             getProdPurchaseByIds: {}
         }
         // 搜索参数
@@ -156,17 +155,9 @@ class PurchaseExamination extends PureComponent {
                     .then(res => {
                         this.setState({
                             getProdPurchaseByIds: res,
-                            initData: record,
                             showModal: true
                         })
                     })
-                // this.props.fetchGetProductById({ productId: '60000117016' })
-                //     .then(res => {
-                //         this.setState({
-                //             initData: record,
-                //             showModal: true
-                //         })
-                //     })
                 break;
             case 'results':
                 // 审批意见

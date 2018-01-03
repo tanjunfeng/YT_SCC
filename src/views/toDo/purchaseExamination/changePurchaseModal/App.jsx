@@ -1,6 +1,6 @@
 /**
  * @file app.jsx
- * @author liujinyu
+ * @author tangjunfeng liujinyu
  * 商品采购关系维护
  */
 import React, { Component } from 'react';
@@ -27,8 +27,9 @@ class ProdModal extends Component {
 
     render() {
         const {
-            prefixCls, getProdPurchaseByIds
+            getProdPurchaseByIds
         } = this.props;
+        const prefixCls = 'purchase-modal'
         const firstCreated = () => {
             switch (getProdPurchaseByIds.firstCreated) {
                 case 0:
@@ -41,9 +42,9 @@ class ProdModal extends Component {
         }
         return (
             <Modal
-                title="采购关系"
+                title="采购价格"
                 visible
-                className={prefixCls}
+                className="purchase-examination-modal"
                 onOk={this.handleCancel}
                 width={'480px'}
                 onCancel={this.handleCancel}
@@ -57,28 +58,28 @@ class ProdModal extends Component {
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*采购内装数：</span>
                                     <span className={`${prefixCls}-barcode-input`}>
-                                        <InputNumber min={0} placeholder="内装数" defaultValue={getProdPurchaseByIds.purchaseInsideNumber} readOnly />
+                                        <InputNumber defaultValue={getProdPurchaseByIds.purchaseInsideNumber || '-'} readOnly />
                                     </span>
                                 </FormItem>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*当前采购价(元)：</span>
                                     <span className={`${prefixCls}-barcode-input`}>
-                                        <InputNumber min={0} step={0.01} placeholder="当前采购价" defaultValue={getProdPurchaseByIds.purchasePrice} readOnly />
+                                        <InputNumber placeholder="当前采购价" defaultValue={getProdPurchaseByIds.purchasePrice || '-'} readOnly />
                                     </span>
                                 </FormItem>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*最新采购价(元)：</span>
                                     <span className={`${prefixCls}-barcode-input`}>
-                                        <InputNumber min={0} step={0.01} placeholder="最新采购价" defaultValue={getProdPurchaseByIds.newestPrice} readOnly />
+                                        <InputNumber defaultValue={getProdPurchaseByIds.newestPrice || '-'} readOnly />
                                     </span>
                                     <span className={`${prefixCls}-adjustment`}>
-                                        调价百分比：{getProdPurchaseByIds.percentage}%
+                                        调价百分比：{getProdPurchaseByIds.percentage || '-'}%
                                     </span>
                                 </FormItem>
                                 <FormItem>
                                     <span className={`${prefixCls}-label`}>*条  码：</span>
                                     <span className={`${prefixCls}-barcode-input`}>
-                                        <Input placeholder="商品条码" defaultValue={getProdPurchaseByIds.internationalCode} readOnly />
+                                        <Input defaultValue={getProdPurchaseByIds.internationalCode || '-'} readOnly />
                                     </span>
                                 </FormItem>
                                 <div className={`${prefixCls}-sub-state`}>
@@ -155,15 +156,8 @@ class ProdModal extends Component {
 }
 
 ProdModal.propTypes = {
-    prefixCls: PropTypes.string,
     handleClose: PropTypes.func,
     getProdPurchaseByIds: PropTypes.objectOf(PropTypes.any)
 };
 
-ProdModal.defaultProps = {
-    prefixCls: 'purchase-modal',
-    goto: () => { },
-    data: {}
-}
-
-export default Form.create()(ProdModal);
+export default ProdModal;
