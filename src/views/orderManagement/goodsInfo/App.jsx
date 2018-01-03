@@ -35,24 +35,24 @@ class GoodsInfo extends PureComponent {
                 let errorTip = null;
                 let arrowTip = null;
 
+                if (record.type === 'promotion') {
+                    message = '赠';
+                    const tipClassName = 'arrowTip giftColor';
+                    arrowTip = <p className={tipClassName}><span>{message}</span></p>;
+                } else if (record.type === 'bundle') {
+                    message = '套';
+                    const tipClassName = 'arrowTip packageColor';
+                    arrowTip = <p className={tipClassName}><span>{message}</span></p>;
+                }
+
                 if (record.abnormalGoods) {
                     message = record.abnormalResonse || '毛利异常';
-                    className = 'abnormalResonse';
-                    errorTip = <div className={className}>{message}</div>;
+                    const tipClassName = arrowTip ? 'abnormalResonse resonse-top' : 'abnormalResonse';
+                    errorTip = <div className={tipClassName}>{message}</div>;
                 } else {
-                    className = '';
                     errorTip = '';
                 }
 
-                if (record.type === 'promotion') {
-                    message = '赠';
-                    className = 'arrowTip giftColor';
-                    arrowTip = <p className={className}><span>{message}</span></p>;
-                } else if (record.type === 'bundle') {
-                    message = '套';
-                    className = 'arrowTip packageColor';
-                    arrowTip = <p className={className}><span>{message}</span></p>;
-                }
                 const imgUrl = text || noImage;
                 return (
                     <div>

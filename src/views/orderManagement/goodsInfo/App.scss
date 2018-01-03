@@ -12,11 +12,10 @@
 }
 
 .orderDetail-message{
-    .abnormalResonse{
-        margin-top: -25px;
-        color: red;
+    .resonse-top {
+        margin-top: -30px;
     }
-    .abnormalResonse-color{
+    .abnormalResonse-color,.abnormalResonse{
         color: red;
     }
 }
