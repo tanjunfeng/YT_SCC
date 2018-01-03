@@ -37,12 +37,13 @@ class SellPriceModal extends Component {
         this.handleMaxChange = this.handleMaxChange.bind(this);
 
         this.state = {
-            newestPrice: null,
+            suggestPrice: null,
             branchCompanyId: null,
             branchCompanyName: null,
-            isContinue: true,
+            editIsContinue: true,
             cretFreConditObj: {},
-            freCondit: {}
+            freCondit: {},
+            sellSectionPrices: []
         }
         this.isSub = false; // 判断是否为已提交状态(true为已提交)
         this.isDisabled = false;
@@ -86,10 +87,31 @@ class SellPriceModal extends Component {
 
     handleOk = () => {
         const { datas, isEdit, values = {} } = this.props;
-        const { validateFields, setFields } = this.props.form;
-        const { branchCompanyId, branchCompanyName, cretFreConditObj, freCondit, isContinue } = this.state;
+        const { validateFields } = this.props.form;
+        const { branchCompanyId, branchCompanyName, cretFreConditObj, freCondit, editIsContinue, sellSectionPrices } = this.state;
         const newDatas = datas.data;
-        const data = {};
+        const createData = {};
+        const editData = {};
+        Object.assign(createData, {
+            branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
+            branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
+            suggestPrice: this.state.suggestPrice || values.suggestPrice,
+            productId: values.id,
+            sellSectionPrices,
+            ...cretFreConditObj,
+            ...freCondit
+        })
+        Object.assign(editData, {
+            branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
+            branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
+            suggestPrice: this.state.suggestPrice || values.suggestPrice,
+            productId: this.newDatas.productId,
+            auditStatus: this.newDatas.auditStatus,
+            sellSectionPrices,
+            id: this.newDatas.id,
+            ...cretFreConditObj,
+            ...freCondit
+        })
         validateFields((err, values) => {
             if (err) return null;
             const result = values;
@@ -106,7 +128,7 @@ class SellPriceModal extends Component {
                 message.error('请输入最大销售数量！');
                 return null;
             }
-            if (!isContinue) {
+            if (!editIsContinue) {
                 message.error('阶梯价格不连续!');
                 return null;
             }
@@ -116,15 +138,11 @@ class SellPriceModal extends Component {
                     productId: datas.productId
                 })
             }
-            Object.assign(data, {
-                branchCompanyId: this.state.branchCompanyId || newDatas.branchCompanyId,
-                branchCompanyName: this.state.branchCompanyName || newDatas.branchCompanyName,
-                newestPrice: this.state.newestPrice,
-                productId: values.id,
-                ...cretFreConditObj,
-                ...freCondit
-            })
-            this.props.handlePostAdd(data, isEdit)
+            if (isEdit) {
+                this.props.handlePostAdd(editData, isEdit);
+            } else {
+                this.props.handlePostAdd(createData, isEdit);
+            }
             return null;
         })
     }
@@ -133,11 +151,16 @@ class SellPriceModal extends Component {
         this.props.handleClose();
     }
 
-    handleCompyChange = (object, data) => {
+    handleCreatPrice = (num) => {
         this.setState({
-            newestPrice: object.newestPrice,
-            branchCompanyId: data.id,
-            branchCompanyName: data.name,
+            suggestPrice: num
+        })
+    }
+
+    handleCompyChange = (record) => {
+        this.setState({
+            branchCompanyId: record.id,
+            branchCompanyName: record.name,
         })
     }
 
@@ -162,7 +185,21 @@ class SellPriceModal extends Component {
 
     handleEditSteps = (num) => {
         this.setState({
-            newestPrice: num
+            suggestPrice: num
+        })
+    }
+
+    handleEditPriceChange = (prices, isContinue) => {
+        this.setState({
+            sellSectionPrices: prices,
+            editIsContinue: isContinue
+        })
+    }
+
+    handleCreatPriceChange = (prices, isContinue) => {
+        this.setState({
+            sellSectionPrices: prices,
+            editIsContinue: isContinue
         })
     }
 
@@ -179,7 +216,7 @@ class SellPriceModal extends Component {
     }
 
     render() {
-        const { prefixCls, form, datas, isEdit, values } = this.props;
+        const { prefixCls, isEdit, values } = this.props;
         const isAfter = this.isAfter === true;
         const isReadOnly = true;
         const { freCondit, cretFreConditObj } = this.state;
@@ -217,6 +254,7 @@ class SellPriceModal extends Component {
                                         isEdit={isEdit}
                                         startNumber={freCondit.minNumber || this.newDatas.minNumber}
                                         onEditChange={this.handleEditSteps}
+                                        onEditPriceChange={this.handleEditPriceChange}
                                     />
                                 </div>
                             </div>
@@ -229,6 +267,7 @@ class SellPriceModal extends Component {
                                 />
                                 <OnlyReadSteps
                                     newDatas={this.referenceDatas}
+                                    isReadOnly={isReadOnly}
                                     startNumber={freCondit.minNumber || this.newDatas.minNumber}
                                 />
                             </div >
@@ -244,7 +283,7 @@ class SellPriceModal extends Component {
                                     <span>{this.newDatas.auditUserName || '-'}</span>
                                 </Col>
                                 <Col>
-                                    <span>售价状态：</span>
+                                    <span>审核状态：</span>
                                     <span>
                                         <i className={`new-price-state-${this.newDatas.auditStatus}`} />
                                         {this.catchAuditstate() || '-'}
@@ -265,7 +304,9 @@ class SellPriceModal extends Component {
                                         newDatas={this.newDatas}
                                         isEdit={isEdit}
                                         startNumber={cretFreConditObj.minNumber || values.minNumber}
-                                        onCreateChange={this.handleCompyChange}
+                                        onCreateChange={this.handleCreatPrice}
+                                        onCreateComChange={this.handleCompyChange}
+                                        onCreatPriceChange={this.handleCreatPriceChange}
                                         values={values}
                                     />
                                 </div>

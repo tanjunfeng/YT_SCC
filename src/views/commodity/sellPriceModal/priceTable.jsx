@@ -11,13 +11,20 @@ import { Table, Popconfirm, Button } from 'antd';
 import EditableCell from './editableCell';
 import { stepPriceColumns as columns } from './columns';
 
+function getNewData(old) {
+    return JSON.parse(JSON.stringify(old));
+}
+
 class PriceTable extends PureComponent {
     constructor(props) {
         super(props);
+        const newData = getNewData(props.value.list)
+
         this.state = {
-            prices: [...props.value.list]
+            prices: newData
         }
-        this.cacheData = props.value.list.map(item => ({ ...item }));
+
+        this.cacheData = newData.map(item => ({ ...item }));
         columns[0].render = (text, record, index) => this.renderColumnsNum(text, record, 'startNumber', index)
         columns[1].render = (text, record) => this.renderColumnsNum(text, record, 'endNumber')
         columns[2].render = (text, record) => this.renderColumnsPrice(text, record, 'price')
@@ -29,7 +36,7 @@ class PriceTable extends PureComponent {
         // 当用户手工修改 startNumber 时，更新 prices 第一条记录并通知父组件更新
         const { startNumber } = nextProps.value;
         const prices = [...this.state.prices];
-        if (prices.length > 0) {
+        if (prices.length > 0 && this.props.value.startNumber !== startNumber) {
             prices[0].startNumber = startNumber;
             this.setState({ prices });
             this.notify(prices);
@@ -234,7 +241,8 @@ class PriceTable extends PureComponent {
 
 PriceTable.propTypes = {
     value: PropTypes.objectOf(PropTypes.any),
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    isReadOnly: PropTypes.bool
 };
 
 export default PriceTable;
