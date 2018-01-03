@@ -29,27 +29,18 @@ const FormItem = Form.Item;
 class EditSteps extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            prices: []
-        }
-    }
 
-    componentWillReceiveProps(nextProps) {
-        const { newDatas, isEdit } = nextProps;
-        if (isEdit) {
-            const arrEidt = [];
-            newDatas.sellSectionPrices.map((element) => (
-                arrEidt.push(element)
-            ))
-            this.setState({
-                prices: arrEidt
-            })
+        const { isEdit = false, newDatas = {} } = props;
+        const { sellSectionPrices = [] } = newDatas;
+
+        this.state = {
+            prices: isEdit ? sellSectionPrices : []
         }
     }
 
     getEditableTableValues = () => {
         const { isEdit, newDatas = {}, startNumber } = this.props;
-        const { sellSectionPrices = [], sellPricesInReview = {}, auditStatus } = newDatas;
+        const { sellPricesInReview = {}, auditStatus } = newDatas;
         const { prices } = this.state;
         return {
             isEdit,
@@ -61,23 +52,21 @@ class EditSteps extends Component {
         };
     }
 
-    handlePropsback = () => {
+    handleNewestPriceChange = (num) => {
         const { isEdit } = this.props;
         const service = isEdit ? this.props.onEditChange : this.props.onCreateChange;
-        return service();
-    }
-
-    handleNewestPriceChange = (num) => {
-        this.handlePropsback(num)
+        service(num)
     }
 
     handlePricesChange = (prices, isContinue) => {
-        this.handlePropsback(prices, isContinue)
+        const { isEdit } = this.props;
+        const service = isEdit ? this.props.onEditPriceChange : this.props.onCreatPriceChange;
+        service(prices, isContinue)
         this.setState({ prices });
     }
 
     handleCompanyChange = (record) => {
-        this.handlePropsback(record)
+        this.props.onCreateComChange(record);
     }
 
     handleValueFormat = (text) => {
@@ -150,6 +139,9 @@ EditSteps.propTypes = {
     startNumber: PropTypes.number,
     isEdit: PropTypes.bool,
     onEditChange: PropTypes.func,
+    onCreatPriceChange: PropTypes.func,
+    onEditPriceChange: PropTypes.func,
+    onCreateComChange: PropTypes.func,
     onCreateChange: PropTypes.func
 };
 
