@@ -123,3 +123,8 @@ export const getCostPrice = params => dispatch => (
             .catch(err => reject(err))
     })
 );
+
+export const clearCostPrice = () => dispatch => (dispatch({
+    type: ActionType.CLEAR_COST_PRICE,
+    payload: -100.00
+}));

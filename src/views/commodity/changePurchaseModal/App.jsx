@@ -230,9 +230,11 @@ class ProdModal extends Component {
                 productCode: getProductByIds.productCode
             })
             subPost(subData).then((res) => {
-                message.success(res.message)
-                this.handleCancel();
-                this.props.goto()
+                if (res.code === 200) {
+                    message.success(res.message)
+                    this.handleCancel();
+                    this.props.goto()
+                }
             }).catch(() => {
                 message.error('操作失败')
             })
@@ -280,7 +282,7 @@ class ProdModal extends Component {
 
     handleNewsPricChange = (newestPrice) => {
         if (newestPrice) {
-            const result = (newestPrice - this.getFormData().purchasePrice) / this.getFormData().purchasePrice
+            const result = ((newestPrice - this.getFormData().purchasePrice) / this.getFormData().purchasePrice) * 100
             return result.toFixed(2)
         }
     }
@@ -348,7 +350,7 @@ class ProdModal extends Component {
                                             <span className={`${prefixCls}-barcode-input`}>
                                                 {getFieldDecorator('newestPrice', {
                                                     rules: [{ required: true, message: '请输入采购价!' }],
-                                                    initialValue: getProductByIds.newestPrice
+                                                    initialValue: getProductByIds.purchasePrice
                                                 })(
                                                     <InputNumber min={0} step={0.01} placeholder="采购价" />)}
                                             </span>
