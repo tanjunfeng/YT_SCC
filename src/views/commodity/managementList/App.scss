@@ -1,19 +1,24 @@
 $commodityManagementFieldWidth: 220px;
 .commodity-management {
-    .manage-form {
-        .ant-input,
-        .ant-select {
-            width: $commodityManagementFieldWidth;
-        }
-        .value-list-input .ywc-smind {
-            top: 8px;
-        }
-        .ywc-smind {
-            width: $commodityManagementFieldWidth;
-        }
-        .tr {
-            text-align: right;
-        }
+    .ant-form {
+        padding: 40px 15px 20px;
+    }
+    .ant-form-item-label {
+        width: 90px;
+    }
+    .ywc-smind {
+        width: $commodityManagementFieldWidth;
+        top: 4px;
+    }
+    .branch-company .ywc-smind {
+        top: 0;
+    }
+    .ant-input,
+    .ant-select {
+        width: $commodityManagementFieldWidth;
+    }
+    .tr {
+        text-align: right;
     }
     .area-list {
         .table-commodity {
@@ -43,13 +48,17 @@ $commodityManagementFieldWidth: 220px;
     .ywc-smind-drop-layout {
         z-index: 3;
     }
+    .ant-btn {
+        margin: 6px 10px;
+    }
 }
+
 .commodityType-wrap {
     & .commodityType-title {
         display: inline-block;
         min-width: 60px;
         margin-right: 8px;
-        & + div {
+        &+div {
             display: inline-block;
         }
     }

@@ -1,4 +1,4 @@
-.purchase-modal {
+.purchase-examination-modal {
     .ant-modal-body {
         height: 700px;
         overflow-y: auto;
@@ -6,7 +6,7 @@
     form .ant-input-number {
         margin-right: 0;
     }
-    .purchase-modal-adjustment{
+    .purchase-modal-adjustment {
         margin-left: 35px;
     }
     &-item {
@@ -33,9 +33,9 @@
         text-align: right;
         margin-right: 10px;
         vertical-align: middle;
-
     }
-    .has-error .ant-form-explain, .has-error .ant-form-split {
+    .has-error .ant-form-explain,
+    .has-error .ant-form-split {
         margin-left: 92px;
     }
     .ant-form-inline .ant-form-item {
@@ -46,18 +46,34 @@
         display: inline-block;
         height: 30px;
     }
-    &-barcode-input{
+    &-barcode-input {
         top: 7px;
         right: -90px;
     }
-    &-sub-state{
-        .ant-form-item{
+    &-sub-state {
+        .ant-form-item {
             width: 260px;
         }
     }
-}
-.purchase-modal-data-disable {
-    input.ywc-smind-input {
-        color: #666 !important;
+    .new-price-state {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        display: inline-block;
+        position: relative;
+        top: -2px;
+        margin-right: 5px;
+        &-1 {
+            background: #5397E8;
+        }
+        &-2 {
+            background: #71E135;
+        }
+        &-3 {
+            background: red;
+        }
+    }
+    .purchase-modal-label {
+        vertical-align: top;
     }
 }

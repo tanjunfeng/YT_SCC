@@ -15,7 +15,7 @@ import FileCut from '../../fileCut';
 import { saveItemAd, uploadImageBase64Data } from '../../../../service';
 import LinkType from '../../common/linkType';
 
-const defaultImge = require('../../../../images/default/1080x280.png');
+const defaultImge = require('../../../../images/default/1080x240.png');
 
 const FormItem = Form.Item;
 const imgConfig = {

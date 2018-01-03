@@ -51,7 +51,7 @@ class SearchForm extends PureComponent {
             productState,
             createTime,
             state
-            } = this.props.form.getFieldsValue();
+        } = this.props.form.getFieldsValue();
         const startCreateTime = createTime ? Date.parse(createTime[0].format(dateFormat)) : '';
         const endCreateTime = createTime ? Date.parse(createTime[1].format(dateFormat)) : '';
         const franchiseeId = this.state.franchiseeId;
@@ -81,7 +81,7 @@ class SearchForm extends PureComponent {
         this.handleJoiningClear();
         this.joiningSearchMind.reset();
         this.props.form.resetFields();
-        this.props.onPromotionReset();  // 通知父页面已清空
+        this.props.onPromotionReset(); // 通知父页面已清空
         // 点击重置时清除 seachMind 引用文本
         this.props.form.setFieldsValue({
             branchCompany: { reset: true }
@@ -108,147 +108,134 @@ class SearchForm extends PureComponent {
         const { getFieldDecorator } = this.props.form;
         const { data } = this.state;
         return (
-            <div className="search-box">
-                <Form
-                    layout="inline"
-                    className="ant-advanced-search-form"
-                    onSubmit={this.handleSearch}
-                >
-                    <Row gutter={40}>
-                        <Col span={8}>
-                            <FormItem label="原订单号">
-                                {getFieldDecorator('orderId', {
-                                    initialValue: data.orderId
-                                })(
-                                    <Input size="default" placeholder="原订单号" />
-                                    )}
-                            </FormItem>
-                        </Col>
-                        <Col span={8} className="company-time">
-                            {/* 子公司 */}
-                            <FormItem label="分公司">
-                                {getFieldDecorator('branchCompany', {
-                                    initialValue: { id: '', name: '' }
-                                })(<BranchCompany />)}
-                            </FormItem>
-                        </Col>
-                        <Col span={8} className="franchisee-item">
-                            <FormItem>
-                                <div>
-                                    <span className="sc-form-item-label">雅堂小超:</span>
-                                    <SearchMind
-                                        defaultValue={this.state.franchiseeIdName}
-                                        rowKey="franchiseeId"
-                                        compKey="search-mind-joining"
-                                        ref={ref => { this.joiningSearchMind = ref }}
-                                        fetch={(params) =>
-                                            this.props.pubFetchValueList({
-                                                param: params.value,
-                                                pageNum: params.pagination.current || 1,
-                                                pageSize: params.pagination.pageSize
-                                            }, 'getFranchiseeInfo')
-                                        }
-                                        onChoosed={this.handleJoiningChoose}
-                                        onClear={this.handleJoiningClear}
-                                        renderChoosedInputRaw={(row) => (
-                                            <div>
-                                                {row.franchiseeId} - {row.franchiseeName}
-                                            </div>
-                                        )}
-                                        pageSize={6}
-                                        columns={[
-                                            {
-                                                title: '加盟商id',
-                                                dataIndex: 'franchiseeId',
-                                                width: 98
-                                            }, {
-                                                title: '加盟商名字',
-                                                dataIndex: 'franchiseeName',
-                                                width: 140
-                                            }
-                                        ]}
-                                    />
-                                </div>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row gutter={40}>
-                        <Col span={8}>
-                            <FormItem label="换货单号">
-                                {getFieldDecorator('id', {
-                                    initialValue: data.id
-                                })(
-                                    <Input size="default" placeholder="换货单号" />
-                                    )}
-                            </FormItem>
-                        </Col>
-                        <Col span={8}>
-                            <FormItem >
-                                <div className="row middle">
-                                    <span className="ant-form-item-label search-mind-label">换货日期</span>
-                                    {getFieldDecorator('createTime', {
-                                        initialValue: data.startCreateTime ? [moment(data.startCreateTime), moment(data.endCreateTime)] : null
-                                    })(
-                                        <RangePicker
-                                            className="date-range-picker"
-                                            style={{ width: 250 }}
-                                            format={dateFormat}
-                                            showTime={{
-                                                hideDisabledOptions: true,
-                                                defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
-                                            }}
-                                            placeholder={['开始日期', '结束日期']}
-                                            onChange={this.chooseCreateDate}
-                                        />
-                                        )}
-                                </div>
-                            </FormItem>
-                        </Col>
-                        <Col span={8}>
-                            <FormItem label="换货单状态">
-                                {getFieldDecorator('state', {
-                                    initialValue: data.state ? data.state : ''
-                                })(
-                                    <Select style={{ width: '200px' }} size="default">
-                                        {
-                                            returnGoodsStatus.data.map((item) => (
-                                                <Select.Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Select.Option>
-                                            ))
-                                        }
-                                    </Select>
-                                    )}
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row gutter={40}>
-                        <Col span={8}>
-                            <FormItem label="商品状态">
-                                {getFieldDecorator('productState', {
-                                    initialValue: data.productState ? data.productState : ''
-                                })(
-                                    <Select style={{ width: '200px' }} size="default">
-                                        {
-                                            productStateOption.data.map((item) => (
-                                                <Select.Option key={item.key} value={item.key}>
-                                                    {item.value}
-                                                </Select.Option>
-                                            ))
-                                        }
-                                    </Select>
-                                    )}
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row gutter={40}>
-                        <Col span={24} style={{ textAlign: 'right' }}>
-                            <Button type="primary" htmlType="submit">搜索</Button>
-                            <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>重置</Button>
-                        </Col>
-                    </Row>
-                </Form>
-            </div >
+            <Form
+                layout="inline"
+                className="exchange-goods-search-form"
+                onSubmit={this.handleSearch}
+            >
+                <Row gutter={40}>
+                    <Col>
+                        <FormItem label="原订单号">
+                            {getFieldDecorator('orderId', {
+                                initialValue: data.orderId
+                            })(
+                                <Input size="default" placeholder="原订单号" />
+                            )}
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        {/* 子公司 */}
+                        <FormItem label="分公司" className="itemTop">
+                            {getFieldDecorator('branchCompany', {
+                                initialValue: { id: '', name: '' }
+                            })(<BranchCompany />)}
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem label="雅堂小超" className="itemTop">
+                            <SearchMind
+                                defaultValue={this.state.franchiseeIdName}
+                                rowKey="franchiseeId"
+                                compKey="search-mind-joining"
+                                ref={ref => { this.joiningSearchMind = ref }}
+                                fetch={(params) =>
+                                    this.props.pubFetchValueList({
+                                        param: params.value,
+                                        pageNum: params.pagination.current || 1,
+                                        pageSize: params.pagination.pageSize
+                                    }, 'getFranchiseeInfo')
+                                }
+                                onChoosed={this.handleJoiningChoose}
+                                onClear={this.handleJoiningClear}
+                                renderChoosedInputRaw={(row) => (
+                                    <div>
+                                        {row.franchiseeId} - {row.franchiseeName}
+                                    </div>
+                                )}
+                                pageSize={6}
+                                columns={[
+                                    {
+                                        title: '加盟商id',
+                                        dataIndex: 'franchiseeId',
+                                        width: 98
+                                    }, {
+                                        title: '加盟商名字',
+                                        dataIndex: 'franchiseeName',
+                                        width: 140
+                                    }
+                                ]}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem label="换货单号">
+                            {getFieldDecorator('id', {
+                                initialValue: data.id
+                            })(
+                                <Input size="default" placeholder="换货单号" />
+                            )}
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem label="换货日期">
+                            {getFieldDecorator('createTime', {
+                                initialValue: data.startCreateTime ? [moment(data.startCreateTime), moment(data.endCreateTime)] : null
+                            })(
+                                <RangePicker
+                                    style={{ width: 250 }}
+                                    format={dateFormat}
+                                    showTime={{
+                                        hideDisabledOptions: true,
+                                        defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                    }}
+                                    placeholder={['开始日期', '结束日期']}
+                                    onChange={this.chooseCreateDate}
+                                />
+                            )}
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem label="换货单状态">
+                            {getFieldDecorator('state', {
+                                initialValue: data.state ? data.state : ''
+                            })(
+                                <Select style={{ width: '200px' }} size="default">
+                                    {
+                                        returnGoodsStatus.data.map((item) => (
+                                            <Select.Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Select.Option>
+                                        ))
+                                    }
+                                </Select>
+                            )}
+                        </FormItem>
+                    </Col>
+                    <Col>
+                        <FormItem label="商品状态">
+                            {getFieldDecorator('productState', {
+                                initialValue: data.productState ? data.productState : ''
+                            })(
+                                <Select style={{ width: '200px' }} size="default">
+                                    {
+                                        productStateOption.data.map((item) => (
+                                            <Select.Option key={item.key} value={item.key}>
+                                                {item.value}
+                                            </Select.Option>
+                                        ))
+                                    }
+                                </Select>
+                            )}
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row gutter={40} type="flex" justify="end">
+                    <Col>
+                        <Button type="primary" htmlType="submit">搜索</Button>
+                        <Button onClick={this.handleReset}>重置</Button>
+                    </Col>
+                </Row>
+            </Form>
         );
     }
 }
