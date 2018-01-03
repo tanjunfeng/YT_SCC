@@ -7,6 +7,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Table, Popconfirm, Button } from 'antd';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import {
     getCostPrice
