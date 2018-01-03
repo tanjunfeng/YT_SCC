@@ -220,11 +220,16 @@ class SellPriceModal extends Component {
         }
         if (prices.length > 1) {
             prices.map((item) => {
-                newArr.push({
+                priceArrMore.push({
                     endNumber: item.endNumber,
                     price: item.price,
                     startNumber: item.startNumber
                 })
+            })
+            console.log(priceArrMore)
+            this.setState({
+                sellSectionPrices: priceArrMore,
+                editIsContinue: isContinue
             })
         }
     }
