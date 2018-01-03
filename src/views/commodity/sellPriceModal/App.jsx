@@ -163,7 +163,7 @@ class SellPriceModal extends Component {
         // http://gitlab.yatang.net/yangshuang/sc_wiki_doc/wikis/sc/prodPurchase/queryPurchasePriceForSellPrice
         this.props.getCostPrice({
             productId, branchCompanyId
-        });2
+        });
     }
 
     handleMaxChange = (num) => {
@@ -199,10 +199,30 @@ class SellPriceModal extends Component {
     }
 
     handleCreatPriceChange = (prices, isContinue) => {
-        this.setState({
-            sellSectionPrices: prices,
-            editIsContinue: isContinue
-        })
+        const newArr = [];
+        const priceArrMore = [];
+        if (prices.length === 1) {
+            prices.map((item) => (
+                newArr.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber
+                })
+            ))
+            this.setState({
+                sellSectionPrices: newArr,
+                editIsContinue: isContinue
+            })
+        }
+        if (prices.length > 1) {
+            prices.map((item) => {
+                newArr.push({
+                    endNumber: item.endNumber,
+                    price: item.price,
+                    startNumber: item.startNumber
+                })
+            })
+        }
     }
 
     handleOnFreConditChange = (data) => {
