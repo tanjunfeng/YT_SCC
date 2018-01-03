@@ -676,8 +676,8 @@ class ManagementList extends PureComponent {
                             >恢复采购</Button>
                         </Col>
                     </Row>
-                    <Row gutter={40} className="branch-company">
-                        <Col span={8}>
+                    <Row gutter={40}>
+                        <Col span={8} className="branch-company">
                             <FormItem label="经营子公司">
                                 <FormItem>
                                     {getFieldDecorator('branchCompany', {
